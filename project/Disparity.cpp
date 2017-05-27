@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 	//@param blocksize
 	//wide camera setting or close objects -> increase numdisparity
 
-	cv::Ptr<cv::StereoBM> sbm = cv::StereoBM::create(128, 11);
+	cv::Ptr<cv::StereoBM> sbm = cv::StereoBM::create(80, 15);
 
 	sbm->setPreFilterCap(31);
 	sbm->setPreFilterSize(5);
