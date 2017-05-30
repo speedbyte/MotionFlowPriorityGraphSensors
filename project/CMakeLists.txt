@@ -5,12 +5,14 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 
 # Prints the environment variables
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-include(CMakePrintNothingConfig)  # Looks for CMakePrint.cmake under CMAKE_MODULES_PATH
+include(CMakePrintNothingConfig)  # Looks for CMakePrintNothing.cmake under CMAKE_MODULES_PATH
+#include(CMakePrintConfig)  # Looks for CMakePrint.cmake under CMAKE_MODULES_PATH
 
 
 #Find the modules ( the modules are coded inside the OpenCVConfig.cmake and OpenCVModules.make )
 #-----------
-set(OpenCV_DIR "/local/usr/local/share/OpenCV")
+set(OpenCV_DIR ${CMAKE_SOURCE_DIR}../opencv-install/share/OpenCV")
+#set(OpenCV_DIR "/local/usr/local/share/OpenCV")
 find_package( OpenCV REQUIRED ) # see the list of the modules below that would be loaded.
 #-----------
 
@@ -19,7 +21,7 @@ find_package( OpenCV REQUIRED ) # see the list of the modules below that would b
 # CXXFLAGS="-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations" ./configure --prefix="$(pwd)/build" --bindir="./bin" --enable-shared 
 
 # IN OPENCV
-#export PKG_CONFIG_PATH=$FFMPEG_PWD/build/lib/pkgconfig:$BOOTSTRAP_PWD/stage/lib/pkgconfig     
+#export PKG_CONFIG_PATH=$FFMPEG_PWD/build/lib/pkgconfig:$BOOTSTRAP_PWD/stage/lib/pkgconfig
 #PKG_CONFIG_PATH_FFMPEG=$(pkg-config --cflags libavcodec) 
 #if [[ $PKG_CONFIG_PATH_FFMPEG == "-I$FFMPEG_PWD/build/include"* ]]; then echo "Correct PKG_CONFIG_PATH_FFMPEG $PKG_CONFIG_PATH_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_FFMPEG $PKG_CONFIG_PATH_FFMPEG"; exit_function; fi
 
@@ -32,6 +34,9 @@ target_link_libraries (DisplayImage ${OpenCV_LIBS})
 
 add_executable(OpticalFlow main.cpp)
 target_link_libraries (OpticalFlow ${OpenCV_LIBS})
+
+
+#List of OpenCV*.make
 #opencv_calib3d
 #opencv_core
 #opencv_features2d
