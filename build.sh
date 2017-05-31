@@ -135,7 +135,7 @@ if [ "$FFMPEG_OPTION" == "y" ] ; then
     cd $FFMPEG_PWD
     echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning ffmpeg ...."; make distclean; cd ../../; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning ffmpeg ...."; make distclean; rm -rf $FFMPEG_PWD/../ffmpeg-install/*; cd ../../; return; fi
     echo "Configuring ffmpeg"
     cd $FFMPEG_PWD
     CXXFLAGS="-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC" ./configure --prefix="$FFMPEG_PWD/../ffmpeg-install" --bindir="./bin" --enable-shared
@@ -161,7 +161,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     tput setf 2 
     cd $OPENCV_PWD
     echo "Building in $(pwd)"
-    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf release; cd ../../; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf release; rm -rf $FFMPEG_PWD/../opencv-install/*; cd ../../; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Check compatibility"
     export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOTSTRAP_PWD/stage/lib/pkgconfig
