@@ -26,8 +26,11 @@ endif (OpenCV_FOUND)
 add_executable(DisplayImage DisplayImage.cpp GreyImage.cpp)
 target_link_libraries (DisplayImage ${OpenCV_LIBS})
 
-add_executable(OpticalFlow main.cpp)
-target_link_libraries (OpticalFlow ${OpenCV_LIBS})
+#add_executable(OpticalFlow main.cpp)
+#target_link_libraries (OpticalFlow ${OpenCV_LIBS})
+
+add_executable(Disparity Disparity.cpp)
+target_link_libraries (Disparity ${OpenCV_LIBS})
 
 
 #List of OpenCV*.make
