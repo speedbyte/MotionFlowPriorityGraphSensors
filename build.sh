@@ -135,11 +135,10 @@ if [ "$FFMPEG_OPTION" == "y" ] ; then
     cd $FFMPEG_PWD
     echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning ffmpeg ...."; make clean; cd ../../; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning ffmpeg ...."; make distclean; cd ../../; return; fi
     echo "Configuring ffmpeg"
     cd $FFMPEG_PWD
-    ./configure --prefix=../ffmpeg-install
-    #./conf.sh
+    CXXFLAGS="-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC" ./configure --prefix="$FFMPEG_PWD/../ffmpeg-install" --bindir="./bin" --enable-shared
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     time make > /dev/null #2>&1
     ret=$(echo $?)
@@ -156,16 +155,16 @@ fi
 
 function enter_opencv_fn
 {
+FFMPEG_PWD="$(pwd)/libs/ffmpeg"
 OPENCV_PWD="$(pwd)/libs/opencv"
 if [ "$OPENCV_OPTION" == "y" ]; then
     tput setf 2 
     cd $OPENCV_PWD
     echo "Building in $(pwd)"
-    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf Release; cd ../../; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf release; cd ../../; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Check compatibility"
-    FFMPEG_PWD="$(pwd)/libs/ffmpeg"
-    export PKG_CONFIG_PATH=$FFMPEG_PWD/build/lib/pkgconfig:$BOOTSTRAP_PWD/stage/lib/pkgconfig
+    export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOTSTRAP_PWD/stage/lib/pkgconfig
     PKG_CONFIG_PATH_FFMPEG=$(pkg-config --cflags libavcodec)
     echo $PKG_CONFIG_PATH_FFMPEG
     ACTUAL_FFMPEG_PATH=$FFMPEG_PWD/../ffmpeg-install/include
@@ -174,13 +173,13 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Configuring opencv"
     #export PKG_CONFIG_LIBDIR=$PKG_CONFIG_LIBDIR:$(pwd)/../ffmpeg/build/lib/
-    #export LD_LIBRARY_PATH=$(pwd)/../ffmpeg/build/lib/
+    export LD_LIBRARY_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/
     echo $(printenv | grep PKG_CONFIG_PATH)
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "In order to use the opencv 3rd party versions of libraries instead of system ones on UNIX systems you
     should use BUILD_<library_name> CMake flags (for example, -D BUILD_PNG for the libpng library)."
-    cmake -Wno-dev -D ENABLE_PRECOMPILED_HEADERS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../opencv-install -D WITH_GTK=ON ..
-    cd release
+    mkdir -p release; cd release
+    cmake -Wno-dev -Wl,-rpath=$FFMPEG_PWD/../ffmpeg-install/lib/ -D ENABLE_PRECOMPILED_HEADERS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../../opencv-install -D WITH_GTK=ON ..
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     time make > /dev/null #2>&1
     ret=$(echo $?)
