@@ -2,3 +2,6 @@
 	path = libs/ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git
 	branch = master
+[submodule "opencv"]
+	path = libs/opencv
+	url = https://github.com/opencv/opencv.git
