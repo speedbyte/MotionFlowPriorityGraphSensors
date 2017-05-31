@@ -1,0 +1,9 @@
+*.pro.user
+*.o
+/build-*/
+*.vcxproj*
+Win32/
+debug/
+release/
+GeneratedFiles/
+
