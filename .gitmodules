@@ -5,3 +5,7 @@
 [submodule "opencv"]
 	path = libs/opencv
 	url = https://github.com/opencv/opencv.git
+[submodule "PRSM"]
+	path = external/algorithms/PRSM-sceneflow
+	url = https://github.com/vogechri/PRSM
+	branch = master
