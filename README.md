@@ -28,7 +28,6 @@ false negatives. These false positives and negatives due to echo, reflections,
 and other interferences would be an input to existing ADAS algorithms and hence
 make the safety critical algorithms more robust.
 
-Presentation:
 
 Advantages and disadvantages of the Virtual world.
 
@@ -63,5 +62,25 @@ Basically, we combined the two algorithms for the final evaluation.
 This should be able to improve the detection of scene flow in comparision to just the image or just the lidar data set or just the radar data set.
 
 ----
+
+Bachelor Arbeit:
+
+Evaluate optical flow algorithms with Kitti data and Generated VIRES Data.
+Capture pedesterian movements with Raspberry or any stereo camera and then run the above algorithms.
+Generate scenes in VIRES with respect to pedesterian detection ( there should be similarity between Raspberry and the VIRES images )  and run the algorithms.
+Compare the two methods ( 1st - real world values and 2nd - virtual values )  for validation purpose.
+
+
+BAchelor Arbeit:
+
+Evaluate lidar flow algorithms with Kitti data and Generated VIRES Data.
+Capture pedesterian movements with Velodyne and then run the above algorithms.
+Generate scenes in VIRES with respect to pedesterian detection ( there should be similarity between Velodyne and the VIRES sensor data )  and run the algorithms.
+Compare the two methods ( 1st - real world values and 2nd - virtual values )  for validation purpose.
+
+
+Bachelor ARbeit:
+
+
 
 
