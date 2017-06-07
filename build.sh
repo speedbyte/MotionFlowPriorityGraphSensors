@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts ":t:bfolscah" opt; do
+while getopts ":t:bfolpcieah" opt; do
   case $opt in
     t)
       echo "-t was triggered, Parameter: $OPTARG" >&2
@@ -22,7 +22,7 @@ while getopts ":t:bfolscah" opt; do
       echo "-l was triggered, Parameter: $OPTARG" >&2
       LIBSVM_OPTION="y"
       ;;
-    s)
+    p)
       echo "-s was triggered, Parameter: $OPTARG" >&2
       PROJECT_OPTION="y"
       ;;
@@ -34,15 +34,20 @@ while getopts ":t:bfolscah" opt; do
       echo "-i was triggered, Parameter: $OPTARG" >&2
       IVT_OPTION="y"
       ;;
+    e)
+      echo "-e was triggered, Parameter: $OPTARG" >&2
+      EXTERNAL_OPTION="y"
+      ;;
     a)
       echo "-a was triggered, Parameter: $OPTARG" >&2
-      OPENCV_OPTION="y"
-      FFMPEG_OPTION="y"
-      LIBSVM_OPTION="y"
       BOOTSTRAP_OPTION="y"
+      FFMPEG_OPTION="y"
+      OPENCV_OPTION="y"
+      LIBSVM_OPTION="y"
       PROJECT_OPTION="y"
       CAFFE_OPTION="y"
       IVT_OPTION="y"
+      EXTERNAL_OPTION="y"
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -50,25 +55,16 @@ while getopts ":t:bfolscah" opt; do
       ;;
     h)
       echo "Options are \
-      -t \
-      -b \
-      -f \
-      -o \
-      -l \
-      -p \
-      -a \
-      -h \
-      -c \
-      -i \
-       "
+      -tbfolpacieah"
       echo "Option -t means type and has parameters either manual or clean"
       echo "Option -b is meant for boost"
       echo "Option -f is meant for ffmpeg"
       echo "Option -o is meant for opencv"
       echo "Option -l is meant for libsvm"
-      echo "Option -s is meant for image streaming server"
+      echo "Option -p is meant for project"
       echo "Option -c is meant for caffe"
       echo "Option -i is meant for ivt"
+      echo "Option -e is meant for external"
       echo "Option -a is meant for all"
       echo "Option -h is meant for this help"
       echo "The same options are valid with -t clean for example <-t clean -o> will only clean opencv whereas <-t clean -a> will clean all"
@@ -91,6 +87,7 @@ if [ $# -eq 0 ]; then
     PROJECT_OPTION="y"
     CAFEE_OPTION="y"
     IVT_OPTION="y"
+    EXTERNAL_OPTION="y"
 fi
 
 
@@ -110,7 +107,8 @@ function exit_function
 
 function enter_boost_fn
 {
-BOOTSTRAP_PWD="$(pwd)/libs/boost"
+cd $SOURCE_DIR
+BOOTSTRAP_PWD="$SOURCE_DIR/libs/boost"
 if [ "$BOOTSTRAP_OPTION" == "y" ] ; then
     cd $BOOTSTRAP_PWD
     if [ ! -d stage ] ; then
@@ -129,11 +127,12 @@ fi
 
 function enter_ffmpeg_fn
 {
-FFMPEG_PWD="$(pwd)/libs/ffmpeg"
+cd $SOURCE_DIR
+FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
 if [ "$FFMPEG_OPTION" == "y" ] ; then
     tput setf 3
     cd $FFMPEG_PWD
-    echo "Building in $(pwd)"
+    echo "Building in $SOURCE_DIR"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning ffmpeg ...."; make distclean; rm -rf $FFMPEG_PWD/../ffmpeg-install/*; cd ../../; return; fi
     echo "Configuring ffmpeg"
@@ -142,12 +141,12 @@ if [ "$FFMPEG_OPTION" == "y" ] ; then
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     time make > /dev/null #2>&1
     ret=$(echo $?)
-    echo "make in $(pwd) returned $ret"
+    echo "make in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "ffmpeg make successful"; else echo "ffmpeg build terminated with error"; rm -rf build; rm -f config.mak; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     time make install >> /dev/null #2>&1
     ret=$(echo $?)
-    echo "make-install in $(pwd) returned $ret"
+    echo "make-install in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "ffmpeg make-install successful"; else echo "ffmpeg make-install terminated with error. Please see the /dev/null file "; exit_function; fi
     cd ../../
 fi
@@ -155,16 +154,17 @@ fi
 
 function enter_opencv_fn
 {
-FFMPEG_PWD="$(pwd)/libs/ffmpeg"
-OPENCV_PWD="$(pwd)/libs/opencv"
+cd $SOURCE_DIR
+FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
+OPENCV_PWD="$SOURCE_DIR/libs/opencv"
 if [ "$OPENCV_OPTION" == "y" ]; then
     tput setf 2 
     cd $OPENCV_PWD
-    echo "Building in $(pwd)"
+    echo "Building in $SOURCE_DIR"
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf release; rm -rf $FFMPEG_PWD/../opencv-install/*; cd ../../; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Check compatibility"
-    export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOTSTRAP_PWD/stage/lib/pkgconfig
+    export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOTSTRAP_PWD/stage/lib/pkgconfig:$OPENCV_PWD/../opencv-install/lib/pkgconfig
     PKG_CONFIG_PATH_FFMPEG=$(pkg-config --cflags libavcodec)
     echo $PKG_CONFIG_PATH_FFMPEG
     ACTUAL_FFMPEG_PATH=$FFMPEG_PWD/../ffmpeg-install/include
@@ -172,7 +172,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     if [[ $PKG_CONFIG_PATH_FFMPEG == "-I$ACTUAL_FFMPEG_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_FFMPEG $PKG_CONFIG_PATH_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_FFMPEG $PKG_CONFIG_PATH_FFMPEG"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Configuring opencv"
-    #export PKG_CONFIG_LIBDIR=$PKG_CONFIG_LIBDIR:$(pwd)/../ffmpeg/build/lib/
+    #export PKG_CONFIG_LIBDIR=$PKG_CONFIG_LIBDIR:$SOURCE_DIR/../ffmpeg/build/lib/
     export LD_LIBRARY_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/
     echo $(printenv | grep PKG_CONFIG_PATH)
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
@@ -187,7 +187,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     time make install >> /dev/null #2>&1
     ret=$(echo $?)
-    echo "make-install in $(pwd) returned $ret"
+    echo "make-install in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "opencv make-install successful"; else echo "opencv make-install terminated with error. Please see the /dev/null file "; exit_function; fi
     cd ../../../
 fi
@@ -195,11 +195,12 @@ fi
 
 function enter_libsvm_fn
 {
-LIBSVM_PWD="$(pwd)/libs/libsvm"
+cd $SOURCE_DIR
+LIBSVM_PWD="$SOURCE_DIR/libs/libsvm"
 if [ "$LIBSVM_OPTION" == "y" ]; then
     tput setf 3 
     cd $LIBSVM_PWD
-    echo "Building in $(pwd)"
+    echo "Building in $SOURCE_DIR"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning libsvm ...."; make clean; cd ../../; return; fi
     echo "Making libsvm"
@@ -207,20 +208,21 @@ if [ "$LIBSVM_OPTION" == "y" ]; then
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     time make lib > /dev/null #2>&1
     ret=$(echo $?)
-    echo "make in $(pwd) returned $ret"
+    echo "make in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "libsvm make successful"; else echo "libsvm build terminated with error"; make clean; exit_function; fi
     ln -s libsvm.so.2 libsvm.so # making -lsvm possible
     cd ../../
 fi
 }
 
-function enter_image_streaming_server_fn
+function enter_project__previous_fn
 {
-PROJECT_PWD="$(pwd)"
+cd $SOURCE_DIR
+PROJECT_PWD="$SOURCE_DIR/project"
 if [ "$PROJECT_OPTION" == "y" ]; then
     tput setf 3
     cd $PROJECT_PWD
-    echo "Building in $(pwd)"
+    echo "Building in $SOURCE_DIR"
     if [ "$BUILD_OPTION" == "clean" ]; then make clean; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     make distclean # remove all libs and, more importantly, all old Makefiles
@@ -235,22 +237,36 @@ if [ "$PROJECT_OPTION" == "y" ]; then
 fi
 }
 
+function enter_project_fn
+{
+cd $SOURCE_DIR
+PROJECT_PWD="$SOURCE_DIR/project"
+if [ "$PROJECT_OPTION" == "y" ]; then
+    tput setf 3
+    cd $PROJECT_PWD/build
+    echo "Building in $PROJECT_DIR"
+    if [ "$BUILD_OPTION" == "clean" ]; then rm -rf *; cd .; return; fi
+    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
+    cmake .. # remove all libs and, more importantly, all old Makefiles
+    ret=$(echo $?)
+    if [ "$ret" == "0" ]; then echo "project cmake conf successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
+    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
+    time make #> /dev/null #2>&1
+    ret=$(echo $?)
+    if [ "$ret" == "0" ]; then echo "project make successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
+    cd .
+fi
+}
+
 function enter_caffe_fn
 {
-PROJECT_LIBS="$(pwd)/libs"
-CAFFE_PWD="$(pwd)/libs/caffe"
+cd $SOURCE_DIR
+PROJECT_LIBS="$SOURCE_DIR/libs"
+CAFFE_PWD="$SOURCE_DIR/libs/caffe"
 if [ "$CAFFE_OPTION" == "y" ]; then
 	cd $CAFFE_PWD
-	echo "Building in $(pwd)"
+	echo "Building in $SOURCE_DIR"
 	if [ "$BUILD_OPTION" == "clean" ]; then echo "Cleaning caffe"; make clean; cd .; return; fi
-	#if [ ! -d build ] ; then
-	#	mkdir build
-	#fi
-	#cd build
-	#export CMAKE_LIBRARY_PATH=$BOOTSTRAP_PWD/stage/lib/:$CMAKE_LIBRARY_PATH
-	#export CMAKE_INCLUDE_PATH=$BOOTSTRAP_PWD:$CMAKE_INCLUDE_PATH
-	#cmake ..
-  
 	make all -n PROJECT_LIBS=$PROJECT_LIBS
 	ret=$(echo $?)
   if [ "$ret" == "0" ]; then echo "caffe make successful"; else echo "caffe make terminated with error. Please see the /dev/null file"; exit_function; fi
@@ -260,10 +276,11 @@ fi
 
 function enter_ivt_fn
 {
-IVT_PWD="$(pwd)/libs/IVT"
+cd $SOURCE_DIR
+IVT_PWD="$SOURCE_DIR/libs/IVT"
 if [ "$IVT_OPTION" == "y" ]; then
 	cd $IVT_PWD
-	echo "Building in $(pwd)"
+	echo "Building in $SOURCE_DIR"
 	./build.sh
 	ret=$(echo $?)
   if [ "$ret" == "0" ]; then echo "ivt make successful"; else echo "ivt make terminated with error. Please see the /dev/null file"; exit_function; fi
@@ -271,32 +288,23 @@ if [ "$IVT_OPTION" == "y" ]; then
 fi
 }
 
-function enter_image_streaming_client_fn
+function enter_external_algorithm_fn
 {
-IMAGE_PWD="$(pwd)/ImageStreamingClient"
-if [ "$IMAGE_OPTION" == "y" ]; then
-    tput setf 2 
-    cd $IMAGE_PWD
-    echo "Building in $(pwd)"
-    if [ "$BUILD_OPTION" == "clean" ]; then make clean; cd ../; return; fi
-    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    ${QMAKE} ImageStreamingClient.pro #-recursive -spec linux-g++-64 CONFIG+=debug
-    ret=$(echo $?)
-    if [ "$ret" == "0" ]; then echo "image streaming qmake conf successful"; else echo "image streaming qmake conf terminated with error. Please see the /dev/null file"; exit_function; fi
-    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    time make #> /dev/null #2>&1
-    ret=$(echo $?)
-    if [ "$ret" == "0" ]; then echo "image streaming make successful"; else echo "image streaming make terminated with error. Please see the /dev/null file"; exit_function; fi
-    cd ../
+cd $SOURCE_DIR
+if [ "$EXTERNAL_OPTION" == "y" ] ; then
+EXTERNAL_PWD="$SOURCE_DIR/external"
+cd $EXTERNAL_PWD
+cd algorithms/VSF-sceneflow-1.0
+make
 fi
 }
 
-
+SOURCE_DIR=$(pwd)
 enter_boost_fn
 enter_ffmpeg_fn
 enter_opencv_fn
 enter_caffe_fn
 enter_libsvm_fn
 enter_ivt_fn
-enter_image_streaming_server_fn
-enter_image_streaming_client_fn
+enter_project_fn
+enter_external_algorithm_fn
