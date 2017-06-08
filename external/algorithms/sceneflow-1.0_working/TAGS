@@ -1,0 +1,1033 @@
+
+ImagesTest.cpp,716
+#define snprintf 16,274
+#define SIZE 22,367
+#define RADIUS 23,384
+#define SIMPLE_TEST 25,405
+# define M_PI 28,441
+static struct sigaction old_sigfpe;32,513
+sigfpe_handler(36,563
+static inline double square(63,1447
+void disp_groundtruth(69,1547
+void flow_groundtruth(82,1958
+void flow_groundtruth2(98,2385
+void flow_groundtruth_fracture(116,2933
+void Yosemite_generate_data(131,3429
+void Yosemite_generate_groundtruth(193,5632
+void AngularErrorGeneration(230,7001
+void BallStereoStatistics(357,11542
+void AngularErrorGenerationFracture(458,14643
+void OF_Statistics(646,21208
+void Stereo_Statistics(738,24213
+void RectifyStereoPairs(787,25605
+void CreateSimpleImages(793,25989
+int main(814,26578
+
+Resolution.cpp,2260
+#define snprintf 5,71
+#define CONST_COLOR 11,173
+#define MAX_HUE 12,197
+#define GMRES 15,282
+#define GMRES_KMAX 16,298
+#define DISACTIVATION_THRESHOLD 18,359
+#define WARP_DETERMINANT_THRESHOLD 20,422
+#define EPSILON_PSI_SMOOTH 22,490
+#define EPSILON_PSI_DATA 23,569
+#define MAX_INCR 25,644
+#define DEBUG_PIXEL 27,737
+#define DEBUG_PIXEL_X 28,759
+#define DEBUG_PIXEL_Y 29,785
+#define DEBUG_PIXEL_COMPONENT 30,810
+#define DISACTIVATE_BORDER 37,1154
+# define M_PI 40,1199
+static void debug_me(43,1258
+static inline double square(46,1286
+ inline double fmax(50,1345
+inline  unsigned char cvmGet8u(56,1416
+inline  static void  cvmSet8u(64,1716
+inline  static void  cvmSet8u_borders(74,2114
+static inline double sign(95,2605
+static inline float sign(100,2679
+static inline void Interpolate_X(109,2893
+static inline void SmoothImage(121,3333
+static inline void SmoothData(125,3422
+static inline double& Crop(136,3617
+static inline void CropArr(146,3816
+void DtEstimation(155,4094
+void ScaleChange 194,5259
+static inline double NormalDensity(278,8535
+static void GradientFast_32f(283,8737
+static void ZBufMap_32f(348,10698
+void SaveImage(387,12137
+void SaveResults(402,12612
+static inline double PsiData(514,16231
+static inline double PsiSmooth(517,16335
+static inline double DPsiSmooth(522,16590
+static inline double DPsiData(528,16748
+static inline void divergence_coefficients_interpolate(535,17053
+static inline void divergence_coefficients_interpolate_diag(546,17699
+static inline void Derivative(558,18329
+void MatrixNormalize(574,18957
+void EnergyComputation(593,19729
+static inline double max_3_arg(855,29055
+static inline double norm_vect(861,29298
+static inline double norm_mat(867,29527
+static inline void GaussianPyramid(873,29760
+static inline double teta_vect(879,29989
+static inline void Underpolate(885,30239
+static void Underpolate(897,30652
+double n_norm(919,31521
+void QR(927,31776
+void Transpose(934,31987
+void SFMatrixProduct(954,32596
+double scalar_prod(1117,39041
+void ColumnExtract(1125,39308
+void GmRes(1131,39578
+void GmRes2(1255,43600
+void PyramidBuild(1382,47487
+void PyramidSmooth(1403,48221
+void PyramidCopy(1410,48431
+void OpticalFlow(1420,48812
+void SceneFlow(2343,88977
+
+dictionary.cpp,567
+#define MAXVALSZ	28,833
+#define DICTMINSZ	31,915
+#define DICT_INVALID_KEY 34,963
+static void * mem_double(43,1291
+unsigned dictionary_hash(71,2220
+dictionary * dictionary_new(102,3008
+void dictionary_del(128,3737
+char * dictionary_get(162,4704
+char dictionary_getchar(194,5610
+int dictionary_getint(219,6365
+double dictionary_getdouble(243,7126
+void dictionary_set(280,8381
+void dictionary_unset(345,10154
+void dictionary_setint(393,11297
+void dictionary_setdouble(415,11922
+void dictionary_dump(437,12550
+#define NVALS 460,12959
+int main(461,12979
+
+groundtruth.cpp,335
+#define SIZE 21,284
+#define RADIUS 22,301
+# define M_PI 24,366
+void flow_sphere(28,460
+#define VIEWPOINT_X 45,1055
+#define VIEWPOINT_Z 46,1079
+float disp_sphere(141,3582
+float dispx_sphere(162,3962
+float dispy_sphere(183,4340
+float flowx_sphere(206,4758
+float flowy_sphere(225,5166
+void recons(232,5342
+void proj(244,5604
+
+iniconfig.cpp,821
+#define snprintf 5,82
+#define INI_SEC(8,117
+#define INI_STR(9,150
+#define INI_INT(10,209
+#define INI_DBL(11,266
+#undef INI_SEC13,347
+#undef INI_STR14,362
+#undef INI_INT15,377
+#undef INI_DBL16,392
+int ReadConfig(18,408
+#define INI_SEC(25,528
+#define INI_STR(26,564
+#define INI_INT(27,705
+#define INI_DBL(28,771
+#undef INI_SEC30,858
+#undef INI_STR31,873
+#undef INI_INT32,888
+#undef INI_DBL33,903
+#define INI_SEC(39,1011
+#define INI_STR(40,1083
+#define INI_INT(41,1285
+#define INI_DBL(42,1433
+#undef INI_SEC44,1613
+#undef INI_STR45,1628
+#undef INI_INT46,1643
+#undef INI_DBL47,1658
+int PrintConfig(53,1718
+#define INI_SEC(55,1745
+#define INI_STR(56,1824
+#define INI_INT(57,1922
+#define INI_DBL(58,2010
+#undef INI_SEC63,2171
+#undef INI_STR64,2186
+#undef INI_INT65,2201
+#undef INI_DBL66,2216
+
+iniparser.cpp,582
+#define ASCIILINESZ 19,542
+#define INI_INVALID_KEY 20,575
+static void iniparser_add_entry(27,867
+int iniparser_getnsec(67,2012
+char * iniparser_getsecname(100,2897
+void iniparser_dump(136,3892
+void iniparser_dump_ini(165,4720
+char * iniparser_getstr(226,6620
+char * iniparser_getstring(247,7438
+int iniparser_getint(290,8744
+double iniparser_getdouble(313,9535
+int iniparser_getboolean(356,10857
+int iniparser_find_entry(387,11900
+int iniparser_setstr(415,12693
+void iniparser_unset(431,13210
+dictionary * iniparser_load(452,13938
+void iniparser_freedict(519,16010
+
+resize.cpp,2070
+#define ICV_WARP_SHIFT 8,130
+#define ICV_WARP_MASK 9,165
+#define ICV_LINEAR_TAB_SIZE 11,226
+#define ICV_CUBIC_TAB_SIZE 15,364
+#define CV_8TO32F(22,554
+#define IPCV_RESIZE(24,601
+#undef IPCV_RESIZE43,1255
+#define ICV_WARP_MUL_ONE_8U(47,1344
+#define ICV_WARP_DESCALE_8U(48,1400
+#define ICV_WARP_CLIP_X(49,1466
+#define ICV_WARP_CLIP_Y(51,1610
+void icvInitLinearCoeffTab(56,1808
+float icvCubicCoeffs[icvCubicCoeffs73,2136
+void icvInitCubicCoeffTab(75,2185
+        #define ICV_CUBIC_1(92,2692
+        #define ICV_CUBIC_2(93,2753
+        #define ICV_CUBIC_1(97,2897
+        #define ICV_CUBIC_2(98,2967
+icvResize_NN_8u_C1R(118,3641
+typedef struct CvResizeAlpha187,5783
+    int idx;CvResizeAlpha::idx189,5814
+        float alpha;CvResizeAlpha::alpha192,5843
+        int ialpha;CvResizeAlpha::ialpha193,5864
+CvResizeAlpha;196,5893
+#define  ICV_DEF_RESIZE_BILINEAR_FUNC(199,5910
+typedef struct CvDecimateAlpha272,11655
+    int si,CvDecimateAlpha::si274,11688
+    int si, di;CvDecimateAlpha::di274,11688
+    float alpha;CvDecimateAlpha::alpha275,11704
+CvDecimateAlpha;277,11723
+#define  ICV_DEF_RESIZE_AREA_FAST_FUNC(280,11742
+#define  ICV_DEF_RESIZE_AREA_FUNC(316,14453
+#define  ICV_DEF_RESIZE_BICUBIC_FUNC(409,21837
+ICV_DEF_RESIZE_BILINEAR_FUNC(533,31765
+typedef CvStatus (CV_STDCALL * CvResizeBilinearFunc)574,33626
+typedef CvStatus (CV_STDCALL * CvResizeBicubicFunc)580,33950
+typedef CvStatus (CV_STDCALL * CvResizeAreaFastFunc)586,34243
+typedef CvStatus (CV_STDCALL * CvResizeAreaFunc)591,34488
+icvResize_8u_C1R_t icvResize_8u_C1R_p 600,34880
+icvResize_8u_C3R_t icvResize_8u_C3R_p 601,34923
+icvResize_8u_C4R_t icvResize_8u_C4R_p 602,34966
+icvResize_16u_C1R_t icvResize_16u_C1R_p 603,35009
+icvResize_16u_C3R_t icvResize_16u_C3R_p 604,35054
+icvResize_16u_C4R_t icvResize_16u_C4R_p 605,35099
+icvResize_32f_C1R_t icvResize_32f_C1R_p 606,35144
+icvResize_32f_C3R_t icvResize_32f_C3R_p 607,35189
+icvResize_32f_C4R_t icvResize_32f_C4R_p 608,35234
+typedef CvStatus (CV_STDCALL * CvResizeIPPFunc)610,35280
+cvResizeScale(618,35593
+
+strlib.cpp,168
+#define ASCIILINESZ	27,841
+char * strlwc(47,1613
+char * strupc(78,2475
+char * strskp(107,3157
+char * strcrop(132,3942
+char * strstrip(166,4904
+int main(190,5273
+
+ImagesTest.h,26
+#define IMAGESTEST_H2,21
+
+Resolution.h,26
+#define RESOLUTION_H2,21
+
+dictionary.h,206
+#define _DICTIONARY_H_17,549
+typedef struct _dictionary_ 42,1413
+	int				n 43,1443
+	int				size 44,1495
+	char 		**	val 45,1530
+	char 		**  key 46,1576
+	unsigned	 *	hash 47,1621
+} dictionary 48,1677
+
+groundtruth.h,27
+#define GROUNDTRUTH_H2,22
+
+iniconfig.h,208
+#define __INICONFIG_H2,22
+#define INI_SEC(7,115
+#define INI_STR(8,148
+#define INI_INT(9,204
+#define INI_DBL(10,258
+#undef INI_SEC12,336
+#undef INI_STR13,351
+#undef INI_INT14,366
+#undef INI_DBL15,381
+
+iniparser.h,29
+#define _INIPARSER_H_13,321
+
+resize.h,68
+#define _RESIZE_H_3,20
+CVAPI(14,251
+#define cvResizeScale(19,498
+
+strlib.h,26
+#define _STRLIB_H_16,453
+
+bp-vision/stereo.cpp,217
+static void dt(31,940
+void msg(45,1236
+image<float[BP_VALUES]> *comp_data(comp_data78,2000
+image<uchar> *output(output123,3263
+void bp_cb(155,4162
+image<uchar> *stereo_ms(stereo_ms187,5066
+int main(269,7612
+
+bp-vision/convolve.h,94
+#define CONVOLVE_H22,759
+static void convolve_even(30,902
+static void convolve_odd(50,1447
+
+bp-vision/filter.h,233
+#define FILTER_H4,39
+#define WIDTH 13,172
+static void normalize(16,236
+#define MAKE_FILTER(29,508
+static image<float> *smooth(smooth43,1161
+image<float> *smooth(smooth57,1579
+static image<float> *laplacian(laplacian65,1777
+
+bp-vision/image.h,406
+#define IMAGE_H4,44
+class image 8,100
+  int width(image::width23,389
+  int height(image::height26,462
+  T *data;image::data29,520
+  T **access;image::access32,556
+  int w,image::w35,583
+  int w, h;image::h35,583
+#define imRef(39,637
+#define imPtr(42,729
+image<T>::image(image45,793
+image<T>::~image(~image60,1179
+void image<T>::init(init66,1261
+image<T> *image<T>::copy(copy75,1423
+
+bp-vision/imconv.h,812
+#define CONV_H22,760
+#define	RED_WEIGHT	29,853
+#define GREEN_WEIGHT	30,878
+#define BLUE_WEIGHT	31,905
+static image<uchar> *imageRGBtoGRAY(imageRGBtoGRAY33,932
+static image<rgb> *imageGRAYtoRGB(imageGRAYtoRGB49,1375
+static image<float> *imageUCHARtoFLOAT(imageUCHARtoFLOAT64,1813
+static image<float> *imageINTtoFLOAT(imageINTtoFLOAT77,2158
+static image<uchar> *imageFLOATtoUCHAR(imageFLOATtoUCHAR90,2506
+static image<uchar> *imageFLOATtoUCHAR(imageFLOATtoUCHAR109,3045
+static image<long> *imageUCHARtoLONG(imageUCHARtoLONG115,3203
+static image<uchar> *imageLONGtoUCHAR(imageLONGtoUCHAR128,3544
+static image<uchar> *imageLONGtoUCHAR(imageLONGtoUCHAR146,4074
+static image<uchar> *imageSHORTtoUCHAR(imageSHORTtoUCHAR152,4228
+static image<uchar> *imageSHORTtoUCHAR(imageSHORTtoUCHAR171,4768
+
+bp-vision/imutil.h,88
+#define IMUTIL_H22,766
+void min_max(29,893
+image<uchar> *threshold(threshold51,1323
+
+bp-vision/misc.h,485
+#define MISC_H22,756
+#define M_PI 27,803
+typedef unsigned char uchar;30,842
+typedef struct { uchar r,32,872
+typedef struct { uchar r, g,32,872
+typedef struct { uchar r, g, b;32,872
+typedef struct { uchar r, g, b; } rgb;32,872
+inline bool operator=34,912
+inline T abs(39,1044
+inline int sign(42,1119
+inline T square(45,1198
+inline T bound(48,1263
+inline bool check_bound(53,1390
+inline int vlib_round(57,1493
+inline int vlib_round(59,1553
+inline double gaussian(61,1613
+
+bp-vision/pnmfile.h,451
+#define PNM_FILE_H22,763
+#define BUF_SIZE 31,897
+class pnm_error 33,919
+static void read_packed(35,941
+static void write_packed(49,1269
+static void pnm_read(65,1645
+static image<uchar> *loadPBM(loadPBM81,1902
+static void savePBM(103,2404
+static image<uchar> *loadPGM(loadPGM113,2713
+static void savePGM(138,3271
+static image<rgb> *loadPPM(loadPPM147,3589
+static void savePPM(172,4158
+void load_image(182,4491
+void save_image(202,4964
+
+bp-vision/stereo.h,219
+#define BP_ITER 1,0
+#define BP_LEVELS 2,65
+#define BP_DISC_K 5,179
+#define BP_DATA_K 7,308
+#define BP_LAMBDA 8,369
+#define BP_INF 10,427
+#define BP_VALUES 13,601
+#define BP_SCALE 14,660
+#define BP_SIGMA 16,733
+
+inifile.h,0
+
+Ball.ini,4519
+Alpha = 250Alpha2,29
+AlphaOF = 250AlphaOF3,87
+AlphaST = 250AlphaST4,182
+AlphaSF = 250AlphaSF5,272
+Lambda = 0.05Lambda6,366
+Mu = 0.05Mu7,445
+Gamma = 1.5Gamma8,515
+PyramidLevelOF = 18PyramidLevelOF10,545
+PyramidLevelST = 12PyramidLevelST11,623
+PyramidLevelSF = 12PyramidLevelSF12,695
+PyramidLevelFinal = 1PyramidLevelFinal14,751
+PyramidEta = 0.9PyramidEta15,795
+LogFile = ./Results/Ball/Ball.logLogFile16,839
+DoStereo = 1DoStereo17,890
+InitStereoBP = 1InitStereoBP18,946
+DoSceneFlow = 1DoSceneFlow19,1018
+Ilt_FileName = ./Images/Ball/BallL.1.pgmIlt_FileName21,1142
+Irt_FileName = ./Images/Ball/BallR.1.pgmIrt_FileName23,1271
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix24,1336
+IltPyramidFilePrefix = ./Results/Ball/Debug/Ilt_IltPyramidFilePrefix26,1420
+IrtPyramidFilePrefix = ./Results/Ball/Debug/Irt_IrtPyramidFilePrefix28,1524
+GT_Special = 1GT_Special32,1613
+GT_Dt_View_FileName = ./Results/Ball/Dt_groundtruth.pngGT_Dt_View_FileName34,1781
+GT_U_View_FileName = ./Results/Ball/U_groundtruth.pngGT_U_View_FileName35,1876
+GT_V_View_FileName = ./Results/Ball/V_groundtruth.pngGT_V_View_FileName36,1966
+OF_It_FileName = ./Results/Ball/Debug/It.pngOF_It_FileName40,2144
+OF_It_Warped_FileName = ./Results/Ball/Debug/It_warped.pngOF_It_Warped_FileName41,2192
+OF_U_increment_FileName = ./Results/Ball/Debug/delta_U_OF.pngOF_U_increment_FileName42,2254
+OF_V_increment_FileName = ./Results/Ball/Debug/delta_V_OF.pngOF_V_increment_FileName43,2319
+OF_U_FileName = ./Results/Ball/Debug/U_OF.pngOF_U_FileName44,2384
+OF_V_FileName = ./Results/Ball/Debug/V_OF.pngOF_V_FileName45,2433
+OF_disactivated_FileName =  ./Results/Ball/Debug/disactivated_f.pngOF_disactivated_FileName46,2482
+OF_U_Final_FileName = ./Results/Ball/U_OF_final.pngOF_U_Final_FileName47,2581
+OF_V_Final_FileName = ./Results/Ball/V_OF_final.pngOF_V_Final_FileName48,2684
+OF_Ur_Final_FileName = ./Results/Ball/Ur_OF_final.pngOF_Ur_Final_FileName49,2787
+OF_Vr_Final_FileName = ./Results/Ball/Vr_OF_final.pngOF_Vr_Final_FileName50,2893
+OF_FlowAngularError_FileName = ./Results/Ball/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName51,2999
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Ball/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName52,3096
+OF_OmegaFileError = ./Results/Ball/OmegaSOR_ErrorOF.datOF_OmegaFileError53,3225
+OF_OmegaFileIter = ./Results/Ball/OmegaSOR_IterOF.datOF_OmegaFileIter54,3283
+SF_Dt_Init_FileName = ./Results/Ball/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName61,3618
+SF_U_increment_FileName = ./Results/Ball/Debug/delta_U_SF.pngSF_U_increment_FileName62,3713
+SF_V_increment_FileName = ./Results/Ball/Debug/delta_V_SF.pngSF_V_increment_FileName63,3778
+SF_Dt_increment_FileName = ./Results/Ball/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName65,3910
+SF_U_FileName = ./Results/Ball/Debug/U_SF.pngSF_U_FileName66,3977
+SF_V_FileName = ./Results/Ball/Debug/V_SF.pngSF_V_FileName67,4026
+SF_Dt_FileName = ./Results/Ball/Debug/Dt_SF.pngSF_Dt_FileName69,4126
+SF_disactivated_stereoinit_FileName = ./Results/Ball/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName70,4177
+SF_disactivated_stereo_FileName = ./Results/Ball/Debug/disactivated_st.pngSF_disactivated_stereo_FileName71,4309
+SF_disactivated_flowleft_FileName = ./Results/Ball/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName72,4438
+SF_disactivated_flowright_FileName = ./Results/Ball/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName73,4560
+SF_Ilt_FileName = ./Results/Ball/Debug/Ilt.pngSF_Ilt_FileName75,4734
+SF_Irt_FileName = ./Results/Ball/Debug/Irt.pngSF_Irt_FileName77,4834
+SF_Ilt_Warped_FileName = ./Results/Ball/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName78,4884
+SF_Irt_Warped_FileName = ./Results/Ball/Debug/Irt_warped.pngSF_Irt_Warped_FileName80,5012
+SF_U_Final_FileName = ./Results/Ball/U_SF_final.pngSF_U_Final_FileName81,5076
+SF_V_Final_FileName = ./Results/Ball/V_SF_final.pngSF_V_Final_FileName82,5131
+SF_Dt_Final_FileName = ./Results/Ball/Dt_SF_final.pngSF_Dt_Final_FileName84,5243
+SF_FlowAngularError_FileName = ./Results/Ball/Error_FlowAngular_SF.pngSF_FlowAngularError_FileName86,5379
+SF_FlowAngularErrorOcclusions_FileName = ./Results/Ball/Error_FlowAngularOcc_SF.pngSF_FlowAngularErrorOcclusions_FileName87,5476
+SF_OmegaFileError = ./Results/Ball/OmegaSOR_ErrorSF.datSF_OmegaFileError88,5605
+SF_OmegaFileIter = ./Results/Ball/OmegaSOR_IterSF.datSF_OmegaFileIter89,5663
+SF_Steps = 1SF_Steps90,5719
+
+Ball_SF.ini,4822
+Alpha = 80Alpha2,29
+AlphaSF = 110AlphaSF3,86
+Lambda = 0.5Lambda4,100
+Mu = 0.05Mu5,178
+Gamma = 1.5Gamma6,248
+PyramidLevelOF = 15PyramidLevelOF7,277
+PyramidLevelST = 15PyramidLevelST8,355
+PyramidLevelSF = 15PyramidLevelSF9,427
+PyramidLevelFinal = 1PyramidLevelFinal10,482
+PyramidEta = 0.9PyramidEta11,526
+LogFile = ./Results/Ball/Ball.logLogFile12,570
+DoStereo = 1DoStereo13,621
+InitStereoBP = 1InitStereoBP14,677
+DoSceneFlow = 1DoSceneFlow15,749
+Ilt_FileName = ./Images/Ball/BallL.1.pgmIlt_FileName17,873
+Irt_FileName = ./Images/Ball/BallR.1.pgmIrt_FileName19,1002
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix20,1067
+IltPyramidFilePrefix = ./Results/Ball/Debug/Ilt_IltPyramidFilePrefix22,1151
+IrtPyramidFilePrefix = ./Results/Ball/Debug/Irt_IrtPyramidFilePrefix24,1255
+EpsilonSOR = 0.1EpsilonSOR25,1307
+EpsilonInner = 0.01EpsilonInner26,1324
+EpsilonOuter = 0.001EpsilonOuter27,1344
+MaxIterSOR = 10MaxIterSOR28,1365
+MaxIterInner = 10MaxIterInner29,1381
+MaxIterOuter = 100MaxIterOuter30,1399
+EpsilonSORSF = 0.1EpsilonSORSF31,1418
+MaxIterSORSF = 10MaxIterSORSF32,1437
+PyramidFloatingPoint = 1PyramidFloatingPoint33,1455
+GT_Special = 1GT_Special36,1516
+GT_Dt_View_FileName = ./Results/Ball/Dt_groundtruth.pngGT_Dt_View_FileName38,1684
+GT_U_View_FileName = ./Results/Ball/U_groundtruth.pngGT_U_View_FileName39,1779
+GT_V_View_FileName = ./Results/Ball/V_groundtruth.pngGT_V_View_FileName40,1869
+OF_It_FileName = ./Results/Ball/Debug/It.pngOF_It_FileName44,2047
+OF_It_Warped_FileName = ./Results/Ball/Debug/It_warped.pngOF_It_Warped_FileName45,2095
+OF_U_increment_FileName = ./Results/Ball/Debug/delta_U_OF.pngOF_U_increment_FileName46,2157
+OF_V_increment_FileName = ./Results/Ball/Debug/delta_V_OF.pngOF_V_increment_FileName47,2222
+OF_U_FileName = ./Results/Ball/Debug/U_OF.pngOF_U_FileName48,2287
+OF_V_FileName = ./Results/Ball/Debug/V_OF.pngOF_V_FileName49,2336
+OF_disactivated_FileName =  ./Results/Ball/Debug/disactivated_f.pngOF_disactivated_FileName50,2385
+OF_U_Final_FileName = ./Results/Ball/U_OF_final.pngOF_U_Final_FileName51,2484
+OF_V_Final_FileName = ./Results/Ball/V_OF_final.pngOF_V_Final_FileName52,2587
+OF_Ur_Final_FileName = ./Results/Ball/Ur_OF_final.pngOF_Ur_Final_FileName53,2690
+OF_Vr_Final_FileName = ./Results/Ball/Vr_OF_final.pngOF_Vr_Final_FileName54,2796
+OF_FlowAngularError_FileName = ./Results/Ball/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName55,2902
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Ball/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName56,2999
+OF_OmegaFileError = ./Results/Ball/OmegaSOR_ErrorOF.datOF_OmegaFileError57,3128
+OF_OmegaFileIter = ./Results/Ball/OmegaSOR_IterOF.datOF_OmegaFileIter58,3186
+SF_Dt_Init_FileName = ./Results/Ball/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName65,3521
+SF_U_increment_FileName = ./Results/Ball/Debug/delta_U_SF.pngSF_U_increment_FileName66,3616
+SF_V_increment_FileName = ./Results/Ball/Debug/delta_V_SF.pngSF_V_increment_FileName67,3681
+SF_Dt_increment_FileName = ./Results/Ball/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName69,3813
+SF_U_FileName = ./Results/Ball/Debug/U_SF.pngSF_U_FileName70,3880
+SF_V_FileName = ./Results/Ball/Debug/V_SF.pngSF_V_FileName71,3929
+SF_Dt_FileName = ./Results/Ball/Debug/Dt_SF.pngSF_Dt_FileName73,4029
+SF_disactivated_stereoinit_FileName = ./Results/Ball/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName74,4080
+SF_disactivated_stereo_FileName = ./Results/Ball/Debug/disactivated_st.pngSF_disactivated_stereo_FileName75,4212
+SF_disactivated_flowleft_FileName = ./Results/Ball/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName76,4341
+SF_disactivated_flowright_FileName = ./Results/Ball/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName77,4463
+SF_Ilt_FileName = ./Results/Ball/Debug/Ilt.pngSF_Ilt_FileName79,4637
+SF_Irt_FileName = ./Results/Ball/Debug/Irt.pngSF_Irt_FileName81,4737
+SF_Ilt_Warped_FileName = ./Results/Ball/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName82,4787
+SF_Irt_Warped_FileName = ./Results/Ball/Debug/Irt_warped.pngSF_Irt_Warped_FileName84,4915
+SF_U_Final_FileName = ./Results/Ball/U_SF_final.pngSF_U_Final_FileName85,4979
+SF_V_Final_FileName = ./Results/Ball/V_SF_final.pngSF_V_Final_FileName86,5034
+SF_Dt_Final_FileName = ./Results/Ball/Dt_SF_final.pngSF_Dt_Final_FileName88,5146
+SF_FlowAngularError_FileName = ./Results/Ball/Error_FlowAngular_SF.pngSF_FlowAngularError_FileName90,5282
+SF_FlowAngularErrorOcclusions_FileName = ./Results/Ball/Error_FlowAngularOcc_SF.pngSF_FlowAngularErrorOcclusions_FileName91,5379
+SF_OmegaFileError = ./Results/Ball/OmegaSOR_ErrorSF.datSF_OmegaFileError92,5508
+SF_OmegaFileIter = ./Results/Ball/OmegaSOR_IterSF.datSF_OmegaFileIter93,5566
+SF_Steps = 0SF_Steps94,5622
+
+Cones.ini,4484
+Alpha = 80Alpha2,29
+AlphaOF = 80AlphaOF3,86
+AlphaST = 80AlphaST4,180
+AlphaSF = 80AlphaSF5,269
+Lambda = 0.5Lambda6,362
+Mu = 0.5Mu7,440
+Gamma = 5.Gamma8,509
+PyramidLevelOF = 30PyramidLevelOF9,521
+PyramidLevelST = 8PyramidLevelST10,541
+PyramidLevelSF = 8PyramidLevelSF11,560
+PyramidEta = 0.9PyramidEta12,579
+LogFile = ./Results/Cones/Cones.logLogFile13,623
+DoStereo = 1DoStereo14,676
+DoSceneFlow = 1DoSceneFlow15,732
+Ilt_FileName = ./Images/Cones/ConesL.1.pgmIlt_FileName17,858
+Irt_FileName = ./Images/Cones/ConesR.1.pgmIrt_FileName19,991
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix20,1058
+IltPyramidFilePrefix = ./Results/Cones/Debug/Ilt_IltPyramidFilePrefix22,1143
+IrtPyramidFilePrefix = ./Results/Cones/Debug/Irt_IrtPyramidFilePrefix24,1249
+GT_Special = 3GT_Special27,1338
+GT_Dt_FileName = ./Images/Cones/GroundTruthStereoInit.pngGT_Dt_FileName31,1612
+GT_Dt_Scale = -0.25GT_Dt_Scale32,1704
+GT_Dt_Invalid = 0GT_Dt_Invalid33,1764
+GT_U_FileName = ./Images/Cones/GroundTruthStereoInit.pngGT_U_FileName34,1809
+GT_U_Scale = -0.125GT_U_Scale35,1897
+GT_U_Invalid = 0GT_U_Invalid36,1954
+GT_Dt_View_FileName = ./Results/Cones/Dt_groundtruth.pngGT_Dt_View_FileName38,2097
+GT_U_View_FileName = ./Results/Cones/U_groundtruth.pngGT_U_View_FileName39,2193
+GT_V_View_FileName = ./Results/Cones/V_groundtruth.pngGT_V_View_FileName40,2284
+GT_OcclusionsDiscontinuities = ./Images/Cones/disc.pgmGT_OcclusionsDiscontinuities41,2375
+OF_U_increment_FileName = ./Results/Cones/Debug/delta_U_OF.pngOF_U_increment_FileName45,2555
+OF_V_increment_FileName = ./Results/Cones/Debug/delta_V_OF.pngOF_V_increment_FileName46,2621
+OF_U_FileName = ./Results/Cones/Debug/U_OF.pngOF_U_FileName47,2687
+OF_V_FileName = ./Results/Cones/Debug/V_OF.pngOF_V_FileName48,2737
+OF_disactivated_FileName =  ./Results/Cones/Debug/disactivated_f.pngOF_disactivated_FileName49,2787
+OF_It_Warped_FileName = ./Results/Cones/Debug/It_warped.pngOF_It_Warped_FileName50,2887
+OF_U_Final_FileName = ./Results/Cones/U_OF_final.pngOF_U_Final_FileName51,2950
+OF_V_Final_FileName = ./Results/Cones/V_OF_final.pngOF_V_Final_FileName52,3054
+OF_Ur_Final_FileName = ./Results/Cones/Ur_OF_final.pngOF_Ur_Final_FileName53,3158
+OF_Vr_Final_FileName = ./Results/Cones/Vr_OF_final.pngOF_Vr_Final_FileName54,3265
+OF_FlowAngularError_FileName = ./Results/Cones/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName55,3372
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Cones/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName56,3470
+SF_Dt_Init_FileName = ./Results/Cones/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName63,3881
+SF_U_increment_FileName = ./Results/Cones/Debug/delta_U_SF.pngSF_U_increment_FileName64,3977
+SF_V_increment_FileName = ./Results/Cones/Debug/delta_V_SF.pngSF_V_increment_FileName65,4043
+SF_Dt_increment_FileName = ./Results/Cones/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName67,4177
+SF_U_FileName = ./Results/Cones/Debug/U_SF.pngSF_U_FileName68,4245
+SF_V_FileName = ./Results/Cones/Debug/V_SF.pngSF_V_FileName69,4295
+SF_Dt_FileName = ./Results/Cones/Debug/Dt_SF.pngSF_Dt_FileName71,4397
+SF_disactivated_stereoinit_FileName = ./Results/Cones/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName72,4449
+SF_disactivated_stereo_FileName = ./Results/Cones/Debug/disactivated_st.pngSF_disactivated_stereo_FileName73,4582
+SF_disactivated_flowleft_FileName = ./Results/Cones/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName74,4712
+SF_disactivated_flowright_FileName = ./Results/Cones/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName75,4835
+SF_Ilt_FileName = ./Results/Cones/Debug/Ilt.pngSF_Ilt_FileName77,5011
+SF_Irt_FileName = ./Results/Cones/Debug/Irt.pngSF_Irt_FileName79,5113
+SF_Ilt_Warped_FileName = ./Results/Cones/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName80,5164
+SF_Irt_Warped_FileName = ./Results/Cones/Debug/Irt_warped.pngSF_Irt_Warped_FileName82,5294
+SF_U_Final_FileName = ./Results/Cones/U_SF_final.pngSF_U_Final_FileName83,5359
+SF_V_Final_FileName = ./Results/Cones/V_SF_final.pngSF_V_Final_FileName84,5415
+SF_Dt_Final_FileName = ./Results/Cones/Dt_SF_final.pngSF_Dt_Final_FileName86,5529
+SF_FlowAngularError_FileName = ./Results/Cones/Error_FlowAngular_SF.pngSF_FlowAngularError_FileName88,5667
+SF_FlowAngularErrorOcclusions_FileName = ./Results/Cones/Error_FlowAngularOcc_SF.pngSF_FlowAngularErrorOcclusions_FileName89,5765
+SF_Steps = 1SF_Steps90,5895
+
+Cones_SF.ini,4429
+Alpha = 80Alpha2,29
+AlphaSF = 200AlphaSF3,86
+Lambda = 0.5Lambda4,180
+Mu = 0.5Mu5,258
+Gamma = 8.Gamma6,327
+PyramidLevelOF = 30PyramidLevelOF7,339
+PyramidLevelST = 30PyramidLevelST8,359
+PyramidLevelSF = 30PyramidLevelSF9,379
+PyramidEta = 0.9PyramidEta10,399
+LogFile = ./Results/Cones/Cones.logLogFile11,443
+DoStereo = 1DoStereo12,496
+DoSceneFlow = 1DoSceneFlow13,552
+Ilt_FileName = ./Images/Cones/ConesL.1.pgmIlt_FileName15,678
+Irt_FileName = ./Images/Cones/ConesR.1.pgmIrt_FileName17,811
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix18,878
+IltPyramidFilePrefix = ./Results/Cones/Debug/Ilt_IltPyramidFilePrefix20,963
+IrtPyramidFilePrefix = ./Results/Cones/Debug/Irt_IrtPyramidFilePrefix22,1069
+GT_Special = 3GT_Special25,1158
+GT_Dt_FileName = ./Images/Cones/GroundTruthStereoInit.pngGT_Dt_FileName29,1378
+GT_Dt_Scale = -0.25GT_Dt_Scale30,1470
+GT_Dt_Invalid = 0GT_Dt_Invalid31,1530
+GT_U_FileName = ./Images/Cones/GroundTruthStereoInit.pngGT_U_FileName32,1575
+GT_U_Scale = -0.125GT_U_Scale33,1663
+GT_U_Invalid = 0GT_U_Invalid34,1720
+GT_Dt_View_FileName = ./Results/Cones/Dt_groundtruth.pngGT_Dt_View_FileName36,1863
+GT_U_View_FileName = ./Results/Cones/U_groundtruth.pngGT_U_View_FileName37,1959
+GT_V_View_FileName = ./Results/Cones/V_groundtruth.pngGT_V_View_FileName38,2050
+GT_OcclusionsDiscontinuities = ./Images/Cones/disc.pgmGT_OcclusionsDiscontinuities39,2141
+OF_U_increment_FileName = ./Results/Cones/Debug/delta_U_OF.pngOF_U_increment_FileName43,2321
+OF_V_increment_FileName = ./Results/Cones/Debug/delta_V_OF.pngOF_V_increment_FileName44,2387
+OF_U_FileName = ./Results/Cones/Debug/U_OF.pngOF_U_FileName45,2453
+OF_V_FileName = ./Results/Cones/Debug/V_OF.pngOF_V_FileName46,2503
+OF_disactivated_FileName =  ./Results/Cones/Debug/disactivated_f.pngOF_disactivated_FileName47,2553
+OF_It_Warped_FileName = ./Results/Cones/Debug/It_warped.pngOF_It_Warped_FileName48,2653
+OF_U_Final_FileName = ./Results/Cones/U_OF_final.pngOF_U_Final_FileName49,2716
+OF_V_Final_FileName = ./Results/Cones/V_OF_final.pngOF_V_Final_FileName50,2820
+OF_Ur_Final_FileName = ./Results/Cones/Ur_OF_final.pngOF_Ur_Final_FileName51,2924
+OF_Vr_Final_FileName = ./Results/Cones/Vr_OF_final.pngOF_Vr_Final_FileName52,3031
+OF_FlowAngularError_FileName = ./Results/Cones/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName53,3138
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Cones/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName54,3236
+SF_Dt_Init_FileName = ./Results/Cones/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName61,3647
+SF_U_increment_FileName = ./Results/Cones/Debug/delta_U_SF.pngSF_U_increment_FileName62,3743
+SF_V_increment_FileName = ./Results/Cones/Debug/delta_V_SF.pngSF_V_increment_FileName63,3809
+SF_Dt_increment_FileName = ./Results/Cones/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName65,3943
+SF_U_FileName = ./Results/Cones/Debug/U_SF.pngSF_U_FileName66,4011
+SF_V_FileName = ./Results/Cones/Debug/V_SF.pngSF_V_FileName67,4061
+SF_Dt_FileName = ./Results/Cones/Debug/Dt_SF.pngSF_Dt_FileName69,4163
+SF_disactivated_stereoinit_FileName = ./Results/Cones/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName70,4215
+SF_disactivated_stereo_FileName = ./Results/Cones/Debug/disactivated_st.pngSF_disactivated_stereo_FileName71,4348
+SF_disactivated_flowleft_FileName = ./Results/Cones/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName72,4478
+SF_disactivated_flowright_FileName = ./Results/Cones/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName73,4601
+SF_Ilt_FileName = ./Results/Cones/Debug/Ilt.pngSF_Ilt_FileName75,4777
+SF_Irt_FileName = ./Results/Cones/Debug/Irt.pngSF_Irt_FileName77,4879
+SF_Ilt_Warped_FileName = ./Results/Cones/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName78,4930
+SF_Irt_Warped_FileName = ./Results/Cones/Debug/Irt_warped.pngSF_Irt_Warped_FileName80,5060
+SF_U_Final_FileName = ./Results/Cones/U_SF_final.pngSF_U_Final_FileName81,5125
+SF_V_Final_FileName = ./Results/Cones/V_SF_final.pngSF_V_Final_FileName82,5181
+SF_Dt_Final_FileName = ./Results/Cones/Dt_SF_final.pngSF_Dt_Final_FileName84,5295
+SF_FlowAngularError_FileName = ./Results/Cones/Error_FlowAngular_SF.pngSF_FlowAngularError_FileName86,5433
+SF_FlowAngularErrorOcclusions_FileName = ./Results/Cones/Error_FlowAngularOcc_SF.pngSF_FlowAngularErrorOcclusions_FileName87,5531
+SF_Steps = 0SF_Steps88,5661
+
+Diana.ini,4052
+Alpha = 90Alpha2,29
+AlphaSF = 250AlphaSF3,86
+Lambda = 1Lambda4,146
+Mu = 1Mu5,222
+Gamma = 7.5Gamma6,289
+PyramidLevelOF = 35PyramidLevelOF7,318
+PyramidLevelST = 35PyramidLevelST8,396
+PyramidLevelSF = 20PyramidLevelSF9,468
+PyramidLevelFinal = 1PyramidLevelFinal10,524
+PyramidEta = 0.9PyramidEta11,568
+LogFile = ./Results/Diana/Diana.logLogFile12,612
+DoStereo = 1DoStereo13,665
+InitStereoBP = 0InitStereoBP14,721
+DoSceneFlow = 1DoSceneFlow15,793
+Ilt_FileName = ./Images/Diana/Il26.pngIlt_FileName17,915
+Irt_FileName = ./Images/Diana/Ir26.pngIrt_FileName19,1040
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix20,1103
+IltPyramidFilePrefix = ./Results/Diana/Debug/Ilt_IltPyramidFilePrefix22,1188
+IrtPyramidFilePrefix = ./Results/Diana/Debug/Irt_IrtPyramidFilePrefix24,1294
+MaxIterOuter = 60MaxIterOuter29,1423
+OF_It_FileName = ./Results/Diana/Debug/It.pngOF_It_FileName34,1552
+OF_It_Warped_FileName = ./Results/Diana/Debug/It_warped.pngOF_It_Warped_FileName35,1601
+OF_U_increment_FileName = ./Results/Diana/Debug/delta_U_OF.pngOF_U_increment_FileName36,1664
+OF_V_increment_FileName = ./Results/Diana/Debug/delta_V_OF.pngOF_V_increment_FileName37,1730
+OF_U_FileName = ./Results/Diana/Debug/U_OF.pngOF_U_FileName38,1796
+OF_V_FileName = ./Results/Diana/Debug/V_OF.pngOF_V_FileName39,1846
+OF_disactivated_FileName =  ./Results/Diana/Debug/disactivated_f.pngOF_disactivated_FileName40,1896
+OF_U_Final_FileName = ./Results/Diana/U_OF_final.pngOF_U_Final_FileName41,1996
+OF_V_Final_FileName = ./Results/Diana/V_OF_final.pngOF_V_Final_FileName42,2100
+OF_Ur_Final_FileName = ./Results/Diana/Ur_OF_final.pngOF_Ur_Final_FileName43,2204
+OF_Vr_Final_FileName = ./Results/Diana/Vr_OF_final.pngOF_Vr_Final_FileName44,2311
+OF_FlowAngularError_FileName = ./Results/Diana/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName45,2418
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Diana/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName46,2516
+OF_OmegaFileError = ./Results/Diana/OmegaSOR_ErrorOF.datOF_OmegaFileError47,2646
+OF_OmegaFileIter = ./Results/Diana/OmegaSOR_IterOF.datOF_OmegaFileIter48,2705
+OF_ZeroTopBorder = 1OF_ZeroTopBorder49,2762
+SF_Dt_Init_FileName = ./Results/Diana/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName58,3149
+SF_U_increment_FileName = ./Results/Diana/Debug/delta_U_SF.pngSF_U_increment_FileName59,3245
+SF_V_increment_FileName = ./Results/Diana/Debug/delta_V_SF.pngSF_V_increment_FileName60,3311
+SF_Dt_increment_FileName = ./Results/Diana/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName62,3445
+SF_U_FileName = ./Results/Diana/Debug/U_SF.pngSF_U_FileName63,3513
+SF_V_FileName = ./Results/Diana/Debug/V_SF.pngSF_V_FileName64,3563
+SF_Dt_FileName = ./Results/Diana/Debug/Dt_SF.pngSF_Dt_FileName66,3665
+SF_disactivated_stereoinit_FileName = ./Results/Diana/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName67,3717
+SF_disactivated_stereo_FileName = ./Results/Diana/Debug/disactivated_st.pngSF_disactivated_stereo_FileName68,3850
+SF_disactivated_flowleft_FileName = ./Results/Diana/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName69,3980
+SF_disactivated_flowright_FileName = ./Results/Diana/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName70,4103
+SF_Ilt_FileName = ./Results/Diana/Debug/Ilt.pngSF_Ilt_FileName72,4279
+SF_Irt_FileName = ./Results/Diana/Debug/Irt.pngSF_Irt_FileName74,4381
+SF_Ilt_Warped_FileName = ./Results/Diana/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName75,4432
+SF_Irt_Warped_FileName = ./Results/Diana/Debug/Irt_warped.pngSF_Irt_Warped_FileName77,4562
+SF_U_Final_FileName = ./Results/Diana/U_SF_final.pngSF_U_Final_FileName78,4627
+SF_V_Final_FileName = ./Results/Diana/V_SF_final.pngSF_V_Final_FileName79,4683
+SF_Dt_Final_FileName = ./Results/Diana/Dt_SF_final.pngSF_Dt_Final_FileName81,4797
+SF_OmegaFileError = ./Results/Diana/OmegaSOR_ErrorSF.datSF_OmegaFileError83,4935
+SF_OmegaFileIter = ./Results/Diana/OmegaSOR_IterSF.datSF_OmegaFileIter84,4994
+SF_Steps = 1SF_Steps85,5051
+
+Diana_SF.ini,4052
+Alpha = 90Alpha2,29
+AlphaSF = 250AlphaSF3,86
+Lambda = 1Lambda4,146
+Mu = 1Mu5,222
+Gamma = 7.5Gamma6,289
+PyramidLevelOF = 35PyramidLevelOF7,318
+PyramidLevelST = 35PyramidLevelST8,396
+PyramidLevelSF = 35PyramidLevelSF9,468
+PyramidLevelFinal = 1PyramidLevelFinal10,524
+PyramidEta = 0.9PyramidEta11,568
+LogFile = ./Results/Diana/Diana.logLogFile12,612
+DoStereo = 1DoStereo13,665
+InitStereoBP = 0InitStereoBP14,721
+DoSceneFlow = 1DoSceneFlow15,793
+Ilt_FileName = ./Images/Diana/Il26.pngIlt_FileName17,915
+Irt_FileName = ./Images/Diana/Ir26.pngIrt_FileName19,1040
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix20,1103
+IltPyramidFilePrefix = ./Results/Diana/Debug/Ilt_IltPyramidFilePrefix22,1188
+IrtPyramidFilePrefix = ./Results/Diana/Debug/Irt_IrtPyramidFilePrefix24,1294
+MaxIterOuter = 60MaxIterOuter29,1423
+OF_It_FileName = ./Results/Diana/Debug/It.pngOF_It_FileName34,1552
+OF_It_Warped_FileName = ./Results/Diana/Debug/It_warped.pngOF_It_Warped_FileName35,1601
+OF_U_increment_FileName = ./Results/Diana/Debug/delta_U_OF.pngOF_U_increment_FileName36,1664
+OF_V_increment_FileName = ./Results/Diana/Debug/delta_V_OF.pngOF_V_increment_FileName37,1730
+OF_U_FileName = ./Results/Diana/Debug/U_OF.pngOF_U_FileName38,1796
+OF_V_FileName = ./Results/Diana/Debug/V_OF.pngOF_V_FileName39,1846
+OF_disactivated_FileName =  ./Results/Diana/Debug/disactivated_f.pngOF_disactivated_FileName40,1896
+OF_U_Final_FileName = ./Results/Diana/U_OF_final.pngOF_U_Final_FileName41,1996
+OF_V_Final_FileName = ./Results/Diana/V_OF_final.pngOF_V_Final_FileName42,2100
+OF_Ur_Final_FileName = ./Results/Diana/Ur_OF_final.pngOF_Ur_Final_FileName43,2204
+OF_Vr_Final_FileName = ./Results/Diana/Vr_OF_final.pngOF_Vr_Final_FileName44,2311
+OF_FlowAngularError_FileName = ./Results/Diana/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName45,2418
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Diana/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName46,2516
+OF_OmegaFileError = ./Results/Diana/OmegaSOR_ErrorOF.datOF_OmegaFileError47,2646
+OF_OmegaFileIter = ./Results/Diana/OmegaSOR_IterOF.datOF_OmegaFileIter48,2705
+OF_ZeroTopBorder = 1OF_ZeroTopBorder49,2762
+SF_Dt_Init_FileName = ./Results/Diana/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName58,3149
+SF_U_increment_FileName = ./Results/Diana/Debug/delta_U_SF.pngSF_U_increment_FileName59,3245
+SF_V_increment_FileName = ./Results/Diana/Debug/delta_V_SF.pngSF_V_increment_FileName60,3311
+SF_Dt_increment_FileName = ./Results/Diana/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName62,3445
+SF_U_FileName = ./Results/Diana/Debug/U_SF.pngSF_U_FileName63,3513
+SF_V_FileName = ./Results/Diana/Debug/V_SF.pngSF_V_FileName64,3563
+SF_Dt_FileName = ./Results/Diana/Debug/Dt_SF.pngSF_Dt_FileName66,3665
+SF_disactivated_stereoinit_FileName = ./Results/Diana/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName67,3717
+SF_disactivated_stereo_FileName = ./Results/Diana/Debug/disactivated_st.pngSF_disactivated_stereo_FileName68,3850
+SF_disactivated_flowleft_FileName = ./Results/Diana/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName69,3980
+SF_disactivated_flowright_FileName = ./Results/Diana/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName70,4103
+SF_Ilt_FileName = ./Results/Diana/Debug/Ilt.pngSF_Ilt_FileName72,4279
+SF_Irt_FileName = ./Results/Diana/Debug/Irt.pngSF_Irt_FileName74,4381
+SF_Ilt_Warped_FileName = ./Results/Diana/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName75,4432
+SF_Irt_Warped_FileName = ./Results/Diana/Debug/Irt_warped.pngSF_Irt_Warped_FileName77,4562
+SF_U_Final_FileName = ./Results/Diana/U_SF_final.pngSF_U_Final_FileName78,4627
+SF_V_Final_FileName = ./Results/Diana/V_SF_final.pngSF_V_Final_FileName79,4683
+SF_Dt_Final_FileName = ./Results/Diana/Dt_SF_final.pngSF_Dt_Final_FileName81,4797
+SF_OmegaFileError = ./Results/Diana/OmegaSOR_ErrorSF.datSF_OmegaFileError83,4935
+SF_OmegaFileIter = ./Results/Diana/OmegaSOR_IterSF.datSF_OmegaFileIter84,4994
+SF_Steps = 0SF_Steps85,5051
+
+Teddy.ini,4541
+Alpha = 80Alpha2,29
+AlphaOF = 80AlphaOF3,86
+AlphaST = 80AlphaST4,180
+AlphaSF = 80AlphaSF5,269
+Gamma = 5.Gamma6,362
+Lambda = 0.5Lambda7,431
+Mu = 0.5Mu8,509
+PyramidLevelOF = 30PyramidLevelOF9,578
+PyramidLevelST = 8PyramidLevelST10,598
+PyramidLevelSF = 8PyramidLevelSF11,617
+PyramidEta = 0.9PyramidEta12,636
+LogFile = ./Results/Teddy/Teddy.logLogFile13,680
+DoStereo = 1DoStereo14,732
+DoSceneFlow = 1DoSceneFlow15,788
+Ilt_FileName = ./Images/Teddy/TeddyL.1.pgmIlt_FileName17,914
+Irt_FileName = ./Images/Teddy/TeddyR.1.pgmIrt_FileName19,1047
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix20,1114
+IltPyramidFilePrefix = ./Results/Teddy/Debug/Ilt_IltPyramidFilePrefix22,1199
+IrtPyramidFilePrefix = ./Results/Teddy/Debug/Irt_IrtPyramidFilePrefix24,1305
+GT_Special = 3GT_Special27,1393
+GT_Dt_FileName = ./Images/Teddy/GroundTruthStereo.pngGT_Dt_FileName31,1667
+GT_Dt_Scale = -0.25GT_Dt_Scale32,1755
+GT_Dt_Invalid = 0GT_Dt_Invalid33,1815
+GT_U_FileName = ./Images/Teddy/GroundTruthStereoInit.pngGT_U_FileName34,1860
+GT_U_Scale = -0.125GT_U_Scale35,1948
+GT_U_Invalid = 0GT_U_Invalid36,2005
+GT_Dt_View_FileName = ./Results/Teddy/Dt_groundtruth.pngGT_Dt_View_FileName38,2148
+GT_U_View_FileName = ./Results/Teddy/U_groundtruth.pngGT_U_View_FileName39,2244
+GT_V_View_FileName = ./Results/Teddy/V_groundtruth.pngGT_V_View_FileName40,2335
+GT_OcclusionsDiscontinuities = ./Images/Teddy/disc.pgmGT_OcclusionsDiscontinuities41,2426
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix44,2557
+OF_U_increment_FileName = ./Results/Teddy/Debug/delta_U_OF.pngOF_U_increment_FileName46,2638
+OF_V_increment_FileName = ./Results/Teddy/Debug/delta_V_OF.pngOF_V_increment_FileName47,2704
+OF_U_FileName = ./Results/Teddy/Debug/U_OF.pngOF_U_FileName48,2770
+OF_V_FileName = ./Results/Teddy/Debug/V_OF.pngOF_V_FileName49,2820
+OF_disactivated_FileName =  ./Results/Teddy/Debug/disactivated_f.pngOF_disactivated_FileName50,2870
+OF_It_Warped_FileName = ./Results/Teddy/Debug/It_warped.pngOF_It_Warped_FileName51,2970
+OF_U_Final_FileName = ./Results/Teddy/U_OF_final.pngOF_U_Final_FileName52,3033
+OF_V_Final_FileName = ./Results/Teddy/V_OF_final.pngOF_V_Final_FileName53,3137
+OF_Ur_Final_FileName = ./Results/Teddy/Ur_OF_final.pngOF_Ur_Final_FileName54,3241
+OF_Vr_Final_FileName = ./Results/Teddy/Vr_OF_final.pngOF_Vr_Final_FileName55,3348
+OF_FlowAngularError_FileName = ./Results/Teddy/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName56,3455
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Teddy/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName57,3553
+SF_Dt_Init_FileName = ./Results/Teddy/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName64,3964
+SF_U_increment_FileName = ./Results/Teddy/Debug/delta_U_SF.pngSF_U_increment_FileName65,4060
+SF_V_increment_FileName = ./Results/Teddy/Debug/delta_V_SF.pngSF_V_increment_FileName66,4126
+SF_Dt_increment_FileName = ./Results/Teddy/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName68,4260
+SF_U_FileName = ./Results/Teddy/Debug/U_SF.pngSF_U_FileName69,4328
+SF_V_FileName = ./Results/Teddy/Debug/V_SF.pngSF_V_FileName70,4378
+SF_Dt_FileName = ./Results/Teddy/Debug/Dt_SF.pngSF_Dt_FileName72,4480
+SF_disactivated_stereoinit_FileName = ./Results/Teddy/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName73,4532
+SF_disactivated_stereo_FileName = ./Results/Teddy/Debug/disactivated_st.pngSF_disactivated_stereo_FileName74,4665
+SF_disactivated_flowleft_FileName = ./Results/Teddy/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName75,4795
+SF_disactivated_flowright_FileName = ./Results/Teddy/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName76,4918
+SF_Ilt_FileName = ./Results/Teddy/Debug/Ilt.pngSF_Ilt_FileName78,5094
+SF_Irt_FileName = ./Results/Teddy/Debug/Irt.pngSF_Irt_FileName80,5196
+SF_Ilt_Warped_FileName = ./Results/Teddy/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName81,5247
+SF_Irt_Warped_FileName = ./Results/Teddy/Debug/Irt_warped.pngSF_Irt_Warped_FileName83,5377
+SF_U_Final_FileName = ./Results/Teddy/U_SF_final.pngSF_U_Final_FileName84,5442
+SF_V_Final_FileName = ./Results/Teddy/V_SF_final.pngSF_V_Final_FileName85,5498
+SF_Dt_Final_FileName = ./Results/Teddy/Dt_SF_final.pngSF_Dt_Final_FileName87,5612
+SF_FlowAngularError_FileName = ./Results/Teddy/Error_FlowAngular_SF.pngSF_FlowAngularError_FileName89,5750
+SF_FlowAngularErrorOcclusions_FileName = ./Results/Teddy/Error_FlowAngularOcc_SF.pngSF_FlowAngularErrorOcclusions_FileName90,5848
+SF_Steps = 1SF_Steps91,5978
+
+Teddy_SF.ini,4486
+Alpha = 80Alpha2,29
+AlphaSF = 200AlphaSF3,86
+Gamma = 8.Gamma4,180
+Lambda = 0.5Lambda5,249
+Mu = 0.5Mu6,327
+PyramidLevelOF = 30PyramidLevelOF7,396
+PyramidLevelST = 30PyramidLevelST8,416
+PyramidLevelSF = 30PyramidLevelSF9,436
+PyramidEta = 0.9PyramidEta10,456
+LogFile = ./Results/Teddy/Teddy.logLogFile11,500
+DoStereo = 1DoStereo12,552
+DoSceneFlow = 1DoSceneFlow13,608
+Ilt_FileName = ./Images/Teddy/TeddyL.1.pgmIlt_FileName15,734
+Irt_FileName = ./Images/Teddy/TeddyR.1.pgmIrt_FileName17,867
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix18,934
+IltPyramidFilePrefix = ./Results/Teddy/Debug/Ilt_IltPyramidFilePrefix20,1019
+IrtPyramidFilePrefix = ./Results/Teddy/Debug/Irt_IrtPyramidFilePrefix22,1125
+GT_Special = 3GT_Special25,1214
+GT_Dt_FileName = ./Images/Teddy/GroundTruthStereo.pngGT_Dt_FileName29,1434
+GT_Dt_Scale = -0.25GT_Dt_Scale30,1522
+GT_Dt_Invalid = 0GT_Dt_Invalid31,1582
+GT_U_FileName = ./Images/Teddy/GroundTruthStereoInit.pngGT_U_FileName32,1627
+GT_U_Scale = -0.125GT_U_Scale33,1715
+GT_U_Invalid = 0GT_U_Invalid34,1772
+GT_Dt_View_FileName = ./Results/Teddy/Dt_groundtruth.pngGT_Dt_View_FileName36,1915
+GT_U_View_FileName = ./Results/Teddy/U_groundtruth.pngGT_U_View_FileName37,2011
+GT_V_View_FileName = ./Results/Teddy/V_groundtruth.pngGT_V_View_FileName38,2102
+GT_OcclusionsDiscontinuities = ./Images/Teddy/disc.pgmGT_OcclusionsDiscontinuities39,2193
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix42,2324
+OF_U_increment_FileName = ./Results/Teddy/Debug/delta_U_OF.pngOF_U_increment_FileName44,2405
+OF_V_increment_FileName = ./Results/Teddy/Debug/delta_V_OF.pngOF_V_increment_FileName45,2471
+OF_U_FileName = ./Results/Teddy/Debug/U_OF.pngOF_U_FileName46,2537
+OF_V_FileName = ./Results/Teddy/Debug/V_OF.pngOF_V_FileName47,2587
+OF_disactivated_FileName =  ./Results/Teddy/Debug/disactivated_f.pngOF_disactivated_FileName48,2637
+OF_It_Warped_FileName = ./Results/Teddy/Debug/It_warped.pngOF_It_Warped_FileName49,2737
+OF_U_Final_FileName = ./Results/Teddy/U_OF_final.pngOF_U_Final_FileName50,2800
+OF_V_Final_FileName = ./Results/Teddy/V_OF_final.pngOF_V_Final_FileName51,2904
+OF_Ur_Final_FileName = ./Results/Teddy/Ur_OF_final.pngOF_Ur_Final_FileName52,3008
+OF_Vr_Final_FileName = ./Results/Teddy/Vr_OF_final.pngOF_Vr_Final_FileName53,3115
+OF_FlowAngularError_FileName = ./Results/Teddy/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName54,3222
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Teddy/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName55,3320
+SF_Dt_Init_FileName = ./Results/Teddy/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName62,3731
+SF_U_increment_FileName = ./Results/Teddy/Debug/delta_U_SF.pngSF_U_increment_FileName63,3827
+SF_V_increment_FileName = ./Results/Teddy/Debug/delta_V_SF.pngSF_V_increment_FileName64,3893
+SF_Dt_increment_FileName = ./Results/Teddy/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName66,4027
+SF_U_FileName = ./Results/Teddy/Debug/U_SF.pngSF_U_FileName67,4095
+SF_V_FileName = ./Results/Teddy/Debug/V_SF.pngSF_V_FileName68,4145
+SF_Dt_FileName = ./Results/Teddy/Debug/Dt_SF.pngSF_Dt_FileName70,4247
+SF_disactivated_stereoinit_FileName = ./Results/Teddy/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName71,4299
+SF_disactivated_stereo_FileName = ./Results/Teddy/Debug/disactivated_st.pngSF_disactivated_stereo_FileName72,4432
+SF_disactivated_flowleft_FileName = ./Results/Teddy/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName73,4562
+SF_disactivated_flowright_FileName = ./Results/Teddy/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName74,4685
+SF_Ilt_FileName = ./Results/Teddy/Debug/Ilt.pngSF_Ilt_FileName76,4861
+SF_Irt_FileName = ./Results/Teddy/Debug/Irt.pngSF_Irt_FileName78,4963
+SF_Ilt_Warped_FileName = ./Results/Teddy/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName79,5014
+SF_Irt_Warped_FileName = ./Results/Teddy/Debug/Irt_warped.pngSF_Irt_Warped_FileName81,5144
+SF_U_Final_FileName = ./Results/Teddy/U_SF_final.pngSF_U_Final_FileName82,5209
+SF_V_Final_FileName = ./Results/Teddy/V_SF_final.pngSF_V_Final_FileName83,5265
+SF_Dt_Final_FileName = ./Results/Teddy/Dt_SF_final.pngSF_Dt_Final_FileName85,5379
+SF_FlowAngularError_FileName = ./Results/Teddy/Error_FlowAngular_SF.pngSF_FlowAngularError_FileName87,5517
+SF_FlowAngularErrorOcclusions_FileName = ./Results/Teddy/Error_FlowAngularOcc_SF.pngSF_FlowAngularErrorOcclusions_FileName88,5615
+SF_Steps = 0SF_Steps89,5745
+
+Venus.ini,4488
+Alpha = 80Alpha2,29
+AlphaOF = 80AlphaOF3,86
+AlphaST = 80AlphaST4,180
+AlphaSF = 80AlphaSF5,269
+Lambda = 0.5Lambda6,362
+Mu = 0.5Mu7,440
+Gamma = 3.Gamma8,509
+PyramidLevelOF = 30PyramidLevelOF9,527
+PyramidLevelST = 15PyramidLevelST10,547
+PyramidLevelSF = 15PyramidLevelSF11,567
+PyramidEta = 0.9PyramidEta12,587
+LogFile = ./Results/Venus/Venus.logLogFile13,631
+DoStereo = 1DoStereo14,684
+DoSceneFlow = 1DoSceneFlow15,740
+Ilt_FileName = ./Images/Venus/VenusL.1.pgmIlt_FileName17,866
+Irt_FileName = ./Images/Venus/VenusR.1.pgmIrt_FileName19,999
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix20,1066
+IltPyramidFilePrefix = ./Results/Venus/Debug/Ilt_IltPyramidFilePrefix22,1151
+IrtPyramidFilePrefix = ./Results/Venus/Debug/Irt_IrtPyramidFilePrefix24,1257
+GT_Special = 3GT_Special28,1364
+GT_Dt_FileName = ./Images/Venus/GroundTruthStereoInit.pngGT_Dt_FileName32,1639
+GT_Dt_Scale = -0.125GT_Dt_Scale33,1731
+GT_Dt_Invalid = 0GT_Dt_Invalid34,1792
+GT_U_FileName = ./Images/Venus/GroundTruthStereoInit.pngGT_U_FileName35,1837
+GT_U_Scale = -0.0625GT_U_Scale36,1925
+GT_U_Invalid = 0GT_U_Invalid37,1983
+GT_Dt_View_FileName = ./Results/Venus/Dt_groundtruth.pngGT_Dt_View_FileName39,2126
+GT_U_View_FileName = ./Results/Venus/U_groundtruth.pngGT_U_View_FileName40,2222
+GT_V_View_FileName = ./Results/Venus/V_groundtruth.pngGT_V_View_FileName41,2313
+GT_OcclusionsDiscontinuities = ./Images/Venus/disc.pgmGT_OcclusionsDiscontinuities42,2404
+OF_U_increment_FileName = ./Results/Venus/Debug/delta_U_OF.pngOF_U_increment_FileName47,2585
+OF_V_increment_FileName = ./Results/Venus/Debug/delta_V_OF.pngOF_V_increment_FileName48,2651
+OF_U_FileName = ./Results/Venus/Debug/U_OF.pngOF_U_FileName49,2717
+OF_V_FileName = ./Results/Venus/Debug/V_OF.pngOF_V_FileName50,2767
+OF_disactivated_FileName =  ./Results/Venus/Debug/disactivated_f.pngOF_disactivated_FileName51,2817
+OF_It_Warped_FileName = ./Results/Venus/Debug/It_warped.pngOF_It_Warped_FileName52,2917
+OF_U_Final_FileName = ./Results/Venus/U_OF_final.pngOF_U_Final_FileName53,2980
+OF_V_Final_FileName = ./Results/Venus/V_OF_final.pngOF_V_Final_FileName54,3084
+OF_Ur_Final_FileName = ./Results/Venus/Ur_OF_final.pngOF_Ur_Final_FileName55,3188
+OF_Vr_Final_FileName = ./Results/Venus/Vr_OF_final.pngOF_Vr_Final_FileName56,3295
+OF_FlowAngularError_FileName = ./Results/Venus/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName57,3402
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Venus/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName58,3500
+SF_Dt_Init_FileName = ./Results/Venus/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName65,3911
+SF_U_increment_FileName = ./Results/Venus/Debug/delta_U_SF.pngSF_U_increment_FileName66,4007
+SF_V_increment_FileName = ./Results/Venus/Debug/delta_V_SF.pngSF_V_increment_FileName67,4073
+SF_Dt_increment_FileName = ./Results/Venus/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName69,4207
+SF_U_FileName = ./Results/Venus/Debug/U_SF.pngSF_U_FileName70,4275
+SF_V_FileName = ./Results/Venus/Debug/V_SF.pngSF_V_FileName71,4325
+SF_Dt_FileName = ./Results/Venus/Debug/Dt_SF.pngSF_Dt_FileName73,4427
+SF_disactivated_stereoinit_FileName = ./Results/Venus/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName74,4479
+SF_disactivated_stereo_FileName = ./Results/Venus/Debug/disactivated_st.pngSF_disactivated_stereo_FileName75,4612
+SF_disactivated_flowleft_FileName = ./Results/Venus/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName76,4742
+SF_disactivated_flowright_FileName = ./Results/Venus/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName77,4865
+SF_Ilt_FileName = ./Results/Venus/Debug/Ilt.pngSF_Ilt_FileName79,5041
+SF_Irt_FileName = ./Results/Venus/Debug/Irt.pngSF_Irt_FileName81,5143
+SF_Ilt_Warped_FileName = ./Results/Venus/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName82,5194
+SF_Irt_Warped_FileName = ./Results/Venus/Debug/Irt_warped.pngSF_Irt_Warped_FileName84,5324
+SF_U_Final_FileName = ./Results/Venus/U_SF_final.pngSF_U_Final_FileName85,5389
+SF_V_Final_FileName = ./Results/Venus/V_SF_final.pngSF_V_Final_FileName86,5445
+SF_Dt_Final_FileName = ./Results/Venus/Dt_SF_final.pngSF_Dt_Final_FileName88,5559
+SF_FlowAngularError_FileName = ./Results/Venus/Error_FlowAngular_SF.pngSF_FlowAngularError_FileName90,5697
+SF_FlowAngularErrorOcclusions_FileName = ./Results/Venus/Error_FlowAngularOcc_SF.pngSF_FlowAngularErrorOcclusions_FileName91,5795
+SF_Steps = 1SF_Steps92,5925
+
+Venus_SF.ini,4470
+Alpha = 80Alpha2,29
+AlphaSF = 200AlphaSF3,86
+Lambda = 0.5Lambda4,101
+Mu = 0.5Mu5,179
+Gamma = 1.2.Gamma6,248
+PyramidLevelOF = 30PyramidLevelOF7,268
+PyramidLevelST = 30PyramidLevelST8,288
+PyramidLevelSF = 30PyramidLevelSF9,308
+PyramidEta = 0.9PyramidEta10,328
+LogFile = ./Results/Venus/Venus.logLogFile11,372
+DoStereo = 1DoStereo12,425
+InitStereoBP = 0InitStereoBP13,481
+DoSceneFlow = 1DoSceneFlow14,553
+Ilt_FileName = ./Images/Venus/VenusL.1.pgmIlt_FileName16,679
+Irt_FileName = ./Images/Venus/VenusR.1.pgmIrt_FileName18,812
+ImagePyramidFileSuffix = pngImagePyramidFileSuffix19,879
+IltPyramidFilePrefix = ./Results/Venus/Debug/Ilt_IltPyramidFilePrefix21,964
+IrtPyramidFilePrefix = ./Results/Venus/Debug/Irt_IrtPyramidFilePrefix23,1070
+GT_Special = 3GT_Special27,1177
+GT_Dt_FileName = ./Images/Venus/GroundTruthStereoInit.pngGT_Dt_FileName31,1398
+GT_Dt_Scale = -0.125GT_Dt_Scale32,1490
+GT_Dt_Invalid = 0GT_Dt_Invalid33,1551
+GT_U_FileName = ./Images/Venus/GroundTruthStereoInit.pngGT_U_FileName34,1596
+GT_U_Scale = -0.0625GT_U_Scale35,1684
+GT_U_Invalid = 0GT_U_Invalid36,1742
+GT_Dt_View_FileName = ./Results/Venus/Dt_groundtruth.pngGT_Dt_View_FileName38,1885
+GT_U_View_FileName = ./Results/Venus/U_groundtruth.pngGT_U_View_FileName39,1981
+GT_V_View_FileName = ./Results/Venus/V_groundtruth.pngGT_V_View_FileName40,2072
+GT_OcclusionsDiscontinuities = ./Images/Venus/disc.pgmGT_OcclusionsDiscontinuities41,2163
+OF_U_increment_FileName = ./Results/Venus/Debug/delta_U_OF.pngOF_U_increment_FileName46,2344
+OF_V_increment_FileName = ./Results/Venus/Debug/delta_V_OF.pngOF_V_increment_FileName47,2410
+OF_U_FileName = ./Results/Venus/Debug/U_OF.pngOF_U_FileName48,2476
+OF_V_FileName = ./Results/Venus/Debug/V_OF.pngOF_V_FileName49,2526
+OF_disactivated_FileName =  ./Results/Venus/Debug/disactivated_f.pngOF_disactivated_FileName50,2576
+OF_It_Warped_FileName = ./Results/Venus/Debug/It_warped.pngOF_It_Warped_FileName51,2676
+OF_U_Final_FileName = ./Results/Venus/U_OF_final.pngOF_U_Final_FileName52,2739
+OF_V_Final_FileName = ./Results/Venus/V_OF_final.pngOF_V_Final_FileName53,2843
+OF_Ur_Final_FileName = ./Results/Venus/Ur_OF_final.pngOF_Ur_Final_FileName54,2947
+OF_Vr_Final_FileName = ./Results/Venus/Vr_OF_final.pngOF_Vr_Final_FileName55,3054
+OF_FlowAngularError_FileName = ./Results/Venus/Error_FlowAngular_OF.pngOF_FlowAngularError_FileName56,3161
+OF_FlowAngularErrorOcclusions_FileName = ./Results/Venus/Error_FlowAngularOcc_OF.pngOF_FlowAngularErrorOcclusions_FileName57,3259
+SF_Dt_Init_FileName = ./Results/Venus/Debug/Dt_SF_Init.pngSF_Dt_Init_FileName64,3670
+SF_U_increment_FileName = ./Results/Venus/Debug/delta_U_SF.pngSF_U_increment_FileName65,3766
+SF_V_increment_FileName = ./Results/Venus/Debug/delta_V_SF.pngSF_V_increment_FileName66,3832
+SF_Dt_increment_FileName = ./Results/Venus/Debug/delta_Dt_SF.pngSF_Dt_increment_FileName68,3966
+SF_U_FileName = ./Results/Venus/Debug/U_SF.pngSF_U_FileName69,4034
+SF_V_FileName = ./Results/Venus/Debug/V_SF.pngSF_V_FileName70,4084
+SF_Dt_FileName = ./Results/Venus/Debug/Dt_SF.pngSF_Dt_FileName72,4186
+SF_disactivated_stereoinit_FileName = ./Results/Venus/Debug/disactivated_sti.pngSF_disactivated_stereoinit_FileName73,4238
+SF_disactivated_stereo_FileName = ./Results/Venus/Debug/disactivated_st.pngSF_disactivated_stereo_FileName74,4371
+SF_disactivated_flowleft_FileName = ./Results/Venus/Debug/disactivated_fl.pngSF_disactivated_flowleft_FileName75,4501
+SF_disactivated_flowright_FileName = ./Results/Venus/Debug/disactivated_fr.pngSF_disactivated_flowright_FileName76,4624
+SF_Ilt_FileName = ./Results/Venus/Debug/Ilt.pngSF_Ilt_FileName78,4800
+SF_Irt_FileName = ./Results/Venus/Debug/Irt.pngSF_Irt_FileName80,4902
+SF_Ilt_Warped_FileName = ./Results/Venus/Debug/Ilt_warped.pngSF_Ilt_Warped_FileName81,4953
+SF_Irt_Warped_FileName = ./Results/Venus/Debug/Irt_warped.pngSF_Irt_Warped_FileName83,5083
+SF_U_Final_FileName = ./Results/Venus/U_SF_final.pngSF_U_Final_FileName84,5148
+SF_V_Final_FileName = ./Results/Venus/V_SF_final.pngSF_V_Final_FileName85,5204
+SF_Dt_Final_FileName = ./Results/Venus/Dt_SF_final.pngSF_Dt_Final_FileName87,5318
+SF_FlowAngularError_FileName = ./Results/Venus/Error_FlowAngular_SF.pngSF_FlowAngularError_FileName89,5456
+SF_FlowAngularErrorOcclusions_FileName = ./Results/Venus/Error_FlowAngularOcc_SF.pngSF_FlowAngularErrorOcclusions_FileName90,5554
+SF_Steps = 0SF_Steps91,5684
