@@ -1,3 +1,35 @@
+
+4 C's
+
+Confusion
+Consistency
+Compromise
+Confidence
+
+Transformation Framework
+Communication Framework
+Decision Framework
+Diagnostics Framework
+Verification Framework
+
+
+Ich schlage vor folgendes: ein Webcam nehmen und eine Software von
+Internet kopieren die drei Stifte in deinem Hand detektieren. Eine
+zweite Webcam die eine andere Position hat detektiert 2 Stifte plus eins
+die der erste nicht sieht. Also das End ergebniss ist, dass 4 Stifte zu
+sehen sind ( Fusion Bild von beiden Kamera ).
+Aber es reicht noch nicht aus. Es muss genau dokumentiert werden, wie
+die 4 Stifte gesehen worden sind. Die Gewichtung muss hier definiert
+werden und abgespeichert werden.
+
+Wenn du nächstes Mal wieder mit 4 Stiften vor den zwei Kameras stehst,
+dann es soll Blind die Gewichtung genommen werden. Jetzt mach mal mit n
+Kamera anstatt zwei. Stell dir mal vor, wie schnell die Entscheidung
+sein wird, dass 4 Stiften zu sehen sind ! Hammer oder? 
+
+Bin mir sicher, hast nicht kappiert aber trotz hammer.
+
+
 In this project a priority graph will be generated. Right sensors will be 
 used at the right condition after reading the priority graph.
 There will be an offline and an online priority graph. In the beginning, 
@@ -46,40 +78,65 @@ The reflections are done using the physics. However, it is not optimum because t
 
 ----
 
-The optical or scene flow needs to be focussed on specific algorithms and in this case, 
-we choose scene flow as a possible algorithms for example pedesterian movements.
+The software WeatherNeffects creates false positives in a virtual simulation world. This helps in creating
+a confusion sensor database. This database is used as an input for verification of ADAS algorithms, such as 
+pedesterian recogntion.
+
+
+The focus is on the optical or scene flow, we choose pedesterian detection as a possible detection algorithm.
 
 First evaluation is done on the images with optical flow.
 We downloaded the Kitti evaulation kit on real data set and ran the evaluation on 3 algorithms to understand the system.
 Thereafter we ran the kitti evaluation kiti on the VIRES generated dataset and again ran the evaluaiton on the 3 algorithms.
 
+Bachelor Arbeit:
+Note: To design the complete Sand area in VIRES and the algorithms would be primarily used on the parking lot.
+
+1. Evaluate optical flow algorithms with Kitti data as learning process. 
+2. Generate scenes in VIRES with respect to pedesterian detection ( there should be similarity between Raspberry and the VIRES images )  and run the algorithms.
+3. Capture pedesterian movements ( optical flow ) with Raspberry or any stereo camera and then run the above algorithms. - Validation von VIRES Dataset.
+Compare the two methods ( 2nd - virtual values and 3rd - real data set )  for validation purpose.
+
 Next we took another algorithm ( http://ais.informatik.uni-freiburg.de/publications/papers/dewan-16iros.pdf ) 
 that runs with LIDAR and again ran the Kitti evaluation with real data set.
 Correspondingly, as in the first method we ran the Kitti evaluation with generated LIDAR Dataset.
 
-Finally we wrote a wrapper to extract the best solution in different scenarios.
-Basically, we combined the two algorithms for the final evaluation.
-This should be able to improve the detection of scene flow in comparision to just the image or just the lidar data set or just the radar data set.
+Bachelor Arbeit:
 
-----
+1. Evaluate lidar flow algorithms with Kitti data and Generated VIRES Data.
+2. Generate scenes in VIRES with respect to pedesterian detection ( there should be similarity between Velodyne and the VIRES sensor data )  and run the algorithms.
+3. Capture pedesterian movements with Velodyne and then run the above algorithms.
+Compare the two methods ( 1st - real world values and 2nd - virtual values )  for validation purpose.
+
+
+Bachelor Arbeit:
+Note: How does optical shadowing work with VIRES
+
+1. Create objects with reflectivity index in the virtual simulation.
+2. Run raytracing to simulate multipath fading, cross-talks and reflection of passing objects.
+3. Capture pedesterian movements with Camera and then run the above algorithm.
+
+Example: Refelction of a car in a lake for example can lead to false positives.
 
 Bachelor Arbeit:
 
-Evaluate optical flow algorithms with Kitti data and Generated VIRES Data.
-Capture pedesterian movements with Raspberry or any stereo camera and then run the above algorithms.
-Generate scenes in VIRES with respect to pedesterian detection ( there should be similarity between Raspberry and the VIRES images )  and run the algorithms.
-Compare the two methods ( 1st - real world values and 2nd - virtual values )  for validation purpose.
+1. Create objects with reflectivity index in the virtual simulation.
+2. Run raytracing to simulate multipath fading, cross-talks and reflection of passing objects.
+3. Capture pedesterian movements with Camera and then run the above algorithm.
+
+Example: Deflection of a beam through another object and eventually reception from the sender, that leads to further false positives. 
 
 
-BAchelor Arbeit:
-
-Evaluate lidar flow algorithms with Kitti data and Generated VIRES Data.
-Capture pedesterian movements with Velodyne and then run the above algorithms.
-Generate scenes in VIRES with respect to pedesterian detection ( there should be similarity between Velodyne and the VIRES sensor data )  and run the algorithms.
-Compare the two methods ( 1st - real world values and 2nd - virtual values )  for validation purpose.
+Finall we wrote a wrapper to extract the best solution in different scenarios.
+Basically, we combined the two algorithms for the final evaluation.
+This should be able to improve the detection of scene flow in comparision to just the image or just the lidar data set or just the radar data set.
 
 
-Bachelor ARbeit:
+
+----
+
+
+
 
 
 
