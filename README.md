@@ -96,7 +96,28 @@ VTD.2.0/Runtime/Tools/Installation
 ./checklib.sh | grep "not found"
 Install all the packages one by one.
 
+
 In my case:
+    library libGL.so.1 ...not found.
+    library libGL.so.1 ...not found.
+    library libGL.so.1 ...not found.
+    library libGL.so.1 ...not found.
+    library libEGL.so.1 ...not found.
+    library liblibcli_lsa3.so.0 ...not found.
+    library libcli_smb_common.so.0 ...not found.
+    library libutil_cmdline.so.0 ...not found.
+    library libGLdispatch.so.0 ...not found.
+    library libcli_cldap.so.0 ...not found.
+    library libsmb_transport.so.0 ...not found.
+    library libutil_tdb.so.0 ...not found.
+    library libutil_reg.so.0 ...not found.
+    library libsmbd_shim.so.0 ...not found.
+    library libutil_setid.so.0 ...not found.
+    library libutil_ntdb.so.0 ...not found.
+    library libauth_sam_reply.so.0 ...not found.
+    library libflag_mapping.so.0 ...not found.
+    
+
 freeglut, libdvdre4a
 
 The license file needs to be placed under VTD2.0/bin/
