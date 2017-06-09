@@ -110,17 +110,20 @@ function enter_boost_fn
 cd $SOURCE_DIR
 BOOTSTRAP_PWD="$SOURCE_DIR/libs/boost"
 if [ "$BOOTSTRAP_OPTION" == "y" ] ; then
+    tput setf 3
     cd $BOOTSTRAP_PWD
+    echo "Building in $(pwd)"
+    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning boost ...."; rm -rf bin.v2; cd ../../; return; fi
     if [ ! -d stage ] ; then
         if [ ! -f b2 ]; then
-        ./bootstrap.sh
+        ./bootstrap.sh --prefix=$BOOTSTRAP_PWD/../boost-install/
         fi
-	./configure
-        ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing"
+        ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" install
     fi
-    ln -s ./boost ./stage/include
-    mkdir ./stage/lib/pkgconfig
-    python main.py -n Boost -v 1.63.0 -p $BOOTSTRAP_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
+    #ln -s ./boost ./stage/include
+    #mkdir ./stage/lib/pkgconfig
+    #python main.py -n Boost -v 1.63.0 -p $BOOTSTRAP_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
     cd ../../
 fi
 }
@@ -240,7 +243,7 @@ fi
 function enter_project_fn
 {
 cd $SOURCE_DIR
-PROJECT_PWD="$SOURCE_DIR/project"
+PROJECT_PWD="$SOURCE_DIR/project/PerceptionSandbox"
 if [ "$PROJECT_OPTION" == "y" ]; then
     tput setf 3
     cd $PROJECT_PWD/build
