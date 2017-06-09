@@ -83,4 +83,45 @@ Bachelor ARbeit:
 
 
 
+VIRES Installation:
+Die Dateien liegen hier:
 
+https://secure.vires.com/demo/vtd/vtd.2.0.3.Demo.Road.20170131.tgz
+https://secure.vires.com/demo/vtd/vtd.2.0.3.addOns.ROD64b.Standard_Dongle_20170209.tgz
+
+login: demo
+OpenSesame: viresDemo
+
+VTD.2.0/Runtime/Tools/Installation
+./checklib.sh | grep "not found"
+Install all the packages one by one.
+
+In my case:
+freeglut, libdvdre4a
+
+The license file needs to be placed under VTD2.0/bin/
+Please make sure the license file obtained has the same MAC Address as the Dongle.
+
+Wireless Dongle:
+
+14.04
+The precondition is that the wifi dongle should be loaded in ifconfig.
+sudo apt-add-repository ppa:thopiekar/mt7601
+sudo apt-get update
+sudo apt-get install mt7601-sta-dkms
+Sempre Wireless Dongles use MediaTek drivers ( mt7601u ). The following will
+load the driver mt7601Usta to be found under 
+/lib/modules/3.13.0-65-generic/updates/dkms/mt7601Usta.ko
+Please check using modinfo mt7601Usta
+
+
+16.04 - automatic because the drivers is already built in the kernel
+To check please invoke lsmod | grep mt761u
+
+if the device is not present in ifconfig, then check for ifconfig -a
+Then start the link ip link set dev <devicename> up
+
+Open the file Data/Setups/Current/Config/SimServer/simServer.xml
+Add an environment variable: <EnvVar name="VI_LIC_DEVICE" val="ra0" /> (replace ra0 with the name of your device)
+
+in the bin directory start .vtdStart.sh
