@@ -17,3 +17,7 @@
 	path = project/PerceptionSandbox
 	url = git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/PerceptionSandbox.git
 	branch = master
+[submodule "pkg-config-generator"]
+	path = utils/pkg-config-generator
+	url = https://github.com/nmante/pkg-config-generator.git
+	branch = master

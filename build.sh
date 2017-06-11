@@ -8,7 +8,7 @@ while getopts ":t:bfolpcieah" opt; do
       ;;
     b)
       echo "-b was triggered, Parameter: $OPTARG" >&2
-      BOOTSTRAP_OPTION="y"
+      BOOST_OPTION="y"
       ;;
     f)
       echo "-f was triggered, Parameter: $OPTARG" >&2
@@ -23,7 +23,7 @@ while getopts ":t:bfolpcieah" opt; do
       LIBSVM_OPTION="y"
       ;;
     p)
-      echo "-s was triggered, Parameter: $OPTARG" >&2
+      echo "-p was triggered, Parameter: $OPTARG" >&2
       PROJECT_OPTION="y"
       ;;
     c)
@@ -40,7 +40,7 @@ while getopts ":t:bfolpcieah" opt; do
       ;;
     a)
       echo "-a was triggered, Parameter: $OPTARG" >&2
-      BOOTSTRAP_OPTION="y"
+      BOOST_OPTION="y"
       FFMPEG_OPTION="y"
       OPENCV_OPTION="y"
       LIBSVM_OPTION="y"
@@ -83,7 +83,7 @@ if [ $# -eq 0 ]; then
     OPENCV_OPTION="y"
     FFMPEG_OPTION="y"
     LIBSVM_OPTION="y"
-    BOOTSTRAP_OPTION="y"
+    BOOST_OPTION="y"
     PROJECT_OPTION="y"
     CAFEE_OPTION="y"
     IVT_OPTION="y"
@@ -108,30 +108,29 @@ function exit_function
 function enter_boost_fn
 {
 cd $SOURCE_DIR
-BOOTSTRAP_PWD="$SOURCE_DIR/libs/boost"
-if [ "$BOOTSTRAP_OPTION" == "y" ] ; then
+if [ "$BOOST_OPTION" == "y" ] ; then
     tput setf 3
-    cd $BOOTSTRAP_PWD
+    cd $BOOST_PWD
     echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning boost ...."; rm -rf bin.v2; cd ../../; return; fi
     if [ ! -d stage ] ; then
         if [ ! -f b2 ]; then
-        ./bootstrap.sh --prefix=$BOOTSTRAP_PWD/../boost-install/
+        ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install/
         fi
         ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" install
     fi
     #ln -s ./boost ./stage/include
-    #mkdir ./stage/lib/pkgconfig
-    #python main.py -n Boost -v 1.63.0 -p $BOOTSTRAP_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
-    cd ../../
+    mkdir -p $BOOST_PWD/../boost-install/lib/pkgconfig
+    python $SOURCE_DIR/utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p $BOOST_PWD/../boost-install -o $BOOST_PWD/../boost-install/lib/pkgconfig/boost.pc $BOOST_PWD/../boost-install/lib/
+#python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
+   cd ../../
 fi
 }
 
 function enter_ffmpeg_fn
 {
 cd $SOURCE_DIR
-FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
 if [ "$FFMPEG_OPTION" == "y" ] ; then
     tput setf 3
     cd $FFMPEG_PWD
@@ -158,8 +157,6 @@ fi
 function enter_opencv_fn
 {
 cd $SOURCE_DIR
-FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
-OPENCV_PWD="$SOURCE_DIR/libs/opencv"
 if [ "$OPENCV_OPTION" == "y" ]; then
     tput setf 2 
     cd $OPENCV_PWD
@@ -167,12 +164,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf release; rm -rf $FFMPEG_PWD/../opencv-install/*; cd ../../; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Check compatibility"
-    export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOTSTRAP_PWD/stage/lib/pkgconfig:$OPENCV_PWD/../opencv-install/lib/pkgconfig
-    PKG_CONFIG_PATH_FFMPEG=$(pkg-config --cflags libavcodec)
-    echo $PKG_CONFIG_PATH_FFMPEG
-    ACTUAL_FFMPEG_PATH=$FFMPEG_PWD/../ffmpeg-install/include
-    echo $ACTUAL_FFMPEG_PATH
-    if [[ $PKG_CONFIG_PATH_FFMPEG == "-I$ACTUAL_FFMPEG_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_FFMPEG $PKG_CONFIG_PATH_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_FFMPEG $PKG_CONFIG_PATH_FFMPEG"; exit_function; fi
+    if [[ $PKG_CONFIG_PATH_INCLUDE_FFMPEG == "-I$ACTUAL_FFMPEG_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Configuring opencv"
     #export PKG_CONFIG_LIBDIR=$PKG_CONFIG_LIBDIR:$SOURCE_DIR/../ffmpeg/build/lib/
@@ -221,11 +213,10 @@ fi
 function enter_project__previous_fn
 {
 cd $SOURCE_DIR
-PROJECT_PWD="$SOURCE_DIR/project"
 if [ "$PROJECT_OPTION" == "y" ]; then
     tput setf 3
     cd $PROJECT_PWD
-    echo "Building in $SOURCE_DIR"
+    echo "Building in $PROJECT_PWD"
     if [ "$BUILD_OPTION" == "clean" ]; then make clean; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     make distclean # remove all libs and, more importantly, all old Makefiles
@@ -243,14 +234,14 @@ fi
 function enter_project_fn
 {
 cd $SOURCE_DIR
-PROJECT_PWD="$SOURCE_DIR/project/PerceptionSandbox"
 if [ "$PROJECT_OPTION" == "y" ]; then
     tput setf 3
     cd $PROJECT_PWD/build
-    echo "Building in $PROJECT_DIR"
+    echo "Building in $PROJECT_PWD"
     if [ "$BUILD_OPTION" == "clean" ]; then rm -rf *; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    cmake .. # remove all libs and, more importantly, all old Makefiles
+    cmake -DOpenCV_DIR="${PROJECT_PWD}/../../libs/opencv-install/share/OpenCV" -DBoost_DIR="${PROJECT_PWD}/../../libs/boost-install/share/FindBoost" ..
+    # remove all libs and, more importantly, all old Makefiles
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project cmake conf successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
@@ -303,8 +294,24 @@ fi
 }
 
 SOURCE_DIR=$(pwd)
+BOOST_PWD="$SOURCE_DIR/libs/boost"
+FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
+OPENCV_PWD="$SOURCE_DIR/libs/opencv"
+PROJECT_PWD="$SOURCE_DIR/project/PerceptionSandbox"
+#PROJECT_PWD="$SOURCE_DIR/project"
+export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOST_PWD/../boost-install/lib/pkgconfig:$OPENCV_PWD/../opencv-install/lib/pkgconfig
 enter_boost_fn
+    PKG_CONFIG_PATH_INCLUDE_BOOST=$(pkg-config --cflags boost)
+    echo $PKG_CONFIG_PATH_INCLUDE_BOOST
+    ACTUAL_BOOST_INCLUDE_PATH=$BOOST_PWD/../boost-install/include
+    echo $ACTUAL_BOOST_INCLUDE_PATH
+    if [[ $PKG_CONFIG_PATH_INCLUDE_BOOST == "-I$ACTUAL_BOOST_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_BOOST $PKG_CONFIG_PATH_INCLUDE_BOOST"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_BOOST $PKG_CONFIG_PATH_INCLUDE_BOOST"; exit_function; fi
 enter_ffmpeg_fn
+    PKG_CONFIG_PATH_INCLUDE_FFMPEG=$(pkg-config --cflags libavcodec)
+    echo $PKG_CONFIG_PATH_INCLUDE_FFMPEG
+    ACTUAL_FFMPEG_INCLUDE_PATH=$FFMPEG_PWD/../ffmpeg-install/include
+    echo $ACTUAL_FFMPEG_INCLUDE_PATH
+    if [[ $PKG_CONFIG_PATH_INCLUDE_FFMPEG == "-I$ACTUAL_FFMPEG_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; exit_function; fi
 enter_opencv_fn
 enter_caffe_fn
 enter_libsvm_fn

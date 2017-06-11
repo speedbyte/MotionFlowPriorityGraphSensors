@@ -1,4 +1,10 @@
 
+
+Adding ffmpeg
+Adding opencv
+Adding boost
+
+
 4 C's
 
 Confusion

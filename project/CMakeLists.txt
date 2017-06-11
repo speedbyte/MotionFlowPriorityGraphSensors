@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+
 project(PriorityGraphSensors)
 
 set(CMAKE_VERBOSE_MAKEFILE on)
@@ -11,8 +11,8 @@ include(CMakePrintNothingConfig)  # Looks for CMakePrintNothing.cmake under CMAK
 
 #Find the modules ( the modules are coded inside the OpenCVConfig.cmake and OpenCVModules.make )
 #-----------
-set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/../libs/opencv-install/share/OpenCV")
-find_package( OpenCV REQUIRED ) # see the list of the modules below that would be loaded.
+#set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/../libs/opencv-install/share/OpenCV")
+find_package( OpenCV REQUIRED HINTS "${CMAKE_SOURCE_DIR}/../libs/opencv-install/share/OpenCV") # see the list of the modules below that would be loaded.
 #-----------
 
 # IN FFPMEG
