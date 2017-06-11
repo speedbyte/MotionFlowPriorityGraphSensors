@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts ":t:bfolpcieah" opt; do
+while getopts ":t:bfolpciedah" opt; do
   case $opt in
     t)
       echo "-t was triggered, Parameter: $OPTARG" >&2
@@ -124,7 +124,7 @@ if [ "$BOOST_OPTION" == "y" ] ; then
     mkdir -p $BOOST_PWD/../boost-install/lib/pkgconfig
     python $SOURCE_DIR/utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p $BOOST_PWD/../boost-install -o $BOOST_PWD/../boost-install/lib/pkgconfig/boost.pc $BOOST_PWD/../boost-install/lib/
 #python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
-   cd ../../
+    cd $SOURCE_DIR
 fi
 }
 
@@ -150,7 +150,7 @@ if [ "$FFMPEG_OPTION" == "y" ] ; then
     ret=$(echo $?)
     echo "make-install in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "ffmpeg make-install successful"; else echo "ffmpeg make-install terminated with error. Please see the /dev/null file "; exit_function; fi
-    cd ../../
+    cd $SOURCE_DIR
 fi
 }
 
@@ -184,7 +184,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     ret=$(echo $?)
     echo "make-install in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "opencv make-install successful"; else echo "opencv make-install terminated with error. Please see the /dev/null file "; exit_function; fi
-    cd ../../../
+    cd $SOURCE_DIR
 fi
 }
 
@@ -206,7 +206,7 @@ if [ "$LIBSVM_OPTION" == "y" ]; then
     echo "make in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "libsvm make successful"; else echo "libsvm build terminated with error"; make clean; exit_function; fi
     ln -s libsvm.so.2 libsvm.so # making -lsvm possible
-    cd ../../
+    cd $SOURCE_DIR
 fi
 }
 
@@ -227,7 +227,7 @@ if [ "$PROJECT_OPTION" == "y" ]; then
     time make #> /dev/null #2>&1
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project make successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
-    cd .
+    cd $SOURCE_DIR
 fi
 }
 
@@ -248,7 +248,7 @@ if [ "$PROJECT_OPTION" == "y" ]; then
     time make #> /dev/null #2>&1
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project make successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
-    cd .
+    cd $SOURCE_DIR
 fi
 }
 
@@ -264,7 +264,7 @@ if [ "$CAFFE_OPTION" == "y" ]; then
 	make all -n PROJECT_LIBS=$PROJECT_LIBS
 	ret=$(echo $?)
   if [ "$ret" == "0" ]; then echo "caffe make successful"; else echo "caffe make terminated with error. Please see the /dev/null file"; exit_function; fi
-  cd ../..
+  cd $SOURCE_DIR
 fi
 }
 
@@ -278,7 +278,7 @@ if [ "$IVT_OPTION" == "y" ]; then
 	./build.sh
 	ret=$(echo $?)
   if [ "$ret" == "0" ]; then echo "ivt make successful"; else echo "ivt make terminated with error. Please see the /dev/null file"; exit_function; fi
-  cd ../..
+  cd $SOURCE_DIR
 fi
 }
 
@@ -286,11 +286,17 @@ function enter_external_algorithm_fn
 {
 cd $SOURCE_DIR
 if [ "$EXTERNAL_OPTION" == "y" ] ; then
-EXTERNAL_PWD="$SOURCE_DIR/external"
-cd $EXTERNAL_PWD
-cd algorithms/VSF-sceneflow-1.0
-make
+    EXTERNAL_PWD="$SOURCE_DIR/external"
+    cd $EXTERNAL_PWD
+    cd algorithms/VSF-sceneflow-1.0
+    make
+    cd $SOURCE_DIR
 fi
+}
+
+function enter_dummy_fn
+{
+    echo "Do Nothing"
 }
 
 SOURCE_DIR=$(pwd)
@@ -298,8 +304,9 @@ BOOST_PWD="$SOURCE_DIR/libs/boost"
 FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
 OPENCV_PWD="$SOURCE_DIR/libs/opencv"
 PROJECT_PWD="$SOURCE_DIR/project/PerceptionSandbox"
-#PROJECT_PWD="$SOURCE_DIR/project"
+PROJECT_PWD="$SOURCE_DIR/project"
 export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOST_PWD/../boost-install/lib/pkgconfig:$OPENCV_PWD/../opencv-install/lib/pkgconfig
+#TODO : Compare Inode instead of string
 enter_boost_fn
     PKG_CONFIG_PATH_INCLUDE_BOOST=$(pkg-config --cflags boost)
     echo $PKG_CONFIG_PATH_INCLUDE_BOOST
@@ -313,8 +320,14 @@ enter_ffmpeg_fn
     echo $ACTUAL_FFMPEG_INCLUDE_PATH
     if [[ $PKG_CONFIG_PATH_INCLUDE_FFMPEG == "-I$ACTUAL_FFMPEG_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; exit_function; fi
 enter_opencv_fn
-enter_caffe_fn
-enter_libsvm_fn
-enter_ivt_fn
+    PKG_CONFIG_PATH_INCLUDE_OPENCV=$(pkg-config --cflags opencv)
+    echo $PKG_CONFIG_PATH_INCLUDE_OPENCV
+    ACTUAL_OPENCV_INCLUDE_PATH=$SOURCE_DIR/libs/opencv-install/include
+    echo $ACTUAL_OPENCV_INCLUDE_PATH
+    if [[ $PKG_CONFIG_PATH_INCLUDE_OPENCV == "-I$ACTUAL_OPENCV_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_OPENCV $PKG_CONFIG_PATH_INCLUDE_OPENCV"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_OPENCV $PKG_CONFIG_PATH_INCLUDE_OPENCV"; exit_function; fi
+#enter_caffe_fn
+#enter_libsvm_fn
+#enter_ivt_fn
 enter_project_fn
 enter_external_algorithm_fn
+enter_dummy_fn
