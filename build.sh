@@ -113,13 +113,16 @@ if [ "$BOOST_OPTION" == "y" ] ; then
     cd $BOOST_PWD
     echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning boost ...."; rm -rf bin.v2; cd ../../; return; fi
-    if [ ! -d stage ] ; then
-        if [ ! -f b2 ]; then
-        ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install/
-        fi
-        ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" install
-    fi
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning boost ...."; ./b2 --clean; rm -rf bin.v2; cd ../../; return; fi
+    ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install/
+    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
+    ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" install
+#    if [ ! -d stage ] ; then
+#        if [ ! -f b2 ]; then
+#        ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install/
+#        fi
+#       ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" install
+#    fi
     #ln -s ./boost ./stage/include
     mkdir -p $BOOST_PWD/../boost-install/lib/pkgconfig
     python $SOURCE_DIR/utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p $BOOST_PWD/../boost-install -o $BOOST_PWD/../boost-install/lib/pkgconfig/boost.pc $BOOST_PWD/../boost-install/lib/
@@ -304,7 +307,7 @@ BOOST_PWD="$SOURCE_DIR/libs/boost"
 FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
 OPENCV_PWD="$SOURCE_DIR/libs/opencv"
 PROJECT_PWD="$SOURCE_DIR/project/PerceptionSandbox"
-PROJECT_PWD="$SOURCE_DIR/project"
+#PROJECT_PWD="$SOURCE_DIR/project"
 export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOST_PWD/../boost-install/lib/pkgconfig:$OPENCV_PWD/../opencv-install/lib/pkgconfig
 #TODO : Compare Inode instead of string
 enter_boost_fn

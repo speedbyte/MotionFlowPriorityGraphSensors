@@ -65,7 +65,6 @@ target_link_libraries (Disparity ${PKG_OPENCV_LDFLAGS})
 #Find the modules ( the modules are coded inside the OpenCVConfig.cmake and OpenCVModules.make )
 #-----------
 #set(OpenCV_DIR "${CMAKE_SOURCE_DIR}/../libs/opencv-install/share/OpenCV")
-#find_package( OpenCV REQUIRED HINTS "${CMAKE_SOURCE_DIR}/../libs/opencv-install/lib/pkgconfig") # see the list of the modules below that would be loaded.
 
 #message (STATUS ${Boost_DIR})
 #message (STATUS ${OpenCV_DIR})

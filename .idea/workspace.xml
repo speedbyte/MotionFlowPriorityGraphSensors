@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="false">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e93a0651-f228-48e1-9ef3-6da506ef479d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_context.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_context.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_context.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_context.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_coroutine.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_coroutine.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_coroutine.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_coroutine.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_graph.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_graph.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_graph.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_graph.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_log.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_log.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_log.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_log.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_log_setup.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_log_setup.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_log_setup.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_log_setup.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_regex.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_regex.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_regex.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_regex.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_serialization.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_serialization.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_serialization.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_serialization.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_test_exec_monitor.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_test_exec_monitor.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_thread.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_thread.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_thread.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_thread.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_unit_test_framework.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_unit_test_framework.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_unit_test_framework.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_unit_test_framework.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_wserialization.a" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_wserialization.a" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/lib/libboost_wserialization.so.1.64.0" afterPath="$PROJECT_DIR$/libs/boost-install/lib/libboost_wserialization.so.1.64.0" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/PerceptionSandbox" afterPath="$PROJECT_DIR$/project/PerceptionSandbox" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.sh" afterPath="$PROJECT_DIR$/build.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/align/aligned_allocator.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/align/aligned_allocator.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/align/aligned_allocator_adaptor.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/align/aligned_allocator_adaptor.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/align.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/align.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/align_down.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/align_down.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/align_up.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/align_up.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/alignment_of_msvc.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/alignment_of_msvc.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/is_alignment.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/align/detail/is_alignment.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/archive/basic_text_iarchive.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/archive/basic_text_iarchive.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/archive/impl/archive_serializer_map.ipp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/archive/impl/archive_serializer_map.ipp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/archive/iterators/base64_from_binary.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/archive/iterators/base64_from_binary.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/archive/iterators/binary_from_base64.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/archive/iterators/binary_from_base64.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/atomic_template.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/atomic_template.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/bitwise_cast.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/bitwise_cast.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/config.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/config.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_emulated.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_emulated.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_alpha.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_alpha.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_arm.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_arm.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_atomic.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_atomic.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_ppc.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_ppc.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_sparc.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_sparc.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_sync.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_sync.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_x86.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_x86.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_x86_dcas.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_gcc_x86_dcas.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_linux_arm.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_linux_arm.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_msvc_arm.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_msvc_arm.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_msvc_x86.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_msvc_x86.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_windows.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/ops_windows.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/platform.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/platform.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/storage_type.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/atomic/detail/storage_type.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/compiler/pathscale.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/compiler/pathscale.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/compiler/visualc.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/compiler/visualc.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/aix.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/aix.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/beos.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/beos.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/bsd.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/bsd.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/cray.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/cray.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/cygwin.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/cygwin.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/haiku.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/haiku.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/hpux.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/hpux.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/irix.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/irix.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/linux.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/linux.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/macos.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/macos.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/qnxnto.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/qnxnto.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/solaris.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/solaris.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/symbian.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/symbian.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/vxworks.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/platform/vxworks.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/dinkumware.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/dinkumware.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/libcomo.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/libcomo.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/libcpp.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/libcpp.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/libstdcpp3.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/libstdcpp3.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/modena.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/modena.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/msl.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/msl.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/roguewave.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/roguewave.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/sgi.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/sgi.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/stlport.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/stlport.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/vacpp.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/config/stdlib/vacpp.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/allocator_traits.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/allocator_traits.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/deque.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/deque.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/adaptive_node_pool_impl.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/adaptive_node_pool_impl.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/advanced_insert_int.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/advanced_insert_int.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/copy_move_algo.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/copy_move_algo.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/destroyers.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/destroyers.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/flat_tree.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/flat_tree.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/iterator_to_raw_pointer.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/iterator_to_raw_pointer.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/multiallocation_chain.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/multiallocation_chain.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/node_alloc_holder.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/node_alloc_holder.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/node_pool_impl.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/node_pool_impl.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/pair.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/pair.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/tree.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/detail/tree.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/flat_map.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/flat_map.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/flat_set.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/flat_set.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/map.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/map.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/node_handle.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/node_handle.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/small_vector.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/small_vector.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/stable_vector.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/stable_vector.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/string.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/string.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/container/vector.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/container/vector.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/context/continuation.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/context/continuation.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/context/detail/config.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/context/detail/config.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/context/detail/exception.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/context/detail/exception.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/context/pooled_fixedsize_stack.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/context/pooled_fixedsize_stack.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/context/posix/protected_fixedsize_stack.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/context/posix/protected_fixedsize_stack.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/context/windows/protected_fixedsize_stack.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/context/windows/protected_fixedsize_stack.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/core/addressof.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/core/addressof.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/core/lightweight_test.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/core/lightweight_test.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/cstdint.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/cstdint.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/date_time/posix_time/conversion.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/date_time/posix_time/conversion.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/date_time/time_resolution_traits.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/date_time/time_resolution_traits.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/detail/workaround.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/detail/workaround.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/error_info_impl.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/error_info_impl.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/exception_ptr.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/exception_ptr.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/is_output_streamable.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/is_output_streamable.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/object_hex_dump.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/object_hex_dump.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/type_info.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/detail/type_info.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/diagnostic_information.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/diagnostic_information.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/enable_error_info.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/enable_error_info.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/get_error_info.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/get_error_info.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/info.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/info.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/to_string.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/to_string.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/to_string_stub.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/exception/to_string_stub.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/bstree.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/bstree.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/default_header_holder.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/default_header_holder.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/hashtable_node.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/hashtable_node.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/hook_traits.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/hook_traits.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/node_to_value.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/node_to_value.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/tree_value_compare.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/detail/tree_value_compare.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/hashtable.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/hashtable.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/member_value_traits.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/member_value_traits.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/pointer_traits.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/intrusive/pointer_traits.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/iterator/zip_iterator.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/iterator/zip_iterator.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/adaptive_sort.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/adaptive_sort.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/adaptive_sort_merge.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/adaptive_sort_merge.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/basic_op.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/basic_op.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/insertion_sort.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/insertion_sort.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/merge.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/merge.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/merge_sort.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/detail/merge_sort.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/move.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/algo/move.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/detail/destruct_n.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/detail/destruct_n.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/move/detail/fwd_macros.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/move/detail/fwd_macros.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/parameter/aux_/arg_list.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/parameter/aux_/arg_list.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/predef/platform/mingw.h" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/predef/platform/mingw.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/preprocessor/config/config.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/preprocessor/config/config.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/serialization/array.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/serialization/array.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/serialization/singleton.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/serialization/singleton.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/smart_ptr/allocate_shared_array.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/smart_ptr/allocate_shared_array.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/smart_ptr/bad_weak_ptr.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/smart_ptr/bad_weak_ptr.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/smart_ptr/detail/atomic_count_gcc.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/smart_ptr/detail/atomic_count_gcc.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/smart_ptr/detail/lwm_win32_cs.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/smart_ptr/detail/lwm_win32_cs.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/token_iterator.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/token_iterator.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/typeof/msvc/typeof_impl.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/typeof/msvc/typeof_impl.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/typeof/register_fundamental.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/typeof/register_fundamental.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/typeof/typeof.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/typeof/typeof.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/utility/result_of.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/utility/result_of.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/variant/get.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/variant/get.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/variant/polymorphic_get.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/variant/polymorphic_get.hpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/boost-install/include/boost/version.hpp" afterPath="$PROJECT_DIR$/libs/boost-install/include/boost/version.hpp" />
+    </list>
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="PriorityGraphSensors" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="build.sh" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="28" />
+    <option name="width" value="1920" />
+    <option name="height" value="1138" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PriorityGraphSensors" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PriorityGraphSensors" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PriorityGraphSensors" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PriorityGraphSensors" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PriorityGraphSensors" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PriorityGraphSensors" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PerceptionSandbox" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="CLion_Remote" factoryName="GDB Remote Debug" remoteCommand="" symbolFile="" sysroot="">
+      <method />
+    </configuration>
+    <configuration default="true" type="CMakeCatchTestRunConfigurationType" factoryName="Catch Test" PASS_PARENT_ENVS_2="true" TEST_MODE="SUITE_TEST">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" PASS_PARENT_ENVS_2="true" TEST_MODE="SUITE_TEST">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="ChromiumRemoteDebugType" factoryName="Chromium Remote">
+      <method />
+    </configuration>
+    <configuration default="true" type="CompoundRunConfigurationType" factoryName="Compound Run Configuration">
+      <method />
+    </configuration>
+    <configuration default="true" type="FirefoxRemoteDebugType" factoryName="Firefox Remote">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
+      <node-interpreter value="project" />
+      <working-dir value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeWebKit" factoryName="NW.js">
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PriorityGraphSensors" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="ReactNative" factoryName="React Native">
+      <node-interpreter value="project" />
+      <platform value="ANDROID" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PriorityGraphSensors" />
+      <method />
+    </configuration>
+    <configuration default="true" type="XSLT" factoryName="XSLT">
+      <option name="myOutputFile" />
+      <option name="myOpenOutputFile" value="false" />
+      <option name="myOpenInBrowser" value="false" />
+      <option name="mySmartErrorHandling" value="true" />
+      <option name="myRunnerPort" value="34873" />
+      <option name="myVmArguments" />
+      <option name="myWorkingDirectory" />
+      <option name="myModule" />
+      <option name="myJdk" />
+      <parameters />
+      <OutputType value="CONSOLE" save-to-file="false" />
+      <FileType name="XML" />
+      <JdkChoice value="FROM_MODULE" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.grunt" factoryName="Grunt.js">
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PriorityGraphSensors" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PriorityGraphSensors" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PriorityGraphSensors" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PriorityGraphSensors" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e93a0651-f228-48e1-9ef3-6da506ef479d" name="Default" comment="" />
+      <created>1497351286473</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1497351286473</updated>
+      <workItem from="1497351291481" duration="269000" />
+      <workItem from="1497351575464" duration="192000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="461000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="28" width="1920" height="1138" extended-state="6" />
+    <layout>
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20729166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20196079" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="processedProjectFiles" value="true" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/build.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt" />
+    <entry file="file://$PROJECT_DIR$/build.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
