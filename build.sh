@@ -239,6 +239,7 @@ function enter_project_fn
 cd $SOURCE_DIR
 if [ "$PROJECT_OPTION" == "y" ]; then
     tput setf 3
+    mkdir -p $PROJECT_PWD/build
     cd $PROJECT_PWD/build
     echo "Building in $PROJECT_PWD"
     if [ "$BUILD_OPTION" == "clean" ]; then rm -rf *; cd .; return; fi
