@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts ":t:bfolpciedah" opt; do
+while getopts ":t:bfolpcierdah" opt; do
   case $opt in
     t)
       echo "-t was triggered, Parameter: $OPTARG" >&2
@@ -37,6 +37,10 @@ while getopts ":t:bfolpciedah" opt; do
     e)
       echo "-e was triggered, Parameter: $OPTARG" >&2
       EXTERNAL_OPTION="y"
+      ;;
+    r)
+      echo "-r was triggered, Parameter: $OPTARG" >&2
+      PROJECT_RUN_OPTION="y"
       ;;
     a)
       echo "-a was triggered, Parameter: $OPTARG" >&2
@@ -137,7 +141,7 @@ cd $SOURCE_DIR
 if [ "$FFMPEG_OPTION" == "y" ] ; then
     tput setf 3
     cd $FFMPEG_PWD
-    echo "Building in $SOURCE_DIR"
+    echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning ffmpeg ...."; make distclean; rm -rf $FFMPEG_PWD/../ffmpeg-install/*; cd ../../; return; fi
     echo "Configuring ffmpeg"
@@ -163,7 +167,7 @@ cd $SOURCE_DIR
 if [ "$OPENCV_OPTION" == "y" ]; then
     tput setf 2 
     cd $OPENCV_PWD
-    echo "Building in $SOURCE_DIR"
+    echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf release; rm -rf $FFMPEG_PWD/../opencv-install/*; cd ../../; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Check compatibility"
@@ -198,7 +202,7 @@ LIBSVM_PWD="$SOURCE_DIR/libs/libsvm"
 if [ "$LIBSVM_OPTION" == "y" ]; then
     tput setf 3 
     cd $LIBSVM_PWD
-    echo "Building in $SOURCE_DIR"
+    echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning libsvm ...."; make clean; cd ../../; return; fi
     echo "Making libsvm"
@@ -213,13 +217,13 @@ if [ "$LIBSVM_OPTION" == "y" ]; then
 fi
 }
 
-function enter_project__previous_fn
+function enter_project_previous_fn
 {
 cd $SOURCE_DIR
 if [ "$PROJECT_OPTION" == "y" ]; then
     tput setf 3
     cd $PROJECT_PWD
-    echo "Building in $PROJECT_PWD"
+    echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "clean" ]; then make clean; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     make distclean # remove all libs and, more importantly, all old Makefiles
@@ -239,10 +243,11 @@ function enter_project_fn
 cd $SOURCE_DIR
 if [ "$PROJECT_OPTION" == "y" ]; then
     tput setf 3
+    cd $PROJECT_PWD
+    echo "Building in $(pwd)"
     mkdir -p $PROJECT_PWD/build
     cd $PROJECT_PWD/build
-    echo "Building in $PROJECT_PWD"
-    if [ "$BUILD_OPTION" == "clean" ]; then rm -rf *; cd .; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning PerceptionSandbox ...."; rm -rf *; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     cmake -DOpenCV_DIR="${PROJECT_PWD}/../../libs/opencv-install/share/OpenCV" -DBoost_DIR="${PROJECT_PWD}/../../libs/boost-install/share/FindBoost" ..
     # remove all libs and, more importantly, all old Makefiles
@@ -252,6 +257,29 @@ if [ "$PROJECT_OPTION" == "y" ]; then
     time make #> /dev/null #2>&1
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project make successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
+    time make install #> /dev/null #2>&1
+    ret=$(echo $?)
+    if [ "$ret" == "0" ]; then echo "project make successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
+    cd $SOURCE_DIR
+fi
+}
+
+function enter_project_run_fn
+{
+cd $SOURCE_DIR
+if [ "$PROJECT_RUN_OPTION" == "y" ]; then
+    tput setf 3
+    cd $PROJECT_PWD
+    echo "Building in $(pwd)"
+    cd $PROJECT_PWD/install/bin
+    if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning PerceptionSandbox ...."; rm -rf *; cd .; return; fi
+    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
+    export CPATH="$SOURCE_DIR/libs/boost-install/include/:$SOURCE_DIR/libs/opencv-install/include/:$SOURCE_DIR/utils/gnuplot-iostream"
+    export LD_LIBRARY_PATH="$SOURCE_DIR/libs/boost-install/lib/:$PROJECT_PWD/install/lib:$SOURCE_DIR/libs/opencv-install/lib/"
+    ./protobuild -f $PROJECT_PWD/install/ -c $PROJECT_PWD/install/config/ego_motion.prototxt -r
+    ret=$(echo $?)
+    if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
+    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     cd $SOURCE_DIR
 fi
 }
@@ -263,7 +291,7 @@ PROJECT_LIBS="$SOURCE_DIR/libs"
 CAFFE_PWD="$SOURCE_DIR/libs/caffe"
 if [ "$CAFFE_OPTION" == "y" ]; then
 	cd $CAFFE_PWD
-	echo "Building in $SOURCE_DIR"
+	echo "Building in $(pwd)"
 	if [ "$BUILD_OPTION" == "clean" ]; then echo "Cleaning caffe"; make clean; cd .; return; fi
 	make all -n PROJECT_LIBS=$PROJECT_LIBS
 	ret=$(echo $?)
@@ -278,7 +306,7 @@ cd $SOURCE_DIR
 IVT_PWD="$SOURCE_DIR/libs/IVT"
 if [ "$IVT_OPTION" == "y" ]; then
 	cd $IVT_PWD
-	echo "Building in $SOURCE_DIR"
+	echo "Building in $(pwd)"
 	./build.sh
 	ret=$(echo $?)
   if [ "$ret" == "0" ]; then echo "ivt make successful"; else echo "ivt make terminated with error. Please see the /dev/null file"; exit_function; fi
@@ -293,6 +321,8 @@ if [ "$EXTERNAL_OPTION" == "y" ] ; then
     EXTERNAL_PWD="$SOURCE_DIR/external"
     cd $EXTERNAL_PWD
     cd algorithms/VSF-sceneflow-1.0
+    echo "Building in $(pwd)"
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning external algorithms ...."; make clean; cd $SOURCE_DIR; return; fi
     make
     cd $SOURCE_DIR
 fi
@@ -312,26 +342,34 @@ PROJECT_PWD="$SOURCE_DIR/project/PerceptionSandbox"
 export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOST_PWD/../boost-install/lib/pkgconfig:$OPENCV_PWD/../opencv-install/lib/pkgconfig
 #TODO : Compare Inode instead of string
 enter_boost_fn
+    if [ "$BUILD_OPTION" != "clean" ]; then
     PKG_CONFIG_PATH_INCLUDE_BOOST=$(pkg-config --cflags boost)
     echo $PKG_CONFIG_PATH_INCLUDE_BOOST
     ACTUAL_BOOST_INCLUDE_PATH=$BOOST_PWD/../boost-install/include
     echo $ACTUAL_BOOST_INCLUDE_PATH
     if [[ $PKG_CONFIG_PATH_INCLUDE_BOOST == "-I$ACTUAL_BOOST_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_BOOST $PKG_CONFIG_PATH_INCLUDE_BOOST"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_BOOST $PKG_CONFIG_PATH_INCLUDE_BOOST"; exit_function; fi
+    fi
 enter_ffmpeg_fn
+    if [ "$BUILD_OPTION" != "clean" ]; then
     PKG_CONFIG_PATH_INCLUDE_FFMPEG=$(pkg-config --cflags libavcodec)
     echo $PKG_CONFIG_PATH_INCLUDE_FFMPEG
     ACTUAL_FFMPEG_INCLUDE_PATH=$FFMPEG_PWD/../ffmpeg-install/include
     echo $ACTUAL_FFMPEG_INCLUDE_PATH
     if [[ $PKG_CONFIG_PATH_INCLUDE_FFMPEG == "-I$ACTUAL_FFMPEG_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; exit_function; fi
+    fi
 enter_opencv_fn
+    if [ "$BUILD_OPTION" != "clean" ]; then
     PKG_CONFIG_PATH_INCLUDE_OPENCV=$(pkg-config --cflags opencv)
     echo $PKG_CONFIG_PATH_INCLUDE_OPENCV
     ACTUAL_OPENCV_INCLUDE_PATH=$SOURCE_DIR/libs/opencv-install/include
     echo $ACTUAL_OPENCV_INCLUDE_PATH
     if [[ $PKG_CONFIG_PATH_INCLUDE_OPENCV == "-I$ACTUAL_OPENCV_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_OPENCV $PKG_CONFIG_PATH_INCLUDE_OPENCV"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_OPENCV $PKG_CONFIG_PATH_INCLUDE_OPENCV"; exit_function; fi
+    fi
 #enter_caffe_fn
 #enter_libsvm_fn
 #enter_ivt_fn
 enter_project_fn
-enter_external_algorithm_fn
+enter_project_run_fn
+#enter_external_algorithm_fn
 enter_dummy_fn
+

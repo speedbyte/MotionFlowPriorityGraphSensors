@@ -64,8 +64,8 @@ Results:
 
 clean:
 	-rm -f $(PROJECTOBJ) StereoFlow
-	-mv Results Results.old
-	-rm -rf Results.old
+#	-mv Results Results.old
+	-rm -rf Results
 
 iniconfig.o: iniconfig.cpp iniconfig.h inifile.h
 
