@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts ":t:bfolpcierdah" opt; do
+while getopts ":t:bfolpcier:dah" opt; do
   case $opt in
     t)
       echo "-t was triggered, Parameter: $OPTARG" >&2
@@ -41,6 +41,7 @@ while getopts ":t:bfolpcierdah" opt; do
     r)
       echo "-r was triggered, Parameter: $OPTARG" >&2
       PROJECT_RUN_OPTION="y"
+      PROTOCONFIG=$OPTARG
       ;;
     a)
       echo "-a was triggered, Parameter: $OPTARG" >&2
@@ -249,7 +250,7 @@ if [ "$PROJECT_OPTION" == "y" ]; then
     cd $PROJECT_PWD/build
     if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning PerceptionSandbox ...."; rm -rf *; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    cmake -DOpenCV_DIR="${PROJECT_PWD}/../../libs/opencv-install/share/OpenCV" -DBoost_DIR="${PROJECT_PWD}/../../libs/boost-install/share/FindBoost" ..
+    cmake #-DOpenCV_DIR="${PROJECT_PWD}/../../libs/opencv-install/share/OpenCV" -DBoost_DIR="${PROJECT_PWD}/../../libs/boost-install/share/FindBoost" ..
     # remove all libs and, more importantly, all old Makefiles
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project cmake conf successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
@@ -276,7 +277,8 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     export CPATH="$SOURCE_DIR/libs/boost-install/include/:$SOURCE_DIR/libs/opencv-install/include/:$SOURCE_DIR/utils/gnuplot-iostream"
     export LD_LIBRARY_PATH="$SOURCE_DIR/libs/boost-install/lib/:$PROJECT_PWD/install/lib:$SOURCE_DIR/libs/opencv-install/lib/"
-    ./protobuild -f $PROJECT_PWD/install/ -c $PROJECT_PWD/install/config/ego_motion.prototxt -r
+    ./protobuild -f $PROJECT_PWD/install/ -c $PROJECT_PWD/install/config/$PROTOCONFIG.prototxt -r;
+
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi

@@ -25,3 +25,7 @@
 	path = utils/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
 	branch = master
+[submodule "protobuf"]
+	path = tools/protobuf
+	url = https://github.com/google/protobuf
+	branch = master

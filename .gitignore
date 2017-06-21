@@ -2,3 +2,5 @@ external/algorithms/VSF-sceneflow-1.0/Results/
 build/
 release/
 .project
+*.o
+*.swp
