@@ -250,7 +250,6 @@ if [ "$PROJECT_OPTION" == "y" ]; then
     cd $PROJECT_PWD/build
     if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning PerceptionSandbox ...."; rm -rf *; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    cmake -DOpenCV_DIR="${PROJECT_PWD}/../../libs/opencv-install/share/OpenCV" -DBoost_DIR="${PROJECT_PWD}/../../libs/boost-install/share/FindBoost" ..
     # remove all libs and, more importantly, all old Makefiles
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project cmake conf successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
@@ -267,6 +266,12 @@ fi
 
 function enter_project_run_fn
 {
+#EXAMPLE="object_saliency"
+#EXAMPLE="spectral_saliency"
+#EXAMPLE="itti_saliency"
+#EXAMPLE="highpass_saliency"
+#EXAMPLE="gbvs_saliency"
+#EXAMPLE="boolean_maps_saliency"
 cd $SOURCE_DIR
 if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     tput setf 3
@@ -275,10 +280,39 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     cd $PROJECT_PWD/install/bin
     if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning PerceptionSandbox ...."; rm -rf *; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    export CPATH="$SOURCE_DIR/libs/boost-install/include/:$SOURCE_DIR/libs/opencv-install/include/:$SOURCE_DIR/utils/gnuplot-iostream"
+    DIR_SCRIPTS="$(dirname "${BASH_SOURCE[0]}")"
+    DIR_FRAMEWORK_ROOT="$(dirname "${DIR_SCRIPTS}")"
+echo "detected framework root: ${DIR_FRAMEWORK_ROOT}"
+    #
+    # find protobuild binary
+    #
+    DIR_BIN="${DIR_FRAMEWORK_ROOT}/bin"
+    PROTOBUILD_BIN="${DIR_BIN}/protobuild"
+    #
+    # prepare configuration
+    #
+    DIR_CONFIG="${DIR_FRAMEWORK_ROOT}/config"
+    DIR_DATA="${DIR_FRAMEWORK_ROOT}/data"
+    FILE_CONFIG="${DIR_CONFIG}/${EXAMPLE}.prototxt"
+    FILE_CONFIG="${1}"
+    echo "detected template: ${FILE_CONFIG}"
+    eval "cat <<EOF
+    $(<${FILE_CONFIG})
+    EOF
+    " > .tmp_pipeline.prototxt
+    echo "temporary config file: .tmp_pipeline.prototxt"
+    #
+    # library path
+    #
+    export LD_LIBRARY_PATH="${DIR_FRAMEWORK_ROOT}/lib"
+    #
+    # run pipeline processor
+    #
+    echo "run protobuild: \$${PROTOBUILD_BIN} -c .tmp_pipeline.prototxt "$@""
+    ${PROTOBUILD_BIN} -c .tmp_pipeline.prototxt "$@"    cmake -DOpenCV_DIR="${PROJECT_PWD}/../../libs/opencv-install/share/OpenCV" -DBoost_DIR="${PROJECT_PWD}/../../libs/boost-install/share/FindBoost" ..
+     export CPATH="$SOURCE_DIR/libs/boost-install/include/:$SOURCE_DIR/libs/opencv-install/include/:$SOURCE_DIR/utils/gnuplot-iostream"
     export LD_LIBRARY_PATH="$SOURCE_DIR/libs/boost-install/lib/:$PROJECT_PWD/install/lib:$SOURCE_DIR/libs/opencv-install/lib/"
     ./protobuild -f $PROJECT_PWD/install/ -c $PROJECT_PWD/install/config/$PROTOCONFIG.prototxt -r;
-
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
