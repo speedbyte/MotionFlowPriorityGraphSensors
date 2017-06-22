@@ -306,6 +306,7 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
+    ./plotvelodyne "$DIR_DATA/kitti/2011_09_26/" "0001" "$PROJECT_PWD/results"
     cd $SOURCE_DIR
 fi
 }
