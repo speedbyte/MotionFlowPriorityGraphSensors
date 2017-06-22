@@ -302,7 +302,7 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     #
     # run pipeline processor
     #
-    ./protobuild -f $PROJECT_PWD/install/ -c $FILE_CONFIG -r;
+    ./protobuild -f $PROJECT_PWD/install/ -c $FILE_CONFIG -r -s;
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
