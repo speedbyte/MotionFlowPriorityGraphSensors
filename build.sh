@@ -255,7 +255,7 @@ if [ "$PROJECT_OPTION" == "y" ]; then
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project cmake conf successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    time make #> /dev/null #2>&1
+    time make -j $(getconf _NPROCESSORS_ONLN) #> /dev/null #2>&1
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project make successful"; else echo "project make terminated with error. Please see the /dev/null file"; exit_function; fi
     time make install #> /dev/null #2>&1
