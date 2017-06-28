@@ -303,11 +303,11 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     #
     # run pipeline processor
     #
-    ./protobuild -f $PROJECT_PWD/install/ -c $FILE_CONFIG -r -s;
+    ./protobuild -i "protobuild" -f  $PROJECT_PWD/install/ -c $FILE_CONFIG -d $DIR_DATA/kitti/2011_09_26/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    ./protobuild "$DIR_DATA/kitti/2011_09_26/" "0001" "$PROJECT_PWD/results" "$PROTOCONFIG"
+    ./protobuild -i "plotvelodyne" -f  $PROJECT_PWD/install/ -c $FILE_CONFIG -d $DIR_DATA/kitti/2011_09_26/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results
     cd $SOURCE_DIR
 fi
 }
