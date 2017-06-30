@@ -13,9 +13,9 @@
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
 	branch = master
-[submodule "PerceptionSandbox"]
-	path = project/PerceptionSandbox
-	url = git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/PerceptionSandbox.git
+[submodule "VirtualTestDriveFramework"]
+	path = project/VirtualTestDriveFramework
+	url = git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/VirtualTestDriveFramework.git
 	branch = master
 [submodule "pkg-config-generator"]
 	path = utils/pkg-config-generator

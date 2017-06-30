@@ -248,7 +248,7 @@ if [ "$PROJECT_OPTION" == "y" ]; then
     echo "Building in $(pwd)"
     mkdir -p $PROJECT_PWD/cmake-build-debug
     cd $PROJECT_PWD/cmake-build-debug
-    if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning PerceptionSandbox ...."; rm -rf *; cd .; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning VirtualTestDriveFramework ...."; rm -rf *; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     # remove all libs and, more importantly, all old Makefiles
     cmake -DOpenCV_DIR="${PROJECT_PWD}/../../libs/opencv-install/share/OpenCV" -DBoost_DIR="${PROJECT_PWD}/../../libs/boost-install/share/FindBoost" ..
@@ -279,7 +279,7 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     cd $PROJECT_PWD
     echo "Building in $(pwd)"
     cd $PROJECT_PWD/install/bin
-    if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning PerceptionSandbox ...."; rm -rf *; cd .; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then  echo "cleaning VirtualTestDriveFramework ...."; rm -rf *; cd .; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     DIR_FRAMEWORK_ROOT=$PROJECT_PWD #"$(dirname "${BASH_SOURCE[0]}")"
     echo "detected framework root: ${DIR_FRAMEWORK_ROOT}"
@@ -294,7 +294,7 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     DIR_CONFIG="${DIR_FRAMEWORK_ROOT}/config"
     DIR_DATA="${DIR_FRAMEWORK_ROOT}/data"
     FILE_CONFIG="${DIR_CONFIG}/${PROTOCONFIG}.prototxt"
-    FILE_CONFIG="${DIR_CONFIG}/ego_motion.prototxt"  # hack to test the scripts
+    #FILE_CONFIG="${DIR_CONFIG}/ego_motion.prototxt"  # hack to test the scripts
     export CPATH="$SOURCE_DIR/libs/boost-install/include/:$SOURCE_DIR/libs/opencv-install/include/:$SOURCE_DIR/utils/gnuplot-iostream"
     #
     # library path
@@ -365,7 +365,7 @@ SOURCE_DIR=$(pwd)
 BOOST_PWD="$SOURCE_DIR/libs/boost"
 FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
 OPENCV_PWD="$SOURCE_DIR/libs/opencv"
-PROJECT_PWD="$SOURCE_DIR/project/PerceptionSandbox"
+PROJECT_PWD="$SOURCE_DIR/project/VirtualTestDriveFramework"
 #PROJECT_PWD="$SOURCE_DIR/project"
 export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOST_PWD/../boost-install/lib/pkgconfig:$OPENCV_PWD/../opencv-install/lib/pkgconfig
 #TODO : Compare Inode instead of string
