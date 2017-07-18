@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="2" RevMinor="0">
+    <Layout Database="Projects/Current/Databases/SmartDB/SmartDB2008.opt.ive" File="Projects/Current/Databases/SmartDB/SmartDB.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile="Distros/Current/Config/Players/Objects"/>
+    <DynObjects Path="Distros/Current/Config/DynObjects/Logic"/>
+    <TrafficElements>
+        <LaneChangeDef Name="slow" Time="8.0000000000000000e+00"/>
+        <LaneChangeDef Name="standard" Time="6.0000000000000000e+00"/>
+        <LaneChangeDef Name="fast" Time="4.0000000000000000e+00"/>
+        <CounterDef Name="Counter"/>
+    </TrafficElements>
+    <PulkTraffic/>
+    <TrafficControl>
+        <Path Name="Pfad_External" PathId="1">
+            <Waypoint PathOption="classic" s="7.8831754318765604e+02" TrackId="2367"/>
+            <Waypoint PathOption="classic" s="3.7170776367187003e+01" TrackId="2364"/>
+            <Waypoint PathOption="classic" s="1.2758970826331090e+03" TrackId="2430"/>
+            <Waypoint PathOption="classic" s="9.7154037450679198e+02" TrackId="2289"/>
+            <Waypoint PathOption="classic" s="1.3343241776346000e+01" TrackId="2446"/>
+            <Waypoint PathOption="classic" s="3.2903500591186003e+01" TrackId="2352"/>
+        </Path>
+        <Player>
+            <Description Driver="DefaultDriver" Control="external" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_black" Name="Ego"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="3.9222365722656250e+03" Y="1.4878991699218755e+03" Z="3.0000000000000000e+00" Direction="1.7160228453581656e+00" AlignToRoad="false"/>
+            </Init>
+        </Player>
+        <PlayerActions Player="Ego">
+            <Action Name="init">
+                <PosRelative CounterID="" CounterComp="COMP_EQ" NetDist="false" Distance="2.0000000000000000e+00" CounterVal="0" Pivot="Ego"/>
+                <EditorPos Radius="2.0000000000000000e+00" X="3.9222365722656250e+03" Y="1.4878991699218755e+03"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionShowRoom actor="$owner" distance="3"/>
+</Traffic>
+]]></SCP>
+            </Action>
+        </PlayerActions>
+        <PlayerActions Selection="ALL_PLAYERS">
+            <Action Name="stop all cars">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="3.9236564941406250e+03" Y="1.4797580566406255e+03" NetDist="false" CounterVal="0" Pivot="$owner"/>
+            </Action>
+        </PlayerActions>
+    </TrafficControl>
+    <MovingObjectsControl/>
+    <LightSigns>
+        <SignalController Id="100" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="101" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="102" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="103" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="200" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="201" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="202" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="203" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="300" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="301" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="302" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="303" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <Signal Id="110"/>
+        <Signal Id="111"/>
+        <Signal Id="112"/>
+        <Signal Id="113"/>
+        <Signal Id="120"/>
+        <Signal Id="121"/>
+        <Signal Id="122"/>
+        <Signal Id="123"/>
+        <Signal Id="130"/>
+        <Signal Id="131"/>
+        <Signal Id="132"/>
+        <Signal Id="133"/>
+        <Signal Id="140"/>
+        <Signal Id="141"/>
+        <Signal Id="142"/>
+        <Signal Id="143"/>
+        <Signal Id="210"/>
+        <Signal Id="211"/>
+        <Signal Id="212"/>
+        <Signal Id="213"/>
+        <Signal Id="220"/>
+        <Signal Id="221"/>
+        <Signal Id="222"/>
+        <Signal Id="223"/>
+        <Signal Id="230"/>
+        <Signal Id="231"/>
+        <Signal Id="232"/>
+        <Signal Id="233"/>
+        <Signal Id="240"/>
+        <Signal Id="241"/>
+        <Signal Id="242"/>
+        <Signal Id="243"/>
+        <Signal Id="310"/>
+        <Signal Id="311"/>
+        <Signal Id="312"/>
+        <Signal Id="313"/>
+        <Signal Id="320"/>
+        <Signal Id="321"/>
+        <Signal Id="322"/>
+        <Signal Id="323"/>
+        <Signal Id="330"/>
+        <Signal Id="331"/>
+        <Signal Id="332"/>
+        <Signal Id="333"/>
+        <Signal Id="340"/>
+        <Signal Id="341"/>
+        <Signal Id="342"/>
+        <Signal Id="343"/>
+    </LightSigns>
+    <Selections/>
+</Scenario>

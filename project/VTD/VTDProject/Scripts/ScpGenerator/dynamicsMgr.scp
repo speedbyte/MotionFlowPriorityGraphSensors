@@ -1,0 +1,13 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   requests driver commands for "Ego" vehicle; these can be found
+#   on RDB as RDB_DRIVER_CTRL_t information
+#
+#
+   0  "<SimCtrl> <Stop/> <LoadScenario filename="trafficDemoPath.xml" /> <Start mode="operation"/> </SimCtrl>"
+  +1s "<Player name="Ego"> <Driver ctrlLatLong="ghostdriver"/> </Player>"
+  +1s "<Symbol name="expl01" > <Text data="Requesting driver commands" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+  +5s "<Symbol name="expl01" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+  +10 "<SimCtrl> <Stop/> </SimCtrl>"

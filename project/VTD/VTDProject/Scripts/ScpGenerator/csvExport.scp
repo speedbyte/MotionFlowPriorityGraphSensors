@@ -1,0 +1,8 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   convert a recording into a CSV file
+#
+#
+    0 "<Replay> <File path="../../../Projects/Current/Recordings/Format6.1" name="recSixOne_000.dat"/> <Convert format="CSV"/></Replay>"

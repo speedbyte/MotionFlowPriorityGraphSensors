@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="2" RevMinor="0">
+    <Layout Database="Projects/Current/Databases/Town/Ive/townGer.opt.osgb" File="Legacy/Project/Databases/Town/Odr/town.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile="Distros/Current/Config/Players/Objects"/>
+    <DynObjects Path="Distros/Current/Config/DynObjects/Logic"/>
+    <TrafficElements>
+        <LaneChangeDef Name="Slow" Time="1.2000000000000000e+01"/>
+        <LaneChangeDef Name="Standard" Time="8.0000000000000000e+00"/>
+        <LaneChangeDef Name="Fast" Time="4.0000000000000000e+00"/>
+    </TrafficElements>
+    <PulkTraffic/>
+    <TrafficControl>
+        <Path Name="ClosedPath" PathId="1">
+            <Waypoint PathOption="shortest" s="4.9468215049359998e+01" TrackId="27"/>
+            <Waypoint PathOption="shortest" s="8.6607234896059992e+00" TrackId="29"/>
+            <Waypoint PathOption="shortest" s="9.4389910560730002e+00" TrackId="28"/>
+            <Waypoint PathOption="shortest" s="4.9493162087027002e+01" TrackId="27"/>
+        </Path>
+        <Player>
+            <Description Driver="DefaultDriver" Control="external" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_blue" Name="Ego"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosRoute/>
+                <PathRef StartS="0.0000000000000000e+00" EndAction="continue" TargetS="5.4607411017931304e+02" StartLane="1" PathId="1"/>
+            </Init>
+        </Player>
+        <PlayerActions Player="Ego"/>
+    </TrafficControl>
+    <MovingObjectsControl/>
+    <LightSigns/>
+    <Selections/>
+</Scenario>

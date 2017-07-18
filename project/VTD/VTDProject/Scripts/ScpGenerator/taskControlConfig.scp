@@ -1,0 +1,23 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   illustrates online control of taskControl settings
+#
+#
+   0 "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+ +1s "<EgoCtrl> <Speed value="12.0"/> </EgoCtrl>"
+ +10 "<TaskControl> <Debug enable="false"/> </TaskControl>"
+  +1 "<Symbol name="expl01" > <Text data="Debug info off" colorRGB="0xff0000" size="40.0" /> <PosScreen x="0.1" y="0.25" /></Symbol>"
+  
+ +2s "<TaskControl> <Debug egoSpeed="true" simTime="true" /> </TaskControl>"
+  +1 "<Symbol name="expl01" > <Text data="Debug speed and time on" colorRGB="0x00ff00" size="40.0" /> <PosScreen x="0.1" y="0.25" /></Symbol>"
+  
+ +2s "<TaskControl> <Debug egoSpeed="false" simTime="false" RDBout="true" /> </TaskControl>"
+  +1 "<Symbol name="expl01" > <Text data="Debug RDBout on" colorRGB="0x00ff00" size="40.0" /> <PosScreen x="0.1" y="0.25" /></Symbol>"
+  
+ +2s "<TaskControl> <Debug enable="false" /> </TaskControl>"
+  +1 "<Symbol name="expl01" > <Text data="Debug off" colorRGB="0x00ff00" size="40.0" /> <PosScreen x="0.1" y="0.25" /></Symbol>"
+
+ +2s "<Symbol name="expl01" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+ +60 "<SimCtrl> <Stop/> </SimCtrl>"

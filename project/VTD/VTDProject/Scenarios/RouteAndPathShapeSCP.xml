@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="2" RevMinor="0">
+    <Layout Database="Projects/Current/Databases/Town/Ive/townGer.opt.osgb" File="Projects/Current/Databases/Town/Odr/town.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile="Distros/Current/Config/Players/Objects"/>
+    <DynObjects Path="Distros/Current/Config/DynObjects/Logic"/>
+    <TrafficElements/>
+    <PulkTraffic/>
+    <TrafficControl>
+        <Player>
+            <Description Driver="No Driver" Control="external" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_blue" Name="Ego"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-2.5275523421143109e+02" Y="2.3254224966899906e+03" Z="9.5000000000000000e+00" Direction="6.3421939729061783e-01" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="VW_PassatVariant_2011_night blue" Name="P1"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-2.4951386742077793e+02" Y="2.3316918289248820e+03" Z="9.5000000000000000e+00" Direction="6.3421939729061783e-01" AlignToRoad="true"/>
+            </Init>
+            <Annotation><![CDATA[Player P1 uses the shapes as steering input,
+after character reached her end position]]></Annotation>
+        </Player>
+        <PlayerActions Player="Ego"/>
+        <PlayerActions Player="P1">
+            <Action Name="P1 go, use paths">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="-2.1197929100476230e+02" Y="2.3575614578311320e+03" NetDist="false" CounterVal="0" Pivot="C1"/>
+                <LaneChange Direction="-1" Force="true" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00" Time="3.0000000000000000e+00"/>
+                <SpeedChange Rate="3.0000000000000000e+00" Target="4.1666666666666670e+00" Force="true" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionNominalTrajectory command="add" name="Shape3" actor="P1"/>
+</Traffic>
+<Path shape="road" name="Route1">
+  <Waypoint>
+    <PosRoad roadId="26" s="50.0" t="0.0"/>
+  </Waypoint>
+  <Waypoint>
+    <PosRoad roadId="28" s="30.0" t="0.0"/>
+  </Waypoint>
+</Path>
+]]></SCP>
+            </Action>
+            <Action Name="use route">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="-1.7713288879394531e+02" Y="2.3832890625000000e+03" NetDist="false" CounterVal="0" Pivot="P1"/>
+                <Autonomous Force="true" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"><![CDATA[<Set entity="player" name="P1">
+  <PathS name="Route1" s="current"/>
+</Set>
+]]></SCP>
+            </Action>
+        </PlayerActions>
+    </TrafficControl>
+    <MovingObjectsControl>
+        <Character CharacterType="female_pedestrian" Class="pedestrian" Appearance="sk_female_suit_1" Name="C1">
+            <StartPosAbs X="-2.4239712524414062e+02" Y="2.3318166503906250e+03" Z="9.5000000000000000e+00" Direction="2.2373925676602289e+00"/>
+            <Annotation><![CDATA[This character creates different path shapes to travel along]]></Annotation>
+        </Character>
+        <CharacterActions Character="C1">
+            <Action Name="create spline (road)">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="1.0000000000000000e+01" X="-2.3893402099609375e+02" Y="2.3274709472656250e+03" NetDist="false" CounterVal="0" Pivot="C1"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="1.0000000000000000e+00"><![CDATA[<Path name="Shape1" shape="spline">
+  <Waypoint>
+    <PosRoad roadId="26" s="26.2" t="-0.8"/>
+  </Waypoint>
+  <Waypoint>
+    <PosRoad roadId="26" s="26.2" t="3.31"/>
+  </Waypoint>
+  <Waypoint>
+    <PosRoad roadId="26" s="19.5" t="3.31"/>
+  </Waypoint>
+  <Waypoint>
+    <PosRoad roadId="26" s="16.2" t="-0.6"/>
+  </Waypoint>
+</Path>]]></SCP>
+            </Action>
+            <Action Name="create line (relative)">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="1.1000000000000000e+01" X="-2.3800315856933594e+02" Y="2.3259243164062500e+03" NetDist="false" CounterVal="0" Pivot="C1"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="2.0000000000000000e+00"><![CDATA[<Path name="Shape2" shape="polyline">
+  <Waypoint>
+    <PosRelative player="P1" dx="20.0" dy="0.0"/>
+  </Waypoint>
+  <Waypoint>
+    <PosRelative player="P1" dx="24.0" dy="-1.5"/>
+  </Waypoint>
+  <Waypoint>
+    <PosRelative player="P1" dx="28.0" dy="0.0"/>
+  </Waypoint>
+</Path>]]></SCP>
+            </Action>
+            <Action Name="create line (inertial)">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="1.2000000000000000e+01" X="-2.3707630920410156e+02" Y="2.3243371582031250e+03" NetDist="false" CounterVal="0" Pivot="C1"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="3.0000000000000000e+00"><![CDATA[<Path name="Shape3" shape="polyline">
+  <Waypoint>
+    <PosInertial x="-220.569" y="2348.76" z="9.5"/>
+  </Waypoint>
+  <Waypoint>
+    <PosInertial x="-218.136" y="2355.81" z="9.5"/>
+  </Waypoint>
+  <Waypoint>
+    <PosInertial x="-211.332" y="2355.19" z="9.5"/>
+  </Waypoint>
+</Path>]]></SCP>
+            </Action>
+            <Action Name="set to shape1">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="1.0000000000000000e+01" X="-2.4538421630859375e+02" Y="2.3389904785156250e+03" NetDist="false" CounterVal="0" Pivot="C1"/>
+                <Motion Move="walk" Rate="0.0000000000000000e+00" Speed="1.1111111640930176e+00" Force="true" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="4.0999999999999996e+00"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="4.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionCharacterPath actor="C1" pathShape="Shape1" beam="true" loop="false"/>
+</Traffic>]]></SCP>
+            </Action>
+            <Action Name="set to shape2">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="-2.3192857360839844e+02" Y="2.3433696289062500e+03" NetDist="false" CounterVal="0" Pivot="C1"/>
+                <Motion Move="walk" Rate="0.0000000000000000e+00" Speed="1.1111111640930176e+00" Force="true" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="2.1000000000000001e+00"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="2.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionCharacterPath actor="C1" pathShape="Shape2" beam="true" loop="false"/>
+</Traffic>]]></SCP>
+            </Action>
+            <Action Name="set to shape3">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="-2.2360826110839844e+02" Y="2.3495031738281250e+03" NetDist="false" CounterVal="0" Pivot="C1"/>
+                <Motion Move="walk" Rate="0.0000000000000000e+00" Speed="1.1111111640930176e+00" Force="true" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="2.1000000000000001e+00"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="2.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionCharacterPath actor="C1" pathShape="Shape3" beam="true" loop="false"/>
+</Traffic>]]></SCP>
+            </Action>
+        </CharacterActions>
+    </MovingObjectsControl>
+    <LightSigns/>
+    <Selections/>
+</Scenario>
