@@ -302,12 +302,13 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     export LD_LIBRARY_PATH="$SOURCE_DIR/libs/boost-install/lib/:$PROJECT_PWD/install/lib:$SOURCE_DIR/libs/opencv-install/lib/"
     #
     echo "Run just in time compiler"
-    ./protobuild -i "protobuild" -f  $PROJECT_PWD/install/ -c $FILE_CONFIG -d $DIR_DATA/kitti/2011_09_26/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results -v
+    #./protobuild -i "protobuild" -f  $PROJECT_PWD/install/ -c $FILE_CONFIG -d $DIR_DATA/kitti/2011_09_26/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results -v
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Run inddividual tests without jit compiler invocation"
     ./protobuild -i "opticalflow" -f  $PROJECT_PWD/install/ -d $DIR_DATA/kitti/2011_09_26/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results -v
+    #./protobuild -i "opticalflow" -f  $PROJECT_PWD/install/ -d $DIR_DATA/kitti/2011_09_28/2011_09_28_drive_0016_sync -r -s -o $PROJECT_PWD/results -v
     cd $SOURCE_DIR
 fi
 }
