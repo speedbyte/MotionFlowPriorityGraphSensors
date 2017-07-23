@@ -2,10 +2,11 @@
 #include "Overload.h"
 #include "Larger.h"
 #include "Constructor.h"
+#include "Template.h"
+
+using namespace cpp_tutorials;
 
 int main ( int argc, char *argv[]) {
-
-    new_function::main_try(argc, argv);
 
     using std::cout;
     DateStruct today { 2020, 10, 14 }; // use uniform initialization

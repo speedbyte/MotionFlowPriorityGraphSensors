@@ -2,6 +2,7 @@
 // Created by veikas on 22.07.17.
 //
 
+
 #ifndef OPENCV_TUTORIAL_HELLO_H
 #define OPENCV_TUTORIAL_HELLO_H
 
