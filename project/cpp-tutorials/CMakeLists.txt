@@ -6,10 +6,9 @@ set(CMAKE_CXX_STANDARD 11)
 find_package(Doxygen)
 
 #set(SOURCE_FILES main2.cpp)
-#add_library(tutorials.lib ${SOURCE_FILES})
-add_executable(cpp_tutorials Constuctor.cpp)
-add_executable(large_two_numbers main2.cpp)
-add_executable(overloading main.cpp Overload.cpp Larger.cpp)
+#add_library( tutorials.lib ${SOURCE_FILES})
+
+add_executable(overloading main.cpp Overload.cpp Larger.cpp Template.cpp OperatorOverload.cpp)
 
 message("Doxygen found ${DOXYGEN_FOUND} ${DOXYGEN_VERSION}")
 

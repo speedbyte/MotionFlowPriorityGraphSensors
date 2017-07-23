@@ -3,55 +3,63 @@
 //
 
 #include "Template.h"
-
+#include "Virtual.h"
 namespace cpp_tutorials {
 
-    template <typename T>
-    class Storage
-    {
-    private:
-        T m_value;
-    public:
-        Storage(T value):m_value(value) {}
+    template int average<int>(int*, int );
+    template double average<double>(double*, int);
+    template double const& add_two_objects<int, double>(int const&, double const&);
+    template int const& add_two_objects<int, int>(int const&, int const&);
+    template Cents average<Cents>(Cents*, int);
+    template Cents const& add_two_objects<Cents, Cents>(Cents const&, Cents const&);
 
-        ~Storage() {}
+    /** brief
+     * Function template with 2 arguments
+     * @tparam T1
+     * @tparam T2
+     * @param x
+     * @param y
+     * @return
+     */
+    // passing all parameters by values
+    template<typename T1, typename T2>
+    // auto automatically assigns a return type and one does not need to fix in advance.
+    //const T1& add_two_objects(const T1& x,const T2& y) { // This will not work
+    //const auto add_two_objects(const T1& x,const T2& y) -> decltype(x+y) {
+    const T2 &add_two_objects(const T1 &x, const T2 &y) {
+        //static decltype(x+y) z;
+        static T2 z(0);
+        z = x + y;
+        return z; // l value
+        //return x+y; // r value
+    }
 
-        void print()
-        {
-            std::cout << m_value << '\n';
-        }
-    };
 
-// Partial class specialisation
-    template <typename T>
-    class Storage<T*> // this is a partial-specialization of Storage that works with pointer types
-    {
-    private:
-        T* m_value;
-    public:
-        Storage(T* value) // for pointer type T
-        {
-            // For pointers, we'll do a deep copy
-            m_value = new T(*value); // this copies a single value, not an array
-        }
+    /** brief
+     * Function average
+     * @tparam T
+     * @param array
+     * @param length
+     * @return
+     */
+    template<typename T>
+    T average(T *array, int length) {
+        T sum = 0;
+        for (int count = 0; count < length; count++)
+            sum += array[count];
+        sum /= length;
+        return sum;
+    }
 
-        ~Storage()
-        {
-            delete m_value; // so we use scalar delete here, not array delete
-        }
 
-        void print()
-        {
-            std::cout << *m_value << '\n';
-        }
-    };
-
-// Specialisation member function. In this case its a constructor.
-    template <>
-    Storage<char*>::Storage(char* value)
-    {
+    /** brief
+     * Function specialization class Storage constructor
+     * @param value
+     */
+    template<>
+    Storage1<char *>::Storage1(char *value) {
         // Figure out how long the string in value is
-        int length=0;
+        int length = 0;
         while (value[length] != '\0')
             ++length;
         ++length; // +1 to account for null terminator
@@ -60,121 +68,26 @@ namespace cpp_tutorials {
         m_value = new char[length];
 
         // Copy the actual value string into the m_value memory we just allocated
-        for (int count=0; count < length; ++count)
+        for (int count = 0; count < length; ++count)
             m_value[count] = value[count];
     }
 
+    /** brief
+     * Function full specializazion class Storage destructor
+     */
     template<>
-    Storage<char*>::~Storage()
-    {
+    Storage1<char *>::~Storage1() {
         delete[] m_value;
     }
 
-    // passing all parameters by values
-    template <typename T1, typename T2>
-    // auto automatically assigns a return type and one does not need to fix in advance.
-    //const T1& add_two_objects(const T1& x,const T2& y) { // This will not work
-    //const auto add_two_objects(const T1& x,const T2& y) -> decltype(x+y) {
-    const T2 &add_two_objects(const T1 &x,const T2 &y) {
-        //static decltype(x+y) z;
-        static T2 z(0);
-        z = x+y;
-        return z;
-        //return x+y;
+    // the below wont work, because partially specializing just a function in the class is not allowed !
+    // Either the whole class needs to be partially specialized or another class needs to be inherited with
+    // partial specialization.
+    //template<int size>
+//    void Storage_Base<double, size>::printArray()
+//    {
+//        for (int i = 0; i < size; i++)
+//            std::cout << std::scientific << m_array[i] << " ";
+//        std::cout << "\n";
+//    }
     }
-
-    template <typename T>
-    T average(T *array, int length) {
-        T sum = 0;
-        for ( int count = 0; count < length ; count ++)
-            sum += array[count];
-        sum /= length;
-        return sum;
-    }
-
-    template <typename T>
-    class Array {
-    private:
-        int m_length;
-        T *m_data;
-    public:
-        Array() {
-            m_length = 0;
-            m_data = nullptr;
-        }
-
-        Array(int length) {
-            m_data = new T[length];
-            m_length = length;
-        }
-
-        ~Array() {
-            delete[] m_data;
-        }
-
-        void Erase() {
-            delete[] m_data;
-            m_data = nullptr;
-            m_length = 0;
-        }
-
-        T& operator[] (int index) {
-            assert(index>=0 && index<m_length);
-            return m_data[index];
-        }
-
-        int getLength(); // templated getLength defined below.
-
-    };
-
-    template <typename T>  // templated member function of an template class.
-    int Array<T>::getLength() { return  m_length;}
-
-
-#include<iostream>
-    template <class T, int size> // size is the expression parameter
-    class StaticArray_Base
-    {
-    protected:
-        // The expression parameter controls the size of the array
-        T m_array[size];
-
-    public:
-        T* getArray();
-
-        T& operator[](int index)
-        {
-            return m_array[index];
-        }
-        void printArray()
-        {
-            for (int i = 0; i < size; i++)
-                std::cout << m_array[i];
-            std::cout << "\n";
-        }
-    };
-
-    template <typename T, int size> // size is the expression parameter
-    class StaticArray: public StaticArray_Base<T, size>
-    {
-    public:
-        StaticArray()
-        {
-
-        }
-    };
-
-    template <int size> // size is the expression parameter
-    class StaticArray<double, size>: public StaticArray_Base<double, size>
-    {
-    public:
-
-        void printArray()
-        {
-            for (int i = 0; i < size; i++)
-                std::cout << std::scientific << m_array[i] << " ";
-            std::cout << "\n";
-        }
-    };
-
-}

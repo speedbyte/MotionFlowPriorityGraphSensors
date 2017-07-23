@@ -7,19 +7,23 @@
 
 /** brief
  Virtual Function:
+
  The concept of virtual functions is an important part of polymorphism. The whole idea is based on the fact that in
  object-oriented programming, when a derived class inherits from a base class, an object of the derived class may be
  referred to via a pointer or reference of the base class type instead of the derived class type. The derived object
  is referred via a pointer or reference of the base class and this gives certain advantages to the programmers.
+
  Virtual functions are resolved late i.e the binding is not yet known at the compile time. In a normal function
  ( without virtual ) the binding is early, because the compiler already knows that member function would be called
  and hence the call to the address is already designated. Virtual functions allow a program to call methods that
  don't necessarily even exist at the moment the code is compiled. It could be possible that the there is a
  overriden function in a derived class in one of the library that is linked at linking stage or an overriden
- function comes from a run time library. The modifier ( virtual ) is inherited by all implementations of that
- method in derived classes, and hence it is not strict to prepend the modifier again in all the overriden derived
- member functions. Only the most base class function needs to be tagged as virtual for all of the derived functions
- to work virtually. However, having the keyword virtual on the derived functions does not hurt, and it serves as a
+ function comes from a run time library.
+
+ The modifier ( virtual ) is inherited by all implementations of that method in derived classes, and hence it is not
+ strict to prepend the modifier again in all the overriden derived member functions. Only the most base class
+ function needs to be tagged as virtual for all of the derived functions to work virtually. However, having the
+ keyword virtual on the derived functions does not hurt, and it serves as a
  useful reminder that the function is a virtual function rather than a normal one. Consequently, it’s generally a
  good idea to use the virtual keyword for virtualized functions in derived classes even though it’s not strictly
  necessary. Since most of the time you’ll want your functions to be virtual, why not just make all functions
@@ -67,11 +71,63 @@
  */
 
 namespace cpp_tutorials {
+    class Animal {
+    public:
+        void /*non-virtual*/ move(void) {
+            std::cout << "This animal moves in some way" << std::endl;
+        }
+        virtual void eat(void) = 0;
+    };
 
+    // The class "Animal" may possess a definition for eat() if desired.
+    class Llama : public Animal {
+    public:
+        // The non virtual function move() is inherited but not overridden
+        void eat(void) override {
+            std::cout << "Llamas eat grass!" << std::endl;
+        }
+    };
+
+    class Super
+    {
+        public:
+            void iAm(int a) { std::cout << "I'm the super class!\n"; }
+            virtual void iAmHello() { std::cout << "I'm not !\n"; }
+    };
+
+    class Sub : public Super
+    {
+        public:
+            void iAmHello() override  { std::cout << "I'm the subclass!\n"; }
+    };
+
+    class Cents {
+    private:
+        int m_cents;
+
+    public:
+        Cents(int cents) : m_cents ( cents ){};
+        friend int operator + (const Cents &c1, const Cents &c2) {
+            return (c1.m_cents + c2.m_cents);
+        }
+        int getCents(void) {
+            return m_cents;
+        }
+        friend std::ostream& operator<< (std::ostream &out, const Cents &cents)
+        {
+            out << cents.m_cents << " cents ";
+            return out;
+        }
+        void operator+=(Cents cents)
+        {
+            m_cents += cents.m_cents;
+        }
+        void operator/=(int value)
+        {
+            m_cents /= value;
+        }
+    };
 }
-class Virtual {
-
-};
 
 
 #endif //CPP_TUTORIALS_VIRTUAL_H

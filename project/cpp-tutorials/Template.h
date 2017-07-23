@@ -31,7 +31,7 @@
      Storage<int> intArray(12);
      Storage<bool> boolStorage;
 
- Template class member functions goes in the header. template class definition goes in the header. Basically any
+ Template class member functions goes in the header. Template class definition goes in the source. Basically any
  lines with contains a keyword template goes in the header file. One can also force the compiler to stencil out
  classes by declaring templates with specific types.
 
@@ -76,7 +76,7 @@
  non-templated  version of a class named Storage.
  Just Storage would refer to a non-templated version of a class named Array.
 
- The precondition to write the following code is that the above should be present. You can only specialize
+ The precondition to write the following code is that the basic template should be present. One can only specialize
  certain things, when the base is there.
 
      template <> // the following is a template class with no templated parameters
@@ -135,10 +135,10 @@
             std::cout << array[count];
     }
 
- if print was a part of the class itself, then a partial specialization of functions would not be possible.
+ If print was a part of the class itself, then a partial specialization of functions would not be possible.
  The only solution would be to create the partial specialization of the class. But this would be highly
  inefficient, because the whole class needs to be redeclared, just for a small change in one of the menber
- function. Fortunatley there is a work around using inheritance.
+ function. Fortunately, there is a work around using inheritance.
 
 
 
@@ -293,10 +293,161 @@
  fn. This can have various reasons like performance optimizations.
 
  */
+#include<iostream>
+#include<assert.h>
 
-class Template {
+using std::cout;
 
-};
+namespace cpp_tutorials {
 
+    template <typename T1, typename T2>
+    // auto automatically assigns a return type and one does not need to fix in advance.
+    //const T1& add_two_objects(const T1& x,const T2& y) { // This will not work
+    //const auto add_two_objects(const T1& x,const T2& y) -> decltype(x+y) {
+    const T2 &add_two_objects(const T1 &x,const T2 &y);
+
+    template <typename T>
+    T average(T *array, int length);
+
+    /** brief
+     * Template Class with expression parameter
+     * @tparam T
+     * @tparam size
+     */
+    template <class T, int size> // size is the expression parameter
+    class Storage_Base
+    {
+        protected:
+            // The expression parameter controls the size of the array
+            T m_array[size];
+
+        private:
+            int m_length;
+            T *m_data;
+
+        public:
+            Storage_Base() {
+                m_length = 0;
+                m_data = nullptr;
+            }
+
+            Storage_Base(int length) {
+                m_data = new T[length];
+                m_length = length;
+            }
+
+            ~Storage_Base() {
+                delete[] m_data;
+            }
+
+            void Erase() {
+                delete[] m_data;
+                m_data = nullptr;
+                m_length = 0;
+            }
+
+            T& operator[] (int index) {
+                assert(index>=0 && index<m_length);
+                return m_data[index];
+            }
+
+            int getLength(); // templated getLength defined below.
+
+            T* getArray();
+
+            void printArray()
+            {
+                for (int i = 0; i < size; i++)
+                    std::cout << m_data[i];
+                std::cout << "\n";
+            }
+    };
+
+    /** brief
+     * Template class with expression parameter
+     * @tparam T
+     * @tparam size
+     */
+    template <typename T, int size> // size is the expression parameter
+    class Storage: public Storage_Base<T, size>
+    {
+        public:
+            Storage()
+            {
+
+            }
+    };
+
+    /** brief
+     * Template function for class Storage
+     * @tparam T
+     * @return
+     */
+    template <typename T, int size>  // templated member function of an template class.
+    int Storage_Base<T,size>::getLength()
+    {
+        return  m_length;
+    }
+
+
+    template <typename T>
+    class Storage1
+    {
+        private:
+            T m_value;
+        public:
+            Storage1(T value):m_value(value) {}
+
+            ~Storage1() {}
+
+            void print()
+            {
+                std::cout << m_value << '\n';
+            }
+    };
+
+    // Partial class specialisation
+    template <typename T>
+    class Storage1<T*> // this is a partial-specialization of Storage that works with pointer types
+    {
+        private:
+            T* m_value;
+        public:
+            Storage1(T* value) // for pointer type T
+            {
+                // For pointers, we'll do a deep copy
+                m_value = new T(*value); // this copies a single value, not an array
+            }
+
+            ~Storage1()
+            {
+                delete m_value; // so we use scalar delete here, not array delete
+            }
+
+            void print()
+            {
+                std::cout << *m_value << '\n';
+            }
+    };
+
+    /** brief
+     * Template class with expression parameter. We have to do this,
+     * because it is not possible to pick out member functions and override
+     * with different templates.
+     * @tparam size
+     */
+    template <int size> // size is the expression parameter
+    class Storage<double, size>: public Storage_Base<double, size>
+    {
+    public:
+        void printArray()
+        {
+            for (int i = 0; i < size; i++)
+                std::cout << std::scientific << this->m_array[i] << " ";
+            std::cout << "\n";
+        }
+    };
+
+}
 
 #endif //CPP_TUTORIALS_TEMPLATE_H
