@@ -10,13 +10,13 @@
 
  int val = 10; // val is an integer
  int const val = 10; // val is a constant integer
- const int val = 10; // val is a constant integer
+ const int val = 10; // val is a constant integer .. this versin is preferred. leftmost keyword defines the variable
  int *val; // val is a pointer that points to an integer
  int const *val; // val is a pointer that points to a constant integer
  const int *val; // val is a pointer that points to a constant integer
  int * const val; // val is a constant pointer that points to an integer
  const int * const val; // val is a constant pointer pointing to a constant int. Invoke using &val
- const char* const argv[] // argv is an array of constant pointers pointing to a constant char. Invoke using &argv[]
+ const char* const argv[] // argv is an array of constant pointers. The pointers point to a constant char. Invoke using &argv[]
  int const * const val; // val is a constant pointer pointing to a constant int
 
  int value = 5;
@@ -39,7 +39,7 @@
  pointing to be changed through the pointer. :) Hint for readability. Just remember that the type of value the
  pointer points to is always on the far left.
 
-  References:
+ References:
 
  Three kinds of references. References to non const values. References to const values often called const references
  and r-value references.
@@ -64,14 +64,12 @@
     const int &ref = 2+3; // allowed
 
  References ( not const references ) cannot refer to a r-value ( temporary value ) or a const l-value. However,
- Const References can refer to a r-value and a l-value ( both const and non const ) . Hence const references can be
+ const References can refer to a r-value and a l-value ( both const and non const ) . Hence const references can be
  applied everywhere. References to const values are particularly useful as function parameters because of their
  versatility. A const reference parameter allows you to pass in a non-const l-value argument, a const l-value argument,
  a literal, or the result of an expression.
  In case, the arguements needs to be changed, then pass using non const references, otherwise pass using const
  references. A restriction is that r-values cannot be assigned to any reference.
-
-
 
  In the above code, getName() will return a pointer to C-style string “Alex”. This is okay since “Alex” will not go out
  of scope when getName() terminates, so the caller can still successfully access it.
@@ -98,9 +96,11 @@
 
  A qualified name is one that specifies a scope for example std::cout - here cout is a qualified name.
 
+ Within choosing pass by value or pass by reference, pass by
+ reference is preferred, because otherwise we will have copies of the objects on the heap. The best is to declare const
+ references.
 
-
-
+    int (&xFunc)() = funcX; xFunc() is an alias for funcX
  */
 
 

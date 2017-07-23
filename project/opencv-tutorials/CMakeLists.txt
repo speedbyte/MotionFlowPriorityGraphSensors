@@ -17,7 +17,7 @@ message("OpenCV ${OpenCV_FOUND} ${OpenCV_INCLUDE_DIRS} ${OpenCV_LIBS}")
 message("Boost ${Boost_FOUND} ${Boost_INCLUDE_DIRS} ${Boost_LIBRARY_DIRS} ${Boost_LIBRARIES}")
 
 set(SOURCE_FILES
-        hello.cpp)
+        main.cpp)
 
 add_executable(opencv_tutorials ${SOURCE_FILES})
 target_link_libraries(opencv_tutorials ${OpenCV_LIBS} ${Boost_LIBRARIES} )

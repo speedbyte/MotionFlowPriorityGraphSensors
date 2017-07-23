@@ -2,7 +2,7 @@
 #include<opencv2/core.hpp>
 #include<opencv2/highgui.hpp>
 #include<boost/filesystem.hpp>
-#include"hello.h"
+#include"CvError.h"
 
 int main ( int argc, char *argv[] ) {
     cv::Mat image;

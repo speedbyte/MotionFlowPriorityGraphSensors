@@ -176,4 +176,21 @@ int main ( int argc, char *argv[]) {
     L2.printLarger();
     L2.printLargest();
     L3.printLarger();
+
+    // declare an integer array with room for 12 integers
+    StaticArray<int, 6> intArray;
+
+    // Fill it up in order, then print it backwards
+    for (int count = 0; count < 6; ++count)
+        intArray[count] = count;
+    intArray.printArray();
+    // declare a double buffer with room for 4 doubles
+    StaticArray<double, 4> doubleArray;
+
+    for (int count = 0; count < 4; ++count)
+        doubleArray[count] = (4. + 0.1*count);
+    doubleArray.printArray();
+
+    return 0;
+
 }

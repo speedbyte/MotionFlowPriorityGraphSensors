@@ -7,41 +7,6 @@
 namespace cpp_tutorials {
 
     template <typename T>
-    class Array {
-    private:
-        int m_length;
-        T *m_data;
-    public:
-        Array() {
-            m_length = 0;
-            m_data = nullptr;
-        }
-
-        Array(int length) {
-            m_data = new T[length];
-            m_length = length;
-        }
-
-        ~Array() {
-            delete[] m_data;
-        }
-
-        void Erase() {
-            delete[] m_data;
-            m_data = nullptr;
-            m_length = 0;
-        }
-
-        T& operator[] (int index) {
-            assert(index>=0 && index<m_length);
-            return m_data[index];
-        }
-
-        int getLength(); // templated getLength defined below.
-
-    };
-
-    template <typename T>
     class Storage
     {
     private:
@@ -105,9 +70,6 @@ namespace cpp_tutorials {
         delete[] m_value;
     }
 
-    template <typename T>  // templated member function of an template class.
-    int Array<T>::getLength() { return  m_length;}
-
     // passing all parameters by values
     template <typename T1, typename T2>
     // auto automatically assigns a return type and one does not need to fix in advance.
@@ -121,7 +83,7 @@ namespace cpp_tutorials {
         //return x+y;
     }
 
-    template <class T>
+    template <typename T>
     T average(T *array, int length) {
         T sum = 0;
         for ( int count = 0; count < length ; count ++)
@@ -129,5 +91,90 @@ namespace cpp_tutorials {
         sum /= length;
         return sum;
     }
+
+    template <typename T>
+    class Array {
+    private:
+        int m_length;
+        T *m_data;
+    public:
+        Array() {
+            m_length = 0;
+            m_data = nullptr;
+        }
+
+        Array(int length) {
+            m_data = new T[length];
+            m_length = length;
+        }
+
+        ~Array() {
+            delete[] m_data;
+        }
+
+        void Erase() {
+            delete[] m_data;
+            m_data = nullptr;
+            m_length = 0;
+        }
+
+        T& operator[] (int index) {
+            assert(index>=0 && index<m_length);
+            return m_data[index];
+        }
+
+        int getLength(); // templated getLength defined below.
+
+    };
+
+    template <typename T>  // templated member function of an template class.
+    int Array<T>::getLength() { return  m_length;}
+
+
+#include<iostream>
+    template <class T, int size> // size is the expression parameter
+    class StaticArray_Base
+    {
+    protected:
+        // The expression parameter controls the size of the array
+        T m_array[size];
+
+    public:
+        T* getArray();
+
+        T& operator[](int index)
+        {
+            return m_array[index];
+        }
+        void printArray()
+        {
+            for (int i = 0; i < size; i++)
+                std::cout << m_array[i];
+            std::cout << "\n";
+        }
+    };
+
+    template <typename T, int size> // size is the expression parameter
+    class StaticArray: public StaticArray_Base<T, size>
+    {
+    public:
+        StaticArray()
+        {
+
+        }
+    };
+
+    template <int size> // size is the expression parameter
+    class StaticArray<double, size>: public StaticArray_Base<double, size>
+    {
+    public:
+
+        void printArray()
+        {
+            for (int i = 0; i < size; i++)
+                std::cout << std::scientific << m_array[i] << " ";
+            std::cout << "\n";
+        }
+    };
 
 }

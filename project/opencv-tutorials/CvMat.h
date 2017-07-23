@@ -13,7 +13,8 @@
     M.row, M.col, M(i,j)
 
  Multi Channel.
-    Mat_<Vec3b> img(240, 320, Vec3b(0,255,0)); // allocate a 320*240 color image and fill it with green. Not a row, column: but a column, row.
+    Mat_<Vec3b> img(240, 320, Vec3b(0,255,0)); // allocate a 320*240 color image and fill it with green. Not a row,
+    column: but a column, row.
     img(i,i) = Vec3b(255,255,255); // Draw a diagonal white line.
 
  */
