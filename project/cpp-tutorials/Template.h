@@ -320,9 +320,8 @@ namespace cpp_tutorials {
         protected:
             // The expression parameter controls the size of the array
             T m_array[size];
-
-        private:
             int m_length;
+        private:
             T *m_data;
 
         public:
@@ -348,7 +347,7 @@ namespace cpp_tutorials {
 
             T& operator[] (int index) {
                 assert(index>=0 && index<m_length);
-                return m_data[index];
+                return m_array[index];
             }
 
             int getLength(); // templated getLength defined below.
@@ -358,7 +357,7 @@ namespace cpp_tutorials {
             void printArray()
             {
                 for (int i = 0; i < size; i++)
-                    std::cout << m_data[i];
+                    std::cout << m_array[i];
                 std::cout << "\n";
             }
     };
@@ -374,8 +373,37 @@ namespace cpp_tutorials {
         public:
             Storage()
             {
-
+                for ( int count = 0; count < size; count++) {
+                    this->m_array[count] = count;
+                }
+                this->m_length = size;
             }
+    };
+
+    /** brief
+     * Template class with expression parameter. We have to do this,
+     * because it is not possible to pick out member functions and override
+     * with different templates.
+     * @tparam size
+     */
+    template <int size> // size is the expression parameter
+    class Storage<double, size>: public Storage_Base<double, size>
+    {
+    public:
+        Storage()
+        {
+            for ( int count = 0; count < size; count++) {
+                this->m_array[count] = count;
+            }
+            this->m_length = size;
+        }
+
+        void printArray()
+        {
+            for (int i = 0; i < size; i++)
+                std::cout << std::scientific << this->m_array[i] << " ";
+            std::cout << "\n";
+        }
     };
 
     /** brief
@@ -430,23 +458,6 @@ namespace cpp_tutorials {
             }
     };
 
-    /** brief
-     * Template class with expression parameter. We have to do this,
-     * because it is not possible to pick out member functions and override
-     * with different templates.
-     * @tparam size
-     */
-    template <int size> // size is the expression parameter
-    class Storage<double, size>: public Storage_Base<double, size>
-    {
-    public:
-        void printArray()
-        {
-            for (int i = 0; i < size; i++)
-                std::cout << std::scientific << this->m_array[i] << " ";
-            std::cout << "\n";
-        }
-    };
 
 }
 

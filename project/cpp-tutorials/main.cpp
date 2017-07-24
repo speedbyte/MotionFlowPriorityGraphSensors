@@ -37,7 +37,7 @@ int main ( int argc, char *argv[]) {
     L3.printLarger();
 
     // declare an integer array with room for 12 integers
-    Storage<int, 6> intArray;
+    Storage<int, 12> intArray;
 
     // Fill it up in order, then print it backwards
     for (int count = 0; count < 6; ++count)
@@ -47,8 +47,23 @@ int main ( int argc, char *argv[]) {
     Storage<double, 4> doubleArray;
 
     for (int count = 0; count < 4; ++count)
-        doubleArray[count] = (4. + 0.1*count);
+        doubleArray[count] = (4 + 0.1*count);
     doubleArray.printArray();
+
+    for (int count = 0; count < intArray.getLength(); ++count)
+    {
+        intArray[count] = count;
+    }
+    for (int count = intArray.getLength()-1; count >= 0; --count)
+        std::cout << intArray[count] << '\n';
+
+    for (int count = 0; count < doubleArray.getLength(); ++count)
+    {
+        doubleArray[count] = count + 0.5;
+    }
+    for (int count = doubleArray.getLength()-1; count >= 0; --count) {
+        std::cout << doubleArray[count]  << '\n';
+    }
 
     DateStruct today { 2020, 10, 14 }; // use uniform initialization
 
@@ -138,14 +153,6 @@ int main ( int argc, char *argv[]) {
     std::cout << "Please enter number 2" << std::endl;
     std::cin >> y;
 
-    for (int count = 0; count < intArray.getLength(); ++count)
-    {
-        intArray[count] = count;
-        doubleArray[count] = count + 0.5;
-    }
-    for (int count = intArray.getLength()-1; count >= 0; --count)
-        std::cout << intArray[count] << "\t" << doubleArray[count] << '\n';
-
 
     avg = average(array1, 5);
     std::cout << "average of the int array is " << avg << '\n';
@@ -193,7 +200,7 @@ int main ( int argc, char *argv[]) {
         throwing_an_exception(x);
     }
     catch (...) { // We dont know what would be thrown from throwing_an_exception
-        std::cerr << "Error in main.cpp :  undetermined type\n";
+        std::cout << "How to throw and catch an exception. \n";
     }
 
     return 0;

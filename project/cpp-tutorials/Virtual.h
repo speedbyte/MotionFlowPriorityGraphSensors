@@ -23,10 +23,11 @@
  The modifier ( virtual ) is inherited by all implementations of that method in derived classes, and hence it is not
  strict to prepend the modifier again in all the overriden derived member functions. Only the most base class
  function needs to be tagged as virtual for all of the derived functions to work virtually. However, having the
- keyword virtual on the derived functions does not hurt, and it serves as a
- useful reminder that the function is a virtual function rather than a normal one. Consequently, it’s generally a
- good idea to use the virtual keyword for virtualized functions in derived classes even though it’s not strictly
- necessary. Since most of the time you’ll want your functions to be virtual, why not just make all functions
+ keyword virtual on the derived functions does not hurt, and it serves as a useful reminder that the function is a
+ virtual function rather than a normal one. Consequently, it’s generally a good idea to use the virtual keyword for
+ virtualized functions in derived classes even though it’s not strictly necessary.
+
+ Since most of the time you’ll want your functions to be virtual, why not just make all functions
  virtual? The answer is because it’s inefficient – resolving a virtual function call takes longer than resolving a
  regular one. Furthermore, the compiler also has to allocate an extra pointer for each class object that has one or
  more virtual functions. We’ll talk about this more in future lessons in this chapter.
