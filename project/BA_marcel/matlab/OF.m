@@ -6,12 +6,35 @@ clear all;
 
 %Create Optical Flow Object for sparse OF via Lucas Kanade (not as pretty
 %in Kitti but still works with worse results. Uncomment to use
-opticFlow = opticalFlowLK('NoiseThreshold',0.005);
+%opticFlow = opticalFlowLK('NoiseThreshold',0.005);
 
 
 %static inout of 2 images. To be expanded for videos
-img1 = imread('000016_10.png');
-img2 = imread('000016_11.png');
+
+
+
+path = './image_0/';
+fileNames = dir(fullfile(path,'*.png'));
+
+C = cell(length(fileNames),1);
+
+for k = 1:length(fileNames)
+    filename = fileNames(k).name;
+    C{k} = imread([path filename]);
+end
+
+
+i = 1;
+j = 0
+
+
+while i <  length(fileNames) 
+    opticFlow = opticalFlowFarneback%('NoiseThreshold',0.009);
+
+    img1 = C{i};
+    img2 = C{i+1};
+
+    name = sprintf('./results/%06d_10.png',j);
 
     %Grayscale
     frameGray1 = rgb2gray(img1);
@@ -42,16 +65,16 @@ img2 = imread('000016_11.png');
      %disp(re(:,:,1));
     
     %Creates OF png for Kitti. Not very lucidly if looked at
-    imwrite( re,'result16.png');
-    im = imread('result6.png');
-    %disp(im(:,:,1));
-    
+    imwrite( re,name);
+    i = i+2;
+    j = j+1
+end    
 
     %This shows the Optical Flow with arrows
-    imshow(img2)
-    hold on
-    plot(flow2,'DecimationFactor',[5 5],'ScaleFactor',10)
-    hold off
-    display(flow2);
+    %imshow(img2)
+    %hold on
+    %plot(flow2,'DecimationFactor',[5 5],'ScaleFactor',10)
+    %hold off
+    %display(flow2);
 
 
