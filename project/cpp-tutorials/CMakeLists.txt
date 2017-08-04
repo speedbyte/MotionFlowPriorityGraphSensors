@@ -8,7 +8,13 @@ find_package(Doxygen)
 #set(SOURCE_FILES main2.cpp)
 #add_library( tutorials.lib ${SOURCE_FILES})
 
+set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/../../libs/boost-install/include")
+find_package(Boost COMPONENTS system filesystem)
+
+include_directories(${Boost_INCLUDE_DIRS})
+
 add_executable(overloading main.cpp Overload.cpp Larger.cpp Template.cpp OperatorOverload.cpp)
+target_link_libraries(overloading ${Boost_LIBRARIES})
 
 message("Doxygen found ${DOXYGEN_FOUND} ${DOXYGEN_VERSION}")
 

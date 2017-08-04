@@ -108,23 +108,22 @@ namespace cpp_tutorials {
 
     public:
         Cents(int cents) : m_cents ( cents ){};
+
         friend int operator + (const Cents &c1, const Cents &c2) {
             return (c1.m_cents + c2.m_cents);
         }
         int getCents(void) {
             return m_cents;
         }
-        friend std::ostream& operator<< (std::ostream &out, const Cents &cents)
-        {
+        friend std::ostream& operator<< (std::ostream &out, const Cents &cents) {
             out << cents.m_cents << " cents ";
             return out;
         }
-        void operator+=(Cents cents)
-        {
+        void operator+=(Cents cents) {
             m_cents += cents.m_cents;
         }
-        void operator/=(int value)
-        {
+
+        void operator/=(int value) {
             m_cents /= value;
         }
     };

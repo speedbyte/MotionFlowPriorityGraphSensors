@@ -14,6 +14,13 @@ namespace cpp_tutorials {
     template Cents const& add_two_objects<Cents, Cents>(Cents const&, Cents const&);
 
     /** brief
+     * Anyonmous parameters are also called unnamed parameters. They have no names, and hence
+     * useful in areas,.... variable arguement list.
+     * @return
+     */
+    template int advancedTemplate<>()
+
+    /** brief
      * Function template with 2 arguments
      * @tparam T1
      * @tparam T2

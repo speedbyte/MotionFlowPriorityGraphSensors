@@ -7,6 +7,7 @@
 #include "OperatorOverload.h"
 #include "Pointers.h"
 #include "Virtual.h"
+#include <boost/filesystem.hpp>
 
 using namespace cpp_tutorials;
 using std::unique_ptr;
@@ -167,7 +168,7 @@ int main ( int argc, char *argv[]) {
 
     z_main = add_two_objects(x,y);
     std::cout<< "sum of two integers is " <<  z_main << " and " << add_two_objects(x,y+1.2) << '\n';
-    z_main = add_two_objects(x,y+2.52424324);
+    z_main = add_two_objects(x,(y+2.52424324));
     std::cout<< "sum of two double is " << z_main << " and " << add_two_objects(x,y+2.52424324) << '\n';
 
 
@@ -177,7 +178,7 @@ int main ( int argc, char *argv[]) {
     std::cout << "sum of " << nickel << " and " << dime << " class objects is " << bigger  << '\n';
 
     try {
-        if ( x < 0 )
+        if ( x <= 0 )
         {
             throw "throwing const char* exception by sending SIGABRT to the process" ;
         }
@@ -202,6 +203,10 @@ int main ( int argc, char *argv[]) {
     catch (...) { // We dont know what would be thrown from throwing_an_exception
         std::cout << "How to throw and catch an exception. \n";
     }
+    //boost::filesystem path = ""
+    //sserr << sspdir(m_framework_path) << "\n\t\tframework root path is not a valid directory: " << m_framework_path
+           << ssthrow;
+
 
     return 0;
 
