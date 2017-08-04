@@ -1,0 +1,1384 @@
+;translation table;;Note / English / adi220_normal / approved;English / adi220_normal / approved;;;Locked / English / adi220_normal / approved;#Modified / English / adi220_normal / approved;German / adi220_normal / approved;;;Locked / German / adi220_normal / approved;#Modified / German / adi220_normal / approved;Czech / adi220_normal / approved;;;Locked / Czech / adi220_normal / approved;#Modified / Czech / adi220_normal / approved;French / adi220_normal / approved;;;Locked / French / adi220_normal / approved;#Modified / French / adi220_normal / approved;Italian / adi220_normal / approved;;;Locked / Italian / adi220_normal / approved;#Modified / Italian / adi220_normal / approved;Portuguese / adi220_normal / approved;;;Locked / Portuguese / adi220_normal / approved;#Modified / Portuguese / adi220_normal / approved;Spanish / adi220_normal / approved;;;Locked / Spanish / adi220_normal / approved;#Modified / Spanish / adi220_normal / approved;Locked / adi220_normal;Layout / adi220_normal;Status / adi220_normal;Comment / adi220_normal;Function;Coordinator;#File;Comment;Status;;
+gültig?;Bezeichner;;Screen-Nr.:;English;Display;Überlänge;;;German;Display;Überlänge;;;Czech;Display;Überlänge;;;French;Display;Überlänge;;;Italian;Display;Überlänge;;;Portuguese;Display;Überlänge;;;Spanish;Display;Überlänge;;;;Layout;;;;;;;;Russian;CAN-
+;Bezeichner;;Screen-Nr.:;US-English;Display;Überlänge;;;German;Display;Überlänge;;;Russian;Display;Überlänge;;;CAN-French;MISSING LAYOUT !;X;;;Dutch;Display;Überlänge;;;;MISSING LAYOUT !;X;;;Mex-Spanish;MISSING LAYOUT !;X;;;;Layout;;;;;;;;;
+;qtn_stp_ta_checkbox_save_pin;;DUMMY for sync with Premium;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;;;;;;;;;;
+;qtn_stp_ta_query_enter_name;;DUMMY for sync with Premium;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;;;;;;;;;;
+;qtn_stp_ta_query_user_name;;DUMMY for sync with Premium;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;;;;;;;;;;
+;qtn_stp_ta_down_time_decrease;;S631;- 5 Minutes;- 5 Minutes;0;;;- 5 Minuten;- 5 Minuten;0;;;;- 5 Minut;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;- 5 Minutos;- 5 Minutos;0;;;;Auswahl;;;;;;;;;
+;qtn_special_char_1;;;"!""#$%&'()*+,-.";MISSING LAYOUT !;X;Not locked;08.08.2002 10:41;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:40;;MISSING LAYOUT !;X;;24.01.2006 10:52;;MISSING LAYOUT !;X;;24.01.2006 10:37;;MISSING LAYOUT !;X;;24.01.2006 10:43;;MISSING LAYOUT !;X;;24.01.2006 10:46;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:49;Not locked;(none);Approved;;STP;Voellinger Stefanie;;Created for Seti;Proposed;;
+;qtn_special_char_2;;;"/:;<=>?@[\\]^";MISSING LAYOUT !;X;X;11.10.2002 16:10;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:40;;MISSING LAYOUT !;X;;24.01.2006 10:52;;MISSING LAYOUT !;X;;24.01.2006 10:37;;MISSING LAYOUT !;X;;24.01.2006 10:43;;MISSING LAYOUT !;X;;24.01.2006 10:46;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:49;Not locked;(none);Approved;;STP;Voellinger Stefanie;;Created for Seti;Proposed;;
+;qtn_special_char_3;;;_`{|}~…™¡¢£¤¥;MISSING LAYOUT !;X;Not locked;11.10.2002 16:10;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:40;;MISSING LAYOUT !;X;;24.01.2006 10:52;;MISSING LAYOUT !;X;;24.01.2006 10:37;;MISSING LAYOUT !;X;;24.01.2006 10:43;;MISSING LAYOUT !;X;;24.01.2006 10:46;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:50;Not locked;(none);Approved;;STP;Voellinger Stefanie;;Created for Seti;Proposed;;
+;qtn_special_char_4;;;§©ª°«®±²³´¹º»;MISSING LAYOUT !;X;Not locked;11.10.2002 16:10;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:40;;MISSING LAYOUT !;X;;24.01.2006 10:53;;MISSING LAYOUT !;X;;24.01.2006 10:37;;MISSING LAYOUT !;X;;24.01.2006 10:43;;MISSING LAYOUT !;X;;24.01.2006 10:46;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:50;Not locked;(none);Approved;;STP;Voellinger Stefanie;;Created for Seti;Proposed;;
+;qtn_special_char_5;;;¼½¾¿×÷;MISSING LAYOUT !;X;Not locked;11.10.2002 16:10;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:40;;MISSING LAYOUT !;X;;24.01.2006 10:53;;MISSING LAYOUT !;X;;24.01.2006 10:37;;MISSING LAYOUT !;X;;24.01.2006 10:43;;MISSING LAYOUT !;X;;24.01.2006 10:46;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:50;Not locked;(none);Approved;;STP;Voellinger Stefanie;;Created for Seti;Proposed;;
+;qtn_stp_ta_note_test;;;#MISSING;#MISSING;0;Not locked;10.08.2005 13:33;#MISSING;#MISSING;0;;24.01.2006 10:42;;#MISSING;0;;24.01.2006 10:55;;EMPTY !;X;;24.01.2006 10:39;;EMPTY !;X;;24.01.2006 10:46;;EMPTY !;X;;24.01.2006 10:49;#MISSING;#MISSING;0;;24.01.2006 10:52;Not locked;4_Zeile;Approved;;STP;Hanebrink Thomas;;;Proposed;;
+1;qtn_stp_ta_time_am;S213;S213;am;MISSING LAYOUT !;X;Not locked;24.01.2006 11:19;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:43;;MISSING LAYOUT !;X;;24.01.2006 10:55;;MISSING LAYOUT !;X;;24.01.2006 10:40;;MISSING LAYOUT !;X;;24.01.2006 10:46;;MISSING LAYOUT !;X;;24.01.2006 10:49;am;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;Not locked;(none);Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed;;
+1;qtn_stp_ta_time_pm;S213;S213;pm;MISSING LAYOUT !;X;Not locked;24.01.2006 11:17;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:43;;MISSING LAYOUT !;X;;24.01.2006 10:55;;MISSING LAYOUT !;X;;24.01.2006 10:40;;MISSING LAYOUT !;X;;24.01.2006 10:46;;MISSING LAYOUT !;X;;24.01.2006 10:49;pm;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;Not locked;(none);Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed;;
+;qtn_stp_ta_down_time_minutes;;S631;%U minutes;%U minutes;0;;;%U Minuten;%U Minuten;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;%U minutos;%U minutos;0;;;;Auswahl;;;;;;;;;
+1;qtn_stp_ta_call_diverted;S901;S901;(diverted);MISSING LAYOUT !;X;Not locked;24.01.2006 11:20;(umgeleitet);(umgeleitet);0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;(desviada);(desviada);0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_down_time_increase;;S631;+ 5 Minutes;+ 5 Minutes;0;;;+ 5 Minuten;+ 5 Minuten;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;+ 5 Minutos;+ 5 Minutos;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_time_standard;S213;S213;12;MISSING LAYOUT !;X;Not locked;24.01.2006 11:21;24;MISSING LAYOUT !;X;Not locked;22.09.2004 17:07;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;24;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;Not locked;(none);Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+1;qtn_stp_ta_menu_cancel;"S001; SC12; 
+S410; S407; S520; S512; S580; SC13; SB01";"S001; SC12; S410; S520; SC13; S627; SB01; S921; S51C; S407; S624; S519";Cancel;Cancel;0;Not locked;26.10.2004 16:40;Abbruch;Abbruch;0;Not locked;28.05.2004 10:33;;dfgdfg;0;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Cancelar;Cancelar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_setting_down_time;;S621;Off time;Off time;0;Not locked;24.01.2006 11:22;Abschaltzeit;Abschaltzeit;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Tiempo descon.;Tiempo descon.;0;Not locked;16.03.2005 20:05;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_down_time;;S631;Off time:\n%U mins;"Off time:
+%U mins";0;Not locked;24.01.2006 11:21;Abschaltzeit:\n%U Minuten;"Abschaltzeit:
+%U Minuten";0;Not locked;20.10.2004 12:24;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;Tiempo descon.\n%U minutos;"Tiempo descon.
+%U minutos";0;Not locked;16.03.2005 20:05;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_values;;S632;Off time possible 0 - 60 min;"Off time possible
+0 - 60 min";0;Not locked;24.01.2006 11:19;Abschaltzeit\n0 bis 60 Minuten\nmöglich;"Abschaltzeit
+0 bis 60 Minuten
+möglich";0;Not locked;20.04.2005 15:15;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Duración de la desconexión: entre 0 y 60 minutos;"Duración de la
+desconexión:
+entre 0 y 60
+minutos";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_reject;"S901; S902; S905";"S901; S902; S905";Reject;Reject;0;Not locked;24.01.2006 11:22;Abweisen;Abweisen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Rechazar;Rechazar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_ignition;S944;S944;Only possible when ignition\nis on;"Only possible
+when ignition
+is on";0;Not locked;24.01.2006 11:21;Aktion nur bei\neingeschalteter\nZündung möglich!;"Aktion nur bei
+eingeschalteter
+Zündung
+möglich!";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Operación ejecutable sólo con el encendido conectado;"Operación
+ejecutable sólo
+con el encendido
+conectado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_speed;;S407;Only possible when vehicle is stationary;"Only possible
+when vehicle is
+stationary";0;Not locked;24.01.2006 11:21;Aktion nur bei stehendem Fahrz. möglich;"Aktion nur bei
+stehendem
+Fahrz. möglich";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;Func. disponible sólo con el veh. detenido;"Func. disponible
+sólo con el veh.
+detenido";0;Not locked;09.02.2005 12:21;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_del_act_device;S579;S579;active. Delete?;active. Delete?;0;Not locked;24.01.2006 11:21;aktiv. Löschen?;aktiv. Löschen?;0;Not locked;26.08.2005 15:29;;EMPTY !;X;Not locked;26.08.2005 15:29;;EMPTY !;X;Not locked;26.08.2005 15:29;;EMPTY !;X;Not locked;26.08.2005 15:29;;EMPTY !;X;Not locked;26.08.2005 15:29;activo,  ¿Borrar?;activo,  ¿Borrar?;0;Not locked;26.08.2005 15:29;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_del_act_user;S555;S555;active. Delete?;active. Delete?;0;Not locked;24.01.2006 11:23;aktiv. Löschen?;"%U aktiv.
+Löschen?";0;Not locked;25.01.2005 17:37;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;activo,  ¿Borrar?;activo,  ¿Borrar?;0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_call_active;"S803; S942";"S803; S942";Active call;Active call;0;Not locked;24.01.2006 11:23;Aktiver Anruf;Aktiver Anruf;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Llamada activa;Llamada activa;0;Not locked;10.06.2002 14:41;Not locked;1_Zeile;Approved;§Header: shown during a call. In the next row a name or number is shown, or the row remains empty.;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_head_active_tone;S642;S642;Active ring tone:;Active ring tone:;0;Not locked;24.01.2006 11:20;Aktiver Rufton:;Aktiver Rufton:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Timbre de llamada activo;"Timbre de
+llamada activo";56;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_bt_active_device;"S562; SC03";"S562; S591;SC03";Active device;Active device;0;Not locked;24.01.2006 11:21;Aktives Gerät;Aktives Gerät;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:18;Dispositivo acoplado;"Dispositivo
+acoplado";24;Not locked;09.02.2005 12:18;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_resume;S811;"S811; S630";Activate;Activate;0;Not locked;24.01.2006 11:19;Aktivieren;Aktivieren;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Activar;Activar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_pb_download;S661;S661;Update;Update;0;Not locked;24.01.2006 11:22;Aktualisieren;Aktualisieren;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Actualizar;Actualizar;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_terminate_conn;S572;S572;End current connection?;"End current
+connection?";0;Not locked;24.01.2006 11:24;Aktuelle Verb.\ntrennen?;"Aktuelle Verb.
+trennen?";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;¿Desconectar?;¿Desconectar?;0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_delete_log;S202;S202;Delete call history?;"Delete call
+history?";0;Not locked;24.01.2006 11:21;Alle Anruflisten\nlöschen?;"Alle Anruflisten
+löschen?";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;¿Borrar listas de llamadas?;"¿Borrar listas de
+llamadas?";0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;S714;S714;Delete all recordings?;"Delete all
+recordings?";0;;;Alle Aufnahm.\nlöschen?;"Alle Aufnahm.
+löschen?";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;¿Borrar todas las grab.?;"¿Borrar todas las
+grab.?";0;;;;2_Zeile;;;;;;;
+;;S702;S702;All recordings;All recordings;0;;;Alle Aufnahmen;Alle Aufnahmen;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Todas las grab.;Todas las grab.;0;;;;Auswahl;;;;;;;
+1;;S522;;Music playback paused;"Music playback
+paused";0;;;Musik-\nwiedergabe\nzeitweise\nangehalten;"Musik-
+wiedergabe
+zeitweise
+angehalten";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;"Reproducción de
+música en pausa";"Reproducción de
+música en pausa";0;;;;4_Zeile;;;;;;;
+1;qtn_stp_ta_call_end_all;S812;S812;End all calls;End all calls;0;Not locked;24.01.2006 11:23;Alle beenden;Alle beenden;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;música en pausa;"música en
+pausa";2;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_diverts;;S807;All incoming calls diverted;"All incoming
+calls diverted";0;Not locked;24.01.2006 11:17;Alle\neingehenden\nAnrufe\numgeleitet;"Alle
+eingehenden
+Anrufe
+umgeleitet";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Todas las llamadas entrantes desviadas;"Todas las
+llamadas
+entrantes
+desviadas";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;S705;S705;Pause;Pause;0;;;Pause;Pause;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Pausa;Pausa;0;;;;Auswahl;;;;;;;
+;;S705;S705;Delete all;Delete all;0;;;Alle Löschen;Alle Löschen;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Borrar todas;Borrar todas;0;;;;Auswahl;;;;;;;
+;;S715;S715;All recordings deleted;"All recordings
+deleted";0;;;Alle\nAufnahmen\ngelöscht;"Alle
+Aufnahmen
+gelöscht";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Se han borrado las grabaciones;"Se han borrado
+las grabaciones";0;;;;3_Zeile;;;;;;;
+;qtn_stp_ta_sms_save;;S422;As template;As template;0;Not locked;24.01.2006 11:23;Als Vorlage;Als Vorlage;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Como plantilla;Como plantilla;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_supp_error;;SB36;Request\nerror;"Request
+error";0;Not locked;24.01.2006 11:23;Anfrage\nfehlgeschlagen;"Anfrage
+fehlgeschlagen";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Error en la solicitud;"Error en la
+solicitud";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_stack_received;S201;S201;Received calls;Received calls;0;Not locked;24.01.2006 11:19;Angen. Anrufe;Angen. Anrufe;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;Llam. recibidas;Llam. recibidas;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_bt_passkey_err;S521;S521;Authorization failed;"Authorization
+failed";0;Not locked;24.01.2006 11:22;Anmeldung\nnicht\nmöglich;"Anmeldung
+nicht
+möglich";0;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Acceso denegado;"Acceso
+denegado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_accept;S901;S901;Answer;Answer;0;Not locked;24.01.2006 11:22;Annehmen;Annehmen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Responder;Responder;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_menu_accept;;;Answer;Answer;0;Not locked;10.05.2002 13:49;Annehmen;Annehmen;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Responder;Responder;0;Not locked;10.06.2002 14:41;Not locked;Auswahl;Approved;§Choice item: to answer a call when your phone is ringing;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_menu_activate;;;Unhold;Unhold;0;Not locked;10.05.2002 13:49;Annehmen;Annehmen;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Activar;Activar;0;Not locked;10.06.2002 14:41;Not locked;Auswahl;Approved;§Choice item: to switch to the call you put on hold;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_stack_missed;S201;S201;Missed calls;Missed calls;0;Not locked;24.01.2006 11:24;Anr. in Abwes.;Anr. in Abwes.;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Llam. perdidas;Llam. perdidas;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_call;S941;S941;Call;Call;0;Not locked;24.01.2006 11:21;Anruf;Anruf;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Llamada;Llamada;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_incoming_call;S901;;Call;Call;0;Not locked;26.10.2004 16:40;Anruf;Anruf;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;20.12.2002 14:15;;EMPTY !;X;Not locked;20.12.2002 14:19;Llam. entrante;Llam. entrante;0;Not locked;20.12.2002 14:21;Not locked;1_Zeile;Approved;§Header: shown when someone is calling you. The following line is either empty or a name or number is shown.;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_call_call1;S812;S812;Call 1;Call 1;0;Not locked;24.01.2006 11:23;Anruf 1;Anruf 1;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Llamada 1;Llamada 1;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+1;qtn_stp_ta_head_call1;S813;S813;Call 1;Call 1;0;Not locked;24.01.2006 11:23;Anruf 1;Anruf 1;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Llamada 1;Llamada 1;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_call2;S813;S813;Call 2;Call 2;0;Not locked;24.01.2006 11:23;Anruf 2;Anruf 2;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Llamada 2;Llamada 2;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+1;qtn_stp_ta_head_call2;S812;S812;Call 2;Call 2;0;Not locked;24.01.2006 11:17;Anruf 2;Anruf 2;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Llamada 2;Llamada 2;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;S811;S811;End call;End call;0;;;Anruf beenden;Anruf beenden;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Colgar;Colgar;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_head_call_hold;S811;S811;Call on hold:;Call on hold:;0;Not locked;24.01.2006 11:21;Anruf gehalten:;Anruf gehalten:;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;06.12.2002 12:35;;EMPTY !;X;Not locked;09.02.2005 12:19;Llamada reten.;Llamada reten.;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;§Header: shown when you put a call on hold. In the following line a name or phone number is displayed, or the following row remains empty;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_note_missed_call;S904;S904;Missed call;Missed call;0;Not locked;24.01.2006 11:21;Anruf in\nAbwesenheit;"Anruf in
+Abwesenheit";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Llamadas perdidas;"Llamadas
+perdidas";0;Not locked;09.02.2005 12:20;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_call_waiting;S902;S902;Call waiting;Call waiting;0;Not locked;24.01.2006 11:23;Anruf klopft an;Anruf klopft an;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Llam. en espera;Llam. en espera;0;Not locked;20.12.2002 14:21;Not locked;1_Zeile;Approved;§Header: When you have activated the call waiting service this text is displayed when you get another call while you are talking to someone on the phone. In the next row a name or number is shown, or the row remains empty.;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;;SC24;SC24;Calls;Calls;0;;;Anrufe;Anrufe;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Llamadas;Llamadas;0;;;;1_Zeile;;;;;;;
+1;qtn_stp_ta_menu_call;"S111; S212";"S111; S212; S302; S303";Call;Call;0;Not locked;10.05.2002 13:49;Anrufen;Anrufen;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Llamar;Llamar;0;Not locked;10.06.2002 14:41;Not locked;Auswahl;Approved;§Choice item: for calling a number from the phonebook or  the list of last dialled numbers;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_vcal_callto;;S999;Call;Call;0;Not locked;24.01.2006 11:23;Anrufen;Anrufen;0;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;Llamar a;Llamar a;0;Not locked;16.03.2005 20:00;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_main_callstacks;"S101; S811";"S101; S811";Call history;Call history;0;Not locked;24.01.2006 11:24;Anruflisten;Anruflisten;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;07.03.2005 18:34;;EMPTY !;X;Not locked;12.01.2005 11:29;Reg. llamadas;Reg. llamadas;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_call_head_register;S201;S201;Call history;Call history;0;Not locked;24.01.2006 11:24;Anruflisten;Anruflisten;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;07.03.2005 18:34;;EMPTY !;X;Not locked;12.01.2005 11:29;Reg. llamadas;Reg. llamadas;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;;;;;;;
+1;qtn_stp_ta_note_stacks_cleared;S203;S203;Call history\ndeleted;"Call history
+deleted";0;Not locked;24.01.2006 11:22;Anruflisten\ngelöscht;"Anruflisten
+gelöscht";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Registro de llamadas borrado.;"Registro de
+llamadas
+borrado.";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_nametag;S117;S117;Voice tag;Voice tag;0;Not locked;24.01.2006 11:19;Anrufname;Anrufname;0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Nombre por voz;Nombre por voz;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+1;qtn_stp_ta_pb_nametag;"S105; S641";"S105; S641";Voice tag;Voice tag;0;Not locked;24.01.2006 11:18;Anrufname;Anrufname;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;10.08.2005 14:57;Nombre por voz;Nombre por voz;0;Not locked;10.08.2005 14:57;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_tag_deleted;;S114;Voice tag deleted;"Voice tag
+deleted";0;Not locked;24.01.2006 11:22;Anrufname gelöscht;"Anrufname
+gelöscht";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;24.01.2006 11:17;;EMPTY !;X;Not locked;06.07.2005 15:34;;EMPTY !;X;Not locked;09.02.2005 12:21;Nombre\nborrado;"Nombre
+borrado";0;Not locked;10.08.2005 14:57;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC16;SC16;Read out\nvoice tag:;"Read out
+voice tag:";0;;;Anrufname\nansagen:;"Anrufname
+ansagen:";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Reproducir nombre:;"Reproducir
+nombre:";0;;;;2_Zeile;;;;;;;
+1;;S114;S114;Voice tag reset;Voice tag reset;0;;;Anrufname\nzurückgesetzt;"Anrufname
+zurückgesetzt";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Nombre anulado;Nombre anulado;0;;;;2_Zeile;;;;;;;
+1;;S115;S115;Reset voice tag?;Reset voice tag?;0;;;Anrufname\nzurücksetzen?;"Anrufname
+zurücksetzen?";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;¿Anular nombre?;"¿Anular
+nombre?";0;;;;2_Zeile;;;;;;;
+;qtn_stp_ta_query_delete_tag;;S115;Delete\nvoice tag?;"Delete
+voice tag?";0;Not locked;24.01.2006 11:23;Anrufnamen löschen?;"Anrufnamen
+löschen?";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;¿Borrar nombre?;¿Borrar nombre?;0;Not locked;09.02.2005 13:23;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_barr_active;;SB23;Call barring active;"Call barring
+active";0;Not locked;24.01.2006 11:19;Anrufsperre\naktiviert;"Anrufsperre
+aktiviert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;Bloqueo de llamadas activo;"Bloqueo de
+llamadas activo";0;Not locked;09.02.2005 12:19;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_barr_inactive;;SB22;Call barring deactivated;"Call barring
+deactivated";0;Not locked;24.01.2006 11:20;Anrufsperre\ndeaktiviert;"Anrufsperre
+deaktiviert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Bloqueo de llamadas desactivado;"Bloqueo de
+llamadas
+desactivado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_stack_time;;S212;Call time;Call time;0;Not locked;24.01.2006 11:18;Anrufzeit;Anrufzeit;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Hora de llam.;Hora de llam.;0;Not locked;10.08.2005 14:57;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_menu_show;S904;S904;Show;Show;0;Not locked;24.01.2006 11:19;Ansehen;Ansehen;0;Not locked;03.02.2005 17:50;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;10.08.2005 14:57;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 13:23;Mostrar;Mostrar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_reply;;S443;Answer to:;Answer to:;0;Not locked;24.01.2006 11:22;Antwort an:;Antwort an:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Responder a:;Responder a:;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_voice_tag_reset;S117;;Reset;Reset;0;Not locked;24.01.2006 11:21;Zurücksetzen;Zurücksetzen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Anular;Anular;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;S601;S601;Audio mode;Audio mode;0;;;Audio Mode;Audio Mode;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Modo Audio;Modo Audio;0;;;;Auswahl;;;;;;;
+1;;S602;S602;Audio mode:;Audio mode:;0;;;Audio Mode:;Audio Mode:;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Modo Audio:;Modo Audio:;0;;;;1_Zeile;;;;;;;
+;qtn_stp_ta_note_caps_on;;S427;Switched to upper case;"Switched to
+upper case";0;Not locked;24.01.2006 11:19;Auf Großbuchstaben umgeschaltet;"Auf
+Großbuchstaben
+umgeschaltet";0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Minúsculas;Minúsculas;0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_note_caps_off;;S426;Switched to lower case;"Switched to
+lower case";0;Not locked;24.01.2006 11:23;Auf Kleinbuchstaben umgeschaltet;"Auf
+Kleinbuchstaben
+umgeschaltet";0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Cambiar a minúsculas;"Cambiar a
+minúsculas";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_note_num_on;;S428;Switched to number entry;"Switched to
+number entry";0;Not locked;24.01.2006 11:18;Auf Zifferneingabe umgeschaltet;"Auf
+Zifferneingabe
+umgeschaltet";0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Cambiar a números;"Cambiar a
+números";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_vcal_todo;;S99B;To-do;To-do;0;Not locked;24.01.2006 11:24;Aufgabe;Aufgabe;0;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;Tareas;Tareas;0;Not locked;16.03.2005 20:00;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_end;"S801; S802; 
+S803; S812; S815; S813;
+SC24";"S801; S802; S803; S812; S813; S815; SC24";End call;End call;0;Not locked;24.01.2006 11:23;Auflegen;Auflegen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Colgar;Colgar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;S704;S704;Recordings;Recordings;0;;;Aufnahmen;Aufnahmen;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Grabaciones;Grabaciones;0;;;;1_Zeile;;;;;;;
+;;S709;S709;Recording deleted;"Recording
+deleted";0;;;Aufnahme\ngelöscht;"Aufnahme
+gelöscht";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Grabación borrada;"Grabación
+borrada";0;;;;2_Zeile;;;;;;;
+;;;S711;Recording copied to mobile phone;"Recording copied
+to mobile phone";0;;;Aufnahme\nauf Mobiltelefon\nkopiert;"Aufnahme
+auf Mobiltelefon
+kopiert";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;3_Zeile;;;;;;;
+;;S713;S713;Recording stopped. Memory full.;"Recording
+stopped.
+Memory full.";0;;;Aufnahme\nbeendet.\nSpeicher\nvoll!;"Aufnahme
+beendet.
+Speicher
+voll!";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Grabación finalizada. Memoria llena.;"Grabación
+finalizada.
+Memoria llena.";0;;;;4_Zeile;;;;;;;
+;;S719;S719;Recording saved.;"Recording
+saved.";0;;;Aufnahme\ngespeichert;"Aufnahme
+gespeichert";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Grabación memorizada;"Grabación
+memorizada";0;;;;2_Zeile;;;;;;;
+;;S703;S703;Recording...;Recording...;0;;;Aufnahme\nläuft;"Aufnahme
+läuft";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Grabando…;Grabando…;0;;;;2_Zeile;;;;;;;
+;;S707;S707;Delete recording?;"Delete
+recording?";0;;;Aufnahme\nlöschen?;"Aufnahme
+löschen?";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;¿Borrar grabación?;"¿Borrar
+grabación?";0;;;;2_Zeile;;;;;;;
+1;qtn_stp_ta_tag_record;"S117; S702";"S117; S702";Record;Record;0;Not locked;24.01.2006 11:22;Aufnehmen;Aufnehmen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Grabar;Grabar;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;S101;S101;Recording;Recording;0;;;Aufzeichnung;Aufzeichnung;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Registro;Registro;0;;;;Auswahl;;;;;;;
+;;S702;S702;Recording;Recording;0;;;Aufzeichnung;Aufzeichnung;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Registro;Registro;0;;;;1_Zeile;;;;;;;
+1;;SC16;SC16;Off;Off;0;;;Aus;Aus;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Desconectado;Desconectado;0;;;;Auswahl;;;;;;;
+1;;SC01;SC01;Options;Options;0;;;Auswahl;Auswahl;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Opciones;Opciones;0;;;;1_Zeile;;;;;;;
+;qtn_stp_ta_net_auto;;"S622;SC15";Automatic;Automatic;0;Not locked;24.01.2006 11:20;Automatisch;Automatisch;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Automático;Automático;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_query_authorisation;;S577;Authorised:;Authorised:;0;Not locked;24.01.2006 11:18;Autorisiert:;Autorisiert:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Autorizado:;Autorizado:;0;Not locked;09.02.2005 12:21;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_bt_authorisation;S571;"S571; S5A1";Authorization;Authorization;0;Not locked;24.01.2006 11:17;Autorisierung;Autorisierung;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Autorización;Autorización;0;Not locked;09.02.2005 12:18;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;S577;S577;Authorization:;Authorization:;0;;;Autorisierung:;Autorisierung:;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Autorización:;Autorización:;0;;;;1_Zeile;;;;;;;
+;qtn_stp_ta_sms_edit;;;Edit;Edit;0;Not locked;24.11.2004 15:38;Bearbeiten;Bearbeiten;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Editar;Editar;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_menu_end;"S703; S706; 
+S904; S903";"S703; S706; S904; S903";Close;Close;0;Not locked;24.01.2006 11:20;Beenden;Beenden;0;Not locked;03.02.2005 17:46;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;10.08.2005 14:57;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;Finalizar;Finalizar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;§Choice item: to end the currently active call;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_menu_user;S502;S502;User;User;0;Not locked;24.01.2006 11:22;Benutzer;Benutzer;0;Not locked;03.02.2005 17:50;;EMPTY !;X;Not locked;09.02.2005 18:19;;EMPTY !;X;Not locked;21.04.2005 12:46;;EMPTY !;X;Not locked;09.02.2005 18:19;;EMPTY !;X;Not locked;09.02.2005 18:19;Usuario;Usuario;0;Not locked;09.02.2005 18:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_head_user;S541;S541;User;User;0;Not locked;24.01.2006 11:22;Benutzer;Benutzer;0;Not locked;03.02.2005 17:50;;EMPTY !;X;Not locked;09.02.2005 18:19;;EMPTY !;X;Not locked;21.04.2005 12:46;;EMPTY !;X;Not locked;09.02.2005 18:19;;EMPTY !;X;Not locked;09.02.2005 18:19;Usuario;Usuario;0;Not locked;09.02.2005 18:19;Not locked;1_Zeile;;;;;;;
+;qtn_stp_ta_user_default;;S531;User %U;User %U;0;Not locked;24.01.2006 11:20;Benutzer %U;Benutzer %U;0;Not locked;25.01.2005 17:37;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;Usuario %U;Usuario %U;0;Not locked;06.07.2005 15:34;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+1;qtn_stp_ta_head_delete_user;S512;S512;Delete\nuser:;"Delete
+user:";0;Not locked;24.01.2006 11:17;Benutzer\nlöschen:;"Benutzer
+löschen:";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Borrar\nusuario:;"Borrar
+usuario:";0;Not locked;09.02.2005 12:19;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_search_user;;S001;Connecting\nuser;"Connecting
+user";0;Not locked;24.01.2006 11:19;Benutzer wird\nverbunden;"Benutzer wird
+verbunden";0;Not locked;01.09.2005 13:38;;EMPTY !;X;Not locked;01.09.2005 13:38;;EMPTY !;X;Not locked;01.09.2005 13:39;;EMPTY !;X;Not locked;01.09.2005 13:38;;EMPTY !;X;Not locked;01.09.2005 13:38;Conectando\nusuario;"Conectando
+usuario";0;Not locked;01.09.2005 13:38;Not locked;2_Zeile;Approved;;STP;Hanebrink Thomas;;;Proposed
+1;qtn_stp_ta_head_user;"S535; S542;
+S536";"S535; S531; S542; S536; S544";User:;User:;0;Not locked;24.01.2006 11:21;Benutzer:;Benutzer:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Usuario:;Usuario:;0;Not locked;09.02.2005 13:23;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_user_activated;;S911;User\nactive;"User
+active";0;Not locked;24.01.2006 11:18;Benutzer\naktiviert;"Benutzer
+aktiviert";0;Not locked;12.08.2005 11:48;;EMPTY !;X;Not locked;12.08.2005 11:48;;EMPTY !;X;Not locked;12.08.2005 11:48;;EMPTY !;X;Not locked;12.08.2005 11:48;;EMPTY !;X;Not locked;12.08.2005 11:48;Usuario\nactivo;"Usuario
+activo";0;Not locked;12.08.2005 11:48;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_new_user;;S007;Create user profile;"Create user
+profile";0;Not locked;24.01.2006 11:20;Benutzerprofil\nanlegen;"Benutzerprofil
+anlegen";0;Not locked;31.01.2005 18:09;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;Crear perfil\nde usuario;"Crear perfil
+de usuario";0;Not locked;16.03.2005 20:05;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_new_user;S534;S534;User profile created successfully;"User profile
+created
+successfully";0;Not locked;24.01.2006 11:19;Benutzerprofil\nerfolgreich\nangelegt;"Benutzerprofil
+erfolgreich
+angelegt";0;Not locked;26.04.2005 12:16;;EMPTY !;X;Not locked;26.04.2005 12:16;;EMPTY !;X;Not locked;06.07.2005 15:34;;EMPTY !;X;Not locked;26.04.2005 12:16;;EMPTY !;X;Not locked;26.04.2005 12:16;Perfil de usuario creado correctamente;"Perfil de usuario
+creado
+correctamente";0;Not locked;26.04.2005 12:16;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_menu_define_user;S502;S502;Select user;Select user;0;Not locked;24.01.2006 11:19;Benutzerwahl;Benutzerwahl;0;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Selecc. usuario;Selecc. usuario;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_max_users;S511;S511;%U users\nalready\ncreated;"%U users
+already
+created";0;Not locked;24.01.2006 11:23;Bereits\n%U Benutzer\nangelegt;"Bereits
+%U Benutzer
+angelegt";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Se han creado%U perfiles de usuario;"Se han
+creado%U
+perfiles de
+usuario";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_user_connected;"S543; S573";"S543; S573";Already connected with;"Already
+connected with";0;Not locked;24.01.2006 11:17;Bereits\nverbunden mit;"Bereits
+verbunden mit";0;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Conectado con;Conectado con;0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_number_busy;S802;S802;Busy;Busy;0;Not locked;24.01.2006 11:19;Besetzt;Besetzt;0;Not locked;24.01.2006 11:21;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:20;Ocupado;Ocupado;0;Not locked;16.03.2005 20:05;Not locked;3_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_vcal_meeting;;S998;Meeting;Meeting;0;Not locked;24.01.2006 11:23;Besprechung;Besprechung;0;Not locked;16.03.2005 20:01;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;Reunión;Reunión;0;Not locked;16.03.2005 20:00;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_user_not_created;;S539;User profile\nnot created;"User profile
+not created";0;Not locked;24.01.2006 11:20;Benutzer nicht\nangelegt;"Benutzer nicht
+angelegt";0;Not locked;20.04.2005 15:15;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;24.01.2006 11:18;;EMPTY !;X;Not locked;09.02.2005 12:20;Usuario no creado;"Usuario no
+creado";0;Not locked;09.02.2005 12:20;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_setting_operator;;S621;Select operator;Select operator;0;Not locked;24.01.2006 11:18;Betreiberwahl;Betreiberwahl;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Selecc. oper.;Selecc. oper.;0;Not locked;16.03.2005 20:05;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_operator_select;;S622;Operator selec.:;Operator selec.:;0;Not locked;24.01.2006 11:18;Betreiberwahl:;Betreiberwahl:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Selecc. oper.:;Selecc. oper.:;0;Not locked;16.03.2005 20:05;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_check_services;;SB61;Please check network services!;"Please check
+network
+services!";0;Not locked;24.01.2006 11:22;Bitte Netzdienste\nprüfen!;"Bitte Netzdienste
+prüfen!";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Verificar servicios de red;"Verificar
+servicios de red";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_enter_puk;;;Please enter PUK code on phone;"Please enter
+PUK code on
+phone";0;Not locked;24.01.2006 11:18;Bitte PUK-Code am Mobiltelefon eingeben!;"Bitte PUK-Code
+am Mobiltelefon
+eingeben!";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Introducir PUK en el teléfono móvil;"Introducir PUK
+en el teléfono
+móvil";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_note_no_sim;;S005;Please insert\nSIM card\nin phone;"Please insert
+SIM card
+in phone";0;Not locked;24.01.2006 11:22;Bitte SIM-Karte\nim Mobiltelefon\neinsetzen!;"Bitte SIM-Karte
+im Mobiltelefon
+einsetzen!";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Insertar la tarjeta SIM en el teléfono;"Insertar la
+tarjeta SIM en el
+teléfono";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_wait_general;"S408; S410";S408, S410;Please wait!;Please wait!;0;Not locked;24.01.2006 11:21;Bitte warten!;Bitte warten!;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;Espere\npor favor;"Espere
+por favor";0;Not locked;16.03.2005 20:05;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_enter_number;S301;S301;Please enter number!;"Please enter
+number!";0;Not locked;24.01.2006 11:19;Bitte\nRufnummer\neingeben!;"Bitte
+Rufnummer
+eingeben!";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Introducir número de teléfono;"Introducir
+número de
+teléfono";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_main_bluetooth;S101;S101;Bluetooth;Bluetooth;0;Not locked;24.01.2006 11:22;Bluetooth;Bluetooth;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;Bluetooth;Bluetooth;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_head_bluetooth;S502;S502;Bluetooth;Bluetooth;0;Not locked;24.01.2006 11:22;Bluetooth;Bluetooth;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;Bluetooth;Bluetooth;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;;;;;;;
+1;qtn_stp_ta_bt_no_conn_headset;S935;S935;Bluetooth connection not possible, headset connected;"Bluetooth
+connection not
+possible, headset
+connected";0;Not locked;24.01.2006 11:21;BT-Verbindung\nnicht möglich,\nHeadset\nverbunden;"BT-Verbindung
+nicht möglich,
+Headset
+verbunden";0;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;"Conexión Bluetooh 
+ocupada , auriculares
+conectados";"Conexión
+Bluetooh 
+ocupada ,
+auriculares
+conectados";37;Not locked;09.02.2005 12:18;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_bt_no_conn_modem;;S936;Bluetooth conn-ection not poss-ible, modem connected;"Bluetooth conn-
+ection not poss-
+ible, modem
+connected";0;Not locked;24.01.2006 11:22;BT-Verbindung\nnicht möglich,\nModem\nverbunden;"BT-Verbindung
+nicht möglich,
+Modem
+verbunden";0;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;Conexión Bluetooh impos., módem conectado;"Conexión
+Bluetooh impos.,
+módem
+conectado";0;Not locked;09.02.2005 12:18;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC23;SC23;BT connection not possible,\ncell phone connected;"BT connection
+not possible,
+cell phone
+connected";0;;;BT-Verbindung\nnicht möglich,\nMobiltelefon\nverbunden;"BT-Verbindung
+nicht möglich,
+Mobiltelefon
+verbunden";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Conexión Bluetooth ocupada , teléfono móvil conectado;"Conexión
+Bluetooth
+ocupada ,
+teléfono móvil
+conectado";56;;;;4_Zeile;;;;;;;
+;;;S937;Bluetooth connection not possible, phone book loading;"Bluetooth
+connection not
+possible, phone
+book loading";0;;;BT-Verbindung\nnicht möglich,\nTelefonbuch\nwird geladen;"BT-Verbindung
+nicht möglich,
+Telefonbuch
+wird geladen";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Conexión Bluetooh impos., cargando la guía;"Conexión
+Bluetooh impos.,
+cargando la guía";0;;;;4_Zeile;;;;;;;
+;qtn_stp_ta_templ_thanks;;;Thank you!;Thank you!;0;Not locked;26.10.2004 16:40;Danke!;Danke!;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;¡Gracias!;¡Gracias!;0;Not locked;09.02.2005 12:22;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_time_format;S703;;MM:SS;MM:SS;0;Not locked;10.05.2002 13:49;MM:SS;MM:SS;0;Not locked;30.07.2002 17:13;;EMPTY !;X;Not locked;06.12.2002 12:29;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;20.12.2002 14:15;;EMPTY !;X;Not locked;10.06.2002 14:40;MM:SS;MM:SS;0;Not locked;20.12.2002 14:21;Not locked;1_Zeile;Approved;§Header: displayed when you are in a data call. In the next row a  number will be shown, or the row remains empty.;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_head_incoming_data;;;Data call;Data call;0;Not locked;30.07.2002 17:13;Datenanruf;Datenanruf;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;20.12.2002 14:19;Llamada datos;Llamada datos;0;Not locked;20.12.2002 14:21;Not locked;1_Zeile;Approved;§Header: displayed when a data call is coming in. In the next line a name or number is shown, or the row remains empty.;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_head_datacall;"S901; S905";"S901; S905";Data call;Data call;0;Not locked;24.01.2006 11:22;Daten-Anruf;Daten-Anruf;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;Llam. de datos;Llam. de datos;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_supp_datacalls;;SB06;Data calls;Data calls;0;Not locked;24.01.2006 11:20;Datenanrufe;Datenanrufe;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Datos;Datos;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_date_value;S213;S213;MM-DD-YYYY;MM-DD-YYYY;0;Not locked;24.01.2006 11:23;DD.MM.YYYY;DD.MM.YYYY;0;Not locked;22.09.2004 17:07;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;DD/MM/YYYY;DD/MM/YYYY;0;Not locked;09.02.2005 13:23;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;;S705;S705;Details;Details;0;;;Details;Details;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Detalles;Detalles;0;;;;Auswahl;;;;;;;
+;qtn_stp_ta_note_diagnosis;;S953;Diagnosis\nactive;"Diagnosis
+active";0;Not locked;24.01.2006 11:23;Diagnose\naktiv;"Diagnose
+aktiv";0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Diagnosis activa;Diagnosis activa;0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+1;qtn_stp_ta_call_dtmf;"S803; S812;
+SC24";"S803;S812; SC24";DTMF;DTMF;0;Not locked;24.01.2006 11:18;DTMF;DTMF;0;Not locked;24.01.2006 11:18;;EMPTY !;X;Not locked;24.01.2006 11:22;;EMPTY !;X;Not locked;24.01.2006 11:22;;EMPTY !;X;Not locked;24.01.2006 11:18;;EMPTY !;X;Not locked;24.01.2006 11:22;DTMF;DTMF;0;Not locked;24.01.2006 11:24;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_dtmf;S804;S804;DTMF;DTMF;0;;;DTMF;DTMF;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;DTMF;DTMF;0;;;;1_Zeile;;;;;;;
+;;;S812;Forward;Forward;0;;;Durchstellen;Durchstellen;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;Auswahl;;;;;;;
+;qtn_stp_ta_setting_own_number;;;Own no. send;Own no. send;0;Not locked;24.01.2006 11:18;Eigene Nr. send.;Eigene Nr. send.;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Env. núm. prop.;Env. núm. prop.;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_send_own_nbr;;S611;Own no. send.:;Own no. send.:;0;Not locked;24.01.2006 11:17;Eig. Nr. senden:;Eig. Nr. senden:;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;Env. núm. prop.:;Env. núm. prop.:;0;Not locked;10.08.2005 14:57;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;;S601;Own number;Own number;0;;;Eigene Nummer;Eigene Nummer;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Número propio;Número propio;0;;;;Auswahl;;;;;;;
+;qtn_stp_ta_note_own_nbr_send;;SB31;Own number will be sent;"Own number will
+be sent";0;Not locked;24.01.2006 11:20;Eigene Nummer\nwird\ngesendet;"Eigene Nummer
+wird
+gesendet";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Función envío del número propio activa;"Función envío
+del número
+propio activa";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_own_nbr_not_snd;;SB32;Own number will not be sent;"Own number will
+not be sent";0;Not locked;24.01.2006 11:19;Eigene Nummer\nwird nicht\ngesendet;"Eigene Nummer
+wird nicht
+gesendet";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Función envío del número propio desact.;"Función envío
+del número
+propio desact.";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC16;SC16;On;On;0;;;Ein;Ein;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Conectado;Conectado;0;;;;Auswahl;;;;;;;
+;qtn_stp_ta_sms_inbox;;S401;Inbox;Inbox;0;Not locked;24.01.2006 11:22;Eingang;Eingang;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Recibidos;Recibidos;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_standby_off;;S668;Switch on;Switch on;0;Not locked;24.01.2006 11:22;Einschalten;Einschalten;0;Not locked;22.09.2004 17:07;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Encender;Encender;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+1;qtn_stp_ta_main_settings;S101;S101;Settings;Settings;0;Not locked;24.01.2006 11:18;Einstellungen;Einstellungen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;Ajustes;Ajustes;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_head_settings;S601;S601;Settings;Settings;0;Not locked;24.01.2006 11:18;Einstellungen;Einstellungen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;Ajustes;Ajustes;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;;;;;;;
+;qtn_stp_ta_vcal_reminder;;S99C;Reminder;Reminder;0;Not locked;24.01.2006 11:21;Erinnerung;Erinnerung;0;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:01;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;Aviso;Aviso;0;Not locked;16.03.2005 20:00;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_incoming_fax;;;Fax;Fax;0;Not locked;26.10.2004 16:40;Faxanruf;Faxanruf;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;06.12.2002 12:29;;EMPTY !;X;Not locked;06.12.2002 12:32;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Llamada de fax;Llamada de fax;0;Not locked;20.12.2002 14:21;Not locked;1_Zeile;Approved;§Header: displayed when a fax call is coming in. In the next line a number is shown, or the row remains empty.;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_head_faxcall;"S901; S905";"S901; S905";Fax call;Fax call;0;Not locked;24.01.2006 11:24;Fax-Anruf;Fax-Anruf;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Fax;Fax;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_supp_faxcalls;;SB06;Fax calls;Fax calls;0;Not locked;24.01.2006 11:19;Faxanrufe;Faxanrufe;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Fax;Fax;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_menu_free;;S112;free;free;0;Not locked;24.01.2006 11:23;frei;frei;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;libre;libre;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_handsfree;"S801; SC20;
+S803; S812; S815";"S801; SC20; S803; S812; S815";Handsfree;Handsfree;0;Not locked;24.01.2006 11:22;Freisprechen;Freisprechen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Manos libres;Manos libres;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_roaming;;S906;Different network:;"Different
+network:";0;Not locked;24.01.2006 11:20;Fremdnetz:;Fremdnetz:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Red;Red;0;Not locked;09.02.2005 12:20;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;;S407;S407;Function only available when car is stationary;"Function only
+available when
+car is stationary";0;;;Funktion nur\nbei stehendem\nFahrzeug;"Funktion nur
+bei stehendem
+Fahrzeug";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Función disp. sólo con el veh. detenido;"Función disp.
+sólo con el veh.
+detenido";0;;;;3_Zeile;;;;;;;;
+1;qtn_stp_ta_note_visible;S554;S554;visible for\n3 minutes;"visible for
+3 minutes";0;Not locked;24.01.2006 11:23;für 3 Minuten\nsichtbar;"für 3 Minuten
+sichtbar";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;visible durante\n3 minutos;"visible durante
+3 minutos";0;Not locked;09.02.2005 12:21;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_info_call;SA01;SA01;Press and hold button 2s\nfor info call;"Press and hold
+button 2s
+for info call";0;Not locked;24.01.2006 11:23;Für Inforuf\nTaste 2 Sek.\ngedrückt\nhalten;"Für Inforuf
+Taste 2 Sek.
+gedrückt
+halten";0;Not locked;11.10.2002 16:14;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Para la llamada de servicio mantenga pulsada la tecla 2 segundos.;"Para la llamada
+de servicio
+mantenga
+pulsada la tecla
+2 segundos.";74;Not locked;13.04.2005 18:08;Not locked;4_Zeile;Approved;2002-11-28: New text. Please translate§Note: There is a separate button in the car just for info calls. When you press it this note is shown. Then you can decide whether you want to make an info call or not. This is a service you can call to get information e.g. about restaurants in a certain city;STP;Voellinger Stefanie;;Created for Seti;Proposed;
+1;qtn_stp_ta_note_service_call;SA02;SA01;Press and hold button 2s\nfor service call;"Press and hold
+button 2s
+for service call";0;Not locked;24.01.2006 11:18;Für Pannenruf\nTaste 2 Sek.\ngedrückt\nhalten;"Für Pannenruf
+Taste 2 Sek.
+gedrückt
+halten";0;Not locked;11.10.2002 16:14;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Para la llamada de servicio mantenga pulsada la tecla 2 segundos.;"Para la llamada
+de servicio
+mantenga
+pulsada la tecla
+2 segundos.";74;Not locked;13.04.2005 18:08;Not locked;4_Zeile;Approved;2002-11-28: New text. Please translate§Note: There is a separate button in the car just for service calls. When you press it this note is shown. Then you can decide whether you want to make a service call or not. This is a service you can call when your car broke down;STP;Voellinger Stefanie;;Created for Seti;Proposed;
+;qtn_stp_ta_vcal_birthday;;S99A;Birthday;Birthday;0;Not locked;24.01.2006 11:18;Geburtstag;Geburtstag;0;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:01;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;Cumpleaños;Cumpleaños;0;Not locked;16.03.2005 20:00;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_bt_paired_devices;"S562; SC03";S562, T562, S591, SC03;Paired devices;Paired devices;0;Not locked;24.01.2006 11:17;Gekopp. Geräte;Gekopp. Geräte;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;Aparatos vincul.;Aparatos vincul.;0;Not locked;13.04.2005 18:08;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_paired_head_devices;"S567; S5B2";"S567, S598; S5B2";Paired devices;Paired devices;0;Not locked;24.01.2006 11:17;Gekopp. Geräte;Gekopp. Geräte;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;Aparatos vincul.;Aparatos vincul.;0;Not locked;13.04.2005 18:08;Not locked;1_Zeile;;;;;;;;
+;qtn_stp_ta_note_search_paired;;;Searching for paired phone.\nPlease wait!;"Searching for
+paired phone.
+Please wait!";0;Not locked;24.11.2004 15:38;Gekoppeltes Tel. wird gesucht.\nBitte warten!;"Gekoppeltes Tel.
+wird gesucht.
+Bitte warten!";0;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;10.02.2005 10:18;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;Buscando tel. vinculado. Espere...;"Buscando tel.
+vinculado.
+Espere...";0;Not locked;13.04.2005 18:08;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;????????????
+1;qtn_stp_ta_note_deleted;S578;S578;deleted;deleted;0;Not locked;24.01.2006 11:19;gelöscht;gelöscht;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;borrado;borrado;0;Not locked;09.02.2005 12:20;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_user_deleted;S514;S514;deleted;deleted;0;Not locked;24.01.2006 11:19;gelöscht;gelöscht;0;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;borrado;borrado;0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_head_device_list;S515;S515;Device list;Device list;0;;;Geräteliste;Geräteliste;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Lista de dispositivos Bluetooth (BT);"Lista de
+dispositivos
+Bluetooth (BT)";114;;;;1_Zeile;;;;;;;;
+1;qtn_stp_ta_bt_search;S902;;Replace;Replace;0;Not locked;24.01.2006 11:18;Ersetzen;Ersetzen;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;Sustituir;Sustituir;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_call_end_active;S902;S902;End active call;End active call;0;Not locked;24.01.2006 11:18;Gespr. beenden;Gespr. beenden;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Colgar;Colgar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;;S597;S597;disconnected;disconnected;0;;;getrennt;getrennt;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Conexión interrumpida;"Conexión
+interrumpida";0;;;;2_Zeile;;;;;;;;
+;;;S912;dialed;dialed;0;;;gewählt;gewählt;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;2_Zeile;;;;;;;;
+;qtn_stp_ta_main_last_dialled;;;Dialled numbers;MISSING LAYOUT !;X;Not locked;16.08.2002 14:04;Gewählte Nrn.;MISSING LAYOUT !;X;Not locked;30.07.2002 17:13;;MISSING LAYOUT !;X;Not locked;06.12.2002 12:29;;MISSING LAYOUT !;X;Not locked;10.06.2002 14:39;;MISSING LAYOUT !;X;Not locked;20.12.2002 14:15;;MISSING LAYOUT !;X;Not locked;10.06.2002 14:40;Llams. enviadas;MISSING LAYOUT !;X;Not locked;20.12.2002 14:21;Not locked;VW_PQ35_one_row_choice_item;Approved;§Choice item: to see the list of last dialled numbers;STP;Voellinger Stefanie;;Created for Seti;Proposed;???????????
+;qtn_stp_ta_setting_gprs;;S601;GPRS;GPRS;0;Not locked;24.01.2006 11:20;GPRS;GPRS;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;GPRS;GPRS;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_gprs_not_avail;;S9B5;GPRS not available;"GPRS not
+available";0;Not locked;24.01.2006 11:23;GPRS\nnicht\nverfügbar;"GPRS
+nicht
+verfügbar";0;Not locked;09.02.2005 12:12;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;GPRS no disponible;"GPRS no
+disponible";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_gprs_connected;;S9B1;GPRS connection made;"GPRS connection
+made";0;Not locked;24.01.2006 11:20;GPRS-\nVerbindung\naufgebaut;"GPRS-
+Verbindung
+aufgebaut";0;Not locked;09.02.2005 12:12;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Estableciendo conexión GPRS;"Estableciendo
+conexión GPRS";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_gprs_ended;;S9B2;GPRS connection ended;"GPRS connection
+ended";0;Not locked;24.01.2006 11:20;GPRS-\nVerbindung\nbeendet;"GPRS-
+Verbindung
+beendet";0;Not locked;09.02.2005 12:12;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Fin de la conexión GPRS;"Fin de la
+conexión GPRS";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_gprs_hold;;S9B3;GPRS connection held;"GPRS connection
+held";0;Not locked;24.01.2006 11:19;GPRS-\nVerbindung\nwird gehalten;"GPRS-
+Verbindung
+wird gehalten";0;Not locked;09.02.2005 12:12;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Conexión GPRS congelada;"Conexión GPRS
+congelada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_gprs_invalid;;S9B4;GPRS access point not valid;"GPRS access
+point not valid";0;Not locked;24.01.2006 11:21;GPRS-\nZugangspunkt ungültig;"GPRS-
+Zugangspunkt
+ungültig";0;Not locked;09.02.2005 12:12;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Punto de acceso GPRS inválido;"Punto de acceso
+GPRS inválido";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_gprs_rename;;S653;"GPRS connection active. Please
+disconnect to rename.";"GPRS connection
+active. Please
+disconnect to
+rename.";0;;;GPRS-Verb.\naktiv. Erst  Verbindung\ntrennen.;"GPRS-Verb.
+aktiv. Erst
+Verbindung
+trennen.";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;"Conexión GPRS activa.
+Para renombrar, desconéctela.";"Conexión GPRS
+activa.
+Para renombrar,
+desconéctela.";0;;;;4_Zeile;;;;;;;;
+;;S706;S706;Size:;Size:;0;;;Größe:;Größe:;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Tamaño:;Tamaño:;0;;;;Auswahl;;;;;;;;
+;;;SC15;GSM;GSM;0;;;GSM;GSM;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;Auswahl;;;;;;;;
+1;qtn_stp_ta_call_hold;"S803; S815";"S803; S815";Hold;Hold;0;Not locked;24.01.2006 11:21;Halten;Halten;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Retener;Retener;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_bt_headset;"S801; S803; 
+S812; S815; S901";S561, S801, S803, S812, S815, S901;Headset;Headset;0;Not locked;24.01.2006 11:23;Headset;Headset;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Auriculares;Auriculares;0;Not locked;09.02.2005 12:18;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_head_headset;S562;S562, T562;Headset;Headset;0;Not locked;24.01.2006 11:23;Headset;Headset;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Auriculares;Auriculares;0;Not locked;09.02.2005 12:18;Not locked;1_Zeile;;;;;;;;
+1;qtn_stp_ta_time_value;S213;S213;HH:MM;HH:MM;0;Not locked;24.01.2006 11:17;HH:MM;HH:MM;0;Not locked;22.09.2004 17:07;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;HH:MM;HH:MM;0;Not locked;09.02.2005 12:22;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed;
+1;qtn_stp_ta_menu_bt_help;;S002;Help;Help;0;Not locked;24.01.2006 11:18;Hilfe;Hilfe;0;Not locked;12.09.2005 11:54;;EMPTY !;X;Not locked;16.09.2005 14:13;;EMPTY !;X;Not locked;16.09.2005 12:03;;EMPTY !;X;Not locked;16.09.2005 12:03;;EMPTY !;X;Not locked;16.09.2005 12:03;Ayuda;Ayuda;0;Not locked;16.09.2005 12:03;Not locked;Auswahl;Approved;;STP;Hanebrink Thomas;;;Proposed;
+;qtn_stp_ta_templ_late;;;I am on my way, but will be a bit late.;MISSING LAYOUT !;X;Not locked;26.10.2004 16:40;Ich bin unter- wegs, werde mich aber etwas verspäten.;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;Llego tarde. Estaré ahí a las;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;Not locked;(none);Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_templ_call;;;I will call you later.;MISSING LAYOUT !;X;Not locked;26.10.2004 16:40;Ich rufe später an.;MISSING LAYOUT !;X;Not locked;28.05.2004 10:33;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;Te llamo más tarde.;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;Not locked;(none);Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_call_mute;;;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:34;Ignorieren;MISSING LAYOUT !;X;Not locked;28.05.2004 10:33;;MISSING LAYOUT !;X;;24.01.2006 10:53;;MISSING LAYOUT !;X;;24.01.2006 10:37;;MISSING LAYOUT !;X;;24.01.2006 10:44;;MISSING LAYOUT !;X;;24.01.2006 10:47;#MISSING;MISSING LAYOUT !;X;;24.01.2006 10:50;Not locked;VW_PQ35_one_row_choice_item;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_menu_mute;;;Silence;Silence;0;Not locked;10.05.2002 13:49;Ignorieren;Ignorieren;0;Not locked;13.05.2002 18:34;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Silenciar;Silenciar;0;Not locked;10.06.2002 14:41;Not locked;Auswahl;Approved;§Choice item: to stop the phone from continuing to ring;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;;S602;S602;Always;Always;0;;;Immer;Immer;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Siempre;Siempre;0;;;;Auswahl;;;;;;;
+;qtn_stp_ta_call_info;;;Info call;Info call;0;Not locked;26.10.2004 16:40;Inforuf;Inforuf;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Serv. de inform.;Serv. de inform.;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_info_call;;;Info call;Info call;0;Not locked;11.10.2002 16:14;Inforuf;Inforuf;0;Not locked;11.10.2002 16:14;;EMPTY !;X;Not locked;06.12.2002 12:29;;EMPTY !;X;Not locked;06.12.2002 12:32;;EMPTY !;X;Not locked;06.12.2002 12:35;;EMPTY !;X;Not locked;06.12.2002 13:17;Llamada de info;Llamada de info;0;Not locked;06.12.2002 13:20;Not locked;1_Zeile;Approved;2002-11-28: New text. Please translate§Header: shown when a service call is active. This is a service you can call to get information e.g. about restaurants in a certain city;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_menu_yes;S577;"S577; S611";Yes;Yes;0;Not locked;26.10.2004 16:40;Ja;Ja;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Sí;Sí;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_templ_yes;;;Yes;MISSING LAYOUT !;X;Not locked;26.10.2004 16:40;Ja.;MISSING LAYOUT !;X;Not locked;28.05.2004 10:33;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;Sí;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;Not locked;(none);Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_vcal_entry;;S99D;Calendar note;Calendar note;0;Not locked;24.01.2006 11:20;Kalendereintrag;Kalendereintrag;0;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;;EMPTY !;X;Not locked;16.03.2005 20:00;Nota agenda;Nota agenda;0;Not locked;16.03.2005 20:00;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_vcal_saved;;S995;Calendar note copied to mobile phone;"Calendar note
+copied to mobile
+phone";0;Not locked;24.01.2006 11:23;Kalendereintrag\nauf Mobiltelefon\nkopiert;"Kalendereintrag
+auf Mobiltelefon
+kopiert";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Entrada del calendario copiado en el tlf.;"Entrada del
+calendario
+copiado en el tlf.";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_vcal_received;;S991;Calendar note received;"Calendar note
+received";0;Not locked;24.01.2006 11:22;Kalendereintrag\nempfangen;"Kalendereintrag
+empfangen";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Entrada del calendario recib.;"Entrada del
+calendario recib.";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_vcal_deleted;;S993;Calendar note deleted;"Calendar note
+deleted";0;Not locked;24.01.2006 11:21;Kalendereintrag\ngelöscht;"Kalendereintrag
+gelöscht";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Entrada del calendario borrada;"Entrada del
+calendario
+borrada";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_query_delete_vcal;;S992;Delete calendar note?;"Delete calendar
+note?";0;Not locked;24.01.2006 11:18;Kalendereintrag\nlöschen?;"Kalendereintrag
+löschen?";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;¿Borrar entrada del calendario?;"¿Borrar entrada
+del calendario?";0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_no_user;S012;S012;No user active. Connect phone first.;"No user active.
+Connect phone
+first.";0;Not locked;24.01.2006 11:17;Kein Benutzer\naktiv.\nZuerst Telefon\nverbinden.;"Kein Benutzer
+aktiv.
+Zuerst Telefon
+verbinden.";0;Not locked;07.03.2005 18:34;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Ningún usuario activo. Conectar primero el teléfono;"Ningún usuario
+activo. Conectar
+primero el
+teléfono";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_no_bt_phone;S002;S002;No paired phone found;"No paired phone
+found";0;Not locked;24.01.2006 11:23;Kein gekoppeltes\nTel. gefunden;"Kein gekoppeltes
+Tel. gefunden";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;"No hay un tel.
+vinculado";"No hay un tel.
+vinculado";0;Not locked;13.04.2005 18:08;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_no_act_device;S566;S566;No device\nactive;"No device
+active";0;Not locked;24.01.2006 11:18;Kein Gerät\naktiv;"Kein Gerät
+aktiv";0;Not locked;10.08.2005 14:57;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Ningún\naparato activo;"Ningún
+aparato activo";0;Not locked;16.03.2005 20:05;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_no_phone;S501;S501;No compatible cell phone found;"No compatible
+cell phone found";0;Not locked;24.01.2006 11:23;Keine\nkompatiblen Mobiltelefone\ngefunden;"Keine
+kompatiblen
+Mobiltelefone
+gefunden";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;No hay teléfonos compatibles;"No hay teléfonos
+compatibles";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_no_accessory;S582;S582;No headset found;"No headset
+found";0;Not locked;24.01.2006 11:22;Kein Headset\ngefunden;"Kein Headset
+gefunden";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;No hay auriculares;"No hay
+auriculares";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_no_operator;;S625;No operator found;"No operator
+found";0;Not locked;24.01.2006 11:19;Kein\nBetreiber\ngefunden;"Kein
+Betreiber
+gefunden";0;Not locked;20.04.2005 15:15;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;No se ha econtrado operador;"No se ha
+econtrado
+operador";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_no_answer;;;No answer;No answer;0;Not locked;10.05.2002 13:49;Keine Antwort;Keine Antwort;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;No hay respuesta;"No hay
+respuesta";0;Not locked;10.06.2002 14:41;Not locked;4_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed;
+1;qtn_stp_ta_note_no_bt_conn_acc;S914;S914;No Bluetooth connection to\n%U;"No Bluetooth
+connection to
+%U";0;Not locked;24.01.2006 11:20;Keine Bluetooth-\nVerbindung zu\n%U;"Keine
+Bluetooth-
+Verbindung zu
+%U";0;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Sin conexión Bluetooth con\n%U;"Sin conexión
+Bluetooth con
+%U";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_no_bt_conn_rsap;"S913; S916";"S913; S916";No Bluetooth connection to phone;"No Bluetooth
+connection to
+phone";0;Not locked;24.01.2006 11:20;Keine Bluetooth-\nVerbindung zum\nMobiltelefon;"Keine
+Bluetooth-
+Verbindung zum
+Mobiltelefon";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Sin conexión Bluetooth con el teléfono móvil;"Sin conexión
+Bluetooth con el
+teléfono móvil";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_no_entries;S103;S103;No entries available;"No entries
+available";0;Not locked;24.01.2006 11:18;Keine Einträge\nvorhanden;"Keine Einträge
+vorhanden";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;No hay ninguna entrada;"No hay ninguna
+entrada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_no_paired_dev;S568;S568;No devices paired;"No devices
+paired";0;Not locked;24.01.2006 11:18;Keine\ngekoppelten\nGeräte;"Keine
+gekoppelten
+Geräte";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;13.04.2005 18:08;Ningún aparato vinculado;"Ningún aparato
+vinculado";0;Not locked;13.04.2005 18:08;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_no_sms;S402;S402;No messages available;"No messages
+available";0;Not locked;24.01.2006 11:18;Keine\nMitteilungen\nvorhanden;"Keine
+Mitteilungen
+vorhanden";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;No hay mensajes;"No hay
+mensajes";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_no_network;S802;"S805; S921; S971";No network;No network;0;Not locked;24.01.2006 11:22;Keine\nNetzverbindung;"Keine
+Netzverbindung";0;Not locked;24.01.2006 11:23;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;10.06.2002 14:40;Fuera de cobertura;"Fuera de
+cobertura";0;Not locked;09.02.2005 12:20;Not locked;3_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed;
+1;qtn_stp_ta_menu_no_nbr;S211;S211;unknown;unknown;0;Not locked;24.01.2006 11:19;unbekannt;unbekannt;0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Desconocido;Desconocido;0;Not locked;09.02.2005 12:19;Not locked;Icon_Auswahl;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed;
+1;qtn_stp_ta_note_no_nbr;S806;S806;No number;No number;0;Not locked;24.01.2006 11:18;Keine\nRufnummer;"Keine
+Rufnummer";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Sin número;Sin número;0;Not locked;09.02.2005 12:20;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_no_dialled_nbr;;;No last dialled number found;"No last dialled
+number found";0;Not locked;10.05.2002 13:49;Keine Rufnummer gespeichert;"Keine
+Rufnummer
+gespeichert";0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;No se ha encon- trado la última llamada enviada;"No se ha encon-
+trado la última
+llamada enviada";0;Not locked;20.12.2002 14:21;Not locked;4_Zeile;Approved;Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed;
+;qtn_stp_ta_note_no_divert_act;;SB05;Call divert\nnot active;"Call divert
+not active";0;Not locked;24.01.2006 11:22;Keine\nRufumleitung\naktiv;"Keine
+Rufumleitung
+aktiv";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Desviación de llamadas desactivada;"Desviación de
+llamadas
+desactivada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_mailbox_no;S951;S951;No voice mailbox number stored;"No voice
+mailbox number
+stored";0;Not locked;24.01.2006 11:19;Keine Sprach-\nmailboxnummer\ngespeichert;"Keine Sprach-
+mailboxnummer
+gespeichert";0;Not locked;11.10.2002 18:30;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Ningún núm. de buzón de voz memorizado;"Ningún núm. de
+buzón de voz
+memorizado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;2002-12-09: Layout corrected. More space available now. Please check translation.§Error note: you tried to call your voice mailbox but you haven't entered your voice mailbox number or it was lost.;STP;;;Created for Seti;Proposed;
+;qtn_stp_ta_note_pbook_empty;;;Phone book empty;"Phone book
+empty";0;Not locked;16.08.2002 14:05;Keine Telefon-\nbucheinträge gefunden;"Keine Telefon-
+bucheinträge
+gefunden";0;Not locked;30.07.2002 17:13;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Guía vacía;Guía vacía;0;Not locked;10.06.2002 14:41;Not locked;4_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed;???????????
+;qtn_stp_ta_note_no_cyphering;;S808;No cyphering active;"No cyphering
+active";0;Not locked;24.01.2006 11:22;Keine Verschlüsselung aktiv;"Keine
+Verschlüsselung
+aktiv";0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Ninguna codificación activa;"Ninguna
+codificación
+activa";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_note_no_templates;;S441;No template available;"No template
+available";0;Not locked;24.01.2006 11:20;Keine Vorlagen vorhanden;"Keine Vorlagen
+vorhanden";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;No hay plantillas disponibles;"No hay plantillas
+disponibles";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;S712;S712;No recordings available;"No recordings
+available";0;;;Keine\nAufnahmen\nvorhanden!;"Keine
+Aufnahmen
+vorhanden!";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;No hay grabaciones;"No hay
+grabaciones";0;;;;3_Zeile;;;;;;;
+;qtn_stp_ta_note_no_speed_dial;;S915;No speed dial stored;"No speed dial
+stored";0;Not locked;24.01.2006 11:18;Keine\nKurzwahl\ngespeichert;"Keine
+Kurzwahl
+gespeichert";0;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Ninguna marcación rápida memorizada;"Ninguna
+marcación
+rápida
+memorizada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC07;SC07;No compatible media players found;"No compatible
+media players
+found";0;;;Keinen\nkompatiblen\nMedia Player\ngefunden;"Keinen
+kompatiblen
+Media Player
+gefunden";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;No hay un reproductor multimedia compatible;"No hay un
+reproductor
+multimedia
+compatible";0;;;;4_Zeile;;;;;;;
+1;qtn_stp_ta_call_waiting;S905;S905;waiting;waiting;0;Not locked;24.01.2006 11:20;klopft an;klopft an;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;En espera;En espera;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_conference;"S812; S815; 
+S813; SC24";"S812; S813; S815; SC24";Conference;Conference;0;Not locked;24.01.2006 11:18;Konferenz;Konferenz;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Multiconferencia;Multiconferencia;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_conference_hold;S811;S811;Conference\non hold;"Conference
+on hold";0;Not locked;24.01.2006 11:19;Konferenz gehalten;"Konferenz
+gehalten";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Multiconferencia retenida;"Multiconferencia
+retenida";0;Not locked;09.02.2005 12:19;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_conf_not_poss;S814;S814;Conference\nnot possible;"Conference
+not possible";0;Not locked;24.01.2006 11:20;Konferenz\nnicht möglich;"Konferenz
+nicht möglich";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Imposible realizar multiconferencia;"Imposible
+realizar
+multiconferencia";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_sms_copy;;"S405; S705; S991";Copy;Copy;0;Not locked;24.01.2006 11:19;Kopieren;Kopieren;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Copia;Copia;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_copy_sms_failed;S930;;Phone book updated;"Phone book
+updated";0;Not locked;24.01.2006 11:19;Telefonbuch\nwurde\naktualisiert;"Telefonbuch
+wurde
+aktualisiert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Imposible copiar mensaje;"Imposible copiar
+mensaje";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;;S710;Unable to copy recording;"Unable to copy
+recording";0;;;Kopieren der\nAufnahme\nfehlgeschlagen;"Kopieren der
+Aufnahme
+fehlgeschlagen";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;3_Zeile;;;;;;;
+;;;S717;Unable to copy recordings;"Unable to copy
+recordings";0;;;Kopieren der\nAufnahmen\nfehlgeschlagen;"Kopieren der
+Aufnahmen
+fehlgeschlagen";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;3_Zeile;;;;;;;
+;qtn_stp_ta_note_vcal_not_saved;;S994;Unable to copy calendar note;"Unable to copy
+calendar note";0;Not locked;24.01.2006 11:21;Kopieren des\nKalendereintrags fehlgeschlagen;"Kopieren des
+Kalendereintrags
+ fehlgeschlagen";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;No se ha copiado la entrada del calendario;"No se ha
+copiado la
+entrada del
+calendario";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_copy_not_poss;;S414;Unable to copy, loading phone book;"Unable to copy,
+loading phone
+book";0;Not locked;24.01.2006 11:20;Kopieren\nnicht möglich,\nTelefonbuch\nwird geladen;"Kopieren
+nicht möglich,
+Telefonbuch
+wird geladen";0;Not locked;10.08.2005 14:57;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;No se puede copiar. Cargando la guía.;"No se puede
+copiar. Cargando
+la guía.";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_head_speed_dial;;S112;Speed dial;Speed dial;0;Not locked;24.01.2006 11:20;Kurzwahl;Kurzwahl;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Marc. rápida;Marc. rápida;0;Not locked;09.02.2005 12:21;Not locked;1_Zeile;;;;;;;
+;qtn_stp_ta_note_sp_dial_saved;;S113;Speed dial\nstored;"Speed dial
+stored";0;Not locked;24.01.2006 11:17;Kurzwahl\ngespeichert;"Kurzwahl
+gespeichert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;Marcación rápida memorizada;"Marcación rápida
+memorizada";0;Not locked;26.08.2005 15:29;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_err_load_phonebook;S927;S927;Unable to load phone book;"Unable to load
+phone book";0;Not locked;24.01.2006 11:19;Laden des Telefonbuchs fehlgeschlagen;"Laden des
+Telefonbuchs
+fehlgeschlagen";0;Not locked;09.02.2005 12:12;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Imposible cargar lista de contactos;"Imposible cargar
+lista de
+contactos";0;Not locked;09.02.2005 12:19;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_volume_up;;S643;Turn vol. up;Turn vol. up;0;Not locked;24.01.2006 11:21;Lauter;Lauter;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;Más alto;Más alto;0;Not locked;09.02.2005 12:22;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_silent;S901;S901;Silent;Silent;0;Not locked;24.01.2006 11:22;Lautlos;Lautlos;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Silencio;Silencio;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_setting_volume;;S641;Volume;Volume;0;Not locked;24.01.2006 11:23;Lautstärke;Lautstärke;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Volumen;Volumen;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_volume;;S643;Volume:;Volume:;0;Not locked;24.01.2006 11:22;Lautstärke:;Lautstärke:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Volumen;Volumen;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_sms_blank;;S443;Empty display;Empty display;0;Not locked;24.01.2006 11:19;Leere Anzeige;Leere Anzeige;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Pantalla vacía;Pantalla vacía;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_volume_down;;S643;Turn vol. down;Turn vol. down;0;Not locked;24.01.2006 11:23;Leiser;Leiser;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;09.02.2005 12:22;Más bajo;Más bajo;0;Not locked;09.02.2005 12:22;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_sms_read;;S405;Read;Read;0;Not locked;24.01.2006 11:19;Zeigen;Zeigen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Leer;Leer;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_stack_dialled;S201;S201;Recent calls;Recent calls;0;Not locked;24.01.2006 11:22;Letzte Anrufe;Letzte Anrufe;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;Últim. llamadas;Últim. llamadas;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_stack_clear;S201;S201;Delete lists;Delete lists;0;Not locked;24.01.2006 11:24;Listen löschen;Listen löschen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Borrar listas;Borrar listas;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_menu_delete;S571;S981, S991;Delete;Delete;0;Not locked;26.10.2004 16:40;Löschen;Löschen;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Borrar;Borrar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_sms_not_deleted;S428;S428;Unable to delete message;"Unable to delete
+message";0;Not locked;24.01.2006 11:19;Löschen der Mitteilung fehlgeschlagen;"Löschen der
+Mitteilung
+fehlgeschlagen";0;Not locked;31.01.2005 18:02;;EMPTY !;X;Not locked;09.02.2005 13:23;;EMPTY !;X;Not locked;09.02.2005 13:23;;EMPTY !;X;Not locked;09.02.2005 13:23;;EMPTY !;X;Not locked;09.02.2005 13:23;Imposible borrar mensaje;"Imposible borrar
+mensaje";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC04;SC04;Unable to delete. Phone is active.;"Unable to
+delete. Phone is
+active.";0;;;Löschen nicht\nmöglich, von\nBenutzer als\nTel. benutzt;"Löschen nicht
+möglich, von
+Benutzer als
+Tel. benutzt";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;"No es posible
+borrar, El telefono
+esta activo";"No es posible
+borrar, El
+telefono
+esta activo";0;;;;4_Zeile;;;;;;;
+1;qtn_stp_ta_query_del_device;S576;S576;Delete?;Delete?;0;Not locked;24.01.2006 11:18;löschen?;löschen?;0;Not locked;26.08.2005 15:29;;EMPTY !;X;Not locked;26.08.2005 15:29;;EMPTY !;X;Not locked;26.08.2005 15:29;;EMPTY !;X;Not locked;26.08.2005 15:29;;EMPTY !;X;Not locked;26.08.2005 15:29;¿Borrar?;¿Borrar?;0;Not locked;26.08.2005 15:29;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_delete_user;S513;S513;Delete?;Delete?;0;Not locked;24.01.2006 11:23;Löschen?;Löschen?;0;Not locked;17.03.2005 14:53;;EMPTY !;X;Not locked;17.03.2005 14:53;;EMPTY !;X;Not locked;17.03.2005 14:53;;EMPTY !;X;Not locked;17.03.2005 14:53;;EMPTY !;X;Not locked;17.03.2005 14:53;¿Borrar %U?;¿Borrar %U?;0;Not locked;17.03.2005 14:53;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_swap;S902;S902;Swap;Swap;0;Not locked;24.01.2006 11:20;Makeln;Makeln;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Cambiar a llam. retenida;"Cambiar a llam.
+retenida";54;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_menu_swap;;;Swap;Swap;0;Not locked;30.07.2002 17:13;Makeln;Makeln;0;Not locked;11.10.2002 16:10;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;20.12.2002 14:15;;EMPTY !;X;Not locked;10.06.2002 14:40;A llam. retenida;A llam. retenida;0;Not locked;10.06.2002 14:41;Not locked;Auswahl;Approved;§Choice item: to switch to the call on hold;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_net_manual;;S622;Manual;Manual;0;Not locked;24.01.2006 11:24;Manuell;Manuell;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Manual;Manual;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_menu_net_manual;;S921;Manual search;Manual search;0;Not locked;24.01.2006 11:18;Manuelle Suche;Manuelle Suche;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Búsqueda man.;Búsqueda man.;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_max_chars;;S952;Too many characters;"Too many
+characters";0;Not locked;24.01.2006 11:21;Maximale Zeichenanzahl erreicht;"Maximale
+Zeichenanzahl
+erreicht";0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Límite máximo de caracteres alcanzado;"Límite máximo
+de caracteres
+alcanzado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+1;;"S002; S502";S002, S502;Media player;Media player;0;;;Media Player;Media Player;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Repr multimedia;Repr multimedia;0;;;;Auswahl;;;;;;;
+1;;SC03;SC03;Media player;Media player;0;;;Media Player;Media Player;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Repr. multimedia;Repr. multimedia;0;;;;1_Zeile;;;;;;;
+1;qtn_stp_ta_main_menu;S101;S101;MENU;MENU;0;Not locked;11.10.2002 16:14;MENÜ;MENÜ;0;Not locked;11.10.2002 16:14;;EMPTY !;X;Not locked;06.12.2002 12:29;;EMPTY !;X;Not locked;06.12.2002 12:32;;EMPTY !;X;Not locked;06.12.2002 12:35;;EMPTY !;X;Not locked;06.12.2002 13:17;MENÚ;MENÚ;0;Not locked;06.12.2002 13:20;Not locked;1_Zeile;Approved;2002-11-28: New text. Please translate§Main menu: to go to the car's phone feature;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_call_micro_off;"S803; S812; 
+S815; SC24";"S803; S812; S815; SC24";Microphone off;Microphone off;0;Not locked;08.11.2005 16:32;Mikrofon aus;Mikrofon aus;0;Not locked;08.11.2005 16:32;;EMPTY !;X;Not locked;08.11.2005 16:32;;EMPTY !;X;Not locked;08.11.2005 16:32;;EMPTY !;X;Not locked;08.11.2005 16:32;;EMPTY !;X;Not locked;08.11.2005 16:32;Micrófono desc.;Micrófono desc.;0;Not locked;08.11.2005 16:32;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_call_micro_on;"S803; S812; 
+S815; SC24";"S803; S812; S815; SC24";Microphone on;Microphone on;0;Not locked;08.11.2005 16:32;Mikrofon ein;Mikrofon ein;0;Not locked;08.11.2005 16:32;;EMPTY !;X;Not locked;08.11.2005 16:32;;EMPTY !;X;Not locked;08.11.2005 16:32;;EMPTY !;X;Not locked;08.11.2005 16:32;;EMPTY !;X;Not locked;08.11.2005 16:32;Micrófono con.;Micrófono con.;0;Not locked;08.11.2005 16:32;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_sms;S405;S405;Message;Message;0;Not locked;24.01.2006 11:22;Mitteilung;Mitteilung;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 13:23;Mensaje;Mensaje;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_sim_copied;;S415;Message copied to phone\n(SIM card);"Message copied
+to phone
+(SIM card)";0;;;Mitteilung\nauf Mobiltelefon\nkopiert\n(SIM-Karte);"Mitteilung
+auf Mobiltelefon
+kopiert
+(SIM-Karte)";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Mensaje copiado en el teléfono (tarjeta SIM);"Mensaje copiado
+en el teléfono
+(tarjeta SIM)";0;;;;4_Zeile;;;;;;;
+;qtn_stp_ta_note_mem_copied;;S416;Message copied to phone\n(phone memory);"Message copied
+to phone
+(phone
+memory)";0;;;Mitteilung\nauf Mobiltelefon\nkopiert\n(Tel.-Speicher);"Mitteilung
+auf Mobiltelefon
+kopiert
+(Tel.-Speicher)";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Mensaje copiado en el teléfono (memoria del teléfono);"Mensaje copiado
+en el teléfono
+(memoria del
+teléfono)";0;;;;4_Zeile;;;;;;;
+1;qtn_stp_ta_note_sms_deleted;S425;S425;Message\ndeleted;"Message
+deleted";0;Not locked;24.01.2006 11:20;Mitteilung gelöscht;"Mitteilung
+gelöscht";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Mensaje\nborrado;"Mensaje
+borrado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_sms_sent;;S433;Message\nsent;"Message
+sent";0;Not locked;24.01.2006 11:23;Mitteilung gesendet;"Mitteilung
+gesendet";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Mensaje no enviado;"Mensaje no
+enviado";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_sms_saved;;S423;Message\nsaved;"Message
+saved";0;Not locked;24.01.2006 11:19;Mitteilung gespeichert;"Mitteilung
+gespeichert";0;Not locked;26.10.2004 16:40;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Mensaje memorizado;"Mensaje
+memorizado";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_sms_no_read;S409;S409;Message cannot be shown;"Message cannot
+be shown";0;Not locked;24.01.2006 11:19;Mitteilung kann\nnicht angezeigt\nwerden;"Mitteilung kann
+nicht angezeigt
+werden";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;No se puede mostrar el mensaje;"No se puede
+mostrar el
+mensaje";0;Not locked;09.02.2005 12:21;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_delete_sms;S413;S413;Delete message?;Delete message?;0;Not locked;24.01.2006 11:17;Mitteilung\nlöschen?;"Mitteilung
+löschen?";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;¿Borrar mensaje?;"¿Borrar
+mensaje?";0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_sms_not_sent;;S434;Message not sent;"Message not
+sent";0;Not locked;24.01.2006 11:18;Mitteilung nicht gesendet;"Mitteilung nicht
+gesendet";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Mensaje no enviado;"Mensaje no
+enviado";0;Not locked;09.02.2005 13:23;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_sms_from;S405;S405;Message from;Message from;0;Not locked;24.01.2006 11:21;Mitteilung von;Mitteilung von;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Mensaje de;Mensaje de;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_sending_sms;;S432;Sending message ...;"Sending
+message ...";0;Not locked;24.01.2006 11:23;Mitteilung wird gesendet;"Mitteilung wird
+gesendet";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;24.01.2006 11:19;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;24.01.2006 11:21;;EMPTY !;X;Not locked;09.02.2005 12:20;Enviando mensaje...;"Enviando
+mensaje...";0;Not locked;24.01.2006 11:19;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC14;SC14;Reading out message...;"Reading out
+message...";0;;;Mitteilung\nwird\nvorgelesen;"Mitteilung
+wird
+vorgelesen";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Se reproduce el mensaje;"Se reproduce el
+mensaje";0;;;;3_Zeile;;;;;;;
+;qtn_stp_ta_note_sms_copied;;S412;Message copied to phone;"Message copied
+to phone";0;Not locked;24.01.2006 11:23;Mitteilung\nauf Mobiltelefon\nkopiert;"Mitteilung
+auf Mobiltelefon
+kopiert";0;Not locked;04.07.2005 13:36;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Mensaje copiado en el teléfono;"Mensaje copiado
+en el teléfono";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_main_messages;S101;S101;Messages;Messages;0;Not locked;24.01.2006 11:18;Mitteilungen;Mitteilungen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;Mensajes;Mensajes;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_head_messages;S404;S404;Messages;Messages;0;Not locked;24.01.2006 11:18;Mitteilungen;Mitteilungen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;Mensajes;Mensajes;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;;;;;;;
+;qtn_stp_ta_sms_memory_full;;S926;Message memory full;"Message
+memory full";0;Not locked;24.01.2006 11:22;Mitteilungs-\nspeicher voll;"Mitteilungs-
+speicher voll";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Memoria de mensajes llena;"Memoria de
+mensajes llena";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_pb_mobile;;S662;Mobile phone;Mobile phone;0;Not locked;24.01.2006 11:23;Mobiltelefon;Mobiltelefon;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Teléfono móvil;Teléfono móvil;0;Not locked;09.02.2005 13:23;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_no_rsap;S599;S599;Cell phone\nis not\ncompatible;"Cell phone
+is not
+compatible";0;;;Mobiltelefon\nist nicht\nkompatibel;"Mobiltelefon
+ist nicht
+kompatibel";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Teléfono móvil no compatible;"Teléfono móvil
+no compatible";0;;;;3_Zeile;;;;;;;
+1;qtn_stp_ta_note_search_phones;S520;S520;Looking for cell phones.\nPlease wait!;"Looking for cell
+phones.
+Please wait!";0;Not locked;24.01.2006 11:18;Mobiltelefone\nwerden gesucht.\nBitte warten!;"Mobiltelefone
+werden gesucht.
+Bitte warten!";0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:20;"Buscando disp.
+bluetooth.
+Espere...";"Buscando disp.
+bluetooth.
+Espere...";0;Not locked;16.03.2005 20:05;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_bt_modem;;S561;Modem;Modem;0;Not locked;24.01.2006 11:23;Modem;Modem;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Módem;Módem;0;Not locked;09.02.2005 12:18;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_head_modem;;S591;Modem;Modem;0;Not locked;24.01.2006 11:23;Modem;Modem;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Módem;Módem;0;Not locked;09.02.2005 12:18;Not locked;1_Zeile;;;;;;;
+1;qtn_stp_ta_pb_sort_lastname;S669;S669;Surname;Surname;0;;;Nachname;Nachname;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Apellidos;Apellidos;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_note_name_exists;S532;S532;Name\nin use;"Name
+in use";0;Not locked;24.01.2006 11:21;Name bereits\nvergeben;"Name bereits
+vergeben";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Nombre ya asignado;"Nombre ya
+asignado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_name_stored;S533;S533;Name saved;Name saved;0;Not locked;24.01.2006 11:20;Name\ngespeichert;"Name
+gespeichert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Nombre memorizado;"Nombre
+memorizado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;;;;Name:;MISSING LAYOUT !;X;;;Name:;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;Nombre;MISSING LAYOUT !;X;;;;;;;;;;;;
+1;qtn_stp_ta_menu_no;S577;"S577; S611";No;No;0;Not locked;24.11.2004 15:38;Nein;Nein;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;No;No;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_templ_no;;;No;MISSING LAYOUT !;X;Not locked;26.10.2004 16:40;Nein.;MISSING LAYOUT !;X;Not locked;28.05.2004 10:33;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;No;MISSING LAYOUT !;X;Not locked;09.02.2005 12:22;Not locked;(none);Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_note_network_busy;S802;S802;Network\nbusy;"Network
+busy";0;Not locked;24.01.2006 11:23;Netz derzeit belegt;"Netz derzeit
+belegt";0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;10.06.2002 14:40;Red ocupada;Red ocupada;0;Not locked;10.06.2002 14:41;Not locked;3_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed;
+;qtn_stp_ta_note_prov_changed;;S922;Network change to:;"Network change
+to:";0;Not locked;24.01.2006 11:18;Netz gewechselt zu:;"Netz gewechselt
+zu:";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Red pasa a:;Red pasa a:;0;Not locked;09.02.2005 12:20;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_provider_sel;;S912;Network:\n%U\nselected;"Network:
+%U
+selected";0;Not locked;24.01.2006 11:17;Netz:\n%U\ngewählt;"Netz:
+%U
+gewählt";0;Not locked;20.04.2005 15:15;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Red\n%U\nseleccionada;"Red
+%U
+seleccionada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_net_dependent;;S611;Network depnd.;Network depnd.;0;Not locked;24.01.2006 11:23;Netzabhängig;Netzabhängig;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;Dep. de la red;Dep. de la red;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_wait_network;;S627;Wait for network;"Wait for
+network";0;Not locked;24.01.2006 11:23;Netzantwort\nabwarten;"Netzantwort
+abwarten";0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;24.01.2006 11:19;;EMPTY !;X;Not locked;09.02.2005 12:21;Solicitando acceso...;"Solicitando
+acceso...";0;Not locked;24.01.2006 11:22;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed;
+;qtn_stp_head_provider;;S626;Provider;Provider;0;;;Netzbetreiber;Netzbetreiber;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Operador;Operador;0;;;;1_Zeile;;;;;;;;
+;;;S621;Network mode;Network mode;0;;;Netzmodus;Netzmodus;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;Auswahl;;;;;;;;
+;;;SC15;Network mode:;Network mode:;0;;;Netzmodus:;Netzmodus:;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;1_Zeile;;;;;;;;
+1;qtn_stp_ta_note_conn_err;S802;S802;Network\nfault;"Network
+fault";0;Not locked;24.01.2006 11:18;Netzwerk-\nfehler;"Netzwerk-
+fehler";0;Not locked;04.07.2005 13:36;;EMPTY !;X;Not locked;01.09.2005 13:39;;EMPTY !;X;Not locked;01.09.2005 13:39;;EMPTY !;X;Not locked;01.09.2005 13:38;;EMPTY !;X;Not locked;01.09.2005 13:38;Error\nen la red;"Error
+en la red";0;Not locked;01.09.2005 13:39;Not locked;3_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed;
+;qtn_stp_ta_note_sms_rcvd;;;New message received;"New message
+received";0;Not locked;10.05.2002 13:49;Neue Kurzmitteilung empfangen;"Neue
+Kurzmitteilung
+empfangen";0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Mensaje nuevo recibido;"Mensaje nuevo
+recibido";0;Not locked;10.06.2002 14:41;Not locked;4_Zeile;Approved;§Notification: pops up when you received a text message.;STP;Voellinger Stefanie;;Created for Seti;Proposed;????????????
+1;qtn_stp_ta_note_new_sms;S903;S903;New\nmessage;"New
+message";0;Not locked;24.01.2006 11:21;Neue\nMitteilung;"Neue
+Mitteilung";0;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Nuevo mensaje;Nuevo mensaje;0;Not locked;09.02.2005 12:20;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_new_sim;;S006;New\nSIM card\nrecognised;"New
+SIM card
+recognised";0;Not locked;24.01.2006 11:23;Neue\nSIM-Karte\nerkannt;"Neue
+SIM-Karte
+erkannt";0;Not locked;04.07.2005 13:36;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Se ha detectado una tarjeta SIM nueva;"Se ha detectado
+una tarjeta SIM
+nueva";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_menu_new_user;S502;S502;New user;New user;0;Not locked;24.01.2006 11:21;Neuer Benutzer;Neuer Benutzer;0;Not locked;25.01.2005 17:37;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Añadir usuario;Añadir usuario;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC17;SC17;Found new\ncell phone;"Found new
+cell phone";0;;;Neues\nMobiltelefon\nerkannt;"Neues
+Mobiltelefon
+erkannt";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;"Se ha
+encontrado un
+nuevo disp. 
+bluetooth
+";"Se ha
+encontrado un
+nuevo disp. 
+bluetooth
+";41;;;;3_Zeile;;;;;;;
+1;;SC22;SC22;New phone book available;"New phone book
+available";0;;;Neues\nTelefonbuch\nverfügbar;"Neues
+Telefonbuch
+verfügbar";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;"Nueva lista
+de contactos";"Nueva lista
+de contactos";0;;;;3_Zeile;;;;;;;
+1;qtn_stp_ta_supp_not_possible;SB35;SB35;Not possible;Not possible;0;Not locked;24.01.2006 11:18;Nicht möglich;Nicht möglich;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Imposible;Imposible;0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_emergency_call;;"S801; S802; S803; S811; S812; S813";Emergency call;Emergency call;0;Not locked;24.01.2006 11:22;Notruf;Notruf;0;Not locked;06.09.2004 16:22;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Llam. de emerg.;Llam. de emerg.;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_query_sos;;S016;Start emergency call?;"Start emergency
+call?";0;;;Notruf\nstarten?;"Notruf
+starten?";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;¿Realizar llam. de emergencia?;"¿Realizar llam.
+de emergencia?";0;;;;2_Zeile;;;;;;;
+;qtn_stp_ta_mailbox_edit_nbr;;S303;Change no.;Change no.;0;Not locked;24.01.2006 11:21;Nr. ändern;Nr. ändern;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Modificar Núm.;Modificar Núm.;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;S105;S105;number;number;0;;;Nummer;Nummer;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Número;Número;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_head_dial_nbr;S305;S305;Dial number;Dial number;0;;;Nummernwahl;Nummernwahl;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Marcación;Marcación;0;;;;1_Zeile;;;;;;;
+1;qtn_stp_ta_main_dial;"S101; S811";"S101; S811";Dial number;Dial number;0;Not locked;24.01.2006 11:19;Nummernwahl;Nummernwahl;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;12.01.2005 11:29;Marcación;Marcación;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;S602;S602;Calls only;Calls only;0;;;Nur Telefonate;Nur Telefonate;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Sólo llamadas;Sólo llamadas;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_menu_ok;"S007; S115; 
+S202; S413; S553; S555; S513; S572; S576; S579; S580; S707; S714; S933";"S016; S007; S011; S115; S202; S413; S553; S555; S513; S572; S576; S579; S667; S707; S714; S933; S51B; S982; S992";OK;OK;0;Not locked;26.10.2004 16:40;OK;OK;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;OK;OK;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_menu_options;;;Options;Options;0;Not locked;26.10.2004 16:40;Optionen;Optionen;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Opciones;Opciones;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_sms_quote;;S443;Original text;Original text;0;Not locked;24.01.2006 11:18;Originaltext;Originaltext;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Texto original;Texto original;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_call_service;;;Service call;Service call;0;Not locked;26.10.2004 16:40;Pannenruf;Pannenruf;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Llamada emerg.;Llamada emerg.;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_service_call;;;Service call;Service call;0;Not locked;11.10.2002 16:14;Pannenruf;Pannenruf;0;Not locked;11.10.2002 16:14;;EMPTY !;X;Not locked;06.12.2002 12:29;;EMPTY !;X;Not locked;06.12.2002 12:32;;EMPTY !;X;Not locked;06.12.2002 12:35;;EMPTY !;X;Not locked;06.12.2002 13:17;Llamada servicio;Llamada servicio;0;Not locked;06.12.2002 13:20;Not locked;1_Zeile;Approved;2002-11-28: New text. Please translate.§Header: shown when a service call is active. This is a service you can call when your car broke down;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_head_rsap_passkey;;S51C;Enter password in phone:;"Enter password
+in phone:";0;Not locked;24.01.2006 11:20;Passwort im Te-\nlefon eingeben:;"Passwort im Te-
+lefon eingeben:";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Introducir contraseña:;"Introducir
+contraseña:";0;Not locked;09.02.2005 12:19;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_passwd_invalid;;SB21;Password\ninvalid;"Password
+invalid";0;Not locked;24.01.2006 11:22;Passwort\nungültig;"Passwort
+ungültig";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Contraseña incorrecta;"Contraseña
+incorrecta";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_passkey;S51D;"S51D; S51B";Password:;Password:;0;Not locked;24.01.2006 11:19;Passwort:;Passwort:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Contraseña:;Contraseña:;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_pin_not_active;;SB41;PIN request deactivated;"PIN request
+deactivated";0;Not locked;24.01.2006 11:23;PIN-Abfrage\ndeaktiviert;"PIN-Abfrage
+deaktiviert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Solicitud del código PIN desactivada;"Solicitud del
+código PIN
+desactivada";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_enter_pin;;;Enter PIN code;Enter PIN code;0;Not locked;10.05.2002 13:49;PIN-Code eingeben;"PIN-Code
+eingeben";0;Not locked;13.05.2002 18:34;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Introduzca el código PIN;"Introduzca el
+código PIN";0;Not locked;10.06.2002 14:41;Not locked;4_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;;;S004a;PIN code\ninvalid for\nSIM mode %U;"PIN code
+invalid for
+SIM mode %U";0;;;PIN-Code für\nSIM Modus %U\nungültig;"PIN-Code für
+SIM Modus %U
+ungültig";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;3_Zeile;;;;;;;
+;qtn_stp_ta_note_pin_changed;;SB53;PIN code changed;"PIN code
+changed";0;Not locked;24.01.2006 11:22;PIN-Code\ngeändert;"PIN-Code
+geändert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;PIN modificado;PIN modificado;0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_pin_saved;;S013;PIN code\nsaved;"PIN code
+saved";0;Not locked;24.01.2006 11:19;PIN-Code\ngespeichert;"PIN-Code
+gespeichert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;PIN memorizado;PIN memorizado;0;Not locked;09.02.2005 13:23;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_wrong_pin;;S004;PIN code\ninvalid;"PIN code
+invalid";0;Not locked;24.01.2006 11:18;PIN-Code\nungültig;"PIN-Code
+ungültig";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;PIN\nincorrecto;"PIN
+incorrecto";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_pin_too_long;;S015;PIN too\nlong;"PIN too
+long";0;Not locked;24.01.2006 11:23;PIN-Code\nzu lang;"PIN-Code
+zu lang";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;PIN demasiado largo;"PIN demasiado
+largo";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_query_pin;;"S017; S011; S012";PIN code:;PIN code:;0;Not locked;24.01.2006 11:18;PIN-Code:;PIN-Code:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;PIN:;PIN:;0;Not locked;09.02.2005 12:21;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_pin_too_short;;S014;PIN too\nshort;"PIN too
+short";0;Not locked;24.01.2006 11:23;PIN-Code\nzu kurz;"PIN-Code
+zu kurz";0;Not locked;04.07.2005 13:36;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;PIN demasiado corto;"PIN demasiado
+corto";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_pin_codes_diff;;SB52;PIN codes do\nnot match;"PIN codes do
+not match";0;Not locked;24.01.2006 11:23;PIN-Codes\nstimmen nicht\nüberein;"PIN-Codes
+stimmen nicht
+überein";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Los códigos PIN no coinciden;"Los códigos PIN
+no coinciden";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC13;SC13;Searching for players. Please wait!;"Searching for
+players. Please
+wait!";0;;;Player werden\ngesucht.\nBitte warten!;"Player werden
+gesucht.
+Bitte warten!";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;"Buscando
+reproductores.
+Espere...";"Buscando
+reproductores.
+Espere...";0;;;;3_Zeile;;;;;;;
+1;;SC12;SC12;Connecting player...;"Connecting
+player...";0;;;Player wird\nverbunden.;"Player wird
+verbunden.";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;"Conectando con
+reproductor.";"Conectando con
+reproductor.";0;;;;3_Zeile;;;;;;;
+1;;"S801; S803";S801, SC20, S803;private call;private call;0;;;Privatgespräch;Privatgespräch;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Llamda. privada;Llamda. privada;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_head_private_call;;S623;Private call;private call;0;;;Privatgespräch;Privatgespräch;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Llamada privada;Llamada privada;0;;;;1_Zeile;;;;;;;
+;qtn_stp_ta_sw_version;;SB34;BTM - %0U\nDSP - %1U\nHC - %2U;"BTM - %0U
+DSP - %1U
+HC - %2U";0;Not locked;24.01.2006 11:23;BTM - %0U\nDSP - %1U\nHC - %2U;"BTM - %0U
+DSP - %1U
+HC - %2U";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;BTM - %0U\nDSP - %1U\nHC - %2U;"BTM - %0U
+DSP - %1U
+HC - %2U";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_puk_invalid;;SB64;PUK code\ninvalid;"PUK code
+invalid";0;Not locked;24.01.2006 11:20;PUK-Code\nungültig;"PUK-Code
+ungültig";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;PUK incorrecto;PUK incorrecto;0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_sms_call;S405;S405;Callback;Callback;0;Not locked;24.01.2006 11:24;Rückruf;Rückruf;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Llamar;Llamar;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_call_setup;"S801; S945";"S801; S945";Calling;Calling;0;Not locked;24.01.2006 11:23;Rufaufbau;Rufaufbau;0;Not locked;05.02.2003 10:08;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;05.02.2003 10:08;Llamando;Llamando;0;Not locked;05.02.2003 10:08;Not locked;1_Zeile;Approved;§Header: shown when a call is being established. In the following line the name of the person you are calling is shown or the number you are calling, or the next row remains empty;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_note_invalid_number;S806;"SB06; S806";Invalid\nphone number;"Invalid
+phone number";0;Not locked;24.01.2006 11:20;Rufnummer\nungültig;"Rufnummer
+ungültig";0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Número de teléfono inválido;"Número de
+teléfono inválido";0;Not locked;09.02.2005 12:20;Not locked;3_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;qtn_stp_ta_head_number;S929;"S302; S943, S929";Number:;Number:;0;Not locked;24.01.2006 11:21;Rufnummer:;Rufnummer:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Número;Número;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_setting_tone;S6t41;S641;Ring tone;Ring tone;0;Not locked;24.01.2006 11:23;Rufton;Rufton;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Señal de llam.;Señal de llam.;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_call_diverts1;;SB07;Call divert to:;Call divert to:;0;Not locked;24.01.2006 11:17;Rufuml. zu:\n%U\nVerzögerung:\n%Usek.;"Rufuml. zu:
+%U
+Verzögerung:
+%Usek.";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Desviación a:;Desviación a:;0;Not locked;09.02.2005 12:19;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_divert_active;;SB04;Call divert\nactive;"Call divert
+active";0;Not locked;24.01.2006 11:20;Rufumleitung\naktiviert;"Rufumleitung
+aktiviert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Desviación de llamadas activa;"Desviación de
+llamadas activa";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_divert_inactive;;SB11;Call divert deactivated;"Call divert
+deactivated";0;Not locked;24.01.2006 11:22;Rufumleitung\ndeaktiviert;"Rufumleitung
+deaktiviert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:20;Desviación de llamadas desactivada;"Desviación de
+llamadas
+desactivada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_diverts;;SB06;Call divert:;Call divert:;0;Not locked;24.01.2006 11:21;Rufumleitung:;Rufumleitung:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Desv. de llam.:;Desv. de llam.:;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_diverts_inact;;SB12;Call diverts deactivated;"Call diverts
+deactivated";0;Not locked;24.01.2006 11:21;Rufumleitungen deaktiviert;"Rufumleitungen
+deaktiviert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:20;Desviación de llamadas desactivada;"Desviación de
+llamadas
+desactivada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_sms_write;;S401;Write;Write;0;Not locked;24.01.2006 11:21;Schreiben;Schreiben;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Escribir;Escribir;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_sms_concatenated;S406;S406;Page %0U of %1U\u0020;"Page %0U of
+%1U\u0020";0;Not locked;24.01.2006 11:19;Seite %0U von %1U\u0020;"Seite %0U von
+%1U\u0020";0;Not locked;24.01.2006 11:21;;EMPTY !;X;Not locked;24.01.2006 11:20;;EMPTY !;X;Not locked;24.01.2006 11:17;;EMPTY !;X;Not locked;24.01.2006 11:22;;EMPTY !;X;Not locked;24.01.2006 11:19;Pág. %0U de %1U\u0020;"Pág. %0U de
+%1U\u0020";0;Not locked;24.01.2006 11:23;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_sms_send;;;Send;MISSING LAYOUT !;X;Not locked;26.10.2004 16:40;Senden;MISSING LAYOUT !;X;Not locked;28.05.2004 10:33;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;Enviar;MISSING LAYOUT !;X;Not locked;09.02.2005 12:21;Not locked;VW_PQ35_one_row_choice_item;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_send_to;;S431;Send to:;Send to:;0;Not locked;24.01.2006 11:19;Senden an:;Senden an:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Enviar a:;Enviar a:;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_sms_time;S405;S405;Send time;Send time;0;Not locked;24.01.2006 11:19;Sendezeit;Sendezeit;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Hora de envío;Hora de envío;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_serial_nbr;;SB33;Serial number:;Serial number:;0;Not locked;24.01.2006 11:20;Seriennummer:;Seriennummer:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Número de serie;Número de serie;0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC25;SC25;Service not supported!;"Service not
+supported!";0;;;Service wird\nnicht unterstützt!;"Service wird
+nicht unterstützt!";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Servicio no disponible;"Servicio no
+disponible";0;;;;2_Zeile;;;;;;;
+1;qtn_stp_ta_bt_visibility;S502;S502;Visibility;Visibility;0;Not locked;24.01.2006 11:19;Sichtbarkeit;Sichtbarkeit;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Visibilidad;Visibilidad;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_visibility;S553;S553;Switch on visibility?;"Switch on
+visibility?";0;Not locked;24.01.2006 11:21;Sichtbarkeit\neinschalten?;"Sichtbarkeit
+einschalten?";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;¿Activar visibilidad?;"¿Activar
+visibilidad?";0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_setting_signals;S601;"S601; S641";Signal settings;Signal settings;0;Not locked;24.01.2006 11:17;Signaleinstell.;Signaleinstell.;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Ajustar opciones de timbre.;"Ajustar
+opciones de
+timbre.";73;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_pb_sim_mobile;;S662;SIM & phone;SIM & phone;0;Not locked;24.01.2006 11:22;SIM & Mobiltel.;SIM & Mobiltel.;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;SIM y teléfono;SIM y teléfono;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;;S621;SIM mode;SIM mode;0;;;SIM Modus;SIM Modus;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;Auswahl;;;;;;;
+;;;S623, S634;SIM mode 1;SIM mode 1;0;;;SIM Modus 1;SIM Modus 1;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_head_setting_signals;S641;S634, S630, S633;Signal settings;Signal settings;0;;;Signaleinstell.;Signaleinstell.;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Ajustar opciones de timbre.;"Ajustar opciones
+de timbre.";0;;;;2_Zeile;;;;;;;
+;;;S633;already connected;"already
+connected";0;;;ist bereits aktiv;ist bereits aktiv;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;2_Zeile;;;;;;;
+;;;S628;Activating\nSIM mode %U;"Activating
+SIM mode %U";0;;;SIM Modus %U\nwird aktiviert;"SIM Modus %U
+wird aktiviert";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;2_Zeile;;;;;;;
+;;;S623, S634;SIM mode 2;SIM mode 2;0;;;SIM Modus 2;SIM Modus 2;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;Auswahl;;;;;;;
+;;;S634, S630;SIM mode 2;SIM mode 2;0;;;SIM Modus 2;SIM Modus 2;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;1_Zeile;;;;;;;
+;;;S590;Change SIM mode;"Change SIM
+mode";0;;;SIM Modus\nWechsel;"SIM Modus
+Wechsel";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;2_Zeile;;;;;;;
+;qtn_stp_ta_pb_sim;;S662;SIM card;SIM card;0;Not locked;24.01.2006 11:22;SIM-Karte;SIM-Karte;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Tarjeta SIM;Tarjeta SIM;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_sim_rejected;;SB63;SIM card rejected;"SIM card
+rejected";0;Not locked;24.01.2006 11:22;SIM-Karte\nabgewiesen;"SIM-Karte
+abgewiesen";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Tarjeta SIM rechazada;"Tarjeta SIM
+rechazada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_insert_sim;;;Insert SIM card;Insert SIM card;0;Not locked;10.05.2002 13:49;SIM-Karte einsetzen;"SIM-Karte
+einsetzen";0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Inserte la tarjeta SIM;"Inserte la tarjeta
+SIM";0;Not locked;10.06.2002 14:41;Not locked;4_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_note_sim_blocked;;S003;SIM card\nblocked;"SIM card
+blocked";0;Not locked;24.01.2006 11:20;SIM-Karte\ngesperrt;"SIM-Karte
+gesperrt";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Tarjeta SIM bloqueada;"Tarjeta SIM
+bloqueada";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_sim_error;;S003;SIM card\nerror;"SIM card
+error";0;Not locked;24.01.2006 11:20;SIM-Kartenfehler;"SIM-
+Kartenfehler";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Error en la tarjeta SIM;"Error en la
+tarjeta SIM";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;;S669;S669;List;List;0;;;Sortierung:;Sortierung:;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Lista;Lista;0;;;;2_Zeile;;;;;;;
+1;;S661;S661;List;List;0;;;Sortierung;Sortierung;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Lista;Lista;0;;;;Auswahl;;;;;;;
+;;;S718;Memory full! Not all recordings were copied.;"Memory full! Not
+all recordings
+were copied.";0;;;Speicher voll!\nNicht alle\nAufnahmen\nkopiert.;"Speicher voll!
+Nicht alle
+Aufnahmen
+kopiert.";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Memoria llena!########;"Memoria
+llena!#######
+#";0;;;;4_Zeile;;;;;;;
+;qtn_stp_ta_note_sms_no_memory;;S424;Memory full. Message not saved;"Memory full.
+Message not
+saved";0;Not locked;24.01.2006 11:23;Speicher voll. Mitteilung nicht gespeichert;"Speicher voll.
+Mitteilung nicht
+gespeichert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;Memoria llena. Mensaje no memorizado;"Memoria llena.
+Mensaje no
+memorizado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_tag_no_memory;S116;S116;Memory full. Unable to\nrecord;"Memory full.
+Unable to
+record";0;Not locked;24.01.2006 11:23;Speicher voll.\nKeine Aufnahme\nmöglich;"Speicher voll.
+Keine Aufnahme
+möglich";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;"Memoria llena
+No se puede
+grabar";"Memoria llena
+No se puede
+grabar";0;Not locked;26.08.2005 15:29;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_menu_save;S575;"S011; S531; S575; S580; S012; S304; S544; S551; S635; S631; S651; S981";Save;Save;0;Not locked;24.11.2004 15:38;Speichern;Speichern;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Guardar;Guardar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_vcard_not_saved;;S984;Unable to save business card;"Unable to save
+business card";0;Not locked;24.01.2006 11:19;Speichern der\nVisitenkarte\nfehlgeschlagen;"Speichern der
+Visitenkarte
+fehlgeschlagen";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;No se ha memorizado la tarjeta de visita;"No se ha
+memorizado la
+tarjeta de visita";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_pb_memory;;S661;Select memory;Select memory;0;Not locked;24.01.2006 11:17;Speicherwahl;Speicherwahl;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Selec. memoria;Selec. memoria;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_location;;S662;Memory select.:;Memory select.:;0;Not locked;24.01.2006 11:20;Speicherwahl:;Speicherwahl:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Selec. memoria:;Selec. memoria:;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_voice_not_ready;S928;S928;Voice recognition not ready;"Voice
+recognition not
+ready";0;Not locked;24.01.2006 11:19;Sprach-\nbedienung\nnoch nicht\nbereit;"Sprach-
+bedienung
+noch nicht
+bereit";0;Not locked;03.02.2005 17:50;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;"Reconocimiento 
+de voz no está
+activo";"Reconocimiento 
+de voz no está
+activo";0;Not locked;16.03.2005 20:05;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_voice_active;S924;S924;Voice recognition active;"Voice
+recognition
+active";0;Not locked;24.01.2006 11:20;Sprach-\nbedienung\naktiv;"Sprach-
+bedienung
+aktiv";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;"Reconocimiento 
+de voz activo";"Reconocimiento 
+de voz activo";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_note_no_voice;;;Voice recognition not available;"Voice
+recognition not
+available";0;Not locked;24.01.2006 11:18;Sprach-\nbedienung nicht verfügbar;"Sprach-
+bedienung nicht
+verfügbar";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Sistema de manejo por voz no disponible;"Sistema de
+manejo por voz
+no disponible";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_supp_speechcalls;;SB06;Speech calls;Speech calls;0;Not locked;24.01.2006 11:19;Sprachanrufe;Sprachanrufe;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Llamadas;Llamadas;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed;
+1;qtn_stp_ta_main_mailbox;S101;S101;Voice mailbox;Voice mailbox;0;Not locked;24.01.2006 11:18;Sprachmailbox;Sprachmailbox;0;Not locked;30.07.2002 17:13;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;06.12.2002 12:32;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;Buzón de voz;Buzón de voz;0;Not locked;06.12.2002 13:20;Not locked;Auswahl;Approved;§Choice item: for calling your voice mailbox;STP;Voellinger Stefanie;;Created for Seti;Proposed;
+1;qtn_stp_ta_head_mailbox;S306;"S306; S303; S304";Voice mailbox;Voice mailbox;0;Not locked;24.01.2006 11:22;Sprachmailbox:;Sprachmailbox:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Buzón de voz:;Buzón de voz:;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_main_status;;S101;Status;Status;0;Not locked;24.01.2006 11:18;Status;Status;0;Not locked;26.09.2005 11:25;;EMPTY !;X;Not locked;26.09.2005 11:24;;EMPTY !;X;Not locked;26.09.2005 11:24;;EMPTY !;X;Not locked;26.09.2005 11:25;;EMPTY !;X;Not locked;26.09.2005 11:24;Estado;Estado;0;Not locked;26.09.2005 11:24;Not locked;Auswahl;Approved;;STP;Hanebrink Thomas;;;Proposed;
+1;;"S562; SC03";S562, T562, SC03;Search;Search;0;;;Suche;Suche;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Búsqueda;Búsqueda;0;;;;Auswahl;;;;;;;;
+1;;S923;S923;Unable to refresh\nphone book;"Unable to
+refresh
+phone book";0;;;Aktualisierung\ndes\nTelefonbuchs\nfehlgeschlagen;"Aktualisierung
+des
+Telefonbuchs
+fehlgeschlagen";0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;"No se ha
+actualizado la
+lista de contactos";"No se ha
+actualizado la
+lista de
+contactos";0;;;;4_Zeile;;;;;;;;
+;qtn_stp_ta_setting_standby;;S601;Switch off ph.;Switch off ph.;0;Not locked;24.01.2006 11:21;Tel. ausschalten;Tel. ausschalten;0;Not locked;22.09.2004 17:07;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Desact. el tlf.;Desact. el tlf.;0;Not locked;16.03.2005 20:05;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed;
+1;qtn_stp_ta_head_phone;;;Phone;Phone;0;Not locked;26.10.2004 16:40;Telefon;Telefon;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;12.01.2005 11:28;;EMPTY !;X;Not locked;12.01.2005 11:28;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;12.01.2005 11:29;Teléfono;Teléfono;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed;
+;qtn_stp_ta_main_menu_phone;;;Phone;MISSING LAYOUT !;X;Not locked;11.10.2002 16:14;Telefon;MISSING LAYOUT !;X;Not locked;11.10.2002 16:14;;MISSING LAYOUT !;X;Not locked;06.12.2002 12:29;;MISSING LAYOUT !;X;Not locked;06.12.2002 12:32;;MISSING LAYOUT !;X;Not locked;06.12.2002 12:35;;MISSING LAYOUT !;X;Not locked;06.12.2002 13:17;Teléfono;MISSING LAYOUT !;X;Not locked;06.12.2002 13:20;Not locked;VW_PQ35_one_row_choice_item;Approved;2002-11-28: New text. Please translate§Main menu: to go to the car's phone feature;STP;Voellinger Stefanie;;Created for Seti;Proposed;??????????????
+;qtn_stp_ta_note_standby;;"S668; S701";Phone\nswitched off;"Phone
+switched off";0;Not locked;24.01.2006 11:23;Telefon\nausgeschaltet;"Telefon
+ausgeschaltet";0;Not locked;22.09.2004 17:07;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;16.03.2005 20:05;Teléfono apagado;"Teléfono
+apagado";0;Not locked;09.02.2005 12:21;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed;
+;qtn_stp_ta_query_standby;;S667;Switch off phone?;"Switch off
+phone?";0;Not locked;24.01.2006 11:18;Telefon\nausschalten?;"Telefon
+ausschalten?";0;Not locked;22.09.2004 17:07;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;¿Apagar el teléfono?;"¿Apagar el
+teléfono?";0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed;
+;qtn_stp_ta_note_activate_phone;;;Switch on;Switch on;0;Not locked;26.10.2004 16:40;Telefon einschalten;"Telefon
+einschalten";0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Active el teléfono;"Active el
+teléfono";0;Not locked;10.06.2002 14:41;Not locked;4_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed;????????????
+;qtn_stp_ta_note_enter_phone;;;Place phone into cradle;"Place phone into
+cradle";0;Not locked;10.05.2002 13:49;Telefon in die Halterung einsetzen;"Telefon in die
+Halterung
+einsetzen";0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Coloque el teléfono en el soporte;"Coloque el
+teléfono en el
+soporte";0;Not locked;10.06.2002 14:41;Not locked;4_Zeile;Approved;§Error note;STP;Voellinger Stefanie;;Created for Seti;Proposed;????????????
+1;qtn_stp_ta_note_phone_initiated;;S009;Initializing\ntelephone.\nPlease wait!;"Initializing
+telephone.
+Please wait!";0;Not locked;24.01.2006 11:18;Telefon wird initialisiert.\nBitte warten!;"Telefon wird
+initialisiert.
+Bitte warten!";0;Not locked;10.08.2005 14:57;;EMPTY !;X;Not locked;01.09.2005 13:39;;EMPTY !;X;Not locked;01.09.2005 13:38;;EMPTY !;X;Not locked;01.09.2005 13:38;;EMPTY !;X;Not locked;01.09.2005 13:38;Inicializando\nteléfono.\nEspere;"Inicializando
+teléfono.
+Espere";0;Not locked;01.09.2005 13:39;Not locked;4_Zeile;Approved;;STP;Hanebrink Thomas;;;Proposed;
+1;;"S101; S601; 
+S811";"S101; S601; S811";Phone book;Phone book;0;Not locked;24.01.2006 11:22;Telefonbuch;Telefonbuch;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;12.01.2005 11:29;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Lista de contactos;"Lista de
+contactos";10;Not locked;10.06.2002 14:41;Not locked;Auswahl;Approved;§Choice item: for opening the phonebook;STP;Voellinger Stefanie;;Created for Seti;Proposed
+1;;"S104; S661";"S104; S661";Phone book;Phone book;0;Not locked;24.01.2006 11:19;Telefonbuch;Telefonbuch;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Guía;Guía;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_pb_load_error;S664;S664;Phone book cannot be loaded;"Phone book
+cannot be
+loaded";0;Not locked;24.01.2006 11:24;Telefonbuch\nkann nicht\ngeladen werden;"Telefonbuch
+kann nicht
+geladen werden";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;"Imposible cargar
+la lista de contactos";"Imposible cargar
+la lista de
+contactos";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_pb_not_ready;;S106;Phone book not yet ready;"Phone book not
+yet ready";0;Not locked;24.01.2006 11:22;Telefonbuch noch nicht bereit;"Telefonbuch
+noch nicht bereit";0;Not locked;27.10.2004 12:15;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Guía no disponible aún;"Guía no
+disponible aún";0;Not locked;09.02.2005 12:20;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_pb_not_complete;S925;S925;Phone book not fully loaded;"Phone book not
+fully loaded";0;Not locked;24.01.2006 11:21;Telefonbuch\nunvollständig geladen;"Telefonbuch
+unvollständig
+geladen";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;"No se ha
+cargado la lista 
+de contactos";"No se ha
+cargado la lista 
+de contactos";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_pbook_loading;S102;S102;Loading phone book:\n%U entries;"Loading phone
+book:
+%U entries";0;Not locked;24.01.2006 11:21;Telefonbuch\nwird geladen:\n%U Einträge;"Telefonbuch
+wird geladen:
+%U Einträge";0;Not locked;26.10.2004 16:58;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;"Cargando
+lista de contactos
+%U entradas";"Cargando
+lista de
+contactos
+%U entradas";0;Not locked;10.08.2005 14:57;Not locked;4_Zeile;Approved;§Wait note;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;qtn_stp_ta_note_pb_loading_me;;S665;Loading phone book from phone;"Loading phone
+book from
+phone";0;Not locked;24.01.2006 11:23;Telefonbuch\nwird vom\nMobiltelefon\ngeladen;"Telefonbuch
+wird vom
+Mobiltelefon
+geladen";0;Not locked;22.09.2004 17:04;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;24.01.2006 11:18;;EMPTY !;X;Not locked;09.02.2005 12:20;Cargando la guía del teléfono móvil;"Cargando la guía
+del teléfono
+móvil";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_pb_loading_sim;;S666;Loading phone book from\nSIM card;"Loading phone
+book from
+SIM card";0;Not locked;24.01.2006 11:20;Telefonbuch\nwird von der\nSIM-Karte\ngeladen;"Telefonbuch
+wird von der
+SIM-Karte
+geladen";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;24.01.2006 11:22;;EMPTY !;X;Not locked;09.02.2005 12:20;Cargando la guía de la tarjeta SIM;"Cargando la guía
+de la tarjeta SIM";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_pb_loading_all;S663;S663;Loading\nphone book;"Loading
+phone book";0;Not locked;24.01.2006 11:18;Telefonbuch\nwird geladen;"Telefonbuch
+wird geladen";0;Not locked;22.09.2004 17:07;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;24.01.2006 11:19;;EMPTY !;X;Not locked;09.02.2005 12:20;"Cargando lista
+de contactos";"Cargando lista
+de contactos";0;Not locked;24.01.2006 11:22;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_setting_phone;;"S601; S621";Phone settings;Phone settings;0;Not locked;24.01.2006 11:21;Telefoneinstell.;Telefoneinstell.;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:21;Opc. del usuario;Opc. del usuario;0;Not locked;16.03.2005 20:05;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_bt_own_name;S502;S502;Phone name;Phone name;0;Not locked;24.01.2006 11:23;Telefonname;Telefonname;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Nombre del tel.;Nombre del tel.;0;Not locked;09.02.2005 12:18;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_head_phone_name;S556;"S556; S551";Phone name:;Phone name:;0;Not locked;24.01.2006 11:18;Telefonname:;Telefonname:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Nombre del tel.:;Nombre del tel.:;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;;S002;Phone search;Phone search;0;;;Telefonsuche;Telefonsuche;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Buscar telefono;Buscar telefono;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_bt_disconnect;"S542; S563";"S542; S563";Disconnect;Disconnect;0;Not locked;24.01.2006 11:19;Trennen;Trennen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Desconectar;Desconectar;0;Not locked;09.02.2005 12:18;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_bt_rename;"S542; S571";"S542; S571; S5A1; S630";Rename;Rename;0;Not locked;24.01.2006 11:19;Umbenennen;Umbenennen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Renombrar;Renombrar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;SC24;SC24;Switch;Switch;0;;;Umschalten;Umschalten;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Cambiar;Cambiar;0;;;;Auswahl;;;;;;;
+;;;SC15;UMTS;UMTS;0;;;UMTS;UMTS;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;Auswahl;;;;;;;
+1;;"S002; S542; 
+S571";"S542; S571; S002";Connect;Connect;0;Not locked;24.01.2006 11:18;Verbinden;Verbinden;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Conectar;Conectar;0;Not locked;09.02.2005 12:18;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_query_connect;S933;S933;Connection?;Connection?;0;Not locked;24.01.2006 11:22;Verbinden mit\n%U?;"Verbinden mit
+%U?";0;Not locked;16.09.2005 12:03;;EMPTY !;X;Not locked;16.09.2005 12:03;;EMPTY !;X;Not locked;16.09.2005 12:03;;EMPTY !;X;Not locked;16.09.2005 12:03;;EMPTY !;X;Not locked;16.09.2005 12:03;¿Conectar con %U?;"¿Conectar con
+%U?";0;Not locked;16.09.2005 12:03;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_conn_terminated;S565;S565;Disconnected;Disconnected;0;Not locked;24.01.2006 11:19;Verbindung\ngetrennt;"Verbindung
+getrennt";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Conexión interrumpida;"Conexión
+interrumpida";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_bt_no_conn_loading;;S937;Bluetooth connection not possible, loading phone book;"Bluetooth
+connection not
+possible, loading
+phone book";0;Not locked;24.01.2006 11:20;Verbindung nicht möglich, Telefonbuch wird geladen;"Verbindung nicht
+möglich,
+Telefonbuch
+wird geladen";0;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;Conexión Bluetooh impos., cargando la guía;"Conexión
+Bluetooh impos.,
+cargando la guía";0;Not locked;09.02.2005 12:18;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_bt_no_conn;S518;S518;Connection not possible;"Connection not
+possible";0;Not locked;24.01.2006 11:17;Verbindung\nnicht\nmöglich;"Verbindung
+nicht
+möglich";0;Not locked;20.04.2005 15:15;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Imposible conectar;"Imposible
+conectar";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_bt_conn_setup;S517;S517;Connecting ...;Connecting ...;0;Not locked;24.01.2006 11:24;Verbindung\nwird\nhergestellt;"Verbindung
+wird
+hergestellt";0;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;24.01.2006 11:21;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;24.01.2006 11:22;;EMPTY !;X;Not locked;09.02.2005 12:20;Conectando...;Conectando...;0;Not locked;24.01.2006 11:23;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_connected;S574;S574;Connected with %U;"Connected with
+%U";0;Not locked;24.01.2006 11:21;Verbunden mit\n%U;"Verbunden mit
+%U";0;Not locked;20.10.2004 12:24;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;13.04.2005 18:08;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Conectado con %U;"Conectado con
+%U";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_note_bt_acc_conn;S934;S934;Connected to Bluetooth headset;"Connected to
+Bluetooth
+headset";0;Not locked;24.01.2006 11:19;Verbunden mit\nBluetooth-\nHeadset;"Verbunden mit
+Bluetooth-
+Headset";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;10.08.2005 14:57;;EMPTY !;X;Not locked;09.02.2005 12:20;Conectado con auriculares Bluetooth;"Conectado con
+auriculares
+Bluetooth";0;Not locked;09.02.2005 12:20;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_call_diverts2;;SB07;Delay\n%U s.;"Delay
+%U s.";0;Not locked;24.01.2006 11:20;Verzögerung:\n%U Sek.;"Verzögerung:
+%U Sek.";0;Not locked;24.01.2006 11:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Retraso\n%U seg.;"Retraso
+%U seg.";0;Not locked;09.02.2005 12:19;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_vcard_received;;S981;Business card received;"Business card
+received";0;Not locked;24.01.2006 11:22;Visitenkarte\nempfangen;"Visitenkarte
+empfangen";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Tarjeta de visita recibida;"Tarjeta de visita
+recibida";0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_vcard_deleted;;S983;Business card deleted;"Business card
+deleted";0;Not locked;24.01.2006 11:20;Visitenkarte\ngelöscht;"Visitenkarte
+gelöscht";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Tarjeta de visita borrada;"Tarjeta de visita
+borrada";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_vcard_saved;;S985;Business card stored in phone book;"Business card
+stored in phone
+book";0;Not locked;24.01.2006 11:21;Visitenkarte\nim Telefonbuch\ngespeichert;"Visitenkarte
+im Telefonbuch
+gespeichert";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Tarjeta de visita memorizada en la guía;"Tarjeta de visita
+memorizada en
+la guía";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_query_delete_vcard;;S982;Delete business card?;"Delete business
+card?";0;Not locked;24.01.2006 11:22;Visitenkarte\nlöschen?;"Visitenkarte
+löschen?";0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;¿Borrar tarjeta de visita?;"¿Borrar tarjeta
+de visita?";0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_template;;"S444; S447";Template;Template;0;Not locked;24.01.2006 11:22;Vorlage;Vorlage;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Plantilla;Plantilla;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_sms_template;;S401;Template;Template;0;Not locked;24.01.2006 11:17;Vorlage;Vorlage;0;Not locked;19.07.2004 12:30;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Plantilla;Plantilla;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_templ_saved;;S445;Template saved;Template saved;0;Not locked;24.01.2006 11:21;Vorlage gespeichert;"Vorlage
+gespeichert";0;Not locked;24.11.2004 15:49;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Plantilla memorizada;"Plantilla
+memorizada";0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;Created for Cumulus;Proposed
+;qtn_stp_ta_note_templ_deleted;;S448;Template deleted;"Template
+deleted";0;Not locked;24.01.2006 11:22;Vorlage\ngelöscht;"Vorlage
+gelöscht";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Plantilla borrada;Plantilla borrada;0;Not locked;09.02.2005 12:21;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_query_delete_templ;;S446;Delete\ntemplate?;"Delete
+template?";0;Not locked;24.01.2006 11:24;Vorlage\nlöschen?;"Vorlage
+löschen?";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;¿Borrar plantilla?;¿Borrar plantilla?;0;Not locked;09.02.2005 12:21;Not locked;2_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_sms_templates;;S401;Templates;Templates;0;Not locked;24.01.2006 11:19;Vorlagen;Vorlagen;0;Not locked;26.10.2004 16:40;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Plantillas;Plantillas;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;;"S405; S903";S405, S903;Read out;Read out;0;;;Vorlesen;Vorlesen;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Reproducir;Reproducir;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_pb_sort_firstname;S669;S669;First name;First name;0;;;Vorname;Vorname;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;Nombre;Nombre;0;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_note_wait_reply;SB01;SB01;Waiting for answer;"Waiting for
+answer";0;Not locked;24.01.2006 11:22;Warte auf Antwort;"Warte auf
+Antwort";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;24.01.2006 11:22;;EMPTY !;X;Not locked;09.02.2005 12:21;Esperando respuesta...;"Esperando
+respuesta...";0;Not locked;24.01.2006 11:17;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;;;S590;Change;Change;0;;;Wechseln;Wechseln;0;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;EMPTY !;X;;;;Auswahl;;;;;;;
+1;qtn_stp_ta_tag_play;"S117; S705";"S117; S705";Replay;Replay;0;Not locked;24.01.2006 11:19;Wiedergeben;Wiedergeben;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;;EMPTY !;X;Not locked;09.02.2005 12:21;Escuchar;Escuchar;0;Not locked;09.02.2005 12:21;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_menu_view;"S405; S903";"S405; S903; S981; S991";Show;Show;0;Not locked;24.11.2004 15:38;Zeigen;Zeigen;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Mostrar;Mostrar;0;Not locked;09.02.2005 12:19;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_bt_accessory;;S502;Headset;Headset;0;Not locked;24.01.2006 11:19;Headset;Headset;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Auriculares;Auriculares;0;Not locked;09.02.2005 12:18;Not locked;Auswahl;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_head_extras;;S561;Extras;Extras;0;Not locked;24.01.2006 11:19;Zubehör;Zubehör;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;;EMPTY !;X;Not locked;09.02.2005 12:18;Accesorios;Accesorios;0;Not locked;09.02.2005 12:18;Not locked;1_Zeile;;;;;;;
+1;qtn_stp_ta_wait_bt_acc_search;S581;S581;Looking for headsets. Please wait!;"Looking for
+headsets. Please
+wait!";0;Not locked;24.01.2006 11:19;Headset wird\ngesucht.\nBitte warten!;"Headset wird
+gesucht.
+Bitte warten!";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:22;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;16.03.2005 20:05;;EMPTY !;X;Not locked;09.02.2005 12:22;Buscando auriculares... Espere...;"Buscando
+auriculares...
+Espere...";0;Not locked;16.03.2005 20:05;Not locked;3_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_gprs_saved;;S652;Access point stored;"Access point
+stored";0;Not locked;24.01.2006 11:22;Zugangspunkt\ngespeichert;"Zugangspunkt
+gespeichert";0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Punto de acceso memorizado;"Punto de acceso
+memorizado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_head_gprs;;S651;Access point:;Access point:;0;Not locked;24.01.2006 11:18;Zugangspunkt:;Zugangspunkt:;0;Not locked;28.05.2004 10:33;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;;EMPTY !;X;Not locked;09.02.2005 12:19;Punto de acceso;Punto de acceso;0;Not locked;09.02.2005 12:19;Not locked;1_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+;qtn_stp_ta_note_prov_not_allow;;S629;Access to\n%U\nnot allowed;"Access to
+%U
+not allowed";0;Not locked;24.01.2006 11:20;Zugriff auf\n%U\nnicht erlaubt;"Zugriff auf
+%U
+nicht erlaubt";0;Not locked;20.04.2005 15:15;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;;EMPTY !;X;Not locked;09.02.2005 12:20;Acceso al\n%U\nno autorizado;"Acceso al
+%U
+no autorizado";0;Not locked;09.02.2005 12:20;Not locked;4_Zeile;Approved;;STP;Voellinger Stefanie;;;Proposed
+1;qtn_stp_ta_help_text;S008;S008;"To start using\nthe system, first\ntake your\ncompatible\ncell phone\nand activate\nthe Bluetooth\nfunction and\nmake it ""visible"".\nThen start the\ndevice search in\nthe vehicle.\nPlease refer to\nthe Owner's\nManual for\nfurther infor-\nmation.";"To start using
+the system, first
+take your
+compatible
+cell phone
+and activate
+the Bluetooth
+function and
+make it ""visible"".
+Then start the
+device search in
+the vehicle.
+Please refer to
+the Owner's
+Manual for
+further infor-
+mation.";0;Not locked;24.01.2006 11:19;Zur Inbetrieb-\nnahme nehmen\nSie zunächst Ihr\nkompatibles\nMobiltelefon zur\nHand, aktivieren\nSie dort Blue-\ntooth und schal-\nten Sie es\n'sichtbar'.\nStarten Sie dann\ndie Gerätesuche\nam Fahrzeug.\nFür weitere In-\nformationen\nschauen Sie\nbitte in der\nBedienungs-\nanleitung nach.;"Zur Inbetrieb-
+nahme nehmen
+Sie zunächst Ihr
+kompatibles
+Mobiltelefon zur
+Hand, aktivieren
+Sie dort Blue-
+tooth und schal-
+ten Sie es
+'sichtbar'.
+Starten Sie dann
+die Gerätesuche
+am Fahrzeug.
+Für weitere In-
+formationen
+schauen Sie
+bitte in der
+Bedienungs-
+anleitung nach.";0;Not locked;12.09.2005 11:54;;EMPTY !;X;Not locked;12.09.2005 11:54;;EMPTY !;X;Not locked;12.09.2005 11:54;;EMPTY !;X;Not locked;12.09.2005 11:54;;EMPTY !;X;Not locked;12.09.2005 11:54;Para ponerlo en\nmarcha, active\nla función\nBluetooth de su\nmóvil\ncompatible\ny seleccione\n'visible'.\nIniciar a\ncontinuación la\nbúsqueda de\naparatos en el\nvehículo.\nPara mayor\ninformación\nconsulte el\nmanual de\ninstrucciones.;"Para ponerlo en
+marcha, active
+la función
+Bluetooth de su
+móvil
+compatible
+y seleccione
+'visible'.
+Iniciar a
+continuación la
+búsqueda de
+aparatos en el
+vehículo.
+Para mayor
+información
+consulte el
+manual de
+instrucciones.";0;Not locked;12.09.2005 11:54;Not locked;Langtext;Approved;;STP;Hanebrink Thomas;;;Proposed
+1;qtn_stp_ta_list_back;###############################################################################################################################################################################################################################################################;###############################################################################################################################################################################################################################################################;Back;Back;0;Not locked;10.05.2002 13:49;Zurück;Zurück;0;Not locked;10.05.2002 13:58;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:39;;EMPTY !;X;Not locked;10.06.2002 14:40;;EMPTY !;X;Not locked;10.06.2002 14:40;Atrás;Atrás;0;Not locked;10.06.2002 14:41;Not locked;Auswahl;Approved;§Choice item: for leaving the menu you are currently in. Choosing this option takes you one step back to the next higher level in the menu;STP;Voellinger Stefanie;;Created for Seti;Proposed
+;;;S634;business;business;0;;;Dienstlich;Dienstlich;0;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;Auswahl;;;;;;;
+;;;S634;private;private;0;;;Privat;Privat;0;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;Auswahl;;;;;;;
+;;;S636;Alternate\nSIM Mode\nactivating;"Alternate
+SIM Mode
+activating";0;;;Alternativer\nSIM Modus\nwird aktiviert;"Alternativer
+SIM Modus
+wird aktiviert";0;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;MISSING LAYOUT !;X;;;;4_Zeile;;;;;;;

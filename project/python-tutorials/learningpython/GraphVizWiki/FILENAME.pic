@@ -1,0 +1,25 @@
+# usage-example for the comment extensions to the
+# Written by Sebastian Setzer
+
+.PS
+copy "sequence.pic";
+
+# Object definition
+object(M,"ucMedia");
+object(C,"ucCAN");
+step();
+active(M);
+active(C);
+
+# Message exchange
+message(M,C,"WD");
+message(C,M,"ACK");
+message(C,M,"firstBAPframe")
+message(M,C,"ACK");
+message(M,C,"answerBAPframe")
+message(C,M,"ACK");
+# Object lifeline completion
+step();
+complete(M);
+complete(C);
+.PE

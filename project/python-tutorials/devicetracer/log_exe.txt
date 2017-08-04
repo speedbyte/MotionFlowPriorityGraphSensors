@@ -1,0 +1,393 @@
+running bdist_msi
+running build
+running build_exe
+creating directory build\exe.win32-2.7
+copying C:\Python27\lib\site-packages\cx_Freeze\bases\Win32GUI.exe -> build\exe.win32-2.7\Main.exe
+copying C:\Windows\system32\python27.dll -> build\exe.win32-2.7\python27.dll
+Stamped: build\exe.win32-2.7\Main.exe
+writing zip file build\exe.win32-2.7\library.zip
+
+  Name                      File
+  ----                      ----
+m BUILD_CONSTANTS           
+m ConfigParser              C:\Python27\lib\ConfigParser.py
+m DeviceConfigurationInterface f:\workspace_python\DeviceTracer\DeviceConfigurationInterface.py
+m DeviceFrame               f:\workspace_python\DeviceTracer\DeviceFrame.py
+m DeviceLoggingThread       f:\workspace_python\DeviceTracer\DeviceLoggingThread.py
+m DeviceThread              f:\workspace_python\DeviceTracer\DeviceThread.py
+m Queue                     C:\Python27\lib\Queue.py
+m StringIO                  
+m UserDict                  
+m __builtin__               
+m __future__                C:\Python27\lib\__future__.py
+m __main__                  
+m _abcoll                   
+m _codecs                   
+m _codecs_cn                
+m _codecs_hk                
+m _codecs_iso2022           
+m _codecs_jp                
+m _codecs_kr                
+m _codecs_tw                
+m _collections              
+m _ctypes                   C:\Python27\DLLs\_ctypes.pyd
+m _functools                
+m _hashlib                  C:\Python27\DLLs\_hashlib.pyd
+m _heapq                    
+m _io                       
+m _locale                   
+m _md5                      
+m _multibytecodec           
+m _random                   
+m _sha                      
+m _sha256                   
+m _sha512                   
+m _sre                      
+m _strptime                 C:\Python27\lib\_strptime.py
+m _struct                   
+m _threading_local          C:\Python27\lib\_threading_local.py
+m _warnings                 
+m _weakref                  
+m _weakrefset               
+m _winreg                   
+m abc                       
+m array                     
+m atexit                    C:\Python27\lib\atexit.py
+m base64                    
+m bdb                       C:\Python27\lib\bdb.py
+m binascii                  
+m bz2                       C:\Python27\DLLs\bz2.pyd
+m cPickle                   
+m cStringIO                 
+m calendar                  C:\Python27\lib\calendar.py
+m cmd                       C:\Python27\lib\cmd.py
+m codecs                    
+m collections               C:\Python27\lib\collections.py
+m copy                      
+m copy_reg                  
+P ctypes                    C:\Python27\lib\ctypes\__init__.py
+m ctypes._endian            C:\Python27\lib\ctypes\_endian.py
+m ctypes.wintypes           C:\Python27\lib\ctypes\wintypes.py
+m cx_Freeze__init__         C:\Python27\lib\site-packages\cx_Freeze\initscripts\Console.py
+m datetime                  
+P devicedrivers             f:\workspace_python\DeviceTracer\devicedrivers\__init__.py
+P devicedrivers.serial      f:\workspace_python\DeviceTracer\devicedrivers\serial\__init__.py
+m devicedrivers.serial.pySERIAL f:\workspace_python\DeviceTracer\devicedrivers\serial\pySERIAL.py
+m difflib                   C:\Python27\lib\difflib.py
+m dis                       C:\Python27\lib\dis.py
+m doctest                   C:\Python27\lib\doctest.py
+m dummy_thread              C:\Python27\lib\dummy_thread.py
+m dummy_threading           C:\Python27\lib\dummy_threading.py
+P encodings                 
+m encodings.aliases         
+m encodings.ascii           
+m encodings.base64_codec    
+m encodings.big5            
+m encodings.big5hkscs       
+m encodings.bz2_codec       
+m encodings.charmap         
+m encodings.cp037           
+m encodings.cp1006          
+m encodings.cp1026          
+m encodings.cp1140          
+m encodings.cp1250          
+m encodings.cp1251          
+m encodings.cp1252          
+m encodings.cp1253          
+m encodings.cp1254          
+m encodings.cp1255          
+m encodings.cp1256          
+m encodings.cp1257          
+m encodings.cp1258          
+m encodings.cp424           
+m encodings.cp437           
+m encodings.cp500           
+m encodings.cp720           
+m encodings.cp737           
+m encodings.cp775           
+m encodings.cp850           
+m encodings.cp852           
+m encodings.cp855           
+m encodings.cp856           
+m encodings.cp857           
+m encodings.cp858           
+m encodings.cp860           
+m encodings.cp861           
+m encodings.cp862           
+m encodings.cp863           
+m encodings.cp864           
+m encodings.cp865           
+m encodings.cp866           
+m encodings.cp869           
+m encodings.cp874           
+m encodings.cp875           
+m encodings.cp932           
+m encodings.cp949           
+m encodings.cp950           
+m encodings.euc_jis_2004    
+m encodings.euc_jisx0213    
+m encodings.euc_jp          
+m encodings.euc_kr          
+m encodings.gb18030         
+m encodings.gb2312          
+m encodings.gbk             
+m encodings.hex_codec       
+m encodings.hp_roman8       
+m encodings.hz              
+m encodings.idna            
+m encodings.iso2022_jp      
+m encodings.iso2022_jp_1    
+m encodings.iso2022_jp_2    
+m encodings.iso2022_jp_2004 
+m encodings.iso2022_jp_3    
+m encodings.iso2022_jp_ext  
+m encodings.iso2022_kr      
+m encodings.iso8859_1       
+m encodings.iso8859_10      
+m encodings.iso8859_11      
+m encodings.iso8859_13      
+m encodings.iso8859_14      
+m encodings.iso8859_15      
+m encodings.iso8859_16      
+m encodings.iso8859_2       
+m encodings.iso8859_3       
+m encodings.iso8859_4       
+m encodings.iso8859_5       
+m encodings.iso8859_6       
+m encodings.iso8859_7       
+m encodings.iso8859_8       
+m encodings.iso8859_9       
+m encodings.johab           
+m encodings.koi8_r          
+m encodings.koi8_u          
+m encodings.latin_1         
+m encodings.mac_arabic      
+m encodings.mac_centeuro    
+m encodings.mac_croatian    
+m encodings.mac_cyrillic    
+m encodings.mac_farsi       
+m encodings.mac_greek       
+m encodings.mac_iceland     
+m encodings.mac_latin2      
+m encodings.mac_roman       
+m encodings.mac_romanian    
+m encodings.mac_turkish     
+m encodings.mbcs            
+m encodings.palmos          
+m encodings.ptcp154         
+m encodings.punycode        
+m encodings.quopri_codec    
+m encodings.raw_unicode_escape 
+m encodings.rot_13          
+m encodings.shift_jis       
+m encodings.shift_jis_2004  
+m encodings.shift_jisx0213  
+m encodings.string_escape   
+m encodings.tis_620         
+m encodings.undefined       
+m encodings.unicode_escape  
+m encodings.unicode_internal 
+m encodings.utf_16          
+m encodings.utf_16_be       
+m encodings.utf_16_le       
+m encodings.utf_32          
+m encodings.utf_32_be       
+m encodings.utf_32_le       
+m encodings.utf_7           
+m encodings.utf_8           
+m encodings.utf_8_sig       
+m encodings.uu_codec        
+m encodings.zlib_codec      
+m errno                     
+m exceptions                
+m fnmatch                   C:\Python27\lib\fnmatch.py
+m functools                 C:\Python27\lib\functools.py
+m genericpath               
+m getopt                    C:\Python27\lib\getopt.py
+m gettext                   C:\Python27\lib\gettext.py
+m hashlib                   C:\Python27\lib\hashlib.py
+m heapq                     C:\Python27\lib\heapq.py
+m imp                       
+m inspect                   C:\Python27\lib\inspect.py
+m io                        C:\Python27\lib\io.py
+m itertools                 
+m keyword                   C:\Python27\lib\keyword.py
+m linecache                 
+m locale                    C:\Python27\lib\locale.py
+P logging                   C:\Python27\lib\logging\__init__.py
+m main__main__              Main.py
+m math                      
+m new                       C:\Python27\lib\new.py
+m nt                        
+m ntpath                    
+m opcode                    C:\Python27\lib\opcode.py
+m operator                  
+m optparse                  C:\Python27\lib\optparse.py
+m os                        
+m pdb                       C:\Python27\lib\pdb.py
+m posixpath                 
+m pprint                    C:\Python27\lib\pprint.py
+m pyCAN                     f:\workspace_python\DeviceTracer\pyCAN.py
+m pySERIAL                  f:\workspace_python\DeviceTracer\pySERIAL.py
+P pynmea                    C:\Python27\lib\site-packages\pynmea\__init__.py
+m pynmea.exceptions         C:\Python27\lib\site-packages\pynmea\exceptions.py
+m pynmea.nmea               C:\Python27\lib\site-packages\pynmea\nmea.py
+m pynmea.streamer           C:\Python27\lib\site-packages\pynmea\streamer.py
+m pynmea.utils              C:\Python27\lib\site-packages\pynmea\utils.py
+m quopri                    
+m random                    C:\Python27\lib\random.py
+m re                        C:\Python27\lib\re.py
+m repr                      
+m select                    C:\Python27\DLLs\select.pyd
+P serial                    C:\Python27\lib\site-packages\serial\__init__.py
+m serial.serialcli          C:\Python27\lib\site-packages\serial\serialcli.py
+m serial.serialjava         C:\Python27\lib\site-packages\serial\serialjava.py
+m serial.serialposix        C:\Python27\lib\site-packages\serial\serialposix.py
+m serial.serialutil         C:\Python27\lib\site-packages\serial\serialutil.py
+m serial.serialwin32        C:\Python27\lib\site-packages\serial\serialwin32.py
+m serial.win32              C:\Python27\lib\site-packages\serial\win32.py
+m shlex                     C:\Python27\lib\shlex.py
+m signal                    
+m sre_compile               C:\Python27\lib\sre_compile.py
+m sre_constants             C:\Python27\lib\sre_constants.py
+m sre_parse                 C:\Python27\lib\sre_parse.py
+m stat                      
+m string                    
+m stringprep                
+m strop                     
+m struct                    
+m sys                       
+m tempfile                  C:\Python27\lib\tempfile.py
+m textwrap                  C:\Python27\lib\textwrap.py
+m thread                    
+m threading                 C:\Python27\lib\threading.py
+m time                      
+m token                     C:\Python27\lib\token.py
+m tokenize                  C:\Python27\lib\tokenize.py
+m traceback                 
+m types                     
+m unicodedata               C:\Python27\DLLs\unicodedata.pyd
+P unittest                  C:\Python27\lib\unittest\__init__.py
+m unittest.case             C:\Python27\lib\unittest\case.py
+m unittest.loader           C:\Python27\lib\unittest\loader.py
+m unittest.main             C:\Python27\lib\unittest\main.py
+m unittest.result           C:\Python27\lib\unittest\result.py
+m unittest.runner           C:\Python27\lib\unittest\runner.py
+m unittest.signals          C:\Python27\lib\unittest\signals.py
+m unittest.suite            C:\Python27\lib\unittest\suite.py
+m unittest.util             C:\Python27\lib\unittest\util.py
+m warnings                  
+m weakref                   
+P wx                        C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\__init__.py
+m wx.__version__            C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\__version__.py
+m wx._controls              C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_controls.py
+m wx._controls_             C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_controls_.pyd
+m wx._core                  C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_core.py
+m wx._core_                 C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_core_.pyd
+m wx._gdi                   C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_gdi.py
+m wx._gdi_                  C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_gdi_.pyd
+m wx._misc                  C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_misc.py
+m wx._misc_                 C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_misc_.pyd
+m wx._windows               C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_windows.py
+m wx._windows_              C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_windows_.pyd
+m zipimport                 
+m zlib                      
+
+Missing modules:
+? FCNTL imported from serial.serialposix
+? System imported from serial.serialcli
+? System.IO.Ports imported from serial.serialcli
+? TERMIOS imported from serial.serialposix
+? _dummy_threading imported from dummy_threading
+? _emx_link imported from os
+? ce imported from os
+? clr imported from serial.serialcli
+? fcntl imported from serial.serialposix
+? org.python.core imported from copy
+? os.path imported from os, shlex
+? os2 imported from os
+? os2emxpath imported from os
+? posix imported from os
+? pwd imported from posixpath
+? riscos imported from os
+? riscosenviron imported from os
+? riscospath imported from os
+? subprocess imported from os
+? termios imported from serial.serialposix
+This is not necessarily a problem - the modules may not be needed on this platform.
+
+copying C:\Python27\DLLs\_ctypes.pyd -> build\exe.win32-2.7\_ctypes.pyd
+copying C:\Python27\DLLs\_hashlib.pyd -> build\exe.win32-2.7\_hashlib.pyd
+copying C:\Python27\DLLs\bz2.pyd -> build\exe.win32-2.7\bz2.pyd
+copying C:\Python27\DLLs\select.pyd -> build\exe.win32-2.7\select.pyd
+copying C:\Python27\DLLs\unicodedata.pyd -> build\exe.win32-2.7\unicodedata.pyd
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_controls_.pyd -> build\exe.win32-2.7\wx._controls_.pyd
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\wxbase28uh_vc.dll -> build\exe.win32-2.7\wxbase28uh_vc.dll
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\wxmsw28uh_core_vc.dll -> build\exe.win32-2.7\wxmsw28uh_core_vc.dll
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\gdiplus.dll -> build\exe.win32-2.7\gdiplus.dll
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\wxmsw28uh_adv_vc.dll -> build\exe.win32-2.7\wxmsw28uh_adv_vc.dll
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_core_.pyd -> build\exe.win32-2.7\wx._core_.pyd
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\wxbase28uh_net_vc.dll -> build\exe.win32-2.7\wxbase28uh_net_vc.dll
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_gdi_.pyd -> build\exe.win32-2.7\wx._gdi_.pyd
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_misc_.pyd -> build\exe.win32-2.7\wx._misc_.pyd
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\_windows_.pyd -> build\exe.win32-2.7\wx._windows_.pyd
+copying C:\Python27\lib\site-packages\wx-2.8-msw-unicode\wx\wxmsw28uh_html_vc.dll -> build\exe.win32-2.7\wxmsw28uh_html_vc.dll
+creating directory build\exe.win32-2.7\.\config\
+copying config\DeviceTracer.ini -> build\exe.win32-2.7\.\config\DeviceTracer.ini
+creating directory build\exe.win32-2.7\.\log\
+copying log\DATA_13_02_11_07_2014_log.txt -> build\exe.win32-2.7\.\log\DATA_13_02_11_07_2014_log.txt
+copying log\DATA_13_05_15_07_2014_log.txt -> build\exe.win32-2.7\.\log\DATA_13_05_15_07_2014_log.txt
+copying log\DATA_20_57_09_07_2014_log.txt -> build\exe.win32-2.7\.\log\DATA_20_57_09_07_2014_log.txt
+copying log\ENERGY_20_57_09_07_2014_log.txt -> build\exe.win32-2.7\.\log\ENERGY_20_57_09_07_2014_log.txt
+copying log\esslingen_stuttgart_fraunhofer_autobahn.png -> build\exe.win32-2.7\.\log\esslingen_stuttgart_fraunhofer_autobahn.png
+copying log\ess_iao_autobahn.png -> build\exe.win32-2.7\.\log\ess_iao_autobahn.png
+copying log\ess_iao_b10.png -> build\exe.win32-2.7\.\log\ess_iao_b10.png
+copying log\figure_1.png -> build\exe.win32-2.7\.\log\figure_1.png
+copying log\GPS_20_57_09_07_2014_log.txt -> build\exe.win32-2.7\.\log\GPS_20_57_09_07_2014_log.txt
+copying log\iao_ess_b10.png -> build\exe.win32-2.7\.\log\iao_ess_b10.png
+copying log\overview.txt -> build\exe.win32-2.7\.\log\overview.txt
+copying log\program.log -> build\exe.win32-2.7\.\log\program.log
+copying log\smart_peaks.png -> build\exe.win32-2.7\.\log\smart_peaks.png
+copying log\stuttgart_esslingen_fraunhofer_b10.png -> build\exe.win32-2.7\.\log\stuttgart_esslingen_fraunhofer_b10.png
+copying log\wu_jian_in_action.png -> build\exe.win32-2.7\.\log\wu_jian_in_action.png
+installing to build\bdist.win32\msi
+running install_exe
+creating build\bdist.win32\msi
+copying build\exe.win32-2.7\bz2.pyd -> build\bdist.win32\msi
+creating build\bdist.win32\msi\config
+copying build\exe.win32-2.7\config\DeviceTracer.ini -> build\bdist.win32\msi\config
+copying build\exe.win32-2.7\gdiplus.dll -> build\bdist.win32\msi
+copying build\exe.win32-2.7\library.zip -> build\bdist.win32\msi
+creating build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\DATA_13_02_11_07_2014_log.txt -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\DATA_13_05_15_07_2014_log.txt -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\DATA_20_57_09_07_2014_log.txt -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\ENERGY_20_57_09_07_2014_log.txt -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\esslingen_stuttgart_fraunhofer_autobahn.png -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\ess_iao_autobahn.png -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\ess_iao_b10.png -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\figure_1.png -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\GPS_20_57_09_07_2014_log.txt -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\iao_ess_b10.png -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\overview.txt -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\program.log -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\smart_peaks.png -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\stuttgart_esslingen_fraunhofer_b10.png -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\log\wu_jian_in_action.png -> build\bdist.win32\msi\log
+copying build\exe.win32-2.7\Main.exe -> build\bdist.win32\msi
+copying build\exe.win32-2.7\python27.dll -> build\bdist.win32\msi
+copying build\exe.win32-2.7\select.pyd -> build\bdist.win32\msi
+copying build\exe.win32-2.7\unicodedata.pyd -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wx._controls_.pyd -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wx._core_.pyd -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wx._gdi_.pyd -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wx._misc_.pyd -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wx._windows_.pyd -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wxbase28uh_net_vc.dll -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wxbase28uh_vc.dll -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wxmsw28uh_adv_vc.dll -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wxmsw28uh_core_vc.dll -> build\bdist.win32\msi
+copying build\exe.win32-2.7\wxmsw28uh_html_vc.dll -> build\bdist.win32\msi
+copying build\exe.win32-2.7\_ctypes.pyd -> build\bdist.win32\msi
+copying build\exe.win32-2.7\_hashlib.pyd -> build\bdist.win32\msi
+removing 'build\bdist.win32\msi' (and everything under it)

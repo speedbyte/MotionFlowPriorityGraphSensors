@@ -1,0 +1,31 @@
+#!/bin/python/
+
+import serial
+import time
+
+dict_led_commands = {
+'led_reset' :       '\xCA\x00\x00\x00\x00\x00\xFE\x8C\xF0',
+'led_red_max':      '\xCA\x00\x00\x00\x00\x02\x7E\x12\x01\x95\x88\xCA\x00\x00\x00\x00\x05\x7E\x04\xFF\x00\x00\x64\x7A\xE0\xCA\x00\x00\x00\x00\x05\x7E\x00\xFF\x00\x00\x64\xBA\x11',
+'led_green_max':    '\xCA\x00\x00\x00\x00\x02\x7E\x12\x01\x95\x88\xCA\x00\x00\x00\x00\x05\x7E\x04\x00\xFF\x00\x64\x5E\xE0\xCA\x00\x00\x00\x00\x05\x7E\x00\x00\xFF\x00\x64\x9E\x11',
+'led_blue_max':     '\xCA\x00\x00\x00\x00\x02\x7E\x12\x01\x95\x88\xCA\x00\x00\x00\x00\x05\x7E\x04\x00\x00\xFF\x64\x9E\x91\xCA\x00\x00\x00\x00\x05\x7E\x00\x00\x00\xFF\x64\x5E\x60',
+}
+
+serialObject = serial.Serial("COM1", 9600)
+list_command = [0xCA, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFE, 0x8C, 0xF0]
+for x in range(3):
+    #serialObject.write(dict_led_commands['led_reset'])
+    serialObject.write(dict_led_commands['led_red_max'])
+    print "led_red_max"
+    time.sleep(1)
+    
+    serialObject.write(dict_led_commands['led_green_max'])
+    print "led_green_max"
+    time.sleep(1)
+    
+    serialObject.write(dict_led_commands['led_blue_max'])
+    print "led_blue_max"
+    time.sleep(1)
+    
+print "end"
+
+# XOR Checksum based on a polynomial
