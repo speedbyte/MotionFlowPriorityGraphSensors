@@ -12,8 +12,7 @@ clear all;
 %static inout of 2 images. To be expanded for videos
 
 
-
-path = './image_0/';
+path = '../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/training/image_2/';
 fileNames = dir(fullfile(path,'*.png'));
 
 C = cell(length(fileNames),1);
@@ -27,47 +26,76 @@ end
 i = 1;
 j = 0
 
+mkdir('results_dense');
+mkdir('results_sparse');
 
 while i <  length(fileNames) 
-    opticFlow = opticalFlowFarneback%('NoiseThreshold',0.009);
-
+    
+    opticFlow_dense = opticalFlowFarneback;%('NoiseThreshold',0.009);
+    opticFlow_sparse = opticalFlowLK('NoiseThreshold',0.005);
+    
     img1 = C{i};
     img2 = C{i+1};
 
-    name = sprintf('./results/%06d_10.png',j);
-
+    name_dense = sprintf('./results_dense/%06d_10.png',j);
+    name_sparse = sprintf('./results_sparse/%06d_10.png',j);
     %Grayscale
     frameGray1 = rgb2gray(img1);
     frameGray2 = rgb2gray(img2);
     
     %calc the Optical Flow on Frame 1 with the used procedure
-    estimateFlow(opticFlow,frameGray1);
-    
+    estimateFlow(opticFlow_dense,frameGray1);
+    estimateFlow(opticFlow_sparse,frameGray1);
     
     %calc OF on frame 2. This step is the important one
-    flow2 = estimateFlow(opticFlow,frameGray2);
+    flow2_dense = estimateFlow(opticFlow_dense,frameGray2);
+    flow2_sparse = estimateFlow(opticFlow_sparse,frameGray2);
     
+    % ----------- DENSE -----------%
     % For the Validation channel.
-    vxCopy = (flow2.Vx ~= 0);
-    vyCopy = (flow2.Vy ~= 0);
-    vXYCopy = vxCopy+vyCopy;
-    vCopy = (vXYCopy ~= 0);
+    vxCopy_dense = (flow2_dense.Vx ~= 0);
+    vyCopy_dense = (flow2_dense.Vy ~= 0);
+    vXYCopy_dense = vxCopy_dense+vyCopy_dense;
+    vCopy_dense = (vXYCopy_dense ~= 0);
     
    
-   %Quantize for Kitti Evaluation set
-   vx = (flow2.Vx*64)+2^15;
-   vy = (flow2.Vy*64)+2^15;
+    %Quantize for Kitti Evaluation set
+    vx_dense = (flow2_dense.Vx*64)+2^15;
+    vy_dense = (flow2_dense.Vy*64)+2^15;
     
-   %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
-   %and Validation bit
-    res = cat(3,vx,vy,vCopy);
-    re =  uint16(res);
+    %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
+    %and Validation bit
+    res_dense = cat(3,vx_dense,vy_dense,vCopy_dense);
+    re16_dense =  uint16(res_dense);
+    %disp(re(:,:,1));
+    
+    % ----------- SPARSE -----------%
+    % For the Validation channel.
+    vxCopy_sparse = (flow2_sparse.Vx ~= 0);
+    vyCopy_sparse = (flow2_sparse.Vy ~= 0);
+    vXYCopy_sparse = vxCopy_sparse+vyCopy_sparse;
+    vCopy_sparse = (vXYCopy_sparse ~= 0);
+    
+   
+    %Quantize for Kitti Evaluation set
+    vx_sparse = (flow2_sparse.Vx*64)+2^15;
+    vy_sparse = (flow2_sparse.Vy*64)+2^15;
+    
+    %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
+    %and Validation bit
+    res_sparse = cat(3,vx_sparse,vy_sparse,vCopy_sparse);
+    re16_sparse =  uint16(res_sparse);
      %disp(re(:,:,1));
     
-    %Creates OF png for Kitti. Not very lucidly if looked at
-    imwrite( re,name);
+         
+    %Creates OF dense estimate png for Kitti. Not very lucidly if looked at
+    imwrite( re16_dense,name_dense);
+    %Creates OF sparse estimate png for Kitti. Not very lucidly if looked at
+    imwrite( re16_sparse,name_sparse);
+    
     i = i+2;
     j = j+1
+    
 end    
 
     %This shows the Optical Flow with arrows
