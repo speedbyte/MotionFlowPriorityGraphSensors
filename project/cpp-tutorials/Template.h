@@ -7,6 +7,7 @@
 
 /** brief Class templates
 
+ Quick sort algorithm is the same whether sorting integers, complex numbers, or strings. Hence we use templates.
  * Dependant and non dependant types:
 
  All template instantiation are dependant because the type of the declaration is not known until they are
