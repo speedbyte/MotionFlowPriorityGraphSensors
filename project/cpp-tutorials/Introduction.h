@@ -61,24 +61,15 @@
  Base* base = new Derived; This means that base is a pointer to the type Base and contains the address of the Derived
  type. This is a valid statement. Base pointers / references can be assigned to their derivatives.
 
- Virtual Constructor:
- Virtual constructors do not exist. The simple reason is that constructors are used to create objects. They are like
- machine in a factory churning out a product. Hence, at the time of instantiation of the object, the constructors
- needs to be known. Thinking of constructors as member functions attached to an existing object is the wrong mental
- mode, instead think of them as factories that churns out objects. The virtual table is a pointer table that points
- to member functions ( base or derived or derived derived etc. ) . Since constructors are not member functions, it is
- not possible to make them as virutal.
+ The sequence of the destructor is exactly the opposite of the constructor. First the derived class object is
+ destructed and in the reverse sequence as the member data are declared in the class body. Then the non virtual base
+ class object is destructed. For virtual base class, the destructor of the base class is only called, when the most
+ derived object is destructed. Hint - diamond shaped multiple inheritance.
+
 
  This pointer:
  This pointer in a class has a type "pointer to the class". If it is invoked in the member function of the class and
  the member function is const, then the this pointer has a type "const pointer to the class"
-
- Copy constructor:
- Many a times, one would like to simply copy an already instantiated object.
- This can be done by new CopyExample (&objectToBeCopied) or if done within the class itself,
- new CopyExample( *this )
- One can explicitly specify the base class in the derived constructor. But it is not important, as the base class
- constructor will be called implicitly. Derived(int radius = 0 ): Base(), _radius(radius)
 
  Scope operator:
  The purpose of the scope operator is to bypass the dynamic binding mechanism. Hence a syntax like
@@ -133,6 +124,9 @@
  2. delete is called
  3. main ends where the object was created
 
+ One can explicitly specify the base class in the derived constructor. But it is not important, as the base class
+ constructor will be called implicitly. Derived(int radius = 0 ): Base(), _radius(radius)
+
  It is worth mentioning that constructors can only call constructors from their immediate parent/base class.
  Consequently, the C constructor could not call or pass parameters to the A constructor directly. The C constructor
  can only call the B constructor (which has the responsibility of calling the A constructor).
@@ -146,7 +140,27 @@
  The nutshell is that the virtual base class is never created by the class that inherited the virtual base class,
  but is created by the most derived class.
 
+ Virtual Constructor:
+ Virtual constructors do not exist. The simple reason is that constructors are used to create objects. They are like
+ machine in a factory churning out a product. Hence, at the time of instantiation of the object, the constructors
+ needs to be known. Thinking of constructors as member functions attached to an existing object is the wrong mental
+ mode, instead think of them as factories that churns out objects. The virtual table is a pointer table that points
+ to member functions ( base or derived or derived derived etc. ) . Since constructors are not member functions, it is
+ not possible to make them as virutal.
+
+ Copy constructor:
+ Many a times, one would like to simply copy an already instantiated object.
+ The copy constructor needs to be defined in the class. If the copy constructor definition does not exist, then the
+ constructor cannot be copied as well. Using the copy constructor a class object can be initialised with an already
+ available object. That means, the initialisation values are values of the object that is being copied.
+ The copy constructor syntax can be
+ Class obj2(obj1); Needs X-X reference Class(const Class& //mind, there is no parameter here//) { }
+ Class obj2 = obj1; Needs Class& operator=(const Class& class);
+ new CopyExample (&objectToBeCopied);
+ new CopyExample( *this ) // when the copy is in the class itself.
+
  Default Constructor:
+ This is of the form Class() { };
  If the base constructor is not called explicitly, then the compiler calls the default constructor written in the
  base class. In the below example, the default constructor has two variables, name and age and both are initialised
  to 0. However, if the base object would have been called by two parameters, then the initialisation would have been
@@ -161,6 +175,52 @@
      Person(std::string name = "", int age = 0)
         : m_name(name), m_age(age )
 
+ bool operator>(const Cents &c1, const Cents &c2)
+
+ Consider the expression std::cout << Point. If the operator is <<, what are the operands? The left operand is the
+ std::cout object of type std::ostream, and the right operand is the Point class object.
+
+ If you are using a member function instead, the left operand automatically becomes the this object. If you are
+ working on a unary operator, then no parameters needs to be passed.
+
+ Although we can overload operator+(Cents, int) as a member function (as we did above), we can’t overload operator+
+ (int, Cents) as a member function, because int isn’t a class we can add members to.
+
+ Also operator<< cannot be overloaded with member function, because the left operand is std::ostream.
+
+ Compiler implicitly converts an object prefix into a hidden leftmost parameter named *this
+
+
+ friend ostream& operator<< (ostream &out, const Cents &cents)
+ {
+     out << cents.m_cents << " cents ";
+     return out;
+ }
+ std::cout << average(array3, 4) << '\n';
+
+ Friend function:
+ Friend a functions is a breather for programmer because they do not have to define the getters and setters for the
+ private variables. A friend function allows to access all the private variables of a class and hence gaining two
+ important things - one does not have to define public functions for this class. This avoids any other class inheriting
+ the class and using the public functions. The friend function is just like a normal function.  A friend function may
+ be either a normal function, or a member function of another class.  To declare a friend function, simply use the
+ friend keyword in front of the prototype of the function you wish to be a friend of the class.  It does not matter
+ whether you declare the friend function in the private or public section of the class. Note that we have to pass the
+ parent class object to the friend function. This is because friend function is not a member function. It does not have
+ a *this pointer, nor does it have an parent class object to work with, unless given one. It is also possible to make
+ an entire class a friend of another class. This gives all of the members of the friend class access to the private
+ members of the other class. Here is an example:
+
+    // Make the reset() function a friend of this class
+    friend void reset(Accumulator &accumulator);
+
+ This simply means, that reset() can be called from anyone. If we want to restrict reset to be called by a specific
+ class, then NewClass::reset() needs to be forward declared in the ParentClass. Another way is to open the ParentClass
+ completely by declaring the whole class as friend i.e
+
+    friend class NewClass;
+
+ in the prototype for the ParentClass. Friending is commonly used when defining overloading operators.
  It turns out that there are three different ways to overload operators: the member function way, the friend function
  way, and the normal function way. We’ll first show you the friend function way (because it’s more intuitive for most
  binary operators) and the normal function way. In a later lesson, we’ll cover the member function way (and discuss
@@ -316,7 +376,12 @@
  and hence the call to the address is already designated. Virtual functions allow a program to call methods that
  don't necessarily even exist at the moment the code is compiled. It could be possible that the there is a
  overriden function in a derived class in one of the library that is linked at linking stage or an overriden
- function comes from a run time library.
+ function comes from a run time library. One point to note with respect to the virtual functions called in the
+ constructors is that the constructors ignore the dynamic binding of virtual functions. The reason is simply as
+ stated in the section Constructors is that the constructors give life to an object. One cannot go into the virtual
+ world, when the object itself is not real. The same stands for destructors. By the time, the base class destructor
+ is called, the derived object is already buried. Hence, it makes sense to call the native virtual function of the
+ base class and not look for the derived version of the virtual function.
 
  The modifier ( virtual ) is inherited by all implementations of that method in derived classes, and hence it is not
  strict to prepend the modifier again in all the overriden derived member functions. Only the most base class
@@ -472,5 +537,87 @@
  references.
 
     int (&xFunc)() = funcX; xFunc() is an alias for funcX
+
+ Scope:
+
+ Static data and functions inside a class are shared among all class objects. They can be accessed the way just another
+ non  static data member or member function is accessed. The only difference is, that the static members retain their
+ values and the  non static members have values depending on the class they are called.
+ Another way to access static data member and functions is using the scope resolution operator. One can think static
+ data and member functions as obdachlosen. They are not linked to any house and can be accessed by anyone. They also
+ do not come under access control, hence they can be put anywhere ( private, public, protected ) and they are still
+ accessible via the scope resolution operator or class objects. The static data is therefore default public. The
+ static member and member functions when declared inside a class is just a kind of forward declaration. They have to
+ be explicitly defined outside the class, because static member variables are not a part of the individual class
+ objects. Mostly, the class is declared in the header file and the static members are defined in the cpp file. There
+ is one excetion however, when the static values can also be defined within the class. This is when the static member
+ is declared to be a const. This is called inline initialisation of static member variables.
+
+ We said, that the static variables should be defined outside the class. This is not a good way to write a program,
+ because in an object oriented programming, most of the data and initialisation is hidden. Constructors are meant to
+ initialise and they are hidden. Similarly static member initialisation should also be hidden. The hiding of
+ initialisation of static member data is possible, if the static object is initialised in a different class. So a
+ sequence of nested classes can achieve the initialisation of static variables.
+
+ Although static members can be accessed by the class object, this is discouraged. The perfereable way is to access
+ the static member data via a scope resolution operator or the static member data can also be accessed by a static
+ member function.
+ One good example of the usage of static objects inside a class is when a count of number of objects of the class is
+ required. Everytime a constructor is called, the static data increments and everytime a destructor is called, the
+ static data is decremented. Ofcourse, one should make sure, that this static member data is not incremented or
+ decremented elsewhere, which technically is not a problem at all.
+ One word of caution is that the static objects needs to be initalised before it is used. Technically, it is possible
+ that the static data is used before it is initialised. Proper care should be taken to avoid the situation.
+
+ Static member functions cannot access non static data.
+
+ Pure static class:
+ A pure static claass is class whose all members are static. A word of note - pure virtual class is called abstract
+ class. Pure virtual function is when a function is initialised to 0.
+
+
+ Class scope static objects
+ File scope static objects
+ File scope global objects
+
+ TYPEDEFS and #DEFINES
+
+    typedef int* int_p1;
+    int_p1 a, b, c;  // a, b, and c are all int pointers.
+
+    #define int_p2 int*
+
+    int_p2 a, b, c;  // only the first is a pointer!
+
+    typedef int a10[10];
+    a10 a, b, c; // create three 10-int arrays
+    int a[10], b[10], c[10];
+    typedef int (*func_p) (int);
+    func_p fp // func_p is a pointer to a function that takes an int and returns an int
+    int (*fp)(int)
+
+ Usually, typedefs are the way to go as they are so much less error-prone. In which case you could use using = as well
+ but that's personal preference since they're both the same:
+
+ The only difference between both prototypes is the use of either the keyword class or the keyword typename. Its use is
+ indistinct, since both expressions have exactly the same meaning and behave exactly the same way.
+
+ #define is a symbolic constant.
+ #ifndef CONSTANTS_H
+ #define CONSTANTS_H
+
+ // define your own namespace to hold constants
+ namespace constants
+ {
+     const double pi(3.14159);
+     const double avogadro(6.0221413e23);
+     const double my_gravity(9.2); // m/s^2 -- gravity is light on this planet
+     // ... other related constants
+ }
+ #endif
+
+ using declaration and using directive
+
+ typedef int &ref_to_int; ref_to_int const r = i;
 
 #endif //CPP_TUTORIALS_INTRODUCTION_H
