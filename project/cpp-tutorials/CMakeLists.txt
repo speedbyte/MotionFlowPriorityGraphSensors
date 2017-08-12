@@ -2,46 +2,25 @@ cmake_minimum_required(VERSION 3.5)
 project(cpp_tutorials)
 
 set(CMAKE_CXX_STANDARD 11)
+message("list of paths for find_file and find_path ${CMAKE_SYSTEM_INCLUDE_PATH}")
+message("list of paths for find_library ${CMAKE_SYSTEM_LIBRARY_PATH}")
+message("list of paths for find_program ${CMAKE_SYSTEM_PROGRAM_PATH}")
 
-find_package(Doxygen)
+find_package(libuvc REQUIRED)
+set(SOURCE_FILES main.cpp)
+add_library( tutorials.lib ${SOURCE_FILES})
 
-#set(SOURCE_FILES main2.cpp)
-#add_library( tutorials.lib ${SOURCE_FILES})
-
-set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/../../libs/boost-install/include")
-find_package(Boost COMPONENTS system filesystem)
+set(BOOST_LIBRARYDIR "/usr/local/lib/boost/")
+find_package(Boost REQUIRED system filesystem)
 
 include_directories(${Boost_INCLUDE_DIRS})
+message("include directory for boost ist ${Boost_INCLUDE_DIRS}")
 
 add_executable(overloading main.cpp Overload.cpp Larger.cpp Template.cpp OperatorOverload.cpp)
 target_link_libraries(overloading ${Boost_LIBRARIES})
 
-message("Doxygen found ${DOXYGEN_FOUND} ${DOXYGEN_VERSION}")
+set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")
+message("CMAKE_MODULE_PATH is ${CMAKE_MODULE_PATH}")
+include(CMakeListsDoxygen)
 
-if(DOXYGEN_FOUND)
-
-    set(DOXYGEN_INPUT main.cpp)
-#    set(DOXYGEN_INPUT {SOURCE_FILES})
-    set(DOXYGEN_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-
-    add_custom_command(
-            OUTPUT ${DOXYGEN_OUTPUT}
-            COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
-            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
-            COMMAND ${CMAKE_COMMAND} -E echo "Done."
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            DEPENDS ${DOXYGEN_INPUT}
-    )
-
-    add_custom_target(apidoc ALL DEPENDS ${DOXYGEN_OUTPUT})
-
-    add_custom_target(apidoc_forced
-            COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
-            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
-            COMMAND ${CMAKE_COMMAND} -E echo "Done."
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            )
-
-endif(DOXYGEN_FOUND)
-
-
+set(ENV{PKG_CONFIG_PATH}  "$ENV{PKG_CONFIG_PATH}:${CMAKE_SOURCE_DIR}/../../libs/boost-install/lib/pkgconfig")

@@ -112,6 +112,7 @@ function exit_function
 
 function enter_boost_fn
 {
+#1.64.0
 cd $SOURCE_DIR
 if [ "$BOOST_OPTION" == "y" ] ; then
     tput setf 3
@@ -131,13 +132,14 @@ if [ "$BOOST_OPTION" == "y" ] ; then
     #ln -s ./boost ./stage/include
     mkdir -p $BOOST_PWD/../boost-install/lib/pkgconfig
     python $SOURCE_DIR/utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p $BOOST_PWD/../boost-install -o $BOOST_PWD/../boost-install/lib/pkgconfig/boost.pc $BOOST_PWD/../boost-install/lib/
-#python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
+    #python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
     cd $SOURCE_DIR
 fi
 }
 
 function enter_ffmpeg_fn
 {
+#n3.3
 cd $SOURCE_DIR
 if [ "$FFMPEG_OPTION" == "y" ] ; then
     tput setf 3
@@ -164,6 +166,7 @@ fi
 
 function enter_opencv_fn
 {
+#3.2.0
 cd $SOURCE_DIR
 if [ "$OPENCV_OPTION" == "y" ]; then
     tput setf 2 

@@ -29,3 +29,7 @@
 	path = libs/protobuf
 	url = https://github.com/google/protobuf
 	branch = master
+[submodule "libuvc"]
+	path = libs/libuvc
+	url = https://github.com/ktossell/libuvc
+	branch = master
