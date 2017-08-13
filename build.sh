@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#To change submodule versions, simply go into the submodule folder. git checkout version. then git clean -ndf. remove any unwanted directories.
+#To make this permanent across different computers, commit and push the submodule status.
+
 while getopts ":t:bfolpcier:dah" opt; do
   case $opt in
     t)
@@ -32,7 +35,7 @@ while getopts ":t:bfolpcier:dah" opt; do
       ;;
     i)
       echo "-i was triggered, Parameter: $OPTARG" >&2
-      IVT_OPTION="y"
+      INSTALL_OPTION="y"
       ;;
     e)
       echo "-e was triggered, Parameter: $OPTARG" >&2
@@ -49,9 +52,8 @@ while getopts ":t:bfolpcier:dah" opt; do
       FFMPEG_OPTION="y"
       OPENCV_OPTION="y"
       LIBSVM_OPTION="y"
-      
       CAFFE_OPTION="y"
-      IVT_OPTION="y"
+      INSTALL_OPTION="n"
       EXTERNAL_OPTION="y"
       ;;
     \?)
@@ -68,7 +70,7 @@ while getopts ":t:bfolpcier:dah" opt; do
       echo "Option -l is meant for libsvm"
       echo "Option -p is meant for project"
       echo "Option -c is meant for caffe"
-      echo "Option -i is meant for ivt"
+      echo "Option -i is meant for install"
       echo "Option -e is meant for external"
       echo "Option -a is meant for all"
       echo "Option -h is meant for this help"
@@ -91,7 +93,7 @@ if [ $# -eq 0 ]; then
     BOOST_OPTION="y"
     PROJECT_OPTION="y"
     CAFEE_OPTION="y"
-    IVT_OPTION="y"
+    INSTALL_OPTION="n"
     EXTERNAL_OPTION="y"
 fi
 
@@ -112,7 +114,6 @@ function exit_function
 
 function enter_boost_fn
 {
-#1.64.0
 cd $SOURCE_DIR
 if [ "$BOOST_OPTION" == "y" ] ; then
     tput setf 3
@@ -120,16 +121,13 @@ if [ "$BOOST_OPTION" == "y" ] ; then
     echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
     if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning boost ...."; ./b2 --clean; rm -rf bin.v2; cd ../../; return; fi
+    if [ ! -d $BOOST_PWD/tools/build ]; then echo "download build.git by git submodule update --remote"; exit; fi
     ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install/
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-    ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" install
-#    if [ ! -d stage ] ; then
-#        if [ ! -f b2 ]; then
-#        ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install/
-#        fi
-#       ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" install
-#    fi
-    #ln -s ./boost ./stage/include
+    time ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" -j $(getconf _NPROCESSORS_ONLN) install
+    ret=$(echo $?)
+    echo "make in $SOURCE_DIR returned $ret"
+    if [ "$ret" == "0" ]; then echo "boost make successful"; else echo "boost build terminated with error"; exit_function; fi
     mkdir -p $BOOST_PWD/../boost-install/lib/pkgconfig
     python $SOURCE_DIR/utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p $BOOST_PWD/../boost-install -o $BOOST_PWD/../boost-install/lib/pkgconfig/boost.pc $BOOST_PWD/../boost-install/lib/
     #python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
@@ -139,8 +137,6 @@ fi
 
 function enter_ffmpeg_fn
 {
-#n3.3
-cd $SOURCE_DIR
 if [ "$FFMPEG_OPTION" == "y" ] ; then
     tput setf 3
     cd $FFMPEG_PWD
@@ -151,7 +147,7 @@ if [ "$FFMPEG_OPTION" == "y" ] ; then
     cd $FFMPEG_PWD
     CXXFLAGS="-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC" ./configure --prefix="$FFMPEG_PWD/../ffmpeg-install" --bindir="./bin" --enable-shared
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-    time make > /dev/null #2>&1
+    time make  -j $(getconf _NPROCESSORS_ONLN) 2>&1
     ret=$(echo $?)
     echo "make in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "ffmpeg make successful"; else echo "ffmpeg build terminated with error"; rm -rf build; rm -f config.mak; exit_function; fi
@@ -160,13 +156,13 @@ if [ "$FFMPEG_OPTION" == "y" ] ; then
     ret=$(echo $?)
     echo "make-install in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "ffmpeg make-install successful"; else echo "ffmpeg make-install terminated with error. Please see the /dev/null file "; exit_function; fi
+    find $FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig -name '*.pc' -exec sed -i 's!/local/git/PriorityGraphSensors/libs/ffmpeg/../ffmpeg-install$!/usr/local!' {} \;
     cd $SOURCE_DIR
 fi
 }
 
 function enter_opencv_fn
 {
-#3.2.0
 cd $SOURCE_DIR
 if [ "$OPENCV_OPTION" == "y" ]; then
     tput setf 2 
@@ -179,7 +175,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Configuring opencv"
     #export PKG_CONFIG_LIBDIR=$PKG_CONFIG_LIBDIR:$SOURCE_DIR/../ffmpeg/build/lib/
-    export LD_LIBRARY_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/
+    #export LD_LIBRARY_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/
     echo $(printenv | grep PKG_CONFIG_PATH)
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "In order to use the opencv 3rd party versions of libraries instead of system ones on UNIX systems you
@@ -187,7 +183,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     mkdir -p release; cd release
     cmake -Wno-dev -Wl,-rpath=$FFMPEG_PWD/../ffmpeg-install/lib/ -D ENABLE_PRECOMPILED_HEADERS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../../opencv-install -D WITH_GTK=ON ..
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
-    time make > /dev/null #2>&1
+    time make -j $(getconf _NPROCESSORS_ONLN) 2>&1
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "opencv make successful"; else echo "opencv make terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
@@ -302,15 +298,15 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     #
     # library path
     #
-    export LD_LIBRARY_PATH="$SOURCE_DIR/libs/boost-install/lib/:$PROJECT_PWD/install/lib:$SOURCE_DIR/libs/opencv-install/lib/"
+    export LD_LIBRARY_PATH="/usr/local/lib/:/usr/lib/:$PROJECT_PWD/install/lib"
     #
     echo "Run just in time compiler"
-    ./vtd_framework -i "protobuild" -f  $PROJECT_PWD/install/ -c $FILE_CONFIG -d $DIR_DATA/kitti_dataset/raw_dataset_with_calib/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results -v
+    #./vtd_framework -i "protobuild" -f  $PROJECT_PWD/install/ -c $FILE_CONFIG -d $DIR_DATA/kitti_dataset/raw_dataset_with_calib/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results -v
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Run inddividual tests without jit compiler invocation"
-    ./vtd_framework -i "opticalflow" -f  $PROJECT_PWD/install/ -d $DIR_DATA/kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync -r -s -o $PROJECT_PWD/results -v
+    ./vtd_framework -i "opticalflow" -f  $PROJECT_PWD/install/  -d $DIR_DATA/kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync -r -s -o $PROJECT_PWD/results -v
     cd $SOURCE_DIR
 fi
 }
@@ -359,6 +355,13 @@ if [ "$EXTERNAL_OPTION" == "y" ] ; then
 fi
 }
 
+function enter_install_fn
+{
+    if [ "$INSTALL_OPTION" == "y" ]; then
+        gksudo bash copybuild.sh
+    fi
+}
+
 function enter_dummy_fn
 {
     echo "Do Nothing"
@@ -370,37 +373,26 @@ FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
 OPENCV_PWD="$SOURCE_DIR/libs/opencv"
 PROJECT_PWD="$SOURCE_DIR/project/VirtualTestDriveFramework"
 #PROJECT_PWD="$SOURCE_DIR/project"
-export PKG_CONFIG_PATH=$FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig:$BOOST_PWD/../boost-install/lib/pkgconfig:$OPENCV_PWD/../opencv-install/lib/pkgconfig
 #TODO : Compare Inode instead of string
 enter_boost_fn
-    if [ "$BUILD_OPTION" != "clean" ]; then
-    PKG_CONFIG_PATH_INCLUDE_BOOST=$(pkg-config --cflags boost)
-    echo $PKG_CONFIG_PATH_INCLUDE_BOOST
-    ACTUAL_BOOST_INCLUDE_PATH=$BOOST_PWD/../boost-install/include
-    echo $ACTUAL_BOOST_INCLUDE_PATH
-    if [[ $PKG_CONFIG_PATH_INCLUDE_BOOST == "-I$ACTUAL_BOOST_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_BOOST $PKG_CONFIG_PATH_INCLUDE_BOOST"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_BOOST $PKG_CONFIG_PATH_INCLUDE_BOOST"; exit_function; fi
-    fi
 enter_ffmpeg_fn
-    if [ "$BUILD_OPTION" != "clean" ]; then
+#export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+if [ "$BUILD_OPTION" != "clean" ]; then
     PKG_CONFIG_PATH_INCLUDE_FFMPEG=$(pkg-config --cflags libavcodec)
     echo $PKG_CONFIG_PATH_INCLUDE_FFMPEG
-    ACTUAL_FFMPEG_INCLUDE_PATH=$FFMPEG_PWD/../ffmpeg-install/include
+    ACTUAL_FFMPEG_INCLUDE_PATH=/usr/local/include
     echo $ACTUAL_FFMPEG_INCLUDE_PATH
     if [[ $PKG_CONFIG_PATH_INCLUDE_FFMPEG == "-I$ACTUAL_FFMPEG_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; exit_function; fi
-    fi
+fi
 enter_opencv_fn
-    if [ "$BUILD_OPTION" != "clean" ]; then
-    PKG_CONFIG_PATH_INCLUDE_OPENCV=$(pkg-config --cflags opencv)
-    echo $PKG_CONFIG_PATH_INCLUDE_OPENCV
-    ACTUAL_OPENCV_INCLUDE_PATH=$SOURCE_DIR/libs/opencv-install/include
-    echo $ACTUAL_OPENCV_INCLUDE_PATH
-    if [[ $PKG_CONFIG_PATH_INCLUDE_OPENCV == "-I$ACTUAL_OPENCV_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_OPENCV $PKG_CONFIG_PATH_INCLUDE_OPENCV"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_OPENCV $PKG_CONFIG_PATH_INCLUDE_OPENCV"; exit_function; fi
-    fi
 #enter_caffe_fn
 #enter_libsvm_fn
 #enter_ivt_fn
 enter_project_fn
 enter_project_run_fn
 #enter_external_algorithm_fn
+if [ "$BUILD_OPTION" != "clean" ]; then
+enter_install_fn
+fi
 enter_dummy_fn
 
