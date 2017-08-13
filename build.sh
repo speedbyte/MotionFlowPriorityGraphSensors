@@ -282,31 +282,19 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     DIR_FRAMEWORK_ROOT=$PROJECT_PWD #"$(dirname "${BASH_SOURCE[0]}")"
     echo "detected framework root: ${DIR_FRAMEWORK_ROOT}"
-    #
-    # find vtd_framework binary
-    #
     DIR_BIN="${DIR_FRAMEWORK_ROOT}/bin"
     VTD_FRAMEWORK_BIN="${DIR_BIN}/vtd_framework"
-    #
-    # prepare configuration
-    #
     DIR_CONFIG="${DIR_FRAMEWORK_ROOT}/config"
     DIR_DATA="${DIR_FRAMEWORK_ROOT}/../../"
     FILE_CONFIG="${DIR_CONFIG}/${PROTOCONFIG}.prototxt"
-    #FILE_CONFIG="${DIR_CONFIG}/ego_motion.prototxt"  # hack to test the scripts
-    export CPATH="$SOURCE_DIR/libs/boost-install/include/:$SOURCE_DIR/libs/opencv-install/include/:$SOURCE_DIR/utils/gnuplot-iostream"
-    #
-    # library path
-    #
-    export LD_LIBRARY_PATH="/usr/local/lib/:/usr/lib/:$PROJECT_PWD/install/lib"
-    #
-    echo "Run just in time compiler"
+    export LD_LIBRARY_PATH="$PROJECT_PWD/install/lib"
+    #echo "Run just in time compiler"
     #./vtd_framework -i "protobuild" -f  $PROJECT_PWD/install/ -c $FILE_CONFIG -d $DIR_DATA/kitti_dataset/raw_dataset_with_calib/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results -v
-    ret=$(echo $?)
-    if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
+    #ret=$(echo $?)
+    #if [ "$ret" == "0" ]; then echo "project run successful"; else echo "project run terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Run inddividual tests without jit compiler invocation"
-    ./vtd_framework -i "opticalflow" -f  $PROJECT_PWD/install/  -d $DIR_DATA/kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync -r -s -o $PROJECT_PWD/results -v
+    ./vtd_framework -i "${PROTOCONFIG}" -f  $PROJECT_PWD/install/  -d $DIR_DATA/kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync -r -s -o $PROJECT_PWD/results -v
     cd $SOURCE_DIR
 fi
 }
@@ -392,7 +380,7 @@ enter_project_fn
 enter_project_run_fn
 #enter_external_algorithm_fn
 if [ "$BUILD_OPTION" != "clean" ]; then
-enter_install_fn
+    enter_install_fn
 fi
 enter_dummy_fn
 
