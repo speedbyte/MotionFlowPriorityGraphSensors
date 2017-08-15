@@ -36,3 +36,7 @@
 [submodule "mrpt"]
 	path = project/mrpt
 	url = https://github.com/MRPT/mrpt.git
+[submodule "pcl"]
+	path = libs/pcl
+	url = https://github.com/PointCloudLibrary/pcl.git
+	branch = master
