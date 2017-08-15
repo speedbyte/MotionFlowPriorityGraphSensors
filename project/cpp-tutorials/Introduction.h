@@ -7,6 +7,7 @@
 
 /**
 
+
  A class is a way to abstract behaviour, not just a way to encapsulate bits. A class interface must make
  sense from the outside. If a detached user expects services to access an attribute, those services should exist.
  One should think OO as behaviour centric and not data centric.
@@ -147,6 +148,13 @@
  mode, instead think of them as factories that churns out objects. The virtual table is a pointer table that points
  to member functions ( base or derived or derived derived etc. ) . Since constructors are not member functions, it is
  not possible to make them as virutal.
+
+ The Big Three:
+
+ Destructors, Copy constructor and the assignment operator are the big threes. When the program does not explicitly
+ defines it, then the compiler synthesises them in the background. So, X a; and X b = a; and X b; b = a; are all
+ valid statements irrespective of if the class has defined them explictly. The first one calls a default constructor,
+ the second one calls the copy constructor and the third one calls the assignment operator.
 
  Copy constructor:
  Many a times, one would like to simply copy an already instantiated object.
@@ -593,7 +601,7 @@
     a10 a, b, c; // create three 10-int arrays
     int a[10], b[10], c[10];
     typedef int (*func_p) (int);
-    func_p fp // func_p is a pointer to a function that takes an int and returns an int
+    func_p fp; // fp is a pointer to a function that takes an int and returns an int
     int (*fp)(int)
 
  Usually, typedefs are the way to go as they are so much less error-prone. In which case you could use using = as well

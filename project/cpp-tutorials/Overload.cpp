@@ -30,7 +30,7 @@ namespace cpp_tutorials {
             return out;
         }
 
-        Overload& operator+ (const Overload &O1, const Overload &O2) {
+        const Overload operator+ (const Overload &O1, const Overload &O2) {
             std::string result = O1.getString() + O2.getString();
             Overload tmp(result);
             return tmp;

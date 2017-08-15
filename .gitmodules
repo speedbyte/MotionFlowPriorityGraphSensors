@@ -33,3 +33,6 @@
 	path = libs/libuvc
 	url = https://github.com/ktossell/libuvc
 	branch = master
+[submodule "mrpt"]
+	path = project/mrpt
+	url = https://github.com/MRPT/mrpt.git

@@ -18,7 +18,6 @@ namespace cpp_tutorials {
      * useful in areas,.... variable arguement list.
      * @return
      */
-    template int advancedTemplate<>()
 
     /** brief
      * Function template with 2 arguments

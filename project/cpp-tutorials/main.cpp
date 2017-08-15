@@ -13,7 +13,35 @@ using namespace cpp_tutorials;
 using std::unique_ptr;
 using std::cout;
 
+template<typename T, int size>
+class Array {
+public:
+    Array(unsigned len=size):len_(len), data_(new T[len]) {
+     } //uniform init
+    Array(const Array<T,size>&) {}// copy constructor b(a) or b = a
+    Array<T,size>& operator= (const Array<T,size>&); //assignment, b = a
+    ~Array() { delete [] data_;}
+    unsigned len() const {return len_;}
+    const T& operator [] ( unsigned i) const { return data_[i];}
+    T& operator [] ( unsigned i) { return data_[i];}
+    friend std::ostream& operator<< (std::ostream &out, const Array<T,size> &array) {
+        for ( int i = 0; i < array.len() ; i++) {
+            out<<"index " << i << " value " << array[i] << ";";
+        }
+        return out;
+    }
+private:
+    T* data_;
+    unsigned len_;
+};
+
 int main ( int argc, char *argv[]) {
+
+    Array<int,10> int_array;
+    Array<Array<int,2>,2> arr_of_int_array;
+
+    std::cout << int_array << std::endl;
+    std::cout << arr_of_int_array << std::endl;
 
     std::cout<<"Current program is Overload" << std::endl;
     cpp_tutorials::overload::Overload O1("Hello");
@@ -205,7 +233,7 @@ int main ( int argc, char *argv[]) {
     }
     //boost::filesystem path = ""
     //sserr << sspdir(m_framework_path) << "\n\t\tframework root path is not a valid directory: " << m_framework_path
-           << ssthrow;
+    //       << ssthrow;
 
 
     return 0;

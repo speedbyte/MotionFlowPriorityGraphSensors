@@ -21,7 +21,7 @@ namespace cpp_tutorials {
             friend std::ostream& operator<< (std::ostream &out, const Overload &O1);
         };
 
-        const Overload& operator+ (const Overload &O1, const Overload &O2);
+        const Overload operator+ (const Overload &O1, const Overload &O2);
     }
 }
 

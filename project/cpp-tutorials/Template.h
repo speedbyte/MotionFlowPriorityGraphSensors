@@ -7,6 +7,11 @@
 
 /** brief Class templates
 
+ The cpp compiler parses the files in a maximum munch manner. This means, it tries to read character by character
+ until the next character doesnt make any sense anymore. This leads to a common problem between the >> character and
+ a template inside a template Array<Array<int>> because the compiler cannot distiguinish, what the >> is meant for.
+ This can be overriden by explicity writing a keyword template. So Array template <Array<int>>
+
  Quick sort algorithm is the same whether sorting integers, complex numbers, or strings. Hence we use templates.
  * Dependant and non dependant types:
 

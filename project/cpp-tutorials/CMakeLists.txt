@@ -10,13 +10,16 @@ find_package(libuvc REQUIRED)
 set(SOURCE_FILES main.cpp)
 add_library( tutorials.lib ${SOURCE_FILES})
 
-set(BOOST_LIBRARYDIR "/usr/local/lib/boost/")
+#set(BOOST_LIBRARYDIR "/usr/local/lib/")
 find_package(Boost REQUIRED system filesystem)
 
 include_directories(${Boost_INCLUDE_DIRS})
 message("include directory for boost ist ${Boost_INCLUDE_DIRS}")
 
-add_executable(overloading main.cpp Overload.cpp Larger.cpp Template.cpp OperatorOverload.cpp)
+aux_source_directory(. SOURCE_FILES)
+MESSAGE("   source files: ${SOURCE_FILES}")
+
+add_executable(overloading ${SOURCE_FILES})
 target_link_libraries(overloading ${Boost_LIBRARIES})
 
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")
