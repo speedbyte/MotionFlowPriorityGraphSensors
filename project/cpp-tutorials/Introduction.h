@@ -6,7 +6,10 @@
 #define CPP_TUTORIALS_INTRODUCTION_H
 
 /**
-
+ Literature:
+ Standard Template Library ( Scott Meyers )
+ Learncpp.com
+ C++ FAQ ( Cline, Molow )
 
  A class is a way to abstract behaviour, not just a way to encapsulate bits. A class interface must make
  sense from the outside. If a detached user expects services to access an attribute, those services should exist.
@@ -627,5 +630,17 @@
  using declaration and using directive
 
  typedef int &ref_to_int; ref_to_int const r = i;
+
+ Standard Template Library
+
+ A copy constructor and an assignment operator guarantees reference counting and that data is shared between the
+ various objects. When all the reference to the data ( referent ) is deleted, then the data ( referent ) is also
+ destroyed. The saves a lot of resource on the heap, because multiple copy of the same data is avoided, thus saving
+ space and memcpy to copy the data from one address to another is avoided and thus saving compuation.
+
+ Remote ownership:
+ When the object that owns a pointer also owns the allocation pointed to by that pointer, the object is said to have
+ remote ownership.
+
 
 #endif //CPP_TUTORIALS_INTRODUCTION_H

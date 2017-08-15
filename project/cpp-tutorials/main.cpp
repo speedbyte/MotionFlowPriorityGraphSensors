@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include <bits/unique_ptr.h>
 #include "Overload.h"
 #include "Larger.h"
@@ -16,10 +17,9 @@ using std::cout;
 template<typename T, int size>
 class Array {
 public:
-    Array(unsigned len=size):len_(len), data_(new T[len]) {
-     } //uniform init
+    Array(unsigned len=size):len_(len), data_(new T[len]) { } //uniform init
     Array(const Array<T,size>&) {}// copy constructor b(a) or b = a
-    Array<T,size>& operator= (const Array<T,size>&); //assignment, b = a
+    Array<T,size>& operator= (const Array<T,size>&) {} //assignment, b = a
     ~Array() { delete [] data_;}
     unsigned len() const {return len_;}
     const T& operator [] ( unsigned i) const { return data_[i];}
@@ -43,6 +43,7 @@ int main ( int argc, char *argv[]) {
     std::cout << int_array << std::endl;
     std::cout << arr_of_int_array << std::endl;
 
+    std::vector
     std::cout<<"Current program is Overload" << std::endl;
     cpp_tutorials::overload::Overload O1("Hello");
     cpp_tutorials::overload::Overload O2("World");

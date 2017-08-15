@@ -47,7 +47,7 @@ _grid_col, uint32_t _grid_row) {
             tmp = in1;
         std::string nWindow = uniqueName();
         cv::resize(tmp,subfig,subfig.size());
-        cv::namedWindow(nWindow, cv::WINDOW_AUTOSIZE);
+        cv::namedWindow(subfig.c_str(), cv::WINDOW_AUTOSIZE);
         cv::imshow(nWindow,subfig);
     }
 }
