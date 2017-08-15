@@ -1,4 +1,6 @@
+*.orig
 results_*
+*.pyc
 *~
 .idea/
 cmake-build-debug/
