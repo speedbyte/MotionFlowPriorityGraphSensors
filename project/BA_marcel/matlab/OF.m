@@ -1,3 +1,18 @@
+% Generate Optical Flow from /training/image_2/ and save in flow2_sparse.
+% Set Validation points from velocity vectors in flow2_sparse.
+% Quantization for kitti color code
+% Read ground truth from training/flow_noc/
+
+% Compare and find error. >5% and >3px. The error is primarily when the
+% difference in the magnitude of the displacement vector between the ground
+% truth and the estimated image is more than 5% of the ground truth displacement vector.
+% Howver, for very small displacements, it is not possible to have 5%
+% error difference. Hence, in the case when 5% from the magnitude of the
+% ground truth displacement vector is lesser than 3px, then a cap is put on
+% 3px ( not lesser ).
+
+% Convert matrix to color code, save in RGB format and imshow
+
 clear all;
 
 
@@ -32,7 +47,9 @@ mkdir('results_sparse');
 while i <  length(fileNames) 
     
     opticFlow_dense = opticalFlowFarneback;%('NoiseThreshold',0.009);
-    opticFlow_sparse = opticalFlowLK('NoiseThreshold',0.005);
+    opticFlow_sparse = opticalFlowLK('NoiseThreshold',0.0000000001);
+    
+    opticFlow_sparse 
     
     img1 = C{i};
     img2 = C{i+1};

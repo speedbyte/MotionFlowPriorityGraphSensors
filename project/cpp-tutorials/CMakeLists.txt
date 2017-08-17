@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.8)
 project(cpp_tutorials)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -6,7 +6,7 @@ message("list of paths for find_file and find_path ${CMAKE_SYSTEM_INCLUDE_PATH}"
 message("list of paths for find_library ${CMAKE_SYSTEM_LIBRARY_PATH}")
 message("list of paths for find_program ${CMAKE_SYSTEM_PROGRAM_PATH}")
 
-find_package(libuvc REQUIRED)
+#find_package(libuvc REQUIRED)
 set(SOURCE_FILES main.cpp)
 add_library( tutorials.lib ${SOURCE_FILES})
 

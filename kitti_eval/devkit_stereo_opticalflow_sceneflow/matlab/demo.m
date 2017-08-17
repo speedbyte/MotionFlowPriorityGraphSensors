@@ -2,7 +2,7 @@ disp('======= KITTI 2015 Benchmark Demo =======');
 clear all; close all; dbstop error;
 
 % error threshold 3px, >5%
-tau = [3 0.05];
+tau = [3 0.2];
 
 % original image
 orig = imread('../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/training/image_2/000169_10.png');
