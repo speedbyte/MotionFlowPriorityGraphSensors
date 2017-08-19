@@ -1,0 +1,9 @@
+x := "hello"
+y := $(x) "earth"
+x := "bye"
+
+print:
+	@echo $y
+
+TEST : iovec-demo.c iovec-demo2.c
+	gcc -o $@ $^

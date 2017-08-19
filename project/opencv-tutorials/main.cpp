@@ -29,8 +29,8 @@ _grid_col, uint32_t _grid_row) {
     cv::Mat X(30, 40, cv::DataType<char>::type);
     cv::Mat image(_grid_col*_image_cols_width*2, _grid_row*_image_rows_height*2,  CV_8UC3, cv::Scalar(0));
     for ( int _index = 0; _index<4; _index++ ){
-        const uint32_t _row = _index / _grid_col;
-        const uint32_t _col = _index - _row * _grid_col;
+        const uint32_t _row = _index / 2;
+        const uint32_t _col = _index - _row * 2;
         cv::Rect rect;
 
         cv::Mat3b in1, in2, in3, in4;
@@ -47,7 +47,7 @@ _grid_col, uint32_t _grid_row) {
             tmp = in1;
         std::string nWindow = uniqueName();
         cv::resize(tmp,subfig,subfig.size());
-        cv::namedWindow(subfig.c_str(), cv::WINDOW_AUTOSIZE);
+        cv::namedWindow(nWindow, cv::WINDOW_AUTOSIZE);
         cv::imshow(nWindow,subfig);
     }
 }
@@ -60,14 +60,14 @@ int main ( int argc, char *argv[] ) {
     cv::Mat3b D = A;
     cv::Mat3b out;
 
-    A = cv::imread("../data/image.png", 1);
+    A = cv::imread("../../pics-dataset/pics-dataset/lena.png", CV_LOAD_IMAGE_COLOR);
     if ( !A.data ) {
         std::cout << "here";
         throw;
     }
     convertColor(A,B);
 
-    out = cv::imread("../data/image2.JPG", 1);
+    out = cv::imread("../../pics-dataset/pics-dataset/lena.png", 1);
     if ( !out.data ) {
         std::cout << "here";
         throw;
@@ -108,7 +108,7 @@ void build_red(const cv::Mat& in, cv::Mat& out) {
 void someoperation()
 {
     cv::Mat image, image1;
-    boost::filesystem::path path = "../data/image.png";
+    boost::filesystem::path path = "../../pics-dataset/pics-dataset/lena.png";
     image = cv::imread(path.string());
     std::cout << "Hello World " << path.string();
     cv::namedWindow("Original", CV_WINDOW_AUTOSIZE);

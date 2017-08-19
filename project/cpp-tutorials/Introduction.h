@@ -97,7 +97,8 @@
  functions. Ofcourse a program cant have a static knowledge of the things that existed before the execution of the
  program, which forces the developers to use the dynamic typing with switch/case statements. However, with a little
  bit of more creativity and design, virtual functions can be used. This also helps to avoid downcasts ( a pointer
- cast used to convert a base pointer into a dervied pointer object ).
+ cast used to convert a base pointer into a dervied pointer object ). -
+ Example downcasting: (Derived&)baseObject.memberFn();
 
      void printItalics(BasePrinterClass &base, const char *s) // global function accepting base or derived objects.
      Depending on the parameter passed ( dynamic typing ) the code is executed.
@@ -157,7 +158,25 @@
  Destructors, Copy constructor and the assignment operator are the big threes. When the program does not explicitly
  defines it, then the compiler synthesises them in the background. So, X a; and X b = a; and X b; b = a; are all
  valid statements irrespective of if the class has defined them explictly. The first one calls a default constructor,
- the second one calls the copy constructor and the third one calls the assignment operator.
+ the second one calls the copy constructor and the third one calls the assignment operator. When a class uses a plain
+ T* to implement remote ownership, forgetting any of the Big Three will lead to generation of the wrong code. The
+ compiler synthesises constructors and assignment operators automatically if it doesnt find one. Therefore it is
+ better to use a managed pointer. Assuming a HeapPtr<Class> ptr; declared inside a class X(). Normally, the compiler
+ will try to synthesize this ptr via copy constructor or assignment operator. However, when it sees, that the ptr is
+ not a raw pointer but a managed pointer and that the class that is managing the pointer already has a copy
+ constructor / assignment operator for the pointer, then it will silently not do anything. Had this been a raw
+ pointer, like Class *ptr, then the compiler would have forced to create the copy constructor and assignment operator
+ for this class object.
+ Ofcourse, when there are more than one objects, such as
+     HeapPtr<ClassName> _ptr;
+     int abcd;
+ then the compiler would synthesise the copy constructors just for the object int abcd and not for HeapPtr<>.
+ Hence the moment, ClassName y;; ClassName x; y = x; is called, the compiler generates a compile error.
+
+ When a compiler synthesises the Big Three, then it does it inline. Sometimes, however you would like it to be non
+ inline, and hence it is good to write them explicitly.
+
+
 
  Copy constructor:
  Many a times, one would like to simply copy an already instantiated object.
@@ -239,6 +258,24 @@
  impossible :     char c = 'Q';
     std::cout << &c;
 
+ A ClassUsed defined as a friend in another ClassMain gets access to all the private variables of the ClassMain.
+ Similarly a FunctionUsed() ( implicitly global ) defined as a friend in another ClassMain gets access to all the
+ private variables of the ClassMain.
+ But friending is not transitive. A ClassUsed2 defined as a friend in ClassUsed does not get access to the private
+ variables of ClassMain. Similarly friendliness is not inherited.
+ Friend functions ( not classes ) are however inheritable. i.e a derived class can use the friendliness of the base
+ class.
+
+ Friend functions differ from member functions in the way they are used. If an operator overloading such as << is
+ declared as a member function, then the class object needs to be the left arguement. This is the only way, the class
+ object can access the << operator for example classObject.operator<<. However we want the classObject on the right
+ hand side, so that it can be streamed to the output stream cout. If the operator overloading is declared as a
+ friend, then the classObject can be positioned to the right hand side. The best example is n.square or square(n). If
+ you want to use square(n), then use friend in the function square. If you do not, then you will be forced to use the
+ dot operator to access square.
+
+
+ Const:
  const int* ptr
  int *const ptr
  const int *const ptr
@@ -486,6 +523,21 @@
  pointing to be changed through the pointer. :) Hint for readability. Just remember that the type of value the
  pointer points to is always on the far left.
 
+ There are two kinds of pointers: Raw pointer and Managed Pointer. The raw pointer is simply pointing to a location
+ in the memory and can only be deleted by the delete keyword. It does not live in a container. Managed pointers live
+ in a container and many actions can be done on the pointers. Most notably are destructing the pointer and the
+ referent ( the object that the pointer is pointing to ) automatically.
+
+ One should always use managed pointers like std::unique_ptr. Avoid std::shared_ptr although they are managed. The
+ reason is that the shared_ptr allow to copy the pointers and hence can lead to dangling pointers after
+ improper destruction.
+
+ Remote ownership:
+ When the object that owns a pointer also owns the allocation pointed to by that pointer, the object is said to have
+ remote ownership. That is the object owns the referent. And when the object has remote ownership, it is also
+ responsible for deleting the referent.
+
+
  References:
 
  Three kinds of references. References to non const values. References to const values often called const references
@@ -548,6 +600,10 @@
  references.
 
     int (&xFunc)() = funcX; xFunc() is an alias for funcX
+
+ When a function returns a reference, the function call becomes an lvalue for the referent. This is normally used to
+ allow operator expressions to be used as lvalues - the subscript operator, the dereference operator, and so on.
+ functioncall(); = referent in the function i.e what is the reference referring to inside the function,
 
  Scope:
 
@@ -638,9 +694,23 @@
  destroyed. The saves a lot of resource on the heap, because multiple copy of the same data is avoided, thus saving
  space and memcpy to copy the data from one address to another is avoided and thus saving compuation.
 
- Remote ownership:
- When the object that owns a pointer also owns the allocation pointed to by that pointer, the object is said to have
- remote ownership.
+ Trivial and Non Trivial:
+
+ A constructor of a class A is trivial if all the following are true:
+
+    It is implicitly defined (compiler synthesized)
+    A has no virtual functions and no virtual base classes
+    All the direct base classes of A have trivial constructors
+    The classes of all the nonstatic data members of A have trivial constructors
+
+ Exceptions:
+ C++ has a Exception class std::exception. One can catch an exception only when a throw is made in a try block. If
+ the thrown argument is a string, then a const char* needs to be catched. Whatever thrown needs to be catched and
+ once it is catched, various actions can be taken for example deleting an object etc.
+ The important thing to note is how the stack unwinds, when an exception is thrown.
+
+
+
 
 
 #endif //CPP_TUTORIALS_INTRODUCTION_H

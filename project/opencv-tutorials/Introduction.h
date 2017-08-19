@@ -45,4 +45,55 @@
   In the case of color images, the decoded images will have the channels stored in B G R order.
   OPENCV_BUILD_3RDPARTY_LIBS flag in CMake would let you compile the relevant codecs.
 
+  The image processing is just a game of numbers. It could be that the intensity has suddenly spiked up and this is
+  known as a spike or a high frequency. If a statistics is taken to find out the difference in the pixel number from
+  the neighbouring pixels, then any pixel which changes to a difference of for example 100 would be considered high
+  frequency. These high frequencies are also introduced for example by scaling the images down. The
+  downsampling is done by convolving the image with a series of delta functions. This convolution algorithm
+  introduces high frequencies in the images, that needs to be filtered out later.
+
+  Converting a RGB to Grayscale is as simple as taking the individual RGB values and averaging them. For example
+  simply divide by 3, or there are other algorithms where weighted average is taken and green is given more weight:
+  0.21 R + 0.72 G + 0.07 B. Also a max of RGB and min of RGB is added and is then divided by 2.
+
+  cv::Vec3b -> typedef Vec<uchar, 3> Vec3b; -> 1 dimensional array with 3 char elements
+  Each index is an array of 3 values i.e its a 2DArray and each element consists of 3 element 1D array.
+
+  Fixed Matrix classes:
+  are classes whose dimensions are known at compile time. As a result, all memory for their data
+  is allocated on the stack, which means that they allocate and clean up quickly. Operations on them are fast and
+  there are even more specialized optimized implementations for small matrices.
+  Representation: cv::Matx or correspnding aliases.
+  Definition: cv::Matx<float,3,3>
+  Access: m(3,1)
+  Reshape: m.reshape<9,9>()
+  Get Row / Column : m.col(1), m.row(1)
+  Get diagnoal: m.diag()
+  Transpose: m.t()
+  Invert: m.inv(method) - default is cv::DECOMP_LU
+  Per element mul: m.mul(m2)
+  Normal multiplication: m1*m2, m1+m2, m1-m2
+  solve linear system: m31f = m33f.solve(rhs31f, method)
+  ::eye(), ::ones(), ::zeros(), ::all(x)
+  Dotproduct: m1.dot(m2) - Dot product is essentially multiplying the corresponding elements and adding them all. It
+  needs to be done on equal dimension matrix. Dot product -> a.b = |a||b|cos(þ)
+
+  Fixed Vector classes:
+  are derived from the fixed matrix classes and other classes such as cv::Scalar derive from fixed vector classes.
+  They are really just convinience functions for Matx. Fixed vector classes is a Fixed matrix class whose number of
+  columns is one. Since it is inherited, the fixed vector class inherits everything from fixed matrix class.
+  members access: v[i] # Please note the difference in parantheses from member access for single column fixed matrix
+  class. m(i).
+  Definition: cv::Vec<float,3>
+  Access: v(3)
+  Cross product: v3f.cross(u3f) - Cross product is always on between two 1 dimensional matrix. Hence this does not
+  appear in cv::Matx. It needs to be done on equal dimension matrix. Cross product -> axb = |a||b|sin(þ)
+
+
+
+
+  Point, Vec, Mat, Matx, Scalar, Size, Rect, RotatedRect
+
+
+
  */

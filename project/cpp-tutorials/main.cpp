@@ -9,41 +9,120 @@
 #include "Pointers.h"
 #include "Virtual.h"
 #include <boost/filesystem.hpp>
+#include <exception>
 
 using namespace cpp_tutorials;
 using std::unique_ptr;
 using std::cout;
 
+class MyException : public std::exception {
+public:
+    const char * what () const throw () {
+        return "C++ Exception";
+    }
+};
+
 template<typename T, int size>
 class Array {
 public:
-    Array(unsigned len=size):len_(len), data_(new T[len]) { } //uniform init
+    Array(int len=size):len_(len), data_(new T[len]) { } //uniform init
+
     Array(const Array<T,size>&) {}// copy constructor b(a) or b = a
+
     Array<T,size>& operator= (const Array<T,size>&) {} //assignment, b = a
-    ~Array() { delete [] data_;}
-    unsigned len() const {return len_;}
-    const T& operator [] ( unsigned i) const { return data_[i];}
-    T& operator [] ( unsigned i) { return data_[i];}
-    friend std::ostream& operator<< (std::ostream &out, const Array<T,size> &array) {
-        for ( int i = 0; i < array.len() ; i++) {
-            out<<"index " << i << " value " << array[i] << ";";
+
+    ~Array() {
+        delete [] data_;
+    }
+
+    unsigned len() const {
+        return len_;
+    }
+
+    // the constructor looks for non const and if non const is not available, then it looks for corresponding const
+    // operator.  (), [] and = cannot be friend / static member functions
+    T& operator [] ( int i) {
+        if (i > len_) throw;
+        return data_[i];
+    }
+
+    const T& operator [] ( int i) const {
+        if (i > len_) throw;
+        return data_[i];
+    }
+
+    friend std::ostream& operator<< (std::ostream& out, const Array<T,size> &array) {
+        for (int i = 0; i < array.len(); i++) {
+            out << "index " << i << " value " << array[i] << ";";
         }
         return out;
     }
+
 private:
     T* data_;
     unsigned len_;
 };
 
+
+class Fraction {
+public:
+    Fraction(int num = 0, int denom = 1) : num_(num), denom_(denom) {}
+    friend std::ostream& operator<< (std::ostream& out, const Fraction& f) {
+        out << f.num_ << '/' << f.denom_;
+        return out;
+    }
+    friend Fraction operator* ( const Fraction& f1, const Fraction& f2) {
+        Fraction f3(f1.num_*f2.num_, f1.denom_*f2.denom_);
+        return f3;   // Lvalue
+        //return Fraction(f1.num_*f2.num_, f1.denom_*f2.denom_); // rvalue
+    }
+    friend Fraction square(Fraction& f ) {
+        return Fraction(f.num_*f.num_, f.denom_*f.denom_);
+    }
+    Fraction square_nofriend(Fraction& f) {
+        return Fraction(f.num_*f.num_, f.denom_*f.denom_);
+    }
+
+
+protected:
+    int num_, denom_;
+};
+
 int main ( int argc, char *argv[]) {
+
+    try {
+        throw MyException();
+    }catch(MyException& e) {
+        std::cout << "MyException caught" << std::endl;
+        std::cout << e.what() << std::endl;
+    } catch(std::exception& e) {
+        //Other errors
+    }
+
+    Fraction n(3,8);
+    std::cout << "if n is " << n << ", 5*n is " << n*n << '\n';
+    std::cout << n.square_nofriend(n) << '\n';
+    std::cout << square(n) << '\n';
+    typedef std::shared_ptr<int> UniquePtr;
+    UniquePtr ptr_unique1(new int());
+    UniquePtr ptr_unique2(new int());
+    ptr_unique2 = ptr_unique1;
+    if ( ptr_unique1 <= ptr_unique2 )
+    {
+        std::cout << ptr_unique1.operator->() << " " << ptr_unique2.operator->() << '\n';
+    }
 
     Array<int,10> int_array;
     Array<Array<int,2>,2> arr_of_int_array;
 
+    //int_array.operator<<(std::cout, int_array);
     std::cout << int_array << std::endl;
     std::cout << arr_of_int_array << std::endl;
+    int_array[9] = 100;
+    int_array.operator[](9) = 50; // the function call operator[]() becomes a l value for the referent data_[i]
+    // referenced by T&
+    std::cout << "manipulate " << int_array << std::endl;
 
-    std::vector
     std::cout<<"Current program is Overload" << std::endl;
     cpp_tutorials::overload::Overload O1("Hello");
     cpp_tutorials::overload::Overload O2("World");
@@ -215,6 +294,9 @@ int main ( int argc, char *argv[]) {
     }
     catch (const char* exception){
         std::cerr << "Error in main.cpp : " << exception << std::endl;
+    }
+    catch (std::exception& exception) {
+        // Other errors.
     }
     try {
         if ( x < 0 )
