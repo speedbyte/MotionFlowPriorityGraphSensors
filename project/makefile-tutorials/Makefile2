@@ -1,0 +1,161 @@
+# Target: Prerequisites
+# The recipes are executed in its own shell i.e in a subshell one line at a time.
+#		  Recipe
+# $@ : target 
+# $< : the first dependancy
+# $^ : 
+
+# Regex : \budp\w*\. \b - is the beginning of the word, \w* anything and then the period
+
+# A pattern rule looks like an ordinary rule, except that its target contains a % ( exactly one of them ).
+# The % can match any non empty substring, while other characters match only themselves.
+# %.o : %.c says how to make any file stem.o from another file stem.c
+
+# it is important to note, that variables and function expansion takes place first before everyother thing.
+ 
+# explicitly define the shell, otherwise /bin/sh
+SHELL = /bin/bash
+TARGET = OBJECT-DETECTION
+FORMAT = binary
+
+include makeopts
+
+OBJECT_DIR 	= object-dir
+SOURCE_DIR 	= src
+EXEC_DIR 	= exec-dir
+
+INCDIR = -I.\
+-I/local/git/sensor-framework/project/libs/opencv/build/include\
+
+INCLIBS = -L/local/git/sensor-framework/project/libs/opencv/build/lib \
+-L/local/git/sensor-framework/project/libs/ffmpeg/build/lib 
+
+LIBS = -lopencv_core\
+-lopencv_calib3d\
+-lopencv_contrib\
+-lopencv_core\
+-lopencv_features2d\
+-lopencv_flann\
+-lopencv_gpu\
+-lopencv_highgui\
+-lopencv_imgproc\
+-lopencv_legacy\
+-lopencv_ml\
+-lopencv_objdetect\
+-lopencv_photo\
+-lopencv_stitching\
+-lopencv_superres\
+-lopencv_ts\
+-lopencv_video\
+-lopencv_videostab\
+
+
+CSRC = VirtualRealityInterface.cpp
+CSRC = retinaDemo.cpp
+CSRC = facedetect.cpp
+
+OBJTREE	= $(OBJECT_DIR)
+SRCTREE	= $(SOURCE_DIR)
+EXETREE = $(EXEC_DIR)
+
+COBJ = $(addprefix $(OBJTREE)/,$(CSRC:.cpp=.o))
+## Display size of file.
+BINSIZE 	= size --target=$(FORMAT) $(EXETREE)/$(TARGET).bin
+ELFSIZE 	= size -A $(EXETREE)/$(TARGET).elf
+
+all : build
+
+build : sizebefore clean prepare object lib elf sym bin sizeafter#diff recursivemain
+
+prepare:
+	@echo $(CURDIR)
+	$(shell [ -d ${OBJECT_DIR} ] || mkdir -p ${OBJECT_DIR})
+	$(shell [ -d ${EXEC_DIR} ] || mkdir -p ${EXEC_DIR})
+
+object: $(COBJ)
+lib: $(TARGET).lib
+elf: $(TARGET).elf
+bin: $(TARGET).bin
+obd: $(TARGET).obd
+sym: $(TARGET).sym
+
+# The makefile executes the targets only when the prerequisites have changed.
+# In case the prereqistes has not changed, still the makefile can be forced to 
+# run by using the .PHONY command. Hence a .PHONY target is "always" run and ofcourse the dependancies. 
+# .PHONY:udpsend.o
+# Compile the file with -c option
+$(OBJTREE)/%.o : $(SRCTREE)/%.cpp 
+	g++ $(INCDIR) -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MT $< -o $@ $<
+	objdump -i > $(patsubst %.o,%.lsq,$@) 
+
+# Create libraries / archive files
+# flags rcs, r replaces the member such as updsend.o in the archive.
+# flag c creates an archive and flag s adds an index to the archive or updates the index if it already exists.
+%.lib:
+	ar rcs $(EXETREE)/$@ $(COBJ)
+
+# Link the object files and output using -o option
+# -L any new libraries can be linked here
+%.elf:
+	g++ $(COBJ) $(INCLIBS) $(LIBS) -o $(EXETREE)/$@
+ 
+# Copy and translate object files. This is useful to generate raw binary file during deployment into production, where debug symbols
+# etc are of no use.
+# -O format
+# -g strips debug information
+# -S strips relocation and symbol information.
+# The bin file is the largest file and is at a fixed length. 0s are appended where there is no information.
+%.bin: %.elf
+	objcopy -O $(FORMAT) $(EXETREE)/$< $(EXETREE)/$@
+
+# Display information of the object file
+# also known as extended listing
+# -h Display summary information of the header
+# -S Display source code intermixed with disassembly
+# -C Demangle low level symbol names into user level names
+%.obd: %.elf
+	objdump -h -S -C $(EXETREE)/$< > $(EXETREE)/$@
+
+# List symbols from object files
+# -n Sort symbols numerically by their addresses than by their name
+%.sym: %.elf
+	nm -n $(EXETREE)/$< > $(EXETREE)/$@
+
+sizebefore:
+	@if [ -f $(EXETREE)/$(TARGET).elf ]; then echo; echo 'size before'; $(ELFSIZE); $(BINSIZE); echo; fi
+
+sizeafter:
+	@if [ -f $(EXETREE)/$(TARGET).elf ]; then echo; echo 'size after'; $(ELFSIZE); $(BINSIZE); echo; fi
+
+# In order to analyze files later one can use the following commands
+# Please note that diff always returns an error if the files are not identical, hence
+# the makefile also stops executing. In order to ignore the return value of the diff, 
+# please use exit 0 in the end.
+diff:
+	diff -y $(TARGET).lib udpsend.o || exit 0
+#diff -y <(xxd -l1000 $(TARGET).lib) <(xxd -l1000 udpsend.o)
+#$(shell colordiff -y < $(shell xxd -l1000 $(TARGET).lib) < $(shell xxd -l1000 udpsend.o))
+
+# The FORCE command is used to force the execution of the target in case the targets
+# are in the subfolders. It is useful for nested makefiles.
+recursivemain:FORCE
+	cd subfolder; make all
+FORCE:
+
+clean:
+	rm -rf $(OBJTREE) $(EXETREE)
+
+# when I put * in front of clean and no :PHONY is present, gcc and ar is run and then the clean command !? 
+# In case .PHONY is activted, then all the commands are run when the * is in front of the clean.
+# Find out more here what the * is doing?
+	
+#
+#
+## Link: create ELF output file from object files.
+#.SECONDARY : $(TARGET).elf
+#.PRECIOUS : $(AOBJARM) $(COBJARM) 
+#
+#
+## Include the dependency files.
+#-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
+#

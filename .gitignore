@@ -1,3 +1,4 @@
+*.autosave
 *.orig
 results_*
 *.pyc
@@ -8,5 +9,6 @@ external/algorithms/VSF-sceneflow-1.0/Results/
 build/
 release/
 .project
+.pydevproject
 *.o
 *.swp

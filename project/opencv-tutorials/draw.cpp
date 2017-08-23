@@ -42,7 +42,7 @@ int main ( int argc, char *argv[]) {
     cv::pyrDown(img_gry, img_pyr_gry);
     cv::Canny(img_pyr_gry, img_canny, 10, 100, 3, true);
 
-    cv::Mat grid(img_rgb.rows*3, img_rgb.cols*3, CV_8UC3, cv::Scalar(0)); // rows, column in declaring.
+    cv::Mat grid(img_rgb.rows*3, img_rgb.cols*3, img_rgb.type(), cv::Scalar(0)); // rows, column in declaring.
 
     m_map_input[0] = img_rgb;
     m_map_input[1] = img_gry;
@@ -74,7 +74,7 @@ int main ( int argc, char *argv[]) {
     std::cout << (unsigned int)img_gry.at<uchar>(y,x) << ',' << std::endl;
     std::cout << (unsigned int)img_canny.at<uchar>(y,x) << ',' << std::endl;
     cv::namedWindow("grid", CV_WINDOW_AUTOSIZE);
-    //imshow("grid", grid);
+    imshow("grid", grid);
 
     cv::waitKey(0);
 }

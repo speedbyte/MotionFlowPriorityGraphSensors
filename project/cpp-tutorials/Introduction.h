@@ -687,4 +687,12 @@
 
  typedef int &ref_to_int; ref_to_int const r = i;
 
+ Typecasts:
+ static_cast : for anything other than base and derived pointer
+ const_cast : convert constness
+ dynamic_cast : for base and derived pointer
+ reinterpret_cast:
+
+
+
 #endif //CPP_TUTORIALS_INTRODUCTION_H

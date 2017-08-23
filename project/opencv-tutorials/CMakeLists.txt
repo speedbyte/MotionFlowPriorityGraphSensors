@@ -4,7 +4,10 @@ project(opencv_tutorial)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_FLAGS_DEBUG -ggdb3)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3")
+
+
 #set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/bin")
 #list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/../../libs/opencv-install/share/OpenCV/")
 
@@ -14,7 +17,7 @@ set(CMAKE_CXX_FLAGS_DEBUG -ggdb3)
 #target_compile_definitions(my_target PRIVATE FOO=1 BAR=1)
 #set_source_files_properties(foo.cpp PROPERTIES COMPILE_DEFINITIONS -DFOO=1)
 
-find_package(OpenCV COMPONENTS core highgui REQUIRED)
+find_package(OpenCV COMPONENTS core highgui imgcodecs imgproc REQUIRED)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})

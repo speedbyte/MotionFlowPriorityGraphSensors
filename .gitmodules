@@ -40,3 +40,6 @@
 	path = libs/pcl
 	url = https://github.com/PointCloudLibrary/pcl.git
 	branch = master
+[submodule "graphviz"]
+	path = libs/graphviz
+	url = https://github.com/ellson/graphviz.git
