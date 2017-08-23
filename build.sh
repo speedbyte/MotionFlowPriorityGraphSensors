@@ -120,14 +120,16 @@ if [ "$BOOST_OPTION" == "y" ] ; then
     cd $BOOST_PWD
     echo "Building in $(pwd)"
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning boost ...."; ./b2 --clean; rm -rf bin.v2; cd ../../; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning boost ...."; ./b2 --clean; rm -rf bin.v2; rm -rf $BOOST_PWD/../boost-install/*; cd ../../; return; fi
     if [ ! -d $BOOST_PWD/tools/build ]; then echo "download build.git by git submodule update --remote"; exit; fi
-    ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install/
+    time ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-    time ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" -j $(getconf _NPROCESSORS_ONLN) install
+    time ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" -j $(getconf _NPROCESSORS_ONLN) headers install 
     ret=$(echo $?)
     echo "make in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "boost make successful"; else echo "boost build terminated with error"; exit_function; fi
+    # Copies the 
+    #cp -Rv boost $BOOST_PWD/../boost-install/include/
     mkdir -p $BOOST_PWD/../boost-install/lib/pkgconfig
     python $SOURCE_DIR/utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p $BOOST_PWD/../boost-install -o $BOOST_PWD/../boost-install/lib/pkgconfig/boost.pc $BOOST_PWD/../boost-install/lib/
     #python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
@@ -168,7 +170,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     tput setf 2 
     cd $OPENCV_PWD
     echo "Building in $(pwd)"
-    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf release; rm -rf $FFMPEG_PWD/../opencv-install/*; cd ../../; return; fi
+    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning opencv ...."; rm -rf cmake-build-debug; rm -rf $FFMPEG_PWD/../opencv-install/*; cd ../../; return; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "Check compatibility"
     if [[ $PKG_CONFIG_PATH_INCLUDE_FFMPEG == "-I$ACTUAL_FFMPEG_INCLUDE_PATH"* ]]; then echo "Correct PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; else echo "Incorrect PKG_CONFIG_PATH_INCLUDE_FFMPEG $PKG_CONFIG_PATH_INCLUDE_FFMPEG"; exit_function; fi
@@ -180,14 +182,14 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     echo "In order to use the opencv 3rd party versions of libraries instead of system ones on UNIX systems you
     should use BUILD_<library_name> CMake flags (for example, -D BUILD_PNG for the libpng library)."
-    mkdir -p release; cd release
+    mkdir -p cmake-build-debug; cd cmake-build-debug
     cmake -Wno-dev -Wl,-rpath=$FFMPEG_PWD/../ffmpeg-install/lib/ -D ENABLE_PRECOMPILED_HEADERS=OFF -D CMAKE_BUILD_TYPE=DEBUG -D CMAKE_INSTALL_PREFIX=../../opencv-install -D WITH_GTK=ON ..
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     time make -j $(getconf _NPROCESSORS_ONLN) 2>&1
     ret=$(echo $?)
     if [ "$ret" == "0" ]; then echo "opencv make successful"; else echo "opencv make terminated with error. Please see the /dev/null file"; exit_function; fi
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-    time make install >> /dev/null #2>&1
+    time make install 2>&1
     ret=$(echo $?)
     echo "make-install in $SOURCE_DIR returned $ret"
     if [ "$ret" == "0" ]; then echo "opencv make-install successful"; else echo "opencv make-install terminated with error. Please see the /dev/null file "; exit_function; fi
@@ -287,7 +289,7 @@ if [ "$PROJECT_RUN_OPTION" == "y" ]; then
     DIR_CONFIG="${DIR_FRAMEWORK_ROOT}/config"
     DIR_DATA="${DIR_FRAMEWORK_ROOT}/../../"
     FILE_CONFIG="${DIR_CONFIG}/${PROTOCONFIG}.prototxt"
-    export LD_LIBRARY_PATH="$PROJECT_PWD/install/lib"
+    export LD_LIBRARY_PATH="$PROJECT_PWD/install/lib:/usr/local/lib/"
     #echo "Run just in time compiler"
     #./vtd_framework -i "protobuild" -f  $PROJECT_PWD/install/ -c $FILE_CONFIG -d $DIR_DATA/kitti_dataset/raw_dataset_with_calib/2011_09_26_drive_0001_sync -r -s -o $PROJECT_PWD/results -v
     #ret=$(echo $?)

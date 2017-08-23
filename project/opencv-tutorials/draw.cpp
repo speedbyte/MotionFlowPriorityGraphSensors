@@ -2,18 +2,34 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/filesystem.hpp>
 #include <iostream>
 
 //using namespace cv;
 
 int main ( int argc, char *argv[]) {
+
+
+
     cv::Mat img_rgb, img_gry, img_gauss1, img_pyr_rgb, img_pyr_gry, img_canny;
     cv::Mat tmp;
     boost::unordered::unordered_map<int,cv::Mat> m_map_input;
     boost::unordered::unordered_map<int,cv::Mat> m_map_grid;
+    boost::filesystem::path fpath("../../../pics-dataset/lena.png");
 
-    img_rgb = cv::imread("../../pics-dataset/pics-dataset/lena.png", CV_LOAD_IMAGE_COLOR);
-    cvtColor(img_rgb, img_gry, cv::COLOR_BGR2GRAY);
+    try {
+        if ( !boost::filesystem::exists(fpath) ) {
+            throw ("FileNotFound error");
+        }
+    }
+    catch  ( const char * value ){
+        std::cout << value;
+        exit(0);
+    }
+
+    img_rgb = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
+    cv::cvtColor(img_rgb, img_gry, cv::COLOR_BGR2GRAY);
+    std::cout << "COLOR, " << img_rgb.channels() << " ,GRAY " << img_gry.channels()<<std::endl;
     //cv::Matx<cv::Vec3b,512,512> img_gauss2;
     //img_gauss2 = cv::imread("../data/lena.png", CV_LOAD_IMAGE_COLOR);
 
@@ -58,7 +74,7 @@ int main ( int argc, char *argv[]) {
     std::cout << (unsigned int)img_gry.at<uchar>(y,x) << ',' << std::endl;
     std::cout << (unsigned int)img_canny.at<uchar>(y,x) << ',' << std::endl;
     cv::namedWindow("grid", CV_WINDOW_AUTOSIZE);
-    imshow("grid", grid);
+    //imshow("grid", grid);
 
     cv::waitKey(0);
 }

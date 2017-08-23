@@ -29,7 +29,7 @@ dataset.load_oxts()         # OXTS packets are loaded as named tuples
 dataset.load_gray()         # Left/right images are accessible as named tuples
 dataset.load_rgb()          # Left/right images are accessible as named tuples
 dataset.load_velo()         # Each scan is a Nx4 array of [x,y,z,reflectance]
-
+ls
 # Display some of the data
 np.set_printoptions(precision=4, suppress=True)
 print('\nDrive: ' + str(dataset.drive))

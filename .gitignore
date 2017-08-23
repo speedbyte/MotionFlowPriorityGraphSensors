@@ -2,7 +2,7 @@
 results_*
 *.pyc
 *~
-.idea/
+*.idea
 cmake-build-debug/
 external/algorithms/VSF-sceneflow-1.0/Results/
 build/

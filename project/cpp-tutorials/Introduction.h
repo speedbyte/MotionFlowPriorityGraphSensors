@@ -687,30 +687,4 @@
 
  typedef int &ref_to_int; ref_to_int const r = i;
 
- Standard Template Library
-
- A copy constructor and an assignment operator guarantees reference counting and that data is shared between the
- various objects. When all the reference to the data ( referent ) is deleted, then the data ( referent ) is also
- destroyed. The saves a lot of resource on the heap, because multiple copy of the same data is avoided, thus saving
- space and memcpy to copy the data from one address to another is avoided and thus saving compuation.
-
- Trivial and Non Trivial:
-
- A constructor of a class A is trivial if all the following are true:
-
-    It is implicitly defined (compiler synthesized)
-    A has no virtual functions and no virtual base classes
-    All the direct base classes of A have trivial constructors
-    The classes of all the nonstatic data members of A have trivial constructors
-
- Exceptions:
- C++ has a Exception class std::exception. One can catch an exception only when a throw is made in a try block. If
- the thrown argument is a string, then a const char* needs to be catched. Whatever thrown needs to be catched and
- once it is catched, various actions can be taken for example deleting an object etc.
- The important thing to note is how the stack unwinds, when an exception is thrown.
-
-
-
-
-
 #endif //CPP_TUTORIALS_INTRODUCTION_H
