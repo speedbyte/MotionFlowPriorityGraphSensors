@@ -293,6 +293,14 @@
 
  both are valid and depending on if the class object is instantiated as const, corresponding resetValue would be called.
 
+ Const Expression:
+ Expressions that are evaluated at compile time are called const expressions
+ constexpr int i = 0;
+ constexpr char a = test1("Test", i); // also OK, compile time invocation of test1()
+ constexpr char test3(unsigned i)
+ {
+    return t<i>::value;
+ }
 
  Uniform initialisation, Direct Initialisation, Copy
 
@@ -693,6 +701,11 @@
  dynamic_cast : for base and derived pointer
  reinterpret_cast:
 
+ Exception:
+ We assert a statement. i.e assert(true) is OK. But assert(false) will trigger an exception. If the condition inside
+ the assert is correct, then no exception will be thrown.
+ assert(found && "Car could not be found in database"); // Add a string
+ static_assert(sizeof(long) == 8, "long must be 8 bytes"); This is triggered only at compile time.
 
 
-#endif //CPP_TUTORIALS_INTRODUCTION_H
+#endif //

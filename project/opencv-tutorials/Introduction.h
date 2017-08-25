@@ -127,7 +127,10 @@
 
   cv::InputArray, cv::OutputArray:
   Any of the cv::Scalar, cv::Vec, cv::Matx, std::vector<>, cv::Mat and cv::SparseMat is defined by cv::InputArray and
-  cv::OutputArray. The primary difference between the two is InputArray is const and OutputArray is not.
+  cv::OutputArray. The primary difference between the two is InputArray is const OutputArray is not.
+  The InputArray and OutputArray is primarily to keep the interfaces from becoming complicated and reperetive. OpenCV
+  defines the types InputArray and OutputArray that takes any of the array types as Input and Output. There is
+  another class called InputOutputArray for in-place computation.
 
   Utility and system functions:
   cv::getTickCount(), cv::getThreadNum() and many more.......... Page 60
@@ -282,6 +285,77 @@ That's how you find the standard deviation.
 
   Point, Vec, Mat, Matx, Scalar, Size, Rect, RotatedRect
 
+  Fixed matrix classes such as Point, Size, Vec, Matx have dimensions that is known at compile time. As a result, all
+  memory for their data is allocated on the stack, which means that they allocate and clean up quickly. Operators on
+  them are fast, and there are specially optimized implementations for small matrices.
 
 
- */
+  Scalar:
+  Scalar is just for ease of use. As most of OpenCV operates on maximum 4 channel images, so Scalar is a simple class which is actually a cv::Vec of length 4, which can be used by OpenCV
+  algorithms according to number of channels of the image. Instead of creating an array of different
+  length each time, you just pass a scalar value to the algorithm.
+
+  Rectangle and Range:
+  If you want to pass both the row and columns, then way is to create a new matrix and pass the source image as the
+  first parameter and the section ( range or rectangle ) as the second parameter. This is a kind of a value constructor.
+
+
+  Summary ( please see Vec and Matx is without underscore )
+  Static : Hence the templates consists of dimensions, where the dimensions can vary.
+  Point_<T>, Point3_<T>
+  Rect_<T>
+  Scalar_<T>
+  Vec_<T,int>      : dimensions can vary
+  Matx<T,int,int>  : dimensions can vary
+
+  Dynamic and hence the template does not consists of dimensions.
+  Mat
+  Mat_<T>
+
+
+ Summary
+ all(val),
+ zero,
+ ones,
+ eye,
+ diag,
+ randu(min, max),
+ nrandn(mean, variance) : create a matrix with normally distributed entities.
+
+ Access:
+ Dynamic
+ Mat.at<>()                         : element access ( Mat type defined without template, dynamic dimension )
+ Mat.at<cv::Vec>()[]                : channel access ( Mat type defined without template, dynamic dimension)
+ Static
+ Matx()                             : element access ( Matx type defined with template, static dimension )
+ Mat_.at<>() or Mat_()              : element access ( Mat_ type defined with template, static dimension )
+ Mat_.at()<cv::Vec>[]  or Mat_()[]  : channel access ( Mat type defined with template, static dimension )
+
+ The purpose of using the template forms Mat_is that you dont have to use the template forms of their member functions.
+
+ Access Subregion: Arrays corresponding to subregions. There is no copy, only headers are defined.
+ Data of Mat is not copied to the new arrays unless copyTo() method is used.
+ Mat.row()
+ Mat.col()
+ Mat.rowRange()
+ Mat.colRange()
+ Mat.rowRange(cv::Range)
+ Mat.colRange(cv::Range)
+ Mat.diag()
+ Mat ( cv::Range, cv::Range )
+ Mat ( cv::Rect )
+
+
+ Ability to create algebraic expressions consisting of matrix arrays and singletons.  The result of the compuation is
+ finally placed in the destination array by operator=(). Arrays are semantically referred to be as cv::Mat and matrix
+ arrays means something which has a mathematical meaning ie on which matrix operations can be done. A cv::MatExpr is
+ assigned to a cv::Mat. m1+m2 is not cv::Mat but a cv::MatExpr. The pointer to the result of MatExpr will be assigned
+ to the destination array. The data of the array itself got created temporarily by the MatExpr, but isnt destroyed
+ because the scope of the array still exists as the reference is incremented. Apart from simple algebra, there are
+ many other operations, one such operation is cv::Mat::eye() or m1*m2 etc etc.. All of these are of the type MatExpr.
+ Higher level operations such as transpose and inversions.
+ inv(), t(), cross(), dot(), cv::abs(m), cv::norm(m), cv::mean(m), cv::sum(m)
+
+ Underflowing and Overflowing is taken care from cv::saturation_cast<>()
+ m0.clone() and m0.copyTo(m1) are the same.
+

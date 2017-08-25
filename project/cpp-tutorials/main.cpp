@@ -90,6 +90,17 @@ protected:
 
 int main ( int argc, char *argv[]) {
 
+    int a = 200;
+    int& b = a;
+    int& c = b;
+    int  d = b;  // New variable
+    printf("%d\n",b) ; // Before change
+    c = 400;
+    printf("%d\n",b) ; // After changing c
+    d = 500;
+    printf("%d\n",b) ; // After changing d
+    return 0;
+
     try {
         throw MyException();
     }catch(MyException& e) {

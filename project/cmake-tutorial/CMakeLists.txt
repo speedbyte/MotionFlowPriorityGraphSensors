@@ -5,6 +5,28 @@ project (Tutorial)
 set (Tutorial_VERSION_MAJOR 1)
 set (Tutorial_VERSION_MINOR 0)
 
+message("list of paths for find_file and find_path ${CMAKE_SYSTEM_INCLUDE_PATH}")
+message("list of paths for find_library ${CMAKE_SYSTEM_LIBRARY_PATH}")
+message("list of paths for find_program ${CMAKE_SYSTEM_PROGRAM_PATH}")
+
+find_package(Boost REQUIRED system filesystem)
+
+include_directories(${Boost_INCLUDE_DIRS})
+message("include directory for boost ist ${Boost_INCLUDE_DIRS}")
+
+set(SOURCE_FILES main.cpp Overload.cpp Template.cpp Larger.cpp)
+add_executable(overloading ${SOURCE_FILES})
+target_link_libraries(overloading ${Boost_LIBRARIES})
+
+add_executable(stackoverflow stackoverflow.cpp)
+target_link_libraries(stackoverflow ${Boost_LIBRARIES})
+
+
+set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")
+message("CMAKE_MODULE_PATH is ${CMAKE_MODULE_PATH}")
+include(CMakeListsDoxygen)
+
+
 # add the binary tree to the search path for include files
 # so that we will find TutorialConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
@@ -17,6 +39,11 @@ configure_file (
   "${PROJECT_BINARY_DIR}/TutorialConfig.h"
   )
 
+#set(BOOST_LIBRARYDIR "/usr/local/lib/")
+set(ENV{PKG_CONFIG_PATH}  "$ENV{PKG_CONFIG_PATH}:${CMAKE_SOURCE_DIR}/../../libs/boost-install/lib/pkgconfig")
+# to create a library from the source files, in case you dont want to create an executable
+add_library( tutorials.lib ${SOURCE_FILES})
+
 option (USE_MYMATH "Use Tutorial provided math implementation" ON)
 
 if (USE_MYMATH)
@@ -27,6 +54,7 @@ endif (USE_MYMATH)
 add_executable(Tutorial Tutorial.cpp)
 target_link_libraries(Tutorial ${EXTRA_LIBS} )
 
+aux_source_directory(. SOURCE_FILES)
 
 message(${PROJECT_BINARY_DIR})
 
