@@ -6,14 +6,15 @@
 %definitely not work for the collision estimation (Farnback can handle
 %greater displacements
 %%
+close all;
 
 opticFlow=opticalFlowFarneback%('NoiseThreshold',0.04);
 
 img1 = zeros(375,1242,3,'uint8');
 img2 = zeros(375,1242,3,'uint8');
 
-xMovement = 2;
-yMovement = 0;
+xMovement = 10;
+yMovement = 10;
 
 width = 200:260;
 height = 46:106;
@@ -46,6 +47,9 @@ for k = height
     end
 end
 
+figure('Name', 'First Frame');
+imshow(img1);
+
 %%create frame 2
 for k=height
     for j=width
@@ -61,35 +65,37 @@ for k=height
     end
 end
 
+figure('Name', 'Second Frame')
+imshow(img2);
+
 %calculate Ground Truth%
 gT(height,width,xMovement,yMovement);
 
 
-
 %%OpticalFlow
-im1 = rgb2gray(img1);
-flow = estimateFlow(opticFlow,im1);
+img1_gray = rgb2gray(img1);
+flow_img1 = estimateFlow(opticFlow,img1_gray);
 
-im2 = rgb2gray(img2);
-flow2 = estimateFlow(opticFlow,im2)
+img2_gray = rgb2gray(img2);
+flow_img2 = estimateFlow(opticFlow,img2_gray)
 
 
 %% This shows the Optical Flow with arrows
-figure
+figure('Name', 'Displacement Vector')
 imshow(img1);
 hold on
-plot(flow2,'DecimationFactor',[5 5],'ScaleFactor',10);
+plot(flow_img1,'DecimationFactor',[5 5],'ScaleFactor',1);
 hold off
-display(flow);
+display(flow_img1);
 %%
 
 %Threshold
-flowX = flow2.Vx;
-flowy = flow2.Vy;
-indices = find(abs(flow2.Vx)<0.001);
+flowX = flow_img2.Vx;
+flowy = flow_img2.Vy;
+indices = find(abs(flow_img2.Vx)<0.001);
 flowX(indices) = 0;
 
-indices = find(abs(flow2.Vy)<0.001);
+indices = find(abs(flow_img2.Vy)<0.001);
 flowy(indices) = 0;
 
 % For the Validation channel.
@@ -100,8 +106,8 @@ vCopy = (vXYCopy ~= 0);
 
 
 %Quantize for Kitti Evaluation set
-vx = (flow2.Vx*64)+2^15;
-vy = (flow2.Vy*64)+2^15;
+vx = (flow_img2.Vx*64)+2^15;
+vy = (flow_img2.Vy*64)+2^15;
 
 %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
 %and Validation bit

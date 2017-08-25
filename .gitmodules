@@ -13,10 +13,6 @@
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
 	branch = master
-[submodule "VirtualTestDriveFramework"]
-	path = project/VirtualTestDriveFramework
-	url = git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/VirtualTestDriveFramework.git
-	branch = master
 [submodule "pkg-config-generator"]
 	path = utils/pkg-config-generator
 	url = https://github.com/nmante/pkg-config-generator.git
@@ -43,3 +39,6 @@
 [submodule "graphviz"]
 	path = libs/graphviz
 	url = https://github.com/ellson/graphviz.git
+[submodule "VirtualTestDriveFramework"]
+	path = project/VirtualTestDriveFramework
+	url = git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/VirtualTestDriveFramework.git
