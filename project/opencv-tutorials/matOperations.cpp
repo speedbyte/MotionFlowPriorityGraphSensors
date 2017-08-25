@@ -44,10 +44,13 @@ int main ( int argc, char *argv[]) {
     std::cout << vec1D_1 << vec1D_1.t(); // transposing is from column vector to row vector for printing purpose
     std::cout << "Member " << vec1D_1(0) << " Array " << vec1D_1.row(2)  << " col " << vec1D_3.col(0)  << std::endl;
 
-    // ------------------------------------------------------
-    //cv::Matx : Matx allows only single channel.
+
+    //Matx ----------------------------------------------------------
+    std::cout << "Begin Matx ----------------------------------" << std::endl;
+    // Initialize
     cv::Matx<float,3,4> matx2D_1;
     cv::Matx<float,3,3> matx2D_2;
+    cv::randu(matx2D_2,2000,3000);
     cv::Matx<float,2,8> matx1D_1(1,1,100,10.0,100,10.0,100,10.0,100,10.0,100,10.0,100,10.0,100,6767);
     cv::Matx<float,2,2> matx22;
     matx2D_2.all(100.11);
@@ -56,7 +59,6 @@ int main ( int argc, char *argv[]) {
     // Static functions in the class
     cv::Matx<float,5,1> vec1D(vec1D_3);  // Only 1 row is allowed.
     cv::Matx<float,3,3> matxType(matx2D_2);
-
     cv::Matx<float,3,4> zeroMatx = cv::Matx<float,3,4>::zeros();
     cv::Matx<float,3,4> oneMatx = cv::Matx<float,3,4>::ones();
     cv::Matx<float,3,4> eyeMatx = cv::Matx<float,3,4>::eye();
@@ -64,13 +66,15 @@ int main ( int argc, char *argv[]) {
     std::cout << oneMatx.row(1) << std::endl;;
     // ------------------------------------------------------
     // Access: Matx doesnt have .at
-    std::cout << matx1D_1.row(0) << std::endl;
+    std::cout << matx1D_1.row(0) << std::endl  << matx2D_2 << std::endl
+            ;
     std::cout << "Vector 1D" << vec1D(3) << std::endl;
     std::cout << "Matrix 2D" << matxType(3,1) << std::endl;
 
 
-    //cv::Mat
-    // ------------------------------------------------------
+    //Mat ----------------------------------------------------------
+    std::cout << "Begin Mat----------------------------------" << std::endl;
+    // Initialize
     float data1[6] = {1,2,3,4,5,6};
     float data2[6] = {10,20,30,40,50,60};
     /*cv::Mat_<cv::Matx<cv::Vec2f,3,4> > mat34_;
@@ -81,6 +85,7 @@ int main ( int argc, char *argv[]) {
 
     cv::Mat mat1(3,4,CV_8UC1);
     cv::Mat mat2(3,4,CV_32FC1);
+    cv::randu(mat2,0,100);
     cv::Mat mat3(3,4,CV_32FC1,data1,sizeof(float));
     cv::Mat mat34(3,4,CV_32FC3,cv::Scalar(20,30,40));
     cv::Mat mat4(cv::Size_<int>(3,4),CV_32FC1);
@@ -94,8 +99,6 @@ int main ( int argc, char *argv[]) {
     cv::Mat bigCube2(3, sz, CV_32FC1, cv::Scalar::all(99));
     std::vector<cv::Range> ranges(3, cv::Range(10,20));
     cv::Mat roiRangeMultiple( bigCube1, ranges);
-
-    // ------------------------------------------------------
     // Access
     mat34.at<float>(2,3) = 1000;
     std::cout << mat1 << std::endl << mat2 << std::endl << mat3 << std::endl << mat34 << std::endl << mat4 << std::endl
@@ -107,11 +110,13 @@ int main ( int argc, char *argv[]) {
 
 
 
-    //Mat_
+    //Mat_ ----------------------------------------------------------
+    std::cout << "Begin Mat_----------------------------------" << std::endl;
     // Initalize
     cv::Mat_<cv::Matx<float,3,4>> mat2x_;
     cv::Mat_<char> mat1_(3,4); mat1_ << -1, 1, 2, -2, 3, 1 , 4, 0, 3, 10, 11, 12;
     cv::Mat_<float> mat2_(3,4);
+    cv::randu(mat2_,0,100);
     cv::Mat_<float> mat3_(3, 4, data1, sizeof(float)); // some random data and random fill.
     cv::Mat_<cv::Vec3f> mat34_(3,4);
     cv::Mat_<float> mat4_(cv::Size_<int>(3,4));
@@ -119,10 +124,9 @@ int main ( int argc, char *argv[]) {
     //cv::Mat_ mat6_(cv::Size(3,4),CV_32FC1,data2,sizeof(float));
     cv::Mat_<float> eyeMat1C_ = cv::Mat_<float>::eye(3,4);
     cv::Mat_<cv::Vec2f> eyeMat2C_ = cv::Mat_<float>::eye(3,4);
-
-    // ------------------------------------------------------
     // Access : Mat_ can be accessed the same way as Mat, but can also be accessed without the template type
     mat34_(2,3) = 1000;
+    // Print
     std::cout << mat1_ << std::endl << mat2_ << std::endl << mat34_ << std::endl << mat4_ <<
               std::endl << mat5_ << std::endl;
     std::cout << eyeMat1C_.at<int>(2,2) << eyeMat2C_.at<cv::Vec2f>(2,2)[0];
