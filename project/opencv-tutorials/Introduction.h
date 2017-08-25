@@ -359,3 +359,24 @@ That's how you find the standard deviation.
  Underflowing and Overflowing is taken care from cv::saturation_cast<>()
  m0.clone() and m0.copyTo(m1) are the same.
 
+ In electronics and signal processing, a Gaussian filter is a filter whose impulse response is a Gaussian function (
+ or an ( or an approximation to it ) . Gaussian filters have the properties of having no overshoot to a step function
+ while minimizing the rise and fall time. This behaviour is closely connected to the fact that the Gaussian filter ha
+ the minimum possible group delay. It is considered the ideal time domain filter, just as the sinc is the ideal
+ frequency domain filter.  Mathematically, a Gaussian filter modfies the input signal by convolution with a Gaussian
+ function. What are the different kinds of filters:
+ 1. Butterworth filter
+ 2. Chebyshev filter
+ 3. Elliptic filter
+ 4. Bessel filter
+ 5. Gaussian filter
+ 6. Optimum L ( Legendre ) filter
+ 7. Linkwitz-Riley filter
+
+ Gaussian Blur:
+ Mathematically applying Gaussian blur to an image is the same as convolving the image wih a Guassian function.
+ A guassian function is a function of the form -
+ Bokeh - a japanese word for blur.
+
+
+

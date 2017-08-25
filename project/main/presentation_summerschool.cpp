@@ -6,7 +6,7 @@
 
 #define RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
 /**
- Are the displacement vectors linear?
+ Fingerprinting - are the displacement vector linear?
 
  Read two manual image files without rain. The two image files are from Marcel
  Read two manual image files with rain. Converted via Dennis tool.

@@ -707,5 +707,4 @@
  assert(found && "Car could not be found in database"); // Add a string
  static_assert(sizeof(long) == 8, "long must be 8 bytes"); This is triggered only at compile time.
 
-
 #endif //
