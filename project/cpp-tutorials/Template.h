@@ -6,6 +6,12 @@
 #define CPP_TUTORIALS_TEMPLATE_H
 
 /** brief Class templates
+ (target).input<(target_port)>()->connect((source).template output<(source_port)>())
+ "a", kitti
+ "b", opticalflow
+ "c", show
+  template<uint32_t _num, typename... _types>
+        class _GridLayoutInputRepeater : public _GridLayoutInputRepeater<_num-1,_types...,Figure>
 
  The cpp compiler parses the files in a maximum munch manner. This means, it tries to read character by character
  until the next character doesnt make any sense anymore. This leads to a common problem between the >> character and

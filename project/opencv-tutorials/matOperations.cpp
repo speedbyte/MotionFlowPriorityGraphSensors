@@ -3,6 +3,17 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 
+void saturation_cast() {
+    uchar init_m0[] = {10,10,30};
+    cv::Mat m0(3,1,CV_8UC1,init_m0,sizeof(uchar));
+    uchar& Vxy = m0.at<uchar>(0);
+    uchar& Vxy_nocast = m0.at<uchar>(1);
+    std::cout << m0 << std::endl;
+    Vxy = cv::saturate_cast<uchar>((Vxy-128)*2 + 128);
+    Vxy_nocast = (Vxy_nocast-128)*2 + 128;
+    std::cout << m0 << std::endl;
+}
+
 int main ( int argc, char *argv[]) {
 
     boost::filesystem::path fpath("../../../pics-dataset/lena.png");

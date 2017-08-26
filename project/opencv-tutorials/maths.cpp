@@ -21,6 +21,8 @@ void cartToPolar() {
     cv::Matx<float,3,1> angle;
     cv::cartToPolar(xpts, ypts, magnitude, angle);
 
+
+
     std::cout << "\nsamples\n" << xy;
     std::cout << "\nmagnitude\n" << magnitude.t();
     std::cout << "\nangle\n" << (angle.t() * ( 180. / CV_PI ))<< std::endl;
@@ -32,9 +34,9 @@ void cartToPolar() {
 void polarToCart() {
 
     cv::Vec2f x,y;
-    cv::Vec2f mag(5,6), angle(40,100);
+    cv::Vec2f mag(7,5), angle(200,70);
     cv::polarToCart(mag, angle, x, y, true);
-    std::cout << x[0]+x[1] << y[0]+y[1] << std::endl;
+    std::cout << x[0]+x[1] << " " << y[0]+y[1] << std::endl;
 
 }
 
@@ -69,6 +71,34 @@ void logPolar() {
     cv::waitKey();
 }
 
+void solveLinear() {
+    cv::Matx31f rhs(3,0,-2);
+    cv::Matx33f coefficients (1,1,1,1,2,3,1,3,4), transpose;
+    float determinant;
+    cv::Matx<float,3,1> result;
+    cv::Matx<cv::Complexf,3,1> result_manual;
+    cv::solve(coefficients, rhs, result);
+    result_manual = coefficients.solve(rhs); // equivalent to coefficients.inv()*rhs and this can also handle Complexf
+    std::cout << result << std::endl << result_manual;
+}
+
+void solvePolynomial() {
+    cv::Matx<cv::Complexf,2,1> roots;
+    cv::Vec3f coefficients(1,-5,6);
+
+    //cv::Matx<cv::Complexf,3,1> result;
+    //cv::Matx<cv::Complexf,3,1> result_manual;
+    cv::solvePoly(coefficients, roots, 1 );
+    std::cout << roots << std::endl;
+}
+
+void matrixOperations() {
+    float determinant;
+    cv::Matx33f coefficients (1,1,1,1,2,3,1,3,4), transpose;
+    transpose = coefficients.t(); // equivalent to coefficients.inv()*rhs;
+    determinant = cv::determinant(coefficients);
+}
+
 /*
     cv::calcCovarMatrix();
     cv::meanStdDev();
@@ -85,12 +115,15 @@ void logPolar() {
 int main ( int argc, char *argv[]) {
 
     std::cout << "cartToPolar----------------------------------------------" << std::endl;
-    cartToPolar();
+    //cartToPolar();
     std::cout << "polarToCart----------------------------------------------" << std::endl;
-    polarToCart();
+    //polarToCart();
     std::cout << "calcCovarMatrix----------------------------------------------" << std::endl;
-    calcCovarMatrix();
-    std::cout << "----------------------------------------------" << std::endl;
+    //calcCovarMatrix();
+    std::cout << "solveLinear----------------------------------------------" << std::endl;
+    //solveLinear();
+    std::cout << "solvePoly----------------------------------------------" << std::endl;
+    solvePolynomial();
     return 0;
 }
 

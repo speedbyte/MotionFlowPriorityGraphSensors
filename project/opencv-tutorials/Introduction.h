@@ -359,12 +359,38 @@ That's how you find the standard deviation.
  Underflowing and Overflowing is taken care from cv::saturation_cast<>()
  m0.clone() and m0.copyTo(m1) are the same.
 
+ There are some general rules in OpenCV functions. Ofcourse there are special rules pertaining to individual
+ functions, and they are reported by the exceptions. There are some general rules and they apply to all the functions:
+ Saturation, Output array, Scalars, Masks, dtype, Inplace operations, Multichannel.
+
+ 1. Saturation: Outputs of calculations are saturation-casted to the type of the output array. cv::saturation_case<>()
+ uchar& Vxy = m0.at<uchar>(y,x)
+ Vxy = cv::saturate_cast<uchar>((Vxy-128)*2 + 128);}
+ This explicit saturation_cast truncates the negative value into 0. Otherwise, the answer would have been the 2s
+ complement.
+ 2. Output Array: The output array will be created with cv::Mat::create() if its type and size do not match the
+ required type and size. Usually, the required output type and site are the same as inputs, but for some functions,
+ xize may be different like for cv::transpose and cv::split
+ 3. Scalars: Addition of two arrays or an array and a scalar. The result of providing a scalar is the same as if a
+ second array had been provided with the same scalar value in every element. Size as described above is taken from
+ the input array.
+ 4: Mask: Whenever the mask argument is present for a function, the output wil be computed only for those elements
+ where the mask value corresponding to the element in the output array is non zero.
+ 5. dtype: This forces the output array to be of a specific type. For example, two CV_8UC1 input array will lead to
+ the same output type. However, this can be overridden with the dtype=CV_32FC1.
+ 6. Inplace operation: One can specify the same arrays for both input and output. Its completely legal to do it, but
+ ofcourse, it should be clear that the input array will completely loose its data.
+ 7. Multichannel: Each channel is processed separately, if multichannel arguements are set.
+
+
+
  In electronics and signal processing, a Gaussian filter is a filter whose impulse response is a Gaussian function (
  or an ( or an approximation to it ) . Gaussian filters have the properties of having no overshoot to a step function
  while minimizing the rise and fall time. This behaviour is closely connected to the fact that the Gaussian filter ha
  the minimum possible group delay. It is considered the ideal time domain filter, just as the sinc is the ideal
  frequency domain filter.  Mathematically, a Gaussian filter modfies the input signal by convolution with a Gaussian
  function. What are the different kinds of filters:
+
  1. Butterworth filter
  2. Chebyshev filter
  3. Elliptic filter
@@ -377,6 +403,34 @@ That's how you find the standard deviation.
  Mathematically applying Gaussian blur to an image is the same as convolving the image wih a Guassian function.
  A guassian function is a function of the form -
  Bokeh - a japanese word for blur.
+
+ 2i + 3j + 4k ( Unit Vectors )
+ We can represent any vector by a linear combination of two vectors. This means the vectors can be spanned anywhere
+ in that plane. If the vector has to be represented in another plane, then the linear combination of the two vectors
+ wont work, because the span has changed. If two vectors cannot be represented  by scaling one of the vectors, then
+ they are said to be linearly independent. An example for linearly independent vectors are the axes. The x axis can
+ never be represented by scaling up or down the y axis and vice versa. Linear dependant vectors hence are vectors
+ that cannot be represented by a combination of other vectors.
+ Dot products are commutative and associative.
+
+ For an arbitrary linear equation, there can be infinite number of solutions, for example, 2x + 4y + 7z + 9w = 1000.
+ Hence x,y,z,w can consists of infinite number of solutions.
+
+ The inverse of the matrix A can be calculated by many methods in linear algebra such as Gaussian elimination,Eigendecomposition, Cholesky decomposition, and Carmer’s rule. A matrix can also be inverted by block inversion method and Neuman series.
+ EVery matrix can be transposed ( rearranging the columns and rows in a matrix ). The diagnoal of the matrix remains
+ unchanged. The matrix is symmetric, if the transpose of the matrix is equal to the matrix. Its skew symmetric, if
+ the transpose of the matrix is the negative of the original matrix. Ofcourse, for the matrix to be symmetric or skew
+ symmetric, they need to be a square matrix. A(i,j) becomes A(j,i). Complex Conjugate matrix is the matrix where the
+ complex number is negated. The real part remains the same.
+
+ Pivot variables, Free variables, Echelon form.
+ Imagining 4 vectors defined by 4 equations. The solution of the equation is the point where all the vectors meet
+ each other and this point is given by (x1, x2, x3 and x4 )
+ A Singular matrix is a matrix whose determinant is 0.
+
+ C++ Libraries to solve linear algebra
+ Flint, Singlular, Givaro, Giv ( Scientific Imaging )
+
 
 
 
