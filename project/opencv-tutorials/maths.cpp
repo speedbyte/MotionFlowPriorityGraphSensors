@@ -3,6 +3,16 @@
 #include <opencv2/imgproc.hpp>
 #include <iostream>
 
+void meanStdDeviation() {
+    cv::Mat_<cv::Vec4i> m0(1,4),m1(1,4); // fills all the channel. Mean and stddev will be calcluated on ind channels.
+    cv::randu(m0, 0, 4);
+    //m0 << 6,5,13,8;
+    cv::Scalar mean, stddev;
+    cv::meanStdDev(m0,mean,stddev);
+    cv::randn(m1,mean,stddev);
+    std::cout << "Mean " << mean << " Std Dev " << stddev << "\nArray " << m0 << "\nArray " << m1;
+}
+
 void cartToPolar() {
     std::vector<cv::Point2f> xy;
     xy.push_back(cv::Point2f(10, 20));
@@ -48,19 +58,25 @@ void polarToCart() {
  */
 void calcCovarMatrix() {
 
-    cv::Mat_<float> x(3,3);  x << -1, 1, 2, -2, 3, 1 , 4, 0, 3;
+    cv::Mat_<uchar> samples(2,9);  samples << 1,3,2,5,8,7,12,2,4,8,6,9,4,3,3,2,7,7;
+    cv::Mat_<uchar> x_sample(1,9);  x_sample << 1,3,2,5,8,7,12,2,4;
+    cv::Mat_<uchar> y_sample(1,9);  y_sample << 8,6,9,4,3,3,2,7,7;
+    std::vector<cv::Mat> matPtr;
+    matPtr.push_back(x_sample);
+    matPtr.push_back(y_sample);
     cv::Mat_<float> covar, mean;
-    std::cout << "\nsamples\n" << x.t();
-    calcCovarMatrix( x, covar, mean, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
+    std::cout << "\nsamples\n" << samples;
+    //cv::calcCovarMatrix( &matPtr, 2, covar, mean, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
+    cv::calcCovarMatrix( samples, covar, mean, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
     std::cout << "\nMean\n" << mean << "\nCovar\n" << covar << std::endl;
 }
 
 void linearPolar() {
-    cv::Mat src = cv::imread("my.png", 0); // read a grayscale img
+    cv::Mat src = cv::imread("../../../pics-dataset/lena.png", 0); // read a grayscale img
     cv::Mat dst; // empty.
     cv::linearPolar(src,dst, cv::Point(src.cols/2,src.rows/2), 120, cv::INTER_CUBIC );
     cv::imshow("linear", dst);
-    cv::waitKey();
+    cv::waitKey(0);
 }
 
 void logPolar() {
@@ -83,12 +99,12 @@ void solveLinear() {
 }
 
 void solvePolynomial() {
-    cv::Matx<cv::Complexf,2,1> roots;
-    cv::Vec3f coefficients(1,-5,6);
-
+    //cv::Matx<cv::Complexf,2,1> roots;
+    cv::Mat roots;
+    cv::Vec3f coefficients(6,-5,1);
     //cv::Matx<cv::Complexf,3,1> result;
     //cv::Matx<cv::Complexf,3,1> result_manual;
-    cv::solvePoly(coefficients, roots, 1 );
+    cv::solvePoly(coefficients, roots, 300 );
     std::cout << roots << std::endl;
 }
 
@@ -119,11 +135,15 @@ int main ( int argc, char *argv[]) {
     std::cout << "polarToCart----------------------------------------------" << std::endl;
     //polarToCart();
     std::cout << "calcCovarMatrix----------------------------------------------" << std::endl;
-    //calcCovarMatrix();
+    calcCovarMatrix();
     std::cout << "solveLinear----------------------------------------------" << std::endl;
-    //solveLinear();
+    solveLinear();
     std::cout << "solvePoly----------------------------------------------" << std::endl;
     solvePolynomial();
+    std::cout << "mean and std dev----------------------------------------------" << std::endl;
+    meanStdDeviation();
+    std::cout << "linearPolar----------------------------------------------" << std::endl;
+    linearPolar();
     return 0;
 }
 

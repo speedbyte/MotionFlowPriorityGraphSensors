@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.8)
 project(opencv_tutorial)
 
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3")
+#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3")
 
 
 #set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/bin")
@@ -41,3 +41,7 @@ add_executable(pimple pimple.cpp)
 target_link_libraries(pimple ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 add_executable(maths maths.cpp)
 target_link_libraries(maths ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+add_executable(image imageOperations.cpp)
+target_link_libraries(image ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+add_executable(filter filterOperations.cpp)
+target_link_libraries(filter ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )

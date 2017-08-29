@@ -1,1 +1,0 @@
-Loop;Zeit[ms];Länge;LängeX;LängeY

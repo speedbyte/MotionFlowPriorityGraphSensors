@@ -112,14 +112,13 @@ int main ( int argc, char *argv[]) {
     cv::Mat roiRangeMultiple( bigCube1, ranges);
     // Access
     mat34.at<float>(2,3) = 1000;
-    std::cout << mat1 << std::endl << mat2 << std::endl << mat3 << std::endl << mat34 << std::endl << mat4 << std::endl
+    std::cout << mat1 << std::endl << mat2 << std::endl << mat3 << std::endl << mat34 << std::endl << mat4 <<
+                                                                                                             std::endl
               << mat5 << std::endl << mat6 << std::endl;
     std::cout << eyeMat1C.at<int>(2,2) << eyeMat2C.at<cv::Vec2f>(2,2)[0];
     std::cout << mat34.at<float>(1,3) << " and " << mat34.at<cv::Vec<float,3> >(1,3)[1] << std::endl;
     std::cout << bigCube1.at<float>(5,5,5)  << std::endl << bigCube2.at<float>(5,5,5) << std::endl ;
     std::cout << roiRangeMultiple.at<float>(0,1,1) << std::endl;
-
-
 
     //Mat_ ----------------------------------------------------------
     std::cout << "Begin Mat_----------------------------------" << std::endl;
@@ -146,9 +145,22 @@ int main ( int argc, char *argv[]) {
 
     // Image Processing Mat
     cv::Mat img_rgb = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
+    try {
+        assert(img_rgb.depth() == CV_8U);
+        assert(img_rgb.channels() == 3);
+    }
+    catch (...){
+        exit(0);
+    }
+
     cv::Mat img_rgb_orig = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
     std::cout<<img_rgb_orig.total() << std::endl;
-    //img_rgb_orig.convertTo(img_rgb_, CV_8U);
+    cv::Mat img_rgb_conv;
+    img_rgb_orig.convertTo(img_rgb_conv, CV_8U);
+    cv::Mat img_rgb_bmp(img_rgb.rows, img_rgb.cols, CV_8UC3, img_rgb.data); // provide different view of m1 data
+    // depending on endianess of reader, you may need to swap byte order of m2 pixels
+    cv::imwrite("../../../pics-dataset/lena.bmp", img_rgb_bmp);
+
 
     // Image Process Mat_
     cv::Mat_<cv::Matx<uchar,512,512>> img_rgb_;
@@ -212,9 +224,6 @@ int main ( int argc, char *argv[]) {
     */
 
     cv::waitKey(0);
-
-
-
 }
 
 void bonus(void) {
@@ -231,6 +240,4 @@ void bonus(void) {
         xpts(i) = sides[i].x;
         ypts(i) = sides[i].y;
     }
-
-
 }

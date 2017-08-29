@@ -6,6 +6,10 @@
 
 #define RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
 /**
+ A graph to show the dynamicity of the image. Is the image set very dynamic or relatively static?
+ Compare the dynamicity of a scene. Intuitively one can achieve a lot. This dynamicity is the fingerprint of the image.
+ How the dynamicity of the image can confirm that two dynamics are the same.
+
  Fingerprinting - are the displacement vector linear?
 
  Read two manual image files without rain. The two image files are from Marcel
@@ -26,6 +30,7 @@
             4. Plot Displacement Vector
             5. Standard deviation of all the displacement vector magnitude.
             6. Standard deviation of all the displacement vector angle.
+            7. Cross Correlation map between the two different function output in 5 and 6.
  Thread 2:  1. Use the pics and run different rain noise ( angle, how strong etc. )
             2. Ground Truth is directly from the testing data in kitti database. Kitti guys generated the ground truth
             using Velodyne.
