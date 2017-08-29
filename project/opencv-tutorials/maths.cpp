@@ -67,7 +67,7 @@ void calcCovarMatrix() {
     cv::Mat_<float> covar, mean;
     std::cout << "\nsamples\n" << samples;
     //cv::calcCovarMatrix( &matPtr, 2, covar, mean, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
-    cv::calcCovarMatrix( samples, covar, mean, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
+    cv::calcCovarMatrix( samples, covar, mean, cv::COVAR_NORMAL|cv::COVAR_COLS|cv::COVAR_SCALE, CV_32FC1);
     std::cout << "\nMean\n" << mean << "\nCovar\n" << covar << std::endl;
 }
 
