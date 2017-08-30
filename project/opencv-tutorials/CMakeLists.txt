@@ -18,7 +18,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 #set_source_files_properties(foo.cpp PROPERTIES COMPILE_DEFINITIONS -DFOO=1)
 
 find_package(OpenCV COMPONENTS core highgui imgcodecs imgproc REQUIRED)
-find_package(Boost COMPONENTS system filesystem REQUIRED)
+find_package(Boost COMPONENTS system filesystem iostreams REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})

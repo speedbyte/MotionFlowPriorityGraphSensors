@@ -33,7 +33,7 @@ int main ( int argc, char *argv[]) {
     //cv::Matx<cv::Vec3b,512,512> img_gauss2;
     //img_gauss2 = cv::imread("../data/lena.png", CV_LOAD_IMAGE_COLOR);
 
-    // Guassian blurring ( always odd kernel size )
+    // Guassian blurring ( always odd kernel size, sigmax, sigmay are the standard deviations )
     GaussianBlur(img_rgb, img_gauss1, cv::Size(5,5), 3, 3);
     GaussianBlur(img_rgb, img_gauss1, cv::Size(5,5), 3, 3);
     // Guassian blurring and downsampling
