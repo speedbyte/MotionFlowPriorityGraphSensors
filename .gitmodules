@@ -42,3 +42,9 @@
 [submodule "VirtualTestDriveFramework"]
 	path = project/VirtualTestDriveFramework
 	url = git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/VirtualTestDriveFramework.git
+[submodule "overleaf-maths"]
+	path = overleaf/maths
+	url = https://git.overleaf.com/10769078vhnvxscwscbm
+[submodule "overleaf-marcelBA"]
+	path = overleaf/marcelBA
+	url = https://git.overleaf.com/9933334yfshcrdkdfhx
