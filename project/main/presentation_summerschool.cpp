@@ -10,6 +10,25 @@
  Compare the dynamicity of a scene. Intuitively one can achieve a lot. This dynamicity is the fingerprint of the image.
  How the dynamicity of the image can confirm that two dynamics are the same.
 
+ Ofcourse, the experiments cannot be done on all the movements. A reference needs to be set up and anything apart
+ from this reference are outliers. Outlying observations can cause problems because they may strongly influence the
+ result. OUtliers are detected by searching for the model fitted by the majority of the data. So, if there are
+ many models ( areas ) , the model ( area ) with the maximum number of data can be used as the observation sample,
+ and other models can be neglected or called outliers.  There are many robust statistics methods that deals with dealing
+ the outliers. Robust procedures are applied on data, to detect the outliers.
+ Univariate, low dimensional and high dimensional data, such as
+ 1. estimation of location and scatter,
+ 2. linear regression,
+ 3. principal component analysis, and
+ 4. classification
+
+ Outliers ( observations, that are different from majority ) can be
+ 1. Errors
+ 2. recorded under exceptional circumstances
+ 3. belong to other populations
+ Consequently, they do not fit the model well.
+
+
  Fingerprinting - are the displacement vector linear?
 
  Read two manual image files without rain. The two image files are from Marcel

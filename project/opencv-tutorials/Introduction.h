@@ -560,7 +560,18 @@ That's how you find the standard deviation.
  Var(X+Y) = Var(X) + Var(Y) // because X and Y are independent
  Var(X+Y) = Var(X) + Var(Y) + 2*Var(X)*Var(Y) // X and Y are dependent
  Var(aX) = a^2*Var(X)  // Put a=2 and Y = X to get the above formula. Remember X and X is always dependant variables.
- Cov(X,Y) = Corr(X,Y) * sqrt((Var(X) * Var(Y))
+ Cov(X,Y) = Corr(X,Y) * sqrt((Var(X) * V
+
+ Algorithms:
+
+ Inverse Matrix
+ LU Factorization
+ LDL* Factorization
+ QR Factorization
+
+ Robust statistics algorithms
+ Outlier detection tools
+
  */
 
 

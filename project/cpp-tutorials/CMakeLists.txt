@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(cpp_tutorials)
+project(cpp-tutorials)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -13,6 +13,10 @@ target_link_libraries(overloading ${Boost_LIBRARIES})
 
 add_executable(stackoverflow stackoverflow.cpp)
 target_link_libraries(stackoverflow ${Boost_LIBRARIES})
+
+add_executable(arrays Arrays.cpp)
+target_link_libraries(arrays ${Boost_LIBRARIES})
+
 
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")
 message("CMAKE_MODULE_PATH is ${CMAKE_MODULE_PATH}")

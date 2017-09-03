@@ -10,7 +10,6 @@
  Standard Template Library ( Scott Meyers )
  Learncpp.com
  C++ FAQ ( Cline, Molow )
-
  A class is a way to abstract behaviour, not just a way to encapsulate bits. A class interface must make
  sense from the outside. If a detached user expects services to access an attribute, those services should exist.
  One should think OO as behaviour centric and not data centric.
@@ -152,7 +151,6 @@
  mode, instead think of them as factories that churns out objects. The virtual table is a pointer table that points
  to member functions ( base or derived or derived derived etc. ) . Since constructors are not member functions, it is
  not possible to make them as virutal.
-
  The Big Three:
 
  Destructors, Copy constructor and the assignment operator are the big threes. When the program does not explicitly
@@ -199,11 +197,14 @@
  If no base class constructor is specified, the default base class constructor will be used. In that case, if no
  default base class constructor can be found (or created by default), the compiler will display an error.
 
- Person person1;   // Default constructor will be called
- PPerson person2("Foo", 50)
-
      Person(std::string name = "", int age = 0)
         : m_name(name), m_age(age )
+
+ Person person1;   // Default constructor will be called
+ Person person2 = Person();
+ Person person3("Foo", 50); // the default constructor can have arguements, but the conditions is that the arguements
+ should have a default value in the definition of the constructor. Please see below
+
 
  bool operator>(const Cents &c1, const Cents &c2)
 
@@ -292,7 +293,6 @@
     void resetValue() { m_value = 0; }
 
  both are valid and depending on if the class object is instantiated as const, corresponding resetValue would be called.
-
  Const Expression:
  Expressions that are evaluated at compile time are called const expressions
  constexpr int i = 0;
@@ -419,7 +419,6 @@
  operator<<. Because friend functions of the base class aren’t actually part of the base class, using the scope
  resolution qualifier won’t work. Instead, we need a way to make our Derived class temporarily look like the Base
  class so that the right version of the function can be called.
-
  Virtual Function:
 
  The concept of virtual functions is an important part of polymorphism. The whole idea is based on the fact that in
@@ -466,6 +465,8 @@
  is any function call in the base constructor that is virtual, then it would go on to look for the derived version.
  However, the derived version is not yet ready, because the derived constructor is not yet been called. Always make
  your destructor virtual when you are dealing with inheritance.
+
+
 
  Pure Virtual Functions: Pure virtual functions are functions that makes a class abstract. A pure virtual function
  simply acts as a placeholder that is meant to be redefined by derived classes. An pure virtual class cannot be
@@ -539,6 +540,10 @@
  One should always use managed pointers like std::unique_ptr. Avoid std::shared_ptr although they are managed. The
  reason is that the shared_ptr allow to copy the pointers and hence can lead to dangling pointers after
  improper destruction.
+
+ A very important thing is that * can only be used on basic data types. It is not possible to dereference a pointer
+ of std::array<int,3> type with a *. However it is possible to dereference an int array[x][y] with *. For std::array
+ or any other c++ class pointer, corresonding methods should be provided such as data() or data in case of std::array.
 
  Remote ownership:
  When the object that owns a pointer also owns the allocation pointed to by that pointer, the object is said to have
@@ -645,7 +650,6 @@
  that the static data is used before it is initialised. Proper care should be taken to avoid the situation.
 
  Static member functions cannot access non static data.
-
  Pure static class:
  A pure static claass is class whose all members are static. A word of note - pure virtual class is called abstract
  class. Pure virtual function is when a function is initialised to 0.
@@ -707,4 +711,60 @@
  assert(found && "Car could not be found in database"); // Add a string
  static_assert(sizeof(long) == 8, "long must be 8 bytes"); This is triggered only at compile time.
 
-#endif //
+ std::vector:
+ A vector is a dynamic array with automatically handled storage. The elements in a vector can be accessed just as
+ efficiently as those in an array with the advantage being that vectors can dynamically change in size
+
+ std::array:
+ std::array is a container that encapsulates fixed size arrays. Unlike A C-style array, it doesnt decay to T*
+ automatically. As an aggregrate type, it can be initialized with aggregrate-initialisation given at most N
+ initializers that are convertible to T.
+
+ Compiler Options:
+ -std=c++11
+ -std=gnu++11
+ -fexception
+
+ Aggregrates:
+ Aggregrates is an array or a class ( struct , union inclusive ) with
+ - no explicitly user declared constructors ( default, non-default and copy constructors ). Aggregrates can have user
+ defined  assignment operator though.
+ - only public data members.
+ - no base class
+ - no virtual functions.
+ - An array is an aggregrate even if it is an array of non aggregrate class type.
+ A special thing about aggregrates are that they can be initialised with curly braces { }. Non aggregrates cannot be
+ initialised with curly brackets.
+ Initialisation of aggregrate array is simple. Simply use the curly brackets to initialise them.
+ Initialisation of aggregrate class is complex. The elements in curly brackets are assigned one to one in the order
+ of the public data members that appear in the class declaration. Memberwise initialisaton with braces implies that
+ the class is nothing more than the sum of its members.
+ In C++11, one can have a user defined default constructor. But it just points to the default constructor.
+ Aggregate() = default; // asks the compiler to generate the default implementation
+ Also, any kind of inline initialization of the data members in the class declarations, such as int x = 5; violates
+ the principles of an aggregrate. Such kind of inline initialization is similiar to a user defind default constructor
+ when the class is instantiated.
+
+ PODs ( Plain Old Data :
+ If a class is not an aggregreate, then it is definetly not a POD. A POD is a special type of aggregrate with few
+ more constraints. As we saw, that an aggregrate can consist of assignment operator.  A POD on the other hand
+ - has no user defined copy-assignment operator
+ - none of its non static data members is a non POD class. As soon as the any of static data members is a non POD class,
+ then the POD class is not a POD anymore.
+ - none of the non stattic data members are references.
+ - none of the non static data members are array of non POD class.
+ - should not have a user defined destructor. The aggregrates allow a user defined destructor.
+ In a nutshell it means, that the PODs cannot consist of any hint of non PODs. This is different from aggregrates,
+ where the aggregrate class can be an array of non aggregrates.
+ A POD is closest to C struct, with additional member functions. PODs are optimum for potability in dynamic libraries
+ . They are often used as portable dynamic library. The lifetime of a POD ends with the release or reuse of the
+ storage, unlike Aggregrates, where the execution of the destructor ends the lifetime of the object. Memcpy from the
+ POD type object to a array of char and back, will not alter the object. This cannot be gauranteed for the non POD
+ type. A struct memcpy to an array and back will reveal the original struct again for example. Additionally member
+ functions in a POD type extends the struct kind of objects.
+
+
+*/
+
+
+
