@@ -9,23 +9,23 @@
 %%
 close all;
 
-opticFlow=opticalFlowFarneback%('NoiseThreshold',0.04);
+opticFlow=opticalFlowLK%('NoiseThreshold',0.04);
 
 img1 = zeros(375,1242,3,'uint8');
 img2 = zeros(375,1242,3,'uint8');
 absoluteFlow = zeros(375,1242,3,'uint16');
 
-xMovement = 7;
-yMovement = 7;
+xMovement = 0;
+yMovement = 2;
 
-width = 200:260;
+width = 520:580;
 height = 46:106;
 
-secondObjectWidth = 599:659;
-secondObjectHeight = 46:106;
+secondObjectWidth = 520:580;
+secondObjectHeight = 116:176;
 
-secondXMovement = -7;
-secondYMovement = 7;
+secondXMovement = 0;
+secondYMovement = -2;
 
 
 %%
@@ -164,6 +164,8 @@ for k=secondObjectHeight
     end
 end
 
+abs1 = absoluteFlow(:,:,1);
+
 %% This shows the Optical Flow with arrows
 figure('Name', 'Displacement Vector');
 imshow(img1);
@@ -172,25 +174,33 @@ plot(flow_img1,'DecimationFactor',[6 6],'ScaleFactor',3);
 hold off
 display(flow_img1);
 
+%% collision checkers
+collisionBool = gtCollision( absoluteGT, width,height,xMovement,yMovement, secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement );
+
+flowCollision( absoluteFlow, width,height, secondObjectWidth,secondObjectHeight)
+% if collisionBool == 1
+%     break;
+% end%%
 %%
-%Threshold
-flowX = flow_img1.Vx;
-flowY = flow_img1.Vy;
-indices = find(abs(flow_img1.Vx)<0.001);
-flowX(indices) = 0;
 
-indices = find(abs(flow_img1.Vy)<0.001);
-flowY(indices) = 0;
-
-% For the Validation channel.
-vxCopy = (flowX ~= 0);
-vyCopy = (flowY ~= 0);
-vXYCopy = vxCopy+vyCopy;
-vCopy = (vXYCopy ~= 0);
-
-%Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
-%and Validation bit
-res = cat(3,flowX,flowY,vCopy);
-re =  uint16(res);
+% %Threshold
+% flowX = flow_img1.Vx;
+% flowY = flow_img1.Vy;
+% indices = find(abs(flow_img1.Vx)<0.001);
+% flowX(indices) = 0;
+% 
+% indices = find(abs(flow_img1.Vy)<0.001);
+% flowY(indices) = 0;
+% 
+% % For the Validation channel.
+% vxCopy = (flowX ~= 0);
+% vyCopy = (flowY ~= 0);
+% vXYCopy = vxCopy+vyCopy;
+% vCopy = (vXYCopy ~= 0);
+% 
+% %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
+% %and Validation bit
+% res = cat(3,flowX,flowY,vCopy);
+% re =  uint16(res);
 
 end
