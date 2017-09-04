@@ -7,7 +7,20 @@
 #include <array>
 #include <vector>
 
+typedef struct {
+    int a;
+    int b;
+} STRUCT_AGGREGRATE;
+
 int main ( int argc, char *argv[]) {
+
+    std::srand(time(0));
+
+    STRUCT_AGGREGRATE struct_aggregrate{2,3};
+    STRUCT_AGGREGRATE array_struct_aggregrate[2] = {{2,3},{2,3}};
+    std::array<STRUCT_AGGREGRATE,2> std_array_struct_aggregrate = {{{2,3},{2,3}}};
+
+    std::cout << struct_aggregrate.a << std::endl;
     std::cout << "----------1D access---------------------------------------\n" ;
     /**
      * xy_pts is the pointer to the first integer in the array. The content of xy_pts is the address of the first
@@ -98,8 +111,12 @@ int main ( int argc, char *argv[]) {
         }
     }
 
+
     std::cout << "-----------1D std::vector--------------------------------------\n" ;
-    std::vector<int> xy_pts_vector = {1,2,3,4,5,6,7,8,9,10};
+    std::vector<int> xy_pts_vector(10);
+    for ( unsigned i = 0; i < xy_pts_vector.size(); i++) {
+        xy_pts_vector[i] = std::rand()%100;
+    }
     for ( unsigned i = 0; i < xy_pts_vector.size(); i++) {
         std::cout << xy_pts_vector[i] << std::endl;
         std::cout << xy_pts_vector.at(i) << std::endl;

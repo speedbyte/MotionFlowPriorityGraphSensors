@@ -564,13 +564,17 @@ That's how you find the standard deviation.
 
  Algorithms:
 
- Inverse Matrix
+ Inverse Matrix:
  LU Factorization
  LDL* Factorization
  QR Factorization
+ cv::DECOMP_SVD
 
  Robust statistics algorithms
  Outlier detection tools
+
+
+
 
  */
 

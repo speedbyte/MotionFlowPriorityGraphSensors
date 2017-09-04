@@ -6,6 +6,27 @@
 
 #define RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
 /**
+
+ Flowchart for testing algorithms with Image Sensors:
+ Acquisiton step and noise induction
+ Acquire image data -> Induce Noise by some forumula -> New noised image data
+
+ Apply optical flow algorithm step and noise induction
+ Acquire new noised image data -> Induce specific movements as noise > New specific movements image data
+ Acquire new specific movements image data -> Apply Optical Flow algorithm -> Output displacement vector
+
+ Apply validation step and noise induction
+ Acquire displacement vector -> Apply collision algorithm -> Output collision graph
+ Compare input collision graph with output collision graph -> Output Error
+
+ --------------------------------------
+
+ Random variable is displacements greater than 2px in a sample space of an image with 100 moving objects. There can be
+ no objects moving and hence the random variable as a real valued function has a value 0, because
+ none of the objects are moving.
+
+ --------------------------
+
  A graph to show the dynamicity of the image. Is the image set very dynamic or relatively static?
  Compare the dynamicity of a scene. Intuitively one can achieve a lot. This dynamicity is the fingerprint of the image.
  How the dynamicity of the image can confirm that two dynamics are the same.

@@ -17,6 +17,8 @@ target_link_libraries(stackoverflow ${Boost_LIBRARIES})
 add_executable(arrays Arrays.cpp)
 target_link_libraries(arrays ${Boost_LIBRARIES})
 
+add_executable(random Random.cpp)
+target_link_libraries(random ${Boost_LIBRARIES})
 
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")
 message("CMAKE_MODULE_PATH is ${CMAKE_MODULE_PATH}")

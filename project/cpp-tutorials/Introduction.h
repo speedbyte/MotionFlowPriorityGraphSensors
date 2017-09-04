@@ -744,6 +744,8 @@
  Also, any kind of inline initialization of the data members in the class declarations, such as int x = 5; violates
  the principles of an aggregrate. Such kind of inline initialization is similiar to a user defind default constructor
  when the class is instantiated.
+ Aggregrate initialisation can be folded in during compile time. For example std::array is a compile time type and
+ hence needs to be work with aggregrate initialisation.
 
  PODs ( Plain Old Data :
  If a class is not an aggregreate, then it is definetly not a POD. A POD is a special type of aggregrate with few
@@ -762,6 +764,31 @@
  POD type object to a array of char and back, will not alter the object. This cannot be gauranteed for the non POD
  type. A struct memcpy to an array and back will reveal the original struct again for example. Additionally member
  functions in a POD type extends the struct kind of objects.
+
+ Randomize:
+ std::generate, std::generate_n, std::nrand()
+ Fischer-Yates Shuffle, std::generate_random()
+
+ std::generate(array, array + sizeof(array)/sizeof(int), ::rand);
+ std::transform(array, array+SIZE, array, std::bind2nd(std::modulus<int>(), 255));
+
+ srand( unsigned( time(NULL) ) );
+ random_shuffle(array, array+5);
+
+ std::string uniqueName() {
+    auto randchar = []() -> char
+    {
+        const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        const size_t max_index = (sizeof(charset) - 1);
+        return charset[ rand() % max_index ];
+    };
+    std::string str(4,0);
+    std::generate_n( str.begin(), 4, randchar );
+    return str;
+ }
+
+
+
 
 
 */
