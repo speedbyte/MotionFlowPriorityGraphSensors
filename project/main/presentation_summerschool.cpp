@@ -7,6 +7,10 @@
 #define RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
 /**
 
+ Papers:
+ Eigenvalues to determine the robustness of optical flow algorithms.
+ Fingerprinting to determine the robustness of optical flow algorithms.
+
  Flowchart for testing algorithms with Image Sensors:
  Acquisiton step and noise induction
  Acquire image data -> Induce Noise by some forumula -> New noised image data

@@ -3,33 +3,7 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 
-
-
-void saturation_cast() {
-    uchar init_m0[] = {10,10,30};
-    cv::Mat m0(3,1,CV_8UC1,init_m0,sizeof(uchar));
-    uchar& Vxy = m0.at<uchar>(0);
-    uchar& Vxy_nocast = m0.at<uchar>(1);
-    std::cout << m0 << std::endl;
-    Vxy = cv::saturate_cast<uchar>((Vxy-128)*2 + 128);
-    Vxy_nocast = (Vxy_nocast-128)*2 + 128;
-    std::cout << m0 << std::endl;
-}
-
-int main ( int argc, char *argv[]) {
-
-    boost::filesystem::path fpath("../../../pics-dataset/lena.png");
-    try {
-        if ( !boost::filesystem::exists(fpath) ) {
-            throw ("FileNotFound error");
-        }
-    }
-    catch  ( const char * value ){
-        std::cout << value;
-        exit(0);
-    }
-
-
+void point_() {
     // ------------------------------------------------------
     //cv::Point
     cv::Point_<float> point2(10,11);
@@ -38,12 +12,16 @@ int main ( int argc, char *argv[]) {
     // The points are points in space and the x,y,z are distance wrt to origin.
     std::cout << " Dot " << point3_1.dot(point3_2)  << " Cross " << point3_1.cross(point3_2) << std::endl;
     std::cout << point2.x << point2.y << std::endl;
+}
 
+void size_() {
     // ------------------------------------------------------
     //cv::Size: same as point, but the access is thru width and height.
     cv::Size_<float> size2_1(5,15);
     std::cout << "Area" << size2_1.area() << "for values " << size2_1.width << size2_1.height << std::endl;
+}
 
+void vector_() {
     //std::vector
     std::vector<float> vector_data;
     // ------------------------------------------------------
@@ -51,13 +29,17 @@ int main ( int argc, char *argv[]) {
     cv::Vec<float,10> vec1D_1(3,4,10.0);
     cv::Vec<float,10> vec1D_2(3,3,10.0);
     cv::Vec<float,5> vec1D_3(100,10.0, 333.33, 444.44, 555.55);
+    cv::Matx<float,5,1> vec1D(vec1D_3);  // Only 1 row is allowed.
     vec1D_3.all(200.22);
 
     //Print
     std::cout << vec1D_1 << vec1D_1.t(); // transposing is from column vector to row vector for printing purpose
     std::cout << "Member " << vec1D_1(0) << " Array " << vec1D_1.row(2)  << " col " << vec1D_3.col(0)  << std::endl;
+    std::cout << "Vector 1D" << vec1D(3) << std::endl;
+}
 
 
+void matx_() {
     //Matx ----------------------------------------------------------
     std::cout << "Begin Matx ----------------------------------" << std::endl;
     // Initialize
@@ -70,7 +52,6 @@ int main ( int argc, char *argv[]) {
     std::cout << matx1D_1(0,0) << matx2D_1.channels  << matx2D_1.row(1)<< std::endl;
     // ------------------------------------------------------
     // Static functions in the class
-    cv::Matx<float,5,1> vec1D(vec1D_3);  // Only 1 row is allowed.
     cv::Matx<float,3,3> matxType(matx2D_2);
     cv::Matx<float,3,4> zeroMatx = cv::Matx<float,3,4>::zeros();
     cv::Matx<float,3,4> oneMatx = cv::Matx<float,3,4>::ones();
@@ -81,10 +62,10 @@ int main ( int argc, char *argv[]) {
     // Access: Matx doesnt have .at
     std::cout << matx1D_1.row(0) << std::endl  << matx2D_2 << std::endl
             ;
-    std::cout << "Vector 1D" << vec1D(3) << std::endl;
     std::cout << "Matrix 2D" << matxType(3,1) << std::endl;
+}
 
-
+void mat() {
     //Mat ----------------------------------------------------------
     std::cout << "Begin Mat----------------------------------" << std::endl;
     // Initialize
@@ -115,16 +96,19 @@ int main ( int argc, char *argv[]) {
     // Access
     mat34.at<float>(2,3) = 1000;
     std::cout << mat1 << std::endl << mat2 << std::endl << mat3 << std::endl << mat34 << std::endl << mat4 <<
-                                                                                                             std::endl
+              std::endl
               << mat5 << std::endl << mat6 << std::endl;
     std::cout << eyeMat1C.at<int>(2,2) << eyeMat2C.at<cv::Vec2f>(2,2)[0];
     std::cout << mat34.at<float>(1,3) << " and " << mat34.at<cv::Vec<float,3> >(1,3)[1] << std::endl;
     std::cout << bigCube1.at<float>(5,5,5)  << std::endl << bigCube2.at<float>(5,5,5) << std::endl ;
     std::cout << roiRangeMultiple.at<float>(0,1,1) << std::endl;
+}
 
+void mat_() {
     //Mat_ ----------------------------------------------------------
     std::cout << "Begin Mat_----------------------------------" << std::endl;
     // Initalize
+    float data1[6] = {1,2,3,4,5,6};
     cv::Mat_<cv::Matx<float,3,4>> mat2x_;
     cv::Mat_<char> mat1_(3,4); mat1_ << -1, 1, 2, -2, 3, 1 , 4, 0, 3, 10, 11, 12;
     cv::Mat_<float> mat2_(3,4);
@@ -143,72 +127,90 @@ int main ( int argc, char *argv[]) {
               std::endl << mat5_ << std::endl;
     std::cout << eyeMat1C_.at<int>(2,2) << eyeMat2C_.at<cv::Vec2f>(2,2)[0];
     std::cout << mat34_(1,3) << " and " << mat34_(1,3)[1] << std::endl;
+}
+
+void mat_multiplication() {
+    std::srand(time(NULL));
+
+    cv::Mat_<float> mat34(3,3), mat34_t(3,3), mat34_mul_t(3,3), mat34_mul_element(3,3);
+    cv::Mat_<float> mat34_div_element(3,3);
+    cv::Mat_<float> mat34_inverse(3,3);
+    float determinant;
+    mat34 << 1,2,3,4,5,6,7,8,10;
+    std::cout << "original\n";
+    std::cout << mat34<<std::endl;
+    std::cout << "-----object multiplications\n";
+
+    std::cout << "transpose object method\n";
+    mat34_t = mat34.t();
+    std::cout << mat34_t<<std::endl;
+
+    std::cout << "determinant no object method\n";
+
+    std::cout << "matrix element by element object method\n";
+    mat34_mul_t = mat34.mul(mat34_t);
+    std::cout << mat34_mul_t<<std::endl;
+
+    std::cout << "matrix multiplication object method\n";
+    mat34_mul_element = mat34*mat34_t;
+    std::cout << mat34_mul_element <<std::endl;
+
+    std::cout << "matrix inverse object method\n";
+    mat34_inverse  = mat34.inv();
+    std::cout << mat34_inverse <<std::endl;
+
+    std::cout << "-----cv static functions \n";
+
+    std::cout << "determinant static method\n";
+    determinant = (float)cv::determinant(mat34);
+    std::cout << determinant <<std::endl;
+
+    std::cout << "transpose static method\n";
+    cv::transpose(mat34, mat34_t);
+    std::cout << mat34_t<<std::endl;
+
+    std::cout << "matrix element by element static multiplication\n";
+    cv::multiply(mat34,mat34_t,mat34_mul_element);
+    std::cout << mat34_mul_element <<std::endl;
+
+    std::cout << "matrix multiplication static method\n";
+    cv::mulTransposed(mat34,mat34_mul_t,0);
+    std::cout << mat34_mul_t <<std::endl;
+
+    std::cout << "matrix element by element static division\n";
+    cv::divide(mat34,mat34_t,mat34_div_element);
+    std::cout << mat34_div_element <<std::endl;
+
+    std::cout << "matrix inverse static method\n";
+    cv::invert(mat34,mat34_inverse);
+    std::cout << mat34_inverse <<std::endl;
+
+    //cv::MatIterator_<float> iterator;
+    //std::vector<float> vector34;
+    //if ()
+}
 
 
-    // Image Processing Mat
-    cv::Mat img_rgb = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
-    try {
-        assert(img_rgb.depth() == CV_8U);
-        assert(img_rgb.channels() == 3);
-    }
-    catch (...){
-        exit(0);
-    }
+void saturation_cast() {
+    uchar init_m0[] = {10,10,30};
+    cv::Mat m0(3,1,CV_8UC1,init_m0,sizeof(uchar));
+    uchar& Vxy = m0.at<uchar>(0);
+    uchar& Vxy_nocast = m0.at<uchar>(1);
+    std::cout << m0 << std::endl;
+    Vxy = cv::saturate_cast<uchar>((Vxy-128)*2 + 128);
+    Vxy_nocast = (Vxy_nocast-128)*2 + 128;
+    std::cout << m0 << std::endl;
+}
 
-    cv::Mat img_rgb_orig = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
-    std::cout<<img_rgb_orig.total() << std::endl;
-    cv::Mat img_rgb_conv;
-    img_rgb_orig.convertTo(img_rgb_conv, CV_8U);
-    cv::Mat img_rgb_bmp(img_rgb.rows, img_rgb.cols, CV_8UC3, img_rgb.data); // provide different view of m1 data
-    // depending on endianess of reader, you may need to swap byte order of m2 pixels
-    cv::imwrite("../../../pics-dataset/lena.bmp", img_rgb_bmp);
+int main ( int argc, char *argv[]) {
 
-
-    // Image Process Mat_
-    cv::Mat_<cv::Matx<uchar,512,512>> img_rgb_;
-    std::cout<<img_rgb_.total() << std::endl;
-    cv::randu(img_rgb_,1,2);
-
-    // ------------------------------------------------------
-    // Range
-    cv::Mat roiRange( img_rgb, cv::Range(100, 300), cv::Range(0, 512)); // Row and Column in one
-    // different ways to extract rows and columns from Range
-    cv::Mat roiRange2 = img_rgb.rowRange(cv::Range(100, 300));  // Row
-    cv::Mat roiRange3 = img_rgb.colRange(cv::Range(100, 300));  // Column
-    cv::Mat roiRange4 = img_rgb.rowRange(100,300);  // Row, another way of depicting
-    cv::Mat roiRange5 = img_rgb.colRange(100,300);  // Column, another way of depicting
-
-    // extract section of an image ( the main diaognal )
-    cv::Mat roiRange6 = img_rgb.diag();
-    cv::namedWindow("range", CV_WINDOW_AUTOSIZE);
-    imshow("range", roiRange4);
-
-    cv::waitKey(0);
-    cv::destroyAllWindows();
-
-    // ------------------------------------------------------
-    // extract section of an image using Rect
-    cv::Mat roiRect( img_rgb, cv::Rect_<int>(0,100,512,200)); // start column, start row, width, height
-    cv::namedWindow("rect", CV_WINDOW_AUTOSIZE);
-    imshow("rect", roiRect);
-
-    cv::waitKey(0);
-    cv::destroyAllWindows();
-
-    // ------------------------------------------------------
-    // Access
-    cv::Mat img_rgb2d3c(512,512,CV_8UC3, cv::Scalar_<int>(255,0,0)); // Blue image
-    img_rgb2d3c.row(0) = img_rgb2d3c.row(3) + img_rgb2d3c.row(5)*3+2;
-    img_rgb2d3c.at<char>(5,1) = 10;
-    // now copy the 7-th column to the 1-st column
-    img_rgb2d3c.col(0) = img_rgb2d3c.col(0) + img_rgb2d3c.col(1);
-    img_rgb2d3c.col(0) = img_rgb2d3c.col(1) + 10;
-    img_rgb2d3c.push_back(img_rgb2d3c.row(3));
-    cv::namedWindow("scalar", CV_WINDOW_AUTOSIZE);
-    imshow("scalar", img_rgb2d3c);
-
-    cv::waitKey(0);
-    cv::destroyAllWindows();
+    point_();
+    size_();
+    vector_();
+    matx_();
+    mat_();
+    mat();
+    mat_multiplication();
 
     /*
     //Very very large operation

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <gnuplot/gnuplot-iostream.h>
 
-void malalanobis() {
+void mahalanobis() {
 
     /**
      * Take all camera points and calculate their magnitude scalar and store it in a matrix
@@ -195,25 +195,77 @@ void logPolar() {
 }
 
 void solveLinear() {
-    cv::Matx31f rhs(3,0,-2);
-    cv::Matx33f coefficients (1,1,1,1,2,3,1,3,4), transpose;
-    float determinant;
-    cv::Matx<float,3,1> result;
+    /**
+     x + y + z = 3
+     x + 2y + 3z = 0
+     x + 3y + 4z = -2
+     */
+    cv::Matx<float,3,3> coefficients (1,1,1,1,2,3,1,3,4);
+    cv::Matx<float,3,1> rhs(-1,0,-2);
+
+    cv::Matx<cv::Complexf,3,1> result_object;
     cv::Matx<cv::Complexf,3,1> result_manual;
-    cv::solve(coefficients, rhs, result);
-    result_manual = coefficients.solve(rhs); // equivalent to coefficients.inv()*rhs and this can also handle Complexf
-    std::cout << result << std::endl << result_manual;
+    cv::Mat_<float> result_static(3,1,CV_32FC2);
+
+    std::cout << "---------manual method solving linear equation\n";
+    result_manual = (cv::Matx<float,3,3>)coefficients.inv()*rhs;
+    std::cout << result_manual << std::endl;
+
+    std::cout << "---------object method solving linear equation\n";
+    result_object = coefficients.solve(rhs); // equivalent to coefficients.inv()*rhs and this can also handle Complexf
+    std::cout << result_object << std::endl;
+
+    std::cout << "---------static method solving linear equation\n";
+    cv::solve(coefficients, rhs, result_static);
+    std::cout << result_static << std::endl;
 }
 
 void solvePolynomial() {
-    //cv::Matx<cv::Complexf,2,1> roots;
-    cv::Mat roots;
     cv::Vec3f coefficients(6,-5,1);
-    //cv::Matx<cv::Complexf,3,1> result;
-    //cv::Matx<cv::Complexf,3,1> result_manual;
-    cv::solvePoly(coefficients, roots, 300 );
-    std::cout << roots << std::endl;
+    cv::Vec3f coefficients_complex(1,-1,1);
+
+    cv::Matx<float,2,2> coefficients_eigen(3,0,0,2);
+    //M << 2,1,1,2;
+    //M << 3,0,0,2;
+    cv::Matx<float,3,3> coefficients_complex_eigen(0,1,0,0,0,1,1,0,0);
+
+    cv::Vec<std::complex<float>,2> roots_manual = {{0,0},{0,0}};
+    cv::Matx<cv::Complexf,2,1> roots_static;
+    //cv::Matx<cv::Complexf,2,1> roots_eigen;
+    cv::Matx<float,2,1>  roots_eigen;
+    cv::Matx<float,2,2>  vector_eigen;
+
+    float c = coefficients.operator()(0);
+    float b = coefficients.operator()(1);
+    float a = coefficients.operator()(2);
+
+    std::cout << "---------manual method solving quadratic equation\n";
+    double delta;
+    delta = std::pow(b,2)-4*a*c;
+    if ( delta < 0) {
+        roots_manual[0].real(-b/(2*a));
+        roots_manual[1].real(-b/(2*a));
+        roots_manual[0].imag((float)-std::sqrt(std::abs(delta))/(2*a));
+        roots_manual[1].imag((float)std::sqrt(std::abs(delta))/(2*a));
+    }
+    else {
+        roots_manual[0].real((float)(-b + std::sqrt(delta))/2*a);
+        roots_manual[1].real((float)(-b - std::sqrt(delta))/2*a);
+    }
+    std::cout << roots_manual[0] << std::endl;
+    std::cout << roots_manual[1] << std::endl;
+
+    std::cout << "---------static method solving quadratic equation\n";
+    cv::solvePoly(coefficients, roots_static, 300); // Number of iterations
+    std::cout << roots_static << std::endl;
+
+    std::cout << "---------using eigen values\n";
+    cv::eigen(coefficients_eigen,roots_eigen,vector_eigen);
+    std::cout << coefficients_eigen << std::endl;
+    std::cout << roots_eigen << std::endl;
+    std::cout << vector_eigen << std::endl;
 }
+
 
 void matrixOperations() {
     float determinant;
@@ -246,13 +298,13 @@ int main ( int argc, char *argv[]) {
     std::cout << "solveLinear----------------------------------------------" << std::endl;
     //solveLinear();
     std::cout << "solvePoly----------------------------------------------" << std::endl;
-    //solvePolynomial();
+    solvePolynomial();
     std::cout << "mean and std dev----------------------------------------------" << std::endl;
     //meanStdDeviation();
     std::cout << "linearPolar----------------------------------------------" << std::endl;
     //linearPolar();
     std::cout << "mahalonobis----------------------------------------------" << std::endl;
-    malalanobis();
+    //mahalanobis();
     return 0;
 }
 

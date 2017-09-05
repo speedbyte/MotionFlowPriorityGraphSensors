@@ -1,6 +1,111 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem.hpp>
+#include <iostream>
+
+void image_processing_() {
+    boost::filesystem::path fpath("../../../pics-dataset/lena.png");
+    try {
+        if ( !boost::filesystem::exists(fpath) ) {
+            throw ("FileNotFound error");
+        }
+    }
+    catch  ( const char * value ){
+        std::cout << value;
+        exit(0);
+    }
+
+    // Image Processing Mat
+    cv::Mat img_rgb = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
+    try {
+        assert(img_rgb.depth() == CV_8U);
+        assert(img_rgb.channels() == 3);
+    }
+    catch (...){
+        exit(0);
+    }
+
+    // Image Process Mat_
+    cv::Mat_<cv::Matx<uchar,512,512>> img_rgb_;
+    std::cout<<img_rgb_.total() << std::endl;
+    cv::randu(img_rgb_,1,2);
+
+    // ------------------------------------------------------
+    // Range
+    cv::Mat roiRange( img_rgb, cv::Range(100, 300), cv::Range(0, 512)); // Row and Column in one
+    // different ways to extract rows and columns from Range
+    cv::Mat roiRange2 = img_rgb.rowRange(cv::Range(100, 300));  // Row
+    cv::Mat roiRange3 = img_rgb.colRange(cv::Range(100, 300));  // Column
+    cv::Mat roiRange4 = img_rgb.rowRange(100,300);  // Row, another way of depicting
+    cv::Mat roiRange5 = img_rgb.colRange(100,300);  // Column, another way of depicting
+
+    // extract section of an image ( the main diaognal )
+    cv::Mat roiRange6 = img_rgb.diag();
+    cv::namedWindow("range", CV_WINDOW_AUTOSIZE);
+    imshow("range", roiRange4);
+
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+
+    // ------------------------------------------------------
+    // extract section of an image using Rect
+    cv::Mat roiRect( img_rgb, cv::Rect_<int>(0,100,512,200)); // start column, start row, width, height
+    cv::namedWindow("rect", CV_WINDOW_AUTOSIZE);
+    imshow("rect", roiRect);
+
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+
+    // ------------------------------------------------------
+    // Access
+    cv::Mat img_rgb2d3c(512,512,CV_8UC3, cv::Scalar_<int>(255,0,0)); // Blue image
+    img_rgb2d3c.row(0) = img_rgb2d3c.row(3) + img_rgb2d3c.row(5)*3+2;
+    img_rgb2d3c.at<char>(5,1) = 10;
+    // now copy the 7-th column to the 1-st column
+    img_rgb2d3c.col(0) = img_rgb2d3c.col(0) + img_rgb2d3c.col(1);
+    img_rgb2d3c.col(0) = img_rgb2d3c.col(1) + 10;
+    img_rgb2d3c.push_back(img_rgb2d3c.row(3));
+    cv::namedWindow("scalar", CV_WINDOW_AUTOSIZE);
+    imshow("scalar", img_rgb2d3c);
+
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+
+}
+
+void image_processing_bmp() {
+    boost::filesystem::path fpath("../../../pics-dataset/lena.png");
+    try {
+        if ( !boost::filesystem::exists(fpath) ) {
+            throw ("FileNotFound error");
+        }
+    }
+    catch  ( const char * value ){
+        std::cout << value;
+        exit(0);
+    }
+
+    // Image Processing Mat
+    cv::Mat img_rgb = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
+    try {
+        assert(img_rgb.depth() == CV_8U);
+        assert(img_rgb.channels() == 3);
+    }
+    catch (...){
+        exit(0);
+    }
+
+    cv::Mat img_rgb_orig = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
+    std::cout<<img_rgb_orig.total() << std::endl;
+    cv::Mat img_rgb_conv;
+    img_rgb_orig.convertTo(img_rgb_conv, CV_8U);
+    cv::Mat img_rgb_bmp(img_rgb.rows, img_rgb.cols, CV_8UC3, img_rgb.data); // provide different view of m1 data
+    // depending on endianess of reader, you may need to swap byte order of m2 pixels
+    cv::imwrite("../../../pics-dataset/lena.bmp", img_rgb_bmp);
+
+}
 
 void sobel() {
     cv::Mat img = cv::imread("image.jpg");
@@ -20,6 +125,9 @@ void sobel() {
 }
 
 int main ( int argc, char *argv[] ) {
+
+    image_processing_();
+    image_processing_bmp();
     cv::Mat kittisrc1 = cv::imread("../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/image_02"
                                          "/data"
                               "/0000000169"".png", CV_LOAD_IMAGE_COLOR);

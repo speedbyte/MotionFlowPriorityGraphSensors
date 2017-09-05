@@ -48,7 +48,9 @@
  Gaussian-distribution random numbers are generated using Ziggurat algorithm.
  cv::randShuffle() - shuffles a 1D array.
 
-
+ cv::solvePoly()
+ cv::solve()
+ cv::cubic()
 
 
 
@@ -493,7 +495,7 @@ That's how you find the standard deviation.
  A Singular matrix is a matrix whose determinant is 0.
 
  C++ Libraries to solve linear algebra
- Flint, Singlular, Givaro, Giv ( Scientific Imaging )
+ Flint, Singlular, Givaro, Giv ( Scientific Imaging ), Eigen
 
  Collections
  XML, YAML based functions is more universal in dealing with image coding and decoding.
@@ -565,13 +567,29 @@ That's how you find the standard deviation.
  Algorithms:
 
  Inverse Matrix:
- LU Factorization
- LDL* Factorization
- QR Factorization
- cv::DECOMP_SVD
+ Sometimes, the calculation needs to be aborted, if the matrix is singular. For example an inverse would make no
+ sense for singular matrix. But the calculation is costly and hence, there are methods where a matrix can be
+ decomposed into a multiplication of many matrices. One such is LU_DECOMPOSITION. In this algorithm, two matrix is
+ decomposed into a lower triangle matrix and a upper triangle matrix. The matrix multiplication of both of them gives
+ the original matrix. Its very easy to say if the original matrix is singular, by just multiplying the first element of
+ the L with the first element of the upper. If its 0, then the matrix is singular, otherwise not.
+
+ DECOMP_LU Gaussian elimination with optimal pivot element chosen.
+ DECOMP_CHOLESKY Cholesky LL^T factorization; the matrix src1 must be symmetrical and positively defined.
+ DECOMP_EIG eigenvalue decomposition; the matrix src1 must be symmetrical.
+ DECOMP_SVD singular value decomposition (SVD) method; the system can be over-defined and/or the matrix src1 can be
+ singular.
+ DECOMP_QR QR factorization; the system can be over-defined and/or the matrix src1 can be singular.
+ DECOMP_NORMAL while all the previous flags are mutually exclusive, this flag can be used together with any of the
+ previous; it means that the normal equations
 
  Robust statistics algorithms
  Outlier detection tools
+
+ Matrix:
+ Inverse / Reciprocal = fact{Transpose(Adjoint)}{Determinant}
+
+
 
 
 

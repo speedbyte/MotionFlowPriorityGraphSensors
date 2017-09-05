@@ -72,7 +72,7 @@
  All distributions have a common characterization through their distribution function d.f / c.d.f The inverse of the df
  is called the quantile function and is useful for indicating where the probability is located in the distribution.
  Distribution of X is defined for every random variable X, regardless of whether the distribution of X is discrete or
- continous or mixed.
+ continous or mixed. The y axis in the cdf is always 0 to 1 because the probability cannot exceed 1.
 
  --------------------
  Bivariate Distribution:
