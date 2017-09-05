@@ -9,27 +9,26 @@
 %%
 close all;
 
-opticFlow=opticalFlowLK%('NoiseThreshold',0.04);
+opticFlow=opticalFlowFarneback%('NoiseThreshold',0.04);
 
 img1 = zeros(375,1242,3,'uint8');
 img2 = zeros(375,1242,3,'uint8');
 absoluteFlow = zeros(375,1242,3,'uint16');
 
-xMovement = 0;
-yMovement = 2;
+xMovement = 5;
+yMovement = 1;
 
-width = 520:580;
+width = 320:380;
 height = 46:106;
 
 secondObjectWidth = 520:580;
-secondObjectHeight = 116:176;
+secondObjectHeight = 5:65;
 
-secondXMovement = 0;
-secondYMovement = -2;
+secondXMovement = -3;
+secondYMovement = 1;
 
 
-%%
-
+%%Initialize
 %%white background
 for k=1:375
     for j=1:1242
@@ -76,58 +75,16 @@ figure('Name', 'Start');
 imshow(img1);
 pause(1);
 close;
-
+%%
 
 
 %%move the objects
-for counter=1:10
-%white background
-for k=1:375
-    for j=1:1242
-        for i=1:3
-            img1(k,j,i) = 255;            
-        end
-    end
-end
+for counter=1:20
 
- 
-%%create shifted frame
-for k = height
-    for j= width
-        for i=1:3
-            img1(k+yMovement,j+xMovement,i)= 0;
-            if mod(k,5) == 0
-                img1(k+yMovement,j,i) = 255;
-            end
-            if mod(j,5) == 0
-                img1(k,j+xMovement,i) = 255;
-            end
-        end
-    end
-end
-
-
-%%expand with shifted 2nd object
-for k = secondObjectHeight
-    for j= secondObjectWidth
-        for i=1:3
-            img1(k,j,i)= 0;
-           if mod(k,5) == 0
-                img1(k+secondYMovement,j,i) = 255;
-            end
-            if mod(j,5) == 0
-                img1(k,j+secondXMovement,i) = 255;
-            end
-        end
-    end
-end
+  img1 = Movement(height,width,xMovement,yMovement,secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement);
 
 %%
-%adjust object position according to movement
-width=width+xMovement;
-height=height+yMovement;
-secondObjectHeight=secondObjectHeight+secondYMovement;
-secondObjectWidth=secondObjectWidth+secondXMovement;
+
 
 
 figure('Name', 'First Frame');
@@ -170,12 +127,12 @@ abs1 = absoluteFlow(:,:,1);
 figure('Name', 'Displacement Vector');
 imshow(img1);
 hold on
-plot(flow_img1,'DecimationFactor',[6 6],'ScaleFactor',3);
+plot(flow_img1,'DecimationFactor',[6 6],'ScaleFactor',13);
 hold off
 display(flow_img1);
 
 %% collision checkers
-collisionBool = gtCollision( absoluteGT, width,height,xMovement,yMovement, secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement );
+gtCollision( absoluteGT, width,height,xMovement,yMovement, secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement );
 
 flowCollision( absoluteFlow, width,height, secondObjectWidth,secondObjectHeight)
 % if collisionBool == 1
@@ -183,24 +140,11 @@ flowCollision( absoluteFlow, width,height, secondObjectWidth,secondObjectHeight)
 % end%%
 %%
 
-% %Threshold
-% flowX = flow_img1.Vx;
-% flowY = flow_img1.Vy;
-% indices = find(abs(flow_img1.Vx)<0.001);
-% flowX(indices) = 0;
-% 
-% indices = find(abs(flow_img1.Vy)<0.001);
-% flowY(indices) = 0;
-% 
-% % For the Validation channel.
-% vxCopy = (flowX ~= 0);
-% vyCopy = (flowY ~= 0);
-% vXYCopy = vxCopy+vyCopy;
-% vCopy = (vXYCopy ~= 0);
-% 
-% %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
-% %and Validation bit
-% res = cat(3,flowX,flowY,vCopy);
-% re =  uint16(res);
+%adjust object position according to movement
+width=width+xMovement;
+height=height+yMovement;
+secondObjectHeight=secondObjectHeight+secondYMovement;
+secondObjectWidth=secondObjectWidth+secondXMovement;
+
 
 end

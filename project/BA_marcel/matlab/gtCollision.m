@@ -20,7 +20,37 @@ end
 
 if collision == 1
     disp('Unavoidable collision detected via Ground Truth');
+    return;
 end
 
-%TODO estimate future collisions based on actual movement 
+%estimate future collisions based on actual movement 
+%therefore move the object virtually into the direction.
+
+
+estCollision = 0;
+
+for i=1:10
+
+    height = height+yMovement;
+    width = width+xMovement;
+    secondObjectHeight = secondObjectHeight+secondYMovement;
+    secondObjectWidth = secondObjectWidth+secondXMovement;
+    
+    checkY = intersect(height,secondObjectHeight);
+    checkX = intersect(width,secondObjectWidth);
+    
+    if ~isempty(checkX) & ~isempty(checkY)
+        estCollision = 1;
+        break;
+    end
+    
+    
+end
+    
+   
+    
+
+if estCollision == 1
+    disp('Objects will collide without changing of movement');
+end
 
