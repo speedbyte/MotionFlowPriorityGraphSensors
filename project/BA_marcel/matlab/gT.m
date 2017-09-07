@@ -26,7 +26,7 @@ for k=secondObjectHeight
     end
 end
 
-
+%%Quantization
 gtX = (img3(:,:,1)*64)+2^15;
 gtY = (img3(:,:,2)*64)+2^15;
 
@@ -37,9 +37,10 @@ re =  uint16(res);
 %disp(re(:,:,1));
 
 %Creates OF png for Kitti. Not very lucidly if looked at
-imwrite( re,'GroundTruth.png');
 
-disp('GroundTruth has been generated')
+%Comment in if needed
+%imwrite( re,'GroundTruth.png');
+%disp('GroundTruth has been generated')
 
 end
 

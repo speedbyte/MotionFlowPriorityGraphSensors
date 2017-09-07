@@ -1,10 +1,11 @@
-function [collision] = gtCollision( absoluteGT, width,height,xMovement,yMovement, secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement )
+function [gtCollision] = gtCollision( absoluteGT, width,height,xMovement,yMovement, secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement )
 
 % use values from absoluteGT to calculate if a collision appears with the
 % acutal movement. 
 
 %check if an unavoidable collision will occur each round
 collision = 0;
+gtCollision = 0;
 
 for k = height
     for j = width
@@ -27,7 +28,6 @@ end
 %therefore move the object virtually into the direction.
 
 
-estCollision = 0;
 
 for i=1:10
 
@@ -40,7 +40,7 @@ for i=1:10
     checkX = intersect(width,secondObjectWidth);
     
     if ~isempty(checkX) & ~isempty(checkY)
-        estCollision = 1;
+        gtCollision = 1;
         break;
     end
     
@@ -50,7 +50,5 @@ end
    
     
 
-if estCollision == 1
-    disp('Objects will collide without changing of movement');
-end
+
 

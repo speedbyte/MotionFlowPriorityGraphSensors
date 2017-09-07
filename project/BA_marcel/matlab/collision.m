@@ -15,7 +15,7 @@ img1 = zeros(375,1242,3,'uint8');
 img2 = zeros(375,1242,3,'uint8');
 absoluteFlow = zeros(375,1242,3,'uint16');
 
-xMovement = 5;
+xMovement = 4;
 yMovement = 1;
 
 width = 320:380;
@@ -24,10 +24,10 @@ height = 46:106;
 secondObjectWidth = 520:580;
 secondObjectHeight = 5:65;
 
-secondXMovement = -3;
+secondXMovement = -5;
 secondYMovement = 1;
 
-
+%%
 %%Initialize
 %%white background
 for k=1:375
@@ -121,7 +121,6 @@ for k=secondObjectHeight
     end
 end
 
-abs1 = absoluteFlow(:,:,1);
 
 %% This shows the Optical Flow with arrows
 figure('Name', 'Displacement Vector');
@@ -129,17 +128,24 @@ imshow(img1);
 hold on
 plot(flow_img1,'DecimationFactor',[6 6],'ScaleFactor',13);
 hold off
-display(flow_img1);
+
 
 %% collision checkers
-gtCollision( absoluteGT, width,height,xMovement,yMovement, secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement );
+gtCol = gtCollision( absoluteGT, width,height,xMovement,yMovement, secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement );
 
-flowCollision( absoluteFlow, width,height, secondObjectWidth,secondObjectHeight)
-% if collisionBool == 1
-%     break;
-% end%%
+flow(:,:,1) = flow_img1.Vx;
+flow(:,:,2) = flow_img1.Vy;
+
+estCol = flowCollision( absoluteFlow,flow, width,height, secondObjectWidth,secondObjectHeight);
+
+if gtCol == 1
+    disp('GT: Collision in the future');
+end
+if estCol == 1
+    disp('FLOW: Collision in the future');
+end
 %%
-
+    
 %adjust object position according to movement
 width=width+xMovement;
 height=height+yMovement;

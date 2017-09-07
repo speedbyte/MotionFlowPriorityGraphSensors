@@ -1,4 +1,4 @@
-function [ output_args ] = flowCollision( absoluteFlow, width,height, secondObjectWidth,secondObjectHeight)
+function [ estCollision ] = flowCollision( absoluteFlow,flow, width,height, secondObjectWidth,secondObjectHeight)
 
 %% (use width+height+threshold) and secondWidth/height/threshold
 % work with those values and check for collision then 
@@ -7,6 +7,7 @@ function [ output_args ] = flowCollision( absoluteFlow, width,height, secondObje
 %TODO Threshold
 
 collision = 0;
+estCollision = 0;
 
 for k = height
     for j = width
@@ -21,8 +22,99 @@ for k = height
 end
 
 if collision == 1
-    disp('Estimated Flow collision');
+    disp('Unavoidable collision via FLOW');
+    return;
+end
+%%
+%%get flow from the objects
+
+for k = height
+    for j = width
+        flowFirstObjectX(:,:,1) = flow(k,j,1);
+        flowFirstObjectY(:,:,2) = flow(k,j,2);
+    end
 end
 
+for kk = secondObjectHeight
+            for jj = secondObjectWidth
+                flowSecondObjectX(:,:,1) = flow(kk,jj,1);
+                flowSecondObjectY(:,:,2) = flow(kk,jj,2);
+            end
+end
 
-%TODO estimate future collisions based on actual movement 
+%%
+%Extract the movement of the object. 
+ x = nonzeros(flowFirstObjectX);
+        xThreshold = find(abs(x)<0.09); %cutting out very small displacements
+        x(xThreshold) = [];
+        
+        y = nonzeros(flowFirstObjectY);
+        yThreshold = find(abs(y)<0.09);
+        y(yThreshold) = [];
+        
+        xS = nonzeros(flowSecondObjectX);
+        xThreshold = find(abs(xS)<0.09); %cutting out very small displacements
+        xS(xThreshold) = [];
+        
+        yS = nonzeros(flowSecondObjectY);
+        yThreshold = find(abs(yS)<0.09);
+        y(yThreshold) = [];
+        
+        
+        
+        xMean=mean(x);
+        yMean=mean(y);
+        xSMean = mean(xS);
+        ySMean = mean(yS);
+        
+        disp('Estimated Movement of the First Object:');
+        
+        disp('x')
+        disp(xMean);
+        disp('y')
+        disp(yMean);
+        disp('Estimated Movement of the second Object');
+        disp('x')
+        disp(xSMean);
+        disp('y')
+        disp(ySMean);
+        
+        if isnan(xMean)
+            xMean = 0;
+        end
+        if isnan(yMean)
+            yMean = 0;
+        end
+        if isnan(ySMean)
+            ySMean = 0;
+        end
+        if isnan(xSMean)
+            xSMean = 0;
+        end
+%%
+%Estimate the future collision
+
+for i=1:10
+
+    height = floor( height+yMean);
+    width = floor(width+xMean);
+    secondObjectHeight = floor(secondObjectHeight+ySMean);
+    secondObjectWidth = floor(secondObjectWidth+xSMean);
+    
+    
+    
+    checkY = intersect(height,secondObjectHeight);
+    checkX = intersect(width,secondObjectWidth);
+    
+    if ~isempty(checkX) & ~isempty(checkY)
+        estCollision = 1;
+        break;
+    end
+    
+    
+end
+    
+   
+    
+
+
