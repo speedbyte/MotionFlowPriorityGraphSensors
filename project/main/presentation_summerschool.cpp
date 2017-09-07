@@ -26,10 +26,11 @@
     Reflection itself is a linear transformation that enables a vector to be reflected through a plane or through
     hyper plane. The result is the Q component and the R component. The R component can also be achieved by reducing
     the original matrix in Hessenberg form in finite number of steps also through Householders algorithms. The
-    Hessenberg is yet not a triangular matrix, but almost a triangular matrix. Further reduction of the Hessenberg
-    can be achieved through iterative procedures such as shifted QR factorization, sometimes combined with deflation
-    steps. It was also possible to reduce the general matrix directly to a triangular matrix, but doing it through
-    Hessenberg matrix, often economizes the arithmetic involved in the QR algorithm for eigen value problems.
+    Hessenberg is yet not a triangular matrix, but almost a triangular matrix. Further reduction of the Hessenberg to
+    a triangular matrix ( R ) can be achieved through iterative procedures such as shifted QR factorization,
+    sometimes combined with deflation steps. It was also possible to reduce the general matrix directly to a
+    triangular matrix, but doing it through Hessenberg matrix, often economizes the arithmetic involved in the QR
+    algorithm for eigen value problems.
 
     It is required to find two images whose variance is an orthogonal matrix.
 

@@ -48,9 +48,11 @@
  Gaussian-distribution random numbers are generated using Ziggurat algorithm.
  cv::randShuffle() - shuffles a 1D array.
 
- cv::solvePoly()
- cv::solve()
- cv::cubic()
+ cv::solvePoly() : solve univariate polynomials
+ cv::solve() : linear equation and least square problems ( uses SVD pr QR).
+ cv::cubic() :
+ cv::solveLP : linear programming problem using the Simplex Algorithm (Simplex Method).
+
 
 
 
@@ -554,16 +556,10 @@ That's how you find the standard deviation.
  What is convoution theorem?
  What is a PSF?
  What does convolution has to do with the structure of the crystal?
- What is correlation?
  How might cross correlation be used in crypto FM?
 
  Auto correlation is between the same signals.
- if two variables are independent then they have zero correlation (though zero correlation does not imply
- independence! )
- Var(X+Y) = Var(X) + Var(Y) // because X and Y are independent
- Var(X+Y) = Var(X) + Var(Y) + 2*Var(X)*Var(Y) // X and Y are dependent
- Var(aX) = a^2*Var(X)  // Put a=2 and Y = X to get the above formula. Remember X and X is always dependant variables.
- Cov(X,Y) = Corr(X,Y) * sqrt((Var(X) * V
+
 
  Algorithms:
 
@@ -592,6 +588,7 @@ That's how you find the standard deviation.
  Inverse / Reciprocal = fact{Transpose(Adjoint)}{Determinant}
  Orthogonal - Q.t()*Q = I. The inverse of an orthogonal matrix is its transpose.
  Hessenberg - below subdiagonal or above super diagnoal is 0. Important to find eigenvalues.
+ Vandermonde Matrix - 1, roots, roots2. The determinant is easily found by products of x_j - x_i
 
  Eigen Values / Eigen Vectors:
  Companion Matrix -> Characteristicts equation or characteristicts polynomial -> Find roots which is also called

@@ -31,8 +31,6 @@ int main (int argc, char *argv[]) {
         std::cout << std::fixed << std::setprecision(1) << std::setw(2)
                   << p.first << ' ' << std::string(p.second/200, '*') << '\n';
     }
-
-
     std::srand ( unsigned ( std::time(0) ) );
     std::vector<int> myvector;
 
@@ -49,5 +47,8 @@ int main (int argc, char *argv[]) {
     std::cout << "myvector contains:";
     for (std::vector<int>::iterator it=myvector.begin(); it!=myvector.end(); ++it)
         std::cout << ' ' << *it;
+
+    //randn(m1,mean,stddev);
+
 
 }

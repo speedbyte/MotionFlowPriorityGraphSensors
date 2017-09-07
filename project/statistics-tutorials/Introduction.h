@@ -97,4 +97,42 @@
  A set of statistical processes for estimating the relationships among variables. Linear least square is widely used
  for statistical regression analysis and the linear least square problem is mainly solved by the QR decompositon.
 
+ Covariance and Correlation:
+ When we are interested in joint distribution of two random variables, it is useful to have a summary of how much the
+ two random variables depend on each other. The covariance and correlation are attempts to measure that dependence,
+ but they only capture a particular type of dependance, namely linear dependance. The joint distribution between two
+ variables can be found out by the mean, medians and the variance of the variables. However, these variables do not
+ provide useful information about the relationship between the two variables or about their tendency to vary
+ together rather than independently. Prediction of one random variable by observing another random variable can be
+ done, if the association between the two random variables can be measured. This association is measured in terms of
+ covariances and correlations.
+ For positive covariance, a large number of X ( x > mean ) predicts Y to be also large ( Y > mean ) and vice versa.
+ For negative variance, a large number of X ( x > mean ) predicts that Y should be lesser than the mean ( Y < mean )
+ and vice versa.
+ But the magnitude of covariance is also influenced by the overall magnitudes of X and Y. If the magnitude is
+ doubled, then covariance is also doubled. That makes covariances between huge random numbers also give a huge
+ covariance. Hence in order to obtain a measure of association between X and Y that is not driven by arbitrary
+ changes in the scales of one or the other random variable, a slight different quantity is defined. This quantity is
+ called correlation.
+ A large absolute value of correlation between two random variables X and Y means that X and Y are close to being
+ linearly related and hence are closely related. Independant variables are 0 correlated.
+
+ Linear Statistical Models:
+ Least Square: When each observation from an experiment is a pair of numbers, it is often important to try to predict
+ one of the numbers from the others. Least square is a method for constructing a predictor of one of the variables
+ from the other by making use of a sample of observed pairs. This is done using the least square line. The method of
+ constructing a straight line to fit the observed values is called the method of least squares. According to this
+ method, the line should be drawn so that the sum of the squares of the vertical deviations of all the points from
+ the line is a minimum.
+
+ Colinearity: When points lie on a single line, they are said to be colinear. Things are in a line or things are in a
+ row.
+
+ Maximum likelihood estimates:
+
+
+
+
+
+
 */

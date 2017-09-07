@@ -6,6 +6,7 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <iterator>
 
 typedef struct {
     int a;
@@ -122,6 +123,8 @@ int main ( int argc, char *argv[]) {
         std::cout << xy_pts_vector.at(i) << std::endl;
         std::cout << xy_pts_vector.operator[](i) << std::endl;
     }
+    //for(const auto& array:m0) {
+    std::copy(xy_pts_vector.begin(), xy_pts_vector.end(), std::ostream_iterator<int>(std::cout, " "));
 
     std::cout << "-----------1D std::vector ptr--------------------------------------\n" ;
     std::vector<int> *xy_pts_vector_ptr = &xy_pts_vector;
