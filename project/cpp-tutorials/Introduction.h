@@ -787,6 +787,21 @@
     return str;
  }
 
+ Big O Notations:
+
+ Computational complexity theory is the branch of computer science that focuses on classifying computational problems on
+ the basis of their inherent difficulties, and relating those classes to each other. One of the roles of compuationanal
+ complexity theory is to determine the practical limits of what computers can and cannot do. The theory formalizes
+ the intuition, by introducing mathematical models of compuation such as time, resource, number of gates in a circuit
+ ( used in circuit complexity ), number of processors ( used in parallel computing ). It is believed, if the problem
+ can be solved by an algorithm, there exists a Turing machine that solves the problems. The most commonly used
+ model is the Turing machine. In the Turing machine, the computational complexity and time to execute is simply done
+ by read, access, write and moving the head pointer to the next block. Basically, the turing machine is an infinite
+ tape.
+
+
+
+
 
 
 

@@ -22,7 +22,7 @@ ax = fig.add_subplot(1, 1, 1)
 ax.set_aspect('equal')
 color1 = "#505050"
 ax.spines['bottom'].set_color(color1)
-ax.spines['top'].set_color(color1) 
+ax.spines['top'].set_color(color1)
 ax.spines['right'].set_color(color1)
 ax.spines['left'].set_color(color1)
 

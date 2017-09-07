@@ -220,18 +220,11 @@ void solveLinear() {
     std::cout << result_static << std::endl;
 }
 
-void solvePolynomial() {
-    cv::Vec3f coefficients(6,-5,1);
-    cv::Vec3f coefficients_complex(1,-1,1);
+void solvePoly() {
 
-    cv::Matx<float,2,2> coefficients_eigen(3,0,0,2);
-    //M << 2,1,1,2;
-    //M << 3,0,0,2;
-    cv::Matx<float,3,3> coefficients_complex_eigen(0,1,0,0,0,1,1,0,0);
-
-    cv::Vec<std::complex<float>,2> roots_manual = {{0,0},{0,0}};
+    cv::Vec3f coefficients(6,-5,1); // 6,5,1 or 1,-1,1
+    std::pair<std::complex<double>, std::complex<double>> roots_manual;
     cv::Matx<cv::Complexf,2,1> roots_static;
-    //cv::Matx<cv::Complexf,2,1> roots_eigen;
     cv::Matx<float,2,1>  roots_eigen;
     cv::Matx<float,2,2>  vector_eigen;
 
@@ -240,30 +233,46 @@ void solvePolynomial() {
     float a = coefficients.operator()(2);
 
     std::cout << "---------manual method solving quadratic equation\n";
-    double delta;
-    delta = std::pow(b,2)-4*a*c;
-    if ( delta < 0) {
-        roots_manual[0].real(-b/(2*a));
-        roots_manual[1].real(-b/(2*a));
-        roots_manual[0].imag((float)-std::sqrt(std::abs(delta))/(2*a));
-        roots_manual[1].imag((float)std::sqrt(std::abs(delta))/(2*a));
+    double determinant;
+    determinant = std::pow(b,2)-4*a*c;
+    if ( determinant < 0) {
+        roots_manual = std::make_pair(std::complex<double>((-b/(2*a)),std::sqrt(-determinant)/(2*a)),
+                       std::complex<double>((-b/(2*a)),-std::sqrt(-determinant)/(2*a)));
     }
     else {
-        roots_manual[0].real((float)(-b + std::sqrt(delta))/2*a);
-        roots_manual[1].real((float)(-b - std::sqrt(delta))/2*a);
+        roots_manual = std::make_pair(((-b + std::sqrt(determinant))/2*a), ((-b - std::sqrt(determinant))/2*a));
     }
-    std::cout << roots_manual[0] << std::endl;
-    std::cout << roots_manual[1] << std::endl;
+    std::cout << roots_manual.first << std::endl;
+    std::cout << roots_manual.second << std::endl;
 
     std::cout << "---------static method solving quadratic equation\n";
     cv::solvePoly(coefficients, roots_static, 300); // Number of iterations
     std::cout << roots_static << std::endl;
 
+}
+
+
+void eigen() {
+
+    cv::Matx<float,2,2> coefficients_eigen(0,1, -6, 5);
+    //cv::Matx<float,2,2> coefficients_eigen(3,0,0,2);    //M << 2,1,1,2;    //M << 3,0,0,2;
+    cv::Matx<float,2,1> roots_eigen;
+    cv::Matx<float,2,2> vector_eigen;
+
+
+
+    cv::Matx<float,3,3> coefficients_complex_eigen(0,1,0,0,0,1,1,0,0);
     std::cout << "---------using eigen values\n";
     cv::eigen(coefficients_eigen,roots_eigen,vector_eigen);
     std::cout << coefficients_eigen << std::endl;
     std::cout << roots_eigen << std::endl;
     std::cout << vector_eigen << std::endl;
+
+
+}
+
+void linearLeastSquare() {
+
 }
 
 
@@ -298,13 +307,17 @@ int main ( int argc, char *argv[]) {
     std::cout << "solveLinear----------------------------------------------" << std::endl;
     //solveLinear();
     std::cout << "solvePoly----------------------------------------------" << std::endl;
-    solvePolynomial();
+    //solvePoly();
     std::cout << "mean and std dev----------------------------------------------" << std::endl;
     //meanStdDeviation();
     std::cout << "linearPolar----------------------------------------------" << std::endl;
     //linearPolar();
     std::cout << "mahalonobis----------------------------------------------" << std::endl;
     //mahalanobis();
+    std::cout << "eigen----------------------------------------------" << std::endl;
+    eigen();
+    std::cout << "linear least square----------------------------------------------" << std::endl;
+    //linearLeastSquare();
     return 0;
 }
 

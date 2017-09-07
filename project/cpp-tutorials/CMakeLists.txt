@@ -20,6 +20,9 @@ target_link_libraries(arrays ${Boost_LIBRARIES})
 add_executable(random Random.cpp)
 target_link_libraries(random ${Boost_LIBRARIES})
 
+add_executable(bigO bigO.cpp)
+target_link_libraries(bigO ${Boost_LIBRARIES})
+
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")
 message("CMAKE_MODULE_PATH is ${CMAKE_MODULE_PATH}")
 include(CMakeListsDoxygen)

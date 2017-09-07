@@ -93,4 +93,8 @@
  pdf - probability density function for continous distribution
  df - distribution function
 
+ Regression analysis:
+ A set of statistical processes for estimating the relationships among variables. Linear least square is widely used
+ for statistical regression analysis and the linear least square problem is mainly solved by the QR decompositon.
+
 */

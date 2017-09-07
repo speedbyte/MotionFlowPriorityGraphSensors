@@ -482,12 +482,13 @@ That's how you find the standard deviation.
  For an arbitrary linear equation, there can be infinite number of solutions, for example, 2x + 4y + 7z + 9w = 1000.
  Hence x,y,z,w can consists of infinite number of solutions.
 
- The inverse of the matrix A can be calculated by many methods in linear algebra such as Gaussian elimination,Eigendecomposition, Cholesky decomposition, and Carmer’s rule. A matrix can also be inverted by block inversion method and Neuman series.
- EVery matrix can be transposed ( rearranging the columns and rows in a matrix ). The diagnoal of the matrix remains
- unchanged. The matrix is symmetric, if the transpose of the matrix is equal to the matrix. Its skew symmetric, if
- the transpose of the matrix is the negative of the original matrix. Ofcourse, for the matrix to be symmetric or skew
- symmetric, they need to be a square matrix. A(i,j) becomes A(j,i). Complex Conjugate matrix is the matrix where the
- complex number is negated. The real part remains the same.
+ The inverse of the matrix A can be calculated by many methods in linear algebra such as Gaussian elimination,
+ Eigendecomposition, Cholesky decomposition and Carmer’s rule. A matrix can also be inverted by block inversion
+ method and Neuman series. Every matrix can be transposed ( rearranging the columns and rows in a matrix ). The diagonal
+ of the matrix remains unchanged. The matrix is symmetric, if the transpose of the matrix is equal to the matrix. Its
+ skew symmetric, if the transpose of the matrix is the negative of the original matrix.Ofcourse, for the matrix to be
+ symmetric or skew symmetric,  they need to be a square matrix. A(i,j) becomes A(j,i). Complex Conjugate matrix is
+ the matrix where the complex number is negated. The real part remains the same.
 
  Pivot variables, Free variables, Echelon form.
  Imagining 4 vectors defined by 4 equations. The solution of the equation is the point where all the vectors meet
@@ -574,6 +575,7 @@ That's how you find the standard deviation.
  the original matrix. Its very easy to say if the original matrix is singular, by just multiplying the first element of
  the L with the first element of the upper. If its 0, then the matrix is singular, otherwise not.
 
+ Matrix decomposition methods:
  DECOMP_LU Gaussian elimination with optimal pivot element chosen.
  DECOMP_CHOLESKY Cholesky LL^T factorization; the matrix src1 must be symmetrical and positively defined.
  DECOMP_EIG eigenvalue decomposition; the matrix src1 must be symmetrical.
@@ -588,6 +590,28 @@ That's how you find the standard deviation.
 
  Matrix:
  Inverse / Reciprocal = fact{Transpose(Adjoint)}{Determinant}
+ Orthogonal - Q.t()*Q = I. The inverse of an orthogonal matrix is its transpose.
+ Hessenberg - below subdiagonal or above super diagnoal is 0. Important to find eigenvalues.
+
+ Eigen Values / Eigen Vectors:
+ Companion Matrix -> Characteristicts equation or characteristicts polynomial -> Find roots which is also called
+ eigen value -> Find eigen vectors.
+ The companion matrix is called companion because its in a sense the companion of polyonomial p.
+ In classical linear algebra, the eigenvalues of a matrix are sometimes defined as the roots of the characteristicts
+ polynomial. An algorithm to compute the roots of the polynomial by computing the eigenvalues of the corresponding
+ companion matrix turns the table on the usual definitions. The eigen value of the companion matrix coincide with the
+ roots ( zeros ) of the associated polynomial because, p(z) = det(zI - C_p). M needs to be converted into the
+ Hessenberg form.
+ QR Algorithm for computing matrix eigen values. QR ( decompose original into orthogonal matrix and the upper
+ triangle matrix ).
+ Some methods to find the roots of the polynomial are
+ Jenkins Traub - rpoly and cpoly
+ Companion Matrix
+
+ Linear Least square:
+ The linear least square method is most widely solved by QR Decomposition method.
+
+
 
 
 

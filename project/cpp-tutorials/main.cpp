@@ -5,8 +5,6 @@
 #include "Larger.h"
 #include "Constructor.h"
 #include "Template.h"
-#include "OperatorOverload.h"
-#include "Pointers.h"
 #include "Virtual.h"
 #include <boost/filesystem.hpp>
 #include <exception>
@@ -99,7 +97,6 @@ int main ( int argc, char *argv[]) {
     printf("%d\n",b) ; // After changing c
     d = 500;
     printf("%d\n",b) ; // After changing d
-    return 0;
 
     try {
         throw MyException();

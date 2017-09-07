@@ -8,8 +8,36 @@
 /**
 
  Papers:
- Eigenvalues to determine the robustness of optical flow algorithms.
+ Regression analysis to determine the robustness of optical flow algorithms.
+    In this regression between two independent variables such as one image with noise and one image
+    without noise should be analysied. The regression methods can be eigenvalues, covariance, least square method etc.
+    Through the regression analysis, it would be helpful to understand how the typical value of the dependant
+    variable changes when one of the independent variable is varied, while the other independent variables are kept
+    fixed.
+    Dependant variable - displacement vector every 100ms
+    Independant variable - movement of the subject
+    Other independant variable - other objects are kept fixed.
+    The analysis is to see how the displacement vector varies when the subject moves. And this is the ground truth,
+    regression analysis of the displacement vector against the independant variable ( movement of the pedesterian ).
+
+    The statistical regression analysis as said before is done by both the least squqre method and the eigen value
+    method. Ofcourse the underlying algorithm to solve the least square and the eigen value is the QR decomposition
+    method. And the methods to calculate the Q and R is the Householder Reflections method. The Householder
+    Reflection itself is a linear transformation that enables a vector to be reflected through a plane or through
+    hyper plane. The result is the Q component and the R component. The R component can also be achieved by reducing
+    the original matrix in Hessenberg form in finite number of steps also through Householders algorithms. The
+    Hessenberg is yet not a triangular matrix, but almost a triangular matrix. Further reduction of the Hessenberg
+    can be achieved through iterative procedures such as shifted QR factorization, sometimes combined with deflation
+    steps. It was also possible to reduce the general matrix directly to a triangular matrix, but doing it through
+    Hessenberg matrix, often economizes the arithmetic involved in the QR algorithm for eigen value problems.
+
+    It is required to find two images whose variance is an orthogonal matrix.
+
  Fingerprinting to determine the robustness of optical flow algorithms.
+ Computational complexity is the next step to determine how many BigOh's are required to complete the algorithm. The
+ time required to solve the problem ( or the space required, or any measure of complexity ) is calculated as a
+ funciton of the size of instance. It is interesting to see how the algorithm to find the robustness scale with
+ increase in the input size of images.
 
  Flowchart for testing algorithms with Image Sensors:
  Acquisiton step and noise induction
