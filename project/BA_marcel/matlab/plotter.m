@@ -1,6 +1,7 @@
 function [ output_args ] = plotter( frame,flow_frame,movement,width,height,secondObjectHeight,secondObjectWidth,groundTruthCollision,estimatedCollision )
 
 %Plot everything
+%Small bug in flow direction, y arrows are inverted.
 
 
 
@@ -21,8 +22,10 @@ plot(flow_frame,'DecimationFactor',[10 10],'ScaleFactor',6);
 drawnow;
 title('Optical FLow');
 
+
 %Plot the movement of the objects
 subplot(4,1,3),
+hold on;
 yyaxis left
 quiver(width(floor(length(width)/2)),height(floor(length(height)/2)),movement(1),movement(2));
 yyaxis right
@@ -31,7 +34,7 @@ title('Movement');
 
 subplot(4,1,4)
 gT = groundTruthCollision;
-est = estimatedCollision
+est = estimatedCollision;
 yyaxis left;
 plot([-50,0],[gT,gT]);
 yyaxis right;

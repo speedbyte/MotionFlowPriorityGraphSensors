@@ -21,29 +21,31 @@ absoluteFlow = zeros(375,1242,3,'uint16');
 
 %Create the two objects(corresponding to pedesterians)
 %and their corresponding movement in x and y direction.
-xMovement =3;
-yMovement = 7;
+xMovement =4;
+yMovement = 5;
 
 width = 320:350;
 height = 26:106;
 
-secondObjectWidth = 520:550;
+secondObjectWidth = 470:500;
 secondObjectHeight = 100:180;
 
-secondXMovement = -5;
+secondXMovement = -4;
 secondYMovement = 1;
 
+%Ground Truth collision value for plotting. May changed below
+plotterColision = 0;
 %how many iterations?
-maxIteration = 20;
+maxIteration = 15;
 %%
 %%move the objects
-for counter=1:maxIteration
+for counter=0:maxIteration
     %Move the frames
     frame = Movement(height,width,xMovement,yMovement,secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement);
     %calculate absolute Ground Truth
     absoluteGroundTruth = gT(height,width,xMovement,yMovement,secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement,'absolute');
     
-    if counter == 1
+    if counter == 0
         figure('Name','Starting Config'),
         imshow(frame)
         pause(2)
@@ -54,7 +56,7 @@ for counter=1:maxIteration
     frame_gray = rgb2gray(frame);
     flow_frame = estimateFlow(opticFlow,frame_gray);
     
-    if counter > 1 %to kick out bad first flow
+    
         
         %get absolute estimated flow.
         for k=height
@@ -85,6 +87,7 @@ for counter=1:maxIteration
         
         if groundTruthCollision == 1
             disp('Ground Truth: The objects will collide.');
+            plotterColision = 1;
         %    pause(3);
         end
         
@@ -93,8 +96,8 @@ for counter=1:maxIteration
         end
         
         %plot everything
-        plotter(frame,flow_frame,movement,width,height,secondObjectHeight,secondObjectWidth,groundTruthCollision,estimatedCollision);
-    end
+        plotter(frame,flow_frame,movement,width,height,secondObjectHeight,secondObjectWidth,plotterColision,estimatedCollision);
+    
     %adjust object position according to movement
     width=width+xMovement;
     height=height+yMovement;

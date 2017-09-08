@@ -10,8 +10,7 @@ collision = 0;
 %estimate future collisions based on actual movement 
 %therefore move the object virtually into the direction.
 
-
-if counter == 2
+if counter == 0
 
 for i=1:maxIteration
 
@@ -30,7 +29,7 @@ for i=1:maxIteration
     
 end
 end
-    
+end
    
     
 
