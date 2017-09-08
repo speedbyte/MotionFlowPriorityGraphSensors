@@ -799,7 +799,11 @@
  by read, access, write and moving the head pointer to the next block. Basically, the turing machine is an infinite
  tape.
 
-
+ A template requires a constant expression for a non-type parameter. For a const variable to be used in a constant
+ expression, its initialization must be visible to the compiler. So you'll probably have to include header1.hpp in
+ header2.hpp.
+ image_manual_bare1’ was not declared ‘constexpr’
+ the value of ‘image_manual_bare1’ is not usable in a constant expression
 
 
 

@@ -147,6 +147,11 @@
       ::eye(), ::ones(), ::zeros(), ::all(x)
       Dotproduct: m1.dot(m2) - Dot product is essentially multiplying the corresponding elements and adding them all. It
       needs to be done on equal dimension matrix. Dot product -> a.b = |a||b|cos(þ),
+      It is important to give the type of the object to .at when accessing a Mat object, because Mat can hold any
+      kind of type at run time. It is the duty of the programmer to extract the type which he thinks that Mat would
+      hold before accessing the elements. This can be made simply by explicitly decalaring Mat with the object type
+      already at the declaration. This is done by Mat_. After this the programmer does not need to specify the type
+      everytime a member function of Mat_ is accessed, simply because the type is already known to the compiler.
 
       Fixed Vector classes:
       are derived from the fixed matrix classes and other classes such as cv::Scalar derive from fixed vector classes.
@@ -158,6 +163,7 @@
       Access: v(3)
       Cross product: v3f.cross(u3f) - Cross product is always on between two 1 dimensional matrix. Hence this does not
       appear in cv::Matx. It needs to be done on equal dimension matrix. Cross product -> axb = |a||b|sin(þ)
+
 
   Helper Object ( cv::Ptr, cv::TermCriteria, cv::Range )
 

@@ -9,7 +9,7 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem REQUIRED)
 
 set(SOURCE_FILES
         Introduction.h
-        presentation_summerschool.cpp)
+        presentation_summerschool.cpp input_output.cpp noise.cpp)
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries(main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})

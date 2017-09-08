@@ -1,46 +1,55 @@
-function [img4] = gT( height,width,xMovement,yMovement,secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement )
-%%generate GT
+% This function creates ground truth data in two formats:
+% The groundTruthRelativeMatrix and groundTruthAbsoluteMatrix - relative 
+% and absolute matrix. 
 
-img3 = zeros(375,1242,3,'uint16');
-img4 = zeros(375,1242,3);
+
+function [responseMatrix] = gT( height,width,xMovement,yMovement,...
+secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement, parameter )
+
+%%generate Ground Truth
+groundTruthRelativeMatrix = zeros(375,1242,3,'uint16');
+groundTruthAbsoluteMatrix = zeros(375,1242,3);
+responseMatrix = zeros(375,1242,3);
 
 for k=height
     for j=width
-        img3(k,j,1) = xMovement;
-        img3(k,j,2) = yMovement;
-        img3(k,j,3) = 1;
-        img4(k,j,1) = xMovement+j;
-        img4(k,j,2) = yMovement+k;
-        img4(k,j,3) = 1;
+        groundTruthRelativeMatrix(k,j,1) = xMovement;
+        groundTruthRelativeMatrix(k,j,2) = yMovement;
+        groundTruthRelativeMatrix(k,j,3) = 1;
+        groundTruthAbsoluteMatrix(k,j,1) = xMovement+j;
+        groundTruthAbsoluteMatrix(k,j,2) = yMovement+k;
+        groundTruthAbsoluteMatrix(k,j,3) = 1;
     end
 end
 
 for k=secondObjectHeight
     for j=secondObjectWidth
-        img3(k,j,1) = secondXMovement;
-        img3(k,j,2) = secondYMovement;
-        img3(k,j,3) = 1;
-        img4(k,j,1) = secondXMovement+j;
-        img4(k,j,2) = secondYMovement+k;
-        img4(k,j,3) = 1;
+        groundTruthRelativeMatrix(k,j,1) = secondXMovement;
+        groundTruthRelativeMatrix(k,j,2) = secondYMovement;
+        groundTruthRelativeMatrix(k,j,3) = 1;
+        groundTruthAbsoluteMatrix(k,j,1) = secondXMovement+j;
+        groundTruthAbsoluteMatrix(k,j,2) = secondYMovement+k;
+        groundTruthAbsoluteMatrix(k,j,3) = 1;
     end
 end
 
 %%Quantization
-gtX = (img3(:,:,1)*64)+2^15;
-gtY = (img3(:,:,2)*64)+2^15;
+gtX = (groundTruthRelativeMatrix(:,:,1)*64)+2^15;
+gtY = (groundTruthRelativeMatrix(:,:,2)*64)+2^15;
 
 %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
 %and Validation bit
-res = cat(3,img3(:,:,1),img3(:,:,2),img3(:,:,3));
-re =  uint16(res);
-%disp(re(:,:,1));
+kittiColorCodedGroundTruth = cat(3,groundTruthRelativeMatrix(:,:,1),...
+      groundTruthRelativeMatrix(:,:,2),groundTruthRelativeMatrix(:,:,3));
+kittiColorCodedGroundTruth =  uint16(kittiColorCodedGroundTruth);
 
-%Creates OF png for Kitti. Not very lucidly if looked at
-
-%Comment in if needed
-%imwrite( re,'GroundTruth.png');
-%disp('GroundTruth has been generated')
+if parameter == 'relative'
+    responseMatrix = groundTruthRelativeMatrix
+elseif parameter == 'absolute'
+    responseMatrix = groundTruthAbsoluteMatrix
+elseif parameter == 'kitti'
+    responseMatrix = kittiColorCodedGroundTruth
+end
 
 end
 

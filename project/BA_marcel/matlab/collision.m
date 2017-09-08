@@ -127,7 +127,6 @@ figure('Name', 'Displacement Vector');
 imshow(img1);
 hold on
 plot(flow_img1,'DecimationFactor',[6 6],'ScaleFactor',13);
-hold off
 
 
 %% collision checkers
