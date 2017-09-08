@@ -1,4 +1,4 @@
-function [ estCollision ] = flowCollision(absoluteFlow,flow, width,height, secondObjectWidth,secondObjectHeight)
+function [ estCollision,movement ] = flowCollision(absoluteFlow,flow, width,height, secondObjectWidth,secondObjectHeight)
 
 %% Estimate if the objects will collide
 % We extract the movement from the objects by using the mean of the flow
@@ -102,6 +102,8 @@ disp('x')
 disp(secondObjectXMean);
 disp('y')
 disp(secondObjectYMean);
+
+movement = [xMean,yMean,secondObjectXMean,secondObjectYMean];
 
 %%
 %Estimate the future collision. Floor call in order to get possibly matching results

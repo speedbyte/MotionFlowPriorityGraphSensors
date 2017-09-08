@@ -21,8 +21,8 @@ absoluteFlow = zeros(375,1242,3,'uint16');
 
 %Create the two objects(corresponding to pedesterians)
 %and their corresponding movement in x and y direction.
-xMovement =4;
-yMovement = 1;
+xMovement =3;
+yMovement = 7;
 
 width = 320:350;
 height = 26:106;
@@ -44,7 +44,7 @@ for counter=1:maxIteration
     absoluteGroundTruth = gT(height,width,xMovement,yMovement,secondObjectWidth,secondObjectHeight,secondXMovement,secondYMovement,'absolute');
     
     if counter == 1
-        figure(2),
+        figure('Name','Starting Config'),
         imshow(frame)
         pause(2)
         close;
@@ -81,7 +81,7 @@ for counter=1:maxIteration
         flow(:,:,2) = flow_frame.Vy;
         
         %estimate if a collision is about to happen.
-        estimatedCollision = flowCollision( absoluteFlow,flow, width,height, secondObjectWidth,secondObjectHeight);
+        [estimatedCollision,movement] = flowCollision( absoluteFlow,flow, width,height, secondObjectWidth,secondObjectHeight);
         
         if groundTruthCollision == 1
             disp('Ground Truth: The objects will collide.');
@@ -93,7 +93,7 @@ for counter=1:maxIteration
         end
         
         %plot everything
-        plotter(frame,flow_frame);
+        plotter(frame,flow_frame,movement,width,height,secondObjectHeight,secondObjectWidth,groundTruthCollision,estimatedCollision);
     end
     %adjust object position according to movement
     width=width+xMovement;
