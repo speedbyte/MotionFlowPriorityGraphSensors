@@ -1,107 +1,116 @@
-function [ estCollision ] = flowCollision( absoluteFlow,flow, width,height, secondObjectWidth,secondObjectHeight)
+function [ estCollision ] = flowCollision(absoluteFlow,flow, width,height, secondObjectWidth,secondObjectHeight)
 
-%% (use width+height+threshold) and secondWidth/height/threshold
-% work with those values and check for collision then 
-% At that moment only say something about unavoidable collisions. 
-
-%TODO Threshold
-
-collision = 0;
+%% Estimate if the objects will collide
+% We extract the movement from the objects by using the mean of the flow
+% components. We then add the movement to the actual position and get the
+% future position. After 10 iteration we will say if the objects will
+% collide or not. This will be done with each consequtive frame pair. 
+%
 estCollision = 0;
 
-for k = height
-    for j = width
-        for kk = secondObjectHeight
-            for jj = secondObjectWidth
-                if (absoluteFlow(k,j,1) == absoluteFlow(kk,jj,1)) && (absoluteFlow(k,j,2) == absoluteFlow(kk,jj,2))
-                    collision = 1;
-                end 
-            end 
-        end
-    end 
+%Threshold of the object, because object detection is not accurate.
+if height < 365
+upperheigtht = height(end)+10;
+end
+if height > 10
+    lowerheight = height(1)-10;
 end
 
-if collision == 1
-    disp('Unavoidable collision via FLOW');
-    return;
+if width < 1232
+upperwidth = width(end)+10;
+end
+if width > 10
+lowerwidth = width(1)-10;
+end
+
+
+if secondObjectHeight < 365
+secondObjectUpperheigtht = secondObjectHeight(end)+10;
+end
+if secondObjectHeight > 10
+    secondObjectLowerheigtht = secondObjectHeight(1)-10;
+end
+
+if secondObjectWidth < 1232
+secondObjectUpperWidth = secondObjectWidth(end)+10;
+end
+if secondObjectWidth > 10
+secondObjectLowerWidth = secondObjectUpperWidth(1)-10;
 end
 %%
 %%get flow from the objects
-
-for k = height
-    for j = width
-        flowFirstObjectX(:,:,1) = flow(k,j,1);
-        flowFirstObjectY(:,:,2) = flow(k,j,2);
+for k = lowerheight:upperheigtht
+    for j = lowerwidth:upperwidth
+        flowFirstObjectX(j,k,1) = flow(k,j,1);
+        flowFirstObjectY(j,k,2) = flow(k,j,2);
     end
 end
 
-for kk = secondObjectHeight
-            for jj = secondObjectWidth
-                flowSecondObjectX(:,:,1) = flow(kk,jj,1);
-                flowSecondObjectY(:,:,2) = flow(kk,jj,2);
-            end
+for kk = secondObjectLowerheigtht:secondObjectUpperheigtht
+    for jj = secondObjectLowerWidth:secondObjectUpperWidth
+        flowSecondObjectX(jj,kk,1) = flow(kk,jj,1);
+        flowSecondObjectY(jj,kk,2) = flow(kk,jj,2);
+    end
 end
 
 %%
-%Extract the movement of the object. 
- x = nonzeros(flowFirstObjectX);
-        xThreshold = find(abs(x)<0.09); %cutting out very small displacements
-        x(xThreshold) = [];
-        
-        y = nonzeros(flowFirstObjectY);
-        yThreshold = find(abs(y)<0.09);
-        y(yThreshold) = [];
-        
-        xS = nonzeros(flowSecondObjectX);
-        xThreshold = find(abs(xS)<0.09); %cutting out very small displacements
-        xS(xThreshold) = [];
-        
-        yS = nonzeros(flowSecondObjectY);
-        yThreshold = find(abs(yS)<0.09);
-        y(yThreshold) = [];
-        
-        
-        
-        xMean=mean(x);
-        yMean=mean(y);
-        xSMean = mean(xS);
-        ySMean = mean(yS);
-        
-        disp('Estimated Movement of the First Object:');
-        
-        disp('x')
-        disp(xMean);
-        disp('y')
-        disp(yMean);
-        disp('Estimated Movement of the second Object');
-        disp('x')
-        disp(xSMean);
-        disp('y')
-        disp(ySMean);
-        
-        if isnan(xMean)
-            xMean = 0;
-        end
-        if isnan(yMean)
-            yMean = 0;
-        end
-        if isnan(ySMean)
-            ySMean = 0;
-        end
-        if isnan(xSMean)
-            xSMean = 0;
-        end
+%Extract the movement of the object.
+firstObjectX = nonzeros(flowFirstObjectX);
+xThreshold = find(abs(firstObjectX)<0.2); %cutting out very small displacements
+firstObjectX(xThreshold) = [];
+
+firstObjectY= nonzeros(flowFirstObjectY);
+yThreshold = find(abs(firstObjectY)<0.2);
+firstObjectY(yThreshold) = [];
+
+secondObjectX = nonzeros(flowSecondObjectX);
+xThreshold = find(abs(secondObjectX)<0.2); 
+secondObjectX(xThreshold) = [];
+
+secondObjectY = nonzeros(flowSecondObjectY);
+yThreshold = find(abs(secondObjectY)<0.2);
+secondObjectY(yThreshold) = [];
 %%
-%Estimate the future collision
 
+%%
+%Get the movement by getting the mean of the flow objects.
+xMean=mean(firstObjectX);
+yMean=mean(firstObjectY);
+secondObjectXMean = mean(secondObjectX);
+secondObjectYMean = mean(secondObjectY);
+
+if isnan(xMean)
+    xMean = 0;
+end
+if isnan(yMean)
+    yMean = 0;
+end
+if isnan(secondObjectYMean)
+    secondObjectYMean = 0;
+end
+if isnan(secondObjectXMean)
+    secondObjectXMean = 0;
+end
+
+disp('Estimated Movement of the First Object:');
+disp('x')
+disp(xMean);
+disp('y')
+disp(yMean);
+disp('Estimated Movement of the second Object');
+disp('x')
+disp(secondObjectXMean);
+disp('y')
+disp(secondObjectYMean);
+
+%%
+%Estimate the future collision. Floor call in order to get possibly matching results
 for i=1:10
-
+    
     height = floor( height+yMean);
     width = floor(width+xMean);
-    secondObjectHeight = floor(secondObjectHeight+ySMean);
-    secondObjectWidth = floor(secondObjectWidth+xSMean);
-    
-    
+    secondObjectHeight = floor(secondObjectHeight+secondObjectYMean);
+    secondObjectWidth = floor(secondObjectWidth+secondObjectXMean);
     
     checkY = intersect(height,secondObjectHeight);
     checkX = intersect(width,secondObjectWidth);
@@ -111,10 +120,9 @@ for i=1:10
         break;
     end
     
-    
 end
-    
-   
-    
+
+
+
 
 
