@@ -21,22 +21,26 @@ absoluteFlow = zeros(375,1242,3,'uint16');
 
 %Create the two objects(corresponding to pedesterians)
 %and their corresponding movement in x and y direction.
-xMovement =4;
-yMovement = 5;
+xMovement = 4;
+yMovement = -2;
 
 width = 320:350;
-height = 26:106;
+height = 260:340;
 
 secondObjectWidth = 470:500;
 secondObjectHeight = 100:180;
 
 secondXMovement = -4;
-secondYMovement = 1;
+secondYMovement = 3;
+
+%for better plotting we negate the yMovement
+negatedHeight = height; 
+negatedSecondObjectHeight = secondObjectHeight ;
 
 %Ground Truth collision value for plotting. May changed below
 plotterColision = 0;
 %how many iterations?
-maxIteration = 15;
+maxIteration = 16;
 %%
 %%move the objects
 for counter=0:maxIteration
@@ -95,14 +99,22 @@ for counter=0:maxIteration
             disp('FLOW: Collision in the future');
         end
         
+        %for better plotting we negate the yMovement
+    negatedHeight = negatedHeight -yMovement;
+    negatedSecondObjectHeight = negatedSecondObjectHeight -secondYMovement;
+        
         %plot everything
-        plotter(frame,flow_frame,movement,width,height,secondObjectHeight,secondObjectWidth,plotterColision,estimatedCollision);
+        plotter(frame,flow_frame,movement,width,height,secondObjectHeight,secondObjectWidth,plotterColision,estimatedCollision,negatedHeight,negatedSecondObjectHeight);
     
+        
+        
     %adjust object position according to movement
     width=width+xMovement;
     height=height+yMovement;
     secondObjectHeight=secondObjectHeight+secondYMovement;
     secondObjectWidth=secondObjectWidth+secondXMovement;
+    
+    
     
     
     

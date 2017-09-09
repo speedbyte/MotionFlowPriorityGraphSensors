@@ -8,7 +8,13 @@ function [ estCollision,movement ] = flowCollision(absoluteFlow,flow, width,heig
 %
 estCollision = 0;
 
+
 %Threshold of the object, because object detection is not accurate.
+upperheigtht = height(end);
+    lowerheight = height(1);
+upperwidth = width(end);
+lowerwidth = width(1);
+
 if height < 365
 upperheigtht = height(end)+10;
 end
