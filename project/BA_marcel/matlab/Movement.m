@@ -17,12 +17,7 @@ for k = height
     for j= width
         for i=1:3
             img1(k+yMovement,j+xMovement,i)= 0;
-            if mod(k,5) == 0
-                img1(k+yMovement,j,i) = 255;
-            end
-            if mod(j,5) == 0
-                img1(k,j+xMovement,i) = 255;
-            end
+
         end
     end
 end
@@ -33,12 +28,7 @@ for k = secondObjectHeight
     for j= secondObjectWidth
         for i=1:3
             img1(k,j,i)= 0;
-           if mod(k,5) == 0
-                img1(k+secondYMovement,j,i) = 255;
-            end
-            if mod(j,5) == 0
-                img1(k,j+secondXMovement,i) = 255;
-            end
+
         end
     end
 end
