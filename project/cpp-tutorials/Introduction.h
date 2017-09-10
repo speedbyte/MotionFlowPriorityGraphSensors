@@ -814,3 +814,23 @@
 
 
 
+/**
+ wprintffwprintfswprintf
+	prints formatted wide character output to stdout, a file stream or a buffer
+(function)
+vprintfvfprintfvsprintfvsnprintf
+(C++11)
+	prints formatted output to stdout, a file stream or a buffer
+using variable argument list
+(function)
+fputs
+	writes a character string to a file stream
+(function)
+scanffscanfsscanf
+	reads formatted input from stdin, a file stream or a buffer
+(function)
+to_chars
+(C++17)
+	converts an integer or floating-point value to a character sequence
+ */
+

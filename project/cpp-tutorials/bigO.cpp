@@ -4,16 +4,8 @@
 
 
 
-/**
- *
- * @tparam Iter
- * @param left
- * @param right
- * @param val
- * @return
- * \brief
- * the program returns the floor in O(logn)
- */
+// example for O(logn)
+
 template <class Iter>
 Iter lower_bound(Iter left,
                  Iter right,

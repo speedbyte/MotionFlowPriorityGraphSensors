@@ -183,7 +183,7 @@ if [ "$OPENCV_OPTION" == "y" ]; then
     echo "In order to use the opencv 3rd party versions of libraries instead of system ones on UNIX systems you
     should use BUILD_<library_name> CMake flags (for example, -D BUILD_PNG for the libpng library)."
     mkdir -p cmake-build-debug; cd cmake-build-debug
-    cmake -Wno-dev -Wl,-rpath=$FFMPEG_PWD/../ffmpeg-install/lib/ -D ENABLE_PRECOMPILED_HEADERS=OFF -D CMAKE_BUILD_TYPE=DEBUG -D CMAKE_INSTALL_PREFIX=../../opencv-install -D WITH_GTK=ON ..
+    cmake -Wno-dev -Wl,-rpath=$FFMPEG_PWD/../ffmpeg-install/lib/ -D ENABLE_PRECOMPILED_HEADERS=OFF -D CMAKE_BUILD_TYPE=DEBUG -D CMAKE_INSTALL_PREFIX=../../opencv-install -D WITH_GTK=ON -D BUILD_JPEG=ON ..
     if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue";  fi
     time make -j $(getconf _NPROCESSORS_ONLN) 2>&1
     ret=$(echo $?)

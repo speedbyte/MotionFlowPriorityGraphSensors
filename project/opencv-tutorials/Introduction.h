@@ -2,6 +2,60 @@
 
 /** brief
 
+
+
+ OpenCV
+
+ create a directory release and then invoke
+ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../build ..
+ It is important to build with gtk support, otherwise, the opencv will built, but the programs wont show any images
+ for example cvNamedWindow wont work.
+
+ Motion Sensing Applications ( Optical Flow )
+
+ Kinetic Sensors: 1 Monochrome CMOS Receptor ( in short a camera lens ),
+ 1 Infrared Camera to monitor depth and
+ 1 Microphone array.
+ Additionally 3 axis accelerometers to find out if the kinetic is placed on a shelf which is
+ tilted. The angle would be then compensated in the software.
+
+ These sensors have a narrow imaging area of about 58 degrees horizontal and 43 degrees vertical. It can also not
+ detect anything within the first 0.5 meters (~20 inches). Highly reflective surfaces, such as metals, glass, or
+ mirrors cannot be detected by the 3D vision sensor.
+
+
+ Depth cloud: Depth cloud is another name for the depth_image produced by the 3D sensor, such as the Kinect, ASUS,
+ and PrimeSense depth cameras.
+ Point cloud: A point cloud is a set of points with x, y, and z coordinates that represent the surface of an object.
+ Registered DepthCloud and Registered PointCloud: These terms are used by ROS for special DepthCloud or PointCloud
+ data colored by the rgb image data. These data streams are available when the depth_registration option is selected
+ (set to true).
+
+ Without BUILD_FFMPEG flag
+
+ --   Checking for modules 'libavcodec;libavformat;libavutil;libswscale'
+ --   Found libavcodec, version 56.60.100
+ --   Found libavformat, version 56.40.101
+ --   Found libavutil, version 54.31.100
+ --   Found libswscale, version 3.1.101
+
+ sudo apt-get install python-opencv
+
+ -Wl,Blsymbolic ; --enable-pic ; --disable-static
+
+ --------------------------------------------------------------------------------
+
+ HighGUI - Functions, that allow to interact with the operating system, the file system and the the hardware such as
+ cameras.
+ - read and write graphics-related files
+ - handle mouse and keyboard events
+ - create sliders etc.
+ - much of the code is redundant, because QT does it better.
+ - still and video images.
+ - provides a set of XML/YAML based functions for human readable, text based format.
+
+
+
  cv::cvtColor() - convert from one color space to another and also specify the number of destination channels.
  cv::mixChannels() - mix channels from one array to another
 
@@ -52,6 +106,69 @@
  cv::solve() : linear equation and least square problems ( uses SVD pr QR).
  cv::cubic() :
  cv::solveLP : linear programming problem using the Simplex Algorithm (Simplex Method).
+
+ cv::imread() - reads an image, GRAY, BGR, BGRA etc.
+     The first few bytes of the file ( signature or magic sequence ) determines the codec.
+     All of them load 8 bits, except ANYDEPTH. Only if WITH_JPEG=ON, otherwise no jpeg extension can be read.
+     cv::IMREAD_COLOR 	    Always load to three-channel array. 	default
+     cv::IMREAD_GRAYSCALE 	Always load to single-channel array.
+     cv::IMREAD_ANYCOLOR 	Channels as indicated by file (up to three).
+     cv::IMREAD_ANYDEPTH 	Allow loading of more than 8-bit depth.
+     cv::IMREAD_UNCHANGED 	Equivalent to combining: cv::IMREAD_ANYCOLOR | cv::IMREAD_ANYDEPTH
+ cv::imwrite() - writes an image, compression algo should be given. jpg, png, tiff, bmp,
+    PNG is not lossless. It depends on the compression. 0 is lossless. But the default is 3 and is lossy.
+    imwrite will store mostly 8bit per channel, but 16 bit and float format is also allowed. Return value is true or
+    false if the image was saved or not.
+    cv::IMWRITE_JPG_QUALITY 	JPEG quality 	0–100 	95
+    cv::IMWRITE_PNG_COMPRESSION 	PNG compression (higher values mean more compression) 	0-9 	3
+    cv::IMWRITE_PXM_BINARY 	Use binary format for PPM, PGM, or PBM files 	0 or 1 	1
+ cv::Mat::isempty() - check if its really an image?
+ cv::imencode() - compresses / encodes a Mat to vector<uchar> in the memory. No file is written on the filesystem.
+ cv::imdecode() - decompresses / decodes a vector<uchar>from the memory to Mat.
+    returns an empty array if the buffer it is given is empty or invalid / unusable data.
+ cv::VideoCapture() - either -1, filename or device. .mpg, avi. If device, then identifier+domain.
+    In case of a file, OpenCV needs to know how the file should be decoded. In case of a device, an identifier (
+    which camera should be acccessed, for single camera on the computer, it is 0 ) and a domain needs to be supplied.
+    The domain is a predetermined constant, and determines how OpenCV would like to talk to the camera.
+    When empty, then open() needs to be called.
+ cv::VideoCapture()::isOpened() - check if the video can really be opened?
+ cv::VideoCapture()::read()
+ cv::VideoCapture& cv::VideoCapture::operator>>
+ cv::VideoCapture::grab( void )
+ cv::VideoCapture::retrieve()
+ cv::VideoCapture::get()
+ cv::VideoCapture::set()
+    cv::CAP_PROP_POS_MSEC 	  	Current position in video file (milliseconds) or video capture timestamp
+    cv::CAP_PROP_POS_FRAMES 	  	Zero-based index of next frame
+    cv::CAP_PROP_POS_AVI_RATIO 	  	Relative position in the video (range is 0.0 to 1.0)
+    cv::CAP_PROP_FRAME_WIDTH 	  	Width of frames in the video
+    cv::CAP_PROP_FRAME_HEIGHT 	  	Height of frames in the video
+    cv::CAP_PROP_FPS 	  	Frame rate at which the video was recorded
+    cv::CAP_PROP_FOURCC 	  	Four character code indicating codec
+    cv::CAP_PROP_FRAME_COUNT 	  	Total number of frames in a video file
+    cv::CAP_PROP_FORMAT 	  	Format of the Mat objects returned (e.g., CV_8UC3)
+    cv::CAP_PROP_MODE 	  	Indicates capture mode; values are specific to video backend being used (e.g., DC1394)
+    cv::CAP_PROP_BRIGHTNESS 	✓ 	Brightness setting for camera (when supported)
+    cv::CAP_PROP_CONTRAST 	✓ 	Contrast setting for camera (when supported)
+    cv::CAP_PROP_SATURATION 	✓ 	Saturation setting for camera (when supported)
+    cv::CAP_PROP_HUE 	✓ 	Hue setting for camera (when supported)
+    cv::CAP_PROP_GAIN 	✓ 	Gain setting for camera (when supported)
+    cv::CAP_PROP_EXPOSURE 	✓ 	Exposure setting for camera (when supported)
+    cv::CAP_PROP_CONVERT_RGB 	✓ 	If nonzero, captured images will be converted to have three channels
+    cv::CAP_PROP_WHITE_BALANCE 	✓ 	White balance setting for camera (when supported)
+    cv::CAP_PROP_RECTIFICATION 	✓ 	Rectification flag for stereo cameras (DC1394-2.x only)
+        cap.get( cv::CAP_PROP_FOURCC );
+
+ cv::VideoWriter::VideoWriter(
+
+    .jpg or .jpeg: baseline JPEG; 8-bit; one- or three-channel input
+    .jp2: JPEG 2000; 8-bit or 16-bit; one- or three-channel input
+    .tif or .tiff: TIFF; 8- or 16-bit; one-, three-, or four-channel input
+    .png: PNG; 8- or 16-bit; one-, three-, or four-channel input
+    .bmp: BMP; 8-bit; one-, three-, or four-channel input
+    .ppm, .pgm: NetPBM; 8-bit; one-channel (PGM) or three-channel (PPM)
+
+
 
 
 
@@ -128,7 +245,9 @@
 
 
 
-  Basic Data Type ( cv::Matx<float,T,T>, cv::Vec<float,T>, cv::Size_<T>, cv::Point_<T>, cv::Point3_<T>,  cv::RotatedRect<point, size, float>, cv::Rect<>
+  Basic Data Type ( cv::Matx<float,T,T>, cv::Vec<float,T>, cv::Size_<T>, cv::Point_<T>, cv::Point3_<T>,
+  cv::RotatedRect<point, size, float>, cv::Rect<>
+
   Fixed Matrix classes:
       are classes whose dimensions are known at compile time. As a result, all memory for their data
       is allocated on the stack, which means that they allocate and clean up quickly. Operations on them are fast and

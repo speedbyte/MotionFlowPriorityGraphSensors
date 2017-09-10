@@ -19,6 +19,9 @@ void image_processing_() {
 
     // Image Processing Mat
     cv::Mat img_rgb = cv::imread(fpath.string(), CV_LOAD_IMAGE_COLOR);
+    if ( img_rgb.empty() == 1 ) {
+        throw ("Not an image");
+    }
     try {
         assert(img_rgb.depth() == CV_8U);
         assert(img_rgb.channels() == 3);
@@ -124,44 +127,13 @@ void sobel() {
     cv::imshow("image", draw);
 }
 
-int main ( int argc, char *argv[] ) {
+void xml_yaml(cv::Mat &kittisrc1, cv::Mat &kittisrc2) {
 
-    image_processing_();
-    image_processing_bmp();
-    cv::Mat kittisrc1 = cv::imread("../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/image_02"
-                                         "/data"
-                              "/0000000169"".png", CV_LOAD_IMAGE_COLOR);
-    cv::Mat kittisrc2 = cv::imread("../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/image_02/data"
-                              "/0000000170.png");
-
-    // store in binary format to be able to compare the data.
-    cv::absdiff(kittisrc1, kittisrc2, kittisrc2); // this gives a result with just the moving objects between two
-    // frames.
-
-    cv::Mat lena = cv::imread("../../../pics-dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
-    assert(kittisrc1.type() == lena.type());
-    cv::Mat input1(lena, cv::Rect(0,0,20,370));
-    cv::Mat input2(lena, cv::Rect(256,0,20,370));
-    cv::Mat output(lena, cv::Rect(256,0,20,370));
-    // one to blend is the image of the guy and the second parameter.
-
-    cv::addWeighted(input1, 1, input2, 1, 0, output); //
-    // this gives a
-    // result with just the moving
-    // objects
-    // between
-    // two
-    cv::namedWindow("result", CV_WINDOW_AUTOSIZE);
-    cv::imshow("result", lena);
-    cv::waitKey(0);
-
+    // XML and YAML START
     cv::Mat whiteImage1C(8,8,CV_8UC1,cv::Scalar(255));
     cv::Mat whiteImage3C(8,8,CV_8UC3,cv::Scalar(255,0,0));
     cv::imwrite("/local/tmp/result1C.png", whiteImage1C);
     cv::imwrite("/local/tmp/result2C.png", whiteImage3C);
-    cv::Mat jpgImage = cv::imread("../../../pics-dataset/lena.jpg");
-    cv::namedWindow("result", CV_WINDOW_AUTOSIZE);
-    cv::imshow("result", kittisrc2);
 
     cv::FileStorage fs("../../../pics-dataset/test.yml", cv::FileStorage::WRITE);
 
@@ -195,10 +167,10 @@ int main ( int argc, char *argv[] ) {
     assert(kittisrc2.type()==CV_8UC3);
     while ( row <= kittisrc2.rows ) {
         col = 0;
+        // save only grayscale value greater than 100
         while ( col <= kittisrc2.cols ) {
             if (((kittisrc1.at<cv::Vec<char, 3>>(row, col)[0] + kittisrc1.at<cv::Vec<char, 3>>(row, col)[1] +
-                        kittisrc1
-                    .at<cv::Vec<char, 3>>(row, col)[2]) / 3 ) > 100) {
+                  kittisrc1.at<cv::Vec<char, 3>>(row, col)[2]) / 3 ) > 100) {
                 fs << "{:" << "row" << row << "col" << col << "lbp" << "[:";
                 fs << kittisrc1.at<cv::Vec<char, 3>>(row, col)[0] << kittisrc1.at<cv::Vec<char, 3>>(row, col)[1] <<
                    kittisrc1.at<cv::Vec<char, 3>>(row, col)[2];
@@ -209,16 +181,40 @@ int main ( int argc, char *argv[] ) {
         row++;
     }
     fs << "]";
-
-
     fs.release();
+    // XML and YAML END
+    cv::imshow("result", kittisrc2);
 
+}
+
+void absdiff(cv::Mat &kittisrc1, cv::Mat &kittisrc2) {
+    cv::absdiff(kittisrc1, kittisrc2, kittisrc2); // this gives a result with just the moving objects between two
+    // frames.
+}
+
+void addWeighted() {
+    cv::Mat lena = cv::imread("../../../pics-dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
+    cv::Mat input1(lena, cv::Rect(0,0,20,370));
+    cv::Mat input2(lena, cv::Rect(256,0,20,370));
+    cv::Mat output(lena, cv::Rect(256,0,20,370));
+    // one to blend is the image of the guy and the second parameter.
+
+    cv::addWeighted(input1, 1, input2, 1, 0, output); //
+    // this gives a result with just the moving objects between two
+    cv::namedWindow("result", CV_WINDOW_AUTOSIZE);
+    cv::imshow("result", lena);
+    cv::waitKey(0);
+
+    cv::Mat jpgImage = cv::imread("../../../pics-dataset/lena.jpg");
+    cv::namedWindow("result", CV_WINDOW_AUTOSIZE);
+}
+
+void imdecode() {
     int    nsize = 100;       // Size of buffer
     uchar pcBuffer[nsize];    // Raw buffer data
     for ( int i = 0; i < nsize; i++) {
         pcBuffer[i] = 255;
     }
-
 
 // Create a Size(1, nSize) Mat object of 8-bit, single-byte elements
     cv::Mat rawData  =  cv::Mat( 1, nsize, CV_8UC1, pcBuffer );
@@ -228,6 +224,26 @@ int main ( int argc, char *argv[] ) {
     {
         // Error reading raw image data
     }
+
+}
+
+int main ( int argc, char *argv[] ) {
+
+
+    cv::Mat kittisrc1 = cv::imread("../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/image_02"
+                                         "/data"
+                              "/0000000169"".png", CV_LOAD_IMAGE_COLOR);
+    cv::Mat kittisrc2 = cv::imread("../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/image_02/data"
+                              "/0000000170.png");
+
+    // store in binary format to be able to compare the data.
+    image_processing_();
+    image_processing_bmp();
+
+    absdiff(kittisrc1, kittisrc2);
+    xml_yaml(kittisrc1, kittisrc2);
+
+    imdecode();
 
     cv::waitKey(0);
 

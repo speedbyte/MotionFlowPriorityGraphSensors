@@ -1,17 +1,19 @@
 //
-// Created by veikas on 08.09.17.
+// Created by veikas on 09.09.17.
 //
 
-#ifndef MAIN_INPUT_OUTPUT_H
-#define MAIN_INPUT_OUTPUT_H
+#ifndef MAIN_INPUTOUTPUT_H
+#define MAIN_INPUTOUTPUT_H
 
 
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv/cv.hpp>
+#include <iomanip>
 
 void processFrame(cv::Mat& img, cv::Mat& out);
+
 
 
 void canny(cv::Mat& img, cv::Mat& out) {
@@ -23,6 +25,16 @@ void canny(cv::Mat& img, cv::Mat& out) {
     // Invert the image
     cv::threshold(out,out,128,255,cv::THRESH_BINARY_INV);
 }
+
+// The frame processor interface
+class FrameProcessor {
+
+public:
+    // processing method
+    virtual void process(cv:: Mat &input, cv:: Mat &output)= 0;
+};
+
+
 
 class VideoProcessor {
 
@@ -126,6 +138,10 @@ public:
             writer.write(frame);
         }
     }
+
+    getFrameRate() {
+        video.get(CV_CAP_PROP_FPS);
+    }
     // set the output video file
     // by default the same parameters than
     // input video will be used
@@ -142,6 +158,7 @@ public:
         if (codec==0) {
             codec= getCodec(c);
         }
+        std::cout << "Codec: " << c[0] << c[1] << c[2] << c[3] << std::endl;
 
         // Open output video
         return writer.open(outputFile, // filename
@@ -340,14 +357,6 @@ public:
     }
 };
 
-// The frame processor interface
-class FrameProcessor {
-
-public:
-    // processing method
-    virtual void process(cv:: Mat &input, cv:: Mat &output)= 0;
-};
-
 
 
 class FeatureTracker : public FrameProcessor {
@@ -466,4 +475,4 @@ public:
 
 
 
-#endif //MAIN_INPUT_OUTPUT_H
+#endif //MAIN_INPUTOUTPUT_H
