@@ -51,3 +51,6 @@
 [submodule "philipp-BA"]
 	path = overleaf/philippBA
 	url = https://git.overleaf.com/10991069gqnknnppvsjj
+[submodule "cockpit"]
+	path = overleaf/cockpit
+	url = https://git.overleaf.com/10975940fxjsvpkymnts

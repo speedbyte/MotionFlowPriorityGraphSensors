@@ -134,7 +134,8 @@ class RDBCodec {
   virtual void process(RDB_DYN_EL_SWITCH_t* /*dyn_el_switch*/) {}
   virtual void process(RDB_DYN_EL_DOF_t* /*dyn_el_dof*/) {}
   virtual void process(RDB_IG_FRAME_t* /*ig_frame*/) {}
-  virtual void process(RDB_RT_PERFORMANCE_t* /*rt_performance*/) {}
+  // comment by Alex (type not found, bosch special?)
+//  virtual void process(RDB_RT_PERFORMANCE_t* /*rt_performance*/) {}
   virtual void process(RDB_CUSTOM_SCORING_t* /*custom_scoring*/) {}
   virtual void process(RDB_CUSTOM_OBJECT_CTRL_TRACK_t* /*custom_object_ctrl_track*/) {}
 

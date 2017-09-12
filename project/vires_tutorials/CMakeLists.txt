@@ -12,7 +12,8 @@ set(SOURCE_FILES
         bosch_adsim/src/rdb_codec.cpp
         bosch_adsim/src/rdb_transceiver_shared_memory.cpp
         bosch_adsim/src/rdb_transceiver_tcp.cpp
-        bosch_adsim/src/scp_transceiver.cpp
-        vires_source/src/RDBHandler.cc )
+        #bosch_adsim/src/scp_transceiver.cpp
+        vires_source/src/RDBHandler.cc
+        )
 
 add_executable(VTD ${SOURCE_FILES})

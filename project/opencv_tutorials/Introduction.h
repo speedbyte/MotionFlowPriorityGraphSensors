@@ -168,8 +168,13 @@
     .bmp: BMP; 8-bit; one-, three-, or four-channel input
     .ppm, .pgm: NetPBM; 8-bit; one-channel (PGM) or three-channel (PPM)
 
-
-
+ Sometimes, it is important to provide the matrix data as text data and not binary data. This is important for
+ example to save calibration values of the camera. Ofcourse, the calibration values could be saved as bin files, but
+ then it is not immediate comparable with different calibration files. Hence, OpenCV provides functions to save the
+ data in either XML or YAML format. The YAML format comprises of mapping and sequences. Mapping is like a dictionary
+ denoted by { and sequence is like a list with a series of numbers. Apart from sequences and mapping, {: puts the
+ subequent lists in a new line. This is like a small '-' sign at the beginning of the line. In YAML format this small
+ dash means. The conversion to XML or YAML formats is called serialisation.
 
 
 

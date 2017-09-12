@@ -3,6 +3,11 @@
 
  Papers:
 
+ Ground truth with pedesterians: 118,119,150,167,169 ( 169 is the best )
+ 5 percent or 3px displacement error means that the differnce between the ground truth and the generated displacement
+ vector should not be more than 5% of the ground truth displacement vector. For very small displacement vector,
+ ofcourse, 5 % is extremely small, hence the error tolerance is increased to 3px.
+
  What are the methods to generate ground truth?
   VIRES is one of the method to generate ground truth.
   Is Crowdsourcing for Optical Flow Ground Truth Generation Feasible?
@@ -117,5 +122,82 @@
  Thread 3:  1. Use the pics and run different rain noise ( angle, how strong etc. )
             2. Ground Truth is from VIRES coordinate system.
             2. Follow Step 2 onwards from above.
+
+ */
+
+
+
+/**
+ Project goals:
+ From VIRES we get the sensor data such as LIDAR Point Cloud and Images or RADAR Pedesterian detection. But the major
+ hurdle is to get the sensor data that also matches the sensor data in the real world? That means the generated
+ image, lidar and radar data should be as close ( validated ) to the real world. All the three sensors create sensor
+ data by capturing the rays in the real world as well as the simulated world. The only difference is that in the real
+ world, the traversing of electromagnetic waves in the real world is automatic  and in the simulated world, the path
+ of the electromagnetic waves are simulated and hence is not perfect.
+
+ This phonomena is called raytracing, that means the virtual sensors send rays and they are refelected by objects.
+ The reflections are done using the physics. However, it is not optimum because the rays fails to simulate the reality.
+
+
+ Design of the software
+ has-a or is-a relationship? Depending on these two aspects ( Composition or heirarchial ), we would proceed with our
+ design.
+
+ This section consists of the design of the overall software. First of all, it is important to define the number of
+ interfaces from the Sensor value acquisition till the Optical Flow. The clases which define the interface has
+ specific attributes and hence has a concrete implementaton. For example, if Patter recognition interface just
+ produces abstract methods, but when a class is inherited from the interface, it should clearly define what kind of
+ pattern recognition method is being used here.
+
+ The interfaces are:
+
+ Hardware Sensor interface. This includes a method to calibrate the sensors, as all sensor need some kind of
+ calibration before data can be acquired
+
+ Write memory interface. The user does not need to know, how the memory is distributed. What kind of file system and
+ where the sensor data would be placed.
+
+ Read Memory interface. The user does not need to know the layout of the memory. The memory reader interface should
+ have abstract methods which provides the data when asked for from a definite memory location. Or initialise the
+ memory location so that the read memory member function can always grab the memory from a definite address.
+
+ Noise Interface. In order to filter the data, we need an interface through which the noise would be either filtered
+ or induced. That  means this interface (between Memory Read and Data usage ) provides a method Noise induction or
+ the method Data correction ( Noise filtering ). Again Noise can be induced in many many ways. One of the method is
+ to add Noise by adding noise through Rain distortion models.
+
+ Patter recognition: The interface lies between the filtered data and the object list. How the patter recognition is
+ done i.e which algorithms for example Lukas kanade are taken is not important for the object lists. The patter
+ recognition interface class just provides a trigger method to activate a specific optical flow algorithm, such as
+ Lukas Kanade in the opencv library. Hence the triggerAlgorithm in the Patterrecogntion interface is just a template,
+ because it is unknown which optical flow algorithm would be triggered. The conversion of filtered sensor data into
+ object lists can then be acquired with the getter method.
+
+ Object list validation interface : The object list validation interface provides an interface between the
+ acquistion of the object list and other data. How the validation is done . For example if validation is done using
+ voting mechanism or the validation is done against the ground truth is unknown at this stage. The result is stored
+ in the database along with all the other surrounding information.
+
+ Data statistics : The fitness landscape interface provides an interface between the object list validation and the
+ end user interface. Test data needs to be stored somewhere, so that they can be used later. The end user, needs
+ this statistical information along with the object list to come up with a decision.
+
+
+ Algorithms
+
+ Disparity
+ Disparity is a phenomena when objects that are closer to the eyes will appear to jump a significant distance while
+ objects further away will move very little. The motion of jumping is called disparity. This can be seen by closing
+ one eye and suddenly opening another eye while closing the first eye. Basically, we are simulating a stereo vision
+ with two lenses.
+ In image processing, its a pixel differnce between two stereo images. In a gray scale disparity map, the brighter
+ pixel denotes a greater shift and the darker pixel represents a smaller shift. This way, the relative distance
+ between the object can be shown, that means a 3D representation in a 2D plane through color coding\\
+
+
+ Pose
+ Feature based pose estimation and 3D pose estimation
+
 
  */

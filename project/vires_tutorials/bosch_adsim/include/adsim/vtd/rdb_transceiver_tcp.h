@@ -27,6 +27,10 @@ class RDBTransceiverTCP : public RDBTransceiver {
 
   virtual ~RDBTransceiverTCP();
 
+  /* local edit starts */
+  void reconnect(std::string host, std::string port);
+  /* local edit ends */
+
   virtual std::vector<RDB_MSG_t*> tryGetMessages();
 
   virtual void freeMessages(std::vector<RDB_MSG_t*>& messages);

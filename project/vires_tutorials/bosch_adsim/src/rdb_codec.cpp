@@ -217,9 +217,9 @@ void RDBCodec::process(RDB_MSG_ENTRY_HDR_t* entry) {
           process(reinterpret_cast<RDB_IG_FRAME_t*>(data));
           break;
 
-        case RDB_PKG_ID_RT_PERFORMANCE:
-          process(reinterpret_cast<RDB_RT_PERFORMANCE_t*>(data));
-          break;
+//        case RDB_PKG_ID_RT_PERFORMANCE:
+//          process(reinterpret_cast<RDB_RT_PERFORMANCE_t*>(data));
+//          break;
 
         case RDB_PKG_ID_CUSTOM_SCORING:
           process(reinterpret_cast<RDB_CUSTOM_SCORING_t*>(data));
