@@ -173,8 +173,9 @@
  then it is not immediate comparable with different calibration files. Hence, OpenCV provides functions to save the
  data in either XML or YAML format. The YAML format comprises of mapping and sequences. Mapping is like a dictionary
  denoted by { and sequence is like a list with a series of numbers. Apart from sequences and mapping, {: puts the
- subequent lists in a new line. This is like a small '-' sign at the beginning of the line. In YAML format this small
- dash means. The conversion to XML or YAML formats is called serialisation.
+ subequent lists in a new line. List members are denoted by a leading hyphen (-) with one member per line, or
+ enclosed in square brackets ([ ]) and separated by comma space (, ).The conversion to XML or YAML formats is called
+ serialisation.
 
 
 
