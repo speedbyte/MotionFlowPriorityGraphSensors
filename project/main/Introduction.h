@@ -2,6 +2,14 @@
 /**
 
  Papers:
+
+ What are the methods to generate ground truth?
+  VIRES is one of the method to generate ground truth.
+  Is Crowdsourcing for Optical Flow Ground Truth Generation Feasible?
+  https://link.springer.com/chapter/10.1007/978-3-642-39402-7_20
+
+ What are the methods to test ADAS algorithms. Rain Simulation is one of the method to generate noise.
+
  Regression analysis to determine the robustness of optical flow algorithms.
     In this regression between two independent variables such as one image with noise and one image
     without noise should be analysed. The regression methods can be eigenvalues, covariance, least square method etc.
