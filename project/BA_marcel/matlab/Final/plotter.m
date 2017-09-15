@@ -1,4 +1,4 @@
-function [ output_args ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x);
+function [ output_args ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,timeCollision,plotTime);
 
 
 
@@ -22,6 +22,8 @@ title('Ground Truth collision');
 subplot(3,1,2);
 plot(estimatedCollisionVector);
 title('Estimated Flow Collision');
+axis([0,1242,0,375]);
+
 
 %Plot the movement of the objects.
 subplot(3,1,3),
@@ -36,9 +38,9 @@ title('Movement');
 axis([0,1242,0,375]);
 
 %kitti plot
-tau = [3 0.05];
+%error, when displacement >3 px & ggf> 5%
+tau = [0 0.01];
 name = sprintf('./GroundTruth/%06d_10.png',x);
-
 F_gt = flow_read(name);
 F_est = flow_read('result.png');
 f_err = flow_error(F_gt,F_est,tau);

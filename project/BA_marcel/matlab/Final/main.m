@@ -5,6 +5,8 @@
 %FOR LK http://de.mathworks.com/matlabcentral/fileexchange/23142-iterative-pyramidal-lk-optical-flow
 
 
+
+
 clear all;
 close all;
 
@@ -12,6 +14,7 @@ load('Initialize.mat');
 load('collisionVector.mat');
 
 opticFlow=opticalFlowFarneback;%('NoiseThreshold',0.004);
+frame = zeros(375,1242,3,'uint8');
 
 
 
@@ -40,6 +43,7 @@ for x = 1:maxIteration
   
     %create the frame
     disp(x);
+    lastFrame = frame;
     frame = movement(xSpec,ySpec,secondXSpec,secondYSpec);
     
     %%
@@ -47,7 +51,14 @@ for x = 1:maxIteration
    frame_gray = rgb2gray(frame);
    flow_frame = estimateFlow(opticFlow,frame_gray);
    
-       vxCopy = (flow_frame.Vx ~= 0);
+   %LK
+ %  if x < 2 
+ %   [flowX,flowY] = LK(lastFrame,frame);
+ %  end
+   
+ %  [flowX,flowY] = LK(lastFrame,frame);
+   
+    vxCopy = (flow_frame.Vx ~= 0);
     vyCopy = (flow_frame.Vy ~= 0);
     vXYCopy = vxCopy+vyCopy;
     vCopy = (vXYCopy ~= 0);

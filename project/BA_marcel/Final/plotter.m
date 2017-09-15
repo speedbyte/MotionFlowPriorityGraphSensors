@@ -1,4 +1,4 @@
-function [ output_args ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x);
+function [ output_args ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,timeCollision,plotTime);
 
 
 
@@ -8,7 +8,7 @@ figure(1)
 imshow(frame);
 hold on
 plot(flow_frame,'DecimationFactor',[8 8],'ScaleFactor',3);
-title('Optical FLow');
+title(sprintf('Optical Flow in iteration %.2f %',x));
 drawnow;
 hold off;
 
@@ -22,6 +22,8 @@ title('Ground Truth collision');
 subplot(3,1,2);
 plot(estimatedCollisionVector);
 title('Estimated Flow Collision');
+axis([0,length(collisionVector),0,1]);
+
 
 %Plot the movement of the objects.
 subplot(3,1,3),
@@ -44,9 +46,32 @@ F_gt = flow_read(name);
 F_est = flow_read('result.png');
 f_err = flow_error(F_gt,F_est,tau);
 F_err = flow_error_image(F_gt,F_est,tau);
-figure(3);
-imshow([flow_to_color([F_est;F_gt],100);F_err]);
-title(sprintf('Dense Flow Error: %.2f %',f_err*100));
+fig3 = figure(3);
+subplot(3,1,1);
+image(flow_to_color(F_est,100));
+title('Estimated Flow');
+subplot(3,1,2)
+image(flow_to_color(F_gt,100));
+title('Ground Truth Flow');
+subplot(3,1,3);
+image(F_err);
+title(sprintf('Flow Error: %.2f %',f_err*100));
+set(fig3, 'Position',[0,0,1000,900]);
+
+figure(4);
+subplot(4,1,1)
+plot(timeToGenerateObject);
+title('Time to generate and move Object');
+subplot(4,1,2)
+plot(flowstop);
+title('Time to estimate Optical Flow');
+subplot(4,1,3);
+plot(timeCollision);
+title('Time to estimate collision');
+subplot(4,1,4);
+plot(plotTime);
+title('Time to plot');
+
 
 
 end

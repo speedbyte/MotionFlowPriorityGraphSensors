@@ -3,20 +3,25 @@ function [ estCollision,movement ] = flowCollision(flow, xSpec,ySpec, secondXSpe
 %% Estimate if the objects will collide
 % We extract the movement from the objects by using the mean of the flow
 % components. We then add the movement to the actual position and get the
-% future position. After 10 iteration we will say if the objects will
+% future position. Then we will say if the objects will
 % collide or not. This will be done with each consequtive frame pair. 
 %
 estCollision = 0;
-flowFirstObjectX = zeros(375,1242);
-flowFirstObjectY = zeros(375,1242);
-flowSecondObjectX = zeros(375,1242);
-flowSecondObjectY = zeros(375,1242);
+flowFirstObjectX = zeros(100,100);
+flowFirstObjectY = zeros(100,100);
+flowSecondObjectX = zeros(100,100);
+flowSecondObjectY = zeros(100,100);
 
 %Threshold of the object, because object detection is not accurate.
 upperheigtht = ySpec(end);
 lowerheight = ySpec(1);
 upperwidth = xSpec(end);
 lowerwidth = xSpec(1);
+
+secondObjectUpperheight = secondYSpec(end);
+secondObjectLowerheight = secondYSpec(1);
+secondObjectUpperWidth = secondXSpec(end);
+secondObjectLowerWidth = secondXSpec(1);
 
 if ySpec < 365
 upperheigtht = ySpec(end)+10;
@@ -34,17 +39,17 @@ end
 
 
 if secondYSpec < 365
-secondObjectUpperheigtht = secondYSpec(end)+10;
+secondObjectUpperheight = secondYSpec(end)+10;
 end
 if secondYSpec > 10
-    secondObjectLowerheigtht = secondYSpec(1)-10;
+    secondObjectLowerheight = secondYSpec(1)-10;
 end
 
 if secondXSpec < 1232
 secondObjectUpperWidth = secondXSpec(end)+10;
 end
 if secondXSpec > 10
-secondObjectLowerWidth = secondObjectUpperWidth(1)-10;
+secondObjectLowerWidth = secondXSpec(1)-10;
 end
 %%
 %%get flow from the objects
@@ -55,7 +60,7 @@ for k = lowerheight:upperheigtht
     end
 end
 
-for kk = secondObjectLowerheigtht:secondObjectUpperheigtht
+for kk = secondObjectLowerheight:secondObjectUpperheight
     for jj = secondObjectLowerWidth:secondObjectUpperWidth
         flowSecondObjectX(jj,kk,1) = flow(kk,jj,1);
         flowSecondObjectY(jj,kk,2) = flow(kk,jj,2);
@@ -101,16 +106,16 @@ if isnan(secondObjectXMean)
     secondObjectXMean = 0;
 end
 
-disp('Estimated Movement of the First Object:');
-disp('x')
-disp(xMean);
-disp('y')
-disp(yMean);
-disp('Estimated Movement of the second Object');
-disp('x')
-disp(secondObjectXMean);
-disp('y')
-disp(secondObjectYMean);
+% disp('Estimated Movement of the First Object:');
+% disp('x')
+% disp(xMean);
+% disp('y')
+% disp(yMean);
+% disp('Estimated Movement of the second Object');
+% disp('x')
+% disp(secondObjectXMean);
+% disp('y')
+% disp(secondObjectYMean);
 
 movement = [xMean,yMean,secondObjectXMean,secondObjectYMean];
 
@@ -118,10 +123,10 @@ movement = [xMean,yMean,secondObjectXMean,secondObjectYMean];
 %Estimate the future collision. Floor call in order to get possibly matching results
 for i=1:1
     
-    ySpec = floor( ySpec+yMean);
-    xSpec = floor(xSpec+xMean);
-    secondYSpec = floor(secondYSpec+secondObjectYMean);
-    secondXSpec = floor(secondXSpec+secondObjectXMean);
+    ySpec = round( ySpec+yMean);
+    xSpec = round(xSpec+xMean);
+    secondYSpec = round(secondYSpec+secondObjectYMean);
+    secondXSpec = round(secondXSpec+secondObjectXMean);
     
     checkY = intersect(ySpec,secondYSpec);
     checkX = intersect(xSpec,secondXSpec);

@@ -1,5 +1,18 @@
-%Estimates the Optical Flow, and the collision prediction based on it. 
+%Loads the Initialization specs. 
 
+%video
+%kitti einbinden
+%Document 
+%keep matrix size
+%only use absolut coordinates
+%make everything more generic
+%classify everything that moves as object
+%noise(static, dynamic)
+
+
+
+%calibration file, 2 persons have checkerboard. Fotos to define start
+%positions.
 
 
 %FOR LK http://de.mathworks.com/matlabcentral/fileexchange/23142-iterative-pyramidal-lk-optical-flow
@@ -12,16 +25,20 @@ load('Initialize.mat');
 load('collisionVector.mat');
 
 opticFlow=opticalFlowFarneback;%('NoiseThreshold',0.004);
-
+frame = zeros(375,1242,3,'uint8');
+plotTime = 1;
 
 
 for x = 1:maxIteration
 
+    %Initialization
     if x == 1
     iterator = 0;
     sIterator = 0;
     end
     
+    lastFrame = frame;
+    %end of path vector? reset
     if iterator+start > length(xPos)
         start = 1;
         iterator = 0;
@@ -31,6 +48,8 @@ for x = 1:maxIteration
         sIterator = 0;
     end
         
+    %Time to generate the object and frame
+    tic;
     %Generate Object
     xSpec = actualX:actualX+width;  %width
     ySpec = actualY:actualY+height; %height
@@ -41,13 +60,17 @@ for x = 1:maxIteration
     %create the frame
     disp(x);
     frame = movement(xSpec,ySpec,secondXSpec,secondYSpec);
+    timeToGenerateObject(x) = toc;
     
     %%
     %Optical Flow
+   tic;
    frame_gray = rgb2gray(frame);
    flow_frame = estimateFlow(opticFlow,frame_gray);
+   flowstop(x) = toc;
    
-       vxCopy = (flow_frame.Vx ~= 0);
+   
+    vxCopy = (flow_frame.Vx ~= 0);
     vyCopy = (flow_frame.Vy ~= 0);
     vXYCopy = vxCopy+vyCopy;
     vCopy = (vXYCopy ~= 0);
@@ -61,8 +84,10 @@ for x = 1:maxIteration
         flow(:,:,2) = flow_frame.Vy;
         
         %%
-        %%collision checkers
-       if x > 1
+        %%collision checkers(first round has bad flow, dont plot and
+        %%estimate collision
+        %time to check for collision
+        tic;
 
          [estimatedCollision,estMovement] = flowCollision(flow, xSpec,ySpec, secondXSpec,secondYSpec);
 
@@ -72,11 +97,13 @@ for x = 1:maxIteration
        else
            estimatedCollisionVector(x) = 0;
        end
-
-      plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x);
-      end
+       timeCollision(x) = toc;
+        
+       tic;
+      plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,timeCollision,plotTime);
+      plotTime(x) = toc;
     
-    
+    %%
     %Update position
 
     actualX = xPos(start+iterator);
@@ -86,8 +113,7 @@ for x = 1:maxIteration
     
   
     iterator = iterator+1;
-   sIterator = sIterator+1;
-   
+    sIterator = sIterator+1;
 
     
 end

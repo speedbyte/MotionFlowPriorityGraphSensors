@@ -17,6 +17,11 @@ upperheigtht = ySpec(end);
 lowerheight = ySpec(1);
 upperwidth = xSpec(end);
 lowerwidth = xSpec(1);
+secondObjectUpperheigtht = secondYSpec(end);
+secondObjectLowerheigtht = secondYSpec(1);
+secondObjectUpperWidth = secondXSpec(end);
+secondObjectLowerWidth = secondObjectUpperWidth(1)-10
+
 
 if ySpec < 365
 upperheigtht = ySpec(end)+10;
@@ -100,25 +105,24 @@ end
 if isnan(secondObjectXMean)
     secondObjectXMean = 0;
 end
-
-disp('Estimated Movement of the First Object:');
-disp('x')
-disp(xMean);
-disp('y')
-disp(yMean);
-disp('Estimated Movement of the second Object');
-disp('x')
-disp(secondObjectXMean);
-disp('y')
-disp(secondObjectYMean);
+% 
+% disp('Estimated Movement of the First Object:');
+% disp('x')
+% disp(xMean);
+% disp('y')
+% disp(yMean);
+% disp('Estimated Movement of the second Object');
+% disp('x')
+% disp(secondObjectXMean);
+% disp('y')
+% disp(secondObjectYMean);
 
 movement = [xMean,yMean,secondObjectXMean,secondObjectYMean];
 
 %%
 %Estimate the future collision. Floor call in order to get possibly matching results
-for i=1:1
     
-    ySpec = floor( ySpec+yMean);
+    ySpec = floor(ySpec+yMean);
     xSpec = floor(xSpec+xMean);
     secondYSpec = floor(secondYSpec+secondObjectYMean);
     secondXSpec = floor(secondXSpec+secondObjectXMean);
@@ -131,4 +135,3 @@ for i=1:1
         break;
     end
     
-end
