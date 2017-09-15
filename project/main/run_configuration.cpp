@@ -26,7 +26,6 @@ get_file(const boost_path &dataset_path, const boost_path &subfolder, const boos
         std::cout << file_path.string() << ":" <<  exception;
         exit(0);
     }
-
     return file_path;
 
 }

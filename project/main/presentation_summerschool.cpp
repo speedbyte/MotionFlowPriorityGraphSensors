@@ -12,8 +12,9 @@
 #define KITTI_RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
 #define KITTI_CALIBRATION_PATH "../../../kitti_dataset/raw_dataset_with_calib/"
 
-extern void salt(cv::Mat image, int n);
 extern void read_kitti_calibration(boost::filesystem::path);
+extern void video_capture(cv::Mat&);
+
 using boost_path=boost::filesystem::path;
 extern boost_path get_file(const boost_path &dataset_path, const boost_path &subfolder, const boost_path
 &file_name);
@@ -48,95 +49,11 @@ int main ( int argc, char *argv[]) {
     ImageShow grid_manual_show;
     grid_manual_show.show(image_manual_bare_grid);
 
-
     cv::waitKey(0);
     cv::destroyAllWindows();
 
-    cv::VideoWriter writer;
 
-    // Create video procesor instance
-    VideoProcessor processor;
-
-    // Create feature tracker instance
-    FeatureTracker tracker;
-
-    char codec[4];
-
-    writer.write(image_manual_bare1); // add the frame to the video file
-
-
-    // Open video file
-    processor.setInput("../../../video_dataset/Megamind.avi");
-    processor.setFrameProcessor(canny);
-    processor.setOutput("../../../video_dataset/Megamind_out.avi");
-    // Start the process
-    processor.run();
-
-    processor.setOutput("bikeOut",  //prefix
-                        ".jpg",     // extension
-                        3,          // number of digits
-                        0);// starting index
-
-    cv::VideoCapture capture("../../../video_dataset/Megamind.avi");
-    // check if video successfully opened
-    if (!capture.isOpened())
-        return 1;
-
-    // Get the frame rate
-    double rate= capture.get(CV_CAP_PROP_FPS);
-
-    bool stop(false);
-    cv::Mat frame; // current video frame
-    cv::namedWindow("Extracted Frame");
-
-    // Delay between each frame in ms
-    // corresponds to video frame rate
-    int delay= 1000/rate;
-
-    // for all frames in video
-    while (!stop) {
-
-        // read next frame if any
-        if (!capture.read(frame))
-            break;
-
-        cv::imshow("Extracted Frame",frame);
-
-        // introduce a delay
-        // or press key to stop
-        if (cv::waitKey(delay)>=0)
-            stop= true;
-    }
-
-    // Close the video file.
-    // Not required since called by destructor
-    capture.release();
-    //return 0;
-    // Open video file
-    processor.setInput("../../../video_dataset/Megamind.avi");
-
-    // set frame processor
-    processor.setFrameProcessor(&tracker);
-
-    // Declare a window to display the video
-    processor.displayOutput("Tracked Features");
-
-    // Play the video at the original frame rate
-    //processor.setDelay(1000./processor.getFrameRate());
-
-    // Start the process
-    processor.run();
-
-    // open the image
-    cv::Mat image= cv::imread("lena.jpg");
-
-    // call function to add noise
-    salt(image,3000);
-
-    // display image
-    cv::namedWindow("Image");
-    cv::imshow("Image",image);
-
+    video_capture(image_manual_bare1);
 
 }
 

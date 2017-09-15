@@ -15,16 +15,6 @@
 
 void processFrame(cv::Mat& img, cv::Mat& out);
 
-void canny(cv::Mat& img, cv::Mat& out) {
-    // Convert to gray
-    if (img.channels()==3)
-        cv::cvtColor(img,out,CV_BGR2GRAY);
-    // Compute Canny edges
-    cv::Canny(out,out,100,200);
-    // Invert the image
-    cv::threshold(out,out,128,255,cv::THRESH_BINARY_INV);
-}
-
 // The frame processor interface
 class FrameProcessor {
 
