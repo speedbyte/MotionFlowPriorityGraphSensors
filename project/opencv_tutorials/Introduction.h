@@ -172,10 +172,33 @@
  example to save calibration values of the camera. Ofcourse, the calibration values could be saved as bin files, but
  then it is not immediate comparable with different calibration files. Hence, OpenCV provides functions to save the
  data in either XML or YAML format. The YAML format comprises of mapping and sequences. Mapping is like a dictionary
- denoted by { and sequence is like a list with a series of numbers. Apart from sequences and mapping, {: puts the
- subequent lists in a new line. List members are denoted by a leading hyphen (-) with one member per line, or
- enclosed in square brackets ([ ]) and separated by comma space (, ).The conversion to XML or YAML formats is called
- serialisation.
+ denoted by { and sequence is like a list with a series of numbers. List members are denoted by a leading hyphen (-)
+ with one member per line or enclosed in square brackets ([ ]) and separated by comma space (, ). Apart from the
+ conventional { and [, there are two more character sequences, {: and [:. They put the subequent lists in the same
+ line. The {: and [: is simply ignored in XML formats, because the file layout is pretty constant, however not so
+ comfortable to read. YAML wins when readability of the file needs to be maintained. The conversion to XML or YAML
+ formats is called serialisation.
+ cv::FileStorage::FileStorage( string fileName, int flag );
+ cv::FileStorage::open( string fileName, int flag );
+ cv::FileStorage::WRITE or cv::FileStorage::APPEND, cv::FileStorage::READ
+ cv::FileStorage::release()
+ << writes to the file. >> reads from a file
+
+ The return value of this operator is not the desired object, however; it is an object of type cv::FileNode, which
+ represents the value that goes with the given key in an abstract form.
+ cv::Mat anArray;
+ myFileStorage["calibrationMatrix"] >> anArray; // cv::FileNode >> cv::Mat
+ cv::FileNodeIterator()
+ cv::FileNode::name()
+ cv::FileNode::begin() and end() returns a cv::FileNodeIterator that can be used to increment and decrement the
+ operator.
+ FileNode.begin() returns the FileNodeIterator  and FileNode.end returns the "after last" FileNodeIterator for either
+ a mapping or a sequence. Once we have the FileNodeIterator, the FileNode can be obtained by dereferencing the
+ FileNodeOperator.  The FileNode can be further dereferenced by either typecasting or redirection operator.
+  - first -> this can have many mappings, listings etc and all of them are referenced using their names.
+  - second
+  - third
+
 
 
 

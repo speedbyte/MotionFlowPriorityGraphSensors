@@ -104,7 +104,7 @@ int main( int argc, const char** argv )
     }
 
 
-    src = cv::imread("../../../pics-dataset/lena.png", CV_LOAD_IMAGE_COLOR);
+    src = cv::imread("../../../pics_dataset/lena.png", CV_LOAD_IMAGE_COLOR);
     namedWindow("pimples dedector", WINDOW_AUTOSIZE);
     cloneimg = src.clone();
     setMouseCallback( "pimples dedector", onMouse, &cloneimg );

@@ -17,7 +17,7 @@ target_link_libraries(stackoverflow ${Boost_LIBRARIES})
 add_executable(arrays Arrays.cpp)
 target_link_libraries(arrays ${Boost_LIBRARIES})
 
-add_executable(random Random.cpp)
+add_executable(random random.cpp)
 target_link_libraries(random ${Boost_LIBRARIES})
 
 add_executable(bigO bigO.cpp)

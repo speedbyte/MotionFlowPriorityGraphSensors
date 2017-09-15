@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-project (Tutorial)
+project (cmake_tutorials)
 
 # The version number.
 set (Tutorial_VERSION_MAJOR 1)
@@ -9,7 +9,10 @@ message("list of paths for find_file and find_path ${CMAKE_SYSTEM_INCLUDE_PATH}"
 message("list of paths for find_library ${CMAKE_SYSTEM_LIBRARY_PATH}")
 message("list of paths for find_program ${CMAKE_SYSTEM_PROGRAM_PATH}")
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 find_package(Boost REQUIRED system filesystem)
+find_package(Qt5 REQUIRED Core)
 
 include_directories(${Boost_INCLUDE_DIRS})
 message("include directory for boost ist ${Boost_INCLUDE_DIRS}")
@@ -20,6 +23,11 @@ target_link_libraries(overloading ${Boost_LIBRARIES})
 
 add_executable(stackoverflow stackoverflow.cpp)
 target_link_libraries(stackoverflow ${Boost_LIBRARIES})
+
+# Get Qt5Widgets library and cut off the library name
+get_target_property(QT5_WIDGETSLIBRARY Qt5::Core LOCATION)
+get_filename_component(QT5_WIDGETSLIBRARYPATH ${QT5_WIDGETSLIBRARY} PATH)
+message("${QT5_WIDGETSLIBRARY}")
 
 
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")

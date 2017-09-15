@@ -36,7 +36,7 @@ RDBTransceiverSharedMemory::RDBTransceiverSharedMemory(key_t key, uint32_t relea
   int i = 0;
 
   if (-1 == shm_id) {
-    logger()->error("SharedMemoryRDB: Failed to get shared memory ID.");
+    std::cout << "SharedMemoryRDB: Failed to get shared memory ID.";
     exit(12000);
   }
 
@@ -46,7 +46,7 @@ RDBTransceiverSharedMemory::RDBTransceiverSharedMemory(key_t key, uint32_t relea
   rdb_shm_hdr_ = reinterpret_cast<RDB_SHM_HDR_t *>(region_.get_address());
 
   if (2 != rdb_shm_hdr_->noBuffers) {
-    logger()->error("SharedMemoryRDB: Double buffering required.");
+    std::cout << "SharedMemoryRDB: Double buffering required.";
     return;
   }
 
@@ -56,7 +56,7 @@ RDBTransceiverSharedMemory::RDBTransceiverSharedMemory(key_t key, uint32_t relea
   rdb_msg_ = new RDB_MSG_t *[rdb_shm_hdr_->noBuffers];
 
   if (0 == rdb_shm_hdr_->dataSize) {
-    logger()->warn("ShardeMemoryRDB: 0 == rdb_shm_hdr->dataSize");
+    std::cout << "ShardeMemoryRDB: 0 == rdb_shm_hdr->dataSize";
     return;
   }
 
@@ -110,7 +110,7 @@ std::vector<RDB_MSG_t *> RDBTransceiverSharedMemory::tryGetMessages() {
 
   for (i = 0; i < rdb_shm_hdr_->noBuffers; ++i) {
     if (RDB_MAGIC_NO != rdb_msg_[i]->hdr.magicNo) {
-      logger()->error("SharedMemoryRDB: magic number does not match:", rdb_msg_[i]->hdr.magicNo);
+      std::cout << "SharedMemoryRDB: magic number does not match: " << rdb_msg_[i]->hdr.magicNo;
       // FIXME(ben): No commented code without explanation!
       // buffer_info_[i]->flags = 0;
       return messages;
@@ -164,7 +164,7 @@ void RDBTransceiverSharedMemory::freeMessages(std::vector<RDB_MSG_t *> &messages
 }
 
 void RDBTransceiverSharedMemory::send(RDB_MSG_t * /*message*/, size_t /*size*/) {
-  logger()->error("RDBClientSharedMemory: send not implemented!");
+  std::cout << "RDBClientSharedMemory: send not implemented!";
 }
 
 }  // namespace vtd

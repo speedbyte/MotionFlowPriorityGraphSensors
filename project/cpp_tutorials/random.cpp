@@ -8,6 +8,10 @@
 #include <algorithm>
 
 int main (int argc, char *argv[]) {
+
+    time_t rawtime; time(&rawtime);
+    std::cout << asctime(localtime(&rawtime));
+
     // Seed with a real random value, if available
     std::random_device r;
 
@@ -49,6 +53,5 @@ int main (int argc, char *argv[]) {
         std::cout << ' ' << *it;
 
     //randn(m1,mean,stddev);
-
 
 }

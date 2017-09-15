@@ -322,7 +322,7 @@ void calcCovarMatrix() {
 }
 
 void linearPolar() {
-    cv::Mat src = cv::imread("../../../pics-dataset/lena.png", 0); // read a grayscale img
+    cv::Mat src = cv::imread("../../../pics_dataset/lena.png", 0); // read a grayscale img
     cv::Mat dst; // empty.
     cv::linearPolar(src,dst, cv::Point(src.cols/2,src.rows/2), 120, cv::INTER_CUBIC );
     cv::imshow("linear", dst);

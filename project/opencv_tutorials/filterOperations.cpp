@@ -34,7 +34,7 @@ respectively (see cv::getGaussianKernel for details); to fully control the resul
 
 void GaussianBlur() {
     cv::Mat inputImage, outputImage;
-    inputImage = cv::imread("../../../pics-dataset/lena.png");
+    inputImage = cv::imread("../../../pics_dataset/lena.png");
     cv::getGaussianKernel(3,0,0);
     cv::GaussianBlur(inputImage,outputImage,cv::Size(3,3),0,0,cv::BORDER_DEFAULT);
 }
@@ -52,7 +52,7 @@ int filter2D() {
     int c;
 
 /// Load an image
-    src = cv::imread("../../../pics-dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
+    src = cv::imread("../../../pics_dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
 
     if( !src.data )
     { return -1; }
