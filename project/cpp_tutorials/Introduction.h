@@ -10,6 +10,8 @@
  Standard Template Library ( Scott Meyers )
  Learncpp.com
  C++ FAQ ( Cline, Molow )
+ C++ All-in-One For Dummies, 3rd Edition By: Jeff Cogswell; John Paul Mueller
+
  A class is a way to abstract behaviour, not just a way to encapsulate bits. A class interface must make
  sense from the outside. If a detached user expects services to access an attribute, those services should exist.
  One should think OO as behaviour centric and not data centric.
@@ -766,6 +768,11 @@
  functions in a POD type extends the struct kind of objects.
 
  Randomize:
+ Standard Library introduces two kinds of random generator. One that is with a global seed and one that takes an input
+ parameter directly with each randomization.
+ rand ( srand ) , drand48 ( srand48 ) for example require a seed, where in erand48 does'nt require a seed.
+ Pseudorandom number generator.
+ std::srand() - sets the seed
  std::generate, std::generate_n, std::nrand()
  Fischer-Yates Shuffle, std::generate_random()
 
@@ -804,6 +811,60 @@
  header2.hpp.
  image_manual_bare1’ was not declared ‘constexpr’
  the value of ‘image_manual_bare1’ is not usable in a constant expression
+
+
+ Standard Library terms:
+
+    Containers
+
+        basic_string
+        bit_vector
+        bitset
+        char_producer
+        deque
+        hash
+        list
+        map
+        multimap
+        multiset
+        priority_queue
+        queue
+        rope
+        set
+        slist
+        stack
+        vector
+
+    Iterators
+
+        back_insert_iterator
+        bidirectional_iterator
+        bidirectional_iterator_tag
+        forward_iterator
+        forward_iterator_tag
+        front_insert_iterator
+        input_iterator
+        input_iterator_tag
+        insert_iterator
+        istream_iterator
+        iterator_traits
+        ostream_iterator
+        output_iterator
+        output_iterator_tag
+        random_access_iterator
+        random_access_iterator_tag
+        raw_storage_iterator
+        reverse_bidirectional_iterator
+        reverse_iterator
+        sequence_buffer
+
+    Algorithms
+    Functors
+    Utilities
+    Adaptors
+    Allocators
+    Polymorphic allocators
+
 
 
 

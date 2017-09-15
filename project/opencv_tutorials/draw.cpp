@@ -15,7 +15,7 @@ int main ( int argc, char *argv[]) {
     cv::Mat tmp;
     boost::unordered::unordered_map<int,cv::Mat> m_map_input;
     boost::unordered::unordered_map<int,cv::Mat> m_map_grid;
-    boost::filesystem::path fpath("../../../pics-dataset/lena.png");
+    boost::filesystem::path fpath("../../../pics_dataset/lena.png");
 
     try {
         if ( !boost::filesystem::exists(fpath) ) {

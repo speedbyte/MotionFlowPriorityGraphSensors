@@ -6,7 +6,7 @@
 #include <iostream>
 
 void image_processing_() {
-    boost::filesystem::path fpath("../../../pics-dataset/lena.png");
+    boost::filesystem::path fpath("../../../pics_dataset/lena.png");
     try {
         if ( !boost::filesystem::exists(fpath) ) {
             throw ("FileNotFound error");
@@ -79,7 +79,7 @@ void image_processing_() {
 }
 
 void image_processing_bmp() {
-    boost::filesystem::path fpath("../../../pics-dataset/lena.png");
+    boost::filesystem::path fpath("../../../pics_dataset/lena.png");
     try {
         if ( !boost::filesystem::exists(fpath) ) {
             throw ("FileNotFound error");
@@ -106,7 +106,7 @@ void image_processing_bmp() {
     img_rgb_orig.convertTo(img_rgb_conv, CV_8U);
     cv::Mat img_rgb_bmp(img_rgb.rows, img_rgb.cols, CV_8UC3, img_rgb.data); // provide different view of m1 data
     // depending on endianess of reader, you may need to swap byte order of m2 pixels
-    cv::imwrite("../../../pics-dataset/lena.bmp", img_rgb_bmp);
+    cv::imwrite("../../../pics_dataset/lena.bmp", img_rgb_bmp);
 
 }
 
@@ -127,73 +127,13 @@ void sobel() {
     cv::imshow("image", draw);
 }
 
-void xml_yaml(cv::Mat &kittisrc1, cv::Mat &kittisrc2) {
-
-    // XML and YAML START
-    cv::Mat whiteImage1C(8,8,CV_8UC1,cv::Scalar(255));
-    cv::Mat whiteImage3C(8,8,CV_8UC3,cv::Scalar(255,0,0));
-    cv::imwrite("/local/tmp/result1C.png", whiteImage1C);
-    cv::imwrite("/local/tmp/result2C.png", whiteImage3C);
-
-    cv::FileStorage fs("../../../pics-dataset/test.yml", cv::FileStorage::WRITE);
-
-    fs << "frameCount" << 5;
-    time_t rawtime; time(&rawtime);
-    fs << "calibrationDate" << asctime(localtime(&rawtime));
-    cv::Mat cameraMatrix = cv::Mat_<double>(3,3) << (1000, 0, 320, 0, 1000, 240, 0, 0, 1);
-    cv::Mat distCoeffs = cv::Mat_<double>(5,1) << (0.1, 0.01, -0.001, 0, 0);
-    fs << "cameraMatrix" << cameraMatrix << "distCoeffs" << distCoeffs;
-    fs << "features" << "[";
-    for( int i = 0; i < 3; i++ )
-    {
-        int x = rand() % 640;
-        int y = rand() % 480;
-        uchar lbp = rand() % 256;
-
-        fs << "{:" << "x" << x << "y" << y << "lbp" << "[:";
-        for( int j = 0; j < 8; j++ )
-            fs << ((lbp >> j) & 1);
-        fs << "]" << "}";
-    }
-    fs << "]";
-
-    fs << "whiteImage1C" << whiteImage1C;
-    fs << "whiteImage3C" << whiteImage3C;
-
-    fs << "features" << "[";
-    int row = 0;
-    int col = 0;
-    std::cout << kittisrc2.depth() << kittisrc2.channels();
-    assert(kittisrc2.type()==CV_8UC3);
-    while ( row <= kittisrc2.rows ) {
-        col = 0;
-        // save only grayscale value greater than 100
-        while ( col <= kittisrc2.cols ) {
-            if (((kittisrc1.at<cv::Vec<char, 3>>(row, col)[0] + kittisrc1.at<cv::Vec<char, 3>>(row, col)[1] +
-                  kittisrc1.at<cv::Vec<char, 3>>(row, col)[2]) / 3 ) > 100) {
-                fs << "{:" << "row" << row << "col" << col << "lbp" << "[:";
-                fs << kittisrc1.at<cv::Vec<char, 3>>(row, col)[0] << kittisrc1.at<cv::Vec<char, 3>>(row, col)[1] <<
-                   kittisrc1.at<cv::Vec<char, 3>>(row, col)[2];
-                fs << "]" << "}";
-            }
-            col++;
-        }
-        row++;
-    }
-    fs << "]";
-    fs.release();
-    // XML and YAML END
-    cv::imshow("result", kittisrc2);
-
-}
-
 void absdiff(cv::Mat &kittisrc1, cv::Mat &kittisrc2) {
     cv::absdiff(kittisrc1, kittisrc2, kittisrc2); // this gives a result with just the moving objects between two
     // frames.
 }
 
 void addWeighted() {
-    cv::Mat lena = cv::imread("../../../pics-dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
+    cv::Mat lena = cv::imread("../../../pics_dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
     cv::Mat input1(lena, cv::Rect(0,0,20,370));
     cv::Mat input2(lena, cv::Rect(256,0,20,370));
     cv::Mat output(lena, cv::Rect(256,0,20,370));
@@ -205,7 +145,7 @@ void addWeighted() {
     cv::imshow("result", lena);
     cv::waitKey(0);
 
-    cv::Mat jpgImage = cv::imread("../../../pics-dataset/lena.jpg");
+    cv::Mat jpgImage = cv::imread("../../../pics_dataset/lena.jpg");
     cv::namedWindow("result", CV_WINDOW_AUTOSIZE);
 }
 
@@ -224,7 +164,6 @@ void imdecode() {
     {
         // Error reading raw image data
     }
-
 }
 
 int main ( int argc, char *argv[] ) {

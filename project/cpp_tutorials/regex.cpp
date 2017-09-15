@@ -8,6 +8,7 @@
  Metasequences : <> - they are not metacharacters.
  The expression \<cat\> literally means “match if we can find a start-of-word position, followed immediately by
  c·a·t, followed immediately by an end-of-word position. Its similiar to ^ and $ for a line.
+ 
 
  */
 

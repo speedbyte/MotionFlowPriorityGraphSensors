@@ -8,10 +8,12 @@
 #include "InputOutput.h"
 #include "GridLayout.h"
 
-#define RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
+
+#define KITTI_RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
+#define KITTI_CALIBRATION_PATH "../../../kitti_dataset/raw_dataset_with_calib/"
 
 extern void salt(cv::Mat image, int n);
-
+extern void read_kitti_calibration(boost::filesystem::path);
 using boost_path=boost::filesystem::path;
 extern boost_path get_file(const boost_path &dataset_path, const boost_path &subfolder, const boost_path
 &file_name);
@@ -20,10 +22,18 @@ extern boost_path get_file(const boost_path &dataset_path, const boost_path &sub
 int main ( int argc, char *argv[]) {
     // Thread 2: Read two kitti image files without rain. The two image files are from kitti
 
+    boost::filesystem::path calib_path;
+    calib_path+=KITTI_CALIBRATION_PATH;
+    calib_path+="calib_cam_to_cam.txt";
+    if ( !boost::filesystem::exists(calib_path) ) {
+        throw ("FileNotFound error");
+    }
+    read_kitti_calibration(calib_path);
+
     boost::filesystem::path kitti_full_image_path1, kitti_full_image_path2;
 
-    kitti_full_image_path1 = get_file(RAW_DATASET_PATH, "image_02/data/", "0000000169.png");
-    kitti_full_image_path2 = get_file(RAW_DATASET_PATH, "image_02/data/", "0000000170.png");
+    kitti_full_image_path1 = get_file(KITTI_RAW_DATASET_PATH, "image_02/data/", "0000000169.png");
+    kitti_full_image_path2 = get_file(KITTI_RAW_DATASET_PATH, "image_02/data/", "0000000170.png");
 
     std::cout << kitti_full_image_path1 << std::endl << kitti_full_image_path2 << std::endl;
 
@@ -55,12 +65,10 @@ int main ( int argc, char *argv[]) {
     writer.write(image_manual_bare1); // add the frame to the video file
 
 
-
-
     // Open video file
-    processor.setInput("bike.avi");
+    processor.setInput("../../../video_dataset/Megamind.avi");
     processor.setFrameProcessor(canny);
-    processor.setOutput("bikeOut.avi");
+    processor.setOutput("../../../video_dataset/Megamind_out.avi");
     // Start the process
     processor.run();
 
@@ -69,7 +77,7 @@ int main ( int argc, char *argv[]) {
                         3,          // number of digits
                         0);// starting index
 
-    cv::VideoCapture capture("lena.avi");
+    cv::VideoCapture capture("../../../video_dataset/Megamind.avi");
     // check if video successfully opened
     if (!capture.isOpened())
         return 1;
@@ -105,7 +113,7 @@ int main ( int argc, char *argv[]) {
     capture.release();
     //return 0;
     // Open video file
-    processor.setInput("../bike.avi");
+    processor.setInput("../../../video_dataset/Megamind.avi");
 
     // set frame processor
     processor.setFrameProcessor(&tracker);

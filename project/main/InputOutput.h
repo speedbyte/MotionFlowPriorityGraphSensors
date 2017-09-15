@@ -7,14 +7,13 @@
 
 
 #include <opencv2/core/mat.hpp>
-#include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
-#include <opencv/cv.hpp>
 #include <iomanip>
+#include <iostream>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/video/tracking.hpp>
 
 void processFrame(cv::Mat& img, cv::Mat& out);
-
-
 
 void canny(cv::Mat& img, cv::Mat& out) {
     // Convert to gray
@@ -139,9 +138,14 @@ public:
         }
     }
 
-    getFrameRate() {
-        video.get(CV_CAP_PROP_FPS);
+    int getFrameRate(void) {
+        return writer.get(CV_CAP_PROP_FPS);
     }
+
+    cv::Size getFrameSize(void) {
+        return cv::Size(512,512);
+    }
+
     // set the output video file
     // by default the same parameters than
     // input video will be used
@@ -151,7 +155,7 @@ public:
         extension.clear();
 
         if (framerate==0.0)
-            framerate= getFrameRate(); // same as input
+            framerate = getFrameRate(); // same as input
 
         char c[4];
         // use same codec as input
