@@ -55,6 +55,7 @@ for x = 1:maxIteration
     ySpec = actualY:actualY+height; %height
     secondXSpec = secondActualX:secondActualX+width;
     secondYSpec = secondActualY:secondActualY+height;
+    absoluteFlow = zeros(375,1242,3,'int16');
     
   
     %create the frame
@@ -83,13 +84,32 @@ for x = 1:maxIteration
         flow(:,:,1) = flow_frame.Vx;
         flow(:,:,2) = flow_frame.Vy;
         
+      %absolute Flow
+               %get absolute estimated flow.
+               
+        for k=ySpec
+            for j=xSpec
+                absoluteFlow(k,j,1) = flow_frame.Vx(k,j)+j;
+                absoluteFlow(k,j,2) = flow_frame.Vy(k,j)+k;
+                absoluteFlow(k,j,3) = 1;
+            end
+        end
+        for k=secondYSpec
+            for j=secondXSpec
+                absoluteFlow(k,j,1) = flow_frame.Vx(k,j)+j;
+                absoluteFlow(k,j,2) = flow_frame.Vy(k,j)+k;
+                absoluteFlow(k,j,3) = 1;
+            end
+        end
+        
         %%
         %%collision checkers(first round has bad flow, dont plot and
         %%estimate collision
         %time to check for collision
         tic;
 
-         [estimatedCollision,estMovement] = flowCollision(flow, xSpec,ySpec, secondXSpec,secondYSpec);
+         estimatedCollision = flowCollision(absoluteFlow, xSpec,ySpec, secondXSpec,secondYSpec);
+         estMovement = estimatedMovement(flow, xSpec,ySpec, secondXSpec,secondYSpec);
 
         
        if estimatedCollision == 1

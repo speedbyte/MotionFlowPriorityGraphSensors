@@ -43,6 +43,8 @@ for x=1:maxIteration
     secondYSpec = secondActualY:secondActualY+height;
     
        relativeGroundTruth = zeros(375,1242,3,'int16');
+       absoluteGroundTruth = zeros(375,1242,3,'uint16');
+
  %%  
    %calculating the relative Ground Truth for the Kitti devkit and store it
    %in a png file
@@ -51,6 +53,8 @@ for x=1:maxIteration
         relativeGroundTruth(k,j,1) = calcMove(1);
         relativeGroundTruth(k,j,2) = calcMove(2);
         relativeGroundTruth(k,j,3) = 1;
+        absoluteGroundTruth(k,j,1) = calcMove(1)+j;
+        absoluteGroundTruth(k,j,2) = calcMove(2)+k;
     end
    end
 
@@ -59,11 +63,11 @@ for k=secondYSpec
         relativeGroundTruth(k,j,1) = calcMove(3);
         relativeGroundTruth(k,j,2) = calcMove(4);
         relativeGroundTruth(k,j,3) = 1;
+        absoluteGroundTruth(k,j,1) = calcMove(3)+j;
+        absoluteGroundTruth(k,j,2) = calcMove(4)+k;
     end
 end
-
-rel1 = relativeGroundTruth(:,:,1);
-rel2 = relativeGroundTruth(:,:,2);
+abs1 = absoluteGroundTruth(:,:,1);
 
 %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
 %and Validation bit
@@ -98,11 +102,11 @@ imwrite(kittiGT,name_dense);
     secondActualX = secondActualX+calcMove(3);
     secondActualY = secondActualY+calcMove(4);
 
-    
+
 
 end
 
-relativeGroundTruth = zeros(375,1242,3,'int16');
+
 
 
 
