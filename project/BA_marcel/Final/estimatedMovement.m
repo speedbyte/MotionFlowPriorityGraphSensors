@@ -1,6 +1,12 @@
 function [ movement ] = estimatedMovement( flow, xSpec,ySpec, secondXSpec,secondYSpec )
 
 %Threshold of the object, because object detection is not accurate.
+
+flowFirstObjectX = zeros(375,1242,3);
+flowFirstObjectY = zeros(375,1242,3);
+flowSecondObjectX = zeros(375,1242,3);
+flowSecondObjectY = zeros(375,1242,3);
+
 upperheigtht = ySpec(end);
 lowerheight = ySpec(1);
 upperwidth = xSpec(end);
@@ -40,40 +46,40 @@ if secondXSpec > 10
 secondObjectLowerWidth = secondXSpec(1)-10;
 end
 
+
 %%
 %%get flow from the objects
 for k = lowerheight:upperheigtht
     for j = lowerwidth:upperwidth
-        flowFirstObjectX(j,k,1) = flow(k,j,1);
-        flowFirstObjectY(j,k,2) = flow(k,j,2);
+        flowFirstObjectX(k,j,1) = flow(k,j,1);
+        flowFirstObjectY(k,j,2) = flow(k,j,2);
     end
 end
 
 for kk = secondObjectLowerheight:secondObjectUpperheight
     for jj = secondObjectLowerWidth:secondObjectUpperWidth
-        flowSecondObjectX(jj,kk,1) = flow(kk,jj,1);
-        flowSecondObjectY(jj,kk,2) = flow(kk,jj,2);
+        flowSecondObjectX(kk,jj,1) = flow(kk,jj,1);
+        flowSecondObjectY(kk,jj,2) = flow(kk,jj,2);
     end
 end
+
 %%
 %Extract the movement of the object.
-tic;
 firstObjectX = nonzeros(flowFirstObjectX);
-% xThreshold = find(abs(firstObjectX)<0.2); %cutting out very small displacements
-% firstObjectX(xThreshold) = [];
-test = toc
+ xThreshold = find(abs(firstObjectX)<0.2); %cutting out very small displacements
+ firstObjectX(xThreshold) = [];
 
 firstObjectY= nonzeros(flowFirstObjectY);
-% yThreshold = find(abs(firstObjectY)<0.2);
-% firstObjectY(yThreshold) = [];
+ yThreshold = find(abs(firstObjectY)<0.2);
+ firstObjectY(yThreshold) = [];
 
 secondObjectX = nonzeros(flowSecondObjectX);
-% xThreshold = find(abs(secondObjectX)<0.2); 
-% secondObjectX(xThreshold) = [];
+ xThreshold = find(abs(secondObjectX)<0.2); 
+ secondObjectX(xThreshold) = [];
 
 secondObjectY = nonzeros(flowSecondObjectY);
-% yThreshold = find(abs(secondObjectY)<0.2);
-% secondObjectY(yThreshold) = [];
+ yThreshold = find(abs(secondObjectY)<0.2);
+ secondObjectY(yThreshold) = [];
 %%
 
 %%
@@ -109,6 +115,19 @@ end
 
 movement = [xMean,yMean,secondObjectXMean,secondObjectYMean];
 
+%Estimate the future collision. Floor call in order to get possibly matching results
+    
+    ySpec = floor(ySpec+yMean);
+    xSpec = floor(xSpec+xMean);
+    secondYSpec = floor(secondYSpec+secondObjectYMean);
+    secondXSpec = floor(secondXSpec+secondObjectXMean);
+    
+    checkY = intersect(ySpec,secondYSpec);
+    checkX = intersect(xSpec,secondXSpec);
+    
+    if ~isempty(checkX) & ~isempty(checkY)
+        estCollision = 1;
+    end
 
 end
 

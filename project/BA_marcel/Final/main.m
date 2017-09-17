@@ -86,7 +86,6 @@ for x = 1:maxIteration
         
       %absolute Flow
                %get absolute estimated flow.
-               
         for k=ySpec
             for j=xSpec
                 absoluteFlow(k,j,1) = flow_frame.Vx(k,j)+j;
@@ -107,20 +106,22 @@ for x = 1:maxIteration
         %%estimate collision
         %time to check for collision
         tic;
-
+        
          estimatedCollision = flowCollision(absoluteFlow, xSpec,ySpec, secondXSpec,secondYSpec);
-         estMovement = estimatedMovement(flow, xSpec,ySpec, secondXSpec,secondYSpec);
+         timeCollision(x) = toc;
 
+         tic;
+         estMovement = estimatedMovement(flow, xSpec,ySpec, secondXSpec,secondYSpec);
+         timeMovement(x) = toc;
         
        if estimatedCollision == 1
             estimatedCollisionVector(x) = 1;
        else
            estimatedCollisionVector(x) = 0;
        end
-       timeCollision(x) = toc;
         
        tic;
-      plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,timeCollision,plotTime);
+      plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,timeCollision,plotTime,timeMovement);
       plotTime(x) = toc;
     
     %%

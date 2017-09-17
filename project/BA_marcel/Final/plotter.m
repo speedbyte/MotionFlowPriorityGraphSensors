@@ -1,4 +1,4 @@
-function [ output_args ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,timeCollision,plotTime);
+function [ output_args ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,timeCollision,plotTime,timeMovement)
 
 
 
@@ -59,16 +59,19 @@ title(sprintf('Flow Error: %.2f %',f_err*100));
 set(fig3, 'Position',[0,0,1000,900]);
 
 figure(4);
-subplot(4,1,1)
+subplot(5,1,1)
 plot(timeToGenerateObject);
 title('Time to generate and move Object');
-subplot(4,1,2)
+subplot(5,1,2)
 plot(flowstop);
 title('Time to estimate Optical Flow');
-subplot(4,1,3);
+subplot(5,1,3);
 plot(timeCollision);
 title('Time to estimate collision');
-subplot(4,1,4);
+subplot(5,1,4)
+plot(timeMovement);
+title('Time to estimate the object movement');
+subplot(5,1,5);
 plot(plotTime);
 title('Time to plot');
 
