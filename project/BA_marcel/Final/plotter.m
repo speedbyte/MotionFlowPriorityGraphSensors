@@ -1,4 +1,4 @@
-function [ f_err ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,plotTime,collisionTime,timeMovement,error)
+function [ err ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,plotTime,collisionTime,timeMovement,error)
 
 
 
@@ -59,10 +59,13 @@ image(F_err);
 title(sprintf('Flow Error: %.2f %',f_err));
 set(fig3, 'Position',[0,0,1000,900]);
 subplot(4,1,4);
-err = sum(error);
-err = (err/x);
-plot(error);
-title(sprintf('Flow Error Mean %2f%',err));
+err = f_err;
+res = error;
+
+plot(res);
+if x > 1
+title(sprintf('Flow Error Mean %2f%',res(x-1)));
+end
 
 figure(4);
 subplot(5,1,1)

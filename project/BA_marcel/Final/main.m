@@ -20,7 +20,8 @@ opticFlow=opticalFlowFarneback;%('NoiseThreshold',0.004);
 frame = zeros(375,1242,3,'uint8');
 bg = zeros(375,1242,3,'uint8');
 plotTime = 1;
-err(1) = 0;
+error(1) = 0;
+error(2) = 0;
 
     for k=1:375
         for j=1:1242
@@ -135,7 +136,9 @@ for x = 1:maxIteration
        end
         
        tic;
-      err(x) =  plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,err);
+      err(x) =  plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,error);
+      errSum = sum(err);
+      error(x) = errSum/x;
       plotTime(x) = toc;
        
     
