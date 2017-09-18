@@ -36,11 +36,11 @@ void video_capture(cv::Mat& image_manual_bare1) {
     // Open video file
     processor.setInput("../../../video_dataset/Megamind.avi");
     processor.setFrameProcessor(canny);
-    processor.setOutput("../../../video_dataset/Megamind_out.avi");
+    processor.configureImageSeqOutput("../../../video_dataset/Megamind_out.avi");
     // Start the process
     processor.run();
 
-    processor.setOutput("bikeOut",  //prefix
+    processor.configureImageSeqOutput("bikeOut",  //prefix
                         ".jpg",     // extension
                         3,          // number of digits
                         0);// starting index

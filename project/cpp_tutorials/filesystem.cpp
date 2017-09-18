@@ -3,7 +3,6 @@
 
 
 #include <sys/stat.h>
-//#include <stdio.h>
 #include <cstdio>
 #include <vector>
 #include <cmath>
@@ -11,6 +10,7 @@
 #include <limits>
 #include <cinttypes>
 #include <iostream>
+#include <boost/filesystem/operations.hpp>
 
 
 void printing() {
@@ -62,8 +62,35 @@ void filesystem() {
     std::printf("Path is a directory : %d \n",S_ISDIR(s1.st_mode));
 }
 
+void boost_filesystem() {
+    boost::filesystem::path curdir = boost::filesystem::current_path();
+    std::cout << curdir.generic_string() << std::endl << curdir.string() << std::endl << curdir
+              << std::endl;
+    for (const auto& dir : curdir) {
+        std::cout << '[' << dir.string() << ']'; // each part
+    }
+}
+
+void boost_program_options() {
+
+/*    cv::CommandLineParser parser(argc, argv, "{@input||}{help h||}");
+    std::string input = parser.get<std::string>("@input");
+
+    if (input.size() == 1 && isdigit(input[0]))
+        cap.open(input[0] - '0');
+    else
+        cap.open(input);
+*/
+
+}
+
+
+
+
 int main()
 {
     printing();
+    boost_filesystem();
+
     return 0;
 }

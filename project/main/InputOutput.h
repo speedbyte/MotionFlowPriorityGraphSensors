@@ -29,25 +29,22 @@ class VideoProcessor {
 
 private:
     // the OpenCV video writer object
-    cv::VideoWriter writer;
-    // output filename
-    std::string outputFile;
+    cv::VideoWriter videoWriter;
+    // the OpenCV video capture object
+    cv::VideoCapture capture;
     // current index for output images
     int currentIndex;
     // number of digits in output image filename
     int digits;
     // extension of output images
     std::string extension;
+    // output Image filename
+    std::string outputImageFile;
 
-    // the OpenCV video capture object
-    cv::VideoCapture capture;
-
-    // the callback function to be called
-    // for the processing of each frame
+    // the callback function to be called for the processing of each frame
     void (*process)(cv::Mat &, cv::Mat &);
 
-    // a bool to determine if the
-    // process callback will be called
+    // a bool to determine if the process callback will be called
     bool callIt;
     // Input display window name
     std::string windowNameInput;
@@ -65,10 +62,54 @@ private:
     std::vector <std::string> images;
     // image vector iterator
     std::vector<std::string>::const_iterator itImg;
-
+    // image vector iterator
     FrameProcessor *frameProcessor;
 
 public:
+    // to write the output frame. output frame could be: video file or images
+    void writeNextFrame(cv::Mat& frame) {
+        if (extension.length()) { // then we write images
+
+            std::stringstream ss;
+            // compose the output filename
+            ss << outputImageFile << std::setfill('0') << std::setw(digits) << currentIndex++ << extension;
+            cv::imwrite(ss.str(),frame);
+
+        } else { // then write to video file 
+            videoWriter.write(frame);
+        }
+    }
+
+    // set the output as a series of image files, extension must be ".jpg", ".bmp" ...
+    bool configureImageSeqOutput(const std::string &filename, // prefix
+                                 const std::string &ext, // image file extension
+                                 int numberOfDigits=3,   // number of digits, example image001.jpg
+                                 int startIndex=0) {     // start index
+
+        // number of digits must be positive
+        if (numberOfDigits<0)
+            return false;
+
+        // filenames and their common extension
+        outputImageFile = filename;
+        extension = ext;
+
+        // number of digits in the file numbering scheme
+        digits= numberOfDigits;
+        // start numbering at this index
+        currentIndex= startIndex;
+
+        return true;
+    }
+
+    double getFrameRate(void) {
+        return videoWriter.get(CV_CAP_PROP_FPS);
+    }
+
+    cv::Size getFrameSize(void) {
+        return cv::Size(512,512);
+    }
+
     // get the codec of input video
     int getCodec(char codec[4]) {
 
@@ -91,57 +132,14 @@ public:
         // return the int value corresponding to the code
         return returned.value;
     }
-    // set the output as a series of image files
-    // extension must be ".jpg", ".bmp" ...
-    bool setOutput(const std::string &filename, // prefix
-                   const std::string &ext, // image file extension
-                   int numberOfDigits=3,   // number of digits
-                   int startIndex=0) {     // start index
 
-        // number of digits must be positive
-        if (numberOfDigits<0)
-            return false;
+    // set the output video file by default the same parameters than input video will be used
+    bool configureVideoOutput(const std::string &filename,
+                                 int codec=0,
+                                 double framerate=0.0,
+                                 bool isColor=true) {
 
-        // filenames and their common extension
-        outputFile= filename;
-        extension= ext;
-
-        // number of digits in the file numbering scheme
-        digits= numberOfDigits;
-        // start numbering at this index
-        currentIndex= startIndex;
-
-        return true;
-    }
-    // to write the output frame
-    // could be: video file or images
-    void writeNextFrame(cv::Mat& frame) {
-        if (extension.length()) { // then we write images
-
-            std::stringstream ss;
-            // compose the output filename
-            ss << outputFile << std::setfill('0') << std::setw(digits) << currentIndex++ << extension;
-            cv::imwrite(ss.str(),frame);
-
-        } else { // then write to video file 
-            writer.write(frame);
-        }
-    }
-
-    int getFrameRate(void) {
-        return writer.get(CV_CAP_PROP_FPS);
-    }
-
-    cv::Size getFrameSize(void) {
-        return cv::Size(512,512);
-    }
-
-    // set the output video file
-    // by default the same parameters than
-    // input video will be used
-    bool setOutput(const std::string &filename, int codec=0, double framerate=0.0, bool isColor=true) {
-
-        outputFile= filename;
+        outputImageFile= filename;
         extension.clear();
 
         if (framerate==0.0)
@@ -155,14 +153,14 @@ public:
         std::cout << "Codec: " << c[0] << c[1] << c[2] << c[3] << std::endl;
 
         // Open output video
-        return writer.open(outputFile, // filename
+        return videoWriter.open(outputImageFile, // filename
                            codec,          // codec to be used
                            framerate,      // frame rate of the video
                            getFrameSize(), // frame size
                            isColor);       // color video?
     }
-    // set the callback function that
-    // will be called for each frame
+
+    // set the callback function that will be called for each frame
     void setFrameProcessor(
             void (*frameProcessingCallback)(cv::Mat &, cv::Mat &)) {
         process = frameProcessingCallback;
@@ -175,8 +173,7 @@ public:
 
         // invalidate callback function
         process= 0;
-        // this is the frame processor instance
-        // that will be called
+        // this is the frame processor instance that will be called
         frameProcessor= frameProcessorPtr;
         callProcess();
     }
@@ -260,7 +257,7 @@ public:
             }
 
             // ** write output sequence **
-            if (outputFile.length()!=0)
+            if (outputImageFile.length()!=0)
                 writeNextFrame(output);
 
             // display output frame
