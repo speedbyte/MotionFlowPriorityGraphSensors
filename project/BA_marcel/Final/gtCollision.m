@@ -55,6 +55,8 @@ for x=1:maxIteration
         relativeGroundTruth(k,j,3) = 1;
         absoluteGroundTruth(k,j,1) = calcMove(1)+j;
         absoluteGroundTruth(k,j,2) = calcMove(2)+k;
+        absoluteGroundTruth(k,j,3) = 1;
+
     end
    end
 
@@ -65,9 +67,10 @@ for k=secondYSpec
         relativeGroundTruth(k,j,3) = 1;
         absoluteGroundTruth(k,j,1) = calcMove(3)+j;
         absoluteGroundTruth(k,j,2) = calcMove(4)+k;
+        absoluteGroundTruth(k,j,3) = 1;
+
     end
 end
-abs1 = absoluteGroundTruth(:,:,1);
 
 %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
 %and Validation bit

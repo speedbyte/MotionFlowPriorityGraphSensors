@@ -7,6 +7,9 @@
 %noise(static, dynamic)
 
 
+%First try of generic trafficing of the objects. Works, but collisions are
+%detected about 5 iterations to soon or too late.
+%Tracking via estimated movement.
 
 
 
@@ -19,6 +22,11 @@ load('collisionVector.mat');
 opticFlow=opticalFlowFarneback;%('NoiseThreshold',0.004);
 frame = zeros(375,1242,3,'uint8');
 plotTime = 1;
+
+trackedActualX = actualX;
+trackedActualY = actualY;
+secondTrackedActualX = secondActualX;
+secondTrackedActualY = secondActualY;
 err = 0;
 
 for x = 1:maxIteration
@@ -49,23 +57,29 @@ for x = 1:maxIteration
     ySpec = actualY:actualY+height; %height
     secondXSpec = secondActualX:secondActualX+width;
     secondYSpec = secondActualY:secondActualY+height;
+    
+    trackedXSpec = trackedActualX:trackedActualX+width;  %width
+    trackedYSpec = trackedActualY:trackedActualY+height; %height
+    secondTrackedXSpec = secondTrackedActualX:secondTrackedActualX+width;
+    secondTrackedYSpec = secondTrackedActualY:secondTrackedActualY+height;
+    
     absoluteFlow = zeros(375,1242,3,'int16');
     
   
     %create the frame
     disp(x);
     frame = movement(xSpec,ySpec,secondXSpec,secondYSpec);
-    
-    %add noise
-    
-    frame = imnoise(frame,'gaussian',0.001);
-
     timeToGenerateObject(x) = toc;
     
     %%
     %Optical Flow
    tic;
+       frame = imnoise(frame,'speckle',0.0005);
+    imshow(frame);
    frame_gray = rgb2gray(frame);
+   level = graythresh(frame_gray);
+   BW = imbinarize(frame_gray,level);
+   imshow(BW);
    flow_frame = estimateFlow(opticFlow,frame_gray);
    flowstop(x) = toc;
    
@@ -87,18 +101,18 @@ for x = 1:maxIteration
       %get absolute estimated flow.
       
          tic;
-         [estMovement] = estimatedMovement(flow, xSpec,ySpec, secondXSpec,secondYSpec);
+         [estMovement] = estimatedMovement(flow, trackedXSpec,trackedYSpec, secondTrackedXSpec,secondTrackedYSpec);
          timeMovement(x) = toc;
 
-        for k=ySpec
-            for j=xSpec
+        for k=trackedYSpec
+            for j=trackedXSpec
                 absoluteFlow(k,j,1) = estMovement(1)+j;
                 absoluteFlow(k,j,2) = estMovement(2)+k;
                 absoluteFlow(k,j,3) = 1;
             end
         end
-        for k=secondYSpec
-            for j=secondXSpec
+        for k=secondTrackedYSpec
+            for j=secondTrackedXSpec
                 absoluteFlow(k,j,1) = estMovement(3)+j;
                 absoluteFlow(k,j,2) = estMovement(4)+k;
                 absoluteFlow(k,j,3) = 1;
@@ -114,7 +128,7 @@ for x = 1:maxIteration
         
         tic;
         
-         estimatedCollision = flowCollision(absoluteFlow, xSpec,ySpec, secondXSpec,secondYSpec);
+         estimatedCollision = flowCollision(absoluteFlow, trackedXSpec,trackedYSpec, secondTrackedXSpec,secondTrackedYSpec);
         collisionTime(x) = toc;
         
        if estimatedCollision == 1
@@ -128,13 +142,19 @@ for x = 1:maxIteration
       plotTime(x) = toc;
     
     %%
-    %Update position(the objects of interest are tracked via Ground Truth
-    %here)
-
+    %Update position. First real position for drawing, then tracked
+    %position. The tracking is done via magnitude at the moment. 
     actualX = xPos(start+iterator);
     actualY = yPos(start+iterator);
     secondActualX = xPos(secondStart+sIterator);
     secondActualY = yPos(secondStart+sIterator);
+    
+    trackedActualX = trackedActualX + round(estMovement(1));
+    trackedActualY = trackedActualY + round(estMovement(2));
+    secondTrackedActualX = secondTrackedActualX + round(estMovement(3));
+    secondTrackedActualY = secondTrackedActualY + round(estMovement(4));
+    
+    
     
   
     iterator = iterator+1;

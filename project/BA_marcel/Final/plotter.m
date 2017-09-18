@@ -1,4 +1,4 @@
-function [ output_args ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,timeCollision,plotTime,timeMovement)
+function [ f_err ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,plotTime,collisionTime,timeMovement,err)
 
 
 
@@ -47,30 +47,40 @@ F_est = flow_read('result.png');
 f_err = flow_error(F_gt,F_est,tau);
 F_err = flow_error_image(F_gt,F_est,tau);
 fig3 = figure(3);
-subplot(3,1,1);
+subplot(4,1,1);
 image(flow_to_color(F_est,100));
 title('Estimated Flow');
-subplot(3,1,2)
+subplot(4,1,2)
 image(flow_to_color(F_gt,100));
 title('Ground Truth Flow');
-subplot(3,1,3);
+subplot(4,1,3);
 image(F_err);
 title(sprintf('Flow Error: %.2f %',f_err*100));
 set(fig3, 'Position',[0,0,1000,900]);
+
+subplot(4,1,4);
+sum(err);
+err = err/x;
+plot(err);
+title(sprintf('Flow Error Mean %2f%',err));
 
 figure(4);
 subplot(5,1,1)
 plot(timeToGenerateObject);
 title('Time to generate and move Object');
+ylim([0,0.1]);
 subplot(5,1,2)
 plot(flowstop);
 title('Time to estimate Optical Flow');
-subplot(5,1,3);
-plot(timeCollision);
-title('Time to estimate collision');
-subplot(5,1,4)
+ylim([0,0.5]);
+subplot(5,1,3)
 plot(timeMovement);
-title('Time to estimate the object movement');
+title('Time to estimate the object movement ');
+ylim([0,0.05]);
+subplot(5,1,4);
+plot(collisionTime);
+
+title('Time to estimate collision');
 subplot(5,1,5);
 plot(plotTime);
 title('Time to plot');

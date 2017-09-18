@@ -2,7 +2,7 @@ function [ movement ] =  gtMovement(xPos,yPos,start,secondStart,iterator,sIterat
 
 
 
-if x == 1
+if x == 1 
     xMovement = 0;
     secondXMovement = 0;
     yMovement = 0;
