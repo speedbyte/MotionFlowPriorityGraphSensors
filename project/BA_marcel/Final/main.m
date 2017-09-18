@@ -18,8 +18,19 @@ load('collisionVector.mat');
 
 opticFlow=opticalFlowFarneback;%('NoiseThreshold',0.004);
 frame = zeros(375,1242,3,'uint8');
+bg = zeros(375,1242,3,'uint8');
 plotTime = 1;
-err = 0;
+err(1) = 0;
+
+    for k=1:375
+        for j=1:1242
+                bg(k,j,1) = randi([0,255]);
+                bg(k,j,2) = randi([0,255]);
+                
+                
+        end
+    end
+
 
 for x = 1:maxIteration
 
@@ -54,11 +65,11 @@ for x = 1:maxIteration
   
     %create the frame
     disp(x);
-    frame = movement(xSpec,ySpec,secondXSpec,secondYSpec);
+    frame = movement(xSpec,ySpec,secondXSpec,secondYSpec,bg);
     
     %add noise
     
-    frame = imnoise(frame,'gaussian',0.001);
+  %  frame = imnoise(frame,'gaussian',0.001);
 
     timeToGenerateObject(x) = toc;
     
@@ -124,8 +135,9 @@ for x = 1:maxIteration
        end
         
        tic;
- err(x) =  plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,err);
+      err(x) =  plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,err);
       plotTime(x) = toc;
+       
     
     %%
     %Update position(the objects of interest are tracked via Ground Truth

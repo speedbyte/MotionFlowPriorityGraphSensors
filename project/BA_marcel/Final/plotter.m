@@ -1,4 +1,4 @@
-function [ f_err ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,plotTime,collisionTime,timeMovement,err)
+function [ f_err ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,plotTime,collisionTime,timeMovement,error)
 
 
 
@@ -45,6 +45,7 @@ addpath(genpath('./Kitti'));
 F_gt = flow_read(name);
 F_est = flow_read('result.png');
 f_err = flow_error(F_gt,F_est,tau);
+f_err = f_err*100;
 F_err = flow_error_image(F_gt,F_est,tau);
 fig3 = figure(3);
 subplot(4,1,1);
@@ -55,13 +56,12 @@ image(flow_to_color(F_gt,100));
 title('Ground Truth Flow');
 subplot(4,1,3);
 image(F_err);
-title(sprintf('Flow Error: %.2f %',f_err*100));
+title(sprintf('Flow Error: %.2f %',f_err));
 set(fig3, 'Position',[0,0,1000,900]);
-
 subplot(4,1,4);
-sum(err);
-err = err/x;
-plot(err);
+err = sum(error);
+err = (err/x);
+plot(error);
 title(sprintf('Flow Error Mean %2f%',err));
 
 figure(4);

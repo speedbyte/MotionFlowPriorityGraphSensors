@@ -1,4 +1,4 @@
-function [ frame ] = movement(xSpec,ySpec,secondXSpec,secondYSpec )
+function [ frame ] = movement(xSpec,ySpec,secondXSpec,secondYSpec,bg )
 %MOVEMENT Summary of this function goes here
 %   Detailed explanation goes here
 frame = zeros(375,1242,3,'uint8');
@@ -9,11 +9,12 @@ b = 0;
     %reset the image to white
     for k=1:375
         for j=1:1242
-            for i=1:3
-                frame(k,j,i) = 255;
-            end
+                frame(k,j,1) = 255;
+                frame(k,j,2) = 255;
+                frame(k,j,3) = 255;            
         end
     end
+    
     %draw new image.
     for k = ySpec
         for j= xSpec
@@ -50,3 +51,4 @@ b = 0;
              end
         end
     end
+    
