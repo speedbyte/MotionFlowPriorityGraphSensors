@@ -1,6 +1,10 @@
 
 /**
 
+ Presentation:
+ 4 kind of environments  - self developed, external dataset, vires dataset, real environment
+ 3 layers - ground truth generation, noise induction, evaluation of algorithm
+
  Papers:
 
  Ground truth with pedesterians: 118,119,150,167,169 ( 169 is the best )
