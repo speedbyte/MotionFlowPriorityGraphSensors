@@ -17,7 +17,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3")
 #target_compile_definitions(my_target PRIVATE FOO=1 BAR=1)
 #set_source_files_properties(foo.cpp PROPERTIES COMPILE_DEFINITIONS -DFOO=1)
 
-find_package(OpenCV COMPONENTS core highgui imgcodecs imgproc REQUIRED)
+find_package(OpenCV COMPONENTS core highgui imgcodecs imgproc videoio REQUIRED)
 find_package(Boost COMPONENTS system filesystem iostreams REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
