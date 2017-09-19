@@ -87,6 +87,8 @@ void mat() {
     cv::Mat mat6(cv::Size(3,4),CV_32FC1,data2,sizeof(float));
     cv::Mat eyeMat1C = cv::Mat::eye(3,4,CV_32FC1);
     cv::Mat eyeMat2C = cv::Mat::eye(3,4,CV_32FC2);
+    cv::Mat createMe;
+    createMe.create(3,4,CV_8UC3);
 
     int sz[] = {30, 30, 30};
     cv::Mat bigCube1(3, sz, CV_32FC3);
@@ -204,13 +206,13 @@ void saturation_cast() {
 
 int main ( int argc, char *argv[]) {
 
-    point_();
-    size_();
-    vector_();
-    matx_();
-    mat_();
+//    point_();
+//    size_();
+//    vector_();
+//    matx_();
+//    mat_();
     mat();
-    mat_multiplication();
+//    mat_multiplication();
 
     /*
     //Very very large operation

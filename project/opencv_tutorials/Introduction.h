@@ -166,7 +166,7 @@
     .tif or .tiff: TIFF; 8- or 16-bit; one-, three-, or four-channel input
     .png: PNG; 8- or 16-bit; one-, three-, or four-channel input
     .bmp: BMP; 8-bit; one-, three-, or four-channel input
-    .ppm, .pgm: NetPBM; 8-bit; one-channel (PGM) or three-channel (PPM)
+    .ppm, .pgm: NetPBM; 8-bit; one-channel (PGM - portable gray map ) or three-channel (PPM - pixmap), (PBM - bitmap) .
 
  Sometimes, it is important to provide the matrix data as text data and not binary data. This is important for
  example to save calibration values of the camera. Ofcourse, the calibration values could be saved as bin files, but
@@ -512,7 +512,8 @@ That's how you find the standard deviation.
 
 
   Scalar:
-  Scalar is just for ease of use. As most of OpenCV operates on maximum 4 channel images, so Scalar is a simple class which is actually a cv::Vec of length 4, which can be used by OpenCV
+  Scalar is just for ease of use. As most of OpenCV operates on maximum 4 channel images, so Scalar is a simple class
+  which is actually a cv::Vec of length 4, which can be used by OpenCV
   algorithms according to number of channels of the image. Instead of creating an array of different
   length each time, you just pass a scalar value to the algorithm.
 
@@ -717,6 +718,9 @@ That's how you find the standard deviation.
 
  Algorithms:
 
+ Harris Method - computes derivative operators, analyses them and returns a list of the points that meet our definition.
+ Shi and Tomasi method
+
  Inverse Matrix:
  Sometimes, the calculation needs to be aborted, if the matrix is singular. For example an inverse would make no
  sense for singular matrix. But the calculation is costly and hence, there are methods where a matrix can be
@@ -763,7 +767,8 @@ That's how you find the standard deviation.
  The linear least square method is most widely solved by QR Decomposition method.
 
 
-
+ cv::goodFeaturesToTrack():
+    tempted to look for points that have some significant change in them - for example, a strong derivative.
 
 
 
