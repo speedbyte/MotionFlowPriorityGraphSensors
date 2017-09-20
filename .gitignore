@@ -13,3 +13,7 @@ release/
 .pydevproject
 *.o
 *.swp
+*.png
+*.mat
+matlab/
+*.avi

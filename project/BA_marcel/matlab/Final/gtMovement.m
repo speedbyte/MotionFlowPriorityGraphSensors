@@ -1,4 +1,4 @@
-function [ movement ] =  gtMovement(xPos,yPos,start,sStart,iterator,sIterator,x)
+function [ movement ] =  gtMovement(xPos,yPos,start,secondStart,iterator,sIterator,x)
 
 
 
@@ -19,7 +19,7 @@ end
 
     
     
-if sIterator+sStart > length(xPos)
+if sIterator+secondStart > length(xPos)
     secondXMovement = xPos(1) - xPos(length(xPos));
     secondYMovement = yPos(1) - yPos(length(yPos));
 end
@@ -33,9 +33,9 @@ if iterator+start <= length(xPos)
 end
     
 
-if sIterator+sStart <= length(xPos)
-    secondXMovement = xPos(sStart+sIterator) - xPos(sStart+sIterator-1);
-        secondYMovement = yPos(sStart+sIterator) - yPos(sStart+sIterator-1);
+if sIterator+secondStart <= length(xPos)
+    secondXMovement = xPos(secondStart+sIterator) - xPos(secondStart+sIterator-1);
+        secondYMovement = yPos(secondStart+sIterator) - yPos(secondStart+sIterator-1);
 end
 
 
@@ -44,12 +44,3 @@ end
 
 movement = [xMovement,yMovement,secondXMovement,secondYMovement];
 end
-
-
-
-    
-    
-
-
-
-
