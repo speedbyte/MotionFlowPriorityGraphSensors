@@ -117,7 +117,7 @@ movement = [xMean,yMean,secondObjectXMean,secondObjectYMean];
 
 %Estimate the future collision. Floor call in order to get possibly matching results
     
-for i = 1:2
+for i = 1:5
     ySpec = floor(ySpec+yMean);
     xSpec = floor(xSpec+xMean);
     secondYSpec = floor(secondYSpec+secondObjectYMean);
@@ -128,6 +128,7 @@ for i = 1:2
     
     if ~isempty(checkX) & ~isempty(checkY)
         estCollision = 1;
+        break;
     end
 end
 

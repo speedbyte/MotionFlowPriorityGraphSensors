@@ -7,8 +7,8 @@ clear all;
 close all;
 tic;
 %Creating a movement path. The path is stored in a x and y vector
-theta = 1:0.5:360;
-for x=1:719
+theta = 1:360;
+for x=1:360
     xPos(x)=600+round(500*cos(theta(x)*3.14/180)/(1+power(sin(theta(x)*3.14/180),2)));
     yPos(x)= 150+round(55*(cos(theta(x)*3.14/180)*sin(theta(x)*3.14/180))/(0.2+power(sin(theta(x)*3.14/180),2)));
 end
@@ -36,7 +36,7 @@ secondActualY = secondYOrigin;
 
 
 %how many interations(frames)?
-maxIteration = 1000;
+maxIteration = 360;
 
 
 %save this workspace to call it from the other functions
