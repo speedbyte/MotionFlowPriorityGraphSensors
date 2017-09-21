@@ -1,15 +1,35 @@
 
 /**
 
+ Related Work:
+
+ http://vision.middlebury.edu/flow/floweval-ijcv2011.pdf,
+    Seite Nr. 19 ist einen Überblick der verschiedene Algorithm mit deren Runtime.
+    Colorcode steht in 13 und flow error in 25
+ Laboratory
+
+ Ford Campus Vision and Lidar Data Set
+
+ Michigan University
+
+ Kitti:
+ because it was found that high ranked optical flow algorithms in lab, fail in the real world. Hence kitti was
+ designed for the real world.
+
+
  Presentation:
+ noise induction = { simple, rain noise }
+ 2 sensor data - light spectrum and radio spectrum
  4 kind of environments  - self developed, external dataset, vires dataset, real environment
- 3 layers - ground truth generation, noise induction, evaluation of algorithm
+ 4 layers - ground truth generation, noise induction[2], store returned intensity value*, inspect the returned
+ intensity values using a well establised algorithm, publish paper
+
+ *1 The assumption is that the intensity value returned would be different in different noise environments.
+ *2 The chose of well established algorithm is described below.
 
  Choice of algorithm -
-  - Later, intensity would be the primary goal and hence, optical flow was chosen, which uses intensity of the pixels
-  inputs.
-
- Papers:
+  - Optical flow was chosen, because it works on the principles of intensity movement. The algorithm tracks the
+  intensities in the sensor database.
 
  Ground truth with pedesterians: 118,119,150,167,169 ( 169 is the best )
  5 percent or 3px displacement error means that the differnce between the ground truth and the generated displacement
@@ -51,7 +71,6 @@
 
  Input classes for statistical regression:
  Salt and Pepper Noise
-
 
  Fingerprinting to determine the robustness of optical flow algorithms.
  Computational complexity is the next step to determine how many BigOh's are required to complete the algorithm. The

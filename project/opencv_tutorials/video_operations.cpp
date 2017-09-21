@@ -1,10 +1,8 @@
 
 
-#include <opencv2/videoio.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <iostream>
-#include <opencv/cv.hpp>
 
 #include "opencv2/video/tracking.hpp"
 #include "opencv2/imgproc.hpp"
@@ -94,57 +92,7 @@ int FlowPoints(cv::Mat frame, struct Points pts, cv::Size frame_size, double ang
 }
 
 
-struct Points FramesToPointerBM( struct TwoFrames tf, CvSize fs ){
-
-    static cv::Mat frame1, frame1_1C, frame2_1C, pyramid1, pyramid2;
-    static CvPoint point;
-
-    frame1_1C.create( fs, CV_8UC1 ); 	//Alokieren des Bildes frame1_C1
-    cv::cvtColor(tf.frame1, frame1_1C, CV_CVTIMG_FLIP);	//�bertragen au das Bild des erste Frames
-
-    frame1.create( fs, CV_8UC1 );
-    cv::cvtColor(tf.frame1, frame1, CV_CVTIMG_FLIP);
-
-    frame1.create( fs, CV_8UC1 );
-    cv::cvtColor(tf.frame2, frame2_1C, CV_CVTIMG_FLIP);
-
-    //cv::Size blockSice = cv::Size(40,40);
-    cv::Size blockSize = cv::Size(4,4);
-    cv::Size shiftSize = cv::Size(1,1);
-    cv::Size maxRange = cv::Size(3,3);
-
-    pyramid1.create(cv::Size(fs.width/blockSize.width,fs.height/blockSize.height),CV_32FC1);
-    pyramid2.create(cv::Size(fs.width/blockSize.width,fs.height/blockSize.height),CV_32FC1);
-
-    //cv::calcOpticalFlowBM( frame1_1C, frame2_1C, blockSize, shiftSize, maxRange, 0, pyramid1, pyramid2 );
-
-    cv::imshow("Optical Flow from Cam 1",frame1_1C);
-    cv::imshow("Optical Flow from Cam 2",frame2_1C);
-
-    CvPoint d, b;
-    b.x = 0;
-    b.y = 0;
-    d.x = 0;
-    d.y = 0;
-
-    for(int i=0;i<pyramid1.rows;i+=3)
-    {
-        b.y = i*blockSize.height; //height
-        for(int j=0;j<pyramid1.cols;j+=3)
-        {
-            b.x = j*blockSize.width; //width
-            d.x = b.x + (int)( (( (float*)(pyramid1.data + i*pyramid1.step) )[j] )*blockSize.width);
-            d.y = b.y + (int)((( ( (float*)(pyramid2.data + i*pyramid2.step) )[j] ))*blockSize.height);
-        }
-    }
-
-    struct Points pointer;
-    pointer.p1 = b;
-    pointer.p2 = d;
-    return pointer;
-}
-
-struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
+struct Points FramesToPointsPyrLK( struct TwoFrames tf, cv::Size fs ){
 
     const int Feat_Count = 300 ; // war zu Beginn auf 400 - Anzahl der Pfeile
 
@@ -152,24 +100,21 @@ struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
     static cv::Point point;
 
     frame1_1C.create( fs, CV_8UC1 ); 	//Alokieren des Bildes frame1_C1
-    cv::cvtColor(tf.frame1, frame1_1C, CV_CVTIMG_FLIP);	//�bertragen au das Bild des erste Frames
-
-    frame1.create(  fs, CV_8UC1 );
-    cv::cvtColor(tf.frame1, frame1, CV_CVTIMG_FLIP);
+    cv::cvtColor(tf.frame1, frame1_1C, CV_CVTIMG_FLIP);	//Übertragen au das Bild des erste Frames
 
     frame2_1C.create(  fs, CV_8UC1 );
     cv::cvtColor(tf.frame2, frame2_1C, CV_CVTIMG_FLIP);
+
+    frame1.create(  fs, CV_8UC1 );
+    cv::cvtColor(tf.frame1, frame1, CV_CVTIMG_FLIP);
 
     eig_image.create(  fs, CV_32FC1);
     temp_image.create(  fs, CV_32FC1);
 
     std::vector<cv::Point2f> frame1_features(Feat_Count);
 
-    int number_of_features;
-    int number_of_good_features;
-
-    number_of_features = Feat_Count; // <- 400
-    number_of_good_features = Feat_Count;
+    int number_of_features = Feat_Count;
+    int number_of_good_features = Feat_Count;
 
     /**
     void cv::goodFeaturesToTrack(
@@ -184,21 +129,11 @@ struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
             bool            useHarrisDetector = false,     // false='Shi Tomasi metric'
             double          k                 = 0.04       // Used for Harris metric
     );
-
-    CVAPI(void)  cvGoodFeaturesToTrack( const CvArr* image, CvArr* eig_image,
-                                        CvArr* temp_image, CvPoint2D32f* corners,
-                                        int* corner_count, double  quality_level,
-                                        double  min_distance,
-                                        const CvArr* mask CV_DEFAULT(NULL),
-                                        int block_size CV_DEFAULT(3),
-                                        int use_harris CV_DEFAULT(0),
-                                        double k CV_DEFAULT(0.04) );
     */
 
     cv::goodFeaturesToTrack(frame1_1C, frame1_features, number_of_features, .01, .01, cv::noArray(), 3, 0, 0.04);
 
-    int i;
-    for (i = 0; i < Feat_Count; i++){
+    for (int i = 0; i < Feat_Count; i++){
         cv::circle(tf.frame1,cv::Point2f(frame1_features[i].x,frame1_features[i].y),1,cvScalar(0,250,250,0));
     }
 
@@ -211,8 +146,7 @@ struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
 
     cv::Size optical_flow_window = cv::Size(10,10);
 
-    CvTermCriteria optical_flow_termination_criteria
-            = cvTermCriteria( CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 3 );
+    cv::TermCriteria optical_flow_termination_criteria( CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 3 );
 
     pyramid1.create(fs, CV_8UC1);
     pyramid2.create(fs, CV_8UC1);
@@ -223,17 +157,6 @@ struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
    every point at every pyramid level.
    Calculates optical flow between two images for certain set of points (i.e.
    it is a "sparse" optical flow, which is opposite to the previous 3 methods)
-    CVAPI(void)  cvCalcOpticalFlowPyrLK( const CvArr*  prev, const CvArr*  curr,
-                                         CvArr*  prev_pyr, CvArr*  curr_pyr,
-                                         const CvPoint2D32f* prev_features,
-                                         CvPoint2D32f* curr_features,
-                                         int       count,
-                                         CvSize    win_size,
-                                         int       level,
-                                         char*     status,
-                                         float*    track_error,
-                                         CvTermCriteria criteria,
-                                         int       flags );
 
  void cv::calcOpticalFlowPyrLK(
   cv::InputArray       prevImg,            // Prior image (t-1), CV_8UC1
@@ -255,7 +178,6 @@ struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
 
  */
 
-
     cv::calcOpticalFlowPyrLK(frame1_1C, frame2_1C, frame1_features, frame2_features,
                                      optical_flow_found_feature, optical_flow_feature_error,
                                      optical_flow_window, 3, optical_flow_termination_criteria, 0 );
@@ -263,12 +185,10 @@ struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
     cv::imshow("Optical Flow from Cam 1",frame1_1C);
     cv::imshow("Optical Flow from Cam 2",frame2_1C);
 
-    for( i = 0; i < number_of_features; i++)
+    for( int i = 0; i < number_of_features; i++)
     {
         printf("%f \t, %f \n", frame1_features[i].x ,frame2_features[i].x );
     }
-    //cvWaitKey(0);
-
 
     cv::Point d, b;
     b.x = 0;
@@ -276,15 +196,13 @@ struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
     d.x = 0;
     d.y = 0;
 
-
-    for( i = 0; i < number_of_features; i++)
+    for( int i = 0; i < number_of_features; i++)
     {
         /* If Pyramidal Lucas Kanade didn't really find the feature, skip it. */
         if (optical_flow_found_feature[i] == 0) {
             number_of_good_features--;
             continue;
         }
-
 
         cv::Point p,q;
         p.x = (int) frame1_features[i].x;
@@ -313,112 +231,17 @@ struct Points FramesToPointerPyrLK( struct TwoFrames tf, cv::Size fs ){
     return pointer;
 }
 
-struct Points FramesToPointsHS( struct TwoFrames tf, cv::Size fs ){
 
-    static cv::Mat frame1, frame1_1C, frame2_1C, eig_image, temp_image, pyramid1, pyramid2;
-    cv::Mat flow(tf.frame1.rows, tf.frame1.cols, CV_32FC2);
-
-/**
- void cv::calcOpticalFlowFarneback(
-  cv::InputArray       prevImg,    // An input image
-  cv::InputArray       nextImg,    // Image immediately subsequent to 'prevImg'
-  cv::InputOutputArray flow,       // Flow vectors will be recorded here
-  double               pyrScale,   // Scale between pyramid levels (< '1.0')
-  int                  levels,     // Number of pyramid levels
-  int                  winsize,    // Size of window for pre-smoothing pass
-  int                  iterations, // Iterations for each pyramid level
-  int                  polyN,      // Area over which polynomial will be fit
-  double               polySigma,  // Width of fit polygon, usually '1.2*polyN'
-  int                  flags       // Option flags, combine with OR operator
-
- The polyN argument determines the size of the area considered when fitting the polynomial around a point. This is
- different from winsize, which is used only for presmoothing. polyN could be thought of as analogous to the window
- size associated with Sobel derivatives. If this number is large, high-frequency fluctuations will not contribute to
- the polynomial fitting. Closely related to polyN is polySigma, which is the source of the intrinsic scale for the
- motion field. The derivatives computed as part of the fit use a Gaussian kernel (not the one associated with the
- smoothing) with variance polySigma and whose total extent is polyN. The value of polySigma should be a bit more than
- 20% of polyN. (The pairings polyN=5, polySigma=1.1, and polyN=7, polySigma=1.5 have been found to work well and are
- recommended in source code.
-);
-
-/* Estimate optical flow for each pixel using the two-frame G. Farneback algorithm
-    CVAPI(void) cvCalcOpticalFlowFarneback( const CvArr* prev, const CvArr* next,
-                                            CvArr* flow, double pyr_scale, int levels,
-                                            int winsize, int iterations, int poly_n,
-                                            double poly_sigma, int flags );
- */
-
-    int polyN = 5;
-    double polySigma = 1.5;
-    double pyrScale = 0.5;
-    int winsize = 5;
-    int levels = 2;
-    int iterations = 3;
-
-    cv::calcOpticalFlowFarneback(tf.frame1, tf.frame2, flow, pyrScale, levels, winsize,iterations,polyN,polySigma,
-                                 cv::OPTFLOW_FARNEBACK_GAUSSIAN);
-
-    cv::Point d, b,p,q;
-    b.x = 0;
-    b.y = 0;
-    d.x = 0;
-    d.y = 0;
-    p.x = 0;
-    p.y = 0;
-    q.x = 0;
-    q.y = 0;
-
-    cv::imshow("Optical Flow from Cam 2", pyramid1); // zeigt die ermittelten Bewegungsframes, in x- und y-Richtung
-    cv::imshow("Optical Flow from Cam", pyramid2);
-
-    //auswertung der Velx und Vely Bilder !!!
-
-    for(int i=0;i<pyramid1.rows;i+=3)
-    {
-        b.y = i; //height
-
-        int j;
-        for (j=0;j<pyramid1.cols;j+=3)
-        {
-            b.x = j; //width
-            d.x = b.x + (int)( ( (float*)(pyramid1.data + i*pyramid1.step) )[j] );
-            d.y = b.y + (int)( ( (float*)(pyramid2.data + i*pyramid2.step) )[j] );
-            p.x=(p.x + b.x);
-            p.y=(p.y + b.y);
-            q.x=(q.x + d.x);
-            q.y=(q.y + d.y);
-
-        }
-    }
-
-    struct Points pointer;
-    pointer.p1 = p;
-    pointer.p2 = q;
-    return pointer;
-}
-
-
-//Fuktion die anhand der l�nge des Vektors eine Dauer in mS ausgibt um optimal den Flow zu erkennen
-int lenghtToLooptime(int lenght){
-    /*if (lenght < 10) return 500;
-    if (20 > lenght > 10) return 250;
+//Fuktion die anhand der länge des Vektors eine Dauer in mS ausgibt um optimal den Flow zu erkennen
+int lengthToLooptime(int length){
+    /*if (length < 10) return 500;
+    if (20 > length > 10) return 250;
     else return 125; */
-    if (lenght < 5) return 250;
-    if (10 > lenght && lenght> 5) return 125;
+    if (length < 5) return 250;
+    if (10 > length && length> 5) return 125;
     else return 60;
 }
 
-//Funktion zum Einstellen der Wartezeit bis zum Loopende
-/*int looptime (int t_u, int t_s, int looptime){
-     struct timeval tv;
-     struct timezone tz;
-     gettimeofday(&tv, &tz);
-     t_s = tv.tv_sec - t_s;
-     t_u = tv.tv_usec - t_u;
-     int tsp = (t_s * 1000000) + t_u;
-     if ((looptime - (tsp/1000)) < 1) return 1;
-     else return (looptime - (tsp/1000));
-}*/
 
 struct Points CalcTriPtr (struct Points pts1,struct Points pts2,struct Points pts3){
     struct Points pts_x;
@@ -430,7 +253,7 @@ struct Points CalcTriPtr (struct Points pts1,struct Points pts2,struct Points pt
 }
 
 
-int main_opticalflow_comparison() {
+int main_opticalflow_comparison(boost::filesystem::path video_path) {
 
     printf("Start \n");
     int p[3];
@@ -439,25 +262,18 @@ int main_opticalflow_comparison() {
     p[2] = 0;
 
     int LOOPtime = 100;
-    //double poineter_scale = 0.3;
-    int loop = 1;
-    //int wait_time = 1;
     CvFont Font_= cvFont(0.5,1); //Vareablen zur Textausgabe
     char str[256];
     char str2[256];
 
     cv::VideoCapture input_video;
-    input_video.open(0);
-    if (input_video.isOpened() == NULL)
+    input_video.open(video_path.string());
+    if (input_video.isOpened() == 0)
     {
-        /* Either the video didn't exist OR it uses a codec OpenCV
-         * doesn't support.
-         */
-        fprintf(stderr, "Error: No Camera found.\n");
+        fprintf(stderr, "Error: No video is found or codec not supported\n");
         return -1;
     }
-    printf("Cam AN \n");
-
+    printf("Open video \n");
 
     /* Read the video's frame size out of the Cam */
     cv::Size frame_size;
@@ -467,31 +283,25 @@ int main_opticalflow_comparison() {
     cvNamedWindow("Optical Flow from Cam 1", 0);
     cvNamedWindow("Optical Flow from Cam 2", 0);
 
-    printf("Fenster AN \n");
-
-    //zeiten fur die ausgabe
-    int t_0 = 0, t_1;
-
     //Schreibt das Video mit
-    boost::filesystem::path VideoPath = "../../../video_dataset/Mitschnitt.mpeg";
-    boost::filesystem::path BildPath = "../../../video_dataset/Bild.jpg";
-    boost::filesystem::path TextPath = "../../../video_dataset/Werte.txt";
-
-
+    boost::filesystem::path VideoOutFile = video_path.parent_path();
+    VideoOutFile += "/optical_flow";
+    boost::filesystem::path BildOutFile = video_path.parent_path();
+    BildOutFile += "/Bild.jpg";
+    boost::filesystem::path TextOutFile = video_path.parent_path();
+    TextOutFile += "/Werte.txt";
 
     cv::Mat image, frame, gray;
 
     cv::VideoWriter video_out;
-    video_out.open(VideoPath.string(),CV_FOURCC('P','I','M','1'),25,frame_size);
+    video_out.open(VideoOutFile.string(),CV_FOURCC('P','I','M','1'),25,frame_size);
     printf("Writer eingerichtet\n");
 
-    //strukturen f�r die Frames
+    //strukturen für die Frames
     struct TwoFrames Two_F;
     struct TwoFrames Two_F2;
     cv::Mat RecordFrame;
     RecordFrame.create(frame_size, CV_8UC3);
-    // Two_F2.frame1.create(frame_size, CV_8UC1 );
-    // Two_F2.frame2.create(frame_size, CV_8UC1 );
 
     Two_F2.frame1.create(frame_size, CV_8UC1 );
     Two_F2.frame2.create(frame_size, CV_8UC1 );
@@ -505,7 +315,10 @@ int main_opticalflow_comparison() {
 
     int RecordFlag;
     FILE *datei;
-    datei = fopen (TextPath.string(), "w");
+    char fileName[200];
+    sprintf(fileName, "%s", TextOutFile.string().data());
+    memcpy(fileName, TextOutFile.string().data(), TextOutFile.string().size());
+    datei = std::fopen(fileName, "w");
     fprintf(datei,"Loop;Zeit[ms];Länge;LängeX;LängeY\n");
 
     //Zeitsteuerung über clock()
@@ -513,7 +326,7 @@ int main_opticalflow_comparison() {
     start2 = clock();
 
     int i = 0;
-    char c = NULL;
+    char c = '\0';
 
     while(c != 'q') {
 
@@ -522,14 +335,14 @@ int main_opticalflow_comparison() {
         start = clock(); // Z�hlt cpu-Ticks, ungefair 1 000 000 pro Sekunde
 
         input_video.read(Two_F.frame1); //holt ein Bild von der Kamera
-        cv::imwrite(BildPath.string() ,Two_F.frame1); // speichert und läd das bild wieder
-        Two_F.frame1 = cv::imread(BildPath.string(),0); // so verschlechtert sich die qualität
+        cv::imwrite(BildOutFile.string() ,Two_F.frame1); // speichert und läd das bild wieder
+        Two_F.frame1 = cv::imread(BildOutFile.string(),0); // so verschlechtert sich die qualität
 
         //cvWaitKey(LOOPtime/2);
 
         input_video.read(Two_F.frame2); //holt ein Bild von der Kamera
-        cv::imwrite(BildPath.string() ,Two_F.frame2); // speichert und läd das bild wieder
-        Two_F.frame2 = cv::imread(BildPath.string(),0); // so verschlechtert sich die qualität
+        cv::imwrite(BildOutFile.string() ,Two_F.frame2); // speichert und läd das bild wieder
+        Two_F.frame2 = cv::imread(BildOutFile.string(),0); // so verschlechtert sich die qualität
 
         end = clock();
 
@@ -547,21 +360,19 @@ int main_opticalflow_comparison() {
 		cv::imshow("Optical Flow from Cam 2", Two_F2.frame2);
 
         // diese Funktionen verwandeln zwei Bilder in einen 2D-Richtungsvektor
-        pts = FramesToPointsHS(Two_F2,frame_size);			//mit dem HS OF Allgoritm  "cvCalcOpticalFlowHS"
-        //pts = FramesToPointsPyrLK(Two_F2,frame_size);		//mit dem LK OF Allgoritm  "cvCalcOpticalFlowPyrLK"
-        //pts = FramesToPointsBM(Two_F2,frame_size);				//mit dem HS OF Allgoritm  "cvCalcOpticalFlowBM"
-
+        pts = FramesToPointsPyrLK(Two_F2,frame_size);		//mit dem LK OF Allgoritm  "cvCalcOpticalFlowPyrLK"
 
 
         double angle;		angle = atan2( (double) pts.p1.y - pts.p2.y, (double) pts.p1.x - pts.p2.x );
-        //double hypotenuse;	hypotenuse = sqrt( square(p.y - q.y) + square(p.x - q.x) );
+        double hypotenuse;	hypotenuse = sqrt( pow((pts.p1.y - pts.p2.y),2) + pow((pts.p1.x - pts.p2.x),2) );
         FlowPoints(Two_F.frame1,pts,frame_size, angle,LOOPtime);
 
         end = clock();
+
         sprintf(str, "Alg: %i ", (int)((end - start)));
         cv::putText(Two_F.frame1, str, cv::Point(10, 10), Font_.font_face, 1,  cvScalar(0, 0, 0, 0));
         cv::putText(Two_F.frame1, str2, cv::Point(10, 20), Font_.font_face, 1,  cvScalar(0, 0, 0, 0));
-        printf(str);
+        printf("%s",str);
         printf("\tuSec \tX=%i, \tY=%i\n", (pts.p1.x - pts.p2.x), (pts.p1.y - pts.p2.y));
         cv::imshow("Optical Flow from Cam 1", Two_F.frame1);
 
@@ -576,7 +387,7 @@ int main_opticalflow_comparison() {
         }
 
         c = (char)cv::waitKey(10);
-        //LOOPtime = lenghtToLooptime(Laengepts(pts));
+        LOOPtime = lengthToLooptime(Laengepts(pts));
 
         input_video.release();
         cv::destroyAllWindows();
@@ -637,7 +448,43 @@ void start_video_capture(boost::filesystem::path input_video_file) {
 
 }
 
-int optical_flow_simple() {
+#define KITTI_RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
+
+void make_video_from_png(const std::string &video_path) {
+    cv::VideoWriter write;
+    cv::Mat temp_image;
+    boost::filesystem::path kitti_raw_dataset_path(KITTI_RAW_DATASET_PATH);
+
+    printf("writing in %s", video_path.data());
+
+    std::string file_name, path;
+    char file_name_char[10];
+    int number = 0;
+    std::string dir_path = "../../../kitti_dataset/raw_dataset_with_calib/2011_09_26_drive_0019_sync/image_02/data/";
+
+    do {
+        sprintf(file_name_char, "0000000%03d", number);
+        path = dir_path + std::string(file_name_char) + ".png";
+        temp_image = cv::imread(path, cv::IMREAD_COLOR);
+        if (boost::filesystem::exists(video_path) == 1) {
+
+            if ( number == 0 ) {
+                write.open(video_path, CV_FOURCC('D', 'I', 'V', 'X'), 30.0, cv::Size(temp_image.cols,
+                                                                                     temp_image.rows),
+                           true);
+            }
+            write.write(temp_image);
+        }
+        number++;
+    } while ( boost::filesystem::exists(path) != 0);
+
+    write.release();
+
+
+}
+
+int samples_lkdemo(const std::string &video_path) {
+
 
     cv::Point2f point;
     bool addRemovePt = true;
@@ -650,7 +497,8 @@ int optical_flow_simple() {
     int i = 0;
 
 
-    cap.open('../../../video_dataset(megamind.avi');
+    std::cout << video_path;
+    cap.open(video_path);
 
     if (!cap.isOpened()) {
         std::cout << "Could not initialize capturing...\n";
@@ -660,36 +508,38 @@ int optical_flow_simple() {
     cv::namedWindow("LK Demo", 1);
 
     cv::Mat gray, prevGray, image, frame;
-    std::vector<cv::Point2f> points[2];
+    std::vector<cv::Point2f> prev_pts;
+    std::vector<cv::Point2f> next_pts;
 
     for (;;) {
         cap >> frame;
         if (frame.empty())
             break;
 
-        frame.copyTo(image);
+        frame.copyTo(image);  //equivalent to m0.copyTo(m1)
         cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
 
 
-        if (i == 20 || needToInit) {
+        if (i == 200 || needToInit) {
             // automatic initialization
-            goodFeaturesToTrack(gray, points[1], MAX_COUNT, 0.01, 10, cv::Mat(), 3,
-                                0, 0.04);
-            cornerSubPix(gray, points[1], subPixWinSize, cv::Size(-1, -1),
-                         termcrit);
+            goodFeaturesToTrack(gray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
+            cv::cornerSubPix(gray, next_pts, subPixWinSize, cv::Size(-1, -1), termcrit);
+
             addRemovePt = false;
             i = 0;
-        } else if (!points[0].empty()) {
+
+        } else if (!prev_pts.empty()) {
             std::vector<uchar> status;
             std::vector<float> err;
             if (prevGray.empty())
                 gray.copyTo(prevGray);
-            cv::calcOpticalFlowPyrLK(prevGray, gray, points[0], points[1], status,
+            cv::calcOpticalFlowPyrLK(prevGray, gray, prev_pts, next_pts, status,
                                      err, winSize, 3, termcrit, 0, 0.001);
+
             size_t i, k;
-            for (i = k = 0; i < points[1].size(); i++) {
+            for (i = k = 0; i < next_pts.size(); i++) {
                 if (addRemovePt) {
-                    if (std::norm(point - points[1][i]) <= 5) {
+                    if (cv::norm(point - next_pts[i]) <= 1) {
                         addRemovePt = false;
                         continue;
                     }
@@ -698,17 +548,17 @@ int optical_flow_simple() {
                 if (!status[i])
                     continue;
 
-                points[1][k++] = points[1][i];
-                circle(image, points[1][i], 3, cv::Scalar(0, 255, 0), -1, 8);
+                next_pts[k++] = next_pts[i];
+                cv::circle(image, next_pts[i], 3, cv::Scalar(0, 255, 0), -1, 8);
             }
-            points[1].resize(k);
+            next_pts.resize(k);
         }
 
-        if (addRemovePt && points[1].size() < (size_t) MAX_COUNT) {
+        if (addRemovePt && next_pts.size() < (size_t) MAX_COUNT) {
             std::vector<cv::Point2f> tmp;
             tmp.push_back(point);
-            cornerSubPix(gray, tmp, winSize, cv::Size(-1, -1), termcrit);
-            points[1].push_back(tmp[0]);
+            cv::cornerSubPix(gray, tmp, winSize, cv::Size(-1, -1), termcrit);
+            next_pts.push_back(tmp[0]);
             addRemovePt = false;
         }
 
@@ -723,14 +573,14 @@ int optical_flow_simple() {
                 needToInit = true;
                 break;
             case 'c':
-                points[0].clear();
-                points[1].clear();
+                prev_pts.clear();
+                next_pts.clear();
                 break;
 
         }
         i++;
 
-        std::swap(points[1], points[0]);
+        std::swap(next_pts, prev_pts);
         cv::swap(prevGray, gray);
     }
 }
@@ -748,9 +598,14 @@ int main (int argc, char *argv[]) {
         std::cout << "Error in reading video flle";
         return 0;
     }
+    boost::filesystem::path  video_path = KITTI_RAW_DATASET_PATH;
+    video_path += "video/" ;
+    video_path += "2011_09_28_drive_0016_sync.avi";
+
+    make_video_from_png(video_path.string());
     //start_video_capture(input_video_file);
     //start_video_capture(input_camera);
-    optical_flow_simple();
-    //main_opticalflow_comparison();
+    //samples_lkdemo(video_path.string());
+    main_opticalflow_comparison(video_path);
 }
 

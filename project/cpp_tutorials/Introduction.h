@@ -866,32 +866,28 @@
     Polymorphic allocators
 
 
-
-
-
-
-
 */
 
 
 
 /**
- wprintffwprintfswprintf
+ wprintf
+ fwprintf
+ swprintf
 	prints formatted wide character output to stdout, a file stream or a buffer
-(function)
-vprintfvfprintfvsprintfvsnprintf
-(C++11)
+ vprintf
+ vfprintf
+ vsprintf
+ vsnprintf
 	prints formatted output to stdout, a file stream or a buffer
 using variable argument list
-(function)
 fputs
 	writes a character string to a file stream
-(function)
-scanffscanfsscanf
+ scanf
+ fscanf
+ sscanf
 	reads formatted input from stdin, a file stream or a buffer
-(function)
-to_chars
-(C++17)
+ to_chars
 	converts an integer or floating-point value to a character sequence
  */
 

@@ -53,7 +53,6 @@ void bionomialDistribution() {
 
 void discreteDistribution() {
 
-
     Gnuplot gp;
     std::vector<std::pair<int, float>> xy_pts;
 
