@@ -6,7 +6,17 @@
 %classify everything that moves as object
 %noise(static, dynamic)
 
+%59-70
+%Err Mean 2.50880
 
+%Noise  frame = imnoise(frame,'gaussian',0.05);
+%Err Mean 4.4
+
+%Noise  frame = imnoise(frame,'gaussian',0.05);
+% Err Mean 4.76
+
+%%%21.9
+%NOISE MIGHT HAVE POSITIVE INFLUENCE
 
 
 
@@ -31,6 +41,7 @@ error(2) = 0;
                 
         end
     end
+
 
 
 for x = 1:maxIteration
@@ -67,20 +78,22 @@ for x = 1:maxIteration
     %create the frame
     disp(x);
     frame = movement(xSpec,ySpec,secondXSpec,secondYSpec,bg);
+   %   frame = imnoise(frame,'gaussian',0.5);
+
     
     %add noise
     
-  %  frame = imnoise(frame,'gaussian',0.001);
 
     timeToGenerateObject(x) = toc;
     
+    addpath('LKpyramid Codes');
     %%
     %Optical Flow
    tic;
    frame_gray = rgb2gray(frame);
    flow_frame = estimateFlow(opticFlow,frame_gray);
    flowstop(x) = toc;
-   
+  
    
     vxCopy = (flow_frame.Vx ~= 0);
     vyCopy = (flow_frame.Vy ~= 0);
@@ -99,8 +112,9 @@ for x = 1:maxIteration
       %get absolute estimated flow.
       
          tic;
-         [estMovement] = estimatedMovement(flow, xSpec,ySpec, secondXSpec,secondYSpec);
+         [estMovement,estimatedCollision] = estimatedMovement(flow, xSpec,ySpec, secondXSpec,secondYSpec);
          timeMovement(x) = toc;
+         collisionTime(x) = toc;
 
         for k=ySpec
             for j=xSpec
@@ -124,10 +138,8 @@ for x = 1:maxIteration
         %%estimate collision
         %time to check for collision
         
-        tic;
         
-         estimatedCollision = flowCollision(absoluteFlow, xSpec,ySpec, secondXSpec,secondYSpec);
-        collisionTime(x) = toc;
+       %  estimatedCollision = flowCollision(absoluteFlow, xSpec,ySpec, secondXSpec,secondYSpec);
         
        if estimatedCollision == 1
             estimatedCollisionVector(x) = 1;
@@ -136,11 +148,25 @@ for x = 1:maxIteration
        end
         
        tic;
-      err(x) =  plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,error);
-      errSum = sum(err);
-      error(x) = errSum/x;
-      plotTime(x) = toc;
        
+    %Kitti Plot, Error calculation and mean error calculation
+    if x > 2
+    tau = [3 0.05];
+    name = sprintf('./GroundTruth/%06d_10.png',x);
+    addpath(genpath('./Kitti'));
+    F_gt = flow_read(name);
+    F_est = flow_read('result.png');
+    f_err = flow_error(F_gt,F_est,tau);
+    f_err = f_err*100;
+    error(x) = f_err;
+    F_err = flow_error_image(F_gt,F_est,tau);
+    errSum = sum(error);
+    errorMean(x) = errSum/x;
+
+       
+       plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,error,f_err,errorMean,F_est,F_gt,F_err);
+      plotTime(x) = toc;
+    end
     
     %%
     %Update position(the objects of interest are tracked via Ground Truth
@@ -167,4 +193,3 @@ for i = 1:maxIteration
     writeVideo(writer,img);
 end
 close(writer);
-close all;
