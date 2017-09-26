@@ -49,3 +49,6 @@ add_executable(data_persistence data_persistence.cpp)
 target_link_libraries(data_persistence ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 add_executable(video_operations video_operations.cpp)
 target_link_libraries(video_operations ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+
+add_executable(birdview birdview.cpp)
+target_link_libraries(birdview ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )

@@ -14,7 +14,7 @@
 
  Kitti:
  because it was found that high ranked optical flow algorithms in lab, fail in the real world. Hence kitti was
- designed for the real world.
+ designed for the real world. In Kitti, the first input is the ground png and the second input is the data matrix.
 
 
  Presentation:

@@ -7,6 +7,7 @@
 #include <array>
 #include <vector>
 #include <iterator>
+#include <algorithm>
 
 typedef struct {
     int a;
@@ -160,5 +161,28 @@ int main ( int argc, char *argv[]) {
     std::cout << sizeof(xy_pts)/sizeof(*xy_pts) << std::endl;
     std::cout << xy_pts_array_ptr->size() << std::endl;
     std::cout << sizeof(xy_pts_2d)/sizeof(**xy_pts_2d) << std::endl;
+
+
+    std::cout << "-------------Randomize------------------------------------\n";
+
+    std::srand(time(NULL));
+
+    const int MAX = 10;
+    std::vector<float> float_val(MAX), float_shuffle(MAX);
+    std::vector<float>::iterator it = float_val.begin(), it_shuffle = float_shuffle.begin();
+
+    for ( ; it < float_val.end(); it++ ) {
+        *it = rand()%100;
+    }
+
+    float_shuffle = float_val;
+
+    std::random_shuffle(float_shuffle.begin(), float_shuffle.end());
+    it = float_val.begin();
+    it_shuffle = float_shuffle.begin();
+
+    for ( ; it < float_val.end(); ) {
+        printf("Normal %f, Random %f\n" ,*it++, *it_shuffle++);
+    }
 
 }

@@ -77,4 +77,5 @@ int main ( int argc, char *argv[]) {
     imshow("grid", grid);
 
     cv::waitKey(0);
+
 }

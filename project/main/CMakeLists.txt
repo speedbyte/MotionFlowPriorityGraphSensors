@@ -10,7 +10,7 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem REQUIRED)
 
 set(SOURCE_FILES
         Introduction.h
-        presentation_summerschool.cpp noise.cpp run_configuration.cpp kitti_calibration.cpp
+        main.cpp noise.cpp run_configuration.cpp kitti_calibration.cpp
         video_capture.cpp
         InputOutput.h)
 

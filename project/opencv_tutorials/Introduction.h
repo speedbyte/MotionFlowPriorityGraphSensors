@@ -160,7 +160,6 @@
         cap.get( cv::CAP_PROP_FOURCC );
 
  cv::VideoWriter::VideoWriter(
-
     .jpg or .jpeg: baseline JPEG; 8-bit; one- or three-channel input
     .jp2: JPEG 2000; 8-bit or 16-bit; one- or three-channel input
     .tif or .tiff: TIFF; 8- or 16-bit; one-, three-, or four-channel input
@@ -200,6 +199,15 @@
   - third
 
 
+ cv::split() - splits into different channels
+ cv::accumulate()
+ cv::convertTo() - converts an image from one type to another. also see cv::cvtColor()
+ cv::threshold() - src > threshold, then do this, otherwise do that.
+    cv::THRESH_OTSU by comparing the varaince of pixels above the threshold and below the threshold. The algorithm
+    hence sets an optimal threshold values, by searching for all possible thresholds in the space.
+ cv::adaptiveThreshold()
+ cv::copyMakeBorder() - makes borders based on specific algorithms
+ cv::borderInterpolate() - returns the donor pixels that created the border
 
 
  cv::dct()

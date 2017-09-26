@@ -13,7 +13,7 @@
 #define KITTI_CALIBRATION_PATH "../../../kitti_dataset/raw_dataset_with_calib/"
 
 extern void read_kitti_calibration(boost::filesystem::path);
-extern void video_capture(cv::Mat&);
+extern void video_capture(boost::filesystem::path path);
 
 using boost_path=boost::filesystem::path;
 extern boost_path get_file(const boost_path &dataset_path, const boost_path &subfolder, const boost_path
@@ -52,8 +52,8 @@ int main ( int argc, char *argv[]) {
     cv::waitKey(0);
     cv::destroyAllWindows();
 
-
-    video_capture(image_manual_bare1);
+    boost::filesystem::path  raw_dataset_path = KITTI_RAW_DATASET_PATH;
+    video_capture(raw_dataset_path);
 
 }
 

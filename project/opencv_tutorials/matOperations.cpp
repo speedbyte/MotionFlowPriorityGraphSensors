@@ -71,6 +71,7 @@ void mat() {
     // Initialize
     float data1[6] = {1,2,3,4,5,6};
     float data2[6] = {10,20,30,40,50,60};
+    std::vector<int> data_vector = {1,2,3,4,5,6};
     /*cv::Mat_<cv::Matx<cv::Vec2f,3,4> > mat34_;
     cv::randu(mat34_,20,30);
     mat34_(2,3) = {1000,1000};
@@ -81,6 +82,7 @@ void mat() {
     cv::Mat mat2(3,4,CV_32FC1);
     cv::randu(mat2,0,100);
     cv::Mat mat3(3,4,CV_32FC1,data1,sizeof(float));
+    cv::Mat mat_data_vector(3,4,CV_32FC1,data_vector.data(),sizeof(float));
     cv::Mat mat34(3,4,CV_32FC3,cv::Scalar(20,30,40));
     cv::Mat mat4(cv::Size_<int>(3,4),CV_32FC1);
     cv::Mat mat5(cv::Size_<float>(3,4),CV_32FC1,cv::Scalar_<float>(66.6));
@@ -192,6 +194,37 @@ void mat_multiplication() {
     //if ()
 }
 
+void randomize_coordinates() {
+    std::srand(time(NULL));
+
+    const int MAX = 10;
+
+    std::vector<cv::Point2i> points(MAX);
+    std::vector<cv::Point2i>::iterator it = points.begin();
+    std::vector<float> x_pts, y_pts;
+    std::vector<float> magnitude;
+
+    int i = 0;
+    for ( ; it < points.end(); it++ ) {
+        it.operator->()->x = i; //rand()%100;
+        it.operator->()->y = i; //rand()%100;
+        i++;
+    }
+
+    it = points.begin();
+
+    for ( ; it < points.end(); it++ ) {
+        x_pts.push_back(it.operator->()->x);
+        y_pts.push_back(it.operator->()->y);
+        printf("Points x = %i, y = %i \n" ,it.operator->()->x, it.operator->()->y);
+    }
+
+    cv::magnitude(x_pts,y_pts,magnitude);
+    cv::Mat mag(1,(int)magnitude.size(), CV_32FC1, magnitude.data(), sizeof(float));
+    std::cout << mag;
+
+}
+
 
 void saturation_cast() {
     uchar init_m0[] = {10,10,30};
@@ -211,8 +244,9 @@ int main ( int argc, char *argv[]) {
 //    vector_();
 //    matx_();
 //    mat_();
-    mat();
+    //mat();
 //    mat_multiplication();
+    randomize_coordinates();
 
     /*
     //Very very large operation
