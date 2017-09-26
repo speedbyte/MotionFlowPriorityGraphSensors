@@ -13,8 +13,25 @@
  Michigan University
 
  Kitti:
- because it was found that high ranked optical flow algorithms in lab, fail in the real world. Hence kitti was
- designed for the real world. In Kitti, the first input is the ground png and the second input is the data matrix.
+ Since it was found that high ranked optical flow algorithms in lab, fail in the real world, Kitti was designed for
+ the real world. In Kitti evaluation kit, the first input is the ground png and the second input is the data matrix
+ in form of a three channel matrix - x, y and validation bit.
+
+ Stereo, optical flow, visual odometry, 3D object detection and 3D tracking.
+ Our evaluation server computes the percentage of bad pixels averaged over all ground truth pixels of all 200 test
+ images.
+ Stereo and Optical flow benchmark comprises of 200 Training and 200 Test Image pairs at a resolution of half a
+ megapixel. The training data is to try your own algorithm and the testing data set is to submit the result to Kitti.
+ Apart from the training datasets that comprises of image_2 and image_3 i.e the left and the right camera, the
+ dataset consists of quick shots one after another. These quick shots are designated by _10 and _11. The shots are in
+ pair and hence can only be taken one pair at a time. For each and every pair, there is a corresponding ground truth.
+ In the raw dataset, image_0 is a representation for left gray, image_1 is a representation of right gray, image_2 is
+ a representation of left color and image_3 is a representation of right color.
+ Tracklets is a boost serialization file and it consists of the starting frame when an object is detected and then
+ the corresponding 3D Laser coordinates. The height, width and length ( hwl ) describes the 3D object and the xyz is
+ its coordinates. The object is tracked until it disappears from the scene.
+ 3D visual odometry data sets
+ 22 Stereo videos with a total length of 40 kms.
 
 
  Presentation:
@@ -30,6 +47,10 @@
  Choice of algorithm -
   - Optical flow was chosen, because it works on the principles of intensity movement. The algorithm tracks the
   intensities in the sensor database.
+ Farnback or LukasKanade -> LK is a sparse technique, which means that we only need to proces some pixels in the
+ entire image. Farneback algorithm on the other hand is a dense techinique that requires us to proces all the pixels
+ in a given image. Farneback approximates a polynomial for the each neighbourhood in both the frames and the goal is
+ to estimate the  motion between the two neighbourhood frames / polynomials.
 
  Ground truth with pedesterians: 118,119,150,167,169 ( 169 is the best )
  5 percent or 3px displacement error means that the differnce between the ground truth and the generated displacement

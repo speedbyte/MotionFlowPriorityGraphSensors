@@ -568,59 +568,37 @@
  
  
   -----
- 
+
  
  
  ATZ . Automobil Technisch Zeitschrift
  VDI - Verein Deutsche Ingineure
- 
+
  identify -format '%[EXIF:*]' DSC_0169.jpg
  exiftool -a -u -g1 image.jpg
- 
- Challenging real world benchmarks.
- 
- Stereo, optical flow, visual odometry, 3D object detection and 3D tracking.
- 
- Evaluation Matrix to check the image.
- 
- Our evaluation server computes the percentage of bad pixels averaged over all ground truth pixels of all 200 test
- images.
- 
- Stereo and Optical flow benchmark comprises of 200 Training and 200 Test Image pairs at a resolution of half a
- megapixel.
- Non occluded as well as ground truth pixels.
- 
- 3D visual odometry data sets
- 22 Stereo videos with a total length of 40 kms.
- 
- Visual Odometry data set.
- 
- 
+
  Class 1, Class 2 ( laser pointers ) , Class 3R, Class 3B and Class 4
- 
+
  The laser power varies from 1 mw ( Laser pointers ) to  100s of watts ( Outdoor shows for example Audience scanning
  ) to MW ( Laser telescopes )
- 
- 
+
+
  Faster and still Reliable Sensor Fusion.
- 
+
  Trying to solve this by making a generic framework and inducing 4 important details in the framework: Confusion,
  Consistency, Compromise and Confidence.
- 
+
  High Dynamic Range: well known method to create synthetic images. 32 bit
  Low Dynamic Range: 8 bit
  Generated images cn be measured in Luminance, Illuminance
- 
- 
- 
- 
+
  High Density Rendering
- 
+
  Difference between ray tracing and beam tracing:
  Rays have no thickness, but beams are shaped as unbounded pyramids with polygonal cross sections. The idea is since
  1984.
  Primarily two things: Ray tracing and scan line tracing.
  Ray tracing is a very complex algorithm, but in short there are
- 
+
  
 */

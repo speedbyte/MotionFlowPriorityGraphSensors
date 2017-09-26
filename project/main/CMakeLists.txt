@@ -12,7 +12,7 @@ set(SOURCE_FILES
         Introduction.h
         main.cpp noise.cpp run_configuration.cpp kitti_calibration.cpp
         video_capture.cpp
-        InputOutput.h)
+        )
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries(main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})

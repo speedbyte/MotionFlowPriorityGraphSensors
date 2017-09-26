@@ -20,6 +20,8 @@ static const double pi = 3.14159265358979323846;
 
 
 
+
+
 void start_video_capture(boost::filesystem::path input_video_file) {
 
     cv::VideoCapture video_read;
@@ -70,43 +72,10 @@ void start_video_capture(boost::filesystem::path input_video_file) {
 
 }
 
-void make_video_from_png(boost::filesystem::path kitti_raw_dataset_path) {
-    cv::VideoWriter write;
-    cv::Mat temp_image;
 
-    boost::filesystem::path video_path = kitti_raw_dataset_path;
-    video_path += "video/" ;
+int samples_lkdemo(boost::filesystem::path dataset_path) {
 
-    std::cout << video_path.string();
-
-    std::string file_name, path;
-    char file_name_char[10];
-    int number = 0;
-    std::string dir_path = kitti_raw_dataset_path.string() + "image_02/data/";
-    if (boost::filesystem::exists(video_path) == 0) {
-        throw("no video file");
-    }
-
-    do {
-        sprintf(file_name_char, "0000000%03d", number);
-        path = dir_path + std::string(file_name_char) + ".png";
-        temp_image = cv::imread(path, cv::IMREAD_COLOR);
-        if ( number == 0 ) {
-            write.open((video_path.string()+"2011_09_28_drive_0016_sync.avi"), CV_FOURCC('D', 'I', 'V', 'X'), 30.0,
-                       cv::Size(temp_image.cols, temp_image.rows), true);
-        }
-        write.write(temp_image);
-        number++;
-    } while ( boost::filesystem::exists(path) != 0);
-
-    write.release();
-
-
-}
-
-int samples_lkdemo(boost::filesystem::path kitti_raw_dataset_path) {
-
-    boost::filesystem::path video_path = kitti_raw_dataset_path;
+    boost::filesystem::path video_path = dataset_path;
     video_path += "video/2011_09_28_drive_0016_sync.avi" ;
 
     if (boost::filesystem::exists(video_path) == 0) {
@@ -234,7 +203,6 @@ int main (int argc, char *argv[]) {
 
     boost::filesystem::path  raw_dataset_path = KITTI_RAW_DATASET_PATH;
 
-    //make_video_from_png(raw_dataset_path);
     samples_lkdemo(raw_dataset_path);
 }
 

@@ -5,17 +5,22 @@
 #include <boost/filesystem.hpp>
 
 
-#include "InputOutput.h"
 #include "GridLayout.h"
 
 
 #define KITTI_RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
-#define KITTI_CALIBRATION_PATH "../../../kitti_dataset/raw_dataset_with_calib/"
+#define KITTI_RAW_CALIBRATION_PATH "../../../kitti_dataset/raw_dataset_with_calib/"
 
-extern void read_kitti_calibration(boost::filesystem::path);
-extern void video_capture(boost::filesystem::path path);
+#define KITTI_FLOW_DATASET_PATH "../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/training/"
+#define KITTI_FLOW_CALIBRATION_PATH "../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/calib/"
 
 using boost_path=boost::filesystem::path;
+
+extern void read_kitti_calibration(boost::filesystem::path);
+extern void of_lk(boost::filesystem::path path);
+extern void of_farneback(boost::filesystem::path path);
+extern void make_video_from_png(boost::filesystem::path dataset_path);
+extern void disparity(boost::filesystem::path dataset_path);
 extern boost_path get_file(const boost_path &dataset_path, const boost_path &subfolder, const boost_path
 &file_name);
 
@@ -24,7 +29,7 @@ int main ( int argc, char *argv[]) {
     // Thread 2: Read two kitti image files without rain. The two image files are from kitti
 
     boost::filesystem::path calib_path;
-    calib_path+=KITTI_CALIBRATION_PATH;
+    calib_path+=KITTI_RAW_CALIBRATION_PATH;
     calib_path+="calib_cam_to_cam.txt";
     if ( !boost::filesystem::exists(calib_path) ) {
         throw ("FileNotFound error");
@@ -52,8 +57,11 @@ int main ( int argc, char *argv[]) {
     cv::waitKey(0);
     cv::destroyAllWindows();
 
-    boost::filesystem::path  raw_dataset_path = KITTI_RAW_DATASET_PATH;
-    video_capture(raw_dataset_path);
+    boost::filesystem::path  dataset_path = KITTI_RAW_DATASET_PATH;
+    //make_video_from_png(dataset_path);
+    //of_lk(dataset_path);
+    of_farneback(dataset_path);
+    //disparity(dataset_path);
 
 }
 
