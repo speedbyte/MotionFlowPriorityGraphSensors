@@ -6,10 +6,12 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <iostream>
-
+#include <gnuplot/gnuplot-iostream.h>
+#include <chrono>
 
 extern void salt(cv::Mat image, int n);
 
+using namespace std::chrono;
 
 void canny(cv::Mat& img, cv::Mat& out) {
     // Convert to gray
@@ -57,8 +59,6 @@ void make_video_from_png(boost::filesystem::path kitti_raw_dataset_path) {
 }
 
 
-void of_farneback( boost::filesystem::path dataset_path ) {
-
 /**
  void cv::calcOpticalFlowFarneback(
   cv::InputArray       prevImg,    // An input image
@@ -82,7 +82,54 @@ void of_farneback( boost::filesystem::path dataset_path ) {
  recommended in source code.
 );
 
- */
+/* It is Lucas & Kanade method, modified to use pyramids.
+   Also it does several iterations to get optical flow for
+   every point at every pyramid level.
+   Calculates optical flow between two images for certain set of points (i.e.
+   it is a "sparse" optical flow, which is opposite to the previous 3 methods)
+
+ void cv::calcOpticalFlowPyrLK(
+  cv::InputArray       prevImg,            // Prior image (t-1), CV_8UC1
+  cv::InputArray       nextImg,            // Next image (t), CV_8UC1
+  cv::InputArray       prevPts,            // Vector of 2d start points (CV_32F)
+  cv::InputOutputArray nextPts,            // Results: 2d end points (CV_32F)
+  cv::OutputArray      status,             // For each point, found=1, else=0
+  cv::OutputArray      err,                // Error measure for found points
+  cv::Size             winSize         = Size(15,15),   // size of search window
+  int                  maxLevel        = 3,             // Pyramid layers to add
+  cv::TermCriteria     criteria        = TermCriteria(  // How to end search
+                         cv::TermCriteria::COUNT | cv::TermCriteria::EPS,
+                         30,
+                         0.01
+                       ),
+  int                  flags           = 0,    // use guesses, and/or eigenvalues
+  double               minEigThreshold = 1e-4  // for spatial gradient matrix
+);
+
+void cv::goodFeaturesToTrack(
+        cv::InputArray  image,                         // Input, CV_8UC1 or CV_32FC1
+        cv::OutputArray corners,                       // Output vector of corners - either Vector cv::Point2f or
+                                                            cv::Mat(x,2)
+        int             maxCorners,                    // Keep this many corners
+        double          qualityLevel,                  // (fraction) rel to best
+        double          minDistance,                   // Discard corner this close
+        cv::InputArray  mask              = noArray(), // Ignore corners where mask=0
+        int             blockSize         = 3,         // Neighborhood used
+        bool            useHarrisDetector = false,     // false='Shi Tomasi metric'
+        double          k                 = 0.04       // Used for Harris metric
+);
+*/
+
+
+
+void of_algo(boost::filesystem::path dataset_path, std::string algo) {
+
+    std::vector<unsigned> x_pts;
+    std::vector<double> y_pts;
+    std::vector<double> z_pts;
+    std::vector<boost::tuple<unsigned, double > > pts_exectime;
+    std::vector<boost::tuple<unsigned, unsigned > > pts_features;
+
     bool needToInit = true;
     std::vector<cv::Point2f> prev_pts;
     std::vector<cv::Point2f> next_pts;
@@ -101,23 +148,36 @@ void of_farneback( boost::filesystem::path dataset_path ) {
         std::cout << "Could not initialize capturing...\n";
         return;
     }
+
     //Schreibt das Video mit
     cv::VideoWriter video_out;
     boost::filesystem::path VideoOutFile = video_path.parent_path();
-    VideoOutFile += "/OpticalFlow_Farneback.avi";
+    VideoOutFile += "/OpticalFlow_"+algo+".avi";
 
     cv::Size frame_size;
     frame_size.height =	(int) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
     frame_size.width =	(int) cap.get(CV_CAP_PROP_FRAME_WIDTH );
-    video_out.open(VideoOutFile.string(),CV_FOURCC('P','I','M','1'), 30, frame_size);
+    video_out.open(VideoOutFile.string(),CV_FOURCC('D','I','V','X'), 5, frame_size);
     printf("Writer eingerichtet\n");
 
-    double scalingFactor = 0;
+
+    cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
+    cv::Size subPixWinSize(10, 10), winSize(31, 31);
+
+    const int MAX_COUNT = 500;
+    cv::Mat pyramid1, pyramid2;
+
+    pyramid1.create(frame_size, CV_8UC1);
+    pyramid2.create(frame_size, CV_8UC1);
+
+    unsigned frame_count = 0;
+
+    cv::namedWindow(algo, CV_WINDOW_AUTOSIZE);
 
     // Iterate until the user presses the Esc key
     while (true) {
         // Break out of the loop if the user presses the Esc key
-        char c = (char)cv::waitKey(10);
+        char c = (char) cv::waitKey(10);
         switch (c) {
             case 27:
                 break;
@@ -134,6 +194,7 @@ void of_farneback( boost::filesystem::path dataset_path ) {
         cap >> frame;
         if (frame.empty())
             break;
+        frame_count++;
 
         // Resize the frame
         //cv::resize(frame, frame, cv::Size(), scalingFactor, scalingFactor, cv::INTER_AREA);
@@ -141,201 +202,118 @@ void of_farneback( boost::filesystem::path dataset_path ) {
         // Convert to grayscale
         cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
 
+        auto start = steady_clock::now();
         // Check if the image is valid
-        if (prevGray.data) {
-            // Initialize parameters for the optical flow algorithm
-            float pyrScale = 0.5;
-            int numLevels = 3;
-            int windowSize = 15;
-            int numIterations = 3;
-            int neighborhoodSize = 5;
-            float stdDeviation = 1.2;
+        if (algo.compare("FB") == 0) {
+            if (prevGray.data) {
+                // Initialize parameters for the optical flow algorithm
+                float pyrScale = 0.5;
+                int numLevels = 3;
+                int windowSize = 15;
+                int numIterations = 3;
+                int neighborhoodSize = 5;
+                float stdDeviation = 1.2;
 
-            // Calculate optical flow map using Farneback algorithm
-            cv::calcOpticalFlowFarneback(prevGray, curGray, flowImage, pyrScale, numLevels, windowSize, numIterations,
-                                     neighborhoodSize, stdDeviation, cv::OPTFLOW_USE_INITIAL_FLOW);
+                // Calculate optical flow map using Farneback algorithm
+                cv::calcOpticalFlowFarneback(prevGray, curGray, flowImage, pyrScale, numLevels, windowSize,
+                                             numIterations,
+                                             neighborhoodSize, stdDeviation, cv::OPTFLOW_USE_INITIAL_FLOW);
 
-            // Draw the optical flow map
-            int stepSize = 16;
+                // Draw the optical flow map
+                int stepSize = 16;
 
-            // Draw the uniform grid of points on the input image along with the motion vectors
-            for(int y = 0; y < frame.rows; y += stepSize)
-            {
-                for(int x = 0; x < frame.cols; x += stepSize)
-                {
-                    // Circles to indicate the uniform grid of points
-                    cv::circle(frame, cv::Point(x,y), 0.5, cv::Scalar(0, 255, 0), -1, 8);
+                // Draw the uniform grid of points on the input image along with the motion vectors
+                for (int y = 0; y < frame.rows; y += stepSize) {
+                    for (int x = 0; x < frame.cols; x += stepSize) {
+                        // Circles to indicate the uniform grid of points
+                        cv::circle(frame, cv::Point(x, y), 0.5, cv::Scalar(0, 255, 0), -1, 8);
 
-                    // Lines to indicate the motion vectors
-                    cv::Point2f pt = flowImage.at<cv::Point2f>(y, x);
-                    cv::arrowedLine(frame, cv::Point(x,y), cv::Point(cvRound(x+pt.x), cvRound(y+pt.y)), cv::Scalar(0,
-                                                                                                                  255, 0));
+                        // Lines to indicate the motion vectors
+                        cv::Point2f pt = flowImage.at<cv::Point2f>(y, x);
+                        cv::arrowedLine(frame, cv::Point(x, y), cv::Point(cvRound(x + pt.x), cvRound(y + pt.y)),
+                                        cv::Scalar(0,
+                                                   255, 0));
+                    }
+                }
+            }
+        }
+
+        else if (algo.compare("LK") == 0) {
+            // Calculate optical flow map using LK algorithm
+            if (needToInit) {
+                // automatic initialization
+                cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
+                // Refining the location of the feature points
+                if (next_pts.size() < MAX_COUNT) {
+                    std::vector<cv::Point2f> currentPoint;
+                    std::swap(currentPoint, next_pts);
+                    for (unsigned i = 0; i < currentPoint.size(); i++) {
+                        std::vector<cv::Point2f> tempPoints;
+                        tempPoints.push_back(currentPoint[i]);
+                        // Function to refine the location of the corners to subpixel accuracy.
+                        // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
+                        cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
+                        next_pts.push_back(tempPoints[0]);
+                    }
+                    std::swap(currentPoint, next_pts);
                 }
             }
 
-            video_out.write(frame);
-            // Display the output image
-            cv::imshow("farneback", frame);
-        }
+            if (!prev_pts.empty()) {
+                std::vector<uchar> status;
+                std::vector<float> err;
+                if (prevGray.empty()) {
+                    curGray.copyTo(prevGray);
+                }
+                cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts, next_pts, status,
+                                         err, winSize, 3, termcrit, 0, 0.001);
 
-        needToInit = false;
-        cv::swap(next_pts, prev_pts);
-        std::swap(prevGray, curGray);
-    }
-    video_out.release();
-}
+                unsigned count = 0;
+                int minDist = 0;
 
-void of_lk(boost::filesystem::path dataset_path) {
+                for (unsigned i = 0; i < next_pts.size(); i++) {
+                    /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
+                    if (cv::norm(prev_pts[i] - next_pts[i]) <= minDist) {
+                        //printf("minimum distance for %i\n", i);
+                        continue;
+                    }
 
-    cv::Point2f point;
-    cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
-    cv::Size subPixWinSize(10, 10), winSize(31, 31);
+                    // Check if the status vector is good
+                    if (!status[i])
+                        continue;
 
-    const int MAX_COUNT = 500;
-    int i = 0;
-
-    cv::Mat pyramid1, pyramid2;
-    cv::namedWindow("LK Demo", 1);
-
-    //Zeitsteuerung über clock()
-    clock_t start, start2, end;
-    int LOOPtime = 100;
-    start = clock();
-
-    CvFont Font_= cvFont(0.5,1); //Vareablen zur Textausgabe
-    char str[256];
-    char str2[256];
-
-    bool needToInit = true;
-    std::vector<cv::Point2f> prev_pts;
-    std::vector<cv::Point2f> next_pts;
-    cv::Mat curGray, prevGray;
-    cv::Mat frame;
-    cv::VideoCapture cap;
-    boost::filesystem::path video_path = dataset_path;
-    video_path += "video/2011_09_28_drive_0016_sync.avi" ;
-    if (boost::filesystem::exists(video_path) == 0) {
-        throw("no video file");
-    }
-    std::cout << video_path.string() << std::endl;
-    cap.open(video_path.string());
-    if (!cap.isOpened()) {
-        std::cout << "Could not initialize capturing...\n";
-        return;
-    }
-    //Schreibt das Video mit
-    cv::VideoWriter video_out;
-    boost::filesystem::path VideoOutFile = video_path.parent_path();
-    VideoOutFile += "/OpticalFlow_LK.avi";
-
-    cv::Size frame_size;
-    frame_size.height =	(int) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
-    frame_size.width =	(int) cap.get(CV_CAP_PROP_FRAME_WIDTH );
-    video_out.open(VideoOutFile.string(),CV_FOURCC('P','I','M','1'), 30, frame_size);
-    printf("Writer eingerichtet\n");
-
-    for (;;) {
-        // Break out of the loop if the user presses the Esc key
-        char c = (char)cv::waitKey(10);
-        switch (c) {
-            case 27:
-                break;
-            case 'r':
-                needToInit = true;
-                break;
-            case 'c':
-                prev_pts.clear();
-                next_pts.clear();
-                break;
-            default:
-                break;
-        }
-        cap >> frame;
-        if (frame.empty())
-            break;
-
-        pyramid1.create(frame_size, CV_8UC1);
-        pyramid2.create(frame_size, CV_8UC1);
-
-        cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
-        if ( prevGray.empty() ) {
-            curGray.copyTo(prevGray);
-        }
-
-        if (i == -1 || needToInit) {
-            // automatic initialization
-            cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
-            cv::cornerSubPix(curGray, next_pts, subPixWinSize, cv::Size(-1, -1), termcrit);
-
-            i = 0;
-
-        } else if (!prev_pts.empty()) {
-            std::vector<uchar> status;
-            std::vector<float> err;
-            cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts, next_pts, status,
-                                     err, winSize, 3, termcrit, 0, 0.001);
-
-            unsigned i, k;
-            std::vector<std::vector<float>> all_x;
-            std::vector<std::vector<float>> all_y;
-
-            std::vector<float> displacement_vector_x;
-            std::vector<float> displacement_vector_y;
-
-            for (i = k = 0; i < next_pts.size(); i++) {
-
-                if (!status[i])
-                    continue;
-
-                next_pts[k++] = next_pts[i];
-                //cv::circle(frame, next_pts[i], 3, cv::Scalar(0, 255, 0), -1, 8);
-
-                cv::Point frame_center;
-                frame_center.x = frame_size.width/2;
-                frame_center.y = frame_size.height/2;
-
-                displacement_vector_x.clear();
-                displacement_vector_y.clear();
-                //std::vector<float>().swap(displacement_vector_x);
-
-                displacement_vector_x.push_back(cv::abs(prev_pts[i].x - next_pts[i].x));
-                displacement_vector_y.push_back(cv::abs(prev_pts[i].y - next_pts[i].y));
-
-                double magnitude = cv::norm(prev_pts[i] - next_pts[i]);
-                std::cout << "Mag" << magnitude << std::endl;
-
-                sprintf(str, "X = %f ", (displacement_vector_x[i]));
-                cv::putText(frame, str, cv::Point(frame_size.width-40, 10), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 0, 0));
-
-                sprintf(str, "Y = %f ", (displacement_vector_y[i]));
-                cv::putText(frame, str, cv::Point(frame_size.width-40, 20), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 0, 0));
-
-                cv::arrowedLine(frame, prev_pts[i], next_pts[i] , cv::Scalar(0,255,0), 1, CV_AA, 0);
-
-                end = clock();
-
-                sprintf(str, "Alg: %i ", (int) ((end - start)));
-                cv::putText(frame, str, cv::Point(10, 10), cv::FONT_HERSHEY_PLAIN, 1, cvScalar(0, 0, 0));
-                cv::putText(frame, str2, cv::Point(10, 20), cv::FONT_HERSHEY_PLAIN, 1, cvScalar(0, 0, 0));
-
-                //fprintf(datei, "%i;%i;%f;%f;%f\n", (int)i, (int) (clock() - start2), magnitude,
-                //        displacement_vector_x[i], displacement_vector_y[i] );
-
+                    next_pts[count++] = next_pts[i];
+                    //cv::circle(frame, next_pts[count], 3, cv::Scalar(0, 255, 0), -1, 8);
+                    cv::arrowedLine(frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
+                }
+                next_pts.resize(count);
+                printf(" new size is %i for frame number %u\n", count, frame_count);
+                pts_features.push_back(boost::make_tuple(frame_count, count));
             }
-
-            //all_x.push_back(displacement_vector_x);
-            //all_y.push_back(displacement_vector_y);
-            next_pts.resize(k);
-            video_out.write(frame);
-            // Display the output image
-            cv::imshow("lk", frame);
         }
+        auto end = steady_clock::now();
 
-        i++;
+        pts_exectime.push_back(boost::make_tuple(frame_count, duration_cast<milliseconds>(end - start).count()));
+
+        video_out.write(frame);
+        // Display the output image
+        cv::imshow(algo, frame);
         needToInit = false;
+        prev_pts.clear();
         std::swap(next_pts, prev_pts);
         std::swap(prevGray, curGray);
+
     }
     video_out.release();
+    cv::destroyAllWindows();
+
+    // gnuplot_2d
+    Gnuplot gp2d;
+    gp2d << "set xrange [0:200]\n";
+    gp2d << "set yrange [0:500]\n";
+    gp2d << "plot '-' with lines title '" << algo << "_exec', '-' with lines title '" << algo << "_features'\n";
+    gp2d.send1d(pts_exectime);
+    gp2d.send1d(pts_features);
+
 }
 

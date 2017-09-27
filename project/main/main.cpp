@@ -17,8 +17,7 @@
 using boost_path=boost::filesystem::path;
 
 extern void read_kitti_calibration(boost::filesystem::path);
-extern void of_lk(boost::filesystem::path path);
-extern void of_farneback(boost::filesystem::path path);
+extern void of_algo(boost::filesystem::path dataset_path, std::string algo);
 extern void make_video_from_png(boost::filesystem::path dataset_path);
 extern void disparity(boost::filesystem::path dataset_path);
 extern boost_path get_file(const boost_path &dataset_path, const boost_path &subfolder, const boost_path
@@ -59,8 +58,8 @@ int main ( int argc, char *argv[]) {
 
     boost::filesystem::path  dataset_path = KITTI_RAW_DATASET_PATH;
     //make_video_from_png(dataset_path);
-    //of_lk(dataset_path);
-    of_farneback(dataset_path);
+    //of_algo(dataset_path, "FB");
+    of_algo(dataset_path, "LK");
     //disparity(dataset_path);
 
 }

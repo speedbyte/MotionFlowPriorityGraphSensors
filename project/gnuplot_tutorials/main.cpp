@@ -1,6 +1,7 @@
 
+#include <gnuplot/gnuplot-iostream.h>
 
-void plot() {
+int main() {
     Gnuplot gp;
     std::vector<std::pair<double, double> > xy_pts_A;
     for(double x=-2; x<2; x+=0.01) {
@@ -19,5 +20,5 @@ void plot() {
     gp.send1d(xy_pts_A);
     gp.send1d(xy_pts_B);
 
-    //pause_if_needed();
+    pause_if_needed();
 }

@@ -2,11 +2,15 @@ cmake_minimum_required(VERSION 3.8)
 project(main)
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_FLAGS_DEBUG -D_DEBUG)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3")
 
 find_package(OpenCV EXACT 3.2.0 COMPONENTS core highgui videoio imgcodecs video REQUIRED)
-find_package(Boost EXACT 1.64 COMPONENTS filesystem REQUIRED)
+find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
+
+include_directories()
 
 set(SOURCE_FILES
         Introduction.h

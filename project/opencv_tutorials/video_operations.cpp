@@ -199,10 +199,10 @@ int main (int argc, char *argv[]) {
         return 0;
     }
     //start_video_capture(input_video_file);
-    //start_video_capture(input_camera);
+    start_video_capture(input_camera);
 
     boost::filesystem::path  raw_dataset_path = KITTI_RAW_DATASET_PATH;
 
-    samples_lkdemo(raw_dataset_path);
+    //samples_lkdemo(raw_dataset_path);
 }
 

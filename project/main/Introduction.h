@@ -34,23 +34,35 @@
  22 Stereo videos with a total length of 40 kms.
 
 
- Presentation:
+ Presentation flowchart:
+ sensor status = { static, moving }
  noise induction = { simple, rain noise }
  2 sensor data - light spectrum and radio spectrum
  4 kind of environments  - self developed, external dataset, vires dataset, real environment
- 4 layers - ground truth generation, noise induction[2], store returned intensity value*, inspect the returned
+ 4 layers - ground truth generation, noise induction[2], store returned intensity value*¹, inspect the returned
  intensity values using a well establised algorithm, publish paper
 
- *1 The assumption is that the intensity value returned would be different in different noise environments.
- *2 The chose of well established algorithm is described below.
+ *¹ The assumption is that the intensity value returned would be different in different noise environments.
+ *² The chose of well established algorithm is described below.
 
  Choice of algorithm -
   - Optical flow was chosen, because it works on the principles of intensity movement. The algorithm tracks the
   intensities in the sensor database.
+
  Farnback or LukasKanade -> LK is a sparse technique, which means that we only need to proces some pixels in the
  entire image. Farneback algorithm on the other hand is a dense techinique that requires us to proces all the pixels
  in a given image. Farneback approximates a polynomial for the each neighbourhood in both the frames and the goal is
- to estimate the  motion between the two neighbourhood frames / polynomials.
+ to estimate the  motion between the two neighbourhood frames / polynomials. In LK, the process is started by
+ extracting the feature points. For each feature point, a 3*3 patch with the feature point at the center is created.
+ It is asumed that all the points within each patch will have a similiar motion. The window size can be adjusted from
+ 3*3 to something else depending on the problem at hand. For each feature point in the current frame, a surrounding
+ window size is taken as a reference point. For this patch ( window ), we take a look at its neighbourhod in the
+ previous frame to get the best match. The neighbourhood is usally bigger than the window size, because we want to
+ get the patch that is closest to the patch under consideration. Now the path from the center pixel of the matched
+ patch in the previous frame to the center pixel of the patch under consideration in the current frame will become
+ the motion vector. This is done for all the feature points and extract all the motion vectors. The window used for
+ computing the local coherent motion is given by winSize. Because we are constructing an image pyramid, the argument
+ level maxLevel is used to set the depth of the stack images.
 
  Ground truth with pedesterians: 118,119,150,167,169 ( 169 is the best )
  5 percent or 3px displacement error means that the differnce between the ground truth and the generated displacement
