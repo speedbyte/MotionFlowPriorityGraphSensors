@@ -10,6 +10,7 @@
 
 #define KITTI_RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
 #define KITTI_RAW_CALIBRATION_PATH "../../../kitti_dataset/raw_dataset_with_calib/"
+#define MATLAB_DATASET_PATH "../../../matlab_dataset/"
 
 #define KITTI_FLOW_DATASET_PATH "../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/training/"
 #define KITTI_FLOW_CALIBRATION_PATH "../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/calib/"
@@ -17,7 +18,7 @@
 using boost_path=boost::filesystem::path;
 
 extern void read_kitti_calibration(boost::filesystem::path);
-extern void of_algo(boost::filesystem::path dataset_path, std::string algo);
+extern void of_algo(boost::filesystem::path dataset_path, std::string video, std::string algo);
 extern void make_video_from_png(boost::filesystem::path dataset_path);
 extern void disparity(boost::filesystem::path dataset_path);
 extern boost_path get_file(const boost_path &dataset_path, const boost_path &subfolder, const boost_path
@@ -58,8 +59,11 @@ int main ( int argc, char *argv[]) {
 
     boost::filesystem::path  dataset_path = KITTI_RAW_DATASET_PATH;
     //make_video_from_png(dataset_path);
-    //of_algo(dataset_path, "FB");
-    of_algo(dataset_path, "LK");
+    of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
+    of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
+    dataset_path = MATLAB_DATASET_PATH;
+    of_algo(dataset_path, "Movement.avi", "FB");
+    of_algo(dataset_path, "Movement.avi", "LK");
     //disparity(dataset_path);
 
 }
