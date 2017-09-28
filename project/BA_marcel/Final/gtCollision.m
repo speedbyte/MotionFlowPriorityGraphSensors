@@ -42,7 +42,7 @@ for x=1:maxIteration
     secondXSpec = secondActualX:secondActualX+width;
     secondYSpec = secondActualY:secondActualY+height;
     
-       relativeGroundTruth = zeros(375,1242,3,'int16');
+       relativeGroundTruth = zeros(375,1242,3,'uint16');
        absoluteGroundTruth = zeros(375,1242,3,'uint16');
 
  %%  
@@ -50,8 +50,8 @@ for x=1:maxIteration
    %in a png file
    for k = ySpec
     for j= xSpec
-        relativeGroundTruth(k,j,1) = calcMove(1);
-        relativeGroundTruth(k,j,2) = calcMove(2);
+        relativeGroundTruth(k,j,1) = calcMove(1)*64+2^15;
+        relativeGroundTruth(k,j,2) = calcMove(2)*64+2^15;
         relativeGroundTruth(k,j,3) = 1;
         absoluteGroundTruth(k,j,1) = calcMove(1)+j;
         absoluteGroundTruth(k,j,2) = calcMove(2)+k;
@@ -62,8 +62,8 @@ for x=1:maxIteration
 
 for k=secondYSpec
     for j=secondXSpec
-        relativeGroundTruth(k,j,1) = calcMove(3);
-        relativeGroundTruth(k,j,2) = calcMove(4);
+        relativeGroundTruth(k,j,1) = calcMove(3)*64+2^15;
+        relativeGroundTruth(k,j,2) = calcMove(4)*64+2^15;
         relativeGroundTruth(k,j,3) = 1;
         absoluteGroundTruth(k,j,1) = calcMove(3)+j;
         absoluteGroundTruth(k,j,2) = calcMove(4)+k;

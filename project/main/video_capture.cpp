@@ -122,13 +122,12 @@ void cv::goodFeaturesToTrack(
 
 
 
-void of_algo(boost::filesystem::path dataset_path, std::string algo) {
+void of_algo(boost::filesystem::path dataset_path, std::string video, std::string algo) {
 
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
     std::vector<unsigned> z_pts;
     std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
-    //std::vector<boost::tuple<unsigned, unsigned > > pts_features;
 
     bool needToInit = true;
     std::vector<cv::Point2f> prev_pts;
@@ -138,7 +137,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string algo) {
     cv::Mat frame;
     cv::VideoCapture cap;
     boost::filesystem::path video_path = dataset_path;
-    video_path += "video/2011_09_28_drive_0016_sync.avi" ;
+    video_path += "video/"+video;
     if (boost::filesystem::exists(video_path) == 0) {
         throw("no video file");
     }
