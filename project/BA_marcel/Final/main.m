@@ -1,9 +1,5 @@
 %Loads the Initialization specs. 
 
-%kitti einbinden
-%Document 
-%make everything more generic
-%classify everything that moves as object
 %noise(static, dynamic)
 
 %59-70
@@ -86,7 +82,6 @@ for x = 1:maxIteration
 
     timeToGenerateObject(x) = toc;
     
-    addpath('LKpyramid Codes');
     %%
     %Optical Flow
    tic;
@@ -108,14 +103,17 @@ for x = 1:maxIteration
         flow(:,:,1) = flow_frame.Vx;
         flow(:,:,2) = flow_frame.Vy;
         
-      %absolute Flow
-      %get absolute estimated flow.
-      
+    
          tic;
+         %Get the Movement of the object. And calculate if they will
+         %collide (using brute force collision checker atm, not
+         %substraction)
          [estMovement,estimatedCollision] = estimatedMovement(flow, xSpec,ySpec, secondXSpec,secondYSpec);
          timeMovement(x) = toc;
          collisionTime(x) = toc;
 
+           %absolute Flow
+      %get absolute estimated flow.
         for k=ySpec
             for j=xSpec
                 absoluteFlow(k,j,1) = estMovement(1)+j;
@@ -130,12 +128,11 @@ for x = 1:maxIteration
                 absoluteFlow(k,j,3) = 1;
             end
         end
-        abs1 = absoluteFlow(:,:,1);
         
         
         %%
         %%collision checkers(first round has bad flow, dont plot and
-        %%estimate collision
+        %%estimate collision(substraction method)
         %time to check for collision
         
         
@@ -185,7 +182,7 @@ for x = 1:maxIteration
 end
 
 %Create Video out of frames.
-writer = VideoWriter('Movement.avi');
+writer = VideoWriter('../../../matlab_dataset/video/Movement.avi');
 open(writer);
 for i = 1:maxIteration
     name  = sprintf('./Videos/Frames/%06d.png',i);

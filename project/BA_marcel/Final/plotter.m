@@ -38,6 +38,7 @@ title('Movement');
 axis([0,1242,0,375]);
 
 
+%Kitti Plot
 fig3 = figure(3);
 subplot(4,1,1);
 image(flow_to_color(F_est,100));
@@ -54,7 +55,7 @@ plot(error);
 axis([1,x+1,0,20]);
 title(sprintf('Flow Error Mean %2f%',errorMean(x)));
 
-
+%Time plot
 figure(4);
 subplot(5,1,1)
 plot(timeToGenerateObject);
