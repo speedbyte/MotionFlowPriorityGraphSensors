@@ -1,27 +1,4 @@
-/*
-Copyright (c) 2013 Daniel Stahlke
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
-
-// This demonstrates all sorts of data types that can be plotted using send2d().  It is not
-// meant as a first tutorial; for that see example-misc.cc or the project wiki.
 
 #define USE_CXX (__cplusplus >= 201103)
 
@@ -43,11 +20,11 @@ THE SOFTWARE.
 #endif
 
 
-void send2d() {
-    Gnuplot gp;
+void send3d() {
+    Gnuplot gp(stdout);
 
-    gp << "set zrange [0:1]\n";
-    gp << "set hidden3d nooffset\n";
+    gp << "set xrange [0:10]\nset yrange [0:10]\nset zrange [0:10]\n";
+    //gp << "set hidden3d nooffset\n";
 
     std::vector<boost::tuple<std::vector<double>,std::vector<double>,std::vector<double> > > pts;
     std::vector<double> x_pts(200);
@@ -61,19 +38,18 @@ void send2d() {
         z_pts[v] = rand()%10;
     }
     pts.push_back(boost::make_tuple(x_pts, y_pts, z_pts));
-    gp << "splot '-' with points using 1:2:3 title 'vec of boost::tuple of vec'";
+    gp << "splot '-' with points title 'vec of boost::tuple of vec'\n";
     gp.send2d(pts);
     gp << std::endl;
 
 }
 
-void send2d_record() {
+void send3d_record() {
 
         Gnuplot gp;
 
-        gp << "set zrange [0:1]\n";
-        gp << "set hidden3d nooffset\n";
-        gp << "splot ";
+        gp << "set xrange [0:10]\nset yrange [0:10]\nset zrange [0:10]\n";
+        //gp << "set hidden3d nooffset\n";
 
         std::vector<boost::tuple<std::vector<double>,std::vector<double>,std::vector<double> > > pts;
         std::vector<double> x_pts(200);
@@ -86,7 +62,7 @@ void send2d_record() {
             z_pts[v] = rand()%10;
         }
         pts.push_back(boost::make_tuple(x_pts, y_pts, z_pts));
-        gp << gp.binFile2d(pts, "record") << "with lines title 'vec of boost::tuple of vec'";
+        gp << "splot" << gp.binFile2d(pts, "record") << " with lines title 'vec of boost::tuple of vec'\n";
         gp << std::endl;
 
 };
@@ -133,9 +109,9 @@ void send2d_colmajor() {
 
 int main() {
 
-    send2d();
-    send2d_record();
-    send2d_colmajor();
+    send3d();
+    send3d_record();
+    //send2d_colmajor();
 
     return 0;
 }

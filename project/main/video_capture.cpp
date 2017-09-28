@@ -126,9 +126,9 @@ void of_algo(boost::filesystem::path dataset_path, std::string algo) {
 
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
-    std::vector<double> z_pts;
-    std::vector<boost::tuple<unsigned, double > > pts_exectime;
-    std::vector<boost::tuple<unsigned, unsigned > > pts_features;
+    std::vector<unsigned> z_pts;
+    std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
+    //std::vector<boost::tuple<unsigned, unsigned > > pts_features;
 
     bool needToInit = true;
     std::vector<cv::Point2f> prev_pts;
@@ -288,12 +288,13 @@ void of_algo(boost::filesystem::path dataset_path, std::string algo) {
                 }
                 next_pts.resize(count);
                 printf(" new size is %i for frame number %u\n", count, frame_count);
-                pts_features.push_back(boost::make_tuple(frame_count, count));
+                z_pts.push_back(count);
             }
         }
         auto end = steady_clock::now();
 
-        pts_exectime.push_back(boost::make_tuple(frame_count, duration_cast<milliseconds>(end - start).count()));
+        x_pts.push_back(frame_count);
+        y_pts.push_back(duration_cast<milliseconds>(end - start).count());
 
         video_out.write(frame);
         // Display the output image
@@ -304,16 +305,15 @@ void of_algo(boost::filesystem::path dataset_path, std::string algo) {
         std::swap(prevGray, curGray);
 
     }
+    pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
     video_out.release();
     cv::destroyAllWindows();
 
     // gnuplot_2d
     Gnuplot gp2d;
     gp2d << "set xrange [0:200]\n";
-    gp2d << "set yrange [0:500]\n";
-    gp2d << "plot '-' with lines title '" << algo << "_exec', '-' with lines title '" << algo << "_features'\n";
-    gp2d.send1d(pts_exectime);
-    gp2d.send1d(pts_features);
+    gp2d << "set yrange [0:100]\n";
+    gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << " with lines title 'vec of boost::tuple of vec'\n";
 
 }
 
