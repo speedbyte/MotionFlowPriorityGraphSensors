@@ -23,6 +23,7 @@ extern void make_video_from_png(boost::filesystem::path dataset_path);
 extern void disparity(boost::filesystem::path dataset_path);
 extern boost_path get_file(const boost_path &dataset_path, const boost_path &subfolder, const boost_path
 &file_name);
+extern void ground_truth();
 
 
 int main ( int argc, char *argv[]) {
@@ -59,12 +60,15 @@ int main ( int argc, char *argv[]) {
 
     boost::filesystem::path  dataset_path = KITTI_RAW_DATASET_PATH;
     //make_video_from_png(dataset_path);
+    ground_truth();
+
     of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
     of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
     dataset_path = MATLAB_DATASET_PATH;
     of_algo(dataset_path, "Movement.avi", "FB");
     of_algo(dataset_path, "Movement.avi", "LK");
     //disparity(dataset_path);
+
 
 }
 
