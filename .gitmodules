@@ -54,3 +54,15 @@
 [submodule "cockpit"]
 	path = overleaf/cockpit
 	url = https://git.overleaf.com/10975940fxjsvpkymnts
+[submodule "QtKittiVisualizer"]
+	path = kitti_eval/QtKittiVisualizer
+	url = https://github.com/MarkMuth/QtKittiVisualizer.git
+	branch = master
+[submodule "kitti-pcl"]
+	path = kitti_eval/kitti-pcl
+	url = https://github.com/yanii/kitti-pcl.git
+	branch = master
+[submodule "kitti2pcl"]
+	path = kitti_eval/kitti2pcl
+	url = https://github.com/jaejunlee0538/kitti2pcl.git
+	branch = master
