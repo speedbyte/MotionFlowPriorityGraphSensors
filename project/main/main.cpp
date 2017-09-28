@@ -60,7 +60,6 @@ int main ( int argc, char *argv[]) {
 
     boost::filesystem::path  dataset_path = KITTI_RAW_DATASET_PATH;
     //make_video_from_png(dataset_path);
-    ground_truth();
 
     of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
     of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");

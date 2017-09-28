@@ -15,8 +15,10 @@ include_directories()
 set(SOURCE_FILES
         Introduction.h
         main.cpp run_configuration.cpp kitti_calibration.cpp
-        video_capture.cpp
-        groundTruth.cpp)
+        video_capture.cpp )
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries(main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(matlab groundTruth.cpp)
+target_link_libraries(matlab ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
