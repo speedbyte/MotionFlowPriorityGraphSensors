@@ -1,6 +1,5 @@
 function [ frame ] = movement(xSpec,ySpec,secondXSpec,secondYSpec,bg )
-%MOVEMENT Summary of this function goes here
-%   Detailed explanation goes here
+%MOVEMENT create the moved object and therefore the next frame.
 frame = zeros(375,1242,3,'uint8');
 r = 0;
 b = 0;
