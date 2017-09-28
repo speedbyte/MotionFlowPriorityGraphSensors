@@ -74,12 +74,9 @@ for x = 1:maxIteration
     %%
     %Optical Flow
    tic;
-       frame = imnoise(frame,'speckle',0.0005);
-    imshow(frame);
+
    frame_gray = rgb2gray(frame);
-   level = graythresh(frame_gray);
-   BW = imbinarize(frame_gray,level);
-   imshow(BW);
+
    flow_frame = estimateFlow(opticFlow,frame_gray);
    flowstop(x) = toc;
    

@@ -100,7 +100,7 @@ for x = 1:maxIteration
     vXYCopy = vxCopy+vyCopy;
     vCopy = (vXYCopy ~= 0);
     
-     res = cat(3,flow_frame.Vx,flow_frame.Vy,vCopy);
+     res = cat(3,flow_frame.Vx*64+2^15,flow_frame.Vy*64+2^15,vCopy);
      res =  uint16(res);
      imwrite(res,'result.png');
     
@@ -153,7 +153,7 @@ for x = 1:maxIteration
     if x > 2
     tau = [3 0.05];
     name = sprintf('./GroundTruth/%06d_10.png',x);
-    addpath(genpath('./Kitti'));
+    addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
     F_gt = flow_read(name);
     F_est = flow_read('result.png');
     f_err = flow_error(F_gt,F_est,tau);
