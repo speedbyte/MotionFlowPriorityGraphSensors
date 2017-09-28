@@ -20,8 +20,8 @@ b = 0;
     %draw new image.
     for k = ySpec
         for j= xSpec
-             frame(k,j,1)= 0;
-             frame(k,j,2)= 0;
+             frame(k,j,1)= r;
+             frame(k,j,2)= b;
              frame(k,j,3)= 0;
              r=r+2;
              b=b+2;
@@ -40,8 +40,8 @@ b = 0;
     %expand with 2nd Object
     for k = secondYSpec
         for j= secondXSpec
-            frame(k,j,1)= 0;
-             frame(k,j,2)= 0;
+            frame(k,j,1)= r;
+             frame(k,j,2)= b;
              frame(k,j,3)= 0;
              r=r+2;
              b=b+2;
