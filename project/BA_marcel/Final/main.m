@@ -164,7 +164,7 @@ for x = 1:maxIteration
     errorMean(x) = errSum/x;
 
        
-       plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,error,f_err,errorMean,F_est,F_gt,F_err);
+   %    plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,error,f_err,errorMean,F_est,F_gt,F_err);
       plotTime(x) = toc;
     end
     
@@ -185,7 +185,7 @@ for x = 1:maxIteration
 end
 
 %Create Video out of frames.
-writer = VideoWriter('Movement.avi');
+writer = VideoWriter('../../../matlab_dataset/video/Movement.avi');
 open(writer);
 for i = 1:maxIteration
     name  = sprintf('./Videos/Frames/%06d.png',i);
