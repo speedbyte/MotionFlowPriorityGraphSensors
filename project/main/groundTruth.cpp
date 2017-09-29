@@ -2,6 +2,7 @@
 
 // This file converts Initialisation.m, gtColision.m and gtMovement.m and main.m from matlab.
 //movement.m and flowCollision.m
+
 #include <vector>
 #include <cmath>
 #include <opencv2/core/cvdef.h>
@@ -18,19 +19,19 @@
 //how many interations(frames)?
 const unsigned maxIteration = 360;
 unsigned collision = 0, iterator = 0, sIterator = 0;
-std::vector<float> xPos, yPos;
+std::vector<unsigned> xPos, yPos;
 unsigned start;
 unsigned secondStart;
 //object specs
 const unsigned width = 30;
 const unsigned height = 100;
 
-float xMovement=0,yMovement=0,secondXMovement=0,secondYMovement=0;
+unsigned xMovement=0,yMovement=0,secondXMovement=0,secondYMovement=0;
 
-float actualX;
-float actualY;
-float secondActualX;
-float secondActualY;
+unsigned actualX;
+unsigned actualY;
+unsigned secondActualX;
+unsigned secondActualY;
 
 cv::Mat absoluteFlow = cv::Mat::zeros(375, 1242, CV_16UC3);
 cv::Mat flow1 = cv::Mat::zeros(375, 1242, CV_16UC3);
@@ -46,21 +47,23 @@ void ground_truth() {
     }
 
     for ( int i = 0; i< 360; i++) {
-        xPos.push_back((float)(1 * cos(theta[i] * CV_PI / 180.0) / (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
-        yPos.push_back((float)(1 * (cos(theta[i] * CV_PI / 180.0) * sin(theta[i] * CV_PI / 180.0)) / (0.2 + std::pow(sin
-                                                                                                                      (theta[i] *
+        xPos.push_back((unsigned)(1 * cos(theta[i] * CV_PI / 180.0) / (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
+        yPos.push_back((unsigned)(1 * (cos(theta[i] * CV_PI / 180.0) * sin(theta[i] * CV_PI / 180.0)) / (0.2 + std::pow(sin
+                                                                                                                     (theta[i] *
+                                                                                                                      CV_PI /
+                                                                                                                      180.0),
+                                                                                                             2))));
     }
-
 
     //Start is somewhere on the path
     start = 30;
-    float xOrigin = xPos.at(start);
-    float yOrigin = yPos.at(start);
+    unsigned xOrigin = xPos.at(start);
+    unsigned yOrigin = yPos.at(start);
 
     //Start of the second object is somewhere on the path
     secondStart = 200;
-    float secondXOrigin = xPos.at(secondStart);
-    float secondYOrigin = yPos.at(secondStart);
+    unsigned secondXOrigin = xPos.at(secondStart);
+    unsigned secondYOrigin = yPos.at(secondStart);
 
     //for moving the objects later
     actualX = xOrigin;
@@ -68,29 +71,27 @@ void ground_truth() {
     secondActualX = secondXOrigin;
     secondActualY = secondYOrigin;
 
-    xMovement=0,yMovement=0,secondXMovement=0,secondYMovement=0;
-
-    cv::Mat kittiGT(375,1242,CV_32FC3,cv::Scalar(0,0,0));
-    cv::Mat relativeGroundTruth(375,1242,CV_32FC3,cv::Scalar(0,0,0));
-    cv::Mat absoluteGroundTruth = cv::Mat::zeros(375,1242,CV_32FC3);
+    cv::Mat kittiGT(375,1242,CV_16UC3,cv::Scalar(0,0,0));
+    cv::Mat relativeGroundTruth(375,1242,CV_16UC3,cv::Scalar(0,0,0));
+    cv::Mat absoluteGroundTruth(375,1242,CV_16UC3,cv::Scalar(0,0,0));
 
 
-    for (unsigned x=1; x <= maxIteration; x++) {
+    for (unsigned x=0; x < maxIteration; x++) {
 
         //Used to store the GT images for the kitti devkit
 
         char name_dense[50];
-        sprintf(name_dense, "../../../matlab_dataset/ground_truth/0000000%03d.png", x);
+        std::sprintf(name_dense, "../../../matlab_dataset/ground_truth/0000000%03d.png", x);
 
         //Initialization
-        if (x == 1) {
+        if (x == 0) {
             iterator = 0;
             sIterator = 0;
         }
 
         //Ground Truth Movement (First Object x, first Object y, second object x, second object y movement
 
-        if (x == 1) {
+        if (x == 0) {
             xMovement = 0;
             secondXMovement = 0;
             yMovement = 0;
@@ -100,15 +101,15 @@ void ground_truth() {
 
         if ((iterator+start) > xPos.size()) {
 
-            xMovement = xPos.at(1) - xPos.at(xPos.size());
-            yMovement = yPos.at(1) - yPos.at(yPos.size());
+            xMovement = xPos.at(0) - xPos.at(xPos.size());
+            yMovement = yPos.at(0) - yPos.at(yPos.size());
 
         }
 
         if ( (sIterator+secondStart) > xPos.size()) {
 
-            secondXMovement = xPos.at(1) - xPos.at(xPos.size());
-            secondYMovement = yPos.at(1) - yPos.at(yPos.size());
+            secondXMovement = xPos.at(0) - xPos.at(xPos.size());
+            secondYMovement = yPos.at(0) - yPos.at(yPos.size());
 
         }
 
@@ -138,23 +139,23 @@ void ground_truth() {
         }
 
         //Object specification
-        std::vector<float> xSpec;
+        std::vector<unsigned> xSpec;
         for ( unsigned i = 0; i < width; i++) {
-            xSpec.push_back(actualX+width);
+            xSpec.push_back(actualX+i);
         }
-        std::vector<float> ySpec;
+        std::vector<unsigned> ySpec;
         for ( unsigned i = 0; i < height; i++) {
-            ySpec.push_back(actualY+height);
+            ySpec.push_back(actualY+i);
         }
 
-        std::vector<float> secondXSpec;
+        std::vector<unsigned> secondXSpec;
         for ( unsigned i = 0; i < width; i++) {
-            secondXSpec.push_back(secondActualX+width);
+            secondXSpec.push_back(secondActualX+i);
         }
 
-        std::vector<float> secondYSpec;
+        std::vector<unsigned> secondYSpec;
         for ( unsigned i = 0; i < height; i++) {
-            secondYSpec.push_back(secondActualY+height);
+            secondYSpec.push_back(secondActualY+i);
         }
 
         //
@@ -163,8 +164,8 @@ void ground_truth() {
 
         for ( int k = 0; k < ySpec.size(); k++ )  {
             for ( int j = 0; j < xSpec.size(); j++ )  {
-                    relativeGroundTruth.at<cv::Vec3f>(k,j)[0] = (float)(xMovement*64+std::pow(2,15));
-                    relativeGroundTruth.at<cv::Vec3f>(k,j)[1] = (float)(yMovement*64+std::pow(2,15));
+                    relativeGroundTruth.at<cv::Vec3f>(k,j)[0] = (unsigned)(xMovement*64+std::pow(2,15));
+                    relativeGroundTruth.at<cv::Vec3f>(k,j)[1] = (unsigned)(yMovement*64+std::pow(2,15));
                     relativeGroundTruth.at<cv::Vec3f>(k,j)[2] = 1;
                     absoluteGroundTruth.at<cv::Vec3f>(k,j)[0] = xMovement+j;
                     absoluteGroundTruth.at<cv::Vec3f>(k,j)[1] = yMovement+k;
@@ -175,8 +176,8 @@ void ground_truth() {
 
         for ( int k = 0; k < secondYSpec.size(); k++ )  {
             for ( int j = 0; j < secondXSpec.size(); j++ )  {
-                relativeGroundTruth.at<cv::Vec3f>(k,j)[0] = (float)(secondXMovement*64+std::pow(2,15));
-                relativeGroundTruth.at<cv::Vec3f>(k,j)[1] = (float)(secondYMovement*64+std::pow(2,15));
+                relativeGroundTruth.at<cv::Vec3f>(k,j)[0] = (unsigned)(secondXMovement*64+std::pow(2,15));
+                relativeGroundTruth.at<cv::Vec3f>(k,j)[1] = (unsigned)(secondYMovement*64+std::pow(2,15));
                 relativeGroundTruth.at<cv::Vec3f>(k,j)[2] = 1;
                 absoluteGroundTruth.at<cv::Vec3f>(k,j)[0] = secondXMovement+j;
                 absoluteGroundTruth.at<cv::Vec3f>(k,j)[1] = secondYMovement+k;
@@ -187,20 +188,33 @@ void ground_truth() {
         //Create png Matrix with 3 channels: OF in vertical. OF in Horizontal and Validation bit
         //kittiGT = cat(3,relativeGroundTruth(:,:,1),relativeGroundTruth(:,:,2),relativeGroundTruth(:,:,3));
         //kittiGT =  uint16(kittiGT);
-        relativeGroundTruth.convertTo(kittiGT, CV_16UC3);
+        relativeGroundTruth.copyTo(kittiGT);
         cv::imwrite(name_dense, kittiGT);
 
         //check for each frame (iteration) if the objects are colliding
-        std::vector<float> xCol = xSpec;
-        std::vector<float> yCol = ySpec;
+        std::vector<unsigned> xCol = xSpec;
+        std::vector<unsigned> yCol = ySpec;
 
-        std::vector<float> secondXCol= secondXSpec;
-        std::vector<float> secondYCol = secondYSpec;
+        std::vector<unsigned> secondXCol= secondXSpec;
+        std::vector<unsigned> secondYCol = secondYSpec;
 
         std::vector<unsigned> checkX(1), checkY(1);
-        std::vector collisionVector(360);
-        //checkX = intersect(xCol,secondXCol);
-        //checkY = intersect(yCol,secondYCol);
+        std::vector<unsigned> collisionVector(360);
+
+        for ( unsigned i = 0; i < xCol.size() ; i++) {
+            for ( unsigned j = 0; j < secondXCol.size() ; j++) {
+                if ( std::abs(xCol.at(i) - secondXCol.at(j)) == 0) {
+                    checkX.push_back(i);  // index of collision
+                }
+            }
+        }
+        for ( unsigned i = 0; i < yCol.size() ; i++) {
+            for ( unsigned j = 0; j < secondYCol.size() ; j++) {
+                if ( std::abs(yCol.at(i) - secondYCol.at(j)) == 0) {
+                    checkY.push_back(i);  // index of collision
+                }
+            }
+        }
 
         if (!checkX.empty() && checkY.empty()) {
             collisionVector.at(x) = 1;
@@ -267,8 +281,8 @@ void flow() {
         //Used to store the GT images for the kitti devkit
 
         char name_frame[50], name_flow[50];
-        sprintf(name_frame, "../../../matlab_dataset/frames/0000000%03d.png", x);
-        sprintf(name_flow, "../../../matlab_dataset/flow/0000000%03d.png", x);
+        std::sprintf(name_frame, "../../../matlab_dataset/frames/0000000%03d.png", x);
+        std::sprintf(name_flow, "../../../matlab_dataset/flow/0000000%03d.png", x);
 
         //Initialization
         if (x == 1) {
@@ -277,14 +291,14 @@ void flow() {
         }
 
         //end of path vector? reset
-        if ((iterator+start) > xPos.size()) {
+        if ((iterator + start) > xPos.size()) {
 
             start = 1;
             iterator = 0;
 
         }
 
-        if ( (sIterator+secondStart) > xPos.size()) {
+        if ((sIterator + secondStart) > xPos.size()) {
 
             secondStart = 1;
             sIterator = 0;
@@ -293,22 +307,22 @@ void flow() {
 
         //Object specification
         std::vector<float> xSpec;
-        for ( unsigned i = 0; i < width; i++) {
-            xSpec.push_back(actualX+width);
+        for (unsigned i = 0; i < width; i++) {
+            xSpec.push_back(actualX + width);
         }
         std::vector<float> ySpec;
-        for ( unsigned i = 0; i < height; i++) {
-            ySpec.push_back(actualY+height);
+        for (unsigned i = 0; i < height; i++) {
+            ySpec.push_back(actualY + height);
         }
 
         std::vector<float> secondXSpec;
-        for ( unsigned i = 0; i < width; i++) {
-            secondXSpec.push_back(secondActualX+width);
+        for (unsigned i = 0; i < width; i++) {
+            secondXSpec.push_back(secondActualX + width);
         }
 
         std::vector<float> secondYSpec;
-        for ( unsigned i = 0; i < height; i++) {
-            secondYSpec.push_back(secondActualY+height);
+        for (unsigned i = 0; i < height; i++) {
+            secondYSpec.push_back(secondActualY + height);
         }
 
 
@@ -318,27 +332,27 @@ void flow() {
         //frame = movement(xSpec, ySpec, secondXSpec, secondYSpec, bg);
         //MOVEMENT Summary of this function goes here
         // Detailed explanation goes here
-        cv::Mat frame = cv::Mat::zeros(375,1242, CV_8UC3);
+        cv::Mat frame = cv::Mat::zeros(375, 1242, CV_8UC3);
         unsigned r = 0;
         unsigned b = 0;
 
         //reset the image to white
-        for ( int k = 0; k < bg.rows; k++ )  {
-            for ( int j = 0; j < bg.cols; j++ )  {
-                frame.at<cv::Vec3f>(k,j)[0] = 255;
-                frame.at<cv::Vec3f>(k,j)[1] = 255;
-                frame.at<cv::Vec3f>(k,j)[2] = 255;
+        for (int k = 0; k < bg.rows; k++) {
+            for (int j = 0; j < bg.cols; j++) {
+                frame.at<cv::Vec3f>(k, j)[0] = 255;
+                frame.at<cv::Vec3f>(k, j)[1] = 255;
+                frame.at<cv::Vec3f>(k, j)[2] = 255;
             }
         }
 
         //draw new image.
-        for ( int k = 0; k < ySpec.size(); k++ )  {
-            for ( int j = 0; j < xSpec.size(); j++ )  {
-                frame.at<cv::Vec3f>(k,j)[0] = r;
-                frame.at<cv::Vec3f>(k,j)[1] = b;
-                frame.at<cv::Vec3f>(k,j)[2] = 0;
-                r=r+2;
-                b=b+2;
+        for (int k = 0; k < ySpec.size(); k++) {
+            for (int j = 0; j < xSpec.size(); j++) {
+                frame.at<cv::Vec3f>(k, j)[0] = r;
+                frame.at<cv::Vec3f>(k, j)[1] = b;
+                frame.at<cv::Vec3f>(k, j)[2] = 0;
+                r = r + 2;
+                b = b + 2;
                 if (r > 254)
                     r = 130;
             }
@@ -351,13 +365,13 @@ void flow() {
 
         //expand with 2nd Object
         //draw new image.
-        for ( int k = 0; k < secondYSpec.size(); k++ )  {
-            for ( int j = 0; j < secondXSpec.size(); j++ )  {
-                frame.at<cv::Vec3f>(k,j)[0] = r;
-                frame.at<cv::Vec3f>(k,j)[1] = b;
-                frame.at<cv::Vec3f>(k,j)[2] = 0;
-                r=r+2;
-                b=b+2;
+        for (int k = 0; k < secondYSpec.size(); k++) {
+            for (int j = 0; j < secondXSpec.size(); j++) {
+                frame.at<cv::Vec3f>(k, j)[0] = r;
+                frame.at<cv::Vec3f>(k, j)[1] = b;
+                frame.at<cv::Vec3f>(k, j)[2] = 0;
+                r = r + 2;
+                b = b + 2;
                 if (r > 254)
                     r = 130;
             }
@@ -381,7 +395,7 @@ void flow() {
         //tic;
         cv::Mat frame_gray;
         cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
-        flow_frame = estimateFlow(opticFlow, frame_gray);
+/*        flow_frame = estimateFlow(opticFlow, frame_gray);
         flowstop(x) = toc;
 
 
@@ -519,6 +533,7 @@ void flow() {
         sIterator = sIterator + 1;
 
         imwrite(frame, name_frame);
+*/
     }
 
     //Create Video out of frames.
@@ -533,8 +548,7 @@ void flow() {
     }
     video_out.release();
 
-}
-
+ }
 
 int main() {
 
