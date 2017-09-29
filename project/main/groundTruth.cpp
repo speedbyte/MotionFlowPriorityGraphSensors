@@ -23,7 +23,7 @@ using namespace std::chrono;
 
 
 
-void ground_truth() {
+void ground_truth() {Y
 
     //how many interations(frames)?
     const unsigned MAX_ITERATION = 360;
@@ -164,8 +164,8 @@ void ground_truth() {
         //calculating the relative Ground Truth for the Kitti devkit and store it
         //in a png file
 
-        for ( int k = 0; k < ySpec.size(); k++ )  {
-            for ( int j = 0; j < xSpec.size(); j++ )  {
+        for ( int k = ySpec.at(0); k < ySpec.at(ySpec.size()-1); k++ )  {
+            for ( int j = xSpec.at(0); j < xSpec.at(xSpec.size()-1); j++ )  {
                     relativeGroundTruth.at<cv::Vec3f>(k,j)[0] = (unsigned)(xMovement*64+std::pow(2,15));
                     relativeGroundTruth.at<cv::Vec3f>(k,j)[1] = (unsigned)(yMovement*64+std::pow(2,15));
                     relativeGroundTruth.at<cv::Vec3f>(k,j)[2] = 1;
@@ -176,8 +176,8 @@ void ground_truth() {
                 }
         }
 
-        for ( int k = 0; k < secondYSpec.size(); k++ )  {
-            for ( int j = 0; j < secondXSpec.size(); j++ )  {
+        for ( int k = secondYSpec.at(0); k < secondYSpec.at(secondYSpec.size()-1); k++ )  {
+            for ( int j = secondXSpec.at(0); j < secondXSpec.at(secondXSpec.size()-1); j++ )  {
                 relativeGroundTruth.at<cv::Vec3f>(k,j)[0] = (unsigned)(secondXMovement*64+std::pow(2,15));
                 relativeGroundTruth.at<cv::Vec3f>(k,j)[1] = (unsigned)(secondYMovement*64+std::pow(2,15));
                 relativeGroundTruth.at<cv::Vec3f>(k,j)[2] = 1;
@@ -352,8 +352,8 @@ void flow() {
         }
 
         //draw new image.
-        for (int k = 0; k < ySpec.size(); k++) {
-            for (int j = 0; j < xSpec.size(); j++) {
+        for ( int k = ySpec.at(0); k < ySpec.at(ySpec.size()-1); k++ )  {
+            for ( int j = xSpec.at(0); j < xSpec.at(xSpec.size()-1); j++ )  {
                 frame.at<cv::Vec3f>(k, j)[0] = b;
                 frame.at<cv::Vec3f>(k, j)[1] = 0;
                 frame.at<cv::Vec3f>(k, j)[2] = r;
@@ -371,8 +371,8 @@ void flow() {
 
         //expand with 2nd Object
         //draw new image.
-        for (int k = 0; k < secondYSpec.size(); k++) {
-            for (int j = 0; j < secondXSpec.size(); j++) {
+        for ( int k = secondYSpec.at(0); k < secondYSpec.at(secondYSpec.size()-1); k++ )  {
+            for ( int j = secondXSpec.at(0); j < secondXSpec.at(secondXSpec.size()-1); j++ )  {
                 frame.at<cv::Vec3f>(k, j)[0] = b;
                 frame.at<cv::Vec3f>(k, j)[1] = 0;
                 frame.at<cv::Vec3f>(k, j)[2] = r;
@@ -485,15 +485,15 @@ void flow() {
         unsigned secondObjectLowerWidth = secondXSpec.at(0);
 
 
-        for ( int k = 0; k < ySpec.size(); k++ )  {
-            for ( int j = 0; j < xSpec.size(); j++ ) {
+        for ( int k = ySpec.at(0); k < ySpec.at(ySpec.size()-1); k++ )  {
+            for ( int j = xSpec.at(0); j < xSpec.at(xSpec.size()-1); j++ )  {
                 flow1.at<cv::Vec3f>(k, j)[0] = absoluteFlow.at<cv::Vec3f>(ySpec.at(k), xSpec.at(j))[0];
                 flow1.at<cv::Vec3f>(k, j)[1] = absoluteFlow.at<cv::Vec3f>(ySpec.at(k), xSpec.at(j))[1];
             }
         }
 
-        for ( int k = 0; k < secondYSpec.size(); k++ )  {
-            for ( int j = 0; j < secondXSpec.size(); j++ ) {
+        for ( int k = secondYSpec.at(0); k < secondYSpec.at(secondYSpec.size()-1); k++ )  {
+            for ( int j = secondXSpec.at(0); j < secondXSpec.at(secondXSpec.size()-1); j++ )  {
                 flow2.at<cv::Vec3f>(k, j)[0] = absoluteFlow.at<cv::Vec3f>(secondYSpec.at(k), secondXSpec.at(j))[0];
                 flow2.at<cv::Vec3f>(k, j)[1] = absoluteFlow.at<cv::Vec3f>(secondYSpec.at(k), secondXSpec.at(j))[1];
             }
