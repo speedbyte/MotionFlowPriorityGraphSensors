@@ -1,7 +1,7 @@
 
 
 // This file converts Initialisation.m, gtColision.m and gtMovement.m and main.m from matlab.
-//movement.m and flowCollision.m
+//movement.m and flowCollision.m, estimatedMovment
 
 #include <vector>
 #include <cmath>
@@ -13,8 +13,13 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/videoio/videoio_c.h>
+#include <opencv/cv.hpp>
+#include <map>
+#include <chrono>
 
 //Creating a movement path. The path is stored in a x and y vector
+
+using namespace std::chrono;
 
 //how many interations(frames)?
 const unsigned maxIteration = 360;
@@ -81,7 +86,7 @@ void ground_truth() {
         //Used to store the GT images for the kitti devkit
 
         char name_dense[50];
-        std::sprintf(name_dense, "../../../matlab_dataset/ground_truth/0000000%03d.png", x);
+        sprintf(name_dense, "../../../matlab_dataset/ground_truth/0000000%03d.png", x);
 
         //Initialization
         if (x == 0) {
@@ -216,7 +221,7 @@ void ground_truth() {
             }
         }
 
-        if (!checkX.empty() && checkY.empty()) {
+        if (!checkX.empty() && !checkY.empty()) {
             collisionVector.at(x) = 1;
         }
         else {
@@ -260,8 +265,14 @@ void flow() {
 
     //opticFlow=opticalFlowFarneback;//('NoiseThreshold',0.004);
 
-    cv::Mat frame = cv::Mat::zeros(375,1242,CV_8UC3);
+    cv::Mat frame = cv::Mat::zeros(375, 1242, CV_8UC3);
     cv::Mat bg = cv::Mat::zeros(375,1242,CV_8UC3);
+
+    cv::Mat frame_gray, prevGray, flow_frame;
+
+
+    std::map<std::string, double> time_map;
+    auto tic, toc;
 
     bool plotTime = 1;
     std::vector<bool> error;
@@ -272,20 +283,20 @@ void flow() {
         for ( int j = 0; j < bg.cols; j++ )  {
             bg.at<cv::Vec3f>(k,j)[0] = rand()%255;
             bg.at<cv::Vec3f>(k,j)[1] = rand()%255;
-
+            bg.at<cv::Vec3f>(k,j)[2] = 0;
         }
     }
 
-    for (unsigned x=1; x <= maxIteration; x++) {
+    for (unsigned x=0; x <= maxIteration; x++) {
 
         //Used to store the GT images for the kitti devkit
 
         char name_frame[50], name_flow[50];
-        std::sprintf(name_frame, "../../../matlab_dataset/frames/0000000%03d.png", x);
-        std::sprintf(name_flow, "../../../matlab_dataset/flow/0000000%03d.png", x);
+        sprintf(name_frame, "../../../matlab_dataset/frames/0000000%03d.png", x);
+        sprintf(name_flow, "../../../matlab_dataset/flow/0000000%03d.png", x);
 
         //Initialization
-        if (x == 1) {
+        if (x == 0) {
             iterator = 0;
             sIterator = 0;
         }
@@ -306,33 +317,32 @@ void flow() {
         }
 
         //Object specification
-        std::vector<float> xSpec;
+        std::vector<unsigned> xSpec;
         for (unsigned i = 0; i < width; i++) {
-            xSpec.push_back(actualX + width);
+            xSpec.push_back(actualX + i);
         }
-        std::vector<float> ySpec;
+        std::vector<unsigned > ySpec;
         for (unsigned i = 0; i < height; i++) {
-            ySpec.push_back(actualY + height);
+            ySpec.push_back(actualY + i);
         }
 
-        std::vector<float> secondXSpec;
+        std::vector<unsigned > secondXSpec;
         for (unsigned i = 0; i < width; i++) {
-            secondXSpec.push_back(secondActualX + width);
+            secondXSpec.push_back(secondActualX + i);
         }
 
-        std::vector<float> secondYSpec;
+        std::vector<unsigned > secondYSpec;
         for (unsigned i = 0; i < height; i++) {
-            secondYSpec.push_back(secondActualY + height);
+            secondYSpec.push_back(secondActualY + i);
         }
-
-
 
         // create the frame
-        // disp(x);
-        //frame = movement(xSpec, ySpec, secondXSpec, secondYSpec, bg);
-        //MOVEMENT Summary of this function goes here
-        // Detailed explanation goes here
-        cv::Mat frame = cv::Mat::zeros(375, 1242, CV_8UC3);
+        // std::cout << x << std::endl;
+        // frame = movement(xSpec, ySpec, secondXSpec, secondYSpec, bg);
+        //MOVEMENT Summary of this function goes here. Detailed explanation goes here
+
+        tic = steady_clock::now();
+
         unsigned r = 0;
         unsigned b = 0;
 
@@ -348,9 +358,9 @@ void flow() {
         //draw new image.
         for (int k = 0; k < ySpec.size(); k++) {
             for (int j = 0; j < xSpec.size(); j++) {
-                frame.at<cv::Vec3f>(k, j)[0] = r;
-                frame.at<cv::Vec3f>(k, j)[1] = b;
-                frame.at<cv::Vec3f>(k, j)[2] = 0;
+                frame.at<cv::Vec3f>(k, j)[0] = b;
+                frame.at<cv::Vec3f>(k, j)[1] = 0;
+                frame.at<cv::Vec3f>(k, j)[2] = r;
                 r = r + 2;
                 b = b + 2;
                 if (r > 254)
@@ -367,9 +377,9 @@ void flow() {
         //draw new image.
         for (int k = 0; k < secondYSpec.size(); k++) {
             for (int j = 0; j < secondXSpec.size(); j++) {
-                frame.at<cv::Vec3f>(k, j)[0] = r;
-                frame.at<cv::Vec3f>(k, j)[1] = b;
-                frame.at<cv::Vec3f>(k, j)[2] = 0;
+                frame.at<cv::Vec3f>(k, j)[0] = b;
+                frame.at<cv::Vec3f>(k, j)[1] = 0;
+                frame.at<cv::Vec3f>(k, j)[2] = r;
                 r = r + 2;
                 b = b + 2;
                 if (r > 254)
@@ -383,44 +393,237 @@ void flow() {
         b = 0;
 
 
-        //   frame = imnoise(frame,'gaussian',0.5);
+        //frame = imnoise(frame,'gaussian',0.5);
 
-        //add noise
+        toc = steady_clock::now();
+        time_map["generate"] = duration_cast<milliseconds>(toc - tic).count();
 
-        //timeToGenerateObject(x) = toc;
+        tic = steady_clock::now();
 
-        //addpath('LKpyramid Codes');
-        ////
-        //Optical Flow
-        //tic;
-        cv::Mat frame_gray;
         cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
-/*        flow_frame = estimateFlow(opticFlow, frame_gray);
-        flowstop(x) = toc;
+
+        if (prevGray.data) {
+            // Initialize parameters for the optical flow algorithm
+            float pyrScale = 0.5;
+            int numLevels = 3;
+            int windowSize = 15;
+            int numIterations = 3;
+            int neighborhoodSize = 5;
+            float stdDeviation = 1.2;
+
+            //flow_frame = cv::calcOpticalFlowFarneback(opticFlow, frame_gray);
+            // Calculate optical flow map using Farneback algorithm
+            cv::calcOpticalFlowFarneback(prevGray, frame_gray, flow_frame, pyrScale, numLevels, windowSize,
+                                         numIterations,
+                                         neighborhoodSize, stdDeviation, cv::OPTFLOW_USE_INITIAL_FLOW);
+
+            // Draw the optical flow map
+            int stepSize = 16;
+
+            // Draw the uniform grid of points on the input image along with the motion vectors
+            for (int y = 0; y < frame.rows; y += stepSize) {
+                for (int x = 0; x < frame.cols; x += stepSize) {
+                    // Circles to indicate the uniform grid of points
+                    cv::circle(frame, cv::Point(x, y), 0.5, cv::Scalar(0, 255, 0), -1, 8);
+
+                    // Lines to indicate the motion vectors
+                    cv::Point2f pt = flow_frame.at<cv::Point2f>(y, x);
+                    cv::arrowedLine(frame, cv::Point(x, y), cv::Point(cvRound(x + pt.x), cvRound(y + pt.y)),
+                                    cv::Scalar(0,
+                                               255, 0));
+                }
+            }
+        }
+
+        toc = steady_clock::now();
+        time_map["flow"] = duration_cast<milliseconds>(toc - tic).count();
 
 
-        vxCopy = (flow_frame.Vx ~ = 0);
-        vyCopy = (flow_frame.Vy ~ = 0);
+        cv::Mat vxCopy, vyCopy, vXYCopy, vCopy;
+        //flow_frame.Vx ~ = 0); // flow_frame != 0 ? 1 : 0
+        cv::threshold (flow_frame, vxCopy, 0, 1, cv::THRESH_BINARY);
+        cv::threshold (flow_frame, vyCopy, 0, 1, cv::THRESH_BINARY);
         vXYCopy = vxCopy + vyCopy;
-        vCopy = (vXYCopy~ = 0);
+        cv::threshold (vXYCopy, vCopy, 0, 1, cv::THRESH_BINARY);
 
-        res = cat(3, flow_frame.Vx * 64 + 2 ^ 15, flow_frame.Vy * 64 + 2 ^ 15, vCopy);
-        res = uint16(res);
-        imwrite(res, 'result.png');
+        cv::Mat res;
+        //channel copy !!!!!!
+        res.at(0) = flow_frame.at(0) * 64 + 2 ^ 15; // Vx
+        res.at(1) = flow_frame.at(1) * 64 + 2 ^ 15; // Vy
+        res.at(2) = vCopy;
+        imwrite('result.png', res);
 
         //create flow matrix to store the estimated displacemend in.
-        flow(:,:,1) = flow_frame.Vx;
-        flow(:,:,2) = flow_frame.Vy;
+        flow.at(0) = flow_frame.Vx;  // 1st channel is Vx
+        flow.at(1) = flow_frame.Vy;  // second channel is Vy
 
         //absolute Flow
         //get absolute estimated flow.
 
-        tic;
-        [estMovement, estimatedCollision] = estimatedMovement(flow, xSpec, ySpec, secondXSpec, secondYSpec);
-        timeMovement(x) = toc;
-        collisionTime(x) = toc;
+        tic = steady_clock::now();
+
+        bool estimatedCollision;
+        std::vector<unsigned> estMovement(4); // xMean,yMean,secondObjectXMean,secondObjectYMean
+
+
+       //Threshold of the object flow
+        estimatedCollision = 0;
+        flowFirstObjectX = zeros(375,1242,3);
+        flowFirstObjectY = zeros(375,1242,3);
+        flowSecondObjectX = zeros(375,1242,3);
+        flowSecondObjectY = zeros(375,1242,3);
+
+        upperheigtht = ySpec(end);
+        lowerheight = ySpec(1);
+        upperwidth = xSpec(end);
+        lowerwidth = xSpec(1);
+
+        secondObjectUpperheight = secondYSpec(end);
+        secondObjectLowerheight = secondYSpec(1);
+        secondObjectUpperWidth = secondXSpec(end);
+        secondObjectLowerWidth = secondXSpec(1);
+
+        if ySpec < 365
+        upperheigtht = ySpec(end)+10;
+        end
+        if ySpec > 10
+        lowerheight = ySpec(1)-10;
+        end
+
+        if xSpec < 1232
+        upperwidth = xSpec(end)+10;
+        end
+        if xSpec > 10
+        lowerwidth = xSpec(1)-10;
+        end
+
+
+        if secondYSpec < 365
+        secondObjectUpperheight = secondYSpec(end)+10;
+        end
+        if secondYSpec > 10
+        secondObjectLowerheight = secondYSpec(1)-10;
+        end
+
+        if secondXSpec < 1232
+        secondObjectUpperWidth = secondXSpec(end)+10;
+        end
+        if secondXSpec > 10
+        secondObjectLowerWidth = secondXSpec(1)-10;
+        end
+
+
+
+        for ( int k = 0; k < ySpec.size(); k++ )  {
+            for ( int j = 0; j < xSpec.size(); j++ ) {
+                flow1.at(k, j)[0] = absoluteFlow.at(ySpec.at(k), xSpec.at(j))[0];
+                flow1.at(k, j)[1] = absoluteFlow.at(ySpec.at(k), xSpec.at(j))[1];
+            }
+        }
+
+        for ( int k = 0; k < secondYSpec.size(); k++ )  {
+            for ( int j = 0; j < secondXSpec.size(); j++ ) {
+                flow2.at(k, j)[0] = absoluteFlow.at(secondYSpec.at(k), secondXSpec.at(j))[0];
+                flow2.at(k, j)[1] = absoluteFlow.at(secondYSpec.at(k), secondXSpec.at(j))[1];
+            }
+        }
+
+       //%
+       //%get flow from the objects
+        for k = lowerheight:upperheigtht
+        for j = lowerwidth:upperwidth
+                flowFirstObjectX(k,j,1) = flow(k,j,1);
+        flowFirstObjectY(k,j,2) = flow(k,j,2);
+        end
+                end
+
+        for kk = secondObjectLowerheight:secondObjectUpperheight
+        for jj = secondObjectLowerWidth:secondObjectUpperWidth
+                flowSecondObjectX(kk,jj,1) = flow(kk,jj,1);
+        flowSecondObjectY(kk,jj,2) = flow(kk,jj,2);
+        end
+        end
+
+       //%
+        %Extract the movement of the object.
+                firstObjectX = nonzeros(flowFirstObjectX);
+        xThreshold = find(abs(firstObjectX)<0.2); %cutting out very small displacements
+        firstObjectX(xThreshold) = [];
+
+        firstObjectY= nonzeros(flowFirstObjectY);
+        yThreshold = find(abs(firstObjectY)<0.2);
+        firstObjectY(yThreshold) = [];
+
+        secondObjectX = nonzeros(flowSecondObjectX);
+        xThreshold = find(abs(secondObjectX)<0.2);
+        secondObjectX(xThreshold) = [];
+
+        secondObjectY = nonzeros(flowSecondObjectY);
+        yThreshold = find(abs(secondObjectY)<0.2);
+        secondObjectY(yThreshold) = [];
+        %%
+
+        %%
+        %Get the movement by getting the mean of the flow objects.
+                xMean=mean(firstObjectX);
+        yMean=mean(firstObjectY);
+        secondObjectXMean = mean(secondObjectX);
+        secondObjectYMean = mean(secondObjectY);
+
+        if isnan(xMean)
+        xMean = 0;
+        end
+        if isnan(yMean)
+        yMean = 0;
+        end
+        if isnan(secondObjectYMean)
+        secondObjectYMean = 0;
+        end
+        if isnan(secondObjectXMean)
+        secondObjectXMean = 0;
+        end
+
+        % disp('Estimated Movement of the First Object:');
+        % disp('x')
+          % disp(xMean);
+        % disp('y')
+          % disp(yMean);
+        % disp('Estimated Movement of the second Object');
+        % disp('x')
+          % disp(secondObjectXMean);
+        % disp('y')
+          % disp(secondObjectYMean);
+
+        estMovement = [xMean,yMean,secondObjectXMean,secondObjectYMean];
+
+        %Estimate the future collision. Floor call in order to get possibly matching results
+
+        for i = 1:1
+        ySpec = floor(ySpec+yMean);
+        xSpec = floor(xSpec+xMean);
+        secondYSpec = floor(secondYSpec+secondObjectYMean);
+        secondXSpec = floor(secondXSpec+secondObjectXMean);
+
+        checkY = intersect(ySpec,secondYSpec);
+        checkX = intersect(xSpec,secondXSpec);
+
+        if ~isempty(checkX) & ~isempty(checkY)
+        estimatedCollision = 1;
+        break;
+        end
+                end
+
+        end
+
+
+
+        toc = steady_clock::now();
+
+        time_map["movement"] = duration_cast<milliseconds>(toc - tic).count();
+        time_map["collision"] = duration_cast<milliseconds>(toc - tic).count();
 
         std::vector<float> estMovement(2);
+
         for ( int k = 0; k < ySpec.size(); k++ )  {
             for ( int j = 0; j < xSpec.size(); j++ ) {
                 absoluteFlow.at(k, j)[0] = estMovement.at(1) + j;
@@ -450,41 +653,8 @@ void flow() {
         // Substract the absolute Flows of the bothobjects of interest. If the result is <= width and height of the
         // object, the objects are colliding
 
-        unsigned estCollision = 0;
+        unsigned estimatedCollision = 0;
         //Estimate the future collision. Floor call in order to get possibly matching results
-
-        for ( int k = 0; k < ySpec.size(); k++ )  {
-            for ( int j = 0; j < xSpec.size(); j++ ) {
-                flow1.at(k, j)[0] = absoluteFlow.at(ySpec.at(k), xSpec.at(j))[0];
-                flow1.at(k, j)[1] = absoluteFlow.at(ySpec.at(k), xSpec.at(j))[1];
-            }
-        }
-
-        for ( int k = 0; k < secondYSpec.size(); k++ )  {
-            for ( int j = 0; j < secondXSpec.size(); j++ ) {
-                flow2.at(k, j)[0] = absoluteFlow.at(secondYSpec.at(k), secondXSpec.at(j))[0];
-                flow2.at(k, j)[1] = absoluteFlow.at(secondYSpec.at(k), secondXSpec.at(j))[1];
-            }
-        }
-
-        abs1 = absoluteFlow(:,:,1);
-        f1 = flow1(:,:,1);
-        f2 = flow2(:,:,1);
-        f3 = f1-f2;
-        finalFlow = flow1-flow2;
-        finalFlow = abs(finalFlow);
-
-
-        sizeCheckX = length(xSpec);
-        sizeCheckY = length(ySpec);
-
-        xChecker = ismember([0:sizeCheckX],finalFlow(:,:,1));
-        yChecker = ismember([0:sizeCheckY],finalFlow(:,:,2));
-
-        if ismember(1,xChecker) & ismember(1,yChecker)
-        estCollision = 1;
-        end
-                end
 
 
 
