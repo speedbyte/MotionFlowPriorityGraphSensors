@@ -21,21 +21,24 @@ using namespace std::chrono;
 
 extern void flow(std::string algo);
 
+#define MATLAB_DATASET_PATH "../../../matlab_dataset/"
 
 void ground_truth() {
 
-    std::map<std::string, double> time_map;
-    boost::filesystem::path path;
-    path = "../../../matlab_dataset/ground_truth/"+std::string("dummy");
-    assert(boost::filesystem::exists(path.parent_path()) != 0);
+    cv::Size frame_size(1242,275);
+    std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
+    boost::filesystem::path gt_video_path;
+    gt_video_path = std::string(MATLAB_DATASET_PATH) + std::string("ground_truth/gtMovement.avi");
+    assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
-    std::string gt_video_path = path.parent_path().string() + '/' + "gtMovement.avi";
-    video_out.open(gt_video_path, CV_FOURCC('D', 'I', 'V', 'X'), 30, cv::Size(1242,375), true);
+    video_out.open(gt_video_path.string(), CV_FOURCC('D', 'I', 'V', 'X'), 30, frame_size, true);
 
     //how many interations(frames)?
-    auto tic = steady_clock::now();
-    auto toc = steady_clock::now();
+    auto tic= steady_clock::now();
+    auto toc= steady_clock::now();
+    auto tic_all = steady_clock::now();
+    auto toc_all = steady_clock::now();
 
     const ushort MAX_ITERATION = 360;
     ushort collision = 0, iterator = 0, sIterator = 0;
@@ -91,19 +94,32 @@ void ground_truth() {
     yMovement = 0;
     secondYMovement = 0;
 
-    cv::Mat kittiGT(375,1242,CV_16UC3,cv::Scalar(0,0,0));
-    cv::Mat relativeGroundTruth(375,1242,CV_16UC3,cv::Scalar(0,0,0));
-    cv::Mat absoluteGroundTruth(375,1242,CV_16UC3,cv::Scalar(0,0,0));
+    cv::Mat kittiGT(frame_size,CV_16UC3,cv::Scalar(0,0,0));
+    cv::Mat relativeGroundTruth(frame_size,CV_16UC3,cv::Scalar(0,0,0));
+    cv::Mat absoluteGroundTruth(frame_size,CV_16UC3,cv::Scalar(0,0,0));
+
+    cv::Mat frame = cv::Mat::zeros(frame_size, CV_8UC3);
 
 
-    tic = steady_clock::now();
+
+    for ( int k = 0; k < frame.rows; k++ )  {
+        for ( int j = 0; j < frame.cols; j++ )  {
+            frame.at<cv::Vec3b>(k,j)[0] = (uchar)(rand()%255);
+            frame.at<cv::Vec3b>(k,j)[1] = (uchar)(rand()%255);
+            frame.at<cv::Vec3b>(k,j)[2] = 0;
+        }
+    }
+
+
+    tic_all = steady_clock::now();
     for (ushort x=0; x < MAX_ITERATION; x++) {
+
 
         //Used to store the GT images for the kitti devkit
 
         char file_name[20];
         sprintf(file_name, "0000000%03d.png", x);
-        std::string gt_image_path = path.parent_path().string() + '/' + std::string(file_name);
+        std::string gt_image_path = gt_video_path.parent_path().string() + '/' + std::string(file_name);
         printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondStart, sIterator);
 
         //If we are at the end of the path vector, we need to reset our iterators
@@ -148,7 +164,70 @@ void ground_truth() {
             secondYSpec.push_back(secondActualY+i);
         }
 
-        //
+
+        // create the frame
+        tic = steady_clock::now();
+
+        uchar r = 0;
+        uchar b = 0;
+
+        //reset the image to white
+        for (int k = 0; k < frame.rows; k++) {
+            for (int j = 0; j < frame.cols; j++) {
+                frame.at<cv::Vec3b>(k, j)[0] = 255;
+                frame.at<cv::Vec3b>(k, j)[1] = 255;
+                frame.at<cv::Vec3b>(k, j)[2] = 255;
+            }
+        }
+
+        //draw new image.
+        for (int k = ySpec.at(0); k < ySpec.at(ySpec.size() - 1); k++) {
+            for (int j = xSpec.at(0); j < xSpec.at(xSpec.size() - 1); j++) {
+                frame.at<cv::Vec3b>(k, j)[0] = b;
+                frame.at<cv::Vec3b>(k, j)[1] = 0;
+                frame.at<cv::Vec3b>(k, j)[2] = r;
+                r = r + (uchar)2;
+                b = b + (uchar)2;
+                if (r > 254)
+                    r = 130;
+            }
+            if (b > 254)
+                b = 46;
+        }
+
+        r = 0;
+        b = 0;
+
+        //expand with 2nd Object
+        //draw new image.
+        for (int k = secondYSpec.at(0); k < secondYSpec.at(secondYSpec.size() - 1); k++) {
+            for (int j = secondXSpec.at(0); j < secondXSpec.at(secondXSpec.size() - 1); j++) {
+                frame.at<cv::Vec3b>(k, j)[0] = b;
+                frame.at<cv::Vec3b>(k, j)[1] = 0;
+                frame.at<cv::Vec3b>(k, j)[2] = r;
+                r = r + (uchar)2;
+                b = b + (uchar)2;
+                if (r > 254)
+                    r = 130;
+            }
+            if (b > 254)
+                b = 46;
+        }
+
+        r = 0;
+        b = 0;
+
+        if ( !video_out.isOpened() ) {
+            std::cerr << "Could not open video" << std::endl;
+        }
+        video_out.write(frame);
+
+        //frame = imnoise(frame,'gaussian',0.5);
+
+        toc = steady_clock::now();
+        time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
+
+
         //calculating the relative Ground Truth for the Kitti devkit and store it in a png file
 
         for ( int k = ySpec.at(0); k < ySpec.at(ySpec.size()-1); k++ )  {
@@ -180,13 +259,7 @@ void ground_truth() {
 
         relativeGroundTruth.copyTo(kittiGT);
         relativeGroundTruth.convertTo(kittiGT, CV_8UC3);
-        std::cout << kittiGT.depth();
-        cv::imwrite(gt_image_path, kittiGT);
-
-        if ( !video_out.isOpened() ) {
-            break;
-        }
-        video_out.write(kittiGT);
+        //cv::imwrite(gt_image_path, kittiGT);
 
         //check for each frame (iteration) if the objects are colliding
         std::vector<ushort> xCol = xSpec;
@@ -232,11 +305,12 @@ void ground_truth() {
         actualY = actualY+yMovement;
         secondActualX = secondActualX+secondXMovement;
         secondActualY = secondActualY+secondYMovement;
+        std::cout << "generate frame - " << time_map["generate"]  << "ms" << std::endl;
 
     }
     video_out.release();
-    toc = steady_clock::now();
-    time_map.insert(std::make_pair("ground truth", duration_cast<milliseconds>(toc - tic).count()));
+    toc_all = steady_clock::now();
+    time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
     std::cout << "ground truth generation time - " << time_map["ground truth"]  << "ms" << std::endl;
 
 }
