@@ -21,27 +21,6 @@ end
 
 
 //Scratch 2
-        cv::Mat vxCopy, vyCopy, vXYCopy, vCopy, flow_frame_individual_channels[3];
-cv::split(flow_frame, flow_frame_individual_channels);
-//flow_frame.Vx ~ = 0); // flow_frame != 0 ? 1 : 0
-cv::threshold (flow_frame_individual_channels[0], vxCopy, 0, 1, cv::THRESH_BINARY);
-cv::threshold (flow_frame_individual_channels[1], vyCopy, 0, 1, cv::THRESH_BINARY);
-vXYCopy = vxCopy + vyCopy;
-cv::threshold (vXYCopy, vCopy, 0, 1, cv::THRESH_BINARY);
-
-cv::Mat res;
-
-cv::Mat flow;
-flow_frame_individual_channels->copyTo(flow);
-
-//channel copy !!!!!!
-flow_frame_individual_channels[0] = (flow_frame_individual_channels[0] * 64 ) + 2 ^ 15; // Vx
-flow_frame_individual_channels[1] = (flow_frame_individual_channels[1] * 64 ) + 2 ^ 15; // Vy
-flow_frame_individual_channels[2] = vCopy;
-
-// merge in a image file
-cv::merge(flow_frame_individual_channels,3,res);
-cv::imwrite("result.png", res);
 
 //create flow matrix to store the estimated displacemend in.
 
@@ -233,20 +212,16 @@ estimatedCollisionVector.at(x) = 1;
 else
 estimatedCollisionVector.at(x) = 0;
 
-tic = steady_clock::now();
 
-
-iterator++;
-sIterator++;
-
-//Update position (the objects of interest are tracked via Ground Truth here)
-
-actualX = xPos.at(start + iterator);
-actualY = yPos.at(start + iterator);
-secondActualX = xPos.at(secondStart + sIterator);
-secondActualY = yPos.at(secondStart + sIterator);
-
-cv::imwrite(name_frame.string(), frame );
-
-auto end = steady_clock::now();
 // Scratch 2 ends
+
+
+
+// Scratch absolute
+for ( int k = secondYSpec.at(0); k < secondYSpec.at(secondYSpec.size()-1); k++ )  {
+for ( int j = secondXSpec.at(0); j < secondXSpec.at(secondXSpec.size()-1); j++ )  {
+absoluteGroundTruth.at<cv::Vec3w>(k,j)[0] = (ushort)(secondXMovement+j);
+absoluteGroundTruth.at<cv::Vec3w>(k,j)[1] = (ushort)(secondYMovement+k);
+absoluteGroundTruth.at<cv::Vec3w>(k,j)[2] = 1;
+}
+}

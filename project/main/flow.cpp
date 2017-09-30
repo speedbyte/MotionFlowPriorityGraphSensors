@@ -312,7 +312,48 @@ void flow(std::string algo, ushort start, ushort secondstart) {
 
 
         // Scratch 2.. begin .. end
+        cv::Mat vxCopy, vyCopy, vXYCopy, vCopy, flow_frame_individual_channels[3];
 
+        cv::split(flow_frame, flow_frame_individual_channels);
+        //flow_frame.Vx ~ = 0); // flow_frame != 0 ? 1 : 0
+        cv::threshold (flow_frame_individual_channels[0], vxCopy, 0, 1, cv::THRESH_BINARY);
+        cv::threshold (flow_frame_individual_channels[1], vyCopy, 0, 1, cv::THRESH_BINARY);
+        vXYCopy = vxCopy + vyCopy;
+        cv::threshold (vXYCopy, vCopy, 0, 1, cv::THRESH_BINARY);
+
+        cv::Mat res;
+
+        cv::Mat flow;
+        flow_frame_individual_channels->copyTo(flow);
+
+        //channel copy !!!!!!
+        flow_frame_individual_channels[0] = (flow_frame_individual_channels[0] * 64 ) + 2 ^ 15; // Vx
+        flow_frame_individual_channels[1] = (flow_frame_individual_channels[1] * 64 ) + 2 ^ 15; // Vy
+        flow_frame_individual_channels[2] = vCopy;
+
+        // merge in a image file
+        cv::merge(flow_frame_individual_channels,3,res);
+        cv::imwrite("result.png", res);
+
+        // Scratch 2 end
+
+        tic = steady_clock::now();
+
+        iterator++;
+        sIterator++;
+
+        //Update position (the objects of interest are tracked via Ground Truth here)
+
+        actualX = xPos.at(start + iterator);
+        actualY = yPos.at(start + iterator);
+        secondActualX = xPos.at(secondstart + sIterator);
+        secondActualY = yPos.at(secondstart + sIterator);
+
+        cv::imwrite(name_frame.string(), frame );
+
+        auto end = steady_clock::now();
+
+        
         x_pts.push_back(frame_count);
 
         video_out.write(frame);

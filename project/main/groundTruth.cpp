@@ -60,16 +60,11 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     }
 
     for ( int i = 0; i< MAX_ITERATION; i++) {
-        xPos.push_back(600 + (500 * cos(theta[i] * CV_PI / 180.0) / (1.0 + std::pow(sin(theta[i] * CV_PI /
-                                                                                                        180.0), 2)
-                                                                    )));
-        yPos.push_back(150 + (55 * (cos(theta[i] * CV_PI / 180.0) * sin(theta[i] * CV_PI / 180.0)) / (0.2 +
-                std::pow
-                                                                                                                     (sin
-                                                                                                                              (theta[i] *
-                                                                                                                               CV_PI /
-                                                                                                                               180.0),
-                                                                                                                      2))));
+        xPos.push_back(static_cast<ushort>((frame_size.width/2) + (500 * cos(theta[i] * CV_PI / 180.0) /
+                (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2)))));
+
+        yPos.push_back(static_cast<ushort>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
+                sin(theta[i] * CV_PI / 180.0)) / (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2)))));
     }
 
     ushort xOrigin = xPos.at(start);
@@ -93,29 +88,18 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     YMovement = 0;
     secondYMovement = 0;
 
-    cv::Mat kittiGT(frame_size,CV_16UC3,cv::Scalar(0,0,0));
     cv::Mat relativeGroundTruth(frame_size,CV_16UC3,cv::Scalar(0,0,0));
-    cv::Mat absoluteGroundTruth(frame_size,CV_16UC3,cv::Scalar(0,0,0));
 
-    cv::Mat frame = cv::Mat::zeros(frame_size, CV_8UC3);
+    cv::Mat test_frame = cv::Mat::zeros(frame_size, CV_8UC3);
 
-
-    for ( int k = 0; k < frame.rows; k++ )  {
-        for ( int j = 0; j < frame.cols; j++ )  {
-            frame.at<cv::Vec3b>(k,j)[0] = (uchar)(rand()%255);
-            frame.at<cv::Vec3b>(k,j)[1] = (uchar)(rand()%255);
-            frame.at<cv::Vec3b>(k,j)[2] = 0;
-        }
-    }
-
+    test_frame = cv::Scalar((rand()%255),(rand()%255),0);
+    char file_name[20];
 
     tic_all = steady_clock::now();
     for (ushort x=0; x < MAX_ITERATION; x++) {
 
-
         //Used to store the GT images for the kitti devkit
 
-        char file_name[20];
         sprintf(file_name, "0000000%03d.png", x);
         std::string gt_image_path = gt_video_path.parent_path().string() + '/' + std::string(file_name);
         printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
@@ -142,12 +126,12 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
             secondYMovement = yPos.at(secondstart+sIterator) - yPos.at(secondstart+sIterator-(ushort)1);
         }
 
-
         //Object specification
         std::vector<ushort> XSpec;
         for ( ushort i = 0; i < width; i++) {
             XSpec.push_back(actualX+i);
         }
+
         std::vector<ushort> YSpec;
         for ( ushort i = 0; i < height; i++) {
             YSpec.push_back(actualY+i);
@@ -171,14 +155,14 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         uchar b = 0;
 
         //reset the image to white
-        frame = cv::Scalar::all(255);
+        test_frame = cv::Scalar::all(255);
 
         //draw new image.
         for (int k = YSpec.at(0); k < YSpec.at(YSpec.size() - 1); k++) {
             for (int j = XSpec.at(0); j < XSpec.at(XSpec.size() - 1); j++) {
-                frame.at<cv::Vec3b>(k, j)[0] = b;
-                frame.at<cv::Vec3b>(k, j)[1] = 0;
-                frame.at<cv::Vec3b>(k, j)[2] = r;
+                test_frame.at<cv::Vec3b>(k, j)[0] = b;
+                test_frame.at<cv::Vec3b>(k, j)[1] = 0;
+                test_frame.at<cv::Vec3b>(k, j)[2] = r;
                 r = r + (uchar)2;
                 b = b + (uchar)2;
                 if (r > 254)
@@ -195,9 +179,9 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         //draw new image.
         for (int k = secondYSpec.at(0); k < secondYSpec.at(secondYSpec.size() - 1); k++) {
             for (int j = secondXSpec.at(0); j < secondXSpec.at(secondXSpec.size() - 1); j++) {
-                frame.at<cv::Vec3b>(k, j)[0] = b;
-                frame.at<cv::Vec3b>(k, j)[1] = 0;
-                frame.at<cv::Vec3b>(k, j)[2] = r;
+                test_frame.at<cv::Vec3b>(k, j)[0] = b;
+                test_frame.at<cv::Vec3b>(k, j)[1] = 0;
+                test_frame.at<cv::Vec3b>(k, j)[2] = r;
                 r = r + (uchar)2;
                 b = b + (uchar)2;
                 if (r > 254)
@@ -213,9 +197,9 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         if ( !video_out.isOpened() ) {
             std::cerr << "Could not open video" << std::endl;
         }
-        video_out.write(frame);
+        video_out.write(test_frame);
 
-        //frame = imnoise(frame,'gaussian',0.5);
+        //test_frame = imnoise(test_frame,'gaussian',0.5);
 
         toc = steady_clock::now();
         time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
@@ -223,11 +207,9 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
         // calculating the relative Ground Truth for the Kitti devkit and store it in a png file
         // Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
-        // overflow. The final value to be stored in U16
+        // overflow. The final value to be stored in U16 in the form of val*64+32768
 
         relativeGroundTruth = cv::Scalar::all(65535);
-        absoluteGroundTruth = cv::Scalar::all(65535);
-        kittiGT = cv::Scalar::all(65535);
 
         assert(relativeGroundTruth.channels() == 3);
 
@@ -236,34 +218,17 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
                 colRange(XSpec.at(0), XSpec.at(XSpec.size()-1)).
                 rowRange(YSpec.at(0), YSpec.at(YSpec.size()-1));
 
-        roi = cv::Scalar((ushort)(XMovement*64+std::pow(2,15)), (ushort)(YMovement*64+std::pow(2,15)),1);
-
-        for ( int k = YSpec.at(0); k < YSpec.at(YSpec.size()-1); k++ )  {
-            for ( int j = XSpec.at(0); j < XSpec.at(XSpec.size()-1); j++ )  {
-                assert(relativeGroundTruth.channels() == 3);
-                absoluteGroundTruth.at<cv::Vec3w>(k,j)[0] = (ushort)(XMovement+j);
-                absoluteGroundTruth.at<cv::Vec3w>(k,j)[1] = (ushort)(YMovement+k);
-                absoluteGroundTruth.at<cv::Vec3w>(k,j)[2] = 1;
-            }
-        }
+        // store displacement in the matrix
+        roi = cv::Scalar((XMovement*64+32768), (YMovement*64+32768),1);
 
         roi = relativeGroundTruth.
                 colRange(secondXSpec.at(0), secondXSpec.at(secondXSpec.size()-1)).
                 rowRange(secondYSpec.at(0), secondYSpec.at(secondYSpec.size()-1));
 
-        roi = cv::Scalar((ushort)(secondXMovement*64+std::pow(2,15)), (ushort)(secondYMovement*64+std::pow(2,15)),1);
+        // store displacement in the matrix
+        roi = cv::Scalar((secondXMovement*64+32768), (secondYMovement*64+32768),1);
 
-        for ( int k = secondYSpec.at(0); k < secondYSpec.at(secondYSpec.size()-1); k++ )  {
-            for ( int j = secondXSpec.at(0); j < secondXSpec.at(secondXSpec.size()-1); j++ )  {
-                absoluteGroundTruth.at<cv::Vec3w>(k,j)[0] = (ushort)(secondXMovement+j);
-                absoluteGroundTruth.at<cv::Vec3w>(k,j)[1] = (ushort)(secondYMovement+k);
-                absoluteGroundTruth.at<cv::Vec3w>(k,j)[2] = 1;
-            }
-        }
-
-        //Create png Matrix with 3 channels: OF in vertical. OF in Horizontal and Validation bit
-
-        relativeGroundTruth.copyTo(kittiGT);
+        //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
         cv::imwrite(gt_image_path, relativeGroundTruth);
         //check for each frame (iteration) if the objects are colliding
         std::vector<ushort> xCol = XSpec;
@@ -323,8 +288,8 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
 int main() {
 
-    //ground_truth((ushort)60,(ushort)240);
-    //flow("FB",(ushort)60,(ushort)240);
+    ground_truth((ushort)60,(ushort)240);
+    flow("FB",(ushort)60,(ushort)240);
     flow("LK",(ushort)60,(ushort)240);
 
 }
