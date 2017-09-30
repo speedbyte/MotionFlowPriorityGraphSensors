@@ -6,7 +6,6 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <iostream>
-#include <opencv2/imgproc/types_c.h>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv/cv.hpp>
@@ -19,13 +18,13 @@
 
 using namespace std::chrono;
 
-extern void flow(std::string algo);
+extern void flow(std::string algo, ushort start, ushort secondstart);
 
 #define MATLAB_DATASET_PATH "../../../matlab_dataset/"
 
-void ground_truth() {
+void ground_truth(ushort start=60, ushort secondstart=240) {
 
-    cv::Size frame_size(1242,275);
+    cv::Size frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
     boost::filesystem::path gt_video_path;
     gt_video_path = std::string(MATLAB_DATASET_PATH) + std::string("ground_truth/gtMovement.avi");
@@ -44,7 +43,7 @@ void ground_truth() {
     ushort collision = 0, iterator = 0, sIterator = 0;
     std::vector<ushort> xPos, yPos;
 
-    ushort xMovement,yMovement,secondXMovement,secondYMovement;
+    short XMovement,YMovement,secondXMovement,secondYMovement;
 
     ushort actualX;
     ushort actualY;
@@ -53,7 +52,7 @@ void ground_truth() {
 
     //object specs
     const ushort width = 30;
-    const ushort height = 100;
+    const ushort height = 40;
 
     std::vector<ushort> theta;
     for ( ushort x = 0; x < MAX_ITERATION; x++) {
@@ -61,23 +60,23 @@ void ground_truth() {
     }
 
     for ( int i = 0; i< MAX_ITERATION; i++) {
-        xPos.push_back((ushort)(1 * cos(theta[i] * CV_PI / 180.0) / (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
-        yPos.push_back((ushort)(1 * (cos(theta[i] * CV_PI / 180.0) * sin(theta[i] * CV_PI / 180.0)) / (0.2 + std::pow(sin
+        xPos.push_back(600 + (500 * cos(theta[i] * CV_PI / 180.0) / (1.0 + std::pow(sin(theta[i] * CV_PI /
+                                                                                                        180.0), 2)
+                                                                    )));
+        yPos.push_back(150 + (55 * (cos(theta[i] * CV_PI / 180.0) * sin(theta[i] * CV_PI / 180.0)) / (0.2 +
+                std::pow
+                                                                                                                     (sin
                                                                                                                               (theta[i] *
                                                                                                                                CV_PI /
                                                                                                                                180.0),
                                                                                                                       2))));
     }
 
-    //Start is somewhere on the path
-    ushort start = 30;
     ushort xOrigin = xPos.at(start);
     ushort yOrigin = yPos.at(start);
 
-    //Start of the second object is somewhere on the path
-    ushort secondStart = 200;
-    ushort secondXOrigin = xPos.at(secondStart);
-    ushort secondYOrigin = yPos.at(secondStart);
+    ushort secondXOrigin = xPos.at(secondstart);
+    ushort secondYOrigin = yPos.at(secondstart);
 
     //for moving the objects later
     actualX = xOrigin;
@@ -89,9 +88,9 @@ void ground_truth() {
     //Ground Truth Movement (First Object x, first Object y, second object x, second object y movement
     iterator = 0;
     sIterator = 0;
-    xMovement = 0;
+    XMovement = 0;
     secondXMovement = 0;
-    yMovement = 0;
+    YMovement = 0;
     secondYMovement = 0;
 
     cv::Mat kittiGT(frame_size,CV_16UC3,cv::Scalar(0,0,0));
@@ -99,7 +98,6 @@ void ground_truth() {
     cv::Mat absoluteGroundTruth(frame_size,CV_16UC3,cv::Scalar(0,0,0));
 
     cv::Mat frame = cv::Mat::zeros(frame_size, CV_8UC3);
-
 
 
     for ( int k = 0; k < frame.rows; k++ )  {
@@ -120,38 +118,39 @@ void ground_truth() {
         char file_name[20];
         sprintf(file_name, "0000000%03d.png", x);
         std::string gt_image_path = gt_video_path.parent_path().string() + '/' + std::string(file_name);
-        printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondStart, sIterator);
+        printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
+               XMovement, secondXMovement);
 
         //If we are at the end of the path vector, we need to reset our iterators
         if ((iterator+start) >= xPos.size()) {
             start = 0;
             iterator = 0;
-            xMovement = xPos.at(0) - xPos.at(xPos.size() - 1);
-            yMovement = yPos.at(0) - yPos.at(yPos.size() - 1);
+            XMovement = xPos.at(0) - xPos.at(xPos.size() - 1);
+            YMovement = yPos.at(0) - yPos.at(yPos.size() - 1);
         } else {
-            xMovement = xPos.at(start+iterator) - xPos.at(start+iterator-(ushort)1);
-            yMovement = yPos.at(start+iterator) - yPos.at(start+iterator-(ushort)1);
+            XMovement = xPos.at(start+iterator) - xPos.at(start+iterator-(ushort)1);
+            YMovement = yPos.at(start+iterator) - yPos.at(start+iterator-(ushort)1);
         }
 
-        if ((sIterator+secondStart) >= xPos.size()) {
-            secondStart = 0;
+        if ((sIterator+secondstart) >= xPos.size()) {
+            secondstart = 0;
             sIterator = 0;
             secondXMovement = xPos.at(0) - xPos.at(xPos.size()-1);
             secondYMovement = yPos.at(0) - yPos.at(yPos.size()-1);
         } else {
-            secondXMovement = xPos.at(secondStart+sIterator) - xPos.at(secondStart+sIterator-(ushort)1);
-            secondYMovement = yPos.at(secondStart+sIterator) - yPos.at(secondStart+sIterator-(ushort)1);
+            secondXMovement = xPos.at(secondstart+sIterator) - xPos.at(secondstart+sIterator-(ushort)1);
+            secondYMovement = yPos.at(secondstart+sIterator) - yPos.at(secondstart+sIterator-(ushort)1);
         }
 
 
         //Object specification
-        std::vector<ushort> xSpec;
+        std::vector<ushort> XSpec;
         for ( ushort i = 0; i < width; i++) {
-            xSpec.push_back(actualX+i);
+            XSpec.push_back(actualX+i);
         }
-        std::vector<ushort> ySpec;
+        std::vector<ushort> YSpec;
         for ( ushort i = 0; i < height; i++) {
-            ySpec.push_back(actualY+i);
+            YSpec.push_back(actualY+i);
         }
 
         std::vector<ushort> secondXSpec;
@@ -172,17 +171,11 @@ void ground_truth() {
         uchar b = 0;
 
         //reset the image to white
-        for (int k = 0; k < frame.rows; k++) {
-            for (int j = 0; j < frame.cols; j++) {
-                frame.at<cv::Vec3b>(k, j)[0] = 255;
-                frame.at<cv::Vec3b>(k, j)[1] = 255;
-                frame.at<cv::Vec3b>(k, j)[2] = 255;
-            }
-        }
+        frame = cv::Scalar::all(255);
 
         //draw new image.
-        for (int k = ySpec.at(0); k < ySpec.at(ySpec.size() - 1); k++) {
-            for (int j = xSpec.at(0); j < xSpec.at(xSpec.size() - 1); j++) {
+        for (int k = YSpec.at(0); k < YSpec.at(YSpec.size() - 1); k++) {
+            for (int j = XSpec.at(0); j < XSpec.at(XSpec.size() - 1); j++) {
                 frame.at<cv::Vec3b>(k, j)[0] = b;
                 frame.at<cv::Vec3b>(k, j)[1] = 0;
                 frame.at<cv::Vec3b>(k, j)[2] = r;
@@ -228,27 +221,40 @@ void ground_truth() {
         time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
 
 
-        //calculating the relative Ground Truth for the Kitti devkit and store it in a png file
+        // calculating the relative Ground Truth for the Kitti devkit and store it in a png file
+        // Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
+        // overflow. The final value to be stored in U16
 
-        for ( int k = ySpec.at(0); k < ySpec.at(ySpec.size()-1); k++ )  {
-            for ( int j = xSpec.at(0); j < xSpec.at(xSpec.size()-1); j++ )  {
+        relativeGroundTruth = cv::Scalar::all(65535);
+        absoluteGroundTruth = cv::Scalar::all(65535);
+        kittiGT = cv::Scalar::all(65535);
+
+        assert(relativeGroundTruth.channels() == 3);
+
+        cv::Mat roi;
+        roi = relativeGroundTruth.
+                colRange(XSpec.at(0), XSpec.at(XSpec.size()-1)).
+                rowRange(YSpec.at(0), YSpec.at(YSpec.size()-1));
+
+        roi = cv::Scalar((ushort)(XMovement*64+std::pow(2,15)), (ushort)(YMovement*64+std::pow(2,15)),1);
+
+        for ( int k = YSpec.at(0); k < YSpec.at(YSpec.size()-1); k++ )  {
+            for ( int j = XSpec.at(0); j < XSpec.at(XSpec.size()-1); j++ )  {
                 assert(relativeGroundTruth.channels() == 3);
-                relativeGroundTruth.at<cv::Vec3w>(k,j)[0] = (ushort)(xMovement*64+std::pow(2,15));
-                relativeGroundTruth.at<cv::Vec3w>(k,j)[1] = (ushort)(yMovement*64+std::pow(2,15));
-                relativeGroundTruth.at<cv::Vec3w>(k,j)[2] = 1;
-                absoluteGroundTruth.at<cv::Vec3w>(k,j)[0] = (ushort)(xMovement+j);
-                absoluteGroundTruth.at<cv::Vec3w>(k,j)[1] = (ushort)(yMovement+k);
+                absoluteGroundTruth.at<cv::Vec3w>(k,j)[0] = (ushort)(XMovement+j);
+                absoluteGroundTruth.at<cv::Vec3w>(k,j)[1] = (ushort)(YMovement+k);
                 absoluteGroundTruth.at<cv::Vec3w>(k,j)[2] = 1;
-
-                }
+            }
         }
+
+        roi = relativeGroundTruth.
+                colRange(secondXSpec.at(0), secondXSpec.at(secondXSpec.size()-1)).
+                rowRange(secondYSpec.at(0), secondYSpec.at(secondYSpec.size()-1));
+
+        roi = cv::Scalar((ushort)(secondXMovement*64+std::pow(2,15)), (ushort)(secondYMovement*64+std::pow(2,15)),1);
 
         for ( int k = secondYSpec.at(0); k < secondYSpec.at(secondYSpec.size()-1); k++ )  {
             for ( int j = secondXSpec.at(0); j < secondXSpec.at(secondXSpec.size()-1); j++ )  {
-                assert(relativeGroundTruth.channels() == 3);
-                relativeGroundTruth.at<cv::Vec3w>(k,j)[0] = (ushort)(secondXMovement*64+std::pow(2,15));
-                relativeGroundTruth.at<cv::Vec3w>(k,j)[1] = (ushort)(secondYMovement*64+std::pow(2,15));
-                relativeGroundTruth.at<cv::Vec3w>(k,j)[2] = 1;
                 absoluteGroundTruth.at<cv::Vec3w>(k,j)[0] = (ushort)(secondXMovement+j);
                 absoluteGroundTruth.at<cv::Vec3w>(k,j)[1] = (ushort)(secondYMovement+k);
                 absoluteGroundTruth.at<cv::Vec3w>(k,j)[2] = 1;
@@ -258,12 +264,10 @@ void ground_truth() {
         //Create png Matrix with 3 channels: OF in vertical. OF in Horizontal and Validation bit
 
         relativeGroundTruth.copyTo(kittiGT);
-        relativeGroundTruth.convertTo(kittiGT, CV_8UC3);
-        //cv::imwrite(gt_image_path, kittiGT);
-
+        cv::imwrite(gt_image_path, relativeGroundTruth);
         //check for each frame (iteration) if the objects are colliding
-        std::vector<ushort> xCol = xSpec;
-        std::vector<ushort> yCol = ySpec;
+        std::vector<ushort> xCol = XSpec;
+        std::vector<ushort> yCol = YSpec;
 
         std::vector<ushort> secondXCol= secondXSpec;
         std::vector<ushort> secondYCol = secondYSpec;
@@ -301,10 +305,11 @@ void ground_truth() {
         iterator++;
         sIterator++;
 
-        actualX = actualX+xMovement;
-        actualY = actualY+yMovement;
-        secondActualX = secondActualX+secondXMovement;
-        secondActualY = secondActualY+secondYMovement;
+        actualX = actualX + XMovement;
+        actualY = actualY + YMovement;
+        secondActualX = secondActualX + secondXMovement;
+        secondActualY = secondActualY + secondYMovement;
+
         std::cout << "generate frame - " << time_map["generate"]  << "ms" << std::endl;
 
     }
@@ -318,8 +323,8 @@ void ground_truth() {
 
 int main() {
 
-    ground_truth();
-    //flow("FB");
-
+    //ground_truth((ushort)60,(ushort)240);
+    //flow("FB",(ushort)60,(ushort)240);
+    flow("LK",(ushort)60,(ushort)240);
 
 }
