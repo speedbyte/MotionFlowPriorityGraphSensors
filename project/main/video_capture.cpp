@@ -201,7 +201,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
         // Convert to grayscale
         cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
 
-        auto start = steady_clock::now();
+        auto tic = steady_clock::now();
         // Check if the image is valid
         if (algo.compare("FB") == 0) {
             if (prevGray.data) {
@@ -290,10 +290,10 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
                 z_pts.push_back(count);
             }
         }
-        auto end = steady_clock::now();
+        auto toc = steady_clock::now();
 
         x_pts.push_back(frame_count);
-        y_pts.push_back(duration_cast<milliseconds>(end - start).count());
+        y_pts.push_back(duration_cast<milliseconds>(toc - tic).count());
 
         video_out.write(frame);
         // Display the output image
