@@ -66,3 +66,7 @@
 	path = kitti_eval/kitti2pcl
 	url = https://github.com/jaejunlee0538/kitti2pcl.git
 	branch = master
+[submodule "libs/pngpp"]
+	path = libs/pngpp
+	url = https://github.com/bysreg/pngpp.git
+	branch = master
