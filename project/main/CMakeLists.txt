@@ -21,4 +21,4 @@ add_executable(main ${SOURCE_FILES})
 target_link_libraries(main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
 
 add_executable(matlab groundTruth.cpp flow.cpp)
-target_link_libraries(matlab ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(matlab ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png)

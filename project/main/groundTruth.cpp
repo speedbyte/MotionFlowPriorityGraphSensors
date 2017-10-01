@@ -13,6 +13,7 @@
 #include <chrono>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <png++/png.hpp>
 
 //Creating a movement path. The path is stored in a x and y vector
 
@@ -24,7 +25,7 @@ extern void flow(std::string algo, ushort start, ushort secondstart);
 
 void ground_truth(ushort start=60, ushort secondstart=240) {
 
-    cv::Size frame_size(1242,375);
+    cv::Size_<unsigned> frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
     boost::filesystem::path gt_video_path;
     gt_video_path = std::string(MATLAB_DATASET_PATH) + std::string("ground_truth/gtMovement.avi");
@@ -40,7 +41,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     auto toc_all = steady_clock::now();
 
     const ushort MAX_ITERATION = 360;
-    ushort collision = 0, iterator = 0, sIterator = 0;
+    ushort iterator = 0, sIterator = 0;
     std::vector<ushort> xPos, yPos;
 
     short XMovement,YMovement,secondXMovement,secondYMovement;
@@ -88,7 +89,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     YMovement = 0;
     secondYMovement = 0;
 
-    cv::Mat relativeGroundTruth(frame_size,CV_16UC3,cv::Scalar(0,0,0));
+    cv::Mat relativeGroundTruth(frame_size,CV_32FC3,cv::Scalar(0,0,0));
 
     cv::Mat test_frame = cv::Mat::zeros(frame_size, CV_8UC3);
 
@@ -100,6 +101,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
         //Used to store the GT images for the kitti devkit
 
+        relativeGroundTruth = cv::Scalar::all(0);
         sprintf(file_name, "0000000%03d.png", x);
         std::string gt_image_path = gt_video_path.parent_path().string() + '/' + std::string(file_name);
         printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
@@ -209,7 +211,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         // Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
         // overflow. The final value to be stored in U16 in the form of val*64+32768
 
-        relativeGroundTruth = cv::Scalar::all(65535);
+        //relativeGroundTruth = cv::Scalar::all(65535.0f);
 
         assert(relativeGroundTruth.channels() == 3);
 
@@ -219,53 +221,33 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
                 rowRange(YSpec.at(0), YSpec.at(YSpec.size()-1));
 
         // store displacement in the matrix
-        roi = cv::Scalar((XMovement*64+32768), (YMovement*64+32768),1);
+        roi = cv::Scalar((XMovement), (YMovement), 1.0f);
 
         roi = relativeGroundTruth.
                 colRange(secondXSpec.at(0), secondXSpec.at(secondXSpec.size()-1)).
                 rowRange(secondYSpec.at(0), secondYSpec.at(secondYSpec.size()-1));
 
         // store displacement in the matrix
-        roi = cv::Scalar((secondXMovement*64+32768), (secondYMovement*64+32768),1);
+        roi = cv::Scalar((secondXMovement), (secondYMovement), 1.0f);
 
         //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
-        cv::imwrite(gt_image_path, relativeGroundTruth);
-        //check for each frame (iteration) if the objects are colliding
-        std::vector<ushort> xCol = XSpec;
-        std::vector<ushort> yCol = YSpec;
 
-        std::vector<ushort> secondXCol= secondXSpec;
-        std::vector<ushort> secondYCol = secondYSpec;
-
-        std::vector<ushort> checkX, checkY;
-        std::vector<ushort> collisionVector;
-        for ( ushort i = 0; i < MAX_ITERATION; i++) {
-            collisionVector.push_back(0);
-        }
-
-        for ( ushort i = 0; i < xCol.size() ; i++) {
-            for ( ushort j = 0; j < secondXCol.size() ; j++) {
-                if ( std::abs(xCol.at(i) - secondXCol.at(j)) == 0) {
-                    checkX.push_back(i);  // index of collision
-                    break;
+        png::image< png::rgb_pixel_16 > image(frame_size.width,frame_size.height);
+        for (int32_t v=0; v<frame_size.height; v++) { // rows
+            for (int32_t u=0; u<frame_size.width; u++) {  // cols
+                png::rgb_pixel_16 val;
+                val.red   = 0;
+                val.green = 0;
+                val.blue  = 0;
+                if (relativeGroundTruth.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
+                    val.red   = (uint16_t)std::max(std::min((relativeGroundTruth.at<cv::Vec3f>(v,u)[0])*64.0f+32768.0f,65535.0f),0.0f);
+                    val.green = (uint16_t)std::max(std::min((relativeGroundTruth.at<cv::Vec3f>(v,u)[1])*64.0f+32768.0f,65535.0f),0.0f);
+                    val.blue  = 1;
                 }
+                image.set_pixel(u,v,val);
             }
         }
-        for ( ushort i = 0; i < yCol.size() ; i++) {
-            for ( ushort j = 0; j < secondYCol.size() ; j++) {
-                if ( std::abs(yCol.at(i) - secondYCol.at(j)) == 0) {
-                    checkY.push_back(i);  // index of collision
-                    break;
-                }
-            }
-        }
-
-        if (!checkX.empty() && !checkY.empty()) {
-            collisionVector.at(x) = 1;
-        }
-        else {
-            collisionVector.at(x) = 0;
-        }
+        image.write(gt_image_path);
 
         iterator++;
         sIterator++;
@@ -289,7 +271,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 int main() {
 
     ground_truth((ushort)60,(ushort)240);
-    flow("FB",(ushort)60,(ushort)240);
+    //flow("FB",(ushort)60,(ushort)240);
     flow("LK",(ushort)60,(ushort)240);
 
 }

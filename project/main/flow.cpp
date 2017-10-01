@@ -15,6 +15,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <gnuplot/gnuplot-iostream.h>
+#include <png++/png.hpp>
 
 //Creating a movement path. The path is stored in a x and y vector
 
@@ -41,7 +42,6 @@ void flow(std::string algo, ushort start, ushort secondstart) {
     bool needToInit = true;
     std::vector<cv::Point2f> prev_pts;
     std::vector<cv::Point2f> next_pts;
-    cv::Mat flowImage;
     cv::Mat curGray, prevGray;
     cv::VideoCapture cap;
     boost::filesystem::path video_in_path = dataset_path.string() + std::string("ground_truth/gtMovement.avi");
@@ -55,13 +55,21 @@ void flow(std::string algo, ushort start, ushort secondstart) {
         return;
     }
 
-    cv::Size frame_size;
+    name_frame = std::string(MATLAB_DATASET_PATH) + std::string("frames/") + std::string("dummy.txt");
+    name_flow = std::string(MATLAB_DATASET_PATH) + std::string("flow/") + std::string("dummy.txt");
+    assert(boost::filesystem::exists(name_frame.parent_path()) != 0);
+    assert(boost::filesystem::exists(name_flow.parent_path()) != 0);
+
+
+    cv::Size_<unsigned> frame_size;
     cv::VideoWriter video_out;
-    frame_size.height =	(int) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
-    frame_size.width =	(int) cap.get(CV_CAP_PROP_FRAME_WIDTH );
+    frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
+    frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
     video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, frame_size);
     printf("Writer eingerichtet\n");
 
+    cv::Mat frame = cv::Mat::zeros(frame_size, CV_8UC3);
+    cv::Mat flowImage(frame_size, CV_32FC3, cv::Scalar(255,255,255));
 
     cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
     cv::Size subPixWinSize(10, 10), winSize(31, 31);
@@ -84,45 +92,8 @@ void flow(std::string algo, ushort start, ushort secondstart) {
     ushort collision = 0, iterator = 0, sIterator = 0;
     std::vector<ushort> xPos, yPos;
 
-    //ushort XMovement=0,YMovement=0,secondXMovement=0,secondYMovement=0;
 
-    ushort actualX;
-    ushort actualY;
-    ushort secondActualX;
-    ushort secondActualY;
-
-    //object specs
-    const ushort width = 30;
-    const ushort height = 100;
-
-    //ushort xOrigin = xPos.at(start);
-    //ushort yOrigin = yPos.at(start);
-
-    //ushort secondXOrigin = xPos.at(secondstart);
-    //ushort secondYOrigin = yPos.at(secondstart);
-
-    //for moving the objects later
-    //actualX = xOrigin;
-    //actualY = yOrigin;
-    //secondActualX = secondXOrigin;
-    //secondActualY = secondYOrigin;
-
-    //Initialization
-    //Ground Truth Movement (First Object x, first Object y, second object x, second object y movement
-    iterator = 0;
-    sIterator = 0;
-    //XMovement = 0;
-    //secondXMovement = 0;
-    //YMovement = 0;
-    //secondYMovement = 0;
-
-    cv::Mat absoluteFlow = cv::Mat::zeros(frame_size, CV_16UC3);
-    cv::Mat flow1 = cv::Mat::zeros(frame_size, CV_16UC3);
-    cv::Mat flow2 = cv::Mat::zeros(frame_size, CV_16UC3);
-    cv::Mat frame = cv::Mat::zeros(frame_size, CV_8UC3);
-
-    cv::Mat flow_frame(cv::Size(1242,375),CV_8UC3);
-    std::vector<bool> estimatedCollisionVector(MAX_ITERATION);
+    cv::Mat flow_frame( frame_size, CV_8UC3 );
 
     std::map<std::string, double> time_map = {{"generate",0},
                                               {"ground truth", 0},
@@ -138,8 +109,9 @@ void flow(std::string algo, ushort start, ushort secondstart) {
     error.at(1) = 0;
 
 
-    for (ushort x=0; x <= MAX_ITERATION; x++) {
+    while ( true ) {
 
+        flowImage = cv::Scalar(0,0,0);
         // Break out of the loop if the user presses the Esc key
         char c = (char) cv::waitKey(10);
         switch (c) {
@@ -163,46 +135,9 @@ void flow(std::string algo, ushort start, ushort secondstart) {
         // Convert to grayscale
         cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
 
-        char file_name[50];
-        sprintf(file_name, "0000000%03d.png ", x);
-
-        name_frame = std::string(MATLAB_DATASET_PATH) + std::string("frames/") + std::string(file_name);
-        name_flow = std::string(MATLAB_DATASET_PATH) + std::string("flow/") + std::string(file_name);
-        assert(boost::filesystem::exists(name_frame.parent_path()) != 0);
-        assert(boost::filesystem::exists(name_flow.parent_path()) != 0);
 
         //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
 
-        //end of path vector? reset
-        if ((iterator + start) >= xPos.size()) {
-            start = 0;
-            iterator = 0;
-        }
-
-        if ((sIterator + secondstart) >= xPos.size()) {
-            secondstart = 0;
-            sIterator = 0;
-        }
-
-        //Object specification
-        std::vector<ushort> XSpec;
-        for (ushort i = 0; i < width; i++) {
-            XSpec.push_back(actualX + i);
-        }
-        std::vector<ushort> YSpec;
-        for (ushort i = 0; i < height; i++) {
-            YSpec.push_back(actualY + i);
-        }
-
-        std::vector<ushort> secondXSpec;
-        for (ushort i = 0; i < width; i++) {
-            secondXSpec.push_back(secondActualX + i);
-        }
-
-        std::vector<ushort> secondYSpec;
-        for (ushort i = 0; i < height; i++) {
-            secondYSpec.push_back(secondActualY + i);
-        }
 
         cap >> frame;
         if (frame.empty())
@@ -298,8 +233,15 @@ void flow(std::string algo, ushort start, ushort secondstart) {
                     next_pts[count++] = next_pts[i];
                     //cv::circle(frame, next_pts[count], 3, cv::Scalar(0, 255, 0), -1, 8);
                     cv::arrowedLine(frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
-                    printf("X - prev_pts = %f -> next_pts = %f\n", prev_pts[i].x, next_pts[i].x);
-                    printf("Y - prev_pts = %f -> next_pts = %f\n", prev_pts[i].y, next_pts[i].y);
+                    int row_coordinate = (int)(prev_pts[i].y);
+                    int col_coordinate = (int)(prev_pts[i].x);
+                    float Vx = (next_pts[i].x - prev_pts[i].x);
+                    float Vy = (next_pts[i].y - prev_pts[i].y);
+                    printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
+                           col_coordinate, Vx, Vy);
+                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = Vx;
+                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = Vy;
+                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
                 }
                 next_pts.resize(count);
                 //printf(" new size is %i for frame number %u\n", count, frame_count);
@@ -308,52 +250,39 @@ void flow(std::string algo, ushort start, ushort secondstart) {
             toc = steady_clock::now();
             time_map["LK"] = duration_cast<milliseconds>(toc - tic).count();
             y_pts.push_back(time_map["LK"]);
+            char file_name[50];
+            sprintf(file_name, "0000000%03d.png", frame_count);
+            std::string flow_image_path = name_frame.parent_path().string() + '/' + std::string(file_name);
+
+            png::image< png::rgb_pixel_16 > image(frame_size.width,frame_size.height);
+            for (int32_t v=0; v<frame_size.height; v++) {
+                for (int32_t u=0; u<frame_size.width; u++) {
+                    png::rgb_pixel_16 val;
+                    val.red   = 0;
+                    val.green = 0;
+                    val.blue  = 0;
+                    if (flowImage.at<cv::Vec3f>(v,u)[2] < 0.5) {
+                        val.red   = (uint16_t)std::max(std::min((flowImage.at<cv::Vec3f>(v,u)[0])*64.0f+32768.0f,
+                                                                65535.0f),0.0f);
+                        val.green = (uint16_t)std::max(std::min((flowImage.at<cv::Vec3f>(v,u)[1])*64.0f+32768.0f,
+                                                                65535.0f),0.0f);
+                        val.blue  = 1;
+                    }
+                    image.set_pixel(u,v,val);
+                }
+            }
+            image.write(flow_image_path);
+            //cv::imwrite(flow_image_path, flowImage);
         }
 
-
         // Scratch 2.. begin .. end
-        cv::Mat vxCopy, vyCopy, vXYCopy, vCopy, flow_frame_individual_channels[3];
-
-        cv::split(flow_frame, flow_frame_individual_channels);
-        //flow_frame.Vx ~ = 0); // flow_frame != 0 ? 1 : 0
-        cv::threshold (flow_frame_individual_channels[0], vxCopy, 0, 1, cv::THRESH_BINARY);
-        cv::threshold (flow_frame_individual_channels[1], vyCopy, 0, 1, cv::THRESH_BINARY);
-        vXYCopy = vxCopy + vyCopy;
-        cv::threshold (vXYCopy, vCopy, 0, 1, cv::THRESH_BINARY);
-
-        cv::Mat res;
-
-        cv::Mat flow;
-        flow_frame_individual_channels->copyTo(flow);
-
-        //channel copy !!!!!!
-        flow_frame_individual_channels[0] = (flow_frame_individual_channels[0] * 64 ) + 2 ^ 15; // Vx
-        flow_frame_individual_channels[1] = (flow_frame_individual_channels[1] * 64 ) + 2 ^ 15; // Vy
-        flow_frame_individual_channels[2] = vCopy;
-
-        // merge in a image file
-        cv::merge(flow_frame_individual_channels,3,res);
-        cv::imwrite("result.png", res);
 
         // Scratch 2 end
 
         tic = steady_clock::now();
 
-        iterator++;
-        sIterator++;
-
-        //Update position (the objects of interest are tracked via Ground Truth here)
-
-        actualX = xPos.at(start + iterator);
-        actualY = yPos.at(start + iterator);
-        secondActualX = xPos.at(secondstart + sIterator);
-        secondActualY = yPos.at(secondstart + sIterator);
-
-        cv::imwrite(name_frame.string(), frame );
-
         auto end = steady_clock::now();
 
-        
         x_pts.push_back(frame_count);
 
         video_out.write(frame);

@@ -1,4 +1,12 @@
 #!/bin/bash
+#_*_ coding: utf-8 _*_
+
+#cd libs/pngpp
+#make all
+#make PREFIX=$(pwd)/../pngpp-install install
+
+
+
 
 #To change submodule versions, simply go into the submodule folder. git checkout version. then git clean -ndf. remove any unwanted directories.
 #To make this permanent across different computers, commit and push the submodule status.
