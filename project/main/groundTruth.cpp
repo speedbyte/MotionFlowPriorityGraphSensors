@@ -15,13 +15,17 @@
 #include <boost/filesystem/operations.hpp>
 #include <png++/png.hpp>
 
+#include <kitti/mail.h>
+
 //Creating a movement path. The path is stored in a x and y vector
 
 using namespace std::chrono;
 
 extern void flow(std::string algo, ushort start, ushort secondstart);
-
+extern bool eval(std::string result_sha, Mail *mail);
 #define MATLAB_DATASET_PATH "../../../matlab_dataset/"
+
+
 
 void ground_truth(ushort start=60, ushort secondstart=240) {
 
@@ -267,11 +271,38 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
 }
 
+void prepare_directories() {
+    boost::filesystem::create_directories(std::string(MATLAB_DATASET_PATH) + std::string("data/stereo_flow/flow_noc"));
+    boost::filesystem::create_directories(std::string(MATLAB_DATASET_PATH) + std::string("data/stereo_flow/flow_occ"));
+    boost::filesystem::create_directories(std::string(MATLAB_DATASET_PATH) + std::string("data/stereo_flow/image_0"));
+}
+
+void test_kitti_original() {
+
+    // read arguments
+    std::string result_sha = "self_generated_OF";
+    std::string user_sha = "vagrawal";
+
+    // init notification mail
+    Mail *mail;
+    mail = new Mail("vagrawal@hs-esslingen.de");
+    mail->msg("Thank you for participating in our evaluation!");
+
+    // run evaluation
+    bool success = eval(result_sha,mail);
+    mail->finalize(success,"flow",result_sha,user_sha);
+    // send mail and exit
+    delete mail;
+
+}
 
 int main() {
 
-    ground_truth((ushort)60,(ushort)240);
+    prepare_directories();
+    test_kitti_original();
+
+    //ground_truth((ushort)60,(ushort)240);
     //flow("FB",(ushort)60,(ushort)240);
-    flow("LK",(ushort)60,(ushort)240);
+    //flow("LK",(ushort)60,(ushort)240);
 
 }
