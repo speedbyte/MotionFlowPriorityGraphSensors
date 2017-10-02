@@ -64,15 +64,15 @@ void flow(std::string result_sha, ushort start, ushort secondstart) {
     assert(boost::filesystem::exists(results_flow.parent_path()) != 0);
 
 
-    cv::Size_<unsigned> frame_size;
+    cv::Size_<unsigned> frame_size(1242,375);
     cv::VideoWriter video_out;
-    frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
-    frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
+    //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
+    //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
     video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, frame_size);
     printf("Writer eingerichtet\n");
 
     cv::Mat frame = cv::Mat::zeros(frame_size, CV_8UC3);
-    cv::Mat flowImage(frame_size, CV_32FC3, cv::Scalar(255,255,255));
+    cv::Mat flowImage(cv::Size(1242,375), CV_32FC3, cv::Scalar(255,255,255));
 
     cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
     cv::Size subPixWinSize(10, 10), winSize(31, 31);
@@ -111,6 +111,7 @@ void flow(std::string result_sha, ushort start, ushort secondstart) {
     error.at(0) = 0;
     error.at(1) = 0;
 
+    std::string results_flow_path_str;
 
     while ( true ) {
 
@@ -131,13 +132,22 @@ void flow(std::string result_sha, ushort start, ushort secondstart) {
             default:
                 break;
         }
-        cap >> frame;
-        if (frame.empty())
-            break;
-        frame_count++;
+
+        //cap >> frame;
+        //if (frame.empty())
+        //    break;
+        sprintf(file_name, "000%03d_10", frame_count);
+        results_flow_path_str = video_in_path.parent_path().string() + "/" + std::string(file_name) + ".png";
+        frame = cv::imread(results_flow_path_str, CV_LOAD_IMAGE_COLOR);
 
         // Convert to grayscale
-        cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
+        try {
+            cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
+        }
+        catch(...) {
+            std::cout << "no more frames";
+            break;
+        }
         //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
 
         if (result_sha.compare("results/FB") == 0) {
@@ -307,6 +317,7 @@ void flow(std::string result_sha, ushort start, ushort secondstart) {
         prev_pts.clear();
         std::swap(next_pts, prev_pts);
         std::swap(prevGray, curGray);
+        frame_count++;
     }
 
     auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
