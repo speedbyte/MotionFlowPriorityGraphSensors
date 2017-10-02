@@ -26,9 +26,9 @@ using namespace std::chrono;
 #define CPP_DATASET_PATH "../../../cpp_dataset/"
 
 
-void flow(std::string results_sha, ushort start, ushort secondstart) {
+void flow(std::string result_sha, ushort start, ushort secondstart) {
 
-    std::cout << "results will be stored in " << results_sha;
+    std::cout << "results will be stored in " << result_sha;
 
     const boost::filesystem::path dataset_path = CPP_DATASET_PATH;
 
@@ -49,7 +49,7 @@ void flow(std::string results_sha, ushort start, ushort secondstart) {
     cv::VideoCapture cap;
     boost::filesystem::path video_in_path = dataset_path.string() + std::string("data/stereo_flow/image_0/gtMovement.avi");
     assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
-    boost::filesystem::path video_out_path = dataset_path.string() + std::string("results/") + results_sha +
+    boost::filesystem::path video_out_path = dataset_path.string() + std::string("results/") + result_sha +
     std::string("video/OpticalFlow.avi");
     assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
 
@@ -60,7 +60,7 @@ void flow(std::string results_sha, ushort start, ushort secondstart) {
         return;
     }
 
-    results_flow = std::string(CPP_DATASET_PATH) + results_sha + std::string("/flow_occ/") + std::string("dummy.txt");
+    results_flow = std::string(CPP_DATASET_PATH) + result_sha + std::string("/data/") + std::string("dummy.txt");
     assert(boost::filesystem::exists(results_flow.parent_path()) != 0);
 
 
@@ -85,7 +85,7 @@ void flow(std::string results_sha, ushort start, ushort secondstart) {
 
     unsigned frame_count = 0;
 
-    cv::namedWindow(results_sha, CV_WINDOW_AUTOSIZE);
+    cv::namedWindow(result_sha, CV_WINDOW_AUTOSIZE);
 
     //how many interations(frames)?
     auto tic = steady_clock::now();
@@ -138,20 +138,9 @@ void flow(std::string results_sha, ushort start, ushort secondstart) {
 
         // Convert to grayscale
         cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
-
-
         //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
 
-
-        cap >> frame;
-        if (frame.empty())
-            break;
-        frame_count++;
-
-
-        cv::cvtColor(frame, curGray, CV_BGR2GRAY);
-
-        if (results_sha.compare("results/FB") == 0) {
+        if (result_sha.compare("results/FB") == 0) {
             tic = steady_clock::now();
             if (prevGray.data) {
                 // Initialize parameters for the optical flow algorithm
@@ -218,7 +207,7 @@ void flow(std::string results_sha, ushort start, ushort secondstart) {
 
         }
 
-        else if (results_sha.compare("results/LK") == 0) {
+        else if (result_sha.compare("results/LK") == 0) {
             tic = steady_clock::now();
             // Calculate optical flow map using LK algorithm
             if (needToInit) {
@@ -313,7 +302,7 @@ void flow(std::string results_sha, ushort start, ushort secondstart) {
 
         video_out.write(frame);
         // Display the output image
-        cv::imshow(results_sha, frame);
+        cv::imshow(result_sha, frame);
         needToInit = false;
         prev_pts.clear();
         std::swap(next_pts, prev_pts);

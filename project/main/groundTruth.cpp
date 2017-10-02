@@ -37,7 +37,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     gt_flow_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/flow_occ/dummy.txt");
     assert(boost::filesystem::exists(gt_flow_path.parent_path()) != 0);
     gt_video_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_0/gtMovement.avi");
-    assert(boost::filesystem::exists(gt_image_path.parent_path()) != 0);
+    assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
     video_out.open(gt_video_path.string(), CV_FOURCC('D', 'I', 'V', 'X'), 30, frame_size, true);
@@ -273,7 +273,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
 std::string prepare_directories(std::string result_sha) {
     std::string result_dir = "results/" + result_sha;
-    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/flow_occ"));
+    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/data"));
     boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/video"));
     return result_dir;
 }
