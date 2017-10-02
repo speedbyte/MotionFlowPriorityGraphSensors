@@ -22,11 +22,13 @@
 using namespace std::chrono;
 
 #define MATLAB_DATASET_PATH "../../../matlab_dataset/"
+#define CPP_DATASET_PATH "../../../cpp_dataset/"
+
 
 void flow(std::string algo, ushort start, ushort secondstart) {
 
 
-    const boost::filesystem::path dataset_path = MATLAB_DATASET_PATH;
+    const boost::filesystem::path dataset_path = CPP_DATASET_PATH;
 
     boost::filesystem::path name_frame, name_flow;
     name_frame = dataset_path.string() + std::string("frames/dummy.tx5");

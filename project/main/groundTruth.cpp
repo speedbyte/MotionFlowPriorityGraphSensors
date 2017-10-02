@@ -18,12 +18,10 @@
 #include <kitti/mail.h>
 #include <kitti/io_flow.h>
 
+#include "datasets.h"
 //Creating a movement path. The path is stored in a x and y vector
 
 using namespace std::chrono;
-
-#define CPP_DATASET_PATH "../../../cpp_dataset/"
-#define MATLAB_DATASET_PATH "../../../matlab_dataset/"
 
 extern void flow(std::string algo, ushort start, ushort secondstart);
 //extern bool eval(std::string result_sha, Mail *mail);
@@ -34,7 +32,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     cv::Size_<unsigned> frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
     boost::filesystem::path gt_video_path;
-    gt_video_path = std::string(CPP_DATASET_PATH) + std::string("ground_truth/gtMovement.avi");
+    gt_video_path = std::string(CPP_DATASET_PATH) + std::string("image_2/gtMovement.avi");
     assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
