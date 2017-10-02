@@ -16,13 +16,14 @@
 #include <png++/png.hpp>
 
 #include <kitti/mail.h>
+#include <kitti/io_flow.h>
 
 //Creating a movement path. The path is stored in a x and y vector
 
 using namespace std::chrono;
 
 extern void flow(std::string algo, ushort start, ushort secondstart);
-extern bool eval(std::string result_sha, Mail *mail);
+//extern bool eval(std::string result_sha, Mail *mail);
 #define MATLAB_DATASET_PATH "../../../matlab_dataset/"
 
 
@@ -163,6 +164,8 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         //reset the image to white
         test_frame = cv::Scalar::all(255);
 
+
+
         //draw new image.
         for (int k = YSpec.at(0); k < YSpec.at(YSpec.size() - 1); k++) {
             for (int j = XSpec.at(0); j < XSpec.at(XSpec.size() - 1); j++) {
@@ -219,6 +222,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
         assert(relativeGroundTruth.channels() == 3);
 
+
         cv::Mat roi;
         roi = relativeGroundTruth.
                 colRange(XSpec.at(0), XSpec.at(XSpec.size()-1)).
@@ -236,22 +240,17 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
         //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
 
-        png::image< png::rgb_pixel_16 > image(frame_size.width,frame_size.height);
+        FlowImage F_gt(frame_size.width, frame_size.height);
         for (int32_t v=0; v<frame_size.height; v++) { // rows
             for (int32_t u=0; u<frame_size.width; u++) {  // cols
-                png::rgb_pixel_16 val;
-                val.red   = 0;
-                val.green = 0;
-                val.blue  = 0;
                 if (relativeGroundTruth.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
-                    val.red   = (uint16_t)std::max(std::min((relativeGroundTruth.at<cv::Vec3f>(v,u)[0])*64.0f+32768.0f,65535.0f),0.0f);
-                    val.green = (uint16_t)std::max(std::min((relativeGroundTruth.at<cv::Vec3f>(v,u)[1])*64.0f+32768.0f,65535.0f),0.0f);
-                    val.blue  = 1;
+                    F_gt.setFlowU(u,v,relativeGroundTruth.at<cv::Vec3f>(v,u)[0]);
+                    F_gt.setFlowV(u,v,relativeGroundTruth.at<cv::Vec3f>(v,u)[1]);
+                    F_gt.setValid(u,v,(bool)relativeGroundTruth.at<cv::Vec3f>(v,u)[2]);
                 }
-                image.set_pixel(u,v,val);
             }
         }
-        image.write(gt_image_path);
+        F_gt.write(gt_image_path);
 
         iterator++;
         sIterator++;
@@ -289,8 +288,8 @@ void test_kitti_original() {
     mail->msg("Thank you for participating in our evaluation!");
 
     // run evaluation
-    bool success = eval(result_sha,mail);
-    mail->finalize(success,"flow",result_sha,user_sha);
+    //bool success = eval(result_sha,mail);
+    //mail->finalize(success,"flow",result_sha,user_sha);
     // send mail and exit
     delete mail;
 
@@ -298,10 +297,10 @@ void test_kitti_original() {
 
 int main() {
 
-    prepare_directories();
-    test_kitti_original();
+    //prepare_directories();
+    //test_kitti_original();
 
-    //ground_truth((ushort)60,(ushort)240);
+    ground_truth((ushort)60,(ushort)240);
     //flow("FB",(ushort)60,(ushort)240);
     //flow("LK",(ushort)60,(ushort)240);
 
