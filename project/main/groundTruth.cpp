@@ -23,7 +23,7 @@
 
 using namespace std::chrono;
 
-extern void flow(std::string algo, ushort start, ushort secondstart);
+extern void flow(std::string results_sha, ushort start, ushort secondstart);
 //extern bool eval(std::string result_sha, Mail *mail);
 extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
@@ -110,8 +110,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         //Used to store the GT images for the kitti devkit
 
         relativeGroundTruth = cv::Scalar::all(0);
-        sprintf(file_name, "000%03d_00", x);
-        //sprintf(file_name_gp, "0000000%03d.txt", x);
+        sprintf(file_name, "000%03d_10", x);
         std::string gt_image_path_str = gt_image_path.parent_path().string() + "/" + std::string(file_name) + ".png";
         std::string gt_flow_path_str = gt_flow_path.parent_path().string() + "/" + std::string(file_name) + ".png";
         printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
@@ -211,10 +210,8 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         if ( !video_out.isOpened() ) {
             std::cerr << "Could not open video" << std::endl;
         }
-        cv::imwrite(gt_flow_path_str, test_frame);
+        cv::imwrite(gt_image_path_str, test_frame);
         video_out.write(test_frame);
-
-        //test_frame = imnoise(test_frame,'gaussian',0.5);
 
         toc = steady_clock::now();
         time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
@@ -224,10 +221,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         // Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
         // overflow. The final value to be stored in U16 in the form of val*64+32768
 
-        //relativeGroundTruth = cv::Scalar::all(65535.0f);
-
         assert(relativeGroundTruth.channels() == 3);
-
 
         cv::Mat roi;
         roi = relativeGroundTruth.
@@ -245,7 +239,6 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         roi = cv::Scalar((secondXMovement), (secondYMovement), 1.0f);
 
         //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
-
         FlowImage F_gt(frame_size.width, frame_size.height);
         for (int32_t v=0; v<frame_size.height; v++) { // rows
             for (int32_t u=0; u<frame_size.width; u++) {  // cols
@@ -256,7 +249,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
                 }
             }
         }
-        F_gt.write(gt_image_path_str);
+        F_gt.write(gt_flow_path_str);
 
         //plotVectorField (F_gt,gt_image_path.parent_path().string(),file_name);
 
@@ -278,10 +271,11 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
 }
 
-void prepare_directories() {
-    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/flow_noc"));
-    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/flow_occ"));
-    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_0"));
+std::string prepare_directories(std::string result_sha) {
+    std::string result_dir = "results/" + result_sha;
+    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/flow_occ"));
+    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/video"));
+    return result_dir;
 }
 
 void test_kitti_original() {
@@ -304,12 +298,15 @@ void test_kitti_original() {
 }
 
 int main() {
-
-    //prepare_directories();
+    std::string result_dir;
     //test_kitti_original();
 
-    ground_truth((ushort)60,(ushort)240);
-    //flow("FB",(ushort)60,(ushort)240);
-    flow("LK",(ushort)60,(ushort)240);
+    //ground_truth((ushort)60,(ushort)240);
+
+    result_dir = prepare_directories("FB");
+    flow(result_dir,(ushort)60,(ushort)240);
+
+    result_dir = prepare_directories("LK");
+    flow(result_dir,(ushort)60,(ushort)240);
 
 }

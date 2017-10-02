@@ -16,6 +16,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <gnuplot/gnuplot-iostream.h>
 #include <png++/png.hpp>
+#include <kitti/io_flow.h>
 
 //Creating a movement path. The path is stored in a x and y vector
 
@@ -25,16 +26,16 @@ using namespace std::chrono;
 #define CPP_DATASET_PATH "../../../cpp_dataset/"
 
 
-void flow(std::string algo, ushort start, ushort secondstart) {
+void flow(std::string results_sha, ushort start, ushort secondstart) {
 
+    std::cout << "results will be stored in " << results_sha;
 
     const boost::filesystem::path dataset_path = CPP_DATASET_PATH;
 
-    boost::filesystem::path name_frame, name_flow;
-    name_frame = dataset_path.string() + std::string("data/stereo_flow/flow_noc/dummy.tx5");
-    name_flow = dataset_path.string() + std::string("flow/dummy.txt");
-    assert(boost::filesystem::exists(name_frame.parent_path()) != 0);
-    assert(boost::filesystem::exists(name_flow.parent_path()) != 0);
+    boost::filesystem::path results_flow;
+
+    char file_name[50];
+
 
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
@@ -46,9 +47,11 @@ void flow(std::string algo, ushort start, ushort secondstart) {
     std::vector<cv::Point2f> next_pts;
     cv::Mat curGray, prevGray;
     cv::VideoCapture cap;
-    boost::filesystem::path video_in_path = dataset_path.string() + std::string("ground_truth/gtMovement.avi");
+    boost::filesystem::path video_in_path = dataset_path.string() + std::string("data/stereo_flow/image_0/gtMovement.avi");
     assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
-    boost::filesystem::path video_out_path = dataset_path.string() + std::string("flow/OpticalFlow_"+algo+".avi");
+    boost::filesystem::path video_out_path = dataset_path.string() + std::string("results/") + results_sha +
+    std::string("video/OpticalFlow.avi");
+    assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
 
     std::cout << video_in_path.string() << std::endl;
     cap.open(video_in_path.string());
@@ -57,10 +60,8 @@ void flow(std::string algo, ushort start, ushort secondstart) {
         return;
     }
 
-    name_frame = std::string(MATLAB_DATASET_PATH) + std::string("frames/") + std::string("dummy.txt");
-    name_flow = std::string(MATLAB_DATASET_PATH) + std::string("flow/") + std::string("dummy.txt");
-    assert(boost::filesystem::exists(name_frame.parent_path()) != 0);
-    assert(boost::filesystem::exists(name_flow.parent_path()) != 0);
+    results_flow = std::string(CPP_DATASET_PATH) + results_sha + std::string("/flow_occ/") + std::string("dummy.txt");
+    assert(boost::filesystem::exists(results_flow.parent_path()) != 0);
 
 
     cv::Size_<unsigned> frame_size;
@@ -84,7 +85,7 @@ void flow(std::string algo, ushort start, ushort secondstart) {
 
     unsigned frame_count = 0;
 
-    cv::namedWindow(algo, CV_WINDOW_AUTOSIZE);
+    cv::namedWindow(results_sha, CV_WINDOW_AUTOSIZE);
 
     //how many interations(frames)?
     auto tic = steady_clock::now();
@@ -114,6 +115,7 @@ void flow(std::string algo, ushort start, ushort secondstart) {
     while ( true ) {
 
         flowImage = cv::Scalar(0,0,0);
+        assert(flowImage.channels() == 3);
         // Break out of the loop if the user presses the Esc key
         char c = (char) cv::waitKey(10);
         switch (c) {
@@ -149,7 +151,7 @@ void flow(std::string algo, ushort start, ushort secondstart) {
 
         cv::cvtColor(frame, curGray, CV_BGR2GRAY);
 
-        if (algo.compare("FB") == 0) {
+        if (results_sha.compare("results/FB") == 0) {
             tic = steady_clock::now();
             if (prevGray.data) {
                 // Initialize parameters for the optical flow algorithm
@@ -179,15 +181,44 @@ void flow(std::string algo, ushort start, ushort secondstart) {
                         cv::arrowedLine(frame, cv::Point(x, y), cv::Point(cvRound(x + pt.x), cvRound(y + pt.y)),
                                         cv::Scalar(0,
                                                    255, 0));
+
+                        int row_coordinate = (int)(y);
+                        int col_coordinate = (int)(x);
+                        float Vx = (cvRound(x+pt.x) - x);
+                        float Vy = (cvRound(y+pt.y) - y);
+                        if ( Vx != 0 && Vy!= 0) {
+                            printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%f,%f) \n", frame_count,
+                                   row_coordinate, col_coordinate, Vx, Vy);
+                        }
+                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = Vx;
+                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = Vy;
+                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
                     }
                 }
             }
             toc = steady_clock::now();
             time_map["FB"] = duration_cast<milliseconds>(toc - tic).count();
             y_pts.push_back(time_map["FB"]);
+
+            sprintf(file_name, "000%03d_10", frame_count);
+            std::string results_flow_path_str = results_flow.parent_path().string() + "/" + std::string(file_name) + ".png";
+
+            //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
+            FlowImage F_gt(frame_size.width, frame_size.height);
+            for (int32_t v=0; v<frame_size.height; v++) { // rows
+                for (int32_t u=0; u<frame_size.width; u++) {  // cols
+                    if (flowImage.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
+                        F_gt.setFlowU(u,v,flowImage.at<cv::Vec3f>(v,u)[0]);
+                        F_gt.setFlowV(u,v,flowImage.at<cv::Vec3f>(v,u)[1]);
+                        F_gt.setValid(u,v,(bool)flowImage.at<cv::Vec3f>(v,u)[2]);
+                    }
+                }
+            }
+            F_gt.write(results_flow_path_str);
+
         }
 
-        else if (algo.compare("LK") == 0) {
+        else if (results_sha.compare("results/LK") == 0) {
             tic = steady_clock::now();
             // Calculate optical flow map using LK algorithm
             if (needToInit) {
@@ -235,8 +266,8 @@ void flow(std::string algo, ushort start, ushort secondstart) {
                     next_pts[count++] = next_pts[i];
                     //cv::circle(frame, next_pts[count], 3, cv::Scalar(0, 255, 0), -1, 8);
                     cv::arrowedLine(frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
-                    int row_coordinate = (int)(prev_pts[i].y);
-                    int col_coordinate = (int)(prev_pts[i].x);
+                    int row_coordinate = (int) (prev_pts[i].y);
+                    int col_coordinate = (int) (prev_pts[i].x);
                     float Vx = (next_pts[i].x - prev_pts[i].x);
                     float Vy = (next_pts[i].y - prev_pts[i].y);
                     printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
@@ -252,33 +283,26 @@ void flow(std::string algo, ushort start, ushort secondstart) {
             toc = steady_clock::now();
             time_map["LK"] = duration_cast<milliseconds>(toc - tic).count();
             y_pts.push_back(time_map["LK"]);
-            char file_name[50];
-            sprintf(file_name, "0000000%03d.png", frame_count);
-            std::string flow_image_path = name_frame.parent_path().string() + '/' + std::string(file_name);
+            sprintf(file_name, "000%03d_10", frame_count);
+            std::string results_flow_path_str =
+                    results_flow.parent_path().string() + "/" + std::string(file_name) + ".png";
 
-            png::image< png::rgb_pixel_16 > image(frame_size.width,frame_size.height);
-            for (int32_t v=0; v<frame_size.height; v++) {
-                for (int32_t u=0; u<frame_size.width; u++) {
-                    png::rgb_pixel_16 val;
-                    val.red   = 0;
-                    val.green = 0;
-                    val.blue  = 0;
-                    if (flowImage.at<cv::Vec3f>(v,u)[2] < 0.5) {
-                        val.red   = (uint16_t)std::max(std::min((flowImage.at<cv::Vec3f>(v,u)[0])*64.0f+32768.0f,
-                                                                65535.0f),0.0f);
-                        val.green = (uint16_t)std::max(std::min((flowImage.at<cv::Vec3f>(v,u)[1])*64.0f+32768.0f,
-                                                                65535.0f),0.0f);
-                        val.blue  = 1;
+            //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
+            FlowImage F_gt(frame_size.width, frame_size.height);
+            for (int32_t v = 0; v < frame_size.height; v++) { // rows
+                for (int32_t u = 0; u < frame_size.width; u++) {  // cols
+                    if (flowImage.at<cv::Vec3f>(v, u)[2] > 0.5) {
+                        F_gt.setFlowU(u, v, flowImage.at<cv::Vec3f>(v, u)[0]);
+                        F_gt.setFlowV(u, v, flowImage.at<cv::Vec3f>(v, u)[1]);
+                        F_gt.setValid(u, v, (bool) flowImage.at<cv::Vec3f>(v, u)[2]);
                     }
-                    image.set_pixel(u,v,val);
                 }
             }
-            image.write(flow_image_path);
-            //cv::imwrite(flow_image_path, flowImage);
+            F_gt.write(results_flow_path_str);
         }
 
-        // Scratch 2.. begin .. end
 
+        // Scratch 2.. begin .. end
         // Scratch 2 end
 
         tic = steady_clock::now();
@@ -289,7 +313,7 @@ void flow(std::string algo, ushort start, ushort secondstart) {
 
         video_out.write(frame);
         // Display the output image
-        cv::imshow(algo, frame);
+        cv::imshow(results_sha, frame);
         needToInit = false;
         prev_pts.clear();
         std::swap(next_pts, prev_pts);
