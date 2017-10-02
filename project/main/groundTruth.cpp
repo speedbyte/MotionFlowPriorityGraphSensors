@@ -303,8 +303,8 @@ int main() {
 
     //ground_truth((ushort)60,(ushort)240);
 
-    //result_dir = prepare_directories("FB");
-    //flow(result_dir,(ushort)60,(ushort)240);
+    result_dir = prepare_directories("FB");
+    flow(result_dir,(ushort)60,(ushort)240);
 
     result_dir = prepare_directories("LK");
     flow(result_dir,(ushort)60,(ushort)240);

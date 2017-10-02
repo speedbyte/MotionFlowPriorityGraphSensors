@@ -2,7 +2,7 @@
 cp -Rv libs/boost-install/* /usr/local/
 cp -Rv libs/opencv-install/* /usr/local/
 cp -Rv libs/ffmpeg-install/* /usr/local/
-cp -Rv utils/gnuplot-iostream/gnuplot-iostream.h /usr/local/include/gnuplot
+cp -Rv libs/gnuplot-iostream-install/* /usr/local/
 cp -Rv libs/pngpp-install/* /usr/local/
 cp -Rv libs/kitti-install/* /usr/local/
 
