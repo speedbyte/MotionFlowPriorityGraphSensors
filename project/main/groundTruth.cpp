@@ -16,6 +16,7 @@
 #include <png++/png.hpp>
 
 #include <kitti/mail.h>
+#include <kitti/log_colormap.h>
 #include <kitti/io_flow.h>
 
 //Creating a movement path. The path is stored in a x and y vector
@@ -26,7 +27,7 @@ extern void flow(std::string algo, ushort start, ushort secondstart);
 //extern bool eval(std::string result_sha, Mail *mail);
 #define MATLAB_DATASET_PATH "../../../matlab_dataset/"
 
-
+extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
 void ground_truth(ushort start=60, ushort secondstart=240) {
 
@@ -99,7 +100,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     cv::Mat test_frame = cv::Mat::zeros(frame_size, CV_8UC3);
 
     test_frame = cv::Scalar((rand()%255),(rand()%255),0);
-    char file_name[20];
+    char file_name[20], file_name_gp[20];
 
     tic_all = steady_clock::now();
     for (ushort x=0; x < MAX_ITERATION; x++) {
@@ -108,6 +109,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
         relativeGroundTruth = cv::Scalar::all(0);
         sprintf(file_name, "0000000%03d.png", x);
+        sprintf(file_name_gp, "0000000%03d.txt", x);
         std::string gt_image_path = gt_video_path.parent_path().string() + '/' + std::string(file_name);
         printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
                XMovement, secondXMovement);
@@ -251,6 +253,8 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
             }
         }
         F_gt.write(gt_image_path);
+
+        plotVectorField (F_gt,gt_video_path.parent_path().string(),file_name_gp);
 
         iterator++;
         sIterator++;
