@@ -23,7 +23,7 @@
 
 using namespace std::chrono;
 
-extern void flow(std::string results_sha, ushort start, ushort secondstart);
+extern void flow(std::string results_sha);
 //extern bool eval(std::string result_sha, Mail *mail);
 extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
@@ -61,7 +61,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
     //object specs
     const ushort width = 30;
-    const ushort height = 40;
+    const ushort height = 100;
 
     std::vector<ushort> theta;
     for ( ushort x = 0; x < MAX_ITERATION; x++) {
@@ -303,10 +303,10 @@ int main() {
 
     //ground_truth((ushort)60,(ushort)240);
 
-    result_dir = prepare_directories("FB");
-    flow(result_dir,(ushort)60,(ushort)240);
+    //result_dir = prepare_directories("FB");
+    //flow(result_dir);
 
     result_dir = prepare_directories("LK");
-    flow(result_dir,(ushort)60,(ushort)240);
+    flow(result_dir);
 
 }

@@ -25,7 +25,7 @@ using namespace std::chrono;
 #define CPP_DATASET_PATH "../../../cpp_dataset/"
 
 
-void flow(std::string result_sha, ushort start, ushort secondstart) {
+void flow(std::string result_sha) {
 
     std::cout << "results will be stored in " << result_sha;
 
@@ -45,14 +45,14 @@ void flow(std::string result_sha, ushort start, ushort secondstart) {
     std::vector<cv::Point2f> prev_pts;
     std::vector<cv::Point2f> next_pts;
     cv::Mat curGray, prevGray;
-    cv::VideoCapture cap;
     boost::filesystem::path video_in_path = dataset_path.string() + std::string("data/stereo_flow/image_0/gtMovement.avi");
     assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
-    boost::filesystem::path video_out_path = dataset_path.string() + std::string("results/") + result_sha +
-    std::string("video/OpticalFlow.avi");
-    assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
+    boost::filesystem::path video_out_path = dataset_path.string() + result_sha +  std::string("/video/OpticalFlow.avi");
+    assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
 
     std::cout << video_in_path.string() << std::endl;
+
+    cv::VideoCapture cap;
     cap.open(video_in_path.string());
     if (!cap.isOpened()) {
         std::cout << "Could not initialize capturing...\n";
@@ -140,13 +140,8 @@ void flow(std::string result_sha, ushort start, ushort secondstart) {
         frame = cv::imread(results_flow_path_str, CV_LOAD_IMAGE_COLOR);
 
         // Convert to grayscale
-        try {
-            cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
-        }
-        catch(...) {
-            std::cout << "no more frames";
-            break;
-        }
+        cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
+
         //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
 
         if (result_sha.compare("results/FB") == 0) {
@@ -317,6 +312,9 @@ void flow(std::string result_sha, ushort start, ushort secondstart) {
         std::swap(next_pts, prev_pts);
         std::swap(prevGray, curGray);
         frame_count++;
+        if ( frame_count == MAX_ITERATION ) {
+            break;
+        }
     }
 
     auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
