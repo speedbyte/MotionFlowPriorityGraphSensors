@@ -13,7 +13,7 @@
 #include <boost/bind.hpp>
 #include <boost/math/constants/constants.hpp>
 
-#include <gnuplot/gnuplot-iostream.h>
+#include <gnuplot-iostrem/gnuplot-iostream.h>
 
 #ifndef M_PI
 #	define M_PI 3.14159265358979323846

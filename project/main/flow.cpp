@@ -4,7 +4,6 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <iostream>
-#include <opencv2/imgproc/types_c.h>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/videoio/videoio_c.h>
@@ -14,7 +13,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/tuple/tuple.hpp>
-#include <gnuplot/gnuplot-iostream.h>
+#include <gnuplot-iostream/gnuplot-iostream.h>
 #include <png++/png.hpp>
 #include <kitti/io_flow.h>
 
