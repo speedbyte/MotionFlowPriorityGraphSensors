@@ -6,7 +6,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <iostream>
-#include <gnuplot/gnuplot-iostream.h>
+#include <gnuplot-iostream/gnuplot-iostream.h>
 #include <chrono>
 
 extern void salt(cv::Mat image, int n);
