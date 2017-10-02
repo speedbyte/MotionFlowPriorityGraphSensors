@@ -31,9 +31,13 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
     cv::Size_<unsigned> frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
-    boost::filesystem::path gt_video_path;
+    boost::filesystem::path gt_image_path, gt_flow_path, gt_video_path;
+    gt_image_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_0/dummy.txt");
+    assert(boost::filesystem::exists(gt_image_path.parent_path()) != 0);
+    gt_flow_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/flow_occ/dummy.txt");
+    assert(boost::filesystem::exists(gt_flow_path.parent_path()) != 0);
     gt_video_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_0/gtMovement.avi");
-    assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
+    assert(boost::filesystem::exists(gt_image_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
     video_out.open(gt_video_path.string(), CV_FOURCC('D', 'I', 'V', 'X'), 30, frame_size, true);
@@ -108,7 +112,8 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         relativeGroundTruth = cv::Scalar::all(0);
         sprintf(file_name, "000%03d_00", x);
         //sprintf(file_name_gp, "0000000%03d.txt", x);
-        std::string gt_image_path = gt_video_path.parent_path().string() + "/" + std::string(file_name) + ".png";
+        std::string gt_image_path_str = gt_image_path.parent_path().string() + "/" + std::string(file_name) + ".png";
+        std::string gt_flow_path_str = gt_flow_path.parent_path().string() + "/" + std::string(file_name) + ".png";
         printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
                XMovement, secondXMovement);
 
@@ -206,6 +211,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         if ( !video_out.isOpened() ) {
             std::cerr << "Could not open video" << std::endl;
         }
+        cv::imwrite(gt_flow_path_str, test_frame);
         video_out.write(test_frame);
 
         //test_frame = imnoise(test_frame,'gaussian',0.5);
@@ -250,9 +256,9 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
                 }
             }
         }
-        F_gt.write(gt_image_path);
+        F_gt.write(gt_image_path_str);
 
-        //plotVectorField (F_gt,gt_video_path.parent_path().string(),file_name);
+        //plotVectorField (F_gt,gt_image_path.parent_path().string(),file_name);
 
         iterator++;
         sIterator++;

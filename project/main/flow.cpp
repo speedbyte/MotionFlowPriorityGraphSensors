@@ -31,7 +31,7 @@ void flow(std::string algo, ushort start, ushort secondstart) {
     const boost::filesystem::path dataset_path = CPP_DATASET_PATH;
 
     boost::filesystem::path name_frame, name_flow;
-    name_frame = dataset_path.string() + std::string("frames/dummy.tx5");
+    name_frame = dataset_path.string() + std::string("data/stereo_flow/flow_noc/dummy.tx5");
     name_flow = dataset_path.string() + std::string("flow/dummy.txt");
     assert(boost::filesystem::exists(name_frame.parent_path()) != 0);
     assert(boost::filesystem::exists(name_flow.parent_path()) != 0);
