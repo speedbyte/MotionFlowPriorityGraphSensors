@@ -24,7 +24,7 @@ xOrigin = xPos(start);
 yOrigin = yPos(start);
 
 %Start of the second object is somewhere on the path
-secondStart = 200;
+secondStart = 110;
 secondXOrigin = xPos(secondStart);
 secondYOrigin = yPos(secondStart);
 
@@ -36,7 +36,11 @@ secondActualY = secondYOrigin;
 
 
 %how many interations(frames)?
-maxIteration = 360;
+maxIteration = 179;
+
+for k = 1:359
+    maxK(k) = xPos(k+1)-xPos(k);
+end
 
 
 %save this workspace to call it from the other functions
