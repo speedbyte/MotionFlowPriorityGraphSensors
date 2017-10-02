@@ -16,17 +16,17 @@
 #include <png++/png.hpp>
 
 #include <kitti/mail.h>
-#include <kitti/log_colormap.h>
 #include <kitti/io_flow.h>
 
 //Creating a movement path. The path is stored in a x and y vector
 
 using namespace std::chrono;
 
-extern void flow(std::string algo, ushort start, ushort secondstart);
-//extern bool eval(std::string result_sha, Mail *mail);
+#define CPP_DATASET_PATH "../../../cpp_dataset/"
 #define MATLAB_DATASET_PATH "../../../matlab_dataset/"
 
+extern void flow(std::string algo, ushort start, ushort secondstart);
+//extern bool eval(std::string result_sha, Mail *mail);
 extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
 void ground_truth(ushort start=60, ushort secondstart=240) {
@@ -34,7 +34,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     cv::Size_<unsigned> frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
     boost::filesystem::path gt_video_path;
-    gt_video_path = std::string(MATLAB_DATASET_PATH) + std::string("ground_truth/gtMovement.avi");
+    gt_video_path = std::string(CPP_DATASET_PATH) + std::string("ground_truth/gtMovement.avi");
     assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
@@ -108,9 +108,9 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         //Used to store the GT images for the kitti devkit
 
         relativeGroundTruth = cv::Scalar::all(0);
-        sprintf(file_name, "0000000%03d.png", x);
-        sprintf(file_name_gp, "0000000%03d.txt", x);
-        std::string gt_image_path = gt_video_path.parent_path().string() + '/' + std::string(file_name);
+        sprintf(file_name, "0000000%03d", x);
+        //sprintf(file_name_gp, "0000000%03d.txt", x);
+        std::string gt_image_path = gt_video_path.parent_path().string() + "/" + std::string(file_name) + ".png";
         printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
                XMovement, secondXMovement);
 
@@ -254,7 +254,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         }
         F_gt.write(gt_image_path);
 
-        plotVectorField (F_gt,gt_video_path.parent_path().string(),file_name_gp);
+        //plotVectorField (F_gt,gt_video_path.parent_path().string(),file_name);
 
         iterator++;
         sIterator++;
@@ -275,9 +275,9 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 }
 
 void prepare_directories() {
-    boost::filesystem::create_directories(std::string(MATLAB_DATASET_PATH) + std::string("data/stereo_flow/flow_noc"));
-    boost::filesystem::create_directories(std::string(MATLAB_DATASET_PATH) + std::string("data/stereo_flow/flow_occ"));
-    boost::filesystem::create_directories(std::string(MATLAB_DATASET_PATH) + std::string("data/stereo_flow/image_0"));
+    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/flow_noc"));
+    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/flow_occ"));
+    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_0"));
 }
 
 void test_kitti_original() {
@@ -306,6 +306,6 @@ int main() {
 
     ground_truth((ushort)60,(ushort)240);
     //flow("FB",(ushort)60,(ushort)240);
-    //flow("LK",(ushort)60,(ushort)240);
+    flow("LK",(ushort)60,(ushort)240);
 
 }
