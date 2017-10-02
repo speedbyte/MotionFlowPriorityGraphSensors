@@ -10,7 +10,7 @@ for x = 1:1000
   if x > 2  
     
     tau = [3 0.05];
-    name = sprintf('./../../../cpp_dataset/data/stereo_flow/image_0/%06d_10.png',x);
+    name = sprintf('./../../../cpp_dataset/data/stereo_flow/flow_occ/%06d_10.png',x);
     addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
     F_gt = flow_read(name);
     F_est = flow_read(name_flow);
