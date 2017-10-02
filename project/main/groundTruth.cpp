@@ -32,7 +32,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     cv::Size_<unsigned> frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
     boost::filesystem::path gt_video_path;
-    gt_video_path = std::string(CPP_DATASET_PATH) + std::string("image_2/gtMovement.avi");
+    gt_video_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_0/gtMovement.avi");
     assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
@@ -106,7 +106,7 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         //Used to store the GT images for the kitti devkit
 
         relativeGroundTruth = cv::Scalar::all(0);
-        sprintf(file_name, "0000000%03d", x);
+        sprintf(file_name, "000%03d_00", x);
         //sprintf(file_name_gp, "0000000%03d.txt", x);
         std::string gt_image_path = gt_video_path.parent_path().string() + "/" + std::string(file_name) + ".png";
         printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
