@@ -14,6 +14,9 @@
 #define MATLAB_DATASET_PATH "../../../matlab_dataset/"
 #define CPP_DATASET_PATH "../../../cpp_dataset/"
 
+#define MAX_ITERATION 10
+#define MAX_ITERATION_THETA 360
+
 
 
 

@@ -48,7 +48,6 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     auto tic_all = steady_clock::now();
     auto toc_all = steady_clock::now();
 
-    const ushort MAX_ITERATION = 360;
     ushort iterator = 0, sIterator = 0;
     std::vector<ushort> xPos, yPos;
 
@@ -60,15 +59,15 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     ushort secondActualY;
 
     //object specs
-    const ushort width = 30;
-    const ushort height = 100;
+    const ushort object_width = 4;
+    const ushort object_height = 4;
 
     std::vector<ushort> theta;
-    for ( ushort x = 0; x < MAX_ITERATION; x++) {
-        theta.push_back(x);
+    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
+        theta.push_back(frame_count);
     }
 
-    for ( int i = 0; i< MAX_ITERATION; i++) {
+    for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
         xPos.push_back(static_cast<ushort>((frame_size.width/2) + (500 * cos(theta[i] * CV_PI / 180.0) /
                 (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2)))));
 
@@ -104,16 +103,23 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     test_frame = cv::Scalar((rand()%255),(rand()%255),0);
     char file_name[20], file_name_gp[20];
 
+    std::string gt_flow_matrix_str = gt_flow_path.parent_path().string() + "/gt_flow.yaml";
+
+    cv::FileStorage fs;
+    fs.open(gt_flow_matrix_str, cv::FileStorage::WRITE);
+
     tic_all = steady_clock::now();
-    for (ushort x=0; x < MAX_ITERATION; x++) {
+    for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
 
         //Used to store the GT images for the kitti devkit
 
         relativeGroundTruth = cv::Scalar::all(0);
-        sprintf(file_name, "000%03d_10", x);
+        sprintf(file_name, "000%03d_10", frame_count);
+
         std::string gt_image_path_str = gt_image_path.parent_path().string() + "/" + std::string(file_name) + ".png";
         std::string gt_flow_path_str = gt_flow_path.parent_path().string() + "/" + std::string(file_name) + ".png";
-        printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", x, start, iterator, secondstart, sIterator, actualX, actualY,
+
+        printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", frame_count, start, iterator, secondstart, sIterator, actualX, actualY,
                XMovement, secondXMovement);
 
         //If we are at the end of the path vector, we need to reset our iterators
@@ -139,22 +145,22 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
         //Object specification
         std::vector<ushort> XSpec;
-        for ( ushort i = 0; i < width; i++) {
+        for ( ushort i = 0; i < object_width; i++) {
             XSpec.push_back(actualX+i);
         }
 
         std::vector<ushort> YSpec;
-        for ( ushort i = 0; i < height; i++) {
+        for ( ushort i = 0; i < object_height; i++) {
             YSpec.push_back(actualY+i);
         }
 
         std::vector<ushort> secondXSpec;
-        for ( ushort i = 0; i < width; i++) {
+        for ( ushort i = 0; i < object_width; i++) {
             secondXSpec.push_back(secondActualX+i);
         }
 
         std::vector<ushort> secondYSpec;
-        for ( ushort i = 0; i < height; i++) {
+        for ( ushort i = 0; i < object_height; i++) {
             secondYSpec.push_back(secondActualY+i);
         }
 
@@ -231,6 +237,18 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         // store displacement in the matrix
         roi = cv::Scalar((XMovement), (YMovement), 1.0f);
 
+        fs << "frame_count" << frame_count;
+
+        //fs << "ground displacement obj1" << "[";
+        int row = YSpec.at(0);
+        int col = XSpec.at(0);
+        //fs << "{:" << "row" <<  row << "col" << col << "displacement" << "[:";
+        //fs << relativeGroundTruth.at<cv::Vec3f>(row, col)[0];
+        //fs << relativeGroundTruth.at<cv::Vec3f>(row, col)[1];
+        //fs << relativeGroundTruth.at<cv::Vec3f>(row, col)[2];
+        //fs << "]" << "}";
+        //fs << "]";
+
         roi = relativeGroundTruth.
                 colRange(secondXSpec.at(0), secondXSpec.at(secondXSpec.size()-1)).
                 rowRange(secondYSpec.at(0), secondYSpec.at(secondYSpec.size()-1));
@@ -238,20 +256,49 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
         // store displacement in the matrix
         roi = cv::Scalar((secondXMovement), (secondYMovement), 1.0f);
 
+        //fs << "ground displacement obj2" << "[";
+        int row_2 = secondYSpec.at(0);
+        int col_2 = secondXSpec.at(0);
+        //fs << "{:" << "row" <<  row_2 << "col" << col_2 << "displacement" << "[:";
+        //fs << relativeGroundTruth.at<cv::Vec3f>(row_2, col_2)[0];
+        //fs << relativeGroundTruth.at<cv::Vec3f>(row_2, col_2)[1];
+        //fs << relativeGroundTruth.at<cv::Vec3f>(row_2, col_2)[2];
+        //fs << "]" << "}";
+        //fs << "]";
+
+        //fs << "complete" << relativeGroundTruth;
+
         //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
-        FlowImage F_gt(frame_size.width, frame_size.height);
+        FlowImage F_gt_write(frame_size.width, frame_size.height);
         for (int32_t v=0; v<frame_size.height; v++) { // rows
             for (int32_t u=0; u<frame_size.width; u++) {  // cols
                 if (relativeGroundTruth.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
-                    F_gt.setFlowU(u,v,relativeGroundTruth.at<cv::Vec3f>(v,u)[0]);
-                    F_gt.setFlowV(u,v,relativeGroundTruth.at<cv::Vec3f>(v,u)[1]);
-                    F_gt.setValid(u,v,(bool)relativeGroundTruth.at<cv::Vec3f>(v,u)[2]);
+                    F_gt_write.setFlowU(u,v,relativeGroundTruth.at<cv::Vec3f>(v,u)[0]);
+                    F_gt_write.setFlowV(u,v,relativeGroundTruth.at<cv::Vec3f>(v,u)[1]);
+                    F_gt_write.setValid(u,v,(bool)relativeGroundTruth.at<cv::Vec3f>(v,u)[2]);
                 }
             }
         }
-        F_gt.write(gt_flow_path_str);
+        F_gt_write.write(gt_flow_path_str);
 
-        //plotVectorField (F_gt,gt_image_path.parent_path().string(),file_name);
+        FlowImage F_gt_read;
+        F_gt_read.read(gt_flow_path_str);
+
+        for (int32_t v=0; v<F_gt_read.height(); v++) { // rows
+            for (int32_t u=0; u<F_gt_read.width(); u++) {  // cols
+                if ((v == row && u == col) || (v == row_2 && u == col_2) ) {
+                    fs << "png file read" << "[";
+                    fs << "{:" << "row" <<  v << "col" << u << "displacement" << "[:";
+                    fs << F_gt_read.getFlowU(u,v);
+                    fs << F_gt_read.getFlowV(u,v);
+                    fs << F_gt_read.isValid(u,v);
+                    fs << "]" << "}";
+                    fs << "]";
+                }
+            }
+        }
+
+        //plotVectorField (F_gt_write,gt_image_path.parent_path().string(),file_name);
 
         iterator++;
         sIterator++;
@@ -265,6 +312,8 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
     }
     video_out.release();
+
+    fs.release();
     toc_all = steady_clock::now();
     time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
     std::cout << "ground truth generation time - " << time_map["ground truth"]  << "ms" << std::endl;
@@ -272,9 +321,28 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 }
 
 std::string prepare_directories(std::string result_sha) {
+
+
     std::string result_dir = "results/" + result_sha;
-    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/data"));
-    boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/video"));
+
+    if ( result_sha.compare("GT") == 0 ) {
+
+        boost::filesystem::remove_all(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/image_0"));
+        boost::filesystem::remove_all(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/flow_occ"));
+
+        boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/image_0"));
+        boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/flow_occ"));
+
+    }
+
+    else {
+
+        boost::filesystem::remove_all(std::string(CPP_DATASET_PATH) + result_dir + ("/data"));
+        boost::filesystem::remove_all(std::string(CPP_DATASET_PATH) + result_dir + ("/video"));
+        boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/data"));
+        boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/video"));
+    }
+
     return result_dir;
 }
 
@@ -301,7 +369,8 @@ int main() {
     std::string result_dir;
     //test_kitti_original();
 
-    //ground_truth((ushort)60,(ushort)240);
+    result_dir = prepare_directories("GT");
+    ground_truth((ushort)60,(ushort)240);
 
     //result_dir = prepare_directories("FB");
     //flow(result_dir);
