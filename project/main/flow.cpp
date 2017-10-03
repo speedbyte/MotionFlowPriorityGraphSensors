@@ -64,10 +64,10 @@ void flow(std::string result_sha) {
         return;
     }
 
-    std::string gt_flow_matrix_str = results_flow.parent_path().string() + "/result_flow.yaml";
+    std::string results_flow_matrix_str = results_flow.parent_path().string() + "/result_flow.yaml";
 
     cv::FileStorage fs;
-    fs.open(gt_flow_matrix_str, cv::FileStorage::WRITE);
+    fs.open(results_flow_matrix_str, cv::FileStorage::WRITE);
 
 
     cv::Size_<unsigned> frame_size(1242,375);
@@ -89,7 +89,7 @@ void flow(std::string result_sha) {
     pyramid1.create(frame_size, CV_8UC1);
     pyramid2.create(frame_size, CV_8UC1);
 
-    unsigned frame_count = 0;
+    ushort frame_count = 0;
 
     cv::namedWindow(result_sha, CV_WINDOW_AUTOSIZE);
 
@@ -142,7 +142,8 @@ void flow(std::string result_sha) {
         //cap >> frame;
         //if (frame.empty())
         //    break;
-        //fs << "frame_count" << frame_count;
+
+        fs << "frame_count" << frame_count;
 
         sprintf(file_name, "000%03d_10", frame_count);
         gt_image_path_str = video_in_path.parent_path().string() + "/" + std::string(file_name) + ".png";
