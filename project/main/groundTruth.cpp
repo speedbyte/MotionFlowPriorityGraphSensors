@@ -58,9 +58,6 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
     ushort secondActualX;
     ushort secondActualY;
 
-    //object specs
-    const ushort object_width = 4;
-    const ushort object_height = 4;
 
     std::vector<ushort> theta;
     for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
@@ -279,24 +276,26 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
                 }
             }
         }
-        F_gt_write.write(gt_flow_path_str);
+        if ( frame_count > 0 ) {
+            F_gt_write.write(gt_flow_path_str);
+            FlowImage F_gt_read;
+            F_gt_read.read(gt_flow_path_str);
 
-        FlowImage F_gt_read;
-        F_gt_read.read(gt_flow_path_str);
-
-        for (int32_t v=0; v<F_gt_read.height(); v++) { // rows
-            for (int32_t u=0; u<F_gt_read.width(); u++) {  // cols
-                if ((v == row && u == col) || (v == row_2 && u == col_2) ) {
-                    fs << "png file read" << "[";
-                    fs << "{:" << "row" <<  v << "col" << u << "displacement" << "[:";
-                    fs << F_gt_read.getFlowU(u,v);
-                    fs << F_gt_read.getFlowV(u,v);
-                    fs << F_gt_read.isValid(u,v);
-                    fs << "]" << "}";
-                    fs << "]";
+            for (int32_t v=0; v<F_gt_read.height(); v++) { // rows
+                for (int32_t u=0; u<F_gt_read.width(); u++) {  // cols
+                    if ((v == row && u == col) || (v == row_2 && u == col_2) ) {
+                        fs << "png file read" << "[";
+                        fs << "{:" << "row" <<  v << "col" << u << "displacement" << "[:";
+                        fs << F_gt_read.getFlowU(u,v);
+                        fs << F_gt_read.getFlowV(u,v);
+                        fs << F_gt_read.isValid(u,v);
+                        fs << "]" << "}";
+                        fs << "]";
+                    }
                 }
             }
         }
+
 
         //plotVectorField (F_gt_write,gt_image_path.parent_path().string(),file_name);
 
@@ -325,10 +324,10 @@ std::string prepare_directories(std::string result_sha) {
 
     std::string result_dir = "results/" + result_sha;
 
-    if ( result_sha.compare("GT") == 0 ) {
+    if ( !result_sha.compare("GT") ) {
 
-        boost::filesystem::remove_all(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/image_0"));
-        boost::filesystem::remove_all(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/flow_occ"));
+        system(("rm " + std::string(CPP_DATASET_PATH) +  std::string("data/stereo_flow/image_0/*")).c_str());
+        system(("rm " + std::string(CPP_DATASET_PATH) +  std::string("data/stereo_flow/flow_occ/*")).c_str());
 
         boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/image_0"));
         boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/flow_occ"));
@@ -337,8 +336,9 @@ std::string prepare_directories(std::string result_sha) {
 
     else {
 
-        boost::filesystem::remove_all(std::string(CPP_DATASET_PATH) + result_dir + ("/data"));
-        boost::filesystem::remove_all(std::string(CPP_DATASET_PATH) + result_dir + ("/video"));
+        system(("rm " + std::string(CPP_DATASET_PATH) + result_dir + std::string("/data/*")).c_str());
+        system(("rm " + std::string(CPP_DATASET_PATH) + result_dir + std::string("/video/*")).c_str());
+
         boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/data"));
         boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/video"));
     }
@@ -372,8 +372,8 @@ int main() {
     result_dir = prepare_directories("GT");
     ground_truth((ushort)60,(ushort)240);
 
-    //result_dir = prepare_directories("FB");
-    //flow(result_dir);
+    result_dir = prepare_directories("FB");
+    flow(result_dir);
 
     result_dir = prepare_directories("LK");
     flow(result_dir);

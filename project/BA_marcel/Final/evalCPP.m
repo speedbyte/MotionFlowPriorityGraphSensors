@@ -3,13 +3,13 @@ load('Initialize.mat');
 
 
 error = 0;
-for x = 1:1000
-    name_flow = sprintf('./../../../cpp_dataset/results/FB/data/%06d_10.png',x);
+for x = 1:360
+    name_flow = sprintf('./../../../cpp_dataset/results/LK/data/%06d_10.png',x);
 
 
   if x > 2  
     
-    tau = [3 0.05];
+    tau = [3 0.2];
     name = sprintf('./../../../cpp_dataset/data/stereo_flow/flow_occ/%06d_10.png',x);
     addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
     F_gt = flow_read(name);

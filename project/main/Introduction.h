@@ -56,6 +56,7 @@
 
 
  Presentation flowchart:
+
  sensor status = { static, moving }
  noise induction = { simple, rain noise }
  2 sensor data - light spectrum and radio spectrum
@@ -143,6 +144,8 @@
  Apply validation step and noise induction
  Acquire displacement vector -> Apply collision algorithm -> Output collision graph
  Compare input collision graph with output collision graph -> Output Error
+
+ Motion based Detection and Tracking in 3D LiDAR Scans.
 
  --------------------------------------
 

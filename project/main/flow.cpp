@@ -157,7 +157,7 @@ void flow(std::string result_sha) {
 
         //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
 
-        if (result_sha.compare("results/FB") == 0) {
+        if (!result_sha.compare("results/FB")) {
             tic = steady_clock::now();
             if (prevGray.data) {
                 // Initialize parameters for the optical flow algorithm
@@ -195,10 +195,10 @@ void flow(std::string result_sha) {
                         if ( Vx != 0 && Vy!= 0) {
                             printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%f,%f) \n", frame_count,
                                    row_coordinate, col_coordinate, Vx, Vy);
+                            flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvRound(Vx+0.5);
+                            flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvRound(Vy+0.5);
+                            flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
                         }
-                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = Vx;
-                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = Vy;
-                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
                     }
                 }
             }
@@ -206,50 +206,17 @@ void flow(std::string result_sha) {
             time_map["FB"] = duration_cast<milliseconds>(toc - tic).count();
             y_pts.push_back(time_map["FB"]);
 
-
-            //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
-            FlowImage F_gt_write(frame_size.width, frame_size.height);
-            for (int32_t v=0; v<frame_size.height; v++) { // rows
-                for (int32_t u=0; u<frame_size.width; u++) {  // cols
-                    if (flowImage.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
-                        F_gt_write.setFlowU(u,v,flowImage.at<cv::Vec3f>(v,u)[0]);
-                        F_gt_write.setFlowV(u,v,flowImage.at<cv::Vec3f>(v,u)[1]);
-                        F_gt_write.setValid(u,v,(bool)flowImage.at<cv::Vec3f>(v,u)[2]);
-                    }
-                }
-            }
-            F_gt_write.write(results_flow_path_str);
-
         }
 
-        else if (result_sha.compare("results/LK") == 0) {
+        else if (!result_sha.compare("results/LK")) {
             tic = steady_clock::now();
             // Calculate optical flow map using LK algorithm
-            if (needToInit) {
-                // automatic initialization
-                cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
-                // Refining the location of the feature points
-                if (next_pts.size() < MAX_COUNT) {
-                    std::vector<cv::Point2f> currentPoint;
-                    std::swap(currentPoint, next_pts);
-                    for (unsigned i = 0; i < currentPoint.size(); i++) {
-                        std::vector<cv::Point2f> tempPoints;
-                        tempPoints.push_back(currentPoint[i]);
-                        // Function to refine the location of the corners to subpixel accuracy.
-                        // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
-                        cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
-                        next_pts.push_back(tempPoints[0]);
-                    }
-                    std::swap(currentPoint, next_pts);
-                }
-            }
-
-            if (!prev_pts.empty()) {
+            if (prevGray.data) {
                 std::vector<uchar> status;
                 std::vector<float> err;
-                if (prevGray.empty()) {
+                /*if (prevGray.empty()) {
                     curGray.copyTo(prevGray);
-                }
+                }*/
                 cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts, next_pts, status,
                                          err, winSize, 3, termcrit, 0, 0.001);
 
@@ -270,56 +237,80 @@ void flow(std::string result_sha) {
                     next_pts[count++] = next_pts[i];
                     //cv::circle(frame, next_pts[count], 3, cv::Scalar(0, 255, 0), -1, 8);
                     cv::arrowedLine(frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
-                    int row_coordinate = cvRound(prev_pts[i].y);
-                    int col_coordinate = cvRound(prev_pts[i].x);
+                    int row_coordinate = cvRound(next_pts[i].y);
+                    int col_coordinate = cvRound(next_pts[i].x);
                     float Vx = (next_pts[i].x - prev_pts[i].x);
                     float Vy = (next_pts[i].y - prev_pts[i].y);
                     printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
                            col_coordinate, Vx, Vy);
-                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = Vx;
-                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = Vy;
+                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvFloor(Vx+0.5);
+                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvFloor(Vy+0.5);
                     flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
                 }
                 next_pts.resize(count);
                 //printf(" new size is %i for frame number %u\n", count, frame_count);
                 z_pts.push_back(count);
             }
+            else {
+                needToInit = true;
+            }
+            if (needToInit) {
+                // automatic initialization
+                cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
+                // Refining the location of the feature points
+                if (next_pts.size() < MAX_COUNT) {
+                    std::vector<cv::Point2f> currentPoint;
+                    std::swap(currentPoint, next_pts);
+                    for (unsigned i = 0; i < currentPoint.size(); i++) {
+                        std::vector<cv::Point2f> tempPoints;
+                        tempPoints.push_back(currentPoint[i]);
+                        // Function to refine the location of the corners to subpixel accuracy.
+                        // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
+                        cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
+                        next_pts.push_back(tempPoints[0]);
+                    }
+                    std::swap(currentPoint, next_pts);
+                }
+            }
+
             toc = steady_clock::now();
             time_map["LK"] = duration_cast<milliseconds>(toc - tic).count();
             y_pts.push_back(time_map["LK"]);
 
-            //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
-            FlowImage F_gt_write(frame_size.width, frame_size.height);
+        }
 
-            for (int32_t v = 0; v < frame_size.height; v++) { // rows
-                for (int32_t u = 0; u < frame_size.width; u++) {  // cols
-                    if (flowImage.at<cv::Vec3f>(v, u)[2] > 0) {
-                        F_gt_write.setFlowU(u, v, flowImage.at<cv::Vec3f>(v, u)[0]);
-                        F_gt_write.setFlowV(u, v, flowImage.at<cv::Vec3f>(v, u)[1]);
-                        F_gt_write.setValid(u, v, (bool) flowImage.at<cv::Vec3f>(v, u)[2]);
+        if (prevGray.data) {
+            //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
+            FlowImage F_result_write(frame_size.width, frame_size.height);
+            for (int32_t v=0; v<frame_size.height; v++) { // rows
+                for (int32_t u=0; u<frame_size.width; u++) {  // cols
+                    if (flowImage.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
+                        F_result_write.setFlowU(u,v,flowImage.at<cv::Vec3f>(v,u)[0]);
+                        F_result_write.setFlowV(u,v,flowImage.at<cv::Vec3f>(v,u)[1]);
+                        F_result_write.setValid(u,v,(bool)flowImage.at<cv::Vec3f>(v,u)[2]);
                     }
                 }
             }
-            F_gt_write.write(results_flow_path_str);
+            F_result_write.write(results_flow_path_str);
 
-            FlowImage F_gt_read;
-            F_gt_read.read(results_flow_path_str);
+            FlowImage F_result_read;
+            F_result_read.read(results_flow_path_str);
 
-            for (int32_t v=0; v<F_gt_read.height(); v++) { // rows
-                for (int32_t u=0; u<F_gt_read.width(); u++) {  // cols
-                    if ( F_gt_read.isValid(u,v) ) {
+            for (int32_t v=0; v<F_result_read.height(); v++) { // rows
+                for (int32_t u=0; u<F_result_read.width(); u++) {  // cols
+                    if ( F_result_read.isValid(u,v) ) {
                         fs << "png file read" << "[";
                         fs << "{:" << "row" <<  v << "col" << u << "displacement" << "[:";
-                        fs << F_gt_read.getFlowU(u,v);
-                        fs << F_gt_read.getFlowV(u,v);
-                        fs << F_gt_read.isValid(u,v);
+                        fs << F_result_read.getFlowU(u,v);
+                        fs << F_result_read.getFlowV(u,v);
+                        fs << F_result_read.isValid(u,v);
                         fs << "]" << "}";
                         fs << "]";
                     }
                 }
             }
-
         }
+        
 
         // Scratch 2.. begin .. end
         // Scratch 2 end
@@ -350,12 +341,12 @@ void flow(std::string result_sha) {
     pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
     video_out.release();
     cv::destroyAllWindows();
-
+/*
     // gnuplot_2d
     Gnuplot gp2d;
-    gp2d << "set xrange [0:360]\n";
+    gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION) + "]\n";
     gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
     gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << " with lines title 'y axis - ms, x axis - frame "
             "count'\n";
-
+*/
 }
