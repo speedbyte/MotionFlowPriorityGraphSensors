@@ -109,7 +109,7 @@ void send2d_colmajor() {
 
 void send_lemniscate(int index) {
 
-    Gnuplot gp;
+    Gnuplot gp("gnuplot -persist");
 
     gp << "set zrange [0:1]\n";
     gp << "set hidden3d nooffset\n";
@@ -159,7 +159,7 @@ void send_lemniscate(int index) {
     }
     std::string cmd = "splot";
     if(index > 0){
-        cmd = "splot";
+        cmd = "refresh";
     }
 
     gp << "set label \"PT\" at " + cx + "," + cy + "," + cz + "; " + cmd  + " ";
@@ -174,9 +174,9 @@ int main() {
     //send3d();
     //send3d_record();
     //send2d_colmajor();
-    for ( int i = 0; i< 10; i++) {
+    for ( int i = 0; i < 4; i++) {
         send_lemniscate(i);
-        usleep(1000);
+        //usleep(10000);
     }
 
     return 0;
