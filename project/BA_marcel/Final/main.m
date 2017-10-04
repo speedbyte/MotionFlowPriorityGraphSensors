@@ -24,6 +24,7 @@ error(2) = 0;
 
 for x = 1:maxIteration
     
+    disp(x);
 
     name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_0/%06d_10.png',x);   %imread
     name_flow = sprintf('./../../../matlab_dataset/data/results/FB/data/%06d_10.png',x);          %result
@@ -74,6 +75,7 @@ for x = 1:maxIteration
      res = cat(3,flow_frame.Vx,flow_frame.Vy,vCopy);
      
      addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
+     
      flow_write(res,name_flow);
      
 
@@ -123,11 +125,10 @@ for x = 1:maxIteration
        
        
        tic;
-
-       plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,flowstop,plotTime,collisionTime, timeMovement);
-      plotTime(x) = toc;
-       
     
+%       plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,flowstop,plotTime,collisionTime, timeMovement);
+          plotTime(x) = toc;
+
     
     %%
     %Update position(the objects of interest are tracked via Ground Truth

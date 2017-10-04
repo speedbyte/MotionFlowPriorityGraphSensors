@@ -7,8 +7,7 @@ for x = 1:maxIteration
     name_flow = sprintf('./../../../matlab_dataset/data/results/FB/data/%06d_10.png',x);
 
 
-  if x > 2  
-    
+    if x > 1
     tau = [3 0.05];
     name = sprintf('./../../../matlab_dataset/data/stereo_flow/flow_occ/%06d_10.png',x);
     addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
@@ -23,4 +22,5 @@ for x = 1:maxIteration
 
        kittiPlotter(error,f_err,errorMean,F_est,F_gt,F_err,x);
   end
-    end
+    
+end

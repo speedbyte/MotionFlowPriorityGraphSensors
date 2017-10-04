@@ -16,4 +16,5 @@ release/
 *.swp
 *.mat
 matlab/
+*.png
 

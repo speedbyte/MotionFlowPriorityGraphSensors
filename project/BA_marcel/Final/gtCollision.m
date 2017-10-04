@@ -42,10 +42,7 @@ for x=1:maxIteration
     ySpec = actualY:actualY+height; %height
     secondXSpec = secondActualX:secondActualX+width;
     secondYSpec = secondActualY:secondActualY+height;
-    
-    frame = movement(xSpec,ySpec,secondXSpec,secondYSpec);
-    imwrite(frame,name_frame);
-    
+        
        relativeGroundTruth = zeros(375,1242,3,'single');
        absoluteGroundTruth = zeros(375,1242,3,'uint16');
 

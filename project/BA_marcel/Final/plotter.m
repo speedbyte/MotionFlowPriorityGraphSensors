@@ -6,9 +6,9 @@ function [ ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector
 %Show the estimated Optical Flow 
 figure(1)
 imshow(frame);
-%hold on
-%plot(flow_frame,'DecimationFactor',[8 8],'ScaleFactor',3);
-%title(sprintf('Optical Flow in iteration %.2f %',x));
+hold on
+plot(flow_frame,'DecimationFactor',[8 8],'ScaleFactor',3);
+title(sprintf('Optical Flow in iteration %.2f %',x));
 drawnow;
 hold off;
 

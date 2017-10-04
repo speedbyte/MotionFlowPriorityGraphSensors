@@ -16,6 +16,9 @@ b = 0;
         end
     end
 
+
+%    frame = imnoise(frame,'Gaussian',0,0.05);
+
         
     
     %draw new image.
@@ -55,7 +58,7 @@ b = 0;
         end
     end
     
-%     %static noise
+%          %static noise
 %     for k=1:375
 %         for j=1:1242
 %             if mod(k,5) == 0 | mod(j,5) == 0
@@ -65,8 +68,7 @@ b = 0;
 %             end
 %         end
 %     end
-%     
-%    
-%  
+    
 
+   
     
