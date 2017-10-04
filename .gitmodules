@@ -18,7 +18,7 @@
 	url = https://github.com/nmante/pkg-config-generator.git
 	branch = master
 [submodule "gnuplot-iostream"]
-	path = utils/gnuplot-iostream
+	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
 	branch = master
 [submodule "protobuf"]
@@ -65,4 +65,8 @@
 [submodule "kitti2pcl"]
 	path = kitti_eval/kitti2pcl
 	url = https://github.com/jaejunlee0538/kitti2pcl.git
+	branch = master
+[submodule "libs/pngpp"]
+	path = libs/pngpp
+	url = https://github.com/bysreg/pngpp.git
 	branch = master

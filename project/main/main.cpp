@@ -4,16 +4,10 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 
+#include "datasets.h"
 
 #include "GridLayout.h"
 
-
-#define KITTI_RAW_DATASET_PATH "../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/"
-#define KITTI_RAW_CALIBRATION_PATH "../../../kitti_dataset/raw_dataset_with_calib/"
-#define MATLAB_DATASET_PATH "../../../matlab_dataset/"
-
-#define KITTI_FLOW_DATASET_PATH "../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/training/"
-#define KITTI_FLOW_CALIBRATION_PATH "../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/calib/"
 
 using boost_path=boost::filesystem::path;
 

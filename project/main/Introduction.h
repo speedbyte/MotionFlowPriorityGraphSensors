@@ -1,5 +1,6 @@
 
 /**
+ git checkout 8569a8c6088a201fbeafdcaa06bcaa8aadd763d9
 
  Related Work:
 
@@ -13,6 +14,27 @@
  Michigan University
 
  Kitti:
+ Ground truth in KITTI Dataset is acquired by accumulating 3D point clouds from a 360 degree Velodyne HDL-64
+ Laserscanner and fitting 3D CAD models to individually moving cars.
+ Outdoor scenes are decomposed
+ - Into a small number of independently moving objects.
+ - Each object in the scene is represented by its rigid motion parameters
+ - The objects are a part of a superpixel.
+ - The superpixel is represented by a 3D plane
+ - The super pixel consists of the index of all the objects that are the part of the superpixel.
+
+ There are 200 test and training data image pairs.
+  The training data set contains image datapairs and various ground truth information such as flow, disparity etc. They
+  are colour coded and hence are also lossless images. That means a normal character buffer is encoded in a lossless
+  PNG format.
+
+  The testing data set contains images over which new algorithms can be tested. The kitti development kit then
+  converts into a format that can be used to compare it with the ground truth. Ofcourse the ground truth information
+  has not been published for the testing image datapairs, because otherwise one can optimise their algorithm to fit
+  the specifications of the ground truth.
+
+  The testing image pairs and training image pairs have been randomly chosen from the kitti raw data set.
+
  Since it was found that high ranked optical flow algorithms in lab, fail in the real world, Kitti was designed for
  the real world. In Kitti evaluation kit, the first input is the ground png and the second input is the data matrix
  in form of a three channel matrix - x, y and validation bit.
@@ -35,6 +57,7 @@
 
 
  Presentation flowchart:
+
  sensor status = { static, moving }
  noise induction = { simple, rain noise }
  2 sensor data - light spectrum and radio spectrum
@@ -122,6 +145,8 @@
  Apply validation step and noise induction
  Acquire displacement vector -> Apply collision algorithm -> Output collision graph
  Compare input collision graph with output collision graph -> Output Error
+
+ Motion based Detection and Tracking in 3D LiDAR Scans.
 
  --------------------------------------
 

@@ -1,19 +1,5 @@
 %Loads the Initialization specs. 
 
-%noise(static, dynamic)
-
-%59-70
-%Err Mean 2.50880
-
-%Noise  frame = imnoise(frame,'gaussian',0.05);
-%Err Mean 4.4
-
-%Noise  frame = imnoise(frame,'gaussian',0.05);
-% Err Mean 4.76
-
-%%%21.9
-%NOISE MIGHT HAVE POSITIVE INFLUENCE
-
 
 
 clear all;
@@ -22,30 +8,38 @@ close all;
 load('Initialize.mat');
 load('collisionVector.mat');
 
-opticFlow=opticalFlowFarneback;%('NoiseThreshold',0.004);
-frame = zeros(375,1242,3,'uint8');
-bg = zeros(375,1242,3,'uint8');
+opticFlow=opticalFlowFarneback%('NoiseThreshold',0.004);
+
+
+
+
+
 plotTime = 1;
 error(1) = 0;
 error(2) = 0;
 
-    for k=1:375
-        for j=1:1242
-                bg(k,j,1) = randi([0,255]);
-                bg(k,j,2) = randi([0,255]);
-                
-                
-        end
-    end
 
+    mkdir('./../../../matlab_dataset/data/results/FB/data/');
 
 
 for x = 1:maxIteration
+    
+    disp(x);
 
-    name_frame = sprintf('./Videos/Frames/%06d.png',x);
-    name_flow = sprintf('./Videos/Flow/%06d.png',x);
+    name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_0/%06d_10.png',x);   %imread
+    name_flow = sprintf('./../../../matlab_dataset/data/results/FB/data/%06d_10.png',x);          %result
 
-    %Initialization
+    
+
+        
+
+    xSpec = actualX:actualX+width;  %width
+    ySpec = actualY:actualY+height; %height
+    secondXSpec = secondActualX:secondActualX+width;
+    secondYSpec = secondActualY:secondActualY+height;
+    absoluteFlow = zeros(375,1242,3,'int16');
+    
+   %Initialization
     if x == 1
     iterator = 0;
     sIterator = 0;
@@ -60,32 +54,15 @@ for x = 1:maxIteration
         secondStart = 1;
         sIterator = 0;
     end
-        
-    %Time to generate the object and frame
-    tic;
-    %Generate Object
-    xSpec = actualX:actualX+width;  %width
-    ySpec = actualY:actualY+height; %height
-    secondXSpec = secondActualX:secondActualX+width;
-    secondYSpec = secondActualY:secondActualY+height;
-    absoluteFlow = zeros(375,1242,3,'int16');
-    
-  
-    %create the frame
-    disp(x);
-    frame = movement(xSpec,ySpec,secondXSpec,secondYSpec,bg);
-   %   frame = imnoise(frame,'gaussian',0.5);
 
-    
-    %add noise
-    
 
-    timeToGenerateObject(x) = toc;
     
     %%
     %Optical Flow
    tic;
+   frame = imread(name_frame);
    frame_gray = rgb2gray(frame);
+   
    flow_frame = estimateFlow(opticFlow,frame_gray);
    flowstop(x) = toc;
   
@@ -95,25 +72,26 @@ for x = 1:maxIteration
     vXYCopy = vxCopy+vyCopy;
     vCopy = (vXYCopy ~= 0);
     
-     res = cat(3,flow_frame.Vx*64+2^15,flow_frame.Vy*64+2^15,vCopy);
-     res =  uint16(res);
-     imwrite(res,'result.png');
-    
+     res = cat(3,flow_frame.Vx,flow_frame.Vy,vCopy);
+     
+     addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
+     
+     flow_write(res,name_flow);
+     
+
+         
       %create flow matrix to store the estimated displacemend in.
         flow(:,:,1) = flow_frame.Vx;
         flow(:,:,2) = flow_frame.Vy;
         
-    
+      %absolute Flow
+      %get absolute estimated flow.
+      
          tic;
-         %Get the Movement of the object. And calculate if they will
-         %collide (using brute force collision checker atm, not
-         %substraction)
          [estMovement,estimatedCollision] = estimatedMovement(flow, xSpec,ySpec, secondXSpec,secondYSpec);
          timeMovement(x) = toc;
          collisionTime(x) = toc;
 
-           %absolute Flow
-      %get absolute estimated flow.
         for k=ySpec
             for j=xSpec
                 absoluteFlow(k,j,1) = estMovement(1)+j;
@@ -128,11 +106,12 @@ for x = 1:maxIteration
                 absoluteFlow(k,j,3) = 1;
             end
         end
+        abs1 = absoluteFlow(:,:,1);
         
         
         %%
         %%collision checkers(first round has bad flow, dont plot and
-        %%estimate collision(substraction method)
+        %%estimate collision
         %time to check for collision
         
         
@@ -143,27 +122,13 @@ for x = 1:maxIteration
        else
            estimatedCollisionVector(x) = 0;
        end
-        
+       
+       
        tic;
-       
-    %Kitti Plot, Error calculation and mean error calculation
-    if x > 2
-    tau = [3 0.05];
-    name = sprintf('./GroundTruth/%06d_10.png',x);
-    addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
-    F_gt = flow_read(name);
-    F_est = flow_read('result.png');
-    f_err = flow_error(F_gt,F_est,tau);
-    f_err = f_err*100;
-    error(x) = f_err;
-    F_err = flow_error_image(F_gt,F_est,tau);
-    errSum = sum(error);
-    errorMean(x) = errSum/x;
+    
+%       plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,flowstop,plotTime,collisionTime, timeMovement);
+          plotTime(x) = toc;
 
-       
-       plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,timeToGenerateObject,flowstop,plotTime,collisionTime, timeMovement,error,f_err,errorMean,F_est,F_gt,F_err);
-      plotTime(x) = toc;
-    end
     
     %%
     %Update position(the objects of interest are tracked via Ground Truth
@@ -178,15 +143,4 @@ for x = 1:maxIteration
     iterator = iterator+1;
     sIterator = sIterator+1;
     
-    imwrite(frame,name_frame);
 end
-
-%Create Video out of frames.
-writer = VideoWriter('../../../matlab_dataset/video/Movement.avi');
-open(writer);
-for i = 1:maxIteration
-    name  = sprintf('./Videos/Frames/%06d.png',i);
-    img = imread(name);
-    writeVideo(writer,img);
-end
-close(writer);

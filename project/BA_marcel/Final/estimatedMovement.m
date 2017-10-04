@@ -1,6 +1,6 @@
 function [ movement,estCollision ] = estimatedMovement( flow, xSpec,ySpec, secondXSpec,secondYSpec )
 
-%Threshold of the object flow
+%Threshold of the object, because object detection is not accurate.
 estCollision = 0;
 flowFirstObjectX = zeros(375,1242,3);
 flowFirstObjectY = zeros(375,1242,3);

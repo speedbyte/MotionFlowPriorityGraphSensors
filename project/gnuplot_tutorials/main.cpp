@@ -1,5 +1,5 @@
 
-#include <gnuplot/gnuplot-iostream.h>
+#include <gnuplot-iostream/gnuplot-iostream.h>
 
 int main() {
     Gnuplot gp;

@@ -665,7 +665,12 @@ That's how you find the standard deviation.
 
  Collections
  XML, YAML based functions is more universal in dealing with image coding and decoding.
- The produced YAML (and XML) consists of heterogeneous collections that can be nested. There are 2 types of collections: named collections (mappings) and unnamedcollections (sequences). In mappings each element has a name and is accessed by name. This is similar to structures and std::map in C/C++ and dictionaries in Python. In sequences elements do not have names, they are accessed by indices. This is similar to arrays and std::vector in C/C++ and lists, tuples in Python. “Heterogeneous” means that elements of each single collection can have different types.
+ The produced YAML (and XML) consists of heterogeneous collections that can be nested. There are 2 types of
+ collections: named collections (mappings) and unnamedcollections (sequences). In mappings each element has a name
+ and is accessed by name. This is similar to structures and std::map in C/C++ and dictionaries in Python. In
+ sequences elements do not have  names, they are accessed by indices. This is similar to arrays and std::vector in
+ C/C++ and lists, tuples in Python. “Heterogeneous” means that elements of each single collection can have different
+ types.
 
  Commutative, Associative, Distributive.
  Cross Correlation and Convolution are the same except the kernel is time reversed. Hence cross correlation can be

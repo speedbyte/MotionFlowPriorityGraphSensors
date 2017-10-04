@@ -1,4 +1,4 @@
-function [ ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,timeToGenerateObject,flowstop,plotTime,collisionTime,timeMovement,error,f_err,errorMean,F_est,F_gt,F_err)
+function [ ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,movement,x,flowstop,plotTime,collisionTime,timeMovement)
 
 
 
@@ -6,10 +6,10 @@ function [ ] = plotter(frame,flow_frame,collisionVector,estimatedCollisionVector
 %Show the estimated Optical Flow 
 figure(1)
 imshow(frame);
-%hold on
-%plot(flow_frame,'DecimationFactor',[8 8],'ScaleFactor',3);
+hold on
+plot(flow_frame,'DecimationFactor',[8 8],'ScaleFactor',3);
 title(sprintf('Optical Flow in iteration %.2f %',x));
-%drawnow;
+drawnow;
 hold off;
 
 
@@ -18,6 +18,7 @@ figure(2)
 subplot(3,1,1)
 plot(collisionVector);
 title('Ground Truth collision');
+axis([0,length(collisionVector),0,1]);
 
 subplot(3,1,2);
 plot(estimatedCollisionVector);
@@ -38,42 +39,21 @@ title('Movement');
 axis([0,1242,0,375]);
 
 
-%Kitti Plot
-fig3 = figure(3);
-subplot(4,1,1);
-image(flow_to_color(F_est,100));
-title('Estimated Flow');
-subplot(4,1,2)
-image(flow_to_color(F_gt,100));
-title('Ground Truth Flow');
-subplot(4,1,3);
-image(F_err);
-title(sprintf('Flow Error: %.2f %',f_err));
-set(fig3, 'Position',[0,0,1000,900]);
-subplot(4,1,4);
-plot(error);
-axis([1,x+1,0,20]);
-title(sprintf('Flow Error Mean %2f%',errorMean(x)));
 
-%Time plot
-figure(4);
-subplot(5,1,1)
-plot(timeToGenerateObject);
-title('Time to generate and move Object');
-ylim([0,0.1]);
-subplot(5,1,2)
+figure(3);
+subplot(4,1,1)
 plot(flowstop);
 title('Time to estimate Optical Flow');
 ylim([0,0.5]);
-subplot(5,1,3)
+subplot(4,1,2)
 plot(timeMovement);
 title('Time to estimate the object movement ');
 ylim([0,0.05]);
-subplot(5,1,4);
+subplot(4,1,3);
 plot(collisionTime);
 
 title('Time to estimate collision');
-subplot(5,1,5);
+subplot(4,1,4);
 plot(plotTime);
 title('Time to plot');
 

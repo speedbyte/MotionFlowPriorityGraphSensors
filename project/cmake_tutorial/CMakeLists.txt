@@ -122,8 +122,48 @@ target_link_libraries (Disparity ${PKG_OPENCV_LDFLAGS})
 
 # CMAKE_MODULE_PATH -> where to find the packages
 # CMAKE_PREFIX_PATH -> where to find the packages
+# CMAKE_INSTALL_PREFIX -> where to install
+# CMAKE_BINARY_DIR : directory where cmake is invoked from
+# CMAKE_SOURCE_DIR : directory where CMakelist.txt is present.
+# CMAKE_C_COMPILER c-compile with full path)
+
 #find_library(OpenCV_CORE NAMES libopencv_core.so HINTS "/local/usr/local/lib/")
 #find_library(OpenCV_HIGHGUI NAMES libopencv_highgui.so HINTS "/local/usr/local/lib/")
 #find_library(OpenCV_IMGPROC NAMES libopencv_imgproc.so HINTS "/local/usr/local/lib/")
 #find_library(OpenCV_IMGCODECS NAMES libopencv_imgcodecs.so HINTS "/local/usr/local/lib/")
 #include_directories(${OpenCV_INCLUDE_DIRS})
+
+#set(#VARIABLENAME #variablevalue)
+
+#include(CMakePrintConfig)  # This looks for a file called CMakePrint.cmake under the CMAKE_MODULES_PATH
+
+#set(OpenCV_DIR #directoryname)  # sets where the .cmake should be looked.
+#find_package(OpenCV REQUIRED) # looks for two kinds of files:     OpenCVConfig.cmake and opencv-config.cmake
+
+#pkg_search_module(pkg_opencv REQUIRED opencv) # looks for .pc file such as opencv.pc
+
+#include_directories("path of the includes one by one")
+#add_subdirectory(path of the directories where souce is present)
+#add_library(Name_of_the_library ${LIBRARY_SOURCES})
+#find_library(ARM_MATH_LIBRARY NAMES libm.so HINTS "path of the libm")
+#add_custom_command(TARGET Name_of_exectuable POST_BUILD COMMAND echo "Finished")
+#file(GLOB_RECURSE variable path/*.c)
+
+#install(TARGET targetname bin nameofinstall OPTIONAL )
+
+
+
+#file(GLOB KITTI_HEADERS "*.h")
+#file(INSTALL ${KITTI_HEADERS} DESTINATION include)
+
+#install(TARGETS kitti DESTINATION lib )
+#install(DIRECTORY src/ DESTINATION include/myproj FILES_MATCHING PATTERN "*.h")
+
+
+
+#Some important commands from command line
+
+#cmake -LA -N /path/to/project - lists all cached variables
+
+
+

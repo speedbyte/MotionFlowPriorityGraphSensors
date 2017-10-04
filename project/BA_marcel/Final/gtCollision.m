@@ -10,7 +10,8 @@ collision = 0;
 for x=1:maxIteration
     
     %Used to store the GT images for the kitti devkit
-  name_dense = sprintf('./GroundTruth/%06d_10.png',x);
+  name_GT = sprintf('./../../../matlab_dataset/data/stereo_flow/flow_occ/%06d_10.png',x);
+  name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_0/%06d_10.png',x);
 
     %Initialization
     if x == 1
@@ -41,8 +42,8 @@ for x=1:maxIteration
     ySpec = actualY:actualY+height; %height
     secondXSpec = secondActualX:secondActualX+width;
     secondYSpec = secondActualY:secondActualY+height;
-    
-       relativeGroundTruth = zeros(375,1242,3,'uint16');
+        
+       relativeGroundTruth = zeros(375,1242,3,'single');
        absoluteGroundTruth = zeros(375,1242,3,'uint16');
 
  %%  
@@ -50,8 +51,8 @@ for x=1:maxIteration
    %in a png file
    for k = ySpec
     for j= xSpec
-        relativeGroundTruth(k,j,1) = calcMove(1)*64+2^15;
-        relativeGroundTruth(k,j,2) = calcMove(2)*64+2^15;
+        relativeGroundTruth(k,j,1) = calcMove(1);
+        relativeGroundTruth(k,j,2) = calcMove(2);
         relativeGroundTruth(k,j,3) = 1;
         absoluteGroundTruth(k,j,1) = calcMove(1)+j;
         absoluteGroundTruth(k,j,2) = calcMove(2)+k;
@@ -62,8 +63,8 @@ for x=1:maxIteration
 
 for k=secondYSpec
     for j=secondXSpec
-        relativeGroundTruth(k,j,1) = calcMove(3)*64+2^15;
-        relativeGroundTruth(k,j,2) = calcMove(4)*64+2^15;
+        relativeGroundTruth(k,j,1) = calcMove(3);
+        relativeGroundTruth(k,j,2) = calcMove(4);
         relativeGroundTruth(k,j,3) = 1;
         absoluteGroundTruth(k,j,1) = calcMove(3)+j;
         absoluteGroundTruth(k,j,2) = calcMove(4)+k;
@@ -75,9 +76,9 @@ end
 %Create png Matrix with 3 channels: OF in vertical. OF in Horizontal.
 %and Validation bit
 kittiGT = cat(3,relativeGroundTruth(:,:,1),relativeGroundTruth(:,:,2),relativeGroundTruth(:,:,3));
-kittiGT =  uint16(kittiGT);
 
-imwrite(kittiGT,name_dense);
+     addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
+     flow_write(kittiGT,name_GT);
    
 
 %%    

@@ -10,15 +10,14 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3")
 find_package(OpenCV EXACT 3.2.0 COMPONENTS core highgui videoio imgcodecs video REQUIRED)
 find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 
-include_directories()
+include_directories(${CMAKE_SOURCE_DIR}/../../kitti_eval)
 
+#set(SOURCE_FILES_KITTI ../../kitti_eval/devkit_stereo_opticalflow_sceneflow/cpp/evaluate_flow.cpp )
 set(SOURCE_FILES
-        Introduction.h
-        main.cpp run_configuration.cpp kitti_calibration.cpp
-        video_capture.cpp )
+        main.cpp run_configuration.cpp kitti_calibration.cpp video_capture.cpp )
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries(main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
 
-add_executable(matlab groundTruth.cpp)
-target_link_libraries(matlab ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
+add_executable(cpp_kitti_flow groundTruth.cpp flow.cpp)
+target_link_libraries(cpp_kitti_flow ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png kitti )

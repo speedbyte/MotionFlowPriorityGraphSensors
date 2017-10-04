@@ -1,4 +1,4 @@
-*.png
+*.yaml
 *.avi
 *.user
 *.autosave
@@ -15,7 +15,7 @@ release/
 .pydevproject
 *.o
 *.swp
-*.png
 *.mat
 matlab/
+*.png
 

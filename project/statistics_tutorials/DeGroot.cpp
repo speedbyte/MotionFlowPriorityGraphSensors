@@ -1,6 +1,6 @@
 
 
-#include <gnuplot/gnuplot-iostream.h> // this depends on the boost library. Also adds
+#include <gnuplot-iostream/gnuplot-iostream.h> // this depends on the boost library. Also adds
 #include <iostream>
 #include <array>
 #include <map>
