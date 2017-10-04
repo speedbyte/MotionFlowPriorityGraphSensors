@@ -99,7 +99,7 @@ if [ $# -eq 0 ]; then
     FFMPEG_OPTION="y"
     LIBSVM_OPTION="y"
     BOOST_OPTION="y"
-    PROJECT_OPTION="y"
+    PROJECT_OPTION="n"
     CAFEE_OPTION="y"
     INSTALL_OPTION="n"
     EXTERNAL_OPTION="y"
@@ -370,10 +370,11 @@ BOOST_PWD="$SOURCE_DIR/libs/boost"
 FFMPEG_PWD="$SOURCE_DIR/libs/ffmpeg"
 OPENCV_PWD="$SOURCE_DIR/libs/opencv"
 PROJECT_PWD="$SOURCE_DIR/project/VirtualTestDriveFramework"
-#PROJECT_PWD="$SOURCE_DIR/project"
-#TODO : Compare Inode instead of string
+PROJECT_PWD="$SOURCE_DIR/project"
+#TODO : Compare Inode instead of directory string
 enter_boost_fn
 enter_ffmpeg_fn
+sudo ./copybuild.sh
 #export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 if [ "$BUILD_OPTION" != "clean" ]; then
     PKG_CONFIG_PATH_INCLUDE_FFMPEG=$(pkg-config --cflags libavcodec)
@@ -393,4 +394,6 @@ if [ "$BUILD_OPTION" != "clean" ]; then
     enter_install_fn
 fi
 enter_dummy_fn
+cd $SOURCE_DIR 
+sudo ./copybuild.sh
 
