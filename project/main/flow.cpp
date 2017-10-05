@@ -22,19 +22,13 @@
 
 using namespace std::chrono;
 
-#define MATLAB_DATASET_PATH "../../../matlab_dataset/"
-#define CPP_DATASET_PATH "../../../cpp_dataset/"
 
-
-void flow(std::string result_sha) {
+void flow(const boost::filesystem::path dataset_path, const std::string result_sha) {
 
     std::cout << "results will be stored in " << result_sha;
 
-    const boost::filesystem::path dataset_path = CPP_DATASET_PATH;
-
 
     char file_name[50];
-
 
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
@@ -49,13 +43,18 @@ void flow(std::string result_sha) {
     boost::filesystem::path video_in_path = dataset_path.string() + std::string("data/stereo_flow/image_0/gtMovement.avi");
     assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
 
+    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/image_0/dummy.txt");
+    assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
+
+    boost::filesystem::path image_in_kitti_path = dataset_path.string() + std::string("data/stereo_flow/image_0/dummy"
+                                                                                           ".txt");
+    assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
+
     boost::filesystem::path video_out_path = dataset_path.string() + result_sha +  std::string("/video/OpticalFlow.avi");
     assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
 
     boost::filesystem::path results_flow = dataset_path.string() + result_sha + std::string("/data/dummy.txt");
     assert(boost::filesystem::exists(results_flow.parent_path()) != 0);
-
-    std::cout << video_in_path.string() << std::endl;
 
     cv::VideoCapture cap;
     cap.open(video_in_path.string());
@@ -146,7 +145,7 @@ void flow(std::string result_sha) {
         fs << "frame_count" << frame_count;
 
         sprintf(file_name, "000%03d_10", frame_count);
-        gt_image_path_str = video_in_path.parent_path().string() + "/" + std::string(file_name) + ".png";
+        gt_image_path_str = image_in_path.parent_path().string() + "/" + std::string(file_name) + ".png";
         frame = cv::imread(gt_image_path_str, CV_LOAD_IMAGE_COLOR);
 
         results_flow_path_str =
@@ -211,7 +210,7 @@ void flow(std::string result_sha) {
         else if (!result_sha.compare("results/LK")) {
             tic = steady_clock::now();
             // Calculate optical flow map using LK algorithm
-            if (prevGray.data) {
+            if (prevGray.data) {  // Calculate only on second or subsequent images.
                 std::vector<uchar> status;
                 std::vector<float> err;
                 /*if (prevGray.empty()) {
@@ -243,8 +242,8 @@ void flow(std::string result_sha) {
                     float Vy = (next_pts[i].y - prev_pts[i].y);
                     printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
                            col_coordinate, Vx, Vy);
-                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvFloor(Vx+0.5);
-                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvFloor(Vy+0.5);
+                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvRound(Vx);
+                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvRound(Vy);
                     flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
                 }
                 next_pts.resize(count);

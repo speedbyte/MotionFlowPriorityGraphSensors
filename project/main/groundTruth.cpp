@@ -23,12 +23,13 @@
 
 using namespace std::chrono;
 
-extern void flow(std::string results_sha);
+extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha);
 //extern bool eval(std::string result_sha, Mail *mail);
 extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
-void ground_truth(ushort start=60, ushort secondstart=240) {
+void ground_truth() {
 
+    ushort start=60; ushort secondstart=240;
     cv::Size_<unsigned> frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
     boost::filesystem::path gt_image_path, gt_flow_path, gt_video_path;
@@ -319,28 +320,28 @@ void ground_truth(ushort start=60, ushort secondstart=240) {
 
 }
 
-std::string prepare_directories(std::string result_sha) {
+std::string prepare_directories(const boost::filesystem::path dataset_path, const std::string result_sha) {
 
 
     std::string result_dir = "results/" + result_sha;
 
     if ( !result_sha.compare("GT") ) {
 
-        system(("rm " + std::string(CPP_DATASET_PATH) +  std::string("data/stereo_flow/image_0/*")).c_str());
-        system(("rm " + std::string(CPP_DATASET_PATH) +  std::string("data/stereo_flow/flow_occ/*")).c_str());
+        system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_0/*")).c_str());
+        system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/flow_occ/*")).c_str());
 
-        boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/image_0"));
-        boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) +  ("data/stereo_flow/flow_occ"));
+        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_0"));
+        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/flow_occ"));
 
     }
 
     else {
 
-        system(("rm " + std::string(CPP_DATASET_PATH) + result_dir + std::string("/data/*")).c_str());
-        system(("rm " + std::string(CPP_DATASET_PATH) + result_dir + std::string("/video/*")).c_str());
+        system(("rm " + dataset_path.string() + result_dir + std::string("/data/*")).c_str());
+        system(("rm " + dataset_path.string() + result_dir + std::string("/video/*")).c_str());
 
-        boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/data"));
-        boost::filesystem::create_directories(std::string(CPP_DATASET_PATH) + result_dir + ("/video"));
+        boost::filesystem::create_directories(dataset_path.string() + result_dir + ("/data"));
+        boost::filesystem::create_directories(dataset_path.string() + result_dir + ("/video"));
     }
 
     return result_dir;
@@ -369,13 +370,17 @@ int main() {
     std::string result_dir;
     //test_kitti_original();
 
-    result_dir = prepare_directories("GT");
-    ground_truth((ushort)60,(ushort)240);
+    //result_dir = prepare_directories(CPP_DATASET_PATH, "GT");
+    //ground_truth();
 
-    result_dir = prepare_directories("FB");
-    flow(result_dir);
+    //result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
+    //flow(CPP_DATASET_PATH, result_dir);
 
-    result_dir = prepare_directories("LK");
-    flow(result_dir);
+    //result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
+    //flow(CPP_DATASET_PATH, result_dir);
 
+    result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "LK");
+    flow(KITTI_FLOW_DATASET_PATH, result_dir);
+
+    //result_dir = prepare_directories("KITTI")KITTI_FLOW_DATASET_PATH
 }
