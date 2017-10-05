@@ -23,21 +23,17 @@
 
 using namespace std::chrono;
 
-extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha);
-//extern bool eval(std::string result_sha, Mail *mail);
-extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
-
-void ground_truth() {
+void ground_truth(const boost::filesystem::path dataset_path) {
 
     ushort start=60; ushort secondstart=240;
     cv::Size_<unsigned> frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
     boost::filesystem::path gt_image_path, gt_flow_path, gt_video_path;
-    gt_image_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_2/dummy.txt");
+    gt_image_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/image_2/dummy.txt");
     assert(boost::filesystem::exists(gt_image_path.parent_path()) != 0);
-    gt_flow_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/flow_occ/dummy.txt");
+    gt_flow_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/flow_occ/dummy.txt");
     assert(boost::filesystem::exists(gt_flow_path.parent_path()) != 0);
-    gt_video_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_2/gtMovement.avi");
+    gt_video_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/image_2/gtMovement.avi");
     assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
@@ -366,21 +362,3 @@ void test_kitti_original() {
 
 }
 
-int main() {
-    std::string result_dir;
-    //test_kitti_original();
-
-    //result_dir = prepare_directories(CPP_DATASET_PATH, "GT");
-    //ground_truth();
-
-    //result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
-    //flow(CPP_DATASET_PATH, result_dir);
-
-    //result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
-    //flow(CPP_DATASET_PATH, result_dir);
-
-    result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "LK");
-    flow(KITTI_FLOW_DATASET_PATH, result_dir);
-
-    //result_dir = prepare_directories("KITTI")KITTI_FLOW_DATASET_PATH
-}

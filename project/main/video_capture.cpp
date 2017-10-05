@@ -24,29 +24,26 @@ void canny(cv::Mat& img, cv::Mat& out) {
 }
 
 
-void make_video_from_png(boost::filesystem::path kitti_raw_dataset_path) {
+void make_video_from_png(boost::filesystem::path dataset_path, std::string unterordner) {
     cv::VideoWriter write;
     cv::Mat temp_image;
 
-    boost::filesystem::path video_path = kitti_raw_dataset_path;
-    video_path += "video/" ;
+    boost::filesystem::path dir_path = dataset_path;
+    dir_path += unterordner;
 
-    std::cout << video_path.string();
+    std::cout << dir_path.string();
+    assert(boost::filesystem::exists(dir_path) != 0);
 
     std::string file_name, path;
-    char file_name_char[10];
+    char file_name_char[20];
     int number = 0;
-    std::string dir_path = kitti_raw_dataset_path.string() + "image_02/data/";
-    if (boost::filesystem::exists(video_path) == 0) {
-        throw("no video file");
-    }
 
     do {
         sprintf(file_name_char, "0000000%03d", number);
-        path = dir_path + std::string(file_name_char) + ".png";
+        path = dir_path.string() + std::string(file_name_char) + ".png";
         temp_image = cv::imread(path, cv::IMREAD_COLOR);
         if ( number == 0 ) {
-            write.open((video_path.string()+"2011_09_28_drive_0016_sync.avi"), CV_FOURCC('D', 'I', 'V', 'X'), 30.0,
+            write.open((dir_path.string()+"original_video.avi" ), CV_FOURCC('D', 'I', 'V', 'X'), 30.0,
                        cv::Size(temp_image.cols, temp_image.rows), true);
         }
         write.write(temp_image);

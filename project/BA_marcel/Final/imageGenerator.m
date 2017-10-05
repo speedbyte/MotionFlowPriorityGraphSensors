@@ -6,7 +6,7 @@ load('Initialize.mat');
 for x=1:maxIteration
     
     %Used to store the GT images for the kitti devkit
-  name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_2/%06d_10.png',x-1);
+  name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_02/%06d_10.png',x-1);
 
     %Initialization
     if x == 1

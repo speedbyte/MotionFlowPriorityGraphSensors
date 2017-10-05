@@ -14,10 +14,8 @@ include_directories(${CMAKE_SOURCE_DIR}/../../kitti_eval)
 
 #set(SOURCE_FILES_KITTI ../../kitti_eval/devkit_stereo_opticalflow_sceneflow/cpp/evaluate_flow.cpp )
 set(SOURCE_FILES
-        main.cpp run_configuration.cpp kitti_calibration.cpp video_capture.cpp )
+        main.cpp run_configuration.cpp kitti_calibration.cpp video_capture.cpp groundTruth.cpp flow.cpp )
 
 add_executable(main ${SOURCE_FILES})
-target_link_libraries(main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png kitti )
 
-add_executable(cpp_kitti_flow groundTruth.cpp flow.cpp)
-target_link_libraries(cpp_kitti_flow ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png kitti )

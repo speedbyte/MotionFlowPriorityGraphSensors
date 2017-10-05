@@ -40,13 +40,14 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
     std::vector<cv::Point2f> next_pts;
     cv::Mat curGray, prevGray;
 
-    boost::filesystem::path video_in_path = dataset_path.string() + std::string("data/stereo_flow/image_2/gtMovement.avi");
+    boost::filesystem::path video_in_path = dataset_path.string() + std::string("data/stereo_flow/image_02/gtMovement"
+                                                                                        ".avi");
     assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
 
-    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/image_2/dummy.txt");
+    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/image_02/dummy.txt");
     assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
 
-    boost::filesystem::path image_in_kitti_path = dataset_path.string() + std::string("data/stereo_flow/image_2/dummy"
+    boost::filesystem::path image_in_kitti_path = dataset_path.string() + std::string("data/stereo_flow/image_02/dummy"
                                                                                            ".txt");
     assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
 

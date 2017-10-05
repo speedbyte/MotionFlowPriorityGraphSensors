@@ -26,7 +26,7 @@ for x = 1:maxIteration
     
     disp(x);
 
-    name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_2/%06d_10.png',x);   %imread
+    name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_02/%06d_10.png',x);   %imread
     name_flow = sprintf('./../../../matlab_dataset/results/FB/data/%06d_10.png',x);          %result
 
     
