@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 // This must be defined before the first time that "gnuplot-iostream.h" is included.
 #define GNUPLOT_ENABLE_PTY
-#include "gnuplot-iostream.h"
+#include <gnuplot-iostream/gnuplot-iostream.h>
 
 int main() {
 	Gnuplot gp;

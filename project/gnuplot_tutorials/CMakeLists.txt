@@ -10,3 +10,9 @@ target_link_libraries(send2d ${Boost_LIBRARIES})
 
 add_executable(example-2d example-data-2d.cc)
 target_link_libraries(example-2d ${Boost_LIBRARIES})
+
+add_executable(example-1d example-data-1d.cc)
+target_link_libraries(example-1d ${Boost_LIBRARIES})
+
+add_executable(example-misc example-misc.cc)
+target_link_libraries(example-misc ${Boost_LIBRARIES})
