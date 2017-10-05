@@ -4,7 +4,7 @@ load('Initialize.mat');
 
 error = 0;
 for x = 1:maxIteration
-    name_flow = sprintf('./../../../matlab_dataset/data/results/FB/data/%06d_10.png',x);
+    name_flow = sprintf('./../../../matlab_dataset/results/FB/data/%06d_10.png',x);
 
 
     if x > 1
@@ -20,7 +20,10 @@ for x = 1:maxIteration
     errSum = sum(error);
     errorMean(x) = errSum/x;
 
+    if x < 10 || x > maxIteration - 10
        kittiPlotter(error,f_err,errorMean,F_est,F_gt,F_err,x);
+    end
+        disp(x);
   end
     
 end

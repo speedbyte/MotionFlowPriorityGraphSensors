@@ -1,6 +1,8 @@
 
 /**
  git checkout 8569a8c6088a201fbeafdcaa06bcaa8aadd763d9
+ ImageStreamingClient
+ project/server/
 
  Related Work:
 

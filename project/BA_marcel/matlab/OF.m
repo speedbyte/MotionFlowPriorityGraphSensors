@@ -28,7 +28,7 @@ clear all;
 %static inout of 2 images. To be expanded for videos
 
 
-path = '../../../kitti_dataset/stereo_opticalflow_sceneflow_dataset_with_calib/training/image_2/';
+path = '../../../kitti_flow_dataset/data/stereo_flow/image_02/';
 fileNames = dir(fullfile(path,'*.png'));
 
 C = cell(length(fileNames),1);
@@ -50,11 +50,14 @@ while i <  length(fileNames)
     opticFlow_dense = opticalFlowFarneback;%('NoiseThreshold',0.009);
     opticFlow_sparse = opticalFlowLK('NoiseThreshold',0.009);
     
-    opticFlow_sparse 
+     
     
     img1 = C{i};
     img2 = C{i+1};
 
+    mkdir('./results_dense');
+    mkdir('./results_sparse');
+    
     name_dense = sprintf('./results_dense/%06d_10.png',j);
     name_sparse = sprintf('./results_sparse/%06d_10.png',j);
     %Grayscale

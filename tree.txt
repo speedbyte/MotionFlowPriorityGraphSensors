@@ -1,25 +1,29 @@
-kitti_dataset
-.
+cpp_dataset/
 ├── data
-│   ├── calib
-│   │   ├── testing
-│   │   └── training
-│   ├── stereo_flow
-│   │   ├── disp_noc_0
-│   │   ├── disp_noc_1
-│   │   ├── disp_occ_0
-│   │   ├── disp_occ_1
-│   │   ├── flow_noc
-│   │   ├── flow_occ
-│   │   ├── image_0
-│   │   ├── image_2
-│   │   ├── obj_map
-│   │   ├── viz_flow_occ
-│   │   └── viz_flow_occ_dilate_1
-│   └── testing
-│       ├── image_2
-│       └── image_3
-└── raw_dataset_with_calib
+│   └── stereo_flow
+│       ├── flow_occ
+│       ├── image_02
+│       └── image_2
+└── results
+    ├── FB
+    │   ├── data
+    │   └── video
+    └── LK
+        ├── data
+        └── video
+
+12 directories, 0 files
+matlab_dataset/
+└── data
+    ├── results
+    │   └── FB
+    └── stereo_flow
+        ├── flow_occ
+        └── image_02
+
+6 directories, 0 files
+kitti_raw_dataset/
+└── data
     ├── 2011_09_26_drive_0001_sync
     │   ├── image_00
     │   ├── image_01
@@ -56,25 +60,30 @@ kitti_dataset
     ├── calib_imu_to_velo.txt
     └── calib_velo_to_cam.txt
 
-cpp_dataset
-
-.
+30 directories, 6 files
+kitti_flow_dataset/
 ├── data
-│   └── stereo_flow
-│       ├── flow_occ
-│       └── image_0
+│   ├── calib
+│   │   ├── testing
+│   │   └── training
+│   ├── stereo_flow
+│   │   ├── disp_noc_0
+│   │   ├── disp_noc_1
+│   │   ├── disp_occ_0
+│   │   ├── disp_occ_1
+│   │   ├── flow_noc
+│   │   ├── flow_occ
+│   │   ├── image_02
+│   │   ├── image_03
+│   │   ├── obj_map
+│   │   ├── viz_flow_occ
+│   │   └── viz_flow_occ_dilate_1
+│   └── testing
+│       ├── image_2
+│       └── image_3
 └── results
-    ├── FB
-    │   └── data
     └── LK
-        └── data
+        ├── data
+        └── video
 
-matlab_dataset
-.
-└── data
-    ├── results
-    │   └── FB
-    └── stereo_flow
-        ├── flow_occ
-        └── image_0
-
+23 directories, 0 files

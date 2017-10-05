@@ -1,5 +1,4 @@
 *.yaml
-*.avi
 *.user
 *.autosave
 *.orig
@@ -17,5 +16,5 @@ release/
 *.swp
 *.mat
 matlab/
-*.png
+
 
