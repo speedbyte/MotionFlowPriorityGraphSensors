@@ -25,7 +25,7 @@ using namespace std::chrono;
 
 void flow(const boost::filesystem::path dataset_path, const std::string result_sha) {
 
-    std::cout << "results will be stored in " << result_sha;
+    std::cout << "results will be stored in " << result_sha << std::endl;
 
 
     char file_name[50];

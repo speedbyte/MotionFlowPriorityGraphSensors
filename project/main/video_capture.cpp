@@ -28,6 +28,8 @@ void make_video_from_png(boost::filesystem::path dataset_path, std::string unter
     cv::VideoWriter write;
     cv::Mat temp_image;
 
+    boost::filesystem::directory_iterator end_iter;
+
     boost::filesystem::path dir_path = dataset_path;
     dir_path += unterordner;
 
@@ -37,18 +39,22 @@ void make_video_from_png(boost::filesystem::path dataset_path, std::string unter
     std::string file_name, path;
     char file_name_char[20];
     int number = 0;
-
-    do {
-        sprintf(file_name_char, "0000000%03d", number);
-        path = dir_path.string() + std::string(file_name_char) + ".png";
-        temp_image = cv::imread(path, cv::IMREAD_COLOR);
-        if ( number == 0 ) {
+    boost::filesystem::path temp;
+    for( boost::filesystem::directory_iterator dir_iter(dir_path) ; dir_iter != end_iter ; ++dir_iter)
+    {
+        if (boost::filesystem::is_regular_file(dir_iter->status()) )
+        {
+            std::cout << *dir_iter << std::endl;
+            temp = *dir_iter;
+            temp_image = cv::imread(temp.string(), cv::IMREAD_COLOR);
+            //sprintf(file_name_char, "0000000%03d", number);
+            //path = dir_path.string() + std::string(file_name_char) + ".png";
             write.open((dir_path.string()+"original_video.avi" ), CV_FOURCC('D', 'I', 'V', 'X'), 30.0,
                        cv::Size(temp_image.cols, temp_image.rows), true);
+            write.write(temp_image);
         }
-        write.write(temp_image);
-        number++;
-    } while ( boost::filesystem::exists(path) != 0);
+    }
+
 
     write.release();
 

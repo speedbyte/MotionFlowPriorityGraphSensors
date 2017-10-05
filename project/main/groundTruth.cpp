@@ -323,10 +323,10 @@ std::string prepare_directories(const boost::filesystem::path dataset_path, cons
 
     if ( !result_sha.compare("GT") ) {
 
-        system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_2/*")).c_str());
+        system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_02/*")).c_str());
         system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/flow_occ/*")).c_str());
 
-        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_2"));
+        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_02"));
         boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/flow_occ"));
 
     }

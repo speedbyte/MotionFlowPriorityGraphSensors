@@ -71,8 +71,8 @@ int main ( int argc, char *argv[]) {
     result_dir = prepare_directories(CPP_DATASET_PATH, "GT");
     ground_truth(CPP_DATASET_PATH);
 
-    result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
-    flow(CPP_DATASET_PATH, result_dir);
+    //result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
+    //flow(CPP_DATASET_PATH, result_dir);
 
     result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
     flow(CPP_DATASET_PATH, result_dir);
