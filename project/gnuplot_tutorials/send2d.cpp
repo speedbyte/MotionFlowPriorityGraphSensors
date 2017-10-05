@@ -22,6 +22,51 @@
 #define PI boost::math::constants::pi<long double>()
 
 
+void gnuplot_from_file() {
+
+    const char *filename_gnuplot = "liveplot.gnu";
+    const char *filename_data = "plot.dat";
+    boost::filesystem::remove(filename_gnuplot);
+    boost::filesystem::remove(filename_data);
+
+    // save file in a filename and call gnuplot
+    Gnuplot gp(std::string("tee ") + std::string(filename_gnuplot) + std::string(" | gnuplot -persist"));
+
+    for ( unsigned i = 0; i < 10; i++ ) {
+        FILE *fp = fopen(filename_data, "a");
+        fprintf(fp, "%d\t%d\t%d\n", i, i*i,i);
+        fclose(fp);
+        gp << "set xrange [0:20]\n";
+        gp << "set yrange [0:400]\n";
+        gp << "set zrange [0:10]\n";
+        gp << "splot \"" << filename_data << "\" with points\n";
+        gp << "pause 1\n";
+        gp << "reread\n";
+    }
+}
+
+
+void gnuplot_from_commandline() {
+
+    // Example copied from http://gnuplot.sourceforge.net/demo/surface1.9.gnu
+    Gnuplot gp("tee create_file.gp | gnuplot -persist");
+    gp << "set samples 21, 21\n";
+    gp << "set isosamples 11, 11\n";
+    gp << "set style data lines\n";
+    gp << "set title \"3D gnuplot demo\"\n";
+    gp << "set xlabel \"X axis\"\n";
+    gp << "set xlabel  offset character -3, -2, 0 font \"\" textcolor lt -1 norotate\n";
+    gp << "set xrange [ -10.0000 : 10.0000 ] noreverse nowriteback\n";
+    gp << "set ylabel \"Y axis\"\n";
+    gp << "set ylabel  offset character 3, -2, 0 font \"\" textcolor lt -1 rotate\n";
+    gp << "set yrange [ -10.0000 : 10.0000 ] noreverse nowriteback\n";
+    gp << "set zlabel \"Z axis\"\n";
+    gp << "set zlabel  offset character -5, 0, 0 font \"\" textcolor lt -1 norotate\n";
+    gp << "DEBUG_TERM_HTIC = 119\n";
+    gp << "DEBUG_TERM_VTIC = 119\n";
+    gp << "splot x*y with points\n";
+}
+
 void send3d() {
     Gnuplot gp(stdout);
 
@@ -140,7 +185,6 @@ void send_lemniscate() {
 
     while (numRuns++ < runs) {
 
-
         std::cout << '\n';
 
         std::string cx, cy, cz;
@@ -164,9 +208,14 @@ void send_lemniscate() {
             // Real
         }
 
+        std::string filename = std::string("record") + std::to_string(numRuns) + std::string(".dat");
+
         //gp << "set label \"PT\" at " + cx + "," + cy + "," + cz + "; ";
         pts.push_back(std::make_tuple(x_pts, y_pts, z_pts));
-        gp << "splot " << gp.binFile2d(pts, "record", "record.dat") << "with points title 'object1'";
+        // lesbare datei
+        //gp << "splot " << gp.file2d(pts, filename) << "with points title 'object1'";
+        // binaer datei
+        gp << "splot " << gp.binFile2d(pts, "record", filename) << "with points title 'object1'";
         gp << std::endl;
 
         pts.clear();
@@ -177,9 +226,7 @@ void send_lemniscate() {
         std::cout << "Sleep" << std::endl;
         usleep(500 * 1000);
 
-
     }
-
 
 }
 
@@ -190,7 +237,6 @@ void test_liveplot(){
 
     const int N = 10;
     std::vector<std::vector<double>> points(N);
-
 
     for (int i = 0; i < N; i++) {
         std::vector<double> elem(3);
@@ -207,32 +253,22 @@ void test_liveplot(){
 }
 
 void demo_animation() {
-#ifdef _WIN32
-    // No animation demo for Windows.  The problem is that every time the plot
-	// is updated, the gnuplot window grabs focus.  So you can't ever focus the
-	// terminal window to press Ctrl-C.  The only way to quit is to right-click
-	// the terminal window on the task bar and close it from there.  Other than
-	// that, it seems to work.
-	std::cout << "Sorry, the animation demo doesn't work in Windows." << std::endl;
-	return;
-#endif
 
     Gnuplot gp;
-
     std::cout << "Press Ctrl-C to quit (closing gnuplot window doesn't quit)." << std::endl;
-
     gp << "set yrange [-1:1]\n";
 
     const int N = 1000;
     std::vector<double> pts(N);
 
     double theta = 0;
-    while(1) {
-            for(int i=0; i<N; i++) {
-                double alpha = (double(i)/N-0.5) * 10;
-                pts[i] = sin(alpha*8.0 + theta) * exp(-alpha*alpha/2.0);
-            }
+    while (true) {
+        char ch;
 
+        for(int i=0; i<N; i++) {
+            double alpha = (double(i)/N-0.5) * 10;
+            pts[i] = sin(alpha*8.0 + theta) * exp(-alpha*alpha/2.0);
+        }
 
         gp << "plot '-' binary" << gp.binFmt1d(pts, "array") << "with lines notitle\n";
         gp.sendBinary1d(pts);
@@ -240,6 +276,7 @@ void demo_animation() {
 
         theta += 0.2;
         usleep(100000);
+
     }
 }
 
@@ -249,8 +286,8 @@ int main() {
     //send3d_record();
     //send2d_colmajor();
     send_lemniscate();
-        //usleep(10000);
-
+    //gnuplot_from_file();
+    //gnuplot_from_commandline();
     //test_liveplot();
     //demo_animation();
 
