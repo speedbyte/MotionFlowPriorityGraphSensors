@@ -1,5 +1,4 @@
 tic;
-load('Initialize.mat');
 
 
 %Generates the ground truth Kitti Maps and the Ground Truth collision

@@ -12,9 +12,14 @@ title(sprintf('Flow Error: %.2f %',f_err));
 set(fig3, 'Position',[0,0,1000,900]);
 subplot(4,1,4);
 plot(error);
-axis([1,x+1,0,20]);
+axis([1,x+1,0,80]);
 title(sprintf('Flow Error Mean %2f%',errorMean(x)));
 drawnow;
+
+name = sprintf('./../../../KittiResult/figure/%06d_10.png',x-1);
+
+
+saveas(gcf,name);
 
 end
 

@@ -20,7 +20,10 @@ for x = 1:maxIteration
     errSum = sum(error);
     errorMean(x) = errSum/x;
 
+    if x < 10 || x > maxIteration - 10
        kittiPlotter(error,f_err,errorMean,F_est,F_gt,F_err,x);
+    end
+        disp(x);
   end
     
 end

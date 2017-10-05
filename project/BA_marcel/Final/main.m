@@ -125,9 +125,11 @@ for x = 1:maxIteration
        
        
        tic;
-    
-%       plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,flowstop,plotTime,collisionTime, timeMovement);
-          plotTime(x) = toc;
+        
+       if x < 10
+       plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,flowstop,plotTime,collisionTime, timeMovement);
+       end   
+       plotTime(x) = toc;
 
     
     %%
