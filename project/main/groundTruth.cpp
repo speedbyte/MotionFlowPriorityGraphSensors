@@ -33,11 +33,11 @@ void ground_truth() {
     cv::Size_<unsigned> frame_size(1242,375);
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
     boost::filesystem::path gt_image_path, gt_flow_path, gt_video_path;
-    gt_image_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_0/dummy.txt");
+    gt_image_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_2/dummy.txt");
     assert(boost::filesystem::exists(gt_image_path.parent_path()) != 0);
     gt_flow_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/flow_occ/dummy.txt");
     assert(boost::filesystem::exists(gt_flow_path.parent_path()) != 0);
-    gt_video_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_0/gtMovement.avi");
+    gt_video_path = std::string(CPP_DATASET_PATH) + std::string("data/stereo_flow/image_2/gtMovement.avi");
     assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
@@ -327,10 +327,10 @@ std::string prepare_directories(const boost::filesystem::path dataset_path, cons
 
     if ( !result_sha.compare("GT") ) {
 
-        system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_0/*")).c_str());
+        system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_2/*")).c_str());
         system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/flow_occ/*")).c_str());
 
-        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_0"));
+        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_2"));
         boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/flow_occ"));
 
     }

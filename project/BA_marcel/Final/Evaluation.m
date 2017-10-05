@@ -4,7 +4,7 @@ load('Initialize.mat');
 
 error = 0;
 for x = 1:maxIteration
-    name_flow = sprintf('./../../../matlab_dataset/data/results/FB/data/%06d_10.png',x);
+    name_flow = sprintf('./../../../matlab_dataset/results/FB/data/%06d_10.png',x);
 
 
     if x > 1
