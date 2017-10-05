@@ -13,19 +13,15 @@ cpp_dataset/
 matlab_dataset/
 ├── data
 │   └── stereo_flow
-│       ├── FastMovement.avi
 │       ├── flow_occ
-│       ├── image_02
-│       ├── Kitti.avi
-│       ├── MediumMovement.avi
-│       └── SlowMovement.avi
+│       └── image_02
 └── results
     ├── FB
     │   └── data
     └── LK
         └── data
 
-9 directories, 4 files
+9 directories, 0 files
 kitti_raw_dataset/
 └── data
     ├── 2011_09_26_drive_0001_sync
