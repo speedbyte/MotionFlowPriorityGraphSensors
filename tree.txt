@@ -54,13 +54,12 @@ kitti_raw_dataset/
     │   ├── image_03
     │   ├── oxts
     │   ├── tracklet_labels.xml
-    │   ├── velodyne_points
-    │   └── video
+    │   └── velodyne_points
     ├── calib_cam_to_cam.txt
     ├── calib_imu_to_velo.txt
     └── calib_velo_to_cam.txt
 
-30 directories, 6 files
+29 directories, 6 files
 kitti_flow_dataset/
 ├── data
 │   ├── calib
