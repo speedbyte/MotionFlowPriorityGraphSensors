@@ -320,24 +320,32 @@ std::string prepare_directories(const boost::filesystem::path dataset_path, cons
 
 
     std::string result_dir = "results/" + result_sha;
+    boost::filesystem::path dir_path = dataset_path;
 
     if ( !result_sha.compare("GT") ) {
 
-        system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_02/*")).c_str());
-        system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/flow_occ/*")).c_str());
 
-        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_02"));
-        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/flow_occ"));
+        dir_path = dataset_path;
+        dir_path += "data/stereo_flow/image_02/";
+        if ( boost::filesystem::exists(dir_path) != 0 )
+        {
+            system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_02/*")).c_str());
+            boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_02"));
+        }
 
+        dir_path = dataset_path;
+        dir_path += "data/stereo_flow/flow_occ/";
+        if ( boost::filesystem::exists(dir_path) != 0 )
+        {
+            system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/flow_occ/*")).c_str());
+            boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/flow_occ"));
+        }
     }
 
     else {
 
         system(("rm " + dataset_path.string() + result_dir + std::string("/data/*")).c_str());
-        system(("rm " + dataset_path.string() + result_dir + std::string("/video/*")).c_str());
-
         boost::filesystem::create_directories(dataset_path.string() + result_dir + ("/data"));
-        boost::filesystem::create_directories(dataset_path.string() + result_dir + ("/video"));
     }
 
     return result_dir;

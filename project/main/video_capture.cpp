@@ -37,8 +37,6 @@ void make_video_from_png(boost::filesystem::path dataset_path, std::string unter
     assert(boost::filesystem::exists(dir_path) != 0);
 
     std::string file_name, path;
-    char file_name_char[20];
-    int number = 0;
     boost::filesystem::path temp;
     for( boost::filesystem::directory_iterator dir_iter(dir_path) ; dir_iter != end_iter ; ++dir_iter)
     {
@@ -47,8 +45,6 @@ void make_video_from_png(boost::filesystem::path dataset_path, std::string unter
             std::cout << *dir_iter << std::endl;
             temp = *dir_iter;
             temp_image = cv::imread(temp.string(), cv::IMREAD_COLOR);
-            //sprintf(file_name_char, "0000000%03d", number);
-            //path = dir_path.string() + std::string(file_name_char) + ".png";
             write.open((dir_path.string()+"original_video.avi" ), CV_FOURCC('D', 'I', 'V', 'X'), 30.0,
                        cv::Size(temp_image.cols, temp_image.rows), true);
             write.write(temp_image);
