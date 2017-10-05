@@ -2,26 +2,30 @@ cpp_dataset/
 ├── data
 │   └── stereo_flow
 │       ├── flow_occ
-│       ├── image_02
-│       └── image_2
+│       └── image_02
 └── results
     ├── FB
-    │   ├── data
-    │   └── video
+    │   └── data
     └── LK
-        ├── data
-        └── video
+        └── data
 
-12 directories, 0 files
+9 directories, 0 files
 matlab_dataset/
-└── data
-    ├── results
-    │   └── FB
-    └── stereo_flow
-        ├── flow_occ
-        └── image_02
+├── data
+│   └── stereo_flow
+│       ├── FastMovement.avi
+│       ├── flow_occ
+│       ├── image_02
+│       ├── Kitti.avi
+│       ├── MediumMovement.avi
+│       └── SlowMovement.avi
+└── results
+    ├── FB
+    │   └── data
+    └── LK
+        └── data
 
-6 directories, 0 files
+9 directories, 4 files
 kitti_raw_dataset/
 └── data
     ├── 2011_09_26_drive_0001_sync
@@ -82,8 +86,9 @@ kitti_flow_dataset/
 │       ├── image_2
 │       └── image_3
 └── results
+    ├── FB
+    │   └── data
     └── LK
-        ├── data
-        └── video
+        └── data
 
-23 directories, 0 files
+24 directories, 0 files
