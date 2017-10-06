@@ -2,6 +2,7 @@
 	path = libs/ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git
 	branch = master
+	ignore = dirty
 [submodule "opencv"]
 	path = libs/opencv
 	url = https://github.com/opencv/opencv.git
@@ -58,14 +59,17 @@
 	path = kitti_eval/QtKittiVisualizer
 	url = https://github.com/MarkMuth/QtKittiVisualizer.git
 	branch = master
+	ignore = dirty
 [submodule "kitti-pcl"]
 	path = kitti_eval/kitti-pcl
 	url = https://github.com/yanii/kitti-pcl.git
 	branch = master
+	ignore = dirty
 [submodule "kitti2pcl"]
 	path = kitti_eval/kitti2pcl
 	url = https://github.com/jaejunlee0538/kitti2pcl.git
 	branch = master
+	ignore = dirty
 [submodule "libs/pngpp"]
 	path = libs/pngpp
 	url = https://github.com/bysreg/pngpp.git
