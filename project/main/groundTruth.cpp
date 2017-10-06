@@ -327,25 +327,30 @@ std::string prepare_directories(const boost::filesystem::path dataset_path, cons
 
         dir_path = dataset_path;
         dir_path += "data/stereo_flow/image_02/";
-        if ( boost::filesystem::exists(dir_path) != 0 )
+
+        if ( boost::filesystem::exists(dir_path)  )
         {
             system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_02/*")).c_str());
-            boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_02"));
         }
-
+        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_02"));
         dir_path = dataset_path;
         dir_path += "data/stereo_flow/flow_occ/";
-        if ( boost::filesystem::exists(dir_path) != 0 )
+        if ( boost::filesystem::exists(dir_path) )
         {
             system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/flow_occ/*")).c_str());
-            boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/flow_occ"));
         }
+        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/flow_occ"));
     }
 
     else {
 
-        system(("rm " + dataset_path.string() + result_dir + std::string("/data/*")).c_str());
-        boost::filesystem::create_directories(dataset_path.string() + result_dir + ("/data"));
+        dir_path = dataset_path;
+        dir_path += result_dir;
+        if ( boost::filesystem::exists(dir_path) )
+        {
+            system(("rm " + dataset_path.string() + result_dir + std::string("/*")).c_str());
+        }
+        boost::filesystem::create_directories(dataset_path.string() + result_dir );
     }
 
     return result_dir;

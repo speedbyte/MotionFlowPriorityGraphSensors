@@ -1,89 +1,34 @@
 cpp_dataset/
 ├── data
 │   └── stereo_flow
-│       ├── flow_occ
-│       └── image_02
 └── results
-    ├── FB
-    │   └── data
-    └── LK
-        └── data
+    └── FB
 
-9 directories, 0 files
+4 directories, 0 files
 matlab_dataset/
 ├── data
 │   └── stereo_flow
-│       ├── flow_occ
-│       └── image_02
 └── results
-    ├── FB
-    │   └── data
-    └── LK
-        └── data
+    └── FB
 
-9 directories, 0 files
+4 directories, 0 files
 kitti_raw_dataset/
 └── data
     ├── 2011_09_26_drive_0001_sync
-    │   ├── image_00
-    │   ├── image_01
-    │   ├── image_02
-    │   ├── image_03
-    │   ├── oxts
-    │   ├── tracklet_labels.xml
-    │   └── velodyne_points
     ├── 2011_09_26_drive_0001_unsync
-    │   ├── image_00
-    │   ├── image_01
-    │   ├── image_02
-    │   ├── image_03
-    │   ├── oxts
-    │   └── velodyne_points
     ├── 2011_09_26_drive_0019_sync
-    │   ├── image_00
-    │   ├── image_01
-    │   ├── image_02
-    │   ├── image_03
-    │   ├── oxts
-    │   ├── tracklet_labels.xml
-    │   └── velodyne_points
     ├── 2011_09_28_drive_0016_sync
-    │   ├── image_00
-    │   ├── image_01
-    │   ├── image_02
-    │   ├── image_03
-    │   ├── oxts
-    │   ├── tracklet_labels.xml
-    │   └── velodyne_points
     ├── calib_cam_to_cam.txt
     ├── calib_imu_to_velo.txt
     └── calib_velo_to_cam.txt
 
-29 directories, 6 files
+5 directories, 3 files
 kitti_flow_dataset/
 ├── data
 │   ├── calib
-│   │   ├── testing
-│   │   └── training
 │   ├── stereo_flow
-│   │   ├── disp_noc_0
-│   │   ├── disp_noc_1
-│   │   ├── disp_occ_0
-│   │   ├── disp_occ_1
-│   │   ├── flow_noc
-│   │   ├── flow_occ
-│   │   ├── image_02
-│   │   ├── image_03
-│   │   ├── obj_map
-│   │   ├── viz_flow_occ
-│   │   └── viz_flow_occ_dilate_1
 │   └── testing
-│       ├── image_2
-│       └── image_3
 └── results
-    ├── FB
-    │   └── data
-    └── LK
-        └── data
+    └── FB
 
-24 directories, 0 files
+6 directories, 0 files

@@ -51,7 +51,6 @@ void make_video_from_png(boost::filesystem::path dataset_path, std::string unter
         }
     }
 
-
     write.release();
 
 
