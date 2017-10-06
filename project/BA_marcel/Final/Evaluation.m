@@ -3,13 +3,13 @@ load('Initialize.mat');
 
 
 error = 0;
-for x = 1:maxIteration
-    name_flow = sprintf('./../../../matlab_dataset/results/FB/data/%06d_10.png',x);
+for x = 1:maxIteration+1
+    name_flow = sprintf('./../../../matlab_dataset/results/FB/slow/flow_occ/%06d_10.png',x-1);
 
 
     if x > 1
     tau = [3 0.05];
-    name = sprintf('./../../../matlab_dataset/data/stereo_flow/flow_occ/%06d_10.png',x);
+    name = sprintf('./../../../matlab_dataset/data/stereo_flow/flow_occ_slow/%06d_10.png',x-1); %GT
     addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
     F_gt = flow_read(name);
     F_est = flow_read(name_flow);
@@ -20,9 +20,8 @@ for x = 1:maxIteration
     errSum = sum(error);
     errorMean(x) = errSum/x;
 
-    if x < 10 || x > maxIteration - 10
        kittiPlotter(error,f_err,errorMean,F_est,F_gt,F_err,x);
-    end
+    
         disp(x);
   end
     

@@ -3,11 +3,10 @@ load('Initialize.mat');
 %%Generates the frames
 
 
-mkdir('./../../../matlab_dataset/data/stereo_flow/image_02/');
 for x=1:maxIteration+1
     
     %Used to store the GT images for the kitti devkit
-  name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_02/%06d_10.png',x-1);
+  name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_02_slow/%06d_10.png',x-1);
 
     %Initialization
     if x == 1

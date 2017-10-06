@@ -9,8 +9,7 @@ collision = 0;
 for x=1:maxIteration
     
     %Used to store the GT images for the kitti devkit
-  name_GT = sprintf('./../../../matlab_dataset/data/stereo_flow/flow_occ/%06d_10.png',x);
-  name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_2/%06d_10.png',x);
+  name_GT = sprintf('./../../../matlab_dataset/data/stereo_flow/flow_occ_slow/%06d_10.png',x);
 
     %Initialization
     if x == 1

@@ -20,16 +20,16 @@ b = 0;
 %    frame = imnoise(frame,'Gaussian',0,0.05);
 
          %static noise
-    for k=1:375
-        for j=1:1242
-            if mod(k,5) == 0 | mod(j,5) == 0
-                frame(k,j,1) = 0;
-                frame(k,j,2) = 0;
-                frame(k,j,3) = 0;
-            end
-        end
-    end
-%         
+%     for k=1:375
+%         for j=1:1242
+%             if mod(k,5) == 0 | mod(j,5) == 0
+%                 frame(k,j,1) = 0;
+%                 frame(k,j,2) = 0;
+%                 frame(k,j,3) = 0;
+%             end
+%         end
+%     end
+% %         
     
     %draw new image.
     for k = ySpec

@@ -16,7 +16,7 @@ axis([1,x+1,0,80]);
 title(sprintf('Flow Error Mean %2f%',errorMean(x)));
 drawnow;
 
-name = sprintf('./../../../KittiResult/figure/%06d_10.png',x-1);
+name = sprintf('./../../../matlab_dataset/results/FB/slow/figures/%06d_10.png',x-1);
 
 
 saveas(gcf,name);

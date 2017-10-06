@@ -19,15 +19,14 @@ error(1) = 0;
 error(2) = 0;
 
 
-    mkdir('./../../../matlab_dataset/results/FB/data/');
 
 
 for x = 1:maxIteration
     
     disp(x);
 
-    name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_02/%06d_10.png',x);   %imread
-    name_flow = sprintf('./../../../matlab_dataset/results/FB/data/%06d_10.png',x);          %result
+    name_frame = sprintf('./../../../matlab_dataset/data/stereo_flow/image_02_slow/%06d_10.png',x);   %imread
+    name_flow = sprintf('./../../../matlab_dataset/results/FB/slow/flow_occ/%06d_10.png',x);          %result
 
     
 

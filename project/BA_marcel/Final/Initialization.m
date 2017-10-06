@@ -7,7 +7,7 @@ clear all;
 close all;
 tic;
 %Creating a movement path. The path is stored in a x and y vector
-scale = 6
+scale = 0.5
 theta = 1:scale:360;
 for x=1:360/scale-1
     xPos(x)=600+round(500*cos(theta(x)*3.14/180)/(1+power(sin(theta(x)*3.14/180),2)));

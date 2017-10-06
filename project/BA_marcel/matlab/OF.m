@@ -28,7 +28,7 @@ clear all;
 %static inout of 2 images. To be expanded for videos
 
 
-path = '../../../kitti_flow_dataset/data/stereo_flow/image_02/';
+path = '../../../kitti_flow_dataset/data/stereo_flow/image_02_rain/';
 fileNames = dir(fullfile(path,'*.png'));
 
 C = cell(length(fileNames),1);
