@@ -266,7 +266,7 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
                         tempPoints.push_back(currentPoint[i]);
                         // Function to refine the location of the corners to subpixel accuracy.
                         // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
-                        cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
+                        //cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
                         next_pts.push_back(tempPoints[0]);
                     }
                     std::swap(currentPoint, next_pts);
