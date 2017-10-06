@@ -74,3 +74,6 @@
 	path = libs/pngpp
 	url = https://github.com/bysreg/pngpp.git
 	branch = master
+[submodule "vtk"]
+	path = libs/vtk
+	url = https://gitlab.kitware.com/vtk/vtk.git

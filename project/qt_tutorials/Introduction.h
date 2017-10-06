@@ -1,7 +1,7 @@
 
 
 /**
-
+ http://www.qtforum.org/article/18473/tutorial-for-using-qt-with-vtk.html
  wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
  run the file
  Install  qt5-default. Check if the  /usr/lib/x86_64-linux-gnu/qtchooser/default.conf has qt5 entries. We can  also
