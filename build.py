@@ -48,12 +48,14 @@ def enter_dummy_fn(args):
 
 def parse_arguements(args):
     list_of_options = list()
-    opencv_properties = ("opencv", 3.2)
-    pcl_properties = ("pcl", 1.8)
+    opencv_properties = ("opencv", 3.2, "2016-12-23")
+    pcl_properties = ("pcl", "pcl-1.8.0", "2016-06-14")
+    vtk_properties = ("vtk", "v6.0.0", "2013-06-12")
     list_of_options.append(opencv_properties)
     list_of_options.append(pcl_properties)
+    list_of_options.append(vtk_properties)
 
-    build_properties = (args.OPENCV_OPTION, args.PCL_OPTION)
+    build_properties = (args.OPENCV_OPTION, args.PCL_OPTION, args.VTK_OPTION)
 
     zipped = zip(list_of_options, build_properties)
     build_option = args.BUILD_OPTION
@@ -63,6 +65,7 @@ def parse_arguements(args):
         if zipped[count][1]:
             module = SOURCE_DIR + "/libs/" + zipped[count][0][0]
             module_install = module + "-install"
+            call_shell_command("mkdir -p "+ module_install)
             print "starting building %s" % module
             os.chdir(SOURCE_DIR)
             os.chdir(module)
@@ -105,8 +108,9 @@ def parse_arguements(args):
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--test', action='store_true', help='test script')
-parser.add_argument('-o', '--opencv', action='store_true', dest='OPENCV_OPTION', help='builds opencv')
-parser.add_argument('-p', '--pcl', action='store_true', dest='PCL_OPTION', help='builds pcl')
+parser.add_argument('--opencv', action='store_true', dest='OPENCV_OPTION', help='builds opencv')
+parser.add_argument('--pcl', action='store_true', dest='PCL_OPTION', help='builds pcl')
+parser.add_argument('--vtk', action='store_true', dest='VTK_OPTION', help='builds vtk')
 parser.add_argument('-t', dest="BUILD_OPTION", choices=('clean', 'manual'), help='build parameters')
 
 parser.set_defaults(func=parse_arguements)

@@ -1,7 +1,6 @@
 [submodule "ffmpeg"]
 	path = libs/ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git
-	branch = master
 	ignore = dirty
 [submodule "opencv"]
 	path = libs/opencv
@@ -9,34 +8,27 @@
 [submodule "PRSM"]
 	path = external/algorithms/PRSM-sceneflow
 	url = https://github.com/vogechri/PRSM
-	branch = master
 [submodule "boost"]
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
-	branch = master
 [submodule "pkg-config-generator"]
 	path = utils/pkg-config-generator
 	url = https://github.com/nmante/pkg-config-generator.git
-	branch = master
 [submodule "gnuplot-iostream"]
 	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
-	branch = master
 [submodule "protobuf"]
 	path = libs/protobuf
 	url = https://github.com/google/protobuf
-	branch = master
 [submodule "libuvc"]
 	path = libs/libuvc
 	url = https://github.com/ktossell/libuvc
-	branch = master
 [submodule "mrpt"]
 	path = project/mrpt
 	url = https://github.com/MRPT/mrpt.git
 [submodule "pcl"]
 	path = libs/pcl
 	url = https://github.com/PointCloudLibrary/pcl.git
-	branch = master
 [submodule "graphviz"]
 	path = libs/graphviz
 	url = https://github.com/ellson/graphviz.git
@@ -63,17 +55,14 @@
 [submodule "kitti-pcl"]
 	path = kitti_eval/kitti-pcl
 	url = https://github.com/yanii/kitti-pcl.git
-	branch = master
 	ignore = dirty
 [submodule "kitti2pcl"]
 	path = kitti_eval/kitti2pcl
 	url = https://github.com/jaejunlee0538/kitti2pcl.git
-	branch = master
 	ignore = dirty
 [submodule "libs/pngpp"]
 	path = libs/pngpp
 	url = https://github.com/bysreg/pngpp.git
-	branch = master
 [submodule "vtk"]
 	path = libs/vtk
 	url = https://gitlab.kitware.com/vtk/vtk.git
