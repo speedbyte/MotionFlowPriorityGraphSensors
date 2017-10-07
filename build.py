@@ -80,6 +80,8 @@ def enter_dummy_fn(args):
 def parse_arguements(args):
     if args.OPENCV_OPTION:
         enter_opencv_fn(args)
+    if args.PCL_OPTION:
+        enter_pcl_fn(args)
 
 parser = argparse.ArgumentParser()
 
@@ -91,9 +93,6 @@ parser.set_defaults(func=parse_arguements)
 
 if len(sys.argv) == 1:
     print (parser.format_help())
-
-#results = parser.parse_args()
-#print results.BUILD_OPTIONS
 
 results = parser.parse_args()
 results.func(results)
