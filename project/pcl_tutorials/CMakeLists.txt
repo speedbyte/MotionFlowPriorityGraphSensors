@@ -2,13 +2,17 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
 project(pcl_visualizer_viewports)
 
-find_package(PCL EXACT 1.8.1.99 REQUIRED)
+find_package(PCL EXACT 1.8.0 REQUIRED)
+find_package(VTK EXACT 7.0.0 COMPONENTS REQUIRED )
 
 include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
+include_directories(${VTK_INCLUDE_DIRS})
+
 add_definitions(${PCL_DEFINITIONS})
 
+message(${VTK_INCLUDE_DIRS})
+message(${PCL_INCLUDE_DIRS})
 add_executable (pcl_visualizer_demo pcl_visualisation_demo.cpp)
 message("Libraries: " ${PCL_LIBRARIES})
 
-target_link_libraries (pcl_visualizer_demo2 ${PCL_LIBRARIES} pcl_visualization)
+target_link_libraries (pcl_visualizer_demo ${PCL_LIBRARIES} ${VTK_LIBRARIES})
