@@ -66,3 +66,6 @@
 [submodule "vtk"]
 	path = libs/vtk
 	url = https://gitlab.kitware.com/vtk/vtk.git
+[submodule "external/pcl_manipulation"]
+	path = external/pcl_manipulation
+	url = https://github.com/Benzarti-Ilyess/pcl_manipulation.git
