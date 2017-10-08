@@ -1,5 +1,43 @@
 /**
 
+ Single Ray
+
+ It computes the intersection of this ray and the bounding box of other objects (vehicles); it returns the position
+ of these objects in sensor co-ordinates with the origin being at the sensor's mounting point.
+
+
+ The multi-ray sensor provides a means to interact with the actual geometry of the 3d database from within the
+ moduleManager. For this purpose, there is a communication channel between MM and the imageGenerator. This means
+ that you may also take continuous features of the environment (e.g. hills, road surface) into account for the sensing.
+
+
+ Real-Time Ray-Tracing (via Optix)
+
+ The VIG-OptiX SDK is a real-time ray tracing plugin using NVIDIA's OptiX ray tracing engine.
+
+ woody./PathToYourWorkingDir/>cp vtd.x.x.addOns.*optix*.yyyymmdd.tgz .
+ woody./PathToYourWorkingDir/>tar -xzvf vtd.x.x.addOns.*optix*.yyyymmdd.tgz .
+
+ switch your setup to OptiX.Stream or OptiX.NonVisualSpectrum
+
+ woody./PathToYourWorkingDir/VTD.X.X>cd Data/Setups
+ woody./PathToYourWorkingDir/VTD.X.X/Data/Setups/>./selectSetup
+
+ OptiXPluginExample
+
+
+
+ Plugin Example
+ see Plugin Example
+
+ IG plugin development
+ see VTD IG plugins
+
+
+ Optix4.1
+
+ CUDA is a parallel computing platform
+
  Coordinate Systems
 
 
@@ -119,7 +157,8 @@
  Find the name of the device by using ifconfig.
  
  In order for VTD to work correctly in terms of network communication, please make sure that your system has a valid
- hostname and a valid host address. If you are not connected to any network, please set a static address for your system. You may also just edit the file /etc/hosts and add the entry
+ hostname and a valid host address. If you are not connected to any network, please set a static address for your
+ system. You may also just edit the file /etc/hosts and add the entry
  127.0.0.2 nameOfYourHost
  
  Graphics Driver
@@ -135,8 +174,10 @@
  ./GpuTest /test=fur /width=1024 /height=640
  
  switching between graphic cards:
+
  There is only one graphic card in the VIRES PC. Hence there is no chance of switching between graphic cards. The
- only thing one can do is switch between drivers. One is the nouveau provided by xfreedesktop.org and the other is directly from nvidia. Both of them use different OpenGL drivers.
+ only thing one can do is switch between drivers. One is the nouveau provided by xfreedesktop.org and the other is
+ directly from nvidia. Both of them use different OpenGL drivers.
  
  sudo prime-select nvidia
  sudo prime-select intel
@@ -144,9 +185,7 @@
  
  StartVIRES
  
- 
- 
- 
+
  
  VTD provides a development environment for the creation of custom moduleManager plug-ins. First, make sure you have
  a license and the libraries for the moduleManager plug-in API. These are located at Develop/Modules
@@ -195,7 +234,8 @@
  style=Platinum
  
  Unless you have a custom configuration, the image generator will derive the display settings from the file
- Data/Setups/Current/Config/ImageGenerator/AutoCfgDisplay.xml. Here, look for the variables displayNum and screenNum and set them appropriately.
+ Data/Setups/Current/Config/ImageGenerator/AutoCfgDisplay.xml. Here, look for the variables displayNum and screenNum
+ and set them appropriately.
  Note: the image generator's config file is created by a script, so if you have auto-configuration of the IG enabled,
  you will need to change the script instead of the config file. Please perform the following steps:
  create a directory Data/Setups/Current/Scripts
@@ -342,7 +382,8 @@
  
  The occlusion matrix will be sent as an RDB package of type RDB_PKG_ID_OCCLUSION_MATRIX.
  After detecting the relevant objects (or calculating the respective information), each sensor will compose an RDB
- output data package containing the relevant information (object lists etc.). The output will be sent via the ports defined in the <Port> section of each sensor. Each sensor will open its own output port
+ output data package containing the relevant information (object lists etc.). The output will be sent via the ports
+ defined in the <Port> section of each sensor. Each sensor will open its own output port
  <Origin type="{USK|inertial|sensor|relative|gps|road}" dx=... dy=... dz=... dhDeg=... dpDeg=... drDeg=.../>
  RDB_IMAGE_t On the sensor's RDB output port, there will be - among others - one package of type SENSOR_OBJECT_t and
  one package of type OBJECT_STATE_t for each detected element.

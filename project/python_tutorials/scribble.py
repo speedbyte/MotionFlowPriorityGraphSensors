@@ -16,28 +16,18 @@ proc = subprocess.Popen(command.split(' '), stderr=subprocess.PIPE, stdout=subpr
 
 os.chdir('/local/git/PriorityGraphSensors/kitti_flow_dataset/data/stereo_flow/image_02_rain')
 
-filenew_list = []
-fp = open('/local/git/PriorityGraphSensors/kitti_flow_dataset/data/stereo_flow/image_02_rain/files.txt', "r")
-for x in range(300):
+file_list = subprocess.check_output("ls", shell=True)
+file_list = file_list.split('\n')
+new_file_list = list()
+for x in range(len(file_list)-1):
+    new_file_list.append("%06d_10.png" %x)
+    new_file_list.append("%06d_11.png" %x)
 
-    file = fp.readline()
-    file = file.strip('\n')
-    #print file
-    file_integer = file.replace('_left.png','')
-    if (int(file_integer)%2 == 0 ):
-        filenew = file_integer +'_10.png'
-    else:
-        filenew = file_integer + '_11.png'
-    filenew_list.append(filenew)
-print filenew_list
+combine = zip(file_list, new_file_list)
+print combine
 
-for x in range(len(filenew_list)):
-    if ( x%2 == 0 ):
-        filenew_list[x+1] = filenew_list[x].replace('_10.png', '') + '_11.png'
-print filenew_list
+for x in range(len(combine)):
+    command = "mv " + combine[x][0] + " " + combine[x][1]
+    subprocess.check_call(command, shell=True)
 
-for x in range(len(filenew_list)):
-    if ( x % 2 == 0):
-        #filenew_list[x] = str(int(filenew_list[x].replace('_10.png', ''))/2)  + '_10.png'
-        print "%06d" % int(filenew_list[x].replace('_10.png', ''))/2
-print filenew_list
+

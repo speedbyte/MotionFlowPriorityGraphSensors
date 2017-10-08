@@ -95,7 +95,7 @@ def parse_arguements(args):
             if ( args.INSTALL_OPTION ):
                 command = "sudo rsync -pavr " + module_install + "/ /usr/local/"
                 call_shell_command(command)
-                sys.exit(0)
+                continue
             call_shell_command("mkdir -p " + module_install)
             os.chdir(module)
             print "Building in " + os.getcwd()

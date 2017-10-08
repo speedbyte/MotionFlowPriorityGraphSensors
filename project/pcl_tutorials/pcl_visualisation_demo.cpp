@@ -30,7 +30,6 @@ printUsage (const char* progName)
             << "\n\n";
 }
 
-
 boost::shared_ptr<pcl::visualization::PCLVisualizer> simpleVis (pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud)
 {
   // --------------------------------------------
@@ -354,7 +353,8 @@ main (int argc, char** argv)
   if (simple)
   {
     //viewer = simpleVis(basic_cloud_ptr)
-    std::string filename("/local/gackstat/PriorityGraphSensors/kitti_raw_dataset/data/2011_09_26_drive_0001_sync/velodyne_points/data_pcd_generated/0000000001.pcd");
+    std::string filename("/local/git/PriorityGraphSensors/kitti_raw_dataset/data/2011_09_26_drive_0001_sync"
+                                 "/velodyne_points/data_pcd_generated/0000000001.pcd");
     viewer = simpleVis(loadCloud(filename));
   }
   else if (rgb)
