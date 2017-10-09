@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
 project(pcl_visualizer_viewports)
 
-find_package(PCL EXACT 1.8.1.99 REQUIRED)
-find_package(VTK EXACT 6.1.0 COMPONENTS REQUIRED )
+find_package(PCL EXACT 1.8.0 REQUIRED)
+find_package(VTK EXACT 7.0.0 COMPONENTS REQUIRED )
 
 include_directories(${PCL_INCLUDE_DIRS})
 include_directories(${VTK_INCLUDE_DIRS})

@@ -140,4 +140,25 @@ Libraries: /usr/local/lib/libboost_system.so
 /usr/lib64/libtheoradec.so
 /usr/lib64/libogg.sovtkRenderingVolumeAMRvtkIONetCDFvtkIOPLYvtkIOParallelvtkTestingRenderingvtkIOVideovtkViewsContext2DvtkRenderingImagevtkRenderingLICvtkRenderingLODvtkImagingMathvtkImagingMorphologicalvtkLocalExamplevtkImagingStatisticsvtkImagingStencilvtkViewsGeovisvtkRenderingQt/usr/lib64/libpython2.7.sovtkRenderingVolumeOpenGLvtkWrappingJavavtkWrappingToolsvtkWrappingPythonCore
 
+
+Not working
+Libraries: /local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_system.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_filesystem.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_thread.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_date_time.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_iostreams.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_serialization.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_chrono.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_atomic.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_regex.sooptimized/usr/local/lib/libpcl_common.sodebug/usr/local/lib/libpcl_common.sooptimized/usr/local/lib/libpcl_octree.sodebug/usr/local/lib/libpcl_octree.sooptimized/usr/local/lib/libpcl_io.sodebug/usr/local/lib/libpcl_io.sooptimized/usr/lib/x86_64-linux-gnu/libflann_cpp_s.adebug/usr/lib/x86_64-linux-gnu/libflann_cpp_s.aoptimized/usr/local/lib/libpcl_kdtree.sodebug/usr/local/lib/libpcl_kdtree.sooptimized/usr/local/lib/libpcl_search.sodebug/usr/local/lib/libpcl_search.sooptimized/usr/local/lib/libpcl_sample_consensus.sodebug/usr/local/lib/libpcl_sample_consensus.sooptimized/usr/local/lib/libpcl_filters.sodebug/usr/local/lib/libpcl_filters.sooptimized/usr/local/lib/libpcl_features.sodebug/usr/local/lib/libpcl_features.sooptimized/usr/local/lib/libpcl_ml.sodebug/usr/local/lib/libpcl_ml.sooptimized/usr/local/lib/libpcl_segmentation.sodebug/usr/local/lib/libpcl_segmentation.sooptimized/usr/local/lib/libpcl_surface.sodebug/usr/local/lib/libpcl_surface.sooptimized/usr/local/lib/libpcl_registration.sodebug/usr/local/lib/libpcl_registration.sooptimized/usr/local/lib/libpcl_keypoints.sodebug/usr/local/lib/libpcl_keypoints.sooptimized/usr/local/lib/libpcl_tracking.sodebug/usr/local/lib/libpcl_tracking.sooptimized/usr/local/lib/libpcl_recognition.sodebug/usr/local/lib/libpcl_recognition.sooptimized/usr/local/lib/libpcl_stereo.sodebug/usr/local/lib/libpcl_stereo.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_system.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_filesystem.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_thread.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_date_time.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_iostreams.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_serialization.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_chrono.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_atomic.so/
+local/git/PriorityGraphSensors/libs/boost-install/lib/libboost_regex.sooptimized/usr/lib/x86_64-linux-gnu/libflann_cpp_s.adebug/usr/lib/x86_64-linux-gnu/libflann_cpp_s.a
+
 '''
