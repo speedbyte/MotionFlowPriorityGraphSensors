@@ -1,8 +1,0 @@
-# 16.06.2014 by M. Dupuis
-# (c) 2014 by VIRES Simulationstechnologie GmbH
-#
-# PURPOSE:
-#   triggers playing of a user-defined sound
-#
-#
-    +5 "<Sound name="mySound"> <Start ID="1" /> </Sound>"

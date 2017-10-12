@@ -1,5 +1,7 @@
 /**
 
+ execute the script as follows: sudo ./instMultiUser.sh -r VTD.2.0
+
  Single Ray
 
  It computes the intersection of this ray and the bounding box of other objects (vehicles); it returns the position
