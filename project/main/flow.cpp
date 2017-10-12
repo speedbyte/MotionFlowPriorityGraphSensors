@@ -23,12 +23,15 @@
 using namespace std::chrono;
 
 
-void flow(const boost::filesystem::path dataset_path, const std::string result_sha) {
+void flow(const boost::filesystem::path dataset_path, const std::string result_sha, FRAME_TYPES frame_types ) {
 
     std::cout << "results will be stored in " << result_sha << std::endl;
 
 
     char file_name[50];
+    char xFlow[100];
+    char yFlow[100];
+
 
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
@@ -40,30 +43,21 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
     std::vector<cv::Point2f> next_pts;
     cv::Mat curGray, prevGray;
 
-    boost::filesystem::path video_in_path = dataset_path.string() + std::string("data/stereo_flow/image_02/gtMovement"
-                                                                                        ".avi");
-    assert(boost::filesystem::exists(video_in_path.parent_path()) != 0);
-
-    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/image_02/dummy.txt");
+    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/image_02_slow/no_noise/dummy.txt");
     assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
 
-    boost::filesystem::path image_in_kitti_path = dataset_path.string() + std::string("data/stereo_flow/image_02/dummy"
-                                                                                           ".txt");
-    assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
-
-    boost::filesystem::path video_out_path = dataset_path.string() + result_sha +  std::string("/video/OpticalFlow.avi");
-    assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
 
     boost::filesystem::path results_flow = dataset_path.string() + result_sha + std::string("/data/dummy.txt");
     assert(boost::filesystem::exists(results_flow.parent_path()) != 0);
 
-    cv::VideoCapture cap;
-    cap.open(video_in_path.string());
-    if (!cap.isOpened()) {
-        std::cout << "Could not initialize capturing...\n";
-        return;
+    if ( frame_types == video_frames) {
+        cv::VideoCapture cap;
+        cap.open(image_in_path.string());
+        if (!cap.isOpened()) {
+            std::cout << "Could not initialize capturing...\n";
+            return;
+        }
     }
-
     std::string results_flow_matrix_str = results_flow.parent_path().string() + "/result_flow.yaml";
 
     cv::FileStorage fs;
@@ -72,10 +66,16 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
 
     cv::Size_<unsigned> frame_size(1242,375);
     cv::VideoWriter video_out;
-    //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
-    //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
-    video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, frame_size);
-    printf("Writer eingerichtet\n");
+
+    if ( frame_types == video_frames)
+    {
+        boost::filesystem::path video_out_path = dataset_path.string() + result_sha +  std::string("/video/OpticalFlow.avi");
+        assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
+        //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
+        //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
+        video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, frame_size);
+        printf("Writer eingerichtet\n");
+    }
 
     cv::Mat frame = cv::Mat::zeros(frame_size, CV_8UC3);
     cv::Mat flowImage(cv::Size(1242,375), CV_32FC3, cv::Scalar(255,255,255));
@@ -83,7 +83,7 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
     cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
     cv::Size subPixWinSize(10, 10), winSize(31, 31);
 
-    const int MAX_COUNT = 500;
+    const int MAX_COUNT = 1242*375;
     cv::Mat pyramid1, pyramid2;
 
     pyramid1.create(frame_size, CV_8UC1);
@@ -118,6 +118,7 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
 
     std::string gt_image_path_str;
     std::string results_flow_path_str;
+    int it = 0;
 
     while ( true ) {
 
@@ -230,6 +231,23 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
                         continue;
                     }
 
+                    sprintf(xFlow,"../../FlowTextFiles/FlowX/x%03d.txt",it);
+                    sprintf(yFlow,"../../FlowTextFiles/FlowY/y%03d.txt",it);
+
+
+                    std::ofstream flowX;
+                    flowX.open(xFlow);
+
+                    std::ofstream flowY;
+                    flowY.open(yFlow);
+
+                    for (int k = 0; k < prev_pts.size(); k++) {
+                        flowX << (int) prev_pts[k].x << " " << next_pts[k].x - prev_pts[k].x << std::endl;
+                        flowY << (int) prev_pts[k].y << " " << next_pts[k].y - prev_pts[k].y << std::endl;
+
+
+                    }
+
                     // Check if the status vector is good
                     if (!status[i])
                         continue;
@@ -256,7 +274,7 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
             }
             if (needToInit) {
                 // automatic initialization
-                cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
+                cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.001, 10, cv::Mat(), 3, false, 0.04);
                 // Refining the location of the feature points
                 if (next_pts.size() < MAX_COUNT) {
                     std::vector<cv::Point2f> currentPoint;
@@ -321,7 +339,11 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
 
         x_pts.push_back(frame_count);
 
-        video_out.write(frame);
+
+        if ( frame_types == video_frames) {
+            video_out.write(frame);
+        }
+
         // Display the output image
         cv::imshow(result_sha, frame);
         needToInit = false;
@@ -332,6 +354,7 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
         if ( frame_count == MAX_ITERATION ) {
             break;
         }
+    it++;
     }
 
     fs.release();
@@ -339,7 +362,9 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
 
 
     pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
-    video_out.release();
+    if ( frame_types == video_frames) {
+        video_out.release();
+    }
     cv::destroyAllWindows();
 /*
     // gnuplot_2d

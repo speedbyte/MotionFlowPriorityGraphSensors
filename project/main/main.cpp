@@ -15,7 +15,7 @@ using boost_path=boost::filesystem::path;
 extern void ground_truth(const boost::filesystem::path dataset_path);
 extern std::string prepare_directories(const boost::filesystem::path dataset_path, const std::string result_sha);
 
-extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha);
+extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha, FRAME_TYPES frame_types);
 //extern bool eval(std::string result_sha, Mail *mail);
 extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
@@ -59,29 +59,29 @@ int main ( int argc, char *argv[]) {
     cv::waitKey(0);
     cv::destroyAllWindows();
 
-    boost::filesystem::path  dataset_path1 = KITTI_FLOW_DATASET_PATH;
-    make_video_from_png(dataset_path1, "data/stereo_flow/image_02/"); // give the path of the folder with pngs.
+//    boost::filesystem::path  dataset_path1 = KITTI_FLOW_DATASET_PATH;
+//    make_video_from_png(dataset_path1, "data/stereo_flow/image_02/"); // give the path of the folder with pngs.
 
-    boost::filesystem::path  dataset_path2 = KITTI_RAW_DATASET_PATH;
-    make_video_from_png(dataset_path2, "data/2011_09_28_drive_0016_sync/image_02/data/"); // give the path of the folder with pngs.
+//    boost::filesystem::path  dataset_path2 = KITTI_RAW_DATASET_PATH;
+//    make_video_from_png(dataset_path2, "data/2011_09_28_drive_0016_sync/image_02/data/"); // give the path of the folder with pngs.
 
     std::string result_dir;
     //test_kitti_original();
 
-    result_dir = prepare_directories(CPP_DATASET_PATH, "GT");
-    ground_truth(CPP_DATASET_PATH);
+//    result_dir = prepare_directories(CPP_DATASET_PATH, "GT");
+//    ground_truth(CPP_DATASET_PATH);
 
-    result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
-    flow(CPP_DATASET_PATH, result_dir);
+//    result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
+//    flow(CPP_DATASET_PATH, result_dir);
 
-    result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
-    flow(CPP_DATASET_PATH, result_dir);
+//    result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
+//    flow(CPP_DATASET_PATH, result_dir);
 
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
-    flow(MATLAB_DATASET_PATH, result_dir);
+    flow(MATLAB_DATASET_PATH, result_dir, continous_frames);
 
-    result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "LK");
-    flow(KITTI_FLOW_DATASET_PATH, result_dir);
+//    result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "LK");
+//    flow(KITTI_FLOW_DATASET_PATH, result_dir);
 
     //result_dir = prepare_directories("KITTI")KITTI_FLOW_DATASET_PATH
 

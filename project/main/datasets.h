@@ -21,6 +21,13 @@
 #define object_width 30
 #define object_height 100
 
+typedef enum {
+    continous_frames = 0,
+    pariwise_frames = 1,
+    video_frames = 2
+} FRAME_TYPES;
+
+
 
 
 

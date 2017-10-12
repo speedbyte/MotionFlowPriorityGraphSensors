@@ -33,11 +33,9 @@ void ground_truth(const boost::filesystem::path dataset_path) {
     assert(boost::filesystem::exists(gt_image_path.parent_path()) != 0);
     gt_flow_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/flow_occ/dummy.txt");
     assert(boost::filesystem::exists(gt_flow_path.parent_path()) != 0);
-    gt_video_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/image_2/gtMovement.avi");
-    assert(boost::filesystem::exists(gt_video_path.parent_path()) != 0);
 
     cv::VideoWriter video_out;
-    video_out.open(gt_video_path.string(), CV_FOURCC('D', 'I', 'V', 'X'), 30, frame_size, true);
+    video_out.open(gt_video_path.string(), CV_FOURCC('X', 'V', 'I', 'D'), 30, frame_size, true);
 
     //how many interations(frames)?
     auto tic= steady_clock::now();
