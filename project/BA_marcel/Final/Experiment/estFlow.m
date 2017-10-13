@@ -223,8 +223,9 @@ for x = 1:maxIteration
        
        tic;
         
+       if  x < 10 
        plotter(frame,flow_frame,collisionVector,estimatedCollisionVector,actualX,actualY,secondActualX,secondActualY,estMovement,x,flowstop,plotTime,collisionTime, timeMovement);
-          
+       end
        plotTime(x) = toc;
 
     
