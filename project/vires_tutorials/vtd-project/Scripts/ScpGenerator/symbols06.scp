@@ -1,0 +1,21 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   tests individual switching of symbols
+#
+#
+   0  "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+ +1s  "<EgoCtrl> <Speed value="2.0"/> </EgoCtrl>"
+  +1  "<Symbol name="newSymbol" > <Overlay id="0" state="2"/> <PosScreen x="0.2" y="0.5" /> <RectSize width="0.2" height="0.2"/> </Symbol>"
+  +1  "<Symbol name="expl01" > <Text data="Showing first symbol" colorRGB="0x00ff00" size="40.0" /> <PosScreen x="0.1" y="0.25" /></Symbol>"
+  +1s "<Symbol name="newSymbol2" > <PosScreen x="0.6" y="0.5" /> <RectSize width="0.2" height="0.2"/> <Overlay id="0" state="2"/> </Symbol>"
+  +1  "<Symbol name="expl02" > <Text data="Showing second symbol" colorRGB="0x00ff00" size="40.0" /> <PosScreen x="0.1" y="0.15" /></Symbol>"
+  +1s "<Symbol name="newSymbol" > <Stop/> </Symbol>"
+  +1  "<Symbol name="expl01" > <Text data="First symbol off" colorRGB="0xff0000" size="40.0" /></Symbol>"
+  +1s "<Symbol name="newSymbol2" > <Stop/> </Symbol>"
+  +1  "<Symbol name="expl02" > <Text data="Second symbol off" colorRGB="0xff0000" size="40.0" /></Symbol>"
+  +1s "<Symbol name="expl01" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+  +1  "<Symbol name="expl02" > <Stop/> </Symbol>"
+  +60 "<SimCtrl> <Stop/> </SimCtrl>"
+ 

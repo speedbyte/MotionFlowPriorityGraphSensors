@@ -1,0 +1,17 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   test for alternating text symbols and overlay symbols
+#
+#
+   0    "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+  +1s   "<EgoCtrl> <Speed value="0.1"/> </EgoCtrl>"
+  +1    "<Symbol name="scrSym" > <Text data="Just text" colorRGB="0x00ffff" size="20.0" /> <PosScreen x="0.5" y="0.25" /></Symbol>"
+  +2s   "<Symbol name="scrSym"> <Stop/> </Symbol>"
+  +0.2s "<Symbol name="scrSymbol" > <Overlay id="0" state="2"/> <PosScreen x="0.5" y="0.5" /> <RectSize width="0.2" height="0.2"/> </Symbol>"
+  +2s   "<Symbol name="scrSymbol"> <Stop/> </Symbol>"
+  +0.2s "<Symbol name="scrSym2" > <Text data="Now just text again" colorRGB="0x0000ff" size="40.0" /> <PosScreen x="0.5" y="0.25" /></Symbol>"
+  +2s   "<Symbol name="scrSym2"> <Stop/> </Symbol>"
+  +1s   "<Symbol name="expl01" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+  +1    "<SimCtrl> <Stop/> </SimCtrl>"

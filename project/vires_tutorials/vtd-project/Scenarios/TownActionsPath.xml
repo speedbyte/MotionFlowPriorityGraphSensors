@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="2" RevMinor="0">
+    <Layout Database="Projects/Current/Databases/Town/Ive/townGer.opt.osgb" File="Legacy/Project/Databases/Town/Odr/town.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile="Distros/Current/Config/Players/Objects"/>
+    <DynObjects Path="Distros/Current/Config/DynObjects/Logic"/>
+    <TrafficElements>
+        <LaneChangeDef Name="Slow" Time="1.2000000000000000e+01"/>
+        <LaneChangeDef Name="Standard" Time="8.0000000000000000e+00"/>
+        <LaneChangeDef Name="Fast" Time="4.0000000000000000e+00"/>
+    </TrafficElements>
+    <PulkTraffic/>
+    <TrafficControl>
+        <Path Name="RoadToNowhere" PathId="1">
+            <Waypoint PathOption="classic" s="1.2958138135242530e+03" TrackId="5"/>
+            <Waypoint PathOption="classic" s="2.7842445191980001e+01" TrackId="28"/>
+            <Waypoint PathOption="classic" s="6.7580419193000001e+00" TrackId="26"/>
+        </Path>
+        <Path Name="scndPath" PathId="2">
+            <Waypoint PathOption="classic" s="4.1120337154160200e+02" TrackId="5"/>
+            <Waypoint PathOption="classic" s="1.0256965928286229e+03" TrackId="17"/>
+            <Waypoint PathOption="classic" s="3.8451459884670001e+01" TrackId="31"/>
+            <Waypoint PathOption="classic" s="4.1966972147477001e+01" TrackId="26"/>
+            <Waypoint PathOption="classic" s="7.9742289477845600e+02" TrackId="25"/>
+            <Waypoint PathOption="classic" s="1.0177978181546200e+02" TrackId="26"/>
+            <Waypoint PathOption="classic" s="4.4042025685353003e+01" TrackId="27"/>
+            <Waypoint PathOption="classic" s="1.4687824474367631e+03" TrackId="17"/>
+        </Path>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_silver" Name="SlowCar"/>
+            <Init>
+                <Speed Value="6.0000000000000000e+00"/>
+                <PosAbsolute X="1.8287453893575760e+03" Y="7.6160084599099798e+02" Z="4.7903580037374924e+00" Direction="2.3059204003984139e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="external" AdaptDriverToVehicleType="false" Type="Audi_A3_2009_blue" Name="Ego"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosRoute/>
+                <PathRef StartS="3.0000000000000000e+01" EndAction="continue" TargetS="3.3549130955094060e+03" StartLane="1" PathId="1"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A6_2010_black" Name="Activator"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0867927246093750e+03" Y="1.5525303079564519e+03" Z="9.5000000000000000e+00" Direction="1.5708433315880002e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_Q5_2008_red" Name="Follower_1"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0866542707371730e+03" Y="1.5417156225789490e+03" Z="9.5000000000000000e+00" Direction="1.5708922005940000e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_R8_2009_red" Name="Follower_2"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0867032274242310e+03" Y="1.5310962014134691e+03" Z="9.5000000000000000e+00" Direction="1.5720445503980001e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_red" Name="Follower_3"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0865620988078281e+03" Y="1.5190157093271080e+03" Z="9.5000000000000000e+00" Direction="1.5694980357630000e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_Q5_2008_red" Name="Sleeper"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0744659423828120e+03" Y="1.6626428222656250e+03" Z="9.5000000000000000e+00" Direction="1.8567935957330002e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_blue" Name="AutonomousOvertaker"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0865975716191970e+03" Y="1.5620929614920669e+03" Z="9.5000000000000000e+00" Direction="1.5722872975310000e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <PlayerActions Player="SlowCar">
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="3.0000000000000000e+00" X="1.0867264404296880e+03" Y="1.4493435058593750e+03" NetDist="false" CounterVal="0" Pivot="$owner"/>
+                <Autonomous Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+        </PlayerActions>
+        <PlayerActions Player="Ego">
+            <Action Name="">
+                <PosRelative CounterID="" CounterComp="COMP_EQ" NetDist="false" Distance="3.0000000000000000e+01" CounterVal="0" Pivot="SlowCar"/>
+                <EditorPos Radius="3.0000000000000000e+01" X="1.8287453893575760e+03" Y="7.6160084599099798e+02"/>
+                <LaneChange Direction="1" Force="false" ExecutionTimes="1" Type="Fast" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+            <Action Name="">
+                <PosRelative CounterID="" CounterComp="COMP_EQ" NetDist="false" Distance="1.0000000000000000e+01" CounterVal="0" Pivot="SlowCar"/>
+                <EditorPos Radius="1.0000000000000000e+01" X="1.8287453893575760e+03" Y="7.6160084599099798e+02"/>
+                <LaneChange Direction="-1" Force="false" ExecutionTimes="1" Type="Standard" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+                <SpeedChange Rate="4.0000000000000000e+00" Target="2.5000000000000000e+01" Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="1.0000000000000000e+00"/>
+            </Action>
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="1.0865335693359380e+03" Y="1.4443858642578130e+03" NetDist="false" CounterVal="0" Pivot="$owner"/>
+                <Autonomous Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="1.8509166259765630e+03" Y="7.3116857910156295e+02" NetDist="false" CounterVal="0" Pivot="$owner"/>
+                <Autonomous Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+        </PlayerActions>
+        <PlayerActions Player="Activator"/>
+        <PlayerActions Player="Follower_1"/>
+        <PlayerActions Player="Follower_2"/>
+        <PlayerActions Player="Follower_3"/>
+        <PlayerActions Player="Sleeper">
+            <Action Name="">
+                <PosRelative CounterID="" CounterComp="COMP_EQ" NetDist="false" Distance="1.6000000000000000e+01" CounterVal="0" Pivot="Activator"/>
+                <EditorPos Radius="1.6000000000000000e+01" X="1.0867927246093750e+03" Y="1.5512963867187500e+03"/>
+                <Autonomous Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+        </PlayerActions>
+        <PlayerActions Player="AutonomousOvertaker">
+            <Action Name="">
+                <PosTrack CounterID="" CounterComp="COMP_EQ" Track="5" NetDist="false" Lane="0" CounterVal="0" Pivot="Ego" s="1.7684204158532999e+01"/>
+                <EditorPos Radius="5.0000000000000000e+00" X="1.0849999999999120e+03" Y="1.4852767333984380e+03"/>
+                <Autonomous Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+        </PlayerActions>
+    </TrafficControl>
+    <MovingObjectsControl/>
+    <LightSigns/>
+    <Selections/>
+</Scenario>

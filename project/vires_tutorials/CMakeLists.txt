@@ -16,7 +16,7 @@ set(SOURCE_FILES
         VTDSource/bosch_adsim/src/rdb_transceiver_tcp.cpp
         #VTDSource  /bosch_adsim/src/scp_transceiver.cpp
         VTDSource/vires/RDBHandler.cc
-        vtd.cpp
+        #vtd.cpp
         main.cpp
         )
 

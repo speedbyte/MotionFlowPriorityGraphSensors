@@ -1,0 +1,28 @@
+<IGconfig>
+
+  <Components>
+	<DynamicCubeMapManager name="TerrainReflectionsCubeMapManager" textureSizeX="1024" textureSizeY="1024" pos_y_far="500"  pos_x_enable="0" neg_x_enable="0" pos_z_enable="0" neg_z_enable="0" neg_y_enable="0"  renderAllEveryFrame="1" clearColor="0 0 0 1.0" />
+
+
+	<MaterialManager name="MyMaterialManager">
+		<AppliedDBEntitiy id="Terrain"/>
+		<AppliedDBEntitiy id="NoTerrain1"/>
+		<AppliedDBEntitiy id="NoTerrain2"/>
+		<AppliedDBEntitiy id="NoTerrain3"/>
+		<AppliedDBEntitiy id="NoTerrain4"/>
+                <Include file="IGLinks/Vig/data/Materials/TexturePool.xml" />
+                <Include file="IGLinks/Vig/data/Materials/BaseMaterials.xml" />
+                <Include file="IGLinks/Vig/data/Materials/DatabaseMaterialsHCS.xml" />
+                <Include file="IGLinks/Vig/data/Materials/VehicleMaterialsHCS.xml" />
+		<Include file="IGLinks/Setup/Config/ImageGenerator/ColorCodeMaterialsGeneral.xml" isOptional="1"/>
+		<!--Include file="IGLinks/Setup/Config/ImageGenerator/ColorCodeMaterialsVehicles.xml" isOptional="1"/-->
+	</MaterialManager>
+
+	<LightingManager name="MyLightingManager" >
+		<Include file="IGLinks/Vig/data/BaseLights.xml" />
+		<Include file="IGLinks/Setup/Config/ImageGenerator/SetupLights.xml" isOptional="1"/>
+     		<Include file="IGLinks/Project/Config/ImageGenerator/ProjectLights.xml" isOptional="1"/>
+	</LightingManager>
+
+  </Components>
+</IGconfig>
