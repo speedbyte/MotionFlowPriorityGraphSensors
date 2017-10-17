@@ -1,3 +1,26 @@
+/********************************************************
+VTD Connector
+ * Enables communication with simple (custom) messages. *
+********************************************************
+*
+*
+* (Proxy-)Message containing:
+* ---------------------------
+* uint16 - protocol
+* uint16 - package/message ID
+* uint32 spare[6] - spares
+* uint32 - data size (size of message data following this entry) in bytes
+*
+*
+* Message data must contain:
+* ---------------------------
+* message type
+* sender information
+* actual data to be processed (traffic signs, road information, other vehicles, etc.)
+*
+*/
+
+
 /**
 
  execute the script as follows: sudo ./instMultiUser.sh -r VTD.2.0
@@ -7,11 +30,9 @@
  It computes the intersection of this ray and the bounding box of other objects (vehicles); it returns the position
  of these objects in sensor co-ordinates with the origin being at the sensor's mounting point.
 
-
  The multi-ray sensor provides a means to interact with the actual geometry of the 3d database from within the
  moduleManager. For this purpose, there is a communication channel between MM and the imageGenerator. This means
  that you may also take continuous features of the environment (e.g. hills, road surface) into account for the sensing.
-
 
  Real-Time Ray-Tracing (via Optix)
 
@@ -27,23 +48,15 @@
 
  OptiXPluginExample
 
-
-
  Plugin Example
  see Plugin Example
 
  IG plugin development
  see VTD IG plugins
 
-
  Optix4.1
 
- CUDA is a parallel computing platform
-
  Coordinate Systems
-
-
-
  VIRES Installation
 
  Demo
@@ -129,8 +142,8 @@
  \subsection{License}
  
  \textbf{License File and Location}
- The license file needs to be placed under VTD2.0/bin/\\
- Please make sure the license file obtained has the same MAC Address as the Dongle.\\
+ The license file needs to be placed under VTD2.0/bin/
+ Please make sure the license file obtained has the same MAC Address as the Dongle.
  
  \textbf{License Hardware Configuration}
  Wireless Dongle
@@ -163,41 +176,44 @@
  system. You may also just edit the file /etc/hosts and add the entry
  127.0.0.2 nameOfYourHost
  
- Graphics Driver
- blacklist nouveau in /etc/modprobe.d to avoid nouveau to be loaded.
- 
- 
- Gpu test
- 
- lshw -class video
- watch -d nvidia-smi
- Download GpuTest : \url{http://www.geeks3d.com/20140304/gputest-0-7-0-opengl-benchmark-win-linux-osx-new-fp64-opengl
- -4-test-and-online-gpu-database/#download}
- ./GpuTest /test=fur /width=1024 /height=640
- 
- switching between graphic cards:
+Single Ray
 
- There is only one graphic card in the VIRES PC. Hence there is no chance of switching between graphic cards. The
- only thing one can do is switch between drivers. One is the nouveau provided by xfreedesktop.org and the other is
- directly from nvidia. Both of them use different OpenGL drivers.
- 
- sudo prime-select nvidia
- sudo prime-select intel
- 
- 
+
+It computes the intersection of this ray and the bounding box of other objects (vehicles); it returns the position of these objects in sensor co-ordinates with the origin being at the sensor's mounting point.
+
+
+The multi-ray sensor provides a means to interact with the actual geometry of the 3d database from within the moduleManager. For this purpose, there is a communication channel between MM and the imageGenerator. This means that you may also take continuous features of the environment (e.g. hills, road surface) into account for the sensing.
+
+
+    Real-Time Ray-Tracing (via Optix)
+
+The VIG-OptiX SDK is a real-time ray tracing plugin using NVIDIA's OptiX ray tracing engine.
+
+       woody./PathToYourWorkingDir/>cp vtd.x.x.addOns.*optix*.yyyymmdd.tgz .
+   woody./PathToYourWorkingDir/>tar -xzvf vtd.x.x.addOns.*optix*.yyyymmdd.tgz .
+
+    switch your setup to OptiX.Stream or OptiX.NonVisualSpectrum
+
+   woody./PathToYourWorkingDir/VTD.X.X>cd Data/Setups
+   woody./PathToYourWorkingDir/VTD.X.X/Data/Setups/>./selectSetup
+
  StartVIRES
- 
 
- 
  VTD provides a development environment for the creation of custom moduleManager plug-ins. First, make sure you have
  a license and the libraries for the moduleManager plug-in API. These are located at Develop/Modules
- 
- 
- 
- 
+
+
  \textbf{Plugin Development OptiX}
  
- 
+ OptiXPluginExample
+
+ Plugin Example
+ see Plugin Example
+ IG plugin development
+ see VTD IG plugins
+
+ Optix4.1
+
  
  First step: compile the example
  
@@ -247,9 +263,7 @@
  Data/Setups/Current/Config/ImageGenerator/AutoCfgDisplay.xml
  displayNum is the environment variable $DISPLAY
  
- 
- 
- 
+
  
  # 18.11.2016 by M. Dupuis
  # (c) 2016 by VIRES Simulationstechnologie GmbH
@@ -318,11 +332,7 @@
  TestReports
  Vehicle Dynamics - simplified
  VT-MÄK License Management
- 
- 
- 
- 
- 
+
      ModuleManager
      Vehicle Configuration Files
      Material System
@@ -344,9 +354,7 @@
  Sensor plug-ins are used for the extraction of data from the virtual world within a given sub-space which is usually
  connected to the own vehicle. The standard sensors work like filter which are adding some information about occlusion etc.
  
- 
- 
- 
+
  <RDB>
      <Port name="RDBraw" number="48190" type="TCP" />
  </RDB>
@@ -380,8 +388,6 @@
      :
  </Sensor>
  
- 
- 
  The occlusion matrix will be sent as an RDB package of type RDB_PKG_ID_OCCLUSION_MATRIX.
  After detecting the relevant objects (or calculating the respective information), each sensor will compose an RDB
  output data package containing the relevant information (object lists etc.). The output will be sent via the ports
@@ -393,8 +399,7 @@
  
  
  <Sensor name="multiRay" type="video">
- 
- 
+
      <Load     lib="libModuleMultiRaySensor.so" path="" persistent="true" />
      <Frustum  near="0.0" far="50.0" left="10.0" right="10.0" bottom="3.0" top="3.0" />
      <Config   noRaysHorizontal="3" noRaysVertical="3" verbose="false" />
@@ -403,9 +408,7 @@
      <Position dx="3.5" dy="0.0" dz="0.5" dhDeg="0.0" dpDeg="0.0" drDeg="0.0" />
      <Debug    enable="false" />
  </Sensor>
- 
- 
- 
+
  <TaskControl>
    :
    <Debug ...
@@ -459,14 +462,10 @@
  - object filtering (by type)
  - object detection (by frustum)
  
- 
- 
- 
+
  
  RDB
- 
- 
-    <RDB            name="default"
+     <RDB            name="default"
                      enable="true"
                      portType="SHM"
                      imageTransfer="false"
@@ -477,16 +476,12 @@
                      portType="SHM"
                      imageTransfer="false"
                      receive="true"/>
- 
- 
- 
  <RDB>
      <Port name="RDBraw" type="SHM" receive="true" />
      <Port name="RDBraw" type="SHM" send="true" />
  </RDB>
  
- 
- 
+
      <RDB            name="default"
                      portType="UDP"
                      imageTransfer="false"/>
@@ -500,21 +495,15 @@
  logical database of the road network is stored in the OpenDRIVE format,
  an XML-based description. For the design and modification of both
  database, the editor RoadDesigner (ROD) may be purchased optionally.
- 
- 
- 
- Scenario
- 
- 
- 
+
+  Scenario
+
  The scenario is stored in an XML format which is proprietary to
  VIRES. It contains references to the visual database and the logical
  database. Actions of all players are also contained in the scenario
  file. The file may be edited using the graphical ScenarioEditor.
- VTD provides an extensive set of binary data for each simulation
- 
- 
- step. The overall amount of data that is available on RDB is listed in
+ VTD provides an extensive set of binary data for each simulation step. The overall amount of data that is available
+ on RDB is listed in
  the respective documentation. Some of the more important / frequent
  contents are given in the following list:
  
@@ -573,11 +562,7 @@
  <Reply label="a58s7" entity="player" id="1" name="Ego"/>
  
  
- 
- 
  Database
- 
- 
  
  ALL SENSORS accept Crash Sensors
  
@@ -591,34 +576,25 @@
  - roadMarks (new in VTD 1.2.2)
  
  
-  What is a crash: Crash between bounding box of self and surrounding.
- 
-  If a crash is detected, it will issue an SCP message.
- 
- 
-  <Filter rdbCategory="RDB_OBJECT_CATEGORY_PLAYER" rdbType="RDB_OBJECT_TYPE_PLAYER_CAR"/>
-  <Filter rdbCategory="RDB_OBJECT_CATEGORY_PLAYER"/>
- 
- 
-  The JitterSensor may be used for deteriorating the accuracy of information retrieved by the perfect sensor. On each
-  component, a sinusoidal noise will be added to the actual signal. The user may specify frequency and amplitude of
-  the noise per channel.
- 
-  Detection like a perfect sensor - this provides the basic object data of vehicles, pedestrians etc. Additional
-  detection AND occlusion calculation for the following types of objects:traffic signs, vehicle lights (headlights,
-  rear lights), street lamps, common obstacles (e.g. houses) which may occlude the former objects. The information
-  about the sensor itself (contained in a package of type RDB_SENSOR_STATE_t) complements the data stream.
- 
- 
-  -----
+ What is a crash: Crash between bounding box of self and surrounding.
+ If a crash is detected, it will issue an SCP message.
 
+ <Filter rdbCategory="RDB_OBJECT_CATEGORY_PLAYER" rdbType="RDB_OBJECT_TYPE_PLAYER_CAR"/>
+ <Filter rdbCategory="RDB_OBJECT_CATEGORY_PLAYER"/>
+
+ The JitterSensor may be used for deteriorating the accuracy of information retrieved by the perfect sensor. On each
+ component, a sinusoidal noise will be added to the actual signal. The user may specify frequency and amplitude of
+ the noise per channel.
+ Detection like a perfect sensor - this provides the basic object data of vehicles, pedestrians etc. Additional
+ detection AND occlusion calculation for the following types of objects:traffic signs, vehicle lights (headlights,
+ rear lights), street lamps, common obstacles (e.g. houses) which may occlude the former objects. The information
+ about the sensor itself (contained in a package of type RDB_SENSOR_STATE_t) complements the data stream.
  
- 
+ -----
+
  ATZ . Automobil Technisch Zeitschrift
  VDI - Verein Deutsche Ingineure
 
- identify -format '%[EXIF:*]' DSC_0169.jpg
- exiftool -a -u -g1 image.jpg
 
  Class 1, Class 2 ( laser pointers ) , Class 3R, Class 3B and Class 4
 
@@ -643,5 +619,4 @@
  Primarily two things: Ray tracing and scan line tracing.
  Ray tracing is a very complex algorithm, but in short there are
 
- 
 */
