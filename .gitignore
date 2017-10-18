@@ -1,4 +1,9 @@
-
+VIRES/VTD.2.0/Doc/
+VIRES/VTD.2.0/Runtime/
+VIRES/VTD.2.0/Data/Distros/
+VIRES/VTD.2.0/Data/Setups/Current
+VIRES/VTD.2.0/Data/Projects/Current
+VIRES/VTD.2.0/Data/Projects/OpenCRG/
 *.yaml
 *.user
 *.autosave
