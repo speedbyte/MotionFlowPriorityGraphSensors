@@ -20,8 +20,44 @@ VTD Connector
 *
 */
 
-
 /**
+
+ The primary source and receiver of RDB is the Task Control.
+ Module Manager sends and receives data to and from RDB. The data is then forwarded to the plugins. The plugins
+ refactors/exterds the data with additional information and then sends it again on the RDB. The data can only be sent
+ by plugins and not received directly.
+ RDB_MSG_HDR_t        headerSize  = sizeof( RDB_MSG_HDR_t )
+                      dataSize    = sum of all following "headerSize" and "dataSize" information, i.e.
+                                     5 * sizeof( RDB_MSG_ENTRY_HDR_t ) +
+                                     3 * sizeof( TypeA ) +
+                                     1 * sizeof( TypeB ) +
+                                     2 * sizeof( TypeC )
+ RDB_MSG_ENTRY_HDR_t  pkgId       = RDB_PKG_ID_START_OF_FRAME
+                      headerSize  = sizeof( RDB_MSG_ENTRY_HDR_t )
+                      dataSize    = 0
+                      elementSize = 0
+ RDB_MSG_ENTRY_HDR_t  pkgId       = TypeA
+                      headerSize  = sizeof( RDB_MSG_ENTRY_HDR_t )
+                      dataSize    = 3 * sizeof( TypeA )
+                      elementSize = sizeof( TypeA )
+     entryOfTypeA
+     entryOfTypeA
+     entryOfTypeA
+ RDB_MSG_ENTRY_HDR_t  pkgId       = TypeB
+                      headerSize  = sizeof( RDB_MSG_ENTRY_HDR_t )
+                      dataSize    = 1 * sizeof( TypeB )
+                      elementSize = sizeof( TypeB )
+     entryOfTypeB
+ RDB_MSG_ENTRY_HDR_t  pkgId = TypeC
+                      headerSize  = sizeof( RDB_MSG_ENTRY_HDR_t )
+                      dataSize    = 2 * sizeof( TypeC )
+                      elementSize = sizeof( TypeC )
+     entryOfTypeC
+     entryOfTypeC
+ RDB_MSG_ENTRY_HDR_t  pkgId       = RDB_PKG_ID_END_OF_FRAME
+                      headerSize  = sizeof( RDB_MSG_ENTRY_HDR_t )
+                      dataSize    = 0
+                      elementSize = 0
 
  execute the script as follows: sudo ./instMultiUser.sh -r VTD.2.0
 
