@@ -9,6 +9,10 @@
 #include <sys/shm.h>
 #include <string.h>
 #include <unistd.h>
+#include <viRDBIcd.h>
+#include <adsim/vtd/rdb_codec.h>
+#include <iostream>
+#include <assert.h>
 #include "RDBHandler.hh"
 
 // forward declarations of methods
@@ -245,5 +249,6 @@ int checkShm()
 void handleMessage( RDB_MSG_t* msg )
 {
     // just print the message
-    Framework::RDBHandler::printMessage( msg );
+    //Framework::RDBHandler::printMessage( msg, true );
+    Framework::RDBHandler::getImageData(msg, true);
 }

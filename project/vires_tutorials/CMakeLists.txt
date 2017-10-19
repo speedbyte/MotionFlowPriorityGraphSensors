@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_BUILD_TYPE Debug)
 
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -fPIC)
 find_package(Boost EXACT 1.64 COMPONENTS filesystem REQUIRED)
 find_package(Qt5 EXACT 5.5.1 COMPONENTS Core Gui REQUIRED)
 
@@ -27,7 +28,8 @@ include_directories(${QT5_INCLUDE_DIR})
 include_directories(${Qt5Gui_INCLUDE_DIRS})
 
 add_executable(VTD ${SOURCE_FILES})
-add_executable(shm_reader_writer vires/RDBHandler.cc RdbTrigger.cpp ShmReader.cpp ShmWriter.cpp main.cpp)
+add_executable(shm_reader_writer vires/RDBHandler.cc RdbTrigger.cpp
+        ShmReader.cpp ShmWriter.cpp main.cpp)
 target_link_libraries(shm_reader_writer ${Boost_LIBRARIES})
 #add_executable(shm_writer vires/RDBHandler.cc ShmWriter.cpp)
 

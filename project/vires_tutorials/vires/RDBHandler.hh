@@ -80,6 +80,17 @@ class RDBHandler
         */
         static void printMessage( RDB_MSG_t* msg = 0, bool details = false, bool binDump = false, bool csv = false, bool csvHeader = false );
 
+    /**
+    * print the contents of an RDB message
+    * @param msg       pointer to the message which is to be printed; 0 for current internal message
+    * @param details   if true, print the details, not only the headers
+    * @param binDump   create a binary dump of the message
+    * @param csv       print CSV version of the message
+    * @param csvHeader print CSV header information only
+    */
+    static void getImageData( RDB_MSG_t* msg = 0, bool details = false, bool binDump = false, bool csv = false, bool
+    csvHeader = false );
+
         /**
         * print the contents of an RDB message entry
         * @param entryHdr pointer to the entry header whose contents are to be printed
