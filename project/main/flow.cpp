@@ -18,12 +18,17 @@
 #include <kitti/io_flow.h>
 #include "datasets.h"
 
+//Standart settings from functions
+//automotive plot
+
+
+
 //Creating a movement path. The path is stored in a x and y vector
 
 using namespace std::chrono;
 
 
-void flow(const boost::filesystem::path dataset_path, const std::string result_sha, FRAME_TYPES frame_types ) {
+void flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string image_input_sha, FRAME_TYPES frame_types,short noise ) {
 
     std::cout << "results will be stored in " << result_sha << std::endl;
 
@@ -36,6 +41,9 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
     std::vector<unsigned> z_pts;
+    std::vector<float> time;
+    double sum_time = 0;
+
     std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
 
     bool needToInit = true;
@@ -43,7 +51,7 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
     std::vector<cv::Point2f> next_pts;
     cv::Mat curGray, prevGray;
 
-    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/image_02_slow/no_noise/dummy.txt");
+    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/") + image_input_sha + std::string("dummy.txt");
     assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
 
 
@@ -81,9 +89,9 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
     cv::Mat flowImage(cv::Size(1242,375), CV_32FC3, cv::Scalar(255,255,255));
 
     cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
-    cv::Size subPixWinSize(10, 10), winSize(31, 31);
+    cv::Size subPixWinSize(10, 10), winSize(21, 21);
 
-    const int MAX_COUNT = 1242*375;
+    const int MAX_COUNT = 5000;
     cv::Mat pyramid1, pyramid2;
 
     pyramid1.create(frame_size, CV_8UC1);
@@ -118,7 +126,6 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
 
     std::string gt_image_path_str;
     std::string results_flow_path_str;
-    int it = 0;
 
     while ( true ) {
 
@@ -206,7 +213,6 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
             toc = steady_clock::now();
             time_map["FB"] = duration_cast<milliseconds>(toc - tic).count();
             y_pts.push_back(time_map["FB"]);
-
         }
 
         else if (!result_sha.compare("results/LK")) {
@@ -219,11 +225,16 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
                     curGray.copyTo(prevGray);
                 }*/
                 cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts, next_pts, status,
-                                         err, winSize, 3, termcrit, 0, 0.001);
+                                         err, winSize, 5, termcrit, 0, 0.001);
 
                 unsigned count = 0;
                 int minDist = 0;
 
+                std::ofstream flowX;
+                flowX.open(xFlow);
+
+                std::ofstream flowY;
+                flowY.open(yFlow);
                 for (unsigned i = 0; i < next_pts.size(); i++) {
                     /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
                     if (cv::norm(prev_pts[i] - next_pts[i]) <= minDist) {
@@ -231,23 +242,37 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
                         continue;
                     }
 
-                    sprintf(xFlow,"../../FlowTextFiles/FlowX/x%03d.txt",it);
-                    sprintf(yFlow,"../../FlowTextFiles/FlowY/y%03d.txt",it);
+                    if(noise == 0) {
+                        sprintf(xFlow, "../../FlowTextFiles/Slow/no_noise/FlowX/x%03d.txt", frame_count);
+                        sprintf(yFlow, "../../FlowTextFiles/Slow/no_noise/FlowY/y%03d.txt", frame_count);
+                    }
+
+                    if(noise == 1){
+                        sprintf(xFlow, "../../FlowTextFiles/Slow/static_BG/FlowX/x%03d.txt", frame_count);
+                        sprintf(yFlow, "../../FlowTextFiles/Slow/static_BG/FlowY/y%03d.txt", frame_count);
+                    }
+
+                    if(noise == 2){
+                        sprintf(xFlow, "../../FlowTextFiles/Slow/static_FG/FlowX/x%03d.txt", frame_count);
+                        sprintf(yFlow, "../../FlowTextFiles/Slow/static_FG/FlowY/y%03d.txt", frame_count);
+                    }
+
+                    if(noise == 3){
+                        sprintf(xFlow, "../../FlowTextFiles/Slow/dynamic_BG/FlowX/x%03d.txt", frame_count);
+                        sprintf(yFlow, "../../FlowTextFiles/Slow/dynamic_BG/FlowY/y%03d.txt", frame_count);
+                    }
+
+                    if(noise == 4){
+                        sprintf(xFlow, "../../FlowTextFiles/Slow/dynamic_FG/FlowX/x%03d.txt", frame_count);
+                        sprintf(yFlow, "../../FlowTextFiles/Slow/dynamic_FG/FlowY/y%03d.txt", frame_count);
+                    }
 
 
-                    std::ofstream flowX;
-                    flowX.open(xFlow);
-
-                    std::ofstream flowY;
-                    flowY.open(yFlow);
 
                     for (int k = 0; k < prev_pts.size(); k++) {
                         flowX << (int) prev_pts[k].x << " " << next_pts[k].x - prev_pts[k].x << std::endl;
                         flowY << (int) prev_pts[k].y << " " << next_pts[k].y - prev_pts[k].y << std::endl;
-
-
                     }
-
                     // Check if the status vector is good
                     if (!status[i])
                         continue;
@@ -255,15 +280,18 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
                     next_pts[count++] = next_pts[i];
                     //cv::circle(frame, next_pts[count], 3, cv::Scalar(0, 255, 0), -1, 8);
                     cv::arrowedLine(frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
-                    int row_coordinate = cvRound(next_pts[i].y);
-                    int col_coordinate = cvRound(next_pts[i].x);
+
+                    int row_coordinate = std::abs(cvRound(next_pts[i].y));
+                    int col_coordinate = std::abs(cvRound(next_pts[i].x));
                     float Vx = (next_pts[i].x - prev_pts[i].x);
                     float Vy = (next_pts[i].y - prev_pts[i].y);
-                    printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
-                           col_coordinate, Vx, Vy);
-                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvRound(Vx);
-                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvRound(Vy);
-                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
+                   // printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
+                   //        col_coordinate, Vx, Vy);
+                    if(row_coordinate < 375 && col_coordinate < 1242) {
+                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvRound(Vx);
+                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvRound(Vy);
+                        flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
+                    }
                 }
                 next_pts.resize(count);
                 //printf(" new size is %i for frame number %u\n", count, frame_count);
@@ -274,27 +302,28 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
             }
             if (needToInit) {
                 // automatic initialization
-                cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.001, 10, cv::Mat(), 3, false, 0.04);
+                cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
                 // Refining the location of the feature points
-                if (next_pts.size() < MAX_COUNT) {
-                    std::vector<cv::Point2f> currentPoint;
-                    std::swap(currentPoint, next_pts);
-                    for (unsigned i = 0; i < currentPoint.size(); i++) {
-                        std::vector<cv::Point2f> tempPoints;
-                        tempPoints.push_back(currentPoint[i]);
-                        // Function to refine the location of the corners to subpixel accuracy.
-                        // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
-                        //cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
-                        next_pts.push_back(tempPoints[0]);
-                    }
-                    std::swap(currentPoint, next_pts);
+                assert(next_pts.size() <= MAX_COUNT );
+                std::vector<cv::Point2f> currentPoint;
+                std::swap(currentPoint, next_pts);
+                next_pts.clear();
+                for (unsigned i = 0; i < currentPoint.size(); i++) {
+                    std::vector<cv::Point2f> tempPoints;
+                    tempPoints.push_back(currentPoint[i]);
+                    // Function to refine the location of the corners to subpixel accuracy.
+                    // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
+                    cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
+                    next_pts.push_back(tempPoints[0]);
                 }
+                printf("old next_pts size is %d and new next_pts size is %d\n", currentPoint.size(), next_pts.size());
+                //std::swap(currentPoint, next_pts);
             }
 
             toc = steady_clock::now();
             time_map["LK"] = duration_cast<milliseconds>(toc - tic).count();
             y_pts.push_back(time_map["LK"]);
-
+            time.push_back(duration_cast<milliseconds>(toc - tic).count());
         }
 
         if (prevGray.data) {
@@ -354,24 +383,28 @@ void flow(const boost::filesystem::path dataset_path, const std::string result_s
         if ( frame_count == MAX_ITERATION ) {
             break;
         }
-    it++;
     }
+
+    for(auto &n : time)
+        sum_time +=n;
+
+    std::cout << "Noise " << noise  << "Zeit " << sum_time << std::endl;
+    std::cout << "time_map LK " << time_map["LK"] << std::endl;
 
     fs.release();
     auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
-
 
     pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
     if ( frame_types == video_frames) {
         video_out.release();
     }
     cv::destroyAllWindows();
-/*
+
     // gnuplot_2d
     Gnuplot gp2d;
     gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION) + "]\n";
     gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-    gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << " with lines title 'y axis - ms, x axis - frame "
-            "count'\n";
-*/
+    std::string tmp = std::string(" with lines title ") + std::string("'") + image_input_sha + std::string(" y axis - ms, x axis - frame\n'");
+    gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
+
 }

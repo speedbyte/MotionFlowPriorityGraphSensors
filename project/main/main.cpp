@@ -15,7 +15,7 @@ using boost_path=boost::filesystem::path;
 extern void ground_truth(const boost::filesystem::path dataset_path);
 extern std::string prepare_directories(const boost::filesystem::path dataset_path, const std::string result_sha);
 
-extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha, FRAME_TYPES frame_types);
+extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string image_input_sha, FRAME_TYPES frame_types, short noise);
 //extern bool eval(std::string result_sha, Mail *mail);
 extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
@@ -78,7 +78,21 @@ int main ( int argc, char *argv[]) {
 //    flow(CPP_DATASET_PATH, result_dir);
 
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
-    flow(MATLAB_DATASET_PATH, result_dir, continous_frames);
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames,0);
+
+    result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_BG/"), continous_frames,1);
+
+
+    result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_FG/"), continous_frames,2);
+
+    result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_BG/"), continous_frames,3);
+    result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_FG/"), continous_frames,4);
+
+
 
 //    result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "LK");
 //    flow(KITTI_FLOW_DATASET_PATH, result_dir);
