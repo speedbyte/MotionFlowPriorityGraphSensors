@@ -27,7 +27,7 @@ include_directories(${QT5_INCLUDE_DIR})
 include_directories(${Qt5Gui_INCLUDE_DIRS})
 
 add_executable(VTD ${SOURCE_FILES})
-add_executable(shm_reader_writer vires/RDBHandler.cc ShmReader.cpp ShmWriter.cpp main.cpp)
+add_executable(shm_reader_writer vires/RDBHandler.cc RdbTrigger.cpp ShmReader.cpp ShmWriter.cpp main.cpp)
 target_link_libraries(shm_reader_writer ${Boost_LIBRARIES})
 #add_executable(shm_writer vires/RDBHandler.cc ShmWriter.cpp)
 

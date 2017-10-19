@@ -8,6 +8,12 @@
 #include <boost/filesystem.hpp>
 
 #include <iostream>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netinet/tcp.h>
+#include <netdb.h>
+
+#include "main.h"
 
 extern unsigned int mShmPtr_writer;
 extern unsigned int mShmKey_writer;
@@ -25,12 +31,16 @@ extern void ValidateArgs_reader(int argc, char **argv);
 extern void openShm_reader();
 extern int checkShm();
 
+extern char  szServer[128];             // Server to connect to
+extern int   iPort;  // Port on server to connect to
+
+extern void sendTrigger( int & sendSocket, const double & simTime, const unsigned int & simFrame );
 
 /**
 * information about usage of the software
 * this method will exit the program
 */
-void usage()
+void usage_reader()
 {
     printf("usage: shmReader [-k:key] [-c:checkMask] [-v] [-f:bufferId]\n\n");
     printf("       -k:key        SHM key that is to be addressed\n");
@@ -71,7 +81,7 @@ void ValidateArgs_reader(int argc, char **argv)
                     break;
 
                 default:
-                    usage();
+                    usage_reader();
                     break;
             }
         }
@@ -123,6 +133,56 @@ void ValidateArgs_writer(int argc, char **argv)
     }
 
     fprintf( stderr, "ValidateArgs: key = 0x%x\n", mShmKey_writer );
+}
+
+
+//
+// Function: usage:
+//
+// Description:
+//    Print usage information and exit
+//
+void usage_trigger()
+{
+    printf("usage: client [-p:x] [-s:IP]\n\n");
+    printf("       -p:x      Remote port to send to\n");
+    printf("       -s:IP     Server's IP address or hostname\n");
+    exit(1);
+}
+
+//
+// Function: ValidateArgs
+//
+// Description:
+//    Parse the command line arguments, and set some global flags
+//    to indicate what actions to perform
+//
+void ValidateArgs_trigger(int argc, char **argv)
+{
+    int i;
+
+    strcpy( szServer, "127.0.0.1" );
+
+    for(i = 1; i < argc; i++)
+    {
+        if ((argv[i][0] == '-') || (argv[i][0] == '/'))
+        {
+            switch (tolower(argv[i][1]))
+            {
+                case 'p':        // Remote port
+                    if (strlen(argv[i]) > 3)
+                        iPort = atoi(&argv[i][3]);
+                    break;
+                case 's':       // Server
+                    if (strlen(argv[i]) > 3)
+                        strcpy(szServer, &argv[i][3]);
+                    break;
+                default:
+                    usage_trigger();
+                    break;
+            }
+        }
+    }
 }
 
 /**
@@ -181,6 +241,90 @@ int main(int argc, char* argv[])
 
             usleep( 1000 );
         }
+    }
+    else if ( strcmp(argv[1], "trigger") == 0 )  {
+        int           sClient;
+        char* szBuffer = new char[DEFAULT_BUFFER];  // allocate on heap
+        int           ret;
+        struct sockaddr_in server;
+        struct hostent    *host = NULL;
+        static bool sSendTrigger = true;
+
+        // Parse the command line
+        //
+        ValidateArgs_trigger(argc, argv);
+
+        //
+        // Create the socket, and attempt to connect to the server
+        //
+        sClient = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+        if ( sClient == -1 )
+        {
+            fprintf( stderr, "socket() failed: %s\n", strerror( errno ) );
+            return 1;
+        }
+
+        int opt = 1;
+        setsockopt ( sClient, IPPROTO_TCP, TCP_NODELAY, &opt, sizeof( opt ) );
+
+        server.sin_family      = AF_INET;
+        server.sin_port        = htons(iPort);
+        server.sin_addr.s_addr = inet_addr(szServer);
+
+        //
+        // If the supplied server address wasn't in the form
+        // "aaa.bbb.ccc.ddd" it's a hostname, so try to resolve it
+        //
+        if ( server.sin_addr.s_addr == INADDR_NONE )
+        {
+            host = gethostbyname(szServer);
+            if ( host == NULL )
+            {
+                fprintf( stderr, "Unable to resolve server: %s\n", szServer );
+                return 1;
+            }
+            memcpy( &server.sin_addr, host->h_addr_list[0], host->h_length );
+        }
+        // wait for connection
+        bool bConnected = false;
+
+        while ( !bConnected )
+        {
+            if (connect( sClient, (struct sockaddr *)&server, sizeof( server ) ) == -1 )
+            {
+                fprintf( stderr, "connect() failed: %s\n", strerror( errno ) );
+                sleep( 1 );
+            }
+            else
+                bConnected = true;
+        }
+
+        fprintf( stderr, "connected!\n" );
+
+        unsigned int  bytesInBuffer = 0;
+        size_t        bufferSize    = sizeof( RDB_MSG_HDR_t );
+        unsigned int  count         = 0;
+        unsigned char *pData        = ( unsigned char* ) calloc( 1, bufferSize );
+
+        // Send and receive data - forever!
+        //
+        for(;;)
+        {
+            bool bMsgComplete = false;
+
+            // CAREFUL: we are not reading the network, so the test will fail after a while!!!
+
+            // do some other stuff before returning to network reading
+            usleep( 500000 );
+
+            if ( sSendTrigger )
+                sendTrigger( sClient, 0.0, 0 );
+
+        }
+        ::close(sClient);
+
+        return 0;
     }
     std::cout << "start my program";
     std::string m_server;

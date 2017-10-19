@@ -22,6 +22,10 @@ VTD Connector
 
 /**
 
+ Setups -> AutoCfgDatabase.xml  -> here is your scene in Projects/Current/Databases/*.ive file
+                                -> here is your occlusion in Projects/Current/Databases/*.occl file
+                                all of them are soft link to Distros/Databases
+
  The primary source and receiver of RDB is the Task Control.
  Module Manager sends and receives data to and from RDB. The data is then forwarded to the plugins. The plugins
  refactors/exterds the data with additional information and then sends it again on the RDB. The data can only be sent
