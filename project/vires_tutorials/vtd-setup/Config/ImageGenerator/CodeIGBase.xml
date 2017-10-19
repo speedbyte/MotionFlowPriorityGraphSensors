@@ -1,0 +1,233 @@
+<IGconfig>
+
+
+  <SystemConfig>    
+    <EnvVariable value="5"     var="__GL_FSAA_MODE" />
+    <EnvVariable value="1"     var="__GL_SYNC_TO_VBLANK" />
+    <EnvVariable value="4"     var="__GL_LOG_MAX_ANISO" />
+    <EnvVariable value="WARN"  var="OSG_NOTIFY_LEVEL" />
+
+    <FilePath path="IGLinks/Vig/data/Fonts" />
+    <FilePath path="IGLinks/Setup/Config/ImageGenerator/Shaders" />
+    <FilePath path="IGLinks/Vig/data/Shaders" />
+    <FilePath path="IGLinks/Vig/data/MaterialTextures" />
+    <FilePath path="IGLinks/Vig/data/Misc" />
+    <FilePath path="IGLinks/Vig/data/ObjectsCommon" />
+    <FilePath path="IGLinks/Vig/data/Sky" />
+    <FilePath path="IGLinks/Project/ImageGenerator/Materials" />    
+    <FilePath path="IGLinks/Project/ImageGenerator/LightSources" />
+    <FilePath path="IGLinks/Project/ImageGenerator/Symbols" />
+    <FilePath path="IGLinks/Project/Databases/ObjectsCommon" />
+    <FilePath path="IGLinks/Project/Databases/Cars" />
+    <FilePath path="IGLinks/Project/Databases/Cars/NumberPlates" />	
+    <FilePath path="IGLinks/Project/Databases" />
+    <FilePath path="IGLinks/Distro/ImageGenerator/Fonts" />
+    <FilePath path="IGLinks/Distro/ImageGenerator/LightSources" />
+    <FilePath path="IGLinks/Distro/ImageGenerator/Misc" />
+    <FilePath path="IGLinks/Distro/ImageGenerator/Symbols" />
+    <FilePath path="IGLinks/Distro/Databases/ObjectsCommon" />
+    
+    <Notification notifyLevel="WARN" OSGNotifyLevel="WARN" />
+  </SystemConfig>    
+  
+  <Plugins>  
+    <Plugin file="CarSim" />
+    <Plugin file="Symbols" />
+    <Plugin file="SpecialEffects"/>
+    <Plugin file="FramebufferReader" />
+    <Plugin file="EnvironmentManager" />  
+    <Plugin file="TunnelRenderer"/> 
+    <Plugin file="PedestriansBDI_v13" />
+    <Plugin file="VIGGenObjectControl" />
+  </Plugins>
+
+  <Database dumpEntities="0" >
+    <Entity attachToScene="0" cacheHintOptions="CACHE_IMAGES" stateShareOptions="SHARE_TEXTURES" ID="DummyPerson"  filename="DummyPersonVIRES.ive" />
+    <Entity attachToScene="0" cacheHintOptions="CACHE_IMAGES" stateShareOptions="SHARE_TEXTURES" ID="MissingCarVIRES"  filename="MissingCarVIRES.ive" />
+  </Database> 
+
+
+  <Components>   
+    <!-- 
+    	Issue: PostProcessing moved to Setup configuration
+        Bug:   #2195
+	Note:  Multiple views per render surface are not allowed in VIG's PP. Hence, component definition is not suitable as a common configuration.
+    	Solution: Move PostProcessing XML-Element to your Setup configuration file.
+    -->
+    <!--PostProcessing name="MyPostProcessing"  /-->
+    <GenObjectManager name="MyGenericObjectManager" />	    
+
+
+    <PrecipitationEffect name="MyPrecipitationEffect" clipDistance="4" >
+      <ParticleConfigurations  >	
+	<ParticleConfiguration type="Rain" particleSpeed="9"  particleSize="0.02"   particleColor="1 1 1 0.03" nearTransition="50" farTransition="100" />	
+	<ParticleConfiguration type="Snow" particleSpeed="1"  particleSize="0.025"   particleColor="1 1 1 1" nearTransition="50" farTransition="100" />	  
+      </ParticleConfigurations>	
+    </PrecipitationEffect>
+
+    <Motion enableText="0" motionModel="GameMotion" name="MyMotion" >
+      <TrackFollow speed="0" offset="0 0 3" acceleration="10" slowSlew="1" fastSlew="15" S="0.0" />
+      <Drive inputMethod="mouse" maxAcceleration="0.02" turnRate="25.1"/>
+    </Motion>
+    
+    <Camera events="DEFAULTS KEYBMOUSE" positioningMethod="Manual" name="MyCamera" >
+      <Motion motion="MyMotion" />
+    </Camera>
+    <!--
+        Note: FramebufferReader now depends on MyCamera at creation time, the old
+              lazy dependency had threading issues.
+    -->
+    <FramebufferReader name="MyFBReader">
+      <VideoEncoder filename="/tmp/video.mpg" frameDrops="1" kbps="4000" cpuAffinity="2"/>
+    </FramebufferReader>
+    <TrafficSignCtrl name="MyTrafficSignCtrl" />
+
+    <PedestriansBDI_v13 name="MyDIGuyPedestrians" >
+      <Settings tick_dt="0.01" />
+    </PedestriansBDI_v13>
+
+    <TunnelRenderer name="MyTunnelRenderer" >
+        
+        <MaterialOverrides>
+
+            <MaterialOverride name="DefaultOverride">
+                <FragmentShader file="../data/tunnelShadowFrag.glsl" />
+                <VertexShader file="../data/tunnelShadowVert.glsl" />
+                <ShaderParams>  
+                    <Param type="float" name="u_skyLightFactor" value="0.5" />
+                    <Param type="vec4" name="u_shadowFadeInOut" value="1000 900 40 10" />
+            </ShaderParams>
+            </MaterialOverride>
+            <MaterialOverride name="TxRdMiscRef">
+                 <FragmentShader file="../data/tunnelShadowFrag.glsl" />
+                <VertexShader file="../data/tunnelShadowVert.glsl" />
+            </MaterialOverride>
+            <!-- Road override currently disables wettness since 
+                 TaskControl sets wettness to 0 when we enter
+            a tunnel and that switch is rather visible-->
+             <MaterialOverride name="RoadOverride">
+                <FragmentShader file="../data/tunnelFrag.glsl" />
+                <VertexShader file="../data/tunnelVert.glsl" />
+                <ShaderParams>  
+                    <Param type="float" name="u_skyLightFactor" value="0.5" />
+                    <Param type="float" name="u_reflectionFactor" value="1" />
+                    <Param type="float" name="u_ambientFactor" value="0.1" />
+                    <Param type="float" name="u_wetness" value="0" />
+                    <Param type="vec4" name="u_shadowFadeInOut" value="1000 900 40 10" />
+            </ShaderParams>
+            </MaterialOverride>
+
+        </MaterialOverrides>
+        <OverrideAssignments>
+            <OverrideAssignment target="*" override="DefaultOverride" />
+            <!--
+            <OverrideAssignment target="TxKoSrfStreet*" override="RoadOverride" />
+            <OverrideAssignment target="TxSrfStreet*" override="RoadOverride" />
+            <OverrideAssignment target="TxPavConcrete*" override="RoadOverride" />
+            <OverrideAssignment target="TxConcret*" override="RoadOverride" />
+            <OverrideAssignment target="TxRoad*" override="RoadOverride" />
+            <OverrideAssignment target="TxRdMiscRef*" override="TxRdMiscRef" />
+            -->
+        </OverrideAssignments>
+    </TunnelRenderer>
+
+    <Statistics name="MyPerfStats" componentPerfStatsFrameCount="0" graphics="1" appDetails="1" frameRate="1" printToConsoleFrameTime="219" showOnScreen="0" >
+      <FrameTime history="500" />
+      <ComponentDeletionTime history="500"  />
+      <ApplicationTime history="500" />
+      <GuiProcessingTime history="500"  />
+      <PreUpdateCallsTime history="500" />
+      <PreFrameCallsTime history="500" />
+      <PostFrameCallsTime history="500" />
+      <SceneGraphUpdateTime history="500" />
+      <SceneGraphCullTimeView0 history="500" />
+      <SceneGraphDrawTimeView0 history="500" />	     
+      <gpu_idle history="500" />
+      <pixel_shader_busy history="500" />
+      <vertex_count  history="500" />
+      <OGLFrameBatchCount  history="500"  />
+    </Statistics>	
+
+    <EnvironmentManager timeOfDay="60000" events="DEFAULTS KEYBMOUSE" name="MyEnvironmentManager" />
+    
+    <DynamicCubeMapManager name="ObjectReflectionsCubeMapManager" clearColor="0.4 0.4 0.4 1.0" renderAllEveryFrame="1" />
+    
+    <Picker name="MyPicker" />
+
+    <VehicleTemplate name="DummyPersonMo" Model="DummyPerson" ShadowModel="DummyPerson" type="12345" />
+    <VehicleTemplate name="MissingCarVIRES" Model="MissingCarVIRES" ShadowModel="MissingCarVIRES" type="123456" />
+
+    <RDBInterface name="MyRDBInterface" printDebugInfo="0" ignoreShmFlags="0">
+        <ShmLayoutImage key="0x0811a" freeFlag="0x00000000" releaseFlag="0x00000002"/>
+    </RDBInterface>
+    
+    <PostProcessing name="MyPostProcessing"/>
+    
+    <PostProcessingPipelineConfigurator name="MyPostProcessingPipelineConfigurator">
+        <Pipeline hideSceneFromDefaultView="1" >
+            <Step type="PPSTextureRect"
+                  name="OriginalScene"
+                  generateDepthTexture="0">
+                <Inputs renderLights="1">
+                    <NodeInput inputNo="0" type="scene"/>
+                </Inputs>
+                <RTT sizeMode="viewport"
+                     bufferFormat="GL_RGB8" />
+                <SAQ lowerLeftX="0" lowerLeftY="0"
+                     width="1.0" height="1.0"
+                     isForDebug="0" enableSRGB="0" />
+                <Readback readbackThreadAffinity="4">
+                    <Image outputSlot="color"/>
+                    <!--Image outputSlot="depth"/-->
+                </Readback>
+            </Step>
+        </Pipeline>
+    </PostProcessingPipelineConfigurator>
+
+    <!--Mirror name="MyMirror" screenPosX="100" screenPosY="50" sizeX="200" sizeY="150" left="35" right="-20" bottom="7" top="7"  near="2" far="150" positionOffset="-0.4 0.5 1.0"  orientationOffset="200 0 0" /-->
+    <Sunblend name="MySunblend" sky="MySky" camera="MyCamera" textureFile="TxSunBlend.inta" color="1.0 1.0 0.85 1.0" apertureAngle="45"/>
+       
+    <!-- <Windshield quadCount="1500" name="MyWindShield" maxAge="10.0" dropsPerSecond="10" dropSize="0.012 0.012" screenAspectRatio="0.75" > -->
+    <!--   <Wiper enabled="1" height="0.75" width="0.0375" wiperPivot="0.6 -0.05" speed="150" /> -->
+    <!-- </Windshield>  -->
+
+    <TAKATA name="TAKATA"  
+	    timeScale="1.0"
+	    constantDeltaTime="0.016666"
+	    useConstantDeltaTime="1"		
+	    ownshipSteeringDebug="0" 
+	    movingModelSteeringDebug="0" 
+	    movingModelManagementDebug="0" 
+	    environmentDebug="0" 
+	    carsInitDebug="0" 
+	    ignoreEnvMsg="0" 
+	    commandDebug="1"
+	    contactPointQueryDebug="0"
+	    headlightsAlwaysOn="0"
+	    lightDebug="0"
+	    pkgVecDebug="0"
+	    printSimTime="0"
+	    printFrameNo="0"
+	    rainEffectScale="800"		
+	    enableRealTimeShadows="1"							
+	    ignoreSetProjectionMessages="0"
+	    hudTextPos= "0.70 0.08" hudCharHeight= "30.0" hudTextShadowOffset= "0.002 -0.002" enableCross="0"
+	    taskControlServerAddress="127.0.0.1"
+	    taskControlServerPort="13112"
+	    connectTaskServerTCP="1"
+	    imageTransferServerAddress="127.0.0.1"
+	    imageTransferServerPort="13110"
+	    connectImageTransferTCP="1"
+	    enableShmReader="0"
+	    materialDB="HighContrastSky"
+	    convertLightmapThreadCPUAffinity="-1"
+	    trigger="TCP">
+
+      <MovingModelDefinitions>
+	<MovingModel type="12345" template="DummyPersonMo"  ShadowDBEntityID="" component="Car" userData="0.4" />
+      </MovingModelDefinitions>
+      
+    </TAKATA>
+
+  </Components>
+</IGconfig>

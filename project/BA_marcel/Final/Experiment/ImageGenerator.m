@@ -21,22 +21,22 @@ mkdir('./../../../../matlab_dataset/data/stereo_flow/image_02_fast/dynamic_BG');
 
 
 
-% speed = 0.5;
-% slow = init(speed,1);
-% generate(slow,0,'slow/no_noise');
-% generate(slow,1,'slow/dynamic_BG');
-% generate(slow,2,'slow/static_BG');
-% generate(slow,3,'slow/static_FG');
-% generate(slow,4,'slow/dynamic_FG');
-% 
-% 
-% speed = 2;
-% normal = init(speed,2);
-% generate(normal,0,'normal/no_noise');
-% generate(normal,1,'normal/dynamic_BG');
-% generate(normal,2,'normal/static_BG');
-% generate(normal,3,'normal/static_FG');
-% generate(normal,4,'normal/dynamic_FG');
+%  speed = 0.5;
+%  slow = init(speed,1);
+%  generate(slow,0,'slow/no_noise');
+%  generate(slow,1,'slow/dynamic_BG');
+%  generate(slow,2,'slow/static_BG');
+%  generate(slow,3,'slow/static_FG');
+%  generate(slow,4,'slow/dynamic_FG');
+%  
+%  
+%  speed = 2;
+%  normal = init(speed,2);
+%  generate(normal,0,'normal/no_noise');
+%  generate(normal,1,'normal/dynamic_BG');
+%  generate(normal,2,'normal/static_BG');
+%  generate(normal,3,'normal/static_FG');
+%  generate(normal,4,'normal/dynamic_FG');
 
 speed = 6;
 fast = init(speed,3);

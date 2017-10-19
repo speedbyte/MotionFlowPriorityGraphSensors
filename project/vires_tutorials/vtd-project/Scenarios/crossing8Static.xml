@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="2" RevMinor="0">
+    <Layout Database="Projects/Current/Databases/Crossing8Course/Crossing8Course.opt.osgb" File="Projects/Current/Databases/Crossing8Course/Crossing8Course.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile="Distros/Current/Config/Players/Objects"/>
+    <DynObjects Path="Distros/Current/Config/DynObjects/Logic"/>
+    <TrafficElements>
+        <LaneChangeDef Name="Slow" Time="1.2000000000000000e+01"/>
+        <LaneChangeDef Name="Standard" Time="8.0000000000000000e+00"/>
+        <LaneChangeDef Name="Fast" Time="4.0000000000000000e+00"/>
+    </TrafficElements>
+    <PulkTraffic/>
+    <TrafficControl>
+        <Player>
+            <Description Driver="No Driver" Control="external" AdaptDriverToVehicleType="false" Type="Audi_A6_2007_blue" Name="Ego"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.8860804268818999e+01" Y="2.1281909654362000e+01" Z="0.0000000000000000e+00" Direction="3.9269908169800001e+00" AlignToRoad="false"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="No Driver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_red" Name="New Player 01"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.6314018249511999e+01" Y="-1.3257057189940999e+01" Z="0.0000000000000000e+00" Direction="2.3561944901819998e+00" AlignToRoad="false"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="No Driver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A3_2009_blue" Name="New Player 02"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-1.4713953018188102e+01" Y="1.1652534484863470e+01" Z="0.0000000000000000e+00" Direction="5.4977870376929996e+00" AlignToRoad="false"/>
+            </Init>
+        </Player>
+        <PlayerActions Player="Ego"/>
+        <PlayerActions Player="New Player 01"/>
+        <PlayerActions Player="New Player 02"/>
+    </TrafficControl>
+    <MovingObjectsControl/>
+    <LightSigns>
+        <SignalController Id="1" DelayRef="-1" Delay="0.0000000000000000e+00">
+            <Phase Duration="1.0000000000000000e+01" Type="stop"/>
+            <Phase Duration="2.0000000000000000e+00" Type="stop_attention"/>
+            <Phase Duration="1.0000000000000000e+01" Type="go"/>
+            <Phase Duration="2.0000000000000000e+00" Type="attention"/>
+        </SignalController>
+        <SignalController Id="3" DelayRef="-1" Delay="0.0000000000000000e+00">
+            <Phase Duration="8.0000000000000000e+00" Type="go"/>
+            <Phase Duration="1.5000000000000000e+01" Type="stop"/>
+            <Phase Duration="1.0000000000000000e+00" Type="go"/>
+        </SignalController>
+        <SignalController Id="4" DelayRef="-1" Delay="0.0000000000000000e+00">
+            <Phase Duration="1.0000000000000000e+01" Type="go"/>
+            <Phase Duration="2.0000000000000000e+00" Type="attention"/>
+            <Phase Duration="1.0000000000000000e+01" Type="stop"/>
+            <Phase Duration="2.0000000000000000e+00" Type="stop_attention"/>
+        </SignalController>
+        <SignalController Id="5" DelayRef="-1" Delay="0.0000000000000000e+00">
+            <Phase Duration="1.1000000000000000e+01" Type="stop"/>
+            <Phase Duration="9.0000000000000000e+00" Type="go"/>
+            <Phase Duration="4.0000000000000000e+00" Type="stop"/>
+        </SignalController>
+        <Signal Id="10">
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="11">
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+        </Signal>
+        <Signal Id="12">
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="13">
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+        </Signal>
+        <Signal Id="20">
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="21">
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+        </Signal>
+        <Signal Id="22">
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="23">
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+        </Signal>
+        <Signal Id="30">
+            <LightState>
+                <Light state="false"/>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="31">
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="32">
+            <LightState>
+                <Light state="false"/>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="33">
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="40">
+            <LightState>
+                <Light state="false"/>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="41">
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="42">
+            <LightState>
+                <Light state="false"/>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+        <Signal Id="43">
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+            <LightState>
+                <Light state="false"/>
+                <Light state="true"/>
+            </LightState>
+            <LightState>
+                <Light state="true"/>
+                <Light state="false"/>
+            </LightState>
+        </Signal>
+    </LightSigns>
+    <Selections/>
+</Scenario>

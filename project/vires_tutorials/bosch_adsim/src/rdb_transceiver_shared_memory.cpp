@@ -18,17 +18,12 @@
 #include <sys/types.h>
 
 #include <boost/interprocess/xsi_shared_memory.hpp>
+#include <QDebug>
 
 #include <RDBHandler.hh>
 
-#include <adsim/utility/logger.h>
-
 namespace adsim {
 namespace vtd {
-
-namespace {
-adsim::utility::Logger logger() { return adsim::utility::GetLogger("adsim/vtd"); }
-}
 
 RDBTransceiverSharedMemory::RDBTransceiverSharedMemory(key_t key, uint32_t release_mask)
     : RDBTransceiver(), release_mask_(release_mask) {

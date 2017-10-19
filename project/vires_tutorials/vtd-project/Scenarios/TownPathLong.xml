@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="2" RevMinor="0">
+    <Layout Database="Projects/Current/Databases/Town/Ive/townGer.opt.osgb" File="Legacy/Project/Databases/Town/Odr/town.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile="Distros/Current/Config/Players/Objects"/>
+    <DynObjects Path="Distros/Current/Config/DynObjects/Logic"/>
+    <TrafficElements>
+        <LaneChangeDef Name="Slow" Time="1.2000000000000000e+01"/>
+        <LaneChangeDef Name="Standard" Time="8.0000000000000000e+00"/>
+        <LaneChangeDef Name="Fast" Time="4.0000000000000000e+00"/>
+    </TrafficElements>
+    <PulkTraffic/>
+    <TrafficControl>
+        <Path Name="RoadToNowhere" PathId="1">
+            <Waypoint PathOption="classic" s="1.2958138135242530e+03" TrackId="5"/>
+            <Waypoint PathOption="classic" s="2.7842445191980001e+01" TrackId="28"/>
+            <Waypoint PathOption="classic" s="6.7580419193000001e+00" TrackId="26"/>
+        </Path>
+        <Path Name="scndPath" PathId="2">
+            <Waypoint PathOption="classic" s="4.1120337154160200e+02" TrackId="5"/>
+            <Waypoint PathOption="classic" s="1.0256965928286229e+03" TrackId="17"/>
+            <Waypoint PathOption="classic" s="3.8451459884670001e+01" TrackId="31"/>
+            <Waypoint PathOption="classic" s="4.1966972147477001e+01" TrackId="26"/>
+            <Waypoint PathOption="classic" s="7.9742289477845600e+02" TrackId="25"/>
+            <Waypoint PathOption="classic" s="1.0177978181546200e+02" TrackId="26"/>
+            <Waypoint PathOption="classic" s="4.4042025685353003e+01" TrackId="27"/>
+            <Waypoint PathOption="classic" s="1.4687824474367631e+03" TrackId="17"/>
+        </Path>
+        <Player>
+            <Description Driver="DefaultDriver" Control="external" AdaptDriverToVehicleType="false" Type="Audi_A3_2009_red" Name="Ego"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosRoute/>
+                <PathRef StartS="0.0000000000000000e+00" EndAction="continue" TargetS="3.3549130955094060e+03" StartLane="1" PathId="1"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_grey" Name="Activator"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-3.0542907014509002e+01" Y="2.4361920991898078e+03" Z="9.5000000000000000e+00" Direction="2.2050156235400000e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_S5_2009_blue" Name="Follower_1"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-3.8199397987479801e+02" Y="2.2104966945025708e+03" Z="9.5000000000000000e+00" Direction="3.9862714512720001e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <PlayerActions Player="Ego">
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="3.0000000000000000e+00" X="1.0865335693359380e+03" Y="1.4443858642578130e+03" NetDist="false" CounterVal="0" Pivot="Ego"/>
+                <Autonomous Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="1.8509166259765630e+03" Y="7.3116857910156295e+02" NetDist="false" CounterVal="0" Pivot="Ego"/>
+                <Autonomous Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+        </PlayerActions>
+        <PlayerActions Player="Activator"/>
+        <PlayerActions Player="Follower_1"/>
+    </TrafficControl>
+    <MovingObjectsControl/>
+    <LightSigns/>
+    <Selections/>
+</Scenario>

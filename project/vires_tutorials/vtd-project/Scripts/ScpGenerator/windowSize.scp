@@ -1,0 +1,17 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   configures the IG window in different sizes
+#
+#
+    0 "<ImageGenerator> <Window width="800" height="600" x="20" y="40" border="false" visual="33" screen="0"/> </ImageGenerator>"
+   +1 "<SimCtrl> <Stop/> <LoadScenario filename="../../../Projects/Current/Scenarios/traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+  +1s "<EgoCtrl> <Speed value="22.0"/> </EgoCtrl>"
+   +1 "<Symbol name="scrSym" > <Text data="Window 800x600@20,40 - no border" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+ +30s "<ImageGenerator> <Window width="768" height="576" x="0" y="0" border="true" visual="36" screen="0"/> </ImageGenerator>"
+   +1 "<SimCtrl> <Stop/> <LoadScenario filename="../../../Projects/Current/Scenarios/traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+  +1s "<EgoCtrl> <Speed value="22.0"/> </EgoCtrl>"
+   +1 "<Symbol name="scrSym" > <Text data="Window 768x576@0,0 - border" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+ +20s "<Symbol name="scrSym" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+   +1 "<SimCtrl> <Stop/> </SimCtrl>"

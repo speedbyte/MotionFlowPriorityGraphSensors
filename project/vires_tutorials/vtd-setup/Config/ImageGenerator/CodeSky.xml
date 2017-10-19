@@ -1,0 +1,47 @@
+<IGconfig>
+  <Components>
+    <Sky lightID="0" name="MySky" events="DEFAULTS KEYBMOUSE" distanceToCamera="1000.0">
+      <SkyCubeSets followInZ="1">
+        <Mode name="Clear">
+          <Entry  texturePrefix="Clear/BlueSky" textureResolutionPostfix="2k"/>
+          <Entry  texturePrefix="Clear/BSMorningEvening" textureResolutionPostfix="1k" />
+          <Entry  texturePrefix="Clear/BSNight" textureResolutionPostfix="1k"/>
+        </Mode>
+        <Mode name="Scattered">
+          <Entry  texturePrefix="Scattered/CloudySky" textureResolutionPostfix="1k"/>
+        </Mode>
+        <Mode name="Broken">
+          <Entry  texturePrefix="Broken/BrokenSky" textureResolutionPostfix="1k"/>
+        </Mode>
+        <Mode name="Overcast">
+          <Entry  texturePrefix="Overcast/OvercastSky" textureResolutionPostfix="1k" />
+        </Mode>
+        <Mode name="ScatteredPlane">
+          <Entry  texturePrefix="Scattered/BavarianSky" textureResolutionPostfix="1k" />
+        </Mode>
+      </SkyCubeSets>
+      <SunModel sunModelDistance="400" size="8" textureFile="sun.png" enableSunGlare="1" glareIntensityFactor="0.6" glareSizeFactor="0.5" />
+      <TimeOfDayTables>
+        <Off>
+          <Entry isSunVisible="0" skyColor="0.0 0.0 0.0" elev="-1.000" sunLightAmbient="0.00 0.00 0.00" sunColor="0.00 0.00 0.00" sunLightDiffuse="0.00 0.00 0.00" sunLightSpecular="0.00 0.00 0.00" fogColor="0.00 0.00 0.00" hazeColor="0.7 0.8 0.9" />
+        </Off>
+        <Clear>
+          <Entry isSunVisible="0" skyColor="0.0 0.0 0.0" elev="-1.000" sunLightAmbient="0.00 0.00 0.00" sunColor="0.00 0.00 0.00" sunLightDiffuse="0.00 0.00 0.00" sunLightSpecular="0.00 0.00 0.00" fogColor="0.00 0.00 0.00" hazeColor="0.7 0.8 0.9" />
+        </Clear>
+        <Scattered>
+          <Entry isSunVisible="0" skyColor="0.0 0.0 0.0" elev="-1.000" sunLightAmbient="0.00 0.00 0.00" sunColor="0.00 0.00 0.00" sunLightDiffuse="0.00 0.00 0.00" sunLightSpecular="0.00 0.00 0.00" fogColor="0.00 0.00 0.00" hazeColor="0.7 0.8 0.9" />
+        </Scattered>
+        <Broken>
+          <Entry isSunVisible="0" skyColor="0.0 0.0 0.0" elev="-1.000" sunLightAmbient="0.00 0.00 0.00" sunColor="0.00 0.00 0.00" sunLightDiffuse="0.00 0.00 0.00" sunLightSpecular="0.00 0.00 0.00" fogColor="0.00 0.00 0.00" hazeColor="0.7 0.8 0.9" />
+        </Broken>
+        <Overcast>
+          <Entry isSunVisible="0" skyColor="0.0 0.0 0.0" elev="-1.000" sunLightAmbient="0.00 0.00 0.00" sunColor="0.00 0.00 0.00" sunLightDiffuse="0.00 0.00 0.00" sunLightSpecular="0.00 0.00 0.00" fogColor="0.00 0.00 0.00" hazeColor="0.7 0.8 0.9" />
+        </Overcast>
+        <ScatteredPlane>
+          <Entry isSunVisible="0" skyColor="0.0 0.0 0.0" elev="-1.000" sunLightAmbient="0.00 0.00 0.00" sunColor="0.00 0.00 0.00" sunLightDiffuse="0.00 0.00 0.00" sunLightSpecular="0.00 0.00 0.00" fogColor="0.00 0.00 0.00" hazeColor="0.7 0.8 0.9" />
+        </ScatteredPlane>
+      </TimeOfDayTables>
+      <Fog mode="OFF" density="0.01" end="100" start="5" />
+    </Sky>
+  </Components>
+</IGconfig>

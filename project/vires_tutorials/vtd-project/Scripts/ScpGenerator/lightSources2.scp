@@ -1,0 +1,51 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   activates two light sources attached to "Ego" vehicle and
+#   switches them in alternating fashion
+#
+#
+   0  "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+ +1s  "<EgoCtrl> <Speed value="12.0"/> </EgoCtrl>"
+  +1  "<Environment> <TimeOfDay value="5000.0"/> </Environment>"
+  +1  "<LightSource name="myLight2"> <Config template="0" state="1" autoMode="false"/> \
+       <PosRelative player="Ego" dx="3.5" dy="0.0" dz="0.5"/> <ViewRelative dhDeg="0.0" dpDeg="3.0" drDeg="0.0" /> </LightSource>"
+  +1  "<LightSource name="myLight3"> <Config template="1" state="1" autoMode="false"/> \
+       <PosRelative player="Ego" dx="3.5" dy="-1.0" dz="0.5"/> <ViewRelative dhDeg="-20.0" dpDeg="3.0" drDeg="0.0" /> </LightSource>"
+  +1  "<Symbol name="expl02" > <Text data="Lights defined" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+#
+  +2s "<Symbol name="expl02" > <Text data="Light 2 ON" colorRGB="0xff0000" size="50.0" /> <PosScreen x="0.01" y="0.1" /></Symbol>"
+ +10  "<LightSource name="myLight2"> <On/> </LightSource>"
+#
+  +2s "<Symbol name="expl03" > <Text data="Light 3 ON" colorRGB="0x00ff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+  +1  "<LightSource name="myLight3"> <On/> </LightSource>"
+#
++100  "<LightSource name="myLight2"> <Off/> </LightSource>"
+  +1  "<Symbol name="expl02" > <Text data="Light 2 OFF" colorRGB="0xff0000" size="50.0" /> <PosScreen x="0.01" y="0.1" /></Symbol>"
+#
++100  "<LightSource name="myLight3"> <Off/> </LightSource>"
+  +1  "<Symbol name="expl03" > <Text data="Light 3 OFF" colorRGB="0x00ff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+#
++100  "<LightSource name="myLight2"> <On/>  </LightSource>"
+  +1  "<Symbol name="expl02" > <Text data="Light 2 ON" colorRGB="0xff0000" size="50.0" /> <PosScreen x="0.01" y="0.1" /></Symbol>"
+#
++100  "<LightSource name="myLight3"> <On/>  </LightSource>"
+  +1  "<Symbol name="expl03" > <Text data="Light 3 ON" colorRGB="0x00ff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+#
++100  "<LightSource name="myLight2"> <Off/> </LightSource>"
+  +1  "<Symbol name="expl02" > <Text data="Light 2 OFF" colorRGB="0xff0000" size="50.0" /> <PosScreen x="0.01" y="0.1" /></Symbol>"
+#
++100  "<LightSource name="myLight3"> <Off/> </LightSource>"
+  +1  "<Symbol name="expl03" > <Text data="Light 3 OFF" colorRGB="0x00ff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+#
++100  "<LightSource name="myLight2"> <On/>  </LightSource>"
+  +1  "<Symbol name="expl02" > <Text data="Light 2 ON" colorRGB="0xff0000" size="50.0" /> <PosScreen x="0.01" y="0.1" /></Symbol>"
+#
++600  "<Environment> <TimeOfDay value="50000.0"/> </Environment>"
++100  "<LightSource name="myLight2"> <Off/> </LightSource>"
+  +1  "<Symbol name="expl02" > <Text data="Light 2 OFF" colorRGB="0xff0000" size="50.0" /> <PosScreen x="0.01" y="0.1" /></Symbol>"
+  +2s "<Symbol name="expl01" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+  +1  "<Symbol name="expl02" > <Stop/></Symbol>"
+  +1  "<Symbol name="expl03" > <Stop/></Symbol>"
+ +60 "<SimCtrl> <Stop/> </SimCtrl>"

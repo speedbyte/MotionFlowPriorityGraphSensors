@@ -27,12 +27,10 @@ RDBTransceiverTCP::RDBTransceiverTCP(std::string host, std::string port) : RDBTr
 
 RDBTransceiverTCP::~RDBTransceiverTCP() { stream_.close(); }
 
-/* local edit starts */
 void RDBTransceiverTCP::reconnect(std::string host, std::string port) {
   stream_.close();
   stream_.connect(host, port);
 }
-/* local edit ends */
 
 RDB_MSG_t* RDBTransceiverTCP::getMessage() {
   RDB_MSG_t* msg =

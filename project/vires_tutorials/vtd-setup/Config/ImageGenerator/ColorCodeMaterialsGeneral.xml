@@ -1,0 +1,57 @@
+<MaterialDefinition>
+    <Materials>
+        <Material name="Black_HCS" copy="Default_HCS">
+            <GeneralParams ambient="0 0 0 1" diffuse="0 0 0 1" specular="0 0 0 1" emissive="0 0 0 1" shininess="0" />
+        </Material>
+        <Material name="Red_HCS" copy="Default_HCS">
+            <GeneralParams ambient="1 0 0 1" diffuse="1 0 0 1" specular="1 0 0 1" emissive="1 0 0 1" shininess="0" />
+        </Material>
+        <Material name="Green_HCS" copy="Default_HCS">
+            <GeneralParams ambient="0 1 0 1" diffuse="0 1 0 1" specular="0 1 0 1" emissive="0 1 0 1" shininess="0" />
+        </Material>
+        <Material name="Blue_HCS" copy="Default_HCS">
+            <GeneralParams ambient="0 0 1 1" diffuse="0 0 1 1" specular="0 0 1 1" emissive="0 0 1 1" shininess="0" />
+        </Material>
+    </Materials>
+    <MaterialAssignments>
+        <MaterialAssignment target="*.rgb" description="HighContrastSky" material="Black_HCS" />
+        <MaterialAssignment target="*.rgba" description="HighContrastSky" material="Black_HCS" />
+        <MaterialAssignment target="DIGUY*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxSn*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxSign*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxCollectPlakate*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxCollectAutobahn*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxDCollectOrt*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxRoadSnCollect*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxCollect08*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxAutobahnCol*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxCollectText*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxCollectInfo*" description="HighContrastSky" material="Red_HCS" />
+        <MaterialAssignment target="TxSrfGrdAsphalt*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxTSTSrfRoad*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxSrfStreetRestrict01*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxSrfStreetRestrict02*" description="HighContrastSky" material="Green_HCS" />
+        <MaterialAssignment target="TxTileParkCobble*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxPiazzaCobble*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxSrfCobble*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxRoadDamage*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxRdMiscRoadDamage*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxKoSrfChuckHole*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxSrfStreetSidewalk*" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxRoadMarkMaster*" description="HighContrastSky" material="Green_HCS" />
+        <MaterialAssignment target="TxTSTSrfStreetUrban01Cross.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxSrfStreet02DarkMedium.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxKoSrfSidewalk01NoDir.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="ALT013-05-D.4repeat.wet.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxAsphalt1.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxSrfStreet02Dark.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxSrfStreet01DarkNoDir.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxStreetGrssRailingLeftDark.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxKoSrfStreetUrban01Dark.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxBrakeTrace01.rgba" description="HighContrastSky" material="BrakeTrace_HCS" />
+        <MaterialAssignment target="TxBakeTrace02.rgba" description="HighContrastSky" material="BrakeTrace_HCS" />
+        <MaterialAssignment target="TxKoSrfStreetUrban01NoDir.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxKoSrfStreetUrban01.rgb" description="HighContrastSky" material="Blue_HCS" />
+        <MaterialAssignment target="TxPavConcrete01.rgb" description="HighContrastSky" material="Blue_HCS" />
+    </MaterialAssignments>
+</MaterialDefinition>

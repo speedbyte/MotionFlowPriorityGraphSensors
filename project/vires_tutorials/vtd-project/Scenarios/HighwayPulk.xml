@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="0" RevMinor="10">
+    <Layout Database="Legacy/Project/Databases/SmartDB/SmartDB2008.opt.ive" File="Legacy/Project/Databases/SmartDB/SmartDB.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile=""/>
+    <TrafficElements>
+        <LaneChangeDef Name="slow" Time="8.000000000000"/>
+        <LaneChangeDef Name="standard" Time="6.000000000000"/>
+        <LaneChangeDef Name="fast" Time="4.000000000000"/>
+        <CounterDef Name="Counter"/>
+    </TrafficElements>
+    <PulkTraffic>
+        <PulkDef VisibleInArea="-1" CenterOffset="60.000000000000" Trucks="0.200000000000" AreaR="0.150000000000" SemiMinorAxis="300.000000000000" AreaB="0.300000000000" OwnSide="0.600000000000" FillAtStart="false" AreaF="0.400000000000" Buses="0.000000000000" Count="20" Cars="0.800000000000" Bikes="0.000000000000" AreaL="0.150000000000" CentralPlayer="Ego" SemiMajorAxis="300.000000000000" Vans="0.000000000000"/>
+    </PulkTraffic>
+    <TrafficControl>
+        <Path Name="Path_External" PathId="1">
+            <Waypoint PathOption="classic" s="8.079917907727" TrackId="2431"/>
+            <Waypoint PathOption="classic" s="885.960558750183" TrackId="2392"/>
+        </Path>
+        <Player>
+            <Description Driver="DefaultDriver" Control="external" Type="Audi_A6_2010_blue" Name="Ego"/>
+            <Init>
+                <Speed Value="0.000000000000"/>
+                <PosRoute/>
+                <EditorPos X="923.174999999712" Y="-33.079917907718" Direction="4.712388980380"/>
+                <PathRef StartS="50.000000000000" EndAction="continue" EditorTargetX="2369.031385854947" EditorTargetY="1014.895498336451" TargetS="4063.639139802567" StartLane="-1" PathId="1"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" Type="Audi_A8L_2008_green" Name="Player 02"/>
+            <Init>
+                <Speed Value="0.000000000000"/>
+                <PosAbsolute X="1546.884332799456" Y="-485.703741551163" Direction="3.109124192528" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" Type="Audi_Q5_2008_black" Name="Player 01"/>
+            <Init>
+                <Speed Value="0.000000000000"/>
+                <PosAbsolute X="1053.996058613473" Y="-380.492510408678" Direction="2.004156152543" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" Type="Audi_S5_2009_deepblue" Name="Player 03"/>
+            <Init>
+                <Speed Value="0.000000000000"/>
+                <PosAbsolute X="1018.840054555754" Y="-315.750726962367" Direction="5.202939524752" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" Type="MB_S_2007_red" Name="Player 04"/>
+            <Init>
+                <Speed Value="0.000000000000"/>
+                <PosAbsolute X="1735.627227675121" Y="-491.257878242742" Direction="3.108758274194" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" Type="Nissan_Z350_2007_gold" Name="Player 05"/>
+            <Init>
+                <Speed Value="0.000000000000"/>
+                <PosAbsolute X="2666.972703187902" Y="-214.381472965183" Direction="5.238887938410" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" Type="MB_Sprinter_2007_yellow" Name="Player 06"/>
+            <Init>
+                <Speed Value="0.000000000000"/>
+                <PosAbsolute X="2651.946623207921" Y="847.402419911364" Direction="5.109393860934" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" Type="Audi_A4_2009_silver" Name="Player 07"/>
+            <Init>
+                <Speed Value="0.000000000000"/>
+                <PosAbsolute X="2582.080503532234" Y="267.064872803258" Direction="0.227900542916" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <PlayerActions Player="Ego">
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.000000000000" X="923.174999999910" Y="-35.113044738773" CounterVal="0" Pivot="Ego"/>
+                <Autonomous Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.000000000000"/>
+            </Action>
+        </PlayerActions>
+        <PlayerActions Player="Player 02"/>
+        <PlayerActions Player="Player 01"/>
+        <PlayerActions Player="Player 03"/>
+        <PlayerActions Player="Player 04"/>
+        <PlayerActions Player="Player 05"/>
+        <PlayerActions Player="Player 06"/>
+        <PlayerActions Player="Player 07"/>
+    </TrafficControl>
+    <MovingObjectsControl/>
+    <LightSigns>
+        <SignalController Id="100" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="101" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="102" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="103" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="200" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="201" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="202" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="203" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="300" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="301" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="302" DelayRef="-1" Delay="0.000000000000"/>
+        <SignalController Id="303" DelayRef="-1" Delay="0.000000000000"/>
+        <Signal Id="110"/>
+        <Signal Id="111"/>
+        <Signal Id="112"/>
+        <Signal Id="113"/>
+        <Signal Id="120"/>
+        <Signal Id="121"/>
+        <Signal Id="122"/>
+        <Signal Id="123"/>
+        <Signal Id="130"/>
+        <Signal Id="131"/>
+        <Signal Id="132"/>
+        <Signal Id="133"/>
+        <Signal Id="140"/>
+        <Signal Id="141"/>
+        <Signal Id="142"/>
+        <Signal Id="143"/>
+        <Signal Id="210"/>
+        <Signal Id="211"/>
+        <Signal Id="212"/>
+        <Signal Id="213"/>
+        <Signal Id="220"/>
+        <Signal Id="221"/>
+        <Signal Id="222"/>
+        <Signal Id="223"/>
+        <Signal Id="230"/>
+        <Signal Id="231"/>
+        <Signal Id="232"/>
+        <Signal Id="233"/>
+        <Signal Id="240"/>
+        <Signal Id="241"/>
+        <Signal Id="242"/>
+        <Signal Id="243"/>
+        <Signal Id="310"/>
+        <Signal Id="311"/>
+        <Signal Id="312"/>
+        <Signal Id="313"/>
+        <Signal Id="320"/>
+        <Signal Id="321"/>
+        <Signal Id="322"/>
+        <Signal Id="323"/>
+        <Signal Id="330"/>
+        <Signal Id="331"/>
+        <Signal Id="332"/>
+        <Signal Id="333"/>
+        <Signal Id="340"/>
+        <Signal Id="341"/>
+        <Signal Id="342"/>
+        <Signal Id="343"/>
+    </LightSigns>
+</Scenario>

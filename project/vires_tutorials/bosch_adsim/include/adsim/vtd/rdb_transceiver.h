@@ -10,6 +10,7 @@
 
 #include <viRDBIcd.h>
 #include <vector>
+#include <cstddef> // size_t
 
 namespace adsim {
 namespace vtd {

@@ -1,0 +1,20 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   Creates five contact points (4x wheels, 1x chassis) for "Ego" player; 
+#   contact point data will be computed each frame and sent via RDB
+#
+#
+   0 "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+ +1s "<EgoCtrl player="Ego"> <Speed value="10.0"/> </EgoCtrl>"
+  +1 "<Symbol name="scrSym"> <Text data="Creating 4 contact points..." colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+  +1 "<ContactPoint id="0"> <PosPlayer player="Ego" dx="0.0" dy="0.0"/> </ContactPoint>"
+  +1 "<ContactPoint id="1"> <PosPlayer player="Ego" dx="2.0" dy="0.5"/> </ContactPoint>"
+  +1 "<ContactPoint id="2"> <PosPlayer player="Ego" dx="2.0" dy="-0.5"/> </ContactPoint>"
+  +1 "<ContactPoint id="3"> <PosPlayer player="Ego" dx="0.0" dy="-0.5"/> </ContactPoint>"
+  +1 "<ContactPoint id="4"> <PosPlayer player="Ego" dx="0.0" dy="0.5"/> </ContactPoint>"
+  +1 "<Symbol name="scrSym" > <Text data="Creating 4 contact points...done" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+1200 "<EgoCtrl> <Speed value="0.0"/> </EgoCtrl>"
+  +1 "<Symbol name="scrSym"> <Text data="End of Test" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +60 "<SimCtrl> <Stop/> </SimCtrl>"

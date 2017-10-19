@@ -69,3 +69,9 @@
 [submodule "external/pcl_manipulation"]
 	path = external/pcl_manipulation
 	url = https://github.com/Benzarti-Ilyess/pcl_manipulation.git
+[submodule "external/VTDSource"]
+	path = external/VTDSource
+	url = git@atreus.informatik.uni-tuebingen.de:testcase-generation/VTDSource.git
+[submodule "VIRES"]
+	path = VIRES
+	url = git@atreus.informatik.uni-tuebingen.de:Veikas/VIRES.git

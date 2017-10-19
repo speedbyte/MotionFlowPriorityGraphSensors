@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="2" RevMinor="0">
+    <Layout Database="Projects/Current/Databases/Town/Ive/townGer.opt.osgb" File="Projects/Current/Databases/Town/Odr/town.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile="Distros/Current/Config/Players/Objects"/>
+    <DynObjects Path="Distros/Current/Config/DynObjects/Logic"/>
+    <TrafficElements>
+        <LaneChangeDef Name="Slow" Time="1.2000000000000000e+01"/>
+        <LaneChangeDef Name="Standard" Time="8.0000000000000000e+00"/>
+        <LaneChangeDef Name="Fast" Time="4.0000000000000000e+00"/>
+    </TrafficElements>
+    <PulkTraffic/>
+    <TrafficControl>
+        <Player>
+            <Description Driver="DefaultDriver" Control="external" AdaptDriverToVehicleType="false" Type="Audi_A4_2009_blue" Name="Ego"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0861043701171880e+03" Y="1.4464577026367190e+03" Z="9.5000000000000000e+00" Direction="1.5553294861319999e+00" AlignToRoad="false"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A8L_2008_red" Name="FastCar"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0867685546875000e+03" Y="1.4751119384765630e+03" Z="9.5000000000000000e+00" Direction="1.6030718418359999e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="false" Type="Audi_A3_2009_white" Name="New Player 01"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="1.0837911376953120e+03" Y="1.4872012939453120e+03" Z="9.5000000000000000e+00" Direction="4.7123889803800001e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <PlayerActions Player="Ego"/>
+        <PlayerActions Player="FastCar">
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="1.8659302978515630e+03" Y="7.0447113037109398e+02" NetDist="false" CounterVal="0" Pivot="FastCar"/>
+                <SpeedChange Rate="4.0000000000000000e+00" Target="0.0000000000000000e+00" Force="false" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="1.0867685546875000e+03" Y="1.4751119384765630e+03" NetDist="false" CounterVal="0" Pivot="FastCar"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"><![CDATA[<Player name="FastCar" > <Visibility graphics="false" /> </Player>]]></SCP>
+            </Action>
+        </PlayerActions>
+        <PlayerActions Player="New Player 01">
+            <Action Name="">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="1.0837911376953120e+03" Y="1.4872012939453120e+03" NetDist="false" CounterVal="0" Pivot="New Player 01"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"><![CDATA[<Player name="New Player 01" > <Visibility sensors="false" traffic="true" graphics="false" /> </Player>]]></SCP>
+            </Action>
+        </PlayerActions>
+    </TrafficControl>
+    <MovingObjectsControl/>
+    <LightSigns/>
+    <Selections/>
+</Scenario>

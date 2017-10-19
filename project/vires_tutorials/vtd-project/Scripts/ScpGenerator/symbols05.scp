@@ -1,0 +1,24 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   tests just another combination of line and text symbols
+#
+#
+   0 "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+  10 "<EgoCtrl> <Speed value="22.0"/> </EgoCtrl>"
+  20 "<Symbol name="newSymbol" > <Overlay id="0" state="2"/> <PosInertial x="1795.0" y="795.0" z="5.0"/> <RectSize width="6.0" height="4.0"/> </Symbol>"
+  21 "<Symbol name="niceSymbol" frequency="2.0" onOffRatio="1.0" duration="10.0" synchronize="false"> <Overlay id="0" state="2"/> <PosPlayer player="Ego" dx="20.0" dy="0.0" dz="1.0"/> <RectSize width="3.0" height="2.0"/> </Symbol>"
+  +1 "<Symbol name="scrSymbol2" > <Overlay id="5" state="2"/> </Symbol>"
+  +1 "<Symbol name="longSym" > <Text data="That's a terribly long text with more than 32 characters" colorRGB="0x00ffff" size="20.0" /> <PosScreen x="0.1" y="0.25" /></Symbol>"
+
+  +1 "<Symbol name="lineSymbol2" > <Orientation type="relative"/><PosPlayer player="FastCar" dx="-0.8" dy="-0.7" dz="0.9"/> <Line width="2.0" fromX="0.0" fromY="0.0" fromZ="0.0" toX="0.0" toY="0.0" toZ="1.0" colorRGB="0x00FF00"/> </Symbol>"
+  +1 "<Symbol name="lineSymbol2" > <Line width="2.0" fromX="0.0" fromY="0.1" fromZ="0.2" toX="0.0" toY="0.0" toZ="0.0" /> </Symbol>"
+  +1 "<Symbol name="lineSymbol2" > <Line width="2.0" fromX="0.0" fromY="-0.1" fromZ="0.2" toX="0.0" toY="0.0" toZ="0.0" /> </Symbol>"
+
+  +1 "<Symbol name="lineSymbol3" > <Orientation type="relative"/><PosPlayer player="FastCar" dx="-0.8" dy="0.7" dz="0.9"/> <Line  width="2.0" fromX="0.0" fromY="0.0" fromZ="0.0" toX="0.0" toY="0.0" toZ="1.0" colorRGB="0xFF0000"/> </Symbol>"
+  +1 "<Symbol name="lineSymbol3" > <Line width="2.0" fromX="0.0" fromY="0.1" fromZ="0.2" toX="0.0" toY="0.0" toZ="0.0" /> </Symbol>"
+  +1 "<Symbol name="lineSymbol3" > <Line width="2.0" fromX="0.0" fromY="-0.1" fromZ="0.2" toX="0.0" toY="0.0" toZ="0.0" /> </Symbol>"
+ +1s "<Symbol name="scrSymbol2" > <Stop/> </Symbol>"
+ +2s "<Symbol name="expl01" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+ +60 "<SimCtrl> <Stop/> </SimCtrl>"

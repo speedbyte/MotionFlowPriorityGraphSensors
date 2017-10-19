@@ -1,0 +1,15 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   resets the traffic via SCP
+#
+#
+   0  "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+ +1s  "<EgoCtrl> <Speed value="22.0"/> </EgoCtrl>"
+  +1  "<Camera name="demoCam"> <PosTether player="Ego" distance="15.0" azimuth="-0.1" elevation="0.2"/> <ViewPlayer player="FastCar"/> <Set/></Camera>"
+  +1  "<Symbol name="expl01" > <Text data="Looking at player FastCar" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.0" y="0.05" /> </Symbol>"
+  +3s "<Symbol name="expl01" > <Text data="RESET - Looking at player FastCar" colorRGB="0xffff00" size="40.0" /></Symbol>"
+  +1  "<Traffic> <Reset/> </Traffic>"
+  +2s "<Symbol name="expl01" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+  +60 "<SimCtrl> <Stop/> </SimCtrl>"

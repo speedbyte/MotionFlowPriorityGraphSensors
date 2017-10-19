@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Scenario>
+<Scenario RevMajor="1" RevMinor="8">
+    <Layout Database="Projects/Current/Databases/Parking/ParkingPerp.opt.ive" File="Projects/Current/Databases/Parking/ParkingPerp.xodr"/>
+    <VehicleList ConfigFile="Distros/Current/Config/Players/Vehicles"/>
+    <DriverList ConfigFile="Distros/Current/Config/Players/driverCfg.xml"/>
+    <CharacterList ConfigFile="Distros/Current/Config/Players/characterCfg.xml"/>
+    <ObjectList ConfigFile="Distros/Current/Config/Players/Objects"/>
+    <TrafficElements>
+        <CounterDef Name="Next"/>
+    </TrafficElements>
+    <PulkTraffic/>
+    <TrafficControl>
+        <Player>
+            <Description Driver="No Driver" Control="internal" AdaptDriverToVehicleType="true" Type="Audi_A3_2009_black" Name="New Player 01"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-8.4362524414062500e+02" Y="2.0073055419921875e+03" Z="0.0000000000000000e+00" Direction="4.6959956259785978e+00" AlignToRoad="false"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="No Driver" Control="internal" AdaptDriverToVehicleType="true" Type="VW_Touareg_2010_night blue metallic" Name="New Player 02"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-8.3872045898437500e+02" Y="2.0045225830078125e+03" Z="0.0000000000000000e+00" Direction="1.6027772962192766e+00" AlignToRoad="false"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="No Driver" Control="internal" AdaptDriverToVehicleType="true" Type="VW_Tiguan_2012_white" Name="New Player 03"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-8.4872961425781250e+02" Y="2.0072746582031250e+03" Z="0.0000000000000000e+00" Direction="4.7124012309257042e+00" AlignToRoad="false"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="external" AdaptDriverToVehicleType="true" Type="Audi_A3_2009_black" Name="Ego"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosAbsolute X="-8.1149648412749070e+02" Y="2.0018595216312706e+03" Z="0.0000000000000000e+00" Direction="3.1417271432248421e+00" AlignToRoad="true"/>
+            </Init>
+        </Player>
+        <Player>
+            <Description Driver="DefaultDriver" Control="internal" AdaptDriverToVehicleType="true" Type="Audi_A3_2009_black" Name="I"/>
+            <Init>
+                <Speed Value="0.0000000000000000e+00"/>
+                <PosPathShape/>
+                <PathShapeRef StartS="1.0000000000000000e-02" EndAction="stop" TargetS="3.4599591030424996e+01" PathShapeId="4"/>
+            </Init>
+        </Player>
+        <PlayerActions Player="New Player 01"/>
+        <PlayerActions Player="New Player 02"/>
+        <PlayerActions Player="New Player 03"/>
+        <PlayerActions Player="Ego">
+            <Action Name="Auto">
+                <PosRelative CounterID="" CounterComp="COMP_EQ" NetDist="false" Distance="2.0000000000000000e+00" CounterVal="0" Pivot="Ego"/>
+                <EditorPos Radius="2.0000000000000000e+00" X="-8.1149648412749070e+02" Y="2.0018595216312706e+03"/>
+                <Autonomous Force="true" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+            </Action>
+            <Action Name="ParkForward">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="5.0000000000000000e+00" X="-8.3062725830078125e+02" Y="2.0016536865234375e+03" NetDist="false" CounterVal="0" Pivot="Ego"/>
+                <SpeedChange Rate="2.5000000000000000e+00" Target="8.3333333333333326e-01" Force="true" ExecutionTimes="-1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"/>
+                <SCP ExecutionTimes="-1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionNominalTrajectory command="add" radius="15" endAction="stop" name="ParkForward" actor="Ego" force="true"/>
+</Traffic>
+]]></SCP>
+            </Action>
+            <Action Name="ReverseOut">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="2.0000000000000000e+00" X="-8.4108944067045945e+02" Y="2.0067263429203331e+03" NetDist="false" CounterVal="0" Pivot="Ego"/>
+                <SpeedChange Rate="4.0000000000000000e+00" Target="-1.1111111111111112e+00" Force="true" ExecutionTimes="-1" ActiveOnEnter="true" DelayTime="2.0000000000000000e+00"/>
+                <Counter CounterID="Next" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00" Value="1" Op="SET"/>
+                <SCP ExecutionTimes="-1" ActiveOnEnter="true" DelayTime="2.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionNominalTrajectory command="add" radius="15" endAction="stop" name="ReverseOut" actor="Ego" force="true" waypointSequence="ascending"/>
+</Traffic>
+]]></SCP>
+            </Action>
+            <Action Name="ToNext">
+                <PosAbsolute CounterID="Next" CounterComp="COMP_EQ" Radius="3.0000000000000000e+00" X="-8.3643062719389695e+02" Y="2.0010698487797081e+03" NetDist="false" CounterVal="1" Pivot="Ego"/>
+                <Autonomous Force="true" ExecutionTimes="-1" ActiveOnEnter="true" DelayTime="1.0000000000000000e+00"/>
+                <SCP ExecutionTimes="-1" ActiveOnEnter="true" DelayTime="1.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionNominalTrajectory command="add" radius="15" endAction="stop" name="ToNext" actor="Ego" force="true" waypointSequence="ascending"/>
+</Traffic>]]></SCP>
+            </Action>
+            <Action Name="ParkReverse">
+                <PosAbsolute CounterID="" CounterComp="COMP_EQ" Radius="2.0000000000000000e+00" X="-8.5422625732421875e+02" Y="2.0008481445312500e+03" NetDist="false" CounterVal="0" Pivot="Ego"/>
+                <SpeedChange Rate="4.0000000000000000e+00" Target="-1.1111111111111112e+00" Force="true" ExecutionTimes="1" ActiveOnEnter="true" DelayTime="2.0000000000000000e+00"/>
+                <SCP ExecutionTimes="1" ActiveOnEnter="true" DelayTime="0.0000000000000000e+00"><![CDATA[<Traffic>
+  <ActionNominalTrajectory command="add" radius="15" endAction="stop" name="ParkReverse" actor="Ego" force="true" waypointSequence="ascending"/>
+</Traffic>
+]]></SCP>
+            </Action>
+        </PlayerActions>
+        <PlayerActions Player="I"/>
+    </TrafficControl>
+    <MovingObjectsControl>
+        <PathShape ShapeId="1" ShapeType="polyline" Closed="false" Name="ParkForward">
+            <Waypoint X="-8.3049102783203125e+02" Y="2.0015262451171875e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="3.5420785138840039e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.3740063476562500e+02" Y="1.9986009521484375e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="2.5827835338738026e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.3967535400390625e+02" Y="2.0000233154296875e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="1.4932167266846639e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.3923022460937500e+02" Y="2.0057495117187500e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="1.4932167266846639e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+        </PathShape>
+        <PathShape ShapeId="2" ShapeType="polyline" Closed="false" Name="ReverseOut">
+            <Waypoint X="-8.4126037597656250e+02" Y="2.0060073242187500e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="5.2352383871067092e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.3976898193359375e+02" Y="2.0034196777343750e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="5.8016848821385887e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.3727954101562500e+02" Y="2.0021188964843750e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="5.8016848821385887e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+        </PathShape>
+        <PathShape ShapeId="3" ShapeType="polyline" Closed="false" Name="ToNext">
+            <Waypoint X="-8.3794183349609375e+02" Y="2.0019133300781250e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="3.2076777460711772e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.5573736572265625e+02" Y="2.0007355957031250e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="3.2076777460711772e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+        </PathShape>
+        <PathShape ShapeId="4" ShapeType="polyline" Closed="false" Name="Test">
+            <Waypoint X="-7.3543432617187500e+02" Y="1.9981337890625000e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="3.1460768651812021e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-7.7003356933593750e+02" Y="1.9979786376953125e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="3.1460768651812021e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+        </PathShape>
+        <PathShape ShapeId="5" ShapeType="polyline" Closed="false" Name="ParkReverse">
+            <Waypoint X="-8.5569976806640625e+02" Y="2.0007053222656250e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="6.2803830880180298e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.5090795898437500e+02" Y="2.0006918945312500e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="7.3542491637542895e-01" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.4778717041015625e+02" Y="2.0035153808593750e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="1.3156196423732931e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+            <Waypoint X="-8.4653771972656250e+02" Y="2.0083050537109375e+03" Options="0x00000000" Z="0.0000000000000000e+00" Weight="1.0000000000000000e+00" Yaw="1.3156196423732931e+00" Pitch="0.0000000000000000e+00" Roll="0.0000000000000000e+00"/>
+        </PathShape>
+    </MovingObjectsControl>
+    <LightSigns>
+        <SignalController Id="1" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="2" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="3" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="4" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="6" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="7" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="8" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <SignalController Id="9" DelayRef="-1" Delay="0.0000000000000000e+00"/>
+        <Signal Id="565"/>
+        <Signal Id="566"/>
+        <Signal Id="567"/>
+        <Signal Id="568"/>
+        <Signal Id="570"/>
+        <Signal Id="571"/>
+        <Signal Id="574"/>
+        <Signal Id="575"/>
+        <Signal Id="580"/>
+        <Signal Id="581"/>
+        <Signal Id="582"/>
+        <Signal Id="583"/>
+        <Signal Id="584"/>
+        <Signal Id="585"/>
+        <Signal Id="587"/>
+        <Signal Id="588"/>
+        <Signal Id="3597"/>
+        <Signal Id="3598"/>
+        <Signal Id="3610"/>
+        <Signal Id="3611"/>
+        <Signal Id="6630"/>
+        <Signal Id="6631"/>
+        <Signal Id="6644"/>
+        <Signal Id="6645"/>
+        <Signal Id="9664"/>
+        <Signal Id="9665"/>
+        <Signal Id="9672"/>
+        <Signal Id="9673"/>
+    </LightSigns>
+    <Selections/>
+</Scenario>

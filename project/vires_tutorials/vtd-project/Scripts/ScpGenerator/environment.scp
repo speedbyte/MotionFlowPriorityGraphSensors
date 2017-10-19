@@ -1,0 +1,28 @@
+# 16.06.2014 by M. Dupuis
+# (c) 2014 by VIRES Simulationstechnologie GmbH
+#
+# PURPOSE:
+#   modifies the environment settings
+#
+#
+   0 "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Start mode="preparation"/> </SimCtrl>"
+ +1s "<EgoCtrl> <Speed value="5.0"/> </EgoCtrl>"
+ +10 "<Environment> <TimeOfDay value="50000.0"/> </Environment>"
+ +2s "<Environment> <Sky visibility="50.0"/> </Environment>"
+  +1 "<Symbol name="scrSym" > <Text data="Visibility 50m" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +1s "<Environment> <Sky visibility="300.0"/> </Environment>"
+  +1 "<Symbol name="scrSym" > <Text data="Visibility 300m" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +1s "<Environment> <Sky visibility="1000000.0"/> </Environment>"
+  +1 "<Symbol name="scrSym" > <Text data="Visibility clear" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +1s "<Environment> <Sky cloudState="off"/> </Environment>"
+  +1 "<Symbol name="scrSym" > <Text data="Sky OFF" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +1s "<Environment> <Sky cloudState="0/8"/> </Environment>"
+  +1 "<Symbol name="scrSym" > <Text data="Clouds 0/8" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +1s "<Environment> <Sky cloudState="4/8"/> </Environment>"
+  +1 "<Symbol name="scrSym" > <Text data="Clouds 4/8" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +1s "<Environment> <Sky cloudState="6/8"/> </Environment>"
+  +1 "<Symbol name="scrSym" > <Text data="Clouds 6/8" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +1s "<Environment> <Sky cloudState="8/8"/> </Environment>"
+  +1 "<Symbol name="scrSym" > <Text data="Clouds 8/8" colorRGB="0xffff00" size="40.0" /> <PosScreen x="0.1" y="0.1" /></Symbol>"
+ +1s "<Symbol name="expl01" > <Text data="End of Test" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"
+ +10 "<SimCtrl> <Stop/> </SimCtrl>"
