@@ -256,9 +256,14 @@ void handleMessage( RDB_MSG_t* msg )
     bool csvHeader = false;
     bool details = false;
     bool binDump = false;
+    static uint32_t prevFrame=65535;
     if ( !msg )
     {
         fprintf( stderr, "RDBHandler::printMessage: no message available\n" );
+        return;
+    }
+
+    if ( msg->hdr.frameNo == prevFrame ) {
         return;
     }
 
@@ -272,14 +277,12 @@ void handleMessage( RDB_MSG_t* msg )
     if ( !msg->hdr.dataSize )
         return;
 
+
+    prevFrame = msg->hdr.frameNo;
     RDB_MSG_ENTRY_HDR_t* entry = NULL;
     uint32_t remainingBytes = 0;
 
     if (NULL == msg) {
-        return;
-    }
-
-    if (0 == msg->hdr.dataSize) {
         return;
     }
 
@@ -309,10 +312,14 @@ void handleMessage( RDB_MSG_t* msg )
                         fprintf( stderr, "%23s,%23s,", "simTime", "simFrame" );
                     else if ( csv )
                         fprintf( stderr, "%+.16e,%23d,", msg->hdr.simTime, msg->hdr.frameNo );
+                    else {
+                        fprintf( stderr, "headers %d\n,", msg->entryHdr.pkgId );
+                    }
                     //process(reinterpret_cast<RDB_START_OF_FRAME_t*>(data));
                     break;
 
                 case RDB_PKG_ID_END_OF_FRAME:
+                    fprintf( stderr, "%d,", msg->entryHdr.pkgId );
                     //process(reinterpret_cast<RDB_END_OF_FRAME_t*>(data));
                     break;
 
@@ -415,7 +422,7 @@ void handleMessage( RDB_MSG_t* msg )
 
                         /// RDB image information of \see image_data_
                         RDB_IMAGE_t image_info_;
-                        memset(&image_info_, 0, sizeof(RDB_IMAGE_t));
+                        //memset(&image_info_, 0, sizeof(RDB_IMAGE_t));
                         memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
 
                         if (NULL == image_data_) {
@@ -426,20 +433,27 @@ void handleMessage( RDB_MSG_t* msg )
                         // jump data header
                         memcpy(image_data_, reinterpret_cast<char*>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
 
-                        png::image<png::rgba_pixel> save_image(image_info_.width, image_info_.height);
-                        unsigned int count = 0;
-                        for (int32_t v=0; v<image_info_.height; v++) {
-                            for (int32_t u=0; u<image_info_.width; u++) {
-                                png::rgba_pixel val;
-                                val.red   = (unsigned char)image_data_[count++];
-                                val.green = (unsigned char)image_data_[count++];
-                                val.blue  = (unsigned char)image_data_[count++];
-                                val.alpha = (unsigned char)image_data_[count++];
-                                save_image.set_pixel(u,v,val);
+                        if ( image_info_.imgSize == image_info_.width*image_info_.height*3){
+                            png::image<png::rgb_pixel> save_image(image_info_.width, image_info_.height);
+                            unsigned int count = 0;
+                            for (int32_t v=0; v<image_info_.height; v++) {
+                                for (int32_t u=0; u<image_info_.width; u++) {
+                                    png::rgb_pixel val;
+                                    val.red   = (unsigned char)image_data_[count++];
+                                    val.green = (unsigned char)image_data_[count++];
+                                    val.blue  = (unsigned char)image_data_[count++];
+                                    //val.alpha = (unsigned char)image_data_[count++];
+                                    save_image.set_pixel(u,v,val);
+                                }
                             }
+                            char file_name[20];
+                            sprintf(file_name, "/local/tmp/000%04d.png", msg->hdr.frameNo);
+                            save_image.write(file_name);
                         }
-                        std::string file_name = "/local/tmp/abcd.png";
-                        save_image.write(file_name);
+                        else {
+                            fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize /( image_info_
+                                                                                                             .width*image_info_.height));
+                        }
                         //process(reinterpret_cast<RDB_IMAGE_t*>(data));
                         break;
                     }
@@ -548,11 +562,12 @@ void handleMessage( RDB_MSG_t* msg )
         }
 
         Framework::RDBHandler::printMessageEntry( entry, details, csv, csvHeader );
-        /* Process end */
-
+        // jump type
         remainingBytes -= ( entry->headerSize + entry->dataSize );
         if ( remainingBytes )
             entry = ( RDB_MSG_ENTRY_HDR_t* ) ( ( ( ( char* ) entry ) + entry->headerSize + entry->dataSize ) );
+        /* Process end */
+
     }
     assert(remainingBytes == 0);
 

@@ -14,6 +14,7 @@
 #include <netdb.h>
 
 #include "main.h"
+#include "kbhit.h"
 
 extern unsigned int mShmPtr_writer;
 extern unsigned int mShmKey_writer;
@@ -318,15 +319,24 @@ int main(int argc, char* argv[])
             // do some other stuff before returning to network reading
             usleep( 500000 );
 
+            int val = kbhit();
+            if ( val == 97 ) {
+                sSendTrigger = true;
+            }
+            else if ( val == 'c') {
+                sSendTrigger = false;
+            }
+            else if ( val == 'i') {
+                sSendTrigger = false;
+                sendTrigger( sClient, 0.0, 0 );
+            }
             if ( sSendTrigger )
                 sendTrigger( sClient, 0.0, 0 );
-
         }
         ::close(sClient);
 
         return 0;
     }
-    std::cout << "start my program";
     std::string m_server;
     int m_port;
     int m_sensor_port;

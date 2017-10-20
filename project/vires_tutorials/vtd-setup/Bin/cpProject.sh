@@ -1,1 +1,0 @@
-../../Common/Scripts/cpProject.sh

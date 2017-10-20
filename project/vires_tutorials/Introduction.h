@@ -22,6 +22,13 @@ VTD Connector
 
 /**
 
+ IGBase.xml <ShmLayoutImage key="0x0811b" freeFlag="0x00000000" releaseFlag="0x00000002"/>
+ ------ shared memory identifiers ------
+ #define RDB_SHM_BUFFER_FLAG_NONE                    0x00000000      /**< no bits set, buffer may be overwritten
+ #define RDB_SHM_BUFFER_FLAG_LOCK                    0x00000001      /**< buffer is locked by producer
+ #define RDB_SHM_BUFFER_FLAG_TC                      0x00000002      /**< buffer is to be processed by TC
+ #define RDB_SHM_BUFFER_FLAG_IG                      0x00000004      /**< buffer is to be processed by IG
+
  Setups -> AutoCfgDatabase.xml  -> here is your scene in Projects/Current/Databases/*.ive file
                                 -> here is your occlusion in Projects/Current/Databases/*.occl file
                                 all of them are soft link to Distros/Databases

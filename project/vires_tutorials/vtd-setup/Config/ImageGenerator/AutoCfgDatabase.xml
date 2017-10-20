@@ -1,7 +1,0 @@
-<IGconfig>
-   <Database>
-     <Entity attachToScene="1" ID="Terrain" filename="Data/Projects/Current/Databases/Town/Ive/townGer.opt.osgb" />
-     <Entity attachToScene="0" ID="ShadowTerrain" filename="Data/Projects/Current/Databases/Town/Ive/townGer.shadow.osgb" />
-    <OcclusionFile file="Data/Projects/Current/Databases/Town/Ive/townGer.occl" />
-  </Database>
- </IGconfig>
