@@ -11,153 +11,151 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include <iostream>
 #include "RDBHandler.hh"
 
-namespace Framework
+namespace Framework 
 {
-
+    
 size_t
 RDBHandler::pkgId2size( unsigned int pkgId, bool extended )
 {
     switch( pkgId )
     {
-        case RDB_PKG_ID_START_OF_FRAME:
+        case RDB_PKG_ID_START_OF_FRAME: 
         case RDB_PKG_ID_END_OF_FRAME:
             return 0;
-
+            
         case RDB_PKG_ID_COORD_SYSTEM:
             return sizeof( RDB_COORD_SYSTEM_t );
-
+            
         case RDB_PKG_ID_COORD:
             return sizeof( RDB_COORD_t );
-
+            
         case RDB_PKG_ID_ROAD_POS:
             return sizeof( RDB_ROAD_POS_t );
-
+            
         case RDB_PKG_ID_LANE_INFO:
             return sizeof( RDB_LANE_INFO_t );
-
+            
         case RDB_PKG_ID_ROADMARK:
             return sizeof( RDB_ROADMARK_t );
-
+            
         case RDB_PKG_ID_OBJECT_CFG:
             return sizeof( RDB_OBJECT_CFG_t );
-
+            
         case RDB_PKG_ID_OBJECT_STATE:
             return ( extended ? sizeof( RDB_OBJECT_STATE_t ) : sizeof ( RDB_OBJECT_STATE_BASE_t ) );
-
+            
         case RDB_PKG_ID_VEHICLE_SYSTEMS:
             return sizeof( RDB_VEHICLE_SYSTEMS_t );
-
+            
         case RDB_PKG_ID_VEHICLE_SETUP:
             return sizeof( RDB_VEHICLE_SETUP_t );
-
+            
         case RDB_PKG_ID_ENGINE:
             return ( extended ? sizeof( RDB_ENGINE_t ) : sizeof( RDB_ENGINE_BASE_t ) );
-
+            
         case RDB_PKG_ID_DRIVETRAIN:
             return ( extended ? sizeof( RDB_DRIVETRAIN_t ) : sizeof( RDB_DRIVETRAIN_BASE_t ) );
-
+            
         case RDB_PKG_ID_WHEEL:
             return ( extended ? sizeof( RDB_WHEEL_t ) : sizeof( RDB_WHEEL_BASE_t ) );
-
+            
         case RDB_PKG_ID_PED_ANIMATION:
             return sizeof( RDB_PED_ANIMATION_t );
-
+            
         case RDB_PKG_ID_SENSOR_STATE:
             return sizeof( RDB_SENSOR_STATE_t );
-
+            
         case RDB_PKG_ID_SENSOR_OBJECT:
             return sizeof( RDB_SENSOR_OBJECT_t );
-
+            
         case RDB_PKG_ID_CAMERA:
             return sizeof( RDB_CAMERA_t );
-
+            
         case RDB_PKG_ID_CONTACT_POINT:
             return sizeof( RDB_CONTACT_POINT_t );
-
+            
         case RDB_PKG_ID_TRAFFIC_SIGN:
             return sizeof( RDB_TRAFFIC_SIGN_t );
-
+            
         case RDB_PKG_ID_ROAD_STATE:
             return sizeof( RDB_ROAD_STATE_t );
-
+            
         case RDB_PKG_ID_IMAGE:
         case RDB_PKG_ID_LIGHT_MAP:
         case RDB_PKG_ID_OCCLUSION_MATRIX:
             return sizeof( RDB_IMAGE_t );
-
+            
         case RDB_PKG_ID_LIGHT_SOURCE:
             return ( extended ? sizeof( RDB_LIGHT_SOURCE_t ) : sizeof( RDB_LIGHT_SOURCE_BASE_t ) );
-
+            
         case RDB_PKG_ID_ENVIRONMENT:
             return sizeof( RDB_ENVIRONMENT_t );
-
+            
         case RDB_PKG_ID_TRIGGER:
             return sizeof( RDB_TRIGGER_t );
-
+            
         case RDB_PKG_ID_DRIVER_CTRL:
             return sizeof( RDB_DRIVER_CTRL_t );
-
+            
         case RDB_PKG_ID_TRAFFIC_LIGHT:
             return ( extended ? sizeof( RDB_TRAFFIC_LIGHT_t ) : sizeof( RDB_TRAFFIC_LIGHT_BASE_t ) );
-
+            
         case RDB_PKG_ID_SYNC:
             return sizeof( RDB_SYNC_t );
-
+            
         case RDB_PKG_ID_DRIVER_PERCEPTION:
             return sizeof( RDB_DRIVER_PERCEPTION_t );
-
+            
         case RDB_PKG_ID_TONE_MAPPING:
-            return sizeof( RDB_FUNCTION_t );
-
+            return sizeof( RDB_FUNCTION_t );            
+            
         case RDB_PKG_ID_ROAD_QUERY:
             return sizeof( RDB_ROAD_QUERY_t );
-
+            
         case RDB_PKG_ID_SCP:
             return sizeof( RDB_SCP_t );
-
+            
         case RDB_PKG_ID_TRAJECTORY:
             return sizeof( RDB_TRAJECTORY_t );
-
+            
         case RDB_PKG_ID_DYN_2_STEER:
             return sizeof( RDB_DYN_2_STEER_t );
-
+            
         case RDB_PKG_ID_STEER_2_DYN:
             return sizeof( RDB_STEER_2_DYN_t );
-
+            
         case RDB_PKG_ID_PROXY:
             return sizeof( RDB_PROXY_t );
-
+            
         case RDB_PKG_ID_MOTION_SYSTEM:
             return sizeof( RDB_MOTION_SYSTEM_t );
-
+            
         case RDB_PKG_ID_FREESPACE:
             return sizeof( RDB_FREESPACE_t );
-
+            
         case RDB_PKG_ID_DYN_EL_SWITCH:
             return sizeof( RDB_DYN_EL_SWITCH_t );
-
+            
         case RDB_PKG_ID_DYN_EL_DOF:
             return sizeof( RDB_DYN_EL_DOF_t );
-
+            
         case RDB_PKG_ID_CUSTOM_SCORING:
             return sizeof( RDB_CUSTOM_SCORING_t );
-
+            
         case RDB_PKG_ID_IG_FRAME:
             return sizeof( RDB_IG_FRAME_t );
-
+            
         case RDB_PKG_ID_RT_PERFORMANCE:
             return sizeof( RDB_RT_PERFORMANCE_t );
-
+            
         case RDB_PKG_ID_RAY:
             return sizeof( RDB_RAY_t );
-
+            
         case RDB_PKG_ID_CUSTOM_OBJECT_CTRL_TRACK:
             return sizeof( RDB_CUSTOM_OBJECT_CTRL_TRACK_t );
-
+            
         default:
             fprintf( stderr, "RDBHandler::pkgId2size: request for size of unknown package <%d>. Returning zero", pkgId );
             return 0;
@@ -169,156 +167,156 @@ RDBHandler::pkgId2string( unsigned int pkgId )
 {
     switch( pkgId )
     {
-        case RDB_PKG_ID_START_OF_FRAME:
+        case RDB_PKG_ID_START_OF_FRAME: 
             return std::string( "RDB_PKG_ID_START_OF_FRAME" );
 
         case RDB_PKG_ID_END_OF_FRAME:
             return std::string( "RDB_PKG_ID_END_OF_FRAME" );
-
+            
         case RDB_PKG_ID_COORD_SYSTEM:
             return std::string( "RDB_PKG_ID_COORD_SYSTEM" );
-
+            
         case RDB_PKG_ID_COORD:
             return std::string( "RDB_PKG_ID_COORD" );
-
+            
         case RDB_PKG_ID_ROAD_POS:
             return std::string( "RDB_PKG_ID_ROAD_POS" );
-
+            
         case RDB_PKG_ID_LANE_INFO:
             return std::string( "RDB_PKG_ID_LANE_INFO" );
-
+            
         case RDB_PKG_ID_ROADMARK:
             return std::string( "RDB_PKG_ID_ROADMARK" );
-
+            
         case RDB_PKG_ID_OBJECT_CFG:
             return std::string( "RDB_PKG_ID_OBJECT_CFG" );
-
+            
         case RDB_PKG_ID_OBJECT_STATE:
             return std::string( "RDB_PKG_ID_OBJECT_STATE" );
-
+            
         case RDB_PKG_ID_VEHICLE_SYSTEMS:
             return std::string( "RDB_PKG_ID_VEHICLE_SYSTEMS" );
-
+            
         case RDB_PKG_ID_VEHICLE_SETUP:
             return std::string( "RDB_PKG_ID_VEHICLE_SETUP" );
-
+            
         case RDB_PKG_ID_ENGINE:
             return std::string( "RDB_PKG_ID_ENGINE" );
-
+            
         case RDB_PKG_ID_DRIVETRAIN:
             return std::string( "RDB_PKG_ID_DRIVETRAIN" );
-
+            
         case RDB_PKG_ID_WHEEL:
             return std::string( "RDB_PKG_ID_WHEEL" );
-
+            
         case RDB_PKG_ID_PED_ANIMATION:
             return std::string( "RDB_PKG_ID_PED_ANIMATION" );
-
+            
         case RDB_PKG_ID_SENSOR_STATE:
             return std::string( "RDB_PKG_ID_SENSOR_STATE" );
-
+            
         case RDB_PKG_ID_SENSOR_OBJECT:
             return std::string( "RDB_PKG_ID_SENSOR_OBJECT" );
-
+            
         case RDB_PKG_ID_CAMERA:
             return std::string( "RDB_PKG_ID_CAMERA" );
-
+            
         case RDB_PKG_ID_CONTACT_POINT:
             return std::string( "RDB_PKG_ID_CONTACT_POINT" );
-
+            
         case RDB_PKG_ID_TRAFFIC_SIGN:
             return std::string( "RDB_PKG_ID_TRAFFIC_SIGN" );
-
+            
         case RDB_PKG_ID_ROAD_STATE:
             return std::string( "RDB_PKG_ID_ROAD_STATE" );
-
+            
         case RDB_PKG_ID_IMAGE:
             return std::string( "RDB_PKG_ID_IMAGE" );
-
+            
         case RDB_PKG_ID_LIGHT_SOURCE:
              return std::string( "RDB_PKG_ID_LIGHT_SOURCE" );
-
+            
         case RDB_PKG_ID_ENVIRONMENT:
             return std::string( "RDB_PKG_ID_ENVIRONMENT" );
-
+            
         case RDB_PKG_ID_TRIGGER:
             return std::string( "RDB_PKG_ID_TRIGGER" );
-
+            
         case RDB_PKG_ID_DRIVER_CTRL:
             return std::string( "RDB_PKG_ID_DRIVER_CTRL" );
-
+            
         case RDB_PKG_ID_TRAFFIC_LIGHT:
             return std::string( "RDB_PKG_ID_TRAFFIC_LIGHT" );
-
+            
         case RDB_PKG_ID_SYNC:
             return std::string( "RDB_PKG_ID_SYNC" );
-
+            
         case RDB_PKG_ID_DRIVER_PERCEPTION:
             return std::string( "RDB_PKG_ID_DRIVER_PERCEPTION" );
-
+            
         case RDB_PKG_ID_LIGHT_MAP:
             return std::string( "RDB_PKG_ID_LIGHT_MAP" );
-
+            
         case RDB_PKG_ID_TONE_MAPPING:
             return std::string( "RDB_PKG_ID_TONE_MAPPING" );
-
+            
         case RDB_PKG_ID_ROAD_QUERY:
             return std::string( "RDB_PKG_ROAD_QUERY" );
-
+            
         case RDB_PKG_ID_SCP:
             return std::string( "RDB_PKG_ID_SCP" );
-
+            
         case RDB_PKG_ID_TRAJECTORY:
             return std::string( "RDB_PKG_ID_TRAJECTORY" );
-
+            
         case RDB_PKG_ID_DYN_2_STEER:
             return std::string( "RDB_PKG_ID_DYN_2_STEER" );
-
+            
         case RDB_PKG_ID_STEER_2_DYN:
             return std::string( "RDB_PKG_ID_STEER_2_DYN" );
-
+            
         case RDB_PKG_ID_PROXY:
             return std::string( "RDB_PKG_ID_PROXY" );
 
         case RDB_PKG_ID_MOTION_SYSTEM:
             return std::string( "RDB_PKG_ID_MOTION_SYSTEM" );
-
+            
         case RDB_PKG_ID_OCCLUSION_MATRIX:
             return std::string( "RDB_PKG_ID_OCCLUSION_MATRIX" );
-
+            
         case RDB_PKG_ID_FREESPACE:
             return std::string( "RDB_PKG_ID_FREESPACE" );
-
+            
         case RDB_PKG_ID_DYN_EL_SWITCH:
             return std::string( "RDB_PKG_ID_DYN_EL_SWITCH" );
-
+            
         case RDB_PKG_ID_DYN_EL_DOF:
             return std::string( "RDB_PKG_ID_DYN_EL_DOF" );
-
+            
         case RDB_PKG_ID_IG_FRAME:
             return std::string( "RDB_PKG_ID_IG_FRAME" );
-
+            
         case RDB_PKG_ID_RT_PERFORMANCE:
             return std::string( "RDB_PKG_ID_RT_PERFORMANCE" );
-
+            
         case RDB_PKG_ID_RAY:
             return std::string( "RDB_PKG_ID_RAY" );
-
+            
         case RDB_PKG_ID_CUSTOM_SCORING:
             return std::string( "RDB_PKG_ID_CUSTOM_SCORING" );
-
+            
         case RDB_PKG_ID_CUSTOM_OBJECT_CTRL_TRACK:
              return std::string( "RDB_PKG_ID_CUSTOM_OBJECT_CTRL_TRACK" );
-
+            
         case RDB_PKG_ID_CUSTOM_AUDI_FORUM:
             return std::string( "RDB_PKG_ID_CUSTOM_AUDI_FORUM" );
-
+            
         case RDB_PKG_ID_CUSTOM_OPTIX_START:
             return std::string( "RDB_PKG_ID_CUSTOM_OPTIX_START" );
-
+            
         case RDB_PKG_ID_CUSTOM_OPTIX_END:
             return std::string( "RDB_PKG_ID_CUSTOM_OPTIX_END" );
-
+            
         default:
             return std::string( "unknown" );
     }
@@ -329,36 +327,36 @@ RDBHandler::coordType2string( unsigned int type )
 {
     switch( type )
     {
-        case RDB_COORD_TYPE_INERTIAL:
+        case RDB_COORD_TYPE_INERTIAL: 
             return std::string( "RDB_COORD_TYPE_INERTIAL" );
 
         case RDB_COORD_TYPE_RESERVED_1:
             return std::string( "RDB_COORD_TYPE_RESERVED_1" );
-
+            
         case RDB_COORD_TYPE_PLAYER:
             return std::string( "RDB_COORD_TYPE_PLAYER" );
-
+            
         case RDB_COORD_TYPE_SENSOR:
             return std::string( "RDB_COORD_TYPE_SENSOR" );
-
+            
         case RDB_COORD_TYPE_USK:
             return std::string( "RDB_COORD_TYPE_USK" );
-
+            
         case RDB_COORD_TYPE_USER:
             return std::string( "RDB_COORD_TYPE_USER" );
-
+            
         case RDB_COORD_TYPE_WINDOW:
             return std::string( "RDB_COORD_TYPE_WINDOW" );
-
+            
         case RDB_COORD_TYPE_TEXTURE:
             return std::string( "RDB_COORD_TYPE_TEXTURE" );
-
+            
         case RDB_COORD_TYPE_RELATIVE_START:
             return std::string( "RDB_COORD_TYPE_RELATIVE_START" );
-
+            
         case RDB_COORD_TYPE_GEO:
             return std::string( "RDB_COORD_TYPE_GEO" );
-
+           
         default:
             return std::string( "unknown" );
     }
@@ -369,27 +367,27 @@ RDBHandler::objectCategory2string( unsigned int id )
 {
     switch( id )
     {
-        case RDB_OBJECT_CATEGORY_NONE:
+        case RDB_OBJECT_CATEGORY_NONE: 
             return std::string( "RDB_OBJECT_CATEGORY_NONE" );
 
         case RDB_OBJECT_CATEGORY_PLAYER:
             return std::string( "RDB_OBJECT_CATEGORY_PLAYER" );
-
+            
         case RDB_OBJECT_CATEGORY_SENSOR:
             return std::string( "RDB_OBJECT_CATEGORY_SENSOR" );
-
+            
         case RDB_OBJECT_CATEGORY_CAMERA:
             return std::string( "RDB_OBJECT_CATEGORY_CAMERA" );
-
+            
         case RDB_OBJECT_CATEGORY_LIGHT_POINT:
             return std::string( "RDB_OBJECT_CATEGORY_LIGHT_POINT" );
-
+            
         case RDB_OBJECT_CATEGORY_COMMON:
             return std::string( "RDB_OBJECT_CATEGORY_COMMON" );
-
+            
         case RDB_OBJECT_CATEGORY_OPENDRIVE:
             return std::string( "RDB_OBJECT_CATEGORY_OPENDRIVE" );
-
+            
         default:
             return std::string( "unknown" );
     }
@@ -418,7 +416,7 @@ RDBHandler::objectString2category( const std::string & name )
 
     if ( name == std::string( "RDB_OBJECT_CATEGORY_OPENDRIVE" ) )
         return RDB_OBJECT_CATEGORY_OPENDRIVE;
-
+    
     return RDB_OBJECT_CATEGORY_NONE;
 }
 
@@ -429,106 +427,106 @@ RDBHandler::objectType2string( unsigned int id )
     {
         case RDB_OBJECT_TYPE_PLAYER_NONE:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_NONE" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_CAR:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_CAR" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_TRUCK:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_TRUCK" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_VAN:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_VAN" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_BIKE:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_BIKE" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_PED_GROUP:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_PED_GROUP" );
-
+            
         case RDB_OBJECT_TYPE_POLE:
             return std::string( "RDB_OBJECT_TYPE_POLE" );
-
+            
         case RDB_OBJECT_TYPE_TREE:
             return std::string( "RDB_OBJECT_TYPE_TREE" );
-
+            
         case RDB_OBJECT_TYPE_BARRIER:
             return std::string( "RDB_OBJECT_TYPE_BARRIER" );
-
+            
         case RDB_OBJECT_TYPE_OPT1:
             return std::string( "RDB_OBJECT_TYPE_OPT1" );
-
+            
         case RDB_OBJECT_TYPE_OPT2:
             return std::string( "RDB_OBJECT_TYPE_OPT2" );
-
+            
         case RDB_OBJECT_TYPE_OPT3:
             return std::string( "RDB_OBJECT_TYPE_OPT3" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_MOTORBIKE:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_MOTORBIKE" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_BUS:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_BUS" );
-
+            
         case RDB_OBJECT_TYPE_STREET_LAMP:
             return std::string( "RDB_OBJECT_TYPE_STREET_LAMP" );
-
+            
         case RDB_OBJECT_TYPE_TRAFFIC_SIGN:
             return std::string( "RDB_OBJECT_TYPE_TRAFFIC_SIGN" );
-
+            
         case RDB_OBJECT_TYPE_HEADLIGHT:
             return std::string( "RDB_OBJECT_TYPE_HEADLIGHT" );
-
+            
         case RDB_OBJECT_TYPE_PLAYER_TRAILER:
             return std::string( "RDB_OBJECT_TYPE_PLAYER_TRAILER" );
-
+            
         case RDB_OBJECT_TYPE_BUILDING:
             return std::string( "RDB_OBJECT_TYPE_BUILDING" );
-
+            
         case RDB_OBJECT_TYPE_PARKING_SPACE:
             return std::string( "RDB_OBJECT_TYPE_PARKING_SPACE" );
-
+            
         case RDB_OBJECT_TYPE_ROAD_WORKS:
             return std::string( "RDB_OBJECT_TYPE_ROAD_WORKS" );
-
+            
         case RDB_OBJECT_TYPE_ROAD_MISC:
             return std::string( "RDB_OBJECT_TYPE_ROAD_MISC" );
-
+            
         case RDB_OBJECT_TYPE_TUNNEL:
             return std::string( "RDB_OBJECT_TYPE_TUNNEL" );
-
+            
         case RDB_OBJECT_TYPE_LEGACY:
             return std::string( "RDB_OBJECT_TYPE_LEGACY" );
-
+            
         case RDB_OBJECT_TYPE_VEGETATION:
             return std::string( "RDB_OBJECT_TYPE_VEGETATION" );
-
+            
         case RDB_OBJECT_TYPE_MISC_MOTORWAY:
             return std::string( "RDB_OBJECT_TYPE_MISC_MOTORWAY" );
-
+            
         case RDB_OBJECT_TYPE_MISC_TOWN:
             return std::string( "RDB_OBJECT_TYPE_MISC_TOWN" );
-
+            
         case RDB_OBJECT_TYPE_PATCH:
             return std::string( "RDB_OBJECT_TYPE_PATCH" );
-
+            
         case RDB_OBJECT_TYPE_OTHER:
             return std::string( "RDB_OBJECT_TYPE_OTHER" );
-
+            
         case RDB_OBJECT_PLAYER_SEMI_TRAILER:
             return std::string( "RDB_OBJECT_PLAYER_SEMI_TRAILER" );
-
+            
         case RDB_OBJECT_PLAYER_RAILCAR:
             return std::string( "RDB_OBJECT_PLAYER_RAILCAR" );
-
+            
         case RDB_OBJECT_PLAYER_RAILCAR_SEMI_HEAD:
             return std::string( "RDB_OBJECT_PLAYER_RAILCAR_SEMI_HEAD" );
-
+            
         case RDB_OBJECT_PLAYER_RAILCAR_SEMI_BACK:
             return std::string( "RDB_OBJECT_PLAYER_RAILCAR_SEMI_BACK" );
-
+            
         default:
             return std::string( "unknown" );
     }
@@ -539,106 +537,106 @@ RDBHandler::objectString2type( const std::string & name )
 {
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_NONE" ) )
         return RDB_OBJECT_TYPE_PLAYER_NONE;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_CAR" ) )
         return RDB_OBJECT_TYPE_PLAYER_CAR;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_TRUCK" ) )
         return RDB_OBJECT_TYPE_PLAYER_TRUCK;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_VAN" ) )
         return RDB_OBJECT_TYPE_PLAYER_VAN;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_BIKE" ) )
         return RDB_OBJECT_TYPE_PLAYER_BIKE;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN" ) )
         return RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_PED_GROUP" ) )
         return RDB_OBJECT_TYPE_PLAYER_PED_GROUP;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_POLE" ) )
         return RDB_OBJECT_TYPE_POLE;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_TREE" ) )
         return RDB_OBJECT_TYPE_TREE;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_BARRIER" ) )
         return RDB_OBJECT_TYPE_BARRIER;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_OPT1" ) )
         return RDB_OBJECT_TYPE_OPT1;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_OPT2" ) )
         return RDB_OBJECT_TYPE_OPT2;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_OPT3" ) )
         return RDB_OBJECT_TYPE_OPT3;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_MOTORBIKE" ) )
         return RDB_OBJECT_TYPE_PLAYER_MOTORBIKE;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_BUS" ) )
         return RDB_OBJECT_TYPE_PLAYER_BUS;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_STREET_LAMP" ) )
         return RDB_OBJECT_TYPE_STREET_LAMP;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_TRAFFIC_SIGN" ) )
         return RDB_OBJECT_TYPE_TRAFFIC_SIGN;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_HEADLIGHT" ) )
         return RDB_OBJECT_TYPE_HEADLIGHT;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PLAYER_TRAILER" ) )
         return RDB_OBJECT_TYPE_PLAYER_TRAILER;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_BUILDING" ) )
         return RDB_OBJECT_TYPE_BUILDING;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PARKING_SPACE" ) )
         return RDB_OBJECT_TYPE_PARKING_SPACE;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_ROAD_WORKS" ) )
         return RDB_OBJECT_TYPE_ROAD_WORKS;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_ROAD_MISC" ) )
         return RDB_OBJECT_TYPE_ROAD_MISC;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_TUNNEL" ) )
         return RDB_OBJECT_TYPE_TUNNEL;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_LEGACY" ) )
         return RDB_OBJECT_TYPE_LEGACY;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_VEGETATION" ) )
         return RDB_OBJECT_TYPE_VEGETATION;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_MISC_MOTORWAY" ) )
         return RDB_OBJECT_TYPE_MISC_MOTORWAY;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_MISC_TOWN" ) )
         return RDB_OBJECT_TYPE_MISC_TOWN;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_PATCH" ) )
         return RDB_OBJECT_TYPE_PATCH;
-
+    
     if ( name == std::string( "RDB_OBJECT_TYPE_OTHER" ) )
         return RDB_OBJECT_TYPE_OTHER;
-
+    
     if ( name == std::string( "RDB_OBJECT_PLAYER_SEMI_TRAILER" ) )
         return RDB_OBJECT_PLAYER_SEMI_TRAILER;
-
+    
     if ( name == std::string( "RDB_OBJECT_PLAYER_RAILCAR" ) )
         return RDB_OBJECT_PLAYER_RAILCAR;
-
+    
     if ( name == std::string( "RDB_OBJECT_PLAYER_RAILCAR_SEMI_HEAD" ) )
         return RDB_OBJECT_PLAYER_RAILCAR_SEMI_HEAD;
-
+    
     if ( name == std::string( "RDB_OBJECT_PLAYER_RAILCAR_SEMI_BACK" ) )
         return RDB_OBJECT_PLAYER_RAILCAR_SEMI_BACK;
-
+    
     return RDB_OBJECT_TYPE_PLAYER_NONE;
 }
 
@@ -650,378 +648,61 @@ RDBHandler::printMessage( RDB_MSG_t* msg, bool details, bool binDump, bool csv, 
         fprintf( stderr, "RDBHandler::printMessage: no message available\n" );
         return;
     }
-
+    
     if ( !csv && !csvHeader )
     {
         fprintf( stderr, "\nRDBHandler::printMessage: ---- %s ----- BEGIN\n", details ? "full info" : "short info" );
         fprintf( stderr, "  message: version = 0x%04x, simTime = %.3f, simFrame = %d, headerSize = %d, dataSize = %d\n",
                                        msg->hdr.version, msg->hdr.simTime, msg->hdr.frameNo, msg->hdr.headerSize, msg->hdr.dataSize );
     }
-
+                               
     if ( !msg->hdr.dataSize )
         return;
-
+    
     RDB_MSG_ENTRY_HDR_t* entry = ( RDB_MSG_ENTRY_HDR_t* ) ( ( ( char* ) msg ) + msg->hdr.headerSize );
     uint32_t remainingBytes    = msg->hdr.dataSize;
-
+        
     while ( remainingBytes )
     {
         if ( entry->pkgId == RDB_PKG_ID_START_OF_FRAME )
         {
             if ( csvHeader )
                 fprintf( stderr, "%23s,%23s,", "simTime", "simFrame" );
-            else if ( csv )
+            else if ( csv ) 
                 fprintf( stderr, "%+.16e,%23d,", msg->hdr.simTime, msg->hdr.frameNo );
         }
-
+        
         printMessageEntry( entry, details, csv, csvHeader );
 
         remainingBytes -= ( entry->headerSize + entry->dataSize );
-
+        
         if ( remainingBytes )
           entry = ( RDB_MSG_ENTRY_HDR_t* ) ( ( ( ( char* ) entry ) + entry->headerSize + entry->dataSize ) );
     }
-
+    
     // create a binary dump?
     if ( binDump )
     {
         fprintf( stderr, "RDBHandler::printMessage: ---- binary dump ----- \n" );
-
+        
         uint32_t remainingBytes = msg->hdr.dataSize + msg->hdr.headerSize;
         unsigned char* dataPtr = ( unsigned char* ) msg;
-
+        
         for ( unsigned int i = 1; i <= remainingBytes; i++ )
         {
             fprintf( stderr, "%02x ", *dataPtr );
-
+            
             dataPtr++;
-
+            
             if ( !( i % 16 ) )
                 fprintf( stderr, "\n" );
         }
         fprintf( stderr, "\n" );
     }
-
+    
     if ( !csv )
         fprintf( stderr, "RDBHandler::printMessage: ---- %s ----- END\n", details ? "full info" : "short info" );
 }
-
-void
-RDBHandler::getImageData( RDB_MSG_t* msg, bool details, bool binDump, bool csv, bool csvHeader )
-{
-    if ( !msg )
-    {
-        fprintf( stderr, "RDBHandler::printMessage: no message available\n" );
-        return;
-    }
-
-    if ( !csv && !csvHeader )
-    {
-        fprintf( stderr, "\nRDBHandler::printMessage: ---- %s ----- BEGIN\n", details ? "full info" : "short info" );
-        fprintf( stderr, "  message: version = 0x%04x, simTime = %.3f, simFrame = %d, headerSize = %d, dataSize = %d\n",
-                 msg->hdr.version, msg->hdr.simTime, msg->hdr.frameNo, msg->hdr.headerSize, msg->hdr.dataSize );
-    }
-
-    if ( !msg->hdr.dataSize )
-        return;
-
-    /// Frame number from last processed RDB message
-    int frame_number_;
-    /// Simulation time from last processed RDB message
-    double simulation_time_;
-
-    RDB_MSG_ENTRY_HDR_t* entry = NULL;
-    uint32_t remainingBytes = 0;
-
-    if (NULL == msg) {
-        return;
-    }
-
-    if (0 == msg->hdr.dataSize) {
-        return;
-    }
-
-    entry = reinterpret_cast<RDB_MSG_ENTRY_HDR_t*>(reinterpret_cast<char*>(msg) + msg->hdr.headerSize);
-    remainingBytes    = msg->hdr.dataSize;
-
-    while ( remainingBytes > 0 )
-    {
-
-        /* Process start */
-        //rdb_codec.cpp -> process(entry);
-
-        uint32_t number_elements = 0;
-        uint32_t i = 0;
-        char* data = NULL;
-
-        if (NULL == entry) {
-            return;
-        }
-
-        if (0 == entry->elementSize) {
-
-            switch (entry->pkgId) {
-                case RDB_PKG_ID_START_OF_FRAME:
-                    if ( csvHeader )
-                        fprintf( stderr, "%23s,%23s,", "simTime", "simFrame" );
-                    else if ( csv )
-                        fprintf( stderr, "%+.16e,%23d,", msg->hdr.simTime, msg->hdr.frameNo );
-                    //process(reinterpret_cast<RDB_START_OF_FRAME_t*>(data));
-                    break;
-
-                case RDB_PKG_ID_END_OF_FRAME:
-                    //process(reinterpret_cast<RDB_END_OF_FRAME_t*>(data));
-                    break;
-
-                default:
-                    std::cerr << "RDB_CODEC: RDB_PKG_ID " << entry->pkgId << " not implemented" << std::endl;
-                    break;
-            }
-        } else {
-            printMessageEntry( entry, details, csv, csvHeader );
-
-            number_elements = entry->dataSize / entry->elementSize;
-            assert(number_elements * entry->elementSize == entry->dataSize);
-
-            data = reinterpret_cast<char*>(entry) + entry->headerSize;
-
-            for (i = 0; i < number_elements; ++i) {
-                switch (entry->pkgId) {
-                    case RDB_PKG_ID_COORD_SYSTEM:
-                        //process(reinterpret_cast<RDB_COORD_SYSTEM_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_COORD:
-                        //process(reinterpret_cast<RDB_COORD_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_ROAD_POS:
-                        //process(reinterpret_cast<RDB_ROAD_POS_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_LANE_INFO:
-                        //process(reinterpret_cast<RDB_LANE_INFO_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_ROADMARK:
-                        //process(reinterpret_cast<RDB_ROADMARK_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_OBJECT_CFG:
-                        //process(reinterpret_cast<RDB_OBJECT_CFG_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_OBJECT_STATE:
-                        //process(reinterpret_cast<RDB_OBJECT_STATE_t*>(data),
-                                //entry->flags & RDB_PKG_FLAG_EXTENDED);
-                        break;
-
-                    case RDB_PKG_ID_VEHICLE_SYSTEMS:
-                        //process(reinterpret_cast<RDB_VEHICLE_SYSTEMS_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_VEHICLE_SETUP:
-                        //process(reinterpret_cast<RDB_VEHICLE_SETUP_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_ENGINE:
-                        //process(reinterpret_cast<RDB_ENGINE_t*>(data), entry->flags & RDB_PKG_FLAG_EXTENDED);
-                        break;
-
-                    case RDB_PKG_ID_DRIVETRAIN:
-                        //process(reinterpret_cast<RDB_DRIVETRAIN_t*>(data), entry->flags & RDB_PKG_FLAG_EXTENDED);
-                        break;
-
-                    case RDB_PKG_ID_WHEEL:
-                        //process(reinterpret_cast<RDB_WHEEL_t*>(data), entry->flags & RDB_PKG_FLAG_EXTENDED);
-                        break;
-
-                    case RDB_PKG_ID_PED_ANIMATION:
-                        //process(reinterpret_cast<RDB_PED_ANIMATION_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_SENSOR_STATE:
-                        //process(reinterpret_cast<RDB_SENSOR_STATE_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_SENSOR_OBJECT:
-                        //process(reinterpret_cast<RDB_SENSOR_OBJECT_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_CAMERA:
-                        //process(reinterpret_cast<RDB_CAMERA_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_CONTACT_POINT:
-                        //process(reinterpret_cast<RDB_CONTACT_POINT_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_TRAFFIC_SIGN:
-                        //process(reinterpret_cast<RDB_TRAFFIC_SIGN_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_ROAD_STATE:
-                        //process(reinterpret_cast<RDB_ROAD_STATE_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_IMAGE:
-                    case RDB_PKG_ID_LIGHT_MAP:
-                    {
-                        char* image_data_=NULL;
-                        RDB_IMAGE_t* image = reinterpret_cast<RDB_IMAGE_t*>(data); /// raw image data
-
-                        /// RDB image information of \see image_data_
-                        RDB_IMAGE_t image_info_;
-                        memset(&image_info_, 0, sizeof(RDB_IMAGE_t));
-                        memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
-
-                        if (NULL == image_data_) {
-                            image_data_ = reinterpret_cast<char*>(malloc(image_info_.imgSize));
-                        } else {
-                            image_data_ = reinterpret_cast<char*>(realloc(image_data_, image_info_.imgSize));
-                        }
-                        memcpy(image_data_, reinterpret_cast<char*>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
-                        //process(reinterpret_cast<RDB_IMAGE_t*>(data));
-                        break;
-                    }
-
-                    case RDB_PKG_ID_OCCLUSION_MATRIX:
-                        // TODO(robin)
-                        //assert(false && "RDB_PKG_ID_OCCLUSION_MATRIX not implemented");
-                        break;
-
-                    case RDB_PKG_ID_LIGHT_SOURCE:
-                        //process(reinterpret_cast<RDB_LIGHT_SOURCE_t*>(data), entry->flags & RDB_PKG_FLAG_EXTENDED);
-                        break;
-
-                    case RDB_PKG_ID_ENVIRONMENT:
-                        //process(reinterpret_cast<RDB_ENVIRONMENT_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_TRIGGER:
-                        //process(reinterpret_cast<RDB_TRIGGER_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_DRIVER_CTRL:
-                        //process(reinterpret_cast<RDB_DRIVER_CTRL_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_TRAFFIC_LIGHT:
-                        //process(reinterpret_cast<RDB_TRAFFIC_LIGHT_t*>(data), entry->flags & RDB_PKG_FLAG_EXTENDED);
-                        break;
-
-                    case RDB_PKG_ID_SYNC:
-                        //process(reinterpret_cast<RDB_SYNC_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_DRIVER_PERCEPTION:
-                        //process(reinterpret_cast<RDB_DRIVER_PERCEPTION_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_TONE_MAPPING:
-                        //process(reinterpret_cast<RDB_FUNCTION_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_ROAD_QUERY:
-                        //process(reinterpret_cast<RDB_ROAD_QUERY_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_SCP:
-                        // TODO(robin): relevant?
-                        assert(false && "RDB_PKG_ID_SCP not implemented");
-                        break;
-
-                    case RDB_PKG_ID_TRAJECTORY:
-                        //process(reinterpret_cast<RDB_TRAJECTORY_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_DYN_2_STEER:
-                        //process(reinterpret_cast<RDB_DYN_2_STEER_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_STEER_2_DYN:
-                        //process(reinterpret_cast<RDB_STEER_2_DYN_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_PROXY:
-                        //process(reinterpret_cast<RDB_PROXY_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_MOTION_SYSTEM:
-                        //process(reinterpret_cast<RDB_MOTION_SYSTEM_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_FREESPACE:
-                        //process(reinterpret_cast<RDB_FREESPACE_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_DYN_EL_SWITCH:
-                        //process(reinterpret_cast<RDB_DYN_EL_SWITCH_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_DYN_EL_DOF:
-                        //process(reinterpret_cast<RDB_DYN_EL_DOF_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_IG_FRAME:
-                        //process(reinterpret_cast<RDB_IG_FRAME_t*>(data));
-                        break;
-
-//        case RDB_PKG_ID_RT_PERFORMANCE:
-//          process(reinterpret_cast<RDB_RT_PERFORMANCE_t*>(data));
-//          break;
-
-                    case RDB_PKG_ID_CUSTOM_SCORING:
-                        //process(reinterpret_cast<RDB_CUSTOM_SCORING_t*>(data));
-                        break;
-
-                    case RDB_PKG_ID_CUSTOM_OBJECT_CTRL_TRACK:
-                        //process(reinterpret_cast<RDB_CUSTOM_OBJECT_CTRL_TRACK_t*>(data));
-                        break;
-
-                    default:
-                        std::cerr << "RDB_CODEC: RDB_PKG_ID " << entry->pkgId << " not implemented" << std::endl;
-                        break;
-                }
-                data = reinterpret_cast<char*>(data) + entry->elementSize;
-            }
-            assert(reinterpret_cast<char*>(entry) + entry->headerSize + entry->dataSize == data);
-        }
-
-
-        printMessageEntry( entry, details, csv, csvHeader );
-        /* Process end */
-
-        remainingBytes -= ( entry->headerSize + entry->dataSize );
-        if ( remainingBytes )
-            entry = ( RDB_MSG_ENTRY_HDR_t* ) ( ( ( ( char* ) entry ) + entry->headerSize + entry->dataSize ) );
-    }
-    assert(remainingBytes == 0);
-
-    // create a binary dump?
-    if ( binDump )
-    {
-        fprintf( stderr, "RDBHandler::printMessage: ---- binary dump ----- \n" );
-
-        uint32_t remainingBytes = msg->hdr.dataSize + msg->hdr.headerSize;
-        unsigned char* dataPtr = ( unsigned char* ) msg;
-
-        for ( unsigned int i = 1; i <= remainingBytes; i++ )
-        {
-            fprintf( stderr, "%02x ", *dataPtr );
-
-            dataPtr++;
-
-            if ( !( i % 16 ) )
-                fprintf( stderr, "\n" );
-        }
-        fprintf( stderr, "\n" );
-    }
-
-    if ( !csv )
-        fprintf( stderr, "RDBHandler::printMessage: ---- %s ----- END\n", details ? "full info" : "short info" );
-}
-
 
 void
 RDBHandler::printMessageEntry( RDB_MSG_ENTRY_HDR_t* entryHdr, bool details, bool csv, bool csvHeader )
