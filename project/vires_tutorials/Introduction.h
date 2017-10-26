@@ -22,7 +22,40 @@ VTD Connector
 
 /**
 
+ VIRES Virtual Test Drive is a tool chain and modular framework for the provision of virtual environments in
+ engineering simulations for the automotive and railroad industry.
+ The dongle can be configured using export VI_LIC_DEVICE="name_of_the_dongle" in vtdStart.sh
+ VTD Starts in config mode - REd in Task Control and green is ParameterServer. This is called Config mode.
+
+
+ If you do not click the Apply buttong, then you can change the paramters using the parameter browser. In case you
+ have already clicked the Apply button, then you can go back to the config mode, by pressing the Configure button.
+ Ofcourse you have to stop a running simualtion first. Thereafter all processes but Task Control, Parameter Server
+ and GUI will be stopped.
+
+ The video is started by clicking on the video record button on the left and is stopped by clicking on the video stop
+ buton on the right. The conversion processes are described in Setups/Common/Scripts/vrecConvert.sh.
+ Instructions from operating from command line only, AdvancedSetup, autoStart, autoConfig.
+ GUI-less and IG-less Operation (auto-started / auto-configured simulation)
+ purpose is to run VTD in a headless test automation environment without any rendering (i.e. only RDB data is of
+ interest)
+
+ One needs to add the post processing step in the IGBase.xml in order to write the images to the shared memory. The
+ IG post processing pipeline allows rendering of a scene with subsequent modification and combination of generated
+ images. Sample use cases of the pipeline include corrective image warping for projection on uneven surfaces, tone
+ mapping of HDR images and various visual effects including depth of view.
+ Post processing is implemented by the IG Component PostProcessing.
+  - PostProcessing with a name.
+  - PostProcessingPipelineConfigurator with a name.
+  - single pipeline child with one or more steps as children.
+
+ Rendering the scene into a texture and then display it.
+
  IGBase.xml <ShmLayoutImage key="0x0811b" freeFlag="0x00000000" releaseFlag="0x00000002"/>
+ ProjectIGBase.xml
+
+ autoStart, autoConfig. autoStart invokes the scpGenerator with the parameter tcpAutoStart.scp
+
  ------ shared memory identifiers ------
  #define RDB_SHM_BUFFER_FLAG_NONE                    0x00000000      /**< no bits set, buffer may be overwritten
  #define RDB_SHM_BUFFER_FLAG_LOCK                    0x00000001      /**< buffer is locked by producer
