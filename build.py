@@ -88,7 +88,9 @@ def parse_arguements(args):
             if build_option == "clean":
                 print "cleaning %s" % library;
                 command = "rm -rf cmake-build-debug"
-                command = "./b2 --clean && rm -rf bin.v2" 
+                if "boost" in library_install: 
+                    os.chdir(library)
+                    command = "./b2 --clean && rm -rf bin.v2" 
                 print command
                 call_shell_command(command)
                 command = "rm -rf " + library_install + "/*"
@@ -103,82 +105,88 @@ def parse_arguements(args):
             os.chdir(library)
             print "Building in " + os.getcwd()
             print "Checking for dependancies for " + os.getcwd()
-            if os.path.isdir(library+"/tools/build") is False:
+            if os.path.isdir(library + "/tools/build") is False:
                 print  "download build.git by git submodule update --remote";
                 sys.exit(1)
-	    else:
-		print "folder exists"
-		sys.exit(1)
             if build_option == "manual":
                 raw_input("Press enter to continue")
             print "Configuring %s" % library
             if build_option == "manual":
                 raw_input("Press enter to continue")
-            call_shell_command("mkdir -p cmake-build-debug")
-            os.chdir("cmake-build-debug")
-            command  =  "/usr/bin/cmake -Wno -dev -Wl,-rpath=/usr/local/lib " \
-                        \
-                        "-DENABLE_PRECOMPILED_HEADERS=OFF " \
-                        "-DCMAKE_BUILD_TYPE=DEBUG " \
-                        "-DCMAKE_INSTALL_PREFIX=" + library_install + " " + \
-                        "-DCMAKE_VERBOSE_MAKEFILE=" + verbose_string + " " \
-                        "-DCMAKE_USE_OPENSSL:BOOL=ON " \
-                        "-DBUILD_TESTING=OFF " \
-                        "-DVTK_BUILD_ALL_MODULES=ON " \
-                        "-DVTK_DATA_EXCLUDE_FROM_ALL=ON " \
-                        "-DVTK_Group_StandAlone=ON " \
-                        "-DVTK_Group_Rendering=ON " \
-                        "-DVTK_Group_Qt=OFF " \
-                        "-DVTK_Group_Views=OFF " \
-                        "-DWITH_GTK=ON " \
-                        "-DBUILD_JPEG=ON " \
-                        "-DBUILD_2d=ON " \
-                        "-DBUILD_CUDA=OFF " \
-                        "-DBUILD_GPU=OFF " \
-                        "-DBUILD_apps=OFF " \
-                        "-DBUILD_common=ON " \
-                        "-DBUILD_examples=ON " \
-                        "-DBUILD_features=ON " \
-                        "-DBUILD_filters=ON " \
-                        "-DBUILD_geometry=ON " \
-                        "-DBUILD_global_tests=OFF " \
-                        "-DBUILD_io=ON " \
-                        "-DBUILD_kdtree=ON " \
-                        "-DBUILD_keypoints=ON " \
-                        "-DBUILD_ml=OFF " \
-                        "-DBUILD_octree=OFF " \
-                        "-DBUILD_outofcore=OFF " \
-                        "-DBUILD_people=OFF " \
-                        "-DBUILD_recognition=OFF " \
-                        "-DBUILD_registration=OFF " \
-                        "-DBUILD_sample_consensus=ON " \
-                        "-DBUILD_search=OFF " \
-                        "-DBUILD_segmentation=OFF " \
-                        "-DBUILD_simulation=OFF " \
-                        "-DBUILD_stereo=OFF " \
-                        "-DBUILD_surface=OFF " \
-                        "-DBUILD_surface_on_nurbs=OFF " \
-                        "-DBUILD_tools=ON " \
-                        "-DBUILD_tracking=ON " \
-                        "-DBUILD_visualization=ON " \
-                        ".."
-
+            if not "boost" in library_install: 
+               call_shell_command("mkdir -p cmake-build-debug")
+               os.chdir("cmake-build-debug")
+               command  =  "/usr/bin/cmake -Wno -dev -Wl,-rpath=/usr/local/lib " \
+                            \
+                            "-DENABLE_PRECOMPILED_HEADERS=OFF " \
+                            "-DCMAKE_BUILD_TYPE=DEBUG " \
+                            "-DCMAKE_INSTALL_PREFIX=" + library_install + " " + \
+                            "-DCMAKE_VERBOSE_MAKEFILE=" + verbose_string + " " \
+                            "-DCMAKE_USE_OPENSSL:BOOL=ON " \
+                            "-DBUILD_TESTING=OFF " \
+                            "-DVTK_BUILD_ALL_MODULES=ON " \
+                            "-DVTK_DATA_EXCLUDE_FROM_ALL=ON " \
+                            "-DVTK_Group_StandAlone=ON " \
+                            "-DVTK_Group_Rendering=ON " \
+                            "-DVTK_Group_Qt=OFF " \
+                            "-DVTK_Group_Views=OFF " \
+                            "-DWITH_GTK=ON " \
+                            "-DBUILD_JPEG=ON " \
+                            "-DBUILD_2d=ON " \
+                            "-DBUILD_CUDA=OFF " \
+                            "-DBUILD_GPU=OFF " \
+                            "-DBUILD_apps=OFF " \
+                            "-DBUILD_common=ON " \
+                            "-DBUILD_examples=ON " \
+                            "-DBUILD_features=ON " \
+                            "-DBUILD_filters=ON " \
+                            "-DBUILD_geometry=ON " \
+                            "-DBUILD_global_tests=OFF " \
+                            "-DBUILD_io=ON " \
+                            "-DBUILD_kdtree=ON " \
+                            "-DBUILD_keypoints=ON " \
+                            "-DBUILD_ml=OFF " \
+                            "-DBUILD_octree=OFF " \
+                            "-DBUILD_outofcore=OFF " \
+                            "-DBUILD_people=OFF " \
+                            "-DBUILD_recognition=OFF " \
+                            "-DBUILD_registration=OFF " \
+                            "-DBUILD_sample_consensus=ON " \
+                            "-DBUILD_search=OFF " \
+                            "-DBUILD_segmentation=OFF " \
+                            "-DBUILD_simulation=OFF " \
+                            "-DBUILD_stereo=OFF " \
+                            "-DBUILD_surface=OFF " \
+                            "-DBUILD_surface_on_nurbs=OFF " \
+                            "-DBUILD_tools=ON " \
+                            "-DBUILD_tracking=ON " \
+                            "-DBUILD_visualization=ON " \
+                            ".."
+            else:
+                command = "./bootstrap.sh --prefix=" + library_install
             print command
             if build_option == "manual":
                 raw_input("Press enter to continue")
             call_shell_command(command)
             if build_option == "manual":
                 raw_input("Press enter to continue")
-            command = "time make -j " + make_power
+            if not "boost" in library_install: 
+                command = "time make -j " + make_power
+            else:
+                command = "./b2 cxxflags=\"-Wno-unused-local-typedefs -Wstrict-aliasing\" headers install -j " + make_power
             print command
             if build_option == "manual":
                 raw_input("Press enter to continue")
             call_shell_command(command)
             if build_option == "manual":
                 raw_input("Press enter to continue")
-            command = "time make install"
-            if build_option == "manual":
-                raw_input("Press enter to continue")
+            if not "boost" in library_install: 
+                command = "time make install"
+                if build_option == "manual":
+                    raw_input("Press enter to continue")
+            else:
+                command = "python " + SOURCE_DIR + "utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p " + library_install + " -o " + library_install + "/lib/pkgconfig/boost.pc " + library_install + "/lib/"
+            print command
             call_shell_command(command)
             if build_option == "manual":
                 raw_input("Press enter to continue")
@@ -207,17 +215,9 @@ results.func(results)
 
 #function enter_boost_fn
 #{
-#      #    time ./bootstrap.sh --prefix=$BOOST_PWD/../boost-install
-#    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-#    time ./b2 cxxflags="-Wno-unused-local-typedefs -Wstrict-aliasing" -j $(getconf _NPROCESSORS_ONLN) headers install 
-#    ret=$(echo $?)
-#    echo "make in $SOURCE_DIR returned $ret"
-#    if [ "$ret" == "0" ]; then echo "boost make successful"; else echo "boost build terminated with error"; exit_function; fi
-#    # Copies the 
 #    #cp -Rv boost $BOOST_PWD/../boost-install/include/
 #    mkdir -p $BOOST_PWD/../boost-install/lib/pkgconfig
-#    python $SOURCE_DIR/utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p $BOOST_PWD/../boost-install -o $BOOST_PWD/../boost-install/lib/pkgconfig/boost.pc $BOOST_PWD/../boost-install/lib/
-#    #python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
+#    #    #python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
 #    cd $SOURCE_DIR
 #fi
 #}
