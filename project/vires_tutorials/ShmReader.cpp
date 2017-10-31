@@ -362,10 +362,13 @@ void handleMessage( RDB_MSG_t* msg )
                         break;
 
                     case RDB_PKG_ID_OBJECT_STATE:
+                    {
+                        RDB_OBJECT_STATE_t* object = reinterpret_cast<RDB_OBJECT_STATE_t*>(data); /// raw image data
+                        std::cout << object->base.pos.x;
                         //process(reinterpret_cast<RDB_OBJECT_STATE_t*>(data),
                         //entry->flags & RDB_PKG_FLAG_EXTENDED);
                         break;
-
+                    }
                     case RDB_PKG_ID_VEHICLE_SYSTEMS:
                         //process(reinterpret_cast<RDB_VEHICLE_SYSTEMS_t*>(data));
                         break;
@@ -446,8 +449,10 @@ void handleMessage( RDB_MSG_t* msg )
                                     save_image.set_pixel(u,v,val);
                                 }
                             }
-                            char file_name[20];
-                            sprintf(file_name, "/local/tmp/000%04d.png", msg->hdr.frameNo);
+                            char file_name[500];
+                            sprintf(file_name,
+                                    "/local/git/PriorityGraphSensors/vires_dataset/data/stereo_flow/image_02/000"
+                                            "%03d_10.png", msg->hdr.frameNo);
                             save_image.write(file_name);
                         }
                         else {

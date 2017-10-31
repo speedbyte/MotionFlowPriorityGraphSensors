@@ -7,6 +7,7 @@ echo "this script pid = $$"
 SOURCE_DIR=$(pwd)
 VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.0/bin
 CPP_DIR=$SOURCE_DIR/project/vires_tutorials/cmake-build-debug
+VIRES_DATASET_DIR=$SOURCE_DIR/vires_dataset/data/stereo_flow/image_02
 cd $VIRES_DIR 
 ./vtdStart.sh -setup="Standard_test" -project="SampleProject_test" -autoStart &
 echo "vtdStart.sh pid = $!"
@@ -37,4 +38,5 @@ kill -9 $trigger_pid
 kill -9 $read_pid
 cd $VIRES_DIR 
 ./vtdStop.sh
-
+cd $VIRES_DATASET_DIR
+find ./ -name '*.png' -exec convert -flip {} {} \;
