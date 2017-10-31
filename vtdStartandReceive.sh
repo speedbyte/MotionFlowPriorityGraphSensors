@@ -1,36 +1,40 @@
 #!/bin/bash
-echo $$
-read -p "enter to continue"
+tempdir=$(mktemp -t -d fifodir.XXXXXX)
+trap 'rm -rf "$tempdir"' EXIT
+mkfifo "$tempdir/child"
+
+echo "this script pid = $$"
 SOURCE_DIR=$(pwd)
 VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.0/bin
 CPP_DIR=$SOURCE_DIR/project/vires_tutorials/cmake-build-debug
 cd $VIRES_DIR 
-./vtdStart.sh -setup="Standard_test" -project="SampleProject_test" -autoStart
-VTD_PID=$!
-pgrep -P $VTD_PID
-ps -ef
+./vtdStart.sh -setup="Standard_test" -project="SampleProject_test" -autoStart &
+echo "vtdStart.sh pid = $!"
 #give some time
 for i in `seq 1 10`; do
 	sleep 1
-	echo "Waiting"
+	echo "Waiting again"
 done
+#This will block until and unless there is a value in the fifo. This makes sure that the processes are synchronous.
+#read simserver_pid <"$tempdir/child"
+
+simserver_pid=`pgrep simServer | head -1`
+echo "simserver pid is $simserver_pid"
+if [[ simserver_pid -gt 0 ]]; then echo "PID is running"; else echo "PID is not running"; ./vtdStop.sh; exit; fi
 cd $CPP_DIR
-simserver_pid=$(cut -d ' ' -f2 /tmp/vtd_pids)
-if ps -p $simserver_pid > /dev/null; then echo "PID is running"; else echo "PID is not running"; exit; fi
-#read -p "enter to continue"
 ./shm_reader_writer trigger & 
 trigger_pid=$!
-echo "trigger_pid $!" >> /tmp/vtd_pids
 sleep 1
 ./shm_reader_writer read & 
 read_pid=$!
-echo "read_pid $!" >> /tmp/vtd_pids
 
-#for i in `seq 1 10`; do
-#	sleep 1
-#	echo $((100-$i)) seconds till abort ... 
+for i in `seq 1 10`; do
+	sleep 1
+	echo $((100-$i)) seconds till abort ... 
+done
 
-cd $VIRES_DIR 
-./vtdStop.sh
 kill -9 $trigger_pid
 kill -9 $read_pid
+cd $VIRES_DIR 
+./vtdStop.sh
+
