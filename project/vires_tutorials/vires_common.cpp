@@ -287,7 +287,7 @@ void readNetwork()
                                 Framework::RDBHandler::printMessage( ( RDB_MSG_t* ) spData, true );
 
                             // now parse the message
-                            //parseRDBMessage( ( RDB_MSG_t* ) spData );
+                            parseRDBMessage( ( RDB_MSG_t* ) spData );
 
                             // remove message from queue
                             memmove( spData, spData + msgSize, sBytesInBuffer - msgSize );
