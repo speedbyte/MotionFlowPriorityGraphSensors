@@ -1,0 +1,57 @@
+
+tr,
+th,
+td,
+tbody td {
+    page-break-inside:avoid;
+    border-color:#aaaaaa;
+}
+
+h1 {
+    width:auto;
+    margin:20px 0px 20px 0px;
+}
+
+.printonly {
+    display:inline;
+}
+
+tr.col1 td {
+    border-top:3px solid #aaaaaa;
+}
+
+tr.col3 td.cmd {
+    border:1px solid #ffffff;
+}
+
+tr.col3 td.cmd {
+    border-right:1px solid #aaaaaa;
+}
+
+/*
+tr.col1 td.scope,
+tr.col2 td.scope,
+tr.col3 td.scope {
+    page-break-after:avoid;
+}
+*/
+
+table {
+    margin:0% 0% 0% 0%;
+    border-color:#aaaaaa;
+    /*border-collapse:collapse;
+    empty-cells:hide;*/
+}
+
+div#navi,
+div#fixeddiv {
+    display:none;
+}
+
+div#fixeddiv table {
+    display:none;
+}
+
+.noprint {
+    display:none;
+}

@@ -53,67 +53,6 @@ extern unsigned int mAddressRx;
 
 
 extern void sendRDBTrigger( int & sendSocket, const double & simTime, const unsigned int & simFrame );
-extern int openRxPort();
-
-//
-// Function: usage:
-//
-// Description:
-//    Print usage information and exit
-//
-void usage_udp()
-{
-    printf("usage: rdbTest [-r:n] [-s:n]\n\n");
-    printf("       -r:n      receive port\n");
-    printf("       -s:n      send port\n");
-    printf("       -a:IP     IP address of partner (127.0.0.1)\n");
-    exit(1);
-}
-
-//
-// Function: ValidateArgs
-//
-// Description:
-//    Parse the command line arguments, and set some global flags
-//    to indicate what actions to perform
-//
-void ValidateArgs_udp(int argc, char **argv)
-{
-    int i;
-
-    strcpy( szServer, "127.0.0.1" );
-
-    for(i = 1; i < argc; i++)
-    {
-        if ((argv[i][0] == '-') || (argv[i][0] == '/'))
-        {
-            switch (tolower(argv[i][1]))
-            {
-                case 'r':        // Remote port
-                    if (strlen(argv[i]) > 3)
-                        mPortRx = atoi(&argv[i][3]);
-                    break;
-                case 's':        // Remote port
-                    if (strlen(argv[i]) > 3)
-                        mPortTx = atoi(&argv[i][3]);
-                    break;
-                case 'a':       // Server
-                    if (strlen(argv[i]) > 3)
-                        strcpy(szServer, &argv[i][3]);
-                    break;
-                default:
-                    usage_udp();
-                    break;
-            }
-        }
-    }
-
-    mAddressTx = inet_addr( szServer );
-    mAddressRx = inet_addr( szServer );
-
-    fprintf( stderr, "ValidateArgs: TX port  = %d, RX port = %d, TX address = %s (0x%x)\n",
-             mPortTx, mPortRx, szServer, mAddressTx );
-}
 
 /**
 * information about usage of the software
@@ -241,40 +180,6 @@ int main(int argc, char* argv[])
             usleep( 10000 );
         }
     }
-    else if ( strcmp(argv[1], "trigger") == 0 )  {
-        static bool sSendTrigger = true;
-
-        // Parse the command line
-        //
-        ValidateArgs(argc, argv);
-        openNetwork();
-
-        for(;;)
-        {
-            bool bMsgComplete = false;
-
-            // CAREFUL: we are not reading the network, so the test will fail after a while!!!
-
-            // do some other stuff before returning to network reading
-            usleep( 500000 );
-
-            int val = kbhit();
-            if ( val == 97 ) {
-                sSendTrigger = true;
-            }
-            else if ( val == 'c') {
-                sSendTrigger = false;
-            }
-            else if ( val == 'i') {
-                sSendTrigger = false;
-                sendRDBTrigger( mClient, 0.0, 0 );
-            }
-            if ( sSendTrigger )
-                sendRDBTrigger( mClient, 0.0, 0 );
-        }
-        ::close(mClient);
-        return 0;
-    }
 
     std::string m_server;
     int m_port;
@@ -333,7 +238,6 @@ unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemI
 
     /// RDB image information of \see image_data_
     RDB_IMAGE_t image_info_;
-    //memset(&image_info_, 0, sizeof(RDB_IMAGE_t));
     memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
 
     if (NULL == image_data_) {
@@ -367,5 +271,4 @@ unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemI
         fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize /( image_info_
                                                                                            .width*image_info_.height));
     }
-    //process(reinterpret_cast<RDB_IMAGE_t*>(data));
 }

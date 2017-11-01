@@ -1,4 +1,17 @@
 #!/bin/bash
+if [ $# == 2 ]; then
+SETUP=$1
+PROJECT=$2
+elif [ $# == 1 ]; then
+SETUP="Standard_test"
+PROJECT=$1
+else
+SETUP="Standard_test"
+PROJECT="SampleProject_test"
+fi
+echo $SETUP
+echo $PROJECT
+
 tempdir=$(mktemp -t -d fifodir.XXXXXX)
 trap 'rm -rf "$tempdir"' EXIT
 mkfifo "$tempdir/child"
@@ -11,7 +24,7 @@ VIRES_DATASET_DIR=$SOURCE_DIR/vires_dataset/data/stereo_flow/image_02
 cd $VIRES_DATASET_DIR
 rm *.png
 cd $VIRES_DIR 
-./vtdStart.sh -setup="Standard_test" -project="SampleProject_test" -autoStart &
+./vtdStart.sh -setup=$SETUP -project=$PROJECT -autoStart &
 echo "vtdStart.sh pid = $!"
 #give some time
 for i in `seq 1 10`; do

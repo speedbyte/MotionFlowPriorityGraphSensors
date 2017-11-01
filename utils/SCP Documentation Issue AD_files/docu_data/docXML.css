@@ -1,0 +1,323 @@
+body {
+    margin:10px;
+    background-color:#ffffff;
+    font:1.0em Arial, sans-serif;
+}
+
+h1 {
+    width:auto;
+    color:#000000;
+    padding: 2px 5px 2px 5px;
+    margin:20px 0px 0px 0px;
+    background-color: #D5E1E8;
+    border: 2px solid #aaaaaa;
+    -moz-border-radius: 4px 4px 4px 4px;
+}
+
+div#date {
+    display:inline;
+    float:right;
+    width:auto;
+    padding:0px 5px 0px 5px;
+    margin:4px 0px 4px 0px;
+    background-color:#D5E1E8;
+    border:2px solid #aaaaaa;
+    text-align:right;
+    -moz-border-radius: 4px 4px 4px 4px;
+}
+
+div#navi {
+    display:block;
+    width:auto;
+    padding:4px 4px 0px 4px;
+    margin:4px 0px 4px 0px;
+    background-color:#dadae0;
+    border:2px solid #aaaaaa;
+    -moz-border-radius: 4px 4px 4px 4px;
+}
+
+div#navi a,
+td.end a,
+/*div#fixeddiv a,*/
+div#seek a {
+    color:#2046aa;
+    text-decoration: none;
+    text-align: left;
+    padding: 2px 10px 2px 10px;
+    white-space: normal;
+    font-weight: bold;
+    font-size:0.9em;
+    margin:0px;
+    /*text-transform:uppercase;*/
+    background-color: #D5E1E8;
+    border: 1px solid #aaaaaa;
+    display:block;
+    width:auto;
+    line-height:1.0em;
+    overflow:visible;
+    -moz-border-radius: 4px 4px 4px 4px;
+}
+
+div#navi a:hover,
+td.end a:hover,
+/* div#fixeddiv a:hover, */
+div#seek a:hover {
+    background-color: #d5f3fa;
+}
+
+
+div#navi a#hide {
+    display:none;
+}
+div#navi a#show {
+    display:none;
+}
+
+/* IE 4-6 do not understand "body>", so navi hide and show are disabled */
+body>div#navi a#hide {
+    display:block;
+    margin:0px 0px 4px 250px;
+    text-align:right;
+    font-size:0.6em;
+}
+body>div#navi a#show {
+    margin:0px 0px 4px 250px;
+    text-align:right;
+    font-size:0.6em;
+}
+
+
+div#navi a#hideb {
+    display:none;
+}
+div#navi a#showb {
+    display:none;
+}
+
+/* IE 4-6 do not understand "body>", so bottom bar hide and show are disabled */
+body>div#navi a#hideb {
+    display:block;
+    margin:0px 0px 12px 250px;
+    text-align:right;
+    font-size:0.6em;
+}
+body>div#navi a#showb {
+    margin:0px 0px 12px 250px;
+    text-align:right;
+    font-size:0.6em;
+}
+
+div#navi ul {
+    list-style:none;
+    margin:0px;
+    padding:0px;
+}
+
+div#navi ul ul {
+    list-style:none;
+    margin:0px;
+    padding:0px 0px 4px 30px;
+    font-size:0.8em;
+}
+
+/* disable fixeddiv for all browsers (gets enabled later) */
+div#fixeddiv {
+    display:none;
+}
+
+/* IE 4-6 do not understand "body>", so fixeddiv stays disabled */
+body>div#fixeddiv {
+    display:block;
+    position:fixed;
+    width:auto;
+    height:auto;
+    left:0px;
+    bottom:0px;
+    padding:0px;
+    margin: 0px 10px 0px 10px;
+    z-index:100;
+}
+
+table {
+    border:2px solid #aaaaaa;
+    /*border-collapse:collapse;*/
+    width:100%;
+    /*background-color:#f4f4fa;*/
+    background-color:#dadae0;
+    margin:0% 0% 80% 0%;
+    empty-cells:show;
+    -moz-border-radius: 4px 4px 4px 4px;
+}
+
+div#fixeddiv table {
+    margin:0% 0% 0% 0%;
+    width:100%;
+}
+
+thead td {
+}
+
+tfoot td {
+    font:0.9em Arial, sans-serif;
+}
+
+tbody td {
+}
+
+th {
+    font-weight:bold;
+    font-style:normal;
+    text-align:center;
+    line-height:1.3em;
+    font-size:1.0em;
+    background-color:#D5E1E8;
+    border-top:1px solid #dadae0;
+    border-right:1px solid #dadae0;
+    border-bottom:1px solid #dadae0;
+    border-left:1px solid #dadae0;
+    -moz-border-radius: 4px 4px 4px 4px;
+}
+
+td {
+    border:0px;
+    font-weight:normal;
+    font-style:normal;
+    text-align:left;
+    vertical-align:top;
+    padding:2px 5px 2px 5px;
+    line-height:1.0em;
+    font-size:1.0em;
+    background-color:#dadae0;
+    border-top:1px solid #dadae0;
+    border-right:1px solid #dadae0;
+    border-bottom:1px solid #dadae0;
+    border-left:1px solid #dadae0;
+}
+
+td ul {
+    list-style-type:disc;
+    margin:0px 0px 0px 14px;
+    padding:0px 0px 0px 0px;
+}
+
+tr.col1 td {
+    background-color:#ced3d5;
+    border-top:1px solid #aaaaaa;
+}
+
+tr.col2 td.cmd,
+tr.col2 td.scope {
+    background-color:#d7e0e0;
+}
+
+tr.col1 td.arg,
+tr.col1 td.arg,
+tr.col1 td.expl,
+tr.col1 td.unit,
+tr.col1 td.user,
+tr.col2 td.arg,
+tr.col2 td.expl,
+tr.col2 td.unit,
+tr.col2 td.user,
+tr.col3 td.scope,
+tr.col3 td.arg,
+tr.col3 td.expl,
+tr.col3 td.unit,
+tr.col3 td.user {
+    background-color:#dee3e5;
+}
+
+td.cmd {
+    font-family:monospace;
+    font-weight:bold;
+    font-style:normal;
+    white-space:nowrap;
+}
+
+td.scope {
+    font-family:sans-serif;
+    font-weight:normal;
+    font-style:normal;
+    font-size:0.9em;
+}
+
+td.arg {
+    font-family:monospace;
+    font-weight:bold;
+    font-style:normal;
+}
+
+td.expl {
+    font-family:sans-serif;
+    font-weight:normal;
+    font-style:normal;
+    font-size:0.9em;
+}
+
+td.unit {
+    font-family:sans-serif;
+    font-weight:normal;
+    font-style:italic;
+    font-size:0.9em;
+}
+
+td.user {
+    font-family:sans-serif;
+    font-weight:normal;
+    font-style:normal;
+    font-size:0.9em;
+}
+
+td.end {
+    font:0.9em Arial, sans-serif;
+    font-weight:bold;
+    font-style:normal;
+    text-align:center;
+    -moz-border-radius: 0px 0px 4px 4px;
+}
+
+.printonly {
+    display:none;
+}
+
+div#seek {
+    position:fixed;
+    top:5px;
+    right:5px;
+    width:auto;
+    padding:10px;
+    border:3px dashed #ffff00;
+    background-color:#333333;
+    opacity:0.80;
+    -moz-border-radius: 4px 4px 4px 4px;
+}
+
+div#seek a {
+    display:inline;
+    width:auto;
+}
+
+.strike {
+    text-decoration:line-through;
+}
+
+.color_1 { /* blue */
+    color:#4b59c8;
+}
+
+.color_2 { /* green */
+    color:#05C722;
+}
+
+.color_3 { /* yellow */
+    color:#FFFBA8;
+}
+
+input {
+    width:49%;
+    margin:0px 0px 0px 0px;
+    padding:0px;
+    background-color:#dadae0;
+    border:2px groove #aaaaaa;
+    -moz-border-radius: 4px 4px 4px 4px;
+}
