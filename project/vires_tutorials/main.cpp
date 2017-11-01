@@ -12,41 +12,121 @@
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
 #include <netdb.h>
+#include <png++/rgb_pixel.hpp>
+#include <png++/image.hpp>
+#include <viRDBIcd.h>
 
 #include "main.h"
 #include "kbhit.h"
 
+
+extern int          mHaveImage    ;                                 // is an image available?
+extern int          mClient       ;                                // client socket
+extern unsigned int mSimFrame     ;                                 // simulation frame counter
+extern double       mSimTime      ;                               // simulation time
+extern double       mDeltaTime    ;                              // simulation step width
+extern int mLastShmFrame;
+
 extern unsigned int mShmPtr_writer;
-extern unsigned int mShmKey_writer;
 extern bool mVerbose;
-extern unsigned int mShmPtr_reader;
-extern unsigned int mShmKey_reader;
+extern unsigned int mShmKey;
+extern unsigned int mShmPtr;
 extern double       mFrameTime;
 extern unsigned int mCheckMask;
 extern int mForceBuffer;
 
-extern void ValidateArgs_writer(int argc, char **argv);
-extern void openShm_writer();
 extern int  writeTriggerToShm();
-extern void ValidateArgs_reader(int argc, char **argv);
-extern void openShm_reader();
+extern void openShm();
+extern void openNetwork();
+extern void readNetwork();
 extern int checkShm();
 
 extern char  szServer[128];             // Server to connect to
 extern int   iPort;  // Port on server to connect to
 
-extern void sendTrigger( int & sendSocket, const double & simTime, const unsigned int & simFrame );
+extern int          mPortTx;
+extern int          mSocketTx;
+extern unsigned int mAddressTx;
+extern int          mPortRx;
+extern int          mSocketRx;
+extern unsigned int mAddressRx;
+
+
+extern void sendRDBTrigger( int & sendSocket, const double & simTime, const unsigned int & simFrame );
+extern int openRxPort();
+
+//
+// Function: usage:
+//
+// Description:
+//    Print usage information and exit
+//
+void usage_udp()
+{
+    printf("usage: rdbTest [-r:n] [-s:n]\n\n");
+    printf("       -r:n      receive port\n");
+    printf("       -s:n      send port\n");
+    printf("       -a:IP     IP address of partner (127.0.0.1)\n");
+    exit(1);
+}
+
+//
+// Function: ValidateArgs
+//
+// Description:
+//    Parse the command line arguments, and set some global flags
+//    to indicate what actions to perform
+//
+void ValidateArgs_udp(int argc, char **argv)
+{
+    int i;
+
+    strcpy( szServer, "127.0.0.1" );
+
+    for(i = 1; i < argc; i++)
+    {
+        if ((argv[i][0] == '-') || (argv[i][0] == '/'))
+        {
+            switch (tolower(argv[i][1]))
+            {
+                case 'r':        // Remote port
+                    if (strlen(argv[i]) > 3)
+                        mPortRx = atoi(&argv[i][3]);
+                    break;
+                case 's':        // Remote port
+                    if (strlen(argv[i]) > 3)
+                        mPortTx = atoi(&argv[i][3]);
+                    break;
+                case 'a':       // Server
+                    if (strlen(argv[i]) > 3)
+                        strcpy(szServer, &argv[i][3]);
+                    break;
+                default:
+                    usage_udp();
+                    break;
+            }
+        }
+    }
+
+    mAddressTx = inet_addr( szServer );
+    mAddressRx = inet_addr( szServer );
+
+    fprintf( stderr, "ValidateArgs: TX port  = %d, RX port = %d, TX address = %s (0x%x)\n",
+             mPortTx, mPortRx, szServer, mAddressTx );
+}
 
 /**
 * information about usage of the software
 * this method will exit the program
 */
-void usage_reader()
+void usage()
 {
-    printf("usage: shmReader [-k:key] [-c:checkMask] [-v] [-f:bufferId]\n\n");
+    printf("usage: videoTest [-k:key] [-c:checkMask] [-v] [-f:bufferId] [-p:x] [-s:IP] [-h]\n\n");
     printf("       -k:key        SHM key that is to be addressed\n");
     printf("       -c:checkMask  mask against which to check before reading an SHM buffer\n");
     printf("       -f:bufferId   force reading of a given buffer (0 or 1) instead of checking for a valid checkMask\n");
+    printf("       -p:x          Remote port to send to\n");
+    printf("       -s:IP         Server's IP address or hostname\n");
     printf("       -v            run in verbose mode\n");
     exit(1);
 }
@@ -54,8 +134,11 @@ void usage_reader()
 /**
 * validate the arguments given in the command line
 */
-void ValidateArgs_reader(int argc, char **argv)
+void ValidateArgs(int argc, char **argv)
 {
+    // initalize the server variable
+    strcpy( szServer, "127.0.0.1" );
+
     for( int i = 1; i < argc; i++)
     {
         if ((argv[i][0] == '-') || (argv[i][0] == '/'))
@@ -64,7 +147,7 @@ void ValidateArgs_reader(int argc, char **argv)
             {
                 case 'k':        // shared memory key
                     if ( strlen( argv[i] ) > 3 )
-                        mShmKey_reader = atoi( &argv[i][3] );
+                        sscanf( &argv[i][3], "0x%x", &mShmKey );
                     break;
 
                 case 'c':       // check mask
@@ -81,95 +164,6 @@ void ValidateArgs_reader(int argc, char **argv)
                     mVerbose = true;
                     break;
 
-                default:
-                    usage_reader();
-                    break;
-            }
-        }
-    }
-
-    fprintf( stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
-             mShmKey_reader, mCheckMask, mForceBuffer );
-}
-
-
-/**
-* information about usage of the software
-* this method will exit the program
-*/
-void usage_writer()
-{
-    printf("usage: shmWriter [-k:key]\n\n");
-    printf("       -k:key        SHM key that is to be addressed\n");
-    printf("       -v            run in verbose mode\n");
-    exit(1);
-}
-
-
-/**
-* validate the arguments given in the command line
-*/
-void ValidateArgs_writer(int argc, char **argv)
-{
-    for( int i = 2; i < argc; i++)
-    {
-        if ((argv[i][0] == '-') || (argv[i][0] == '/'))
-        {
-            switch (tolower(argv[i][1]))
-            {
-                case 'k':        // shared memory key
-                    if ( strlen( argv[i] ) > 3 )
-                        mShmKey_writer = atoi( &argv[i][3] );
-                    break;
-
-                case 'v':       // verbose mode
-                    mVerbose = true;
-                    break;
-
-                default:
-                    usage_writer();
-                    break;
-            }
-        }
-    }
-
-    fprintf( stderr, "ValidateArgs: key = 0x%x\n", mShmKey_writer );
-}
-
-
-//
-// Function: usage:
-//
-// Description:
-//    Print usage information and exit
-//
-void usage_trigger()
-{
-    printf("usage: client [-p:x] [-s:IP]\n\n");
-    printf("       -p:x      Remote port to send to\n");
-    printf("       -s:IP     Server's IP address or hostname\n");
-    exit(1);
-}
-
-//
-// Function: ValidateArgs
-//
-// Description:
-//    Parse the command line arguments, and set some global flags
-//    to indicate what actions to perform
-//
-void ValidateArgs_trigger(int argc, char **argv)
-{
-    int i;
-
-    strcpy( szServer, "127.0.0.1" );
-
-    for(i = 1; i < argc; i++)
-    {
-        if ((argv[i][0] == '-') || (argv[i][0] == '/'))
-        {
-            switch (tolower(argv[i][1]))
-            {
                 case 'p':        // Remote port
                     if (strlen(argv[i]) > 3)
                         iPort = atoi(&argv[i][3]);
@@ -178,13 +172,19 @@ void ValidateArgs_trigger(int argc, char **argv)
                     if (strlen(argv[i]) > 3)
                         strcpy(szServer, &argv[i][3]);
                     break;
+
+                case 'h':
                 default:
-                    usage_trigger();
+                    usage();
                     break;
             }
         }
     }
+
+    fprintf( stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
+             mShmKey, mCheckMask, mForceBuffer );
 }
+
 
 /**
 * main program with high frequency loop for checking the shared memory;
@@ -195,42 +195,23 @@ int main(int argc, char* argv[])
 {
     // Parse the command line
     //
-    if ( strcmp(argv[1], "write") == 0 ) {
-        ValidateArgs_writer(argc, argv);
+    if ( strcmp(argv[1], "triggerandread") == 0 ) {
+        int initCounter = 6;
 
-        // first: open the shared memory (try to attach without creating a new segment)
-
-        fprintf( stderr, "attaching to shared memory....\n" );
-
-        while ( !mShmPtr_writer )
-        {
-            openShm_writer();
-            usleep( 1000 );     // do not overload the CPU
-        }
-
-        fprintf( stderr, "...attached! Triggering now...\n" );
-
-        // now write the trigger to the SHM for the time being
-        while ( 1 )
-        {
-            writeTriggerToShm();
-
-            usleep( ( unsigned int ) ( 1.e6 * mFrameTime ) );    // wait for frame time (not very precise!)
-        }
-    }
-    else if ( strcmp(argv[1], "read") == 0 ) {
         // Parse the command line
-        //
-        ValidateArgs_reader(argc, argv);
+        ValidateArgs(argc, argv);
 
-        // first: open the shared memory (try to attach without creating a new segment)
+        // open the network connection to the taskControl (so triggers may be sent)
+        fprintf( stderr, "creating network connection....\n" );
+        openNetwork();  // this is blocking until the network has been opened
 
-        fprintf( stderr, "attaching to shared memory....\n" );
+        // now: open the shared memory (try to attach without creating a new segment)
+        fprintf( stderr, "attaching to shared memory 0x%x....\n", mShmKey );
 
-        while ( !mShmPtr_reader )
+        while ( !mShmPtr )
         {
-            openShm_reader();
-            usleep( 100000 );     // do not overload the CPU
+            openShm();
+            usleep( 1000 );     // do not overload the CPU
         }
 
         fprintf( stderr, "...attached! Reading now...\n" );
@@ -238,78 +219,36 @@ int main(int argc, char* argv[])
         // now check the SHM for the time being
         while ( 1 )
         {
-            checkShm();
+            readNetwork();
 
-            usleep( 1000 );
+            if ( initCounter <= 0 )
+                checkShm();
+
+            // has an image arrived or do the first frames need to be triggered
+            //(first image will arrive with a certain frame delay only)
+            if ( mHaveImage || ( initCounter-- > 0 ) )
+            {
+                sendRDBTrigger( mClient, mSimTime, mSimFrame );
+
+                // increase internal counters
+                mSimTime += mDeltaTime;
+                mSimFrame++;
+            }
+
+            // ok, reset image indicator
+            mHaveImage = 0;
+
+            usleep( 10000 );
         }
     }
     else if ( strcmp(argv[1], "trigger") == 0 )  {
-        int           sClient;
-        char* szBuffer = new char[DEFAULT_BUFFER];  // allocate on heap
-        int           ret;
-        struct sockaddr_in server;
-        struct hostent    *host = NULL;
         static bool sSendTrigger = true;
 
         // Parse the command line
         //
-        ValidateArgs_trigger(argc, argv);
+        ValidateArgs(argc, argv);
+        openNetwork();
 
-        //
-        // Create the socket, and attempt to connect to the server
-        //
-        sClient = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-        if ( sClient == -1 )
-        {
-            fprintf( stderr, "socket() failed: %s\n", strerror( errno ) );
-            return 1;
-        }
-
-        int opt = 1;
-        setsockopt ( sClient, IPPROTO_TCP, TCP_NODELAY, &opt, sizeof( opt ) );
-
-        server.sin_family      = AF_INET;
-        server.sin_port        = htons(iPort);
-        server.sin_addr.s_addr = inet_addr(szServer);
-
-        //
-        // If the supplied server address wasn't in the form
-        // "aaa.bbb.ccc.ddd" it's a hostname, so try to resolve it
-        //
-        if ( server.sin_addr.s_addr == INADDR_NONE )
-        {
-            host = gethostbyname(szServer);
-            if ( host == NULL )
-            {
-                fprintf( stderr, "Unable to resolve server: %s\n", szServer );
-                return 1;
-            }
-            memcpy( &server.sin_addr, host->h_addr_list[0], host->h_length );
-        }
-        // wait for connection
-        bool bConnected = false;
-
-        while ( !bConnected )
-        {
-            if (connect( sClient, (struct sockaddr *)&server, sizeof( server ) ) == -1 )
-            {
-                fprintf( stderr, "connect() failed: %s\n", strerror( errno ) );
-                sleep( 1 );
-            }
-            else
-                bConnected = true;
-        }
-
-        fprintf( stderr, "connected!\n" );
-
-        unsigned int  bytesInBuffer = 0;
-        size_t        bufferSize    = sizeof( RDB_MSG_HDR_t );
-        unsigned int  count         = 0;
-        unsigned char *pData        = ( unsigned char* ) calloc( 1, bufferSize );
-
-        // Send and receive data - forever!
-        //
         for(;;)
         {
             bool bMsgComplete = false;
@@ -328,15 +267,15 @@ int main(int argc, char* argv[])
             }
             else if ( val == 'i') {
                 sSendTrigger = false;
-                sendTrigger( sClient, 0.0, 0 );
+                sendRDBTrigger( mClient, 0.0, 0 );
             }
             if ( sSendTrigger )
-                sendTrigger( sClient, 0.0, 0 );
+                sendRDBTrigger( mClient, 0.0, 0 );
         }
-        ::close(sClient);
-
+        ::close(mClient);
         return 0;
     }
+
     std::string m_server;
     int m_port;
     int m_sensor_port;
@@ -348,5 +287,85 @@ int main(int argc, char* argv[])
 }
 
 
+void MyRDBHandler::parseMessage( RDB_MSG_t* msg ) {
+    Framework::RDBHandler::parseMessage(msg);
+}
 
+void MyRDBHandler::parseStartOfFrame(const double &simTime, const unsigned int &simFrame) {
+    fprintf( stderr, "headers %d\n,", RDB_PKG_ID_START_OF_FRAME );
+    fprintf( stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame );
+}
 
+void MyRDBHandler::parseEndOfFrame( const double & simTime, const unsigned int & simFrame )
+{
+    fprintf( stderr, "headers %d\n,", RDB_PKG_ID_END_OF_FRAME );
+    fprintf( stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame );
+}
+
+void MyRDBHandler::parseEntry( RDB_OBJECT_CFG_t *data, const double & simTime, const unsigned int & simFrame, const
+unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
+    RDB_OBJECT_CFG_t* object = reinterpret_cast<RDB_OBJECT_CFG_t*>(data); /// raw image data
+    std::cout << object->type;
+}
+
+void MyRDBHandler::parseEntry( RDB_OBJECT_STATE_t *data, const double & simTime, const unsigned int & simFrame, const unsigned
+short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
+    RDB_OBJECT_STATE_t* object = reinterpret_cast<RDB_OBJECT_STATE_t*>(data); /// raw image data
+    fprintf( stderr, "handleRDBitem: handling object state\n" );
+    fprintf( stderr, "    simTime = %.3lf, simFrame = %d\n", simTime, simFrame );
+    fprintf( stderr, "    object = %s, id = %d\n", data->base.name, data->base.id );
+    fprintf( stderr, "    position = %.3lf / %.3lf / %.3lf\n", data->base.pos.x, data->base.pos.y, data->base.pos.z );
+}
+
+void MyRDBHandler::parseEntry( RDB_IMAGE_t *data, const double & simTime, const unsigned int & simFrame, const
+unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
+    if ( !data )
+        return;
+    fprintf( stderr, "handleRDBitem: image\n" );
+    fprintf( stderr, "    simTime = %.3lf, simFrame = %d, mLastShmFrame = %d\n", simTime, simFrame, mLastShmFrame );
+    fprintf( stderr, "    width / height = %d / %d\n", data->width, data->height );
+    fprintf( stderr, "    dataSize = %d\n", data->imgSize );
+
+    // ok, I have an image:
+    mHaveImage = 1;
+    char* image_data_=NULL;
+    RDB_IMAGE_t* image = reinterpret_cast<RDB_IMAGE_t*>(data); /// raw image data
+
+    /// RDB image information of \see image_data_
+    RDB_IMAGE_t image_info_;
+    //memset(&image_info_, 0, sizeof(RDB_IMAGE_t));
+    memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
+
+    if (NULL == image_data_) {
+        image_data_ = reinterpret_cast<char*>(malloc(image_info_.imgSize));
+    } else {
+        image_data_ = reinterpret_cast<char*>(realloc(image_data_, image_info_.imgSize));
+    }
+    // jump data header
+    memcpy(image_data_, reinterpret_cast<char*>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
+
+    if ( image_info_.imgSize == image_info_.width*image_info_.height*3){
+        png::image<png::rgb_pixel> save_image(image_info_.width, image_info_.height);
+        unsigned int count = 0;
+        for (int32_t v=0; v<image_info_.height; v++) {
+            for (int32_t u=0; u<image_info_.width; u++) {
+                png::rgb_pixel val;
+                val.red   = (unsigned char)image_data_[count++];
+                val.green = (unsigned char)image_data_[count++];
+                val.blue  = (unsigned char)image_data_[count++];
+                //val.alpha = (unsigned char)image_data_[count++];
+                save_image.set_pixel(u,v,val);
+            }
+        }
+        char file_name[500];
+        sprintf(file_name,
+                "/local/git/PriorityGraphSensors/vires_dataset/data/stereo_flow/image_02/000"
+                        "%03d_10.png", simFrame);
+        save_image.write(file_name);
+    }
+    else {
+        fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize /( image_info_
+                                                                                           .width*image_info_.height));
+    }
+    //process(reinterpret_cast<RDB_IMAGE_t*>(data));
+}

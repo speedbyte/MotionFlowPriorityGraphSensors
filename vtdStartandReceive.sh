@@ -8,6 +8,8 @@ SOURCE_DIR=$(pwd)
 VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.0/bin
 CPP_DIR=$SOURCE_DIR/project/vires_tutorials/cmake-build-debug
 VIRES_DATASET_DIR=$SOURCE_DIR/vires_dataset/data/stereo_flow/image_02
+cd $VIRES_DATASET_DIR
+rm *.png
 cd $VIRES_DIR 
 ./vtdStart.sh -setup="Standard_test" -project="SampleProject_test" -autoStart &
 echo "vtdStart.sh pid = $!"
@@ -23,10 +25,10 @@ simserver_pid=`pgrep simServer | head -1`
 echo "simserver pid is $simserver_pid"
 if [[ simserver_pid -gt 0 ]]; then echo "PID is running"; else echo "PID is not running"; ./vtdStop.sh; exit; fi
 cd $CPP_DIR
-./shm_reader_writer trigger & 
-trigger_pid=$!
-sleep 1
-./shm_reader_writer read & 
+#./shm_reader_writer trigger & 
+#trigger_pid=$!
+#sleep 1
+./shm_trigger_read triggerandread > $VIRES_DATASET_DIR/file.log 2>&1 & 
 read_pid=$!
 
 for i in `seq 1 10`; do
@@ -34,7 +36,7 @@ for i in `seq 1 10`; do
 	echo $((100-$i)) seconds till abort ... 
 done
 
-kill -9 $trigger_pid
+#kill -9 $trigger_pid
 kill -9 $read_pid
 cd $VIRES_DIR 
 ./vtdStop.sh

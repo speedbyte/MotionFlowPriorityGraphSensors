@@ -131,3 +131,71 @@ VigLightMapTest::dualBufferTest( SensorIface* sensorData )
     }
     return 1;
 }
+
+
+int writeTriggerToShm()
+{
+    if ( !mShmPtr_writer )
+        return 0;
+
+    // get access to the administration information of the first RDB buffer in SHM
+    RDB_SHM_BUFFER_INFO_t* info = mRdbHandler.shmBufferGetInfo( 0 );
+
+    if ( !info )
+        return 0;
+
+    // is the buffer ready for write?
+    if ( info->flags )      // is the buffer accessible (flags == 0)?
+        return 0;
+
+    // clear the buffer before writing to it (otherwise messages will accumulate)
+    if ( !mRdbHandler.shmBufferClear( 0, true ) )   // true = clearing will be forced; not recommended!
+        return 0;
+
+    fprintf( stderr, "writeTriggerToShm: sending single trigger\n" );
+
+    // increase the frame number
+    mFrameNo++;
+
+    // create a message containing the sync information
+    RDB_SYNC_t* syncData = ( RDB_SYNC_t* ) mRdbHandler.addPackage( mFrameNo * mFrameTime, mFrameNo, RDB_PKG_ID_SYNC );
+
+    if ( !syncData )
+        return 0;
+
+    syncData->mask    = 0x0;
+    syncData->cmdMask = RDB_SYNC_CMD_RENDER_SINGLE_FRAME;
+
+    // set some information concerning the RDB buffer itself
+    info->id    = 1;
+    info->flags = RDB_SHM_BUFFER_FLAG_IG;
+
+    // now copy the symc message to the first RDB buffer in SHM
+    mRdbHandler.mapMsgToShm( 0 );
+
+    return 1;
+}
+
+
+else if ( strcmp(argv[1], "write") == 0 ) {
+ValidateArgs(argc, argv);
+
+// first: open the shared memory (try to attach without creating a new segment)
+
+fprintf( stderr, "attaching to shared memory....\n" );
+
+while ( !mShmPtr_writer )
+{
+openShm();
+usleep( 1000 );     // do not overload the CPU
+}
+
+fprintf( stderr, "...attached! Triggering now...\n" );
+
+// now write the trigger to the SHM for the time being
+while ( 1 )
+{
+writeTriggerToShm();
+usleep( ( unsigned int ) ( 1.e6 * mFrameTime ) );    // wait for frame time (not very precise!)
+}
+}
