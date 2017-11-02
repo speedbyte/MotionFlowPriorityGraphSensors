@@ -21,18 +21,24 @@ SOURCE_DIR=$(pwd)
 VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.0/bin
 CPP_DIR=$SOURCE_DIR/project/vires_tutorials/cmake-build-debug
 VIRES_DATASET_DIR=$SOURCE_DIR/vires_dataset/data/stereo_flow/image_02
+
 cd $VIRES_DATASET_DIR
 rm *.png
 cd $VIRES_DIR 
-./vtdStart.sh -setup=$SETUP -project=$PROJECT -autoStart &
+./vtdStart.sh -setup=$SETUP -project=$PROJECT & 
 echo "vtdStart.sh pid = $!"
-#give some time
-for i in `seq 1 10`; do
-	sleep 1
-	echo "Waiting again"
+variable="dummy"
+read -p "First press apply and then play in VIRES and then Enter here to start the cpp data transfer" -t 1 -N 1 variable
+echo -e "\n"
+while [ "$variable" != $'\x0a' ] 
+do
+IFS=''
+read -p "First press apply and then play in VIRES and then Enter here to start the cpp data transfer" -t 1 -N 1 variable
+echo -e "\n" 
 done
 #This will block until and unless there is a value in the fifo. This makes sure that the processes are synchronous.
 #read simserver_pid <"$tempdir/child"
+IFS=$'\n'
 
 simserver_pid=`pgrep simServer | head -1`
 echo "simserver pid is $simserver_pid"
@@ -44,7 +50,7 @@ cd $CPP_DIR
 ./shm_trigger_read triggerandread > $VIRES_DATASET_DIR/file.log 2>&1 & 
 read_pid=$!
 
-for i in `seq 1 10`; do
+for i in `seq 1 100`; do
 	sleep 1
 	echo $((100-$i)) seconds till abort ... 
 done

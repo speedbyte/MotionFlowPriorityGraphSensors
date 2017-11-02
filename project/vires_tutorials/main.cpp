@@ -38,6 +38,7 @@ extern int mForceBuffer;
 extern int  writeTriggerToShm();
 extern void openShm();
 extern void openNetwork();
+extern void openNetwork_GT();
 extern void readNetwork();
 extern int checkShm();
 
@@ -143,6 +144,7 @@ int main(int argc, char* argv[])
         // open the network connection to the taskControl (so triggers may be sent)
         fprintf( stderr, "creating network connection....\n" );
         openNetwork();  // this is blocking until the network has been opened
+        openNetwork_GT();
 
         // now: open the shared memory (try to attach without creating a new segment)
         fprintf( stderr, "attaching to shared memory 0x%x....\n", mShmKey );
@@ -216,10 +218,12 @@ unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemI
 void MyRDBHandler::parseEntry( RDB_OBJECT_STATE_t *data, const double & simTime, const unsigned int & simFrame, const unsigned
 short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
     RDB_OBJECT_STATE_t* object = reinterpret_cast<RDB_OBJECT_STATE_t*>(data); /// raw image data
-    fprintf( stderr, "handleRDBitem: handling object state\n" );
-    fprintf( stderr, "    simTime = %.3lf, simFrame = %d\n", simTime, simFrame );
-    fprintf( stderr, "    object = %s, id = %d\n", data->base.name, data->base.id );
-    fprintf( stderr, "    position = %.3lf / %.3lf / %.3lf\n", data->base.pos.x, data->base.pos.y, data->base.pos.z );
+    if ( strcmp(data->base.name, "New Character") == 0) {
+        fprintf( stderr, "handleRDBitem: handling object state\n" );
+        fprintf( stderr, "    simTime = %.3lf, simFrame = %d\n", simTime, simFrame );
+        fprintf( stderr, "    object = %s, id = %d\n", data->base.name, data->base.id );
+        fprintf( stderr, "    position = %.3lf / %.3lf / %.3lf\n", data->base.pos.x, data->base.pos.y, data->base.pos.z );
+    }
 }
 
 void MyRDBHandler::parseEntry( RDB_IMAGE_t *data, const double & simTime, const unsigned int & simFrame, const

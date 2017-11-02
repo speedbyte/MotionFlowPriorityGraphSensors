@@ -11,7 +11,7 @@
 #define DEFAULT_PORT        48190   /* for image port it should be 48192 */
 #define DEFAULT_BUFFER      204800
 
-#define DEFAULT_RX_PORT     48190   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT     48185   /* for image port it should be 48192 */
 #define DEFAULT_TX_PORT     48191
 
 class MyRDBHandler : Framework::RDBHandler {

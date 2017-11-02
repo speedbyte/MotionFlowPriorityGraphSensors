@@ -122,6 +122,7 @@ char         szServer[128];                                     // Server to con
 int          iPort         = DEFAULT_PORT;                      // Port on server to connect to
 int          mHaveImage    = 0;                                 // is an image available?
 int          mClient       = -1;                                // client socket
+int          mClient_GT    = -1;
 unsigned int mSimFrame     = 0;                                 // simulation frame counter
 double       mSimTime      = 0.0;                               // simulation time
 double       mDeltaTime    = 0.01;                              // simulation step width
@@ -224,6 +225,58 @@ void openNetwork()
     fprintf( stderr, "connected!\n" );
 }
 
+void openNetwork_GT()
+{
+    struct sockaddr_in server;
+    struct hostent    *host = NULL;
+
+    // Create the socket, and attempt to connect to the server
+    mClient_GT = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
+
+    if ( mClient_GT == -1 )
+    {
+        fprintf( stderr, "socket() failed: %s\n", strerror( errno ) );
+        return;
+    }
+
+    int opt = 1;
+    setsockopt ( mClient_GT, IPPROTO_TCP, TCP_NODELAY, &opt, sizeof( opt ) );
+
+    server.sin_family      = AF_INET;
+    server.sin_port        = htons(48185);
+    server.sin_addr.s_addr = inet_addr(szServer);
+
+    // If the supplied server address wasn't in the form
+    // "aaa.bbb.ccc.ddd" it's a hostname, so try to resolve it
+    if ( server.sin_addr.s_addr == INADDR_NONE )
+    {
+        host = gethostbyname(szServer);
+        if ( host == NULL )
+        {
+            fprintf( stderr, "Unable to resolve server: %s\n", szServer );
+            return;
+        }
+        memcpy( &server.sin_addr, host->h_addr_list[0], host->h_length );
+    }
+
+    // wait for connection
+    bool bConnected = false;
+
+    while ( !bConnected )
+    {
+        if ( connect( mClient_GT, (struct sockaddr *)&server, sizeof( server ) ) == -1 )
+        {
+            fprintf( stderr, "connect() failed: %s\n", strerror( errno ) );
+            sleep( 1 );
+        }
+        else
+            bConnected = true;
+    }
+
+    fprintf( stderr, "connected!\n" );
+}
+
+
 void readNetwork()
 {
     static char*         szBuffer       = 0;
@@ -241,7 +294,7 @@ void readNetwork()
     {
         ret = 0;        // nothing read yet
 
-        int noReady = getNoReadyRead( mClient );
+        int noReady = getNoReadyRead( mClient_GT );
 
         if ( noReady < 0 )
         {
@@ -252,7 +305,7 @@ void readNetwork()
         if ( noReady > 0 )
         {
             // read data
-            if ( ( ret = recv( mClient, szBuffer, DEFAULT_BUFFER, 0 ) ) != 0 )
+            if ( ( ret = recv( mClient_GT, szBuffer, DEFAULT_BUFFER, 0 ) ) != 0 )
             {
                 // do we have to grow the buffer??
                 if ( ( sBytesInBuffer + ret ) > sBufferSize )
