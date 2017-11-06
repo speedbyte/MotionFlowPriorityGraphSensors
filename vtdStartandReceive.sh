@@ -50,7 +50,7 @@ cd $CPP_DIR
 ./shm_trigger_read triggerandread > $VIRES_DATASET_DIR/file.log 2>&1 & 
 read_pid=$!
 
-for i in `seq 1 100`; do
+for i in `seq 1 40`; do
 	sleep 1
 	echo $((100-$i)) seconds till abort ... 
 done
@@ -60,4 +60,8 @@ kill -9 $read_pid
 cd $VIRES_DIR 
 ./vtdStop.sh
 cd $VIRES_DATASET_DIR
-find ./ -name '*.png' -exec convert -flip {} {} \;
+#find ./ -name '*.png' -exec convert -flip {} {} \;
+mogrify -flip *.png
+#Extract flow from log file
+grep -e '^INDICATOR' file.log > FLow.log
+
