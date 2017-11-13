@@ -135,8 +135,11 @@ int main(int argc, char* argv[])
 {
     // Parse the command line
     //
+
+
     if ( strcmp(argv[1], "triggerandread") == 0 ) {
         int initCounter = 6;
+
 
         // Parse the command line
         ValidateArgs(argc, argv);
@@ -145,6 +148,8 @@ int main(int argc, char* argv[])
         fprintf( stderr, "creating network connection....\n" );
         openNetwork();  // this is blocking until the network has been opened
         openNetwork_GT();
+
+
 
         // now: open the shared memory (try to attach without creating a new segment)
         fprintf( stderr, "attaching to shared memory 0x%x....\n", mShmKey );
@@ -219,12 +224,23 @@ void MyRDBHandler::parseEntry( RDB_OBJECT_STATE_t *data, const double & simTime,
 short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
     RDB_OBJECT_STATE_t* object = reinterpret_cast<RDB_OBJECT_STATE_t*>(data); /// raw image data
     if ( strcmp(data->base.name, "New Character") == 0) {
-        fprintf( stderr, "handleRDBitem: handling object state\n" );
-        fprintf( stderr, "    simTime = %.3lf, simFrame = %d\n", simTime, simFrame );
-        fprintf( stderr, "    object = %s, id = %d\n", data->base.name, data->base.id );
-        fprintf( stderr, "    position = %.3lf / %.3lf / %.3lf\n", data->base.pos.x, data->base.pos.y, data->base.pos.z );
+//        fprintf( stderr, "handleRDBitem: handling object state\n" );
+//        fprintf( stderr, "    simTime = %.3lf, simFrame = %d\n", simTime, simFrame );
+//        fprintf( stderr, "    object = %s, id = %d\n", data->base.name, data->base.id );
+//        fprintf( stderr, "    position = %.3lf / %.3lf / %.3lf\n", data->base.pos.x, data->base.pos.y, data->base
+//                .pos.z );
+
+        fprintf( stderr, "INDICATOR: %d %.3lf %.3lf %.3lf %.3lf \n" ,
+                 simFrame,data->base.pos.x,
+                 data->base.pos.y, data->base.geo.dimX, data->base.geo.dimY );
     }
-}
+    else if ( strcmp(data->base.name, "New Character01") == 0) {
+        fprintf( stderr, "INDICATOR2: %d %.3lf %.3lf %.3lf %.3lf \n" ,
+                 simFrame,data->base.pos.x,
+                 data->base.pos.y, data->base.geo.dimX, data->base.geo.dimY );
+    }
+        }
+
 
 void MyRDBHandler::parseEntry( RDB_IMAGE_t *data, const double & simTime, const unsigned int & simFrame, const
 unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
@@ -265,9 +281,10 @@ unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemI
                 save_image.set_pixel(u,v,val);
             }
         }
+
         char file_name[500];
         sprintf(file_name,
-                "/local/git/PriorityGraphSensors/vires_dataset/data/stereo_flow/image_02/000"
+                "/local/git/PriorityGraphSensors/vires_dataset/data/stereo_flow/image_02_car/000"
                         "%03d_10.png", simFrame);
         save_image.write(file_name);
     }
