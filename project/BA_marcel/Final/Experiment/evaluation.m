@@ -40,7 +40,7 @@ if strcmp(name,'normal')
         load('collisionVectorNormal.mat');
 
         if noise == 0
-        path = 'normal/flow_occ_';
+        path = 'normal/flow_occ';
         gtName = 'normal';
 
     end
@@ -127,9 +127,8 @@ for x = 1:maxIteration
     errSum = sum(error);
     errorMean(x) = errSum/x;
 
-    if x > maxIteration -5
        kittiPlotter(error,f_err,errorMean,F_est,F_gt,F_err,x);
-    end
+    
         disp(x);
   end
     

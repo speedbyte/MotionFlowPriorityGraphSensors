@@ -11,6 +11,7 @@ iG = './ImageGenerator.m';
 run(iG)
 end
 
+
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ');
 %estFlow('slow',0);
 %evaluation('slow',0);
@@ -20,29 +21,28 @@ close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ_dynamic_BG');
 %estFlow('slow',1);
-evaluation('slow',1);
+%evaluation('slow',1);
 disp('Press any key to continue');
 w = waitforbuttonpress;
 close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ_static_BG');
 %estFlow('slow',2);
-evaluation('slow',2);
+%evaluation('slow',2);
 disp('Press any key to continue');
 w = waitforbuttonpress;
 close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ_static_FG');
-estFlow('slow',3);
-evaluation('slow',3);
+%estFlow('slow',3);
+%evaluation('slow',3);
 disp('Press any key to continue');
 w = waitforbuttonpress;
 close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ_dynamic_FG');
-estFlow('slow',4);
-evaluation('slow',4);
-
+%estFlow('slow',4);
+%evaluation('slow',4);
 disp('Press any key to start normal Experiment');
 w = waitforbuttonpress;
 close all;
