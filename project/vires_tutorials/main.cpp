@@ -133,61 +133,6 @@ void ValidateArgs(int argc, char **argv)
 
 int main(int argc, char* argv[])
 {
-    // Parse the command line
-    //
-
-
-    if ( strcmp(argv[1], "triggerandread") == 0 ) {
-        int initCounter = 6;
-
-
-        // Parse the command line
-        ValidateArgs(argc, argv);
-
-        // open the network connection to the taskControl (so triggers may be sent)
-        fprintf( stderr, "creating network connection....\n" );
-        openNetwork();  // this is blocking until the network has been opened
-        openNetwork_GT();
-
-
-
-        // now: open the shared memory (try to attach without creating a new segment)
-        fprintf( stderr, "attaching to shared memory 0x%x....\n", mShmKey );
-
-        while ( !mShmPtr )
-        {
-            openShm();
-            usleep( 1000 );     // do not overload the CPU
-        }
-
-        fprintf( stderr, "...attached! Reading now...\n" );
-
-        // now check the SHM for the time being
-        while ( 1 )
-        {
-            readNetwork();
-
-            if ( initCounter <= 0 )
-                checkShm();
-
-            // has an image arrived or do the first frames need to be triggered
-            //(first image will arrive with a certain frame delay only)
-            if ( mHaveImage || ( initCounter-- > 0 ) )
-            {
-                sendRDBTrigger( mClient, mSimTime, mSimFrame );
-
-                // increase internal counters
-                mSimTime += mDeltaTime;
-                mSimFrame++;
-            }
-
-            // ok, reset image indicator
-            mHaveImage = 0;
-
-            usleep( 10000 );
-        }
-    }
-
     std::string m_server;
     int m_port;
     int m_sensor_port;
@@ -195,6 +140,55 @@ int main(int argc, char* argv[])
     int m_frames_to_read;
     bool m_write_ts_gt;
     boost::filesystem::path m_ts_gt_out_dir;
+
+    int initCounter = 6;
+
+
+    // Parse the command line
+    ValidateArgs(argc, argv);
+
+    // open the network connection to the taskControl (so triggers may be sent)
+    fprintf( stderr, "creating network connection....\n" );
+    openNetwork();  // this is blocking until the network has been opened
+    openNetwork_GT();
+
+
+
+    // now: open the shared memory (try to attach without creating a new segment)
+    fprintf( stderr, "attaching to shared memory 0x%x....\n", mShmKey );
+
+    while ( !mShmPtr )
+    {
+        openShm();
+        usleep( 1000 );     // do not overload the CPU
+    }
+
+    fprintf( stderr, "...attached! Reading now...\n" );
+
+    // now check the SHM for the time being
+    while ( 1 )
+    {
+        readNetwork();
+
+        if ( initCounter <= 0 )
+            checkShm();
+
+        // has an image arrived or do the first frames need to be triggered
+        //(first image will arrive with a certain frame delay only)
+        if ( mHaveImage || ( initCounter-- > 0 ) )
+        {
+            sendRDBTrigger( mClient, mSimTime, mSimFrame );
+
+            // increase internal counters
+            mSimTime += mDeltaTime;
+            mSimFrame++;
+        }
+
+        // ok, reset image indicator
+        mHaveImage = 0;
+
+        usleep( 10000 );
+    }
 
 }
 

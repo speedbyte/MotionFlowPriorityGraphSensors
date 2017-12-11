@@ -33,7 +33,7 @@
 #include <iostream>
 #include <thread>
 #include "RDBHandler.hh"
-#include "vtd.h"
+#include "vtd_obselete.h"
 
 class TrafficSigns;
 
