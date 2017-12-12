@@ -19,8 +19,6 @@ startFrame = 35;
 for x = startFrame:100
     disp(x);
     
-    name_flow = sprintf('./../../../vires_dataset/data/stereo_flow/flow_occ_car/%06d_10.png',x-startFrame); %Ground Truth
-    
     %%For creating the GroundTruth pixels as vires only delivers the
     %%position of the object as x,y coordinate and not for each pixel.
     %%Therefore parameters need to be changed manually
@@ -51,6 +49,8 @@ for x = startFrame:100
     
     addpath(genpath('../../../kitti_eval/devkit_stereo_opticalflow_sceneflow/matlab/'));
     
+    % instantiate and save ground truth flow matrix png file for each iteration.
+    name_flow = sprintf('./../../../vires_dataset/data/stereo_flow/flow_occ_car/%06d_10.png',x-startFrame); %Ground Truth
     flow_write(res,name_flow);
     
     save('start.mat','startFrame');

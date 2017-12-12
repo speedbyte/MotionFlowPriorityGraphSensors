@@ -1,5 +1,5 @@
-gt = 0;
-ig = 0;
+gt = 1; % ground truth would be generated if 1
+ig = 1; % image generator would be generated if 1
 
 if gt == 1
 gT = './GroundTruthGenerator.m';
@@ -11,38 +11,48 @@ iG = './ImageGenerator.m';
 run(iG)
 end
 
+if  1 == 1
+    
+disp('Press any key to start slow Experiment');
+w = waitforbuttonpress;
+close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ');
-%estFlow('slow',0);
-%evaluation('slow',0);
+estFlow('slow',0);
+evaluation('slow',0);
 disp('Press any key to continue');
 w = waitforbuttonpress;
 close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ_dynamic_BG');
-%estFlow('slow',1);
-%evaluation('slow',1);
+estFlow('slow',1);
+evaluation('slow',1);
 disp('Press any key to continue');
 w = waitforbuttonpress;
 close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ_static_BG');
-%estFlow('slow',2);
-%evaluation('slow',2);
+estFlow('slow',2);
+evaluation('slow',2);
 disp('Press any key to continue');
 w = waitforbuttonpress;
 close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ_static_FG');
-%estFlow('slow',3);
-%evaluation('slow',3);
+estFlow('slow',3);
+evaluation('slow',3);
 disp('Press any key to continue');
 w = waitforbuttonpress;
 close all;
 
 mkdir('./../../../../matlab_dataset/results/FB/slow/flow_occ_dynamic_FG');
-%estFlow('slow',4);
-%evaluation('slow',4);
+estFlow('slow',4);
+evaluation('slow',4);
+
+end 
+
+if  1 == 0
+
 disp('Press any key to start normal Experiment');
 w = waitforbuttonpress;
 close all;
@@ -77,13 +87,17 @@ mkdir('./../../../../matlab_dataset/results/FB/normal/flow_occ_dynamic_FG');
 estFlow('normal',4);
 evaluation('normal',4);
 
+end
+
+if  1 == 0
 disp('Press any key to start fast Experiment');
 w = waitforbuttonpress;
 close all;
 
 
+
 mkdir('./../../../../matlab_dataset/results/FB/fast/flow_occ');
-%estFlow('fast',0);
+estFlow('fast',0);
 evaluation('fast',0);
 disp('Press any key to continue');
 w = waitforbuttonpress;
@@ -113,6 +127,8 @@ close all;
 mkdir('./../../../../matlab_dataset/results/FB/fast/flow_occ_dynamic_FG');
 estFlow('fast',4);
 evaluation('fast',4);
+
+end
 
 
 disp('--------FINISHED---------');

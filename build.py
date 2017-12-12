@@ -194,15 +194,18 @@ def parse_arguements(args):
 
 
 parser = argparse.ArgumentParser()
-
-parser.add_argument('--test', action='store_true', help='test script')
+#External Modules
 parser.add_argument('--opencv', action='store_true', dest='OPENCV_OPTION', help='builds opencv')
 parser.add_argument('--pcl', action='store_true', dest='PCL_OPTION', help='builds pcl')
 parser.add_argument('--vtk', action='store_true', dest='VTK_OPTION', help='builds vtk')
 parser.add_argument('--boost', action='store_true', dest='BOOST_OPTION', help='builds boost')
+parser.add_argument('--vires', action='store_true', dest='VIRES_OPTION', help='builds vires')
+#Generic options
 parser.add_argument('-t', dest="BUILD_OPTION", choices=('clean', 'manual'), help='build parameters')
 parser.add_argument('-v', action='store_true', dest='VERBOSE_OPTION', help='build parameters')
 parser.add_argument('-i', action='store_true', dest='INSTALL_OPTION', help='build parameters')
+#Tests
+parser.add_argument('--test', action='store_true', help='test script')
 
 parser.set_defaults(func=parse_arguements)
 
