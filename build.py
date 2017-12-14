@@ -10,7 +10,6 @@ import re
 
 SOURCE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/'
 
-
 def call_shell_command(command):
     ret = subprocess.check_call(command, shell=True)
     if ret == 0:
@@ -18,7 +17,6 @@ def call_shell_command(command):
     else:
         print "%s failed" % command
         sys.exit(1)
-
     # except subprocess.CalledProcessError as e:
     #    print e.returncode
     #    print e.output
@@ -71,6 +69,8 @@ def parse_arguements(args):
             build_properties[count] = args.VTK_OPTION
         if "libs/boost" in submodule_dir[count]:
             build_properties[count] = args.BOOST_OPTION
+        if "libs/ffmpeg" in submodule_dir[count]:
+            build_properties[count] = args.FFMPEG_OPTION
         os.chdir(SOURCE_DIR)
 
     print build_properties
@@ -83,40 +83,57 @@ def parse_arguements(args):
             os.chdir(SOURCE_DIR)
             metadata = zipped[count][0][1]
             library = SOURCE_DIR + zipped[count][0][0]
-            library_install = library + "-install"
-            print "starting building %s with version %s" % (library, metadata)
+            library_install = SOURCE_DIR + "libs-install/" + zipped[count][0][0] + "-install"
+
             if build_option == "clean":
                 print "cleaning %s" % library;
                 command = "rm -rf cmake-build-debug"
                 if "boost" in library_install: 
                     os.chdir(library)
                     command = "./b2 --clean && rm -rf bin.v2" 
+                elif "ffmpeg" in library_install:
+                    os.chdir(library)
+                command = "make clean"
                 print command
                 call_shell_command(command)
                 command = "rm -rf " + library_install + "/*"
                 print command
                 call_shell_command(command)
                 sys.exit(0)
-            if args.INSTALL_OPTION:
-                command = "sudo rsync -pavr " + library_install + "/ /usr/local/"
-                call_shell_command(command)
-                continue
-            call_shell_command("mkdir -p " + library_install)
+
             os.chdir(library)
-            print "Building in " + os.getcwd()
-            print "Checking for dependancies for " + os.getcwd()
-            if os.path.isdir(library + "/tools/build") is False:
-                print  "download build.git by git submodule update --remote";
-                sys.exit(1)
+            print "starting building %s with version %s" % (os.getcwd(), metadata)
             if build_option == "manual":
                 raw_input("Press enter to continue")
+            call_shell_command("mkdir -p " + library_install)
+            command = "mkdir -p " + library_install + "/lib/pkgconfig"
+            call_shell_command(command)
+
+            # CONFIGURE
             print "Configuring %s" % library
             if build_option == "manual":
                 raw_input("Press enter to continue")
-            if not "boost" in library_install: 
-               call_shell_command("mkdir -p cmake-build-debug")
-               os.chdir("cmake-build-debug")
-               command  =  "/usr/bin/cmake -Wno -dev -Wl,-rpath=/usr/local/lib " \
+            os.environ['PKG_CONFIG_PATH'] = SOURCE_DIR + "libs-install/libs/ffmpeg-install/lib/pkgconfig"
+            pkg_config_path_ffmpeg = subprocess.check_output("pkg-config --cflags libavcodec", shell=True)
+            if "boost" in library_install:
+                if os.path.isdir(library + "/tools/build") is False:
+                    print  "download build.git by git submodule update --remote";
+                    sys.exit(1)
+                command = "./bootstrap.sh --prefix=" + library_install
+            elif "ffmpeg" in library_install:
+                command = "CXXFLAGS=\"-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC\" ./configure --prefix=\"" + library_install + "\" --bindir=\"./bin\" --enable-shared"
+            else:
+                if "opencv" in library_install:
+                    if "ffmpeg-install/include" in pkg_config_path_ffmpeg:
+                        print "correct ffmpeg path while building opencv ", pkg_config_path_ffmpeg.strip('\n')
+                    else:
+                        if build_option == "manual":
+                            raw_input("Press enter to continue")
+                        print "Plese build ffmpeg before opencv. Aborting due to incompatibility between ffmpeg and opencv ", pkg_config_path_ffmpeg.strip('\n')
+                        sys.exit(-1)
+                call_shell_command("mkdir -p cmake-build-debug")
+                os.chdir("cmake-build-debug")
+                command  =  "/usr/bin/cmake -Wno -dev -Wl,-rpath=/usr/local/lib " \
                             \
                             "-DENABLE_PRECOMPILED_HEADERS=OFF " \
                             "-DCMAKE_BUILD_TYPE=DEBUG " \
@@ -162,43 +179,73 @@ def parse_arguements(args):
                             "-DBUILD_tracking=ON " \
                             "-DBUILD_visualization=ON " \
                             ".."
-            else:
-                command = "./bootstrap.sh --prefix=" + library_install
-            print command
-            if build_option == "manual":
-                raw_input("Press enter to continue")
-            call_shell_command(command)
-            if build_option == "manual":
-                raw_input("Press enter to continue")
-            if not "boost" in library_install: 
-                command = "time make -j " + make_power
-            else:
+                print command
+                if build_option == "manual":
+                    raw_input("Press enter to continue")
+                call_shell_command(command)
+                if build_option == "manual":
+                    raw_input("Press enter to continue")
+
+            # MAKE
+            if "boost" in library_install:
                 command = "./b2 cxxflags=\"-Wno-unused-local-typedefs -Wstrict-aliasing\" headers install -j " + make_power
+            else:
+                command = "time make -j " + make_power
             print command
             if build_option == "manual":
                 raw_input("Press enter to continue")
             call_shell_command(command)
             if build_option == "manual":
                 raw_input("Press enter to continue")
-            if not "boost" in library_install: 
+
+            # MAKE INSTALL
+            if "boost" in library_install:
+                pass
+            else:
                 command = "time make install"
                 if build_option == "manual":
                     raw_input("Press enter to continue")
-            else:
+                print command
+                call_shell_command(command)
+                if build_option == "manual":
+                    raw_input("Press enter to continue")
+
+            # POST INSTALL
+            if "boost" in library_install:
                 command = "python " + SOURCE_DIR + "utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p " + library_install + " -o " + library_install + "/lib/pkgconfig/boost.pc " + library_install + "/lib/"
-            print command
-            call_shell_command(command)
-            if build_option == "manual":
-                raw_input("Press enter to continue")
             os.chdir(SOURCE_DIR)
+
+            # SYSTEM INSTALL
+            if args.INSTALL_OPTION:
+                #kinit
+                #aklogs
+                command = "rsync -pavr " + library_install + "/ ~/tmp/"
+                print command
+                if build_option == "manual":
+                    raw_input("Press enter to continue")
+                call_shell_command(command)
+                # copy back to /usr/local
+                command = "sudo rsync -pavr ~/tmp/ /usr/local/"
+                print command
+                if build_option == "manual":
+                    raw_input("Press enter to continue")
+                call_shell_command(command)
+                command = "rm -rf ~/tmp"
+                print command
+                if build_option == "manual":
+                    raw_input("Press enter to continue")
+                call_shell_command(command)
+
 
 
 parser = argparse.ArgumentParser()
+#subparsers = parser.add_subparsers(title='subcommands', description='')
 #External Modules
 parser.add_argument('--opencv', action='store_true', dest='OPENCV_OPTION', help='builds opencv')
 parser.add_argument('--pcl', action='store_true', dest='PCL_OPTION', help='builds pcl')
 parser.add_argument('--vtk', action='store_true', dest='VTK_OPTION', help='builds vtk')
 parser.add_argument('--boost', action='store_true', dest='BOOST_OPTION', help='builds boost')
+parser.add_argument('--ffmpeg', action='store_true', dest='FFMPEG_OPTION', help='builds ffmpeg')
 parser.add_argument('--vires', action='store_true', dest='VIRES_OPTION', help='builds vires')
 #Generic options
 parser.add_argument('-t', dest="BUILD_OPTION", choices=('clean', 'manual'), help='build parameters')
@@ -216,36 +263,11 @@ results = parser.parse_args()
 results.func(results)
 
 
-#function enter_boost_fn
-#{
-#    #cp -Rv boost $BOOST_PWD/../boost-install/include/
-#    mkdir -p $BOOST_PWD/../boost-install/lib/pkgconfig
-#    #    #python main.py -n Boost -v 1.63.0 -p $BOOST_PWD/stage -o ./stage/lib/pkgconfig/boost.pc ./stage/lib/
-#    cd $SOURCE_DIR
-#fi
-#}
-#
 #function enter_ffmpeg_fn
 #{
 #if [ "$FFMPEG_OPTION" == "y" ] ; then
-#    tput setf 3
-#    cd $FFMPEG_PWD
-#    echo "Building in $(pwd)"
-#    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-#    if [ "$BUILD_OPTION" == "clean" ]; then echo "cleaning ffmpeg ...."; make distclean; rm -rf $FFMPEG_PWD/../ffmpeg-install/*; cd ../../; return; fi
-#    echo "Configuring ffmpeg"
-#    cd $FFMPEG_PWD
 #    CXXFLAGS="-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC" ./configure --prefix="$FFMPEG_PWD/../ffmpeg-install" --bindir="./bin" --enable-shared
-#    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-#    time make  -j $(getconf _NPROCESSORS_ONLN) 2>&1
-#    ret=$(echo $?)
-#    echo "make in $SOURCE_DIR returned $ret"
 #    if [ "$ret" == "0" ]; then echo "ffmpeg make successful"; else echo "ffmpeg build terminated with error"; rm -rf build; rm -f config.mak; exit_function; fi
-#    if [ "$BUILD_OPTION" == "manual" ]; then read -p "Press enter to continue"; fi
-#    time make install >> /dev/null #2>&1
-#    ret=$(echo $?)
-#    echo "make-install in $SOURCE_DIR returned $ret"
-#    if [ "$ret" == "0" ]; then echo "ffmpeg make-install successful"; else echo "ffmpeg make-install terminated with error. Please see the /dev/null file "; exit_function; fi
 #    find $FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig -name '*.pc' -exec sed -i 's!/local/git/PriorityGraphSensors/libs/ffmpeg/../ffmpeg-install$!/usr/local!' {} \;
 #    cd $SOURCE_DIR
 #fi
