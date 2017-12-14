@@ -75,7 +75,6 @@
 [submodule "VIRES"]
 	path = VIRES
 	url = git@atreus.informatik.uni-tuebingen.de:Veikas/VIRES.git
-[submodule "vires_interface"]
-	path = libs/vires_interface
+[submodule "vires-interface"]
+	path = libs/vires-interface
 	url = git@atreus.informatik.uni-tuebingen.de:Veikas/vires-interface.git
-	branch = master

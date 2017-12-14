@@ -71,6 +71,8 @@ def parse_arguements(args):
             build_properties[count] = args.BOOST_OPTION
         if "libs/ffmpeg" in submodule_dir[count]:
             build_properties[count] = args.FFMPEG_OPTION
+        if "libs/vires-interface" in submodule_dir[count]:
+            build_properties[count] = args.VIRES_OPTION
         os.chdir(SOURCE_DIR)
 
     print build_properties
