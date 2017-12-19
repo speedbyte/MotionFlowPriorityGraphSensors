@@ -135,7 +135,7 @@ def parse_arguements(args):
                         sys.exit(-1)
                 call_shell_command("mkdir -p cmake-build-debug")
                 os.chdir("cmake-build-debug")
-                command  =  "/usr/bin/cmake -Wno -dev -Wl,-rpath=/usr/local/lib " \
+                command  =  "cmake -Wno -dev -Wl,-rpath=/usr/local/lib " \
                             \
                             "-DENABLE_PRECOMPILED_HEADERS=OFF " \
                             "-DCMAKE_BUILD_TYPE=DEBUG " \
@@ -263,6 +263,19 @@ if len(sys.argv) == 1:
 
 results = parser.parse_args()
 results.func(results)
+
+
+#parser = argparse.ArgumentParser()
+#parser.add_argument('host', help = "Host to schedule. Local fqdn used if not specified.", nargs = '?'  default=alias)
+#parser.add_argument('duration', type = int, help = 'Duration of downtime (minutes), 15 if not specified', default=15)
+#parser.add_argument('-d', '--debug', action='store_true', help = 'Print debug info')
+
+#g = p.add_mutually_exclusive_group()
+#g.add_argument('-l', '--flexible', help = "Use f_L_exible downtime (used by default)", action='store_true')
+#g.add_argument('-f', '--fixed', help = 'Use _F_ixed downtime', action="store_false")
+#mode2 = p.add_argument_group('show')
+#mode2.add_argument('-s', '--show', help = 'show downtimes for host', action="store_true")
+#args = p.parse_args()
 
 
 #function enter_ffmpeg_fn
