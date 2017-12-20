@@ -99,17 +99,16 @@ int main ( int argc, char *argv[]) {
     cv::waitKey(0);
     cv::destroyAllWindows();
 
-    boost::filesystem::path  dataset_path1 = KITTI_FLOW_DATASET_PATH;
-    make_video_from_png(dataset_path1, "data/stereo_flow/image_02/"); // give the path of the folder with pngs.
 
-    boost::filesystem::path  dataset_path2 = KITTI_RAW_DATASET_PATH;
-    make_video_from_png(dataset_path2, "data/2011_09_28_drive_0016_sync/image_02/data/"); // give the path of the folder with pngs.
-
-        std::string result_dir;
+    std::string result_dir;
     //test_kitti_original();
 
     result_dir = prepare_directories(CPP_DATASET_PATH, "GT");
     ground_truth(CPP_DATASET_PATH);
+
+    make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
+    make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH, "data/2011_09_28_drive_0016_sync/image_02/data/"); // give the path of the folder with pngs.
+    make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/"); // give the path of the folder with pngs.
 
     result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
     flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, 0);

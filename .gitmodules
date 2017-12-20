@@ -5,30 +5,39 @@
 [submodule "opencv"]
 	path = libs/opencv
 	url = https://github.com/opencv/opencv.git
+	ignore = dirty
 [submodule "PRSM"]
 	path = external/algorithms/PRSM-sceneflow
 	url = https://github.com/vogechri/PRSM
+	ignore = dirty
 [submodule "boost"]
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
+	ignore = dirty
 [submodule "pkg-config-generator"]
 	path = utils/pkg-config-generator
 	url = https://github.com/nmante/pkg-config-generator.git
+	ignore = dirty
 [submodule "gnuplot-iostream"]
 	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
+	ignore = dirty
 [submodule "protobuf"]
 	path = libs/protobuf
 	url = https://github.com/google/protobuf
+	ignore = dirty
 [submodule "libuvc"]
 	path = libs/libuvc
 	url = https://github.com/ktossell/libuvc
+	ignore = dirty
 [submodule "mrpt"]
 	path = project/mrpt
 	url = https://github.com/MRPT/mrpt.git
+	ignore = dirty
 [submodule "pcl"]
 	path = libs/pcl
 	url = https://github.com/PointCloudLibrary/pcl.git
+	ignore = dirty
 [submodule "graphviz"]
 	path = libs/graphviz
 	url = https://github.com/ellson/graphviz.git
@@ -38,9 +47,11 @@
 [submodule "overleaf-maths"]
 	path = overleaf/maths
 	url = https://git.overleaf.com/10769078vhnvxscwscbm
+	ignore = dirty
 [submodule "overleaf-marcelBA"]
 	path = overleaf/marcelBA
 	url = https://git.overleaf.com/9933334yfshcrdkdfhx
+	ignore = dirty
 [submodule "philipp-BA"]
 	path = overleaf/philippBA
 	url = https://git.overleaf.com/10991069gqnknnppvsjj
@@ -63,9 +74,11 @@
 [submodule "libs/pngpp"]
 	path = libs/pngpp
 	url = https://github.com/bysreg/pngpp.git
+	ignore = dirty
 [submodule "vtk"]
 	path = libs/vtk
 	url = https://gitlab.kitware.com/vtk/vtk.git
+	ignore = dirty
 [submodule "external/pcl_manipulation"]
 	path = external/pcl_manipulation
 	url = https://github.com/Benzarti-Ilyess/pcl_manipulation.git

@@ -50,12 +50,16 @@ void make_video_from_png(boost::filesystem::path dataset_path, std::string unter
                 temp = *dir_iter;
                 temp_image = cv::imread(temp.string(), cv::IMREAD_COLOR);
                 if ( video_writer_init == false ) {
-                    if ( !video_write.open((dir_path.string()+"original_video.avi" ), CV_FOURCC('D', 'I', 'V', 'X'), 30.0,
+                    if ( !video_write.open((dir_path.string()+"movement_video.avi" ), CV_FOURCC('D', 'I', 'V', 'X'), 30.0,
                                            cv::Size(temp_image.cols, temp_image.rows), true) )
                     {
                         std::cerr << "failed to initialise the video write" << std::endl;
                         throw;
                     }
+                    if ( !video_write.isOpened() ) {
+                        std::cerr << "Could not open video" << std::endl;
+                    }
+
                     video_writer_init = true;
                 }
                 /*cv::namedWindow("video", CV_WINDOW_AUTOSIZE);

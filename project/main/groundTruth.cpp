@@ -27,15 +27,17 @@ void ground_truth(const boost::filesystem::path dataset_path) {
 
     ushort start=60; ushort secondstart=240;
     cv::Size_<unsigned> frame_size(1242,375);
+
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
+
     boost::filesystem::path gt_image_path, gt_flow_path, gt_video_path;
-    gt_image_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/image_2/dummy.txt");
+
+    gt_image_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/image_02/dummy.txt");
     assert(boost::filesystem::exists(gt_image_path.parent_path()) != 0);
     gt_flow_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/flow_occ/dummy.txt");
     assert(boost::filesystem::exists(gt_flow_path.parent_path()) != 0);
-
-    cv::VideoWriter video_out;
-    video_out.open(gt_video_path.string(), CV_FOURCC('X', 'V', 'I', 'D'), 30, frame_size, true);
+    gt_video_path = gt_image_path.parent_path();
+    gt_video_path += std::string("/movement_video.avi");
 
     //how many interations(frames)?
     auto tic= steady_clock::now();
@@ -205,12 +207,6 @@ void ground_truth(const boost::filesystem::path dataset_path) {
         r = 0;
         b = 0;
 
-        if ( !video_out.isOpened() ) {
-            std::cerr << "Could not open video" << std::endl;
-        }
-        cv::imwrite(gt_image_path_str, test_frame);
-        video_out.write(test_frame);
-
         toc = steady_clock::now();
         time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
 
@@ -305,7 +301,6 @@ void ground_truth(const boost::filesystem::path dataset_path) {
         std::cout << "generate frame - " << time_map["generate"]  << "ms" << std::endl;
 
     }
-    video_out.release();
 
     fs.release();
     toc_all = steady_clock::now();
@@ -321,7 +316,6 @@ std::string prepare_directories(const boost::filesystem::path dataset_path, cons
     boost::filesystem::path dir_path = dataset_path;
 
     if ( !result_sha.compare("GT") ) {
-
 
         dir_path = dataset_path;
         dir_path += "data/stereo_flow/image_02/";
