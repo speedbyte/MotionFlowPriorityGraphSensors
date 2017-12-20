@@ -7,7 +7,6 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3")
 
-
 #set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/bin")
 #list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/../../libs/opencv-install/share/OpenCV/")
 
@@ -27,8 +26,6 @@ message("OpenCV ${OpenCV_FOUND} ${OpenCV_INCLUDE_DIRS} ${OpenCV_LIBRARIES}")
 message("Boost ${Boost_FOUND} ${Boost_INCLUDE_DIRS}  ${Boost_LIBRARIES}")
 
 
-add_executable(opencv_tutorials main.cpp)
-target_link_libraries(opencv_tutorials ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 add_executable(contour contour.cpp)
 target_link_libraries(contour ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 add_executable(core core.cpp)

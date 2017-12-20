@@ -99,46 +99,42 @@ int main ( int argc, char *argv[]) {
     cv::waitKey(0);
     cv::destroyAllWindows();
 
-//    boost::filesystem::path  dataset_path1 = KITTI_FLOW_DATASET_PATH;
-//    make_video_from_png(dataset_path1, "data/stereo_flow/image_02/"); // give the path of the folder with pngs.
+    boost::filesystem::path  dataset_path1 = KITTI_FLOW_DATASET_PATH;
+    make_video_from_png(dataset_path1, "data/stereo_flow/image_02/"); // give the path of the folder with pngs.
 
-//    boost::filesystem::path  dataset_path2 = KITTI_RAW_DATASET_PATH;
-//    make_video_from_png(dataset_path2, "data/2011_09_28_drive_0016_sync/image_02/data/"); // give the path of the folder with pngs.
+    boost::filesystem::path  dataset_path2 = KITTI_RAW_DATASET_PATH;
+    make_video_from_png(dataset_path2, "data/2011_09_28_drive_0016_sync/image_02/data/"); // give the path of the folder with pngs.
 
-    std::string result_dir;
+        std::string result_dir;
     //test_kitti_original();
 
-//    result_dir = prepare_directories(CPP_DATASET_PATH, "GT");
-//    ground_truth(CPP_DATASET_PATH);
+    result_dir = prepare_directories(CPP_DATASET_PATH, "GT");
+    ground_truth(CPP_DATASET_PATH);
 
-//    result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
-//    flow(CPP_DATASET_PATH, result_dir);
+    result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
+    flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, 0);
 
-//    result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
-//    flow(CPP_DATASET_PATH, result_dir);
+    result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
+    flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, 0);
 
+    // Matlab dataset
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
     flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, 0);
 
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
     flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_BG/"), continous_frames, 1);
 
-
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
     flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_FG/"), continous_frames, 2);
 
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
     flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_BG/"), continous_frames, 3);
+
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
     flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_FG/"), continous_frames, 4);
 
-
-
-//    result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "LK");
-//    flow(KITTI_FLOW_DATASET_PATH, result_dir);
-
-    //result_dir = prepare_directories("KITTI")KITTI_FLOW_DATASET_PATH
-
+    result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "LK");
+    flow(KITTI_FLOW_DATASET_PATH, result_dir, std::string("image_02/no_noise/"), continous_frames, 0);
 
     //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
     //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
@@ -153,7 +149,7 @@ int main ( int argc, char *argv[]) {
     int initCounter = 6;
 
     // initalize the server variable
-    char *serverName = "127.0.0.1";
+    std::string serverName = "127.0.0.1";
 
     /**
     * validate the arguments given in the command line
@@ -189,7 +185,7 @@ int main ( int argc, char *argv[]) {
                     break;
                 case 's':       // Server
                     if (strlen(argv[i]) > 3)
-                        strcpy(serverName, &argv[i][3]);
+                        strcpy((char *)(serverName.c_str()), &argv[i][3]);
                     break;
                 case 'h':
                 default:
@@ -198,7 +194,7 @@ int main ( int argc, char *argv[]) {
             }
         }
     }
-    vi.setServer(serverName);
+    vi.setServer(serverName.c_str());
 
     fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
             vi.getShmKey(), vi.getCheckMask(), vi.getForceBuffer());

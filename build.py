@@ -14,9 +14,10 @@ def call_shell_command(command):
     ret = subprocess.check_call(command, shell=True)
     if ret == 0:
         print "%s successful" % command
+        return ret
     else:
         print "%s failed" % command
-        sys.exit(1)
+        return ret
     # except subprocess.CalledProcessError as e:
     #    print e.returncode
     #    print e.output
@@ -115,7 +116,7 @@ def parse_arguements(args):
             print "Configuring %s" % library
             if build_option == "manual":
                 raw_input("Press enter to continue")
-            os.environ['PKG_CONFIG_PATH'] = SOURCE_DIR + "libs-install/libs/ffmpeg-install/lib/pkgconfig"
+            os.environ['PKG_CONFIG_PATH'] = "/usr/local/lib/pkgconfig"
             pkg_config_path_ffmpeg = subprocess.check_output("pkg-config --cflags libavcodec", shell=True)
             if "boost" in library_install:
                 if os.path.isdir(library + "/tools/build") is False:
@@ -123,10 +124,24 @@ def parse_arguements(args):
                     sys.exit(1)
                 command = "./bootstrap.sh --prefix=" + library_install
             elif "ffmpeg" in library_install:
-                command = "CXXFLAGS=\"-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC\" ./configure --prefix=\"" + library_install + "\" --bindir=\"./bin\" --enable-shared"
+                command = "CXXFLAGS=\"-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC\" ./configure --prefix=\"" + library_install + "\" --bindir=\"./bin\" " \
+                "--enable-shared " \
+                "--enable-avresample " \
+                "--enable-gpl " \
+                "--disable-libass " \
+                "--disable-libfdk-aac " \
+                "--enable-libfreetype " \
+                "--disable-libmp3lame "\
+                "--disable-libopus "\
+                "--disable-libtheora "\
+                "--disable-libvorbis "\
+                "--disable-libvpx "\
+                "--enable-libx264 "\
+                "--enable-nonfree "\
+                "--enable-openssl "
             else:
                 if "opencv" in library_install:
-                    if "ffmpeg-install/include" in pkg_config_path_ffmpeg:
+                    if "/usr/local" in pkg_config_path_ffmpeg:
                         print "correct ffmpeg path while building opencv ", pkg_config_path_ffmpeg.strip('\n')
                     else:
                         if build_option == "manual":
@@ -141,6 +156,7 @@ def parse_arguements(args):
                             "-DCMAKE_BUILD_TYPE=DEBUG " \
                             "-DCMAKE_INSTALL_PREFIX=" + library_install + " " + \
                             "-DCMAKE_VERBOSE_MAKEFILE=" + verbose_string + " " \
+                            " OPENCV_EXTRA_EXE_LINKER_FLAGS=-Wl,-rpath,/usr/local/lib" \
                             "-DCMAKE_USE_OPENSSL:BOOL=ON " \
                             "-DBUILD_TESTING=OFF " \
                             "-DVTK_BUILD_ALL_MODULES=ON " \
@@ -150,6 +166,7 @@ def parse_arguements(args):
                             "-DVTK_Group_Qt=OFF " \
                             "-DVTK_Group_Views=OFF " \
                             "-DWITH_GTK=ON " \
+                            "-DWITH_CUDA=OFF " \
                             "-DBUILD_JPEG=ON " \
                             "-DBUILD_2d=ON " \
                             "-DBUILD_CUDA=OFF " \
@@ -181,12 +198,12 @@ def parse_arguements(args):
                             "-DBUILD_tracking=ON " \
                             "-DBUILD_visualization=ON " \
                             ".."
-                print command
-                if build_option == "manual":
-                    raw_input("Press enter to continue")
-                call_shell_command(command)
-                if build_option == "manual":
-                    raw_input("Press enter to continue")
+            print command
+            if build_option == "manual":
+                raw_input("Press enter to continue")
+            call_shell_command(command)
+            if build_option == "manual":
+                raw_input("Press enter to continue")
 
             # MAKE
             if "boost" in library_install:
@@ -196,7 +213,10 @@ def parse_arguements(args):
             print command
             if build_option == "manual":
                 raw_input("Press enter to continue")
-            call_shell_command(command)
+            ret = call_shell_command(command)
+            if ( ret != 0 ):
+                print "ffmpeg build terminated with error"
+                sys.exit(1) # rm -rf build; rm -f config.mak;; fi            
             if build_option == "manual":
                 raw_input("Press enter to continue")
 
@@ -213,21 +233,35 @@ def parse_arguements(args):
                     raw_input("Press enter to continue")
 
             # POST INSTALL
+            print "Post install"
             if "boost" in library_install:
                 command = "python " + SOURCE_DIR + "utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p " + library_install + " -o " + library_install + "/lib/pkgconfig/boost.pc " + library_install + "/lib/"
+
+            elif "ffmpeg" in library_install:
+                command = "find " + library_install + "/lib/pkgconfig/ -name '*.pc' -exec sed -i 's!" + library_install + "!/usr/local!' {} \;"
+
+            else:
+                command = ""
+                print "no post install command"
+
+            print command
+            if build_option == "manual":
+                raw_input("Press enter to continue")
+            ret = call_shell_command(command)
+
             os.chdir(SOURCE_DIR)
 
             # SYSTEM INSTALL
             if args.INSTALL_OPTION:
                 #kinit
                 #aklogs
-                command = "rsync -pavr " + library_install + "/ ~/tmp/"
+                command = "rsync -avr " + library_install + "/ ~/tmp/"
                 print command
                 if build_option == "manual":
                     raw_input("Press enter to continue")
                 call_shell_command(command)
                 # copy back to /usr/local
-                command = "sudo rsync -pavr ~/tmp/ /usr/local/"
+                command = "sudo rsync -avr ~/tmp/ /usr/local/"
                 print command
                 if build_option == "manual":
                     raw_input("Press enter to continue")
@@ -278,14 +312,3 @@ results.func(results)
 #args = p.parse_args()
 
 
-#function enter_ffmpeg_fn
-#{
-#if [ "$FFMPEG_OPTION" == "y" ] ; then
-#    CXXFLAGS="-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC" ./configure --prefix="$FFMPEG_PWD/../ffmpeg-install" --bindir="./bin" --enable-shared
-#    if [ "$ret" == "0" ]; then echo "ffmpeg make successful"; else echo "ffmpeg build terminated with error"; rm -rf build; rm -f config.mak; exit_function; fi
-#    find $FFMPEG_PWD/../ffmpeg-install/lib/pkgconfig -name '*.pc' -exec sed -i 's!/local/git/PriorityGraphSensors/libs/ffmpeg/../ffmpeg-install$!/usr/local!' {} \;
-#    cd $SOURCE_DIR
-#fi
-#}
-#
-#
