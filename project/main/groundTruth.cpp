@@ -309,43 +309,56 @@ void ground_truth(const boost::filesystem::path dataset_path) {
 
 }
 
-std::string prepare_directories(const boost::filesystem::path dataset_path, const std::string result_sha) {
+/**
+ * This function means that the directories would be deleted and then created.
+ * Hence only those datasets that has been synthetically produced on the test bench by us, should be deleted.
+ * The results directory can be generally deleted, because they are all created by us.
+ *
+ * dataset/results/flow_occ_<algorithm>_<source>_<click_speed>_<noise_type>
+ *
+ * @param dataset_path
+ * @param result_sha
+ * @return
+ */
+std::string prepare_directories_flow_result(const boost::filesystem::path dataset_path, const std::string
+unterordner) {
 
+    // example <result_sha> = "flow_occ_LK_image_02_slow_no_noise";
+    boost::filesystem::path result_dir_path = dataset_path;
+    result_dir_path = dataset_path;
+    result_dir_path += unterordner;
 
-    std::string result_dir = "results/" + result_sha;
-    boost::filesystem::path dir_path = dataset_path;
-
-    if ( result_sha.compare("GT") ) {
-
-        dir_path = dataset_path;
-        dir_path += result_dir;
-        if ( boost::filesystem::exists(dir_path) )
-        {
-            system(("rm " + dataset_path.string() + result_dir + std::string("/*")).c_str());
-        }
-        boost::filesystem::create_directories(dataset_path.string() + result_dir );
+    if ( boost::filesystem::exists(result_dir_path) ) {
+        system(("rm " + result_dir_path.string() + std::string("/*")).c_str());
     }
+    boost::filesystem::create_directories(result_dir_path.string());
+    return result_dir_path.string();
+}
 
-    else {
+std::string prepare_directories_flow_groundtruth(const boost::filesystem::path dataset_path, const std::string
+unterordner) {
 
-        dir_path = dataset_path;
-        dir_path += "data/stereo_flow/image_02/";
+    boost::filesystem::path result_dir_path = dataset_path;
+    if (dataset_path.compare(MATLAB_DATASET_PATH)) {
 
-        if ( boost::filesystem::exists(dir_path)  )
-        {
-            system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/image_02/*")).c_str());
+        /* prepare diectory for ground truth synthetic images */
+        result_dir_path = dataset_path;
+        result_dir_path += unterordner;
+
+        if (boost::filesystem::exists(result_dir_path)) {
+            system(("rm " + dataset_path.string() + std::string("data/stereo_flow/image_02/*")).c_str());
         }
-        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/image_02"));
-        dir_path = dataset_path;
-        dir_path += "data/stereo_flow/flow_occ/";
-        if ( boost::filesystem::exists(dir_path) )
-        {
-            system(("rm " + dataset_path.string() +  std::string("data/stereo_flow/flow_occ/*")).c_str());
+        boost::filesystem::create_directories(dataset_path.string() + ("data/stereo_flow/image_02"));
+
+        /* prepare diectory for ground truth flow */
+        result_dir_path = dataset_path;
+        result_dir_path += unterordner;
+        if (boost::filesystem::exists(result_dir_path)) {
+            system(("rm " + dataset_path.string() + std::string("data/stereo_flow/flow_occ/*")).c_str());
         }
-        boost::filesystem::create_directories(dataset_path.string() +  ("data/stereo_flow/flow_occ"));
+        boost::filesystem::create_directories(dataset_path.string() + ("data/stereo_flow/flow_occ"));
     }
-
-    return result_dir;
+    return result_dir_path.string();
 }
 
 void test_kitti_original() {
