@@ -28,7 +28,8 @@
 using namespace std::chrono;
 
 
-void flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string image_input_sha, FRAME_TYPES frame_types,short noise ) {
+void flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
+image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
 
     std::cout << "results will be stored in " << result_sha << std::endl;
 

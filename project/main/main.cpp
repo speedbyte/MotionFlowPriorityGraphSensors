@@ -28,7 +28,8 @@ using boost_path=boost::filesystem::path;
 extern void ground_truth(const boost::filesystem::path dataset_path);
 extern std::string prepare_directories(const boost::filesystem::path dataset_path, const std::string result_sha);
 
-extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string image_input_sha, FRAME_TYPES frame_types, short noise);
+extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
+image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise);
 //extern bool eval(std::string result_sha, Mail *mail);
 extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
@@ -99,7 +100,6 @@ int main ( int argc, char *argv[]) {
     cv::waitKey(0);
     cv::destroyAllWindows();
 
-
     std::string result_dir;
     //test_kitti_original();
 
@@ -110,30 +110,30 @@ int main ( int argc, char *argv[]) {
     make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH, "data/2011_09_28_drive_0016_sync/image_02/data/"); // give the path of the folder with pngs.
     make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/"); // give the path of the folder with pngs.
 
-    result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
-    flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, 0);
-
-    result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
-    flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, 0);
-
     // Matlab dataset
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, 0);
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, no_noise);
 
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_BG/"), continous_frames, 1);
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_BG/"), continous_frames, static_bg_noise);
 
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_FG/"), continous_frames, 2);
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_FG/"), continous_frames, static_fg_noise);
 
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_BG/"), continous_frames, 3);
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_BG/"), continous_frames, dynamic_bg_noise);
 
     result_dir = prepare_directories(MATLAB_DATASET_PATH, "LK");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_FG/"), continous_frames, 4);
+    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_FG/"), continous_frames, dynamic_fg_noise);
 
     result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "LK");
-    flow(KITTI_FLOW_DATASET_PATH, result_dir, std::string("image_02/no_noise/"), continous_frames, 0);
+    flow(KITTI_FLOW_DATASET_PATH, result_dir, std::string("image_02/no_noise/"), continous_frames, no_noise);
+
+    result_dir = prepare_directories(CPP_DATASET_PATH, "FB");
+    flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, no_noise);
+
+    result_dir = prepare_directories(CPP_DATASET_PATH, "LK");
+    flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, no_noise);
 
     //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
     //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");

@@ -27,6 +27,14 @@ typedef enum {
     video_frames = 2
 } FRAME_TYPES;
 
+typedef enum {
+    no_noise = 0,
+    static_bg_noise = 1,
+    static_fg_noise = 2,
+    dynamic_bg_noise = 3,
+    dynamic_fg_noise =4
+} NOISE_TYPES;
+
 
 
 
