@@ -33,12 +33,13 @@ SOURCE_DIR=$(pwd)
 echo $SOURCE_DIR
 VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.0/bin
 CPP_DIR=$SOURCE_DIR/project/main/cmake-build-debug
-VIRES_DATASET_DIR=$SOURCE_DIR/datasets/vires_dataset/data/stereo_flow/$RESULT_PATH
+VIRES_DATASET_DIR=$SOURCE_DIR/datasets/vires_dataset
+VIRES_GROUNDTRUTH_DIR=$VIRES_DATASET_DIR/data/stereo_flow/$RESULT_PATH
 VTD_SCP_GENERATOR_EXE=$SOURCE_DIR/VIRES/VTD2.0/Runtime/Tools/ScpGenerator/
 PORT_SCP=48179
 
-cd $VIRES_DATASET_DIR
-#rm *.png
+cd $VIRES_GROUNDTRUTH_DIR
+find ./ -maxdepth 1 -name '*.png*'
 cd $VIRES_DIR 
 ./vtdStart.sh -setup=$SETUP -project=$PROJECT & 
 echo "vtdStart.sh pid = $!"
@@ -59,7 +60,7 @@ cd $CPP_DIR
 #I would like to pass the output dir to c++ as argument and then store it there.
 # The procedure is clear but c++ tricks me(and I suck at it) and I dont want to waste time now.
 # It would be cool if we can do this together if you have some spare time in December :)
-./main > $VIRES_DATASET_DIR/file.log 2>&1 & 
+./main > $VIRES_GROUNDTRUTH_DIR/file.log 2>&1 & 
 read_pid=$!
 
 for i in `seq 1 20`; do
@@ -70,7 +71,7 @@ done
 kill -9 $read_pid
 cd $VIRES_DIR 
 ./vtdStop.sh
-cd $VIRES_DATASET_DIR
+cd $VIRES_GROUNDTRUTH_DIR
 #find ./ -name '*.png' -exec convert -flip {} {} \;
 mogrify -flip *.png
 #Extract flow from log file

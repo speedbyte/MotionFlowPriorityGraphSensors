@@ -28,6 +28,9 @@ using boost_path=boost::filesystem::path;
 extern void calculate_ground_truth_image_and_flow(const boost::filesystem::path dataset_path, const std::string
 unterordner);
 
+extern void calculate_ground_truth_image_and_flow_vires(const boost::filesystem::path dataset_path, const std::string
+unterordner);
+
 extern void calculate_flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
 image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise);
 //extern bool eval(std::string result_sha, Mail *mail);
@@ -141,13 +144,6 @@ int main ( int argc, char *argv[]) {
     calculate_flow(KITTI_FLOW_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
             ("image_02/no_noise/"), continous_frames, no_noise);
 
-    //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
-    //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
-    //dataset_path = MATLAB_DATASET_PATH;
-    //of_algo(dataset_path, "Movement.avi", "FB");
-    //of_algo(dataset_path, "Movement.avi", "LK");
-    //disparity(dataset_path);
-
     make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
     make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,
                         "data/2011_09_28_drive_0016_sync/image_02/data/");
@@ -204,6 +200,12 @@ int main ( int argc, char *argv[]) {
             }
         }
     }
+
+
+/* VIRES_DATASET ------------- */
+
+    calculate_ground_truth_image_and_flow_vires(VIRES_DATASET_PATH, "data/stereo_flow/image_02/");
+
     vi.setServer(serverName.c_str());
 
     fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
@@ -246,11 +248,25 @@ int main ( int argc, char *argv[]) {
         usleep(10000);
     }
 
+    calculate_flow(VIRES_DATASET_PATH, "results/flow_occ_FB_image_02_slow_no_noise", std::string
+            ("image_02_slow/no_noise/"), continous_frames, no_noise);
+
+    calculate_flow(VIRES_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
+            ("image_02_slow/no_noise/"), continous_frames, no_noise);
+
+
     int m_port;
     int m_sensor_port;
     bool m_triggers;
     int m_frames_to_read;
     bool m_write_ts_gt;
+
+    //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
+    //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
+    //dataset_path = MATLAB_DATASET_PATH;
+    //of_algo(dataset_path, "Movement.avi", "FB");
+    //of_algo(dataset_path, "Movement.avi", "LK");
+    //disparity(dataset_path);
 
 }
 

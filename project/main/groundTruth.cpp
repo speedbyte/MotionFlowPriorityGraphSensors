@@ -349,6 +349,14 @@ unterordner) {
 }
 
 
+void calculate_ground_truth_image_and_flow_vires(const boost::filesystem::path dataset_path, const std::string
+unterordner) {
+
+    prepare_directories_groundtruth_image(dataset_path, unterordner);
+    prepare_directories_groundtruth_flow(dataset_path, unterordner);
+
+}
+
 
 
 
