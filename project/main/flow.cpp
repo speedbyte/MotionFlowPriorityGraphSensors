@@ -28,10 +28,36 @@
 using namespace std::chrono;
 
 
-void flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
-image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
+/**
+ * This function means that the directories would be deleted and then created.
+ * Hence only those datasets that has been synthetically produced on the test bench by us, should be deleted.
+ * The results directory can be generally deleted, because they are all created by us.
+ *
+ * dataset/results/flow_occ_<algorithm>_<source>_<click_speed>_<noise_type>
+ *
+ * @param dataset_path
+ * @param result_sha
+ * @return
+ */
+void prepare_directories_result_flow(const boost::filesystem::path dataset_path, const std::string unterordner) {
 
-    std::cout << "results will be stored in " << result_sha << std::endl;
+    boost::filesystem::path result_dir_path = dataset_path;
+    result_dir_path = dataset_path;
+    result_dir_path += unterordner;
+
+    if ( boost::filesystem::exists(result_dir_path) ) {
+        system(("rm " + result_dir_path.string() + std::string("/*")).c_str());
+    }
+    boost::filesystem::create_directories(result_dir_path.string());
+}
+
+
+void calculate_flow(const boost::filesystem::path dataset_path, const std::string unterordner, const std::string
+input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
+
+    prepare_directories_result_flow(dataset_path, unterordner);
+    
+    std::cout << "results will be stored in " << unterordner << std::endl;
 
 
     char file_name[50];
@@ -52,11 +78,12 @@ image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
     std::vector<cv::Point2f> next_pts;
     cv::Mat curGray, prevGray;
 
-    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/") + image_input_sha + std::string("dummy.txt");
+    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/") + 
+            input_image_folder + std::string("dummy.txt");
     assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
 
 
-    boost::filesystem::path results_flow = dataset_path.string() + result_sha + std::string("/data/dummy.txt");
+    boost::filesystem::path results_flow = dataset_path.string() + unterordner + std::string("dummy.txt");
     assert(boost::filesystem::exists(results_flow.parent_path()) != 0);
 
     if ( frame_types == video_frames) {
@@ -78,7 +105,7 @@ image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
 
     if ( frame_types == video_frames)
     {
-        boost::filesystem::path video_out_path = dataset_path.string() + result_sha +  std::string("/video/OpticalFlow.avi");
+        boost::filesystem::path video_out_path = dataset_path.string() + unterordner + std::string("/video/OpticalFlow.avi");
         assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
         //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
         //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
@@ -100,7 +127,7 @@ image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
 
     ushort frame_count = 0;
 
-    cv::namedWindow(result_sha, CV_WINDOW_AUTOSIZE);
+    cv::namedWindow(unterordner, CV_WINDOW_AUTOSIZE);
 
     //how many interations(frames)?
     auto tic = steady_clock::now();
@@ -166,10 +193,10 @@ image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
 
         //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
 
-        if (!result_sha.compare("results/FB")) {
+        if (!unterordner.compare("results/FB")) {
             tic = steady_clock::now();
             if (prevGray.data) {
-                // Initialize parameters for the optical flow algorithm
+                // Initialize parameters for the optical calculate_flow algorithm
                 float pyrScale = 0.5;
                 int numLevels = 3;
                 int windowSize = 15;
@@ -177,12 +204,12 @@ image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
                 int neighborhoodSize = 5;
                 float stdDeviation = 1.2;
 
-                // Calculate optical flow map using Farneback algorithm
+                // Calculate optical calculate_flow map using Farneback algorithm
                 cv::calcOpticalFlowFarneback(prevGray, curGray, flow_frame, pyrScale, numLevels, windowSize,
                                              numIterations,
                                              neighborhoodSize, stdDeviation, cv::OPTFLOW_USE_INITIAL_FLOW);
 
-                // Draw the optical flow map
+                // Draw the optical calculate_flow map
                 int stepSize = 16;
 
                 // Draw the uniform grid of points on the input image along with the motion vectors
@@ -216,9 +243,9 @@ image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
             y_pts.push_back(time_map["FB"]);
         }
 
-        else if (!result_sha.compare("results/LK")) {
+        else if (!unterordner.compare("results/LK")) {
             tic = steady_clock::now();
-            // Calculate optical flow map using LK algorithm
+            // Calculate optical calculate_flow map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
                 std::vector<uchar> status;
                 std::vector<float> err;
@@ -375,7 +402,7 @@ image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
         }
 
         // Display the output image
-        cv::imshow(result_sha, frame);
+        cv::imshow(unterordner, frame);
         needToInit = false;
         prev_pts.clear();
         std::swap(next_pts, prev_pts);
@@ -405,7 +432,7 @@ image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
     Gnuplot gp2d;
     gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION) + "]\n";
     gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-    std::string tmp = std::string(" with lines title ") + std::string("'") + image_input_sha + std::string(" y axis - ms, x axis - frame\n'");
+    std::string tmp = std::string(" with lines title ") + std::string("'") + input_image_folder + std::string(" y axis - ms, x axis - frame\n'");
     gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
 
 }

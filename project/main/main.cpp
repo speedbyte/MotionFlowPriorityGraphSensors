@@ -25,14 +25,10 @@
 
 using boost_path=boost::filesystem::path;
 
-extern void ground_truth(const boost::filesystem::path dataset_path);
-extern std::string prepare_directories_flow_result(const boost::filesystem::path dataset_path, const std::string
+extern void calculate_ground_truth_image_and_flow(const boost::filesystem::path dataset_path, const std::string
 unterordner);
 
-extern std::string prepare_directories_flow_groundtruth(const boost::filesystem::path dataset_path, const std::string
-unterordner);
-
-extern void flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
+extern void calculate_flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
 image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise);
 //extern bool eval(std::string result_sha, Mail *mail);
 extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
@@ -109,36 +105,41 @@ int main ( int argc, char *argv[]) {
 
 /* MATLAB_DATASET ------------- */
 
-    result_dir = prepare_directories_(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, no_noise);
+    // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
+    // calculated here.
 
-    result_dir = prepare_directories(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_static_bg_noise");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_BG/"), continous_frames, static_bg_noise);
+    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
+            ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
-    result_dir = prepare_directories(MATLAB_DATASET_PATH, "flow_occ_LK_image_02_slow_static_fg_noise");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/static_FG/"), continous_frames, static_fg_noise);
+    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_static_bg_noise", std::string
+            ("image_02_slow/static_BG/"), continous_frames, static_bg_noise);
 
-    result_dir = prepare_directories(MATLAB_DATASET_PATH, "flow_occ_LK_image_02_slow_dynamic_bg_noise");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_BG/"), continous_frames, dynamic_bg_noise);
+    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_static_fg_noise", std::string
+            ("image_02_slow/static_FG/"), continous_frames, static_fg_noise);
 
-    result_dir = prepare_directories(MATLAB_DATASET_PATH, "flow_occ_LK_image_02_slow_dynamic_fg_noise");
-    flow(MATLAB_DATASET_PATH, result_dir, std::string("image_02_slow/dynamic_FG/"), continous_frames, dynamic_fg_noise);
+    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_dynamic_bg_noise", std::string
+            ("image_02_slow/dynamic_BG/"), continous_frames, dynamic_bg_noise);
+
+    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_dynamic_fg_noise", std::string
+            ("image_02_slow/dynamic_FG/"), continous_frames, dynamic_fg_noise);
 
 /* CPP_DATASET ------------- */
 
-    result_dir = prepare_directories(CPP_DATASET_PATH, "data/stereo_flow/image_02/");
-    ground_truth(CPP_DATASET_PATH);
+    calculate_ground_truth_image_and_flow(CPP_DATASET_PATH, "data/stereo_flow/image_02/");
 
-    result_dir = prepare_directories(CPP_DATASET_PATH, "flow_occ_FB_image_02_slow_no_noise");
-    flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, no_noise);
+    calculate_flow(CPP_DATASET_PATH, "results/flow_occ_FB_image_02_slow_no_noise", std::string
+            ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
-    result_dir = prepare_directories(CPP_DATASET_PATH, "flow_occ_LK_image_02_slow_no_noise");
-    flow(CPP_DATASET_PATH, result_dir, std::string("image_02_slow/no_noise/"), continous_frames, no_noise);
+    calculate_flow(CPP_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
+            ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
 /* KITTI_FLOW_DATASET------------- */
 
-    result_dir = prepare_directories(KITTI_FLOW_DATASET_PATH, "flow_occ_LK_image_02_slow_no_noise");
-    flow(KITTI_FLOW_DATASET_PATH, result_dir, std::string("image_02/no_noise/"), continous_frames, no_noise);
+    // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
+    // calculated here.
+
+    calculate_flow(KITTI_FLOW_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
+            ("image_02/no_noise/"), continous_frames, no_noise);
 
     //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
     //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
@@ -149,9 +150,8 @@ int main ( int argc, char *argv[]) {
 
     make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
     make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,
-                        "data/2011_09_28_drive_0016_sync/image_02/data/"); // give the path of the folder with pngs.
-    make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/"); // give the path
-// of the folder with pngs.
+                        "data/2011_09_28_drive_0016_sync/image_02/data/");
+    make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/");
 
     std::string m_server;
     boost::filesystem::path m_ts_gt_out_dir;
