@@ -17,7 +17,7 @@
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
 
-#define MAX_ITERATION 716
+#define MAX_ITERATION 20
 #define MAX_ITERATION_THETA 360
 
 //object specs

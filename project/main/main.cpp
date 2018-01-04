@@ -106,6 +106,16 @@ int main ( int argc, char *argv[]) {
     std::string result_dir;
     //test_kitti_original();
 
+/* CPP_DATASET ------------- */
+
+    calculate_ground_truth_image_and_flow(CPP_DATASET_PATH, "data/stereo_flow/");
+
+    calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise/", std::string
+            ("image_02/"), continous_frames, no_noise);
+
+    calculate_flow(CPP_DATASET_PATH, "results/LK_image_02_slow_no_noise/", std::string
+            ("image_02/"), continous_frames, no_noise);
+
 /* MATLAB_DATASET ------------- */
 
     // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
@@ -125,16 +135,6 @@ int main ( int argc, char *argv[]) {
 
     calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_dynamic_fg_noise/", std::string
             ("image_02_slow/dynamic_FG/"), continous_frames, dynamic_fg_noise);
-
-/* CPP_DATASET ------------- */
-
-    calculate_ground_truth_image_and_flow(CPP_DATASET_PATH, "data/stereo_flow/image_02/");
-
-    calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise", std::string
-            ("image_02_slow/no_noise/"), continous_frames, no_noise);
-
-    calculate_flow(CPP_DATASET_PATH, "results/LK_image_02_slow_no_noise", std::string
-            ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
 /* KITTI_FLOW_DATASET------------- */
 

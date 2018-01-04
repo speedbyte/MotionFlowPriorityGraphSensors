@@ -39,7 +39,7 @@ using namespace std::chrono;
  * @param result_sha
  * @return
  */
-void prepare_directories_result_flow(const boost::filesystem::path dataset_path, const std::string resultordner) {
+void prepare_directories_result(const boost::filesystem::path dataset_path, const std::string resultordner) {
 
     boost::filesystem::path result_dir_path = dataset_path;
     result_dir_path = dataset_path;
@@ -59,7 +59,7 @@ void prepare_directories_result_flow(const boost::filesystem::path dataset_path,
 void calculate_flow(const boost::filesystem::path dataset_path, const std::string resultordner, const std::string
 input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
 
-    prepare_directories_result_flow(dataset_path, resultordner);
+    prepare_directories_result(dataset_path, resultordner);
     
     char file_name[50];
     char xFlow[100];

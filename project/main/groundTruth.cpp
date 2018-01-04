@@ -25,58 +25,52 @@ using namespace std::chrono;
 
 
 
-void prepare_directories_groundtruth_image(const boost::filesystem::path dataset_path, const std::string
-unterordner) {
+void prepare_directories_groundtruth_data(const boost::filesystem::path dataset_path, const std::string
+dataordner) {
 
     boost::filesystem::path result_dir_path = dataset_path;
-    if (dataset_path.compare(CPP_DATASET_PATH)) {
+    result_dir_path = dataset_path;
+    result_dir_path += dataordner;
+    if (!dataset_path.compare(CPP_DATASET_PATH)) {
 
         /* prepare diectory for ground truth synthetic images */
         result_dir_path = dataset_path;
-        result_dir_path += unterordner;
+        result_dir_path += dataordner;
 
-        if (boost::filesystem::exists(result_dir_path)) {
-            system(("rm " + dataset_path.string() + std::string("data/stereo_flow/image_02/*")).c_str());
+        if ( boost::filesystem::exists(result_dir_path) ) {
+            system(("rm -rf " + result_dir_path.string()).c_str());
         }
-        boost::filesystem::create_directories(dataset_path.string() + ("data/stereo_flow/image_02"));
+
+        std::cout << "Creating directories" << std::endl;
+        boost::filesystem::create_directories(result_dir_path.string());
+        boost::filesystem::create_directories(result_dir_path.string() + "/image_02");
+        boost::filesystem::create_directories(result_dir_path.string() + "/flow_occ");
+        std::cout << "Ending directories" << std::endl;
     }
 }
 
-void prepare_directories_groundtruth_flow(const boost::filesystem::path dataset_path, const std::string
-unterordner) {
-
-    boost::filesystem::path result_dir_path = dataset_path;
-    if (dataset_path.compare(CPP_DATASET_PATH)) {
-
-        /* prepare diectory for ground truth flow */
-        result_dir_path = dataset_path;
-        result_dir_path += unterordner;
-        if (boost::filesystem::exists(result_dir_path)) {
-            system(("rm " + dataset_path.string() + std::string("data/stereo_flow/flow_occ/*")).c_str());
-        }
-        boost::filesystem::create_directories(dataset_path.string() + ("data/stereo_flow/flow_occ"));
-    }
-}
 
 void calculate_ground_truth_image_and_flow(const boost::filesystem::path dataset_path, const std::string
-unterordner) {
+dataordner) {
 
-    prepare_directories_groundtruth_image(dataset_path, unterordner);
-    prepare_directories_groundtruth_flow(dataset_path, unterordner);
+    prepare_directories_groundtruth_data(dataset_path, dataordner);
 
     ushort start=60; ushort secondstart=240;
     cv::Size_<unsigned> frame_size(1242,375);
 
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
 
-    boost::filesystem::path gt_image_path, gt_flow_path, gt_video_path;
+    boost::filesystem::path  gt_image_out_path = dataset_path.string() + dataordner + std::string("image_02/dummy.txt");
+    assert(boost::filesystem::exists(gt_image_out_path.parent_path()) != 0);
 
-    gt_image_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/image_02/dummy.txt");
-    assert(boost::filesystem::exists(gt_image_path.parent_path()) != 0);
-    gt_flow_path = std::string(dataset_path.string()) + std::string("data/stereo_flow/flow_occ/dummy.txt");
-    assert(boost::filesystem::exists(gt_flow_path.parent_path()) != 0);
-    gt_video_path = gt_image_path.parent_path();
-    gt_video_path += std::string("/movement_video.avi");
+    boost::filesystem::path  gt_flow_out_path = dataset_path.string() + dataordner + std::string("flow_occ/dummy.txt");
+    assert(boost::filesystem::exists(gt_flow_out_path.parent_path()) != 0);
+
+    boost::filesystem::path gt_video_out_path = gt_image_out_path.parent_path();
+    gt_video_out_path += std::string("/movement_video.avi");
+
+    std::cout << "ground truth images will be stored in " << gt_image_out_path.parent_path().string() << std::endl;
+
 
     //how many interations(frames)?
     auto tic= steady_clock::now();
@@ -136,7 +130,7 @@ unterordner) {
     test_frame = cv::Scalar((rand()%255),(rand()%255),0);
     char file_name[20], file_name_gp[20];
 
-    std::string gt_flow_matrix_str = gt_flow_path.parent_path().string() + "/gt_flow.yaml";
+    std::string gt_flow_matrix_str = gt_flow_out_path.parent_path().string() + "/gt_flow.yaml";
 
     cv::FileStorage fs;
     fs.open(gt_flow_matrix_str, cv::FileStorage::WRITE);
@@ -149,8 +143,8 @@ unterordner) {
         relativeGroundTruth = cv::Scalar::all(0);
         sprintf(file_name, "000%03d_10", frame_count);
 
-        std::string gt_image_path_str = gt_image_path.parent_path().string() + "/" + std::string(file_name) + ".png";
-        std::string gt_flow_path_str = gt_flow_path.parent_path().string() + "/" + std::string(file_name) + ".png";
+        std::string gt_image_path_str = gt_image_out_path.parent_path().string() + "/" + std::string(file_name) + ".png";
+        std::string gt_flow_path_str = gt_flow_out_path.parent_path().string() + "/" + std::string(file_name) + ".png";
 
         printf("%u, %u , %u, %u, %u, %u, %u, %i, %i\n", frame_count, start, iterator, secondstart, sIterator, actualX, actualY,
                XMovement, secondXMovement);
@@ -249,6 +243,7 @@ unterordner) {
         toc = steady_clock::now();
         time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
 
+        cv::imwrite(gt_image_path_str, test_frame);
 
         // calculating the relative Ground Truth for the Kitti devkit and store it in a png file
         // Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
@@ -327,7 +322,7 @@ unterordner) {
         }
 
 
-        //plotVectorField (F_gt_write,gt_image_path.parent_path().string(),file_name);
+        //plotVectorField (F_gt_write,gt_image_out_path.parent_path().string(),file_name);
 
         iterator++;
         sIterator++;
@@ -350,11 +345,9 @@ unterordner) {
 
 
 void calculate_ground_truth_image_and_flow_vires(const boost::filesystem::path dataset_path, const std::string
-unterordner) {
+dataordner) {
 
-    prepare_directories_groundtruth_image(dataset_path, unterordner);
-    prepare_directories_groundtruth_flow(dataset_path, unterordner);
-
+    prepare_directories_groundtruth_data(dataset_path, dataordner);
 }
 
 
