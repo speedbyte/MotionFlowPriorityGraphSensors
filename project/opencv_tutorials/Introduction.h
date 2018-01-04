@@ -6,6 +6,9 @@
 
  OpenCV
 
+ Mat ( row, column )
+ Size ( width, height ) which is equivalent to ( column, row )
+
  create a directory release and then invoke
  cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=../build ..
  It is important to build with gtk support, otherwise, the opencv will built, but the programs wont show any images

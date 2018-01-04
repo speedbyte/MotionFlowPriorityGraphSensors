@@ -111,29 +111,29 @@ int main ( int argc, char *argv[]) {
     // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
     // calculated here.
 
-    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
+    calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_no_noise/", std::string
             ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
-    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_static_bg_noise", std::string
+    calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_static_bg_noise/", std::string
             ("image_02_slow/static_BG/"), continous_frames, static_bg_noise);
 
-    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_static_fg_noise", std::string
+    calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_static_fg_noise/", std::string
             ("image_02_slow/static_FG/"), continous_frames, static_fg_noise);
 
-    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_dynamic_bg_noise", std::string
+    calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_dynamic_bg_noise/", std::string
             ("image_02_slow/dynamic_BG/"), continous_frames, dynamic_bg_noise);
 
-    calculate_flow(MATLAB_DATASET_PATH, "results/flow_occ_LK_image_02_slow_dynamic_fg_noise", std::string
+    calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_dynamic_fg_noise/", std::string
             ("image_02_slow/dynamic_FG/"), continous_frames, dynamic_fg_noise);
 
 /* CPP_DATASET ------------- */
 
     calculate_ground_truth_image_and_flow(CPP_DATASET_PATH, "data/stereo_flow/image_02/");
 
-    calculate_flow(CPP_DATASET_PATH, "results/flow_occ_FB_image_02_slow_no_noise", std::string
+    calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise", std::string
             ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
-    calculate_flow(CPP_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
+    calculate_flow(CPP_DATASET_PATH, "results/LK_image_02_slow_no_noise", std::string
             ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
 /* KITTI_FLOW_DATASET------------- */
@@ -141,7 +141,7 @@ int main ( int argc, char *argv[]) {
     // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
     // calculated here.
 
-    calculate_flow(KITTI_FLOW_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
+    calculate_flow(KITTI_FLOW_DATASET_PATH, "results/LK_image_02_slow_no_noise", std::string
             ("image_02/no_noise/"), continous_frames, no_noise);
 
     make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
@@ -248,10 +248,10 @@ int main ( int argc, char *argv[]) {
         usleep(10000);
     }
 
-    calculate_flow(VIRES_DATASET_PATH, "results/flow_occ_FB_image_02_slow_no_noise", std::string
+    calculate_flow(VIRES_DATASET_PATH, "results/FB_image_02_slow_no_noise", std::string
             ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
-    calculate_flow(VIRES_DATASET_PATH, "results/flow_occ_LK_image_02_slow_no_noise", std::string
+    calculate_flow(VIRES_DATASET_PATH, "results/LK_image_02_slow_no_noise", std::string
             ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
 

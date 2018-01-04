@@ -39,27 +39,28 @@ using namespace std::chrono;
  * @param result_sha
  * @return
  */
-void prepare_directories_result_flow(const boost::filesystem::path dataset_path, const std::string unterordner) {
+void prepare_directories_result_flow(const boost::filesystem::path dataset_path, const std::string resultordner) {
 
     boost::filesystem::path result_dir_path = dataset_path;
     result_dir_path = dataset_path;
-    result_dir_path += unterordner;
+    result_dir_path += resultordner;
 
     if ( boost::filesystem::exists(result_dir_path) ) {
-        system(("rm " + result_dir_path.string() + std::string("/*")).c_str());
+        system(("rm -rf " + result_dir_path.string()).c_str());
     }
+    std::cout << "Creating directories" << std::endl;
     boost::filesystem::create_directories(result_dir_path.string());
+    boost::filesystem::create_directories(result_dir_path.string() + "/plots");
+    boost::filesystem::create_directories(result_dir_path.string() + "/flow_occ");
+    std::cout << "Ending directories" << std::endl;
 }
 
 
-void calculate_flow(const boost::filesystem::path dataset_path, const std::string unterordner, const std::string
+void calculate_flow(const boost::filesystem::path dataset_path, const std::string resultordner, const std::string
 input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
 
-    prepare_directories_result_flow(dataset_path, unterordner);
+    prepare_directories_result_flow(dataset_path, resultordner);
     
-    std::cout << "results will be stored in " << unterordner << std::endl;
-
-
     char file_name[50];
     char xFlow[100];
     char yFlow[100];
@@ -83,8 +84,10 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
     assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
 
 
-    boost::filesystem::path results_flow = dataset_path.string() + unterordner + std::string("dummy.txt");
+    boost::filesystem::path results_flow = dataset_path.string() + resultordner + std::string("dummy.txt");
     assert(boost::filesystem::exists(results_flow.parent_path()) != 0);
+
+    std::cout << "results will be stored in " << results_flow.parent_path().string() << std::endl;
 
     if ( frame_types == video_frames) {
         cv::VideoCapture cap;
@@ -94,7 +97,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
             return;
         }
     }
-    std::string results_flow_matrix_str = results_flow.parent_path().string() + "/result_flow.yaml";
+    std::string results_flow_matrix_str = results_flow.parent_path().string() + "/flow_occ/result_flow.yaml";
 
     cv::FileStorage fs;
     fs.open(results_flow_matrix_str, cv::FileStorage::WRITE);
@@ -105,7 +108,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
 
     if ( frame_types == video_frames)
     {
-        boost::filesystem::path video_out_path = dataset_path.string() + unterordner + std::string("/video/OpticalFlow.avi");
+        boost::filesystem::path video_out_path = dataset_path.string() + resultordner + std::string("/video/OpticalFlow.avi");
         assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
         //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
         //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
@@ -127,7 +130,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
 
     ushort frame_count = 0;
 
-    cv::namedWindow(unterordner, CV_WINDOW_AUTOSIZE);
+    cv::namedWindow(resultordner, CV_WINDOW_AUTOSIZE);
 
     //how many interations(frames)?
     auto tic = steady_clock::now();
@@ -185,15 +188,20 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
         gt_image_path_str = image_in_path.parent_path().string() + "/" + std::string(file_name) + ".png";
         frame = cv::imread(gt_image_path_str, CV_LOAD_IMAGE_COLOR);
 
+        if ( frame.data == NULL ) {
+            std::cerr << gt_image_path_str << " not found" << std::endl;
+            throw ("No image file found error");
+        }
+
         results_flow_path_str =
-                results_flow.parent_path().string() + "/" + std::string(file_name) + ".png";
+                results_flow.parent_path().string() + "/flow_occ/" + std::string(file_name) + ".png";
 
         // Convert to grayscale
         cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
 
         //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
 
-        if (!unterordner.compare("results/FB")) {
+        if (resultordner.find("FB") != std::string::npos ) {
             tic = steady_clock::now();
             if (prevGray.data) {
                 // Initialize parameters for the optical calculate_flow algorithm
@@ -243,7 +251,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
             y_pts.push_back(time_map["FB"]);
         }
 
-        else if (!unterordner.compare("results/LK")) {
+        else if (resultordner.find("LK")) {
             tic = steady_clock::now();
             // Calculate optical calculate_flow map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
@@ -256,7 +264,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
                                          err, winSize, 5, termcrit, 0, 0.001);
 
                 unsigned count = 0;
-                int minDist = 0;
+                int minDist = 1;
 
                 std::ofstream flowX;
                 flowX.open(xFlow);
@@ -265,8 +273,16 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
                 flowY.open(yFlow);
                 for (unsigned i = 0; i < next_pts.size(); i++) {
                     /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
-                    if (cv::norm(prev_pts[i] - next_pts[i]) <= minDist) {
-                        //printf("minimum distance for %i\n", i);
+                    // auto dist = cv::norm(prev_pts[i] - next_pts[i]);
+                    double x = prev_pts[i].x - next_pts[i].x;
+                    double y = prev_pts[i].y - next_pts[i].y;
+                    double dist;
+                    dist = pow(x,2)+pow(y,2);           //calculating distance by euclidean formula
+                    dist = sqrt(dist);                  //sqrt is function in math.h
+                    if ( dist <= minDist && frame_count != 1 ) { // frame_count = 1 is a hack because the first and
+                        // the second frame is identical and hence the flow distance will always be 0, leading to
+                        // errors.
+                        printf("minimum distance for %i is %f\n", i, dist);
                         continue;
                     }
 
@@ -313,8 +329,8 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
                     int col_coordinate = std::abs(cvRound(next_pts[i].x));
                     float Vx = (next_pts[i].x - prev_pts[i].x);
                     float Vy = (next_pts[i].y - prev_pts[i].y);
-                   // printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
-                   //        col_coordinate, Vx, Vy);
+                    printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
+                           col_coordinate, Vx, Vy);
                     if(row_coordinate < 375 && col_coordinate < 1242) {
                         flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvRound(Vx);
                         flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvRound(Vy);
@@ -333,6 +349,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
                 cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
                 // Refining the location of the feature points
                 assert(next_pts.size() <= MAX_COUNT );
+                std::cout << next_pts.size();
                 std::vector<cv::Point2f> currentPoint;
                 std::swap(currentPoint, next_pts);
                 next_pts.clear();
@@ -344,7 +361,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
                     cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
                     next_pts.push_back(tempPoints[0]);
                 }
-                printf("old next_pts size is %d and new next_pts size is %d\n", currentPoint.size(), next_pts.size());
+                printf("old next_pts size is %ld and new next_pts size is %ld\n", currentPoint.size(), next_pts.size());
                 //std::swap(currentPoint, next_pts);
             }
 
@@ -387,9 +404,6 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
         }
         
 
-        // Scratch 2.. begin .. end
-        // Scratch 2 end
-
         tic = steady_clock::now();
 
         auto end = steady_clock::now();
@@ -402,7 +416,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
         }
 
         // Display the output image
-        cv::imshow(unterordner, frame);
+        cv::imshow(resultordner, frame);
         needToInit = false;
         prev_pts.clear();
         std::swap(next_pts, prev_pts);
@@ -416,7 +430,7 @@ input_image_folder, FRAME_TYPES frame_types, NOISE_TYPES noise ) {
     for(auto &n : time)
         sum_time +=n;
 
-    std::cout << "Noise " << noise  << "Zeit " << sum_time << std::endl;
+    std::cout << "Noise " << noise  << ", Zeit " << sum_time << std::endl;
     std::cout << "time_map LK " << time_map["LK"] << std::endl;
 
     fs.release();
