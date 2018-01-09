@@ -554,9 +554,11 @@
 
 
  References:
+ So, as C defines the terms, an lvalue is a kind of expression (something that exists in C source code), but an
+ rvalue is the result of evaluating an expression (something that exists during program execution).
 
  Three kinds of references. References to non const values. References to const values often called const references
- and r-value references.
+ and rvalue references.
 
  References are just aliases. Instead of using the variable name, one can simply use the reference name for accessing
  or modifying the variable. Just as addresses can be printed by using the & operator, the references can also access
@@ -577,13 +579,14 @@
 
     const int &ref = 2+3; // allowed
 
- References ( not const references ) cannot refer to a r-value ( temporary value ) or a const l-value. However,
- const References can refer to a r-value and a l-value ( both const and non const ) . Hence const references can be
+ References ( not const references ) cannot refer to a rvalue ( temporary value ) or a const lvalue. However,
+ const References can refer to a rvalue and a lvalue ( both const and non const ) . Hence const references can be
  applied everywhere. References to const values are particularly useful as function parameters because of their
- versatility. A const reference parameter allows you to pass in a non-const l-value argument, a const l-value argument,
+ versatility. A const reference parameter allows you to pass in a non-const lvalue argument, a const lvalue argument,
  a literal, or the result of an expression.
  In case, the arguements needs to be changed, then pass using non const references, otherwise pass using const
- references. A restriction is that r-values cannot be assigned to any reference.
+ references. A restriction is that rvalues can be assigned to only const reference. A lvalue can be assigned to
+ both const reference and reference.
 
  In the above code, getName() will return a pointer to C-style string “Alex”. This is okay since “Alex” will not go out
  of scope when getName() terminates, so the caller can still successfully access it.
@@ -716,6 +719,11 @@
  std::vector:
  A vector is a dynamic array with automatically handled storage. The elements in a vector can be accessed just as
  efficiently as those in an array with the advantage being that vectors can dynamically change in size
+ vector<int> v1 = {1,2,3,4} // size is 4
+ vector<string> v2; // size is 0
+ vector<Shape *> v3(23) // size is 23 and default init value is null, since the type is a pointer.
+ vector<double> v4(23) // size is 23 and the default init value is 0, since the type is not a pointer.
+ vector<double> v4(23,9.9) // size is 23 and the default init value is 9.9
 
  std::array:
  std::array is a container that encapsulates fixed size arrays. Unlike A C-style array, it doesnt decay to T*
@@ -878,6 +886,9 @@
 
  Condtitions are expressions that are contextually convertible to bool.
      for (int i = 0, *p = &i - this is multiple declaration; i < 10 condtion contextually converts to bool; ++i)
+     for ( int ee; cin>>ee; ) {} Here Entry is a declaration without initializer. cin >> ee is an expression that
+     contexually converts to a bool, if the user has returned without inputing any text. This line simply outputs
+     infinelty a number on the input unless, the user presses return two times.
 
  a declaration of a single variable with a brace-or-equals initializer. the initializer is evaluated before each
  iteration, and if the value of the declared variable converts to false,
@@ -903,7 +914,42 @@
  begin and end member functions or free functions are defined or a braced init list. range expression is evaluated to
  determine the sequence of the range to iterate.
   std::vector<int> numbers = { 1, 2, 3, 4, 5, 6, 7 };
-     for ( auto xyz : numbers )
+     for ( auto xyz : vector ) // xyz = vector[x] and hence the type is either int, double float etc.
+        cout << xyz << '\n'
+     for ( auto xyz : map) // xyz = map[x] and hence the type is a std::pair. The map should be like int,int
+
+
+ Iterators -
+ The Iterator concept describes types that can be used to identify and traverse the elements of a container.
+ Iterators can be thought as an abstraction of pointers.
+ Given
+
+ Containers -
+    vector
+    list
+    forward_list
+    deque
+    set
+    multiset
+    map
+    multimap
+    unordered_map
+    unordered_multimap
+    unordered_set
+    unordered_multiset
+
+ Collection of values and then manipulating such collections are done in classes with the main purpose of holding
+ objects that can be manipulated. These classes are called containers.
+
+ Map -
+ if the key isnt found, it is entered into the map with a default value for its value. The default value for an
+ integer type is 0.
+
+ Unordered Map -
+ The cost of a map lookup is O(log(n)) where n is the number of elements in the map. This means, we perform only
+ about 20 comparisons to find an element. It is still better to do a hashed look up instead of using an ordering
+ function such as <.  The standard library hashed containers are referred to as unordered, because they dont require an
+ ordering function, such as comparison with <.
 
 */
 
@@ -928,5 +974,7 @@ fputs
 	reads formatted input from stdin, a file stream or a buffer
  to_chars
 	converts an integer or floating-point value to a character sequence
+
+
  */
 

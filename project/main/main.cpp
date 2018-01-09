@@ -20,6 +20,8 @@
 #include "datasets.h"
 #include <kitti/io_flow.h>
 #include "GridLayout.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
 
 
 
@@ -70,9 +72,41 @@ void usage()
 int main ( int argc, char *argv[]) {
     // Thread 2: Read two kitti image files without rain. The two image files are from kitti
 
+
     ViresInterface vi;
-    for (boost::program_options::detail::config_file_iterator i(s, options), e ; i != e; ++i)
-        std::cout << i->value[0] << std::endl;
+
+    bool test_kitti_raw_dataset, test_cpp_dataset, test_matlab_dataset, test_kitti_flow_dataset, test_vires_dataset;
+
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_ini("../input.txt", pt);
+
+    for (auto& section : pt)
+    {
+        std::cout << "[" << section.first << "]\n";
+        for (auto& key : section.second)
+            std::cout << key.first << "=" << key.second.get_value<std::string>() << "\n";
+    }
+
+    try {
+        std::cout << pt.get<std::string>("CPP_DATASET.EXECUTE") << std::endl;
+        std::strcmp(pt.get<std::string>("CPP_DATASET.EXECUTE").c_str(), "0") == 0 ? test_cpp_dataset = false :
+                test_cpp_dataset = true;
+        std::strcmp(pt.get<std::string>("MATLAB_DATASET.EXECUTE").c_str(), "0") == 0 ? test_matlab_dataset = false :
+                test_matlab_dataset = true;
+        std::strcmp(pt.get<std::string>("VIRES_DATASET.EXECUTE").c_str(), "0") == 0 ? test_vires_dataset = false :
+                test_vires_dataset = true;
+        std::strcmp(pt.get<std::string>("KITTI_RAW_DATASET.EXECUTE").c_str(), "0") == 0 ? test_kitti_raw_dataset =
+                                                                                                  false :
+                test_kitti_raw_dataset = true;
+        std::strcmp(pt.get<std::string>("KITTI_FLOW_DATASET.EXECUTE").c_str(), "0") == 0 ? test_kitti_flow_dataset =
+                                                                                                   false :
+                test_kitti_flow_dataset = true;
+    }
+    catch(boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::property_tree
+    ::ptree_bad_path> >) {
+        std::cerr << "Corrupt config file\n";
+        throw;
+    }
 
 
     if ( test_kitti_raw_dataset ) {
@@ -143,7 +177,7 @@ int main ( int argc, char *argv[]) {
 
 /* KITTI_FLOW_DATASET------------- */
 
-    if ( kitti_flow_dataset ) {
+    if ( test_kitti_flow_dataset ) {
         // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
         // calculated here.
 
