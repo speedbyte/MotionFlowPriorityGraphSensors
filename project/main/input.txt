@@ -1,0 +1,23 @@
+[CPP_DATASET]
+PATH = "../../../datasets/cpp_dataset/"
+EXECUTE = 0
+
+[MATLAB_DATASET]
+PATH = "../../../datasets/matlab_dataset/"
+EXECUTE = 0
+
+[KITTI_FLOW_DATASET]
+PATH = "../../../datasets/kitti_flow_dataset/"
+EXECUTE = 0
+
+[KITTI_RAW_DATASET]
+PATH = "../../../datasets/kitti_raw_dataset/"
+EXECUTE = 0
+
+[KITTI_RAW_CALIBRATION]
+PATH = "../../../datasets/kitti_raw_dataset/data/"
+EXECUTE = 0
+
+[VIRES_DATASET]
+PATH = "../../../datasets/vires_dataset/"
+EXECUTE = 1
