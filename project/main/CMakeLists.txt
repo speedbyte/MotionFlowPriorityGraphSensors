@@ -13,6 +13,13 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 include_directories(${CMAKE_SOURCE_DIR}/../../kitti_eval)
 include_directories(${CMAKE_SOURCE_DIR}/../../libs/vires-interface)
 
+#configure_file(Example.h.in Example.h)
+#set(VERSION "1.0")
+#set(NUMBER 3)
+#In example.h.in
+##define VERSION "${VERSION}"
+##define NUMBER  ${NUMBER}
+
 #set(SOURCE_FILES_KITTI ../../kitti_eval/devkit_stereo_opticalflow_sceneflow/cpp/evaluate_flow.cpp )
 set(SOURCE_FILES
         main.cpp run_configuration.cpp kitti_calibration.cpp video_capture.cpp groundTruth.cpp flow.cpp kbhit.cpp )

@@ -3,9 +3,6 @@
 //
 
 #ifndef MAIN_DATASETS_H_H
-#define MAIN_DATASETS_H_H
-
-
 #define KITTI_FLOW_DATASET_PATH "../../../datasets/kitti_flow_dataset/"
 #define KITTI_RAW_DATASET_PATH "../../../datasets/kitti_raw_dataset/"
 
@@ -19,6 +16,9 @@
 
 #define MAX_ITERATION 20
 #define MAX_ITERATION_THETA 360
+
+
+#define MAIN_DATASETS_H_H
 
 //object specs
 #define object_width 30

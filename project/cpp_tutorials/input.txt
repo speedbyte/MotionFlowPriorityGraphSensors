@@ -1,0 +1,6 @@
+[Section1]
+section1_val1 = 0
+section1_val2 = "new value"
+[Section2]
+section2_val1 = 0
+section2_val2 = "new value"

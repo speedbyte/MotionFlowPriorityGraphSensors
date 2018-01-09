@@ -865,6 +865,45 @@
     Allocators
     Polymorphic allocators
 
+ Auto keyword -  For variables, specifies that the type of the variable that is being declared will be automatically
+ deduced from its initializer. For functions, specifies that the return type is a trailing return type or will be
+ deduced from its return statements (since C++14).
+
+ for loop - 
+ Executes init-statement once, then executes statement and iteration_expression repeatedly, until the value
+ of condition becomes false. The test for condition takes place before each iteration.
+ An init statement can be a null statement. It can be an expression statement. It can be a declaration with
+ initializer and there is no limiit to the number of declarations. The init statement must end with a semicolon. The
+ series of expression statements are sepearated by a comma.
+
+ Condtitions are expressions that are contextually convertible to bool.
+     for (int i = 0, *p = &i - this is multiple declaration; i < 10 condtion contextually converts to bool; ++i)
+
+ a declaration of a single variable with a brace-or-equals initializer. the initializer is evaluated before each
+ iteration, and if the value of the declared variable converts to false,
+ the loop is exited.
+    for (int n = 0; char c = cstr[n] - a declaration of a single variable is also a condition ; ++n)
+
+ Auto
+     for (auto iter = v.begin() - init can be used as auto ; iter != v.end(); ++iter)
+
+ Type of statements in CPP - one is the exreppsion statement and the other is a return statement.
+ Conditional expressions are contextually convertible to bool.
+ Operand can either be left side operand or the right side operand. In some cases, there is only one operand.
+ Operators work on operands.
+
+
+ Range based loops are loops, where there is no indexing.
+ If all the elements in a container needs to be parsed, then it is adivsable to use a range based for loop.
+
+ range declaration -  a declaration of a named variable, whose type is the type of the element of the sequence
+ represented by range_expression, or a reference of that type.
+
+ range expression -  any expression that represents a suitable sequence ( either an array or an object for which
+ begin and end member functions or free functions are defined or a braced init list. range expression is evaluated to
+ determine the sequence of the range to iterate.
+  std::vector<int> numbers = { 1, 2, 3, 4, 5, 6, 7 };
+     for ( auto xyz : numbers )
 
 */
 

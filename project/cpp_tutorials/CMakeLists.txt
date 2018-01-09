@@ -29,6 +29,9 @@ target_link_libraries(filesystem ${Boost_LIBRARIES})
 add_executable(time time.cpp)
 target_link_libraries(time ${Boost_LIBRARIES})
 
+add_executable(boost_try boost_try.cpp)
+target_link_libraries(boost_try ${Boost_LIBRARIES})
+
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")
 message("CMAKE_MODULE_PATH is ${CMAKE_MODULE_PATH}")
 include(CMakeListsDoxygen)
