@@ -32,7 +32,6 @@ echo "this script pid = $$"
 SOURCE_DIR=$(pwd)
 echo $SOURCE_DIR
 VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.0/bin
-CPP_DIR=$SOURCE_DIR/project/main/cmake-build-debug
 VIRES_DATASET_DIR=$SOURCE_DIR/datasets/vires_dataset
 VIRES_GROUNDTRUTH_DIR=$VIRES_DATASET_DIR/data/stereo_flow/$RESULT_PATH
 VTD_SCP_GENERATOR_EXE=$SOURCE_DIR/VIRES/VTD2.0/Runtime/Tools/ScpGenerator/
@@ -44,7 +43,16 @@ cd $VIRES_DIR
 ./vtdStart.sh -setup=$SETUP -project=$PROJECT & 
 echo "vtdStart.sh pid = $!"
 
-sleep 10
+function test()
+{
+	echo "test"	
+}
+
+for i in $(seq 1 10); do
+	sleep 1
+	echo "Wait"
+done 
+
 
 simserver_pid=`pgrep simServer | head -1`
 echo "simserver pid is $simserver_pid"
@@ -56,10 +64,9 @@ sleep 5
 ./scpGenerator -p $PORT_SCP -c $SOURCE_DIR/VIRES/SCP/$SCP/Run.scp
 sleep 10
 
+CPP_DIR=$SOURCE_DIR/project/main/cmake-build-debug
+#CPP_DIR=$SOURCE_DIR/project/vires_tutorials/cmake-build-debug
 cd $CPP_DIR
-#I would like to pass the output dir to c++ as argument and then store it there.
-# The procedure is clear but c++ tricks me(and I suck at it) and I dont want to waste time now.
-# It would be cool if we can do this together if you have some spare time in December :)
 ./main > $VIRES_GROUNDTRUTH_DIR/file.log 2>&1 & 
 read_pid=$!
 
@@ -75,5 +82,5 @@ cd $VIRES_GROUNDTRUTH_DIR
 #find ./ -name '*.png' -exec convert -flip {} {} \;
 mogrify -flip *.png
 #Extract flow from log file
-grep -e '^INDICATOR' file.log > FLow.log
+#grep -e '^INDICATOR' file.log > FLow.log
 

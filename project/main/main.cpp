@@ -1,7 +1,7 @@
 #include <boost/bind.hpp>
 
-#include <vires/RDBHandler.hh>
-#include <vires_common.h>
+#include "vires/RDBHandler.hh"
+#include "vires_common.h"
 
 #include <boost/filesystem.hpp>
 
@@ -191,6 +191,9 @@ int main ( int argc, char *argv[]) {
     }
 
     if (test_vires_dataset ) {
+
+/* VIRES_DATASET ------------- */
+
         std::string m_server;
         boost::filesystem::path m_ts_gt_out_dir;
 
@@ -243,9 +246,6 @@ int main ( int argc, char *argv[]) {
             }
         }
 
-
-/* VIRES_DATASET ------------- */
-
         calculate_ground_truth_image_and_flow_vires(VIRES_DATASET_PATH, "data/stereo_flow/image_02/");
 
         vi.setServer(serverName.c_str());
@@ -288,8 +288,10 @@ int main ( int argc, char *argv[]) {
             vi.setHaveImage(0);
 
             usleep(10000);
+            std::cout << "getting data from VIRES\n";
         }
 
+        /*
         calculate_flow(VIRES_DATASET_PATH, "results/FB_image_02_slow_no_noise", std::string
                 ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
@@ -297,6 +299,7 @@ int main ( int argc, char *argv[]) {
                 ("image_02_slow/no_noise/"), continous_frames, no_noise);
 
 
+        */
         int m_port;
         int m_sensor_port;
         bool m_triggers;
@@ -309,8 +312,9 @@ int main ( int argc, char *argv[]) {
         //of_algo(dataset_path, "Movement.avi", "FB");
         //of_algo(dataset_path, "Movement.avi", "LK");
         //disparity(dataset_path);
+
     }
 
-
+    std::cout << "End of Program\n";
 }
 
