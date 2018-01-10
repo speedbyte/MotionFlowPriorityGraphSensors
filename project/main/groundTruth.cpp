@@ -17,6 +17,7 @@
 
 #include <kitti/mail.h>
 #include <kitti/io_flow.h>
+#include <vires_common.h>
 
 #include "datasets.h"
 //Creating a movement path. The path is stored in a x and y vector
@@ -25,7 +26,7 @@ using namespace std::chrono;
 
 
 
-void prepare_directories_groundtruth_data(const boost::filesystem::path dataset_path, const std::string
+void prepare_gt_dataandflow_directories(const boost::filesystem::path dataset_path, const std::string
 dataordner) {
 
     boost::filesystem::path result_dir_path = dataset_path;
@@ -50,10 +51,10 @@ dataordner) {
 }
 
 
-void calculate_ground_truth_image_and_flow(const boost::filesystem::path dataset_path, const std::string
+void calculate_gt_image_and_gt_flow(const boost::filesystem::path dataset_path, const std::string
 dataordner) {
 
-    prepare_directories_groundtruth_data(dataset_path, dataordner);
+    prepare_gt_dataandflow_directories(dataset_path, dataordner);
 
     ushort start=60; ushort secondstart=240;
     cv::Size_<unsigned> frame_size(1242,375);
@@ -344,10 +345,63 @@ dataordner) {
 }
 
 
-void calculate_ground_truth_image_and_flow_vires(const boost::filesystem::path dataset_path, const std::string
+void calculate_gt_image_and_gt_flow_vires(const boost::filesystem::path dataset_path, const std::string
 dataordner) {
 
-    prepare_directories_groundtruth_data(dataset_path, dataordner);
+    prepare_gt_dataandflow_directories(dataset_path, dataordner);
+
+    ViresInterface vi;
+    std::string m_server;
+    boost::filesystem::path m_ts_gt_out_dir;
+
+    int initCounter = 6;
+
+    // initalize the server variable
+    std::string serverName = "127.0.0.1";
+
+    vi.setServer(serverName.c_str());
+
+    fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
+            vi.getShmKey(), vi.getCheckMask(), vi.getForceBuffer());
+
+    // open the network connection to the taskControl (so triggers may be sent)
+    fprintf(stderr, "creating network connection....\n");
+    vi.openNetwork();  // this is blocking until the network has been opened
+    vi.openNetwork_GT();
+
+
+
+    // now: open the shared memory (try to attach without creating a new segment)
+    fprintf(stderr, "attaching to shared memory 0x%x....\n", vi.getShmKey());
+
+    while (!vi.getShmPtr()) {
+        vi.openShm();
+        usleep(1000);     // do not overload the CPU
+    }
+
+    fprintf(stderr, "...attached! Reading now...\n");
+
+    // now check the SHM for the time being
+    while (1) {
+        vi.readNetwork();
+
+        if (initCounter <= 0)
+            vi.checkShm();
+
+        // has an image arrived or do the first frames need to be triggered
+        //(first image will arrive with a certain frame delay only)
+        if (vi.getHaveImage() || (initCounter-- > 0)) {
+            vi.sendRDBTrigger();
+
+        }
+
+        // ok, reset image indicator
+        vi.setHaveImage(0);
+
+        usleep(10000);
+        std::cout << "getting data from VIRES\n";
+    }
+
 }
 
 

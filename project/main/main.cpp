@@ -1,36 +1,32 @@
-#include <boost/bind.hpp>
 
-#include "vires/RDBHandler.hh"
-#include "vires_common.h"
-
-#include <boost/filesystem.hpp>
+#include <vires/RDBHandler.hh>
 
 #include <iostream>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-
-
-
+#include <iostream>
 
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
-#include <iostream>
-#include <boost/filesystem.hpp>
 
-#include "datasets.h"
 #include <kitti/io_flow.h>
-#include "GridLayout.h"
+
+#include <boost/bind.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+
+#include "GridLayout.h"
+#include "datasets.h"
 
 
 
 using boost_path=boost::filesystem::path;
 
-extern void calculate_ground_truth_image_and_flow(const boost::filesystem::path dataset_path, const std::string
+extern void calculate_gt_image_and_gt_flow(const boost::filesystem::path dataset_path, const std::string
 unterordner);
 
-extern void calculate_ground_truth_image_and_flow_vires(const boost::filesystem::path dataset_path, const std::string
+extern void calculate_gt_image_and_gt_flow_vires(const boost::filesystem::path dataset_path, const std::string
 unterordner);
 
 extern void calculate_flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
@@ -72,8 +68,6 @@ void usage()
 int main ( int argc, char *argv[]) {
     // Thread 2: Read two kitti image files without rain. The two image files are from kitti
 
-
-    ViresInterface vi;
 
     bool test_kitti_raw_dataset, test_cpp_dataset, test_matlab_dataset, test_kitti_flow_dataset, test_vires_dataset;
 
@@ -144,7 +138,7 @@ int main ( int argc, char *argv[]) {
 /* CPP_DATASET ------------- */
 
     if ( test_cpp_dataset ) {
-        calculate_ground_truth_image_and_flow(CPP_DATASET_PATH, "data/stereo_flow/");
+        calculate_gt_image_and_gt_flow(CPP_DATASET_PATH, "data/stereo_flow/");
 
         calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise/", std::string
                 ("image_02/"), continous_frames, no_noise);
@@ -194,112 +188,14 @@ int main ( int argc, char *argv[]) {
 
 /* VIRES_DATASET ------------- */
 
-        std::string m_server;
-        boost::filesystem::path m_ts_gt_out_dir;
+        calculate_gt_image_and_gt_flow_vires(VIRES_DATASET_PATH, "data/stereo_flow/image_02/");
 
-        int initCounter = 6;
-
-        // initalize the server variable
-        std::string serverName = "127.0.0.1";
-
-        /**
-        * validate the arguments given in the command line
-        */
-        for (int i = 1; i < argc; i++) {
-            if ((argv[i][0] == '-') || (argv[i][0] == '/')) {
-                switch (tolower(argv[i][1])) {
-                    case 'k':        // shared memory key
-                        unsigned int tempKey;
-                        if (strlen(argv[i]) > 3) {
-                            sscanf(&argv[i][3], "0x%x", &tempKey);
-                            vi.setShmKey(tempKey);
-                        }
-                        break;
-
-                    case 'c':       // check mask
-                        if (strlen(argv[i]) > 3)
-                            vi.setCheckMask(atoi(&argv[i][3]));
-                        break;
-
-                    case 'f':       // force reading a given buffer
-                        if (strlen(argv[i]) > 3)
-                            vi.setForceBuffer(atoi(&argv[i][3]));
-                        break;
-
-                    case 'v':       // verbose mode
-                        vi.setVerbose(true);
-                        break;
-
-                    case 'p':        // Remote port
-                        if (strlen(argv[i]) > 3)
-                            vi.setPort(atoi(&argv[i][3]));
-                        break;
-                    case 's':       // Server
-                        if (strlen(argv[i]) > 3)
-                            strcpy((char *)(serverName.c_str()), &argv[i][3]);
-                        break;
-                    case 'h':
-                    default:
-                        usage();
-                        break;
-                }
-            }
-        }
-
-        calculate_ground_truth_image_and_flow_vires(VIRES_DATASET_PATH, "data/stereo_flow/image_02/");
-
-        vi.setServer(serverName.c_str());
-
-        fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
-                vi.getShmKey(), vi.getCheckMask(), vi.getForceBuffer());
-
-        // open the network connection to the taskControl (so triggers may be sent)
-        fprintf(stderr, "creating network connection....\n");
-        vi.openNetwork();  // this is blocking until the network has been opened
-        vi.openNetwork_GT();
-
-
-
-        // now: open the shared memory (try to attach without creating a new segment)
-        fprintf(stderr, "attaching to shared memory 0x%x....\n", vi.getShmKey());
-
-        while (!vi.getShmPtr()) {
-            vi.openShm();
-            usleep(1000);     // do not overload the CPU
-        }
-
-        fprintf(stderr, "...attached! Reading now...\n");
-
-        // now check the SHM for the time being
-        while (1) {
-            vi.readNetwork();
-
-            if (initCounter <= 0)
-                vi.checkShm();
-
-            // has an image arrived or do the first frames need to be triggered
-            //(first image will arrive with a certain frame delay only)
-            if (vi.getHaveImage() || (initCounter-- > 0)) {
-                vi.sendRDBTrigger();
-
-            }
-
-            // ok, reset image indicator
-            vi.setHaveImage(0);
-
-            usleep(10000);
-            std::cout << "getting data from VIRES\n";
-        }
-
-        /*
         calculate_flow(VIRES_DATASET_PATH, "results/FB_image_02_slow_no_noise", std::string
-                ("image_02_slow/no_noise/"), continous_frames, no_noise);
+                ("image_02/no_noise/"), continous_frames, no_noise);
 
         calculate_flow(VIRES_DATASET_PATH, "results/LK_image_02_slow_no_noise", std::string
-                ("image_02_slow/no_noise/"), continous_frames, no_noise);
+                ("image_02/no_noise/"), continous_frames, no_noise);
 
-
-        */
         int m_port;
         int m_sensor_port;
         bool m_triggers;

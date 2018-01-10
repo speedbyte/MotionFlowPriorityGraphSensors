@@ -38,7 +38,7 @@ VTD_SCP_GENERATOR_EXE=$SOURCE_DIR/VIRES/VTD2.0/Runtime/Tools/ScpGenerator/
 PORT_SCP=48179
 
 cd $VIRES_GROUNDTRUTH_DIR
-find ./ -maxdepth 1 -name '*.png*'
+find ./ -maxdepth 1 -name '*.png*' -exec rm {} \;
 cd $VIRES_DIR 
 ./vtdStart.sh -setup=$SETUP -project=$PROJECT & 
 echo "vtdStart.sh pid = $!"
@@ -82,5 +82,5 @@ cd $VIRES_GROUNDTRUTH_DIR
 #find ./ -name '*.png' -exec convert -flip {} {} \;
 mogrify -flip *.png
 #Extract flow from log file
-#grep -e '^INDICATOR' file.log > FLow.log
+grep -e '^INDICATOR' file.log > FLow.log
 
