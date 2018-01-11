@@ -11,7 +11,6 @@ find_package(OpenCV EXACT 3.2.0 COMPONENTS core highgui videoio imgcodecs video 
 find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/../../kitti_eval)
-include_directories(${CMAKE_SOURCE_DIR}/../../libs/vires-interface)
 
 #configure_file(Example.h.in Example.h)
 #set(VERSION "1.0")

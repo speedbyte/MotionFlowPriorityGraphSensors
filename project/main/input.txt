@@ -1,6 +1,6 @@
 [CPP_DATASET]
 PATH = "../../../datasets/cpp_dataset/"
-EXECUTE = 0
+EXECUTE = 1
 
 [MATLAB_DATASET]
 PATH = "../../../datasets/matlab_dataset/"
@@ -20,4 +20,4 @@ EXECUTE = 0
 
 [VIRES_DATASET]
 PATH = "../../../datasets/vires_dataset/"
-EXECUTE = 1
+EXECUTE = 0

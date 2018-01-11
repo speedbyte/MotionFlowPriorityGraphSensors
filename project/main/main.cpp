@@ -1,6 +1,4 @@
 
-#include <vires/RDBHandler.hh>
-
 #include <iostream>
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -18,16 +16,10 @@
 
 #include "GridLayout.h"
 #include "datasets.h"
-
+#include "groundTruth.h"
 
 
 using boost_path=boost::filesystem::path;
-
-extern void calculate_gt_image_and_gt_flow(const boost::filesystem::path dataset_path, const std::string
-unterordner);
-
-extern void calculate_gt_image_and_gt_flow_vires(const boost::filesystem::path dataset_path, const std::string
-unterordner);
 
 extern void calculate_flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
 image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise);
@@ -70,6 +62,7 @@ int main ( int argc, char *argv[]) {
 
 
     bool test_kitti_raw_dataset, test_cpp_dataset, test_matlab_dataset, test_kitti_flow_dataset, test_vires_dataset;
+
 
     boost::property_tree::ptree pt;
     boost::property_tree::read_ini("../input.txt", pt);
@@ -137,8 +130,9 @@ int main ( int argc, char *argv[]) {
 
 /* CPP_DATASET ------------- */
 
+    GroundTruth gt(CPP_DATASET_PATH,"data/stereo_flow/");
     if ( test_cpp_dataset ) {
-        calculate_gt_image_and_gt_flow(CPP_DATASET_PATH, "data/stereo_flow/");
+        gt.generate_gt_image_and_gt_flow();
 
         calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise/", std::string
                 ("image_02/"), continous_frames, no_noise);
@@ -188,7 +182,8 @@ int main ( int argc, char *argv[]) {
 
 /* VIRES_DATASET ------------- */
 
-        calculate_gt_image_and_gt_flow_vires(VIRES_DATASET_PATH, "data/stereo_flow/image_02/");
+        GroundTruth gt(VIRES_DATASET_PATH,"data/stereo_flow/image_02");
+        gt.generate_gt_image_and_gt_flow_vires();
 
         calculate_flow(VIRES_DATASET_PATH, "results/FB_image_02_slow_no_noise", std::string
                 ("image_02/no_noise/"), continous_frames, no_noise);

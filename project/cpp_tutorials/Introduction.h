@@ -122,7 +122,7 @@
  #168 Constructors and Destructors:
 
 
- Constructors provides the ability ot think to existing objects. This means first an object is created and then a
+ Constructors provides the ability to think to existing objects. This means first an object is created and then a
  constructor is immediately called, that initialises this object in a meaningful way.
  Destructor shreds the objects after it has died. It takes away the ability to think from the object. Its like
  digging a grave for a person who is already dead. The death of an object can occur in many ways:
@@ -136,7 +136,7 @@
  It is worth mentioning that constructors can only call constructors from their immediate parent/base class.
  Consequently, the C constructor could not call or pass parameters to the A constructor directly. The C constructor
  can only call the B constructor (which has the responsibility of calling the A constructor).
- There is an exception in case of diamond shaped multiple inheritance when the the constructor can be called
+ There is an exception in case of diamond shaped multiple inheritance when the constructor can be called
  by a non immediate derived class, because otherwise, it would not be clear who should call the parent construtor.
  This is one time when the non immediate derived class is allowed to call a non-immediate-parent constructor directly
  . The virtual base class constructor is called before a non virtual base class constructor. That the most derived

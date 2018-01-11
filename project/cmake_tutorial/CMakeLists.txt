@@ -160,6 +160,17 @@ target_link_libraries (Disparity ${PKG_OPENCV_LDFLAGS})
 #install(DIRECTORY src/ DESTINATION include/myproj FILES_MATCHING PATTERN "*.h")
 
 
+#instlling headers in /usr/local/include
+#adds the header files to /usr/local/include by default, if you want to change it then do: make
+#DESTDIR=/home/user/my_include install
+INSTALL(FILES ${HEADERS} DESTINATION include)
+
+set_target_properties(myproject PROPERTIES PUBLIC_HEADER "some.h;another.h")
+INSTALL(TARGETS myproject
+        LIBRARY DESTINATION some/libpath
+        PUBLIC_HEADER DESTINATION some/includepath
+
+
 
 #Some important commands from command line
 
