@@ -28,12 +28,11 @@ using namespace std::chrono;
 
 
 GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string dataordner) {
+
     m_dataset_path = dataset_path;
     m_dataordner = dataordner;
     m_base_directory_path_image_out = m_dataset_path.string() + m_dataordner + std::string("image_02_0/dummy.txt");
-    assert(boost::filesystem::exists(m_base_directory_path_image_out.parent_path()) != 0);
     m_base_directory_path_flow_out = m_dataset_path.string() + m_dataordner + std::string("flow_occ_0/dummy.txt");
-    assert(boost::filesystem::exists(m_base_directory_path_flow_out.parent_path()) != 0);
     m_base_directory_path_video_out = m_base_directory_path_image_out.parent_path();
     m_base_directory_path_video_out += std::string("/movement_video.avi");
     m_gt_flow_matrix_str = m_base_directory_path_flow_out.parent_path().string() + "/gt_flow.yaml";
@@ -54,7 +53,6 @@ GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string datao
                                                                           sin(theta[i] * CV_PI / 180.0)) / (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2)))));
     }
 }
-
 
 void GroundTruth::prepare_gt_dataandflow_directories(int frame_skip) {
 
@@ -79,10 +77,12 @@ void GroundTruth::prepare_gt_dataandflow_directories(int frame_skip) {
     }
 }
 
-
 void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
     prepare_gt_dataandflow_directories(0);
+
+    assert(boost::filesystem::exists(m_base_directory_path_image_out.parent_path()) != 0);
+    assert(boost::filesystem::exists(m_base_directory_path_flow_out.parent_path()) != 0);
 
     ushort start=60;
 
@@ -108,8 +108,6 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     ushort actualX;
     ushort actualY;
 
-
-
     ushort xOrigin = m_xPos.at(start);  // return row pixel
     ushort yOrigin = m_yPos.at(start);  // return col pixel
 
@@ -120,7 +118,6 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     test_frame = cv::Scalar((rand()%255),(rand()%255),0);
     char file_name[20];
 
-
     cv::FileStorage fs;
     fs.open(m_gt_flow_matrix_str, cv::FileStorage::WRITE);
 
@@ -129,7 +126,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
         //Used to store the GT images for the kitti devkit
         relativeGroundTruth = cv::Scalar::all(0);
-        absolutePixelLocation = cv::Scalar::all(0);
+        absolutePixelLocation = cv::Scalar::all(255);
 
         sprintf(file_name, "000%03d_10", frame_count);
 
@@ -144,8 +141,10 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
         printf("%u, %u , %u, %u, %u, %u\n", frame_count, start, iterator, actualX, actualY,
                XMovement);
 
+        std::vector<ushort>::iterator it = m_xPos.begin();
+        //it++;
         //If we are at the end of the path vector, we need to reset our iterators
-        if ((iterator+start) >= m_xPos.size()) {
+        if ((start+iterator) >= m_xPos.size()) {
             start = 0;
             iterator = 0;
             XMovement = m_xPos.at(0) - m_xPos.at(m_xPos.size() - 1);
@@ -345,7 +344,6 @@ void GroundTruth::generate_gt_image_and_gt_flow_vires() {
         std::cout << "getting data from VIRES\n";
     }
 }
-
 
 void GroundTruth::test_kitti_original() {
 
