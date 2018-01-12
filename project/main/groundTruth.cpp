@@ -52,6 +52,27 @@ GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string datao
         m_yPos.push_back(static_cast<ushort>((m_frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
                                                                           sin(theta[i] * CV_PI / 180.0)) / (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2)))));
     }
+
+    m_pedesterianImage.create(object_height, object_width, CV_8UC3);
+
+    uchar r = 0;
+    uchar b = 0;
+
+    r = 0;
+    b = 0;
+    for (int k = 0; k < (object_height - 1); k++) {
+        for (int j = 0; j < (object_width -1 ); j++) {
+            m_pedesterianImage.at<cv::Vec3b>(k, j)[0] = b;
+            m_pedesterianImage.at<cv::Vec3b>(k, j)[1] = 0;
+            m_pedesterianImage.at<cv::Vec3b>(k, j)[2] = r;
+            r = r + (uchar)2;
+            b = b + (uchar)2;
+            if (r > 254)
+                r = 130;
+        }
+        if (b > 254)
+            b = 46;
+    }
 }
 
 void GroundTruth::prepare_gt_dataandflow_directories(int frame_skip) {
@@ -84,14 +105,15 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     assert(boost::filesystem::exists(m_base_directory_path_image_out.parent_path()) != 0);
     assert(boost::filesystem::exists(m_base_directory_path_flow_out.parent_path()) != 0);
 
+
     ushort start=60;
 
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
 
     std::cout << "ground truth images will be stored in " << m_base_directory_path_image_out.parent_path().string() << std::endl;
 
-    cv::Mat relativeGroundTruth(m_frame_size,CV_32FC3,cv::Scalar(0,0,0));
-    cv::Mat absolutePixelLocation(m_frame_size,CV_16UC3,cv::Scalar(0,0,0));
+    cv::Mat absoluteGroundTruthFlow(m_frame_size,CV_32FC3,cv::Scalar(0,0,0));
+    cv::Mat absolutePixelLocation(m_frame_size,CV_16UC3,cv::Scalar(255,255,255));
 
     cv::Mat test_frame = cv::Mat::zeros(m_frame_size, CV_8UC3);
     cv::Mat test_absolute_frame = cv::Mat::zeros(m_frame_size, CV_16UC3);
@@ -108,8 +130,8 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     ushort actualX;
     ushort actualY;
 
-    ushort xOrigin = m_xPos.at(start);  // return row pixel
-    ushort yOrigin = m_yPos.at(start);  // return col pixel
+    const ushort xOrigin = m_xPos.at(start);  // return row pixel
+    const ushort yOrigin = m_yPos.at(start);  // return col pixel
 
     //for moving the objects later
     actualX = xOrigin;
@@ -125,7 +147,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
 
         //Used to store the GT images for the kitti devkit
-        relativeGroundTruth = cv::Scalar::all(0);
+        absoluteGroundTruthFlow = cv::Scalar::all(0);
         absolutePixelLocation = cv::Scalar::all(255);
 
         sprintf(file_name, "000%03d_10", frame_count);
@@ -138,65 +160,41 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
         std::string gt_flow_path_str = m_base_directory_path_flow_out.parent_path().string() + "/" + std::string
                                                                                                             (file_name) + ".png";
 
-        printf("%u, %u , %u, %u, %u, %u\n", frame_count, start, iterator, actualX, actualY,
-               XMovement);
+        printf("%u, %u , %u, %u, %u, %u, %u\n", frame_count, start, iterator, actualX, actualY,
+               XMovement, YMovement);
+
+        /*auto circularNext = [&m_xPos](auto it) { ++it; return (it == m_xPos.end()) ? m_xPos.begin() : it; };
+        for (auto first = m_xPos.begin() + 59, second = m_xPos.begin() + 60; ; first = circularNext(first), second = circularNext(second)) {
+            std::cout << *second - *first;
+        }*/
+
+
+        //(start+iterator) >= m_xPos.size() ? {start = 0, iterator = 0} : {};
 
         std::vector<ushort>::iterator it = m_xPos.begin();
         //it++;
         //If we are at the end of the path vector, we need to reset our iterators
-        if ((start+iterator) >= m_xPos.size()) {
+        if ((start+iterator) >= m_xPos.size() ) {
             start = 0;
             iterator = 0;
-            XMovement = m_xPos.at(0) - m_xPos.at(m_xPos.size() - 1);
-            YMovement = m_yPos.at(0) - m_yPos.at(m_yPos.size() - 1);
-            absolutePixelLocation.at<cv::Vec3s>(m_yPos.at(0), m_xPos.at(0))[0] = m_xPos.at(0);
-            absolutePixelLocation.at<cv::Vec3s>(m_yPos.at(0), m_xPos.at(0))[1] = m_yPos.at(0);
+            XMovement = m_xPos.at(start+iterator) - m_xPos.at(m_xPos.size() - 1);
+            YMovement = m_yPos.at(start+iterator) - m_yPos.at(m_yPos.size() - 1);
         } else {
             XMovement = m_xPos.at(start+iterator) - m_xPos.at(start+iterator-(ushort)1);
             YMovement = m_yPos.at(start+iterator) - m_yPos.at(start+iterator-(ushort)1);
-            absolutePixelLocation.at<cv::Vec3s>(m_yPos.at(start+iterator), m_xPos.at(start+iterator))[0] = m_xPos.at
-                    (start+iterator);
-            absolutePixelLocation.at<cv::Vec3s>(m_yPos.at(start+iterator), m_xPos.at(start+iterator))[1] = m_yPos.at
-                    (start+iterator);
         }
-
-        //Object specification
-        std::vector<ushort> XSpec;
-        for ( ushort i = 0; i < object_width; i++) {
-            XSpec.push_back(actualX+i);
-        }
-
-        std::vector<ushort> YSpec;
-        for ( ushort i = 0; i < object_height; i++) {
-            YSpec.push_back(actualY+i);
-        }
+        //absolutePixelLocation.at<cv::Vec3s>(m_yPos.at(start+iterator), m_xPos.at(start+iterator))[0] = m_yPos.at(0);
+        //absolutePixelLocation.at<cv::Vec3s>(m_yPos.at(start+iterator), m_xPos.at(start+iterator))[1] = m_xPos.at(0);
 
         // create the frame
         tic = steady_clock::now();
-
-        uchar r = 0;
-        uchar b = 0;
 
         //reset the image to white
         test_frame = cv::Scalar::all(255);
         test_absolute_frame = cv::Scalar::all(255);
 
         //draw new image.
-        r = 0;
-        b = 0;
-        for (int k = YSpec.at(0); k < YSpec.at(YSpec.size() - 1); k++) {
-            for (int j = XSpec.at(0); j < XSpec.at(XSpec.size() - 1); j++) {
-                test_frame.at<cv::Vec3b>(k, j)[0] = b;
-                test_frame.at<cv::Vec3b>(k, j)[1] = 0;
-                test_frame.at<cv::Vec3b>(k, j)[2] = r;
-                r = r + (uchar)2;
-                b = b + (uchar)2;
-                if (r > 254)
-                    r = 130;
-            }
-            if (b > 254)
-                b = 46;
-        }
+        m_pedesterianImage.copyTo(test_frame(cv::Rect(actualX, actualY, object_width, object_height)));
 
         toc = steady_clock::now();
         time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
@@ -207,47 +205,47 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
         // Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
         // overflow. The final value to be stored in U16 in the form of val*64+32768
 
-        assert(relativeGroundTruth.channels() == 3);
+        assert(absoluteGroundTruthFlow.channels() == 3);
         assert(absolutePixelLocation.channels() == 3);
 
         cv::Mat roi;
-        roi = relativeGroundTruth.
-                colRange(XSpec.at(0), XSpec.at(XSpec.size()-1)).
-                rowRange(YSpec.at(0), YSpec.at(YSpec.size()-1));
+        roi = absoluteGroundTruthFlow.
+                colRange(actualX, ( actualX + object_width )).
+                rowRange(actualY, (actualY + object_height));
 
         // store displacement in the matrix
         roi = cv::Scalar((XMovement), (YMovement), 1.0f);
 
         cv::Mat roi_absolute;
         roi_absolute = absolutePixelLocation.
-                colRange(m_xPos.at(start+iterator)-(object_width/2),m_xPos.at(start+iterator)+(object_width/2)).
-                rowRange(m_yPos.at(start+iterator)-(object_height/2),m_yPos.at(start+iterator)+(object_height/2));
+                colRange(actualX, ( actualX + object_width )).
+                rowRange(actualY, (actualY + object_height));
 
-        roi_absolute = cv::Scalar(m_xPos.at(start+iterator), m_yPos.at(start+iterator), 1.0f);
+        roi_absolute = cv::Scalar(m_yPos.at(start+iterator), m_xPos.at(start+iterator), 1.0f);
 
         cv::imwrite(gt_abs_pixel_location_str, test_absolute_frame);
 
         fs << "frame_count" << frame_count;
 
         //fs << "ground displacement obj1" << "[";
-        int row = YSpec.at(0);
-        int col = XSpec.at(0);
+        int row = actualY;
+        int col = actualX;
         //fs << "{:" << "row" <<  row << "col" << col << "displacement" << "[:";
-        //fs << relativeGroundTruth.at<cv::Vec3f>(row, col)[0];
-        //fs << relativeGroundTruth.at<cv::Vec3f>(row, col)[1];
-        //fs << relativeGroundTruth.at<cv::Vec3f>(row, col)[2];
+        //fs << absoluteGroundTruthFlow.at<cv::Vec3f>(row, col)[0];
+        //fs << absoluteGroundTruthFlow.at<cv::Vec3f>(row, col)[1];
+        //fs << absoluteGroundTruthFlow.at<cv::Vec3f>(row, col)[2];
         //fs << "]" << "}";
         //fs << "]";
-        //fs << "complete" << relativeGroundTruth;
+        //fs << "complete" << absoluteGroundTruthFlow;
 
         //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
         FlowImage F_gt_write(m_frame_size.width, m_frame_size.height);
         for (int32_t v=0; v<m_frame_size.height; v++) { // rows
             for (int32_t u=0; u<m_frame_size.width; u++) {  // cols
-                if (relativeGroundTruth.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
-                    F_gt_write.setFlowU(u,v,relativeGroundTruth.at<cv::Vec3f>(v,u)[0]);
-                    F_gt_write.setFlowV(u,v,relativeGroundTruth.at<cv::Vec3f>(v,u)[1]);
-                    F_gt_write.setValid(u,v,(bool)relativeGroundTruth.at<cv::Vec3f>(v,u)[2]);
+                if (absoluteGroundTruthFlow.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
+                    F_gt_write.setFlowU(u,v,absoluteGroundTruthFlow.at<cv::Vec3f>(v,u)[0]);
+                    F_gt_write.setFlowV(u,v,absoluteGroundTruthFlow.at<cv::Vec3f>(v,u)[1]);
+                    F_gt_write.setValid(u,v,(bool)absoluteGroundTruthFlow.at<cv::Vec3f>(v,u)[2]);
                 }
             }
         }

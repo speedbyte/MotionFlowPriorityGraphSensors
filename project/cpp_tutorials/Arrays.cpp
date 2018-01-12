@@ -22,6 +22,9 @@ int main ( int argc, char *argv[]) {
     STRUCT_AGGREGRATE array_struct_aggregrate[2] = {{2,3},{2,3}};
     std::array<STRUCT_AGGREGRATE,2> std_array_struct_aggregrate = {{{2,3},{2,3}}};
 
+    std::vector<ushort> m_xPos(10,100);
+
+
     std::cout << struct_aggregrate.a << std::endl;
     std::cout << "----------1D access---------------------------------------\n" ;
     /**
@@ -184,5 +187,6 @@ int main ( int argc, char *argv[]) {
     for ( ; it < float_val.end(); ) {
         printf("Normal %f, Random %f\n" ,*it++, *it_shuffle++);
     }
+
 
 }

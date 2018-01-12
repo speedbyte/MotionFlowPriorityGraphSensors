@@ -17,7 +17,7 @@ private:
     cv::Size_<unsigned> m_frame_size;
 
     std::vector<ushort> m_xPos, m_yPos;
-
+    cv::Mat m_pedesterianImage;
 
 public:
 

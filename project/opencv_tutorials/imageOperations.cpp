@@ -6,7 +6,7 @@
 #include <iostream>
 
 void image_processing_() {
-    boost::filesystem::path fpath("../../../pics_dataset/lena.png");
+    boost::filesystem::path fpath("../../../datasets/pics_dataset/lena.png");
     try {
         if ( !boost::filesystem::exists(fpath) ) {
             throw ("FileNotFound error");
@@ -31,7 +31,7 @@ void image_processing_() {
     }
 
     // Image Process Mat_
-    cv::Mat_<cv::Matx<uchar,512,512>> img_rgb_;
+    cv::Mat_<cv::Matx<uchar,512,512>> img_rgb_; //row,column
     std::cout<<img_rgb_.total() << std::endl;
     cv::randu(img_rgb_,1,2);
 
@@ -79,7 +79,7 @@ void image_processing_() {
 }
 
 void image_processing_bmp() {
-    boost::filesystem::path fpath("../../../pics_dataset/lena.png");
+    boost::filesystem::path fpath("../../../datasets/pics_dataset/lena.png");
     try {
         if ( !boost::filesystem::exists(fpath) ) {
             throw ("FileNotFound error");
@@ -133,19 +133,19 @@ void absdiff(cv::Mat &kittisrc1, cv::Mat &kittisrc2) {
 }
 
 void addWeighted() {
-    cv::Mat lena = cv::imread("../../../pics_dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
+    cv::Mat lena = cv::imread("../../../datasets/pics_dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
     cv::Mat input1(lena, cv::Rect(0,0,20,370));
-    cv::Mat input2(lena, cv::Rect(256,0,20,370));
-    cv::Mat output(lena, cv::Rect(256,0,20,370));
+    cv::Mat input2(lena, cv::Rect(100,0,20,370));
+    cv::Mat output(lena, cv::Rect(256,0,20,370)); // x, y, width, height
     // one to blend is the image of the guy and the second parameter.
 
-    cv::addWeighted(input1, 1, input2, 1, 0, output); //
+    cv::addWeighted(input1, 1, input2, 1, 0, output); //output = input1*alpha + input2*beta + gamma
     // this gives a result with just the moving objects between two
     cv::namedWindow("result", CV_WINDOW_AUTOSIZE);
     cv::imshow("result", lena);
     cv::waitKey(0);
 
-    cv::Mat jpgImage = cv::imread("../../../pics_dataset/lena.jpg");
+    cv::Mat jpgImage = cv::imread("../../../datasets/pics_dataset/lena.jpg");
     cv::namedWindow("result", CV_WINDOW_AUTOSIZE);
 }
 
@@ -169,18 +169,21 @@ void imdecode() {
 int main ( int argc, char *argv[] ) {
 
 
-    cv::Mat kittisrc1 = cv::imread("../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/image_02"
+    cv::Mat kittisrc1 = cv::imread("../../../datasets/kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync"
+                                           "/image_02"
                                          "/data"
                               "/0000000169"".png", CV_LOAD_IMAGE_COLOR);
-    cv::Mat kittisrc2 = cv::imread("../../../kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync/image_02/data"
+    cv::Mat kittisrc2 = cv::imread("../../../datasets/kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync"
+                                           "/image_02/data"
                               "/0000000170.png");
 
     // store in binary format to be able to compare the data.
+    addWeighted();
     image_processing_();
     image_processing_bmp();
 
     absdiff(kittisrc1, kittisrc2);
-    xml_yaml(kittisrc1, kittisrc2);
+    //xml_yaml(kittisrc1, kittisrc2);
 
     imdecode();
 

@@ -135,10 +135,10 @@ int main ( int argc, char *argv[]) {
         gt.generate_gt_image_and_gt_flow();
 
         calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise/", std::string
-                ("image_02/"), continous_frames, no_noise);
+                ("image_02_0/"), continous_frames, no_noise);
 
         calculate_flow(CPP_DATASET_PATH, "results/LK_image_02_slow_no_noise/", std::string
-                ("image_02/"), continous_frames, no_noise);
+                ("image_02_0/"), continous_frames, no_noise);
     }
 
 /* MATLAB_DATASET ------------- */
