@@ -166,6 +166,15 @@ void imdecode() {
     }
 }
 
+void miscallenous() {
+    cv::Mat misc(50,100,CV_8UC3);
+    misc = cv::Scalar::all(255);
+    misc = cv::Scalar((rand()%255),(rand()%255),0);
+    cv::Mat test_frame = cv::Mat::zeros(cv::Size(1242,375), CV_8UC3);
+    cv::Mat test_absolute_frame = cv::Mat::zeros(cv::Size(1242,375), CV_16UC3);
+
+}
+
 int main ( int argc, char *argv[] ) {
 
 

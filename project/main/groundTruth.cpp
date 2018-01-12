@@ -105,7 +105,6 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     assert(boost::filesystem::exists(m_base_directory_path_image_out.parent_path()) != 0);
     assert(boost::filesystem::exists(m_base_directory_path_flow_out.parent_path()) != 0);
 
-
     ushort start=60;
 
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
@@ -113,10 +112,12 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     std::cout << "ground truth images will be stored in " << m_base_directory_path_image_out.parent_path().string() << std::endl;
 
     cv::Mat absoluteGroundTruthFlow(m_frame_size,CV_32FC3,cv::Scalar(0,0,0));
-    cv::Mat absolutePixelLocation(m_frame_size,CV_16UC3,cv::Scalar(255,255,255));
+    cv::Mat absolutePixelLocation(m_frame_size,CV_16UC3,cv::Scalar(0,0,0));
+    cv::Mat test_frame(m_frame_size, CV_8UC3);
+    cv::Mat test_absolute_frame(m_frame_size, CV_16UC3);
 
-    cv::Mat test_frame = cv::Mat::zeros(m_frame_size, CV_8UC3);
-    cv::Mat test_absolute_frame = cv::Mat::zeros(m_frame_size, CV_16UC3);
+    assert(absoluteGroundTruthFlow.channels() == 3);
+    assert(absolutePixelLocation.channels() == 3);
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
@@ -137,7 +138,6 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     actualX = xOrigin;
     actualY = yOrigin;
 
-    test_frame = cv::Scalar((rand()%255),(rand()%255),0);
     char file_name[20];
 
     cv::FileStorage fs;
@@ -147,8 +147,6 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
 
         //Used to store the GT images for the kitti devkit
-        absoluteGroundTruthFlow = cv::Scalar::all(0);
-        absolutePixelLocation = cv::Scalar::all(255);
 
         sprintf(file_name, "000%03d_10", frame_count);
 
@@ -186,27 +184,21 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
         //absolutePixelLocation.at<cv::Vec3s>(m_yPos.at(start+iterator), m_xPos.at(start+iterator))[0] = m_yPos.at(0);
         //absolutePixelLocation.at<cv::Vec3s>(m_yPos.at(start+iterator), m_xPos.at(start+iterator))[1] = m_xPos.at(0);
 
-        // create the frame
         tic = steady_clock::now();
-
         //reset the image to white
         test_frame = cv::Scalar::all(255);
-        test_absolute_frame = cv::Scalar::all(255);
-
         //draw new image.
         m_pedesterianImage.copyTo(test_frame(cv::Rect(actualX, actualY, object_width, object_height)));
-
         toc = steady_clock::now();
         time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
-
         cv::imwrite(gt_image_path_str, test_frame);
 
         // calculating the relative Ground Truth for the Kitti devkit and store it in a png file
         // Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
         // overflow. The final value to be stored in U16 in the form of val*64+32768
 
-        assert(absoluteGroundTruthFlow.channels() == 3);
-        assert(absolutePixelLocation.channels() == 3);
+
+        test_absolute_frame = cv::Scalar::all(255);
 
         cv::Mat roi;
         roi = absoluteGroundTruthFlow.
