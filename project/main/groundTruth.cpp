@@ -33,7 +33,7 @@ GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string datao
     m_dataordner = dataordner;
 
     m_base_directory_path_image_out = m_dataset_path.string() + m_dataordner + std::string("image_02/dummy.txt");
-    m_base_directory_path_flow_out = m_dataset_path.string() + m_dataordner + std::string("flow_occ_00/dummy.txt");
+    m_base_directory_path_flow_out = m_dataset_path.string() + m_dataordner + std::string("flow_occ/dummy.txt");
     m_base_directory_path_video_out = m_base_directory_path_image_out.parent_path();
     m_base_directory_path_video_out += std::string("/movement_video.avi");
 
@@ -49,8 +49,7 @@ GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string datao
     // Prepare points
     for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
 
-        m_position.x = (static_cast<ushort>((m_frame_size.width/2) + (500 * cos(theta[i] *
-                                                                                                           CV_PI / 180.0) /
+        m_position.x = (static_cast<ushort>((m_frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /
                                                                    (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2)))));
 
         m_position.y = (static_cast<ushort>((m_frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
@@ -101,7 +100,8 @@ void GroundTruth::prepare_gt_dataandflow_directories() {
 
         std::cout << "Creating directories" << std::endl;
         boost::filesystem::create_directories(result_dir_path.string() + "/image_02");
-        for (int i = 0; i < 10; ++i) {
+        boost::filesystem::create_directories(result_dir_path.string() + "/flow_occ");
+        for (int i = 1; i < 10; ++i) {
             sprintf(char_dir_append, "%02d", i);
             boost::filesystem::create_directories(result_dir_path.string() + "/flow_occ_" + char_dir_append);
         }
@@ -182,7 +182,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
         current_index++;
     }
 
-    for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
+    for (ushort frame_count=0; frame_count < MAX_ITERATION; ) {
         sprintf(file_name, "/000%03d_10.png", frame_count);
         std::string temp_flow_path = m_gt_flow_path + file_name;
         if ( frame_count > 0 ) {
@@ -191,8 +191,25 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
                                          (frame_count).first.y),
                                  object_width, object_height, m_flow_matrix.at(frame_count).second.x, m_flow_matrix.at
                             (frame_count).second.y, temp_flow_path );
-            //store_in_yaml(temp_flow_path, frame_count, currentPixelPositionX, currentPixelPositionX, XMovement,
-            // m_movement.y);
+        }
+        frame_count = frame_count + (ushort)1;
+    }
+
+    int temp_flow_x = 0, temp_flow_y = 0 ; const ushort frame_skip = 4;
+    for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
+        if ( frame_count > 0 ) {
+            //draw new ground truth flow.
+            if ( frame_count%frame_skip != 0 ) {
+                temp_flow_x += m_flow_matrix.at(frame_count).second.x;
+                temp_flow_y += m_flow_matrix.at(frame_count).second.y;
+                continue;
+            }
+            temp_flow_x = 0; temp_flow_y = 0;
+            sprintf(file_name, "_%02d/000%03d_10.png", frame_skip, frame_count);
+            std::string temp_flow_path = m_gt_flow_path + file_name;
+            extrapolate_objects( cv::Point2i(m_flow_matrix.at(frame_count).first.x, m_flow_matrix.at
+                                         (frame_count).first.y),
+                                 object_width, object_height, temp_flow_x, temp_flow_x, temp_flow_path );
         }
     }
 
@@ -235,6 +252,8 @@ void GroundTruth::extrapolate_objects( cv::Point2i pt, ushort width, ushort heig
 void GroundTruth::store_in_yaml(const std::string &temp_flow_path, int frame_count, ushort currentPixelPositionX,
                                 ushort currentPixelPositionY, int XMovement, int YMovement ) {
 
+    //store_in_yaml(temp_flow_path, frame_count, currentPixelPositionX, currentPixelPositionX, XMovement,
+    // m_movement.y);
     m_fs << "frame_count" << frame_count;
     m_fs << "gt flow png file read" << "[";
     m_fs << "{:" << "row" <<  currentPixelPositionX << "col" << currentPixelPositionY << "displacement" << "[:";
