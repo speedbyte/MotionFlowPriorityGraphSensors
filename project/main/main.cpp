@@ -62,6 +62,7 @@ int main ( int argc, char *argv[]) {
 
 
     bool test_kitti_raw_dataset, test_cpp_dataset, test_matlab_dataset, test_kitti_flow_dataset, test_vires_dataset;
+    bool generate_ground_truth, generate_LK, generate_FB;
 
 
     boost::property_tree::ptree pt;
@@ -88,6 +89,12 @@ int main ( int argc, char *argv[]) {
         std::strcmp(pt.get<std::string>("KITTI_FLOW_DATASET.EXECUTE").c_str(), "0") == 0 ? test_kitti_flow_dataset =
                                                                                                    false :
                 test_kitti_flow_dataset = true;
+        std::strcmp(pt.get<std::string>("CPP_DATASET.GT").c_str(), "0") == 0 ? generate_ground_truth = false :
+        generate_ground_truth = true;
+        std::strcmp(pt.get<std::string>("CPP_DATASET.FB").c_str(), "0") == 0 ? generate_FB = false :
+                generate_FB = true;
+        std::strcmp(pt.get<std::string>("CPP_DATASET.LK").c_str(), "0") == 0 ? generate_LK = false :
+                generate_LK = true;
     }
     catch(boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::property_tree
     ::ptree_bad_path> >) {
@@ -132,13 +139,18 @@ int main ( int argc, char *argv[]) {
 
     GroundTruth gt(CPP_DATASET_PATH,"data/stereo_flow/");
     if ( test_cpp_dataset ) {
-        gt.generate_gt_image_and_gt_flow();
+        if ( generate_ground_truth ) {
+            gt.generate_gt_image_and_gt_flow();
+        }
 
-        calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise/", std::string
-                ("image_02_0/"), continous_frames, no_noise);
-
-        calculate_flow(CPP_DATASET_PATH, "results/LK_image_02_slow_no_noise/", std::string
-                ("image_02_0/"), continous_frames, no_noise);
+        if ( generate_FB ) {
+            calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise/", std::string
+                    ("image_02_0/"), continous_frames, no_noise);
+        }
+        if ( generate_LK ) {
+            calculate_flow(CPP_DATASET_PATH, "results/LK_image_02_slow_no_noise/", std::string
+                    ("image_02_0/"), continous_frames, no_noise);
+        }
     }
 
 /* MATLAB_DATASET ------------- */

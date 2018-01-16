@@ -1,6 +1,9 @@
 [CPP_DATASET]
 PATH = "../../../datasets/cpp_dataset/"
 EXECUTE = 1
+GT = 1
+LK = 0
+FB = 0
 
 [MATLAB_DATASET]
 PATH = "../../../datasets/matlab_dataset/"

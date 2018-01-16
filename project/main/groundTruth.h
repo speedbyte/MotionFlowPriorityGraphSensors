@@ -16,23 +16,39 @@ private:
     std::string m_gt_flow_matrix_str;
     cv::Size_<unsigned> m_frame_size;
 
-    std::vector<ushort> m_xPos, m_yPos;
     cv::Mat m_pedesterianImage;
-    cv::Mat m_groundTruthImage;
-    cv::Mat m_absoluteGroundTruthFlow;
     cv::Mat m_absolutePixelLocation;
+
+    std::string m_gt_image_path;
+    std::string m_gt_flow_path;
+
+    cv::FileStorage m_fs;
+
+    cv::Point2i m_position, m_movement;
+
+    std::vector<cv::Point2i> m_position_matrix;
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix;
+
 
 public:
 
     GroundTruth(boost::filesystem::path dataset_path, std::string dataordner);
 
-    void prepare_gt_dataandflow_directories(int frame_skip);
+    void prepare_gt_dataandflow_directories();
 
     void generate_gt_image_and_gt_flow_vires();
 
     void generate_gt_image_and_gt_flow();
 
     void test_kitti_original();
+
+    void extrapolate_objects( cv::Point2i pt, ushort width,
+                                           ushort height, int xValue, int yValue, std::string image_path );
+
+
+private:
+    void store_in_yaml(const std::string &temp_flow_path, int frame_count, ushort currentPixelPositionX, ushort
+    currentPixelPositionY, int XMovement, int YMovement);
 };
 
 

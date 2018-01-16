@@ -172,7 +172,6 @@ void miscallenous() {
     misc = cv::Scalar((rand()%255),(rand()%255),0);
     cv::Mat test_frame = cv::Mat::zeros(cv::Size(1242,375), CV_8UC3);
     cv::Mat test_absolute_frame = cv::Mat::zeros(cv::Size(1242,375), CV_16UC3);
-
 }
 
 int main ( int argc, char *argv[] ) {

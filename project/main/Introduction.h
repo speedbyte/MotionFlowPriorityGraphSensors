@@ -1,5 +1,18 @@
 
 /**
+
+
+ calculating the relative Ground Truth for the Kitti devkit and store it in a png file
+ Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
+ overflow. The final value to be stored in U16 in the form of val*2pow6+32768.
+ So -5 means (-5*64)+32768 = 32574
+
+ The flow matrix is such, that it tells you that I came from here. Hence the first frame has no meaning.
+ Image starts from 0. The flow starts from 1 because flow 1 is actually image1 - image0.
+ On the pixel 200,100 if the flow is 5,4 it means that the pixel it came from was 195,96.
+ positive means that the last pixel was smaller.
+ negative means that the last pixel was larger.
+
  git checkout 8569a8c6088a201fbeafdcaa06bcaa8aadd763d9
  ImageStreamingClient
  project/server/
