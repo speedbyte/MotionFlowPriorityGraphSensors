@@ -73,6 +73,15 @@ GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string datao
         if (b > 254)
             b = 46;
     }
+
+    m_groundTruthImage.create(m_frame_size, CV_8UC3);
+    m_absoluteGroundTruthFlow.create(m_frame_size,CV_32FC3);
+    m_absolutePixelLocation.create(m_frame_size,CV_16UC3);
+    assert(m_absoluteGroundTruthFlow.channels() == 3);
+    assert(m_absolutePixelLocation.channels() == 3);
+    m_absoluteGroundTruthFlow = cv::Scalar::all(0);
+    m_absolutePixelLocation = cv::Scalar::all(0);
+
 }
 
 void GroundTruth::prepare_gt_dataandflow_directories(int frame_skip) {
@@ -111,13 +120,8 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
     std::cout << "ground truth images will be stored in " << m_base_directory_path_image_out.parent_path().string() << std::endl;
 
-    cv::Mat absoluteGroundTruthFlow(m_frame_size,CV_32FC3,cv::Scalar(0,0,0));
-    cv::Mat absolutePixelLocation(m_frame_size,CV_16UC3,cv::Scalar(0,0,0));
-    cv::Mat test_frame(m_frame_size, CV_8UC3);
     cv::Mat test_absolute_frame(m_frame_size, CV_16UC3);
 
-    assert(absoluteGroundTruthFlow.channels() == 3);
-    assert(absolutePixelLocation.channels() == 3);
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
@@ -126,7 +130,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
     //Initialization
     ushort iterator = 0;
-    short XMovement = 0,YMovement = 0;
+    signed short XMovement = 0,YMovement = 0;
 
     ushort actualX;
     ushort actualY;
@@ -166,11 +170,6 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
             std::cout << *second - *first;
         }*/
 
-
-        //(start+iterator) >= m_xPos.size() ? {start = 0, iterator = 0} : {};
-
-        std::vector<ushort>::iterator it = m_xPos.begin();
-        //it++;
         //If we are at the end of the path vector, we need to reset our iterators
         if ((start+iterator) >= m_xPos.size() ) {
             start = 0;
@@ -186,22 +185,21 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
         tic = steady_clock::now();
         //reset the image to white
-        test_frame = cv::Scalar::all(255);
+        m_groundTruthImage = cv::Scalar::all(255);
         //draw new image.
-        m_pedesterianImage.copyTo(test_frame(cv::Rect(actualX, actualY, object_width, object_height)));
+        m_pedesterianImage.copyTo(m_groundTruthImage(cv::Rect(actualX, actualY, object_width, object_height)));
         toc = steady_clock::now();
         time_map["generate"] =  duration_cast<milliseconds>(toc - tic).count();
-        cv::imwrite(gt_image_path_str, test_frame);
+        cv::imwrite(gt_image_path_str, m_groundTruthImage);
 
         // calculating the relative Ground Truth for the Kitti devkit and store it in a png file
         // Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
         // overflow. The final value to be stored in U16 in the form of val*64+32768
 
-
         test_absolute_frame = cv::Scalar::all(255);
 
         cv::Mat roi;
-        roi = absoluteGroundTruthFlow.
+        roi = m_absoluteGroundTruthFlow.
                 colRange(actualX, ( actualX + object_width )).
                 rowRange(actualY, (actualY + object_height));
 
@@ -209,13 +207,13 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
         roi = cv::Scalar((XMovement), (YMovement), 1.0f);
 
         cv::Mat roi_absolute;
-        roi_absolute = absolutePixelLocation.
+        roi_absolute = m_absolutePixelLocation.
                 colRange(actualX, ( actualX + object_width )).
                 rowRange(actualY, (actualY + object_height));
 
         roi_absolute = cv::Scalar(m_yPos.at(start+iterator), m_xPos.at(start+iterator), 1.0f);
 
-        cv::imwrite(gt_abs_pixel_location_str, test_absolute_frame);
+        cv::imwrite(gt_abs_pixel_location_str, m_absolutePixelLocation);
 
         fs << "frame_count" << frame_count;
 

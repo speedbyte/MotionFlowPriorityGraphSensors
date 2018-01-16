@@ -18,6 +18,9 @@ private:
 
     std::vector<ushort> m_xPos, m_yPos;
     cv::Mat m_pedesterianImage;
+    cv::Mat m_groundTruthImage;
+    cv::Mat m_absoluteGroundTruthFlow;
+    cv::Mat m_absolutePixelLocation;
 
 public:
 
