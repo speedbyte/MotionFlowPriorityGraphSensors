@@ -54,6 +54,8 @@ public:
     void calculate_flow(const boost::filesystem::path dataset_path, const std::string image_input_sha, ALGO_TYPES algo,
     FRAME_TYPES frame_types, NOISE_TYPES noise);
 
+    void LK();
+
 
 
 private:
