@@ -91,3 +91,6 @@
 [submodule "vires-interface"]
 	path = libs/vires-interface
 	url = git@atreus.informatik.uni-tuebingen.de:Veikas/vires-interface.git
+[submodule "kitti_devkit_stereo_opticalflow_sceneflow"]
+	path = libs/kitti_devkit_stereo_opticalflow_sceneflow
+	url = git@atreus.informatik.uni-tuebingen.de:Veikas/kitti_devkit_stereo_opticalflow_sceneflow

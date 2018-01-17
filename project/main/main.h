@@ -6,6 +6,4 @@
 #define VIRES_TUTORIAL_MAIN_H
 
 
-
-
 #endif //VIRES_TUTORIAL_MAIN_H

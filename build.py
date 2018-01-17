@@ -74,6 +74,8 @@ def parse_arguements(args):
             build_properties[count] = args.FFMPEG_OPTION
         if "libs/vires-interface" in submodule_dir[count]:
             build_properties[count] = args.VIRES_OPTION
+        if "libs/kitti_devkit_stereo_opticalflow_sceneflow" in submodule_dir[count]:
+            build_properties[count] = args.KITTI_FLOW_OPTION
         os.chdir(SOURCE_DIR)
 
     print build_properties
@@ -105,6 +107,8 @@ def parse_arguements(args):
                 sys.exit(0)
 
             os.chdir(library)
+	    if "kitti" in library_install:
+		os.chdir("cpp")	
             print "starting building %s with version %s" % (os.getcwd(), metadata)
             if build_option == "manual":
                 raw_input("Press enter to continue")
@@ -283,6 +287,7 @@ parser.add_argument('--vtk', action='store_true', dest='VTK_OPTION', help='build
 parser.add_argument('--boost', action='store_true', dest='BOOST_OPTION', help='builds boost')
 parser.add_argument('--ffmpeg', action='store_true', dest='FFMPEG_OPTION', help='builds ffmpeg')
 parser.add_argument('--vires', action='store_true', dest='VIRES_OPTION', help='builds vires')
+parser.add_argument('--kitti_flow', action='store_true', dest='KITTI_FLOW_OPTION', help='builds kitti flow')
 #Generic options
 parser.add_argument('-t', dest="BUILD_OPTION", choices=('clean', 'manual'), help='build parameters')
 parser.add_argument('-v', action='store_true', dest='VERBOSE_OPTION', help='build parameters')

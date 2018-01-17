@@ -16,6 +16,7 @@
 
 #define MAX_ITERATION 20
 #define MAX_ITERATION_THETA 360
+#define MAX_SKIPS 10
 
 
 #define MAIN_DATASETS_H_H

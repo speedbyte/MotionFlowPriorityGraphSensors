@@ -7,8 +7,6 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 
-#include <kitti/io_flow.h>
-
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -19,19 +17,15 @@
 #include "groundTruth.h"
 
 
-using boost_path=boost::filesystem::path;
-
-extern void calculate_flow(const boost::filesystem::path dataset_path, const std::string result_sha, const std::string
-image_input_sha, FRAME_TYPES frame_types, NOISE_TYPES noise);
 //extern bool eval(std::string result_sha, Mail *mail);
-extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
+//extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
 extern void read_kitti_calibration(boost::filesystem::path);
-extern void of_algo(boost::filesystem::path dataset_path, std::string video, std::string algo);
+//extern void of_algo(boost::filesystem::path dataset_path, std::string video, std::string algo);
 extern void make_video_from_png(boost::filesystem::path dataset_path, std::string unterordner);
-extern void disparity(boost::filesystem::path dataset_path);
-extern boost_path get_file(const boost_path &dataset_path, const boost_path &subfolder, const boost_path
-&file_name);
+//extern void disparity(boost::filesystem::path dataset_path);
+extern boost::filesystem::path get_file(const boost::filesystem::path &dataset_path, const boost::filesystem::path
+&subfolder, const boost::filesystem::path &file_name);
 
 
 /**
@@ -137,19 +131,18 @@ int main ( int argc, char *argv[]) {
 
 /* CPP_DATASET ------------- */
 
-    GroundTruth gt(CPP_DATASET_PATH,"data/stereo_flow/");
+    GroundTruth gt(CPP_DATASET_PATH, "data/stereo_flow/");
     if ( test_cpp_dataset ) {
         if ( generate_ground_truth ) {
             gt.generate_gt_image_and_gt_flow();
         }
 
         if ( generate_FB ) {
-            calculate_flow(CPP_DATASET_PATH, "results/FB_image_02_slow_no_noise/", std::string
-                    ("image_02_0/"), continous_frames, no_noise);
+            gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), continous_frames, no_noise);
         }
+
         if ( generate_LK ) {
-            calculate_flow(CPP_DATASET_PATH, "results/LK_image_02_slow_no_noise/", std::string
-                    ("image_02_0/"), continous_frames, no_noise);
+            gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), continous_frames, no_noise);
         }
     }
 
@@ -159,20 +152,15 @@ int main ( int argc, char *argv[]) {
         // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
         // calculated here.
 
-        calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_no_noise/", std::string
-                ("image_02_slow/no_noise/"), continous_frames, no_noise);
+        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), continous_frames, no_noise);
 
-        calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_static_bg_noise/", std::string
-                ("image_02_slow/static_BG/"), continous_frames, static_bg_noise);
+        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), continous_frames, static_bg_noise);
 
-        calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_static_fg_noise/", std::string
-                ("image_02_slow/static_FG/"), continous_frames, static_fg_noise);
+        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), continous_frames, static_fg_noise);
 
-        calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_dynamic_bg_noise/", std::string
-                ("image_02_slow/dynamic_BG/"), continous_frames, dynamic_bg_noise);
+        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), continous_frames, dynamic_bg_noise);
 
-        calculate_flow(MATLAB_DATASET_PATH, "results/LK_image_02_slow_dynamic_fg_noise/", std::string
-                ("image_02_slow/dynamic_FG/"), continous_frames, dynamic_fg_noise);
+        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), continous_frames, dynamic_fg_noise);
     }
 
 /* KITTI_FLOW_DATASET------------- */
@@ -181,8 +169,7 @@ int main ( int argc, char *argv[]) {
         // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
         // calculated here.
 
-        calculate_flow(KITTI_FLOW_DATASET_PATH, "results/LK_image_02_slow_no_noise", std::string
-                ("image_02/no_noise/"), continous_frames, no_noise);
+        gt.calculate_flow(KITTI_FLOW_DATASET_PATH, std::string("image_02/"), continous_frames, no_noise);
 
         make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
         make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,
@@ -194,14 +181,10 @@ int main ( int argc, char *argv[]) {
 
 /* VIRES_DATASET ------------- */
 
-        GroundTruth gt(VIRES_DATASET_PATH,"data/stereo_flow/image_02");
-        gt.generate_gt_image_and_gt_flow_vires();
-
-        calculate_flow(VIRES_DATASET_PATH, "results/FB_image_02_slow_no_noise", std::string
-                ("image_02/no_noise/"), continous_frames, no_noise);
-
-        calculate_flow(VIRES_DATASET_PATH, "results/LK_image_02_slow_no_noise", std::string
-                ("image_02/no_noise/"), continous_frames, no_noise);
+        GroundTruth gt(VIRES_DATASET_PATH, "data/stereo_flow/image_02");
+        if ( generate_ground_truth ) {
+            gt.generate_gt_image_and_gt_flow_vires();
+        }
 
         int m_port;
         int m_sensor_port;
