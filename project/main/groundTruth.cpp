@@ -214,7 +214,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
         printf("%u, %u , %u, %u, %u, %d, %d\n", frame_count, start, current_index, m_position.x, m_position.y,
                m_movement.x, m_movement.y);
 
-        m_flow_matrix.push_back(std::make_pair(m_position, m_movement));
+        m_flow_matrix_gt.push_back(std::make_pair(m_position, m_movement));
         current_index++;
     }
 
@@ -225,15 +225,15 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
             if ( frame_count > 0 ) {
                 //draw new ground truth flow.
                 if ( frame_count%frame_skip != 0 ) {
-                    temp_flow_x += m_flow_matrix.at(frame_count).second.x;
-                    temp_flow_y += m_flow_matrix.at(frame_count).second.y;
+                    temp_flow_x += m_flow_matrix_gt.at(frame_count).second.x;
+                    temp_flow_y += m_flow_matrix_gt.at(frame_count).second.y;
                     continue;
                 }
                 temp_flow_x = 0; temp_flow_y = 0;
                 sprintf(file_name_image, "000%03d_10.png", frame_count);
                 std::string temp_flow_path = m_base_directory_path_input_in.string() + "/" + folder_name_flow + "/"
                                              + file_name_image;
-                extrapolate_objects( cv::Point2i(m_flow_matrix.at(frame_count).first.x, m_flow_matrix.at
+                extrapolate_objects( cv::Point2i(m_flow_matrix_gt.at(frame_count).first.x, m_flow_matrix_gt.at
                                              (frame_count).first.y),
                                      object_width, object_height, temp_flow_x, temp_flow_x, temp_flow_path );
             }
@@ -398,8 +398,8 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
             printf("Writer eingerichtet\n");
         }
 
-        cv::Mat frame = cv::Mat::zeros(m_frame_size, CV_8UC3);
-        cv::Mat flowImage(m_frame_size, CV_32FC3, cv::Scalar(255,255,255));
+        cv::Mat image_02_frame = cv::Mat::zeros(m_frame_size, CV_8UC3);
+        cv::Mat flowImage(m_frame_size, CV_32FC3);
 
         cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
         cv::Size subPixWinSize(10, 10), winSize(21, 21);
@@ -457,17 +457,17 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     break;
             }
 
-            //cap >> frame;
-            //if (frame.empty())
+            //cap >> image_02_frame;
+            //if (image_02_frame.empty())
             //    break;
 
             fs << "frame_count" << frame_count;
 
             std::string temp_image_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name_image;
 
-            frame = cv::imread(temp_image_path, CV_LOAD_IMAGE_COLOR);
+            image_02_frame = cv::imread(temp_image_path, CV_LOAD_IMAGE_COLOR);
 
-            if ( frame.data == NULL ) {
+            if ( image_02_frame.data == NULL ) {
                 std::cerr << temp_image_path << " not found" << std::endl;
                 throw ("No image file found error");
             }
@@ -476,13 +476,12 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                                     folder_name_flow + "/" + file_name_image;
 
             // Convert to grayscale
-            cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
-
-            //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
+            cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
 
             if ( fb == algo ) {
 
                 tic = steady_clock::now();
+
                 if (prevGray.data) {
                     // Initialize parameters for the optical calculate_flow algorithm
                     float pyrScale = 0.5;
@@ -494,23 +493,25 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
 
                     // Calculate optical calculate_flow map using Farneback algorithm
                     cv::calcOpticalFlowFarneback(prevGray, curGray, flow_frame, pyrScale, numLevels, windowSize,
-                                                 numIterations,
-                                                 neighborhoodSize, stdDeviation, cv::OPTFLOW_USE_INITIAL_FLOW);
+                                                 numIterations, neighborhoodSize, stdDeviation,
+                                                 cv::OPTFLOW_USE_INITIAL_FLOW);
 
                     // Draw the optical calculate_flow map
                     int stepSize = 16;
 
                     // Draw the uniform grid of points on the input image along with the motion vectors
-                    for (int y = 0; y < frame.rows; y += stepSize) {
-                        for (int x = 0; x < frame.cols; x += stepSize) {
+                    for (int y = 0; y < image_02_frame.rows; y += stepSize) {
+                        for (int x = 0; x < image_02_frame.cols; x += stepSize) {
                             // Circles to indicate the uniform grid of points
-                            cv::circle(frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
+                            cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
 
                             // Lines to indicate the motion vectors
                             cv::Point2f pt = flow_frame.at<cv::Point2f>(y, x);
-                            cv::arrowedLine(frame, cv::Point(x, y), cv::Point(cvRound(x + pt.x), cvRound(y + pt.y)),
+                            cv::arrowedLine(image_02_frame, cv::Point(x, y), cv::Point(cvRound(x + pt.x), cvRound(y + pt.y)),
                                             cv::Scalar(0, 255, 0));
 
+                            m_position.x = y;
+                            m_position.y = x;
                             int row_coordinate = (int)(y);
                             int col_coordinate = (int)(x);
                             float Vx = (cvRound(x+pt.x) - x);
@@ -567,11 +568,11 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
             x_pts.push_back(frame_count);
 
             if ( frame_types == video_frames) {
-                video_out.write(frame);
+                video_out.write(image_02_frame);
             }
 
             // Display the output image
-            cv::imshow(resultordner, frame);
+            cv::imshow(resultordner, image_02_frame);
             needToInit = false;
             prev_pts.clear();
             std::swap(next_pts, prev_pts);
@@ -596,7 +597,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
         Gnuplot gp2d;
         gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION) + "]\n";
         gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-        std::string tmp = std::string(" with lines title ") + std::string("'") + input_image_folder + std::string(" y axis - ms, x axis - frame\n'");
+        std::string tmp = std::string(" with lines title ") + std::string("'") + input_image_folder + std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
     }
 
@@ -646,7 +647,7 @@ void GroundTruth::generate_gt_image_and_gt_flow_vires() {
             vi.checkShm();
 
         // has an image arrived or do the first frames need to be triggered
-        //(first image will arrive with a certain frame delay only)
+        //(first image will arrive with a certain image_02_frame delay only)
         if (vi.getHaveImage() || (initCounter-- > 0)) {
             vi.sendRDBTrigger();
 
@@ -710,7 +711,7 @@ void GroundTruth::LK() {
 //                dist = pow(x,2)+pow(y,2);           //calculating distance by euclidean formula
 //                dist = sqrt(dist);                  //sqrt is function in math.h
 //                if ( dist <= minDist && frame_count != 1 ) { // frame_count = 1 is a hack because the first and
-//                    // the second frame is identical and hence the flow distance will always be 0, leading to
+//                    // the second image_02_frame is identical and hence the flow distance will always be 0, leading to
 //                    // errors.
 //                    printf("minimum distance for %i is %f\n", i, dist);
 //                    continue;
@@ -751,8 +752,8 @@ void GroundTruth::LK() {
 //                    continue;
 //
 //                next_pts[count++] = next_pts[i];
-//                //cv::circle(frame, next_pts[count], 3, cv::Scalar(0, 255, 0), -1, 8);
-//                cv::arrowedLine(frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
+//                //cv::circle(image_02_frame, next_pts[count], 3, cv::Scalar(0, 255, 0), -1, 8);
+//                cv::arrowedLine(image_02_frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
 //
 //                int row_coordinate = std::abs(cvRound(next_pts[i].y));
 //                int col_coordinate = std::abs(cvRound(next_pts[i].x));
@@ -767,7 +768,7 @@ void GroundTruth::LK() {
 //                }
 //            }
 //            next_pts.resize(count);
-//            //printf(" new size is %i for frame number %u\n", count, frame_count);
+//            //printf(" new size is %i for image_02_frame number %u\n", count, frame_count);
 //            z_pts.push_back(count);
 //        }
 //        else {

@@ -35,7 +35,7 @@ private:
     cv::Point2i m_position, m_movement;
 
     std::vector<cv::Point2i> m_position_matrix;
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix;
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix_gt, m_flow_matrix_result;
 
 
 public:
