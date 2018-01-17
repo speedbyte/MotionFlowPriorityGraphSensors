@@ -32,6 +32,11 @@ typedef enum {
 } FRAME_TYPES;
 
 typedef enum {
+    lk,
+    fb
+} ALGO_TYPES;
+
+typedef enum {
     no_noise = 0,
     static_bg_noise = 1,
     static_fg_noise = 2,

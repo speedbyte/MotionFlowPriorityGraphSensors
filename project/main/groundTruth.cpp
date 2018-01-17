@@ -14,7 +14,6 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/tuple/tuple.hpp>
-
 #include <png++/png.hpp>
 
 #include <kitti/mail.h>
@@ -26,23 +25,25 @@
 #include "datasets.h"
 #include "groundTruth.h"
 
+#include <unordered_map>
+#include <bits/unordered_map.h>
 
 
 //Creating a movement path. The path is stored in a x and y vector
 
 using namespace std::chrono;
 
-GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string unterordner) {
+GroundTruth::GroundTruth(std::string dataset_path, std::string unterordner, std::string resultordner) {
 
     m_dataset_path = dataset_path;
-    m_unterordner = unterordner;
 
-    m_base_directory_path_image_out = m_dataset_path.string() + m_unterordner + std::string("image_02/dummy.txt");
-    m_base_directory_path_flow_out = m_dataset_path.string() + m_unterordner + std::string("flow_occ/dummy.txt");
-    m_base_directory_path_video_out = m_base_directory_path_image_out.parent_path();
-    m_base_directory_path_video_out += std::string("/movement_video.avi");
+    boost::filesystem::path temp;
 
-    m_gt_flow_matrix_str = m_base_directory_path_flow_out.parent_path().string() + "/gt_flow.yaml";
+    temp = m_dataset_path + unterordner + std::string("dummy.txt");
+    m_base_directory_path_input_in = temp.parent_path(); //data/stereo_flow/
+
+    temp = m_dataset_path + resultordner + std::string("dummy.txt");
+    m_base_directory_path_result_out = temp.parent_path(); // results/
 
     m_frame_size.width = 1242;
     m_frame_size.height = 375;
@@ -61,6 +62,7 @@ GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string unter
                                                                           sin(theta[i] * CV_PI / 180.0)) / (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2)))));
 
         m_position_matrix.push_back(m_position);
+
     }
 
     m_pedesterianImage.create(object_height, object_width, CV_8UC3);
@@ -83,8 +85,6 @@ GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string unter
         if (b > 254)
             b = 46;
     }
-    m_gt_image_path = m_base_directory_path_image_out.parent_path().string();
-    m_gt_flow_path = m_base_directory_path_flow_out.parent_path().string();
 
     m_position = {0,0};
     m_movement = {0,0};
@@ -101,46 +101,45 @@ GroundTruth::GroundTruth(boost::filesystem::path dataset_path, std::string unter
  * @param result_sha
  * @return
  */
-void GroundTruth::prepare_result_directories(const std::string
-resultordner) {
+void GroundTruth::prepare_result_directories(std::string resultordner) {
 
-    boost::filesystem::path result_dir_path = m_dataset_path;
-    result_dir_path = m_dataset_path;
-    result_dir_path += resultordner;
-
-    if ( boost::filesystem::exists(result_dir_path) ) {
-        system(("rm -rf " + result_dir_path.string()).c_str());
+    char char_dir_append[20];
+    if ( boost::filesystem::exists(m_base_directory_path_result_out) ) {
+        system(("rm -rf " + m_base_directory_path_result_out.string()).c_str());
     }
     std::cout << "Creating directories" << std::endl;
-    boost::filesystem::create_directories(result_dir_path.string());
-    boost::filesystem::create_directories(result_dir_path.string() + "/plots");
-    boost::filesystem::create_directories(result_dir_path.string() + "/flow_occ");
+    boost::filesystem::create_directories(m_base_directory_path_result_out.string());
+    // create flow directories
+    for (int i = 1; i < 10; ++i) {
+        sprintf(char_dir_append, "%02d", i);
+        boost::filesystem::create_directories(m_base_directory_path_result_out.string() + "/" + resultordner +
+        "/flow_occ_" + char_dir_append);
+        boost::filesystem::create_directories(m_base_directory_path_result_out.string() + "/" + resultordner +
+                                                      "/plots_" + char_dir_append);
+    }
     std::cout << "Ending directories" << std::endl;
 }
 
 void GroundTruth::prepare_gt_data_and_gt_flow_directories() {
 
-    boost::filesystem::path result_dir_path = m_dataset_path;
-    result_dir_path += m_unterordner;
     char char_dir_append[20];
 
     if (!m_dataset_path.compare(CPP_DATASET_PATH) || !m_dataset_path.compare(VIRES_DATASET_PATH) ) {
 
         // delete ground truth image and ground truth flow directories
-        if ( boost::filesystem::exists(result_dir_path) ) {
-            system(("rm -rf " + result_dir_path.string()).c_str()); // data/stereo_flow/
+        if ( boost::filesystem::exists(m_base_directory_path_input_in) ) {
+            system(("rm -rf " + m_base_directory_path_input_in.string()).c_str()); // data/stereo_flow/
         }
 
         // create base directories
-        boost::filesystem::create_directories(result_dir_path.string());
+        boost::filesystem::create_directories(m_base_directory_path_input_in.string());
         std::cout << "Creating directories" << std::endl;
-        boost::filesystem::create_directories(result_dir_path.string() + "/image_02");
-        boost::filesystem::create_directories(result_dir_path.string() + "/flow_occ");
+        boost::filesystem::create_directories(m_base_directory_path_input_in.string() + "/image_02");
 
         // create flow directories
         for (int i = 1; i < 10; ++i) {
             sprintf(char_dir_append, "%02d", i);
-            boost::filesystem::create_directories(result_dir_path.string() + "/flow_occ_" + char_dir_append);
+            boost::filesystem::create_directories(m_base_directory_path_input_in.string() + "/flow_occ_" + char_dir_append);
         }
         std::cout << "Ending directories" << std::endl;
     }
@@ -151,10 +150,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
     prepare_gt_data_and_gt_flow_directories();
 
-    m_fs.open(m_gt_flow_matrix_str, cv::FileStorage::WRITE);
-
-    assert(boost::filesystem::exists(m_base_directory_path_image_out.parent_path()) != 0);
-    assert(boost::filesystem::exists(m_base_directory_path_flow_out.parent_path()) != 0);
+    m_fs.open(m_base_directory_path_input_in.string() + "flow_occ_01/gt_flow.yaml", cv::FileStorage::WRITE);
 
     cv::Mat tempGroundTruthImage;
     tempGroundTruthImage.create(m_frame_size, CV_8UC3);
@@ -164,7 +160,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
 
-    std::cout << "ground truth images will be stored in " << m_base_directory_path_image_out.parent_path().string() << std::endl;
+    std::cout << "ground truth images will be stored in " << m_base_directory_path_input_in.string() << std::endl;
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
@@ -180,8 +176,8 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
     for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
 
-        sprintf(file_name, "/000%03d_10.png", frame_count);
-        std::string temp_image_path = m_gt_image_path + file_name;
+        sprintf(file_name, "000%03d_10.png", frame_count);
+        std::string temp_image_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name;
 
         tempGroundTruthImage = cv::Scalar::all(0);
 
@@ -223,8 +219,8 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
 
     for (ushort frame_count=0; frame_count < MAX_ITERATION; ) {
-        sprintf(file_name, "/000%03d_10.png", frame_count);
-        std::string temp_flow_path = m_gt_flow_path + file_name;
+        sprintf(file_name, "000%03d_10.png", frame_count);
+        std::string temp_flow_path = m_base_directory_path_input_in.string() + "/flow_occ_01/" + file_name;
         if ( frame_count > 0 ) {
             //draw new ground truth flow.
             extrapolate_objects( cv::Point2i(m_flow_matrix.at(frame_count).first.x, m_flow_matrix.at
@@ -247,7 +243,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
                 }
                 temp_flow_x = 0; temp_flow_y = 0;
                 sprintf(file_name, "_%02d/000%03d_10.png", frame_skip, frame_count);
-                std::string temp_flow_path = m_gt_flow_path + file_name;
+                std::string temp_flow_path = m_base_directory_path_input_in.string() + "/flow_occ" + file_name;
                 extrapolate_objects( cv::Point2i(m_flow_matrix.at(frame_count).first.x, m_flow_matrix.at
                                              (frame_count).first.y),
                                      object_width, object_height, temp_flow_x, temp_flow_x, temp_flow_path );
@@ -317,17 +313,57 @@ void GroundTruth::store_in_yaml(const std::string &temp_flow_path, int frame_cou
     m_fs << "]";
 }
 
-void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, const std::string input_image_folder, FRAME_TYPES
-frame_types, NOISE_TYPES noise) {
+void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, const std::string input_image_folder,
+                                 ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
 
-    const std::string resultordner = "results/";
+    std::string resultordner = "results_";
+    switch ( algo ) {
+        case lk: {
+            resultordner += "LK_";
+            break;
+        }
+        case fb: {
+            resultordner += "FB_";
+            break;
+        }
+        default: {
+            throw("algorithm not yet supported");
+            break;
+        }
+    }
+
+    switch ( noise ) {
+        case no_noise: {
+            resultordner += "no_noise/";
+            break;
+        }
+        case static_bg_noise: {
+            resultordner += "static_bg_noise/";
+            break;
+        }
+        case static_fg_noise: {
+            resultordner += "static_fg_noise/";
+            break;
+        }
+        case dynamic_bg_noise: {
+            resultordner += "dynamic_bg_noise/";
+            break;
+        }
+        case dynamic_fg_noise: {
+            resultordner += "dynamic_fg_noise/";
+            break;
+        }
+        default: {
+            throw("algorithm not yet supported");
+            break;
+        }
+    }
 
     prepare_result_directories(resultordner);
 
     char file_name[50];
     char xFlow[100];
     char yFlow[100];
-
 
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
@@ -342,25 +378,17 @@ frame_types, NOISE_TYPES noise) {
     std::vector<cv::Point2f> next_pts;
     cv::Mat curGray, prevGray;
 
-    boost::filesystem::path image_in_path = dataset_path.string() + std::string("data/stereo_flow/") +
-                                            input_image_folder + std::string("dummy.txt");
-    assert(boost::filesystem::exists(image_in_path.parent_path()) != 0);
-
-
-    boost::filesystem::path results_flow = dataset_path.string() + resultordner + std::string("dummy.txt");
-    assert(boost::filesystem::exists(results_flow.parent_path()) != 0);
-
-    std::cout << "results will be stored in " << results_flow.parent_path().string() << std::endl;
+    std::cout << "results will be stored in " << resultordner << std::endl;
 
     if ( frame_types == video_frames) {
         cv::VideoCapture cap;
-        cap.open(image_in_path.string());
+        cap.open(m_base_directory_path_input_in.string() + "image_02/movement.avi");
         if (!cap.isOpened()) {
             std::cout << "Could not initialize capturing...\n";
             return;
         }
     }
-    std::string results_flow_matrix_str = results_flow.parent_path().string() + "/flow_occ/result_flow.yaml";
+    std::string results_flow_matrix_str = resultordner + "flow_occ_01/result_flow.yaml";
 
     cv::FileStorage fs;
     fs.open(results_flow_matrix_str, cv::FileStorage::WRITE);
@@ -418,8 +446,7 @@ frame_types, NOISE_TYPES noise) {
     error.at(0) = 0;
     error.at(1) = 0;
 
-    std::string gt_image_path_str;
-    std::string results_flow_path_str;
+    std::string temp_result_flow_path;
 
     while ( true ) {
 
@@ -447,24 +474,25 @@ frame_types, NOISE_TYPES noise) {
 
         fs << "frame_count" << frame_count;
 
-        sprintf(file_name, "000%03d_10", frame_count);
-        gt_image_path_str = image_in_path.parent_path().string() + "/" + std::string(file_name) + ".png";
-        frame = cv::imread(gt_image_path_str, CV_LOAD_IMAGE_COLOR);
+        sprintf(file_name, "000%03d_10.png", frame_count);
+        std::string temp_image_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name;
+
+        frame = cv::imread(temp_image_path, CV_LOAD_IMAGE_COLOR);
 
         if ( frame.data == NULL ) {
-            std::cerr << gt_image_path_str << " not found" << std::endl;
+            std::cerr << temp_image_path << " not found" << std::endl;
             throw ("No image file found error");
         }
 
-        results_flow_path_str =
-                results_flow.parent_path().string() + "/flow_occ/" + std::string(file_name) + ".png";
+        std::string temp_result_flow_path = m_base_directory_path_result_out.string() + "/" + resultordner +
+                "/flow_occ_01/" + file_name;
 
         // Convert to grayscale
         cv::cvtColor(frame, curGray, cv::COLOR_BGR2GRAY);
 
         //printf("%u, %u , %u, %u, %u\n", x, start, iterator, secondstart, sIterator);
 
-        if (resultordner.find("FB") != std::string::npos ) {
+        if ( fb == algo ) {
             tic = steady_clock::now();
             if (prevGray.data) {
                 // Initialize parameters for the optical calculate_flow algorithm
@@ -514,7 +542,7 @@ frame_types, NOISE_TYPES noise) {
             y_pts.push_back(time_map["FB"]);
         }
 
-        else if (resultordner.find("LK")) {
+        else if (lk == algo) {
             tic = steady_clock::now();
             // Calculate optical calculate_flow map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
@@ -646,10 +674,10 @@ frame_types, NOISE_TYPES noise) {
                     }
                 }
             }
-            F_result_write.write(results_flow_path_str);
+            F_result_write.write(temp_result_flow_path);
 
             FlowImage F_result_read;
-            F_result_read.read(results_flow_path_str);
+            F_result_read.read(temp_result_flow_path);
 
             for (int32_t v=0; v<F_result_read.height(); v++) { // rows
                 for (int32_t u=0; u<F_result_read.width(); u++) {  // cols

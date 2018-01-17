@@ -17,19 +17,18 @@ class GroundTruth {
 
 private:
 
-    boost::filesystem::path m_dataset_path;
-    std::string m_unterordner;
-    boost::filesystem::path  m_base_directory_path_image_out;
-    boost::filesystem::path  m_base_directory_path_flow_out;
-    boost::filesystem::path m_base_directory_path_video_out;
-    std::string m_gt_flow_matrix_str;
+    std::string m_dataset_path;
+
+    boost::filesystem::path  m_base_directory_path_input_in;
+    boost::filesystem::path m_base_directory_path_result_out;
+
     cv::Size_<unsigned> m_frame_size;
 
     cv::Mat m_pedesterianImage;
-    cv::Mat m_absolutePixelLocation;
 
     std::string m_gt_image_path;
     std::string m_gt_flow_path;
+    std::string m_result_flow_path;
 
     cv::FileStorage m_fs;
 
@@ -41,7 +40,7 @@ private:
 
 public:
 
-    GroundTruth(boost::filesystem::path dataset_path, std::string unterordner);
+    GroundTruth(std::string dataset_path, std::string unterordner, std::string resultordner);
 
     void generate_gt_image_and_gt_flow_vires();
 
@@ -52,8 +51,8 @@ public:
     void extrapolate_objects( cv::Point2i pt, ushort width,
                                            ushort height, int xValue, int yValue, std::string image_path );
 
-    void calculate_flow(const boost::filesystem::path dataset_path, const std::string image_input_sha, FRAME_TYPES
-    frame_types, NOISE_TYPES noise);
+    void calculate_flow(const boost::filesystem::path dataset_path, const std::string image_input_sha, ALGO_TYPES algo,
+    FRAME_TYPES frame_types, NOISE_TYPES noise);
 
 
 
@@ -61,7 +60,7 @@ private:
 
     void prepare_gt_data_and_gt_flow_directories();
 
-    void prepare_result_directories(const std::string resultordner);
+    void prepare_result_directories(std::string resultordner);
 
     void store_in_yaml(const std::string &temp_flow_path, int frame_count, ushort currentPixelPositionX, ushort
     currentPixelPositionY, int XMovement, int YMovement);
