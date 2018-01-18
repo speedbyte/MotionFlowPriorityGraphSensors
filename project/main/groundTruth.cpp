@@ -105,7 +105,7 @@ void GroundTruth::prepare_result_directories(std::string resultordner) {
 
     char char_dir_append[20];
     if ( boost::filesystem::exists(m_base_directory_path_result_out) ) {
-        system(("rm -rf " + m_base_directory_path_result_out.string()).c_str());
+        system(("rm -rf " + m_base_directory_path_result_out.string() + "/" + resultordner).c_str());
     }
     std::cout << "Creating directories" << std::endl;
     boost::filesystem::create_directories(m_base_directory_path_result_out.string());
@@ -369,8 +369,6 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
 
         char folder_name_flow[50];
         char file_name_image[50];
-        char xFlow[100];
-        char yFlow[100];
 
         std::vector<unsigned> x_pts;
         std::vector<double> y_pts;
@@ -508,6 +506,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     float stdDeviation = 1.2;
 
                     // Calculate optical calculate_flow map using Farneback algorithm
+                    // Farnback returns displacement frame and LK returns points.
                     cv::calcOpticalFlowFarneback(prevGray, curGray, flow_frame, pyrScale, numLevels, windowSize,
                                                  numIterations, neighborhoodSize, stdDeviation,
                                                  cv::OPTFLOW_USE_INITIAL_FLOW);
@@ -529,12 +528,13 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                             // draw lines where there is some displacement
                             if ( l_pixel_movement.x != 0 && l_pixel_movement.y!= 0) {
 
-                                printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", frame_count,
-                                       y, x, l_pixel_movement.x, l_pixel_movement.y);
-
                                 // l_pixel_position is the new pixel position !
                                 l_pixel_position.x = cvRound(x + l_pixel_movement.x);
                                 l_pixel_position.y = cvRound(y + l_pixel_movement.y);
+
+                                printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", frame_count,
+                                       l_pixel_position.y, l_pixel_position.x, l_pixel_movement.x, l_pixel_movement.y);
+
                                 // Lines to indicate the motion vectors
                                 cv::arrowedLine( image_02_frame, cv::Point(x, y), l_pixel_position, cv::Scalar(0, 255, 0));
                                 m_flow_matrix_result.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
@@ -546,6 +546,92 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                 time_map["FB"] = duration_cast<milliseconds>(toc - tic).count();
                 y_pts.push_back(time_map["FB"]);
             }
+
+            else if ( lk == algo ) {
+                tic = steady_clock::now();
+                // Calculate optical calculate_flow map using LK algorithm
+                if (prevGray.data) {  // Calculate only on second or subsequent images.
+                    std::vector<uchar> status;
+                    std::vector<float> err;
+                    /*if (prevGray.empty()) {
+                        curGray.copyTo(prevGray);
+                    }*/
+                    cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts, next_pts, status,
+                                             err, winSize, 5, termcrit, 0, 0.001);
+
+                    unsigned count = 0;
+                    int minDist = 1;
+
+                    for (unsigned i = 0; i < next_pts.size(); i++) {
+                        /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
+                        // auto dist = cv::norm(prev_pts[i] - next_pts[i]);
+                        cv::Point2i l_pixel_position, l_pixel_movement;
+
+                        l_pixel_movement.x = cvRound(next_pts[i].x - prev_pts[i].x + 0.5);
+                        l_pixel_movement.y = cvRound(next_pts[i].y - prev_pts[i].y + 0.5);
+
+                        double dist;
+                        dist = pow(l_pixel_movement.x,2)+pow(l_pixel_movement.y,2);
+                        //calculating distance by euclidean formula
+                        dist = sqrt(dist);
+
+                        if ( dist <= minDist ) {
+                            printf("minimum distance for %i is %f\n", i, dist);
+                            continue;
+                        }
+
+                        // Check if the status vector is good
+                        if (!status[i])
+                            continue;
+
+                        next_pts[count++] = next_pts[i];
+                        // draw lines where there is some displacement
+                        if ( l_pixel_movement.x != 0 && l_pixel_movement.y!= 0) {
+
+                            // l_pixel_position is the new pixel position !
+                            l_pixel_position.x = std::abs(cvRound(next_pts[i].x));
+                            l_pixel_position.y = std::abs(cvRound(next_pts[i].y));
+
+                            printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", i,
+                                   l_pixel_position.y, l_pixel_position.x, l_pixel_movement.x, l_pixel_movement.y);
+
+                            // Lines to indicate the motion vectors
+                            cv::arrowedLine(image_02_frame, prev_pts[i], l_pixel_position, cv::Scalar(0, 255, 0));
+                            m_flow_matrix_result.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
+                        }
+                    }
+                    next_pts.resize(count);
+                }
+                else {
+                    needToInit = true;
+                }
+                if (needToInit) {
+                    // automatic initialization
+                    cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
+                    // Refining the location of the feature points
+                    assert(next_pts.size() <= MAX_COUNT );
+                    std::cout << next_pts.size();
+                    std::vector<cv::Point2f> currentPoint;
+                    std::swap(currentPoint, next_pts);
+                    next_pts.clear();
+                    for (unsigned i = 0; i < currentPoint.size(); i++) {
+                        std::vector<cv::Point2f> tempPoints;
+                        tempPoints.push_back(currentPoint[i]);
+                        // Function to refine the location of the corners to subpixel accuracy.
+                        // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
+                        cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
+                        next_pts.push_back(tempPoints[0]);
+                    }
+                    printf("old next_pts size is %ld and new next_pts size is %ld\n", currentPoint.size(), next_pts.size());
+                    //std::swap(currentPoint, next_pts);
+                }
+
+                toc = steady_clock::now();
+                time_map["LK"] = duration_cast<milliseconds>(toc - tic).count();
+                y_pts.push_back(time_map["LK"]);
+                time.push_back(duration_cast<milliseconds>(toc - tic).count());
+            }
+
 
             if (prevGray.data) {
 
@@ -690,123 +776,5 @@ void GroundTruth::read_png_image(std::string temp_result_flow_path) {
 
 void GroundTruth::LK() {
 
-//    else if (lk == algo) {
-//        tic = steady_clock::now();
-//        // Calculate optical calculate_flow map using LK algorithm
-//        if (prevGray.data) {  // Calculate only on second or subsequent images.
-//            std::vector<uchar> status;
-//            std::vector<float> err;
-//            /*if (prevGray.empty()) {
-//                curGray.copyTo(prevGray);
-//            }*/
-//            cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts, next_pts, status,
-//                                     err, winSize, 5, termcrit, 0, 0.001);
-//
-//            unsigned count = 0;
-//            int minDist = 1;
-//
-//            std::ofstream flowX;
-//            flowX.open(xFlow);
-//
-//            std::ofstream flowY;
-//            flowY.open(yFlow);
-//            for (unsigned i = 0; i < next_pts.size(); i++) {
-//                /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
-//                // auto dist = cv::norm(prev_pts[i] - next_pts[i]);
-//                double x = prev_pts[i].x - next_pts[i].x;
-//                double y = prev_pts[i].y - next_pts[i].y;
-//                double dist;
-//                dist = pow(x,2)+pow(y,2);           //calculating distance by euclidean formula
-//                dist = sqrt(dist);                  //sqrt is function in math.h
-//                if ( dist <= minDist && frame_count != 1 ) { // frame_count = 1 is a hack because the first and
-//                    // the second image_02_frame is identical and hence the flow distance will always be 0, leading to
-//                    // errors.
-//                    printf("minimum distance for %i is %f\n", i, dist);
-//                    continue;
-//                }
-//                /*
-//                if(noise == 0) {
-//                    sprintf(xFlow, "../../FlowTextFiles/Slow/no_noise/FlowX/x%03d.txt", frame_count);
-//                    sprintf(yFlow, "../../FlowTextFiles/Slow/no_noise/FlowY/y%03d.txt", frame_count);
-//                }
-//
-//                if(noise == 1){
-//                    sprintf(xFlow, "../../FlowTextFiles/Slow/static_BG/FlowX/x%03d.txt", frame_count);
-//                    sprintf(yFlow, "../../FlowTextFiles/Slow/static_BG/FlowY/y%03d.txt", frame_count);
-//                }
-//
-//                if(noise == 2){
-//                    sprintf(xFlow, "../../FlowTextFiles/Slow/static_FG/FlowX/x%03d.txt", frame_count);
-//                    sprintf(yFlow, "../../FlowTextFiles/Slow/static_FG/FlowY/y%03d.txt", frame_count);
-//                }
-//
-//                if(noise == 3){
-//                    sprintf(xFlow, "../../FlowTextFiles/Slow/dynamic_BG/FlowX/x%03d.txt", frame_count);
-//                    sprintf(yFlow, "../../FlowTextFiles/Slow/dynamic_BG/FlowY/y%03d.txt", frame_count);
-//                }
-//
-//                if(noise == 4){
-//                    sprintf(xFlow, "../../FlowTextFiles/Slow/dynamic_FG/FlowX/x%03d.txt", frame_count);
-//                    sprintf(yFlow, "../../FlowTextFiles/Slow/dynamic_FG/FlowY/y%03d.txt", frame_count);
-//                }
-//                */
-//
-//                for (int k = 0; k < prev_pts.size(); k++) {
-//                    flowX << (int) prev_pts[k].x << " " << next_pts[k].x - prev_pts[k].x << std::endl;
-//                    flowY << (int) prev_pts[k].y << " " << next_pts[k].y - prev_pts[k].y << std::endl;
-//                }
-//                // Check if the status vector is good
-//                if (!status[i])
-//                    continue;
-//
-//                next_pts[count++] = next_pts[i];
-//                //cv::circle(image_02_frame, next_pts[count], 3, cv::Scalar(0, 255, 0), -1, 8);
-//                cv::arrowedLine(image_02_frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
-//
-//                int row_coordinate = std::abs(cvRound(next_pts[i].y));
-//                int col_coordinate = std::abs(cvRound(next_pts[i].x));
-//                float Vx = (next_pts[i].x - prev_pts[i].x);
-//                float Vy = (next_pts[i].y - prev_pts[i].y);
-//                printf("(iteration %u, x y (%i,%i) -> ( Vx, Vy)(%f,%f) \n", frame_count, row_coordinate,
-//                       col_coordinate, Vx, Vy);
-//                if(row_coordinate < 375 && col_coordinate < 1242) {
-//                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvRound(Vx);
-//                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvRound(Vy);
-//                    flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
-//                }
-//            }
-//            next_pts.resize(count);
-//            //printf(" new size is %i for image_02_frame number %u\n", count, frame_count);
-//            z_pts.push_back(count);
-//        }
-//        else {
-//            needToInit = true;
-//        }
-//        if (needToInit) {
-//            // automatic initialization
-//            cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
-//            // Refining the location of the feature points
-//            assert(next_pts.size() <= MAX_COUNT );
-//            std::cout << next_pts.size();
-//            std::vector<cv::Point2f> currentPoint;
-//            std::swap(currentPoint, next_pts);
-//            next_pts.clear();
-//            for (unsigned i = 0; i < currentPoint.size(); i++) {
-//                std::vector<cv::Point2f> tempPoints;
-//                tempPoints.push_back(currentPoint[i]);
-//                // Function to refine the location of the corners to subpixel accuracy.
-//                // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
-//                cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
-//                next_pts.push_back(tempPoints[0]);
-//            }
-//            printf("old next_pts size is %ld and new next_pts size is %ld\n", currentPoint.size(), next_pts.size());
-//            //std::swap(currentPoint, next_pts);
-//        }
-//
-//        toc = steady_clock::now();
-//        time_map["LK"] = duration_cast<milliseconds>(toc - tic).count();
-//        y_pts.push_back(time_map["LK"]);
-//        time.push_back(duration_cast<milliseconds>(toc - tic).count());
-//    }
 
 }
