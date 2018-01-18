@@ -176,7 +176,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
 
         sprintf(file_name_image, "000%03d_10.png", frame_count);
-        std::string temp_image_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name_image;
+        std::string input_image_file_with_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name_image;
 
         tempGroundTruthImage = cv::Scalar::all(0);
 
@@ -186,7 +186,7 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
                          object_height)));
         toc = steady_clock::now();
         time_map["generate"] = duration_cast<milliseconds>(toc - tic).count();
-        cv::imwrite(temp_image_path, tempGroundTruthImage);
+        cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
         if ((current_index) >= m_trajectory_1.size() ) {
             current_index = 0;
         }
@@ -219,6 +219,9 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
             // make m_flow_matrix_gt_single_points with smallest resolution.
             m_flow_matrix_gt_single_points.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
         }
+        else {
+            m_flow_matrix_gt_single_points.push_back(std::make_pair(cv::Point2i(0,0), cv::Point2i(0,0)));
+        }
         current_index++;
     }
 
@@ -230,23 +233,23 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
                 cv::FileStorage::WRITE);
         for (ushort frame_count=1; frame_count < MAX_ITERATION; frame_count++) {
             // The first frame is the reference frame.
-            if ( frame_count > 0 ) {
                 //the below code has to go through consecutive frames
-                if ( frame_count%frame_skip != 0 ) {
-                    temp_flow_x += m_flow_matrix_gt_single_points.at(frame_count).second.x;
-                    temp_flow_y += m_flow_matrix_gt_single_points.at(frame_count).second.y;
-                    continue;
-                }
-                fs << "frame_count" << frame_count;
-                sprintf(file_name_image, "000%03d_10.png", frame_count);
-                std::string temp_flow_path = m_base_directory_path_input_in.string() + "/" + folder_name_flow + "/"
-                                             + file_name_image;
-                extrapolate_objects( fs, cv::Point2i(m_flow_matrix_gt_single_points.at(frame_count).first.x,
-                                                  m_flow_matrix_gt_single_points.at
-                                             (frame_count).first.y),
-                                     object_width, object_height, temp_flow_x, temp_flow_y, temp_flow_path );
-                temp_flow_x = 0, temp_flow_y = 0 ;
+            if ( frame_count%frame_skip != 0 ) {
+                temp_flow_x += m_flow_matrix_gt_single_points.at(frame_count).second.x;
+                temp_flow_y += m_flow_matrix_gt_single_points.at(frame_count).second.y;
+                continue;
             }
+            temp_flow_x += m_flow_matrix_gt_single_points.at(frame_count).second.x;
+            temp_flow_y += m_flow_matrix_gt_single_points.at(frame_count).second.y;
+            fs << "frame_count" << frame_count;
+            sprintf(file_name_image, "000%03d_10.png", frame_count);
+            std::string temp_flow_path = m_base_directory_path_input_in.string() + "/" + folder_name_flow + "/"
+                                         + file_name_image;
+            extrapolate_objects( fs, cv::Point2i(m_flow_matrix_gt_single_points.at(frame_count).first.x,
+                                              m_flow_matrix_gt_single_points.at
+                                         (frame_count).first.y),
+                                 object_width, object_height, temp_flow_x, temp_flow_y, temp_flow_path );
+            temp_flow_x = 0, temp_flow_y = 0 ;
         }
         fs.release();
     }
@@ -472,12 +475,12 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
             //if (image_02_frame.empty())
             //    break;
 
-            std::string temp_image_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name_image;
+            std::string input_image_file_with_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name_image;
 
-            image_02_frame = cv::imread(temp_image_path, CV_LOAD_IMAGE_COLOR);
+            image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
 
             if ( image_02_frame.data == NULL ) {
-                std::cerr << temp_image_path << " not found" << std::endl;
+                std::cerr << input_image_file_with_path << " not found" << std::endl;
                 throw ("No image file found error");
             }
 
@@ -556,7 +559,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
                     F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
                     F_result_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
-                    store_in_yaml(fs, (*it).first.y, (*it).first.x, (*it).second.y, (*it).second.x  );
+                    store_in_yaml(fs, (*it).first.y, (*it).first.x, (*it).second.x, (*it).second.y  );
                 }
                 F_result_write.write(temp_result_flow_path);
             }
