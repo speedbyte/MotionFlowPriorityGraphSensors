@@ -26,16 +26,10 @@ private:
 
     cv::Mat m_pedesterianImage;
 
-    std::string m_gt_image_path;
-    std::string m_gt_flow_path;
-    std::string m_result_flow_path;
+    //cv::FileStorage m_fs;
 
-    cv::FileStorage m_fs;
-
-    cv::Point2i m_position, m_movement;
-
-    std::vector<cv::Point2i> m_position_matrix;
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix_gt, m_flow_matrix_result;
+    std::vector<cv::Point2i> m_trajectory_1;
+    // position, movement as pair
 
 
 public:
@@ -48,13 +42,15 @@ public:
 
     void test_kitti_original();
 
-    void extrapolate_objects( cv::Point2i pt, ushort width,
+    void extrapolate_objects(cv::FileStorage fs, cv::Point2i pt, ushort width,
                                            ushort height, int xValue, int yValue, std::string image_path );
 
     void calculate_flow(const boost::filesystem::path dataset_path, const std::string image_input_sha, ALGO_TYPES algo,
     FRAME_TYPES frame_types, NOISE_TYPES noise);
 
     void LK();
+
+    void read_png_image(std::string temp_result_flow_path);
 
 
 
@@ -64,7 +60,7 @@ private:
 
     void prepare_result_directories(std::string resultordner);
 
-    void store_in_yaml(const std::string &temp_flow_path, int frame_count, ushort currentPixelPositionX, ushort
+    void store_in_yaml(cv::FileStorage &fs, ushort currentPixelPositionX, ushort
     currentPixelPositionY, int XMovement, int YMovement);
 };
 

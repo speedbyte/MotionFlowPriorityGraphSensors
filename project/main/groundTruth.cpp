@@ -39,6 +39,8 @@ GroundTruth::GroundTruth(std::string dataset_path, std::string unterordner, std:
 
     boost::filesystem::path temp;
 
+    cv::Point2i l_pixel_position, l_pixel_movement;
+
     temp = m_dataset_path + unterordner + std::string("dummy.txt");
     m_base_directory_path_input_in = temp.parent_path(); //data/stereo_flow/
 
@@ -55,13 +57,13 @@ GroundTruth::GroundTruth(std::string dataset_path, std::string unterordner, std:
     // Prepare points
     for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
 
-        m_position.x = (static_cast<ushort>((m_frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /
+        l_pixel_position.x = (static_cast<ushort>((m_frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /
                                                                    (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2)))));
 
-        m_position.y = (static_cast<ushort>((m_frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
+        l_pixel_position.y = (static_cast<ushort>((m_frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
                                                                           sin(theta[i] * CV_PI / 180.0)) / (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2)))));
 
-        m_position_matrix.push_back(m_position);
+        m_trajectory_1.push_back(l_pixel_position);
 
     }
 
@@ -86,8 +88,6 @@ GroundTruth::GroundTruth(std::string dataset_path, std::string unterordner, std:
             b = 46;
     }
 
-    m_position = {0,0};
-    m_movement = {0,0};
 }
 
 /**
@@ -150,8 +150,6 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
     prepare_gt_data_and_gt_flow_directories();
 
-    m_fs.open(m_base_directory_path_input_in.string() + "flow_occ_01/gt_flow.yaml", cv::FileStorage::WRITE);
-
     cv::Mat tempGroundTruthImage;
     tempGroundTruthImage.create(m_frame_size, CV_8UC3);
     assert(tempGroundTruthImage.channels() == 3);
@@ -184,64 +182,76 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
 
         //draw new ground truth image.
         m_pedesterianImage.copyTo(tempGroundTruthImage(
-                cv::Rect(m_position_matrix.at(current_index).x, m_position_matrix.at(current_index).y, object_width,
+                cv::Rect(m_trajectory_1.at(current_index).x, m_trajectory_1.at(current_index).y, object_width,
                          object_height)));
         toc = steady_clock::now();
         time_map["generate"] = duration_cast<milliseconds>(toc - tic).count();
         cv::imwrite(temp_image_path, tempGroundTruthImage);
-        if ((current_index) >= m_position_matrix.size() ) {
+        if ((current_index) >= m_trajectory_1.size() ) {
             current_index = 0;
         }
         current_index++;
     }
 
     current_index = start;
+    cv::Point2i l_pixel_position, l_pixel_movement;
+
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix_gt_single_points;
 
     for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
+        // The first frame is the reference frame, hence it is skipped
+        if ( frame_count > 0 ) {
+            //If we are at the end of the path vector, we need to reset our iterators
+            if ((current_index) >= m_trajectory_1.size()) {
+                current_index = 0;
+                l_pixel_movement.x = m_trajectory_1.at(current_index).x - m_trajectory_1.at(m_trajectory_1.size() - 1).x;
+                l_pixel_movement.y = m_trajectory_1.at(current_index).y - m_trajectory_1.at(m_trajectory_1.size() - 1).y;
+                l_pixel_position = m_trajectory_1.at(current_index);
+            } else {
+                l_pixel_movement.x = m_trajectory_1.at(current_index).x - m_trajectory_1.at(current_index - (ushort) 1).x;
+                l_pixel_movement.y = m_trajectory_1.at(current_index).y - m_trajectory_1.at(current_index - (ushort) 1).y;
+                l_pixel_position = m_trajectory_1.at(current_index);
+            }
 
-        //If we are at the end of the path vector, we need to reset our iterators
-        if ((current_index) >= m_position_matrix.size()) {
-            current_index = 0;
-            m_movement.x = m_position_matrix.at(current_index).x - m_position_matrix.at(m_position_matrix.size() - 1).x;
-            m_movement.y = m_position_matrix.at(current_index).y - m_position_matrix.at(m_position_matrix.size() - 1).y;
-            m_position = m_position_matrix.at(current_index);
-        } else {
-            m_movement.x = m_position_matrix.at(current_index).x - m_position_matrix.at(current_index - (ushort) 1).x;
-            m_movement.y = m_position_matrix.at(current_index).y - m_position_matrix.at(current_index - (ushort) 1).y;
-            m_position = m_position_matrix.at(current_index);
+            printf("%u, %u , %u, %u, %u, %d, %d\n", frame_count, start, current_index, l_pixel_position.x, l_pixel_position.y,
+                   l_pixel_movement.x, l_pixel_movement.y);
+
+            // make m_flow_matrix_gt_single_points with smallest resolution.
+            m_flow_matrix_gt_single_points.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
         }
-
-        printf("%u, %u , %u, %u, %u, %d, %d\n", frame_count, start, current_index, m_position.x, m_position.y,
-               m_movement.x, m_movement.y);
-
-        m_flow_matrix_gt.push_back(std::make_pair(m_position, m_movement));
         current_index++;
     }
 
-    int temp_flow_x = 0, temp_flow_y = 0 ;
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ){
+        int temp_flow_x = 0, temp_flow_y = 0 ;
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
-        for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
+        cv::FileStorage fs;
+        fs.open(m_base_directory_path_input_in.string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+                cv::FileStorage::WRITE);
+        for (ushort frame_count=1; frame_count < MAX_ITERATION; frame_count++) {
+            // The first frame is the reference frame.
             if ( frame_count > 0 ) {
-                //draw new ground truth flow.
+                //the below code has to go through consecutive frames
                 if ( frame_count%frame_skip != 0 ) {
-                    temp_flow_x += m_flow_matrix_gt.at(frame_count).second.x;
-                    temp_flow_y += m_flow_matrix_gt.at(frame_count).second.y;
+                    temp_flow_x += m_flow_matrix_gt_single_points.at(frame_count).second.x;
+                    temp_flow_y += m_flow_matrix_gt_single_points.at(frame_count).second.y;
                     continue;
                 }
-                temp_flow_x = 0; temp_flow_y = 0;
+                fs << "frame_count" << frame_count;
                 sprintf(file_name_image, "000%03d_10.png", frame_count);
                 std::string temp_flow_path = m_base_directory_path_input_in.string() + "/" + folder_name_flow + "/"
                                              + file_name_image;
-                extrapolate_objects( cv::Point2i(m_flow_matrix_gt.at(frame_count).first.x, m_flow_matrix_gt.at
+                extrapolate_objects( fs, cv::Point2i(m_flow_matrix_gt_single_points.at(frame_count).first.x,
+                                                  m_flow_matrix_gt_single_points.at
                                              (frame_count).first.y),
-                                     object_width, object_height, temp_flow_x, temp_flow_x, temp_flow_path );
+                                     object_width, object_height, temp_flow_x, temp_flow_y, temp_flow_path );
+                temp_flow_x = 0, temp_flow_y = 0 ;
             }
         }
+        fs.release();
     }
 
     // plotVectorField (F_gt_write,m_base_directory_path_image_out.parent_path().string(),file_name);
-    m_fs.release();
     toc_all = steady_clock::now();
     time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
     std::cout << "ground truth generation time - " << time_map["ground truth"]  << "ms" << std::endl;
@@ -258,8 +268,8 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
  * @param image_path - where should the extrapolated image be stored?
  */
 
-void GroundTruth::extrapolate_objects( cv::Point2i pt, ushort width, ushort height, int xValue, int yValue,
-                                       std::string image_path) {
+void GroundTruth::extrapolate_objects( cv::FileStorage fs, cv::Point2i pt, ushort width, ushort height, int xValue, int
+yValue, std::string image_path) {
 
     cv::Mat tempMatrix;
     tempMatrix.create(m_frame_size,CV_32FC3);
@@ -273,33 +283,34 @@ void GroundTruth::extrapolate_objects( cv::Point2i pt, ushort width, ushort heig
     //bulk storage
     roi = cv::Scalar(xValue, yValue, 1.0f);
 
+    // TODO take all the non 0 data in a float matrix and then call FlowImage Constructor with additional data
+    // parameter
     //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
     FlowImage F_gt_write(m_frame_size.width, m_frame_size.height);
-    for (int32_t v=0; v<m_frame_size.height; v++) { // rows
-        for (int32_t u=0; u<m_frame_size.width; u++) {  // cols
-            if (tempMatrix.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
-                F_gt_write.setFlowU(u,v,tempMatrix.at<cv::Vec3f>(v,u)[0]);
-                F_gt_write.setFlowV(u,v,tempMatrix.at<cv::Vec3f>(v,u)[1]);
-                F_gt_write.setValid(u,v,(bool)tempMatrix.at<cv::Vec3f>(v,u)[2]);
+    for (int32_t row=0; row<m_frame_size.height; row++) { // rows
+        for (int32_t column=0; column<m_frame_size.width; column++) {  // cols
+            if (tempMatrix.at<cv::Vec3f>(row,column)[2] > 0.5 ) {
+                F_gt_write.setFlowU(column,row,yValue);
+                F_gt_write.setFlowV(column,row,xValue);
+                F_gt_write.setValid(column,row,1.0f);
+                store_in_yaml(fs, row, column, xValue, yValue );
             }
         }
     }
     F_gt_write.write(image_path);
+
 }
 
-void GroundTruth::store_in_yaml(const std::string &temp_flow_path, int frame_count, ushort currentPixelPositionX,
+void GroundTruth::store_in_yaml(cv::FileStorage &fs, ushort currentPixelPositionX,
                                 ushort currentPixelPositionY, int XMovement, int YMovement ) {
 
-    //store_in_yaml(temp_flow_path, frame_count, currentPixelPositionX, currentPixelPositionX, XMovement,
-    // m_movement.y);
-    m_fs << "frame_count" << frame_count;
-    m_fs << "gt flow png file read" << "[";
-    m_fs << "{:" << "row" <<  currentPixelPositionX << "col" << currentPixelPositionY << "displacement" << "[:";
-    m_fs << XMovement;
-    m_fs << YMovement;
-    m_fs << 1;
-    m_fs << "]" << "}";
-    m_fs << "]";
+    fs << "gt flow png file read" << "[";
+    fs << "{:" << "row" <<  currentPixelPositionX << "col" << currentPixelPositionY << "displacement" << "[:";
+    fs << XMovement;
+    fs << YMovement;
+    fs << 1;
+    fs << "]" << "}";
+    fs << "]";
 }
 
 void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, const std::string input_image_folder,
@@ -384,8 +395,6 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
         std::string results_flow_matrix_str = m_base_directory_path_result_out.string() + "/" + resultordner + "/" +
                 folder_name_flow + "/" + "result_flow.yaml";
-        cv::FileStorage fs;
-        fs.open(results_flow_matrix_str, cv::FileStorage::WRITE);
         cv::VideoWriter video_out;
 
         if ( frame_types == video_frames)
@@ -416,7 +425,6 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
         std::vector<ushort> xPos, yPos;
 
 
-        cv::Mat flow_frame( m_frame_size, CV_8UC3 );
 
         std::map<std::string, double> time_map = {{"generate",0},
                                                   {"ground truth", 0},
@@ -432,6 +440,9 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
         error.at(1) = 0;
 
         std::string temp_result_flow_path;
+        cv::FileStorage fs;
+        fs.open(results_flow_matrix_str, cv::FileStorage::WRITE);
+
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION; frame_count++) {
             //draw new ground truth flow.
@@ -461,8 +472,6 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
             //if (image_02_frame.empty())
             //    break;
 
-            fs << "frame_count" << frame_count;
-
             std::string temp_image_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name_image;
 
             image_02_frame = cv::imread(temp_image_path, CV_LOAD_IMAGE_COLOR);
@@ -477,6 +486,10 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
+
+            cv::Mat flow_frame( m_frame_size, CV_8UC3 );
+
+            std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix_result;
 
             if ( fb == algo ) {
 
@@ -497,31 +510,31 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                                                  cv::OPTFLOW_USE_INITIAL_FLOW);
 
                     // Draw the optical calculate_flow map
-                    int stepSize = 16;
+                    int stepSize = 1;
 
                     // Draw the uniform grid of points on the input image along with the motion vectors
                     for (int y = 0; y < image_02_frame.rows; y += stepSize) {
                         for (int x = 0; x < image_02_frame.cols; x += stepSize) {
                             // Circles to indicate the uniform grid of points
-                            cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
+                            //cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
 
-                            // Lines to indicate the motion vectors
-                            cv::Point2f pt = flow_frame.at<cv::Point2f>(y, x);
-                            cv::arrowedLine(image_02_frame, cv::Point(x, y), cv::Point(cvRound(x + pt.x), cvRound(y + pt.y)),
-                                            cv::Scalar(0, 255, 0));
+                            cv::Point2i l_pixel_position, l_pixel_movement;
+                            
+                            l_pixel_movement.x = cvRound(flow_frame.at<cv::Point2f>(y, x).x + 0.5);
+                            l_pixel_movement.y = cvRound(flow_frame.at<cv::Point2f>(y, x).y + 0.5);
 
-                            m_position.x = y;
-                            m_position.y = x;
-                            int row_coordinate = (int)(y);
-                            int col_coordinate = (int)(x);
-                            float Vx = (cvRound(x+pt.x) - x);
-                            float Vy = (cvRound(y+pt.y) - y);
-                            if ( Vx != 0 && Vy!= 0) {
-                                printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%f,%f) \n", frame_count,
-                                       row_coordinate, col_coordinate, Vx, Vy);
-                                flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[0] = cvRound(Vx+0.5);
-                                flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[1] = cvRound(Vy+0.5);
-                                flowImage.at<cv::Vec3f>(row_coordinate, col_coordinate)[2] = 1.0f;
+                            // draw lines where there is some displacement
+                            if ( l_pixel_movement.x != 0 && l_pixel_movement.y!= 0) {
+
+                                printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", frame_count,
+                                       y, x, l_pixel_movement.x, l_pixel_movement.y);
+
+                                // l_pixel_position is the new pixel position !
+                                l_pixel_position.x = cvRound(x + l_pixel_movement.x);
+                                l_pixel_position.y = cvRound(y + l_pixel_movement.y);
+                                // Lines to indicate the motion vectors
+                                cv::arrowedLine( image_02_frame, cv::Point(x, y), l_pixel_position, cv::Scalar(0, 255, 0));
+                                m_flow_matrix_result.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
                             }
                         }
                     }
@@ -532,35 +545,20 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
             }
 
             if (prevGray.data) {
+
                 //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
+                //kitti uses col, row specification
                 FlowImage F_result_write(m_frame_size.width, m_frame_size.height);
-                for (int32_t v=0; v<m_frame_size.height; v++) { // rows
-                    for (int32_t u=0; u<m_frame_size.width; u++) {  // cols
-                        if (flowImage.at<cv::Vec3f>(v,u)[2] > 0.5 ) {
-                            F_result_write.setFlowU(u,v,flowImage.at<cv::Vec3f>(v,u)[0]);
-                            F_result_write.setFlowV(u,v,flowImage.at<cv::Vec3f>(v,u)[1]);
-                            F_result_write.setValid(u,v,(bool)flowImage.at<cv::Vec3f>(v,u)[2]);
-                        }
-                    }
+                std::vector<std::pair<cv::Point2i, cv::Point2i> >::iterator it ;
+                fs << "frame_count" << frame_count;
+                for ( it = m_flow_matrix_result.begin(); it != m_flow_matrix_result.end(); it++ )
+                {
+                    F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
+                    F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
+                    F_result_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+                    store_in_yaml(fs, (*it).first.y, (*it).first.x, (*it).second.y, (*it).second.x  );
                 }
                 F_result_write.write(temp_result_flow_path);
-
-                FlowImage F_result_read;
-                F_result_read.read(temp_result_flow_path);
-
-                for (int32_t v=0; v<F_result_read.height(); v++) { // rows
-                    for (int32_t u=0; u<F_result_read.width(); u++) {  // cols
-                        if ( F_result_read.isValid(u,v) ) {
-                            fs << "png file read" << "[";
-                            fs << "{:" << "row" <<  v << "col" << u << "displacement" << "[:";
-                            fs << F_result_read.getFlowU(u,v);
-                            fs << F_result_read.getFlowV(u,v);
-                            fs << F_result_read.isValid(u,v);
-                            fs << "]" << "}";
-                            fs << "]";
-                        }
-                    }
-                }
             }
 
             tic = steady_clock::now();
@@ -578,13 +576,14 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
             std::swap(next_pts, prev_pts);
             std::swap(prevGray, curGray);
         }
+        fs.release();
+
         for(auto &n : time)
             sum_time +=n;
 
         std::cout << "Noise " << noise  << ", Zeit " << sum_time << std::endl;
         std::cout << "time_map LK " << time_map["LK"] << std::endl;
 
-        fs.release();
         auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
 
         pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
@@ -597,7 +596,8 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
         Gnuplot gp2d;
         gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION) + "]\n";
         gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-        std::string tmp = std::string(" with lines title ") + std::string("'") + input_image_folder + std::string(" y axis - ms, x axis - image_02_frame\n'");
+        std::string tmp = std::string(" with points title ") + std::string("'") + input_image_folder + std::string(" y "
+                                                                                                                      "axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
     }
 
@@ -679,6 +679,11 @@ void GroundTruth::test_kitti_original() {
     delete mail;
 }
 
+void GroundTruth::read_png_image(std::string temp_result_flow_path) {
+
+    FlowImage F_result_read;
+    F_result_read.read(temp_result_flow_path);
+}
 
 void GroundTruth::LK() {
 
