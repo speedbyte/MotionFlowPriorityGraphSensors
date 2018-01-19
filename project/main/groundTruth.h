@@ -40,17 +40,13 @@ public:
 
     void generate_gt_image_and_gt_flow();
 
-    void test_kitti_original();
-
     void extrapolate_objects(cv::FileStorage fs, cv::Point2i pt, ushort width,
                                            ushort height, int xValue, int yValue, std::string image_path );
 
     void calculate_flow(const boost::filesystem::path dataset_path, const std::string image_input_sha, ALGO_TYPES algo,
     FRAME_TYPES frame_types, NOISE_TYPES noise);
 
-    void LK();
-
-    void read_png_image(std::string temp_result_flow_path);
+    void plot(std::string resultsordner);
 
 
 

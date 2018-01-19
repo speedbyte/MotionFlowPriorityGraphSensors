@@ -145,6 +145,8 @@ int main ( int argc, char *argv[]) {
         if ( generate_LK ) {
             gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
         }
+
+        gt.plot(std::string("results_FB_no_noise"));
     }
 
 /* MATLAB_DATASET ------------- */

@@ -6,8 +6,11 @@
 #include <map>
 #include <iomanip>
 #include <algorithm>
+#include <cfloat>
 
 int main (int argc, char *argv[]) {
+
+    std::cout << FLT_MAX << " " << INT32_MIN << " " << INT32_MAX;
 
     time_t rawtime; time(&rawtime);
     std::cout << asctime(localtime(&rawtime));
@@ -45,7 +48,7 @@ int main (int argc, char *argv[]) {
     std::random_shuffle ( myvector.begin(), myvector.end() );
 
     // using myrandom:
-    std::random_shuffle ( myvector.begin(), myvector.end(), std::rand()%10);
+    //std::random_shuffle ( myvector.begin(), myvector.end(), (std::rand()));
 
     // print out content:
     std::cout << "myvector contains:";
