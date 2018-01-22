@@ -131,77 +131,87 @@ int main ( int argc, char *argv[]) {
 
 /* CPP_DATASET ------------- */
 
-    GroundTruth gt(CPP_DATASET_PATH, "data/stereo_flow/", "results/");
-    if ( test_cpp_dataset ) {
+    {
+        if ( test_cpp_dataset ) {
 
-        if ( generate_ground_truth ) {
-            gt.generate_gt_image_and_gt_flow();
+            GroundTruth gt(CPP_DATASET_PATH, "data/stereo_flow/", "results/");
+
+            if ( generate_ground_truth ) {
+                gt.generate_gt_image_and_gt_flow();
+            }
+
+            if ( generate_FB ) {
+                gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+                gt.plot(std::string("results_FB_no_noise"));
+            }
+
+            if ( generate_LK ) {
+                gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+                gt.plot(std::string("results_LK_no_noise"));
+            }
         }
-
-        if ( generate_FB ) {
-            gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
-        }
-
-        if ( generate_LK ) {
-            gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
-        }
-
-        gt.plot(std::string("results_FB_no_noise"));
     }
 
 /* MATLAB_DATASET ------------- */
 
-    if ( test_matlab_dataset ) {
-        // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
-        // calculated here.
+    {
+        if ( test_matlab_dataset ) {
+            GroundTruth gt(MATLAB_DATASET_PATH, "data/stereo_flow/", "results/");
+            // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
+            // calculated here.
 
-        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
 
-        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_bg_noise);
+            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_bg_noise);
 
-        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_fg_noise);
+            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_fg_noise);
 
-        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_bg_noise);
+            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_bg_noise);
 
-        gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_fg_noise);
+            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_fg_noise);
+        }
     }
 
 /* KITTI_FLOW_DATASET------------- */
 
-    if ( test_kitti_flow_dataset ) {
-        // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
-        // calculated here.
+    {
+        if ( test_kitti_flow_dataset ) {
+            GroundTruth gt(KITTI_FLOW_DATASET_PATH, "data/stereo_flow/", "results/");
+            // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
+            // calculated here.
 
-        gt.calculate_flow(KITTI_FLOW_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+            gt.calculate_flow(KITTI_FLOW_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
 
-        make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
-        make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,
-                            "data/2011_09_28_drive_0016_sync/image_02/data/");
-        make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/");
+            make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
+            make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,
+                                "data/2011_09_28_drive_0016_sync/image_02/data/");
+            make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/");
+        }
     }
-
-    if (test_vires_dataset ) {
 
 /* VIRES_DATASET ------------- */
 
-        GroundTruth gt(VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
-        if ( generate_ground_truth ) {
-            gt.generate_gt_image_and_gt_flow_vires();
+    {
+        if (test_vires_dataset ) {
+
+            GroundTruth gt(VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
+            if ( generate_ground_truth ) {
+                gt.generate_gt_image_and_gt_flow_vires();
+            }
+
+            int m_port;
+            int m_sensor_port;
+            bool m_triggers;
+            int m_frames_to_read;
+            bool m_write_ts_gt;
+
+            //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
+            //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
+            //dataset_path = MATLAB_DATASET_PATH;
+            //of_algo(dataset_path, "Movement.avi", "FB");
+            //of_algo(dataset_path, "Movement.avi", "LK");
+            //disparity(dataset_path);
         }
-
-        int m_port;
-        int m_sensor_port;
-        bool m_triggers;
-        int m_frames_to_read;
-        bool m_write_ts_gt;
-
-        //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
-        //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
-        //dataset_path = MATLAB_DATASET_PATH;
-        //of_algo(dataset_path, "Movement.avi", "FB");
-        //of_algo(dataset_path, "Movement.avi", "LK");
-        //disparity(dataset_path);
-
     }
 
     std::cout << "End of Program\n";

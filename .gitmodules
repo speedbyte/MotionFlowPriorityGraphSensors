@@ -25,7 +25,6 @@
 [submodule "protobuf"]
 	path = libs/protobuf
 	url = https://github.com/google/protobuf
-	ignore = dirty
 [submodule "libuvc"]
 	path = libs/libuvc
 	url = https://github.com/ktossell/libuvc
@@ -47,11 +46,9 @@
 [submodule "overleaf-maths"]
 	path = overleaf/maths
 	url = https://git.overleaf.com/10769078vhnvxscwscbm
-	ignore = dirty
 [submodule "overleaf-marcelBA"]
 	path = overleaf/marcelBA
 	url = https://git.overleaf.com/9933334yfshcrdkdfhx
-	ignore = dirty
 [submodule "philipp-BA"]
 	path = overleaf/philippBA
 	url = https://git.overleaf.com/10991069gqnknnppvsjj
@@ -78,7 +75,6 @@
 [submodule "vtk"]
 	path = libs/vtk
 	url = https://gitlab.kitware.com/vtk/vtk.git
-	ignore = dirty
 [submodule "external/pcl_manipulation"]
 	path = external/pcl_manipulation
 	url = https://github.com/Benzarti-Ilyess/pcl_manipulation.git

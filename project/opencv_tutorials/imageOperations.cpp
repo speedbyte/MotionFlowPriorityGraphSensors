@@ -176,6 +176,14 @@ void miscallenous() {
 
 int main ( int argc, char *argv[] ) {
 
+    // Do motion templates-
+
+    /* cv::motempl::updateMotionHistory(
+    tempGroundTruthImage, // Nonzero pixels where motion occurs
+    mhi,        // Motion history image
+    timestamp,  // Current time (usually milliseconds)
+    duration    // Max track duration ('timestamp' units)
+    ); */
 
     cv::Mat kittisrc1 = cv::imread("../../../datasets/kitti_dataset/raw_dataset_with_calib/2011_09_28_drive_0016_sync"
                                            "/image_02"

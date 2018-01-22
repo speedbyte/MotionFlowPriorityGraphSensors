@@ -27,12 +27,12 @@ int kbhit(void)
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     fcntl(STDIN_FILENO, F_SETFL, oldf);
 
-    return ch;
-    if(ch != EOF)
+    //return ch;
+    if(ch != -1)
     {
-        //ungetc(ch, stdin);
-        return -1;
+        ungetc(ch, stdin);
+        return ch;
     }
 
-    return ch;
+    return (ch);
 }

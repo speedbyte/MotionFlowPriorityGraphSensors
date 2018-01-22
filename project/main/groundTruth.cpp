@@ -24,6 +24,7 @@
 
 #include "datasets.h"
 #include "groundTruth.h"
+#include "kbhit.h"
 
 #include <unordered_map>
 #include <bits/unordered_map.h>
@@ -186,12 +187,6 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
                          object_height)));
         toc = steady_clock::now();
         time_map["generate"] = duration_cast<milliseconds>(toc - tic).count();
-        cv::motempl::updateMotionHistory(
-                tempGroundTruthImage, // Nonzero pixels where motion occurs
-                mhi,        // Motion history image
-                timestamp,  // Current time (usually milliseconds)
-                duration    // Max track duration ('timestamp' units)
-        );
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
         current_index++;
         if ((current_index) >= m_trajectory_1.size() ) {
@@ -519,7 +514,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
 
                     // Draw the optical calculate_flow map
-                    int stepSize = 1;
+                    int stepSize = 16;
 
                     // Draw the uniform grid of points on the input image along with the motion vectors
                     for (int row = 0; row < image_02_frame.rows; row += stepSize) {
@@ -705,10 +700,18 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
 
 }
 
-
 void GroundTruth::generate_gt_image_and_gt_flow_vires() {
 
     prepare_gt_data_and_gt_flow_directories();
+
+    char command[1024];
+
+
+    sprintf(command,"cd %s; %s",(m_dataset_path + std::string("../../")).c_str(),"bash vtdSendandReceive.sh");
+    std::cout << command << std::endl;
+    system(command);
+
+    std::cout << " I am out of bash" << std::endl;
 
     ViresInterface vi;
     std::string m_server;
@@ -742,7 +745,27 @@ void GroundTruth::generate_gt_image_and_gt_flow_vires() {
     fprintf(stderr, "...attached! Reading now...\n");
 
     // now check the SHM for the time being
+    bool breaking = false;
+    int count = 0;
     while (1) {
+
+        // Break out of the loop if the user presses the Esc key
+        int c =  kbhit();
+        switch (c) {
+            case 9:
+                breaking = true;
+                break;
+            default:
+                break;
+        }
+        if ( breaking ) {
+            break;
+        }
+
+        if ( count++ > 100 ) {
+            breaking = true;
+        }
+
         vi.readNetwork();
 
         if (initCounter <= 0)
@@ -754,13 +777,16 @@ void GroundTruth::generate_gt_image_and_gt_flow_vires() {
             vi.sendRDBTrigger();
 
         }
-
         // ok, reset image indicator
         vi.setHaveImage(0);
 
-        usleep(10000);
+        usleep(10000); // sleep for 10 ms
         std::cout << "getting data from VIRES\n";
     }
+
+    sprintf(command,"cd %s; %s",(m_dataset_path + std::string("../../")).c_str(),"bash vtdStop.sh");
+    std::cout << command << std::endl;
+    system(command);
 }
 
 void GroundTruth::plot(std::string resultsordner) {
@@ -793,6 +819,8 @@ void GroundTruth::plot(std::string resultsordner) {
 
             png::image<png::rgb_pixel> errorImage(m_frame_size.width, m_frame_size.height);
 
+            // all black when the flow is identical. logcolor = false
+            // all blue when the flow is identical. logcolor = true
             errorImage = gt_flow_read.errorImage(result_flow_read, result_flow_read, true);
             errorImage.write(temp_plot_flow_path);
 

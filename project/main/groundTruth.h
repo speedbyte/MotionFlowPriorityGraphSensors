@@ -48,6 +48,9 @@ public:
 
     void plot(std::string resultsordner);
 
+    ~GroundTruth(){
+        std::cout << "killing previous GroundTruth object\n" ;
+    }
 
 
 private:
