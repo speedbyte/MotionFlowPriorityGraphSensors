@@ -186,6 +186,12 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
                          object_height)));
         toc = steady_clock::now();
         time_map["generate"] = duration_cast<milliseconds>(toc - tic).count();
+        cv::motempl::updateMotionHistory(
+                tempGroundTruthImage, // Nonzero pixels where motion occurs
+                mhi,        // Motion history image
+                timestamp,  // Current time (usually milliseconds)
+                duration    // Max track duration ('timestamp' units)
+        );
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
         current_index++;
         if ((current_index) >= m_trajectory_1.size() ) {
