@@ -14,7 +14,7 @@
 
 #include "GridLayout.h"
 #include "datasets.h"
-#include "groundTruth.h"
+#include "GroundTruth.h"
 
 
 //extern bool eval(std::string result_sha, Mail *mail);

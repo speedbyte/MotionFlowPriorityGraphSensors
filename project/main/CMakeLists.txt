@@ -18,7 +18,7 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 ##define NUMBER  ${NUMBER}
 
 set(SOURCE_FILES
-        main.cpp run_configuration.cpp kitti_calibration.cpp video_capture.cpp groundTruth.cpp kbhit.cpp )
+        main.cpp run_configuration.cpp kitti_calibration.cpp video_capture.cpp GroundTruth.cpp kbhit.cpp )
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries( main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png viresrdb )

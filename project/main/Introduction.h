@@ -1,8 +1,6 @@
 
 /**
 
- The major thing between a general optical flow and automotive is the real time constraint.
-
  calculating the relative Ground Truth for the Kitti devkit and store it in a png file
  Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
  overflow. The final value to be stored in U16 in the form of val*2pow6+32768.

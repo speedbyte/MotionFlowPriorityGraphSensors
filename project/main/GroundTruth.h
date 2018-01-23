@@ -5,6 +5,9 @@
 #ifndef MAIN_GROUNDTRUTH_H
 #define MAIN_GROUNDTRUTH_H
 
+
+#include <vires/vires_common.h>
+
 /**
  * This class
  *  private - makes directories where synthetic images will be stored
@@ -13,7 +16,7 @@
  *  produces flow images
  */
 
-class GroundTruth {
+class GroundTruth : Framework::ViresInterface {
 
 private:
 
@@ -47,6 +50,8 @@ public:
     FRAME_TYPES frame_types, NOISE_TYPES noise);
 
     void plot(std::string resultsordner);
+
+    void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
 
     ~GroundTruth(){
         std::cout << "killing previous GroundTruth object\n" ;

@@ -23,7 +23,7 @@
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
 #include "datasets.h"
-#include "groundTruth.h"
+#include "GroundTruth.h"
 #include "kbhit.h"
 
 #include <unordered_map>
@@ -713,7 +713,7 @@ void GroundTruth::generate_gt_image_and_gt_flow_vires() {
 
     std::cout << " I am out of bash" << std::endl;
 
-    ViresInterface vi;
+    //Framework::ViresInterface vi;
     std::string m_server;
     boost::filesystem::path m_ts_gt_out_dir;
 
@@ -722,23 +722,23 @@ void GroundTruth::generate_gt_image_and_gt_flow_vires() {
     // initalize the server variable
     std::string serverName = "127.0.0.1";
 
-    vi.setServer(serverName.c_str());
+    setServer(serverName.c_str());
 
     fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
-            vi.getShmKey(), vi.getCheckMask(), vi.getForceBuffer());
+            getShmKey(), getCheckMask(), getForceBuffer());
 
     // open the network connection to the taskControl (so triggers may be sent)
     fprintf(stderr, "creating network connection....\n");
-    vi.openNetwork();  // this is blocking until the network has been opened
-    vi.openNetwork_GT();
+    openNetwork();  // this is blocking until the network has been opened
+    openNetwork_GT();
 
 
 
     // now: open the shared memory (try to attach without creating a new segment)
-    fprintf(stderr, "attaching to shared memory 0x%x....\n", vi.getShmKey());
+    fprintf(stderr, "attaching to shared memory 0x%x....\n", getShmKey());
 
-    while (!vi.getShmPtr()) {
-        vi.openShm();
+    while (!getShmPtr()) {
+        openShm();
         usleep(1000);     // do not overload the CPU
     }
 
@@ -766,19 +766,19 @@ void GroundTruth::generate_gt_image_and_gt_flow_vires() {
             breaking = true;
         }
 
-        vi.readNetwork();
+        readNetwork();  // this calls parseRDBMessage() in vires_common.cpp
 
         if (initCounter <= 0)
-            vi.checkShm();
+            checkShm();
 
         // has an image arrived or do the first frames need to be triggered
         //(first image will arrive with a certain image_02_frame delay only)
-        if (vi.getHaveImage() || (initCounter-- > 0)) {
-            vi.sendRDBTrigger();
+        if (getHaveImage() || (initCounter-- > 0)) {
+            sendRDBTrigger();
 
         }
         // ok, reset image indicator
-        vi.setHaveImage(0);
+        setHaveImage(0);
 
         usleep(10000); // sleep for 10 ms
         std::cout << "getting data from VIRES\n";
@@ -831,4 +831,10 @@ void GroundTruth::plot(std::string resultsordner) {
 
         cv::destroyAllWindows();
     }
+}
+
+
+void GroundTruth::parseStartOfFrame(const double &simTime, const unsigned int &simFrame) {
+    fprintf( stderr, "I am in groundtruth %d\n,", RDB_PKG_ID_START_OF_FRAME );
+    fprintf( stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame );
 }
