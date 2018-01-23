@@ -22,7 +22,6 @@ public:
         std::cout << "in Base printA\n";
         printDerived();
     }
-
 };
 
 class Derived: Base {
@@ -40,7 +39,6 @@ public:
         std::cout << "in derived inherit\n";
         printInherit();
     }
-
 };
 
 class Derived2: Derived {
@@ -53,7 +51,6 @@ public:
         std::cout << "in Derived2\n";
         printInherit2();
     }
-
 };
 
 

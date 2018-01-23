@@ -53,6 +53,18 @@ public:
 
     void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
 
+    void parseEndOfFrame( const double & simTime, const unsigned int & simFrame );
+
+    void parseEntry( RDB_IMAGE_t *data, const double & simTime, const unsigned int & simFrame, const
+    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &totalElem );
+
+    void parseEntry( RDB_OBJECT_STATE_t *data, const double & simTime, const unsigned int & simFrame, const
+    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &
+    totalElem );
+
+    void parseEntry( RDB_OBJECT_CFG_t *data, const double & simTime, const unsigned int & simFrame, const
+    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
+
     ~GroundTruth(){
         std::cout << "killing previous GroundTruth object\n" ;
     }
