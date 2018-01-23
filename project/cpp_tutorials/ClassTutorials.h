@@ -14,6 +14,7 @@ public:
         printDerived();
     }
 
+    // Virtual functions must be implemented or set to 0
     virtual void printDerived() {
         std::cout << "virtual base to be printed\n";
     }
