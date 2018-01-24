@@ -408,7 +408,6 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
         cv::Mat image_02_frame = cv::Mat::zeros(m_frame_size, CV_8UC3);
         cv::Mat flowImage(m_frame_size, CV_32FC3);
 
-        cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
         cv::Size subPixWinSize(10, 10), winSize(21, 21);
 
         const int MAX_COUNT = 5000;
@@ -440,6 +439,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
         std::string temp_result_flow_path;
         cv::FileStorage fs;
         fs.open(results_flow_matrix_str, cv::FileStorage::WRITE);
+        std::vector<cv::Point2f> next_pts_healthy;
 
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
@@ -561,8 +561,9 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     /*if (prevGray.empty()) {
                         curGray.copyTo(prevGray);
                     }*/
+                    cv::TermCriteria termcrit_lk(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
                     cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts, next_pts, status,
-                                             err, winSize, 5, termcrit, 0, 0.001);
+                                             err, winSize, 5, termcrit_lk, 0, 0.001);
 
                     unsigned count = 0;
                     int minDist = 1;
@@ -606,11 +607,17 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                         }
                     }
                     next_pts.resize(count);
+
+                    if ( next_pts.size() == 0 ) {
+                        // pick up the last healthy points
+                        next_pts = next_pts_healthy;
+                    }
                 }
                 else {
                     needToInit = true;
                 }
-                if (needToInit) {
+                if ( needToInit || ( frame_count%4 == 0) ) {
+                    //|| next_pts.size() == 0) { // the init should be also when there is no next_pts.
                     // automatic initialization
                     cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
                     // Refining the location of the feature points
@@ -624,7 +631,8 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                         tempPoints.push_back(currentPoint[i]);
                         // Function to refine the location of the corners to subpixel accuracy.
                         // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
-                        cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit);
+                        cv::TermCriteria termcrit_subpixel(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
+                        cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit_subpixel);
                         next_pts.push_back(tempPoints[0]);
                     }
                     printf("old next_pts size is %ld and new next_pts size is %ld\n", currentPoint.size(), next_pts.size());
@@ -638,9 +646,9 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                 needToInit = false;
                 //std::swap(next_pts, prev_pts);
                 prev_pts = next_pts;
+                next_pts_healthy = prev_pts;
                 next_pts.clear();
             }
-
 
             if (prevGray.data) {
 
