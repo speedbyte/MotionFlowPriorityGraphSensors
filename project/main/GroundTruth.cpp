@@ -644,7 +644,6 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                 time.push_back(duration_cast<milliseconds>(toc - tic).count());
 
                 needToInit = false;
-                //std::swap(next_pts, prev_pts);
                 prev_pts = next_pts;
                 next_pts_healthy = prev_pts;
                 next_pts.clear();
@@ -863,18 +862,20 @@ unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemI
 void GroundTruth::parseEntry( RDB_OBJECT_STATE_t *data, const double & simTime, const unsigned int & simFrame, const
 unsigned
 short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
+
     RDB_OBJECT_STATE_t* object = reinterpret_cast<RDB_OBJECT_STATE_t*>(data); /// raw image data
-    if ( strcmp(data->base.name, "New Character") == 0) {
 //        fprintf( stderr, "handleRDBitem: handling object state\n" );
 //        fprintf( stderr, "    simTime = %.3lf, simFrame = %d\n", simTime, simFrame );
 //        fprintf( stderr, "    object = %s, id = %d\n", data->base.name, data->base.id );
 //        fprintf( stderr, "    position = %.3lf / %.3lf / %.3lf\n", data->base.pos.x, data->base.pos.y, data->base
 //                .pos.z );
+    if ( strcmp(data->base.name, "New Character") == 0) {
 
         fprintf( stderr, "INDICATOR: %d %.3lf %.3lf %.3lf %.3lf \n" ,
                  simFrame,data->base.pos.x,
                  data->base.pos.y, data->base.geo.dimX, data->base.geo.dimY );
     }
+
     else if ( strcmp(data->base.name, "New Character01") == 0) {
         fprintf( stderr, "INDICATOR2: %d %.3lf %.3lf %.3lf %.3lf \n" ,
                  simFrame,data->base.pos.x,
@@ -884,6 +885,7 @@ short & pkgId, const unsigned short & flags, const unsigned int & elemId, const 
 
 void GroundTruth::parseEntry( RDB_IMAGE_t *data, const double & simTime, const unsigned int & simFrame, const
 unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
+
     if ( !data )
         return;
     fprintf( stderr, "handleRDBitem: image\n" );
