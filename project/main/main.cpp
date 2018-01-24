@@ -72,6 +72,7 @@ int main ( int argc, char *argv[]) {
         bool gt;
         bool lk;
         bool fb;
+        bool plot;
     } CONFIG_FILE_DATA;
 
     CONFIG_FILE_DATA kitti_raw_dataset, kitti_flow_dataset, matlab_dataset, cpp_dataset, vires_dataset;
@@ -94,6 +95,8 @@ int main ( int argc, char *argv[]) {
                 cpp_dataset.fb = true;
         std::strcmp(pt.get<std::string>("CPP_DATASET.LK").c_str(), "0") == 0 ? cpp_dataset.lk = false :
                 cpp_dataset.lk = true;
+        std::strcmp(pt.get<std::string>("VIRES_DATASET.PLOT").c_str(), "0") == 0 ? cpp_dataset.plot = false :
+                cpp_dataset.plot = true;
 
         std::strcmp(pt.get<std::string>("VIRES_DATASET.EXECUTE").c_str(), "0") == 0 ? vires_dataset.execute = false :
                 vires_dataset.execute = true;
@@ -103,6 +106,8 @@ int main ( int argc, char *argv[]) {
                 vires_dataset.fb = true;
         std::strcmp(pt.get<std::string>("VIRES_DATASET.LK").c_str(), "0") == 0 ? vires_dataset.lk = false :
                 vires_dataset.lk = true;
+        std::strcmp(pt.get<std::string>("VIRES_DATASET.PLOT").c_str(), "0") == 0 ? vires_dataset.plot = false :
+                vires_dataset.plot = true;
 
 
     }
@@ -161,11 +166,15 @@ int main ( int argc, char *argv[]) {
                 gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
                 gt.plot(std::string("results_FB_no_noise"));
             }
-
             if ( cpp_dataset.lk ) {
                 gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+            }
+
+            if ( cpp_dataset.plot ) {
+                gt.plot(std::string("results_FB_no_noise"));
                 gt.plot(std::string("results_LK_no_noise"));
             }
+
         }
     }
 
@@ -226,6 +235,10 @@ int main ( int argc, char *argv[]) {
                 gt.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
             }
 
+            if ( vires_dataset.plot ) {
+                gt.plot(std::string("results_FB_no_noise"));
+                //gt.plot(std::string("results_LK_no_noise"));
+            }
 
 
             int m_port;

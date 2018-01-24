@@ -4,6 +4,7 @@ EXECUTE = 0
 GT = 1
 LK = 1
 FB = 1
+PLOT = 1
 
 [MATLAB_DATASET]
 PATH = "../../../datasets/matlab_dataset/"
@@ -25,5 +26,6 @@ EXECUTE = 0
 PATH = "../../../datasets/vires_dataset/"
 EXECUTE = 1
 GT = 0
-LK = 0
-FB = 1
+LK = 1
+FB = 0
+PLOT = 0

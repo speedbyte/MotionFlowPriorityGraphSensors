@@ -378,7 +378,6 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
 
         bool needToInit = true;
         std::vector<cv::Point2f> prev_pts;
-        std::vector<cv::Point2f> next_pts;
 
         std::cout << "results will be stored in " << resultordner << std::endl;
 
@@ -461,7 +460,6 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     break;
                 case 'c':
                     prev_pts.clear();
-                    next_pts.clear();
                     break;
                 default:
                     break;
@@ -511,7 +509,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
 
                     // Draw the optical calculate_flow map
-                    int stepSize = 1;
+                    int stepSize = 10;
 
                     // Draw the uniform grid of points on the input image along with the motion vectors
                     for (int row = 0; row < image_02_frame.rows; row += stepSize) {
@@ -554,6 +552,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
             }
 
             else if ( lk == algo ) {
+                std::vector<cv::Point2f> next_pts;
                 tic = steady_clock::now();
                 // Calculate optical calculate_flow map using LK algorithm
                 if (prevGray.data) {  // Calculate only on second or subsequent images.
@@ -616,7 +615,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
                     // Refining the location of the feature points
                     assert(next_pts.size() <= MAX_COUNT );
-                    std::cout << next_pts.size();
+                    std::cout << next_pts.size() << std::endl;
                     std::vector<cv::Point2f> currentPoint;
                     std::swap(currentPoint, next_pts);
                     next_pts.clear();
@@ -635,6 +634,11 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                 time_map["LK"] = duration_cast<milliseconds>(toc - tic).count();
                 y_pts.push_back(time_map["LK"]);
                 time.push_back(duration_cast<milliseconds>(toc - tic).count());
+
+                needToInit = false;
+                //std::swap(next_pts, prev_pts);
+                prev_pts = next_pts;
+                next_pts.clear();
             }
 
 
@@ -665,10 +669,8 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
 
             // Display the output image
             cv::imshow(resultordner, image_02_frame);
-            needToInit = false;
-            prev_pts.clear();
-            std::swap(next_pts, prev_pts);
-            std::swap(prevGray, curGray);
+            prevGray = curGray.clone();
+            //std::swap(prevGray, curGray);
         }
         fs.release();
 
