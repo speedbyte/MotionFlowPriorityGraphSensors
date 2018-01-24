@@ -48,9 +48,6 @@ GroundTruth::GroundTruth(std::string dataset_path, std::string unterordner, std:
     temp = m_dataset_path + resultordner + std::string("dummy.txt");
     m_base_directory_path_result_out = temp.parent_path(); // results/
 
-    m_frame_size.width = 1242;
-    m_frame_size.height = 375;
-
     std::vector<ushort> theta;
     for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
         theta.push_back(frame_count);
@@ -514,7 +511,7 @@ void GroundTruth::calculate_flow(const boost::filesystem::path dataset_path, con
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
 
                     // Draw the optical calculate_flow map
-                    int stepSize = 16;
+                    int stepSize = 1;
 
                     // Draw the uniform grid of points on the input image along with the motion vectors
                     for (int row = 0; row < image_02_frame.rows; row += stepSize) {
@@ -915,14 +912,22 @@ unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemI
             }
         }
 
-        char file_name[500];
-        sprintf(file_name,
-                "/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/image_02/000"
-                        "%03d_10.png", simFrame);
-        save_image.write(file_name);
+        char file_name_image[500];
+
+        if ( simFrame > 0 ) {
+            sprintf(file_name_image, "000%03d_10.png", ( simFrame - 7 ));
+            std::string input_image_file_with_path = m_base_directory_path_input_in.string() + "/image_02/" + file_name_image;
+            save_image.write(input_image_file_with_path);
+        }
     }
     else {
         fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize /( image_info_
                                                                                            .width*image_info_.height));
     }
+}
+
+
+void GroundTruth::setFrameSize(const unsigned &width, const unsigned &height) {
+    m_frame_size.width = width;
+    m_frame_size.height = height;
 }

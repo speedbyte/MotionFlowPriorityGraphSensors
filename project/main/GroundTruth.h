@@ -39,6 +39,8 @@ public:
 
     GroundTruth(std::string dataset_path, std::string unterordner, std::string resultordner);
 
+    void setFrameSize(const unsigned &width, const unsigned &height);
+
     void generate_gt_image_and_gt_flow_vires();
 
     void generate_gt_image_and_gt_flow();

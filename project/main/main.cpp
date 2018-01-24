@@ -55,9 +55,7 @@ int main ( int argc, char *argv[]) {
     // Thread 2: Read two kitti image files without rain. The two image files are from kitti
 
 
-    bool test_kitti_raw_dataset, test_cpp_dataset, test_matlab_dataset, test_kitti_flow_dataset, test_vires_dataset;
-    bool generate_ground_truth, generate_LK, generate_FB;
-
+    //bool kitti_raw_dataset.execute, cpp_dataset.execute, matlab_dataset.execute, kitti_flow_dataset.execute, vires_dataset.execute;
 
     boost::property_tree::ptree pt;
     boost::property_tree::read_ini("../input.txt", pt);
@@ -69,26 +67,44 @@ int main ( int argc, char *argv[]) {
             std::cout << key.first << "=" << key.second.get_value<std::string>() << "\n";
     }
 
+    typedef struct {
+        bool execute;
+        bool gt;
+        bool lk;
+        bool fb;
+    } CONFIG_FILE_DATA;
+
+    CONFIG_FILE_DATA kitti_raw_dataset, kitti_flow_dataset, matlab_dataset, cpp_dataset, vires_dataset;
+
     try {
-        std::cout << pt.get<std::string>("CPP_DATASET.EXECUTE") << std::endl;
-        std::strcmp(pt.get<std::string>("CPP_DATASET.EXECUTE").c_str(), "0") == 0 ? test_cpp_dataset = false :
-                test_cpp_dataset = true;
-        std::strcmp(pt.get<std::string>("MATLAB_DATASET.EXECUTE").c_str(), "0") == 0 ? test_matlab_dataset = false :
-                test_matlab_dataset = true;
-        std::strcmp(pt.get<std::string>("VIRES_DATASET.EXECUTE").c_str(), "0") == 0 ? test_vires_dataset = false :
-                test_vires_dataset = true;
-        std::strcmp(pt.get<std::string>("KITTI_RAW_DATASET.EXECUTE").c_str(), "0") == 0 ? test_kitti_raw_dataset =
+        std::strcmp(pt.get<std::string>("MATLAB_DATASET.EXECUTE").c_str(), "0") == 0 ? matlab_dataset.execute = false :
+                matlab_dataset.execute = true;
+        std::strcmp(pt.get<std::string>("KITTI_RAW_DATASET.EXECUTE").c_str(), "0") == 0 ? kitti_raw_dataset.execute =
                                                                                                   false :
-                test_kitti_raw_dataset = true;
-        std::strcmp(pt.get<std::string>("KITTI_FLOW_DATASET.EXECUTE").c_str(), "0") == 0 ? test_kitti_flow_dataset =
+                kitti_raw_dataset.execute = true;
+        std::strcmp(pt.get<std::string>("KITTI_FLOW_DATASET.EXECUTE").c_str(), "0") == 0 ? kitti_flow_dataset.execute =
                                                                                                    false :
-                test_kitti_flow_dataset = true;
-        std::strcmp(pt.get<std::string>("CPP_DATASET.GT").c_str(), "0") == 0 ? generate_ground_truth = false :
-        generate_ground_truth = true;
-        std::strcmp(pt.get<std::string>("CPP_DATASET.FB").c_str(), "0") == 0 ? generate_FB = false :
-                generate_FB = true;
-        std::strcmp(pt.get<std::string>("CPP_DATASET.LK").c_str(), "0") == 0 ? generate_LK = false :
-                generate_LK = true;
+                kitti_flow_dataset.execute = true;
+
+        std::strcmp(pt.get<std::string>("CPP_DATASET.EXECUTE").c_str(), "0") == 0 ? cpp_dataset.execute = false :
+                cpp_dataset.execute = true;
+        std::strcmp(pt.get<std::string>("CPP_DATASET.GT").c_str(), "0") == 0 ? cpp_dataset.gt = false :
+        cpp_dataset.gt = true;
+        std::strcmp(pt.get<std::string>("CPP_DATASET.FB").c_str(), "0") == 0 ? cpp_dataset.gt = false :
+                cpp_dataset.fb = true;
+        std::strcmp(pt.get<std::string>("CPP_DATASET.LK").c_str(), "0") == 0 ? cpp_dataset.lk = false :
+                cpp_dataset.lk = true;
+
+        std::strcmp(pt.get<std::string>("VIRES_DATASET.EXECUTE").c_str(), "0") == 0 ? vires_dataset.execute = false :
+                vires_dataset.execute = true;
+        std::strcmp(pt.get<std::string>("VIRES_DATASET.GT").c_str(), "0") == 0 ? vires_dataset.gt = false :
+                vires_dataset.gt = true;
+        std::strcmp(pt.get<std::string>("VIRES_DATASET.FB").c_str(), "0") == 0 ? vires_dataset.fb = false :
+                vires_dataset.fb = true;
+        std::strcmp(pt.get<std::string>("VIRES_DATASET.LK").c_str(), "0") == 0 ? vires_dataset.lk = false :
+                vires_dataset.lk = true;
+
+
     }
     catch(boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::property_tree
     ::ptree_bad_path> >) {
@@ -97,7 +113,7 @@ int main ( int argc, char *argv[]) {
     }
 
 
-    if ( test_kitti_raw_dataset ) {
+    if ( kitti_raw_dataset.execute ) {
         boost::filesystem::path calib_path = get_file(KITTI_RAW_CALIBRATION_PATH,
                                                       "./", "calib_cam_to_cam.txt");
         read_kitti_calibration(calib_path);
@@ -132,20 +148,21 @@ int main ( int argc, char *argv[]) {
 /* CPP_DATASET ------------- */
 
     {
-        if ( test_cpp_dataset ) {
+        if ( cpp_dataset.execute ) {
 
             GroundTruth gt(CPP_DATASET_PATH, "data/stereo_flow/", "results/");
+            gt.setFrameSize(1242,375);
 
-            if ( generate_ground_truth ) {
+            if ( cpp_dataset.gt ) {
                 gt.generate_gt_image_and_gt_flow();
             }
 
-            if ( generate_FB ) {
+            if ( cpp_dataset.fb ) {
                 gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
                 gt.plot(std::string("results_FB_no_noise"));
             }
 
-            if ( generate_LK ) {
+            if ( cpp_dataset.lk ) {
                 gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
                 gt.plot(std::string("results_LK_no_noise"));
             }
@@ -155,7 +172,7 @@ int main ( int argc, char *argv[]) {
 /* MATLAB_DATASET ------------- */
 
     {
-        if ( test_matlab_dataset ) {
+        if ( matlab_dataset.execute ) {
             GroundTruth gt(MATLAB_DATASET_PATH, "data/stereo_flow/", "results/");
             // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
             // calculated here.
@@ -175,7 +192,7 @@ int main ( int argc, char *argv[]) {
 /* KITTI_FLOW_DATASET------------- */
 
     {
-        if ( test_kitti_flow_dataset ) {
+        if ( kitti_flow_dataset.execute ) {
             GroundTruth gt(KITTI_FLOW_DATASET_PATH, "data/stereo_flow/", "results/");
             // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
             // calculated here.
@@ -192,12 +209,24 @@ int main ( int argc, char *argv[]) {
 /* VIRES_DATASET ------------- */
 
     {
-        if (test_vires_dataset ) {
+        if (vires_dataset.execute ) {
 
             GroundTruth gt(VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
-            if ( generate_ground_truth ) {
+            gt.setFrameSize(800,600);
+
+            if ( vires_dataset.gt ) {
                 gt.generate_gt_image_and_gt_flow_vires();
             }
+
+            if ( vires_dataset.lk ) {
+                gt.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+            }
+
+            if ( vires_dataset.fb ) {
+                gt.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+            }
+
+
 
             int m_port;
             int m_sensor_port;
