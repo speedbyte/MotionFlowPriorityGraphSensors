@@ -29,12 +29,6 @@ private:
 
     cv::Mat m_pedesterianImage;
 
-    //cv::FileStorage m_fs;
-
-    std::vector<cv::Point2i> m_trajectory_1;
-    // position, movement as pair
-
-
 public:
 
     GroundTruth(std::string dataset_path, std::string unterordner, std::string resultordner);

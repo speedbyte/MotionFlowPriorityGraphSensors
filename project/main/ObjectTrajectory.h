@@ -11,6 +11,9 @@ class ObjectTrajectory {
 private:
     std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix_result;
 
+    std::vector<cv::Point2i> m_trajectory_1;
+
+
 public:
 
     ObjectTrajectory();
@@ -23,6 +26,10 @@ public:
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
     &l_pixelmovement );
+
+    std::vector<cv::Point2i> create_trajectory(cv::Size m_frame_size);
+
+    std::vector<cv::Point2i> getTrajectoryPoints(void);
 
 };
 

@@ -43,30 +43,11 @@ GroundTruth::GroundTruth(std::string dataset_path, std::string unterordner, std:
 
     boost::filesystem::path temp;
 
-    cv::Point2i l_pixel_position, l_pixel_movement;
-
     temp = m_dataset_path + unterordner + std::string("dummy.txt");
     m_base_directory_path_input_in = temp.parent_path(); //data/stereo_flow/
 
     temp = m_dataset_path + resultordner + std::string("dummy.txt");
     m_base_directory_path_result_out = temp.parent_path(); // results/
-
-    std::vector<ushort> theta;
-    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
-        theta.push_back(frame_count);
-    }
-    // Prepare points
-    for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
-
-        l_pixel_position.x = (static_cast<ushort>((m_frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /
-                                                                   (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2)))));
-
-        l_pixel_position.y = (static_cast<ushort>((m_frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
-                                                                          sin(theta[i] * CV_PI / 180.0)) / (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2)))));
-
-        m_trajectory_1.push_back(l_pixel_position);
-
-    }
 
     m_pedesterianImage.create(object_height, object_width, CV_8UC3);
 
@@ -173,6 +154,11 @@ void GroundTruth::generate_gt_image_and_gt_flow(void) {
     char file_name_image[50];
 
     current_index = start;
+
+    std::vector<cv::Point2i> m_trajectory_1;
+    ObjectTrajectory trajectory;
+    m_trajectory_1 = trajectory.create_trajectory(m_frame_size);
+    m_trajectory_1 = trajectory.getTrajectoryPoints();
 
     for (ushort frame_count=0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
