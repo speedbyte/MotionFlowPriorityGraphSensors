@@ -14,10 +14,6 @@
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
 	ignore = dirty
-[submodule "pkg-config-generator"]
-	path = utils/pkg-config-generator
-	url = https://github.com/nmante/pkg-config-generator.git
-	ignore = dirty
 [submodule "gnuplot-iostream"]
 	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
@@ -90,3 +86,6 @@
 [submodule "kitti_devkit_stereo_opticalflow_sceneflow"]
 	path = libs/kitti_devkit_stereo_opticalflow_sceneflow
 	url = git@atreus.informatik.uni-tuebingen.de:Veikas/kitti_devkit_stereo_opticalflow_sceneflow
+[submodule "utils/pkg-config-generator"]
+	path = utils/pkg-config-generator
+	url = https://github.com/nmante/pkg-config-generator.git
