@@ -78,8 +78,8 @@ private:
 
     void prepare_result_directories(std::string resultordner);
 
-    void store_in_yaml(cv::FileStorage &fs, ushort currentPixelPositionX, ushort
-    currentPixelPositionY, int XMovement, int YMovement);
+    void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
+            &l_pixelmovement);
 };
 
 

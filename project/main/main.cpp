@@ -164,7 +164,6 @@ int main ( int argc, char *argv[]) {
 
             if ( cpp_dataset.fb ) {
                 gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
-                gt.plot(std::string("results_FB_no_noise"));
             }
             if ( cpp_dataset.lk ) {
                 gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);

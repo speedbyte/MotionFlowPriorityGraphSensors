@@ -3,6 +3,8 @@
 //
 
 #ifndef MAIN_DATASETS_H_H
+#define MAIN_DATASETS_H_H
+
 #define KITTI_FLOW_DATASET_PATH "../../../datasets/kitti_flow_dataset/"
 #define KITTI_RAW_DATASET_PATH "../../../datasets/kitti_raw_dataset/"
 
@@ -14,13 +16,11 @@
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
 
-#define MAX_ITERATION_RESULTS 60
-#define MAX_ITERATION_GT 360
+#define MAX_ITERATION_RESULTS 10
+#define MAX_ITERATION_GT 200
 #define MAX_ITERATION_THETA 360
 #define MAX_SKIPS 10
 
-
-#define MAIN_DATASETS_H_H
 
 //object specs
 #define object_width 30

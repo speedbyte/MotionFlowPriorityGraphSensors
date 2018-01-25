@@ -8,19 +8,15 @@ SETUP="Standard_test"
 if [ $# == 1 ]; then	#set project
 PROJECT=$1
 SCP="Normal"
-RESULT_PATH="image_02"
 elif [ $# == 2 ]; then	#set project and SCP
 PROJECT=$1
 SCP=$2
-RESULT_PATH="image_02"
 elif [ $# == 3 ]; then	#set project and SCP and result directory
 PROJECT=$1
 SCP=$2
-RESULT_PATH=$3
 else
 PROJECT="Movement"
-SCP="Normal"
-RESULT_PATH="image_02"
+SCP="two"
 fi
 
 echo $SETUP
@@ -60,7 +56,11 @@ if [[ simserver_pid -gt 0 ]]; then echo "PID is running"; else echo "PID is not 
 cd $SOURCE_DIR/VIRES/VTD.2.0/Runtime/Tools/ScpGenerator/
 ./scpGenerator -p $PORT_SCP -i '<SimCtrl><Apply/></SimCtrl>'
 sleep 5
+#./scpGenerator -p $PORT_SCP -i "'<SimCtrl><Project name="Movement" path="${SOURCE_DIR}/VIRES/VTD.2.0/Data/Projects/Current" /></SimCtrl>'"
+#sleep 1
 ./scpGenerator -p $PORT_SCP -c $SOURCE_DIR/VIRES/SCP/$SCP/Run.scp
+#sleep 1
+#./scpGenerator -p $PORT_SCP -i "'<SimCtrl><UnloadSensors /><LoadScenario filename="${SOURCE_DIR}/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/two.xml"/><Start mode="operation"/></SimCtrl>'"
 sleep 10
 
 function call_cpp()
