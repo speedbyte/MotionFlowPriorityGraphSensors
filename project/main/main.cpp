@@ -160,12 +160,14 @@ int main ( int argc, char *argv[]) {
         if ( cpp_dataset.execute ) {
 
             Dataset cpp(frame_size, CPP_DATASET_PATH, "data/stereo_flow/", "results/");
-            GroundTruthFlow gt(cpp);
+            GroundTruthFlow gt_flow(cpp);
+            GroundTruthScene gt_scene(cpp);
             AlgorithmFlow fback(cpp);
             AlgorithmFlow lkanade(cpp);
 
             if ( cpp_dataset.gt ) {
-                gt.generate_gt_image_and_gt_flow();
+                gt_scene.generate_gt_scene();
+                gt_flow.generate_gt_flow();
             }
 
             if ( cpp_dataset.fb ) {

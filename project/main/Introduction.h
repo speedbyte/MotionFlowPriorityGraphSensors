@@ -3,6 +3,12 @@
 
 
 
+ flowvector means a pair of coordinates plus flow at that coordinate.
+ On the pixel 200,100 if the flow is 5,4 it means that the pixel it came from was 195,96.
+ So, prev_pts = 195,96 and next_pts is 200,100
+ positive means that the last pixel was smaller.
+ negative means that the last pixel was larger.
+
  calculating the relative Ground Truth for the Kitti devkit and store it in a png file
  Displacements between -512 to 512 are allowed. Smaller than -512 and greater than 512 will result in an
  overflow. The final value to be stored in U16 in the form of val*2pow6+32768.
@@ -11,9 +17,6 @@
  The flow matrix is such, that it tells you that I came from here. Hence the first frame has no meaning.
 
  Image starts from 0. The flow starts from 1 because flow 1 is actually image1 - image0.
- On the pixel 200,100 if the flow is 5,4 it means that the pixel it came from was 195,96.
- positive means that the last pixel was smaller.
- negative means that the last pixel was larger.
 
  I will only use carterisan coordinate system and not camera coordinate system.
  Camera coordinate means . row, col which is equivalent to y,x ( height, width )

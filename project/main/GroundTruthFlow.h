@@ -19,6 +19,31 @@
  */
 
 
+class GroundTruthScene {
+
+private:
+
+    Dataset m_dataset;
+
+public:
+
+    GroundTruthScene(Dataset dataset);
+
+
+    void generate_gt_scene();
+
+    ~GroundTruthScene(){
+        std::cout << "killing previous GroundTruthScene object\n" ;
+    }
+
+
+private:
+
+    void prepare_directories_gt_scene();
+
+};
+
+
 class GroundTruthFlow : Framework::ViresInterface, public PlotFlow {
 
 private:
@@ -31,11 +56,7 @@ public:
 
     void generate_gt_image_and_gt_flow_vires();
 
-    void generate_gt_image_and_gt_flow();
-
-    void extrapolate_objects(cv::FileStorage fs, cv::Point2i pt, ushort width,
-                                           ushort height, int xValue, int yValue, std::string image_path );
-
+    void generate_gt_flow();
 
     void plot(std::string resultsordner);
 
@@ -60,7 +81,7 @@ public:
 
 private:
 
-    void prepare_directories();
+    void prepare_directories_gt_flow();
 
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
