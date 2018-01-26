@@ -14,7 +14,8 @@
 
 #include "GridLayout.h"
 #include "datasets.h"
-#include "GroundTruth.h"
+#include "GroundTruthFlow.h"
+#include "AlgorithmFlow.h"
 
 
 //extern bool eval(std::string result_sha, Mail *mail);
@@ -152,21 +153,25 @@ int main ( int argc, char *argv[]) {
 
 /* CPP_DATASET ------------- */
 
+    cv::Size_<unsigned> frame_size(1242, 375);
+
     {
+
         if ( cpp_dataset.execute ) {
 
-            GroundTruth gt(CPP_DATASET_PATH, "data/stereo_flow/", "results/");
-            gt.setFrameSize(1242,375);
+            Dataset cpp(frame_size, CPP_DATASET_PATH, "data/stereo_flow/", "results/");
+            GroundTruthFlow gt(cpp);
+            AlgorithmFlow algo(cpp);
 
             if ( cpp_dataset.gt ) {
                 gt.generate_gt_image_and_gt_flow();
             }
 
             if ( cpp_dataset.fb ) {
-                gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+                algo.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
             }
             if ( cpp_dataset.lk ) {
-                gt.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+                algo.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
             }
 
             if ( cpp_dataset.plot ) {
@@ -181,19 +186,22 @@ int main ( int argc, char *argv[]) {
 
     {
         if ( matlab_dataset.execute ) {
-            GroundTruth gt(MATLAB_DATASET_PATH, "data/stereo_flow/", "results/");
+
+            Dataset matlab(frame_size, MATLAB_DATASET_PATH, "data/stereo_flow/", "results/");
+            GroundTruthFlow gt(matlab);
+            AlgorithmFlow algo(matlab);
             // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
             // calculated here.
 
-            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
 
-            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_bg_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_bg_noise);
 
-            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_fg_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_fg_noise);
 
-            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_bg_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_bg_noise);
 
-            gt.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_fg_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_fg_noise);
         }
     }
 
@@ -201,11 +209,14 @@ int main ( int argc, char *argv[]) {
 
     {
         if ( kitti_flow_dataset.execute ) {
-            GroundTruth gt(KITTI_FLOW_DATASET_PATH, "data/stereo_flow/", "results/");
+
+            Dataset kitti_flow(frame_size, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/", "results/");
+            GroundTruthFlow gt(kitti_flow);
+            AlgorithmFlow algo(kitti_flow);
             // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
             // calculated here.
 
-            gt.calculate_flow(KITTI_FLOW_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+            algo.calculate_flow(KITTI_FLOW_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
 
             make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
             make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,
@@ -219,19 +230,22 @@ int main ( int argc, char *argv[]) {
     {
         if (vires_dataset.execute ) {
 
-            GroundTruth gt(VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
-            gt.setFrameSize(800,600);
+            cv::Size_<unsigned> frame_size_vires(1242, 375);
+
+            Dataset vires(frame_size, VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
+            GroundTruthFlow gt(vires);
+            AlgorithmFlow algo(vires);
 
             if ( vires_dataset.gt ) {
                 gt.generate_gt_image_and_gt_flow_vires();
             }
 
             if ( vires_dataset.lk ) {
-                gt.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+                algo.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
             }
 
             if ( vires_dataset.fb ) {
-                gt.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+                algo.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
             }
 
             if ( vires_dataset.plot ) {

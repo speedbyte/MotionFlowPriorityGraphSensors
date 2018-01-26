@@ -19,8 +19,7 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 
 set(SOURCE_FILES
         KittiSubmitInterface.cpp ObjectTrajectory.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
-        video_capture.cpp GroundTruth.cpp
-        kbhit.cpp )
+        video_capture.cpp GroundTruthFlow.cpp  AlgorithmFlow.cpp kbhit.cpp Dataset.cpp )
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries( main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png viresrdb kitti)

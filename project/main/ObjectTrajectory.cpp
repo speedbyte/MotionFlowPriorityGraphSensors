@@ -16,6 +16,7 @@
 #include "datasets.h"
 
 
+
 ObjectTrajectory::ObjectTrajectory() {
 
 };
@@ -131,3 +132,30 @@ std::vector<cv::Point2i> ObjectTrajectory::getTrajectoryPoints() {
     return m_trajectory_1;
 }
 
+cv::Mat ObjectShape::createRectangle() {
+
+    cv::Mat rectangle;
+
+    rectangle.create(object_height, object_width, CV_8UC3);
+
+    uchar r = 0;
+    uchar b = 0;
+
+    r = 0;
+    b = 0;
+    for (int k = 0; k < (object_height - 1); k++) {
+        for (int j = 0; j < (object_width -1 ); j++) {
+            rectangle.at<cv::Vec3b>(k, j)[0] = b;
+            rectangle.at<cv::Vec3b>(k, j)[1] = 0;
+            rectangle.at<cv::Vec3b>(k, j)[2] = r;
+            r = r + (uchar)2;
+            b = b + (uchar)2;
+            if (r > 254)
+                r = 130;
+        }
+        if (b > 254)
+            b = 46;
+    }
+    
+    return rectangle;
+}

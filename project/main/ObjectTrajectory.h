@@ -6,6 +6,16 @@
 #define MAIN_OBJECTTRAJECTORY_H
 
 
+class ObjectShape {
+public:
+    cv::Mat createRectangle();
+};
+
+
+class ObjectFlow {
+
+};
+
 class ObjectTrajectory {
 
 private:
@@ -33,4 +43,17 @@ public:
 
 };
 
+class ObjectCollision {
+
+};
+
+class PlotCollision {
+
+};
+
+class PlotTrajectory {
+
+};
+
 #endif //MAIN_OBJECTTRAJECTORY_H
+

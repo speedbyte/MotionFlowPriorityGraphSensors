@@ -2,11 +2,12 @@
 // Created by veikas on 11.01.18.
 //
 
-#ifndef MAIN_GROUNDTRUTH_H
-#define MAIN_GROUNDTRUTH_H
+#ifndef MAIN_GROUNDTRUTH_FLOW_H
+#define MAIN_GROUNDTRUTH_FLOW_H
 
 
 #include <vires/vires_common.h>
+#include "Dataset.h"
 
 /**
  * This class
@@ -16,24 +17,16 @@
  *  produces flow images
  */
 
-class GroundTruth : Framework::ViresInterface {
+
+class GroundTruthFlow : Framework::ViresInterface {
 
 private:
 
-    std::string m_dataset_path;
-
-    boost::filesystem::path  m_base_directory_path_input_in;
-    boost::filesystem::path m_base_directory_path_result_out;
-
-    cv::Size_<unsigned> m_frame_size;
-
-    cv::Mat m_pedesterianImage;
+    Dataset m_dataset;
 
 public:
 
-    GroundTruth(std::string dataset_path, std::string unterordner, std::string resultordner);
-
-    void setFrameSize(const unsigned &width, const unsigned &height);
+    GroundTruthFlow(Dataset dataset);
 
     void generate_gt_image_and_gt_flow_vires();
 
@@ -42,8 +35,6 @@ public:
     void extrapolate_objects(cv::FileStorage fs, cv::Point2i pt, ushort width,
                                            ushort height, int xValue, int yValue, std::string image_path );
 
-    void calculate_flow(const boost::filesystem::path dataset_path, const std::string image_input_sha, ALGO_TYPES algo,
-    FRAME_TYPES frame_types, NOISE_TYPES noise);
 
     void plot(std::string resultsordner);
 
@@ -61,8 +52,8 @@ public:
     void parseEntry( RDB_OBJECT_CFG_t *data, const double & simTime, const unsigned int & simFrame, const
     unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
 
-    ~GroundTruth(){
-        std::cout << "killing previous GroundTruth object\n" ;
+    ~GroundTruthFlow(){
+        std::cout << "killing previous GroundTruthFlow object\n" ;
     }
 
 
@@ -70,11 +61,10 @@ private:
 
     void prepare_gt_data_and_gt_flow_directories();
 
-    void prepare_result_directories(std::string resultordner);
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
             &l_pixelmovement);
 };
 
 
-#endif //MAIN_GROUNDTRUTH_H
+#endif //MAIN_GROUNDTRUTH_FLOW_H
