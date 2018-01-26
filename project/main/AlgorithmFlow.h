@@ -9,8 +9,9 @@
 #include <iostream>
 #include <boost/filesystem/path.hpp>
 #include "Dataset.h"
+#include "PlotFlow.h"
 
-class AlgorithmFlow  {
+class AlgorithmFlow: public PlotFlow  {
 
     Dataset m_dataset;
 
@@ -22,6 +23,8 @@ public:
 
     void calculate_flow(const boost::filesystem::path dataset_path, const std::string image_input_sha, ALGO_TYPES algo,
                         FRAME_TYPES frame_types, NOISE_TYPES noise);
+
+    void plot(std::string resultordner);
 
 };
 

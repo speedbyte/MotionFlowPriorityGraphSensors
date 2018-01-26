@@ -16,4 +16,13 @@ int main(int argc, char *argv[]) {
     std::cout << std::endl;
     c.printC();
 
+    //std::cout << b.getA();
+
+    Rectangle rect;
+    Object obj1 = Object(rect);
+
+    std::cout << obj1.getShape() << std::endl;
+
+
+
 }

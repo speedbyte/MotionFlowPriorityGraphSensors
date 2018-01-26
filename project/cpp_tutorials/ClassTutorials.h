@@ -7,7 +7,53 @@
 
 #include <iostream>
 
+
+
+
+class Shape {
+
+protected:
+    int shape = 10;
+public:
+
+    int get() {
+        return shape;
+    }
+    virtual void process() {
+        shape = 30;
+    }
+};
+
+class Rectangle : public Shape {
+
+public:
+    void process() {
+        shape = 40;
+    }
+
+};
+
+
+class Object : Shape {
+
+    Shape &m_sh;
+public:
+    Object(Shape &sh) : m_sh ( sh) {
+        //m_sh = sh;
+        m_sh.process();
+    }
+
+    int getShape() {
+        return m_sh.get();
+    }
+
+};
+
+
+
 class Base {
+protected:
+    int a;
 public:
     void printInherit() {
         std::cout << "in base inherit\n";
@@ -15,19 +61,25 @@ public:
     }
 
     // Virtual functions must be implemented or set to 0
-    virtual void printDerived() {
-        std::cout << "virtual base to be printed\n";
+    virtual void printDerived()  {
+        a  = 10;
+        std::cout << "virtual base to be printed " << a << std::endl;
     }
 
     void printA() {
         std::cout << "in Base printA\n";
         printDerived();
     }
+
+    int getA() {
+        return a;
+    }
 };
 
-class Derived: Base {
-    virtual void printDerived() {
-        std::cout << "virtual derived to be printed\n";
+class Derived: public Base {
+    virtual void printDerived() override {
+        a = 20;
+        std::cout << "virtual derived to be printed " << a << std::endl;
     }
 
 public:
@@ -43,7 +95,7 @@ public:
 };
 
 class Derived2: Derived {
-    void printDerived() {
+    void printDerived() override {
         std::cout << "virtual derived2 to be printed\n";
     }
 

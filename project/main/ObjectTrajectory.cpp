@@ -17,10 +17,6 @@
 
 
 
-ObjectTrajectory::ObjectTrajectory() {
-
-};
-
 void ObjectTrajectory::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts,
                                  const std::vector<uchar> status) {
 
@@ -108,7 +104,7 @@ void ObjectTrajectory::store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_p
     fs << "]";
 }
 
-std::vector<cv::Point2i> ObjectTrajectory::create_trajectory(cv::Size m_frame_size) {
+void Achterbahn::process(cv::Size frame_size) {
     std::vector<ushort> theta;
     for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
         theta.push_back(frame_count);
@@ -117,26 +113,20 @@ std::vector<cv::Point2i> ObjectTrajectory::create_trajectory(cv::Size m_frame_si
     cv::Point2i l_pixel_position;
     for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
 
-        l_pixel_position.x = (static_cast<ushort>((m_frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /
+        l_pixel_position.x = (static_cast<ushort>((frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /
                                                                             (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2)))));
 
-        l_pixel_position.y = (static_cast<ushort>((m_frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
+        l_pixel_position.y = (static_cast<ushort>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
                                                                                    sin(theta[i] * CV_PI / 180.0)) / (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2)))));
 
-        m_trajectory_1.push_back(l_pixel_position);
+        m_trajectory.push_back(l_pixel_position);
     }
-    return m_trajectory_1;
 }
 
-std::vector<cv::Point2i> ObjectTrajectory::getTrajectoryPoints() {
-    return m_trajectory_1;
-}
+void Rectangle::process() {
 
-cv::Mat ObjectShape::createRectangle() {
 
-    cv::Mat rectangle;
-
-    rectangle.create(object_height, object_width, CV_8UC3);
+    m_shape.create(object_height, object_width, CV_8UC3);
 
     uchar r = 0;
     uchar b = 0;
@@ -145,9 +135,9 @@ cv::Mat ObjectShape::createRectangle() {
     b = 0;
     for (int k = 0; k < (object_height - 1); k++) {
         for (int j = 0; j < (object_width -1 ); j++) {
-            rectangle.at<cv::Vec3b>(k, j)[0] = b;
-            rectangle.at<cv::Vec3b>(k, j)[1] = 0;
-            rectangle.at<cv::Vec3b>(k, j)[2] = r;
+            m_shape.at<cv::Vec3b>(k, j)[0] = b;
+            m_shape.at<cv::Vec3b>(k, j)[1] = 0;
+            m_shape.at<cv::Vec3b>(k, j)[2] = r;
             r = r + (uchar)2;
             b = b + (uchar)2;
             if (r > 254)
@@ -156,6 +146,49 @@ cv::Mat ObjectShape::createRectangle() {
         if (b > 254)
             b = 46;
     }
-    
-    return rectangle;
+
+}
+
+/**
+ *
+ * @param pt - start from pt
+ * @param width - extrapolate pt.y + width
+ * @param height - extrapolate pt.x + height
+ * @param xValue - what x value?
+ * @param yValue - what y value?
+ * @param image_path - where should the extrapolated image be stored?
+ */
+
+void ObjectFlow::extrapolate_flowpoints( cv::FileStorage fs, cv::Point2i pt, ushort width, ushort height, int xValue,
+                                         int yValue, std::string image_path) {
+
+    cv::Mat tempMatrix;
+    //ObjectTrajectory trajectory;
+    tempMatrix.create(m_dataset.getFrameSize(),CV_32FC3);
+    assert(tempMatrix.channels() == 3);
+
+    tempMatrix = cv::Scalar::all(0);
+    cv::Mat roi;
+    roi = tempMatrix.
+            colRange(pt.x, (pt.x + width)).
+            rowRange(pt.y, (pt.y + height));
+    //bulk storage
+    roi = cv::Scalar(xValue, yValue, 1.0f);
+
+    // TODO take all the non 0 data in a float matrix and then call FlowImage Constructor with additional data
+    // parameter
+    //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
+    FlowImage F_gt_write(m_dataset.getFrameSize().width, m_dataset.getFrameSize().height);
+    for (int32_t row=0; row<m_dataset.getFrameSize().height; row++) { // rows
+        for (int32_t column=0; column<m_dataset.getFrameSize().width; column++) {  // cols
+            if (tempMatrix.at<cv::Vec3f>(row,column)[2] > 0.5 ) {
+                F_gt_write.setFlowU(column,row,yValue);
+                F_gt_write.setFlowV(column,row,xValue);
+                F_gt_write.setValid(column,row,1.0f);
+                //trajectory.store_in_yaml(fs, cv::Point2i(row, column), cv::Point2i(xValue, yValue) );
+            }
+        }
+    }
+    F_gt_write.write(image_path);
+
 }

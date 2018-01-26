@@ -26,10 +26,10 @@ public:
     Dataset(cv::Size_<unsigned> frame_size, std::string dataset_path, std::string unterordner, std::string
     resultordner);
 
-    const boost::filesystem::path getBasePath();
-    const boost::filesystem::path getInputPath();
-    const boost::filesystem::path getResultPath();
-    const cv::Size_<unsigned> getFrameSize();
+    const boost::filesystem::path getBasePath() const ;
+    const boost::filesystem::path getInputPath() const ;
+    const boost::filesystem::path getResultPath() const ;
+    const cv::Size_<unsigned> getFrameSize() const ;
 
 };
 

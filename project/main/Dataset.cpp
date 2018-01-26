@@ -22,19 +22,19 @@ resultordner) {
 
 }
 
-const cv::Size_<unsigned> Dataset::getFrameSize() {
+const cv::Size_<unsigned> Dataset::getFrameSize() const {
     return m_frame_size;
 }
 
-const boost::filesystem::path Dataset::getBasePath() {
+const boost::filesystem::path Dataset::getBasePath() const {
     return m_dataset_path;
 }
 
-const boost::filesystem::path Dataset::getInputPath() {
+const boost::filesystem::path Dataset::getInputPath() const {
     return m_base_directory_path_input_in;
 }
 
-const boost::filesystem::path Dataset::getResultPath() {
+const boost::filesystem::path Dataset::getResultPath() const {
     return m_base_directory_path_result_out;
 }
 

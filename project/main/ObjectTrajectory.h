@@ -6,27 +6,44 @@
 #define MAIN_OBJECTTRAJECTORY_H
 
 
+#include "Dataset.h"
+
 class ObjectShape {
+
+protected:
+
+    cv::Mat m_shape;
+
 public:
-    cv::Mat createRectangle();
+
+    virtual void process() {};
+
+    cv::Mat get() {
+        return m_shape;
+    }
+
 };
 
+class Rectangle :  public ObjectShape {
 
-class ObjectFlow {
+public:
+
+    void process() override ;
 
 };
+
 
 class ObjectTrajectory {
 
 private:
     std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix_result;
 
-    std::vector<cv::Point2i> m_trajectory_1;
-
+protected:
+    std::vector<cv::Point2i> m_trajectory;
 
 public:
 
-    ObjectTrajectory();
+    ObjectTrajectory() {};
 
     void storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts, const
     std::vector<uchar> status);
@@ -37,11 +54,62 @@ public:
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
     &l_pixelmovement );
 
-    std::vector<cv::Point2i> create_trajectory(cv::Size m_frame_size);
+    virtual void process(cv::Size framesize)  {};
 
-    std::vector<cv::Point2i> getTrajectoryPoints(void);
+    std::vector<cv::Point2i> get() {
+        return m_trajectory;
+    }
 
 };
+
+class Achterbahn : public ObjectTrajectory {
+
+public:
+
+    Achterbahn() {};
+
+    void process(cv::Size framesize) override ;
+
+};
+
+class ObjectProperties {
+
+private:
+    ObjectShape &obj_shape;
+    ObjectTrajectory &obj_trajectory;
+
+public:
+
+    ObjectProperties( Dataset dataset, ObjectShape &shape, ObjectTrajectory &trajectory) : obj_shape ( shape ),
+    obj_trajectory (
+            trajectory) {
+        shape.process();
+        trajectory.process(dataset.getFrameSize());
+    }
+
+    cv::Mat getShape() {
+        return obj_shape.get();
+    }
+
+    std::vector<cv::Point2i> getTrajectoryPoints() {
+        return obj_trajectory.get();
+    }
+
+};
+
+
+class ObjectFlow {
+
+private:
+    Dataset m_dataset;
+
+public:
+    ObjectFlow(Dataset dataset) : m_dataset(dataset) {}
+
+    void extrapolate_flowpoints( cv::FileStorage fs, cv::Point2i pt, ushort width, ushort height, int xValue, int
+    yValue, std::string image_path);
+};
+
 
 class ObjectCollision {
 

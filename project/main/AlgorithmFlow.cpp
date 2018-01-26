@@ -375,3 +375,9 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path, c
     }
 
 }
+
+void AlgorithmFlow::plot(std::string resultordner) {
+
+    PlotFlow::plot(m_dataset, resultordner);
+
+}

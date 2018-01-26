@@ -8,6 +8,7 @@
 
 #include <vires/vires_common.h>
 #include "Dataset.h"
+#include "PlotFlow.h"
 
 /**
  * This class
@@ -18,7 +19,7 @@
  */
 
 
-class GroundTruthFlow : Framework::ViresInterface {
+class GroundTruthFlow : Framework::ViresInterface, public PlotFlow {
 
 private:
 
@@ -59,7 +60,7 @@ public:
 
 private:
 
-    void prepare_gt_data_and_gt_flow_directories();
+    void prepare_directories();
 
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i

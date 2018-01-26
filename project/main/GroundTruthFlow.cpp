@@ -43,7 +43,7 @@ GroundTruthFlow::GroundTruthFlow(Dataset dataset) {
 }
 
 
-void GroundTruthFlow::prepare_gt_data_and_gt_flow_directories() {
+void GroundTruthFlow::prepare_directories() {
 
     char char_dir_append[20];
 
@@ -71,7 +71,18 @@ void GroundTruthFlow::prepare_gt_data_and_gt_flow_directories() {
 
 void GroundTruthFlow::generate_gt_image_and_gt_flow(void) {
 
-    prepare_gt_data_and_gt_flow_directories();
+    prepare_directories();
+
+    /*
+     * First create an object with an shape
+     * Then define the object trajectory
+     * Then copy the object shape on the object trajectory points
+     * Then store the image in the ground truth image folder
+     *
+     * Then extrapolate the object trajectory with the above shape
+     *
+     * Then store the flow information in the flow folder
+     */
 
     cv::Mat tempGroundTruthImage;
     tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_8UC3);
@@ -96,10 +107,15 @@ void GroundTruthFlow::generate_gt_image_and_gt_flow(void) {
 
     current_index = start;
 
-    std::vector<cv::Point2i> m_trajectory_1;
-    ObjectTrajectory trajectory;
-    m_trajectory_1 = trajectory.create_trajectory(m_dataset.getFrameSize());
-    m_trajectory_1 = trajectory.getTrajectoryPoints();
+
+
+    Rectangle rectangle;
+    Achterbahn achterbahn;
+
+    ObjectProperties shape1 = ObjectProperties(m_dataset, rectangle, achterbahn);
+
+    std::vector<cv::Point2i> trajectory_points = shape1.getTrajectoryPoints();
+    cv::Mat shape = shape1.getShape();
 
     for (ushort frame_count=0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
@@ -109,18 +125,16 @@ void GroundTruthFlow::generate_gt_image_and_gt_flow(void) {
         tempGroundTruthImage = cv::Scalar::all(0);
 
         //draw new ground truth image.
-        cv::Mat rectangle;
-        ObjectShape shape;
-        rectangle = shape.createRectangle();
 
-        rectangle.copyTo(tempGroundTruthImage(
-                cv::Rect(m_trajectory_1.at(current_index).x, m_trajectory_1.at(current_index).y, object_width,
+        shape.copyTo(tempGroundTruthImage(
+                cv::Rect(trajectory_points.at(current_index).x, trajectory_points.at
+                                 (current_index).y, object_width,
                          object_height)));
         toc = steady_clock::now();
         time_map["generate"] = duration_cast<milliseconds>(toc - tic).count();
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
         current_index++;
-        if ((current_index) >= m_trajectory_1.size() ) {
+        if ((current_index) >= trajectory_points.size() ) {
             current_index = 0;
         }
     }
@@ -134,15 +148,15 @@ void GroundTruthFlow::generate_gt_image_and_gt_flow(void) {
         // The first frame is the reference frame, hence it is skipped
         if ( frame_count > 0 ) {
             //If we are at the end of the path vector, we need to reset our iterators
-            if ((current_index) >= m_trajectory_1.size()) {
+            if ((current_index) >= trajectory_points.size()) {
                 current_index = 0;
-                l_pixel_movement.x = m_trajectory_1.at(current_index).x - m_trajectory_1.at(m_trajectory_1.size() - 1).x;
-                l_pixel_movement.y = m_trajectory_1.at(current_index).y - m_trajectory_1.at(m_trajectory_1.size() - 1).y;
-                l_pixel_position = m_trajectory_1.at(current_index);
+                l_pixel_movement.x = trajectory_points.at(current_index).x - trajectory_points.at(trajectory_points.size() - 1).x;
+                l_pixel_movement.y = trajectory_points.at(current_index).y - trajectory_points.at(trajectory_points.size() - 1).y;
+                l_pixel_position = trajectory_points.at(current_index);
             } else {
-                l_pixel_movement.x = m_trajectory_1.at(current_index).x - m_trajectory_1.at(current_index - (ushort) 1).x;
-                l_pixel_movement.y = m_trajectory_1.at(current_index).y - m_trajectory_1.at(current_index - (ushort) 1).y;
-                l_pixel_position = m_trajectory_1.at(current_index);
+                l_pixel_movement.x = trajectory_points.at(current_index).x - trajectory_points.at(current_index - (ushort) 1).x;
+                l_pixel_movement.y = trajectory_points.at(current_index).y - trajectory_points.at(current_index - (ushort) 1).y;
+                l_pixel_position = trajectory_points.at(current_index);
             }
 
             printf("%u, %u , %u, %u, %u, %d, %d\n", frame_count, start, current_index, l_pixel_position.x, l_pixel_position.y,
@@ -178,7 +192,8 @@ void GroundTruthFlow::generate_gt_image_and_gt_flow(void) {
             sprintf(file_name_image, "000%03d_10.png", frame_count);
             std::string temp_gt_flow_path = m_dataset.getInputPath().string() + "/" + folder_name_flow + "/"
                                          + file_name_image;
-            extrapolate_objects( fs, cv::Point2i(m_flow_matrix_gt_single_points.at(frame_count).first.x,
+            ObjectFlow point(m_dataset);
+            point.extrapolate_flowpoints( fs, cv::Point2i(m_flow_matrix_gt_single_points.at(frame_count).first.x,
                                               m_flow_matrix_gt_single_points.at
                                          (frame_count).first.y),
                                  object_width, object_height, temp_flow_x, temp_flow_y, temp_gt_flow_path );
@@ -194,54 +209,10 @@ void GroundTruthFlow::generate_gt_image_and_gt_flow(void) {
 
 }
 
-/**
- *
- * @param pt - start from pt
- * @param width - extrapolate pt.y + width
- * @param height - extrapolate pt.x + height
- * @param xValue - what x value?
- * @param yValue - what y value?
- * @param image_path - where should the extrapolated image be stored?
- */
-
-void GroundTruthFlow::extrapolate_objects( cv::FileStorage fs, cv::Point2i pt, ushort width, ushort height, int xValue, int
-yValue, std::string image_path) {
-
-    cv::Mat tempMatrix;
-    ObjectTrajectory trajectory;
-    tempMatrix.create(m_dataset.getFrameSize(),CV_32FC3);
-    assert(tempMatrix.channels() == 3);
-
-    tempMatrix = cv::Scalar::all(0);
-    cv::Mat roi;
-    roi = tempMatrix.
-            colRange(pt.x, (pt.x + width)).
-            rowRange(pt.y, (pt.y + height));
-    //bulk storage
-    roi = cv::Scalar(xValue, yValue, 1.0f);
-
-    // TODO take all the non 0 data in a float matrix and then call FlowImage Constructor with additional data
-    // parameter
-    //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
-    FlowImage F_gt_write(m_dataset.getFrameSize().width, m_dataset.getFrameSize().height);
-    for (int32_t row=0; row<m_dataset.getFrameSize().height; row++) { // rows
-        for (int32_t column=0; column<m_dataset.getFrameSize().width; column++) {  // cols
-            if (tempMatrix.at<cv::Vec3f>(row,column)[2] > 0.5 ) {
-                F_gt_write.setFlowU(column,row,yValue);
-                F_gt_write.setFlowV(column,row,xValue);
-                F_gt_write.setValid(column,row,1.0f);
-                trajectory.store_in_yaml(fs, cv::Point2i(row, column), cv::Point2i(xValue, yValue) );
-            }
-        }
-    }
-    F_gt_write.write(image_path);
-
-}
-
 
 void GroundTruthFlow::generate_gt_image_and_gt_flow_vires() {
 
-    prepare_gt_data_and_gt_flow_directories();
+    prepare_directories();
 
     char command[1024];
 
@@ -329,50 +300,6 @@ void GroundTruthFlow::generate_gt_image_and_gt_flow_vires() {
     sprintf(command,"cd %s; %s",(m_dataset.getBasePath().string() + std::string("../../")).c_str(),"bash vtdStop.sh");
     std::cout << command << std::endl;
     system(command);
-}
-
-void GroundTruthFlow::plot(std::string resultsordner) {
-
-    char folder_name_flow[50], folder_name_plot[50];
-    char file_name_image[50];
-    cv::Mat showErrorImage;
-
-    for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ){
-
-        sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
-        sprintf(folder_name_plot, "plots_%02d", frame_skip);
-        cv::namedWindow(folder_name_flow, CV_WINDOW_AUTOSIZE);
-
-        for (ushort frame_count=1; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
-            if ( frame_count%frame_skip != 0 ) {
-                continue;
-            }
-            sprintf(file_name_image, "000%03d_10.png", frame_count);
-            std::string temp_gt_flow_path = m_dataset.getInputPath().string() + "/" + folder_name_flow + "/"
-                                         + file_name_image;
-            std::string temp_result_flow_path = m_dataset.getResultPath().string() + "/" + resultsordner + "/" +
-                    folder_name_flow + "/"
-                                         + file_name_image;
-            std::string temp_plot_flow_path = m_dataset.getResultPath().string() + "/" + resultsordner + "/" +
-                                                folder_name_plot + "/"
-                                                + file_name_image;
-            FlowImage gt_flow_read(temp_gt_flow_path);
-            FlowImage result_flow_read(temp_result_flow_path);
-
-            png::image<png::rgb_pixel> errorImage(m_dataset.getFrameSize().width, m_dataset.getFrameSize().height);
-
-            // all black when the flow is identical. logcolor = false
-            // all blue when the flow is identical. logcolor = true
-            errorImage = gt_flow_read.errorImage(result_flow_read, result_flow_read, true);
-            errorImage.write(temp_plot_flow_path);
-
-            showErrorImage = cv::imread(temp_plot_flow_path, CV_LOAD_IMAGE_ANYCOLOR);
-            cv::imshow(folder_name_flow, showErrorImage);
-            cv::waitKey(1000);
-        }
-
-        cv::destroyAllWindows();
-    }
 }
 
 
@@ -472,5 +399,11 @@ unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemI
         fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize /( image_info_
                                                                                            .width*image_info_.height));
     }
+}
+
+void GroundTruthFlow::plot(std::string resultsordner) {
+
+    PlotFlow::plot(m_dataset, resultsordner);
+
 }
 

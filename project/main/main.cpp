@@ -92,11 +92,11 @@ int main ( int argc, char *argv[]) {
                 cpp_dataset.execute = true;
         std::strcmp(pt.get<std::string>("CPP_DATASET.GT").c_str(), "0") == 0 ? cpp_dataset.gt = false :
         cpp_dataset.gt = true;
-        std::strcmp(pt.get<std::string>("CPP_DATASET.FB").c_str(), "0") == 0 ? cpp_dataset.gt = false :
+        std::strcmp(pt.get<std::string>("CPP_DATASET.FB").c_str(), "0") == 0 ? cpp_dataset.fb = false :
                 cpp_dataset.fb = true;
         std::strcmp(pt.get<std::string>("CPP_DATASET.LK").c_str(), "0") == 0 ? cpp_dataset.lk = false :
                 cpp_dataset.lk = true;
-        std::strcmp(pt.get<std::string>("VIRES_DATASET.PLOT").c_str(), "0") == 0 ? cpp_dataset.plot = false :
+        std::strcmp(pt.get<std::string>("CPP_DATASET.PLOT").c_str(), "0") == 0 ? cpp_dataset.plot = false :
                 cpp_dataset.plot = true;
 
         std::strcmp(pt.get<std::string>("VIRES_DATASET.EXECUTE").c_str(), "0") == 0 ? vires_dataset.execute = false :
@@ -161,22 +161,24 @@ int main ( int argc, char *argv[]) {
 
             Dataset cpp(frame_size, CPP_DATASET_PATH, "data/stereo_flow/", "results/");
             GroundTruthFlow gt(cpp);
-            AlgorithmFlow algo(cpp);
+            AlgorithmFlow fback(cpp);
+            AlgorithmFlow lkanade(cpp);
 
             if ( cpp_dataset.gt ) {
                 gt.generate_gt_image_and_gt_flow();
             }
 
             if ( cpp_dataset.fb ) {
-                algo.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+                fback.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
             }
+
             if ( cpp_dataset.lk ) {
-                algo.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+                lkanade.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
             }
 
             if ( cpp_dataset.plot ) {
-                gt.plot(std::string("results_FB_no_noise"));
-                gt.plot(std::string("results_LK_no_noise"));
+                fback.plot(std::string("results_FB_no_noise"));
+                lkanade.plot(std::string("results_LK_no_noise"));
             }
 
         }
@@ -234,23 +236,24 @@ int main ( int argc, char *argv[]) {
 
             Dataset vires(frame_size, VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
             GroundTruthFlow gt(vires);
-            AlgorithmFlow algo(vires);
+            AlgorithmFlow fback(vires);
+            AlgorithmFlow lkanade(vires);
 
             if ( vires_dataset.gt ) {
                 gt.generate_gt_image_and_gt_flow_vires();
             }
 
             if ( vires_dataset.lk ) {
-                algo.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+                fback.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
             }
 
             if ( vires_dataset.fb ) {
-                algo.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+                lkanade.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
             }
 
             if ( vires_dataset.plot ) {
-                gt.plot(std::string("results_FB_no_noise"));
-                //gt.plot(std::string("results_LK_no_noise"));
+                fback.plot(std::string("results_FB_no_noise"));
+                lkanade.plot(std::string("results_LK_no_noise"));
             }
 
 
