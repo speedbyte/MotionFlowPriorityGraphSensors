@@ -1,6 +1,6 @@
-dummy_libs-install/
-dummy_datasets/
-
+libs-install/
+datasets/
+libs/OpenGL/
 VIRES/VTD.2.0/Doc/
 VIRES/VTD.2.0/Runtime/
 VIRES/VTD.2.0/Data/Distros/

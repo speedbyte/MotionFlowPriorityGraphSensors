@@ -102,12 +102,21 @@ class ObjectFlow {
 
 private:
     Dataset m_dataset;
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flowvector_with_coordinate_gt;
 
 public:
     ObjectFlow(Dataset dataset) : m_dataset(dataset) {}
 
     void extrapolate_flowpoints( cv::FileStorage fs, cv::Point2i pt, ushort width, ushort height, int xValue, int
     yValue, std::string image_path);
+
+    void generate_base_flow_vector(std::vector<cv::Point2i> trajectory_points, const ushort start);
+
+    void generate_extended_flow_vector(const int &max_skips);
+
+    std::vector<std::pair<cv::Point2i, cv::Point2i> >  get_base_flow_vector() {
+        return m_flowvector_with_coordinate_gt;
+    }
 };
 
 

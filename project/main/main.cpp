@@ -16,6 +16,8 @@
 #include "datasets.h"
 #include "GroundTruthFlow.h"
 #include "AlgorithmFlow.h"
+#include "ObjectTrajectory.h"
+#include "GroundTruthScene.h"
 
 
 //extern bool eval(std::string result_sha, Mail *mail);
@@ -160,16 +162,20 @@ int main ( int argc, char *argv[]) {
         if ( cpp_dataset.execute ) {
 
             Dataset cpp(frame_size, CPP_DATASET_PATH, "data/stereo_flow/", "results/");
-            GroundTruthFlow gt_flow(cpp);
-            GroundTruthScene gt_scene(cpp);
-            AlgorithmFlow fback(cpp);
-            AlgorithmFlow lkanade(cpp);
 
             if ( cpp_dataset.gt ) {
-                gt_scene.generate_gt_scene();
+
+                std::vector<Rectangle> rectangles;
+                std::vector<Achterbahn> trajectories;
+
+                GroundTruthSceneInternal gt_scene(cpp, rectangles, trajectories);
+
+                GroundTruthFlow gt_flow(cpp, gt_scene);
                 gt_flow.generate_gt_flow();
             }
 
+            AlgorithmFlow fback(cpp);
+            AlgorithmFlow lkanade(cpp);
             if ( cpp_dataset.fb ) {
                 fback.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
             }
@@ -192,7 +198,6 @@ int main ( int argc, char *argv[]) {
         if ( matlab_dataset.execute ) {
 
             Dataset matlab(frame_size, MATLAB_DATASET_PATH, "data/stereo_flow/", "results/");
-            GroundTruthFlow gt(matlab);
             AlgorithmFlow algo(matlab);
             // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
             // calculated here.
@@ -215,7 +220,6 @@ int main ( int argc, char *argv[]) {
         if ( kitti_flow_dataset.execute ) {
 
             Dataset kitti_flow(frame_size, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/", "results/");
-            GroundTruthFlow gt(kitti_flow);
             AlgorithmFlow algo(kitti_flow);
             // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
             // calculated here.
@@ -237,14 +241,17 @@ int main ( int argc, char *argv[]) {
             cv::Size_<unsigned> frame_size_vires(1242, 375);
 
             Dataset vires(frame_size, VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
-            GroundTruthFlow gt(vires);
-            AlgorithmFlow fback(vires);
-            AlgorithmFlow lkanade(vires);
+            GroundTruthSceneExternal gt_scene(vires);
+
+            GroundTruthFlow gt_flow(gt_scene);
 
             if ( vires_dataset.gt ) {
-                gt.generate_gt_image_and_gt_flow_vires();
+                gt_scene.generate_gt_scene();
+                gt_flow.generate_gt_flow();
             }
 
+            AlgorithmFlow fback(vires);
+            AlgorithmFlow lkanade(vires);
             if ( vires_dataset.lk ) {
                 fback.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
             }

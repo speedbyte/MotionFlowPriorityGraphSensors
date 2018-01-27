@@ -6,9 +6,10 @@
 #define MAIN_GROUNDTRUTH_FLOW_H
 
 
-#include <vires/vires_common.h>
 #include "Dataset.h"
 #include "PlotFlow.h"
+#include "ObjectTrajectory.h"
+#include "GroundTruthScene.h"
 
 /**
  * This class
@@ -19,60 +20,24 @@
  */
 
 
-class GroundTruthScene {
+
+class GroundTruthFlow : public PlotFlow {
 
 private:
 
     Dataset m_dataset;
+    GroundTruthScene &m_gt_scene;
 
 public:
 
-    GroundTruthScene(Dataset dataset);
-
-
-    void generate_gt_scene();
-
-    ~GroundTruthScene(){
-        std::cout << "killing previous GroundTruthScene object\n" ;
+    GroundTruthFlow(Dataset dataset, GroundTruthScene &gt_scene) : m_dataset(dataset), m_gt_scene
+            (gt_scene) {
+        m_gt_scene.generate_gt_scene();
     }
-
-
-private:
-
-    void prepare_directories_gt_scene();
-
-};
-
-
-class GroundTruthFlow : Framework::ViresInterface, public PlotFlow {
-
-private:
-
-    Dataset m_dataset;
-
-public:
-
-    GroundTruthFlow(Dataset dataset);
-
-    void generate_gt_image_and_gt_flow_vires();
 
     void generate_gt_flow();
 
     void plot(std::string resultsordner);
-
-    void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
-
-    void parseEndOfFrame( const double & simTime, const unsigned int & simFrame );
-
-    void parseEntry( RDB_IMAGE_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &totalElem );
-
-    void parseEntry( RDB_OBJECT_STATE_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &
-    totalElem );
-
-    void parseEntry( RDB_OBJECT_CFG_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
 
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
@@ -81,7 +46,7 @@ public:
 
 private:
 
-    void prepare_directories_gt_flow();
+    void prepare_directories();
 
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i

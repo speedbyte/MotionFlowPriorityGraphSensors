@@ -2,6 +2,7 @@
 // Created by veikas on 26.01.18.
 //
 
+#include <boost/filesystem/operations.hpp>
 #include "Dataset.h"
 
 
@@ -19,6 +20,10 @@ resultordner) {
     m_base_directory_path_result_out = m_dataset_path.string() + resultordner + std::string("dummy.txt");
     //results
     m_base_directory_path_result_out = m_base_directory_path_result_out.parent_path();
+
+    if (boost::filesystem::exists(m_base_directory_path_input_in) == 0 ) {
+        boost::filesystem::create_directories(m_base_directory_path_input_in.string());
+    }
 
 }
 
