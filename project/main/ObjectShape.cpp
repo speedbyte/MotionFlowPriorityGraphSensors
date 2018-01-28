@@ -10,15 +10,15 @@
 
 void Rectangle::process() {
 
-    m_shape.create(object_height, object_width, CV_8UC3);
+    m_shape.create(m_objectHeight, m_objectWidth, CV_8UC3);
 
     uchar r = 0;
     uchar b = 0;
 
     r = 0;
     b = 0;
-    for (int k = 0; k < (object_height - 1); k++) {
-        for (int j = 0; j < (object_width -1 ); j++) {
+    for (int k = 0; k < (m_objectHeight - 1); k++) {
+        for (int j = 0; j < (m_objectWidth -1 ); j++) {
             m_shape.at<cv::Vec3b>(k, j)[0] = b;
             m_shape.at<cv::Vec3b>(k, j)[1] = 0;
             m_shape.at<cv::Vec3b>(k, j)[2] = r;

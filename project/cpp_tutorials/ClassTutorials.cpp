@@ -2,6 +2,7 @@
 // Created by veikas on 23.01.18.
 //
 
+#include <vector>
 #include "ClassTutorials.h"
 
 int main(int argc, char *argv[]) {
@@ -19,9 +20,16 @@ int main(int argc, char *argv[]) {
     //std::cout << b.getA();
 
     Rectangle rect;
-    Object obj1 = Object(rect);
+    GroundTruth obj1 = GroundTruth(rect);
+
+    std::vector<GroundTruth> list_objects;
+    list_objects.push_back(obj1);
+
+    //Object obj1 = ObjectList(list_rect);
+
 
     std::cout << obj1.getShape() << std::endl;
+    std::cout << list_objects.at(0).getShape() << std::endl;
 
 
 

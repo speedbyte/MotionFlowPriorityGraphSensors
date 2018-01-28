@@ -22,10 +22,6 @@
 #define MAX_SKIPS 10
 
 
-//object specs
-#define object_width 30
-#define object_height 100
-
 typedef enum {
     continous_frames = 0,
     pariwise_frames = 1,

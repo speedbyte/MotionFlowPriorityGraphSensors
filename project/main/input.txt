@@ -2,7 +2,7 @@
 PATH = "../../../datasets/cpp_dataset/"
 EXECUTE = 1
 GT = 1
-LK = 0
+LK = 1
 FB = 0
 PLOT = 0
 

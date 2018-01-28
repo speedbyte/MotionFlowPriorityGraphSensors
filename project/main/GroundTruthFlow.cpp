@@ -75,7 +75,6 @@ void GroundTruthFlow::generate_gt_flow(void) {
     tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_8UC3);
     assert(tempGroundTruthImage.channels() == 3);
 
-    const ushort start=60;
 
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
 
@@ -84,18 +83,14 @@ void GroundTruthFlow::generate_gt_flow(void) {
     auto tic_all = steady_clock::now();
     auto toc_all = steady_clock::now();
 
-    //Initialization
-    //for moving the objects later
 
-    //std::vector<cv::Point2i> shapes = m_gt_scene.getListObjectShapes();
-    ObjectTrajectory trajectory_points = m_gt_scene.getListObjectTrajectories();
 
     ObjectFlow point(m_dataset);
     // create the base flow vector
-    point.generate_base_flow_vector(trajectory_points, start);
+    point.generate_base_flow_vector(m_list_objects);
 
     // extend the flow vectors by skipping frames and then storing them as pngs
-    point.generate_extended_flow_vector(MAX_SKIPS);
+    point.generate_extended_flow_vector(MAX_SKIPS, m_list_objects);
 
     // plotVectorField (F_gt_write,m_base_directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();

@@ -17,6 +17,10 @@ public:
 
     virtual void process() {};
 
+    virtual ushort getWidth() {};
+
+    virtual ushort getHeight() {};
+
     cv::Mat get() {
         return m_shape;
     }
@@ -25,10 +29,23 @@ public:
 
 class Rectangle :  public ObjectShape {
 
+private:
+    ushort m_objectWidth;
+    ushort m_objectHeight;
+
 public:
+
+    Rectangle(ushort width, ushort height) : m_objectWidth(width), m_objectHeight(height) {};
 
     void process() override ;
 
+    ushort getWidth() {
+        return m_objectWidth;
+    }
+
+    ushort getHeight() {
+        return m_objectHeight;
+    }
 };
 
 

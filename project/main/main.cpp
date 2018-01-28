@@ -18,6 +18,7 @@
 #include "AlgorithmFlow.h"
 #include "ObjectTrajectory.h"
 #include "GroundTruthScene.h"
+#include "ObjectProperties.h"
 
 
 //extern bool eval(std::string result_sha, Mail *mail);
@@ -158,20 +159,28 @@ int main ( int argc, char *argv[]) {
     cv::Size_<unsigned> frame_size(1242, 375);
 
     {
-
         if ( cpp_dataset.execute ) {
 
             Dataset cpp(frame_size, CPP_DATASET_PATH, "data/stereo_flow/", "results/");
 
             if ( cpp_dataset.gt ) {
 
-                Rectangle rectangles;
-                Achterbahn trajectories;
 
-                GroundTruthSceneInternal gt_scene(cpp, rectangles, trajectories);
+                Rectangle rectangle1(30, 100);
+                Achterbahn trajectory;
+                Rectangle rectangle2(100, 30);
+
+                ObjectProperties obj1(cpp, rectangle1, trajectory, 60);
+                ObjectProperties obj2(cpp, rectangle2, trajectory, 120);
+
+                std::vector<ObjectProperties> list_of_objects;
+                list_of_objects.push_back(obj1);
+                list_of_objects.push_back(obj2);
+
+                GroundTruthSceneInternal gt_scene(cpp, list_of_objects);
                 gt_scene.generate_gt_scene();
 
-                GroundTruthFlow gt_flow(cpp, gt_scene);
+                GroundTruthFlow gt_flow(cpp, list_of_objects);
                 gt_flow.generate_gt_flow();
             }
 
@@ -189,7 +198,6 @@ int main ( int argc, char *argv[]) {
                 fback.plot(std::string("results_FB_no_noise"));
                 lkanade.plot(std::string("results_LK_no_noise"));
             }
-
         }
     }
 
@@ -242,12 +250,12 @@ int main ( int argc, char *argv[]) {
             cv::Size_<unsigned> frame_size_vires(1242, 375);
 
             Dataset vires(frame_size, VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
-            GroundTruthSceneExternal gt_scene(vires);
-
-            GroundTruthFlow gt_flow(vires, gt_scene);
 
             if ( vires_dataset.gt ) {
+                GroundTruthSceneExternal gt_scene(vires);
                 gt_scene.generate_gt_scene();
+                std::vector<ObjectProperties> list_of_objects = gt_scene.getListOfObjects();
+                GroundTruthFlow gt_flow(vires, list_of_objects);
                 gt_flow.generate_gt_flow();
             }
 

@@ -10,6 +10,7 @@
 #include <vires/vires_common.h>
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
+#include "ObjectProperties.h"
 
 class GroundTruthScene : protected Framework::ViresInterface {
 
@@ -22,9 +23,9 @@ public:
 
     virtual void generate_gt_scene() {};
 
-    virtual ObjectShape getListObjectShapes() {};
+    virtual ObjectShape getObjectShape() {};
 
-    virtual ObjectTrajectory getListObjectTrajectories() {};
+    virtual ObjectTrajectory getObjectTrajectory() {};
 
 protected:
     void prepare_directories();
@@ -35,23 +36,21 @@ class GroundTruthSceneInternal : public GroundTruthScene {
 
 private:
 
-    ObjectShape &m_shapes;
-    ObjectTrajectory &m_trajectories;
+    std::vector<ObjectProperties> &m_list_objects;
 
 public:
 
-    GroundTruthSceneInternal(Dataset &dataset, ObjectShape &shapes, ObjectTrajectory &trajectories) :
-            GroundTruthScene(dataset), m_shapes(shapes), m_trajectories(trajectories) {}
+    GroundTruthSceneInternal(Dataset &dataset, std::vector<ObjectProperties> &list_objects) :
+            GroundTruthScene(dataset), m_list_objects(list_objects) {}
 
     void generate_gt_scene();
 
-    ObjectShape getListObjectShapes() {
-        return m_shapes;
+    cv::Mat getObjectShape(int index) {
+        return m_list_objects.at(index).getShape().get();
     }
 
-
-    ObjectTrajectory getListObjectTrajectories() {
-        return m_trajectories;
+    std::vector<cv::Point2i> getObjectTrajectory(int index) {
+        return m_list_objects.at(index).getTrajectoryPoints().get();
     };
 
     ~GroundTruthSceneInternal(){
@@ -64,6 +63,7 @@ class GroundTruthSceneExternal : public GroundTruthScene {
 
 private:
 
+    std::vector<ObjectProperties> m_list_of_objects;
     //ObjectShape &m_shapes;
     //ObjectTrajectory &m_trajectories;
 
@@ -88,6 +88,9 @@ public:
     void parseEntry( RDB_OBJECT_CFG_t *data, const double & simTime, const unsigned int & simFrame, const
     unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
 
+    std::vector<ObjectProperties> getListOfObjects() {
+        return m_list_of_objects;
+    }
 
     ~GroundTruthSceneExternal(){
         std::cout << "killing previous GroundTruthScene object\n" ;

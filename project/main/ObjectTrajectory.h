@@ -55,32 +55,6 @@ public:
 
 };
 
-class ObjectProperties {
-
-private:
-    ObjectShape &obj_shape;
-    ObjectTrajectory &obj_trajectory;
-
-public:
-
-    ObjectProperties( Dataset dataset, ObjectShape &shape, ObjectTrajectory &trajectory) : obj_shape ( shape ),
-    obj_trajectory (
-            trajectory) {
-        shape.process();
-        trajectory.process(dataset.getFrameSize());
-    }
-
-    cv::Mat getShape() {
-        return obj_shape.get();
-    }
-
-    std::vector<cv::Point2i> getTrajectoryPoints() {
-        return obj_trajectory.get();
-    }
-
-};
-
-
 
 class ObjectCollision {
 

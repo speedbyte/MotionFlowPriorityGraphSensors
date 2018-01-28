@@ -9,7 +9,6 @@
 
 
 
-
 class Shape {
 
 protected:
@@ -34,11 +33,11 @@ public:
 };
 
 
-class Object : Shape {
+class GroundTruth : Shape {
 
     Shape &m_sh;
 public:
-    Object(Shape &sh) : m_sh ( sh) {
+    GroundTruth(Shape &sh) : m_sh ( sh) {
         //m_sh = sh;
         m_sh.process();
     }
@@ -48,7 +47,6 @@ public:
     }
 
 };
-
 
 
 class Base {

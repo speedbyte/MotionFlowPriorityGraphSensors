@@ -26,14 +26,13 @@ class GroundTruthFlow : public PlotFlow {
 private:
 
     Dataset &m_dataset;
-    GroundTruthScene &m_gt_scene;
+    std::vector<ObjectProperties> &m_list_objects;
+
 
 public:
 
-    GroundTruthFlow(Dataset &dataset, GroundTruthScene &gt_scene) : m_dataset(dataset), m_gt_scene
-            (gt_scene) {
-        //m_gt_scene.generate_gt_scene();
-    }
+    GroundTruthFlow(Dataset &dataset, std::vector<ObjectProperties> &list_objects) : m_dataset(dataset), m_list_objects
+            (list_objects) {}
 
     void generate_gt_flow();
 

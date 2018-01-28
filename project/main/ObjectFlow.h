@@ -8,28 +8,27 @@
 
 #include <opencv2/core/types.hpp>
 #include <opencv2/core/persistence.hpp>
+#include <kitti/io_flow.h>
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
+#include "ObjectProperties.h"
 
 class ObjectFlow {
 
 private:
     Dataset m_dataset;
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flowvector_with_coordinate_gt;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_scene_flow_vector_with_coordinate_gt;
 
 public:
     ObjectFlow(Dataset dataset) : m_dataset(dataset) {}
 
-    void extrapolate_flowpoints( cv::FileStorage fs, cv::Point2i pt, ushort width, ushort height, int xValue, int
-    yValue, std::string image_path);
+    /* This needs to know the shape of the object to extrapolate */
+    void extrapolate_flowpoints( FlowImage &F_gt_write, cv::FileStorage fs, cv::Point2i pt, int width, int height, int
+    xValue, int yValue);
 
-    void generate_base_flow_vector(ObjectTrajectory trajectory_points, const ushort start);
+    void generate_base_flow_vector(std::vector<ObjectProperties> list_objects);
 
-    void generate_extended_flow_vector(const int &max_skips);
-
-    std::vector<std::pair<cv::Point2i, cv::Point2i> >  get_base_flow_vector() {
-        return m_flowvector_with_coordinate_gt;
-    }
+    void generate_extended_flow_vector(const int &max_skips, std::vector<ObjectProperties> list_objects);
 };
 
 
