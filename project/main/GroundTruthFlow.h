@@ -25,14 +25,14 @@ class GroundTruthFlow : public PlotFlow {
 
 private:
 
-    Dataset m_dataset;
+    Dataset &m_dataset;
     GroundTruthScene &m_gt_scene;
 
 public:
 
-    GroundTruthFlow(Dataset dataset, GroundTruthScene &gt_scene) : m_dataset(dataset), m_gt_scene
+    GroundTruthFlow(Dataset &dataset, GroundTruthScene &gt_scene) : m_dataset(dataset), m_gt_scene
             (gt_scene) {
-        m_gt_scene.generate_gt_scene();
+        //m_gt_scene.generate_gt_scene();
     }
 
     void generate_gt_flow();

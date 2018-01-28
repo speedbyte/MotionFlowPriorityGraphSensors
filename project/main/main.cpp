@@ -165,10 +165,11 @@ int main ( int argc, char *argv[]) {
 
             if ( cpp_dataset.gt ) {
 
-                std::vector<Rectangle> rectangles;
-                std::vector<Achterbahn> trajectories;
+                Rectangle rectangles;
+                Achterbahn trajectories;
 
                 GroundTruthSceneInternal gt_scene(cpp, rectangles, trajectories);
+                gt_scene.generate_gt_scene();
 
                 GroundTruthFlow gt_flow(cpp, gt_scene);
                 gt_flow.generate_gt_flow();
@@ -243,7 +244,7 @@ int main ( int argc, char *argv[]) {
             Dataset vires(frame_size, VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
             GroundTruthSceneExternal gt_scene(vires);
 
-            GroundTruthFlow gt_flow(gt_scene);
+            GroundTruthFlow gt_flow(vires, gt_scene);
 
             if ( vires_dataset.gt ) {
                 gt_scene.generate_gt_scene();

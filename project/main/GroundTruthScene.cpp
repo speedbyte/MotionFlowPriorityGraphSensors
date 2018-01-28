@@ -37,6 +37,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     prepare_directories();
 
+
     /*
      * First create an object with an shape
      * Then define the object trajectory
@@ -47,6 +48,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
      *
      * Then store the flow information in the flow folder
      */
+
+    m_shapes.process();
+    m_trajectories.process(m_dataset.getFrameSize());
 
     cv::Mat tempGroundTruthImage;
     tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_8UC3);
@@ -71,16 +75,10 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     current_index = start;
 
+    //ObjectProperties shape1 = ObjectProperties(m_dataset, m_shapes, m_trajectories);
 
-
-    Rectangle rectangle;
-    Achterbahn achterbahn;
-
-    ObjectProperties shape1 = ObjectProperties(m_dataset, m_gt_scene.getListObjectShapes()[0], m_gt_scene
-            .getListObjectTrajectories()[0]);
-
-    std::vector<cv::Point2i> trajectory_points = shape1.getTrajectoryPoints();
-    cv::Mat shape = shape1.getShape();
+    std::vector<cv::Point2i> trajectory_points = m_trajectories.get();
+    cv::Mat shape = m_shapes.get();
 
     for (ushort frame_count=0; frame_count < MAX_ITERATION_GT; frame_count++) {
 

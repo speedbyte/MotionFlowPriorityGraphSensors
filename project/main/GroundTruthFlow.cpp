@@ -31,6 +31,7 @@
 #include "ObjectTrajectory.h"
 #include "Dataset.h"
 #include "GroundTruthScene.h"
+#include "ObjectFlow.h"
 
 
 //Creating a movement path. The path is stored in a x and y vector
@@ -78,8 +79,6 @@ void GroundTruthFlow::generate_gt_flow(void) {
 
     std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
 
-    std::cout << "ground truth images will be stored in " << m_dataset.getInputPath().string() << std::endl;
-
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
     auto tic_all = steady_clock::now();
@@ -88,8 +87,8 @@ void GroundTruthFlow::generate_gt_flow(void) {
     //Initialization
     //for moving the objects later
 
-    std::vector<cv::Point2i> shapes = m_gt_scene.getListObjectShapes();
-    std::vector<cv::Point2i> trajectory_points = m_gt_scene.getListObjectTrajectories();
+    //std::vector<cv::Point2i> shapes = m_gt_scene.getListObjectShapes();
+    ObjectTrajectory trajectory_points = m_gt_scene.getListObjectTrajectories();
 
     ObjectFlow point(m_dataset);
     // create the base flow vector
@@ -101,7 +100,7 @@ void GroundTruthFlow::generate_gt_flow(void) {
     // plotVectorField (F_gt_write,m_base_directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << "ground truth generation time - " << time_map["ground truth"]  << "ms" << std::endl;
+    std::cout << "ground truth flow generation time - " << time_map["ground truth"]  << "ms" << std::endl;
 
 }
 

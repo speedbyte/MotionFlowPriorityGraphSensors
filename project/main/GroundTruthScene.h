@@ -12,13 +12,22 @@
 #include "ObjectTrajectory.h"
 
 class GroundTruthScene : protected Framework::ViresInterface {
+
 protected:
-    Dataset m_dataset;
+    Dataset &m_dataset;
+
 public:
-    GroundTruthScene() {}
-    GroundTruthScene(Dataset dataset):m_dataset(dataset) {}
-    void prepare_directories();
+
+    GroundTruthScene(Dataset &dataset):m_dataset(dataset) {}
+
     virtual void generate_gt_scene() {};
+
+    virtual ObjectShape getListObjectShapes() {};
+
+    virtual ObjectTrajectory getListObjectTrajectories() {};
+
+protected:
+    void prepare_directories();
 
 };
 
@@ -26,22 +35,22 @@ class GroundTruthSceneInternal : public GroundTruthScene {
 
 private:
 
-    std::vector<ObjectShape> &m_shapes;
-    std::vector<ObjectTrajectory> &m_trajectories;
+    ObjectShape &m_shapes;
+    ObjectTrajectory &m_trajectories;
 
 public:
 
-    GroundTruthSceneInternal(Dataset dataset, std::vector<ObjectShape> &shapes, std::vector<ObjectTrajectory>
-    &trajectories) :
-    GroundTruthScene(dataset), m_shapes(shapes), m_trajectories(trajectories) {}
+    GroundTruthSceneInternal(Dataset &dataset, ObjectShape &shapes, ObjectTrajectory &trajectories) :
+            GroundTruthScene(dataset), m_shapes(shapes), m_trajectories(trajectories) {}
 
     void generate_gt_scene();
 
-    std::vector<ObjectShape> getListObjectShapes() {
+    ObjectShape getListObjectShapes() {
         return m_shapes;
     }
 
-    std::vector<ObjectTrajectory> getListObjectTrajectories() {
+
+    ObjectTrajectory getListObjectTrajectories() {
         return m_trajectories;
     };
 
@@ -51,18 +60,17 @@ public:
 
 };
 
-class GroundTruthSceneExternal : GroundTruthScene {
+class GroundTruthSceneExternal : public GroundTruthScene {
 
 private:
 
-    std::vector<ObjectShape> &m_shapes;
-    std::vector<ObjectTrajectory> &m_trajectories;
+    //ObjectShape &m_shapes;
+    //ObjectTrajectory &m_trajectories;
 
 public:
 
-    GroundTruthSceneExternal(Dataset dataset, std::vector<ObjectShape> &shapes, std::vector<ObjectTrajectory>
-    &trajectories) :
-    GroundTruthScene(dataset), m_shapes(shapes), m_trajectories(trajectories) {}
+    GroundTruthSceneExternal(Dataset dataset) :
+    GroundTruthScene(dataset) {}
 
     void generate_gt_scene();
 
