@@ -130,6 +130,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     bool connected_trigger_port = false;
     bool connected_module_manager_port = false;
+    bool connected_scp_port = false;
 
     // open the network connection to the taskControl (so triggers may be sent)
     fprintf(stderr, "creating network connection....\n");
@@ -139,12 +140,21 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         connected_trigger_port = true;
     }
     int moduleManagerSocket = openNetwork(DEFAULT_RX_PORT);
-    std::cout << "mm socket - " << moduleManagerSocket << std::endl;
+    std::cout << "scp socket - " << moduleManagerSocket << std::endl;
     if ( moduleManagerSocket != -1 )  { // this is blocking until the network has been opened
         connected_module_manager_port = true;
     }
 
-    if ( connected_trigger_port && connected_module_manager_port ) {
+    int scpSocket = openNetwork(SCP_DEFAULT_PORT);
+    std::cout << "mm socket - " << scpSocket << std::endl;
+    if ( scpSocket != -1 )  { // this is blocking until the network has been opened
+        connected_scp_port = true;
+    }
+
+    sendSCPMessage(scpSocket, "'<SimCtrl><Apply/></SimCtrl>'");
+
+
+    if ( connected_trigger_port && connected_module_manager_port && connected_scp_port ) {
         // now: open the shared memory (try to attach without creating a new segment)
         fprintf(stderr, "attaching to shared memory 0x%x....\n", getShmKey());
 
