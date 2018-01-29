@@ -19,8 +19,6 @@
  *  produces flow images
  */
 
-
-
 class GroundTruthFlow : public PlotFlow {
 
 private:
