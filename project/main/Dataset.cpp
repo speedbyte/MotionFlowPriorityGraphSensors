@@ -13,11 +13,13 @@ resultordner) {
 
     m_dataset_path = dataset_path;
 
-    m_base_directory_path_input_in = m_dataset_path.string() + unterordner + std::string("dummy.txt");
+    m_base_directory_path_input_in = m_dataset_path.string() + unterordner + std::string("/dummy.txt");
     //data/stereo_flow/
     m_base_directory_path_input_in = m_base_directory_path_input_in.parent_path();
 
-    m_base_directory_path_result_out = m_dataset_path.string() + resultordner + std::string("dummy.txt");
+    m_base_directory_path_gt_flow = m_base_directory_path_input_in.parent_path();
+
+    m_base_directory_path_result_out = m_dataset_path.string() + resultordner + std::string("/dummy.txt");
     //results
     m_base_directory_path_result_out = m_base_directory_path_result_out.parent_path();
 
@@ -41,5 +43,9 @@ const boost::filesystem::path Dataset::getInputPath() const {
 
 const boost::filesystem::path Dataset::getResultPath() const {
     return m_base_directory_path_result_out;
+}
+
+const boost::filesystem::path Dataset::getGroundTruthFlowPath() const {
+    return m_base_directory_path_gt_flow;
 }
 

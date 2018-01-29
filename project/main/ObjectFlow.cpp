@@ -27,7 +27,7 @@ void ObjectFlow::generate_base_flow_vector(std::vector<ObjectProperties> list_ob
         std::cout << "start point "<< current_index.at(i) << std::endl;
     }
 
-    std::cout << "ground truth flow will be stored in " << m_dataset.getInputPath().string() << std::endl;
+    std::cout << "ground truth flow will be stored in " << m_dataset.getGroundTruthFlowPath().string() << std::endl;
 
     for ( int i = 0; i < list_objects.size(); i++ ) {
 
@@ -124,7 +124,7 @@ void ObjectFlow::generate_extended_flow_vector(const int &max_skips, std::vector
 
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
         cv::FileStorage fs;
-        fs.open(m_dataset.getInputPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+        fs.open(m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
                 cv::FileStorage::WRITE);
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
 
@@ -135,7 +135,7 @@ void ObjectFlow::generate_extended_flow_vector(const int &max_skips, std::vector
 
             char file_name_image[50];
             sprintf(file_name_image, "000%03d_10.png", frame_count);
-            std::string temp_gt_flow_image_path = m_dataset.getInputPath().string() + "/" + folder_name_flow + "/"
+            std::string temp_gt_flow_image_path = m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
                                                   + file_name_image;
 
             for ( int i = 0; i < m_scene_flow_vector_with_coordinate_gt.size(); i++ ) {
@@ -164,5 +164,4 @@ void ObjectFlow::generate_extended_flow_vector(const int &max_skips, std::vector
         }
         fs.release();
     }
-
 }

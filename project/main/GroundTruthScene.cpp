@@ -21,14 +21,13 @@ void GroundTruthScene::prepare_directories() {
 
     // delete ground truth image and ground truth flow directories
     if (boost::filesystem::exists(m_dataset.getInputPath())) {
-        system(("rm -rf " + m_dataset.getInputPath().string()).c_str()); // data/stereo_flow/
+        system(("rm -rf " + m_dataset.getInputPath().string()).c_str()); // m_dataset.m_base_directory_path_input_in
     }
 
     // create base directories
     boost::filesystem::create_directories(m_dataset.getInputPath().string());
     std::cout << "Creating GT Scene directories" << std::endl;
-    boost::filesystem::create_directories(m_dataset.getInputPath().string() + "/image_02");
-
+    boost::filesystem::create_directories(m_dataset.getInputPath().string());
     std::cout << "Ending GT Scene directories" << std::endl;
 }
 
@@ -36,7 +35,6 @@ void GroundTruthScene::prepare_directories() {
 void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     prepare_directories();
-
 
     /*
      * First create an object with an shape
@@ -72,7 +70,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
         sprintf(file_name_image, "000%03d_10.png", frame_count);
-        std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/image_02/" + file_name_image;
+        std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/" + file_name_image;
 
         tempGroundTruthImage = cv::Scalar::all(0);
 
@@ -105,9 +103,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     char command[1024];
 
+    std::cout << "ground truth images will be stored in " << m_dataset.getInputPath().string() << std::endl;
 
-    sprintf(command, "cd %s; %s", (m_dataset.getBasePath().string() + std::string("../../")).c_str(), "bash "
-            "vtdSendandReceive.sh");
+    std::string project = "Movement";
+
+    sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s %s", (m_dataset.getBasePath().string()).c_str(),
+            project.c_str(), m_scenario.c_str());
     std::cout << command << std::endl;
     system(command);
 
@@ -127,63 +128,74 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
             getShmKey(), getCheckMask(), getForceBuffer());
 
+    bool connected_trigger_port = false;
+    bool connected_module_manager_port = false;
+
     // open the network connection to the taskControl (so triggers may be sent)
     fprintf(stderr, "creating network connection....\n");
-    openNetwork();  // this is blocking until the network has been opened
-    openNetwork_GT();
-
-
-
-    // now: open the shared memory (try to attach without creating a new segment)
-    fprintf(stderr, "attaching to shared memory 0x%x....\n", getShmKey());
-
-    while (!getShmPtr()) {
-        openShm();
-        usleep(1000);     // do not overload the CPU
+    int triggerSocket = openNetwork(DEFAULT_PORT);
+    std::cout << "trigger socket - " <<  triggerSocket << std::endl;
+    if ( triggerSocket != -1 )  { // this is blocking until the network has been opened
+        connected_trigger_port = true;
+    }
+    int moduleManagerSocket = openNetwork(DEFAULT_RX_PORT);
+    std::cout << "mm socket - " << moduleManagerSocket << std::endl;
+    if ( moduleManagerSocket != -1 )  { // this is blocking until the network has been opened
+        connected_module_manager_port = true;
     }
 
-    fprintf(stderr, "...attached! Reading now...\n");
+    if ( connected_trigger_port && connected_module_manager_port ) {
+        // now: open the shared memory (try to attach without creating a new segment)
+        fprintf(stderr, "attaching to shared memory 0x%x....\n", getShmKey());
 
-    // now check the SHM for the time being
-    bool breaking = false;
-    int count = 0;
-    while (1) {
+        while (!getShmPtr()) {
+            openShm();
+            usleep(1000);     // do not overload the CPU
+        }
 
-        // Break out of the loop if the user presses the Esc key
-        int c = kbhit();
+        fprintf(stderr, "...attached! Reading now...\n");
 
-        switch (c) {
-            case 9:
+        // now check the SHM for the time being
+        bool breaking = false;
+        int count = 0;
+        while (1) {
+
+            // Break out of the loop if the user presses the Esc key
+            int c = kbhit();
+
+            switch (c) {
+                case 9:
+                    breaking = true;
+                    break;
+                default:
+                    break;
+            }
+
+            if (breaking) {
+                break;
+            }
+
+            if (getSimFrame() > MAX_ITERATION_GT) {
                 breaking = true;
-                break;
-            default:
-                break;
+            }
+
+            readNetwork(moduleManagerSocket);  // this calls parseRDBMessage() in vires_common.cpp
+
+            if (initCounter <= 0)
+                checkShm();
+
+            // has an image arrived or do the first frames need to be triggered
+            //(first image will arrive with a certain image_02_frame delay only)
+            if (getHaveImage() || (initCounter-- > 0)) {
+                sendRDBTrigger(triggerSocket);
+                std::cout << getSimFrame() << std::endl;
+            }
+            // ok, reset image indicator
+            setHaveImage(0);
+
+            usleep(10000); // sleep for 10 ms
+            std::cout << "getting data from VIRES\n";
         }
-
-        if (breaking) {
-            break;
-        }
-
-        if (getSimFrame() > MAX_ITERATION_GT) {
-            breaking = true;
-        }
-
-        readNetwork();  // this calls parseRDBMessage() in vires_common.cpp
-
-        if (initCounter <= 0)
-            checkShm();
-
-        // has an image arrived or do the first frames need to be triggered
-        //(first image will arrive with a certain image_02_frame delay only)
-        if (getHaveImage() || (initCounter-- > 0)) {
-            sendRDBTrigger();
-            std::cout << getSimFrame() << std::endl;
-        }
-        // ok, reset image indicator
-        setHaveImage(0);
-
-        usleep(10000); // sleep for 10 ms
-        std::cout << "getting data from VIRES\n";
     }
 
     sprintf(command, "cd %s; %s", (m_dataset.getBasePath().string() + std::string("../../")).c_str(),
@@ -284,7 +296,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
         if (simFrame > 0) {
             sprintf(file_name_image, "000%03d_10.png", (simFrame - 7));
-            std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/image_02/" + file_name_image;
+            std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/" + file_name_image;
             save_image.write(input_image_file_with_path);
         }
     } else {

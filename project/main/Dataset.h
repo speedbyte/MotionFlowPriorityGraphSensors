@@ -17,6 +17,8 @@ class Dataset {
 
     boost::filesystem::path  m_base_directory_path_input_in;
 
+    boost::filesystem::path  m_base_directory_path_gt_flow;
+
     boost::filesystem::path m_base_directory_path_result_out;
 
 public:
@@ -29,6 +31,7 @@ public:
     const boost::filesystem::path getBasePath() const ;
     const boost::filesystem::path getInputPath() const ;
     const boost::filesystem::path getResultPath() const ;
+    const boost::filesystem::path getGroundTruthFlowPath() const ;
     const cv::Size_<unsigned> getFrameSize() const ;
 
 };

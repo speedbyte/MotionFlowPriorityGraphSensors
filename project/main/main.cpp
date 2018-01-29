@@ -161,10 +161,10 @@ int main ( int argc, char *argv[]) {
     {
         if ( cpp_dataset.execute ) {
 
-            Dataset cpp(frame_size, CPP_DATASET_PATH, "data/stereo_flow/", "results/");
+            std::string input = "data/stereo_flow/image_02";
+            Dataset cpp(frame_size, CPP_DATASET_PATH, input, "results");
 
             if ( cpp_dataset.gt ) {
-
 
                 Rectangle rectangle1(30, 100);
                 Achterbahn trajectory;
@@ -187,11 +187,11 @@ int main ( int argc, char *argv[]) {
             AlgorithmFlow fback(cpp);
             AlgorithmFlow lkanade(cpp);
             if ( cpp_dataset.fb ) {
-                fback.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+                fback.calculate_flow(CPP_DATASET_PATH, fb, continous_frames, no_noise);
             }
 
             if ( cpp_dataset.lk ) {
-                lkanade.calculate_flow(CPP_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+                lkanade.calculate_flow(CPP_DATASET_PATH, lk, continous_frames, no_noise);
             }
 
             if ( cpp_dataset.plot ) {
@@ -206,20 +206,21 @@ int main ( int argc, char *argv[]) {
     {
         if ( matlab_dataset.execute ) {
 
-            Dataset matlab(frame_size, MATLAB_DATASET_PATH, "data/stereo_flow/", "results/");
+            std::string input = "data/stereo_flow/image_02";
+            Dataset matlab(frame_size, MATLAB_DATASET_PATH, input, "results");
             AlgorithmFlow algo(matlab);
             // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
             // calculated here.
 
-            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, fb, continous_frames, no_noise);
 
-            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_bg_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, fb, continous_frames, static_bg_noise);
 
-            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, static_fg_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, fb, continous_frames, static_fg_noise);
 
-            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_bg_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, fb, continous_frames, dynamic_bg_noise);
 
-            algo.calculate_flow(MATLAB_DATASET_PATH, std::string("image_02/"), fb, continous_frames, dynamic_fg_noise);
+            algo.calculate_flow(MATLAB_DATASET_PATH, fb, continous_frames, dynamic_fg_noise);
         }
     }
 
@@ -228,12 +229,12 @@ int main ( int argc, char *argv[]) {
     {
         if ( kitti_flow_dataset.execute ) {
 
-            Dataset kitti_flow(frame_size, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/", "results/");
+            Dataset kitti_flow(frame_size, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02", "results");
             AlgorithmFlow algo(kitti_flow);
             // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
             // calculated here.
 
-            algo.calculate_flow(KITTI_FLOW_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+            algo.calculate_flow(KITTI_FLOW_DATASET_PATH, fb, continous_frames, no_noise);
 
             make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
             make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,
@@ -249,10 +250,12 @@ int main ( int argc, char *argv[]) {
 
             cv::Size_<unsigned> frame_size_vires(1242, 375);
 
-            Dataset vires(frame_size, VIRES_DATASET_PATH, "data/stereo_flow/", "results/");
+            std::string scenario = "truck";
+            std::string input = "data/stereo_flow/image_02_" + scenario;
+            Dataset vires(frame_size, VIRES_DATASET_PATH, input, "results");
 
             if ( vires_dataset.gt ) {
-                GroundTruthSceneExternal gt_scene(vires);
+                GroundTruthSceneExternal gt_scene(vires, scenario);
                 gt_scene.generate_gt_scene();
                 std::vector<ObjectProperties> list_of_objects = gt_scene.getListOfObjects();
                 GroundTruthFlow gt_flow(vires, list_of_objects);
@@ -262,30 +265,17 @@ int main ( int argc, char *argv[]) {
             AlgorithmFlow fback(vires);
             AlgorithmFlow lkanade(vires);
             if ( vires_dataset.lk ) {
-                fback.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), lk, continous_frames, no_noise);
+                fback.calculate_flow(VIRES_DATASET_PATH,  lk, continous_frames, no_noise);
             }
 
             if ( vires_dataset.fb ) {
-                lkanade.calculate_flow(VIRES_DATASET_PATH, std::string("image_02/"), fb, continous_frames, no_noise);
+                lkanade.calculate_flow(VIRES_DATASET_PATH,  fb, continous_frames, no_noise);
             }
 
             if ( vires_dataset.plot ) {
                 fback.plot(std::string("results_FB_no_noise"));
                 lkanade.plot(std::string("results_LK_no_noise"));
             }
-
-
-            int m_port;
-            int m_sensor_port;
-            bool m_triggers;
-            int m_frames_to_read;
-            bool m_write_ts_gt;
-
-            //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "FB");
-            //of_algo(dataset_path, "2011_09_28_drive_0016_sync.avi", "LK");
-            //dataset_path = MATLAB_DATASET_PATH;
-            //of_algo(dataset_path, "Movement.avi", "FB");
-            //of_algo(dataset_path, "Movement.avi", "LK");
             //disparity(dataset_path);
         }
     }

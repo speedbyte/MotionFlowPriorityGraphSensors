@@ -58,7 +58,7 @@ void AlgorithmFlow::prepare_result_directories(std::string resultordner) {
 }
 
 
-void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path, const std::string input_image_folder,
+void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
                                      ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
 
     std::string resultordner = "results_";
@@ -214,7 +214,7 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path, c
             //if (image_02_frame.empty())
             //    break;
 
-            std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/image_02/" + file_name_image;
+            std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/" + file_name_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
 
@@ -369,8 +369,8 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path, c
         Gnuplot gp2d;
         gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";
         gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-        std::string tmp = std::string(" with points title ") + std::string("'") + input_image_folder + std::string(" y "
-                                                                                                                           "axis - ms, x axis - image_02_frame\n'");
+        std::string tmp = std::string(" with points title ") + std::string("'") + m_dataset.getInputPath().string() +
+                std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
     }
 

@@ -48,8 +48,13 @@ void GroundTruthFlow::prepare_directories() {
         std::cout << "Creating GT Flow directories" << std::endl;
         // create flow directories
         for (int i = 1; i < 10; ++i) {
+            // delete ground truth image and ground truth flow directories
             sprintf(char_dir_append, "%02d", i);
-            boost::filesystem::create_directories(m_dataset.getInputPath().string() + "/flow_occ_" + char_dir_append);
+            boost::filesystem::path path = m_dataset.getGroundTruthFlowPath().string() + "/flow_occ_" + char_dir_append;
+            if (boost::filesystem::exists(path)) {
+                system(("rm -rf " + path.string()).c_str());
+            }
+            boost::filesystem::create_directories(path);
         }
         std::cout << "Ending GT Flow directories" << std::endl;
     }

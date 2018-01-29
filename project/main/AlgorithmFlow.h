@@ -21,7 +21,7 @@ public:
 
     void prepare_result_directories(std::string resultordner);
 
-    void calculate_flow(const boost::filesystem::path dataset_path, const std::string image_input_sha, ALGO_TYPES algo,
+    void calculate_flow(const boost::filesystem::path dataset_path, ALGO_TYPES algo,
                         FRAME_TYPES frame_types, NOISE_TYPES noise);
 
     void plot(std::string resultordner);

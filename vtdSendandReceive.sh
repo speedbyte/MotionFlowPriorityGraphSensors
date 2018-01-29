@@ -7,16 +7,13 @@ SETUP="Standard_test"
 
 if [ $# == 1 ]; then	#set project
 PROJECT=$1
-SCP="Normal"
+SCP="normal"
 elif [ $# == 2 ]; then	#set project and SCP
-PROJECT=$1
-SCP=$2
-elif [ $# == 3 ]; then	#set project and SCP and result directory
 PROJECT=$1
 SCP=$2
 else
 PROJECT="Movement"
-SCP="two"
+SCP="normal"
 fi
 
 echo $SETUP

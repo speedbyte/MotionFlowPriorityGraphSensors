@@ -27,7 +27,7 @@ void PlotFlow::plot(const Dataset &dataset, std::string resultsordner) {
                 continue;
             }
             sprintf(file_name_image, "000%03d_10.png", frame_count);
-            std::string temp_gt_flow_path = dataset.getInputPath().string() + "/" + folder_name_flow + "/"
+            std::string temp_gt_flow_path = dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
                                             + file_name_image;
             std::string temp_result_flow_path = dataset.getResultPath().string() + "/" + resultsordner + "/" +
                                                 folder_name_flow + "/" + file_name_image;

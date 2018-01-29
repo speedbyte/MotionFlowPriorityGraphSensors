@@ -8,6 +8,7 @@
 
 #include <vires/vires/viRDBIcd.h>
 #include <vires/vires_common.h>
+#include <iostream>
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
 #include "ObjectProperties.h"
@@ -64,13 +65,12 @@ class GroundTruthSceneExternal : public GroundTruthScene {
 private:
 
     std::vector<ObjectProperties> m_list_of_objects;
-    //ObjectShape &m_shapes;
-    //ObjectTrajectory &m_trajectories;
+    std::string m_scenario;
 
 public:
 
-    GroundTruthSceneExternal(Dataset dataset) :
-    GroundTruthScene(dataset) {}
+    GroundTruthSceneExternal(Dataset &dataset, std::string scenario) : GroundTruthScene(dataset), m_scenario
+    (scenario) {}
 
     void generate_gt_scene();
 
