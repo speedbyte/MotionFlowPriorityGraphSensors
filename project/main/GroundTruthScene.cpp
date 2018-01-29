@@ -13,6 +13,7 @@
 #include "GroundTruthScene.h"
 #include "datasets.h"
 #include "kbhit.h"
+#include "scp.h"
 
 using namespace std::chrono;
 
@@ -132,6 +133,25 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     bool connected_module_manager_port = false;
     bool connected_scp_port = false;
 
+    int scpSocket = openNetwork(SCP_DEFAULT_PORT);
+    std::cout << "scp socket - " << scpSocket << std::endl;
+    if ( scpSocket != -1 )  { // this is blocking until the network has been opened
+        connected_scp_port = true;
+    }
+
+    sendSCPMessage(scpSocket, "<SimCtrl><Apply/></SimCtrl>"); // keine hochkommas.
+
+    sleep(5); // Give some time before you start.
+
+    sendSCPMessage(scpSocket, project_name);
+    sleep(1);
+
+    sendSCPMessage(scpSocket, scenario_name);
+    sleep(1);
+
+    sendSCPMessage(scpSocket, module_manager);
+    sleep(1);
+
     // open the network connection to the taskControl (so triggers may be sent)
     fprintf(stderr, "creating network connection....\n");
     int triggerSocket = openNetwork(DEFAULT_PORT);
@@ -139,19 +159,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     if ( triggerSocket != -1 )  { // this is blocking until the network has been opened
         connected_trigger_port = true;
     }
+
     int moduleManagerSocket = openNetwork(DEFAULT_RX_PORT);
-    std::cout << "scp socket - " << moduleManagerSocket << std::endl;
+    std::cout << "mm socket - " << moduleManagerSocket << std::endl;
     if ( moduleManagerSocket != -1 )  { // this is blocking until the network has been opened
         connected_module_manager_port = true;
     }
-
-    int scpSocket = openNetwork(SCP_DEFAULT_PORT);
-    std::cout << "mm socket - " << scpSocket << std::endl;
-    if ( scpSocket != -1 )  { // this is blocking until the network has been opened
-        connected_scp_port = true;
-    }
-
-    sendSCPMessage(scpSocket, "'<SimCtrl><Apply/></SimCtrl>'");
 
 
     if ( connected_trigger_port && connected_module_manager_port && connected_scp_port ) {

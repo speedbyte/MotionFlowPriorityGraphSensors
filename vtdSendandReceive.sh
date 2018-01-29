@@ -51,14 +51,8 @@ echo "simserver pid is $simserver_pid"
 if [[ simserver_pid -gt 0 ]]; then echo "PID is running"; else echo "PID is not running"; ./vtdStop.sh; exit; fi
 
 cd $SOURCE_DIR/VIRES/VTD.2.0/Runtime/Tools/ScpGenerator/
-./scpGenerator -p $PORT_SCP -i '<SimCtrl><Apply/></SimCtrl>'
-sleep 5
-#./scpGenerator -p $PORT_SCP -i "'<SimCtrl><Project name="Movement" path="${SOURCE_DIR}/VIRES/VTD.2.0/Data/Projects/Current" /></SimCtrl>'"
-#sleep 1
-./scpGenerator -p $PORT_SCP -c $SOURCE_DIR/VIRES/SCP/$SCP/Run.scp
-#sleep 1
-#./scpGenerator -p $PORT_SCP -i "'<SimCtrl><UnloadSensors /><LoadScenario filename="${SOURCE_DIR}/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/two.xml"/><Start mode="operation"/></SimCtrl>'"
-sleep 10
+#./scpGenerator -p $PORT_SCP -c $SOURCE_DIR/VIRES/SCP/$SCP/Run.scp
+#sleep 5 
 
 function call_cpp()
 {
