@@ -2,15 +2,13 @@
 // Created by veikas on 28.01.18.
 //
 
-#include "ObjectShape.h"
+#include "ObjectCameraData.h"
 #include "ObjectTrajectory.h"
-#include "datasets.h"
-#include <opencv2/core.hpp>
 
 
 void Rectangle::process() {
 
-    m_shape.create(m_objectHeight, m_objectWidth, CV_8UC3);
+    m_data.create(m_objectHeight, m_objectWidth, CV_8UC3);
 
     uchar r = 0;
     uchar b = 0;
@@ -19,9 +17,9 @@ void Rectangle::process() {
     b = 0;
     for (int k = 0; k < (m_objectHeight - 1); k++) {
         for (int j = 0; j < (m_objectWidth -1 ); j++) {
-            m_shape.at<cv::Vec3b>(k, j)[0] = b;
-            m_shape.at<cv::Vec3b>(k, j)[1] = 0;
-            m_shape.at<cv::Vec3b>(k, j)[2] = r;
+            m_data.at<cv::Vec3b>(k, j)[0] = b;
+            m_data.at<cv::Vec3b>(k, j)[1] = 0;
+            m_data.at<cv::Vec3b>(k, j)[2] = r;
             r = r + (uchar)2;
             b = b + (uchar)2;
             if (r > 254)

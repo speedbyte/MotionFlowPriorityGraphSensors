@@ -15,8 +15,7 @@
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
 #include "AlgorithmFlow.h"
-#include "Dataset.h"
-#include "ObjectTrajectory.h"
+#include "ObjectFlow.h"
 
 
 using namespace std::chrono;
@@ -233,7 +232,6 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
 
             std::vector<cv::Point2f> next_pts;
             tic = steady_clock::now();
-            ObjectTrajectory trajectory;
 
             // Calculate optical calculate_flow map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
@@ -289,7 +287,7 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
                     }
                 }
 
-                trajectory.storeData(prev_pts, next_pts, status);
+                storeData(prev_pts, next_pts, status);
                 for (unsigned i = 0; i < next_pts.size(); i++) {
                     cv::arrowedLine(image_02_frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0));
                 }
@@ -331,7 +329,7 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
 
             if (prevGray.data) {
 
-                trajectory.store_in_png(fs, frame_count, m_dataset.getFrameSize(), temp_result_flow_path);
+                store_in_png(fs, frame_count, m_dataset.getFrameSize(), temp_result_flow_path);
             }
 
             toc = steady_clock::now();

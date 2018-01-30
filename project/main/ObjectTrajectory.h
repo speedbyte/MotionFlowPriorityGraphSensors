@@ -7,7 +7,7 @@
 
 
 #include "Dataset.h"
-#include "ObjectShape.h"
+#include "ObjectCameraData.h"
 #include <opencv2/core/cvdef.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -18,24 +18,12 @@
 
 class ObjectTrajectory {
 
-private:
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_flow_matrix_result;
-
 protected:
     std::vector<cv::Point2i> m_trajectory;
 
 public:
 
     ObjectTrajectory() {};
-
-    void storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts, const
-    std::vector<uchar> status);
-
-    void store_in_png(cv::FileStorage &fs, ushort &frame_count, cv::Size frame_size, std::string
-    temp_result_flow_path);
-
-    void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
-    &l_pixelmovement );
 
     virtual void process(cv::Size framesize)  {};
 
@@ -52,6 +40,18 @@ public:
     Achterbahn() {};
 
     void process(cv::Size framesize) override ;
+
+};
+
+class NoTrajectory: public ObjectTrajectory {
+
+public:
+
+    NoTrajectory() {};
+
+    void process(cv::Size framesize) override {
+        m_trajectory.push_back(cv::Point2i(0,0));
+    };
 
 };
 

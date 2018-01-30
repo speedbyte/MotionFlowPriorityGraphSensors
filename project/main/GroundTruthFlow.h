@@ -10,6 +10,7 @@
 #include "PlotFlow.h"
 #include "ObjectTrajectory.h"
 #include "GroundTruthScene.h"
+#include "ObjectFlow.h"
 
 /**
  * This class
@@ -24,15 +25,14 @@ class GroundTruthFlow : public PlotFlow {
 private:
 
     Dataset &m_dataset;
-    std::vector<ObjectProperties> &m_list_objects;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_scene_flow_vector_with_coordinate_gt;
 
 
 public:
 
-    GroundTruthFlow(Dataset &dataset, std::vector<ObjectProperties> &list_objects) : m_dataset(dataset), m_list_objects
-            (list_objects) {}
+    GroundTruthFlow( Dataset &dataset ) : m_dataset(dataset) {}
 
-    void generate_gt_flow();
+    void generate_gt_scene_flow_vector(std::vector<Objects> list_of_objects);
 
     void plot(std::string resultsordner);
 

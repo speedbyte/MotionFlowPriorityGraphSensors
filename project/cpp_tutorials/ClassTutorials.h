@@ -7,7 +7,16 @@
 
 #include <iostream>
 
+class Shape;
 
+class Noise {
+
+public:
+    void changeValue(Shape &shape) {
+        shape.set(50);
+    }
+
+};
 
 class Shape {
 
@@ -21,13 +30,31 @@ public:
     virtual void process() {
         shape = 30;
     }
+
+    virtual void set(int x) {
+
+    }
 };
 
 class Rectangle : public Shape {
 
+    int xyz = 100;
+
 public:
-    void process() {
+    void process() override {
         shape = 40;
+    }
+
+    void changexyz(Noise noise) {
+        noise.changeValue(*this);
+    }
+
+    void set(int x) override {
+        xyz = x;
+    }
+
+    int getXyz() {
+        return xyz;
     }
 
 };
@@ -48,6 +75,7 @@ public:
 
 };
 
+/* ------------------- */
 
 class Base {
 protected:

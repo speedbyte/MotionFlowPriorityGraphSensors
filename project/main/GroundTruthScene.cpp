@@ -52,7 +52,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     //m_trajectories.process(m_dataset.getFrameSize());
 
     cv::Mat tempGroundTruthImage;
-    tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_8UC3);
+    tempGroundTruthImage = m_canvas.getData().clone();
     assert(tempGroundTruthImage.channels() == 3);
 
     std::map<std::string, double> time_map = {{"generate",0},{"ground truth", 0}};
@@ -63,9 +63,11 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     auto toc = steady_clock::now();
 
     std::vector<ushort> current_index;
+
     for ( int i = 0; i < m_list_objects.size(); i++ ) {
         current_index.push_back(m_list_objects.at(i).getStartPoint());
     }
+
     char file_name_image[50];
 
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
@@ -73,7 +75,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         sprintf(file_name_image, "000%03d_10.png", frame_count);
         std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/" + file_name_image;
 
-        tempGroundTruthImage = cv::Scalar::all(0);
+        tempGroundTruthImage = m_canvas.getData().clone();
 
         //draw new ground truth image.
 
@@ -146,7 +148,14 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     sendSCPMessage(scpSocket, project_name);
     sleep(1);
 
-    sendSCPMessage(scpSocket, scenario_name);
+    std::string::size_type position = scenario_name.find("truck.xml");
+    if ( position != std::string::npos ) {
+        scenario_name.replace(position, std::string("truck.xml").length(), std::string("traffic_demo.xml"));
+    }
+
+    readScpNetwork(scpSocket);
+
+    sendSCPMessage(scpSocket, scenario_name.c_str());
     sleep(1);
 
     sendSCPMessage(scpSocket, module_manager);

@@ -18,7 +18,7 @@
 #include "AlgorithmFlow.h"
 #include "ObjectTrajectory.h"
 #include "GroundTruthScene.h"
-#include "ObjectProperties.h"
+#include "Objects.h"
 
 
 //extern bool eval(std::string result_sha, Mail *mail);
@@ -157,31 +157,39 @@ int main ( int argc, char *argv[]) {
 /* CPP_DATASET ------------- */
 
     cv::Size_<unsigned> frame_size(1242, 375);
-
+    ushort depth = CV_8U;
+    ushort cn = 3;
     {
         if ( cpp_dataset.execute ) {
 
             std::string input = "data/stereo_flow/image_02";
-            Dataset cpp(frame_size, CPP_DATASET_PATH, input, "results");
+            Dataset cpp(frame_size, depth, cn, CPP_DATASET_PATH, input, "results");
 
             if ( cpp_dataset.gt ) {
 
                 Rectangle rectangle1(30, 100);
                 Achterbahn trajectory;
                 Rectangle rectangle2(100, 30);
+                Rectangle background(1242, 375);
+                NoNoise noNoise;
 
-                ObjectProperties obj1(cpp, rectangle1, trajectory, 60);
-                ObjectProperties obj2(cpp, rectangle2, trajectory, 120);
+                Objects obj1(cpp, rectangle1, trajectory, 60, noNoise);
+                Objects obj2(cpp, rectangle2, trajectory, 120, noNoise);
 
-                std::vector<ObjectProperties> list_of_objects;
+                std::vector<Objects> list_of_objects;
                 list_of_objects.push_back(obj1);
                 list_of_objects.push_back(obj2);
 
-                GroundTruthSceneInternal gt_scene(cpp, list_of_objects);
+                // Canvas is a Camera Sensor Image
+                GuassianNoise guassiannoise;
+                Canvas canvas(cpp, background, trajectory, 60, guassiannoise);
+
+                GroundTruthSceneInternal gt_scene(cpp, canvas, list_of_objects);
                 gt_scene.generate_gt_scene();
 
-                GroundTruthFlow gt_flow(cpp, list_of_objects);
-                gt_flow.generate_gt_flow();
+                GroundTruthFlow gt_flow(cpp);
+                gt_flow.generate_gt_scene_flow_vector(list_of_objects);
+
             }
 
             AlgorithmFlow fback(cpp);
@@ -207,7 +215,7 @@ int main ( int argc, char *argv[]) {
         if ( matlab_dataset.execute ) {
 
             std::string input = "data/stereo_flow/image_02";
-            Dataset matlab(frame_size, MATLAB_DATASET_PATH, input, "results");
+            Dataset matlab(frame_size, depth, cn, MATLAB_DATASET_PATH, input, "results");
             AlgorithmFlow algo(matlab);
             // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
             // calculated here.
@@ -229,7 +237,7 @@ int main ( int argc, char *argv[]) {
     {
         if ( kitti_flow_dataset.execute ) {
 
-            Dataset kitti_flow(frame_size, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02", "results");
+            Dataset kitti_flow(frame_size, depth, cn, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02", "results");
             AlgorithmFlow algo(kitti_flow);
             // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
             // calculated here.
@@ -252,14 +260,14 @@ int main ( int argc, char *argv[]) {
 
             std::string scenario = "truck";
             std::string input = "data/stereo_flow/image_02_" + scenario;
-            Dataset vires(frame_size, VIRES_DATASET_PATH, input, "results");
+            Dataset vires(frame_size, depth, cn, VIRES_DATASET_PATH, input, "results");
 
             if ( vires_dataset.gt ) {
                 GroundTruthSceneExternal gt_scene(vires, scenario);
                 gt_scene.generate_gt_scene();
-                std::vector<ObjectProperties> list_of_objects = gt_scene.getListOfObjects();
-                GroundTruthFlow gt_flow(vires, list_of_objects);
-                gt_flow.generate_gt_flow();
+                std::vector<Objects> list_of_objects = gt_scene.getListOfObjects();
+                GroundTruthFlow gt_flow(vires);
+                gt_flow.generate_gt_scene_flow_vector(list_of_objects);
             }
 
             AlgorithmFlow fback(vires);

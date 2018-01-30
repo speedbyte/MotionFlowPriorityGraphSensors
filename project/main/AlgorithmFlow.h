@@ -10,8 +10,9 @@
 #include <boost/filesystem/path.hpp>
 #include "Dataset.h"
 #include "PlotFlow.h"
+#include "ObjectFlow.h"
 
-class AlgorithmFlow: public PlotFlow  {
+class AlgorithmFlow: public ObjectFlow, public PlotFlow  {
 
     Dataset m_dataset;
 

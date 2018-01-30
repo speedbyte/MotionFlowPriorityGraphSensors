@@ -7,27 +7,26 @@
 
 #include <opencv2/core/mat.hpp>
 
-class ObjectShape {
+class ObjectCameraData {
 
 protected:
 
-    cv::Mat m_shape;
+    cv::Mat m_data;
 
 public:
 
     virtual void process() {};
 
-    virtual ushort getWidth() {};
-
-    virtual ushort getHeight() {};
-
     cv::Mat get() {
-        return m_shape;
+        return m_data;
     }
 
+    cv::Mat set() {
+        m_data = cv::Scalar::all(0);
+    }
 };
 
-class Rectangle :  public ObjectShape {
+class Rectangle :  public ObjectCameraData {
 
 private:
     ushort m_objectWidth;

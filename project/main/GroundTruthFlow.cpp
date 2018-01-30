@@ -61,20 +61,9 @@ void GroundTruthFlow::prepare_directories() {
 }
 
 
-void GroundTruthFlow::generate_gt_flow(void) {
+void GroundTruthFlow::generate_gt_scene_flow_vector(std::vector<Objects> list_of_objects) {
 
     prepare_directories();
-
-    /*
-     * First create an object with an shape
-     * Then define the object trajectory
-     * Then copy the object shape on the object trajectory points
-     * Then store the image in the ground truth image folder
-     *
-     * Then extrapolate the object trajectory with the above shape
-     *
-     * Then store the flow information in the flow folder
-     */
 
     cv::Mat tempGroundTruthImage;
     tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_8UC3);
@@ -89,13 +78,60 @@ void GroundTruthFlow::generate_gt_flow(void) {
     auto toc_all = steady_clock::now();
 
 
+    std::cout << "ground truth flow will be stored in " << m_dataset.getGroundTruthFlowPath().string() << std::endl;
 
-    ObjectFlow point(m_dataset);
-    // create the base flow vector
-    point.generate_base_flow_vector(m_list_objects);
+    for ( int i = 0; i < list_of_objects.size(); i++ ) {
+        list_of_objects.at(i).generate_base_flow_vector();
+        // extend the flow vectors by skipping frames and then storing them as pngs
+        list_of_objects.at(i).generate_extended_flow_vector();
+        m_scene_flow_vector_with_coordinate_gt.push_back(list_of_objects.at(i).getFlowPoints().get()[0]);
+    }
 
-    // extend the flow vectors by skipping frames and then storing them as pngs
-    point.generate_extended_flow_vector(MAX_SKIPS, m_list_objects);
+
+    char folder_name_flow[50];
+    cv::FileStorage fs;
+    fs.open(m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+            cv::FileStorage::WRITE);
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > objects;
+
+
+
+    for ( int frame_skip = 1; frame_skip < list_of_objects.at(0).getFlowPoints().get().size() ;
+          frame_skip++ ) {
+
+        sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
+
+        std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
+
+        for (ushort frame_count = 0; frame_count < list_of_objects.at(0).getFlowPoints().get().at
+                (frame_skip).size(); frame_count++) {
+
+            /* What is the shape of the object ? */
+            FlowImage F_gt_write(m_dataset.getFrameSize().width, m_dataset.getFrameSize().height);
+
+            char file_name_image[50];
+            sprintf(file_name_image, "000%03d_10.png", frame_count);
+            std::string temp_gt_flow_image_path = m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
+                                                  + file_name_image;
+
+            fs << "frame_count" << frame_count;
+            for ( int i = 0; i < list_of_objects.size(); i++ ) {
+                list_of_objects.at(i).getFlowPoints().extrapolate_flowpoints(F_gt_write, fs,
+                                       cv::Point2i(list_of_objects.at(i).getFlowPoints().get().at
+                                                           (frame_skip).at(frame_count).first.x,
+                                                   list_of_objects.at(i).getFlowPoints().get().at
+                                                           (frame_skip).at(frame_count).first.y),
+                                                                             list_of_objects.at(i).getData().cols, list_of_objects.at(i).getData().rows,
+                                       list_of_objects.at(i).getFlowPoints().get().at
+                                               (frame_skip).at(frame_count).second.x,
+                                       list_of_objects.at(i).getFlowPoints().get().at
+                                               (frame_skip).at(frame_count).second.y, m_dataset);
+            }
+            F_gt_write.write(temp_gt_flow_image_path);
+        }
+        fs.release();
+    }
+
 
     // plotVectorField (F_gt_write,m_base_directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();

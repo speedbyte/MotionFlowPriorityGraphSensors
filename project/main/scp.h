@@ -3,7 +3,10 @@ const char *project_name = "<SimCtrl><Project name=\"Movement\" "
         "/></SimCtrl>";
 
 
-const char *scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario "
+const char *scenario_nam = "<SimCtrl><UnloadSensors /><LoadScenario "
+        "filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/truck.xml\" /><Start mode=\"operation\" /></SimCtrl>";
+
+std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario "
         "filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/truck.xml\" /><Start mode=\"operation\" /></SimCtrl>";
 
 
@@ -23,14 +26,14 @@ const char *module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\"><Load li
 
 "<VIL><EyepointOffset hDeg="0.000000" pDeg="0.000000" rDeg="0.000000" x="0.000000" y="0.000000" z="0.000000" /></VIL>"
 
- "<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/traffic_demo.xml" /><Start mode="operation" /></SimCtrl>"
-"<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/car.xml" /><Start mode="operation" /></SimCtrl>"
-"<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/moving_car.xml" /><Start mode="operation" /></SimCtrl>"
-"<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/moving_car_near.xml" /><Start mode="operation" /></SimCtrl>"
-"<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/truck.xml" /><Start mode="operation" /></SimCtrl>"
-"<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/moving.xml" /><Start mode="operation" /></SimCtrl>"
-"<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/moving_truck.xml" /><Start mode="operation" /></SimCtrl>"
-"<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/two.xml" /><Start mode="operation" /></SimCtrl>"
+traffic_demo.xml
+car.xml
+moving_car.xml
+moving_car_near.xml
+truck.xml
+moving.xml
+moving_truck.xml
+two.xml
 
 
 

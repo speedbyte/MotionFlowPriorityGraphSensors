@@ -11,22 +11,22 @@
 #include <iostream>
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
-#include "ObjectProperties.h"
+#include "Objects.h"
+#include "Canvas.h"
 
-class GroundTruthScene : protected Framework::ViresInterface {
+
+class GroundTruthScene  {
 
 protected:
     Dataset &m_dataset;
 
 public:
 
-    GroundTruthScene(Dataset &dataset):m_dataset(dataset) {}
+    GroundTruthScene(Dataset &dataset, Canvas canvas): m_dataset(dataset) {}
+
+    GroundTruthScene(Dataset &dataset): m_dataset(dataset) {}
 
     virtual void generate_gt_scene() {};
-
-    virtual ObjectShape getObjectShape() {};
-
-    virtual ObjectTrajectory getObjectTrajectory() {};
 
 protected:
     void prepare_directories();
@@ -37,17 +37,18 @@ class GroundTruthSceneInternal : public GroundTruthScene {
 
 private:
 
-    std::vector<ObjectProperties> &m_list_objects;
+    std::vector<Objects> &m_list_objects;
+    Canvas &m_canvas;
 
 public:
 
-    GroundTruthSceneInternal(Dataset &dataset, std::vector<ObjectProperties> &list_objects) :
-            GroundTruthScene(dataset), m_list_objects(list_objects) {}
+    GroundTruthSceneInternal(Dataset &dataset, Canvas &canvas, std::vector<Objects> &list_objects) :
+            GroundTruthScene(dataset), m_canvas(canvas), m_list_objects(list_objects) {}
 
     void generate_gt_scene();
 
     cv::Mat getObjectShape(int index) {
-        return m_list_objects.at(index).getShape().get();
+        return m_list_objects.at(index).getData();
     }
 
     std::vector<cv::Point2i> getObjectTrajectory(int index) {
@@ -60,11 +61,11 @@ public:
 
 };
 
-class GroundTruthSceneExternal : public GroundTruthScene {
+class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::ViresInterface {
 
 private:
 
-    std::vector<ObjectProperties> m_list_of_objects;
+    std::vector<Objects> m_list_of_objects;
     std::string m_scenario;
 
 public:
@@ -88,7 +89,7 @@ public:
     void parseEntry( RDB_OBJECT_CFG_t *data, const double & simTime, const unsigned int & simFrame, const
     unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
 
-    std::vector<ObjectProperties> getListOfObjects() {
+    std::vector<Objects> getListOfObjects() {
         return m_list_of_objects;
     }
 

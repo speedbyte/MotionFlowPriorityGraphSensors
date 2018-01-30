@@ -7,6 +7,21 @@
 
 int main(int argc, char *argv[]) {
 
+
+    Rectangle rect;
+    GroundTruth obj1 = GroundTruth(rect);
+    Noise noise;
+
+    std::vector<GroundTruth> list_objects;
+    list_objects.push_back(obj1);
+
+    //Object obj1 = ObjectList(list_rect);
+
+    std::cout << obj1.getShape() << std::endl;
+    std::cout << list_objects.at(0).getShape() << std::endl;
+
+    /* ------- */
+
     Base a;
     Derived b;
     Derived2 c;
@@ -19,17 +34,10 @@ int main(int argc, char *argv[]) {
 
     //std::cout << b.getA();
 
-    Rectangle rect;
-    GroundTruth obj1 = GroundTruth(rect);
+    /* -------------- */
 
-    std::vector<GroundTruth> list_objects;
-    list_objects.push_back(obj1);
-
-    //Object obj1 = ObjectList(list_rect);
-
-
-    std::cout << obj1.getShape() << std::endl;
-    std::cout << list_objects.at(0).getShape() << std::endl;
+    Rectangle rect1;
+    std::cout << rect1.getXyz() << std::endl;
 
 
 
