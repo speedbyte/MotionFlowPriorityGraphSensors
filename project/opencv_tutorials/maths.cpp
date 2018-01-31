@@ -443,14 +443,16 @@ void matrixOperations() {
 
 int main ( int argc, char *argv[]) {
 
-    cv::Point3f hello;aut
+    cv::Point3f hello;
+
+
 
     std::cout << "\ncartToPolar----------------------------------------------" << std::endl;
     //cartToPolar();
     std::cout << "\npolarToCart----------------------------------------------" << std::endl;
     //polarToCart();
     std::cout << "\ncalcCovarMatrix----------------------------------------------" << std::endl;
-    calcCovarMatrix();
+    //calcCovarMatrix();
     std::cout << "\nsolveLinear----------------------------------------------" << std::endl;
     //solveLinear();
     std::cout << "\nsolvePoly----------------------------------------------" << std::endl;
@@ -465,6 +467,9 @@ int main ( int argc, char *argv[]) {
     //eigen();
     std::cout << "\nlinear least square----------------------------------------------" << std::endl;
     //linearLeastSquare();
+    std::cout << (1%1) << (2%1) << (1%2) << (5%3) << (3%5) << (4%1) << (0%4);
+
     return 0;
+
 }
 

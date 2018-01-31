@@ -41,6 +41,9 @@ public:
         std::cout << "killing previous GroundTruthFlow object\n" ;
     }
 
+    void extrapolate_flowpoints( std::string temp_gt_flow_image_path, unsigned frame_skip,
+                                                  unsigned frame_count);
+
 
 private:
 

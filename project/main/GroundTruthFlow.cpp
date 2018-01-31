@@ -102,11 +102,8 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
 
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-        for (ushort frame_count = 0; frame_count < m_list_objects.at(0).getFlowPoints().get().at
-                (frame_skip).size(); frame_count++) {
-
-            /* What is the shape of the object ? */
-            FlowImage F_gt_write(m_dataset.getFrameSize().width, m_dataset.getFrameSize().height);
+        for (ushort frame_count = 0; frame_count < (m_list_objects.at(0).getFlowPoints().get().at
+                (frame_skip-1)).size(); frame_count++) {
 
             char file_name_image[50];
             sprintf(file_name_image, "000%03d_10.png", frame_count);
@@ -114,18 +111,7 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
                                                   + file_name_image;
 
             fs << "frame_count" << frame_count;
-            for ( unsigned i = 0; i < m_list_objects.size(); i++ ) {
-                m_list_objects.at(i).getFlowPoints().extrapolate_flowpoints(F_gt_write, fs,
-                                       m_list_objects.at(i).getFlowPoints().get().at
-                                                           (frame_skip).at(frame_count).first,
-                                                                             m_list_objects.at(i).getShapeImageData
-                                                                                             ().get().cols,
-                                                                             m_list_objects.at(i).getShapeImageData
-                                                                                     ().get().rows,
-                                       m_list_objects.at(i).getFlowPoints().get().at
-                                               (frame_skip).at(frame_count).second, m_dataset);
-            }
-            F_gt_write.write(temp_gt_flow_image_path);
+            extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count);
         }
         fs.release();
     }
@@ -137,6 +123,65 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
     std::cout << "ground truth flow generation time - " << time_map["ground truth"]  << "ms" << std::endl;
 
 }
+
+
+void GroundTruthFlow::extrapolate_flowpoints( std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
+frame_count) {
+
+    FlowImage F_gt_write(m_dataset.getFrameSize().width, m_dataset.getFrameSize().height);
+    cv::Mat tempMatrix;
+    tempMatrix.create(m_dataset.getFrameSize(),CV_32FC3);
+    assert(tempMatrix.channels() == 3);
+    //tempMatrix = cv::Scalar::all(0);
+    for ( unsigned i = 0; i < m_list_objects.size(); i++ ) {
+
+        // object shape
+        int width = m_list_objects.at(i).getShapeImageData().get().cols;
+        int height = m_list_objects.at(i).getShapeImageData().get().rows;
+
+        // displacement
+        cv::Point2i pt = m_list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).first;
+        cv::Point2f displacement = m_list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).second;
+
+        cv::Mat roi;
+        roi = tempMatrix.
+                colRange(pt.x, (pt.x + width)).
+                rowRange(pt.y, (pt.y + height));
+        //bulk storage
+        roi = cv::Scalar(displacement.x, displacement.y, 1.0f);
+
+/*
+        //cv::Vec3f *dataPtr = tempMatrix.ptr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
+        // first row. The r, g b  value of single pixels are continous.
+        float *array = (float *)malloc(3*sizeof(float)*m_dataset.getFrameSize().width*m_dataset.getFrameSize().height);
+        cv::MatConstIterator_<cv::Vec3f> it = roi.begin<cv::Vec3f>();
+        for (unsigned i = 0; it != roi.end<cv::Vec3f>(); it++ ) {
+            for ( unsigned j = 0; j < 3; j++ ) {
+                *(array + i ) = (*it)[j];
+                i++;
+            }
+        }
+        FlowImage temp = FlowImage(array, m_dataset.getFrameSize().width, m_dataset.getFrameSize().height );
+        F_gt_write = temp;
+
+ */
+
+    }
+
+    //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
+    for (int32_t row=0; row<m_dataset.getFrameSize().height; row++) { // rows
+        for (int32_t column=0; column<m_dataset.getFrameSize().width; column++) {  // cols
+            if (tempMatrix.at<cv::Vec3f>(row,column)[2] > 0.5 ) {
+                F_gt_write.setFlowU(column,row,tempMatrix.at<cv::Vec3f>(row,column)[1]);
+                F_gt_write.setFlowV(column,row,tempMatrix.at<cv::Vec3f>(row,column)[0]);
+                F_gt_write.setValid(column,row,1.0f);
+                //trajectory.store_in_yaml(fs, cv::Point2i(row, column), cv::Point2i(xValue, yValue) );
+            }
+        }
+    }
+    F_gt_write.write(temp_gt_flow_image_path);
+}
+
 
 
 void GroundTruthFlow::plot(std::string resultsordner) {
