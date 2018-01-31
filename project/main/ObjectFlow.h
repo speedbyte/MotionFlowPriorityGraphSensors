@@ -12,18 +12,17 @@
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
 
-class ObjectFlow {
+class ObjectFlow : public FlowImage {
 
 private:
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_object_flowvector_with_coordinate_gt;
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_basic;
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >
-            m_object_frame_skips_extended_flowvector_with_coordinate_gt;
+            m_obj_flow_vector_extended;
 
 public:
 
     /* This needs to know the shape of the object to extrapolate */
-    void extrapolate_flowpoints( FlowImage &F_gt_write, cv::FileStorage fs, cv::Point2i pt, int width, int height, int
-    xValue, int yValue, const Dataset &dataset);
+    void extrapolate_flowpoints( FlowImage &F_gt_write, cv::FileStorage fs, cv::Point2i pt, int width, int height, cv::Point2f displacement, const Dataset &dataset);
 
     void generate_base_flow_vector(const Dataset &m_dataset, const ushort &start_point, const std::vector<cv::Point2i>
     &trajectory_points);
@@ -40,7 +39,7 @@ public:
     &l_pixelmovement );
 
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >  get() {
-        return m_object_frame_skips_extended_flowvector_with_coordinate_gt;
+        return m_obj_flow_vector_extended;
     }
 
 };

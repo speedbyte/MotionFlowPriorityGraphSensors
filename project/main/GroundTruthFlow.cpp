@@ -61,7 +61,7 @@ void GroundTruthFlow::prepare_directories() {
 }
 
 
-void GroundTruthFlow::generate_gt_scene_flow_vector(std::vector<Objects> list_of_objects) {
+void GroundTruthFlow::generate_gt_scene_flow_vector() {
 
     prepare_directories();
 
@@ -80,11 +80,10 @@ void GroundTruthFlow::generate_gt_scene_flow_vector(std::vector<Objects> list_of
 
     std::cout << "ground truth flow will be stored in " << m_dataset.getGroundTruthFlowPath().string() << std::endl;
 
-    for ( int i = 0; i < list_of_objects.size(); i++ ) {
-        list_of_objects.at(i).generate_base_flow_vector();
+    for ( int i = 0; i < m_list_objects.size(); i++ ) {
+        m_list_objects.at(i).generate_base_flow_vector();
         // extend the flow vectors by skipping frames and then storing them as pngs
-        list_of_objects.at(i).generate_extended_flow_vector();
-        m_scene_flow_vector_with_coordinate_gt.push_back(list_of_objects.at(i).getFlowPoints().get()[0]);
+        m_list_objects.at(i).generate_extended_flow_vector();
     }
 
 
@@ -96,14 +95,14 @@ void GroundTruthFlow::generate_gt_scene_flow_vector(std::vector<Objects> list_of
 
 
 
-    for ( int frame_skip = 1; frame_skip < list_of_objects.at(0).getFlowPoints().get().size() ;
+    for ( unsigned frame_skip = 1; frame_skip < m_list_objects.at(0).getFlowPoints().get().size() ;
           frame_skip++ ) {
 
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
 
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-        for (ushort frame_count = 0; frame_count < list_of_objects.at(0).getFlowPoints().get().at
+        for (ushort frame_count = 0; frame_count < m_list_objects.at(0).getFlowPoints().get().at
                 (frame_skip).size(); frame_count++) {
 
             /* What is the shape of the object ? */
@@ -115,20 +114,16 @@ void GroundTruthFlow::generate_gt_scene_flow_vector(std::vector<Objects> list_of
                                                   + file_name_image;
 
             fs << "frame_count" << frame_count;
-            for ( int i = 0; i < list_of_objects.size(); i++ ) {
-                list_of_objects.at(i).getFlowPoints().extrapolate_flowpoints(F_gt_write, fs,
-                                       cv::Point2i(list_of_objects.at(i).getFlowPoints().get().at
-                                                           (frame_skip).at(frame_count).first.x,
-                                                   list_of_objects.at(i).getFlowPoints().get().at
-                                                           (frame_skip).at(frame_count).first.y),
-                                                                             list_of_objects.at(i).getShapeImageData
+            for ( unsigned i = 0; i < m_list_objects.size(); i++ ) {
+                m_list_objects.at(i).getFlowPoints().extrapolate_flowpoints(F_gt_write, fs,
+                                       m_list_objects.at(i).getFlowPoints().get().at
+                                                           (frame_skip).at(frame_count).first,
+                                                                             m_list_objects.at(i).getShapeImageData
                                                                                              ().get().cols,
-                                                                             list_of_objects.at(i).getShapeImageData
+                                                                             m_list_objects.at(i).getShapeImageData
                                                                                      ().get().rows,
-                                       list_of_objects.at(i).getFlowPoints().get().at
-                                               (frame_skip).at(frame_count).second.x,
-                                       list_of_objects.at(i).getFlowPoints().get().at
-                                               (frame_skip).at(frame_count).second.y, m_dataset);
+                                       m_list_objects.at(i).getFlowPoints().get().at
+                                               (frame_skip).at(frame_count).second, m_dataset);
             }
             F_gt_write.write(temp_gt_flow_image_path);
         }

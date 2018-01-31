@@ -6,6 +6,7 @@
 #define MAIN_NOISE_H
 
 
+#include <opencv2/imgproc.hpp>
 #include "SensorImage.h"
 
 class SensorImage;
@@ -14,29 +15,33 @@ class Noise {
 
 public:
 
-    virtual void set(SensorImage &image) {
-        // clear the element and repeats the noise
+    virtual void apply(SensorImage &image) {
+
+        clear(); // restore original image without noise and then apply
+        append();
     }
 
     virtual void append() {
        // append the noise on already noised element
     }
 
-    // we cannot clear a noise, because we dont have the original. To solve this
-    // the original image needs to be stored somewhere.
+    virtual void clear() {
+
+    }
 };
 
 class GuassianNoise: public Noise {
 
 public:
-    void set(SensorImage &image) override {
-        // manipulate image with noise on this and return
+    void apply(SensorImage &image) override {
+        //cv::GaussianBlur();// manipulate image with noise on this and return
     }
+
 };
 
 class Reflection: public Noise {
 public:
-    void set() {
+    void apply() {
         // manipulate image with noise and return
     }
 };
@@ -44,7 +49,7 @@ public:
 class NoNoise: public Noise {
 
 public:
-    void set() {
+    void apply() {
         // manipulate image with noise and return
     }
 };

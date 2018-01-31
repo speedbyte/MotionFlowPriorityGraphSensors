@@ -67,7 +67,7 @@ void matx_() {
 
 void mat() {
     //Mat ----------------------------------------------------------
-    std::cout << "Begin Mat----------------------------------" << std::endl;
+    std::cout << "Begin Mat---------------------- " << std::endl;
     // Initialize
     float data1[6] = {1,2,3,4,5,6};
     float data2[6] = {10,20,30,40,50,60};
@@ -237,6 +237,42 @@ void saturation_cast() {
     std::cout << m0 << std::endl;
 }
 
+
+void Mat_to_array() {
+
+    int sz[3] = {3,3,3};
+    cv::Mat tempMatrix_(3, sz ,CV_32FC3);;
+    cv::Mat tempMatrix(3,3,CV_32FC2);
+    cv::randu(tempMatrix, 1, 5);
+
+    //assert(tempMatrix.channels() == 3);
+
+    // TODO take all the non 0 data in a float matrix and then call FlowImage Constructor with additional data
+
+    //cv::Vec3f *dataPtr = tempMatrix.ptr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
+    // first row. The r, g b  value of single pixels are not continous. all channel elements are continous. So, r is
+    // continous and then g is continous and then b is continous.
+
+    //float array[m_dataset.getFrameSize().width*m_dataset.getFrameSize().height][3];
+    float *array = (float *)malloc(2*sizeof(float)*3*3);
+    //cv::MatConstIterator_<cv::Vec3f> it = tempMatrix.begin<cv::Vec3f>();
+    cv::MatConstIterator_<cv::Vec2f> it = tempMatrix.begin<cv::Vec2f>();
+    for (unsigned i = 0; it != tempMatrix.end<cv::Vec2f>(); it++ ) {
+        std::cout << (*it)[0] << std::endl;
+        std::cout << (*it)[1] << std::endl;
+        //std::cout << (*it)[2] << std::endl;
+        for ( unsigned j = 0; j < 2; j++ ) {
+            *(array + i ) = (*it)[j];
+            i++;
+        }
+    }
+    std::cout << tempMatrix << std::endl;
+    for ( unsigned i = 0; i < 18 ; i++ ) {
+        std::cout << *(array+i) << std::endl;
+    }
+}
+
+
 int main ( int argc, char *argv[]) {
 
 //    point_();
@@ -246,7 +282,8 @@ int main ( int argc, char *argv[]) {
 //    mat_();
     //mat();
 //    mat_multiplication();
-    randomize_coordinates();
+    //randomize_coordinates();
+    Mat_to_array();
 
     /*
     //Very very large operation

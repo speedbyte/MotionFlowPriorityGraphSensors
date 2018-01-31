@@ -70,7 +70,7 @@ void ObjectFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector
         printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", i,
                l_pixel_position.x, l_pixel_position.y, l_pixel_movement.x, l_pixel_movement.y);
         // Lines to indicate the motion vectors
-        m_object_flowvector_with_coordinate_gt.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
+        m_obj_flow_vector_basic.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
     }
     next_pts.resize(count);
 }
@@ -84,7 +84,7 @@ temp_result_flow_path) {
 
     fs << "frame_count" << frame_count;
 
-    for ( it = m_object_flowvector_with_coordinate_gt.begin(); it != m_object_flowvector_with_coordinate_gt.end(); it++ )
+    for ( it = m_obj_flow_vector_basic.begin(); it != m_obj_flow_vector_basic.end(); it++ )
     {
         F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
         F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
@@ -145,10 +145,10 @@ std::vector<cv::Point2i> &trajectory_points) {
                    l_pixel_movement.x, l_pixel_movement.y);
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
-            m_object_flowvector_with_coordinate_gt.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
+            m_obj_flow_vector_basic.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
         }
         else {
-            m_object_flowvector_with_coordinate_gt.push_back(std::make_pair(cv::Point2i(0,0), cv::Point2i(0,0)));
+            m_obj_flow_vector_basic.push_back(std::make_pair(cv::Point2i(0,0), cv::Point2i(0,0)));
         }
         current_index++;
     }
@@ -171,26 +171,25 @@ void ObjectFlow::generate_extended_flow_vector(const Dataset &m_dataset, const i
             // The first frame is the reference frame.
             // The below code has to go through consecutive frames
             if (frame_count % frame_skip != 0) {
-                temp_flow_x += m_object_flowvector_with_coordinate_gt.at(frame_count).second.x;
-                temp_flow_y += m_object_flowvector_with_coordinate_gt.at(frame_count).second.y;
+                temp_flow_x += m_obj_flow_vector_basic.at(frame_count).second.x;
+                temp_flow_y += m_obj_flow_vector_basic.at(frame_count).second.y;
             }
             else {
-                temp_flow_x += m_object_flowvector_with_coordinate_gt.at(frame_count).second.x;
-                temp_flow_y += m_object_flowvector_with_coordinate_gt.at(frame_count).second.y;
+                temp_flow_x += m_obj_flow_vector_basic.at(frame_count).second.x;
+                temp_flow_y += m_obj_flow_vector_basic.at(frame_count).second.y;
 
                 extended_flowvector.push_back
-                        (std::make_pair(m_object_flowvector_with_coordinate_gt.at
+                        (std::make_pair(m_obj_flow_vector_basic.at
                         (frame_count).first, cv::Point2i(temp_flow_x, temp_flow_y)));
                 temp_flow_x = 0, temp_flow_y = 0;
             }
         }
-        m_object_frame_skips_extended_flowvector_with_coordinate_gt.push_back
-                (extended_flowvector);
+        m_obj_flow_vector_extended.push_back(extended_flowvector);
     }
 }
 
 void ObjectFlow::extrapolate_flowpoints( FlowImage &F_gt_write, cv::FileStorage fs, cv::Point2i pt, int width, int
-height, int xValue, int yValue, const Dataset &m_dataset) {
+height, cv::Point2f displacement, const Dataset &m_dataset) {
 
     cv::Mat tempMatrix;
     tempMatrix.create(m_dataset.getFrameSize(),CV_32FC3);
@@ -202,16 +201,33 @@ height, int xValue, int yValue, const Dataset &m_dataset) {
             colRange(pt.x, (pt.x + width)).
             rowRange(pt.y, (pt.y + height));
     //bulk storage
-    roi = cv::Scalar(xValue, yValue, 1.0f);
+    roi = cv::Scalar(displacement.x, displacement.y, 1.0f);
 
     // TODO take all the non 0 data in a float matrix and then call FlowImage Constructor with additional data
+
+    //cv::Vec3f *dataPtr = tempMatrix.ptr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
+    // first row. The r, g b  value of single pixels are not continous. all channel elements are continous. So, r is
+    // continous and then g is continous and then b is continous.
+/*
+    float *array = (float *)malloc(3*sizeof(float)*m_dataset.getFrameSize().width*m_dataset.getFrameSize().height);
+    cv::MatConstIterator_<cv::Vec3f> it = roi.begin<cv::Vec3f>();
+    for (unsigned i = 0; it != roi.end<cv::Vec3f>(); it++ ) {
+        for ( unsigned j = 0; j < 3; j++ ) {
+            *(array + i ) = (*it)[j];
+            i++;
+        }
+    }
+
+    FlowImage temp = FlowImage(array, m_dataset.getFrameSize().width, m_dataset.getFrameSize().height );
+    F_gt_write = temp;
+*/
     // parameter
     //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
     for (int32_t row=0; row<m_dataset.getFrameSize().height; row++) { // rows
         for (int32_t column=0; column<m_dataset.getFrameSize().width; column++) {  // cols
             if (tempMatrix.at<cv::Vec3f>(row,column)[2] > 0.5 ) {
-                F_gt_write.setFlowU(column,row,yValue);
-                F_gt_write.setFlowV(column,row,xValue);
+                F_gt_write.setFlowU(column,row,displacement.y);
+                F_gt_write.setFlowV(column,row,displacement.x);
                 F_gt_write.setValid(column,row,1.0f);
                 //trajectory.store_in_yaml(fs, cv::Point2i(row, column), cv::Point2i(xValue, yValue) );
             }

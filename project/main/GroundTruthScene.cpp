@@ -52,6 +52,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     //m_trajectories.process(m_dataset.getFrameSize());
 
     cv::Mat tempGroundTruthImage;
+    tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_32FC3);
     assert(tempGroundTruthImage.channels() == 3);
 
     std::map<std::string, double> time_map = {{"generate",0},{"ground truth", 0}};

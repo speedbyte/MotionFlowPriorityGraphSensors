@@ -187,8 +187,8 @@ int main ( int argc, char *argv[]) {
                 GroundTruthSceneInternal gt_scene(cpp, canvas, list_of_objects);
                 gt_scene.generate_gt_scene();
 
-                GroundTruthFlow gt_flow(cpp);
-                gt_flow.generate_gt_scene_flow_vector(list_of_objects);
+                GroundTruthFlow gt_flow(cpp, list_of_objects);
+                gt_flow.generate_gt_scene_flow_vector();
 
             }
 
@@ -266,8 +266,8 @@ int main ( int argc, char *argv[]) {
                 GroundTruthSceneExternal gt_scene(vires, scenario);
                 gt_scene.generate_gt_scene();
                 std::vector<Objects> list_of_objects = gt_scene.getListOfObjects();
-                GroundTruthFlow gt_flow(vires);
-                gt_flow.generate_gt_scene_flow_vector(list_of_objects);
+                GroundTruthFlow gt_flow(vires, list_of_objects);
+                gt_flow.generate_gt_scene_flow_vector();
             }
 
             AlgorithmFlow fback(vires);

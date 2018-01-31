@@ -7,8 +7,9 @@
 
 #include <iostream>
 #include "Dataset.h"
+#include <kitti/io_flow.h>
 
-class PlotFlow {
+class PlotFlow : public FlowImage {
 
 public:
     void plot(const Dataset &dataset, std::string resultsordner);

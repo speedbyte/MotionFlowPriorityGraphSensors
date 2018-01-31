@@ -24,15 +24,16 @@ class GroundTruthFlow : public PlotFlow {
 
 private:
 
-    Dataset &m_dataset;
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_scene_flow_vector_with_coordinate_gt;
 
+    std::vector<Objects> &m_list_objects;
+    Dataset &m_dataset;
 
 public:
 
-    GroundTruthFlow( Dataset &dataset ) : m_dataset(dataset) {}
+    GroundTruthFlow( Dataset &dataset, std::vector<Objects> &list_objects ) : m_dataset(dataset), m_list_objects
+            (list_objects) {}
 
-    void generate_gt_scene_flow_vector(std::vector<Objects> list_of_objects);
+    void generate_gt_scene_flow_vector();
 
     void plot(std::string resultsordner);
 
