@@ -49,4 +49,7 @@ public:
     }
 };
 
+
+
+
 #endif //MAIN_NOISE_H

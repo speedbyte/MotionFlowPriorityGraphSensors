@@ -16,7 +16,6 @@ class ObjectFlow {
 
 private:
     std::vector<std::pair<cv::Point2i, cv::Point2i> > m_object_flowvector_with_coordinate_gt;
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_object_extended_flowvector_with_coordinate_gt;
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >
             m_object_frame_skips_extended_flowvector_with_coordinate_gt;
 

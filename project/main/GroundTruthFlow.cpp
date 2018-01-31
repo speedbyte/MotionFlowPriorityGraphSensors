@@ -121,7 +121,10 @@ void GroundTruthFlow::generate_gt_scene_flow_vector(std::vector<Objects> list_of
                                                            (frame_skip).at(frame_count).first.x,
                                                    list_of_objects.at(i).getFlowPoints().get().at
                                                            (frame_skip).at(frame_count).first.y),
-                                                                             list_of_objects.at(i).getData().cols, list_of_objects.at(i).getData().rows,
+                                                                             list_of_objects.at(i).getShapeImageData
+                                                                                             ().get().cols,
+                                                                             list_of_objects.at(i).getShapeImageData
+                                                                                     ().get().rows,
                                        list_of_objects.at(i).getFlowPoints().get().at
                                                (frame_skip).at(frame_count).second.x,
                                        list_of_objects.at(i).getFlowPoints().get().at

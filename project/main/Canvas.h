@@ -19,7 +19,7 @@ class Canvas : public Objects {
 public:
 
     // The canvas can move to simulate a moving car. Hence we need trajectory etc.
-    Canvas ( Dataset &dataset, ObjectCameraData &shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
+    Canvas ( Dataset &dataset, ObjectShapeImageData &shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
     &noise ) : Objects(dataset, shape, trajectory, startPoint, noise) {
         shape.process();
     };

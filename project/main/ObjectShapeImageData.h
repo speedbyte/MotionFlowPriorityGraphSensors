@@ -7,7 +7,7 @@
 
 #include <opencv2/core/mat.hpp>
 
-class ObjectCameraData {
+class ObjectShapeImageData {
 
 protected:
 
@@ -26,7 +26,7 @@ public:
     }
 };
 
-class Rectangle :  public ObjectCameraData {
+class Rectangle :  public ObjectShapeImageData {
 
 private:
     ushort m_objectWidth;

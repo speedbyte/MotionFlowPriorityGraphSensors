@@ -48,12 +48,8 @@ public:
     void generate_gt_scene();
 
     cv::Mat getObjectShape(int index) {
-        return m_list_objects.at(index).getData();
+        return m_list_objects.at(index).getShapeImageData().get();
     }
-
-    std::vector<cv::Point2i> getObjectTrajectory(int index) {
-        return m_list_objects.at(index).getTrajectoryPoints().get();
-    };
 
     ~GroundTruthSceneInternal(){
         std::cout << "killing previous GroundTruthScene object\n" ;
