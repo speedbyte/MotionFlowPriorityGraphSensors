@@ -19,7 +19,7 @@
  *  produces flow images
  */
 
-class GroundTruthFlow : public PlotFlow {
+class GroundTruthFlow{
 
 private:
 
@@ -37,7 +37,9 @@ public:
 
     void generate_gt_scene_flow_vector();
 
-    void plot(std::string resultsordner);
+    void generatePixelRobustness();
+
+    void generateVectorRobustness();
 
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
@@ -46,6 +48,8 @@ public:
 private:
 
     void prepare_directories();
+
+    void calcCovarMatrix();
 
 };
 

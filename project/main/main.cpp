@@ -189,6 +189,7 @@ int main ( int argc, char *argv[]) {
 
                 GroundTruthFlow gt_flow(cpp, list_of_objects);
                 gt_flow.generate_gt_scene_flow_vector();
+                gt_flow.generatePixelRobustness();
 
             }
 
