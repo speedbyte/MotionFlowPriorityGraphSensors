@@ -10,7 +10,6 @@
 #include "PlotFlow.h"
 #include "ObjectTrajectory.h"
 #include "GroundTruthScene.h"
-#include "ObjectFlow.h"
 
 /**
  * This class
@@ -33,6 +32,9 @@ public:
     GroundTruthFlow( Dataset &dataset, std::vector<Objects> &list_objects ) : m_dataset(dataset), m_list_objects
             (list_objects) {}
 
+    void extrapolate_flowpoints( std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
+    frame_count, std::vector<Objects> list_objects, Dataset &dataset);
+
     void generate_gt_scene_flow_vector();
 
     void plot(std::string resultsordner);
@@ -41,17 +43,10 @@ public:
         std::cout << "killing previous GroundTruthFlow object\n" ;
     }
 
-    void extrapolate_flowpoints( std::string temp_gt_flow_image_path, unsigned frame_skip,
-                                                  unsigned frame_count);
-
-
 private:
 
     void prepare_directories();
 
-
-    void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
-            &l_pixelmovement);
 };
 
 

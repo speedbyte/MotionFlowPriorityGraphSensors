@@ -12,22 +12,20 @@
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
 
-class ObjectFlow : public FlowImage {
+
+class ObjectFlow {
 
 private:
     std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_basic;
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >
-            m_obj_flow_vector_extended;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_flow_vector_extended;
 
 public:
 
     /* This needs to know the shape of the object to extrapolate */
-    void extrapolate_flowpoints( FlowImage &F_gt_write, cv::FileStorage fs, cv::Point2i pt, int width, int height, cv::Point2f displacement, const Dataset &dataset);
-
     void generate_base_flow_vector(const Dataset &m_dataset, const ushort &start_point, const std::vector<cv::Point2i>
     &trajectory_points);
 
-    void generate_extended_flow_vector(const Dataset &dataset, const int &max_skips, cv::Mat data);
+    void generate_extended_flow_vector(const Dataset &dataset, const int &max_skips);
 
     void storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts, const
     std::vector<uchar> status);

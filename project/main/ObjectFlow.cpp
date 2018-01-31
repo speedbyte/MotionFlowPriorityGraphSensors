@@ -16,7 +16,7 @@
 #include <kitti/io_flow.h>
 #include "ObjectTrajectory.h"
 #include "datasets.h"
-
+#include "PlotFlow.h"
 
 
 void ObjectFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts,
@@ -154,8 +154,7 @@ std::vector<cv::Point2i> &trajectory_points) {
     }
 }
 
-void ObjectFlow::generate_extended_flow_vector(const Dataset &m_dataset, const int &max_skips, cv::Mat shape
-) {
+void ObjectFlow::generate_extended_flow_vector(const Dataset &m_dataset, const int &max_skips ) {
 
     int temp_flow_x(0);
     int temp_flow_y(0);

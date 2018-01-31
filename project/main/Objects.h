@@ -56,7 +56,7 @@ public:
     }
 
     void generate_extended_flow_vector()  {
-        m_obj_flow.generate_extended_flow_vector(m_dataset, MAX_SKIPS, m_shape.get() );
+        m_obj_flow.generate_extended_flow_vector(m_dataset, MAX_SKIPS );
     }
 
     ushort getStartPoint() {

@@ -1,5 +1,4 @@
 
-
 #include <vector>
 #include <cmath>
 #include <opencv2/core/cvdef.h>
@@ -13,7 +12,6 @@
 #include <chrono>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <png++/png.hpp>
 
 #include "kitti/log_colormap.h"
@@ -86,7 +84,6 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
         m_list_objects.at(i).generate_extended_flow_vector();
     }
 
-
     char folder_name_flow[50];
     cv::FileStorage fs;
     fs.open(m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
@@ -111,11 +108,11 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
                                                   + file_name_image;
 
             fs << "frame_count" << frame_count;
-            extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count);
+            extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects,
+                                              m_dataset);
         }
         fs.release();
     }
-
 
     // plotVectorField (F_gt_write,m_base_directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
@@ -125,23 +122,25 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
 }
 
 
-void GroundTruthFlow::extrapolate_flowpoints( std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
-frame_count) {
 
-    FlowImage F_gt_write(m_dataset.getFrameSize().width, m_dataset.getFrameSize().height);
+void GroundTruthFlow::extrapolate_flowpoints(std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
+frame_count,
+                                        std::vector<Objects> list_objects, Dataset &dataset) {
+
+    FlowImage F_gt_write(dataset.getFrameSize().width, dataset.getFrameSize().height);
     cv::Mat tempMatrix;
-    tempMatrix.create(m_dataset.getFrameSize(),CV_32FC3);
+    tempMatrix.create(dataset.getFrameSize(),CV_32FC3);
     assert(tempMatrix.channels() == 3);
     //tempMatrix = cv::Scalar::all(0);
-    for ( unsigned i = 0; i < m_list_objects.size(); i++ ) {
+    for ( unsigned i = 0; i < list_objects.size(); i++ ) {
 
         // object shape
-        int width = m_list_objects.at(i).getShapeImageData().get().cols;
-        int height = m_list_objects.at(i).getShapeImageData().get().rows;
+        int width = list_objects.at(i).getShapeImageData().get().cols;
+        int height = list_objects.at(i).getShapeImageData().get().rows;
 
         // displacement
-        cv::Point2i pt = m_list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).first;
-        cv::Point2f displacement = m_list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).second;
+        cv::Point2i pt = list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).first;
+        cv::Point2f displacement = list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).second;
 
         cv::Mat roi;
         roi = tempMatrix.
@@ -153,7 +152,7 @@ frame_count) {
 /*
         //cv::Vec3f *dataPtr = tempMatrix.ptr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
         // first row. The r, g b  value of single pixels are continous.
-        float *array = (float *)malloc(3*sizeof(float)*m_dataset.getFrameSize().width*m_dataset.getFrameSize().height);
+        float *array = (float *)malloc(3*sizeof(float)*dataset.getFrameSize().width*dataset.getFrameSize().height);
         cv::MatConstIterator_<cv::Vec3f> it = roi.begin<cv::Vec3f>();
         for (unsigned i = 0; it != roi.end<cv::Vec3f>(); it++ ) {
             for ( unsigned j = 0; j < 3; j++ ) {
@@ -161,16 +160,15 @@ frame_count) {
                 i++;
             }
         }
-        FlowImage temp = FlowImage(array, m_dataset.getFrameSize().width, m_dataset.getFrameSize().height );
+        FlowImage temp = FlowImage(array, dataset.getFrameSize().width, dataset.getFrameSize().height );
         F_gt_write = temp;
 
  */
-
     }
 
     //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
-    for (int32_t row=0; row<m_dataset.getFrameSize().height; row++) { // rows
-        for (int32_t column=0; column<m_dataset.getFrameSize().width; column++) {  // cols
+    for (int32_t row=0; row<dataset.getFrameSize().height; row++) { // rows
+        for (int32_t column=0; column<dataset.getFrameSize().width; column++) {  // cols
             if (tempMatrix.at<cv::Vec3f>(row,column)[2] > 0.5 ) {
                 F_gt_write.setFlowU(column,row,tempMatrix.at<cv::Vec3f>(row,column)[1]);
                 F_gt_write.setFlowV(column,row,tempMatrix.at<cv::Vec3f>(row,column)[0]);
@@ -182,11 +180,4 @@ frame_count) {
     F_gt_write.write(temp_gt_flow_image_path);
 }
 
-
-
-void GroundTruthFlow::plot(std::string resultsordner) {
-
-    PlotFlow::plot(m_dataset, resultsordner);
-
-}
 

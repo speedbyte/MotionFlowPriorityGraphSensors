@@ -45,7 +45,7 @@ public:
     virtual void clearNoise() override {
     }
 
-    ObjectShapeImageData getShapeImageData() {
+    ObjectShapeImageData getShapeImageData() const {
         return m_shape;
     }
 };

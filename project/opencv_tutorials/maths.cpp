@@ -452,13 +452,13 @@ int main ( int argc, char *argv[]) {
     std::cout << "\npolarToCart----------------------------------------------" << std::endl;
     //polarToCart();
     std::cout << "\ncalcCovarMatrix----------------------------------------------" << std::endl;
-    //calcCovarMatrix();
+    calcCovarMatrix();
     std::cout << "\nsolveLinear----------------------------------------------" << std::endl;
     //solveLinear();
     std::cout << "\nsolvePoly----------------------------------------------" << std::endl;
     //solvePoly();
     std::cout << "\nmean and std dev----------------------------------------------" << std::endl;
-    meanStdDeviation();
+    //meanStdDeviation();
     std::cout << "\nlinearPolar----------------------------------------------" << std::endl;
     //linearPolar();
     std::cout << "\nmahalonobis----------------------------------------------" << std::endl;

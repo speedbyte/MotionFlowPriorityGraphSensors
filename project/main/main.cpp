@@ -203,8 +203,8 @@ int main ( int argc, char *argv[]) {
             }
 
             if ( cpp_dataset.plot ) {
-                fback.plot(std::string("results_FB_no_noise"));
-                lkanade.plot(std::string("results_LK_no_noise"));
+                PlotFlow::plot(cpp, std::string("results_FB_no_noise"));
+                PlotFlow::plot(cpp, std::string("results_LK_no_noise"));
             }
         }
     }
@@ -281,8 +281,8 @@ int main ( int argc, char *argv[]) {
             }
 
             if ( vires_dataset.plot ) {
-                fback.plot(std::string("results_FB_no_noise"));
-                lkanade.plot(std::string("results_LK_no_noise"));
+                PlotFlow::plot(vires, std::string("results_FB_no_noise"));
+                PlotFlow::plot(vires, std::string("results_LK_no_noise"));
             }
             //disparity(dataset_path);
         }

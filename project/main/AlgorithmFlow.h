@@ -12,21 +12,19 @@
 #include "PlotFlow.h"
 #include "ObjectFlow.h"
 
-class AlgorithmFlow: public ObjectFlow, public PlotFlow  {
+class AlgorithmFlow : public ObjectFlow {
 
     Dataset m_dataset;
 
 public:
 
+    AlgorithmFlow() {}
     AlgorithmFlow( Dataset dataset );
 
-    void prepare_result_directories(std::string resultordner);
+    void prepare_directories(std::string resultordner);
 
     void calculate_flow(const boost::filesystem::path dataset_path, ALGO_TYPES algo,
                         FRAME_TYPES frame_types, NOISE_TYPES noise);
-
-    void plot(std::string resultordner);
-
 };
 
 

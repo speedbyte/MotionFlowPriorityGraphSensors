@@ -37,7 +37,7 @@ AlgorithmFlow::AlgorithmFlow(Dataset dataset) {
  * @param result_sha
  * @return
  */
-void AlgorithmFlow::prepare_result_directories(std::string resultordner) {
+void AlgorithmFlow::prepare_directories(std::string resultordner) {
 
     char char_dir_append[20];
     if ( boost::filesystem::exists(m_dataset.getResultPath()) ) {
@@ -72,7 +72,6 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
         }
         default: {
             throw("algorithm not yet supported");
-            break;
         }
     }
 
@@ -99,11 +98,10 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
         }
         default: {
             throw("algorithm not yet supported");
-            break;
         }
     }
 
-    prepare_result_directories(resultordner);
+    prepare_directories(resultordner);
 
 
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ){
@@ -374,8 +372,3 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
 
 }
 
-void AlgorithmFlow::plot(std::string resultordner) {
-
-    PlotFlow::plot(m_dataset, resultordner);
-
-}

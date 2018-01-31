@@ -12,7 +12,7 @@
 class PlotFlow : public FlowImage {
 
 public:
-    void plot(const Dataset &dataset, std::string resultsordner);
+    static void plot(const Dataset &dataset, const std::string &resultsordner);
 
 };
 

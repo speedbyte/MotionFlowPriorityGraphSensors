@@ -10,7 +10,7 @@
 #include "Dataset.h"
 
 
-void PlotFlow::plot(const Dataset &dataset, std::string resultsordner) {
+void PlotFlow::plot(const Dataset &dataset, const std::string &resultsordner) {
 
     char folder_name_flow[50], folder_name_plot[50];
     char file_name_image[50];
