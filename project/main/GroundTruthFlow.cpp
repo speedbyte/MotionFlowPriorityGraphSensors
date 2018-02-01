@@ -57,6 +57,10 @@ void GroundTruthFlow::prepare_directories() {
 
 void GroundTruthFlow::generate_gt_scene_flow_vector() {
 
+    // reads the flow vector array already created at the time of instantiation of the object.
+    // Additionally stores the frames in a png file
+    // Additionally stores the trajectory in a png file
+
     prepare_directories();
 
     cv::Mat tempGroundTruthImage;
@@ -166,6 +170,7 @@ frame_count, std::vector<Objects> list_objects, Dataset &dataset) {
         }
     }
     F_gt_write.writeExtended(temp_gt_flow_image_path);
+
 }
 
 void GroundTruthFlow::generatePixelRobustness() {

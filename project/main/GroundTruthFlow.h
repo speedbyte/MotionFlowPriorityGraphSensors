@@ -27,6 +27,7 @@ private:
 
     std::vector<Objects> &m_list_objects;
     Dataset &m_dataset;
+    cv::Mat groundTruthSceneTrajectory;
 
 public:
 

@@ -163,7 +163,7 @@ int main ( int argc, char *argv[]) {
         if ( cpp_dataset.execute ) {
 
             std::string input = "data/stereo_flow/image_02";
-            Dataset cpp(frame_size, depth, cn, CPP_DATASET_PATH, input, "results");
+            Dataset cpp(frame_size, depth, cn, CPP_DATASET_PATH, "data/stereo_flow/image_02", "results");
 
             if ( cpp_dataset.gt ) {
 

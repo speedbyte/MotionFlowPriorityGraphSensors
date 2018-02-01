@@ -26,6 +26,8 @@ class Dataset {
     // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/trajectroy_occ_01
     boost::filesystem::path  m__directory_path_gt_trajectory;
 
+private:
+
     // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/flow_occ_01
     boost::filesystem::path m__directory_path_result_flow;
 
@@ -50,18 +52,36 @@ public:
 
         m_dataset_path = dataset_path;
 
+        //data/stereo_flow/image_02/dummy.txt
         m__directory_path_input = m_dataset_path.string() + unterordner + std::string("/dummy.txt");
-        //data/stereo_flow/
+        //data/stereo_flow/image_02
         m__directory_path_input = m__directory_path_input.parent_path();
 
+        //data/stereo_flow/
         m__directory_path_gt_flow = m__directory_path_input.parent_path();
 
+        //data/stereo_flow/
+        m__directory_path_gt_trajectory = m__directory_path_input.parent_path();
+
+        /* result------------------------------------------------------------------------- */
+        //results/resultordner/dummy.txt
         m__directory_path_result_flow = m_dataset_path.string() + resultordner + std::string("/dummy.txt");
-        //results
+        //results/resultordner
         m__directory_path_result_flow = m__directory_path_result_flow.parent_path();
+
 
         if (boost::filesystem::exists(m__directory_path_input) == 0 ) {
             boost::filesystem::create_directories(m__directory_path_input.string());
+        }
+
+        // Prepare 10 directories for 10 object trajectories
+        for ( int i = 0; i < 10; i++ ) {
+            boost::filesystem::path objectTrajectory = m__directory_path_gt_trajectory.string() + std::string
+                    ("_object_") + std::to_string(i);
+
+            if ( boost::filesystem::exists(objectTrajectory) == 0 ) {
+                boost::filesystem::create_directories(objectTrajectory);
+            }
         }
 
     };
@@ -97,6 +117,15 @@ public:
     const ushort getMakeType() const {
         return static_cast<ushort>(CV_MAKETYPE(m_depth, m_cn));
     }
+
+    const boost::filesystem::path getGroundTruthTrajectoryPath() const {
+        return m__directory_path_gt_trajectory;
+    }
+
+    const boost::filesystem::path getResultTrajectoryPath() const {
+        return m__directory_path_result_trajectory_out;
+    }
+
 };
 
 

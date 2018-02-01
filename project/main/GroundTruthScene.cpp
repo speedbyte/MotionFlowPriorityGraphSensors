@@ -19,10 +19,30 @@ using namespace std::chrono;
 
 void GroundTruthScene::prepare_directories() {
 
+    char char_dir_append[20];
+
     // delete ground truth image and ground truth flow directories
     if (boost::filesystem::exists(m_dataset.getInputPath())) {
         system(("rm -rf " + m_dataset.getInputPath().string()).c_str()); // m_dataset.m__directory_path_input
     }
+
+    if (!m_dataset.getBasePath().compare(CPP_DATASET_PATH) || !m_dataset.getBasePath().compare(VIRES_DATASET_PATH)) {
+
+        std::cout << "Creating GT Flow directories" << std::endl;
+        // create flow directories
+        for (int i = 1; i < 10; ++i) {
+            // delete ground truth image and ground truth flow directories
+            sprintf(char_dir_append, "%02d", i);
+            boost::filesystem::path path = m_dataset.getGroundTruthTrajectoryPath().string() + "/trajectory_occ_" +
+                    char_dir_append;
+            if (boost::filesystem::exists(path)) {
+                system(("rm -rf " + path.string()).c_str());
+            }
+            boost::filesystem::create_directories(path);
+        }
+        std::cout << "Ending GT Flow directories" << std::endl;
+    }
+
 
     // create base directories
     boost::filesystem::create_directories(m_dataset.getInputPath().string());
@@ -54,6 +74,17 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_32FC3);
     assert(tempGroundTruthImage.channels() == 3);
 
+    cv::Mat tempGroundTruthTrajectory;
+    tempGroundTruthTrajectory.create(m_dataset.getFrameSize(), CV_32FC3);
+    assert(tempGroundTruthTrajectory.channels() == 3);
+    tempGroundTruthTrajectory = cv::Scalar::all(255);
+
+    cv::Mat tempGroundTruthTrajectory_2;
+    tempGroundTruthTrajectory_2.create(m_dataset.getFrameSize(), CV_32FC3);
+    assert(tempGroundTruthTrajectory_2.channels() == 3);
+    tempGroundTruthTrajectory_2 = cv::Scalar::all(255);
+
+
     std::map<std::string, double> time_map = {{"generate",0},{"ground truth", 0}};
 
     std::cout << "ground truth images will be stored in " << m_dataset.getInputPath().string() << std::endl;
@@ -80,19 +111,46 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         //draw new ground truth image.
 
+        char folder_name_flow[50];
         for ( int i = 0; i < m_list_objects.size(); i++ ) {
+
+            sprintf(folder_name_flow, "trajectory_occ_%02d", m_list_objects.at(i).getObjectId());
+            std::string trajectory_image_file_with_path = m_dataset.getGroundTruthTrajectoryPath().string() + "/" +
+                    folder_name_flow + "/" + file_name_image;
+
             std::vector<cv::Point2i> trajectory_points = m_list_objects.at(i).getTrajectoryPoints()
                     .get();
             cv::Mat shape = m_list_objects.at(i).getShapeImageData().get();
+
+            cv::Mat trajectoryShape = m_list_objects.at(i).getShapeImageData().get();;
+
             shape.copyTo(tempGroundTruthImage(
                     cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
                                      (current_index.at(i)).y, shape.cols, shape.rows)));
+
+
+            if ( m_list_objects.at(i).getObjectId() == 1 ) {
+                trajectoryShape = cv::Scalar(255,0,0);
+                trajectoryShape.copyTo(tempGroundTruthTrajectory(
+                        cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
+                                (current_index.at(i)).y, shape.cols, shape.rows)));
+                cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
+            }
+
+            if ( m_list_objects.at(i).getObjectId() == 2 ) {
+                trajectoryShape = cv::Scalar(0,255,0);
+                trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
+                        cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
+                                (current_index.at(i)).y, shape.cols, shape.rows)));
+                cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
+            }
 
             current_index.at(i)++;
             if ((current_index.at(i)) >= trajectory_points.size()) {
                 current_index.at(i) = 0;
             }
         }
+
         toc = steady_clock::now();
         time_map["generate"] = duration_cast<milliseconds>(toc - tic).count();
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
