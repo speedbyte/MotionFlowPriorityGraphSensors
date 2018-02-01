@@ -47,5 +47,4 @@ public:
     }
 };
 
-
 #endif //MAIN_OBJECTSHAPE_H

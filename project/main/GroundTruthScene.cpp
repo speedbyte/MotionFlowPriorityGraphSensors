@@ -11,7 +11,6 @@
 #include <png++/rgb_pixel.hpp>
 #include <png++/image.hpp>
 #include "GroundTruthScene.h"
-#include "datasets.h"
 #include "kbhit.h"
 #include "scp.h"
 
@@ -22,7 +21,7 @@ void GroundTruthScene::prepare_directories() {
 
     // delete ground truth image and ground truth flow directories
     if (boost::filesystem::exists(m_dataset.getInputPath())) {
-        system(("rm -rf " + m_dataset.getInputPath().string()).c_str()); // m_dataset.m_base_directory_path_input_in
+        system(("rm -rf " + m_dataset.getInputPath().string()).c_str()); // m_dataset.m__directory_path_input
     }
 
     // create base directories
@@ -66,7 +65,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     for ( int i = 0; i < m_list_objects.size(); i++ ) {
         current_index.push_back(m_list_objects.at(i).getStartPoint());
-    }
+        printf("registered objects name %s with object id %u\n", m_list_objects.at(i).getObjectName().c_str(),
+                       m_list_objects.at(i).getObjectId());
+     }
 
     char file_name_image[50];
 

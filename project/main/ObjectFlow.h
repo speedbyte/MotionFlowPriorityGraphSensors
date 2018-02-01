@@ -8,7 +8,6 @@
 
 #include <opencv2/core/types.hpp>
 #include <opencv2/core/persistence.hpp>
-#include <kitti/io_flow.h>
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
 
@@ -16,18 +15,17 @@
 class ObjectFlow {
 
 private:
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_basic;
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_flow_vector_extended;
-    // extrpolate each point into a blob of points ( depending on the shape of the original matrix ) 
-    std::vector<std::vector<std::pair<cv::Mat_<cv::Point2i>, cv::Mat_<cv::Point2i> > > > m_obj_flow_vector_extrapolated;
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_baseframe;
+    //std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_baseframe;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_flow_vector_multiframe;
 
 public:
 
     /* This needs to know the shape of the object to extrapolate */
-    void generate_base_flow_vector(const Dataset &m_dataset, const ushort &start_point, const std::vector<cv::Point2i>
+    void generate_baseframe_flow_vector(const Dataset &m_dataset, const ushort &start_point, const std::vector<cv::Point2i>
     &trajectory_points);
 
-    void generate_extended_flow_vector(const Dataset &dataset, const int &max_skips);
+    void generate_multiframe_flow_vector(const Dataset &dataset, const int &max_skips);
 
     void storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts, const
     std::vector<uchar> status);
@@ -39,7 +37,7 @@ public:
     &l_pixelmovement );
 
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >  get() {
-        return m_obj_flow_vector_extended;
+        return m_obj_flow_vector_multiframe;
     }
 
 };

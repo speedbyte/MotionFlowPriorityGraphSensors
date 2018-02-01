@@ -64,13 +64,13 @@ int main ( int argc, char *argv[]) {
     boost::property_tree::ptree pt;
     boost::property_tree::read_ini("../input.txt", pt);
 
-    for (auto& section : pt)
+/*    for (auto& section : pt)
     {
         std::cout << "[" << section.first << "]\n";
         for (auto& key : section.second)
             std::cout << key.first << "=" << key.second.get_value<std::string>() << "\n";
     }
-
+*/
     typedef struct {
         bool execute;
         bool gt;
@@ -167,22 +167,26 @@ int main ( int argc, char *argv[]) {
 
             if ( cpp_dataset.gt ) {
 
-                Rectangle rectangle1(30, 100);
-                Achterbahn trajectory;
-                Rectangle rectangle2(100, 30);
                 Rectangle background(1242, 375);
+                NoTrajectory noTrajectory;
+
+                // Canvas is itself registered as an Object with a dummy trajectory
+                GuassianNoise guassiannoise;
+                Canvas canvas(cpp, background, noTrajectory, 60, guassiannoise);
+
+                // Further objects
+                Rectangle rectangle1(30, 100); // width, height
+                Rectangle rectangle2(100, 30);
+                Achterbahn trajectory;
                 NoNoise noNoise;
 
-                Objects obj1(cpp, rectangle1, trajectory, 60, noNoise);
-                Objects obj2(cpp, rectangle2, trajectory, 120, noNoise);
+                Objects obj1(cpp, rectangle1, trajectory, 60, noNoise, "rectangle_long");
+                Objects obj2(cpp, rectangle2, trajectory, 120, noNoise, "rectangle_wide");
 
                 std::vector<Objects> list_of_objects;
                 list_of_objects.push_back(obj1);
                 list_of_objects.push_back(obj2);
 
-                // Canvas is a Camera Sensor Image
-                GuassianNoise guassiannoise;
-                Canvas canvas(cpp, background, trajectory, 60, guassiannoise);
 
                 GroundTruthSceneInternal gt_scene(cpp, canvas, list_of_objects);
                 gt_scene.generate_gt_scene();
@@ -245,10 +249,9 @@ int main ( int argc, char *argv[]) {
 
             algo.calculate_flow(KITTI_FLOW_DATASET_PATH, fb, continous_frames, no_noise);
 
-            make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
-            make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,
-                                "data/2011_09_28_drive_0016_sync/image_02/data/");
-            make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/");
+            //make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
+            //make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");
+            //make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/");
         }
     }
 

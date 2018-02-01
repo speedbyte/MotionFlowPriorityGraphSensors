@@ -18,9 +18,9 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 ##define NUMBER  ${NUMBER}
 
 set(SOURCE_FILES
-        KittiSubmitInterface.cpp ObjectTrajectory.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
+        ObjectTrajectory.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
         video_capture.cpp GroundTruthFlow.cpp  AlgorithmFlow.cpp kbhit.cpp Dataset.cpp PlotFlow.cpp
-        GroundTruthScene.cpp ObjectShapeImageData.cpp ObjectFlow.cpp Objects.cpp Noise.cpp Noise.h Canvas.cpp Canvas.h SensorImage.cpp SensorImage.h)
+        GroundTruthScene.cpp ObjectShapeImageData.cpp ObjectFlow.cpp Objects.cpp Noise.cpp Noise.h Canvas.cpp Canvas.h SensorImage.cpp SensorImage.h FlowImageExtended.cpp)
 
 add_executable(main ${SOURCE_FILES})
-target_link_libraries( main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png viresrdb kitti)
+target_link_libraries( main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png viresrdb)

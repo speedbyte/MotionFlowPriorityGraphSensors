@@ -4,10 +4,10 @@
 
 #include <opencv2/core/mat.hpp>
 #include <opencv/cv.hpp>
-#include <kitti/io_flow.h>
 #include "PlotFlow.h"
 #include "datasets.h"
 #include "Dataset.h"
+#include "FlowImageExtended.h"
 
 
 void PlotFlow::plot(const Dataset &dataset, const std::string &resultsordner) {
@@ -33,8 +33,8 @@ void PlotFlow::plot(const Dataset &dataset, const std::string &resultsordner) {
                                                 folder_name_flow + "/" + file_name_image;
             std::string temp_plot_flow_path = dataset.getResultPath().string() + "/" + resultsordner + "/" +
                                               folder_name_plot + "/" + file_name_image;
-            FlowImage gt_flow_read(temp_gt_flow_path);
-            FlowImage result_flow_read(temp_result_flow_path);
+            FlowImageExtended gt_flow_read(temp_gt_flow_path);
+            FlowImageExtended result_flow_read(temp_result_flow_path);
 
             png::image<png::rgb_pixel> errorImage(dataset.getFrameSize().width, dataset.getFrameSize().height);
 

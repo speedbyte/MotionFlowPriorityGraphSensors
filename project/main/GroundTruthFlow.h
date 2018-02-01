@@ -10,6 +10,7 @@
 #include "PlotFlow.h"
 #include "ObjectTrajectory.h"
 #include "GroundTruthScene.h"
+#include "FlowImageExtended.h"
 
 /**
  * This class
@@ -19,7 +20,7 @@
  *  produces flow images
  */
 
-class GroundTruthFlow{
+class GroundTruthFlow {
 
 private:
 
@@ -40,6 +41,8 @@ public:
     void generatePixelRobustness();
 
     void generateVectorRobustness();
+
+    void make_video_from_png(const Dataset &dataset_path, std::string unterordner);
 
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;

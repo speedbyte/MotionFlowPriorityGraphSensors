@@ -19,7 +19,7 @@
 #define MAX_ITERATION_RESULTS 200
 #define MAX_ITERATION_GT 200
 #define MAX_ITERATION_THETA 360
-#define MAX_SKIPS 10
+#define MAX_SKIPS 5
 
 
 typedef enum {

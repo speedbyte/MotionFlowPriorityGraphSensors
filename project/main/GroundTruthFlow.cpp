@@ -15,11 +15,6 @@
 #include <png++/png.hpp>
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
-#include "kitti/log_colormap.h"
-#include <kitti/mail.h>
-#include <kitti/io_flow.h>
-#include <vires/vires_common.h>
-
 #include "datasets.h"
 #include "GroundTruthFlow.h"
 #include "kbhit.h"
@@ -42,7 +37,7 @@ void GroundTruthFlow::prepare_directories() {
 
     char char_dir_append[20];
 
-    if (!m_dataset.getBasePath().compare(CPP_DATASET_PATH) || !m_dataset.getBasePath().compare(VIRES_DATASET_PATH) ) {
+    if (!m_dataset.getBasePath().compare(CPP_DATASET_PATH) || !m_dataset.getBasePath().compare(VIRES_DATASET_PATH)) {
 
         std::cout << "Creating GT Flow directories" << std::endl;
         // create flow directories
@@ -69,7 +64,8 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
     assert(tempGroundTruthImage.channels() == 3);
 
 
-    std::map<std::string, double> time_map = {{"generate",0}, {"ground truth", 0}};
+    std::map<std::string, double> time_map = {{"generate",     0},
+                                              {"ground truth", 0}};
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
@@ -79,12 +75,6 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
 
     std::cout << "ground truth flow will be stored in " << m_dataset.getGroundTruthFlowPath().string() << std::endl;
 
-    for ( int i = 0; i < m_list_objects.size(); i++ ) {
-        m_list_objects.at(i).generate_base_flow_vector();
-        // extend the flow vectors by skipping frames and then storing them as pngs
-        m_list_objects.at(i).generate_extended_flow_vector();
-    }
-
     char folder_name_flow[50];
     cv::FileStorage fs;
     fs.open(m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
@@ -92,63 +82,60 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > objects;
 
 
-
-    for ( unsigned frame_skip = 1; frame_skip < m_list_objects.at(0).getFlowPoints().get().size() ;
-          frame_skip++ ) {
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
-
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
         for (ushort frame_count = 0; frame_count < (m_list_objects.at(0).getFlowPoints().get().at
-                (frame_skip-1)).size(); frame_count++) {
+                (frame_skip - 1)).size(); frame_count++) {
 
             char file_name_image[50];
             sprintf(file_name_image, "000%03d_10.png", frame_count);
-            std::string temp_gt_flow_image_path = m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
-                                                  + file_name_image;
-
+            std::string temp_gt_flow_image_path =
+                    m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
+                    + file_name_image;
             fs << "frame_count" << frame_count;
             extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects,
-                                              m_dataset);
+                                   m_dataset);
         }
         fs.release();
     }
 
-    // plotVectorField (F_gt_write,m_base_directory_path_image_out.parent_path().string(),file_name);
+    // plotVectorField (F_gt_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << "ground truth flow generation time - " << time_map["ground truth"]  << "ms" << std::endl;
+    std::cout << "ground truth flow generation time - " << time_map["ground truth"] << "ms" << std::endl;
 
 }
 
 
-
 void GroundTruthFlow::extrapolate_flowpoints(std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
-frame_count,
-                                        std::vector<Objects> list_objects, Dataset &dataset) {
+frame_count, std::vector<Objects> list_objects, Dataset &dataset) {
 
-    FlowImage F_gt_write(dataset.getFrameSize().width, dataset.getFrameSize().height);
+    FlowImageExtended F_gt_write(dataset.getFrameSize().width, dataset.getFrameSize().height);
     cv::Mat tempMatrix;
-    tempMatrix.create(dataset.getFrameSize(),CV_32FC3);
+    tempMatrix.create(dataset.getFrameSize(), CV_32FC3);
     assert(tempMatrix.channels() == 3);
-    //tempMatrix = cv::Scalar::all(0);
-    for ( unsigned i = 0; i < list_objects.size(); i++ ) {
+
+    for (unsigned i = 0; i < list_objects.size(); i++) {
+
 
         // object shape
         int width = list_objects.at(i).getShapeImageData().get().cols;
         int height = list_objects.at(i).getShapeImageData().get().rows;
 
         // gt_displacement
-        cv::Point2i gt_next_pts = list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).first;
-        cv::Point2f gt_displacement = list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).second;
+        cv::Point2i gt_next_pts = list_objects.at(i).getFlowPoints().get().at(frame_skip - 1).at(frame_count).first;
+        cv::Point2f gt_displacement = list_objects.at(i).getFlowPoints().get().at(frame_skip - 1).at(
+                frame_count).second;
 
         cv::Mat roi;
         roi = tempMatrix.
                 colRange(gt_next_pts.x, (gt_next_pts.x + width)).
                 rowRange(gt_next_pts.y, (gt_next_pts.y + height));
         //bulk storage
-        roi = cv::Scalar(gt_displacement.x, gt_displacement.y, 1.0f);
+        roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(list_objects.at(i).getObjectId()));
 
 /*
         //cv::Vec3f *datagt_next_ptsr = tempMatrix.gt_next_ptsr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
@@ -161,29 +148,29 @@ frame_count,
                 i++;
             }
         }
-        FlowImage temp = FlowImage(array, dataset.getFrameSize().width, dataset.getFrameSize().height );
+        FlowImageExtended temp = FlowImageExtended(array, dataset.getFrameSize().width, dataset.getFrameSize().height );
         F_gt_write = temp;
 
  */
     }
 
-    //Create png Matrix with 3 channels: x gt_displacement. y displacment and Validation bit
-    for (int32_t row=0; row<dataset.getFrameSize().height; row++) { // rows
-        for (int32_t column=0; column<dataset.getFrameSize().width; column++) {  // cols
-            if (tempMatrix.at<cv::Vec3f>(row,column)[2] > 0.5 ) {
-                F_gt_write.setFlowU(column,row,tempMatrix.at<cv::Vec3f>(row,column)[1]);
-                F_gt_write.setFlowV(column,row,tempMatrix.at<cv::Vec3f>(row,column)[0]);
-                F_gt_write.setValid(column,row,1.0f);
+    //Create png Matrix with 3 channels: x gt_displacement. y displacment and ObjectId
+    for (int32_t row = 0; row < dataset.getFrameSize().height; row++) { // rows
+        for (int32_t column = 0; column < dataset.getFrameSize().width; column++) {  // cols
+            if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5) {
+                F_gt_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
+                F_gt_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
+                F_gt_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
                 //trajectory.store_in_yaml(fs, cv::Point2i(row, column), cv::Point2i(xValue, yValue) );
             }
         }
     }
-    F_gt_write.write(temp_gt_flow_image_path);
+    F_gt_write.writeExtended(temp_gt_flow_image_path);
 }
 
 void GroundTruthFlow::generatePixelRobustness() {
 
-    calcCovarMatrix();
+    //calcCovarMatrix();
 
 }
 
@@ -192,49 +179,50 @@ void GroundTruthFlow::generateVectorRobustness() {
 }
 
 
+void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::string> &list_gp_lines) {
 
-void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::string> &list_gp_lines ) {
-
-    float m,c;
+    float m, c;
     std::string coord1;
     std::string coord2;
     std::string gp_line;
     // XY, 2XY and 2X2Y all gives the same correlation
     cv::Mat_<float> covar, mean, corr;
-    cv::Scalar mean_x, mean_y, stddev_x,stddev_y;
+    cv::Scalar mean_x, mean_y, stddev_x, stddev_y;
 
     cv::Vec4f line;
-    cv::Mat mat_samples(1,samples_xy.cols,CV_32FC(2));
+    cv::Mat mat_samples(1, samples_xy.cols, CV_32FC(2));
 
 
     std::cout << "\nsamples_xy\n" << samples_xy;
-    cv::calcCovarMatrix( samples_xy, covar, mean, cv::COVAR_NORMAL|cv::COVAR_COLS|cv::COVAR_SCALE, CV_32FC1);
+    cv::calcCovarMatrix(samples_xy, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
 
-    cv::meanStdDev(samples_xy.row(0),mean_x,stddev_x);
-    cv::meanStdDev(samples_xy.row(1),mean_y,stddev_y);
+    cv::meanStdDev(samples_xy.row(0), mean_x, stddev_x);
+    cv::meanStdDev(samples_xy.row(1), mean_y, stddev_y);
 
-    assert(std::floor(mean(0)*100) == std::floor(mean_x(0)*100));
-    assert(std::floor(mean(1)*100) == std::floor(mean_y(0)*100));
+    assert(std::floor(mean(0) * 100) == std::floor(mean_x(0) * 100));
+    assert(std::floor(mean(1) * 100) == std::floor(mean_y(0) * 100));
 
-    cv::Mat_<float> stddev(2,2);
-    stddev << stddev_x[0]*stddev_x[0], stddev_x[0]*stddev_y[0], stddev_x[0]*stddev_y[0], stddev_y[0]*stddev_y[0];
-    corr = covar/stddev;
+    cv::Mat_<float> stddev(2, 2);
+    stddev << stddev_x[0] * stddev_x[0], stddev_x[0] * stddev_y[0], stddev_x[0] * stddev_y[0], stddev_y[0] *
+                                                                                               stddev_y[0];
+    corr = covar / stddev;
 
     std::cout << "\nMean\n" << mean << "\nCovar\n" << covar <<
               "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
               "\ncorr\n" << corr << std::endl;
 
 
-    for (unsigned i=0;i<samples_xy.cols;i++) {
-        mat_samples.at<cv::Vec<float,2>>(0,i)[0] = samples_xy[0][i];
-        mat_samples.at<cv::Vec<float,2>>(0,i)[1] = samples_xy[1][i];
+    for (unsigned i = 0; i < samples_xy.cols; i++) {
+        mat_samples.at<cv::Vec<float, 2>>(0, i)[0] = samples_xy[0][i];
+        mat_samples.at<cv::Vec<float, 2>>(0, i)[1] = samples_xy[1][i];
     }
 
-    cv::fitLine(mat_samples,line,CV_DIST_L2,0,0.01,0.01); // radius and angle from the origin - a kind of constraint
-    m = line[1]/line[0];
-    c = line[3] - line[2]*m;
+    cv::fitLine(mat_samples, line, CV_DIST_L2, 0, 0.01,
+                0.01); // radius and angle from the origin - a kind of constraint
+    m = line[1] / line[0];
+    c = line[3] - line[2] * m;
     coord1 = "0," + std::to_string(c);
-    coord2 = std::to_string(-c/m) + ",0";
+    coord2 = std::to_string(-c / m) + ",0";
     gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
     list_gp_lines.push_back(gp_line);
 }
@@ -248,35 +236,35 @@ void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::strin
  */
 void GroundTruthFlow::calcCovarMatrix() {
 
-    for ( int i = 0; i < m_list_objects.size(); i++ ) {
+    for (int i = 0; i < m_list_objects.size(); i++) {
     }
 
-    std::vector<std::pair<double,double>> xypoints_1, xypoints_2, xypoints_3;
+    std::vector<std::pair<double, double>> xypoints_1, xypoints_2, xypoints_3;
 
-    cv::Mat_<uchar> samples_xy(2,9);
+    cv::Mat_<uchar> samples_xy(2, 9);
     std::vector<std::string> list_gp_lines;
 
     //------------------------------------------------------------------------
 
-    samples_xy << 1,3,2,5,8,7,12,2,4,8,6,9,4,3,3,2,7,7;
+    samples_xy << 1, 3, 2, 5, 8, 7, 12, 2, 4, 8, 6, 9, 4, 3, 3, 2, 7, 7;
     common(samples_xy, list_gp_lines);
-    for ( unsigned i = 0; i<samples_xy.cols; i++) {
+    for (unsigned i = 0; i < samples_xy.cols; i++) {
         xypoints_1.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
     }
 
     //------------------------------------------------------------------------
 
-    samples_xy.row(0) = 5*samples_xy.row(0);
+    samples_xy.row(0) = 5 * samples_xy.row(0);
     common(samples_xy, list_gp_lines);
-    for ( unsigned i = 0; i<samples_xy.cols; i++) {
+    for (unsigned i = 0; i < samples_xy.cols; i++) {
         xypoints_2.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
     }
 
     //------------------------------------------------------------------------
 
-    samples_xy.row(1) = 2*samples_xy.row(1);
+    samples_xy.row(1) = 2 * samples_xy.row(1);
     common(samples_xy, list_gp_lines);
-    for ( unsigned i = 0; i<samples_xy.cols; i++) {
+    for (unsigned i = 0; i < samples_xy.cols; i++) {
         xypoints_3.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
     }
 
@@ -300,8 +288,10 @@ void GroundTruthFlow::calcCovarMatrix() {
     gp.send1d(xypoints_3);
 
     // Two matrices sample
-    cv::Mat_<uchar> x_sample(1,9);  x_sample << 1,3,2,5,8,7,12,2,4;
-    cv::Mat_<uchar> y_sample(1,9);  y_sample << 8,6,9,4,3,3,2,7,7;
+    cv::Mat_<uchar> x_sample(1, 9);
+    x_sample << 1, 3, 2, 5, 8, 7, 12, 2, 4;
+    cv::Mat_<uchar> y_sample(1, 9);
+    y_sample << 8, 6, 9, 4, 3, 3, 2, 7, 7;
     std::vector<cv::Mat> matgt_next_ptsr;
     matgt_next_ptsr.push_back(x_sample);
     matgt_next_ptsr.push_back(y_sample);
@@ -310,3 +300,53 @@ void GroundTruthFlow::calcCovarMatrix() {
 }
 
 
+void GroundTruthFlow::make_video_from_png(const Dataset &dataset_path, std::string unterordner) {
+
+    cv::VideoWriter video_write;
+    cv::Mat temp_image;
+
+    boost::filesystem::directory_iterator end_iter;
+
+    boost::filesystem::path dir_path = dataset_path.getGroundTruthFlowPath();
+
+    std::cout << dir_path.string() << std::endl;
+    assert(boost::filesystem::exists(dir_path) != 0);
+
+    std::string file_name, path;
+    boost::filesystem::path temp;
+    bool video_writer_init = false;
+
+    for (boost::filesystem::directory_iterator dir_iter(dir_path); dir_iter != end_iter; ++dir_iter) {
+        if (boost::filesystem::is_regular_file(dir_iter->status())) {
+            std::string extension = boost::filesystem::extension(*dir_iter);
+            if (extension == ".png") {
+                std::cout << *dir_iter << std::endl;
+                temp = *dir_iter;
+                temp_image = cv::imread(temp.string(), cv::IMREAD_COLOR);
+                if (video_writer_init == false) {
+                    if (!video_write.open((dir_path.string() + "movement_video.avi"), CV_FOURCC('D', 'I', 'V', 'X'),
+                                          30.0,
+                                          cv::Size(temp_image.cols, temp_image.rows), true)) {
+                        std::cerr << "failed to initialise the video write" << std::endl;
+                        throw;
+                    }
+                    if (!video_write.isOpened()) {
+                        std::cerr << "Could not open video" << std::endl;
+                    }
+
+                    video_writer_init = true;
+                }
+                /*cv::namedWindow("video", CV_WINDOW_AUTOSIZE);
+                cv::imshow("video", temp_image);
+                cv::waitKey(1000);*/
+                video_write.write(temp_image);
+            } else {
+                std::cout << "ignoring extension : " << extension << " path " << *dir_iter << std::endl;
+            }
+        }
+        cv::destroyAllWindows();
+    }
+
+    video_write.release();
+
+}

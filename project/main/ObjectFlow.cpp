@@ -13,7 +13,6 @@
 
 
 #include "kitti/log_colormap.h"
-#include <kitti/io_flow.h>
 #include "ObjectTrajectory.h"
 #include "datasets.h"
 #include "PlotFlow.h"
@@ -70,7 +69,7 @@ void ObjectFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector
         printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", i,
                gt_next_pts.x, gt_next_pts.y, gt_displacement.x, gt_displacement.y);
         // Lines to indicate the motion vectors
-        m_obj_flow_vector_basic.push_back(std::make_pair(gt_next_pts, gt_displacement));
+        m_obj_flow_vector_baseframe.push_back(std::make_pair(gt_next_pts, gt_displacement));
     }
     next_pts.resize(count);
 }
@@ -84,7 +83,7 @@ temp_result_flow_path) {
 
     fs << "frame_count" << frame_count;
 
-    for ( it = m_obj_flow_vector_basic.begin(); it != m_obj_flow_vector_basic.end(); it++ )
+    for ( it = m_obj_flow_vector_baseframe.begin(); it != m_obj_flow_vector_baseframe.end(); it++ )
     {
         F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
         F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
@@ -108,7 +107,7 @@ void ObjectFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelpo
 
 
 
-void ObjectFlow::generate_base_flow_vector(const Dataset &m_dataset, const ushort &start_point, const
+void ObjectFlow::generate_baseframe_flow_vector(const Dataset &m_dataset, const ushort &start_point, const
 std::vector<cv::Point2i> &trajectory_points) {
 
     //Initialization
@@ -145,23 +144,23 @@ std::vector<cv::Point2i> &trajectory_points) {
                    gt_displacement.x, gt_displacement.y);
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
-            m_obj_flow_vector_basic.push_back(std::make_pair(gt_next_pts, gt_displacement));
+            m_obj_flow_vector_baseframe.push_back(std::make_pair(gt_next_pts, gt_displacement));
         }
         else {
-            m_obj_flow_vector_basic.push_back(std::make_pair(cv::Point2i(0,0), cv::Point2i(0,0)));
+            m_obj_flow_vector_baseframe.push_back(std::make_pair(cv::Point2i(0,0), cv::Point2i(0,0)));
         }
         current_index++;
     }
 }
 
-void ObjectFlow::generate_extended_flow_vector(const Dataset &m_dataset, const int &max_skips ) {
+void ObjectFlow::generate_multiframe_flow_vector(const Dataset &m_dataset, const int &max_skips ) {
 
     int temp_flow_x(0);
     int temp_flow_y(0);
 
     for ( int frame_skip = 1; frame_skip < max_skips ; frame_skip++ ) {
 
-        std::vector<std::pair<cv::Point2i, cv::Point2i> > extended_flowvector;
+        std::vector<std::pair<cv::Point2i, cv::Point2i> > multiframe_flowvector;
 
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
 
@@ -171,20 +170,20 @@ void ObjectFlow::generate_extended_flow_vector(const Dataset &m_dataset, const i
             // frame skip 1 means no skips
             // The below code has to go through consecutive frames
             if ((frame_count % frame_skip != 0)) {
-                temp_flow_x += m_obj_flow_vector_basic.at(frame_count).second.x;
-                temp_flow_y += m_obj_flow_vector_basic.at(frame_count).second.y;
+                temp_flow_x += m_obj_flow_vector_baseframe.at(frame_count).second.x;
+                temp_flow_y += m_obj_flow_vector_baseframe.at(frame_count).second.y;
             }
             else {
-                temp_flow_x += m_obj_flow_vector_basic.at(frame_count).second.x;
-                temp_flow_y += m_obj_flow_vector_basic.at(frame_count).second.y;
+                temp_flow_x += m_obj_flow_vector_baseframe.at(frame_count).second.x;
+                temp_flow_y += m_obj_flow_vector_baseframe.at(frame_count).second.y;
 
-                extended_flowvector.push_back
-                        (std::make_pair(m_obj_flow_vector_basic.at
+                multiframe_flowvector.push_back
+                        (std::make_pair(m_obj_flow_vector_baseframe.at
                         (frame_count).first, cv::Point2i(temp_flow_x, temp_flow_y)));
                 temp_flow_x = 0, temp_flow_y = 0;
             }
         }
-        m_obj_flow_vector_extended.push_back(extended_flowvector);
+        m_obj_flow_vector_multiframe.push_back(multiframe_flowvector);
     }
 }
 

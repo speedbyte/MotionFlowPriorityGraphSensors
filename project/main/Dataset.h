@@ -14,13 +14,23 @@ class Dataset {
 
     cv::Size_<unsigned> m_frame_size;
 
+    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset
     boost::filesystem::path m_dataset_path;
 
-    boost::filesystem::path  m_base_directory_path_input_in;
+    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/image_02
+    boost::filesystem::path  m__directory_path_input;
 
-    boost::filesystem::path  m_base_directory_path_gt_flow;
+    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/flow_occ_01
+    boost::filesystem::path  m__directory_path_gt_flow;
 
-    boost::filesystem::path m_base_directory_path_result_out;
+    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/trajectroy_occ_01
+    boost::filesystem::path  m__directory_path_gt_trajectory;
+
+    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/flow_occ_01
+    boost::filesystem::path m__directory_path_result_flow;
+
+    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/flow_occ_01
+    boost::filesystem::path m__directory_path_result_trajectory_out;
 
     ushort m_depth;
 
@@ -40,18 +50,18 @@ public:
 
         m_dataset_path = dataset_path;
 
-        m_base_directory_path_input_in = m_dataset_path.string() + unterordner + std::string("/dummy.txt");
+        m__directory_path_input = m_dataset_path.string() + unterordner + std::string("/dummy.txt");
         //data/stereo_flow/
-        m_base_directory_path_input_in = m_base_directory_path_input_in.parent_path();
+        m__directory_path_input = m__directory_path_input.parent_path();
 
-        m_base_directory_path_gt_flow = m_base_directory_path_input_in.parent_path();
+        m__directory_path_gt_flow = m__directory_path_input.parent_path();
 
-        m_base_directory_path_result_out = m_dataset_path.string() + resultordner + std::string("/dummy.txt");
+        m__directory_path_result_flow = m_dataset_path.string() + resultordner + std::string("/dummy.txt");
         //results
-        m_base_directory_path_result_out = m_base_directory_path_result_out.parent_path();
+        m__directory_path_result_flow = m__directory_path_result_flow.parent_path();
 
-        if (boost::filesystem::exists(m_base_directory_path_input_in) == 0 ) {
-            boost::filesystem::create_directories(m_base_directory_path_input_in.string());
+        if (boost::filesystem::exists(m__directory_path_input) == 0 ) {
+            boost::filesystem::create_directories(m__directory_path_input.string());
         }
 
     };
@@ -65,15 +75,15 @@ public:
     }
 
     const boost::filesystem::path getInputPath() const {
-        return m_base_directory_path_input_in;
+        return m__directory_path_input;
     }
 
     const boost::filesystem::path getResultPath() const {
-        return m_base_directory_path_result_out;
+        return m__directory_path_result_flow;
     }
 
     const boost::filesystem::path getGroundTruthFlowPath() const {
-        return m_base_directory_path_gt_flow;
+        return m__directory_path_gt_flow;
     }
 
     const ushort getDepth() const {

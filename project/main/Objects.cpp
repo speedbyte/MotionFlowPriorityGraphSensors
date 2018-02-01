@@ -5,3 +5,4 @@
 #include "Objects.h"
 
 
+unsigned Objects::objectCurrentCount = 0;

@@ -24,24 +24,35 @@ private:
     ObjectTrajectory &m_obj_trajectory;
     ObjectFlow m_obj_flow;
 
+    static unsigned objectCurrentCount;
+
+    const unsigned m_objectId;
+    const std::string m_objectName;
+
 public:
 
     Objects( Dataset &dataset, ObjectShapeImageData &shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
-    &noise, ObjectFlow objectFlow) : CameraSensorImage(shape, noise), m_dataset(dataset), m_obj_trajectory
-            (trajectory), m_startPoint(startPoint), m_obj_flow(objectFlow) {
+    &noise, std::string objectName ) : CameraSensorImage(shape, noise), m_dataset(dataset), m_obj_trajectory
+            (trajectory), m_startPoint(startPoint) , m_objectName ( objectName ), m_objectId
+                                               (objectCurrentCount) {
 
         shape.process();
         trajectory.process(dataset.getFrameSize());
+        objectCurrentCount += 1;
+
         m_obj_flow = ObjectFlow();
+
+        printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
+                (), getObjectId());
+
+        m_obj_flow.generate_baseframe_flow_vector(m_dataset, m_startPoint, m_obj_trajectory.get());
+
+        printf("generating ground truth frame displacement for name %s with object id %u\n", getObjectName().c_str
+                (), getObjectId());
+
+        m_obj_flow.generate_multiframe_flow_vector(m_dataset, MAX_SKIPS );
     }
 
-    Objects( Dataset &dataset, ObjectShapeImageData &shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
-    &noise) : CameraSensorImage(shape, noise), m_dataset(dataset), m_obj_trajectory
-            (trajectory), m_startPoint(startPoint) {
-
-        shape.process();
-        trajectory.process(dataset.getFrameSize());
-    }
 
     ObjectTrajectory getTrajectoryPoints() {
         return m_obj_trajectory;
@@ -51,16 +62,16 @@ public:
         return m_obj_flow;
     }
 
-    void generate_base_flow_vector()  {
-        m_obj_flow.generate_base_flow_vector(m_dataset, m_startPoint, m_obj_trajectory.get());
-    }
-
-    void generate_extended_flow_vector()  {
-        m_obj_flow.generate_extended_flow_vector(m_dataset, MAX_SKIPS );
-    }
-
     ushort getStartPoint() {
         return m_startPoint;
+    }
+
+    unsigned getObjectId() {
+        return m_objectId;
+    }
+
+    std::string getObjectName() {
+        return m_objectName;
     }
 
 };
