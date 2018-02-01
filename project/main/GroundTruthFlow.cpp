@@ -92,8 +92,8 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
 
         for (ushort frame_count = 0; frame_count < (m_list_objects.at(0).getFlowPoints().at
                 (frame_skip - 1)).size(); frame_count++) {
-
             char file_name_image[50];
+
             sprintf(file_name_image, "000%03d_10.png", frame_count);
             std::string temp_gt_flow_image_path =
                     Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"

@@ -185,7 +185,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::vector<cv::Point2f> next_pts_healthy;
 
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
-        m_frame_flow_vector_base_movement.clear();
+        std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > frame_flow_vector_base_movement;
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
@@ -342,8 +342,8 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 std::cout << "frame_count " << frame_count << std::endl;
                 fs << "frame_count" << frame_count;
 
-                for ( it = m_frame_flow_vector_base_movement.at(count).begin(); it !=
-                        m_frame_flow_vector_base_movement.at(count).end(); it++ )
+                for ( it = frame_flow_vector_base_movement.at(count).begin(); it !=
+                        frame_flow_vector_base_movement.at(count).end(); it++ )
                 {
                     F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
                     F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
@@ -379,7 +379,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         }
 
         //F_result_write_trajectory.write(temp_result_flow_path);
-        m_obj_flow_vector_resultmultiframe.push_back(m_frame_flow_vector_base_movement);
+        m_frame_flow_vector_fast_movement.push_back(frame_flow_vector_base_movement);
         fs.release();
 
         for(auto &n : time)
@@ -460,7 +460,7 @@ void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vec
         // Lines to indicate the motion vectors
         frame_points.push_back(std::make_pair(result_next_pts, result_displacement));
     }
-    m_frame_flow_vector_base_movement.push_back(frame_points);
+    frame_flow_vector_base_movement.push_back(frame_points);
     next_pts.resize(count);
 }
 

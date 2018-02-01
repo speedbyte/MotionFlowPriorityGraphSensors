@@ -14,8 +14,10 @@
 
 class AlgorithmFlow {
 
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_frame_flow_vector_base_movement;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > > m_obj_flow_vector_resultmultiframe;
+    // Each point on GroundTruthFlow is a vector of points in AlgorithmFlow. Hence both the base and fast movement
+    // consists of an additional vector wrappper.
+
+    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > > m_frame_flow_vector_fast_movement;
 
 public:
 
