@@ -26,7 +26,8 @@ public:
     void calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 
     void storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts, const
-    std::vector<uchar> status);
+    std::vector<uchar> status, std::vector<std::vector<std::pair<cv::Point2i,
+            cv::Point2i> > > &frame_flow_vector_base_movement);
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
     &l_pixelmovement );

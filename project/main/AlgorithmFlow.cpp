@@ -45,7 +45,7 @@ void AlgorithmFlow::prepare_directories(std::string resultordner) {
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
                                               "/flow_occ_" + char_dir_append);
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
-                                              "/trajectory_" + char_dir_append);
+                                              "/trajectory_occ_" + char_dir_append);
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
                                               "/plots_" + char_dir_append);
     }
@@ -290,7 +290,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     }
                 }
 
-                storeData(prev_pts, next_pts, status);
+                storeData(prev_pts, next_pts, status, frame_flow_vector_base_movement);
 
                 for (unsigned i = 0; i < next_pts.size(); i++) {
                     cv::arrowedLine(image_02_frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0));
@@ -407,7 +407,8 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 }
 
 void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts,
-                           const std::vector<uchar> status) {
+                           const std::vector<uchar> status, std::vector<std::vector<std::pair<cv::Point2i,
+        cv::Point2i> > > &frame_flow_vector_base_movement) {
 
     unsigned count = 0;
 
