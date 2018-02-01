@@ -40,7 +40,7 @@ void GroundTruthFlow::prepare_directories() {
 
         std::cout << "Creating GT Flow directories" << std::endl;
         // create flow directories
-        for (int i = 1; i < 10; ++i) {
+        for (int i = 1; i < MAX_SKIPS; ++i) {
             // delete ground truth image and ground truth flow directories
             sprintf(char_dir_append, "%02d", i);
             boost::filesystem::path path = Dataset::getGroundTruthFlowPath().string() + "/flow_occ_" + char_dir_append;
@@ -115,8 +115,8 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
             for (unsigned i = 0; i < m_list_objects.at(lo).getFlowPoints().at(frame_skip - 1).size();
                  i++) {
                 // gt_displacement
-                cv::Point2i gt_next_pts = m_list_objects.at(lo).getFlowPoints()..at(frame_skip - 1).at(i).first;
-                cv::Point2f gt_displacement = m_list_objects.at(lo).getFlowPoints()..at(frame_skip - 1).at(i).second;
+                cv::Point2i gt_next_pts = m_list_objects.at(lo).getFlowPoints().at(frame_skip - 1).at(i).first;
+                cv::Point2f gt_displacement = m_list_objects.at(lo).getFlowPoints().at(frame_skip - 1).at(i).second;
 
                 std::vector<std::pair<cv::Point2i, cv::Point2i> > base_movement;
 

@@ -40,7 +40,7 @@ void AlgorithmFlow::prepare_directories(std::string resultordner) {
     std::cout << "Creating directories" << std::endl;
     boost::filesystem::create_directories(Dataset::getResultPath().string());
     // create flow directories
-    for (int i = 1; i < 10; ++i) {
+    for (int i = 1; i < MAX_SKIPS; ++i) {
         sprintf(char_dir_append, "%02d", i);
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
                                               "/flow_occ_" + char_dir_append);

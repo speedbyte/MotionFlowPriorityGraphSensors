@@ -16,10 +16,10 @@
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
 
-#define MAX_ITERATION_RESULTS 200
-#define MAX_ITERATION_GT 200
+#define MAX_ITERATION_RESULTS 360
+#define MAX_ITERATION_GT 360
 #define MAX_ITERATION_THETA 360
-#define MAX_SKIPS 5
+#define MAX_SKIPS 20
 
 
 typedef enum {
