@@ -29,8 +29,6 @@ private:
 
     std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_point_base_movement;
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_flow_point_fast_movement;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > >m_obj_flow_vector_fast_movement;
-
 
 public:
 

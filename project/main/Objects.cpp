@@ -88,29 +88,5 @@ void Objects::generate_multiframe_flow_vector(const int &max_skips ) {
         }
         m_obj_flow_point_fast_movement.push_back(multiframe_flowvector);
     }
-
-    // object shape
-    int width = getShapeImageData().get().cols;
-    int height = getShapeImageData().get().rows;
-
-    for ( unsigned frame_skip = 1; frame_skip < max_skips ; frame_skip++ ) {
-        std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > outer_base_movement;
-        for (unsigned i = 0; i < m_obj_flow_point_fast_movement.at(frame_skip-1).size(); i++) {
-            // gt_displacement
-            cv::Point2i gt_next_pts = m_obj_flow_point_fast_movement.at(frame_skip-1).at(i).first;
-            cv::Point2f gt_displacement = m_obj_flow_point_fast_movement.at(frame_skip-1).at(i).second;
-
-            std::vector<std::pair<cv::Point2i, cv::Point2i> > base_movement;
-
-            for (unsigned j = 0; j < width; j++) {
-                for (unsigned k = 0; k < height; k++) {
-                    base_movement.push_back(std::make_pair(cv::Point2i(gt_next_pts.x + j, gt_next_pts.y +
-                                                                                          k), gt_displacement));
-                }
-            }
-            outer_base_movement.push_back(base_movement);
-        }
-        m_obj_flow_vector_fast_movement.push_back(outer_base_movement);
-    }
 }
 

@@ -26,7 +26,7 @@ private:
 
 
     std::vector<Objects> &m_list_objects;
-    cv::Mat groundTruthSceneTrajectory;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > >m_obj_flow_vector_fast_movement;
 
 public:
 
