@@ -74,23 +74,23 @@ void ObjectFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector
     next_pts.resize(count);
 }
 
-void ObjectFlow::store_in_png(cv::FileStorage &fs, ushort &frame_count, cv::Size frame_size, std::string
-temp_result_flow_path) {
+void ObjectFlow::store_in_png(cv::FileStorage &fs, ushort &frame_count, cv::Size frame_size,
+                              std::string temp_result_flow_path) {
     //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
     //kitti uses col, row specification
-    FlowImage F_result_write(frame_size.width, frame_size.height);
+    FlowImageExtended F_gt_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
     std::vector<std::pair<cv::Point2i, cv::Point2i> >::iterator it ;
 
     fs << "frame_count" << frame_count;
 
     for ( it = m_obj_flow_vector_baseframe.begin(); it != m_obj_flow_vector_baseframe.end(); it++ )
     {
-        F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
-        F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
-        F_result_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+        //F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
+        //F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
+        //F_result_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
         store_in_yaml(fs, (*it).first, (*it).second ); // coordinate - > movement y(row),x(col) ; x,y
     }
-    F_result_write.write(temp_result_flow_path);
+    //F_result_write.write(temp_result_flow_path);
 }
 
 void ObjectFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
@@ -107,7 +107,7 @@ void ObjectFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelpo
 
 
 
-void ObjectFlow::generate_baseframe_flow_vector(const Dataset &m_dataset, const ushort &start_point, const
+void ObjectFlow::generate_baseframe_flow_vector(const ushort &start_point, const
 std::vector<cv::Point2i> &trajectory_points) {
 
     //Initialization
@@ -153,7 +153,7 @@ std::vector<cv::Point2i> &trajectory_points) {
     }
 }
 
-void ObjectFlow::generate_multiframe_flow_vector(const Dataset &m_dataset, const int &max_skips ) {
+void ObjectFlow::generate_multiframe_flow_vector(const int &max_skips ) {
 
     int temp_flow_x(0);
     int temp_flow_y(0);

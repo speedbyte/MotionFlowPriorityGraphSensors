@@ -22,10 +22,10 @@ private:
 public:
 
     /* This needs to know the shape of the object to extrapolate */
-    void generate_baseframe_flow_vector(const Dataset &m_dataset, const ushort &start_point, const std::vector<cv::Point2i>
+    void generate_baseframe_flow_vector(const ushort &start_point, const std::vector<cv::Point2i>
     &trajectory_points);
 
-    void generate_multiframe_flow_vector(const Dataset &dataset, const int &max_skips);
+    void generate_multiframe_flow_vector(const int &max_skips);
 
     void storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts, const
     std::vector<uchar> status);

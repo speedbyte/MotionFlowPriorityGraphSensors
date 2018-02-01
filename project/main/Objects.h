@@ -18,7 +18,7 @@ class Objects : public CameraSensorImage {
 
 private:
 
-    Dataset &m_dataset;
+    
     const ushort m_startPoint;
 
     ObjectTrajectory &m_obj_trajectory;
@@ -31,13 +31,13 @@ private:
 
 public:
 
-    Objects( Dataset &dataset, ObjectShapeImageData &shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
-    &noise, std::string objectName ) : CameraSensorImage(shape, noise), m_dataset(dataset), m_obj_trajectory
+    Objects( ObjectShapeImageData &shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
+    &noise, std::string objectName ) : CameraSensorImage(shape, noise), m_obj_trajectory
             (trajectory), m_startPoint(startPoint) , m_objectName ( objectName ), m_objectId
                                                (objectCurrentCount) {
 
         shape.process();
-        trajectory.process(dataset.getFrameSize());
+        trajectory.process(Dataset::getFrameSize());
         objectCurrentCount += 1;
 
         m_obj_flow = ObjectFlow();
@@ -45,12 +45,12 @@ public:
         printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                 (), getObjectId());
 
-        m_obj_flow.generate_baseframe_flow_vector(m_dataset, m_startPoint, m_obj_trajectory.get());
+        m_obj_flow.generate_baseframe_flow_vector( m_startPoint, m_obj_trajectory.get());
 
         printf("generating ground truth frame displacement for name %s with object id %u\n", getObjectName().c_str
                 (), getObjectId());
 
-        m_obj_flow.generate_multiframe_flow_vector(m_dataset, MAX_SKIPS );
+        m_obj_flow.generate_multiframe_flow_vector( MAX_SKIPS );
     }
 
 

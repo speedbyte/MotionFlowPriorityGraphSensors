@@ -17,14 +17,7 @@
 
 class GroundTruthScene  {
 
-protected:
-    Dataset &m_dataset;
-
 public:
-
-    GroundTruthScene(Dataset &dataset, Canvas canvas): m_dataset(dataset) {}
-
-    GroundTruthScene(Dataset &dataset): m_dataset(dataset) {}
 
     virtual void generate_gt_scene() {};
 
@@ -42,8 +35,8 @@ private:
 
 public:
 
-    GroundTruthSceneInternal(Dataset &dataset, Canvas &canvas, std::vector<Objects> &list_objects) :
-            GroundTruthScene(dataset), m_canvas(canvas), m_list_objects(list_objects) {}
+    GroundTruthSceneInternal(Canvas &canvas, std::vector<Objects> &list_objects) :
+            m_canvas(canvas), m_list_objects(list_objects) {}
 
     void generate_gt_scene();
 
@@ -66,8 +59,7 @@ private:
 
 public:
 
-    GroundTruthSceneExternal(Dataset &dataset, std::string scenario) : GroundTruthScene(dataset), m_scenario
-    (scenario) {}
+    GroundTruthSceneExternal(std::string scenario) :  m_scenario(scenario) {}
 
     void generate_gt_scene();
 

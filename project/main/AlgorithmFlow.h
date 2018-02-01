@@ -14,17 +14,11 @@
 
 class AlgorithmFlow : public ObjectFlow {
 
-    Dataset m_dataset;
-
 public:
-
-    AlgorithmFlow() {}
-    AlgorithmFlow( Dataset dataset );
 
     void prepare_directories(std::string resultordner);
 
-    void calculate_flow(const boost::filesystem::path dataset_path, ALGO_TYPES algo,
-                        FRAME_TYPES frame_types, NOISE_TYPES noise);
+    void calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 };
 
 

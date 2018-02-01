@@ -20,11 +20,6 @@
 
 using namespace std::chrono;
 
-AlgorithmFlow::AlgorithmFlow(Dataset dataset) {
-
-    m_dataset = dataset;
-
-}
 
 /**
  * This function means that the directories would be deleted and then created.
@@ -40,25 +35,24 @@ AlgorithmFlow::AlgorithmFlow(Dataset dataset) {
 void AlgorithmFlow::prepare_directories(std::string resultordner) {
 
     char char_dir_append[20];
-    if ( boost::filesystem::exists(m_dataset.getResultPath()) ) {
-        system(("rm -rf " + m_dataset.getResultPath().string() + "/" + resultordner).c_str());
+    if ( boost::filesystem::exists(Dataset::getResultPath()) ) {
+        system(("rm -rf " + Dataset::getResultPath().string() + "/" + resultordner).c_str());
     }
     std::cout << "Creating directories" << std::endl;
-    boost::filesystem::create_directories(m_dataset.getResultPath().string());
+    boost::filesystem::create_directories(Dataset::getResultPath().string());
     // create flow directories
     for (int i = 1; i < 10; ++i) {
         sprintf(char_dir_append, "%02d", i);
-        boost::filesystem::create_directories(m_dataset.getResultPath().string() + "/" + resultordner +
+        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
                                               "/flow_occ_" + char_dir_append);
-        boost::filesystem::create_directories(m_dataset.getResultPath().string() + "/" + resultordner +
+        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
                                               "/plots_" + char_dir_append);
     }
     std::cout << "Ending directories" << std::endl;
 }
 
 
-void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
-                                     ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
+void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
 
     std::string resultordner = "results_";
     switch ( algo ) {
@@ -124,7 +118,7 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
 
         if ( frame_types == video_frames) {
             cv::VideoCapture cap;
-            cap.open(m_dataset.getInputPath().string() + "image_02/movement.avi");
+            cap.open(Dataset::getInputPath().string() + "image_02/movement.avi");
             if (!cap.isOpened()) {
                 std::cout << "Could not initialize capturing...\n";
                 return;
@@ -132,22 +126,22 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
         }
         cv::Mat curGray, prevGray;
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
-        std::string results_flow_matrix_str = m_dataset.getResultPath().string() + "/" + resultordner + "/" +
+        std::string results_flow_matrix_str = Dataset::getResultPath().string() + "/" + resultordner + "/" +
                                               folder_name_flow + "/" + "result_flow.yaml";
         cv::VideoWriter video_out;
 
         if ( frame_types == video_frames)
         {
-            boost::filesystem::path video_out_path = m_dataset.getResultPath().string() + "/" + std::string("/video/OpticalFlow.avi");
+            boost::filesystem::path video_out_path = Dataset::getResultPath().string() + "/" + std::string("/video/OpticalFlow.avi");
             assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
             //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
             //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
-            video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, m_dataset.getFrameSize());
+            video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, Dataset::getFrameSize());
             printf("Writer eingerichtet\n");
         }
 
-        cv::Mat image_02_frame = cv::Mat::zeros(m_dataset.getFrameSize(), CV_8UC3);
-        cv::Mat flowImage(m_dataset.getFrameSize(), CV_32FC3);
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_8UC3);
+        cv::Mat flowImage(Dataset::getFrameSize(), CV_32FC3);
 
         cv::Size subPixWinSize(10, 10), winSize(21, 21);
 
@@ -211,7 +205,7 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
             //if (image_02_frame.empty())
             //    break;
 
-            std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/" + file_name_image;
+            std::string input_image_file_with_path = Dataset::getInputPath().string() + "/" + file_name_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
 
@@ -220,13 +214,13 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
                 throw ("No image file found error");
             }
 
-            temp_result_flow_path = m_dataset.getResultPath().string() + "/" + resultordner + "/" +
+            temp_result_flow_path = Dataset::getResultPath().string() + "/" + resultordner + "/" +
                                     folder_name_flow + "/" + file_name_image;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
 
-            cv::Mat flow_frame( m_dataset.getFrameSize(), CV_32FC2 );
+            cv::Mat flow_frame( Dataset::getFrameSize(), CV_32FC2 );
 
             std::vector<cv::Point2f> next_pts;
             tic = steady_clock::now();
@@ -327,7 +321,7 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
 
             if (prevGray.data) {
 
-                store_in_png(fs, frame_count, m_dataset.getFrameSize(), temp_result_flow_path);
+                store_in_png(fs, frame_count, Dataset::getFrameSize(), temp_result_flow_path);
             }
 
             toc = steady_clock::now();
@@ -365,7 +359,7 @@ void AlgorithmFlow::calculate_flow(const boost::filesystem::path dataset_path,
         Gnuplot gp2d;
         gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";
         gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-        std::string tmp = std::string(" with points title ") + std::string("'") + m_dataset.getInputPath().string() +
+        std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getInputPath().string() +
                 std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
     }

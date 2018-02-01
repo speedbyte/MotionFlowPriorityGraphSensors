@@ -22,18 +22,18 @@ void GroundTruthScene::prepare_directories() {
     char char_dir_append[20];
 
     // delete ground truth image and ground truth flow directories
-    if (boost::filesystem::exists(m_dataset.getInputPath())) {
-        system(("rm -rf " + m_dataset.getInputPath().string()).c_str()); // m_dataset.m__directory_path_input
+    if (boost::filesystem::exists(Dataset::getInputPath())) {
+        system(("rm -rf " + Dataset::getInputPath().string()).c_str()); // Dataset::m__directory_path_input
     }
 
-    if (!m_dataset.getBasePath().compare(CPP_DATASET_PATH) || !m_dataset.getBasePath().compare(VIRES_DATASET_PATH)) {
+    if (!Dataset::getBasePath().compare(CPP_DATASET_PATH) || !Dataset::getBasePath().compare(VIRES_DATASET_PATH)) {
 
         std::cout << "Creating GT Flow directories" << std::endl;
         // create flow directories
         for (int i = 1; i < 10; ++i) {
             // delete ground truth image and ground truth flow directories
             sprintf(char_dir_append, "%02d", i);
-            boost::filesystem::path path = m_dataset.getGroundTruthTrajectoryPath().string() + "/trajectory_occ_" +
+            boost::filesystem::path path = Dataset::getGroundTruthTrajectoryPath().string() + "/trajectory_occ_" +
                     char_dir_append;
             if (boost::filesystem::exists(path)) {
                 system(("rm -rf " + path.string()).c_str());
@@ -45,9 +45,9 @@ void GroundTruthScene::prepare_directories() {
 
 
     // create base directories
-    boost::filesystem::create_directories(m_dataset.getInputPath().string());
+    boost::filesystem::create_directories(Dataset::getInputPath().string());
     std::cout << "Creating GT Scene directories" << std::endl;
-    boost::filesystem::create_directories(m_dataset.getInputPath().string());
+    boost::filesystem::create_directories(Dataset::getInputPath().string());
     std::cout << "Ending GT Scene directories" << std::endl;
 }
 
@@ -68,26 +68,26 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
      */
 
     //m_shapes.process();
-    //m_trajectories.process(m_dataset.getFrameSize());
+    //m_trajectories.process(Dataset::getFrameSize());
 
     cv::Mat tempGroundTruthImage;
-    tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_32FC3);
+    tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
     assert(tempGroundTruthImage.channels() == 3);
 
     cv::Mat tempGroundTruthTrajectory;
-    tempGroundTruthTrajectory.create(m_dataset.getFrameSize(), CV_32FC3);
+    tempGroundTruthTrajectory.create(Dataset::getFrameSize(), CV_32FC3);
     assert(tempGroundTruthTrajectory.channels() == 3);
     tempGroundTruthTrajectory = cv::Scalar::all(255);
 
     cv::Mat tempGroundTruthTrajectory_2;
-    tempGroundTruthTrajectory_2.create(m_dataset.getFrameSize(), CV_32FC3);
+    tempGroundTruthTrajectory_2.create(Dataset::getFrameSize(), CV_32FC3);
     assert(tempGroundTruthTrajectory_2.channels() == 3);
     tempGroundTruthTrajectory_2 = cv::Scalar::all(255);
 
 
     std::map<std::string, double> time_map = {{"generate",0},{"ground truth", 0}};
 
-    std::cout << "ground truth images will be stored in " << m_dataset.getInputPath().string() << std::endl;
+    std::cout << "ground truth images will be stored in " << Dataset::getInputPath().string() << std::endl;
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
@@ -105,17 +105,16 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
         sprintf(file_name_image, "000%03d_10.png", frame_count);
-        std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/" + file_name_image;
+        std::string input_image_file_with_path = Dataset::getInputPath().string() + "/" + file_name_image;
 
         tempGroundTruthImage = m_canvas.getShapeImageData().get().clone();
 
-        //draw new ground truth image.
-
         char folder_name_flow[50];
-        for ( int i = 0; i < m_list_objects.size(); i++ ) {
+
+        for ( unsigned  i = 0; i < m_list_objects.size(); i++ ) {
 
             sprintf(folder_name_flow, "trajectory_occ_%02d", m_list_objects.at(i).getObjectId());
-            std::string trajectory_image_file_with_path = m_dataset.getGroundTruthTrajectoryPath().string() + "/" +
+            std::string trajectory_image_file_with_path = Dataset::getGroundTruthTrajectoryPath().string() + "/" +
                     folder_name_flow + "/" + file_name_image;
 
             std::vector<cv::Point2i> trajectory_points = m_list_objects.at(i).getTrajectoryPoints()
@@ -166,11 +165,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     char command[1024];
 
-    std::cout << "ground truth images will be stored in " << m_dataset.getInputPath().string() << std::endl;
+    std::cout << "ground truth images will be stored in " << Dataset::getInputPath().string() << std::endl;
 
     std::string project = "Movement";
 
-    sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s %s", (m_dataset.getBasePath().string()).c_str(),
+    sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s %s", (Dataset::getBasePath().string()).c_str(),
             project.c_str(), m_scenario.c_str());
     std::cout << command << std::endl;
     system(command);
@@ -290,7 +289,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
     }
 
-    sprintf(command, "cd %s; %s", (m_dataset.getBasePath().string() + std::string("../../")).c_str(),
+    sprintf(command, "cd %s; %s", (Dataset::getBasePath().string() + std::string("../../")).c_str(),
             "bash vtdStop.sh");
     std::cout << command << std::endl;
     system(command);
@@ -388,7 +387,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
         if (simFrame > 0) {
             sprintf(file_name_image, "000%03d_10.png", (simFrame - 7));
-            std::string input_image_file_with_path = m_dataset.getInputPath().string() + "/" + file_name_image;
+            std::string input_image_file_with_path = Dataset::getInputPath().string() + "/" + file_name_image;
             save_image.write(input_image_file_with_path);
         }
     } else {

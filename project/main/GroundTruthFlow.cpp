@@ -37,14 +37,14 @@ void GroundTruthFlow::prepare_directories() {
 
     char char_dir_append[20];
 
-    if (!m_dataset.getBasePath().compare(CPP_DATASET_PATH) || !m_dataset.getBasePath().compare(VIRES_DATASET_PATH)) {
+    if (!Dataset::getBasePath().compare(CPP_DATASET_PATH) || !Dataset::getBasePath().compare(VIRES_DATASET_PATH)) {
 
         std::cout << "Creating GT Flow directories" << std::endl;
         // create flow directories
         for (int i = 1; i < 10; ++i) {
             // delete ground truth image and ground truth flow directories
             sprintf(char_dir_append, "%02d", i);
-            boost::filesystem::path path = m_dataset.getGroundTruthFlowPath().string() + "/flow_occ_" + char_dir_append;
+            boost::filesystem::path path = Dataset::getGroundTruthFlowPath().string() + "/flow_occ_" + char_dir_append;
             if (boost::filesystem::exists(path)) {
                 system(("rm -rf " + path.string()).c_str());
             }
@@ -64,7 +64,7 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
     prepare_directories();
 
     cv::Mat tempGroundTruthImage;
-    tempGroundTruthImage.create(m_dataset.getFrameSize(), CV_8UC3);
+    tempGroundTruthImage.create(Dataset::getFrameSize(), CV_8UC3);
     assert(tempGroundTruthImage.channels() == 3);
 
 
@@ -77,11 +77,11 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
     auto toc_all = steady_clock::now();
 
 
-    std::cout << "ground truth flow will be stored in " << m_dataset.getGroundTruthFlowPath().string() << std::endl;
+    std::cout << "ground truth flow will be stored in " << Dataset::getGroundTruthFlowPath().string() << std::endl;
 
     char folder_name_flow[50];
     cv::FileStorage fs;
-    fs.open(m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+    fs.open(Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
             cv::FileStorage::WRITE);
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > objects;
 
@@ -97,11 +97,10 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
             char file_name_image[50];
             sprintf(file_name_image, "000%03d_10.png", frame_count);
             std::string temp_gt_flow_image_path =
-                    m_dataset.getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
+                    Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
                     + file_name_image;
             fs << "frame_count" << frame_count;
-            extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects,
-                                   m_dataset);
+            extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects);
         }
         fs.release();
     }
@@ -115,11 +114,11 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
 
 
 void GroundTruthFlow::extrapolate_flowpoints(std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
-frame_count, std::vector<Objects> list_objects, Dataset &dataset) {
+frame_count, std::vector<Objects> list_objects) {
 
-    FlowImageExtended F_gt_write(dataset.getFrameSize().width, dataset.getFrameSize().height);
+    FlowImageExtended F_gt_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
     cv::Mat tempMatrix;
-    tempMatrix.create(dataset.getFrameSize(), CV_32FC3);
+    tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
     assert(tempMatrix.channels() == 3);
 
     for (unsigned i = 0; i < list_objects.size(); i++) {
@@ -141,26 +140,11 @@ frame_count, std::vector<Objects> list_objects, Dataset &dataset) {
         //bulk storage
         roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(list_objects.at(i).getObjectId()));
 
-/*
-        //cv::Vec3f *datagt_next_ptsr = tempMatrix.gt_next_ptsr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
-        // first row. The r, g b  value of single pixels are continous.
-        float *array = (float *)malloc(3*sizeof(float)*dataset.getFrameSize().width*dataset.getFrameSize().height);
-        cv::MatConstIterator_<cv::Vec3f> it = roi.begin<cv::Vec3f>();
-        for (unsigned i = 0; it != roi.end<cv::Vec3f>(); it++ ) {
-            for ( unsigned j = 0; j < 3; j++ ) {
-                *(array + i ) = (*it)[j];
-                i++;
-            }
-        }
-        FlowImageExtended temp = FlowImageExtended(array, dataset.getFrameSize().width, dataset.getFrameSize().height );
-        F_gt_write = temp;
-
- */
     }
 
     //Create png Matrix with 3 channels: x gt_displacement. y displacment and ObjectId
-    for (int32_t row = 0; row < dataset.getFrameSize().height; row++) { // rows
-        for (int32_t column = 0; column < dataset.getFrameSize().width; column++) {  // cols
+    for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
+        for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
             if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5) {
                 F_gt_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
                 F_gt_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
@@ -169,6 +153,7 @@ frame_count, std::vector<Objects> list_objects, Dataset &dataset) {
             }
         }
     }
+
     F_gt_write.writeExtended(temp_gt_flow_image_path);
 
 }
@@ -355,3 +340,21 @@ void GroundTruthFlow::make_video_from_png(const Dataset &dataset_path, std::stri
     video_write.release();
 
 }
+
+
+
+/*
+        //cv::Vec3f *datagt_next_ptsr = tempMatrix.gt_next_ptsr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
+        // first row. The r, g b  value of single pixels are continous.
+        float *array = (float *)malloc(3*sizeof(float)*Dataset::getFrameSize().width*Dataset::getFrameSize().height);
+        cv::MatConstIterator_<cv::Vec3f> it = roi.begin<cv::Vec3f>();
+        for (unsigned i = 0; it != roi.end<cv::Vec3f>(); it++ ) {
+            for ( unsigned j = 0; j < 3; j++ ) {
+                *(array + i ) = (*it)[j];
+                i++;
+            }
+        }
+        FlowImageExtended temp = FlowImageExtended(array, Dataset::getFrameSize().width, Dataset::getFrameSize().height );
+        F_gt_write = temp;
+
+ */
