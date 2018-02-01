@@ -8,12 +8,14 @@
 #include "datasets.h"
 #include <iostream>
 #include <boost/filesystem/path.hpp>
+#include <opencv2/core/persistence.hpp>
 #include "Dataset.h"
 #include "PlotFlow.h"
 
 class AlgorithmFlow {
 
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_resultframe;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_frame_flow_vector_base_movement;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > > m_obj_flow_vector_resultmultiframe;
 
 public:
 

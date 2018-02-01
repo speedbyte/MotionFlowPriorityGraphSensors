@@ -1,7 +1,7 @@
 [CPP_DATASET]
 PATH = "../../../datasets/cpp_dataset/"
 EXECUTE = 1
-GT = 1
+GT = 0
 LK = 1
 FB = 1
 PLOT = 0

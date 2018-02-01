@@ -47,10 +47,10 @@ std::vector<cv::Point2i> &trajectory_points) {
                    gt_displacement.x, gt_displacement.y);
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
-            m_obj_flow_vector_baseframe.push_back(std::make_pair(gt_next_pts, gt_displacement));
+            m_obj_flow_vector_base_movement.push_back(std::make_pair(gt_next_pts, gt_displacement));
         }
         else {
-            m_obj_flow_vector_baseframe.push_back(std::make_pair(cv::Point2i(0,0), cv::Point2i(0,0)));
+            m_obj_flow_vector_base_movement.push_back(std::make_pair(cv::Point2i(0,0), cv::Point2i(0,0)));
         }
         current_index++;
     }
@@ -73,20 +73,20 @@ void Objects::generate_multiframe_flow_vector(const int &max_skips ) {
             // frame skip 1 means no skips
             // The below code has to go through consecutive frames
             if ((frame_count % frame_skip != 0)) {
-                temp_flow_x += m_obj_flow_vector_baseframe.at(frame_count).second.x;
-                temp_flow_y += m_obj_flow_vector_baseframe.at(frame_count).second.y;
+                temp_flow_x += m_obj_flow_vector_base_movement.at(frame_count).second.x;
+                temp_flow_y += m_obj_flow_vector_base_movement.at(frame_count).second.y;
             }
             else {
-                temp_flow_x += m_obj_flow_vector_baseframe.at(frame_count).second.x;
-                temp_flow_y += m_obj_flow_vector_baseframe.at(frame_count).second.y;
+                temp_flow_x += m_obj_flow_vector_base_movement.at(frame_count).second.x;
+                temp_flow_y += m_obj_flow_vector_base_movement.at(frame_count).second.y;
 
                 multiframe_flowvector.push_back
-                        (std::make_pair(m_obj_flow_vector_baseframe.at
+                        (std::make_pair(m_obj_flow_vector_base_movement.at
                                 (frame_count).first, cv::Point2i(temp_flow_x, temp_flow_y)));
                 temp_flow_x = 0, temp_flow_y = 0;
             }
         }
-        m_obj_flow_vector_multiframe.push_back(multiframe_flowvector);
+        m_obj_flow_vector_fast_movement.push_back(multiframe_flowvector);
     }
 }
 

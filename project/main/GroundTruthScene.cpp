@@ -102,12 +102,17 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     char file_name_image[50];
 
+    cv::Mat shape;
+    cv::Mat trajectoryShape;
+
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
         sprintf(file_name_image, "000%03d_10.png", frame_count);
         std::string input_image_file_with_path = Dataset::getInputPath().string() + "/" + file_name_image;
 
         tempGroundTruthImage = m_canvas.getShapeImageData().get().clone();
+
+        //draw new ground truth image.
 
         char folder_name_flow[50];
 
@@ -117,11 +122,10 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             std::string trajectory_image_file_with_path = Dataset::getGroundTruthTrajectoryPath().string() + "/" +
                     folder_name_flow + "/" + file_name_image;
 
-            std::vector<cv::Point2i> trajectory_points = m_list_objects.at(i).getTrajectoryPoints()
-                    .get();
-            cv::Mat shape = m_list_objects.at(i).getShapeImageData().get();
+            std::vector<cv::Point2i> trajectory_points = m_list_objects.at(i).getTrajectoryPoints().get();
 
-            cv::Mat trajectoryShape = m_list_objects.at(i).getShapeImageData().get();;
+            shape = m_list_objects.at(i).getShapeImageData().get().clone();
+            trajectoryShape = m_list_objects.at(i).getShapeImageData().get().clone();
 
             shape.copyTo(tempGroundTruthImage(
                     cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at

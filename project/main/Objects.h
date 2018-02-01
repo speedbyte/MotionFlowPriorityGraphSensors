@@ -27,8 +27,8 @@ private:
     const unsigned m_objectId;
     const std::string m_objectName;
 
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_baseframe;
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_flow_vector_multiframe;
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_base_movement;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_flow_vector_fast_movement;
 
 
 public:
@@ -64,7 +64,7 @@ public:
     }
 
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >  getFlowPoints() {
-        return m_obj_flow_vector_multiframe;
+        return m_obj_flow_vector_fast_movement;
     }
 
     ushort getStartPoint() {
@@ -80,7 +80,7 @@ public:
     }
 
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >  get() {
-        return m_obj_flow_vector_multiframe;
+        return m_obj_flow_vector_fast_movement;
     }
 
 

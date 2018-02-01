@@ -45,6 +45,8 @@ void AlgorithmFlow::prepare_directories(std::string resultordner) {
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
                                               "/flow_occ_" + char_dir_append);
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
+                                              "/trajectory_" + char_dir_append);
+        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
                                               "/plots_" + char_dir_append);
     }
     std::cout << "Ending directories" << std::endl;
@@ -97,9 +99,9 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
     prepare_directories(resultordner);
 
 
-    for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ){
+    for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
 
-        char folder_name_flow[50];
+        char folder_name_flow[50], folder_name_trajectory[50];
         char file_name_image[50];
 
         std::vector<unsigned> x_pts;
@@ -108,7 +110,12 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::vector<float> time;
         double sum_time = 0;
 
+        ushort count = 0;
         std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
+
+        FlowImageExtended F_result_write_trajectory(Dataset::getFrameSize().width, Dataset::getFrameSize()
+                .height);
+
 
         bool needToInit = true;
         std::vector<cv::Point2f> prev_pts;
@@ -125,6 +132,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         }
         cv::Mat curGray, prevGray;
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
+        sprintf(folder_name_trajectory, "trajectory_occ_%02d", frame_skip);
         std::string results_flow_matrix_str = Dataset::getResultPath().string() + "/" + resultordner + "/" +
                                               folder_name_flow + "/" + "result_flow.yaml";
         cv::VideoWriter video_out;
@@ -171,11 +179,13 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         error.at(0) = 0;
         error.at(1) = 0;
 
-        std::string temp_result_flow_path;
+        std::string temp_result_flow_path, temp_result_trajectory_path;
         cv::FileStorage fs;
         fs.open(results_flow_matrix_str, cv::FileStorage::WRITE);
         std::vector<cv::Point2f> next_pts_healthy;
 
+        std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
+        m_frame_flow_vector_base_movement.clear();
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
@@ -215,6 +225,8 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
             temp_result_flow_path = Dataset::getResultPath().string() + "/" + resultordner + "/" +
                                     folder_name_flow + "/" + file_name_image;
+            temp_result_trajectory_path = Dataset::getResultPath().string() + "/" + resultordner + "/" +
+                                    folder_name_trajectory + "/" + file_name_image;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
@@ -324,18 +336,30 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
                 //kitti uses col, row specification
                 FlowImageExtended F_result_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+
                 std::vector<std::pair<cv::Point2i, cv::Point2i> >::iterator it ;
 
+                std::cout << "frame_count " << frame_count << std::endl;
                 fs << "frame_count" << frame_count;
 
-                for ( it = m_obj_flow_vector_resultframe.begin(); it != m_obj_flow_vector_resultframe.end(); it++ )
+                for ( it = m_frame_flow_vector_base_movement.at(count).begin(); it !=
+                        m_frame_flow_vector_base_movement.at(count).end(); it++ )
                 {
                     F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
                     F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
                     F_result_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
                     store_in_yaml(fs, (*it).first, (*it).second ); // coordinate - > movement y(row),x(col) ; x,y
+
+                    F_result_write_trajectory.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
+                    F_result_write_trajectory.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
+                    F_result_write_trajectory.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+
                 }
+
+                count++;
                 F_result_write.write(temp_result_flow_path);
+                F_result_write_trajectory.write(temp_result_trajectory_path);
+
             }
 
             toc = steady_clock::now();
@@ -353,6 +377,9 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
             cv::imshow(resultordner, image_02_frame);
             prevGray = curGray.clone();
         }
+
+        //F_result_write_trajectory.write(temp_result_flow_path);
+        m_obj_flow_vector_resultmultiframe.push_back(m_frame_flow_vector_base_movement);
         fs.release();
 
         for(auto &n : time)
@@ -377,7 +404,6 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
     }
-
 }
 
 void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts,
@@ -385,6 +411,7 @@ void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vec
 
     unsigned count = 0;
 
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > frame_points;
     for (unsigned i = 0; i < next_pts.size(); i++) {
 
         int minDist = 1;
@@ -431,8 +458,9 @@ void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vec
         printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", i,
                result_next_pts.x, result_next_pts.y, result_displacement.x, result_displacement.y);
         // Lines to indicate the motion vectors
-        m_obj_flow_vector_resultframe.push_back(std::make_pair(result_next_pts, result_displacement));
+        frame_points.push_back(std::make_pair(result_next_pts, result_displacement));
     }
+    m_frame_flow_vector_base_movement.push_back(frame_points);
     next_pts.resize(count);
 }
 
