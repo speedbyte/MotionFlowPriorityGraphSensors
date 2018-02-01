@@ -25,7 +25,6 @@
 #include "ObjectTrajectory.h"
 #include "Dataset.h"
 #include "GroundTruthScene.h"
-#include "ObjectFlow.h"
 
 
 //Creating a movement path. The path is stored in a x and y vector
@@ -91,7 +90,7 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-        for (ushort frame_count = 0; frame_count < (m_list_objects.at(0).getFlowPoints().get().at
+        for (ushort frame_count = 0; frame_count < (m_list_objects.at(0).getFlowPoints().at
                 (frame_skip - 1)).size(); frame_count++) {
 
             char file_name_image[50];
@@ -129,8 +128,8 @@ frame_count, std::vector<Objects> list_objects) {
         int height = list_objects.at(i).getShapeImageData().get().rows;
 
         // gt_displacement
-        cv::Point2i gt_next_pts = list_objects.at(i).getFlowPoints().get().at(frame_skip - 1).at(frame_count).first;
-        cv::Point2f gt_displacement = list_objects.at(i).getFlowPoints().get().at(frame_skip - 1).at(
+        cv::Point2i gt_next_pts = list_objects.at(i).getFlowPoints().at(frame_skip - 1).at(frame_count).first;
+        cv::Point2f gt_displacement = list_objects.at(i).getFlowPoints().at(frame_skip - 1).at(
                 frame_count).second;
 
         cv::Mat roi;

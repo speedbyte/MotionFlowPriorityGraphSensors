@@ -2,8 +2,8 @@
 PATH = "../../../datasets/cpp_dataset/"
 EXECUTE = 1
 GT = 1
-LK = 0
-FB = 0
+LK = 1
+FB = 1
 PLOT = 0
 
 [MATLAB_DATASET]
