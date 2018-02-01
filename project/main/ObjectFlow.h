@@ -18,6 +18,8 @@ class ObjectFlow {
 private:
     std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_vector_basic;
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_flow_vector_extended;
+    // extrpolate each point into a blob of points ( depending on the shape of the original matrix ) 
+    std::vector<std::vector<std::pair<cv::Mat_<cv::Point2i>, cv::Mat_<cv::Point2i> > > > m_obj_flow_vector_extrapolated;
 
 public:
 

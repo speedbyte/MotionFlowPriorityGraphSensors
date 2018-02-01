@@ -139,19 +139,19 @@ frame_count,
         int width = list_objects.at(i).getShapeImageData().get().cols;
         int height = list_objects.at(i).getShapeImageData().get().rows;
 
-        // displacement
-        cv::Point2i pt = list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).first;
-        cv::Point2f displacement = list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).second;
+        // gt_displacement
+        cv::Point2i gt_next_pts = list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).first;
+        cv::Point2f gt_displacement = list_objects.at(i).getFlowPoints().get().at(frame_skip-1).at(frame_count).second;
 
         cv::Mat roi;
         roi = tempMatrix.
-                colRange(pt.x, (pt.x + width)).
-                rowRange(pt.y, (pt.y + height));
+                colRange(gt_next_pts.x, (gt_next_pts.x + width)).
+                rowRange(gt_next_pts.y, (gt_next_pts.y + height));
         //bulk storage
-        roi = cv::Scalar(displacement.x, displacement.y, 1.0f);
+        roi = cv::Scalar(gt_displacement.x, gt_displacement.y, 1.0f);
 
 /*
-        //cv::Vec3f *dataPtr = tempMatrix.ptr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
+        //cv::Vec3f *datagt_next_ptsr = tempMatrix.gt_next_ptsr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
         // first row. The r, g b  value of single pixels are continous.
         float *array = (float *)malloc(3*sizeof(float)*dataset.getFrameSize().width*dataset.getFrameSize().height);
         cv::MatConstIterator_<cv::Vec3f> it = roi.begin<cv::Vec3f>();
@@ -167,7 +167,7 @@ frame_count,
  */
     }
 
-    //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
+    //Create png Matrix with 3 channels: x gt_displacement. y displacment and Validation bit
     for (int32_t row=0; row<dataset.getFrameSize().height; row++) { // rows
         for (int32_t column=0; column<dataset.getFrameSize().width; column++) {  // cols
             if (tempMatrix.at<cv::Vec3f>(row,column)[2] > 0.5 ) {
@@ -191,35 +191,22 @@ void GroundTruthFlow::generateVectorRobustness() {
 
 }
 
-/**
- * Given any number of vectors, the function will compute
- * 1. The mean of the gaussian approximaiton to the distribution of the sample points.
- * 2. The covariance for the Guassian approximation to the distribution of the sample points.
- *
- */
-void GroundTruthFlow::calcCovarMatrix() {
 
-    for ( int i = 0; i < m_list_objects.size(); i++ ) {
-    }
 
-    std::vector<std::string> list_gp_lines;
+void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::string> &list_gp_lines ) {
+
     float m,c;
     std::string coord1;
     std::string coord2;
     std::string gp_line;
-
     // XY, 2XY and 2X2Y all gives the same correlation
     cv::Mat_<float> covar, mean, corr;
     cv::Scalar mean_x, mean_y, stddev_x,stddev_y;
-    cv::Mat_<uchar> samples_xy(2,9);
-    std::vector<std::pair<double,double>> xypoints_1, xypoints_2, xypoints_3;
 
     cv::Vec4f line;
     cv::Mat mat_samples(1,samples_xy.cols,CV_32FC(2));
 
-    //------------------------------------------------------------------------
 
-    samples_xy << 1,3,2,5,8,7,12,2,4,8,6,9,4,3,3,2,7,7;
     std::cout << "\nsamples_xy\n" << samples_xy;
     cv::calcCovarMatrix( samples_xy, covar, mean, cv::COVAR_NORMAL|cv::COVAR_COLS|cv::COVAR_SCALE, CV_32FC1);
 
@@ -237,18 +224,12 @@ void GroundTruthFlow::calcCovarMatrix() {
               "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
               "\ncorr\n" << corr << std::endl;
 
-    for ( unsigned i = 0; i<samples_xy.cols; i++) {
-        xypoints_1.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
-    }
-    cv::meanStdDev(samples_xy.row(0),mean_x,stddev_x);
-
 
     for (unsigned i=0;i<samples_xy.cols;i++) {
         mat_samples.at<cv::Vec<float,2>>(0,i)[0] = samples_xy[0][i];
-    }
-    for (unsigned i=0;i<samples_xy.cols;i++) {
         mat_samples.at<cv::Vec<float,2>>(0,i)[1] = samples_xy[1][i];
     }
+
     cv::fitLine(mat_samples,line,CV_DIST_L2,0,0.01,0.01); // radius and angle from the origin - a kind of constraint
     m = line[1]/line[0];
     c = line[3] - line[2]*m;
@@ -256,80 +237,49 @@ void GroundTruthFlow::calcCovarMatrix() {
     coord2 = std::to_string(-c/m) + ",0";
     gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
     list_gp_lines.push_back(gp_line);
+}
+
+
+/**
+ * Given any number of vectors, the function will compute
+ * 1. The mean of the gaussian approximaiton to the distribution of the sample points.
+ * 2. The covariance for the Guassian approximation to the distribution of the sample points.
+ *
+ */
+void GroundTruthFlow::calcCovarMatrix() {
+
+    for ( int i = 0; i < m_list_objects.size(); i++ ) {
+    }
+
+    std::vector<std::pair<double,double>> xypoints_1, xypoints_2, xypoints_3;
+
+    cv::Mat_<uchar> samples_xy(2,9);
+    std::vector<std::string> list_gp_lines;
+
+    //------------------------------------------------------------------------
+
+    samples_xy << 1,3,2,5,8,7,12,2,4,8,6,9,4,3,3,2,7,7;
+    common(samples_xy, list_gp_lines);
+    for ( unsigned i = 0; i<samples_xy.cols; i++) {
+        xypoints_1.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
+    }
 
     //------------------------------------------------------------------------
 
     samples_xy.row(0) = 5*samples_xy.row(0);
-    std::cout << "\nsamples_xy\n" << samples_xy;
-    cv::calcCovarMatrix( samples_xy, covar, mean, cv::COVAR_NORMAL|cv::COVAR_COLS|cv::COVAR_SCALE, CV_32FC1);
-    cv::meanStdDev(samples_xy.row(0),mean_x,stddev_x);
-    cv::meanStdDev(samples_xy.row(1),mean_y,stddev_y);
-
-    assert(std::floor(mean(0)*100) == std::floor(mean_x(0)*100));
-    assert(std::floor(mean(1)*100) == std::floor(mean_y(0)*100));
-
-    stddev << stddev_x[0]*stddev_x[0], stddev_x[0]*stddev_y[0], stddev_x[0]*stddev_y[0], stddev_y[0]*stddev_y[0];
-    corr = covar/stddev;
-
-    std::cout << "\nMean\n" << mean << "\nCovar\n" << covar <<
-              "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
-              "\ncorr\n" << corr << std::endl;
-
-
+    common(samples_xy, list_gp_lines);
     for ( unsigned i = 0; i<samples_xy.cols; i++) {
         xypoints_2.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
     }
 
-    for (unsigned i=0;i<samples_xy.cols;i++) {
-        mat_samples.at<cv::Vec<float,2>>(0,i)[0] = samples_xy[0][i];
-    }
-    for (unsigned i=0;i<samples_xy.cols;i++) {
-        mat_samples.at<cv::Vec<float,2>>(0,i)[1] = samples_xy[1][i];
-    }
-    cv::fitLine(mat_samples,line,CV_DIST_L2,0,0.01,0.01); // radius and angle from the origin - a kind of constraint
-    m = line[1]/line[0];
-    c = line[3] - line[2]*m;
-    coord1 = "0," + std::to_string(c);
-    coord2 = std::to_string(-c/m) + ",0";
-    gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
-    list_gp_lines.push_back(gp_line);
-
     //------------------------------------------------------------------------
 
     samples_xy.row(1) = 2*samples_xy.row(1);
-    std::cout << "\nsamples_xy\n" << samples_xy;
-    cv::calcCovarMatrix( samples_xy, covar, mean, cv::COVAR_NORMAL|cv::COVAR_COLS|cv::COVAR_SCALE, CV_32FC1);
-    cv::meanStdDev(samples_xy.row(0),mean_x,stddev_x);
-    cv::meanStdDev(samples_xy.row(1),mean_y,stddev_y);
-
-    assert(std::floor(mean(0)*100) == std::floor(mean_x(0)*100));
-    assert(std::floor(mean(1)*100) == std::floor(mean_y(0)*100));
-
-    stddev << stddev_x[0]*stddev_x[0], stddev_x[0]*stddev_y[0], stddev_x[0]*stddev_y[0], stddev_y[0]*stddev_y[0];
-    corr = covar/stddev;
-
-    std::cout << "\nMean\n" << mean << "\nCovar\n" << covar <<
-              "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
-              "\ncorr\n" << corr << std::endl;
-
-
+    common(samples_xy, list_gp_lines);
     for ( unsigned i = 0; i<samples_xy.cols; i++) {
         xypoints_3.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
     }
 
-    for (unsigned i=0;i<samples_xy.cols;i++) {
-        mat_samples.at<cv::Vec<float,2>>(0,i)[0] = samples_xy[0][i];
-    }
-    for (unsigned i=0;i<samples_xy.cols;i++) {
-        mat_samples.at<cv::Vec<float,2>>(0,i)[1] = samples_xy[1][i];
-    }
-    cv::fitLine(mat_samples,line,CV_DIST_L2,0,0.01,0.01); // radius and angle from the origin - a kind of constraint
-    m = line[1]/line[0];
-    c = line[3] - line[2]*m;
-    coord1 = "0," + std::to_string(c);
-    coord2 = std::to_string(-c/m) + ",0";
-    gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
-    list_gp_lines.push_back(gp_line);
 
     //------------------------------------------------------------------------
 
@@ -352,11 +302,10 @@ void GroundTruthFlow::calcCovarMatrix() {
     // Two matrices sample
     cv::Mat_<uchar> x_sample(1,9);  x_sample << 1,3,2,5,8,7,12,2,4;
     cv::Mat_<uchar> y_sample(1,9);  y_sample << 8,6,9,4,3,3,2,7,7;
-    std::vector<cv::Mat> matPtr;
-    matPtr.push_back(x_sample);
-    matPtr.push_back(y_sample);
-    //cv::calcCovarMatrix( &matPtr, 2, covar_x, mean_x, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
-
+    std::vector<cv::Mat> matgt_next_ptsr;
+    matgt_next_ptsr.push_back(x_sample);
+    matgt_next_ptsr.push_back(y_sample);
+    //cv::calcCovarMatrix( &matgt_next_ptsr, 2, covar_x, mean_x, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
 
 }
 

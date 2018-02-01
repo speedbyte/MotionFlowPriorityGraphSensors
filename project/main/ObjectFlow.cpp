@@ -28,7 +28,7 @@ void ObjectFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector
 
         int minDist = 1;
 
-        cv::Point2i l_pixel_position, l_pixel_movement;
+        cv::Point2i gt_next_pts, gt_displacement;
         cv::Point2f algorithmMovement ((next_pts[i].x - prev_pts[i].x), (next_pts[i].y - prev_pts[i]
                 .y));
 
@@ -42,13 +42,13 @@ void ObjectFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector
         printf("flow_frame.at<cv::Point2f>(%f, %f).y =  %f\n", next_pts[i].x, next_pts[i].y,
                algorithmMovement.y);
 
-        l_pixel_movement.x = cvRound( algorithmMovement.x + 0.5);
-        l_pixel_movement.y = cvRound( algorithmMovement.y + 0.5);
+        gt_displacement.x = cvRound( algorithmMovement.x + 0.5);
+        gt_displacement.y = cvRound( algorithmMovement.y + 0.5);
 
         /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
         // auto dist = cv::norm(prev_pts[i] - next_pts[i]);
         double dist;
-        dist = pow(l_pixel_movement.x,2)+pow(l_pixel_movement.y,2);
+        dist = pow(gt_displacement.x,2)+pow(gt_displacement.y,2);
         //calculating distance by euclidean formula
         dist = sqrt(dist);
 
@@ -57,20 +57,20 @@ void ObjectFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector
             continue;
         }
 
-        if ( l_pixel_movement.x == 0 && l_pixel_movement.y == 0) {
+        if ( gt_displacement.x == 0 && gt_displacement.y == 0) {
             continue;
         }
 
         next_pts[count++] = next_pts[i];
 
-        // l_pixel_position is the new pixel position !
-        l_pixel_position.x = std::abs(cvRound(next_pts[i].x));
-        l_pixel_position.y = std::abs(cvRound(next_pts[i].y));
+        // gt_next_pts is the new pixel position !
+        gt_next_pts.x = std::abs(cvRound(next_pts[i].x));
+        gt_next_pts.y = std::abs(cvRound(next_pts[i].y));
 
         printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", i,
-               l_pixel_position.x, l_pixel_position.y, l_pixel_movement.x, l_pixel_movement.y);
+               gt_next_pts.x, gt_next_pts.y, gt_displacement.x, gt_displacement.y);
         // Lines to indicate the motion vectors
-        m_obj_flow_vector_basic.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
+        m_obj_flow_vector_basic.push_back(std::make_pair(gt_next_pts, gt_displacement));
     }
     next_pts.resize(count);
 }
@@ -122,30 +122,30 @@ std::vector<cv::Point2i> &trajectory_points) {
 
         if ( frame_count > 0 ) {
 
-            cv::Point2i l_pixel_position= {0,0}, l_pixel_movement = {0,0};
+            cv::Point2i gt_next_pts= {0,0}, gt_displacement = {0,0};
 
             //If we are at the end of the path vector, we need to reset our iterators
             if (current_index >= trajectory_points.size()) {
                 current_index = 0;
-                l_pixel_movement.x = trajectory_points.at(current_index).x - trajectory_points.at
+                gt_displacement.x = trajectory_points.at(current_index).x - trajectory_points.at
                         (trajectory_points.size() - 1).x;
-                l_pixel_movement.y = trajectory_points.at(current_index).y - trajectory_points.at
+                gt_displacement.y = trajectory_points.at(current_index).y - trajectory_points.at
                         (trajectory_points.size() - 1).y;
-                l_pixel_position = trajectory_points.at(current_index);
+                gt_next_pts = trajectory_points.at(current_index);
             } else {
-                l_pixel_movement.x = trajectory_points.at(current_index).x - trajectory_points.at
+                gt_displacement.x = trajectory_points.at(current_index).x - trajectory_points.at
                         (current_index - (ushort) 1).x;
-                l_pixel_movement.y = trajectory_points.at(current_index).y - trajectory_points.at
+                gt_displacement.y = trajectory_points.at(current_index).y - trajectory_points.at
                         (current_index - (ushort) 1).y;
-                l_pixel_position = trajectory_points.at(current_index);
+                gt_next_pts = trajectory_points.at(current_index);
             }
 
-            printf("%u, %u , %u, %u, %d, %d\n", frame_count, current_index, l_pixel_position.x,
-                   l_pixel_position.y,
-                   l_pixel_movement.x, l_pixel_movement.y);
+            printf("%u, %u , %u, %u, %d, %d\n", frame_count, current_index, gt_next_pts.x,
+                   gt_next_pts.y,
+                   gt_displacement.x, gt_displacement.y);
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
-            m_obj_flow_vector_basic.push_back(std::make_pair(l_pixel_position, l_pixel_movement));
+            m_obj_flow_vector_basic.push_back(std::make_pair(gt_next_pts, gt_displacement));
         }
         else {
             m_obj_flow_vector_basic.push_back(std::make_pair(cv::Point2i(0,0), cv::Point2i(0,0)));

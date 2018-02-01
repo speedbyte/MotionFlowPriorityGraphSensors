@@ -51,7 +51,10 @@ private:
 
     void calcCovarMatrix();
 
-};
+    void common(cv::Mat_<uchar> &samples_xy, std::vector<std::string> &list_gp_lines );
+
+
+    };
 
 
 #endif //MAIN_GROUNDTRUTH_FLOW_H
