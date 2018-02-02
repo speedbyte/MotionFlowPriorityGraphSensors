@@ -17,12 +17,15 @@ void RobustnessIndex::generatePixelRobustness(const std::string &resultOrdner) {
     boost::filesystem::path dir_path = Dataset::getResultTrajectoryPath();
     dir_path += "/";
     dir_path += resultOrdner;
+    dir_path += "/flow_occ_01";
 
     std::cout << dir_path.string() << std::endl;
     assert(boost::filesystem::exists(dir_path) != 0);
 
     std::string file_name, path;
     boost::filesystem::path temp;
+
+
 
     for (boost::filesystem::directory_iterator dir_iter(dir_path); dir_iter != end_iter; ++dir_iter) {
         if (boost::filesystem::is_regular_file(dir_iter->status())) {

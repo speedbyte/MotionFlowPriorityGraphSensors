@@ -18,7 +18,7 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 ##define NUMBER  ${NUMBER}
 
 set(SOURCE_FILES
-        ObjectTrajectory.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
+        KittiSubmitInterface.cpp ObjectTrajectory.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
         video_capture.cpp GroundTruthFlow.cpp  AlgorithmFlow.cpp kbhit.cpp Dataset.cpp PlotFlow.cpp
         GroundTruthScene.cpp ObjectImageShapeData.cpp Objects.cpp Noise.cpp Noise.h Canvas.cpp Canvas.h SensorImage.cpp
         SensorImage.h FlowImageExtended.cpp CameraSensorImage.cpp CameraSensorImage.h RobustnessIndex.cpp RobustnessIndex.h)
