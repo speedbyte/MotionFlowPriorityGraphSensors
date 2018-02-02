@@ -19,6 +19,7 @@
 #include "ObjectTrajectory.h"
 #include "GroundTruthScene.h"
 #include "Objects.h"
+#include "RobustnessIndex.h"
 
 
 //extern bool eval(std::string result_sha, Mail *mail);
@@ -194,7 +195,6 @@ int main ( int argc, char *argv[]) {
 
                 GroundTruthFlow gt_flow(list_of_objects);
                 gt_flow.generate_gt_scene_flow_vector();
-                gt_flow.generatePixelRobustness();
 
             }
 
@@ -209,8 +209,14 @@ int main ( int argc, char *argv[]) {
             }
 
             if ( cpp_dataset.plot ) {
-                PlotFlow::plot(std::string("results_FB_no_noise"));
-                PlotFlow::plot(std::string("results_LK_no_noise"));
+
+                RobustnessIndex robust;
+                std::string resultordner;
+                fback.setResultOrdner(fb, continous_frames, no_noise);
+                robust.generatePixelRobustness(fback.getResultOrdner());
+                //PlotFlow::plot(std::string("results_FB_no_noise"));
+                //PlotFlow::plot(std::string("results_LK_no_noise"));
+
             }
         }
     }

@@ -18,7 +18,7 @@ typedef struct {
     boost::filesystem::path m_dataset_path;
 
     // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/image_02
-    boost::filesystem::path  m__directory_path_input;
+    boost::filesystem::path  m__directory_path_gt;
 
     // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/flow_occ_01
     boost::filesystem::path  m__directory_path_gt_flow;
@@ -26,10 +26,13 @@ typedef struct {
     // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/trajectroy_occ_01
     boost::filesystem::path  m__directory_path_gt_trajectory;
 
+    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/
+    boost::filesystem::path m__directory_path_result;
+
     // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/flow_occ_01
     boost::filesystem::path m__directory_path_result_flow;
 
-    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/flow_occ_01
+    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/trajectory_coo_01
     boost::filesystem::path m__directory_path_result_trajectory_out;
 
     ushort m_depth;
@@ -56,11 +59,17 @@ public:
 
     const static boost::filesystem::path getBasePath() ;
     
-    const static boost::filesystem::path getInputPath()  ;
+    const static boost::filesystem::path getGtPath()  ;
+
+    const static boost::filesystem::path getGroundTruthFlowPath();
+
+    const static boost::filesystem::path getGroundTruthTrajectoryPath();
 
     const static boost::filesystem::path getResultPath();
 
-    const static boost::filesystem::path getGroundTruthFlowPath();
+    const static boost::filesystem::path getResultFlowPath();
+
+    const static boost::filesystem::path getResultTrajectoryPath();
 
     const static ushort getDepth();
 
@@ -68,9 +77,6 @@ public:
 
     const static ushort getMakeType();
 
-    const static boost::filesystem::path getGroundTruthTrajectoryPath();
-
-    const static boost::filesystem::path getResultTrajectoryPath();
 
 
 

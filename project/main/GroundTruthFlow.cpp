@@ -186,17 +186,6 @@ frame_count, std::vector<Objects> list_objects) {
 
 }
 
-void GroundTruthFlow::generatePixelRobustness() {
-
-    //calcCovarMatrix();
-
-}
-
-void GroundTruthFlow::generateVectorRobustness() {
-
-}
-
-
 void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::string> &list_gp_lines) {
 
     float m, c;

@@ -31,38 +31,17 @@ using namespace std::chrono;
  * @param result_sha
  * @return
  */
-void AlgorithmFlow::prepare_directories(std::string resultordner) {
 
-    char char_dir_append[20];
-    if ( boost::filesystem::exists(Dataset::getResultPath()) ) {
-        system(("rm -rf " + Dataset::getResultPath().string() + "/" + resultordner).c_str());
-    }
-    std::cout << "Creating directories" << std::endl;
-    boost::filesystem::create_directories(Dataset::getResultPath().string());
-    // create flow directories
-    for (int i = 1; i < MAX_SKIPS; ++i) {
-        sprintf(char_dir_append, "%02d", i);
-        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
-                                              "/flow_occ_" + char_dir_append);
-        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
-                                              "/trajectory_occ_" + char_dir_append);
-        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + resultordner +
-                                              "/plots_" + char_dir_append);
-    }
-    std::cout << "Ending directories" << std::endl;
-}
+void AlgorithmFlow::setResultOrdner(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
 
-
-void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
-
-    std::string resultordner = "results_";
+    m_resultordner = "results_";
     switch ( algo ) {
         case lk: {
-            resultordner += "LK_";
+            m_resultordner += "LK_";
             break;
         }
         case fb: {
-            resultordner += "FB_";
+            m_resultordner += "FB_";
             break;
         }
         default: {
@@ -72,23 +51,23 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
     switch ( noise ) {
         case no_noise: {
-            resultordner += "no_noise/";
+            m_resultordner += "no_noise/";
             break;
         }
         case static_bg_noise: {
-            resultordner += "static_bg_noise/";
+            m_resultordner += "static_bg_noise/";
             break;
         }
         case static_fg_noise: {
-            resultordner += "static_fg_noise/";
+            m_resultordner += "static_fg_noise/";
             break;
         }
         case dynamic_bg_noise: {
-            resultordner += "dynamic_bg_noise/";
+            m_resultordner += "dynamic_bg_noise/";
             break;
         }
         case dynamic_fg_noise: {
-            resultordner += "dynamic_fg_noise/";
+            m_resultordner += "dynamic_fg_noise/";
             break;
         }
         default: {
@@ -96,7 +75,35 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         }
     }
 
-    prepare_directories(resultordner);
+}
+
+void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
+
+    setResultOrdner(algo, frame_types, noise);
+
+    char char_dir_append[20];
+    if ( boost::filesystem::exists(Dataset::getResultPath()) ) {
+        system(("rm -rf " + Dataset::getResultPath().string() + "/" + m_resultordner).c_str());
+    }
+    std::cout << "Creating directories" << std::endl;
+    boost::filesystem::create_directories(Dataset::getResultPath().string());
+    // create flow directories
+    for (int i = 1; i < MAX_SKIPS; ++i) {
+        sprintf(char_dir_append, "%02d", i);
+        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + m_resultordner +
+                                              "/flow_occ_" + char_dir_append);
+        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + m_resultordner +
+                                              "/trajectory_occ_" + char_dir_append);
+        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + m_resultordner +
+                                              "/plots_" + char_dir_append);
+    }
+    std::cout << "Ending directories" << std::endl;
+}
+
+
+void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
+
+    prepare_directories(algo, frame_types, noise);
 
 
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
@@ -120,11 +127,11 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         bool needToInit = true;
         std::vector<cv::Point2f> prev_pts;
 
-        std::cout << "results will be stored in " << resultordner << std::endl;
+        std::cout << "results will be stored in " << m_resultordner << std::endl;
 
         if ( frame_types == video_frames) {
             cv::VideoCapture cap;
-            cap.open(Dataset::getInputPath().string() + "image_02/movement.avi");
+            cap.open(Dataset::getGtPath().string() + "image_02/movement.avi");
             if (!cap.isOpened()) {
                 std::cout << "Could not initialize capturing...\n";
                 return;
@@ -133,7 +140,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         cv::Mat curGray, prevGray;
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
         sprintf(folder_name_trajectory, "trajectory_occ_%02d", frame_skip);
-        std::string results_flow_matrix_str = Dataset::getResultPath().string() + "/" + resultordner + "/" +
+        std::string results_flow_matrix_str = Dataset::getResultPath().string() + "/" + m_resultordner + "/" +
                                               folder_name_flow + "/" + "result_flow.yaml";
         cv::VideoWriter video_out;
 
@@ -154,7 +161,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
         const int MAX_COUNT = 5000;
 
-        cv::namedWindow(resultordner, CV_WINDOW_AUTOSIZE);
+        cv::namedWindow(m_resultordner, CV_WINDOW_AUTOSIZE);
 
         auto tic = steady_clock::now();
         auto toc = steady_clock::now();
@@ -214,7 +221,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
             //if (image_02_frame.empty())
             //    break;
 
-            std::string input_image_file_with_path = Dataset::getInputPath().string() + "/" + file_name_image;
+            std::string input_image_file_with_path = Dataset::getGtPath().string() + "/" + file_name_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
 
@@ -223,9 +230,9 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 throw ("No image file found error");
             }
 
-            temp_result_flow_path = Dataset::getResultPath().string() + "/" + resultordner + "/" +
+            temp_result_flow_path = Dataset::getResultPath().string() + "/" + m_resultordner + "/" +
                                     folder_name_flow + "/" + file_name_image;
-            temp_result_trajectory_path = Dataset::getResultPath().string() + "/" + resultordner + "/" +
+            temp_result_trajectory_path = Dataset::getResultPath().string() + "/" + m_resultordner + "/" +
                                     folder_name_trajectory + "/" + file_name_image;
 
             // Convert to grayscale
@@ -374,7 +381,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
             }
 
             // Display the output image
-            cv::imshow(resultordner, image_02_frame);
+            cv::imshow(m_resultordner, image_02_frame);
             prevGray = curGray.clone();
         }
 
@@ -400,7 +407,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         Gnuplot gp2d;
         gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";
         gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-        std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getInputPath().string() +
+        std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGtPath().string() +
                 std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
     }

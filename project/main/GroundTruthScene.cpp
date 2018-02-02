@@ -22,13 +22,17 @@ void GroundTruthScene::prepare_directories() {
     char char_dir_append[20];
 
     // delete ground truth image and ground truth flow directories
-    if (boost::filesystem::exists(Dataset::getInputPath())) {
-        system(("rm -rf " + Dataset::getInputPath().string()).c_str()); // Dataset::m__directory_path_input
+    if (boost::filesystem::exists(Dataset::getGtPath())) {
+        system(("rm -rf " + Dataset::getGtPath().string()).c_str()); // Dataset::m__directory_path_input
     }
+
+    std::cout << "Creating GT Scene directories" << std::endl;
+    boost::filesystem::create_directories(Dataset::getGtPath().string());
+    std::cout << "Ending GT Scene directories" << std::endl;
 
     if (!Dataset::getBasePath().compare(CPP_DATASET_PATH) || !Dataset::getBasePath().compare(VIRES_DATASET_PATH)) {
 
-        std::cout << "Creating GT Flow directories" << std::endl;
+        std::cout << "Creating GT Scene directories" << std::endl;
         // create flow directories
         for (int i = 1; i < 10; ++i) {
             // delete ground truth image and ground truth flow directories
@@ -40,15 +44,10 @@ void GroundTruthScene::prepare_directories() {
             }
             boost::filesystem::create_directories(path);
         }
-        std::cout << "Ending GT Flow directories" << std::endl;
+        std::cout << "Ending GT Scene directories" << std::endl;
     }
 
-
     // create base directories
-    boost::filesystem::create_directories(Dataset::getInputPath().string());
-    std::cout << "Creating GT Scene directories" << std::endl;
-    boost::filesystem::create_directories(Dataset::getInputPath().string());
-    std::cout << "Ending GT Scene directories" << std::endl;
 }
 
 
@@ -87,7 +86,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     std::map<std::string, double> time_map = {{"generate",0},{"ground truth", 0}};
 
-    std::cout << "ground truth images will be stored in " << Dataset::getInputPath().string() << std::endl;
+    std::cout << "ground truth images will be stored in " << Dataset::getGtPath().string() << std::endl;
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
@@ -108,7 +107,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
         sprintf(file_name_image, "000%03d_10.png", frame_count);
-        std::string input_image_file_with_path = Dataset::getInputPath().string() + "/" + file_name_image;
+        std::string input_image_file_with_path = Dataset::getGtPath().string() + "/" + file_name_image;
 
         tempGroundTruthImage = m_canvas.getImageShapeAndData().get().clone();
 
@@ -169,7 +168,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     char command[1024];
 
-    std::cout << "ground truth images will be stored in " << Dataset::getInputPath().string() << std::endl;
+    std::cout << "ground truth images will be stored in " << Dataset::getGtPath().string() << std::endl;
 
     std::string project = "Movement";
 
@@ -391,7 +390,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
         if (simFrame > 0) {
             sprintf(file_name_image, "000%03d_10.png", (simFrame - 7));
-            std::string input_image_file_with_path = Dataset::getInputPath().string() + "/" + file_name_image;
+            std::string input_image_file_with_path = Dataset::getGtPath().string() + "/" + file_name_image;
             save_image.write(input_image_file_with_path);
         }
     } else {

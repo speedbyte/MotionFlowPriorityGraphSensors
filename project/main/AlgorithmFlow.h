@@ -18,10 +18,11 @@ class AlgorithmFlow {
     // consists of an additional vector wrappper.
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > > m_frame_flow_vector_fast_movement;
+    std::string m_resultordner;
 
 public:
 
-    void prepare_directories(std::string resultordner);
+    void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 
     void calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 
@@ -32,6 +33,11 @@ public:
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
     &l_pixelmovement );
 
+    void setResultOrdner(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
+
+    const std::string getResultOrdner() const {
+        return m_resultordner;
+    }
 
 };
 
