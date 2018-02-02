@@ -89,3 +89,6 @@
 [submodule "utils/pkg-config-generator"]
 	path = utils/pkg-config-generator
 	url = https://github.com/nmante/pkg-config-generator.git
+[submodule "pix2pixHD"]
+	path = project/NVIDIA/pix2pixHD
+	url = https://github.com/NVIDIA/pix2pixHD.git
