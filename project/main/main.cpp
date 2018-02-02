@@ -171,21 +171,22 @@ int main ( int argc, char *argv[]) {
                 NoTrajectory noTrajectory;
 
                 // Canvas is itself registered as an Object with a dummy trajectory
-                GuassianNoise guassiannoise;
-                Canvas canvas(background, noTrajectory, 60, guassiannoise);
+                WhiteNoise whiteNoise;
+                ColorfulNoise colorfulNoise;
+                Canvas canvas(background, noTrajectory, 60, whiteNoise);
 
                 // Further objects
-                Rectangle rectangle1(30, 100); // width, height
-                Rectangle rectangle2(100, 30);
+                Rectangle rectangle1(30, 30); // width, height
+                //Rectangle rectangle2(100, 30);
                 Achterbahn trajectory;
                 NoNoise noNoise;
 
-                Objects obj1(rectangle1, trajectory, 60, noNoise, "rectangle_long");
-                Objects obj2(rectangle2, trajectory, 120, noNoise, "rectangle_wide");
+                Objects obj1(rectangle1, trajectory, 60, colorfulNoise, "rectangle_long");
+                //Objects obj2(rectangle2, trajectory, 120, noNoise, "rectangle_wide");
 
                 std::vector<Objects> list_of_objects;
                 list_of_objects.push_back(obj1);
-                list_of_objects.push_back(obj2);
+                //list_of_objects.push_back(obj2);
 
 
                 GroundTruthSceneInternal gt_scene(canvas, list_of_objects);

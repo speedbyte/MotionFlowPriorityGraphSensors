@@ -264,7 +264,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 }
 
                 // Draw the optical calculate_flow map
-                int stepSize = 10;
+                int stepSize = 1;
 
                 if ( fb == algo ) {
                     // Draw the uniform grid of points on the input image along with the motion vectors

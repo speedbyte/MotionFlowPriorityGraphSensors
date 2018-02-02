@@ -8,10 +8,10 @@
 
 // Objects are either CameraSensorImage or RadarSensorImage
 
-#include "SensorImage.h"
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
 #include "datasets.h"
+#include "CameraSensorImage.h"
 
 class Objects : public CameraSensorImage {
 
@@ -20,11 +20,12 @@ private:
     
     const ushort m_startPoint;
 
+    static unsigned objectCurrentCount; // assingn object id
+
     ObjectTrajectory &m_obj_trajectory;
 
-    static unsigned objectCurrentCount;
-
     const unsigned m_objectId;
+
     const std::string m_objectName;
 
     std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_point_base_movement;
@@ -32,12 +33,12 @@ private:
 
 public:
 
-    Objects( ObjectShapeImageData &shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
-    &noise, std::string objectName ) : CameraSensorImage(shape, noise), m_obj_trajectory
+    Objects( ObjectImageShapeData &image_data_and_shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
+    &noise, std::string objectName ) : CameraSensorImage(image_data_and_shape, noise), m_obj_trajectory
             (trajectory), m_startPoint(startPoint) , m_objectName ( objectName ), m_objectId
                                                (objectCurrentCount) {
 
-        shape.process();
+        image_data_and_shape.process();
         trajectory.process(Dataset::getFrameSize());
         objectCurrentCount += 1;
 
@@ -50,6 +51,7 @@ public:
                 (), getObjectId());
 
         generate_multiframe_flow_vector( MAX_SKIPS );
+
     }
 
     void generate_baseframe_flow_vector(const ushort &start_point, const std::vector<cv::Point2i>

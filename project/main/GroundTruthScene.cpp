@@ -57,12 +57,12 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     prepare_directories();
 
     /*
-     * First create an object with an shape
+     * First create an object with an image_data_and_shape
      * Then define the object trajectory
-     * Then copy the object shape on the object trajectory points
+     * Then copy the object image_data_and_shape on the object trajectory points
      * Then store the image in the ground truth image folder
      *
-     * Then extrapolate the object trajectory with the above shape
+     * Then extrapolate the object trajectory with the above image_data_and_shape
      *
      * Then store the flow information in the flow folder
      */
@@ -102,7 +102,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     char file_name_image[50];
 
-    cv::Mat shape;
+    cv::Mat image_data_and_shape;
     cv::Mat trajectoryShape;
 
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
@@ -110,7 +110,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         sprintf(file_name_image, "000%03d_10.png", frame_count);
         std::string input_image_file_with_path = Dataset::getInputPath().string() + "/" + file_name_image;
 
-        tempGroundTruthImage = m_canvas.getShapeImageData().get().clone();
+        tempGroundTruthImage = m_canvas.getImageShapeAndData().get().clone();
 
         //draw new ground truth image.
 
@@ -124,19 +124,19 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
             std::vector<cv::Point2i> trajectory_points = m_list_objects.at(i).getTrajectoryPoints().get();
 
-            shape = m_list_objects.at(i).getShapeImageData().get().clone();
-            trajectoryShape = m_list_objects.at(i).getShapeImageData().get().clone();
+            image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
+            trajectoryShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
 
-            shape.copyTo(tempGroundTruthImage(
+            image_data_and_shape.copyTo(tempGroundTruthImage(
                     cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
-                                     (current_index.at(i)).y, shape.cols, shape.rows)));
+                                     (current_index.at(i)).y, image_data_and_shape.cols, image_data_and_shape.rows)));
 
 
             if ( m_list_objects.at(i).getObjectId() == 1 ) {
                 trajectoryShape = cv::Scalar(255,0,0);
                 trajectoryShape.copyTo(tempGroundTruthTrajectory(
                         cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
-                                (current_index.at(i)).y, shape.cols, shape.rows)));
+                                (current_index.at(i)).y, image_data_and_shape.cols, image_data_and_shape.rows)));
                 cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
             }
 
@@ -144,7 +144,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 trajectoryShape = cv::Scalar(0,255,0);
                 trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
                         cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
-                                (current_index.at(i)).y, shape.cols, shape.rows)));
+                                (current_index.at(i)).y, image_data_and_shape.cols, image_data_and_shape.rows)));
                 cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
             }
 

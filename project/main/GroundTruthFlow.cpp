@@ -106,9 +106,9 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
 
     for (unsigned lo = 0; lo < m_list_objects.size(); lo++) {
 
-        // object shape
-        int width = m_list_objects.at(lo).getShapeImageData().get().cols;
-        int height = m_list_objects.at(lo).getShapeImageData().get().rows;
+        // object image_data_and_shape
+        int width = m_list_objects.at(lo).getImageShapeAndData().get().cols;
+        int height = m_list_objects.at(lo).getImageShapeAndData().get().rows;
 
         for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
             std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > outer_base_movement;
@@ -152,9 +152,9 @@ frame_count, std::vector<Objects> list_objects) {
     for (unsigned i = 0; i < list_objects.size(); i++) {
 
 
-        // object shape
-        int width = list_objects.at(i).getShapeImageData().get().cols;
-        int height = list_objects.at(i).getShapeImageData().get().rows;
+        // object image_data_and_shape
+        int width = list_objects.at(i).getImageShapeAndData().get().cols;
+        int height = list_objects.at(i).getImageShapeAndData().get().rows;
 
         // gt_displacement
         cv::Point2i gt_next_pts = list_objects.at(i).getFlowPoints().at(frame_skip - 1).at(frame_count).first;

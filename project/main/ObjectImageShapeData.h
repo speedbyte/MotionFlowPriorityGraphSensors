@@ -7,7 +7,7 @@
 
 #include <opencv2/core/mat.hpp>
 
-class ObjectShapeImageData {
+class ObjectImageShapeData {
 
 protected:
 
@@ -15,6 +15,9 @@ protected:
 
 public:
 
+    ObjectImageShapeData(int width, int height ) {
+        m_data.create(height, width, CV_8UC3);
+    }
     virtual void process() {};
 
     cv::Mat get() {
@@ -26,7 +29,7 @@ public:
     }
 };
 
-class Rectangle :  public ObjectShapeImageData {
+class Rectangle :  public ObjectImageShapeData {
 
 private:
     ushort m_objectWidth;
@@ -34,7 +37,8 @@ private:
 
 public:
 
-    Rectangle(ushort width, ushort height) : m_objectWidth(width), m_objectHeight(height) {};
+    Rectangle(ushort width, ushort height) : ObjectImageShapeData(width, height), m_objectWidth(width), m_objectHeight
+            (height) {};
 
     void process() override ;
 

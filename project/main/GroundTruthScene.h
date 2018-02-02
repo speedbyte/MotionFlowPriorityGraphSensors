@@ -41,7 +41,7 @@ public:
     void generate_gt_scene();
 
     cv::Mat getObjectShape(int index) {
-        return m_list_objects.at(index).getShapeImageData().get();
+        return m_list_objects.at(index).getImageShapeAndData().get();
     }
 
     ~GroundTruthSceneInternal(){

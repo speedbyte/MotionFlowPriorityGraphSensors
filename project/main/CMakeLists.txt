@@ -20,7 +20,8 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 set(SOURCE_FILES
         ObjectTrajectory.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
         video_capture.cpp GroundTruthFlow.cpp  AlgorithmFlow.cpp kbhit.cpp Dataset.cpp PlotFlow.cpp
-        GroundTruthScene.cpp ObjectShapeImageData.cpp Objects.cpp Noise.cpp Noise.h Canvas.cpp Canvas.h SensorImage.cpp SensorImage.h FlowImageExtended.cpp)
+        GroundTruthScene.cpp ObjectImageShapeData.cpp Objects.cpp Noise.cpp Noise.h Canvas.cpp Canvas.h SensorImage.cpp
+        SensorImage.h FlowImageExtended.cpp CameraSensorImage.cpp CameraSensorImage.h)
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries( main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png viresrdb)

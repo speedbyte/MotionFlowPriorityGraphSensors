@@ -7,7 +7,7 @@
 
 
 #include "Dataset.h"
-#include "ObjectShapeImageData.h"
+#include "ObjectImageShapeData.h"
 #include <opencv2/core/cvdef.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgcodecs.hpp>
