@@ -92,3 +92,6 @@
 [submodule "pix2pixHD"]
 	path = project/NVIDIA/pix2pixHD
 	url = https://github.com/NVIDIA/pix2pixHD.git
+[submodule "libs/middlebury_devkit_flow"]
+	path = libs/middlebury_devkit_flow
+	url = git@atreus.informatik.uni-tuebingen.de:Veikas/middlebury_devkit_flow.git
