@@ -2,6 +2,10 @@
 /**
 
 
+Centroid and mean is essentially the same.
+ Centroid distance and average distance is however different. In the latter case , each points are taken and their
+ corresponding point is summed up and divided by 2. Where in centroid point, it is essentially the distance between
+ centroid A and centroid B.
 
  flowvector means a pair of coordinates plus flow at that coordinate.
  On the pixel 200,100 if the flow is 5,4 it means that the pixel it came from was 195,96.

@@ -178,7 +178,7 @@ int main ( int argc, char *argv[]) {
 
                 // Further objects
                 Rectangle rectangle1(30, 30); // width, height
-                //Rectangle rectangle2(100, 30);
+                Rectangle rectangle2(100, 30);
                 Achterbahn trajectory;
                 NoNoise noNoise;
 
@@ -194,7 +194,7 @@ int main ( int argc, char *argv[]) {
                 gt_scene.generate_gt_scene();
 
                 GroundTruthFlow gt_flow(list_of_objects);
-                gt_flow.generate_gt_scene_flow_vector();
+                gt_flow.generate_gt_scenepixel_displacement();
 
             }
 
@@ -210,7 +210,7 @@ int main ( int argc, char *argv[]) {
 
             if ( cpp_dataset.plot ) {
 
-                RobustnessIndex robust;
+                PixelRobustness robust;
                 std::string resultordner;
                 fback.setResultOrdner(fb, continous_frames, no_noise);
                 robust.generatePixelRobustness(fback.getResultOrdner());
@@ -279,7 +279,7 @@ int main ( int argc, char *argv[]) {
                 gt_scene.generate_gt_scene();
                 std::vector<Objects> list_of_objects = gt_scene.getListOfObjects();
                 GroundTruthFlow gt_flow(list_of_objects);
-                gt_flow.generate_gt_scene_flow_vector();
+                gt_flow.generate_gt_scenepixel_displacement();
             }
 
             AlgorithmFlow fback;

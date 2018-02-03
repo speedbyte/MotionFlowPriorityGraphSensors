@@ -26,7 +26,6 @@ private:
 
 
     std::vector<Objects> &m_list_objects;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > >m_obj_flow_vector_fast_movement;
 
 public:
 
@@ -36,11 +35,7 @@ public:
     void extrapolate_flowpoints( std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
     frame_count, std::vector<Objects> list_objects);
 
-    void generate_gt_scene_flow_vector();
-
-    void generatePixelRobustness();
-
-    void generateVectorRobustness();
+    void generate_gt_scenepixel_displacement();
 
     void make_video_from_png(const Dataset &dataset_path, std::string unterordner);
 

@@ -28,8 +28,14 @@ private:
 
     const std::string m_objectName;
 
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_flow_point_base_movement;
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_flow_point_fast_movement;
+    std::vector<std::pair<cv::Point2i, cv::Point2i> > m_obj_base_pixel_point_pixel_displacement;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > m_obj_extrapolated_pixel_point_pixel_displacement;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > >m_obj_extrapolated_shape_pixel_point_pixel_displacement;
+
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >
+            m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
+
+
 
 public:
 
@@ -45,31 +51,46 @@ public:
         printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                 (), getObjectId());
 
-        generate_baseframe_flow_vector( m_startPoint, m_obj_trajectory.get());
+        generate_obj_base_pixel_point_pixel_displacement( m_startPoint, m_obj_trajectory.get());
 
         printf("generating ground truth frame displacement for name %s with object id %u\n", getObjectName().c_str
                 (), getObjectId());
 
-        generate_multiframe_flow_vector( MAX_SKIPS );
+        generate_obj_extrapolated_pixel_point_pixel_displacement( MAX_SKIPS );
+
+        generate_obj_extrapolated_shape_pixel_point_pixel_displacement(MAX_SKIPS);
+
+        generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( MAX_SKIPS );
+
+
 
     }
 
-    void generate_baseframe_flow_vector(const ushort &start_point, const std::vector<cv::Point2i>
+
+
+    void generate_obj_base_pixel_point_pixel_displacement(const ushort &start_point, const std::vector<cv::Point2i>
     &trajectory_points);
 
-    void generate_multiframe_flow_vector(const int &max_skips);
+    void generate_obj_extrapolated_pixel_point_pixel_displacement(const int &max_skips);
 
+    void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(const int &max_skips);
+
+    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const int &max_skips );
 
     ObjectTrajectory getTrajectoryPoints() {
         return m_obj_trajectory;
     }
 
-    std::vector<std::pair<cv::Point2i, cv::Point2i> >  getBasePoints() {
-        return m_obj_flow_point_base_movement;
+    std::vector<std::pair<cv::Point2i, cv::Point2i> >  getBasePixelpoint_pixelDisplacement() {
+        return m_obj_base_pixel_point_pixel_displacement;
     }
 
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >  getFlowPoints() {
-        return m_obj_flow_point_fast_movement;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >  getExtrapolatedPixelpoint_pixelDisplacement() {
+        return m_obj_extrapolated_pixel_point_pixel_displacement;
+    }
+
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > >  getExtrapolatedPixelCentroid_DisplacementMean() {
+        return m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
     }
 
     ushort getStartPoint() {

@@ -25,6 +25,8 @@ public:
 
     FlowImageExtended(const int32_t width, const int32_t height) : FlowImage(width, height) {}
 
+    FlowImageExtended(const float *data, const int32_t width, const int32_t height) : FlowImage(data, width, height) {}
+
     // set optical flow at given pixel to valid / invalid
     inline void setObjectId(const int32_t u, const int32_t v, const float objId) {
         data_[3*(v*width_+u)+2] = objId;

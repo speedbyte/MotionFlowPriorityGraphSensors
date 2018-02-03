@@ -6,14 +6,30 @@
 #define MAIN_ROBUSTNESSINDEX_H
 
 
+
+
 class RobustnessIndex {
 
 public:
-    void generatePixelRobustness(const std::string &resultOrdner);
-    void generateVectorRobustness();
+
 
 
 };
 
+
+class PixelRobustness : public RobustnessIndex {
+
+public:
+    void generatePixelRobustness(const std::string &resultOrdner);
+
+};
+
+class VectorRobustness : public RobustnessIndex {
+
+public:
+    void generateVectorRobustness();
+
+
+};
 
 #endif //MAIN_ROBUSTNESSINDEX_H

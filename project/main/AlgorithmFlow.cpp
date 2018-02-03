@@ -192,7 +192,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::vector<cv::Point2f> next_pts_healthy;
 
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
-        std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > frame_flow_vector_base_movement;
+        std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > frame_pixel_point_pixel_displacement;
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
@@ -297,7 +297,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     }
                 }
 
-                storeData(prev_pts, next_pts, status, frame_flow_vector_base_movement);
+                storeData(prev_pts, next_pts, status, frame_pixel_point_pixel_displacement);
 
                 for (unsigned i = 0; i < next_pts.size(); i++) {
                     cv::arrowedLine(image_02_frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0));
@@ -349,8 +349,8 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 std::cout << "frame_count " << frame_count << std::endl;
                 fs << "frame_count" << frame_count;
 
-                for ( it = frame_flow_vector_base_movement.at(count).begin(); it !=
-                        frame_flow_vector_base_movement.at(count).end(); it++ )
+                for ( it = frame_pixel_point_pixel_displacement.at(count).begin(); it !=
+                        frame_pixel_point_pixel_displacement.at(count).end(); it++ )
                 {
                     F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
                     F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
@@ -386,7 +386,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         }
 
         //F_result_write_trajectory.write(temp_result_flow_path);
-        m_frame_flow_vector_fast_movement.push_back(frame_flow_vector_base_movement);
+        m_algo_frame_pixel_point_pixel_displacement.push_back(frame_pixel_point_pixel_displacement);
         fs.release();
 
         for(auto &n : time)
@@ -415,7 +415,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
 void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts,
                            const std::vector<uchar> status, std::vector<std::vector<std::pair<cv::Point2i,
-        cv::Point2i> > > &frame_flow_vector_base_movement) {
+        cv::Point2i> > > &frame_pixel_point_pixel_displacement) {
 
     unsigned count = 0;
 
@@ -468,7 +468,7 @@ void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vec
         // Lines to indicate the motion vectors
         frame_points.push_back(std::make_pair(result_next_pts, result_displacement));
     }
-    frame_flow_vector_base_movement.push_back(frame_points);
+    frame_pixel_point_pixel_displacement.push_back(frame_points);
     next_pts.resize(count);
 }
 

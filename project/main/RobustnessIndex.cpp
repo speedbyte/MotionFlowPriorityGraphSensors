@@ -8,7 +8,9 @@
 #include "Dataset.h"
 
 
-void RobustnessIndex::generatePixelRobustness(const std::string &resultOrdner) {
+
+
+void PixelRobustness::generatePixelRobustness(const std::string &resultOrdner) {
 
 
     cv::Mat temp_image;
@@ -49,6 +51,6 @@ void RobustnessIndex::generatePixelRobustness(const std::string &resultOrdner) {
     //calcCovarMatrix();
 }
 
-void RobustnessIndex::generateVectorRobustness() {
+void VectorRobustness::generateVectorRobustness() {
 
 }

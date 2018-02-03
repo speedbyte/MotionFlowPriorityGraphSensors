@@ -290,7 +290,7 @@ void logPolar() {
 
 void solveLinear() {
     /**
-     x + y + z = 3
+     x + y + z = -1
      x + 2y + 3z = 0
      x + 3y + 4z = -2
      */

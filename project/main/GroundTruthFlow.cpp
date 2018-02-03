@@ -54,7 +54,7 @@ void GroundTruthFlow::prepare_directories() {
 }
 
 
-void GroundTruthFlow::generate_gt_scene_flow_vector() {
+void GroundTruthFlow::generate_gt_scenepixel_displacement() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
@@ -90,7 +90,7 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-        for (ushort frame_count = 0; frame_count < (m_list_objects.at(0).getFlowPoints().at
+        for (ushort frame_count = 0; frame_count < (m_list_objects.at(0).getExtrapolatedPixelpoint_pixelDisplacement().at
                 (frame_skip - 1)).size(); frame_count++) {
             char file_name_image[50];
 
@@ -102,34 +102,6 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
             extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects);
         }
         fs.release();
-    }
-
-    for (unsigned lo = 0; lo < m_list_objects.size(); lo++) {
-
-        // object image_data_and_shape
-        int width = m_list_objects.at(lo).getImageShapeAndData().get().cols;
-        int height = m_list_objects.at(lo).getImageShapeAndData().get().rows;
-
-        for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
-            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > outer_base_movement;
-            for (unsigned i = 0; i < m_list_objects.at(lo).getFlowPoints().at(frame_skip - 1).size();
-                 i++) {
-                // gt_displacement
-                cv::Point2i gt_next_pts = m_list_objects.at(lo).getFlowPoints().at(frame_skip - 1).at(i).first;
-                cv::Point2f gt_displacement = m_list_objects.at(lo).getFlowPoints().at(frame_skip - 1).at(i).second;
-
-                std::vector<std::pair<cv::Point2i, cv::Point2i> > base_movement;
-
-                for (unsigned j = 0; j < width; j++) {
-                    for (unsigned k = 0; k < height; k++) {
-                        base_movement.push_back(std::make_pair(cv::Point2i(gt_next_pts.x + j, gt_next_pts.y +
-                                                                                              k), gt_displacement));
-                    }
-                }
-                outer_base_movement.push_back(base_movement);
-            }
-            m_obj_flow_vector_fast_movement.push_back(outer_base_movement);
-        }
     }
 
 
@@ -144,22 +116,32 @@ void GroundTruthFlow::generate_gt_scene_flow_vector() {
 void GroundTruthFlow::extrapolate_flowpoints(std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
 frame_count, std::vector<Objects> list_objects) {
 
-    FlowImageExtended F_gt_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+    float *data_ = (float*)malloc(Dataset::getFrameSize().width*Dataset::getFrameSize().height*3*sizeof(float));
+    memset(data_, 255, Dataset::getFrameSize().width*Dataset::getFrameSize().height*3*sizeof(float));
+    FlowImageExtended F_gt_write(data_, Dataset::getFrameSize().width, Dataset::getFrameSize().height);
     cv::Mat tempMatrix;
     tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
+    tempMatrix = cv::Scalar_<unsigned>(255,255,255);
     assert(tempMatrix.channels() == 3);
 
     for (unsigned i = 0; i < list_objects.size(); i++) {
-
 
         // object image_data_and_shape
         int width = list_objects.at(i).getImageShapeAndData().get().cols;
         int height = list_objects.at(i).getImageShapeAndData().get().rows;
 
+        cv::Point2i prev_pts = list_objects[i].getExtrapolatedPixelCentroid_DisplacementMean().at
+                        (frame_skip -1 ).at(frame_count).first;
+
+        cv::Point2i next_pts = list_objects[i].getExtrapolatedPixelCentroid_DisplacementMean().at
+                (frame_skip -1 ).at(frame_count).second;
+
         // gt_displacement
-        cv::Point2i gt_next_pts = list_objects.at(i).getFlowPoints().at(frame_skip - 1).at(frame_count).first;
-        cv::Point2f gt_displacement = list_objects.at(i).getFlowPoints().at(frame_skip - 1).at(
-                frame_count).second;
+        cv::Point2i gt_next_pts = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1)
+                .at(frame_count).first;
+        cv::Point2f gt_displacement = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip
+                                                                                                          - 1).at(frame_count).second;
+
 
         cv::Mat roi;
         roi = tempMatrix.
@@ -168,12 +150,14 @@ frame_count, std::vector<Objects> list_objects) {
         //bulk storage
         roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(list_objects.at(i).getObjectId()));
 
+        cv::arrowedLine(tempMatrix, prev_pts, next_pts, cv::Scalar(0, 255, 0));
+
     }
 
     //Create png Matrix with 3 channels: x gt_displacement. y displacment and ObjectId
     for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
         for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
-            if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5) {
+            if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5 ) {
                 F_gt_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
                 F_gt_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
                 F_gt_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
