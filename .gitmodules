@@ -95,3 +95,6 @@
 [submodule "libs/middlebury_devkit_flow"]
 	path = libs/middlebury_devkit_flow
 	url = git@atreus.informatik.uni-tuebingen.de:Veikas/middlebury_devkit_flow.git
+[submodule "libs/rob_devkit_flow"]
+	path = libs/rob_devkit_flow
+	url = http://cvlibs.net:3000/ageiger/rob_devkit.git
