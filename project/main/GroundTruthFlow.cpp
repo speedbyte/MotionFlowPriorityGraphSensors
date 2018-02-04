@@ -153,20 +153,34 @@ frame_count, std::vector<Objects> list_objects) {
         // find the optimal line
         //cv::fitLine( points, line, cv::DIST_L1, 1, 0.001, 0.001);
 
-        // ... and the long enough line to cross the whole image
-        // vx,vy, x, y
+        // vx, vy, x, y
         cv::Vec<float, 4> line = {displacement_vector.x, displacement_vector.y, prev_pts.x, prev_pts.y};
         float d = sqrt( (double)line[0]*line[0] + (double)line[1]*line[1] );
         line[0] /= d; // normalized vector in x
         line[1] /= d; // normalized vector in y
-        float t = (float)(width + height);
+        unsigned t = Dataset::getFrameSize().width + Dataset::getFrameSize().height;
         cv::Point pt1, pt2;
         pt1.x = cvRound(line[2]);
         pt1.y = cvRound(line[3]);
-        pt2.x = cvRound(line[2] + line[0]*t);
-        pt2.y = cvRound(line[3] + line[1]*t);
+        pt2.x = cvRound(line[2] - line[0]*(float)t);
+        pt2.y = cvRound(line[3] - line[1]*(float)t);
+
+        float m,c;
+
+        m = line[1]/line[0];
+        c = line[3] - line[2]*m;
+
+        cv::Matx<float,2,2> coefficients (-m,1,-1,1);
+        cv::Matx<float,2,1> rhs(c,0);
+
+        cv::Matx<float,2,1> result_manual;
+        //result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
+        result_manual = coefficients.solve(rhs);
+
         cv::line( tempMatrix, pt1, pt2, cv::Scalar(0,255,0), 3, cv::LINE_AA, 0 );
 
+        cv::circle(tempMatrix, cv::Point(result_manual(0,0), result_manual(1,0)), 20, cv::Scalar(0, 255, 0), -1,
+                   cv::LINE_AA);
         //cv::arrowedLine(tempMatrix, prev_pts, next_pts, cv::Scalar(0, 255, 0));
 
     }

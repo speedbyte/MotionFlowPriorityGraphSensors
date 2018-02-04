@@ -476,7 +476,7 @@ int main ( int argc, char *argv[]) {
 
 
     std::cout << "\nfitLine----------------------------------------------" << std::endl;
-    fitLine();
+    //fitLine();
 
     std::cout << "\ncartToPolar----------------------------------------------" << std::endl;
     cartToPolar();
@@ -485,7 +485,7 @@ int main ( int argc, char *argv[]) {
     std::cout << "\ncalcCovarMatrix----------------------------------------------" << std::endl;
     //calcCovarMatrix();
     std::cout << "\nsolveLinear----------------------------------------------" << std::endl;
-    //solveLinear();
+    solveLinear();
     std::cout << "\nsolvePoly----------------------------------------------" << std::endl;
     //solvePoly();
     std::cout << "\nmean and std dev----------------------------------------------" << std::endl;
