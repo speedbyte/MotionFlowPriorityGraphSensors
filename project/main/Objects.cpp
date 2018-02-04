@@ -136,8 +136,6 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
             int next_pts_y = 0;
             int displacement_sum_x = 0;
             int displacement_sum_y = 0;
-            double displacement_mag = 0;
-            double displacement_angle = 0;
 
             unsigned cluster_size = (unsigned)m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
                     .at(i).size();
@@ -155,12 +153,13 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
             next_pts_y /= cluster_size;
             displacement_sum_x /= (int)cluster_size;
             displacement_sum_y /= (int)cluster_size;
-            prev_pts_x = next_pts_x - displacement_sum_x;
-            prev_pts_y = next_pts_y - displacement_sum_y;
+            //prev_pts_x = next_pts_x - displacement_sum_x;
+            //prev_pts_y = next_pts_y - displacement_sum_y;
 
-            multiframe_flowvector.push_back(std::make_pair(cv::Point2i(int(std::round(prev_pts_x)), int(
-                    (std::round(prev_pts_y)))), cv::Point2d
-                    (int(std::round(next_pts_x)), int(std::round(next_pts_y)))));
+            // I should return the vector instead of points and then normalize it.
+            multiframe_flowvector.push_back(std::make_pair(cv::Point2i(int(std::round(next_pts_x)), int(
+                    (std::round(next_pts_y)))), cv::Point2d
+                    (int(std::round(displacement_sum_x)), int(std::round(displacement_sum_y)))));
         }
 
         m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.push_back(multiframe_flowvector);

@@ -3,6 +3,84 @@
 #include <opencv2/imgproc.hpp>
 #include <iostream>
 #include <gnuplot-iostream/gnuplot-iostream.h>
+#include "opencv2/opencv.hpp"
+#include <iostream>
+#include <math.h>
+
+void fitLine() {
+
+
+        cv::Mat img(500, 500, CV_8UC3);
+        cv::RNG rng(-1);
+        for(;;) {
+
+            char key;
+            int   i, count = rng.uniform(0,100) + 3, outliers = count/5;
+            float a        = (float) rng.uniform(0., 200.);
+            float b        = (float) rng.uniform(0., 40.);
+            float angle    = (float) rng.uniform(0., CV_PI);
+            float cos_a    = cos(angle), sin_a = sin(angle);
+            cv::Point pt1, pt2;
+            std::vector< cv::Point > points( count );
+            cv::Vec4f line;
+            float d, t;
+
+            b = MIN( a*0.3f, b );
+/*
+            // generate some points that are close to the line
+            for( i = 0; i < count - outliers; i++ ) {
+                float x = (float)rng.uniform(-1.,1.)*a;
+                float y = (float)rng.uniform(-1.,1.)*b;
+                points[i].x = cvRound(x*cos_a - y*sin_a + img.cols/2);
+                points[i].y = cvRound(x*sin_a + y*cos_a + img.rows/2);
+            }
+
+            // generate outlier points
+            for( ; i < count; i++ ) {
+                points[i].x = rng.uniform(0, img.cols);
+                points[i].y = rng.uniform(0, img.rows);
+            }
+*/
+            points[0] =  cv::Point( 10 , img.rows/2+10);
+            points[1] =  cv::Point( 50 , img.rows/2+20);
+
+            // draw the points
+            img = cv::Scalar::all(0);
+            for( i = 0; i < count; i++ )
+                cv::circle(
+                        img,
+                        points[i],
+                        2,
+                        i < count - outliers
+                        ? cv::Scalar(0, 0, 255)
+                        : cv::Scalar(0,255,255),
+                        cv::FILLED,
+                        cv::LINE_AA,
+                        0
+                );
+
+            // find the optimal line
+            cv::fitLine( points, line, cv::DIST_L1, 1, 0.001, 0.001);
+
+            // ... and the long enough line to cross the whole image
+            // vx,vy, x, y
+            d = sqrt( (double)line[0]*line[0] + (double)line[1]*line[1] );
+            line[0] /= d; // normalized vector in x
+            line[1] /= d; // normalized vector in y
+            t = (float)(img.cols + img.rows);
+            pt1.x = cvRound(line[2] - line[0]*t);
+            pt1.y = cvRound(line[3] - line[1]*t);
+            pt2.x = cvRound(line[2] + line[0]*t);
+            pt2.y = cvRound(line[3] + line[1]*t);
+            cv::line( img, pt1, pt2, cv::Scalar(0,255,0), 3, cv::LINE_AA, 0 );
+
+            cv::imshow( "Fit Line", img );
+
+            key = (char) cv::waitKey(0);
+            if( key == 27 || key == 'q' || key == 'Q' ) // 'ESC'
+                break;
+        }
+}
 
 void mahalanobis() {
 
@@ -397,13 +475,15 @@ int main ( int argc, char *argv[]) {
     cv::Point3f hello;
 
 
+    std::cout << "\nfitLine----------------------------------------------" << std::endl;
+    fitLine();
 
     std::cout << "\ncartToPolar----------------------------------------------" << std::endl;
-    //cartToPolar();
+    cartToPolar();
     std::cout << "\npolarToCart----------------------------------------------" << std::endl;
     //polarToCart();
     std::cout << "\ncalcCovarMatrix----------------------------------------------" << std::endl;
-    calcCovarMatrix();
+    //calcCovarMatrix();
     std::cout << "\nsolveLinear----------------------------------------------" << std::endl;
     //solveLinear();
     std::cout << "\nsolvePoly----------------------------------------------" << std::endl;
