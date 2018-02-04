@@ -151,8 +151,8 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
             }
             next_pts_x /= cluster_size;
             next_pts_y /= cluster_size;
-            displacement_sum_x /= cluster_size;
-            displacement_sum_y /= cluster_size;
+            displacement_sum_x /= (int)cluster_size;
+            displacement_sum_y /= (int)cluster_size;
             //prev_pts_x = next_pts_x - displacement_sum_x;
             //prev_pts_y = next_pts_y - displacement_sum_y;
 
