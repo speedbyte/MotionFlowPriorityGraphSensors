@@ -56,7 +56,7 @@ std::vector<cv::Point2i> &trajectory_points) {
     }
 }
 
-void Objects::generate_obj_extrapolated_pixel_point_pixel_displacement(const int &max_skips ) {
+void Objects::generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips) {
 
     int temp_flow_x(0);
     int temp_flow_y(0);
@@ -92,7 +92,7 @@ void Objects::generate_obj_extrapolated_pixel_point_pixel_displacement(const int
 }
 
 
-void Objects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const int &max_skips ) {
+void Objects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const unsigned &max_skips ) {
 
 // object image_data_and_shape
     int width = m_image_data_and_shape.get().cols;
@@ -122,20 +122,20 @@ void Objects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(con
 }
 
 
-void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const int &max_skips) {
+void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const unsigned &max_skips) {
 
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2i, cv::Point2i> > multiframe_flowvector;
-        unsigned long array_size = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
-        for (unsigned i = 0; i < array_size; i++) {
+        unsigned long frame_count = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
+        for (unsigned i = 0; i < frame_count; i++) {
 // gt_displacement
             int prev_pts_x = 0;
             int prev_pts_y = 0;
             int next_pts_x = 0;
             int next_pts_y = 0;
-            int displacement_sum_x = 0;
-            int displacement_sum_y = 0;
+            int displacement_vector_x = 0;
+            int displacement_vector_y = 0;
 
             unsigned cluster_size = (unsigned)m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
                     .at(i).size();
@@ -146,22 +146,106 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
                         .at(i).at(j).second;
                 next_pts_x += pts.x ;
                 next_pts_y += pts.y ;
-                displacement_sum_x += gt_displacement.x ;
-                displacement_sum_y += gt_displacement.y ;
+                displacement_vector_x += gt_displacement.x ;
+                displacement_vector_y += gt_displacement.y ;
             }
             next_pts_x /= cluster_size;
             next_pts_y /= cluster_size;
-            displacement_sum_x /= (int)cluster_size;
-            displacement_sum_y /= (int)cluster_size;
-            //prev_pts_x = next_pts_x - displacement_sum_x;
-            //prev_pts_y = next_pts_y - displacement_sum_y;
+            displacement_vector_x /= (int)cluster_size;
+            displacement_vector_y /= (int)cluster_size;
+            //prev_pts_x = next_pts_x - displacement_vector_x;
+            //prev_pts_y = next_pts_y - displacement_vector_y;
 
             // I should return the vector instead of points and then normalize it.
             multiframe_flowvector.push_back(std::make_pair(cv::Point2i(int(std::round(next_pts_x)), int(
                     (std::round(next_pts_y)))), cv::Point2d
-                    (int(std::round(displacement_sum_x)), int(std::round(displacement_sum_y)))));
+                    (int(std::round(displacement_vector_x)), int(std::round(displacement_vector_y)))));
+
+
         }
 
         m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.push_back(multiframe_flowvector);
     }
+
+
+    //TODO - clean up this section.
+    for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
+        std::vector<std::pair<cv::Point2f, cv::Point2i> > line_parameters;
+        unsigned long frame_count = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1).size();
+        for (unsigned i = 0; i < frame_count; i++) {
+// gt_displacement
+            int next_pts_x = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
+                    .at(frame_count).first.x;
+            int next_pts_y = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
+                    .at(frame_count).first.y;
+            int displacement_vector_x = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
+                    .at(frame_count).second.x;
+            int displacement_vector_y = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
+                    .at(frame_count).second.y;
+
+            cv::Vec<float, 4> line_in_cartesian_coordinates = {displacement_vector_x, -displacement_vector_y,
+                                                               next_pts_x, -next_pts_y};
+
+            float m, c;
+            m = line_in_cartesian_coordinates[1] / line_in_cartesian_coordinates[0];
+            c = line_in_cartesian_coordinates[3] - line_in_cartesian_coordinates[2] * m;
+
+            float d = (float) sqrt((double) line_in_cartesian_coordinates[0] * line_in_cartesian_coordinates[0] +
+                                   (double) line_in_cartesian_coordinates[1] * line_in_cartesian_coordinates[1]);
+            line_in_cartesian_coordinates[0] /= d; // normalized vector in x
+            line_in_cartesian_coordinates[1] /= d; // normalized vector in y
+
+            cv::Point pt1, pt2;
+            pt1.x = cvRound(line_in_cartesian_coordinates[2]); // 700
+            pt1.y = cvRound(-line_in_cartesian_coordinates[3]); // again change to pixel coordinates
+
+            if (std::isinf(m)) {
+                if (line_in_cartesian_coordinates[1] >
+                    0.0f) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point on y = height
+                    pt2.x = pt1.x; //
+                    pt2.y = 0;
+                    pt2.y = -pt2.y; // again change to pixel coordinates
+                    //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
+                } else {
+                    pt2.x = pt1.x; //
+                    pt2.y = -Dataset::getFrameSize().height;
+                    pt2.y = -pt2.y; // again change to pixel coordinates
+                    //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
+                }
+            } else if (abs(m) == 0) {
+                if (std::signbit(m)) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point
+                    pt2.x = 0; //
+                    pt2.y = pt1.y;
+                    //pt2.y = -pt2.y; // again change to pixel coordinates
+                    //std::cout << temp_gt_flow_image_path << " " << pt1 << " " << m << " " << pt2 << std::endl;
+                } else {
+                    pt2.x = Dataset::getFrameSize().width; //
+                    pt2.y = pt1.y;
+                    //pt2.y = -pt2.y; // again change to pixel coordinates
+                    //std::cout << temp_gt_flow_image_path << " " << pt1 << " " << m << " " << pt2 << std::endl;
+                }
+            } else {
+
+                if (line_in_cartesian_coordinates[1] >
+                    0.0f) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point on y = height
+                    pt2.x = cvRound((Dataset::getFrameSize().height - c) / m); //
+                    pt2.y = Dataset::getFrameSize().height;
+                    pt2.y = -pt2.y; // again change to pixel coordinates
+                    //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
+                } else if (line_in_cartesian_coordinates[1] <
+                           0.0f) { //  if going down ( displacement.y in cartesian < 0 ) then, find x point on
+                    // y = 0
+                    pt2.x = int((-(float) Dataset::getFrameSize().height - c) / m); //
+                    pt2.y = -Dataset::getFrameSize().height; // again change to pixel coordinates
+                    pt2.y = -pt2.y; // again change to pixel coordinates
+                    //std::cout << temp_gt_flow_image_path << " " << line <<  " " << m << " " << pt2.x << std::endl;
+                }
+            }
+
+            line_parameters.push_back(std::make_pair(cv::Point2f(m, c), pt2));
+        }
+        m_obj_line_parameters.push_back(line_parameters);
+
+    }
 }
+

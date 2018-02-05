@@ -130,17 +130,17 @@ frame_count, std::vector<Objects> list_objects) {
         int width = list_objects.at(i).getImageShapeAndData().get().cols;
         int height = list_objects.at(i).getImageShapeAndData().get().rows;
 
-        cv::Point2i next_pts = list_objects[i].getExtrapolatedPixelCentroid_DisplacementMean().at
-                        (frame_skip -1 ).at(frame_count).first;
-
-        cv::Point2i displacement_vector = list_objects[i].getExtrapolatedPixelCentroid_DisplacementMean().at
-                (frame_skip -1 ).at(frame_count).second;
 
         // gt_displacement
         cv::Point2i gt_next_pts = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1)
                 .at(frame_count).first;
-        cv::Point2f gt_displacement = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip
-                                                                                                          - 1).at(frame_count).second;
+
+        cv::Point2i gt_displacement = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip
+                                                                                                          - 1)
+                .at(frame_count).second;
+
+        cv::Point2i gt_line_pts = list_objects.at(i).getLineParameters().at(frame_skip - 1)
+                .at(frame_count).second;
 
 
         cv::Mat roi;
@@ -153,86 +153,10 @@ frame_count, std::vector<Objects> list_objects) {
         // find the optimal line
         //cv::fitLine( points, line, cv::DIST_L1, 1, 0.001, 0.001);
 
-        // vx, vy, x, y
-        // change to cartesian coordinates
-        cv::Vec<float, 4> line = {displacement_vector.x, -displacement_vector.y, next_pts.x, -next_pts.y};
+        cv::line(tempMatrix, gt_next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
 
-        float m,c;
-        m = line[1]/line[0];
-        c = line[3] - line[2]*m;
-
-        float d = (float)sqrt( (double)line[0]*line[0] + (double)line[1]*line[1] );
-        line[0] /= d; // normalized vector in x
-        line[1] /= d; // normalized vector in y
-        unsigned t_x = Dataset::getFrameSize().height;
-        unsigned t_y = Dataset::getFrameSize().width ;
-
-        cv::Point pt1, pt2;
-        pt1.x = cvRound(line[2]); // 700
-        pt1.y = cvRound(-line[3]); // again change to pixel coordinates
-        /*
-        if ( line[1] <= 0 ) { // displacement y is negative or 0, point vector towards y = 0
-            pt2.x = cvRound(line[2] + (-c/m)); //
-            pt2.y = cvRound(line[3] + 0.0f);
-        }
-        else { // displacement y is positive, point vector towards y = 0
-            pt2.x = cvRound(line[2] + (((float)t_x-c)/m)); //
-            pt2.y = cvRound(line[3] + (float)t_x);
-        }
-*/
-
-        if ( isinf(m)) {
-            if ( line[1] > 0.0f ) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point on y = height
-                pt2.x = pt1.x; //
-                pt2.y = 0;
-                pt2.y = -pt2.y; // again change to pixel coordinates
-                cv::line( tempMatrix, pt1, pt2, cv::Scalar(0,255,0), 3, cv::LINE_AA, 0 );
-                //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
-            }
-            else {
-                pt2.x = pt1.x; //
-                pt2.y = -Dataset::getFrameSize().height;
-                pt2.y = -pt2.y; // again change to pixel coordinates
-                cv::line( tempMatrix, pt1, pt2, cv::Scalar(0,255,0), 3, cv::LINE_AA, 0 );
-                //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
-            }
-        }
-        else if ( abs(m) == 0) {
-            if ( std::signbit(m) ) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point
-                pt2.x = 0; //
-                pt2.y = pt1.y;
-                //pt2.y = -pt2.y; // again change to pixel coordinates
-                cv::line( tempMatrix, pt1, pt2, cv::Scalar(0,255,0), 3, cv::LINE_AA, 0 );
-                std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
-            }
-            else {
-                pt2.x = Dataset::getFrameSize().width; //
-                pt2.y = pt1.y;
-                //pt2.y = -pt2.y; // again change to pixel coordinates
-                cv::line( tempMatrix, pt1, pt2, cv::Scalar(0,255,0), 3, cv::LINE_AA, 0 );
-                std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
-            }
-        }
-        else {
-
-            if ( line[1] > 0.0f ) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point on y = height
-                pt2.x = cvRound((Dataset::getFrameSize().height - c)/m); //
-                pt2.y = Dataset::getFrameSize().height;
-                pt2.y = -pt2.y; // again change to pixel coordinates
-                cv::line( tempMatrix, pt1, pt2, cv::Scalar(0,255,0), 3, cv::LINE_AA, 0 );
-                //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
-            }
-            else if ( line[1] < 0.0f ) { //  if going down ( displacement.y in cartesian < 0 ) then, find x point on
-                // y = 0
-                pt2.x = int((-(float)Dataset::getFrameSize().height-c)/m); //
-                pt2.y = -Dataset::getFrameSize().height; // again change to pixel coordinates
-                pt2.y = -pt2.y; // again change to pixel coordinates
-                cv::line( tempMatrix, pt1, pt2, cv::Scalar(0,255,0), 3, cv::LINE_AA, 0 );
-                //std::cout << temp_gt_flow_image_path << " " << line <<  " " << m << " " << pt2.x << std::endl;
-            }
-        }
-        cv::Matx<float,2,2> coefficients (-m,1,-1,1);
-        cv::Matx<float,2,1> rhs(c,0);
+        cv::Matx<float,2,2> coefficients (-2,1,-1,1);
+        cv::Matx<float,2,1> rhs(3,0);
 
         cv::Matx<float,2,1> result_manual;
         //result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
