@@ -84,14 +84,38 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
             cv::FileStorage::WRITE);
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > objects;
 
+    std::vector<Objects>::iterator objectIterator = m_list_objects.begin();
+    std::vector<Objects>::iterator  objectIteratorNext;
+    for (unsigned current = 0; current < m_list_objects.size(); ++current)
+    {
+        for (unsigned next = current + 1; next < m_list_objects.size(); ++next)
+        {
+            //m_list_objects_combination.push_back(std::make_pair((m_list_objects[current]), (m_list_objects[next])));
+            //std::cout << m_list_objects[current] << m_list_objects[next] << "\n";
+        }
+    }
+
+    for ( ; objectIterator < m_list_objects.end() ; objectIterator++ ) {
+        for ( objectIteratorNext = objectIterator+1; objectIteratorNext <
+                                                     m_list_objects.end();
+              objectIteratorNext++) {
+
+            m_list_objects_combination.push_back(std::make_pair((*objectIterator), (*objectIteratorNext)));
+            std::cout << "collision between object id " << (*objectIterator).getObjectId() << " and object id " <<
+                      (*objectIteratorNext).getObjectId() << "\n";
+
+        }
+    }
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-        for (ushort frame_count = 0; frame_count < (m_list_objects.at(0).getExtrapolatedPixelpoint_pixelDisplacement().at
-                (frame_skip - 1)).size(); frame_count++) {
+
+        unsigned FRAME_COUNT = m_list_objects.at(0).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1).size();
+
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char file_name_image[50];
 
             sprintf(file_name_image, "000%03d_10.png", frame_count);
@@ -100,10 +124,11 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
                     + file_name_image;
             fs << "frame_count" << frame_count;
             extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects);
+            std::cout << "next frame " << frame_count << std::endl;
+
         }
         fs.release();
     }
-
 
     // plotVectorField (F_gt_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
@@ -124,6 +149,7 @@ frame_count, std::vector<Objects> list_objects) {
     tempMatrix = cv::Scalar_<unsigned>(255,255,255);
     assert(tempMatrix.channels() == 3);
 
+
     for (unsigned i = 0; i < list_objects.size(); i++) {
 
         // object image_data_and_shape
@@ -134,11 +160,13 @@ frame_count, std::vector<Objects> list_objects) {
         // gt_displacement
         cv::Point2i gt_next_pts = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1)
                 .at(frame_count).first;
-
         cv::Point2i gt_displacement = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip
                                                                                                           - 1)
                 .at(frame_count).second;
 
+        cv::Point2i gt_next_pts_mean = list_objects.at(i).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip
+                                                                                                          - 1)
+                .at(frame_count).first;
         cv::Point2i gt_line_pts = list_objects.at(i).getLineParameters().at(frame_skip - 1)
                 .at(frame_count).second;
 
@@ -153,19 +181,31 @@ frame_count, std::vector<Objects> list_objects) {
         // find the optimal line
         //cv::fitLine( points, line, cv::DIST_L1, 1, 0.001, 0.001);
 
-        cv::line(tempMatrix, gt_next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
+        cv::line(tempMatrix, gt_next_pts_mean, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
 
-        cv::Matx<float,2,2> coefficients (-2,1,-1,1);
-        cv::Matx<float,2,1> rhs(3,0);
+
+    }
+
+    for ( unsigned i = 0; i < m_list_objects_combination.size(); i++) {
+
+        cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
+                .at(frame_count).first;
+
+        cv::Point2f lineparameters2 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
+                .at(frame_count).second;
+
+        // first fill row
+        cv::Matx<float,2,2> coefficients (-1,-lineparameters1.x,-1,lineparameters2.x);
+        cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
 
         cv::Matx<float,2,1> result_manual;
-        //result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
+        result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
         result_manual = coefficients.solve(rhs);
 
+        cv::circle(tempMatrix, cv::Point(result_manual(0,0), result_manual(1,0)), 20, cv::Scalar(0, 255, 0), -1,
+                   cv::LINE_AA);
 
-        //cv::circle(tempMatrix, cv::Point(result_manual(0,0), result_manual(1,0)), 20, cv::Scalar(0, 255, 0), -1,
-        //           cv::LINE_AA);
-        //cv::arrowedLine(tempMatrix, prev_pts, next_pts, cv::Scalar(0, 255, 0));
+        std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
 
     }
 
@@ -182,8 +222,9 @@ frame_count, std::vector<Objects> list_objects) {
     }
 
     F_gt_write.writeExtended(temp_gt_flow_image_path);
-
 }
+
+
 
 void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::string> &list_gp_lines) {
 

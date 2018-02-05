@@ -182,11 +182,11 @@ int main ( int argc, char *argv[]) {
                 Achterbahn trajectory;
                 NoNoise noNoise;
 
-                //Objects obj1(rectangle1, trajectory, 60, colorfulNoise, "rectangle_long");
+                Objects obj1(rectangle1, trajectory, 60, colorfulNoise, "rectangle_long");
                 Objects obj2(rectangle2, trajectory, 120, noNoise, "rectangle_wide");
 
                 std::vector<Objects> list_of_objects;
-                //list_of_objects.push_back(obj1);
+                list_of_objects.push_back(obj1);
                 list_of_objects.push_back(obj2);
 
 

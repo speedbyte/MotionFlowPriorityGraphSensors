@@ -66,9 +66,9 @@ void Objects::generate_obj_extrapolated_pixel_point_pixel_displacement(const uns
         std::vector<std::pair<cv::Point2i, cv::Point2i> > multiframe_flowvector;
 
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
+        unsigned long FRAME_COUNT = m_obj_base_pixel_point_pixel_displacement.size();
 
-        for (ushort frame_count = 1; frame_count < m_obj_base_pixel_point_pixel_displacement.size();
-             frame_count++) {
+        for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 
             // The first frame is the reference frame.
             // frame skip 1 means no skips
@@ -100,12 +100,11 @@ void Objects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(con
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > outer_base_movement;
-        unsigned long array_size = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
-        for (unsigned i = 0; i < array_size; i++) {
+        unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
+        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
-            cv::Point2i gt_next_pts = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).at(i).first;
-            cv::Point2f gt_displacement = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).at(
-                    i).second;
+            cv::Point2i gt_next_pts = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).at(frame_count).first;
+            cv::Point2f gt_displacement = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).at(frame_count).second;
 
             std::vector<std::pair<cv::Point2i, cv::Point2i> > base_movement;
 
@@ -127,8 +126,8 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2i, cv::Point2i> > multiframe_flowvector;
-        unsigned long frame_count = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
-        for (unsigned i = 0; i < frame_count; i++) {
+        unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
+        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
             int prev_pts_x = 0;
             int prev_pts_y = 0;
@@ -137,22 +136,23 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
             int displacement_vector_x = 0;
             int displacement_vector_y = 0;
 
-            unsigned cluster_size = (unsigned)m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
-                    .at(i).size();
-            for (unsigned j = 0; j < cluster_size; j++) {
+            const unsigned CLUSTER_SIZE = (unsigned)m_obj_extrapolated_shape_pixel_point_pixel_displacement.at
+                            (frame_skip - 1)
+                    .at(frame_count).size();
+            for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
                 cv::Point2i pts = m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
-                        .at(i).at(j).first;
+                        .at(frame_count).at(cluster_point).first;
                 cv::Point2f gt_displacement = m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
-                        .at(i).at(j).second;
+                        .at(frame_count).at(cluster_point).second;
                 next_pts_x += pts.x ;
                 next_pts_y += pts.y ;
                 displacement_vector_x += gt_displacement.x ;
                 displacement_vector_y += gt_displacement.y ;
             }
-            next_pts_x /= cluster_size;
-            next_pts_y /= cluster_size;
-            displacement_vector_x /= (int)cluster_size;
-            displacement_vector_y /= (int)cluster_size;
+            next_pts_x /= CLUSTER_SIZE;
+            next_pts_y /= CLUSTER_SIZE;
+            displacement_vector_x /= (int)CLUSTER_SIZE;
+            displacement_vector_y /= (int)CLUSTER_SIZE;
             //prev_pts_x = next_pts_x - displacement_vector_x;
             //prev_pts_y = next_pts_y - displacement_vector_y;
 
@@ -171,20 +171,17 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
     //TODO - clean up this section.
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2f, cv::Point2i> > line_parameters;
-        unsigned long frame_count = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1).size();
-        for (unsigned i = 0; i < frame_count; i++) {
+        const unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
+                .size();
+        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
-            int next_pts_x = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
-                    .at(frame_count).first.x;
-            int next_pts_y = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
-                    .at(frame_count).first.y;
-            int displacement_vector_x = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
-                    .at(frame_count).second.x;
-            int displacement_vector_y = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
-                    .at(frame_count).second.y;
+            cv::Point2i next_pts = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
+                    .at(frame_count).first;
+            cv::Point2i  displacement_vector = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
+                            (frame_skip - 1).at(frame_count).second;
 
-            cv::Vec<float, 4> line_in_cartesian_coordinates = {displacement_vector_x, -displacement_vector_y,
-                                                               next_pts_x, -next_pts_y};
+            cv::Vec<float, 4> line_in_cartesian_coordinates = {displacement_vector.x, -displacement_vector.y,
+                                                               next_pts.x, -next_pts.y};
 
             float m, c;
             m = line_in_cartesian_coordinates[1] / line_in_cartesian_coordinates[0];
@@ -212,7 +209,7 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
                     pt2.y = -pt2.y; // again change to pixel coordinates
                     //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
                 }
-            } else if (abs(m) == 0) {
+            } else if (m == 0) {
                 if (std::signbit(m)) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point
                     pt2.x = 0; //
                     pt2.y = pt1.y;

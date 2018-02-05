@@ -26,6 +26,7 @@ private:
 
 
     std::vector<Objects> &m_list_objects;
+    std::vector<std::pair<Objects, Objects> > m_list_objects_combination;
 
 public:
 
