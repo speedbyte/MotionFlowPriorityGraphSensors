@@ -177,20 +177,25 @@ int main ( int argc, char *argv[]) {
                 Canvas canvas(background, noTrajectory, 60, whiteNoise);
 
                 // Further objects
-                Rectangle rectangle1(30, 30); // width, height
-                Rectangle rectangle2(30, 30);
+                Rectangle rectangle(30, 30); // width, height
                 Achterbahn achterbahn;
                 NoNoise noNoise;
-                Circle trajectory_cicle;
+                Circle circle;
                 Ramp ramp;
                 NegativeRamp negativeRamp;
 
-                Objects obj1(rectangle1, achterbahn, 120, noNoise, "rectangle_wide");
-                Objects obj2(rectangle2, achterbahn, 60, colorfulNoise, "rectangle_long");
+                Objects obj1(rectangle, achterbahn, 120, noNoise, "rectangle_wide");
+                Objects obj2(rectangle, achterbahn, 60, colorfulNoise, "rectangle_long");
+                Objects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
+                Objects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
+                Objects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
 
                 std::vector<Objects> list_of_objects;
                 list_of_objects.push_back(obj1);
                 list_of_objects.push_back(obj2);
+                list_of_objects.push_back(obj3);
+                list_of_objects.push_back(obj4);
+                list_of_objects.push_back(obj5);
 
 
                 GroundTruthSceneInternal gt_scene(canvas, list_of_objects);
@@ -198,6 +203,8 @@ int main ( int argc, char *argv[]) {
 
                 GroundTruthFlow gt_flow(list_of_objects);
                 gt_flow.generate_gt_scenepixel_displacement();
+
+                gt_flow.calcCovarMatrix();
 
             }
 

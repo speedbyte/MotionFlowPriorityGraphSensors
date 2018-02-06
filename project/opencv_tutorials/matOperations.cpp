@@ -284,6 +284,14 @@ int main ( int argc, char *argv[]) {
 //    mat_multiplication();
     //randomize_coordinates();
     Mat_to_array();
+    cv::Mat_<float> samples_xy(2, 100);
+    std::vector<float> xsamples(100,1),ysamples(100,2);
+    for ( auto t : xsamples ) {
+        samples_xy.push_back(t);
+    }
+    for ( auto t : ysamples ) {
+        samples_xy.push_back(t);
+    }
 
     /*
     //Very very large operation

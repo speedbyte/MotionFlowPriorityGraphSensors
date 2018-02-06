@@ -38,7 +38,7 @@ void Achterbahn::process(cv::Size frame_size) {
 
 
 void Circle::process(cv::Size frame_size) {
-    ObjectTrajectory::process(frame_size);
+
     std::vector<ushort> theta;
     for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
         theta.push_back(frame_count);
@@ -47,20 +47,16 @@ void Circle::process(cv::Size frame_size) {
     cv::Point2f l_pixel_position;
     for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
 
-        //l_pixel_position.x = static_cast<float>((frame_size.width/2) + 10 * cos(theta[i]));
+        l_pixel_position.x = static_cast<float>( frame_size.width/2 + 100 * cos(theta[i]));
 
-        //l_pixel_position.y = static_cast<float>((frame_size.height/2) + 10 * sin(theta[i]));
-
-        l_pixel_position.x = static_cast<float>(30 + 10 * cos(theta[i]));
-
-        l_pixel_position.y = static_cast<float>(300 + 10 * sin(theta[i]));
+        l_pixel_position.y = static_cast<float>( frame_size.height/2 + 100 * sin(theta[i]));
 
         m_trajectory.push_back(l_pixel_position);
     }
 }
 
 void Ramp::process(cv::Size frame_size) {
-    ObjectTrajectory::process(frame_size);
+
     std::vector<ushort> theta;
     for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
         theta.push_back(frame_count);

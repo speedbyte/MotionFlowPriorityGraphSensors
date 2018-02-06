@@ -115,8 +115,8 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
                     + file_name_image;
             fs << "frame_count" << frame_count;
             extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects);
-
         }
+        frame_skip_collision_points.push_back(frame_collision_points);
         fs.release();
     }
 
@@ -161,13 +161,19 @@ frame_count, std::vector<Objects> list_objects) {
                 .at(frame_count).second;
 
 
-        cv::Mat roi;
-        roi = tempMatrix.
-                colRange(cvRound(gt_next_pts.x), cvRound(gt_next_pts.x + width)).
-                rowRange(cvRound(gt_next_pts.y), cvRound(gt_next_pts.y + height));
-        //bulk storage
-        roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(list_objects.at(i).getObjectId()));
-
+        if ( ( gt_next_pts.x ) > 0 &&
+             ( gt_next_pts.y ) > 0 &&
+             ( gt_next_pts.x ) < Dataset::getFrameSize().width  &&
+             ( gt_next_pts.y ) < Dataset::getFrameSize().height
+                ) {
+            cv::Mat roi;
+            roi = tempMatrix.
+                    colRange(cvRound(gt_next_pts.x), cvRound(gt_next_pts.x + width)).
+                    rowRange(cvRound(gt_next_pts.y), cvRound(gt_next_pts.y + height));
+            //bulk storage
+            roi = cv::Scalar(gt_displacement.x, gt_displacement.y,
+                             static_cast<float>(list_objects.at(i).getObjectId()));
+        }
         // find the optimal line
         //cv::fitLine( points, line, cv::DIST_L1, 1, 0.001, 0.001);
 
@@ -178,6 +184,7 @@ frame_count, std::vector<Objects> list_objects) {
 
     }
 
+    std::vector<cv::Point2f> collision_points;
     for ( unsigned i = 0; i < m_list_objects_combination.size(); i++) {
 
         cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
@@ -196,11 +203,16 @@ frame_count, std::vector<Objects> list_objects) {
         assert ( cv::determinant(coefficients ) != 0 );
         result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
         //result_manual = coefficients.solve(rhs);
-        cv::circle(tempMatrix, cv::Point2f(result_manual(0,0), result_manual(1,0)), 20, cv::Scalar(0, 255, 0), -1,
+        cv::circle(tempMatrix, cv::Point2f(result_manual(0,0), result_manual(1,0)), 5, cv::Scalar(0, 255, 0), -1,
                    cv::LINE_AA);
 
         std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
+        collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
     }
+
+    frame_collision_points.push_back(collision_points);
+
+
 
     //Create png Matrix with 3 channels: x gt_displacement. y displacment and ObjectId
     for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
@@ -219,7 +231,7 @@ frame_count, std::vector<Objects> list_objects) {
 
 
 
-void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::string> &list_gp_lines) {
+void GroundTruthFlow::common(cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines) {
 
     float m, c;
     std::string coord1;
@@ -231,7 +243,6 @@ void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::strin
 
     cv::Vec4f line;
     cv::Mat mat_samples(1, samples_xy.cols, CV_32FC(2));
-
 
     std::cout << "\nsamples_xy\n" << samples_xy;
     cv::calcCovarMatrix(samples_xy, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
@@ -257,12 +268,12 @@ void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::strin
         mat_samples.at<cv::Vec<float, 2>>(0, i)[1] = samples_xy[1][i];
     }
 
-    cv::fitLine(mat_samples, line, CV_DIST_L2, 0, 0.01,
-                0.01); // radius and angle from the origin - a kind of constraint
+    cv::fitLine(mat_samples, line, CV_DIST_L2, 0, 0.01, 0.01); // radius and angle from the origin - a kind of
+    // constraint
     m = line[1] / line[0];
     c = line[3] - line[2] * m;
     coord1 = "0," + std::to_string(c);
-    coord2 = std::to_string(-c / m) + ",0";
+    coord2 = std::to_string((375 - c ) / m) + ",375";
     gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
     list_gp_lines.push_back(gp_line);
 }
@@ -276,56 +287,68 @@ void GroundTruthFlow::common(cv::Mat_<uchar> &samples_xy, std::vector<std::strin
  */
 void GroundTruthFlow::calcCovarMatrix() {
 
-    for (int i = 0; i < m_list_objects.size(); i++) {
+    std::vector<float> xsamples,ysamples;
+
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+
+        unsigned long FRAME_COUNT = frame_skip_collision_points.at(frame_skip - 1).size();
+
+        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+
+            for ( unsigned points = 0 ; points < frame_skip_collision_points.at(frame_skip-1).at(frame_count).size();
+                  points++ ) {
+
+                cv::Point2f collisionpoints = frame_skip_collision_points.at(frame_skip-1).at(frame_count).at
+                        (points);
+                if ( ( collisionpoints.x ) > 0 &&
+                     ( collisionpoints.y ) > 0 &&
+                     ( collisionpoints.x ) < Dataset::getFrameSize().width  &&
+                     ( collisionpoints.y ) < Dataset::getFrameSize().height
+                        ) {
+                    xsamples.push_back(collisionpoints.x);
+                    ysamples.push_back(collisionpoints.y);
+                }
+            }
+        }
     }
 
-    std::vector<std::pair<double, double>> xypoints_1, xypoints_2, xypoints_3;
-
-    cv::Mat_<uchar> samples_xy(2, 9);
     std::vector<std::string> list_gp_lines;
+    std::vector<std::pair<double, double>> xypoints_1, xypoints_2, xypoints_3, xypoints_collision;
 
-    //------------------------------------------------------------------------
+    ushort size_collision = xsamples.size();
+    cv::Mat_<float> samples_xy_collision(2, size_collision);
 
-    samples_xy << 1, 3, 2, 5, 8, 7, 12, 2, 4, 8, 6, 9, 4, 3, 3, 2, 7, 7;
-    common(samples_xy, list_gp_lines);
-    for (unsigned i = 0; i < samples_xy.cols; i++) {
-        xypoints_1.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
+
+    for ( auto i = 0; i < size_collision; i++) {
+        samples_xy_collision(0,i) = xsamples.at(i);
+        samples_xy_collision(1,i) = ysamples.at(i);
     }
 
-    //------------------------------------------------------------------------
-
-    samples_xy.row(0) = 5 * samples_xy.row(0);
-    common(samples_xy, list_gp_lines);
-    for (unsigned i = 0; i < samples_xy.cols; i++) {
-        xypoints_2.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
+/*    for ( auto t : ysamples ) {
+        samples_xy_collision.push_back(t);
     }
-
-    //------------------------------------------------------------------------
-
-    samples_xy.row(1) = 2 * samples_xy.row(1);
-    common(samples_xy, list_gp_lines);
-    for (unsigned i = 0; i < samples_xy.cols; i++) {
-        xypoints_3.push_back(std::make_pair(samples_xy[0][i], samples_xy[1][i]));
+*/
+    common(samples_xy_collision, list_gp_lines);
+    for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
+        xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
     }
-
-
-    //------------------------------------------------------------------------
-
-    //------------------------------------------------------------------------
 
     //Plot
     Gnuplot gp;
     gp << "set xlabel 'x'\nset ylabel 'y'\n";
-    gp << "set xrange[0:80]\n" << "set yrange[0:20]\n";
+    gp << "set xrange[0:1242]\n" << "set yrange[0:375]\n";
     //gp_line = "set arrow from 0,0 to $x1,$y2 nohead lc rgb \'red\'\n";
     std::cout << list_gp_lines[0];
     gp << list_gp_lines.at(0);
     gp << list_gp_lines.at(1);
     gp << list_gp_lines.at(2);
-    gp << "plot '-' with lines title 'xy', '-' with lines title 'x_2,y', '-' with lines title 'x_2_y_2'\n";
+    gp << list_gp_lines.at(3);
+    gp << "plot '-' with lines title 'xy', '-' with lines title 'x_2,y', '-' with lines title 'x_2_y_2', '-' with "
+            "points title 'collision'\n";
     gp.send1d(xypoints_1);
     gp.send1d(xypoints_2);
     gp.send1d(xypoints_3);
+    gp.send1d(xypoints_collision);
 
     // Two matrices sample
     cv::Mat_<uchar> x_sample(1, 9);

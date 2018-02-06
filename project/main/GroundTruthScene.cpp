@@ -126,25 +126,31 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
             trajectoryShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
 
-            image_data_and_shape.copyTo(tempGroundTruthImage(
-                    cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
-                                     (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
-
-
-            if ( m_list_objects.at(i).getObjectId() == 1 ) {
-                trajectoryShape = cv::Scalar(255,0,0);
-                trajectoryShape.copyTo(tempGroundTruthTrajectory(
+            if ( ( trajectory_points.at(current_index.at(i)).x ) > 0 &&
+                    ( trajectory_points.at(current_index.at(i)).y ) > 0 &&
+                    ( trajectory_points.at(current_index.at(i)).x ) < Dataset::getFrameSize().width  &&
+                    ( trajectory_points.at(current_index.at(i)).y ) < Dataset::getFrameSize().height
+                    ) {
+                image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
                                 (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
-                cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
-            }
 
-            if ( m_list_objects.at(i).getObjectId() == 2 ) {
-                trajectoryShape = cv::Scalar(0,255,0);
-                trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
-                        cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
-                                (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
-                cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
+
+                if (m_list_objects.at(i).getObjectId() == 1) {
+                    trajectoryShape = cv::Scalar(255, 0, 0);
+                    trajectoryShape.copyTo(tempGroundTruthTrajectory(
+                            cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
+                                    (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                    cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
+                }
+
+                if (m_list_objects.at(i).getObjectId() == 2) {
+                    trajectoryShape = cv::Scalar(0, 255, 0);
+                    trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
+                            cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
+                                    (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                    cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
+                }
             }
 
             current_index.at(i)++;
