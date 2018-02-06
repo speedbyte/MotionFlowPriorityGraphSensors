@@ -125,7 +125,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
 
         bool needToInit = true;
-        std::vector<cv::Point2f> prev_pts;
+        std::vector<cv::Point2f> prev_pts_array;
 
         std::cout << "results will be stored in " << m_resultordner << std::endl;
 
@@ -211,7 +211,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     needToInit = true;
                     break;
                 case 'c':
-                    prev_pts.clear();
+                    prev_pts_array.clear();
                     break;
                 default:
                     break;
@@ -240,7 +240,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
             cv::Mat flow_frame( Dataset::getFrameSize(), CV_32FC2 );
 
-            std::vector<cv::Point2f> next_pts;
+            std::vector<cv::Point2f> next_pts_array;
             tic = steady_clock::now();
 
             // Calculate optical calculate_flow map using LK algorithm
@@ -260,7 +260,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 // Farnback returns displacement frame and LK returns points.
                 cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
                 if ( lk == algo ) {
-                    cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts, next_pts, status,
+                    cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts_array, next_pts_array, status,
                                              err, winSize, 5, termcrit, 0, 0.001);
                 }
                 else if ( fb == algo ) {
@@ -277,7 +277,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     // Draw the uniform grid of points on the input image along with the motion vectors
                     // Circles to indicate the uniform grid of points
                     //cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
-                    prev_pts.clear();
+                    prev_pts_array.clear();
                     for (int row = 0; row < image_02_frame.rows; row += stepSize) {
                         for (int col = 0; col < image_02_frame.cols; col += stepSize) {
 
@@ -289,8 +289,8 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                                 continue;
                             }
 
-                            next_pts.push_back(cv::Point2f(col, row));
-                            prev_pts.push_back(cv::Point2f((col - algorithmMovement.x), (row - algorithmMovement.y)));
+                            next_pts_array.push_back(cv::Point2f(col, row));
+                            prev_pts_array.push_back(cv::Point2f((col - algorithmMovement.x), (row - algorithmMovement.y)));
 
                             status.push_back(1);
                         }
@@ -300,12 +300,12 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 unsigned count = 0;
 
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_points;
-                for (unsigned i = 0; i < next_pts.size(); i++) {
+                for (unsigned i = 0; i < next_pts_array.size(); i++) {
 
                     int minDist = 1;
 
-                    cv::Point2f result_next_pts, displacement;
-                    cv::Point2f algorithmMovement ((next_pts[i].x - prev_pts[i].x), (next_pts[i].y - prev_pts[i]
+                    cv::Point2f next_pts, displacement;
+                    cv::Point2f algorithmMovement ((next_pts_array[i].x - prev_pts_array[i].x), (next_pts_array[i].y - prev_pts_array[i]
                             .y));
 
                     // Check if the status vector is good
@@ -313,16 +313,16 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                         continue;
 
 
-                    printf("flow_frame.at<cv::Point2f>(%f, %f).x =  %f\n", next_pts[i].x, next_pts[i].y,
+                    printf("flow_frame.at<cv::Point2f>(%f, %f).x =  %f\n", next_pts_array[i].x, next_pts_array[i].y,
                            algorithmMovement.x);
-                    printf("flow_frame.at<cv::Point2f>(%f, %f).y =  %f\n", next_pts[i].x, next_pts[i].y,
+                    printf("flow_frame.at<cv::Point2f>(%f, %f).y =  %f\n", next_pts_array[i].x, next_pts_array[i].y,
                            algorithmMovement.y);
 
                     displacement.x = cvRound( algorithmMovement.x + 0.5);
                     displacement.y = cvRound( algorithmMovement.y + 0.5);
 
                     /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
-                    // auto dist = cv::norm(prev_pts[i] - next_pts[i]);
+                    // auto dist = cv::norm(prev_pts_array[i] - next_pts_array[i]);
                     double dist;
                     dist = pow(displacement.x,2)+pow(displacement.y,2);
                     //calculating distance by euclidean formula
@@ -337,27 +337,27 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                         continue;
                     }
 
-                    next_pts[count++] = next_pts[i];
+                    next_pts_array[count++] = next_pts_array[i];
 
-                    // result_next_pts is the new pixel position !
-                    result_next_pts.x = std::abs(cvRound(next_pts[i].x));
-                    result_next_pts.y = std::abs(cvRound(next_pts[i].y));
+                    // next_pts is the new pixel position !
+                    next_pts.x = std::abs(cvRound(next_pts_array[i].x));
+                    next_pts.y = std::abs(cvRound(next_pts_array[i].y));
 
-                    printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", i,
-                           result_next_pts.x, result_next_pts.y, displacement.x, displacement.y);
+                    printf("(iteration %u, coordinates x y (%f,%f) ->  Vx, Vy (%f,%f) \n", i,
+                           next_pts.x, next_pts.y, displacement.x, displacement.y);
                     // Lines to indicate the motion vectors
-                    frame_points.push_back(std::make_pair(result_next_pts, displacement));
+                    frame_points.push_back(std::make_pair(next_pts, displacement));
                 }
                 frame_pixel_point_pixel_displacement.push_back(frame_points);
-                next_pts.resize(count);
+                next_pts_array.resize(count);
 
 
-                for (unsigned i = 0; i < next_pts.size(); i++) {
-                    cv::arrowedLine(image_02_frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0));
+                for (unsigned i = 0; i < next_pts_array.size(); i++) {
+                    cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
                 }
-                if ( next_pts.size() == 0 ) {
+                if ( next_pts_array.size() == 0 ) {
                     // pick up the last healthy points
-                    next_pts = next_pts_healthy;
+                    next_pts_array = next_pts_healthy;
                 }
 
             }
@@ -365,15 +365,15 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 needToInit = true;
             }
             if ( needToInit ) { //|| ( frame_count%4 == 0) ) {
-                //|| next_pts.size() == 0) { // the init should be also when there is no next_pts.
+                //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.
                 // automatic initialization
-                cv::goodFeaturesToTrack(curGray, next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
+                cv::goodFeaturesToTrack(curGray, next_pts_array, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
                 // Refining the location of the feature points
-                assert(next_pts.size() <= MAX_COUNT );
-                std::cout << next_pts.size() << std::endl;
+                assert(next_pts_array.size() <= MAX_COUNT );
+                std::cout << next_pts_array.size() << std::endl;
                 std::vector<cv::Point2f> currentPoint;
-                std::swap(currentPoint, next_pts);
-                next_pts.clear();
+                std::swap(currentPoint, next_pts_array);
+                next_pts_array.clear();
                 for (unsigned i = 0; i < currentPoint.size(); i++) {
                     std::vector<cv::Point2f> tempPoints;
                     tempPoints.push_back(currentPoint[i]);
@@ -381,15 +381,15 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
                     cv::TermCriteria termcrit_subpixel(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
                     cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit_subpixel);
-                    next_pts.push_back(tempPoints[0]);
+                    next_pts_array.push_back(tempPoints[0]);
                 }
-                printf("old next_pts size is %ld and new next_pts size is %ld\n", currentPoint.size(), next_pts.size());
+                printf("old next_pts_array size is %ld and new next_pts_array size is %ld\n", currentPoint.size(), next_pts_array.size());
             }
 
             needToInit = false;
-            prev_pts = next_pts;
-            next_pts_healthy = prev_pts;
-            next_pts.clear();
+            prev_pts_array = next_pts_array;
+            next_pts_healthy = prev_pts_array;
+            next_pts_array.clear();
 
             if (prevGray.data) {
 
