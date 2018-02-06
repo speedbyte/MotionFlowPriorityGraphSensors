@@ -191,17 +191,17 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
 
             cv::Point pt1, pt2;
             pt1.x = cvRound(next_pts.x); // 700
-            pt1.y = cvRound(-next_pts.y); // again change to pixel coordinates
+            pt1.y = cvRound(next_pts.y); // again change to pixel coordinates
 
             if (std::isinf(m)) {
                 if (displacement_vector.y >  // negative ( means arrow pointing down )
-                    0.0f) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point on y = height
+                    0.0f) {
                     pt2.x = pt1.x; //
-                    pt2.y = 0;
+                    pt2.y = -Dataset::getFrameSize().height;
                     //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
                 } else {
                     pt2.x = pt1.x; //
-                    pt2.y = -Dataset::getFrameSize().height;
+                    pt2.y = 0;
                     //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
                 }
             } else if (m == 0) {
@@ -217,9 +217,9 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
             } else {
 
                 if (displacement_vector.y >  // negative ( means arrow pointing down )
-                    0.0f) {
+                    0.0f) { // ??
                     pt2.x = cvRound((Dataset::getFrameSize().height - c) / m); //
-                    pt2.y = Dataset::getFrameSize().height;
+                    pt2.y = -Dataset::getFrameSize().height;
                     //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
                 } else if (displacement_vector.y <
                            0.0f) {
@@ -228,6 +228,9 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
                     //std::cout << temp_gt_flow_image_path << " " << line <<  " " << m << " " << pt2.x << std::endl;
                 }
             }
+
+            pt1.y = -pt1.y;
+            pt2.y = -pt2.y;
 
             line_parameters.push_back(std::make_pair(cv::Point2f(m, c), pt2));
         }
