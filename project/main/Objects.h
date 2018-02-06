@@ -79,35 +79,37 @@ public:
 
     void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const unsigned &max_skips);
 
-    ObjectTrajectory getTrajectoryPoints() {
+    ObjectTrajectory getTrajectoryPoints() const {
         return m_obj_trajectory;
     }
 
-    std::vector<std::pair<cv::Point2f, cv::Point2f> >  getBasePixelpoint_pixelDisplacement() {
+    std::vector<std::pair<cv::Point2f, cv::Point2f> >  getBasePixelpoint_pixelDisplacement() const {
         return m_obj_base_pixel_point_pixel_displacement;
     }
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getExtrapolatedPixelpoint_pixelDisplacement() {
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getExtrapolatedPixelpoint_pixelDisplacement()
+    const {
         return m_obj_extrapolated_pixel_point_pixel_displacement;
     }
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getExtrapolatedPixelCentroid_DisplacementMean() {
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getExtrapolatedPixelCentroid_DisplacementMean()
+    const {
         return m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
     }
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getLineParameters() {
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getLineParameters() const {
         return m_obj_line_parameters;
     }
 
-    ushort getStartPoint() {
+    ushort getStartPoint() const {
         return m_startPoint;
     }
 
-    unsigned getObjectId() {
+    unsigned getObjectId() const {
         return m_objectId;
     }
 
-    std::string getObjectName() {
+    std::string getObjectName() const {
         return m_objectName;
     }
 };

@@ -84,21 +84,11 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
             cv::FileStorage::WRITE);
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > objects;
 
-    std::vector<Objects>::iterator objectIterator = m_list_objects.begin();
-    std::vector<Objects>::iterator  objectIteratorNext;
-    for (unsigned current = 0; current < m_list_objects.size(); ++current)
-    {
-        for (unsigned next = current + 1; next < m_list_objects.size(); ++next)
-        {
-            //m_list_objects_combination.push_back(std::make_pair((m_list_objects[current]), (m_list_objects[next])));
-            //std::cout << m_list_objects[current] << m_list_objects[next] << "\n";
-        }
-    }
+    std::vector<Objects>::const_iterator objectIterator = m_list_objects.begin();
+    std::vector<Objects>::const_iterator  objectIteratorNext;
 
     for ( ; objectIterator < m_list_objects.end() ; objectIterator++ ) {
-        for ( objectIteratorNext = objectIterator+1; objectIteratorNext <
-                                                     m_list_objects.end();
-              objectIteratorNext++) {
+        for ( objectIteratorNext = objectIterator+1; objectIteratorNext < m_list_objects.end(); objectIteratorNext++) {
 
             m_list_objects_combination.push_back(std::make_pair((*objectIterator), (*objectIteratorNext)));
             std::cout << "collision between object id " << (*objectIterator).getObjectId() << " and object id " <<
@@ -117,6 +107,7 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char file_name_image[50];
+            std::cout << "frame_count " << frame_count << std::endl;
 
             sprintf(file_name_image, "000%03d_10.png", frame_count);
             std::string temp_gt_flow_image_path =
@@ -124,7 +115,6 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
                     + file_name_image;
             fs << "frame_count" << frame_count;
             extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects);
-            std::cout << "next frame " << frame_count << std::endl;
 
         }
         fs.release();
@@ -197,8 +187,10 @@ frame_count, std::vector<Objects> list_objects) {
                 .at(frame_count).first;
 
         // first fill rowco
-        cv::Matx<float,2,2> coefficients (1,-lineparameters1.x,1,-lineparameters2.x);
+        cv::Matx<float,2,2> coefficients (-lineparameters1.x,1,-lineparameters2.x,1);
         cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
+
+        std::cout << "object 1  = " << lineparameters1 << " and object 2 = " << lineparameters2 << std::endl ;
 
         cv::Matx<float,2,1> result_manual;
         assert ( cv::determinant(coefficients ) != 0 );

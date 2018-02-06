@@ -53,6 +53,25 @@ public:
 
 };
 
+class Ramp : public ObjectTrajectory {
+
+public:
+
+    Ramp() {};
+
+    void process(cv::Size frame_size) override ;
+
+};
+
+class NegativeRamp : public ObjectTrajectory {
+
+public:
+
+    NegativeRamp() {};
+
+    void process(cv::Size frame_size) override ;
+
+};
 
 class NoTrajectory: public ObjectTrajectory {
 

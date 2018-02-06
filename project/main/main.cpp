@@ -178,14 +178,15 @@ int main ( int argc, char *argv[]) {
 
                 // Further objects
                 Rectangle rectangle1(30, 30); // width, height
-                Rectangle rectangle2(100, 30);
-                Achterbahn trajectory;
+                Rectangle rectangle2(30, 30);
+                Achterbahn achterbahn;
                 NoNoise noNoise;
                 Circle trajectory_cicle;
+                Ramp ramp;
+                NegativeRamp negativeRamp;
 
-                Objects obj1(rectangle1, trajectory, 60, colorfulNoise, "rectangle_long");
-                //Objects obj2(rectangle2, trajectory, 180, noNoise, "rectangle_wide");
-                Objects obj2(rectangle2, trajectory_cicle, 180, noNoise, "rectangle_wide");
+                Objects obj1(rectangle1, achterbahn, 120, noNoise, "rectangle_wide");
+                Objects obj2(rectangle2, achterbahn, 60, colorfulNoise, "rectangle_long");
 
                 std::vector<Objects> list_of_objects;
                 list_of_objects.push_back(obj1);

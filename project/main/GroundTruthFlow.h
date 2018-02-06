@@ -25,12 +25,12 @@ class GroundTruthFlow {
 private:
 
 
-    std::vector<Objects> &m_list_objects;
+    const std::vector<Objects> &m_list_objects;
     std::vector<std::pair<Objects, Objects> > m_list_objects_combination;
 
 public:
 
-    GroundTruthFlow( std::vector<Objects> &list_objects ) : m_list_objects
+    GroundTruthFlow( const std::vector<Objects> &list_objects ) : m_list_objects
             (list_objects) {}
 
     void extrapolate_flowpoints( std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
