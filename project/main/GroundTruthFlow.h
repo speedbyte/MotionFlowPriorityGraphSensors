@@ -11,6 +11,7 @@
 #include "ObjectTrajectory.h"
 #include "GroundTruthScene.h"
 #include "FlowImageExtended.h"
+#include "OpticalFlow.h"
 
 /**
  * This class
@@ -20,15 +21,13 @@
  *  produces flow images
  */
 
-class GroundTruthFlow {
+
+class GroundTruthFlow : public OpticalFlow {
 
 private:
 
-
     const std::vector<Objects> &m_list_objects;
     std::vector<std::pair<Objects, Objects> > m_list_objects_combination;
-    std::vector<std::vector<cv::Point2f> >  frame_collision_points;
-    std::vector<std::vector<std::vector<cv::Point2f> > > frame_skip_collision_points;
 
 public:
 
@@ -42,8 +41,6 @@ public:
 
     void make_video_from_png(const Dataset &dataset_path, std::string unterordner);
 
-    void calcCovarMatrix();
-
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
     }
@@ -53,7 +50,6 @@ private:
     void prepare_directories();
 
 
-    void common(cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines );
 
 
     };

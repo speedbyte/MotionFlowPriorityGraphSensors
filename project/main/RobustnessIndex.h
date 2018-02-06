@@ -6,7 +6,7 @@
 #define MAIN_ROBUSTNESSINDEX_H
 
 
-
+#include "OpticalFlow.h"
 
 class RobustnessIndex {
 
@@ -27,7 +27,13 @@ public:
 class VectorRobustness : public RobustnessIndex {
 
 public:
-    void generateVectorRobustness();
+
+    void generateVectorRobustness(const OpticalFlow &opticalFlow);
+
+private:
+
+    void calcCovarMatrix(const OpticalFlow &opticalFlow);
+    void fitLineForCollisionPoints(cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines );
 
 
 };

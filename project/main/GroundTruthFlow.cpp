@@ -102,7 +102,6 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-
         unsigned FRAME_COUNT = m_list_objects.at(0).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1).size();
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -116,7 +115,7 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
             fs << "frame_count" << frame_count;
             extrapolate_flowpoints(temp_gt_flow_image_path, frame_skip, frame_count, m_list_objects);
         }
-        frame_skip_collision_points.push_back(frame_collision_points);
+        m_frame_skip_collision_points.push_back(m_frame_collision_points);
         fs.release();
     }
 
@@ -210,7 +209,7 @@ frame_count, std::vector<Objects> list_objects) {
         collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
     }
 
-    frame_collision_points.push_back(collision_points);
+    m_frame_collision_points.push_back(collision_points);
 
 
 
@@ -229,138 +228,6 @@ frame_count, std::vector<Objects> list_objects) {
     F_gt_write.writeExtended(temp_gt_flow_image_path);
 }
 
-
-
-void GroundTruthFlow::common(cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines) {
-
-    float m, c;
-    std::string coord1;
-    std::string coord2;
-    std::string gp_line;
-    // XY, 2XY and 2X2Y all gives the same correlation
-    cv::Mat_<float> covar, mean, corr;
-    cv::Scalar mean_x, mean_y, stddev_x, stddev_y;
-
-    cv::Vec4f line;
-    cv::Mat mat_samples(1, samples_xy.cols, CV_32FC(2));
-
-    std::cout << "\nsamples_xy\n" << samples_xy;
-    cv::calcCovarMatrix(samples_xy, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
-
-    cv::meanStdDev(samples_xy.row(0), mean_x, stddev_x);
-    cv::meanStdDev(samples_xy.row(1), mean_y, stddev_y);
-
-    assert(std::floor(mean(0) * 100) == std::floor(mean_x(0) * 100));
-    assert(std::floor(mean(1) * 100) == std::floor(mean_y(0) * 100));
-
-    cv::Mat_<float> stddev(2, 2);
-    stddev << stddev_x[0] * stddev_x[0], stddev_x[0] * stddev_y[0], stddev_x[0] * stddev_y[0], stddev_y[0] *
-                                                                                               stddev_y[0];
-    corr = covar / stddev;
-
-    std::cout << "\nMean\n" << mean << "\nCovar\n" << covar <<
-              "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
-              "\ncorr\n" << corr << std::endl;
-
-
-    for (unsigned i = 0; i < samples_xy.cols; i++) {
-        mat_samples.at<cv::Vec<float, 2>>(0, i)[0] = samples_xy[0][i];
-        mat_samples.at<cv::Vec<float, 2>>(0, i)[1] = samples_xy[1][i];
-    }
-
-    cv::fitLine(mat_samples, line, CV_DIST_L2, 0, 0.01, 0.01); // radius and angle from the origin - a kind of
-    // constraint
-    m = line[1] / line[0];
-    c = line[3] - line[2] * m;
-    coord1 = "0," + std::to_string(c);
-    coord2 = std::to_string((375 - c ) / m) + ",375";
-    gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
-    list_gp_lines.push_back(gp_line);
-}
-
-
-/**
- * Given any number of vectors, the function will compute
- * 1. The mean of the gaussian approximaiton to the distribution of the sample points.
- * 2. The covariance for the Guassian approximation to the distribution of the sample points.
- *
- */
-void GroundTruthFlow::calcCovarMatrix() {
-
-    std::vector<float> xsamples,ysamples;
-
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
-
-        unsigned long FRAME_COUNT = frame_skip_collision_points.at(frame_skip - 1).size();
-
-        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-
-            for ( unsigned points = 0 ; points < frame_skip_collision_points.at(frame_skip-1).at(frame_count).size();
-                  points++ ) {
-
-                cv::Point2f collisionpoints = frame_skip_collision_points.at(frame_skip-1).at(frame_count).at
-                        (points);
-                if ( ( collisionpoints.x ) > 0 &&
-                     ( collisionpoints.y ) > 0 &&
-                     ( collisionpoints.x ) < Dataset::getFrameSize().width  &&
-                     ( collisionpoints.y ) < Dataset::getFrameSize().height
-                        ) {
-                    xsamples.push_back(collisionpoints.x);
-                    ysamples.push_back(collisionpoints.y);
-                }
-            }
-        }
-    }
-
-    std::vector<std::string> list_gp_lines;
-    std::vector<std::pair<double, double>> xypoints_1, xypoints_2, xypoints_3, xypoints_collision;
-
-    ushort size_collision = xsamples.size();
-    cv::Mat_<float> samples_xy_collision(2, size_collision);
-
-
-    for ( auto i = 0; i < size_collision; i++) {
-        samples_xy_collision(0,i) = xsamples.at(i);
-        samples_xy_collision(1,i) = ysamples.at(i);
-    }
-
-/*    for ( auto t : ysamples ) {
-        samples_xy_collision.push_back(t);
-    }
-*/
-    common(samples_xy_collision, list_gp_lines);
-    for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
-        xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
-    }
-
-    //Plot
-    Gnuplot gp;
-    gp << "set xlabel 'x'\nset ylabel 'y'\n";
-    gp << "set xrange[0:1242]\n" << "set yrange[0:375]\n";
-    //gp_line = "set arrow from 0,0 to $x1,$y2 nohead lc rgb \'red\'\n";
-    std::cout << list_gp_lines[0];
-    gp << list_gp_lines.at(0);
-    gp << list_gp_lines.at(1);
-    gp << list_gp_lines.at(2);
-    gp << list_gp_lines.at(3);
-    gp << "plot '-' with lines title 'xy', '-' with lines title 'x_2,y', '-' with lines title 'x_2_y_2', '-' with "
-            "points title 'collision'\n";
-    gp.send1d(xypoints_1);
-    gp.send1d(xypoints_2);
-    gp.send1d(xypoints_3);
-    gp.send1d(xypoints_collision);
-
-    // Two matrices sample
-    cv::Mat_<uchar> x_sample(1, 9);
-    x_sample << 1, 3, 2, 5, 8, 7, 12, 2, 4;
-    cv::Mat_<uchar> y_sample(1, 9);
-    y_sample << 8, 6, 9, 4, 3, 3, 2, 7, 7;
-    std::vector<cv::Mat> matgt_next_ptsr;
-    matgt_next_ptsr.push_back(x_sample);
-    matgt_next_ptsr.push_back(y_sample);
-    //cv::calcCovarMatrix( &matgt_next_ptsr, 2, covar_x, mean_x, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
-
-}
 
 
 void GroundTruthFlow::make_video_from_png(const Dataset &dataset_path, std::string unterordner) {
@@ -411,7 +278,6 @@ void GroundTruthFlow::make_video_from_png(const Dataset &dataset_path, std::stri
     }
 
     video_write.release();
-
 }
 
 

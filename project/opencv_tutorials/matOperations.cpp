@@ -293,6 +293,16 @@ int main ( int argc, char *argv[]) {
         samples_xy.push_back(t);
     }
 
+    // Two matrices sample
+    cv::Mat_<uchar> x_sample(1, 9);
+    x_sample << 1, 3, 2, 5, 8, 7, 12, 2, 4;
+    cv::Mat_<uchar> y_sample(1, 9);
+    y_sample << 8, 6, 9, 4, 3, 3, 2, 7, 7;
+    std::vector<cv::Mat> matgt_next_ptsr;
+    matgt_next_ptsr.push_back(x_sample);
+    matgt_next_ptsr.push_back(y_sample);
+    //cv::calcCovarMatrix( &matgt_next_ptsr, 2, covar_x, mean_x, cv::COVAR_NORMAL|cv::COVAR_ROWS, CV_32FC1);
+
     /*
     //Very very large operation
     // allocates 1 matrices sized 100 by 100 by 100

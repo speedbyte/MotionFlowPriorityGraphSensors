@@ -11,8 +11,9 @@
 #include <opencv2/core/persistence.hpp>
 #include "Dataset.h"
 #include "PlotFlow.h"
+#include "OpticalFlow.h"
 
-class AlgorithmFlow {
+class AlgorithmFlow : public OpticalFlow {
 
     // Each point on GroundTruthFlow is a vector of points in AlgorithmFlow. Hence both the base and fast movement
     // consists of an additional vector wrappper.

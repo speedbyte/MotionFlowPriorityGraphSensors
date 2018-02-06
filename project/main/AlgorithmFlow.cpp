@@ -349,9 +349,11 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 std::cout << "frame_count " << frame_count << std::endl;
                 fs << "frame_count" << frame_count;
 
+
                 for ( it = frame_pixel_point_pixel_displacement.at(count).begin(); it !=
                         frame_pixel_point_pixel_displacement.at(count).end(); it++ )
                 {
+
                     F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
                     F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
                     F_result_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);

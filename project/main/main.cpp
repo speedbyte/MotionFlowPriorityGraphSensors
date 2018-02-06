@@ -204,7 +204,8 @@ int main ( int argc, char *argv[]) {
                 GroundTruthFlow gt_flow(list_of_objects);
                 gt_flow.generate_gt_scenepixel_displacement();
 
-                gt_flow.calcCovarMatrix();
+                VectorRobustness vectorRobustness;
+                vectorRobustness.generateVectorRobustness(gt_flow);
 
             }
 
@@ -221,9 +222,11 @@ int main ( int argc, char *argv[]) {
             if ( cpp_dataset.plot ) {
 
                 PixelRobustness robust;
+                VectorRobustness vectorRobustness;
                 std::string resultordner;
                 fback.setResultOrdner(fb, continous_frames, no_noise);
                 robust.generatePixelRobustness(fback.getResultOrdner());
+                vectorRobustness.generateVectorRobustness(fback);
                 //PlotFlow::plot(std::string("results_FB_no_noise"));
                 //PlotFlow::plot(std::string("results_LK_no_noise"));
 
