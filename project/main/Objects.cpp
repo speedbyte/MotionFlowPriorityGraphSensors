@@ -131,14 +131,14 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
 // gt_displacement
             int prev_pts_x = 0;
             int prev_pts_y = 0;
-            int next_pts_x = 0;
-            int next_pts_y = 0;
-            int displacement_vector_x = 0;
-            int displacement_vector_y = 0;
+            float next_pts_x = 0;
+            float next_pts_y = 0;
+            float displacement_vector_x = 0;
+            float displacement_vector_y = 0;
 
             const unsigned CLUSTER_SIZE = (unsigned)m_obj_extrapolated_shape_pixel_point_pixel_displacement.at
-                            (frame_skip - 1)
-                    .at(frame_count).size();
+                            (frame_skip - 1).at(frame_count).size();
+
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
                 cv::Point2i pts = m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).first;
@@ -151,15 +151,15 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
             }
             next_pts_x /= CLUSTER_SIZE;
             next_pts_y /= CLUSTER_SIZE;
-            displacement_vector_x /= (int)CLUSTER_SIZE;
-            displacement_vector_y /= (int)CLUSTER_SIZE;
+            displacement_vector_x /= (float)CLUSTER_SIZE;
+            displacement_vector_y /= (float)CLUSTER_SIZE;
             //prev_pts_x = next_pts_x - displacement_vector_x;
             //prev_pts_y = next_pts_y - displacement_vector_y;
 
             // I should return the vector instead of points and then normalize it.
             multiframe_flowvector.push_back(std::make_pair(cv::Point2i(int(std::round(next_pts_x)), int(
-                    (std::round(next_pts_y)))), cv::Point2d
-                    (int(std::round(displacement_vector_x)), int(std::round(displacement_vector_y)))));
+                    (std::round(next_pts_y)))), cv::Point2f
+                    (displacement_vector_x, displacement_vector_y)));
 
 
         }
@@ -177,64 +177,54 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
 // gt_displacement
             cv::Point2i next_pts = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
                     .at(frame_count).first;
-            cv::Point2i  displacement_vector = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
+            cv::Point2f  displacement_vector = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
                             (frame_skip - 1).at(frame_count).second;
 
-            cv::Vec<float, 4> line_in_cartesian_coordinates = {displacement_vector.x, -displacement_vector.y,
-                                                               next_pts.x, -next_pts.y};
-
             float m, c;
-            m = line_in_cartesian_coordinates[1] / line_in_cartesian_coordinates[0];
-            c = line_in_cartesian_coordinates[3] - line_in_cartesian_coordinates[2] * m;
+            m = displacement_vector.y / displacement_vector.x;
+            c = next_pts.y - next_pts.x * m;
 
-            float d = (float) sqrt((double) line_in_cartesian_coordinates[0] * line_in_cartesian_coordinates[0] +
-                                   (double) line_in_cartesian_coordinates[1] * line_in_cartesian_coordinates[1]);
-            line_in_cartesian_coordinates[0] /= d; // normalized vector in x
-            line_in_cartesian_coordinates[1] /= d; // normalized vector in y
+            //float d = (float) sqrt((double) displacement_vector.x * displacement_vector.x +
+            //                       (double) displacement_vector.y * displacement_vector.y);
+            //displacement_vector.x /= d; // normalized vector in x
+            //displacement_vector.y /= d; // normalized vector in y
 
             cv::Point pt1, pt2;
-            pt1.x = cvRound(line_in_cartesian_coordinates[2]); // 700
-            pt1.y = cvRound(-line_in_cartesian_coordinates[3]); // again change to pixel coordinates
+            pt1.x = cvRound(next_pts.x); // 700
+            pt1.y = cvRound(-next_pts.y); // again change to pixel coordinates
 
             if (std::isinf(m)) {
-                if (line_in_cartesian_coordinates[1] >
+                if (displacement_vector.y >  // negative ( means arrow pointing down )
                     0.0f) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point on y = height
                     pt2.x = pt1.x; //
                     pt2.y = 0;
-                    pt2.y = -pt2.y; // again change to pixel coordinates
                     //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
                 } else {
                     pt2.x = pt1.x; //
                     pt2.y = -Dataset::getFrameSize().height;
-                    pt2.y = -pt2.y; // again change to pixel coordinates
                     //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
                 }
             } else if (m == 0) {
                 if (std::signbit(m)) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point
                     pt2.x = 0; //
                     pt2.y = pt1.y;
-                    //pt2.y = -pt2.y; // again change to pixel coordinates
                     //std::cout << temp_gt_flow_image_path << " " << pt1 << " " << m << " " << pt2 << std::endl;
                 } else {
                     pt2.x = Dataset::getFrameSize().width; //
                     pt2.y = pt1.y;
-                    //pt2.y = -pt2.y; // again change to pixel coordinates
                     //std::cout << temp_gt_flow_image_path << " " << pt1 << " " << m << " " << pt2 << std::endl;
                 }
             } else {
 
-                if (line_in_cartesian_coordinates[1] >
-                    0.0f) { //  if going up ( displacement.y in cartesian > 0 ) then, find x point on y = height
+                if (displacement_vector.y >  // negative ( means arrow pointing down )
+                    0.0f) {
                     pt2.x = cvRound((Dataset::getFrameSize().height - c) / m); //
                     pt2.y = Dataset::getFrameSize().height;
-                    pt2.y = -pt2.y; // again change to pixel coordinates
                     //std::cout << temp_gt_flow_image_path << " " << pt1 <<  " " << m << " " << pt2<< std::endl;
-                } else if (line_in_cartesian_coordinates[1] <
-                           0.0f) { //  if going down ( displacement.y in cartesian < 0 ) then, find x point on
-                    // y = 0
-                    pt2.x = int((-(float) Dataset::getFrameSize().height - c) / m); //
-                    pt2.y = -Dataset::getFrameSize().height; // again change to pixel coordinates
-                    pt2.y = -pt2.y; // again change to pixel coordinates
+                } else if (displacement_vector.y <
+                           0.0f) {
+                    pt2.x = (int)(-c/m); //
+                    pt2.y = 0;
                     //std::cout << temp_gt_flow_image_path << " " << line <<  " " << m << " " << pt2.x << std::endl;
                 }
             }

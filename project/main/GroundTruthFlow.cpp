@@ -194,18 +194,18 @@ frame_count, std::vector<Objects> list_objects) {
         cv::Point2f lineparameters2 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
                 .at(frame_count).second;
 
-        // first fill row
-        cv::Matx<float,2,2> coefficients (-1,-lineparameters1.x,-1,lineparameters2.x);
+        // first fill rowco
+        cv::Matx<float,2,2> coefficients (-1,-lineparameters1.x,-1,-lineparameters2.x);
         cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
 
         cv::Matx<float,2,1> result_manual;
-        result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
+        //result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
         result_manual = coefficients.solve(rhs);
 
         cv::circle(tempMatrix, cv::Point(result_manual(0,0), result_manual(1,0)), 20, cv::Scalar(0, 255, 0), -1,
                    cv::LINE_AA);
 
-        std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
+        //std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
 
     }
 

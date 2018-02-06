@@ -22,7 +22,7 @@ void Achterbahn::process(cv::Size frame_size) {
         theta.push_back(frame_count);
     }
     // Prepare points
-    cv::Point2i l_pixel_position;
+    cv::Point2f l_pixel_position;
     for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
 
         l_pixel_position.x = (static_cast<ushort>((frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /

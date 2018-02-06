@@ -391,6 +391,16 @@ void solveLinear() {
     cv::solve(coefficients, rhs, result_static);
     std::cout << result_static << std::endl;
 
+    cv::Matx<float,2,2> coefficients2d (2,-3,5,6);
+    cv::Matx<float,2,1> rhs2d(3,6);
+    std::cout << coefficients2d.inv();
+    std::cout << "---------2d object method solving linear equation\n";
+    cv::Matx<cv::Complexf,2,1> result_object2d = coefficients2d.solve(rhs2d); // equivalent to coefficients.inv()*rhs
+    std::cout << result_object2d << cv::determinant(coefficients2d) << std::endl;
+
+    cv::Matx33f coefficient = {1,2,3,4,5,6,7,8,9};
+    float determinant  = cv::determinant(coefficient);
+    std::cout << coefficient.t() << determinant;
 
 }
 
@@ -479,7 +489,7 @@ int main ( int argc, char *argv[]) {
     //fitLine();
 
     std::cout << "\ncartToPolar----------------------------------------------" << std::endl;
-    cartToPolar();
+    //cartToPolar();
     std::cout << "\npolarToCart----------------------------------------------" << std::endl;
     //polarToCart();
     std::cout << "\ncalcCovarMatrix----------------------------------------------" << std::endl;
@@ -498,7 +508,7 @@ int main ( int argc, char *argv[]) {
     //eigen();
     std::cout << "\nlinear least square----------------------------------------------" << std::endl;
     //linearLeastSquare();
-    std::cout << (1%1) << (2%1) << (1%2) << (5%3) << (3%5) << (4%1) << (0%4);
+    //std::cout << (1%1) << (2%1) << (1%2) << (5%3) << (3%5) << (4%1) << (0%4);
 
     return 0;
 
