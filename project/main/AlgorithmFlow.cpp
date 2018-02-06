@@ -120,7 +120,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         ushort count = 0;
         std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
 
-        FlowImageExtended F_result_write_trajectory(Dataset::getFrameSize().width, Dataset::getFrameSize()
+        FlowImageExtended F_png_write_trajectory(Dataset::getFrameSize().width, Dataset::getFrameSize()
                 .height);
 
 
@@ -297,7 +297,60 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     }
                 }
 
-                storeData(prev_pts, next_pts, status, frame_pixel_point_pixel_displacement);
+                unsigned count = 0;
+
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_points;
+                for (unsigned i = 0; i < next_pts.size(); i++) {
+
+                    int minDist = 1;
+
+                    cv::Point2f result_next_pts, displacement;
+                    cv::Point2f algorithmMovement ((next_pts[i].x - prev_pts[i].x), (next_pts[i].y - prev_pts[i]
+                            .y));
+
+                    // Check if the status vector is good
+                    if (!status[i])
+                        continue;
+
+
+                    printf("flow_frame.at<cv::Point2f>(%f, %f).x =  %f\n", next_pts[i].x, next_pts[i].y,
+                           algorithmMovement.x);
+                    printf("flow_frame.at<cv::Point2f>(%f, %f).y =  %f\n", next_pts[i].x, next_pts[i].y,
+                           algorithmMovement.y);
+
+                    displacement.x = cvRound( algorithmMovement.x + 0.5);
+                    displacement.y = cvRound( algorithmMovement.y + 0.5);
+
+                    /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
+                    // auto dist = cv::norm(prev_pts[i] - next_pts[i]);
+                    double dist;
+                    dist = pow(displacement.x,2)+pow(displacement.y,2);
+                    //calculating distance by euclidean formula
+                    dist = sqrt(dist);
+
+                    if ( dist <= minDist ) {
+                        printf("minimum distance for %i is %f\n", i, dist);
+                        continue;
+                    }
+
+                    if ( displacement.x == 0 && displacement.y == 0) {
+                        continue;
+                    }
+
+                    next_pts[count++] = next_pts[i];
+
+                    // result_next_pts is the new pixel position !
+                    result_next_pts.x = std::abs(cvRound(next_pts[i].x));
+                    result_next_pts.y = std::abs(cvRound(next_pts[i].y));
+
+                    printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", i,
+                           result_next_pts.x, result_next_pts.y, displacement.x, displacement.y);
+                    // Lines to indicate the motion vectors
+                    frame_points.push_back(std::make_pair(result_next_pts, displacement));
+                }
+                frame_pixel_point_pixel_displacement.push_back(frame_points);
+                next_pts.resize(count);
+
 
                 for (unsigned i = 0; i < next_pts.size(); i++) {
                     cv::arrowedLine(image_02_frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0));
@@ -342,7 +395,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
                 //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
                 //kitti uses col, row specification
-                FlowImageExtended F_result_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+                FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator it ;
 
@@ -354,20 +407,20 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                         frame_pixel_point_pixel_displacement.at(count).end(); it++ )
                 {
 
-                    F_result_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
-                    F_result_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
-                    F_result_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+                    F_png_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
+                    F_png_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
+                    F_png_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
                     store_in_yaml(fs, (*it).first, (*it).second ); // coordinate - > movement y(row),x(col) ; x,y
 
-                    F_result_write_trajectory.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
-                    F_result_write_trajectory.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
-                    F_result_write_trajectory.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+                    F_png_write_trajectory.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
+                    F_png_write_trajectory.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
+                    F_png_write_trajectory.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
 
                 }
 
                 count++;
-                F_result_write.write(temp_result_flow_path);
-                F_result_write_trajectory.write(temp_result_trajectory_path);
+                F_png_write.write(temp_result_flow_path);
+                F_png_write_trajectory.write(temp_result_trajectory_path);
 
             }
 
@@ -387,7 +440,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
             prevGray = curGray.clone();
         }
 
-        //F_result_write_trajectory.write(temp_result_flow_path);
+        //F_png_write_trajectory.write(temp_result_flow_path);
         m_algo_frame_pixel_point_pixel_displacement.push_back(frame_pixel_point_pixel_displacement);
         fs.release();
 
@@ -415,64 +468,6 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
     }
 }
 
-void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts,
-                           const std::vector<uchar> status, std::vector<std::vector<std::pair<cv::Point2f,
-        cv::Point2f> > > &frame_pixel_point_pixel_displacement) {
-
-    unsigned count = 0;
-
-    std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_points;
-    for (unsigned i = 0; i < next_pts.size(); i++) {
-
-        int minDist = 1;
-
-        cv::Point2f result_next_pts, result_displacement;
-        cv::Point2f algorithmMovement ((next_pts[i].x - prev_pts[i].x), (next_pts[i].y - prev_pts[i]
-                .y));
-
-        // Check if the status vector is good
-        if (!status[i])
-            continue;
-
-
-        printf("flow_frame.at<cv::Point2f>(%f, %f).x =  %f\n", next_pts[i].x, next_pts[i].y,
-               algorithmMovement.x);
-        printf("flow_frame.at<cv::Point2f>(%f, %f).y =  %f\n", next_pts[i].x, next_pts[i].y,
-               algorithmMovement.y);
-
-        result_displacement.x = cvRound( algorithmMovement.x + 0.5);
-        result_displacement.y = cvRound( algorithmMovement.y + 0.5);
-
-        /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
-        // auto dist = cv::norm(prev_pts[i] - next_pts[i]);
-        double dist;
-        dist = pow(result_displacement.x,2)+pow(result_displacement.y,2);
-        //calculating distance by euclidean formula
-        dist = sqrt(dist);
-
-        if ( dist <= minDist ) {
-            printf("minimum distance for %i is %f\n", i, dist);
-            continue;
-        }
-
-        if ( result_displacement.x == 0 && result_displacement.y == 0) {
-            continue;
-        }
-
-        next_pts[count++] = next_pts[i];
-
-        // result_next_pts is the new pixel position !
-        result_next_pts.x = std::abs(cvRound(next_pts[i].x));
-        result_next_pts.y = std::abs(cvRound(next_pts[i].y));
-
-        printf("(iteration %u, coordinates x y (%i,%i) ->  Vx, Vy (%d,%d) \n", i,
-               result_next_pts.x, result_next_pts.y, result_displacement.x, result_displacement.y);
-        // Lines to indicate the motion vectors
-        frame_points.push_back(std::make_pair(result_next_pts, result_displacement));
-    }
-    frame_pixel_point_pixel_displacement.push_back(frame_points);
-    next_pts.resize(count);
-}
 
 
 void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
