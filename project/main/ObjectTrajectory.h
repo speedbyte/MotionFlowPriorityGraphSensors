@@ -19,15 +19,15 @@
 class ObjectTrajectory {
 
 protected:
-    std::vector<cv::Point2i> m_trajectory;
+    std::vector<cv::Point2f> m_trajectory;
 
 public:
 
     ObjectTrajectory() {};
 
-    virtual void process(cv::Size framesize)  {};
+    virtual void process(cv::Size frame_size)  {};
 
-    std::vector<cv::Point2i> get() {
+    std::vector<cv::Point2f> get() {
         return m_trajectory;
     }
 
@@ -39,9 +39,20 @@ public:
 
     Achterbahn() {};
 
-    void process(cv::Size framesize) override ;
+    void process(cv::Size frame_size) override ;
 
 };
+
+class Circle : public ObjectTrajectory {
+
+public:
+
+    Circle() {};
+
+    void process(cv::Size frame_size) override ;
+
+};
+
 
 class NoTrajectory: public ObjectTrajectory {
 
@@ -49,8 +60,8 @@ public:
 
     NoTrajectory() {};
 
-    void process(cv::Size framesize) override {
-        m_trajectory.push_back(cv::Point2i(0,0));
+    void process(cv::Size frame_size) override {
+        m_trajectory.push_back(cv::Point2f(0,0));
     };
 
 };

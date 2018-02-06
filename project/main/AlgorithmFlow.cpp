@@ -192,7 +192,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::vector<cv::Point2f> next_pts_healthy;
 
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
-        std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > frame_pixel_point_pixel_displacement;
+        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > frame_pixel_point_pixel_displacement;
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
@@ -344,7 +344,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 //kitti uses col, row specification
                 FlowImageExtended F_result_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-                std::vector<std::pair<cv::Point2i, cv::Point2i> >::iterator it ;
+                std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator it ;
 
                 std::cout << "frame_count " << frame_count << std::endl;
                 fs << "frame_count" << frame_count;
@@ -414,17 +414,17 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 }
 
 void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vector<cv::Point2f> &next_pts,
-                           const std::vector<uchar> status, std::vector<std::vector<std::pair<cv::Point2i,
-        cv::Point2i> > > &frame_pixel_point_pixel_displacement) {
+                           const std::vector<uchar> status, std::vector<std::vector<std::pair<cv::Point2f,
+        cv::Point2f> > > &frame_pixel_point_pixel_displacement) {
 
     unsigned count = 0;
 
-    std::vector<std::pair<cv::Point2i, cv::Point2i> > frame_points;
+    std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_points;
     for (unsigned i = 0; i < next_pts.size(); i++) {
 
         int minDist = 1;
 
-        cv::Point2i result_next_pts, result_displacement;
+        cv::Point2f result_next_pts, result_displacement;
         cv::Point2f algorithmMovement ((next_pts[i].x - prev_pts[i].x), (next_pts[i].y - prev_pts[i]
                 .y));
 
@@ -473,7 +473,7 @@ void AlgorithmFlow::storeData(const std::vector<cv::Point2f> &prev_pts, std::vec
 }
 
 
-void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2i &l_pixelposition, const cv::Point2i
+void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
 &l_pixelmovement )  {
 
     fs << "gt flow png file read" << "[";

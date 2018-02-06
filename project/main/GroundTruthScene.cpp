@@ -121,29 +121,29 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             std::string trajectory_image_file_with_path = Dataset::getGroundTruthTrajectoryPath().string() + "/" +
                     folder_name_flow + "/" + file_name_image;
 
-            std::vector<cv::Point2i> trajectory_points = m_list_objects.at(i).getTrajectoryPoints().get();
+            std::vector<cv::Point2f> trajectory_points = m_list_objects.at(i).getTrajectoryPoints().get();
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
             trajectoryShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
 
             image_data_and_shape.copyTo(tempGroundTruthImage(
-                    cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
-                                     (current_index.at(i)).y, image_data_and_shape.cols, image_data_and_shape.rows)));
+                    cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
+                                     (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
 
 
             if ( m_list_objects.at(i).getObjectId() == 1 ) {
                 trajectoryShape = cv::Scalar(255,0,0);
                 trajectoryShape.copyTo(tempGroundTruthTrajectory(
-                        cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
-                                (current_index.at(i)).y, image_data_and_shape.cols, image_data_and_shape.rows)));
+                        cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
+                                (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
                 cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
             }
 
             if ( m_list_objects.at(i).getObjectId() == 2 ) {
                 trajectoryShape = cv::Scalar(0,255,0);
                 trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
-                        cv::Rect(trajectory_points.at(current_index.at(i)).x, trajectory_points.at
-                                (current_index.at(i)).y, image_data_and_shape.cols, image_data_and_shape.rows)));
+                        cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
+                                (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
                 cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
             }
 

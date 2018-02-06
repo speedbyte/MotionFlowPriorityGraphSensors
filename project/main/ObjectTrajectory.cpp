@@ -25,14 +25,36 @@ void Achterbahn::process(cv::Size frame_size) {
     cv::Point2f l_pixel_position;
     for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
 
-        l_pixel_position.x = (static_cast<ushort>((frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /
-                                                                            (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2)))));
+        l_pixel_position.x = static_cast<float>((frame_size.width/2) + (500 * cos(theta[i] *CV_PI / 180.0) /
+                                                                            (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
 
-        l_pixel_position.y = (static_cast<ushort>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
-                                                                                   sin(theta[i] * CV_PI / 180.0)) / (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2)))));
+        l_pixel_position.y = static_cast<float>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
+                                                                                   sin(theta[i] * CV_PI / 180.0)) /
+                (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
 
         m_trajectory.push_back(l_pixel_position);
     }
 }
 
 
+void Circle::process(cv::Size frame_size) {
+    ObjectTrajectory::process(frame_size);
+    std::vector<ushort> theta;
+    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
+        theta.push_back(frame_count);
+    }
+    // Prepare points
+    cv::Point2f l_pixel_position;
+    for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
+
+        //l_pixel_position.x = static_cast<float>((frame_size.width/2) + 10 * cos(theta[i]));
+
+        //l_pixel_position.y = static_cast<float>((frame_size.height/2) + 10 * sin(theta[i]));
+
+        l_pixel_position.x = static_cast<float>(30 + 10 * cos(theta[i]));
+
+        l_pixel_position.y = static_cast<float>(300 + 10 * sin(theta[i]));
+
+        m_trajectory.push_back(l_pixel_position);
+    }
+}

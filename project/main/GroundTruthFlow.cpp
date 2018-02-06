@@ -82,7 +82,7 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
     cv::FileStorage fs;
     fs.open(Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
             cv::FileStorage::WRITE);
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2i> > > objects;
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > objects;
 
     std::vector<Objects>::iterator objectIterator = m_list_objects.begin();
     std::vector<Objects>::iterator  objectIteratorNext;
@@ -158,29 +158,31 @@ frame_count, std::vector<Objects> list_objects) {
 
 
         // gt_displacement
-        cv::Point2i gt_next_pts = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1)
+        cv::Point2f gt_next_pts = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1)
                 .at(frame_count).first;
-        cv::Point2i gt_displacement = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip
+        cv::Point2f gt_displacement = list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip
                                                                                                           - 1)
                 .at(frame_count).second;
 
-        cv::Point2i gt_next_pts_mean = list_objects.at(i).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip
+        cv::Point2f gt_next_pts_mean = list_objects.at(i).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip
                                                                                                           - 1)
                 .at(frame_count).first;
-        cv::Point2i gt_line_pts = list_objects.at(i).getLineParameters().at(frame_skip - 1)
+        cv::Point2f gt_line_pts = list_objects.at(i).getLineParameters().at(frame_skip - 1)
                 .at(frame_count).second;
 
 
         cv::Mat roi;
         roi = tempMatrix.
-                colRange(gt_next_pts.x, (gt_next_pts.x + width)).
-                rowRange(gt_next_pts.y, (gt_next_pts.y + height));
+                colRange(cvRound(gt_next_pts.x), cvRound(gt_next_pts.x + width)).
+                rowRange(cvRound(gt_next_pts.y), cvRound(gt_next_pts.y + height));
         //bulk storage
         roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(list_objects.at(i).getObjectId()));
 
         // find the optimal line
         //cv::fitLine( points, line, cv::DIST_L1, 1, 0.001, 0.001);
 
+        //std::cout << gt_next_pts_mean << " " << gt_line_pts << std::endl;
+        // cv line is intelligent and it can also project to values not within the frame size including negative values.
         cv::line(tempMatrix, gt_next_pts_mean, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
 
 
@@ -191,22 +193,21 @@ frame_count, std::vector<Objects> list_objects) {
         cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
                 .at(frame_count).first;
 
-        cv::Point2f lineparameters2 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
-                .at(frame_count).second;
+        cv::Point2f lineparameters2 = m_list_objects_combination.at(i).second.getLineParameters().at(frame_skip - 1)
+                .at(frame_count).first;
 
         // first fill rowco
-        cv::Matx<float,2,2> coefficients (-1,-lineparameters1.x,-1,-lineparameters2.x);
+        cv::Matx<float,2,2> coefficients (1,-lineparameters1.x,1,-lineparameters2.x);
         cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
 
         cv::Matx<float,2,1> result_manual;
-        //result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
-        result_manual = coefficients.solve(rhs);
-
-        cv::circle(tempMatrix, cv::Point(result_manual(0,0), result_manual(1,0)), 20, cv::Scalar(0, 255, 0), -1,
+        assert ( cv::determinant(coefficients ) != 0 );
+        result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
+        //result_manual = coefficients.solve(rhs);
+        cv::circle(tempMatrix, cv::Point2f(result_manual(0,0), result_manual(1,0)), 20, cv::Scalar(0, 255, 0), -1,
                    cv::LINE_AA);
 
-        //std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
-
+        std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
     }
 
     //Create png Matrix with 3 channels: x gt_displacement. y displacment and ObjectId
@@ -216,7 +217,7 @@ frame_count, std::vector<Objects> list_objects) {
                 F_gt_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
                 F_gt_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
                 F_gt_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
-                //trajectory.store_in_yaml(fs, cv::Point2i(row, column), cv::Point2i(xValue, yValue) );
+                //trajectory.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
             }
         }
     }
