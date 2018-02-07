@@ -32,6 +32,10 @@ int main(int argc, char *argv[]) {
     std::cout << std::endl;
     c.printC();
 
+    b.setA();
+    b.printA();
+
+
     //std::cout << b.getA();
 
     /* -------------- */

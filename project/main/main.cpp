@@ -170,24 +170,32 @@ int main ( int argc, char *argv[]) {
 
             if ( cpp_dataset.gt ) {
 
-                Rectangle background(1242, 375);
+                // Trajectories
                 NoTrajectory noTrajectory;
+                noTrajectory.process(Dataset::getFrameSize());
+                Achterbahn achterbahn1, achterbahn2;
+                achterbahn1.process(Dataset::getFrameSize());
+                //achterbahn1.setDynamic();
+                achterbahn2.process(Dataset::getFrameSize());
+                //achterbahn2.setDynamic();
 
-                // Canvas is itself registered as an Object with a dummy trajectory
-                WhiteNoise whiteNoise;
-                ColorfulNoise colorfulNoise;
-                Canvas canvas(background, noTrajectory, 60, whiteNoise);
-
-                // Further objects
-                Rectangle rectangle(30, 30); // width, height
-                Achterbahn achterbahn;
-                NoNoise noNoise;
+                // Shapes
+                Rectangle background(1242, 375);
+                Rectangle rectangle1(30, 30); // width, height
+                Rectangle rectangle2(30, 30); // width, height
                 //Circle circle;
                 //Ramp ramp;
                 //NegativeRamp negativeRamp;
 
-                Objects obj1(rectangle, achterbahn, 120, noNoise, "rectangle_wide", true);
-                Objects obj2(rectangle, achterbahn, 60, colorfulNoise, "rectangle_long", false);
+                // Noise
+                WhiteNoise whiteNoise;
+                ColorfulNoise colorfulNoise;
+                NoNoise noNoise;
+
+                // Canvas is itself registered as an Object with a dummy trajectory
+                Canvas canvas(background, noTrajectory, 60, whiteNoise);
+                Objects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide", true);
+                Objects obj2(rectangle2, achterbahn2, 60, colorfulNoise, "rectangle_long", false);
                 //Objects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
                 //Objects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
                 //Objects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");

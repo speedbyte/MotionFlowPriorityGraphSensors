@@ -8,6 +8,8 @@
 
 #include "Dataset.h"
 #include "ObjectImageShapeData.h"
+#include <iostream>
+#include "datasets.h"
 #include <opencv2/core/cvdef.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -20,19 +22,63 @@ class ObjectTrajectory {
 
 protected:
     std::vector<cv::Point2f> m_trajectory;
+    std::vector<bool> m_visibility;
 
 public:
 
-    ObjectTrajectory() {};
+    ObjectTrajectory() {
+        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
+            m_visibility.push_back(true);
+        }
+    };
 
-    virtual void process(cv::Size frame_size)  {};
+    virtual void process(cv::Size frame_size) {};
 
-    std::vector<cv::Point2f> get() {
+    std::vector<cv::Point2f> getTrajectory() const {
         return m_trajectory;
     }
 
-    virtual void setDynamic();
+    std::vector<bool> getVisibility() const {
+        return m_visibility;
+    }
 
+    void setDynamic() {
+
+        cv::RNG rng(cv::getTickCount());
+        for (ushort i = 0; i < MAX_ITERATION_THETA / 20; i++) {
+            ushort index = (ushort) rng.uniform(0, 360);
+            m_visibility.at(index) = false;
+            m_trajectory.at(index) = cv::Point2f(0.0f, 0.0f);
+        }
+        for ( auto t : m_visibility ) {
+            std::cout << t;
+        }
+        std::cout << std::endl;
+
+        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
+
+            if (i < (m_visibility.size() - 1) && m_visibility.at(i + (ushort) 1) == false) {
+                m_visibility.at(i) = false;
+            }
+        }
+
+        for ( auto t : m_visibility ) {
+            std::cout << t;
+        }
+
+        std::cout << std::endl;
+        for (ushort i = MAX_ITERATION_THETA; i > 0; i--) {
+
+            if (i < (m_visibility.size() - 1) && m_visibility.at(i - (ushort) 1) == false) {
+                m_visibility.at(i) = false;
+            }
+        }
+
+        for ( auto t : m_visibility ) {
+            std::cout << t;
+        }
+        std::cout << std::endl;
+    }
 };
 
 class Achterbahn : public ObjectTrajectory {
@@ -42,8 +88,6 @@ public:
     Achterbahn() {};
 
     void process(cv::Size frame_size) override ;
-
-    void setDynamic() override;
 
 };
 
@@ -83,9 +127,7 @@ public:
 
     NoTrajectory() {};
 
-    void process(cv::Size frame_size) override {
-        m_trajectory.push_back(cv::Point2f(0,0));
-    };
+    void process(cv::Size frame_size) override;
 
 };
 

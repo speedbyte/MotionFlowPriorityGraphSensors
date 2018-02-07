@@ -121,7 +121,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             std::string trajectory_image_file_with_path = Dataset::getGroundTruthTrajectoryPath().string() + "/" +
                     folder_name_flow + "/" + file_name_image;
 
-            std::vector<cv::Point2f> trajectory_points = m_list_objects.at(i).getTrajectoryPoints().get();
+            std::vector<cv::Point2f> trajectory_points = m_list_objects.at(i).getTrajectoryPoints().getTrajectory();
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
             trajectoryShape = m_list_objects.at(i).getImageShapeAndData().get().clone();

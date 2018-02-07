@@ -14,11 +14,12 @@ class CameraSensorImage : public SensorImage {
 protected:
 
     Noise &m_noise;
-    ObjectImageShapeData m_image_data_and_shape; // use a own copy instead of reference.
+    ObjectImageShapeData &m_image_data_and_shape; // TODO use a own copy instead of reference.
 
 public:
 
-    CameraSensorImage(ObjectImageShapeData image_data_and_shape, Noise &noise):m_image_data_and_shape(image_data_and_shape), m_noise(noise) {
+    CameraSensorImage(ObjectImageShapeData &image_data_and_shape, Noise &noise):m_image_data_and_shape
+                                                                                        (image_data_and_shape), m_noise(noise) {
         m_noise.apply(m_image_data_and_shape);
     }
 

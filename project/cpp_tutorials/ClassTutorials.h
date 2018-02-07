@@ -7,17 +7,6 @@
 
 #include <iostream>
 
-class Shape;
-
-class Noise {
-
-public:
-    void changeValue(Shape &shape) {
-        shape.set(50);
-    }
-
-};
-
 class Shape {
 
 protected:
@@ -34,6 +23,15 @@ public:
     virtual void set(int x) {
 
     }
+};
+
+class Noise {
+
+public:
+    void changeValue(Shape &shape) {
+        shape.set(50);
+    }
+
 };
 
 class Rectangle : public Shape {
@@ -100,9 +98,14 @@ public:
     int getA() {
         return a;
     }
+
+    void setA() {
+        a = 100;
+    }
 };
 
 class Derived: public Base {
+
     virtual void printDerived() override {
         a = 20;
         std::cout << "virtual derived to be printed " << a << std::endl;
@@ -118,6 +121,11 @@ public:
         std::cout << "in derived inherit\n";
         printInherit();
     }
+
+    void printA()  {
+        std::cout << "print a" << a << std::endl;
+    }
+
 };
 
 class Derived2: Derived {

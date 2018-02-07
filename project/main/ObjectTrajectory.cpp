@@ -37,10 +37,6 @@ void Achterbahn::process(cv::Size frame_size) {
     }
 }
 
-void Achterbahn::setDynamic() {
-    ObjectTrajectory::setDynamic();
-}
-
 void Circle::process(cv::Size frame_size) {
 
     std::vector<ushort> theta;
@@ -103,13 +99,12 @@ void NegativeRamp::process(cv::Size frame_size) {
     }
 }
 
-void ObjectTrajectory::setDynamic() {
-    cv::RNG rng;
-    for ( ushort i = 0; i < MAX_ITERATION_THETA/10; i++) {
+void NoTrajectory::process(cv::Size frame_size) {
 
-        ushort index = (ushort)rng.uniform(0, 360);
-        std::cout << index;
-        m_trajectory.at(index) = cv::Point2f(0.0f, 0.0f);
+    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
+        m_trajectory.push_back(cv::Point2f(0, 0));
     }
 
-}
+};
+
+

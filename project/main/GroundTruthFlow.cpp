@@ -102,7 +102,7 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-        unsigned FRAME_COUNT = m_list_objects.at(0).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1).size();
+        unsigned FRAME_COUNT = m_list_objects.at(0).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1).size();
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char file_name_image[50];
@@ -130,26 +130,19 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
                 int width = m_list_objects.at(i).getImageShapeAndData().get().cols;
                 int height = m_list_objects.at(i).getImageShapeAndData().get().rows;
 
+                if ( m_list_objects.at(i).getExtrapolatedVisibility().at(frame_skip - 1).at(frame_count) == true ) {
 
-                // gt_displacement
-                cv::Point2f next_pts = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip - 1)
-                        .at(frame_count).first;
-                cv::Point2f displacement = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at(frame_skip
-                                                                                                                  - 1)
-                        .at(frame_count).second;
-
-                cv::Point2f gt_next_pts_mean = m_list_objects.at(i).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip
+                    // gt_displacement
+                    cv::Point2f next_pts = m_list_objects.at(i).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1)
+                            .at(frame_count).first;
+                    cv::Point2f displacement = m_list_objects.at(i).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip
                                                                                                                      - 1)
-                        .at(frame_count).first;
-                cv::Point2f gt_line_pts = m_list_objects.at(i).getLineParameters().at(frame_skip - 1)
-                        .at(frame_count).second;
+                            .at(frame_count).second;
+
+                    cv::Point2f gt_line_pts = m_list_objects.at(i).getLineParameters().at(frame_skip - 1)
+                            .at(frame_count).second;
 
 
-                if ( ( next_pts.x ) > 0 &&
-                     ( next_pts.y ) > 0 &&
-                     ( next_pts.x ) < Dataset::getFrameSize().width  &&
-                     ( next_pts.y ) < Dataset::getFrameSize().height
-                        ) {
                     cv::Mat roi;
                     roi = tempMatrix.
                             colRange(cvRound(next_pts.x), cvRound(next_pts.x + width)).
@@ -157,38 +150,51 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
                     //bulk storage
                     roi = cv::Scalar(displacement.x, displacement.y,
                                      static_cast<float>(m_list_objects.at(i).getObjectId()));
+
+                    // cv line is intelligent and it can also project to values not within the frame size including negative values.
+                    cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                 }
-
-                // cv line is intelligent and it can also project to values not within the frame size including negative values.
-                cv::line(tempMatrix, gt_next_pts_mean, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
-
             }
 
             std::vector<cv::Point2f> collision_points;
 
             for ( unsigned i = 0; i < m_list_objects_combination.size(); i++) {
 
-                cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
-                        .at(frame_count).first;
+                if ( ( m_list_objects_combination.at(i).first.getExtrapolatedVisibility().at(frame_skip - 1)
+                        .at(frame_count) == true ) && ( m_list_objects_combination.at(i).second
+                                                                              .getExtrapolatedVisibility()
+                                                                                  .at(frame_skip - 1)
+                                                                                  .at(frame_count) == true )) {
 
-                cv::Point2f lineparameters2 = m_list_objects_combination.at(i).second.getLineParameters().at(frame_skip - 1)
-                        .at(frame_count).first;
+                    cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
+                            .at(frame_count).first;
 
-                // first fill rowco
-                cv::Matx<float,2,2> coefficients (-lineparameters1.x,1,-lineparameters2.x,1);
-                cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
+                    cv::Point2f lineparameters2 = m_list_objects_combination.at(i).second.getLineParameters().at(frame_skip - 1)
+                            .at(frame_count).first;
 
-                std::cout << "object 1  = " << lineparameters1 << " and object 2 = " << lineparameters2 << std::endl ;
+                    // first fill rowco
+                    cv::Matx<float,2,2> coefficients (-lineparameters1.x,1,-lineparameters2.x,1);
+                    cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
 
-                cv::Matx<float,2,1> result_manual;
-                assert ( cv::determinant(coefficients ) != 0 );
-                result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
-                //result_manual = coefficients.solve(rhs);
-                cv::circle(tempMatrix, cv::Point2f(result_manual(0,0), result_manual(1,0)), 5, cv::Scalar(0, 255, 0), -1,
-                           cv::LINE_AA);
+                    std::cout << "object 1  = " << lineparameters1 << " and object 2 = " << lineparameters2 << std::endl ;
 
-                std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
-                collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
+                    cv::Matx<float,2,1> result_manual;
+                    assert ( cv::determinant(coefficients ) != 0 );
+                    if ( cv::determinant(coefficients ) != 0 ) {
+                        result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
+                        //result_manual = coefficients.solve(rhs);
+                        cv::circle(tempMatrix, cv::Point2f(result_manual(0,0), result_manual(1,0)), 5, cv::Scalar(0, 255, 0), -1,
+                                   cv::LINE_AA);
+
+                        std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
+                        collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
+                    }
+                    else {
+                        result_manual(0,0) = -5;
+                        result_manual(1,0) = -5;
+                        collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
+                    }
+                }
             }
 
             m_frame_collision_points.push_back(collision_points);

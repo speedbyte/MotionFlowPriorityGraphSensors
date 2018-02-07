@@ -12,8 +12,6 @@ class RobustnessIndex {
 
 public:
 
-
-
 };
 
 
