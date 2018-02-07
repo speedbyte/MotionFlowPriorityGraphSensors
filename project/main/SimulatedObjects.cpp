@@ -5,6 +5,7 @@
 #include "SimulatedObjects.h"
 #include "Dataset.h"
 
+unsigned SimulatedObjects::SimulatedobjectCurrentCount = 0;
 
 void SimulatedObjects::generate_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const unsigned
                                                                                              &max_skips) {

@@ -17,6 +17,10 @@ private:
 
     const std::string m_objectName;
 
+    int m_simulatedObjectWidth;
+
+    int m_simulatedObjectHeight;
+
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_algo_frame_pixel_point_pixel_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
@@ -28,10 +32,13 @@ private:
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             m_simulated_obj_line_parameters;
 
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
 
 public:
 
-    SimulatedObjects(unsigned objectId, std::string objectName ) : m_objectId(objectId), m_objectName(objectName) {
+    SimulatedObjects(unsigned objectId, std::string objectName, int width, int height) :
+            m_objectId(objectId), m_objectName(objectName), m_simulatedObjectWidth(width), m_simulatedObjectHeight
+            (height) {
         SimulatedobjectCurrentCount += 1;
     }
 
@@ -52,8 +59,6 @@ public:
         return m_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
     }
 
-
-
     unsigned getObjectId() const {
         return m_objectId;
     }
@@ -62,6 +67,22 @@ public:
         return m_objectName;
     }
 
+    void set_outer_base_movement(std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement) {
+        outer_base_movement.push_back(base_movement);
+    }
+
+    void trigger_m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement() {
+        m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement.push_back(outer_base_movement);
+        outer_base_movement.clear();
+    }
+
+    int getWidth() const {
+        return m_simulatedObjectWidth;
+    }
+
+    int getHeight() const {
+        return m_simulatedObjectHeight;
+    }
 
 
 };

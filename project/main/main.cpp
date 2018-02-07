@@ -229,7 +229,9 @@ int main ( int argc, char *argv[]) {
                     list_of_simulated_objects.at(i)
                             .generate_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
                 }
-                fback.getCollisionPoints();
+                fback.generate_collision_points();
+                VectorRobustness vectorRobustness;
+                vectorRobustness.generateVectorRobustness(fback);
             }
 
             if ( cpp_dataset.lk ) {

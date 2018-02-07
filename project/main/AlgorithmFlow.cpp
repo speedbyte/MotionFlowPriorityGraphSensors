@@ -93,6 +93,8 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + m_resultordner +
                                               "/flow_occ_" + char_dir_append);
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + m_resultordner +
+                                              "/flow_obj_" + char_dir_append);
+        boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + m_resultordner +
                                               "/trajectory_occ_" + char_dir_append);
         boost::filesystem::create_directories(Dataset::getResultPath().string() + "/" + m_resultordner +
                                               "/plots_" + char_dir_append);
@@ -107,8 +109,6 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
 
-
-        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
 
         char folder_name_flow[50], folder_name_trajectory[50];
         char file_name_image[50];
@@ -198,7 +198,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
-            std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
+
 
             if ( frame_count%frame_skip != 0 ) {
                 continue;
@@ -277,24 +277,29 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     stencilFrame = flow_frame.clone();
                     for ( ushort i = 0; i < m_list_objects.size(); i++ ) {
                         //two objects
-                        SimulatedObjects objects(m_list_objects.at(i).getObjectId(), m_list_objects.at(i).getObjectName() );
-                        m_list_simulated_objects.push_back(objects);
+                        std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
                         int width = m_list_objects.at(i).getImageShapeAndData().get().cols;
                         int height = m_list_objects.at(i).getImageShapeAndData().get().rows;
+                        SimulatedObjects objects(m_list_objects.at(i).getObjectId(), m_list_objects.at(i)
+                                .getObjectName() , width, height );
+                        m_list_simulated_objects.push_back(objects);
                         float rowBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
                                 (frame_skip-1).at(frame_count).first.y;
                         float columnBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
                                 (frame_skip-1).at(frame_count).first.x;
 
-                        cv::Mat roi = stencilFrame.rowRange(rowBegin,width).colRange(columnBegin,height);
-                        cv::Mat tempObject = roi.clone();
+                        cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin),(cvRound(rowBegin)+height)).colRange
+                                (cvRound(columnBegin),(cvRound(columnBegin)+width));
+                        //cv::Mat tempObject = roi.clone();
 
-                        for (unsigned j = 0; j < height; j++) {
-                            for (unsigned k = 0; k < width; k++) {
-                                base_movement.push_back(std::make_pair(cv::Point2f(rowBegin + j, columnBegin + k),
-                                                                       roi.at<cv::Vec2f>(j,k)));
+                        for (unsigned y = 0; y < roi.rows; y++) {
+                            for (unsigned x = 0; x < roi.cols; x++) {
+
+                                base_movement.push_back(std::make_pair(cv::Point2f(x, y),
+                                                                       roi.at<cv::Vec2f>(y,x)));
                             }
                         }
+                        objects.set_outer_base_movement(base_movement);
                     }
                 }
 
@@ -466,12 +471,10 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
             // Display the output image
             cv::imshow(m_resultordner, image_02_frame);
             prevGray = curGray.clone();
-            outer_base_movement.push_back(base_movement);
         }
 
         //F_png_write_trajectory.write(temp_result_flow_path);
-        m_algo_extrapolated_frame_pixel_point_pixel_displacement.push_back
-                (frame_pixel_point_pixel_displacement);
+        //m_algo_extrapolated_frame_pixel_point_pixel_displacement.push_back(frame_pixel_point_pixel_displacement);
         fs.release();
 
         for(auto &n : time)
@@ -495,7 +498,9 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGtPath().string() +
                 std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
-        m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement.push_back(outer_base_movement);
+        for ( ushort i = 0; i < m_list_simulated_objects.size(); i++) {
+            m_list_simulated_objects.at(i).trigger_m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement();
+        }
     }
 }
 
@@ -531,7 +536,8 @@ void AlgorithmFlow::generate_collision_points() {
     std::vector<SimulatedObjects>::const_iterator  objectIteratorNext;
 
     for ( ; objectIterator < m_list_simulated_objects.end() ; objectIterator++ ) {
-        for ( objectIteratorNext = objectIterator+1; objectIteratorNext < m_list_objects.end(); objectIteratorNext++) {
+        for ( objectIteratorNext = objectIterator+1; objectIteratorNext < m_list_simulated_objects.end();
+              objectIteratorNext++) {
 
             m_list_objects_combination.push_back(std::make_pair((*objectIterator), (*objectIteratorNext)));
             std::cout << "collision between object id " << (*objectIterator).getObjectId() << " and object id " <<
@@ -542,10 +548,12 @@ void AlgorithmFlow::generate_collision_points() {
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
+        sprintf(folder_name_flow, "flow_obj_%02d", frame_skip);
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-        unsigned FRAME_COUNT = m_list_objects.at(0).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1).size();
+        unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
+                .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at
+                (frame_skip - 1).size();
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char file_name_image[50];
@@ -570,8 +578,8 @@ void AlgorithmFlow::generate_collision_points() {
             for (unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
                 // object image_data_and_shape
-                int width = m_list_simulated_objects.at(i).getImageShapeAndData().get().cols;
-                int height = m_list_simulated_objects.at(i).getImageShapeAndData().get().rows;
+                int width = m_list_simulated_objects.at(i).getWidth();
+                int height = m_list_simulated_objects.at(i).getHeight();
 
                 //if ( m_list_simulated_objects.at(i).getExtrapolatedVisibility().at(frame_skip - 1).at(frame_count)
                 //      == true ) {
@@ -582,8 +590,7 @@ void AlgorithmFlow::generate_collision_points() {
                             .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1)
                             .at(frame_count).first;
                     cv::Point2f displacement = m_list_simulated_objects.at(i)
-                            .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip
-                                                                                                                       - 1)
+                            .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip- 1)
                             .at(frame_count).second;
 
                     cv::Point2f gt_line_pts = m_list_simulated_objects.at(i).getLineParameters().at(frame_skip - 1)
@@ -666,7 +673,6 @@ void AlgorithmFlow::generate_collision_points() {
 
         }
         m_frame_skip_collision_points.push_back(m_frame_collision_points);
-        fs.release();
     }
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);

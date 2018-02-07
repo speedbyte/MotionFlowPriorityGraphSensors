@@ -120,8 +120,9 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
         gp << "set xrange[0:1242]\n" << "set yrange[0:375]\n";
         std::cout << list_gp_lines[0];
         gp << list_gp_lines.at(0);
-        gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points)+ "'\n";
-        gp.send1d(xypoints_collision);
+        //gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points)+
+                "'\n";
+        //gp.send1d(xypoints_collision);
     }
 }
 
