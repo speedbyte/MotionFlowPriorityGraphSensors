@@ -26,16 +26,11 @@ class GroundTruthFlow : public OpticalFlow {
 
 private:
 
-    const std::vector<Objects> &m_list_objects;
     std::vector<std::pair<Objects, Objects> > m_list_objects_combination;
 
 public:
 
-    GroundTruthFlow( const std::vector<Objects> &list_objects ) : m_list_objects
-            (list_objects) {}
-
-    void extrapolate_flowpoints( std::string temp_gt_flow_image_path, unsigned frame_skip, unsigned
-    frame_count, std::vector<Objects> list_objects);
+    GroundTruthFlow( const std::vector<Objects> &list_objects ) : OpticalFlow(list_objects) {}
 
     void generate_gt_scenepixel_displacement();
 

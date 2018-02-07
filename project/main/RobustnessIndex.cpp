@@ -67,10 +67,10 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) 
  */
 void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
 
-    std::vector<float> xsamples,ysamples;
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
-
+        ushort m_valid_collision_points = 0;
+        std::vector<float> xsamples,ysamples;
         unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(frame_skip - 1).size();
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -88,41 +88,41 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
                         ) {
                     xsamples.push_back(collisionpoints.x);
                     ysamples.push_back(collisionpoints.y);
+                    m_valid_collision_points++;
                 }
             }
         }
-    }
 
-    std::vector<std::string> list_gp_lines;
-    std::vector<std::pair<double, double>> xypoints_1, xypoints_2, xypoints_3, xypoints_collision;
+        std::vector<std::string> list_gp_lines;
+        std::vector<std::pair<double, double>> xypoints_1, xypoints_2, xypoints_3, xypoints_collision;
 
-    ushort size_collision = xsamples.size();
-    cv::Mat_<float> samples_xy_collision(2, size_collision);
+        ushort size_collision = xsamples.size();
+        cv::Mat_<float> samples_xy_collision(2, size_collision);
 
 
-    for ( auto i = 0; i < size_collision; i++) {
-        samples_xy_collision(0,i) = xsamples.at(i);
-        samples_xy_collision(1,i) = ysamples.at(i);
-    }
+        for ( auto i = 0; i < size_collision; i++) {
+            samples_xy_collision(0,i) = xsamples.at(i);
+            samples_xy_collision(1,i) = ysamples.at(i);
+        }
 
 /*    for ( auto t : ysamples ) {
         samples_xy_collision.push_back(t);
     }
 */
-    fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
-    for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
-        xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
+        fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
+        for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
+            xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
+        }
+
+        //Plot
+        Gnuplot gp;
+        gp << "set xlabel 'x'\nset ylabel 'y'\n";
+        gp << "set xrange[0:1242]\n" << "set yrange[0:375]\n";
+        std::cout << list_gp_lines[0];
+        gp << list_gp_lines.at(0);
+        gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points)+ "'\n";
+        gp.send1d(xypoints_collision);
     }
-
-    //Plot
-    Gnuplot gp;
-    gp << "set xlabel 'x'\nset ylabel 'y'\n";
-    gp << "set xrange[0:1242]\n" << "set yrange[0:375]\n";
-    std::cout << list_gp_lines[0];
-    gp << list_gp_lines.at(0);
-    gp << "plot '-' with points title 'collision'\n";
-    gp.send1d(xypoints_collision);
-
 }
 
 
@@ -146,8 +146,8 @@ void VectorRobustness::fitLineForCollisionPoints(cv::Mat_<float> &samples_xy, st
     cv::meanStdDev(samples_xy.row(0), mean_x, stddev_x);
     cv::meanStdDev(samples_xy.row(1), mean_y, stddev_y);
 
-    assert(std::floor(mean(0) * 100) == std::floor(mean_x(0) * 100));
-    assert(std::floor(mean(1) * 100) == std::floor(mean_y(0) * 100));
+    //assert(std::floor(mean(0) * 100) == std::floor(mean_x(0) * 100));
+    //assert(std::floor(mean(1) * 100) == std::floor(mean_y(0) * 100));
 
     cv::Mat_<float> stddev(2, 2);
     stddev << stddev_x[0] * stddev_x[0], stddev_x[0] * stddev_y[0], stddev_x[0] * stddev_y[0], stddev_y[0] *

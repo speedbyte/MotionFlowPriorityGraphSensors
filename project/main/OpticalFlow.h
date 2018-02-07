@@ -6,16 +6,21 @@
 #define MAIN_OPTICALFLOW_H
 
 #include <opencv2/core/types.hpp>
+#include "Objects.h"
 
 class OpticalFlow {
 
 protected:
+
+    const std::vector<Objects> &m_list_objects;
 
     std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
     std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_collision_points;
 
 public:
+
+    OpticalFlow(const std::vector<Objects> &list_objects): m_list_objects(list_objects) {};
 
     std::vector<std::vector<std::vector<cv::Point2f> > > getCollisionPoints () const {
         return m_frame_skip_collision_points;

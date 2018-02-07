@@ -262,12 +262,19 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 if ( lk == algo ) {
                     cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts_array, next_pts_array, status,
                                              err, winSize, 5, termcrit, 0, 0.001);
+                    // TODO create a flow_frame
                 }
                 else if ( fb == algo ) {
                     cv::calcOpticalFlowFarneback(prevGray, curGray, flow_frame, pyrScale, numLevels, windowSize,
                                                  numIterations, neighborhoodSize, stdDeviation,
                                                  cv::OPTFLOW_FARNEBACK_GAUSSIAN);
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
+                    cv::Mat stencilFrame;
+                    stencilFrame = flow_frame.clone();
+                    for ( ushort i = 0; i < m_list_objects.size(); i++ ) {
+                        //two objects
+                    }
+
                 }
 
                 // Draw the optical calculate_flow map
@@ -441,7 +448,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         }
 
         //F_png_write_trajectory.write(temp_result_flow_path);
-        m_algo_frame_pixel_point_pixel_displacement.push_back(frame_pixel_point_pixel_displacement);
+        m_algo_extrapolated_frame_pixel_point_pixel_displacement.push_back(frame_pixel_point_pixel_displacement);
         fs.release();
 
         for(auto &n : time)
@@ -482,3 +489,13 @@ void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixe
     fs << "]";
 }
 
+const std::vector<std::vector<std::vector<pair<cv::Point2f, cv::Point2f>>>> &
+AlgorithmFlow::get_algo_extrapolated_frame_pixel_point_pixel_displacement() const {
+    return m_algo_extrapolated_frame_pixel_point_pixel_displacement;
+}
+
+
+
+void AlgorithmFlow::generate_gt_scenepixel_displacement() {
+
+}

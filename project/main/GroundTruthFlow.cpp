@@ -179,7 +179,6 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
                     std::cout << "object 1  = " << lineparameters1 << " and object 2 = " << lineparameters2 << std::endl ;
 
                     cv::Matx<float,2,1> result_manual;
-                    assert ( cv::determinant(coefficients ) != 0 );
                     if ( cv::determinant(coefficients ) != 0 ) {
                         result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
                         //result_manual = coefficients.solve(rhs);
@@ -190,9 +189,11 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
                         collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
                     }
                     else {
-                        result_manual(0,0) = -5;
-                        result_manual(1,0) = -5;
-                        collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
+                        std::cerr << "Determinant is singular" << std::endl;
+                        //assert ( cv::determinant(coefficients ) != 0 );
+                        //result_manual(0,0) = -5;
+                        //result_manual(1,0) = -5;
+                        //collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
                     }
                 }
             }

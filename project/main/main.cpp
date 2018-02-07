@@ -168,45 +168,44 @@ int main ( int argc, char *argv[]) {
             std::string input = "data/stereo_flow/image_02";
             Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, "data/stereo_flow/image_02", "results");
 
+            // Trajectories
+            NoTrajectory noTrajectory;
+            noTrajectory.process(Dataset::getFrameSize());
+            Achterbahn achterbahn1, achterbahn2;
+            achterbahn1.process(Dataset::getFrameSize());
+            achterbahn1.setDynamic();
+            achterbahn2.process(Dataset::getFrameSize());
+            //achterbahn2.setDynamic();
+
+            // Shapes
+            Rectangle background(1242, 375);
+            Rectangle rectangle1(30, 30); // width, height
+            Rectangle rectangle2(30, 30); // width, height
+            //Circle circle;
+            //Ramp ramp;
+            //NegativeRamp negativeRamp;
+
+            // Noise
+            WhiteNoise whiteNoise;
+            ColorfulNoise colorfulNoise;
+            NoNoise noNoise;
+
+            // Canvas is itself registered as an Object with a dummy trajectory
+            Canvas canvas(background, noTrajectory, 60, whiteNoise);
+            Objects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide", true);
+            Objects obj2(rectangle2, achterbahn2, 60, colorfulNoise, "rectangle_long", false);
+            //Objects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
+            //Objects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
+            //Objects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
+
+            std::vector<Objects> list_of_objects;
+            list_of_objects.push_back(obj1);
+            list_of_objects.push_back(obj2);
+            //list_of_objects.push_back(obj3);
+            //list_of_objects.push_back(obj4);
+            //list_of_objects.push_back(obj5);
+
             if ( cpp_dataset.gt ) {
-
-                // Trajectories
-                NoTrajectory noTrajectory;
-                noTrajectory.process(Dataset::getFrameSize());
-                Achterbahn achterbahn1, achterbahn2;
-                achterbahn1.process(Dataset::getFrameSize());
-                //achterbahn1.setDynamic();
-                achterbahn2.process(Dataset::getFrameSize());
-                //achterbahn2.setDynamic();
-
-                // Shapes
-                Rectangle background(1242, 375);
-                Rectangle rectangle1(30, 30); // width, height
-                Rectangle rectangle2(30, 30); // width, height
-                //Circle circle;
-                //Ramp ramp;
-                //NegativeRamp negativeRamp;
-
-                // Noise
-                WhiteNoise whiteNoise;
-                ColorfulNoise colorfulNoise;
-                NoNoise noNoise;
-
-                // Canvas is itself registered as an Object with a dummy trajectory
-                Canvas canvas(background, noTrajectory, 60, whiteNoise);
-                Objects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide", true);
-                Objects obj2(rectangle2, achterbahn2, 60, colorfulNoise, "rectangle_long", false);
-                //Objects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
-                //Objects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
-                //Objects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
-
-                std::vector<Objects> list_of_objects;
-                list_of_objects.push_back(obj1);
-                list_of_objects.push_back(obj2);
-                //list_of_objects.push_back(obj3);
-                //list_of_objects.push_back(obj4);
-                //list_of_objects.push_back(obj5);
-
 
                 GroundTruthSceneInternal gt_scene(canvas, list_of_objects);
                 gt_scene.generate_gt_scene();
@@ -219,8 +218,9 @@ int main ( int argc, char *argv[]) {
 
             }
 
-            AlgorithmFlow fback;
-            AlgorithmFlow lkanade;
+            AlgorithmFlow fback(list_of_objects);
+            AlgorithmFlow lkanade(list_of_objects);
+
             if ( cpp_dataset.fb ) {
                 fback.calculate_flow(fb, continous_frames, no_noise);
             }
@@ -251,19 +251,8 @@ int main ( int argc, char *argv[]) {
 
             std::string input = "data/stereo_flow/image_02";
             Dataset::fillDataset(frame_size, depth, cn, MATLAB_DATASET_PATH, input, "results");
-            AlgorithmFlow algo;
-            // The ground truth calculate_flow and image is calculated directly in the matlab. Hence only results can be
-            // calculated here.
+            //AlgorithmFlow algo();
 
-            algo.calculate_flow(fb, continous_frames, no_noise);
-
-            algo.calculate_flow(fb, continous_frames, static_bg_noise);
-
-            algo.calculate_flow(fb, continous_frames, static_fg_noise);
-
-            algo.calculate_flow(fb, continous_frames, dynamic_bg_noise);
-
-            algo.calculate_flow(fb, continous_frames, dynamic_fg_noise);
         }
     }
 
@@ -274,11 +263,11 @@ int main ( int argc, char *argv[]) {
 
             Dataset::fillDataset(frame_size, depth, cn, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02",
                                  "results");
-            AlgorithmFlow algo;
+            //AlgorithmFlow algo;
             // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
             // calculated here.
 
-            algo.calculate_flow(fb, continous_frames, no_noise);
+            //algo.calculate_flow(fb, continous_frames, no_noise);
 
             //make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
             //make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");
@@ -292,6 +281,7 @@ int main ( int argc, char *argv[]) {
         if (vires_dataset.execute ) {
 
             cv::Size_<unsigned> frame_size_vires(1242, 375);
+            std::vector<Objects> list_of_objects;
 
             std::string scenario = "truck";
             std::string input = "data/stereo_flow/image_02_" + scenario;
@@ -305,8 +295,9 @@ int main ( int argc, char *argv[]) {
                 gt_flow.generate_gt_scenepixel_displacement();
             }
 
-            AlgorithmFlow fback;
-            AlgorithmFlow lkanade;
+            AlgorithmFlow fback(list_of_objects);
+            AlgorithmFlow lkanade(list_of_objects);
+
             if ( vires_dataset.lk ) {
                 fback.calculate_flow(lk, continous_frames, no_noise);
             }
