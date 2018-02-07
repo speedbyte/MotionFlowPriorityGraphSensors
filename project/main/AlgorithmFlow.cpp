@@ -105,8 +105,10 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
     prepare_directories(algo, frame_types, noise);
 
-
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
+
+
+        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
 
         char folder_name_flow[50], folder_name_trajectory[50];
         char file_name_image[50];
@@ -196,6 +198,8 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
+            std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
+
             if ( frame_count%frame_skip != 0 ) {
                 continue;
             }
@@ -273,8 +277,25 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     stencilFrame = flow_frame.clone();
                     for ( ushort i = 0; i < m_list_objects.size(); i++ ) {
                         //two objects
-                    }
+                        SimulatedObjects objects(m_list_objects.at(i).getObjectId(), m_list_objects.at(i).getObjectName() );
+                        m_list_simulated_objects.push_back(objects);
+                        int width = m_list_objects.at(i).getImageShapeAndData().get().cols;
+                        int height = m_list_objects.at(i).getImageShapeAndData().get().rows;
+                        float rowBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
+                                (frame_skip-1).at(frame_count).first.y;
+                        float columnBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
+                                (frame_skip-1).at(frame_count).first.x;
 
+                        cv::Mat roi = stencilFrame.rowRange(rowBegin,width).colRange(columnBegin,height);
+                        cv::Mat tempObject = roi.clone();
+
+                        for (unsigned j = 0; j < height; j++) {
+                            for (unsigned k = 0; k < width; k++) {
+                                base_movement.push_back(std::make_pair(cv::Point2f(rowBegin + j, columnBegin + k),
+                                                                       roi.at<cv::Vec2f>(j,k)));
+                            }
+                        }
+                    }
                 }
 
                 // Draw the optical calculate_flow map
@@ -445,10 +466,12 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
             // Display the output image
             cv::imshow(m_resultordner, image_02_frame);
             prevGray = curGray.clone();
+            outer_base_movement.push_back(base_movement);
         }
 
         //F_png_write_trajectory.write(temp_result_flow_path);
-        m_algo_extrapolated_frame_pixel_point_pixel_displacement.push_back(frame_pixel_point_pixel_displacement);
+        m_algo_extrapolated_frame_pixel_point_pixel_displacement.push_back
+                (frame_pixel_point_pixel_displacement);
         fs.release();
 
         for(auto &n : time)
@@ -472,6 +495,7 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGtPath().string() +
                 std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
+        m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement.push_back(outer_base_movement);
     }
 }
 
@@ -489,13 +513,165 @@ void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixe
     fs << "]";
 }
 
-const std::vector<std::vector<std::vector<pair<cv::Point2f, cv::Point2f>>>> &
-AlgorithmFlow::get_algo_extrapolated_frame_pixel_point_pixel_displacement() const {
-    return m_algo_extrapolated_frame_pixel_point_pixel_displacement;
-}
+
+
+void AlgorithmFlow::generate_collision_points() {
+
+    // reads the flow vector array already created at the time of instantiation of the object.
+    // Additionally stores the frames in a png file
+    // Additionally stores the trajectory in a png file
+
+
+    char folder_name_flow[50];
+    cv::FileStorage fs;
+    fs.open(Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+            cv::FileStorage::WRITE);
+
+    std::vector<SimulatedObjects>::const_iterator objectIterator = m_list_simulated_objects.begin();
+    std::vector<SimulatedObjects>::const_iterator  objectIteratorNext;
+
+    for ( ; objectIterator < m_list_simulated_objects.end() ; objectIterator++ ) {
+        for ( objectIteratorNext = objectIterator+1; objectIteratorNext < m_list_objects.end(); objectIteratorNext++) {
+
+            m_list_objects_combination.push_back(std::make_pair((*objectIterator), (*objectIteratorNext)));
+            std::cout << "collision between object id " << (*objectIterator).getObjectId() << " and object id " <<
+                      (*objectIteratorNext).getObjectId() << "\n";
+
+        }
+    }
+
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+
+        sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
+        std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
+
+        unsigned FRAME_COUNT = m_list_objects.at(0).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1).size();
+
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            char file_name_image[50];
+            std::cout << "frame_count " << frame_count << std::endl;
+
+            sprintf(file_name_image, "000%03d_10.png", frame_count);
+            std::string temp_gt_flow_image_path =
+                    Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
+                    + file_name_image;
+            fs << "frame_count" << frame_count;
+
+
+            float *data_ = (float*)malloc(Dataset::getFrameSize().width*Dataset::getFrameSize().height*3*sizeof(float));
+            memset(data_, 255, Dataset::getFrameSize().width*Dataset::getFrameSize().height*3*sizeof(float));
+            FlowImageExtended F_png_write(data_, Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+            cv::Mat tempMatrix;
+            tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
+            tempMatrix = cv::Scalar_<unsigned>(255,255,255);
+            assert(tempMatrix.channels() == 3);
+
+
+            for (unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
+
+                // object image_data_and_shape
+                int width = m_list_simulated_objects.at(i).getImageShapeAndData().get().cols;
+                int height = m_list_simulated_objects.at(i).getImageShapeAndData().get().rows;
+
+                //if ( m_list_simulated_objects.at(i).getExtrapolatedVisibility().at(frame_skip - 1).at(frame_count)
+                //      == true ) {
+                if ( 1 ) {
+
+                    // gt_displacement
+                    cv::Point2f next_pts = m_list_simulated_objects.at(i)
+                            .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1)
+                            .at(frame_count).first;
+                    cv::Point2f displacement = m_list_simulated_objects.at(i)
+                            .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip
+                                                                                                                       - 1)
+                            .at(frame_count).second;
+
+                    cv::Point2f gt_line_pts = m_list_simulated_objects.at(i).getLineParameters().at(frame_skip - 1)
+                            .at(frame_count).second;
+
+
+                    cv::Mat roi;
+                    roi = tempMatrix.
+                            colRange(cvRound(next_pts.x), cvRound(next_pts.x + width)).
+                            rowRange(cvRound(next_pts.y), cvRound(next_pts.y + height));
+                    //bulk storage
+                    roi = cv::Scalar(displacement.x, displacement.y,
+                                     static_cast<float>(m_list_simulated_objects.at(i).getObjectId()));
+
+                    // cv line is intelligent and it can also project to values not within the frame size including negative values.
+                    cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
+                }
+            }
+
+            std::vector<cv::Point2f> collision_points;
+
+            for ( unsigned i = 0; i < m_list_objects_combination.size(); i++) {
+
+                /*if ( ( m_list_objects_combination.at(i).first.getExtrapolatedVisibility().at(frame_skip - 1)
+                               .at(frame_count) == true ) && ( m_list_objects_combination.at(i).second
+                                                                       .getExtrapolatedVisibility()
+                                                                       .at(frame_skip - 1)
+                                                                       .at(frame_count) == true )) { */
+                if ( 1 ) {
+
+                    cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
+                            .at(frame_count).first;
+
+                    cv::Point2f lineparameters2 = m_list_objects_combination.at(i).second.getLineParameters().at(frame_skip - 1)
+                            .at(frame_count).first;
+
+                    // first fill rowco
+                    cv::Matx<float,2,2> coefficients (-lineparameters1.x,1,-lineparameters2.x,1);
+                    cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
+
+                    std::cout << "object 1  = " << lineparameters1 << " and object 2 = " << lineparameters2 << std::endl ;
+
+                    cv::Matx<float,2,1> result_manual;
+                    if ( cv::determinant(coefficients ) != 0 ) {
+                        result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
+                        //result_manual = coefficients.solve(rhs);
+                        cv::circle(tempMatrix, cv::Point2f(result_manual(0,0), result_manual(1,0)), 5, cv::Scalar(0, 255, 0), -1,
+                                   cv::LINE_AA);
+
+                        std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
+                        collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
+                    }
+                    else {
+                        std::cerr << "Determinant is singular" << std::endl;
+                        //assert ( cv::determinant(coefficients ) != 0 );
+                        //result_manual(0,0) = -5;
+                        //result_manual(1,0) = -5;
+                        //collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));
+                    }
+                }
+            }
+
+            m_frame_collision_points.push_back(collision_points);
 
 
 
-void AlgorithmFlow::generate_gt_scenepixel_displacement() {
+            //Create png Matrix with 3 channels: x displacement. y displacment and ObjectId
+            for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
+                for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
+                    if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5 ) {
+                        F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
+                        F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
+                        F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
+                        //trajectory.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
+                    }
+                }
+            }
+
+            F_png_write.writeExtended(temp_gt_flow_image_path);
+
+        }
+        m_frame_skip_collision_points.push_back(m_frame_collision_points);
+        fs.release();
+    }
+
+    // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
+    //toc_all = steady_clock::now();
+    //time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
+    //std::cout << "ground truth flow generation time - " << time_map["ground truth"] << "ms" << std::endl;
 
 }

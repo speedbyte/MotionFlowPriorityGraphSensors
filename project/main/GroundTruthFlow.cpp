@@ -82,7 +82,7 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
     cv::FileStorage fs;
     fs.open(Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
             cv::FileStorage::WRITE);
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > objects;
+    //std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > objects;
 
     std::vector<Objects>::const_iterator objectIterator = m_list_objects.begin();
     std::vector<Objects>::const_iterator  objectIteratorNext;

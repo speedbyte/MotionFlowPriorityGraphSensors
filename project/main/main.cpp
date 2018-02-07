@@ -223,6 +223,13 @@ int main ( int argc, char *argv[]) {
 
             if ( cpp_dataset.fb ) {
                 fback.calculate_flow(fb, continous_frames, no_noise);
+                std::vector<SimulatedObjects> list_of_simulated_objects;
+                list_of_simulated_objects = fback.getSimulatedObjects();
+                for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
+                    list_of_simulated_objects.at(i)
+                            .generate_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
+                }
+                fback.getCollisionPoints();
             }
 
             if ( cpp_dataset.lk ) {

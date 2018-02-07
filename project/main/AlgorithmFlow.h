@@ -15,20 +15,16 @@
 
 
 
-
 class AlgorithmFlow : public OpticalFlow {
 
     // Each point on GroundTruthFlow is a vector of points in AlgorithmFlow. Hence both the base and fast movement
     // consists of an additional vector wrappper.
 
-public:
-
-    const vector<vector<vector<pair<cv::Point2f, cv::Point2f>>>> &
-    get_algo_extrapolated_frame_pixel_point_pixel_displacement() const;
-
 private:
     std::string m_resultordner;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_algo_extrapolated_frame_pixel_point_pixel_displacement;
+
+    std::vector<std::pair<SimulatedObjects, SimulatedObjects> > m_list_objects_combination;
+
 
 public:
 
@@ -47,8 +43,7 @@ public:
         return m_resultordner;
     }
 
-    void generate_gt_scenepixel_displacement();
-
+    void generate_collision_points();
 };
 
 

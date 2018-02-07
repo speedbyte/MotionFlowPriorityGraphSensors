@@ -115,8 +115,10 @@ void Objects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(con
     int height = m_image_data_and_shape.get().rows;
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
+
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
         std::vector<std::vector<bool>  > outer_base_visiblity;
+
         unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
