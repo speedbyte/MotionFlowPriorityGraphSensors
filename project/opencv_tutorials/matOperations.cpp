@@ -284,14 +284,13 @@ int main ( int argc, char *argv[]) {
 //    mat_multiplication();
     //randomize_coordinates();
     Mat_to_array();
-    cv::Mat_<float> samples_xy(2, 100);
-    std::vector<float> xsamples(100,1),ysamples(100,2);
-    for ( auto t : xsamples ) {
-        samples_xy.push_back(t);
-    }
-    for ( auto t : ysamples ) {
-        samples_xy.push_back(t);
-    }
+
+    cv::Mat_<float> samples_xy;
+    cv::Mat_<float> xsamples(1, 100, 1.f), ysamples(1, 100, 2.f);
+    samples_xy.push_back(xsamples);
+    samples_xy.push_back(ysamples);
+    std::cout << samples_xy;
+
 
     // Two matrices sample
     cv::Mat_<uchar> x_sample(1, 9);

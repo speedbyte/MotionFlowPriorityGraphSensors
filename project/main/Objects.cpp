@@ -10,12 +10,11 @@ unsigned Objects::objectCurrentCount = 0;
 
 
 
-void Objects::generate_obj_base_pixel_point_pixel_displacement(const ushort &start_point, const
-std::vector<cv::Point2f> &trajectory_points) {
+void Objects::generate_obj_base_pixel_point_pixel_displacement() {
 
     //Initialization
 
-    ushort current_index = start_point;
+    ushort current_index = m_startPoint;
 
     std::cout << "start point "<< current_index << std::endl;
 
@@ -27,19 +26,19 @@ std::vector<cv::Point2f> &trajectory_points) {
             cv::Point2f gt_next_pts= {0,0}, gt_displacement = {0,0};
 
             //If we are at the end of the path vector, we need to reset our iterators
-            if (current_index >= trajectory_points.size()) {
+            if (current_index >= m_obj_trajectory.get().size()) {
                 current_index = 0;
-                gt_displacement.x = trajectory_points.at(current_index).x - trajectory_points.at
-                        (trajectory_points.size() - 1).x;
-                gt_displacement.y = trajectory_points.at(current_index).y - trajectory_points.at
-                        (trajectory_points.size() - 1).y;
-                gt_next_pts = trajectory_points.at(current_index);
+                gt_displacement.x = m_obj_trajectory.get().at(current_index).x - m_obj_trajectory.get().at
+                        (m_obj_trajectory.get().size() - 1).x;
+                gt_displacement.y = m_obj_trajectory.get().at(current_index).y - m_obj_trajectory.get().at
+                        (m_obj_trajectory.get().size() - 1).y;
+                gt_next_pts = m_obj_trajectory.get().at(current_index);
             } else {
-                gt_displacement.x = trajectory_points.at(current_index).x - trajectory_points.at
+                gt_displacement.x = m_obj_trajectory.get().at(current_index).x - m_obj_trajectory.get().at
                         (current_index - (ushort) 1).x;
-                gt_displacement.y = trajectory_points.at(current_index).y - trajectory_points.at
+                gt_displacement.y = m_obj_trajectory.get().at(current_index).y - m_obj_trajectory.get().at
                         (current_index - (ushort) 1).y;
-                gt_next_pts = trajectory_points.at(current_index);
+                gt_next_pts = m_obj_trajectory.get().at(current_index);
             }
 
             printf("%u, %u , %f, %f, %f, %f\n", frame_count, current_index, gt_next_pts.x, gt_next_pts.y,

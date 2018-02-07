@@ -157,6 +157,8 @@ int main ( int argc, char *argv[]) {
 
 /* CPP_DATASET ------------- */
 
+
+
     cv::Size_<unsigned> frame_size(1242, 375);
     ushort depth = CV_8U;
     ushort cn = 3;
@@ -180,22 +182,22 @@ int main ( int argc, char *argv[]) {
                 Rectangle rectangle(30, 30); // width, height
                 Achterbahn achterbahn;
                 NoNoise noNoise;
-                Circle circle;
-                Ramp ramp;
-                NegativeRamp negativeRamp;
+                //Circle circle;
+                //Ramp ramp;
+                //NegativeRamp negativeRamp;
 
-                Objects obj1(rectangle, achterbahn, 120, noNoise, "rectangle_wide");
-                Objects obj2(rectangle, achterbahn, 60, colorfulNoise, "rectangle_long");
-                Objects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
-                Objects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
-                Objects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
+                Objects obj1(rectangle, achterbahn, 120, noNoise, "rectangle_wide", true);
+                Objects obj2(rectangle, achterbahn, 60, colorfulNoise, "rectangle_long", false);
+                //Objects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
+                //Objects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
+                //Objects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
 
                 std::vector<Objects> list_of_objects;
                 list_of_objects.push_back(obj1);
                 list_of_objects.push_back(obj2);
-                list_of_objects.push_back(obj3);
-                list_of_objects.push_back(obj4);
-                list_of_objects.push_back(obj5);
+                //list_of_objects.push_back(obj3);
+                //list_of_objects.push_back(obj4);
+                //list_of_objects.push_back(obj5);
 
 
                 GroundTruthSceneInternal gt_scene(canvas, list_of_objects);

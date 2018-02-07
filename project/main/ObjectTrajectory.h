@@ -31,6 +31,8 @@ public:
         return m_trajectory;
     }
 
+    virtual void setDynamic();
+
 };
 
 class Achterbahn : public ObjectTrajectory {
@@ -40,6 +42,8 @@ public:
     Achterbahn() {};
 
     void process(cv::Size frame_size) override ;
+
+    void setDynamic() override;
 
 };
 
@@ -86,17 +90,6 @@ public:
 };
 
 
-class ObjectCollision {
-
-};
-
-class PlotCollision {
-
-};
-
-class PlotTrajectory {
-
-};
 
 #endif //MAIN_OBJECTTRAJECTORY_H
 

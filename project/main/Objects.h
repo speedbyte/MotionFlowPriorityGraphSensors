@@ -22,11 +22,13 @@ private:
 
     static unsigned objectCurrentCount; // assingn object id
 
-    ObjectTrajectory &m_obj_trajectory;
+    ObjectTrajectory m_obj_trajectory; // use a own copy instead of reference.
 
     const unsigned m_objectId;
 
     const std::string m_objectName;
+
+    std::vector<bool> m_object_validity;
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_point_pixel_displacement;
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_point_pixel_displacement;
@@ -42,20 +44,23 @@ private:
 
 public:
 
-    Objects( ObjectImageShapeData &image_data_and_shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
-    &noise, std::string objectName ) : CameraSensorImage(image_data_and_shape, noise), m_obj_trajectory
-            (trajectory), m_startPoint(startPoint) , m_objectName ( objectName ), m_objectId
-                                               (objectCurrentCount) {
+    Objects( ObjectImageShapeData image_data_and_shape, ObjectTrajectory trajectory, ushort startPoint, Noise
+    &noise, std::string objectName, bool dynamic ) : CameraSensorImage(image_data_and_shape, noise), m_obj_trajectory
+            (trajectory), m_startPoint(startPoint) , m_objectName(objectName), m_objectId (objectCurrentCount)
+    {
 
         image_data_and_shape.process();
-        trajectory.process(Dataset::getFrameSize());
+        m_obj_trajectory.process(Dataset::getFrameSize());
+        if ( dynamic ) {
+            m_obj_trajectory.setDynamic();
+        }
         objectCurrentCount += 1;
 
         if ( objectName.compare("BackgroundCanvas")) {
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                     (), getObjectId());
 
-            generate_obj_base_pixel_point_pixel_displacement( m_startPoint, m_obj_trajectory.get());
+            generate_obj_base_pixel_point_pixel_displacement();
 
             printf("generating ground truth frame displacement for name %s with object id %u\n", getObjectName().c_str
                     (), getObjectId());
@@ -68,10 +73,14 @@ public:
         }
     }
 
+    Objects( ObjectImageShapeData &image_data_and_shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
+    &noise, std::string objectName, std::vector<bool> object_validity ) : CameraSensorImage(image_data_and_shape,
+                                                                                            noise), m_obj_trajectory
+                                                                                  (trajectory), m_startPoint(startPoint) , m_objectName(objectName), m_objectId (objectCurrentCount),
+                                                                          m_object_validity(object_validity) {
+    }
 
-
-    void generate_obj_base_pixel_point_pixel_displacement(const ushort &start_point, const std::vector<cv::Point2f>
-    &trajectory_points);
+    void generate_obj_base_pixel_point_pixel_displacement();
 
     void generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips);
 
