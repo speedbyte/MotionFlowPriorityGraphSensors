@@ -103,7 +103,7 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
 }
 
 
-void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
+void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
 
     prepare_directories(algo, frame_types, noise);
 
@@ -120,7 +120,6 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::vector<float> time;
         double sum_time = 0;
 
-        ushort count = 0;
         std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
 
         FlowImageExtended F_png_write_trajectory(Dataset::getFrameSize().width, Dataset::getFrameSize()
@@ -128,7 +127,6 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
 
         bool needToInit = true;
-        std::vector<cv::Point2f> prev_pts_array;
 
         std::cout << "results will be stored in " << m_resultordner << std::endl;
 
@@ -195,11 +193,13 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::vector<cv::Point2f> next_pts_healthy;
 
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
-        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > frame_pixel_point_pixel_displacement;
+        std::vector<cv::Point2f> prev_pts_array;
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
 
+
+            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > frame_pixel_point_pixel_displacement;
 
             if ( frame_count%frame_skip != 0 ) {
                 continue;
@@ -248,10 +248,10 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
             std::vector<cv::Point2f> next_pts_array;
             tic = steady_clock::now();
 
-            // Calculate optical calculate_flow map using LK algorithm
+            // Calculate optical generate_flow_frame map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
                 std::vector<uchar> status;
-                // Initialize parameters for the optical calculate_flow algorithm
+                // Initialize parameters for the optical generate_flow_frame algorithm
                 float pyrScale = 0.5;
                 int numLevels = 3;
                 int windowSize = 15;
@@ -261,61 +261,35 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
                 std::vector<float> err;
 
-                // Calculate optical calculate_flow map using Farneback algorithm
+                // Calculate optical generate_flow_frame map using Farneback algorithm
                 // Farnback returns displacement frame and LK returns points.
                 cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
                 if ( lk == algo ) {
                     cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts_array, next_pts_array, status,
                                              err, winSize, 5, termcrit, 0, 0.001);
-                    // TODO create a flow_frame
                 }
                 else if ( fb == algo ) {
                     cv::calcOpticalFlowFarneback(prevGray, curGray, flow_frame, pyrScale, numLevels, windowSize,
                                                  numIterations, neighborhoodSize, stdDeviation,
                                                  cv::OPTFLOW_FARNEBACK_GAUSSIAN);
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
-                    cv::Mat stencilFrame;
-                    stencilFrame = flow_frame.clone();
-                    for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
-                        //two objects
-                        std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                        int width = m_list_simulated_objects.at(i).getWidth();
-                        int height = m_list_simulated_objects.at(i).getHeight();
-                        float rowBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
-                                (frame_skip-1).at(frame_count).first.y;
-                        float columnBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
-                                (frame_skip-1).at(frame_count).first.x;
-
-                        cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin),(cvRound(rowBegin)+height)).colRange
-                                (cvRound(columnBegin),(cvRound(columnBegin)+width));
-                        //cv::Mat tempObject = roi.clone();
-
-                        for (unsigned y = 0; y < roi.rows; y++) {
-                            for (unsigned x = 0; x < roi.cols; x++) {
-
-                                base_movement.push_back(std::make_pair(cv::Point2f(cvRound(columnBegin)+x, cvRound
-                                                                                                                (rowBegin)
-                                                                                                        +y),
-                                                                       roi.at<cv::Vec2f>(y,x)));
-                            }
-                        }
-                        m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
-                    }
                 }
 
-                // Draw the optical calculate_flow map
-                int stepSize = 1;
+                // Draw the optical generate_flow_frame map
+                int stepSize = 4;
 
                 if ( fb == algo ) {
                     // Draw the uniform grid of points on the input image along with the motion vectors
                     // Circles to indicate the uniform grid of points
                     //cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
                     prev_pts_array.clear();
+                    next_pts_array.clear();
                     for (int row = 0; row < image_02_frame.rows; row += stepSize) {
                         for (int col = 0; col < image_02_frame.cols; col += stepSize) {
 
                             cv::Point2f algorithmMovement ( flow_frame.at<cv::Point2f>(row, col).x, flow_frame
                                     .at<cv::Point2f>(row, col).y );
+
 
                             if (( cvFloor(std::abs(algorithmMovement.x)) == 0 && cvFloor(std::abs(algorithmMovement
                                                                                                           .y)) == 0 )) {
@@ -330,39 +304,30 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     }
                 }
 
-                unsigned count = 0;
+                unsigned count_good_points = 0;
 
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_points;
                 for (unsigned i = 0; i < next_pts_array.size(); i++) {
 
                     int minDist = 1;
 
-                    cv::Point2f next_pts, displacement;
-                    cv::Point2f algorithmMovement ((next_pts_array[i].x - prev_pts_array[i].x), (next_pts_array[i].y - prev_pts_array[i]
-                            .y));
-
                     // Check if the status vector is good
                     if (!status[i])
                         continue;
 
+                    cv::Point2f next_pts, displacement;
 
-                    printf("flow_frame.at<cv::Point2f>(%f, %f).x =  %f\n", next_pts_array[i].x, next_pts_array[i].y,
-                           algorithmMovement.x);
-                    printf("flow_frame.at<cv::Point2f>(%f, %f).y =  %f\n", next_pts_array[i].x, next_pts_array[i].y,
-                           algorithmMovement.y);
-
-                    displacement.x = cvRound( algorithmMovement.x + 0.5);
-                    displacement.y = cvRound( algorithmMovement.y + 0.5);
+                    displacement.x = next_pts_array[i].x - prev_pts_array[i].x;
+                    displacement.y = next_pts_array[i].y - prev_pts_array[i].y;
 
                     /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
                     // auto dist = cv::norm(prev_pts_array[i] - next_pts_array[i]);
                     double dist;
-                    dist = pow(displacement.x,2)+pow(displacement.y,2);
-                    //calculating distance by euclidean formula
+                    dist = pow(displacement.x,2)+pow(displacement.y,2); //calculating distance by euclidean formula
                     dist = sqrt(dist);
 
                     if ( dist <= minDist ) {
-                        printf("minimum distance for %i is %f\n", i, dist);
+                        //printf("minimum distance for %i is %f\n", i, dist);
                         continue;
                     }
 
@@ -370,29 +335,25 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                         continue;
                     }
 
-                    next_pts_array[count++] = next_pts_array[i];
-
                     // next_pts is the new pixel position !
-                    next_pts.x = std::abs(cvRound(next_pts_array[i].x));
-                    next_pts.y = std::abs(cvRound(next_pts_array[i].y));
+                    next_pts.x = next_pts_array[i].x;
+                    next_pts.y = next_pts_array[i].y;
 
-                    printf("(iteration %u, coordinates x y (%f,%f) ->  Vx, Vy (%f,%f) \n", i,
-                           next_pts.x, next_pts.y, displacement.x, displacement.y);
-                    // Lines to indicate the motion vectors
+                    std::cout << "next valid points " << next_pts << " displacement " << displacement << std::endl;
+                    next_pts_array[count_good_points++] = next_pts_array[i];
+
                     frame_points.push_back(std::make_pair(next_pts, displacement));
+
                 }
+
                 frame_pixel_point_pixel_displacement.push_back(frame_points);
-                next_pts_array.resize(count);
+                next_pts_array.resize(count_good_points); // this is required for LK. For FB, anyways the frame will
+                // be completely calculated every time.
 
-
-                for (unsigned i = 0; i < next_pts_array.size(); i++) {
-                    cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
-                }
                 if ( next_pts_array.size() == 0 ) {
                     // pick up the last healthy points
                     next_pts_array = next_pts_healthy;
                 }
-
             }
             else {
                 needToInit = true;
@@ -419,12 +380,11 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 printf("old next_pts_array size is %ld and new next_pts_array size is %ld\n", currentPoint.size(), next_pts_array.size());
             }
 
-            needToInit = false;
-            prev_pts_array = next_pts_array;
-            next_pts_healthy = prev_pts_array;
-            next_pts_array.clear();
-
             if (prevGray.data) {
+
+                for (unsigned i = 0; i < next_pts_array.size(); i++) {
+                    cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
+                }
 
                 //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
                 //kitti uses col, row specification
@@ -436,8 +396,8 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                 fs << "frame_count" << frame_count;
 
 
-                for ( it = frame_pixel_point_pixel_displacement.at(count).begin(); it !=
-                        frame_pixel_point_pixel_displacement.at(count).end(); it++ )
+                for ( it = frame_pixel_point_pixel_displacement.at(0).begin(); it !=
+                        frame_pixel_point_pixel_displacement.at(0).end(); it++ )
                 {
 
                     F_png_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
@@ -451,11 +411,55 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
                 }
 
-                count++;
+                cv::Mat flowframe;
+                flowframe.create(Dataset::getFrameSize(), CV_32FC3);
+
+                cv::MatIterator_<cv::Vec3f> it_flowframe = flowframe.begin<cv::Vec3f>();
+                for (unsigned i = 0; it_flowframe != flowframe.end<cv::Vec3f>(); it_flowframe++ ) {
+                    for ( unsigned j = 0; j < 3; j++ ) {
+                        (*it_flowframe)[j] = *(F_png_write.data_ + i );
+                        i++;
+                    }
+                }
+
+                cv::Mat stencilFrame;
+                stencilFrame = flowframe.clone();
+                for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
+                    //two objects
+                    std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
+
+                    int width = m_list_simulated_objects.at(i).getWidth();
+                    int height = m_list_simulated_objects.at(i).getHeight();
+
+                    float rowBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
+                            (frame_skip-1).at(frame_count).first.y;
+                    float columnBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
+                            (frame_skip-1).at(frame_count).first.x;
+
+                    cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin),(cvRound(rowBegin)+height)).colRange
+                            (cvRound(columnBegin),(cvRound(columnBegin)+width));
+
+                    for (unsigned y = 0; y < roi.rows; y++) {
+                        for (unsigned x = 0; x < roi.cols; x++) {
+
+                            base_movement.push_back(std::make_pair(cv::Point2f(cvRound(columnBegin)+x, cvRound
+                                                                                                               (rowBegin) +y),
+                                                                   roi.at<cv::Vec2f>(y,x)));
+                        }
+                    }
+                    m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
+                }
+
+                //cv::imwrite(temp_result_flow_path, flowframe);
                 F_png_write.write(temp_result_flow_path);
                 F_png_write_trajectory.write(temp_result_trajectory_path);
 
             }
+
+            needToInit = false;
+            prev_pts_array = next_pts_array;
+            next_pts_healthy = prev_pts_array;
+            next_pts_array.clear();
 
             toc = steady_clock::now();
             time_map[algo_map[algo]] = duration_cast<milliseconds>(toc - tic).count();
@@ -473,8 +477,6 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
             prevGray = curGray.clone();
         }
 
-        //F_png_write_trajectory.write(temp_result_flow_path);
-        //m_algo_extrapolated_frame_pixel_point_pixel_displacement.push_back(frame_pixel_point_pixel_displacement);
         fs.release();
 
         for(auto &n : time)
@@ -498,9 +500,9 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
         std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGtPath().string() +
                 std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
-        for ( ushort i = 0; i < m_list_simulated_objects.size(); i++) {
-            m_list_simulated_objects.at(i).trigger_m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement();
-        }
+    }
+    for ( ushort i = 0; i < m_list_simulated_objects.size(); i++) {
+        m_list_simulated_objects.at(i).set_m_obj_extrapolated_shape_pixel_point_pixel_displacement();
     }
 }
 
@@ -526,12 +528,17 @@ void AlgorithmFlow::generate_collision_points() {
     // Additionally stores the frames in a png file
     // Additionally stores the trajectory in a png file
 
+    std::map<std::string, double> time_map = {{"generate",     0},
+                                              {"ground truth", 0}};
 
+    auto tic = steady_clock::now();
+    auto toc = steady_clock::now();
+    auto tic_all = steady_clock::now();
+    auto toc_all = steady_clock::now();
+
+    std::cout << "ground truth flow will be stored in " << Dataset::getGroundTruthFlowPath().string() << std::endl;
     char folder_name_flow[50];
     cv::FileStorage fs;
-
-    fs.open(Dataset::getResultPath().string() + "/" + m_resultordner + "/" + folder_name_flow + "/" + "gt_flow.yaml",
-            cv::FileStorage::WRITE);
 
     std::vector<SimulatedObjects>::const_iterator objectIterator = m_list_simulated_objects.begin();
     std::vector<SimulatedObjects>::const_iterator  objectIteratorNext;
@@ -549,11 +556,16 @@ void AlgorithmFlow::generate_collision_points() {
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
+        sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
+        fs.open(Dataset::getResultPath().string() + "/" + m_resultordner + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+                cv::FileStorage::WRITE);
+
         sprintf(folder_name_flow, "flow_obj_%02d", frame_skip);
-        std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
+        std::cout << "generating collision points in AlgorithmFlow.cpp " << frame_skip << std::endl;
 
         unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0).get_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement().at
                 (frame_skip - 1).size();
+        assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char file_name_image[50];
@@ -563,17 +575,15 @@ void AlgorithmFlow::generate_collision_points() {
             std::string temp_gt_flow_image_path =
                     Dataset::getResultPath().string() + "/" + m_resultordner + "/" + folder_name_flow + "/" +
                             file_name_image;
+
             fs << "frame_count" << frame_count;
 
+            FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-            float *data_ = (float*)malloc(Dataset::getFrameSize().width*Dataset::getFrameSize().height*3*sizeof(float));
-            memset(data_, 255, Dataset::getFrameSize().width*Dataset::getFrameSize().height*3*sizeof(float));
-            FlowImageExtended F_png_write(data_, Dataset::getFrameSize().width, Dataset::getFrameSize().height);
             cv::Mat tempMatrix;
             tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
             tempMatrix = cv::Scalar_<unsigned>(255,255,255);
             assert(tempMatrix.channels() == 3);
-
 
             for (unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
@@ -581,10 +591,8 @@ void AlgorithmFlow::generate_collision_points() {
                 int width = m_list_simulated_objects.at(i).getWidth();
                 int height = m_list_simulated_objects.at(i).getHeight();
 
-                //if ( m_list_simulated_objects.at(i).getExtrapolatedVisibility().at(frame_skip - 1).at(frame_count)
-                //      == true ) {
-                if ( 1 ) {
-
+                if ( m_list_simulated_objects.at(i).getExtrapolatedVisibility().at(frame_skip - 1).at(frame_count)
+                      == true ) {
                     // gt_displacement
                     cv::Point2f next_pts = m_list_simulated_objects.at(i)
                             .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1)
@@ -614,12 +622,11 @@ void AlgorithmFlow::generate_collision_points() {
 
             for ( unsigned i = 0; i < m_list_objects_combination.size(); i++) {
 
-                /*if ( ( m_list_objects_combination.at(i).first.getExtrapolatedVisibility().at(frame_skip - 1)
+                if ( ( m_list_objects_combination.at(i).first.getExtrapolatedVisibility().at(frame_skip - 1)
                                .at(frame_count) == true ) && ( m_list_objects_combination.at(i).second
                                                                        .getExtrapolatedVisibility()
                                                                        .at(frame_skip - 1)
-                                                                       .at(frame_count) == true )) { */
-                if ( 1 ) {
+                                                                       .at(frame_count) == true )) {
 
                     cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
                             .at(frame_count).first;
@@ -655,8 +662,6 @@ void AlgorithmFlow::generate_collision_points() {
 
             m_frame_collision_points.push_back(collision_points);
 
-
-
             //Create png Matrix with 3 channels: x displacement. y displacment and ObjectId
             for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
                 for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
@@ -676,8 +681,8 @@ void AlgorithmFlow::generate_collision_points() {
     }
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
-    //toc_all = steady_clock::now();
-    //time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    //std::cout << "ground truth flow generation time - " << time_map["ground truth"] << "ms" << std::endl;
+    toc_all = steady_clock::now();
+    time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
+    std::cout << "ground truth flow generation time - " << time_map["ground truth"] << "ms" << std::endl;
 
 }

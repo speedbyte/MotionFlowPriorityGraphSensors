@@ -70,6 +70,7 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
         ushort m_valid_collision_points = 0;
+        ushort m_invalid_collision_points = 0;
         std::vector<float> xsamples,ysamples;
         unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(frame_skip - 1).size();
 
@@ -90,8 +91,20 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
                     ysamples.push_back(collisionpoints.y);
                     m_valid_collision_points++;
                 }
+                else {
+                    m_invalid_collision_points++;
+                }
+            }
+
+            if (m_valid_collision_points == 0 ) {
+                std::cout << "number of invalid collision points in frame " << frame_count << " are " <<
+                        m_invalid_collision_points << std::endl;
+                xsamples.push_back(0);
+                ysamples.push_back(0);
+
             }
         }
+
 
         std::vector<std::string> list_gp_lines;
         std::vector<std::pair<double, double>> xypoints_1, xypoints_2, xypoints_3, xypoints_collision;

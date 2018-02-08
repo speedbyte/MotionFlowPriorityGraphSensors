@@ -73,6 +73,7 @@ void Objects::generate_obj_extrapolated_pixel_point_pixel_displacement(const uns
 
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
         unsigned long FRAME_COUNT = m_obj_base_pixel_point_pixel_displacement.size();
+        assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 
@@ -120,6 +121,7 @@ void Objects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(con
         std::vector<std::vector<bool>  > outer_base_visiblity;
 
         unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
+        assert(FRAME_COUNT>0);
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
             cv::Point2f gt_next_pts = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).at(frame_count).first;
@@ -151,10 +153,9 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool> multiframe_visibility;
         unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
+        assert(FRAME_COUNT>0);
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
-            int prev_pts_x = 0;
-            int prev_pts_y = 0;
             float next_pts_x = 0.0f;
             float next_pts_y = 0.0f;
             float displacement_vector_x = 0.0f;
@@ -177,8 +178,6 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
             next_pts_y /= (float)CLUSTER_SIZE;
             displacement_vector_x =  displacement_vector_x / (float) CLUSTER_SIZE;
             displacement_vector_y = displacement_vector_y / (float) CLUSTER_SIZE;
-            //prev_pts_x = next_pts_x - displacement_vector_x;
-            //prev_pts_y = next_pts_y - displacement_vector_y;
 
             // I should return the vector instead of points and then normalize it.
             multiframe_flowvector.push_back(std::make_pair(cv::Point2f(next_pts_x, next_pts_y), cv::Point2f
@@ -195,6 +194,7 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > line_parameters;
         const unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at(frame_skip - 1)
                 .size();
+        assert(FRAME_COUNT>0);
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 

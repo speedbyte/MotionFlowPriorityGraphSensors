@@ -54,7 +54,7 @@ void GroundTruthFlow::prepare_directories() {
 }
 
 
-void GroundTruthFlow::generate_gt_scenepixel_displacement() {
+void GroundTruthFlow::generate_flow_frame_and_collision_points() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
@@ -74,7 +74,6 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
     auto toc = steady_clock::now();
     auto tic_all = steady_clock::now();
     auto toc_all = steady_clock::now();
-
 
     std::cout << "ground truth flow will be stored in " << Dataset::getGroundTruthFlowPath().string() << std::endl;
 
@@ -103,6 +102,7 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
         unsigned FRAME_COUNT = m_list_objects.at(0).getExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1).size();
+        assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char file_name_image[50];
@@ -112,12 +112,11 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
             std::string temp_gt_flow_image_path =
                     Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
                     + file_name_image;
+
             fs << "frame_count" << frame_count;
 
+            FlowImageExtended F_png_write( Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-            float *data_ = (float*)malloc(Dataset::getFrameSize().width*Dataset::getFrameSize().height*3*sizeof(float));
-            memset(data_, 255, Dataset::getFrameSize().width*Dataset::getFrameSize().height*3*sizeof(float));
-            FlowImageExtended F_png_write(data_, Dataset::getFrameSize().width, Dataset::getFrameSize().height);
             cv::Mat tempMatrix;
             tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
             tempMatrix = cv::Scalar_<unsigned>(255,255,255);
@@ -199,8 +198,6 @@ void GroundTruthFlow::generate_gt_scenepixel_displacement() {
             }
 
             m_frame_collision_points.push_back(collision_points);
-
-
 
             //Create png Matrix with 3 channels: x displacement. y displacment and ObjectId
             for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows

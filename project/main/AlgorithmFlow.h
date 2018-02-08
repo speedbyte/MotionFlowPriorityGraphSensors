@@ -36,7 +36,7 @@ public:
 
     void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 
-    void calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
+    void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
     &l_pixelmovement );

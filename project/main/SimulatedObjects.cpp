@@ -14,24 +14,22 @@ void SimulatedObjects::generate_simulated_obj_extrapolated_pixel_centroid_pixel_
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool> multiframe_visibility;
-        unsigned long FRAME_COUNT = m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
+        unsigned long FRAME_COUNT = m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
                 .size();
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
-            int prev_pts_x = 0;
-            int prev_pts_y = 0;
             float next_pts_x = 0.0f;
             float next_pts_y = 0.0f;
             float displacement_vector_x = 0.0f;
             float displacement_vector_y = 0.0f;
 
-            const unsigned CLUSTER_SIZE = (unsigned)m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement.at
+            const unsigned CLUSTER_SIZE = (unsigned)m_obj_extrapolated_shape_pixel_point_pixel_displacement.at
                     (frame_skip - 1).at(frame_count).size();
 
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
-                cv::Point2f pts = m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
+                cv::Point2f pts = m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).first;
-                cv::Point2f gt_displacement = m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
+                cv::Point2f gt_displacement = m_obj_extrapolated_shape_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).second;
                 next_pts_x += pts.x ;
                 next_pts_y += pts.y ;
@@ -42,35 +40,31 @@ void SimulatedObjects::generate_simulated_obj_extrapolated_pixel_centroid_pixel_
             next_pts_y /= (float)CLUSTER_SIZE;
             displacement_vector_x =  displacement_vector_x / (float) CLUSTER_SIZE;
             displacement_vector_y = displacement_vector_y / (float) CLUSTER_SIZE;
-            //prev_pts_x = next_pts_x - displacement_vector_x;
-            //prev_pts_y = next_pts_y - displacement_vector_y;
 
             // I should return the vector instead of points and then normalize it.
             multiframe_flowvector.push_back(std::make_pair(cv::Point2f(next_pts_x, next_pts_y), cv::Point2f
                     (displacement_vector_x, displacement_vector_y)));
             multiframe_visibility.push_back(true);
         }
-        m_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean.push_back(multiframe_flowvector);
+        m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.push_back(multiframe_flowvector);
+        m_obj_extrapolated_mean_visibility.push_back(multiframe_visibility);
+
     }
 
 
     //TODO - clean up this section.
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2f, cv::Point2f> > line_parameters;
-        const unsigned long FRAME_COUNT = m_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
-                        (frame_skip
-                                                                                                          - 1)
-                .size();
+        const unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
+                        (frame_skip - 1).size();
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 
-//            if ( m_obj_extrapolated_mean_visibility.at(frame_skip-1).at(frame_count) == true ) {
-            if ( 1 ) {
-                cv::Point2f next_pts = m_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
-                                (frame_skip - 1)
-                        .at(frame_count).first;
+            if ( m_obj_extrapolated_mean_visibility.at(frame_skip-1).at(frame_count) == true ) {
+                cv::Point2f next_pts = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
+                                (frame_skip - 1).at(frame_count).first;
                 cv::Point2f  displacement_vector =
-                        m_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
+                        m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
                         (frame_skip - 1).at(frame_count).second;
 
                 float m, c;
@@ -119,7 +113,7 @@ void SimulatedObjects::generate_simulated_obj_extrapolated_pixel_centroid_pixel_
             }
 
         }
-        m_simulated_obj_line_parameters.push_back(line_parameters);
+        m_obj_line_parameters.push_back(line_parameters);
 
     }
 }

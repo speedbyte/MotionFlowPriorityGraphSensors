@@ -16,8 +16,8 @@
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
 
-#define MAX_ITERATION_RESULTS 10
-#define MAX_ITERATION_GT 20
+#define MAX_ITERATION_RESULTS 50
+#define MAX_ITERATION_GT 100
 #define MAX_ITERATION_THETA 360
 #define MAX_SKIPS 2 // 1 means do not generate flow, 2 means generate base flow
 

@@ -35,7 +35,7 @@ public:
 
     GroundTruthFlow( const std::vector<Objects> &list_objects ) : m_list_objects(list_objects) {}
 
-    void generate_gt_scenepixel_displacement();
+    void generate_flow_frame_and_collision_points();
 
     void make_video_from_png(const Dataset &dataset_path, std::string unterordner);
 

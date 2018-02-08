@@ -24,21 +24,26 @@ private:
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_algo_frame_pixel_point_pixel_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
-            m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement;
+            m_obj_extrapolated_shape_pixel_point_pixel_displacement;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            m_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
+            m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
+
+    std::vector<std::vector<bool> > m_obj_extrapolated_mean_visibility;
+
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            m_simulated_obj_line_parameters;
+            m_obj_line_parameters;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
 
+    std::vector<std::vector<bool> >  m_obj_extrapolated_visibility;
+
 public:
 
-    SimulatedObjects(unsigned objectId, std::string objectName, int width, int height) :
+    SimulatedObjects(unsigned objectId, std::string objectName, int width, int height, std::vector<std::vector<bool> >  extrapolated_visibility) :
             m_objectId(objectId), m_objectName(objectName), m_simulatedObjectWidth(width), m_simulatedObjectHeight
-            (height) {
+            (height), m_obj_extrapolated_visibility(extrapolated_visibility) {
         SimulatedobjectCurrentCount += 1;
     }
 
@@ -46,17 +51,17 @@ public:
 
     const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>>> &
     get_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement() const {
-        return m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement;
+        return m_obj_extrapolated_shape_pixel_point_pixel_displacement;
     }
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getLineParameters() const {
-        return m_simulated_obj_line_parameters;
+        return m_obj_line_parameters;
     }
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
     getSimulatedExtrapolatedPixelCentroid_DisplacementMean()
     const {
-        return m_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
+        return m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
     }
 
     unsigned getObjectId() const {
@@ -71,8 +76,8 @@ public:
         outer_base_movement.push_back(base_movement);
     }
 
-    void trigger_m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement() {
-        m_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement.push_back(outer_base_movement);
+    void set_m_obj_extrapolated_shape_pixel_point_pixel_displacement() {
+        m_obj_extrapolated_shape_pixel_point_pixel_displacement.push_back(outer_base_movement);
         outer_base_movement.clear();
     }
 
@@ -84,6 +89,10 @@ public:
         return m_simulatedObjectHeight;
     }
 
+    std::vector<std::vector<bool> >  getExtrapolatedVisibility()
+    const {
+        return m_obj_extrapolated_visibility;
+    }
 
 };
 

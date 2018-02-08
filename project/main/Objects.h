@@ -56,7 +56,7 @@ private:
 public:
 
     Objects( ObjectImageShapeData &image_data_and_shape, const ObjectTrajectory &trajectory, ushort startPoint, Noise
-    &noise, std::string objectName, bool dynamic ) : CameraSensorImage(image_data_and_shape, noise), m_obj_trajectory
+    &noise, std::string objectName) : CameraSensorImage(image_data_and_shape, noise), m_obj_trajectory
             (trajectory), m_startPoint(startPoint) , m_objectName(objectName), m_objectId (objectCurrentCount)
     {
 

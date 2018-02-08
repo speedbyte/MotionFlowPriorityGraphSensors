@@ -173,7 +173,7 @@ int main ( int argc, char *argv[]) {
             noTrajectory.process(Dataset::getFrameSize());
             Achterbahn achterbahn1, achterbahn2;
             achterbahn1.process(Dataset::getFrameSize());
-            achterbahn1.setDynamic();
+            //achterbahn1.setDynamic();
             achterbahn2.process(Dataset::getFrameSize());
             //achterbahn2.setDynamic();
 
@@ -192,8 +192,8 @@ int main ( int argc, char *argv[]) {
 
             // Canvas is itself registered as an Object with a dummy trajectory
             Canvas canvas(background, noTrajectory, 60, whiteNoise);
-            Objects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide", true);
-            Objects obj2(rectangle2, achterbahn2, 60, colorfulNoise, "rectangle_long", false);
+            Objects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide");
+            Objects obj2(rectangle2, achterbahn2, 60, colorfulNoise, "rectangle_long");
             //Objects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
             //Objects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
             //Objects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
@@ -211,7 +211,7 @@ int main ( int argc, char *argv[]) {
                 gt_scene.generate_gt_scene();
 
                 GroundTruthFlow gt_flow(list_of_objects);
-                gt_flow.generate_gt_scenepixel_displacement();
+                gt_flow.generate_flow_frame_and_collision_points();
 
                 VectorRobustness vectorRobustness;
                 vectorRobustness.generateVectorRobustness(gt_flow);
@@ -223,16 +223,19 @@ int main ( int argc, char *argv[]) {
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
                 int width = list_of_objects.at(i).getImageShapeAndData().get().cols;
                 int height = list_of_objects.at(i).getImageShapeAndData().get().rows;
+                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_objects.at(i).getExtrapolatedVisibility();
+
+
                 SimulatedObjects objects(list_of_objects.at(i).getObjectId(), list_of_objects.at(i)
-                        .getObjectName(), width, height);
+                        .getObjectName(), width, height, extrapolated_visibility);
                 list_of_simulated_objects.push_back(objects);
             }
 
-            AlgorithmFlow fback(list_of_objects, list_of_simulated_objects);
-            fback.getSimulatedObjects();
 
             if ( cpp_dataset.fb ) {
-                fback.calculate_flow(fb, continous_frames, no_noise);
+                AlgorithmFlow fback(list_of_objects, list_of_simulated_objects);
+                fback.getSimulatedObjects();
+                fback.generate_flow_frame(fb, continous_frames, no_noise);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)
@@ -243,9 +246,18 @@ int main ( int argc, char *argv[]) {
                 vectorRobustness.generateVectorRobustness(fback);
             }
 
-            AlgorithmFlow lkanade(list_of_objects, list_of_simulated_objects);
             if ( cpp_dataset.lk ) {
-                lkanade.calculate_flow(lk, continous_frames, no_noise);
+                AlgorithmFlow lkanade(list_of_objects, list_of_simulated_objects);
+                lkanade.getSimulatedObjects();
+                lkanade.generate_flow_frame(lk, continous_frames, no_noise);
+
+                for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
+                    list_of_simulated_objects.at(i)
+                            .generate_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
+                }
+                lkanade.generate_collision_points();
+                VectorRobustness vectorRobustness;
+                vectorRobustness.generateVectorRobustness(lkanade);
             }
 
             if ( cpp_dataset.plot ) {
@@ -253,9 +265,6 @@ int main ( int argc, char *argv[]) {
                 PixelRobustness robust;
                 VectorRobustness vectorRobustness;
                 std::string resultordner;
-                fback.setResultOrdner(fb, continous_frames, no_noise);
-                robust.generatePixelRobustness(fback.getResultOrdner());
-                vectorRobustness.generateVectorRobustness(fback);
                 //PlotFlow::plot(std::string("results_FB_no_noise"));
                 //PlotFlow::plot(std::string("results_LK_no_noise"));
 
@@ -283,10 +292,10 @@ int main ( int argc, char *argv[]) {
             Dataset::fillDataset(frame_size, depth, cn, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02",
                                  "results");
             //AlgorithmFlow algo;
-            // The ground truth calculate_flow and image is already available from the base dataset. Hence only results can be
+            // The ground truth generate_flow_frame and image is already available from the base dataset. Hence only results can be
             // calculated here.
 
-            //algo.calculate_flow(fb, continous_frames, no_noise);
+            //algo.generate_flow_frame(fb, continous_frames, no_noise);
 
             //make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
             //make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");
@@ -311,7 +320,7 @@ int main ( int argc, char *argv[]) {
                 gt_scene.generate_gt_scene();
                 std::vector<Objects> list_of_objects = gt_scene.getListOfObjects();
                 GroundTruthFlow gt_flow(list_of_objects);
-                gt_flow.generate_gt_scenepixel_displacement();
+                gt_flow.generate_flow_frame_and_collision_points();
             }
 
 
@@ -321,8 +330,10 @@ int main ( int argc, char *argv[]) {
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
                 int width = list_of_objects.at(i).getImageShapeAndData().get().cols;
                 int height = list_of_objects.at(i).getImageShapeAndData().get().rows;
+                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_objects.at(i).getExtrapolatedVisibility();
+
                 SimulatedObjects objects(list_of_objects.at(i).getObjectId(), list_of_objects.at(i)
-                        .getObjectName(), width, height);
+                        .getObjectName(), width, height, extrapolated_visibility);
                 list_of_simulated_objects.push_back(objects);
             }
 
@@ -330,11 +341,11 @@ int main ( int argc, char *argv[]) {
             AlgorithmFlow lkanade(list_of_objects, list_of_simulated_objects);
 
             if ( vires_dataset.lk ) {
-                fback.calculate_flow(lk, continous_frames, no_noise);
+                fback.generate_flow_frame(lk, continous_frames, no_noise);
             }
 
             if ( vires_dataset.fb ) {
-                lkanade.calculate_flow(fb, continous_frames, no_noise);
+                lkanade.generate_flow_frame(fb, continous_frames, no_noise);
             }
 
             if ( vires_dataset.plot ) {
