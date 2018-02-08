@@ -107,7 +107,18 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
     prepare_directories(algo, frame_types, noise);
 
+    for ( ushort i = 0; i < m_list_objects.size(); i++ ) {
+        //two objects
+        std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
+        int width = m_list_objects.at(i).getImageShapeAndData().get().cols;
+        int height = m_list_objects.at(i).getImageShapeAndData().get().rows;
+        SimulatedObjects objects(m_list_objects.at(i).getObjectId(), m_list_objects.at(i)
+                .getObjectName(), width, height);
+        m_list_simulated_objects.push_back(objects);
+    }
+
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
+
 
 
         char folder_name_flow[50], folder_name_trajectory[50];
@@ -275,14 +286,11 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
                     cv::Mat stencilFrame;
                     stencilFrame = flow_frame.clone();
-                    for ( ushort i = 0; i < m_list_objects.size(); i++ ) {
+                    for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
                         //two objects
                         std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                        int width = m_list_objects.at(i).getImageShapeAndData().get().cols;
-                        int height = m_list_objects.at(i).getImageShapeAndData().get().rows;
-                        SimulatedObjects objects(m_list_objects.at(i).getObjectId(), m_list_objects.at(i)
-                                .getObjectName() , width, height );
-                        m_list_simulated_objects.push_back(objects);
+                        int width = m_list_simulated_objects.at(i).getWidth();
+                        int height = m_list_simulated_objects.at(i).getHeight();
                         float rowBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
                                 (frame_skip-1).at(frame_count).first.y;
                         float columnBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
@@ -295,11 +303,13 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
                         for (unsigned y = 0; y < roi.rows; y++) {
                             for (unsigned x = 0; x < roi.cols; x++) {
 
-                                base_movement.push_back(std::make_pair(cv::Point2f(x, y),
+                                base_movement.push_back(std::make_pair(cv::Point2f(cvRound(columnBegin)+x, cvRound
+                                                                                                                (rowBegin)
+                                                                                                        +y),
                                                                        roi.at<cv::Vec2f>(y,x)));
                             }
                         }
-                        objects.set_outer_base_movement(base_movement);
+                        m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
                     }
                 }
 
@@ -551,8 +561,7 @@ void AlgorithmFlow::generate_collision_points() {
         sprintf(folder_name_flow, "flow_obj_%02d", frame_skip);
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
-        unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
-                .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at
+        unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0).get_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement().at
                 (frame_skip - 1).size();
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
