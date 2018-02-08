@@ -28,9 +28,12 @@ private:
 
     std::vector<std::pair<Objects, Objects> > m_list_objects_combination;
 
+    const std::vector<Objects> &m_list_objects;
+
+
 public:
 
-    GroundTruthFlow( const std::vector<Objects> &list_objects ) : OpticalFlow(list_objects) {}
+    GroundTruthFlow( const std::vector<Objects> &list_objects ) : m_list_objects(list_objects) {}
 
     void generate_gt_scenepixel_displacement();
 

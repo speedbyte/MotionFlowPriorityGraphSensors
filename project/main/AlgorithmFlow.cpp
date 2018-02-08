@@ -107,16 +107,6 @@ void AlgorithmFlow::calculate_flow(ALGO_TYPES algo, FRAME_TYPES frame_types, NOI
 
     prepare_directories(algo, frame_types, noise);
 
-    for ( ushort i = 0; i < m_list_objects.size(); i++ ) {
-        //two objects
-        std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-        int width = m_list_objects.at(i).getImageShapeAndData().get().cols;
-        int height = m_list_objects.at(i).getImageShapeAndData().get().rows;
-        SimulatedObjects objects(m_list_objects.at(i).getObjectId(), m_list_objects.at(i)
-                .getObjectName(), width, height);
-        m_list_simulated_objects.push_back(objects);
-    }
-
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
 
 
@@ -539,7 +529,8 @@ void AlgorithmFlow::generate_collision_points() {
 
     char folder_name_flow[50];
     cv::FileStorage fs;
-    fs.open(Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+
+    fs.open(Dataset::getResultPath().string() + "/" + m_resultordner + "/" + folder_name_flow + "/" + "gt_flow.yaml",
             cv::FileStorage::WRITE);
 
     std::vector<SimulatedObjects>::const_iterator objectIterator = m_list_simulated_objects.begin();
@@ -570,8 +561,8 @@ void AlgorithmFlow::generate_collision_points() {
 
             sprintf(file_name_image, "000%03d_10.png", frame_count);
             std::string temp_gt_flow_image_path =
-                    Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
-                    + file_name_image;
+                    Dataset::getResultPath().string() + "/" + m_resultordner + "/" + folder_name_flow + "/" +
+                            file_name_image;
             fs << "frame_count" << frame_count;
 
 

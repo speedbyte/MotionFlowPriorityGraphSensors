@@ -217,14 +217,23 @@ int main ( int argc, char *argv[]) {
                 vectorRobustness.generateVectorRobustness(gt_flow);
 
             }
+            std::vector<SimulatedObjects> list_of_simulated_objects;
+            for ( ushort i = 0; i < list_of_objects.size(); i++ ) {
+                //two objects
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
+                int width = list_of_objects.at(i).getImageShapeAndData().get().cols;
+                int height = list_of_objects.at(i).getImageShapeAndData().get().rows;
+                SimulatedObjects objects(list_of_objects.at(i).getObjectId(), list_of_objects.at(i)
+                        .getObjectName(), width, height);
+                list_of_simulated_objects.push_back(objects);
+            }
 
-            AlgorithmFlow fback(list_of_objects);
-            AlgorithmFlow lkanade(list_of_objects);
+            AlgorithmFlow fback(list_of_objects, list_of_simulated_objects);
+            fback.getSimulatedObjects();
 
             if ( cpp_dataset.fb ) {
                 fback.calculate_flow(fb, continous_frames, no_noise);
-                std::vector<SimulatedObjects> list_of_simulated_objects;
-                list_of_simulated_objects = fback.getSimulatedObjects();
+
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)
                             .generate_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
@@ -234,6 +243,7 @@ int main ( int argc, char *argv[]) {
                 vectorRobustness.generateVectorRobustness(fback);
             }
 
+            AlgorithmFlow lkanade(list_of_objects, list_of_simulated_objects);
             if ( cpp_dataset.lk ) {
                 lkanade.calculate_flow(lk, continous_frames, no_noise);
             }
@@ -304,8 +314,20 @@ int main ( int argc, char *argv[]) {
                 gt_flow.generate_gt_scenepixel_displacement();
             }
 
-            AlgorithmFlow fback(list_of_objects);
-            AlgorithmFlow lkanade(list_of_objects);
+
+            std::vector<SimulatedObjects> list_of_simulated_objects;
+            for ( ushort i = 0; i < list_of_objects.size(); i++ ) {
+                //two objects
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
+                int width = list_of_objects.at(i).getImageShapeAndData().get().cols;
+                int height = list_of_objects.at(i).getImageShapeAndData().get().rows;
+                SimulatedObjects objects(list_of_objects.at(i).getObjectId(), list_of_objects.at(i)
+                        .getObjectName(), width, height);
+                list_of_simulated_objects.push_back(objects);
+            }
+
+            AlgorithmFlow fback(list_of_objects, list_of_simulated_objects);
+            AlgorithmFlow lkanade(list_of_objects, list_of_simulated_objects);
 
             if ( vires_dataset.lk ) {
                 fback.calculate_flow(lk, continous_frames, no_noise);
