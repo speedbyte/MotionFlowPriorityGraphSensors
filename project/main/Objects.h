@@ -12,18 +12,18 @@ class Objects {
 
 public:
 
-    virtual unsigned getObjectId() const  {};
+    virtual unsigned getObjectId() const = 0;
 
     virtual std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-    get_obj_extrapolated_pixel_centroid_pixel_displacement_mean() const {};
+    get_obj_extrapolated_pixel_centroid_pixel_displacement_mean() const = 0;
 
-    virtual int getWidth() const {};
+    virtual int getWidth() const = 0;
 
-    virtual int getHeight() const {};
+    virtual int getHeight() const = 0;
 
-    virtual std::vector<std::vector<bool> >  get_obj_extrapolated_visibility() const {};
+    virtual std::vector<std::vector<bool> >  get_obj_extrapolated_visibility() const = 0;
 
-    virtual std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_line_parameters() const {};
+    virtual std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_line_parameters() const = 0;
 
 };
 
