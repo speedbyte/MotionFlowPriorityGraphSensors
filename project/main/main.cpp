@@ -211,7 +211,8 @@ int main ( int argc, char *argv[]) {
                 gt_scene.generate_gt_scene();
 
                 GroundTruthFlow gt_flow(list_of_objects);
-                gt_flow.generate_flow_frame_and_collision_points();
+                gt_flow.generate_flow_frame();
+                gt_flow.generate_collision_points();
 
                 VectorRobustness vectorRobustness;
                 vectorRobustness.generateVectorRobustness(gt_flow);
@@ -221,9 +222,9 @@ int main ( int argc, char *argv[]) {
             for ( ushort i = 0; i < list_of_objects.size(); i++ ) {
                 //two objects
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                int width = list_of_objects.at(i).getImageShapeAndData().get().cols;
-                int height = list_of_objects.at(i).getImageShapeAndData().get().rows;
-                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_objects.at(i).getExtrapolatedVisibility();
+                int width = list_of_objects.at(i).getWidth();
+                int height = list_of_objects.at(i).getHeight();
+                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_objects.at(i).get_obj_extrapolated_visibility();
 
 
                 SimulatedObjects objects(list_of_objects.at(i).getObjectId(), list_of_objects.at(i)
@@ -320,7 +321,8 @@ int main ( int argc, char *argv[]) {
                 gt_scene.generate_gt_scene();
                 std::vector<Objects> list_of_objects = gt_scene.getListOfObjects();
                 GroundTruthFlow gt_flow(list_of_objects);
-                gt_flow.generate_flow_frame_and_collision_points();
+                gt_flow.generate_flow_frame();
+                gt_flow.generate_collision_points();
             }
 
 
@@ -328,9 +330,9 @@ int main ( int argc, char *argv[]) {
             for ( ushort i = 0; i < list_of_objects.size(); i++ ) {
                 //two objects
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                int width = list_of_objects.at(i).getImageShapeAndData().get().cols;
-                int height = list_of_objects.at(i).getImageShapeAndData().get().rows;
-                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_objects.at(i).getExtrapolatedVisibility();
+                int width = list_of_objects.at(i).getWidth();
+                int height = list_of_objects.at(i).getHeight();
+                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_objects.at(i).get_obj_extrapolated_visibility();
 
                 SimulatedObjects objects(list_of_objects.at(i).getObjectId(), list_of_objects.at(i)
                         .getObjectName(), width, height, extrapolated_visibility);

@@ -431,9 +431,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     int width = m_list_simulated_objects.at(i).getWidth();
                     int height = m_list_simulated_objects.at(i).getHeight();
 
-                    float rowBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
+                    float rowBegin = m_list_objects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.y;
-                    float columnBegin = m_list_objects.at(i).getExtrapolatedPixelpoint_pixelDisplacement().at
+                    float columnBegin = m_list_objects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
 
                     cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin),(cvRound(rowBegin)+height)).colRange
@@ -563,7 +563,7 @@ void AlgorithmFlow::generate_collision_points() {
         sprintf(folder_name_flow, "flow_obj_%02d", frame_skip);
         std::cout << "generating collision points in AlgorithmFlow.cpp " << frame_skip << std::endl;
 
-        unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0).get_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement().at
+        unsigned FRAME_COUNT = (unsigned)(unsigned)m_list_simulated_objects.at(0).get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
                 (frame_skip - 1).size();
         assert(FRAME_COUNT>0);
 
@@ -591,17 +591,17 @@ void AlgorithmFlow::generate_collision_points() {
                 int width = m_list_simulated_objects.at(i).getWidth();
                 int height = m_list_simulated_objects.at(i).getHeight();
 
-                if ( m_list_simulated_objects.at(i).getExtrapolatedVisibility().at(frame_skip - 1).at(frame_count)
+                if ( m_list_simulated_objects.at(i).get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count)
                       == true ) {
                     // gt_displacement
                     cv::Point2f next_pts = m_list_simulated_objects.at(i)
-                            .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip - 1)
+                            .get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
                             .at(frame_count).first;
                     cv::Point2f displacement = m_list_simulated_objects.at(i)
-                            .getSimulatedExtrapolatedPixelCentroid_DisplacementMean().at(frame_skip- 1)
+                            .get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip- 1)
                             .at(frame_count).second;
 
-                    cv::Point2f gt_line_pts = m_list_simulated_objects.at(i).getLineParameters().at(frame_skip - 1)
+                    cv::Point2f gt_line_pts = m_list_simulated_objects.at(i).get_line_parameters().at(frame_skip - 1)
                             .at(frame_count).second;
 
 
@@ -622,16 +622,16 @@ void AlgorithmFlow::generate_collision_points() {
 
             for ( unsigned i = 0; i < m_list_objects_combination.size(); i++) {
 
-                if ( ( m_list_objects_combination.at(i).first.getExtrapolatedVisibility().at(frame_skip - 1)
+                if ( ( m_list_objects_combination.at(i).first.get_obj_extrapolated_visibility().at(frame_skip - 1)
                                .at(frame_count) == true ) && ( m_list_objects_combination.at(i).second
-                                                                       .getExtrapolatedVisibility()
+                                                                       .get_obj_extrapolated_visibility()
                                                                        .at(frame_skip - 1)
                                                                        .at(frame_count) == true )) {
 
-                    cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.getLineParameters().at(frame_skip - 1)
+                    cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first.get_line_parameters().at(frame_skip - 1)
                             .at(frame_count).first;
 
-                    cv::Point2f lineparameters2 = m_list_objects_combination.at(i).second.getLineParameters().at(frame_skip - 1)
+                    cv::Point2f lineparameters2 = m_list_objects_combination.at(i).second.get_line_parameters().at(frame_skip - 1)
                             .at(frame_count).first;
 
                     // first fill rowco

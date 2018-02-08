@@ -17,11 +17,12 @@ private:
 
     const std::string m_objectName;
 
-    int m_simulatedObjectWidth;
+    int m_ObjectWidth;
 
-    int m_simulatedObjectHeight;
+    int m_ObjectHeight;
 
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_algo_frame_pixel_point_pixel_displacement;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+             m_algo_frame_pixel_point_pixel_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_obj_extrapolated_shape_pixel_point_pixel_displacement;
@@ -42,7 +43,7 @@ private:
 public:
 
     SimulatedObjects(unsigned objectId, std::string objectName, int width, int height, std::vector<std::vector<bool> >  extrapolated_visibility) :
-            m_objectId(objectId), m_objectName(objectName), m_simulatedObjectWidth(width), m_simulatedObjectHeight
+            m_objectId(objectId), m_objectName(objectName), m_ObjectWidth(width), m_ObjectHeight
             (height), m_obj_extrapolated_visibility(extrapolated_visibility) {
         SimulatedobjectCurrentCount += 1;
     }
@@ -50,16 +51,16 @@ public:
     void generate_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean(const unsigned &max_skips);
 
     const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>>> &
-    get_simulated_obj_extrapolated_shape_pixel_point_pixel_displacement() const {
+    get_obj_extrapolated_shape_pixel_point_pixel_displacement() const {
         return m_obj_extrapolated_shape_pixel_point_pixel_displacement;
     }
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getLineParameters() const {
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_line_parameters() const {
         return m_obj_line_parameters;
     }
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-    getSimulatedExtrapolatedPixelCentroid_DisplacementMean()
+    get_obj_extrapolated_pixel_centroid_pixel_displacement_mean()
     const {
         return m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
     }
@@ -82,14 +83,14 @@ public:
     }
 
     int getWidth() const {
-        return m_simulatedObjectWidth;
+        return m_ObjectWidth;
     }
 
     int getHeight() const {
-        return m_simulatedObjectHeight;
+        return m_ObjectHeight;
     }
 
-    std::vector<std::vector<bool> >  getExtrapolatedVisibility()
+    std::vector<std::vector<bool> >  get_obj_extrapolated_visibility()
     const {
         return m_obj_extrapolated_visibility;
     }

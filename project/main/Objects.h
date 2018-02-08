@@ -20,6 +20,10 @@ private:
     
     const ushort m_startPoint;
 
+    int m_ObjectWidth;
+
+    int m_ObjectHeight;
+
     static unsigned objectCurrentCount; // assingn object id
 
     const ObjectTrajectory &m_obj_trajectory; // TODO use a own copy instead of reference.
@@ -29,16 +33,24 @@ private:
     const std::string m_objectName;
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_point_pixel_displacement;
+
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_point_pixel_displacement;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >m_obj_extrapolated_shape_pixel_point_pixel_displacement;
+
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_obj_extrapolated_shape_pixel_point_pixel_displacement;
+
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
+
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             m_obj_line_parameters;
 
     std::vector<bool> m_obj_base_visibility;
+
     std::vector<std::vector<bool> >  m_obj_extrapolated_visibility;
+
     std::vector<std::vector<std::vector<bool> > > m_obj_extrapolated_shape_visibility;
+
     std::vector<std::vector<bool> > m_obj_extrapolated_mean_visibility;
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> >  getBasePixelpoint_pixelDisplacement() const {
@@ -64,6 +76,9 @@ public:
         image_data_and_shape.process();
         objectCurrentCount += 1;
 
+        m_ObjectWidth = image_data_and_shape.get().cols;
+        m_ObjectHeight = image_data_and_shape.get().rows;
+
         if ( objectName.compare("BackgroundCanvas")) {
 
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
@@ -83,27 +98,35 @@ public:
     }
 
 
+    int getWidth() const {
+        return m_ObjectWidth;
+    }
+
+    int getHeight() const {
+        return m_ObjectHeight;
+    }
+
     ObjectTrajectory getTrajectoryPoints() const {
         return m_obj_trajectory;
     }
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getExtrapolatedPixelpoint_pixelDisplacement()
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_obj_extrapolated_pixel_point_pixel_displacement()
     const {
         return m_obj_extrapolated_pixel_point_pixel_displacement;
     }
 
-    std::vector<std::vector<bool> >  getExtrapolatedVisibility()
+    std::vector<std::vector<bool> >  get_obj_extrapolated_visibility()
     const {
         return m_obj_extrapolated_visibility;
     }
 
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getExtrapolatedPixelCentroid_DisplacementMean()
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_obj_extrapolated_pixel_centroid_pixel_displacement_mean()
     const {
         return m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
     }
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  getLineParameters() const {
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_line_parameters() const {
         return m_obj_line_parameters;
     }
 

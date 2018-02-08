@@ -112,8 +112,6 @@ void Objects::generate_obj_extrapolated_pixel_point_pixel_displacement(const uns
 void Objects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const unsigned &max_skips ) {
 
 // object image_data_and_shape
-    int width = m_image_data_and_shape.get().cols;
-    int height = m_image_data_and_shape.get().rows;
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
 
@@ -130,8 +128,8 @@ void Objects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(con
             std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
             std::vector<bool> base_visibility;
 
-            for (unsigned j = 0; j < width; j++) {
-                for (unsigned k = 0; k < height; k++) {
+            for (unsigned j = 0; j < m_ObjectWidth; j++) {
+                for (unsigned k = 0; k < m_ObjectHeight; k++) {
                     base_movement.push_back(std::make_pair(cv::Point2f(gt_next_pts.x + j, gt_next_pts.y +
                                                                                               k), gt_displacement));
                     base_visibility.push_back(true);
