@@ -265,7 +265,7 @@ int main ( int argc, char *argv[]) {
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)
-                            .generate_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
+                            .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
                 }
                 fback.generate_collision_points(list_of_simulated_objects_ptr);
                 VectorRobustness vectorRobustness;
@@ -279,7 +279,7 @@ int main ( int argc, char *argv[]) {
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)
-                            .generate_simulated_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
+                            .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
                 }
                 lkanade.generate_collision_points(list_of_simulated_objects_ptr);
                 VectorRobustness vectorRobustness;
