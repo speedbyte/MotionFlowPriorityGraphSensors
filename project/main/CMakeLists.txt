@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(main)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -20,8 +20,8 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 set(SOURCE_FILES
         KittiSubmitInterface.cpp ObjectTrajectory.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
         video_capture.cpp GroundTruthFlow.cpp  AlgorithmFlow.cpp kbhit.cpp Dataset.cpp PlotFlow.cpp
-        GroundTruthScene.cpp ObjectImageShapeData.cpp Objects.cpp Noise.cpp Noise.h Canvas.cpp Canvas.h SensorImage.cpp
-        SensorImage.h FlowImageExtended.cpp CameraSensorImage.cpp CameraSensorImage.h RobustnessIndex.cpp RobustnessIndex.h OpticalFlow.cpp OpticalFlow.h SimulatedObjects.cpp SimulatedObjects.h)
+        GroundTruthScene.cpp ObjectImageShapeData.cpp GroundTruthObjects.cpp Noise.cpp Noise.h Canvas.cpp Canvas.h SensorImage.cpp
+        SensorImage.h FlowImageExtended.cpp CameraSensorImage.cpp CameraSensorImage.h RobustnessIndex.cpp RobustnessIndex.h OpticalFlow.cpp OpticalFlow.h SimulatedObjects.cpp SimulatedObjects.h Objects.cpp Objects.h)
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries( main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png viresrdb)

@@ -7,8 +7,9 @@
 
 
 #include <opencv2/core/types.hpp>
+#include "Objects.h"
 
-class SimulatedObjects {
+class SimulatedObjects : public Objects {
 private:
 
     static unsigned SimulatedobjectCurrentCount; // assingn object id

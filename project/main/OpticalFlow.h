@@ -6,7 +6,7 @@
 #define MAIN_OPTICALFLOW_H
 
 #include <opencv2/core/types.hpp>
-#include "Objects.h"
+#include "GroundTruthObjects.h"
 #include "SimulatedObjects.h"
 
 class OpticalFlow {
@@ -14,11 +14,11 @@ class OpticalFlow {
 protected:
 
 
-
-
     std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
     std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_collision_points;
+
+    std::vector<std::pair<Objects*, Objects* > > m_list_objects_combination;
 
 public:
 
@@ -26,6 +26,8 @@ public:
         return m_frame_skip_collision_points;
     }
 
+
+    void generate_collision_points(std::vector<Objects* > & m_list_objects_ptr);
 
 
 

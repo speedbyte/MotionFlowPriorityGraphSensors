@@ -25,18 +25,16 @@ private:
 
     std::vector<std::pair<SimulatedObjects, SimulatedObjects> > m_list_objects_combination;
 
-    const std::vector<Objects> &m_list_objects;
-
-    std::vector<SimulatedObjects> &m_list_simulated_objects;
+    std::vector<SimulatedObjects> &m_list_objects;
 
 public:
 
-    AlgorithmFlow( const std::vector<Objects> &list_objects, std::vector<SimulatedObjects>
-    &list_simulated_objects ) : m_list_objects(list_objects), m_list_simulated_objects(list_simulated_objects) {}
+    AlgorithmFlow( std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_objects(list_simulated_objects)  {}
 
     void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 
-    void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
+    void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise,
+                             const std::vector<GroundTruthObjects>& groundtruthobjects);
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
     &l_pixelmovement );
@@ -47,10 +45,8 @@ public:
         return m_resultordner;
     }
 
-    void generate_collision_points();
-
     std::vector<SimulatedObjects> getSimulatedObjects() {
-        return m_list_simulated_objects;
+        return m_list_objects;
     }
 
 };

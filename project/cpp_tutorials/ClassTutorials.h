@@ -99,9 +99,10 @@ public:
         return a;
     }
 
-    void setA() {
-        a = 100;
+    void setA(int b) {
+        a = b;
     }
+
 };
 
 class Derived: public Base {

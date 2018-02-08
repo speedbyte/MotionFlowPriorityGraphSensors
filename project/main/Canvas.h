@@ -9,18 +9,18 @@
 #include <opencv2/core/mat.hpp>
 #include "SensorImage.h"
 #include "Dataset.h"
-#include "Objects.h"
+#include "GroundTruthObjects.h"
 
 
 // Canvas is a kind of Object ( its just a big object, and hence has the same property )
-class Canvas : public Objects {
+class Canvas : public GroundTruthObjects {
 
 
 public:
 
     // The canvas can move to simulate a moving car. Hence we need trajectory etc.
     Canvas ( ObjectImageShapeData &image_data_and_shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
-    &noise) : Objects(image_data_and_shape, trajectory, startPoint, noise, "BackgroundCanvas") {
+    &noise) : GroundTruthObjects(image_data_and_shape, trajectory, startPoint, noise, "BackgroundCanvas") {
         image_data_and_shape.process();
     };
 

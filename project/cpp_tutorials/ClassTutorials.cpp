@@ -3,7 +3,49 @@
 //
 
 #include <vector>
+#include <memory>
+#include <algorithm>
 #include "ClassTutorials.h"
+
+void someFunction(std::vector<std::unique_ptr<Base> > & vec) {
+
+    std::vector<std::unique_ptr<Base>>::iterator it = vec.begin();
+    std::vector<std::unique_ptr<Base>>::iterator it_next = it+1;
+
+    std::vector<std::pair<std::unique_ptr<Base>, std::unique_ptr<Base>> > pairWise;
+    //pairWisevectorUnique.push_back(std::make_pair( (*it).get(), (*it_next).get() ));
+    //pairWisevectorUnique.push_back(std::make_pair( (*it).get(), (*it_next).get() ));
+
+    pairWise.push_back(std::make_pair(std::make_unique<Base>(*(*it).get()), std::make_unique<Base>(*(*it_next).get())));
+    pairWise.push_back(std::make_pair(std::make_unique<Base>(*(*it).get()), std::make_unique<Base>(*(*it_next).get())));
+    //pairWise.emplace_back(std::make_unique<Base>(*(*it).get()), std::make_unique<Base>(*(*it_next).get()));
+
+    std::cout << pairWise.at(0).first.get()->getA() << std::endl;
+    //std::cout << "enddd\n";
+    std::cout << pairWise.at(1).second.get()->getA() << std::endl;
+
+
+}
+
+void someFunction2(std::vector<Base*> &vec) {
+
+    std::vector<Base*>::iterator it = vec.begin();
+    std::vector<Base*>::iterator it_next = it+1;
+
+    std::vector<std::pair<Base*, Base*> > pairWise;
+    //pairWisevectorUnique.push_back(std::make_pair( (*it).get(), (*it_next).get() ));
+    //pairWisevectorUnique.push_back(std::make_pair( (*it).get(), (*it_next).get() ));
+
+    pairWise.push_back(std::make_pair( ((*it)), ((*it_next))) );
+    pairWise.push_back(std::make_pair( ((*it)), ((*it_next))) );
+
+    std::cout << pairWise.at(0).first->getA() << std::endl;
+    //std::cout << "enddd\n";
+    std::cout << pairWise.at(1).second->getA() << std::endl;
+
+
+}
+
 
 int main(int argc, char *argv[]) {
 
@@ -32,8 +74,20 @@ int main(int argc, char *argv[]) {
     std::cout << std::endl;
     c.printC();
 
-    b.setA();
+    b.setA(10);
     b.printA();
+
+    std::vector<Derived> derivedObjects(2);
+    derivedObjects.at(0).setA(150);
+    derivedObjects.at(1).setA(300);
+    std::vector<Base*> vecPtr = {&derivedObjects.at(0), &derivedObjects.at(1)};
+
+
+    /*
+    std::transform(derivedObjects.begin(), derivedObjects.end(), std::back_inserter(vecPtr),
+                   [](auto p){ return std::make_unique<Base>(p); });
+*/
+    someFunction2(vecPtr);
 
 
     //std::cout << b.getA();
