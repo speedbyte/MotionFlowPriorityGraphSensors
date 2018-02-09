@@ -53,7 +53,8 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
             m_obj_base_visibility.push_back(true);
         }
         else {
-            m_obj_base_visibility.push_back(false);
+            m_obj_base_visibility.push_back(true); // Dangerous because this means the objects in first frame will
+            // always be visible, even if they are not.
             m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(cv::Point2f(0,0), cv::Point2f(0,0)));
         }
         current_index++;
@@ -74,7 +75,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_point_pixel_displacemen
         unsigned long FRAME_COUNT = m_obj_base_pixel_point_pixel_displacement.size();
         assert(FRAME_COUNT>0);
 
-        for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
             // The first frame is the reference frame. frame skip 1 means no skips
             // The below code has to go through consecutive frames

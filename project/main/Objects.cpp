@@ -6,9 +6,7 @@
 #include "Dataset.h"
 
 
-void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const unsigned
-                                                                                                   &max_skips) {
-
+void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const unsigned &max_skips) {
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
@@ -51,6 +49,11 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
 
     }
 
+    generate_obj_line_parameters(max_skips);
+}
+
+
+void Objects::generate_obj_line_parameters( const unsigned &max_skips) {
 
     //TODO - clean up this section.
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
@@ -114,7 +117,6 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
 
         }
         m_obj_line_parameters.push_back(line_parameters);
-
     }
 }
 

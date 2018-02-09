@@ -104,7 +104,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
 
 
-        char folder_name_flow[50], folder_name_trajectory[50];
+        char frame_skip_folder_suffix[50];
         char file_name_image[50];
 
         std::vector<unsigned> x_pts;
@@ -132,10 +132,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             }
         }
         cv::Mat curGray, prevGray;
-        sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
-        sprintf(folder_name_trajectory, "trajectory_occ_%02d", frame_skip);
-        std::string results_flow_matrix_str = m_generatepath.string() + "/" +
-                                              folder_name_flow + "/" + "result_flow.yaml";
+        sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
+        std::string results_flow_matrix_str = m_flow_occ_path.string() + "/" +
+                                              frame_skip_folder_suffix + "/" + "result_flow.yaml";
         cv::VideoWriter video_out;
 
         if ( frame_types == video_frames)
@@ -192,12 +191,12 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //draw new ground truth flow.
 
 
-            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > frame_pixel_point_pixel_displacement;
 
+            /*
             if ( frame_count%frame_skip != 0 ) {
                 continue;
-            }
-            sprintf(file_name_image, "000%03d_10.png", frame_count);
+            }*/
+            sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
             flowImage = cv::Scalar(0,0,0);
             assert(flowImage.channels() == 3);
             // Break out of the loop if the user presses the Esc key
@@ -229,10 +228,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 throw ("No image file found error");
             }
 
-            temp_result_flow_path = m_generatepath.string() + "/" +
-                                    folder_name_flow + "/" + file_name_image;
-            temp_result_trajectory_path = m_generatepath.string() + "/" +
-                                    folder_name_trajectory + "/" + file_name_image;
+            temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
+            temp_result_trajectory_path = m_trajectory_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
@@ -241,6 +238,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
             std::vector<cv::Point2f> next_pts_array;
             tic = steady_clock::now();
+
+            //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
+            //kitti uses col, row specification
+            FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
             // Calculate optical generate_flow_frame map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
@@ -340,7 +341,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 }
 
-                frame_pixel_point_pixel_displacement.push_back(frame_points);
                 next_pts_array.resize(count_good_points); // this is required for LK. For FB, anyways the frame will
                 // be completely calculated every time.
 
@@ -348,50 +348,17 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     // pick up the last healthy points
                     next_pts_array = next_pts_healthy;
                 }
-            }
-            else {
-                needToInit = true;
-            }
-            if ( needToInit ) { //|| ( frame_count%4 == 0) ) {
-                //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.
-                // automatic initialization
-                cv::goodFeaturesToTrack(curGray, next_pts_array, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
-                // Refining the location of the feature points
-                assert(next_pts_array.size() <= MAX_COUNT );
-                std::cout << next_pts_array.size() << std::endl;
-                std::vector<cv::Point2f> currentPoint;
-                std::swap(currentPoint, next_pts_array);
-                next_pts_array.clear();
-                for (unsigned i = 0; i < currentPoint.size(); i++) {
-                    std::vector<cv::Point2f> tempPoints;
-                    tempPoints.push_back(currentPoint[i]);
-                    // Function to refine the location of the corners to subpixel accuracy.
-                    // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
-                    cv::TermCriteria termcrit_subpixel(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
-                    cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit_subpixel);
-                    next_pts_array.push_back(tempPoints[0]);
-                }
-                printf("old next_pts_array size is %ld and new next_pts_array size is %ld\n", currentPoint.size(), next_pts_array.size());
-            }
 
-            if (prevGray.data) {
-
-                for (unsigned i = 0; i < next_pts_array.size(); i++) {
+                for (unsigned i = 0; i < frame_points.size(); i++) {
                     cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
                 }
-
-                //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
-                //kitti uses col, row specification
-                FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
-
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator it ;
 
                 std::cout << "frame_count " << frame_count << std::endl;
                 fs << "frame_count" << frame_count;
 
 
-                for ( it = frame_pixel_point_pixel_displacement.at(0).begin(); it !=
-                        frame_pixel_point_pixel_displacement.at(0).end(); it++ )
+                for ( it = frame_points.begin(); it !=frame_points.end(); it++ )
                 {
 
                     F_png_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
@@ -436,8 +403,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     for (unsigned y = 0; y < roi.rows; y++) {
                         for (unsigned x = 0; x < roi.cols; x++) {
 
-                            base_movement.push_back(std::make_pair(cv::Point2f(cvRound(columnBegin)+x, cvRound
-                                                                                                               (rowBegin) +y),
+                            base_movement.push_back(std::make_pair(cv::Point2f(cvRound(columnBegin)+x, cvRound(rowBegin) +y),
                                                                    roi.at<cv::Vec2f>(y,x)));
                         }
                     }
@@ -448,6 +414,43 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 F_png_write.write(temp_result_flow_path);
                 F_png_write_trajectory.write(temp_result_trajectory_path);
 
+            }
+
+            else {
+                std::cout << "skipping first frame frame count " << frame_count << std::endl;
+                // But still write the data for completion
+                F_png_write.write(temp_result_flow_path);
+                F_png_write_trajectory.write(temp_result_trajectory_path);
+
+                for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
+                    std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
+                    base_movement.push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
+                    m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
+                }
+
+                needToInit = true;
+            }
+
+            if ( needToInit && algo == lk) { //|| ( frame_count%4 == 0) ) {
+                //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.
+                // automatic initialization
+                cv::goodFeaturesToTrack(curGray, next_pts_array, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
+                // Refining the location of the feature points
+                assert(next_pts_array.size() <= MAX_COUNT );
+                std::cout << next_pts_array.size() << std::endl;
+                std::vector<cv::Point2f> currentPoint;
+                std::swap(currentPoint, next_pts_array);
+                next_pts_array.clear();
+                for (unsigned i = 0; i < currentPoint.size(); i++) {
+                    std::vector<cv::Point2f> tempPoints;
+                    tempPoints.push_back(currentPoint[i]);
+                    // Function to refine the location of the corners to subpixel accuracy.
+                    // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
+                    cv::TermCriteria termcrit_subpixel(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
+                    cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit_subpixel);
+                    next_pts_array.push_back(tempPoints[0]);
+                }
+                printf("old next_pts_array size is %ld and new next_pts_array size is %ld\n", currentPoint.size(), next_pts_array.size());
             }
 
             needToInit = false;

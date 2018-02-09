@@ -71,15 +71,15 @@ void GroundTruthFlow::generate_flow_frame() {
 
     std::cout << "ground truth flow will be stored in " << Dataset::getGroundTruthPath().string() << std::endl;
 
-    char folder_name_flow[50];
+    char frame_skip_folder_suffix[50];
     cv::FileStorage fs;
-    fs.open(m_generatepath.string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+    fs.open(m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + "gt_flow.yaml",
             cv::FileStorage::WRITE);
 
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
+        sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
         std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
 
         unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0).get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1).size();
@@ -89,8 +89,8 @@ void GroundTruthFlow::generate_flow_frame() {
             char file_name_image[50];
             std::cout << "frame_count " << frame_count << std::endl;
 
-            sprintf(file_name_image, "000%03d_10.png", frame_count);
-            std::string temp_gt_flow_image_path = m_generatepath.string() + "/" + folder_name_flow + "/" +
+            sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+            std::string temp_gt_flow_image_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                     file_name_image;
 
             fs << "frame_count" << frame_count;
@@ -115,12 +115,7 @@ void GroundTruthFlow::generate_flow_frame() {
                     cv::Point2f next_pts = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
                             .at(frame_count).first;
                     cv::Point2f displacement = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip
-                                                                                                                       - 1)
-                            .at(frame_count).second;
-
-                    cv::Point2f gt_line_pts = m_list_gt_objects.at(i).get_line_parameters().at(frame_skip - 1)
-                            .at(frame_count).second;
-
+                                                                                                                      - 1).at(frame_count).second;
 
                     cv::Mat roi;
                     roi = tempMatrix.
@@ -130,8 +125,6 @@ void GroundTruthFlow::generate_flow_frame() {
                     roi = cv::Scalar(displacement.x, displacement.y,
                                      static_cast<float>(m_list_gt_objects.at(i).getObjectId()));
 
-                    // cv line is intelligent and it can also project to values not within the frame size including negative values.
-                    cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                 }
             }
 

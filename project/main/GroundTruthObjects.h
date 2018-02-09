@@ -44,10 +44,14 @@ private:
 
 public:
 
-    GroundTruthObjects( ObjectImageShapeData &image_data_and_shape, const ObjectTrajectory &trajectory, ushort startPoint, Noise &noise, std::string objectName) : CameraSensorImage(image_data_and_shape, noise), m_obj_trajectory(trajectory), m_startPoint(startPoint) , Objects(objectName)
+    GroundTruthObjects( ObjectImageShapeData &image_data_and_shape, const ObjectTrajectory &trajectory, ushort
+    startPoint, Noise &noise, std::string objectName) : CameraSensorImage(image_data_and_shape, noise),
+                                                        m_obj_trajectory(trajectory), m_startPoint(startPoint),
+                                                        Objects(objectName)
 
     {
 
+        assert(m_obj_trajectory.getTrajectory().size() >= MAX_ITERATION_GT);
         m_objectId = objectCurrentCount ;
         image_data_and_shape.process();
         objectCurrentCount += 1;

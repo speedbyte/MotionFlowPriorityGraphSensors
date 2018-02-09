@@ -170,6 +170,31 @@ int main ( int argc, char *argv[]) {
 
             // Trajectories
             NoTrajectory noTrajectory;
+            MyTrajectory myTrajectory2;
+            MyTrajectory myTrajectory1;
+            MyTrajectory myTrajectory;
+            myTrajectory1.pushTrajectoryPoints(cv::Point2f(50,25));
+            myTrajectory1.pushTrajectoryPoints(cv::Point2f(100,50));
+            myTrajectory1.pushTrajectoryPoints(cv::Point2f(150,75));
+            myTrajectory1.pushTrajectoryPoints(cv::Point2f(200,100));
+            myTrajectory1.pushTrajectoryPoints(cv::Point2f(250,125));
+
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(800,250));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(900,225));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1000,200));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1100,175));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1200,150));
+
+            cv::RNG rng(-1);
+            for ( unsigned i = 0 ; i < MAX_ITERATION_THETA; i++ ) {
+                float a        = (float) rng.uniform(100., 1000.);
+                float b        = (float) rng.uniform(100., 300.);
+                cv::Point2f points(a,b);
+                myTrajectory.pushTrajectoryPoints(points);
+            }
+
+            std::cout << myTrajectory1.getTrajectory();
+
             noTrajectory.process(Dataset::getFrameSize());
             Achterbahn achterbahn1, achterbahn2;
             achterbahn1.process(Dataset::getFrameSize());
@@ -179,8 +204,9 @@ int main ( int argc, char *argv[]) {
 
             // Shapes
             Rectangle background(1242, 375);
-            Rectangle rectangle1(30, 30); // width, height
-            Rectangle rectangle2(30, 30); // width, height
+            Rectangle rectangle1(5, 5); // width, height
+            Rectangle rectangle2(5, 5); // width, height
+            Rectangle myShape(5, 5); // width, height
             //Circle circle;
             //Ramp ramp;
             //NegativeRamp negativeRamp;
@@ -192,21 +218,18 @@ int main ( int argc, char *argv[]) {
 
             // Canvas is itself registered as an Object with a dummy trajectory
             Canvas canvas(background, noTrajectory, 60, whiteNoise);
-            GroundTruthObjects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide");
-            GroundTruthObjects obj2(rectangle2, achterbahn2, 60, colorfulNoise, "rectangle_long");
+            //GroundTruthObjects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide");
+            GroundTruthObjects obj2(rectangle2, myTrajectory2, 0, colorfulNoise, "rectangle_long");
+            GroundTruthObjects obj3(myShape, myTrajectory1, 0, noNoise, "random_object");
+
             //GroundTruthObjects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
             //GroundTruthObjects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
             //GroundTruthObjects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
-            list_of_gt_objects.push_back(obj1);
+            //list_of_gt_objects.push_back(obj1);
             list_of_gt_objects.push_back(obj2);
-
-
-            /*
-            std::transform(list_of_gt_objects.begin(), list_of_gt_objects.end(), std::back_inserter(list_of_gt_objects_ptr),
-                           [](auto p){ return std::make_unique<Objects>(p); });
-            */
+            list_of_gt_objects.push_back(obj3);
 
             //list_of_gt_objects.push_back(obj3);
             //list_of_gt_objects.push_back(obj4);
@@ -233,13 +256,6 @@ int main ( int argc, char *argv[]) {
                 int height = list_of_gt_objects.at(i).getHeight();
                 std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
 
-
-                /*
-                std::transform(list_of_simulated_objects.begin(), list_of_simulated_objects.end(), std::back_inserter
-                                       (list_of_simulated_objects_ptr),
-                               [](auto p){ return std::make_unique<Objects>(p); });
-                               */
-
                 SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
                         .getObjectName(), width, height, extrapolated_visibility);
                 list_of_simulated_objects.push_back(objects);
@@ -247,7 +263,6 @@ int main ( int argc, char *argv[]) {
 
             if ( cpp_dataset.fb ) {
                 AlgorithmFlow fback( list_of_simulated_objects);
-                fback.getSimulatedObjects();
                 fback.generate_flow_frame(fb, continous_frames, no_noise, list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
@@ -261,7 +276,6 @@ int main ( int argc, char *argv[]) {
 
             if ( cpp_dataset.lk ) {
                 AlgorithmFlow lkanade(list_of_simulated_objects);
-                lkanade.getSimulatedObjects();
                 lkanade.generate_flow_frame(lk, continous_frames, no_noise, list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {

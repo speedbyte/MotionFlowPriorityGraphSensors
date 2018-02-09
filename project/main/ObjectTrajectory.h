@@ -131,6 +131,19 @@ public:
 
 };
 
+class MyTrajectory: public ObjectTrajectory {
+
+public:
+
+    MyTrajectory() {};
+
+    void process(cv::Size frame_size) override;
+
+    void pushTrajectoryPoints(cv::Point2f points) {
+        m_trajectory.push_back(points);
+    }
+
+};
 
 
 #endif //MAIN_OBJECTTRAJECTORY_H

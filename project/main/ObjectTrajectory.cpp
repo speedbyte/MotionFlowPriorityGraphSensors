@@ -107,4 +107,9 @@ void NoTrajectory::process(cv::Size frame_size) {
 
 };
 
+void MyTrajectory::process(cv::Size frame_size) {
+
+};
+
+
 

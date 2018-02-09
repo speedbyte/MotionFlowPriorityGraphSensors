@@ -19,6 +19,14 @@ protected:
 
     boost::filesystem::path  m_generatepath;
 
+    boost::filesystem::path  m_collision_obj_path;
+
+    boost::filesystem::path  m_flow_occ_path;
+
+    boost::filesystem::path  m_trajectory_occ_path;
+
+    boost::filesystem::path  m_plots_path;
+
     std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
     std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_collision_points;

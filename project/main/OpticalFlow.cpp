@@ -19,16 +19,20 @@ void OpticalFlow::prepare_directories() {
 
         sprintf(char_dir_append, "%02d", i);
 
-        path =  m_generatepath.string() + "/collision_obj_" + char_dir_append;
+        m_collision_obj_path = m_generatepath.string() + "/collision_obj_";
+        path =  m_collision_obj_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
-        path = m_generatepath.string() + "/flow_occ_" + char_dir_append;
+        m_flow_occ_path = m_generatepath.string() + "/flow_occ_";
+        path =  m_flow_occ_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
-        path = m_generatepath.string() + "/trajectory_occ_" + char_dir_append;
+        m_trajectory_occ_path = m_generatepath.string() + "/trajectory_occ_";
+        path =  m_trajectory_occ_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
-        path = m_generatepath.string() + "/plots_" + char_dir_append;
+        m_plots_path = m_generatepath.string() + "/plots_";
+        path =  m_plots_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
     }
@@ -51,7 +55,7 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
     auto toc_all = steady_clock::now();
 
     std::cout << "collision graph will be srored in " << m_basepath << std::endl;
-    char folder_name_flow[50];
+    char frame_skip_folder_suffix[50];
     cv::FileStorage fs;
 
     std::vector<Objects*>::const_iterator objectIterator = m_list_objects.begin();
@@ -75,11 +79,8 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
-        fs.open(m_generatepath.string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
-                cv::FileStorage::WRITE);
+        sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
-        sprintf(folder_name_flow, "collision_obj_%02d", frame_skip);
         std::cout << "generating collision points in GroundTruthFlow.cpp " << frame_skip << std::endl;
 
         unsigned FRAME_COUNT = (unsigned)(unsigned)m_list_objects.at(0)
@@ -91,10 +92,9 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
             char file_name_image[50];
             std::cout << "frame_count " << frame_count << std::endl;
 
-            sprintf(file_name_image, "000%03d_10.png", frame_count);
-            std::string temp_gt_flow_image_path =
-                    m_generatepath.string() + "/" + folder_name_flow + "/" +
-                    file_name_image;
+            sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+            std::string temp_collision_image_path =
+                    m_collision_obj_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
 
             fs << "frame_count" << frame_count;
 
@@ -161,7 +161,9 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                     cv::Matx<float,2,2> coefficients (-lineparameters1.x,1,-lineparameters2.x,1);
                     cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
 
-                    std::cout << "object 1  = " << lineparameters1 << " and object 2 = " << lineparameters2 << std::endl ;
+                    std::cout << "object " << m_list_objects_combination.at(i).first->getObjectId() << " = " <<
+                              lineparameters1 << " and object " << m_list_objects_combination.at(i)
+                            .second->getObjectId() << " = " <<lineparameters2 << std::endl ;
 
                     cv::Matx<float,2,1> result_manual;
                     if ( cv::determinant(coefficients ) != 0 ) {
@@ -197,7 +199,7 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                 }
             }
 
-            F_png_write.writeExtended(temp_gt_flow_image_path);
+            F_png_write.writeExtended(temp_collision_image_path);
 
         }
         m_frame_skip_collision_points.push_back(m_frame_collision_points);

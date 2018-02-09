@@ -10,8 +10,6 @@
 #include <exception>
 
 using namespace cpp_tutorials;
-using std::unique_ptr;
-using std::cout;
 
 class MyException : public std::exception {
 public:
@@ -97,6 +95,8 @@ int main ( int argc, char *argv[]) {
     printf("%d\n",b) ; // After changing c
     d = 500;
     printf("%d\n",b) ; // After changing d
+
+    std::cout << "hello" << (5%0)<< (1%1) << (2%1) << (1%2) << (5%3) << (3%5) << (4%1) << (0%4);
 
     try {
         throw MyException();

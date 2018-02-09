@@ -96,9 +96,11 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     cv::Mat image_data_and_shape;
     cv::Mat trajectoryShape;
 
+    const ushort frame_skip = 1; // image is generated only once irrespective of skips.
+
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
-        sprintf(file_name_image, "000%03d_10.png", frame_count);
+        sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
         std::string input_image_file_with_path = Dataset::getGroundTruthPath().string() + "/image_02/" +
                 file_name_image;
 
@@ -106,13 +108,13 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         //draw new ground truth image.
 
-        char folder_name_flow[50];
+        char frame_skip_folder_suffix[50];
 
         for ( unsigned  i = 0; i < m_list_objects.size(); i++ ) {
 
-            sprintf(folder_name_flow, "generated/trajectory_obj_%02d", m_list_objects.at(i).getObjectId());
+            sprintf(frame_skip_folder_suffix, "generated/trajectory_obj_%02d", m_list_objects.at(i).getObjectId());
             std::string trajectory_image_file_with_path = Dataset::getGroundTruthPath().string() + "/" +
-                    folder_name_flow + "/" + file_name_image;
+                    frame_skip_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
             trajectoryShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
@@ -120,28 +122,28 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
                 image_data_and_shape.copyTo(tempGroundTruthImage(
-                        cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
-                                                 .at(frame_count).first.x),
-                                 cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
-                                                 .at(frame_count).first.y), image_data_and_shape.cols,
+                        cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
+                                                 .getTrajectory().at(frame_count).x),
+                                 cvRound(m_list_objects.at(i).getTrajectoryPoints()
+                                         .getTrajectory().at(frame_count).y), image_data_and_shape.cols,
                                  image_data_and_shape.rows)));
 
 
                 if (m_list_objects.at(i).getObjectId() == 1) {
                     trajectoryShape = cv::Scalar(255, 0, 0);
                     trajectoryShape.copyTo(tempGroundTruthTrajectory(
-                            cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
-                                                     .at(frame_count).first.x), cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
-                                                                                                                                     .at(frame_count).first.y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                            cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
+                                                     .getTrajectory().at(frame_count).x), cvRound(m_list_objects.at
+                                    (i).getTrajectoryPoints().getTrajectory().at(frame_count).y), image_data_and_shape.cols, image_data_and_shape.rows)));
                     cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
                 }
 
                 if (m_list_objects.at(i).getObjectId() == 2) {
                     trajectoryShape = cv::Scalar(0, 255, 0);
                     trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
-                            cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
-                                                     .at(frame_count).first.x), cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
-                                                                                                                                     .at(frame_count).first.y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                            cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
+                                                     .getTrajectory().at(frame_count).x), cvRound(m_list_objects.at(i).getTrajectoryPoints()
+                                                                                                                                               .getTrajectory().at(frame_count).y), image_data_and_shape.cols, image_data_and_shape.rows)));
                     cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
                 }
             }

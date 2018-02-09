@@ -508,7 +508,7 @@ int main ( int argc, char *argv[]) {
     //eigen();
     std::cout << "\nlinear least square----------------------------------------------" << std::endl;
     //linearLeastSquare();
-    //std::cout << (1%1) << (2%1) << (1%2) << (5%3) << (3%5) << (4%1) << (0%4);
+
 
     return 0;
 
