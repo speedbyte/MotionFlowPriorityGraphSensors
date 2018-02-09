@@ -425,12 +425,12 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 cv::Mat stencilFrame;
                 stencilFrame = flowframe.clone();
-                for ( ushort i = 0; i < m_list_objects.size(); i++ ) {
+                for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
                     //two objects
                     std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
 
-                    int width = m_list_objects.at(i).getWidth();
-                    int height = m_list_objects.at(i).getHeight();
+                    int width = m_list_simulated_objects.at(i).getWidth();
+                    int height = m_list_simulated_objects.at(i).getHeight();
 
                     float rowBegin = groundtruthobjects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.y;
@@ -448,7 +448,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                                                    roi.at<cv::Vec2f>(y,x)));
                         }
                     }
-                    m_list_objects.at(i).set_outer_base_movement(base_movement);
+                    m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
                 }
 
                 //cv::imwrite(temp_result_flow_path, flowframe);
@@ -502,8 +502,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
     }
-    for ( ushort i = 0; i < m_list_objects.size(); i++) {
-        m_list_objects.at(i).set_m_obj_extrapolated_shape_pixel_point_pixel_displacement();
+    for ( ushort i = 0; i < m_list_simulated_objects.size(); i++) {
+        m_list_simulated_objects.at(i).set_m_obj_extrapolated_shape_pixel_point_pixel_displacement();
     }
 }
 

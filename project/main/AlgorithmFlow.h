@@ -25,11 +25,11 @@ private:
 
     std::vector<std::pair<SimulatedObjects, SimulatedObjects> > m_list_objects_combination;
 
-    std::vector<SimulatedObjects> &m_list_objects;
+    std::vector<SimulatedObjects> &m_list_simulated_objects;
 
 public:
 
-    AlgorithmFlow( std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_objects(list_simulated_objects)  {}
+    AlgorithmFlow( std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_simulated_objects(list_simulated_objects)  {}
 
     void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 
@@ -46,7 +46,7 @@ public:
     }
 
     std::vector<SimulatedObjects> getSimulatedObjects() {
-        return m_list_objects;
+        return m_list_simulated_objects;
     }
 
 };

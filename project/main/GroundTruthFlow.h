@@ -28,12 +28,12 @@ private:
 
     std::vector<std::pair<GroundTruthObjects, GroundTruthObjects> > m_list_objects_combination;
 
-    const std::vector<GroundTruthObjects> &m_list_objects;
+    const std::vector<GroundTruthObjects> &m_list_gt_objects;
 
 
 public:
 
-    GroundTruthFlow( const std::vector<GroundTruthObjects> &list_objects ) : m_list_objects(list_objects) {}
+    GroundTruthFlow( const std::vector<GroundTruthObjects> &list_objects ) : m_list_gt_objects(list_objects) {}
 
     void generate_flow_frame();
 

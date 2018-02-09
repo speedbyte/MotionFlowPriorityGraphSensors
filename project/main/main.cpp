@@ -198,46 +198,46 @@ int main ( int argc, char *argv[]) {
             //GroundTruthObjects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
             //GroundTruthObjects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
 
-            std::vector<GroundTruthObjects> list_of_objects;
-            list_of_objects.push_back(obj1);
-            list_of_objects.push_back(obj2);
+            std::vector<GroundTruthObjects> list_of_gt_objects;
+            list_of_gt_objects.push_back(obj1);
+            list_of_gt_objects.push_back(obj2);
 
-            std::vector<Objects*> list_of_objects_ptr;
+            std::vector<Objects*> list_of_gt_objects_ptr;
             std::vector<Objects*> list_of_simulated_objects_ptr;
 
-            for ( unsigned i = 0; i < list_of_objects.size(); i++ ) {
-                list_of_objects_ptr.push_back(&list_of_objects.at(i));
+            for ( unsigned i = 0; i < list_of_gt_objects.size(); i++ ) {
+                list_of_gt_objects_ptr.push_back(&list_of_gt_objects.at(i));
             }
 
             /*
-            std::transform(list_of_objects.begin(), list_of_objects.end(), std::back_inserter(list_of_objects_ptr),
+            std::transform(list_of_gt_objects.begin(), list_of_gt_objects.end(), std::back_inserter(list_of_gt_objects_ptr),
                            [](auto p){ return std::make_unique<Objects>(p); });
             */
 
-            //list_of_objects.push_back(obj3);
-            //list_of_objects.push_back(obj4);
-            //list_of_objects.push_back(obj5);
+            //list_of_gt_objects.push_back(obj3);
+            //list_of_gt_objects.push_back(obj4);
+            //list_of_gt_objects.push_back(obj5);
 
             if ( cpp_dataset.gt ) {
 
-                GroundTruthSceneInternal gt_scene(canvas, list_of_objects);
+                GroundTruthSceneInternal gt_scene(canvas, list_of_gt_objects);
                 gt_scene.generate_gt_scene();
 
-                GroundTruthFlow gt_flow(list_of_objects);
+                GroundTruthFlow gt_flow(list_of_gt_objects);
                 gt_flow.generate_flow_frame();
-                gt_flow.generate_collision_points(list_of_objects_ptr);
+                gt_flow.generate_collision_points(list_of_gt_objects_ptr);
 
                 VectorRobustness vectorRobustness;
                 vectorRobustness.generateVectorRobustness(gt_flow);
 
             }
             std::vector<SimulatedObjects> list_of_simulated_objects;
-            for ( ushort i = 0; i < list_of_objects.size(); i++ ) {
+            for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
                 //two objects
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                int width = list_of_objects.at(i).getWidth();
-                int height = list_of_objects.at(i).getHeight();
-                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_objects.at(i).get_obj_extrapolated_visibility();
+                int width = list_of_gt_objects.at(i).getWidth();
+                int height = list_of_gt_objects.at(i).getHeight();
+                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
 
 
                 /*
@@ -246,13 +246,13 @@ int main ( int argc, char *argv[]) {
                                [](auto p){ return std::make_unique<Objects>(p); });
                                */
 
-                SimulatedObjects objects(list_of_objects.at(i).getObjectId(), list_of_objects.at(i)
+                SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
                         .getObjectName(), width, height, extrapolated_visibility);
                 list_of_simulated_objects.push_back(objects);
             }
 
             for ( unsigned i = 0; i < list_of_simulated_objects.size(); i++ ) {
-                list_of_simulated_objects_ptr.push_back(&list_of_objects.at(i));
+                list_of_simulated_objects_ptr.push_back(&list_of_gt_objects.at(i));
             }
 
 
@@ -261,7 +261,7 @@ int main ( int argc, char *argv[]) {
             if ( cpp_dataset.fb ) {
                 AlgorithmFlow fback( list_of_simulated_objects);
                 fback.getSimulatedObjects();
-                fback.generate_flow_frame(fb, continous_frames, no_noise, list_of_objects);
+                fback.generate_flow_frame(fb, continous_frames, no_noise, list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)
@@ -275,7 +275,7 @@ int main ( int argc, char *argv[]) {
             if ( cpp_dataset.lk ) {
                 AlgorithmFlow lkanade(list_of_simulated_objects);
                 lkanade.getSimulatedObjects();
-                lkanade.generate_flow_frame(lk, continous_frames, no_noise, list_of_objects);
+                lkanade.generate_flow_frame(lk, continous_frames, no_noise, list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)
@@ -336,7 +336,7 @@ int main ( int argc, char *argv[]) {
 
             cv::Size_<unsigned> frame_size_vires(1242, 375);
 
-            std::vector<GroundTruthObjects> list_of_objects;
+            std::vector<GroundTruthObjects> list_of_gt_objects;
             //TODO - getListOfObjects from VIRES
 
             std::string scenario = "truck";
@@ -346,30 +346,30 @@ int main ( int argc, char *argv[]) {
             if ( vires_dataset.gt ) {
                 GroundTruthSceneExternal gt_scene(scenario);
                 gt_scene.generate_gt_scene();
-                //std::vector<GroundTruthObjects> list_of_objects = gt_scene.getListOfObjects();
+                //std::vector<GroundTruthObjects> list_of_gt_objects = gt_scene.getListOfObjects();
 
-                std::vector<Objects*> list_of_objects_ptr;
+                std::vector<Objects*> list_of_gt_objects_ptr;
                 /*
-                std::transform(list_of_objects.begin(), list_of_objects.end(), std::back_inserter(list_of_objects_ptr),
+                std::transform(list_of_gt_objects.begin(), list_of_gt_objects.end(), std::back_inserter(list_of_gt_objects_ptr),
                                [](auto p){ return std::make_unique<Objects>(p); });
                                */
 
 
-                GroundTruthFlow gt_flow(list_of_objects);
+                GroundTruthFlow gt_flow(list_of_gt_objects);
                 gt_flow.generate_flow_frame();
-                gt_flow.generate_collision_points(list_of_objects_ptr);
+                gt_flow.generate_collision_points(list_of_gt_objects_ptr);
             }
 
 
             std::vector<SimulatedObjects> list_of_simulated_objects;
-            for ( ushort i = 0; i < list_of_objects.size(); i++ ) {
+            for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
                 //two objects
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                int width = list_of_objects.at(i).getWidth();
-                int height = list_of_objects.at(i).getHeight();
-                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_objects.at(i).get_obj_extrapolated_visibility();
+                int width = list_of_gt_objects.at(i).getWidth();
+                int height = list_of_gt_objects.at(i).getHeight();
+                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
 
-                SimulatedObjects objects(list_of_objects.at(i).getObjectId(), list_of_objects.at(i)
+                SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
                         .getObjectName(), width, height, extrapolated_visibility);
                 list_of_simulated_objects.push_back(objects);
             }
@@ -378,11 +378,11 @@ int main ( int argc, char *argv[]) {
             AlgorithmFlow lkanade(list_of_simulated_objects);
 
             if ( vires_dataset.lk ) {
-                fback.generate_flow_frame(lk, continous_frames, no_noise, list_of_objects);
+                fback.generate_flow_frame(lk, continous_frames, no_noise, list_of_gt_objects);
             }
 
             if ( vires_dataset.fb ) {
-                lkanade.generate_flow_frame(fb, continous_frames, no_noise, list_of_objects);
+                lkanade.generate_flow_frame(fb, continous_frames, no_noise, list_of_gt_objects);
             }
 
             if ( vires_dataset.plot ) {
