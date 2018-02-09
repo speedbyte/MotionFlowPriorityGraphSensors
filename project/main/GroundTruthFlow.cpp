@@ -34,33 +34,16 @@ using namespace std::chrono;
 
 void GroundTruthFlow::prepare_directories() {
 
-    char char_dir_append[20];
+    m_resultordner="/generated";
+
+    m_generatepath = m_basepath.string() + m_resultordner;
 
     if (!Dataset::getBasePath().compare(CPP_DATASET_PATH) || !Dataset::getBasePath().compare(VIRES_DATASET_PATH)) {
 
-        std::string m_resultordner="";
-
         std::cout << "Creating GT Flow directories" << std::endl;
-        // create flow directories
-        boost::filesystem::path path;
-        for (int i = 1; i < MAX_SKIPS; ++i) {
-            // delete ground truth image and ground truth flow directories
-            sprintf(char_dir_append, "%02d", i);
-            path = Dataset::getGroundTruthFlowPath().string() + "/" + m_resultordner +
-                                           "/flow_obj_" + char_dir_append;
-            if (boost::filesystem::exists(path)) {
-                system(("rm -rf " + path.string()).c_str());
-            }
-            boost::filesystem::create_directories(path);
 
-            path = Dataset::getGroundTruthFlowPath().string() + "/" + m_resultordner +
-                                                  "/flow_occ_" + char_dir_append;
+        OpticalFlow::prepare_directories();
 
-            if (boost::filesystem::exists(path)) {
-                system(("rm -rf " + path.string()).c_str());
-            }
-            boost::filesystem::create_directories(path);
-        }
         std::cout << "Ending GT Flow directories" << std::endl;
     }
 }
@@ -86,11 +69,11 @@ void GroundTruthFlow::generate_flow_frame() {
     auto tic_all = steady_clock::now();
     auto toc_all = steady_clock::now();
 
-    std::cout << "ground truth flow will be stored in " << Dataset::getGroundTruthFlowPath().string() << std::endl;
+    std::cout << "ground truth flow will be stored in " << Dataset::getGroundTruthPath().string() << std::endl;
 
     char folder_name_flow[50];
     cv::FileStorage fs;
-    fs.open(Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+    fs.open(m_generatepath.string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
             cv::FileStorage::WRITE);
 
 
@@ -107,9 +90,8 @@ void GroundTruthFlow::generate_flow_frame() {
             std::cout << "frame_count " << frame_count << std::endl;
 
             sprintf(file_name_image, "000%03d_10.png", frame_count);
-            std::string temp_gt_flow_image_path =
-                    Dataset::getGroundTruthFlowPath().string() + "/" + folder_name_flow + "/"
-                    + file_name_image;
+            std::string temp_gt_flow_image_path = m_generatepath.string() + "/" + folder_name_flow + "/" +
+                    file_name_image;
 
             fs << "frame_count" << frame_count;
 
@@ -189,7 +171,7 @@ void GroundTruthFlow::make_video_from_png(const Dataset &dataset_path, std::stri
 
     boost::filesystem::directory_iterator end_iter;
 
-    boost::filesystem::path dir_path = dataset_path.getGroundTruthFlowPath();
+    boost::filesystem::path dir_path = Dataset::getGroundTruthPath();
 
     std::cout << dir_path.string() << std::endl;
     assert(boost::filesystem::exists(dir_path) != 0);

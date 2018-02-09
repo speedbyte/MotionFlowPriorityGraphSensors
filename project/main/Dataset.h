@@ -14,30 +14,17 @@ typedef struct {
 
 
     cv::Size_<unsigned> m_frame_size;
-    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset
-    boost::filesystem::path m_dataset_path;
-
-    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/image_02
-    boost::filesystem::path  m__directory_path_gt;
-
-    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/flow_occ_01
-    boost::filesystem::path  m__directory_path_gt_flow;
-
-    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/trajectroy_occ_01
-    boost::filesystem::path  m__directory_path_gt_trajectory;
-
-    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/
-    boost::filesystem::path m__directory_path_result;
-
-    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/flow_occ_01
-    boost::filesystem::path m__directory_path_result_flow;
-
-    // /local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/results/results_LK/trajectory_coo_01
-    boost::filesystem::path m__directory_path_result_trajectory_out;
 
     ushort m_depth;
 
     ushort m_cn;
+
+    boost::filesystem::path m_dataset_basepath;
+
+    boost::filesystem::path  m_directory_path_gt;
+
+    boost::filesystem::path  m_directory_path_result;
+
 
 } DATASET_STRUCT;
 
@@ -58,18 +45,10 @@ public:
     const static cv::Size_<unsigned> getFrameSize()  ;
 
     const static boost::filesystem::path getBasePath() ;
-    
-    const static boost::filesystem::path getGtPath()  ;
 
-    const static boost::filesystem::path getGroundTruthFlowPath();
-
-    const static boost::filesystem::path getGroundTruthTrajectoryPath();
+    const static boost::filesystem::path getGroundTruthPath()  ;
 
     const static boost::filesystem::path getResultPath();
-
-    const static boost::filesystem::path getResultFlowPath();
-
-    const static boost::filesystem::path getResultTrajectoryPath();
 
     const static ushort getDepth();
 

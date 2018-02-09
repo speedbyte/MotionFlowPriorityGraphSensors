@@ -17,7 +17,7 @@ void PixelRobustness::generatePixelRobustness(const std::string &resultOrdner) {
     cv::Mat temp_image;
     boost::filesystem::directory_iterator end_iter;
 
-    boost::filesystem::path dir_path = Dataset::getResultTrajectoryPath();
+    boost::filesystem::path dir_path = Dataset::getResultPath();
     dir_path += "/";
     dir_path += resultOrdner;
     dir_path += "/flow_occ_01";

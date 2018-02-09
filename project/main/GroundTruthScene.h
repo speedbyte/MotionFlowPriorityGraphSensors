@@ -17,7 +17,12 @@
 
 class GroundTruthScene  {
 
+protected:
+    std::vector<GroundTruthObjects> &m_list_objects;
+
 public:
+
+    GroundTruthScene(std::vector<GroundTruthObjects> &list_objects):m_list_objects(list_objects) {};
 
     virtual void generate_gt_scene() {};
 
@@ -30,13 +35,12 @@ class GroundTruthSceneInternal : public GroundTruthScene {
 
 private:
 
-    std::vector<GroundTruthObjects> &m_list_objects;
     Canvas &m_canvas;
 
 public:
 
     GroundTruthSceneInternal(Canvas &canvas, std::vector<GroundTruthObjects> &list_objects) :
-            m_canvas(canvas), m_list_objects(list_objects) {}
+            m_canvas(canvas), GroundTruthScene(list_objects) {}
 
     void generate_gt_scene();
 
@@ -54,12 +58,12 @@ class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::V
 
 private:
 
-    //std::vector<GroundTruthObjects> m_list_of_objects;
     std::string m_scenario;
 
 public:
 
-    GroundTruthSceneExternal(std::string scenario) :  m_scenario(scenario) {}
+    GroundTruthSceneExternal(std::string scenario, std::vector<GroundTruthObjects> &list_objects) :
+    m_scenario(scenario), GroundTruthScene(list_objects)  {}
 
     void generate_gt_scene();
 

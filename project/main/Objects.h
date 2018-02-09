@@ -29,6 +29,8 @@ protected:
 
     unsigned m_objectId;
 
+    std::vector<bool> m_obj_base_visibility;
+
     std::vector<std::vector<bool> >  m_obj_extrapolated_visibility;
 
     const std::string m_objectName;
@@ -74,6 +76,12 @@ public:
     const {
         return m_obj_extrapolated_visibility;
     }
+
+    std::vector<bool>  get_obj_base_visibility()
+    const {
+        return m_obj_base_visibility;
+    }
+
 
     unsigned getObjectId() const {
         return m_objectId;

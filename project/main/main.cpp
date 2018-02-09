@@ -166,7 +166,7 @@ int main ( int argc, char *argv[]) {
         if ( cpp_dataset.execute ) {
 
             std::string input = "data/stereo_flow/image_02";
-            Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, "data/stereo_flow/image_02", "results");
+            Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, "data/stereo_flow", "results");
 
             // Trajectories
             NoTrajectory noTrajectory;
@@ -202,12 +202,6 @@ int main ( int argc, char *argv[]) {
             list_of_gt_objects.push_back(obj1);
             list_of_gt_objects.push_back(obj2);
 
-            std::vector<Objects*> list_of_gt_objects_ptr;
-            std::vector<Objects*> list_of_simulated_objects_ptr;
-
-            for ( unsigned i = 0; i < list_of_gt_objects.size(); i++ ) {
-                list_of_gt_objects_ptr.push_back(&list_of_gt_objects.at(i));
-            }
 
             /*
             std::transform(list_of_gt_objects.begin(), list_of_gt_objects.end(), std::back_inserter(list_of_gt_objects_ptr),
@@ -225,7 +219,7 @@ int main ( int argc, char *argv[]) {
 
                 GroundTruthFlow gt_flow(list_of_gt_objects);
                 gt_flow.generate_flow_frame();
-                gt_flow.generate_collision_points(list_of_gt_objects_ptr);
+                gt_flow.generate_collision_points();
 
                 VectorRobustness vectorRobustness;
                 vectorRobustness.generateVectorRobustness(gt_flow);
@@ -251,13 +245,6 @@ int main ( int argc, char *argv[]) {
                 list_of_simulated_objects.push_back(objects);
             }
 
-            for ( unsigned i = 0; i < list_of_simulated_objects.size(); i++ ) {
-                list_of_simulated_objects_ptr.push_back(&list_of_gt_objects.at(i));
-            }
-
-
-
-
             if ( cpp_dataset.fb ) {
                 AlgorithmFlow fback( list_of_simulated_objects);
                 fback.getSimulatedObjects();
@@ -267,7 +254,7 @@ int main ( int argc, char *argv[]) {
                     list_of_simulated_objects.at(i)
                             .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
                 }
-                fback.generate_collision_points(list_of_simulated_objects_ptr);
+                fback.generate_collision_points();
                 VectorRobustness vectorRobustness;
                 vectorRobustness.generateVectorRobustness(fback);
             }
@@ -281,7 +268,7 @@ int main ( int argc, char *argv[]) {
                     list_of_simulated_objects.at(i)
                             .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
                 }
-                lkanade.generate_collision_points(list_of_simulated_objects_ptr);
+                lkanade.generate_collision_points();
                 VectorRobustness vectorRobustness;
                 vectorRobustness.generateVectorRobustness(lkanade);
             }
@@ -340,11 +327,11 @@ int main ( int argc, char *argv[]) {
             //TODO - getListOfObjects from VIRES
 
             std::string scenario = "truck";
-            std::string input = "data/stereo_flow/image_02_" + scenario;
+            std::string input = "data/stereo_flow" + scenario;
             Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, "results");
 
             if ( vires_dataset.gt ) {
-                GroundTruthSceneExternal gt_scene(scenario);
+                GroundTruthSceneExternal gt_scene(scenario, list_of_gt_objects);
                 gt_scene.generate_gt_scene();
                 //std::vector<GroundTruthObjects> list_of_gt_objects = gt_scene.getListOfObjects();
 
@@ -357,7 +344,7 @@ int main ( int argc, char *argv[]) {
 
                 GroundTruthFlow gt_flow(list_of_gt_objects);
                 gt_flow.generate_flow_frame();
-                gt_flow.generate_collision_points(list_of_gt_objects_ptr);
+                gt_flow.generate_collision_points();
             }
 
 

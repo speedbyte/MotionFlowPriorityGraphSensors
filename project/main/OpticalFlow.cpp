@@ -9,7 +9,33 @@
 
 using namespace std::chrono;
 
-void OpticalFlow::generate_collision_points(std::vector<Objects* > & m_list_objects) {
+void OpticalFlow::prepare_directories() {
+
+    char char_dir_append[20];
+
+    boost::filesystem::path path;
+
+    for (int i = 1; i < MAX_SKIPS; ++i) {
+
+        sprintf(char_dir_append, "%02d", i);
+
+        path =  m_generatepath.string() + "/collision_obj_" + char_dir_append;
+        boost::filesystem::create_directories(path);
+
+        path = m_generatepath.string() + "/flow_occ_" + char_dir_append;
+        boost::filesystem::create_directories(path);
+
+        path = m_generatepath.string() + "/trajectory_occ_" + char_dir_append;
+        boost::filesystem::create_directories(path);
+
+        path = m_generatepath.string() + "/plots_" + char_dir_append;
+        boost::filesystem::create_directories(path);
+
+    }
+}
+
+
+void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_list_objects) {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
@@ -24,7 +50,7 @@ void OpticalFlow::generate_collision_points(std::vector<Objects* > & m_list_obje
     auto tic_all = steady_clock::now();
     auto toc_all = steady_clock::now();
 
-    std::cout << "collision graph will be srored in " << Dataset::getGroundTruthFlowPath().string() << std::endl;
+    std::cout << "collision graph will be srored in " << m_basepath << std::endl;
     char folder_name_flow[50];
     cv::FileStorage fs;
 
@@ -50,10 +76,10 @@ void OpticalFlow::generate_collision_points(std::vector<Objects* > & m_list_obje
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         sprintf(folder_name_flow, "flow_occ_%02d", frame_skip);
-        fs.open(Dataset::getGroundTruthFlowPath().string() + "/" + m_resultordner + "/" + folder_name_flow + "/" + "gt_flow.yaml",
+        fs.open(m_generatepath.string() + "/" + folder_name_flow + "/" + "gt_flow.yaml",
                 cv::FileStorage::WRITE);
 
-        sprintf(folder_name_flow, "flow_obj_%02d", frame_skip);
+        sprintf(folder_name_flow, "collision_obj_%02d", frame_skip);
         std::cout << "generating collision points in GroundTruthFlow.cpp " << frame_skip << std::endl;
 
         unsigned FRAME_COUNT = (unsigned)(unsigned)m_list_objects.at(0)
@@ -67,7 +93,7 @@ void OpticalFlow::generate_collision_points(std::vector<Objects* > & m_list_obje
 
             sprintf(file_name_image, "000%03d_10.png", frame_count);
             std::string temp_gt_flow_image_path =
-                    Dataset::getGroundTruthFlowPath().string() + "/" + m_resultordner + "/" + folder_name_flow + "/" +
+                    m_generatepath.string() + "/" + folder_name_flow + "/" +
                     file_name_image;
 
             fs << "frame_count" << frame_count;

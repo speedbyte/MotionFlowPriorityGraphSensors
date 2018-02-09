@@ -13,6 +13,11 @@ class OpticalFlow {
 
 protected:
 
+    std::string m_resultordner;
+
+    boost::filesystem::path  m_basepath;
+
+    boost::filesystem::path  m_generatepath;
 
     std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
@@ -26,10 +31,9 @@ public:
         return m_frame_skip_collision_points;
     }
 
+    void prepare_directories();
 
-    void generate_collision_points(std::vector<Objects* > & m_list_objects_ptr);
-
-
+    void generate_collision_points(const std::vector<Objects* > & m_list_objects_ptr);
 
 };
 

@@ -20,34 +20,28 @@ using namespace std::chrono;
 void GroundTruthScene::prepare_directories() {
 
     char char_dir_append[20];
+    boost::filesystem::path path;
 
-    // delete ground truth image and ground truth flow directories
-    if (boost::filesystem::exists(Dataset::getGtPath())) {
-        system(("rm -rf " + Dataset::getGtPath().string()).c_str()); // Dataset::m__directory_path_input
+    path = Dataset::getGroundTruthPath();
+    // delete input_folder completely
+    if (boost::filesystem::exists(Dataset::getGroundTruthPath())) {
+        system(("rm -rf " + path.string()).c_str()); //
+    }
+    boost::filesystem::create_directories(path);
+
+    path =  Dataset::getGroundTruthPath().string() + "/image_02";
+    boost::filesystem::create_directories(path);
+
+    for (int i = 1; i <= m_list_objects.size(); i++) {
+        sprintf(char_dir_append, "%02d", i);
+        path = Dataset::getGroundTruthPath().string() +  "/generated/trajectory_obj_" + char_dir_append;
+        boost::filesystem::create_directories(path);
     }
 
     std::cout << "Creating GT Scene directories" << std::endl;
-    boost::filesystem::create_directories(Dataset::getGtPath().string());
+    boost::filesystem::create_directories(Dataset::getGroundTruthPath().string());
     std::cout << "Ending GT Scene directories" << std::endl;
 
-    if (!Dataset::getBasePath().compare(CPP_DATASET_PATH) || !Dataset::getBasePath().compare(VIRES_DATASET_PATH)) {
-
-        std::cout << "Creating GT Scene directories" << std::endl;
-        // create flow directories
-        for (int i = 1; i < 10; ++i) {
-            // delete ground truth image and ground truth flow directories
-            sprintf(char_dir_append, "%02d", i);
-            boost::filesystem::path path = Dataset::getGroundTruthTrajectoryPath().string() + "/trajectory_occ_" +
-                    char_dir_append;
-            if (boost::filesystem::exists(path)) {
-                system(("rm -rf " + path.string()).c_str());
-            }
-            boost::filesystem::create_directories(path);
-        }
-        std::cout << "Ending GT Scene directories" << std::endl;
-    }
-
-    // create base directories
 }
 
 
@@ -86,15 +80,13 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     std::map<std::string, double> time_map = {{"generate",0},{"ground truth", 0}};
 
-    std::cout << "ground truth images will be stored in " << Dataset::getGtPath().string() << std::endl;
+    std::cout << "ground truth images will be stored in " << Dataset::getGroundTruthPath().string() << std::endl;
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
 
-    std::vector<ushort> current_index;
 
     for ( int i = 0; i < m_list_objects.size(); i++ ) {
-        current_index.push_back(m_list_objects.at(i).getStartPoint());
         printf("registered objects name %s with object id %u\n", m_list_objects.at(i).getObjectName().c_str(),
                        m_list_objects.at(i).getObjectId());
      }
@@ -107,7 +99,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
         sprintf(file_name_image, "000%03d_10.png", frame_count);
-        std::string input_image_file_with_path = Dataset::getGtPath().string() + "/" + file_name_image;
+        std::string input_image_file_with_path = Dataset::getGroundTruthPath().string() + "/image_02/" +
+                file_name_image;
 
         tempGroundTruthImage = m_canvas.getImageShapeAndData().get().clone();
 
@@ -117,45 +110,40 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         for ( unsigned  i = 0; i < m_list_objects.size(); i++ ) {
 
-            sprintf(folder_name_flow, "trajectory_occ_%02d", m_list_objects.at(i).getObjectId());
-            std::string trajectory_image_file_with_path = Dataset::getGroundTruthTrajectoryPath().string() + "/" +
+            sprintf(folder_name_flow, "generated/trajectory_obj_%02d", m_list_objects.at(i).getObjectId());
+            std::string trajectory_image_file_with_path = Dataset::getGroundTruthPath().string() + "/" +
                     folder_name_flow + "/" + file_name_image;
-
-            std::vector<cv::Point2f> trajectory_points = m_list_objects.at(i).getTrajectoryPoints().getTrajectory();
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
             trajectoryShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
 
-            if ( ( trajectory_points.at(current_index.at(i)).x ) > 0 &&
-                    ( trajectory_points.at(current_index.at(i)).y ) > 0 &&
-                    ( trajectory_points.at(current_index.at(i)).x ) < Dataset::getFrameSize().width  &&
-                    ( trajectory_points.at(current_index.at(i)).y ) < Dataset::getFrameSize().height
+            if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
                 image_data_and_shape.copyTo(tempGroundTruthImage(
-                        cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
-                                (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                        cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
+                                                 .at(frame_count).first.x),
+                                 cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
+                                                 .at(frame_count).first.y), image_data_and_shape.cols,
+                                 image_data_and_shape.rows)));
 
 
                 if (m_list_objects.at(i).getObjectId() == 1) {
                     trajectoryShape = cv::Scalar(255, 0, 0);
                     trajectoryShape.copyTo(tempGroundTruthTrajectory(
-                            cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
-                                    (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                            cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
+                                                     .at(frame_count).first.x), cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
+                                                                                                                                     .at(frame_count).first.y), image_data_and_shape.cols, image_data_and_shape.rows)));
                     cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
                 }
 
                 if (m_list_objects.at(i).getObjectId() == 2) {
                     trajectoryShape = cv::Scalar(0, 255, 0);
                     trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
-                            cv::Rect(cvRound(trajectory_points.at(current_index.at(i)).x), cvRound(trajectory_points.at
-                                    (current_index.at(i)).y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                            cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
+                                                     .at(frame_count).first.x), cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement()
+                                                                                                                                     .at(frame_count).first.y), image_data_and_shape.cols, image_data_and_shape.rows)));
                     cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
                 }
-            }
-
-            current_index.at(i)++;
-            if ((current_index.at(i)) >= trajectory_points.size()) {
-                current_index.at(i) = 0;
             }
         }
 
@@ -174,7 +162,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     char command[1024];
 
-    std::cout << "ground truth images will be stored in " << Dataset::getGtPath().string() << std::endl;
+    std::cout << "ground truth images will be stored in " << Dataset::getGroundTruthPath().string() << std::endl;
 
     std::string project = "Movement";
 
@@ -396,7 +384,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
         if (simFrame > 0) {
             sprintf(file_name_image, "000%03d_10.png", (simFrame - 7));
-            std::string input_image_file_with_path = Dataset::getGtPath().string() + "/" + file_name_image;
+            std::string input_image_file_with_path = Dataset::getGroundTruthPath().string() + "/" + file_name_image;
             save_image.write(input_image_file_with_path);
         }
     } else {
