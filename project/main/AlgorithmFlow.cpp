@@ -364,6 +364,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     F_png_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
                     F_png_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
                     F_png_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+                    // TODO - store objectId instead of 1.0. also convert to 2s complement by the below formula.
                     store_in_yaml(fs, (*it).first, (*it).second ); // coordinate - > movement y(row),x(col) ; x,y
 
                     F_png_write_trajectory.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
@@ -378,7 +379,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 cv::MatIterator_<cv::Vec3f> it_flowframe = flowframe.begin<cv::Vec3f>();
                 for (unsigned i = 0; it_flowframe != flowframe.end<cv::Vec3f>(); it_flowframe++ ) {
                     for ( unsigned j = 0; j < 3; j++ ) {
-                        (*it_flowframe)[j] = *(F_png_write.data_ + i );
+                        float temp = *(F_png_write.data_ + i );
+                        if ( temp != 0 ) {
+                            (*it_flowframe)[j] = temp;
+                        }
+                        // std::min(temp*64.0f+32768.0f,65535.0f),0.0f)
                         i++;
                     }
                 }
@@ -400,6 +405,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin),(cvRound(rowBegin)+height)).colRange
                             (cvRound(columnBegin),(cvRound(columnBegin)+width));
 
+                    // Here I should write the fact
+                    // roi_write = cv::Scalar(i,j,k);
+
                     for (unsigned y = 0; y < roi.rows; y++) {
                         for (unsigned x = 0; x < roi.cols; x++) {
 
@@ -407,6 +415,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                                                    roi.at<cv::Vec2f>(y,x)));
                         }
                     }
+
                     m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
                 }
 

@@ -146,6 +146,8 @@ void GroundTruthFlow::generate_flow_frame() {
         fs.release();
     }
 
+    std::cout << "end of saving flow files " << std::endl;
+
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();

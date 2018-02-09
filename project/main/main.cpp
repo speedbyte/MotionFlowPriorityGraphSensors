@@ -179,11 +179,11 @@ int main ( int argc, char *argv[]) {
             myTrajectory1.pushTrajectoryPoints(cv::Point2f(200,100));
             myTrajectory1.pushTrajectoryPoints(cv::Point2f(250,125));
 
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(800,250));
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(900,225));
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1000,200));
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1100,175));
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1200,150));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(700,250));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(800,225));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(900,200));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1000,175));
+            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1100,150));
 
             cv::RNG rng(-1);
             for ( unsigned i = 0 ; i < MAX_ITERATION_THETA; i++ ) {
@@ -245,7 +245,7 @@ int main ( int argc, char *argv[]) {
                 gt_flow.generate_collision_points();
 
                 VectorRobustness vectorRobustness;
-                vectorRobustness.generateVectorRobustness(gt_flow);
+                //vectorRobustness.generateVectorRobustness(gt_flow);
 
             }
             std::vector<SimulatedObjects> list_of_simulated_objects;
@@ -271,7 +271,7 @@ int main ( int argc, char *argv[]) {
                 }
                 fback.generate_collision_points();
                 VectorRobustness vectorRobustness;
-                vectorRobustness.generateVectorRobustness(fback);
+                //vectorRobustness.generateVectorRobustness(fback);
             }
 
             if ( cpp_dataset.lk ) {
