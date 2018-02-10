@@ -10,10 +10,11 @@
 #include <chrono>
 #include <png++/rgb_pixel.hpp>
 #include <png++/image.hpp>
+#include <vires/vires/viRDBIcd.h>
 #include "GroundTruthScene.h"
 #include "kbhit.h"
 #include "scp.h"
-
+#include "ViresObjects.h"
 using namespace std::chrono;
 
 
@@ -327,11 +328,15 @@ simFrame, const
 //        fprintf( stderr, "    object = %s, id = %d\n", data->base.name, data->base.id );
 //        fprintf( stderr, "    position = %.3lf / %.3lf / %.3lf\n", data->base.pos.x, data->base.pos.y, data->base
 //                .pos.z );
+    ViresObjects viresObjects = ViresObjects();
+    viresObjects.objectProperties = *object;
+    viresObjects.frame_count = simFrame;
+
     if (strcmp(data->base.name, "New Character") == 0) {
 
         fprintf(stderr, "INDICATOR: %d %.3lf %.3lf %.3lf %.3lf \n",
                 simFrame, data->base.pos.x,
-                data->base.pos.y, data->base.geo.dimX, data->base.geo.dimY);
+                object->base.pos.y, data->base.geo.dimX, data->base.geo.dimY);
     } else if (strcmp(data->base.name, "New Character01") == 0) {
         fprintf(stderr, "INDICATOR2: %d %.3lf %.3lf %.3lf %.3lf \n",
                 simFrame, data->base.pos.x,
