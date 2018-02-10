@@ -13,6 +13,8 @@ void OpticalFlow::prepare_directories() {
 
     char char_dir_append[20];
 
+    m_datasetpath = Dataset::getBasePath();
+
     boost::filesystem::path path;
 
     for (int i = 1; i < MAX_SKIPS; ++i) {

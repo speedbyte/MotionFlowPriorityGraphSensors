@@ -17,6 +17,8 @@ protected:
 
     boost::filesystem::path  m_basepath;
 
+    boost::filesystem::path  m_datasetpath;
+
     boost::filesystem::path  m_generatepath;
 
     boost::filesystem::path  m_collision_obj_path;

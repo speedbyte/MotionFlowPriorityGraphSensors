@@ -40,7 +40,7 @@ private:
 public:
 
     static void fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
-            std::string unterordner, std::string resultordner);
+            std::string unterordner, std::string resultordner) ;
 
     const static cv::Size_<unsigned> getFrameSize()  ;
 

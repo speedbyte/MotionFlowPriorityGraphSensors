@@ -18,7 +18,7 @@ cd $VIRES_DIR
 ./vtdStop.sh
 cd $VIRES_GROUNDTRUTH_DIR
 #find ./ -name '*.png' -exec convert -flip {} {} \;
-mogrify -flip *.png
+#mogrify -flip *.png
 #Extract flow from log file
-grep -e '^INDICATOR' file.log > FLow.log
+#grep -e '^INDICATOR' file.log > FLow.log
 

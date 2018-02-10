@@ -1,17 +1,42 @@
+#ifndef _SCP_H
+#define _SCP_H
+
+
 const char *project_name = "<SimCtrl><Project name=\"Movement\" "
         "path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current\" "
         "/></SimCtrl>";
 
-
-const char *scenario_nam = "<SimCtrl><UnloadSensors /><LoadScenario "
-        "filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/truck.xml\" /><Start mode=\"operation\" /></SimCtrl>";
-
 std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario "
         "filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/truck.xml\" /><Start mode=\"operation\" /></SimCtrl>";
 
-
 const char *module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\"><Load lib=\"libModuleCameraSensor.so\" "
         "path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /><Player name=\"New Player\" /><Frustum bottom=\"15.000000\" far=\"40.000000\" left=\"20.000000\" near=\"1.000000\" right=\"20.000000\" top=\"15.000000\" /><Position dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" /><Origin type=\"usk\" /><Cull enable=\"true\" maxObjects=\"10\" /><Port name=\"RDBout\" number=\"48185\" sendEgo=\"true\" type=\"TCP\" /><Filter objectType=\"none\" /><Filter objectType=\"pedestrian\" /><Debug camera=\"false\" culling=\"false\" detection=\"false\" dimensions=\"false\" enable=\"false\" packages=\"false\" position=\"false\" road=\"false\" /></Sensor>";
+
+/*
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><Stop /></SimCtrl>
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><Stop /></SimCtrl>
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><Apply /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<TaskControl><RDB client="false" enable="true" interface="eth0" portRx="48190" portTx="48190" portType="TCP" /></TaskControl>
+------------------------------------------------------------
+TaskControl
+<TaskControl><Interface name="eth0" /><ImageGenerator autoConfig="true" autoHeadlight="true" autoRestart="true" ctrlPortConnect="true" dynPlayerConfig="true" idleImgId="20" imgPortConnect="true" portType="TCP" protocol="precision10" showIdleImg="true" /><Traffic controlHeadlights="true" /><Mockup arguments="" force="false" lookupBrakePedal="" lookupThrottlePedal="" player="" type="none" /><Joystick debug="false" type="custom"><Axis /><Axis /><Axis /><Button cmd="" index="0" /><Button cmd="" index="0" /><Button cmd="" index="0" /><Button cmd="" index="0" /><Button cmd="" index="0" /><Button cmd="" index="0" /><Button cmd="" index="0" /><Button cmd="" index="0" /><Button cmd="" index="0" /><Button cmd="" index="0" /></Joystick><Sound enable="false" interface="" multicastAddress="" starterSound="" /><DataVis enable="false" /><ScVis enable="true" portType="loopback" /><Instruments enable="false" /><RDB enable="true" imageTransfer="false" portType="TCP" sendEnvironment="true" sendLightPos="true" sendLightSources="true" sendScoring="true" targetAddress="" /><RDB enable="false" name="" server="" targetAddress="" /><RDB enable="false" name="" server="" targetAddress="" /><RecPlay autoRec="false" dummyPedestrians="auto" playSCP="true" /><Video buffer="color" liveStream="false" motionBlurMs="0" motionBlurRes="0" saveToFile="false" /><Dynamics syncMode="frame" /><Sync frameTimeMs="40" realTime="true" source="extern" /><Config publish="true" /><Debug egoSpeed="true" enable="true" simTime="true" /></TaskControl>
+------------------------------------------------------------
+IG
+<Reply entity="imageGenerator"><VisualDatabase file="Data/Projects/Current/Databases/Town/Ive/townGer.opt.osgb" /></Reply>
+------------------------------------------------------------
+IG
+<Reply entity="imageGenerator"><Window height="600" width="800" x="12" y="90" /></Reply>
+
+
+ */
 
 /*
 "<TaskControl><RDB client="false" enable="true" interface="eth0" portRx="48190" portTx="48190" portType="TCP" /></TaskControl>"
@@ -25,18 +50,6 @@ const char *module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\"><Load li
 "<VIL><Imu dbElevation="true" /></VIL>"
 
 "<VIL><EyepointOffset hDeg="0.000000" pDeg="0.000000" rDeg="0.000000" x="0.000000" y="0.000000" z="0.000000" /></VIL>"
-
-traffic_demo.xml
-car.xml
-moving_car.xml
-moving_car_near.xml
-truck.xml
-moving.xml
-moving_truck.xml
-two.xml
-
-
-
 
 read -p "Darn, that weather!Press enter to let it snow"
 
@@ -65,3 +78,5 @@ WET
 
 
  */
+
+#endif _SCP_H

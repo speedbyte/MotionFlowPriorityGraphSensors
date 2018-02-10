@@ -13,6 +13,7 @@
 #include "ObjectTrajectory.h"
 #include "GroundTruthObjects.h"
 #include "Canvas.h"
+#include <map>
 
 
 class GroundTruthScene  {
@@ -20,13 +21,35 @@ class GroundTruthScene  {
 protected:
     std::vector<GroundTruthObjects> &m_list_objects;
 
+    boost::filesystem::path  m_basepath;
+
+    boost::filesystem::path  m_datasetpath;
+
+    boost::filesystem::path  m_generatepath;
+
+    boost::filesystem::path  m_trajectory_obj_path;
+
+    std::string m_scenario;
+
 public:
 
-    GroundTruthScene(std::vector<GroundTruthObjects> &list_objects):m_list_objects(list_objects) {};
+    GroundTruthScene(std::string scenario, std::vector<GroundTruthObjects> &list_objects):m_scenario
+                                                                                                  (scenario),
+    m_list_objects(list_objects) {
+
+        m_datasetpath = Dataset::getBasePath();
+        m_basepath = Dataset::getGroundTruthPath();
+
+    };
+
+    GroundTruthScene(std::vector<GroundTruthObjects> &list_objects):m_list_objects(list_objects) {
+
+        m_basepath = Dataset::getGroundTruthPath();
+
+    };
 
     virtual void generate_gt_scene() {};
 
-protected:
     void prepare_directories();
 
 };
@@ -51,19 +74,19 @@ public:
     ~GroundTruthSceneInternal(){
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
-
 };
 
 class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::ViresInterface {
 
 private:
+    MyTrajectory trajectory;
 
-    std::string m_scenario;
+    std::vector<std::pair<std::string, cv::Point2f> >trajectory_points;
 
 public:
 
     GroundTruthSceneExternal(std::string scenario, std::vector<GroundTruthObjects> &list_objects) :
-    m_scenario(scenario), GroundTruthScene(list_objects)  {}
+    GroundTruthScene(scenario, list_objects)  {}
 
     void generate_gt_scene();
 

@@ -69,7 +69,7 @@ void GroundTruthFlow::generate_flow_frame() {
     auto tic_all = steady_clock::now();
     auto toc_all = steady_clock::now();
 
-    std::cout << "ground truth flow will be stored in " << Dataset::getGroundTruthPath().string() << std::endl;
+    std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
     char frame_skip_folder_suffix[50];
     cv::FileStorage fs;

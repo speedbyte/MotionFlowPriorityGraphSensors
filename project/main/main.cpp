@@ -165,14 +165,15 @@ int main ( int argc, char *argv[]) {
     {
         if ( cpp_dataset.execute ) {
 
-            std::string input = "data/stereo_flow/image_02";
-            Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, "data/stereo_flow", "results");
+            std::string input = "data/stereo_flow/";
+            Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, "results");
 
             // Trajectories
             NoTrajectory noTrajectory;
             MyTrajectory myTrajectory2;
             MyTrajectory myTrajectory1;
             MyTrajectory myTrajectory;
+            /*
             myTrajectory1.pushTrajectoryPoints(cv::Point2f(50,25));
             myTrajectory1.pushTrajectoryPoints(cv::Point2f(100,50));
             myTrajectory1.pushTrajectoryPoints(cv::Point2f(150,75));
@@ -184,13 +185,14 @@ int main ( int argc, char *argv[]) {
             myTrajectory2.pushTrajectoryPoints(cv::Point2f(900,200));
             myTrajectory2.pushTrajectoryPoints(cv::Point2f(1000,175));
             myTrajectory2.pushTrajectoryPoints(cv::Point2f(1100,150));
-
+*/
             cv::RNG rng(-1);
             for ( unsigned i = 0 ; i < MAX_ITERATION_THETA; i++ ) {
                 float a        = (float) rng.uniform(100., 1000.);
                 float b        = (float) rng.uniform(100., 300.);
                 cv::Point2f points(a,b);
-                myTrajectory.pushTrajectoryPoints(points);
+                myTrajectory1.pushTrajectoryPoints(points);
+                myTrajectory2.pushTrajectoryPoints(points);
             }
 
             std::cout << myTrajectory1.getTrajectory();
@@ -341,12 +343,13 @@ int main ( int argc, char *argv[]) {
             //TODO - getListOfObjects from VIRES
 
             std::string scenario = "truck";
-            std::string input = "data/stereo_flow" + scenario;
+            std::string input = "data/stereo_flow/";
             Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, "results");
 
             if ( vires_dataset.gt ) {
                 GroundTruthSceneExternal gt_scene(scenario, list_of_gt_objects);
                 gt_scene.generate_gt_scene();
+                exit(0);
                 //std::vector<GroundTruthObjects> list_of_gt_objects = gt_scene.getListOfObjects();
 
                 std::vector<Objects*> list_of_gt_objects_ptr;

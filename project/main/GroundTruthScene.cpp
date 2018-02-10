@@ -20,31 +20,43 @@ using namespace std::chrono;
 
 void GroundTruthScene::prepare_directories() {
 
-    char char_dir_append[20];
-    boost::filesystem::path path;
 
-    path = Dataset::getGroundTruthPath();
-    // delete input_folder completely
-    if (boost::filesystem::exists(Dataset::getGroundTruthPath())) {
-        system(("rm -rf " + path.string()).c_str()); //
+    m_basepath = Dataset::getGroundTruthPath(); // data/stereo_flow
+
+    m_generatepath = m_basepath.string() + "image_02/";
+
+    if (!m_basepath.string().compare(CPP_DATASET_PATH) || !m_basepath.string().compare(VIRES_DATASET_PATH)) {
+
+        std::cout << "Creating GT Scene directories" << std::endl;
+
+        if (boost::filesystem::exists(m_generatepath)) {
+            system(("rm -rf " + m_generatepath.string()).c_str());
+        }
+        boost::filesystem::create_directories(m_generatepath);
+
+        char char_dir_append[20];
+        boost::filesystem::path path;
+
+        for (int i = 1; i <= m_list_objects.size(); i++) {
+
+            sprintf(char_dir_append, "%02d", i);
+            m_trajectory_obj_path = m_generatepath.string() + "trajectory_obj_";
+            path = m_trajectory_obj_path.string() + char_dir_append;
+            boost::filesystem::create_directories(path);
+
+        }
+
+        path = m_generatepath.string() + m_scenario;
+        if ( !boost::filesystem::exists(path)) {
+            boost::filesystem::create_directories(path);
+        }
+
+        std::cout << "Ending GT Scene directories" << std::endl;
+
     }
-    boost::filesystem::create_directories(path);
 
-    path =  Dataset::getGroundTruthPath().string() + "/image_02";
-    boost::filesystem::create_directories(path);
-
-    for (int i = 1; i <= m_list_objects.size(); i++) {
-        sprintf(char_dir_append, "%02d", i);
-        path = Dataset::getGroundTruthPath().string() +  "/generated/trajectory_obj_" + char_dir_append;
-        boost::filesystem::create_directories(path);
-    }
-
-    std::cout << "Creating GT Scene directories" << std::endl;
-    boost::filesystem::create_directories(Dataset::getGroundTruthPath().string());
-    std::cout << "Ending GT Scene directories" << std::endl;
 
 }
-
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
 
@@ -81,7 +93,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     std::map<std::string, double> time_map = {{"generate",0},{"ground truth", 0}};
 
-    std::cout << "ground truth images will be stored in " << Dataset::getGroundTruthPath().string() << std::endl;
+    std::cout << "ground truth images will be stored in " << m_basepath.string() << std::endl;
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
@@ -102,8 +114,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT; frame_count++) {
 
         sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
-        std::string input_image_file_with_path = Dataset::getGroundTruthPath().string() + "/image_02/" +
-                file_name_image;
+        std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
 
         tempGroundTruthImage = m_canvas.getImageShapeAndData().get().clone();
 
@@ -113,8 +124,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         for ( unsigned  i = 0; i < m_list_objects.size(); i++ ) {
 
-            sprintf(frame_skip_folder_suffix, "generated/trajectory_obj_%02d", m_list_objects.at(i).getObjectId());
-            std::string trajectory_image_file_with_path = Dataset::getGroundTruthPath().string() + "/" +
+            sprintf(frame_skip_folder_suffix, "%02d", m_list_objects.at(i).getObjectId());
+            std::string trajectory_image_file_with_path = m_trajectory_obj_path.string() +
                     frame_skip_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
@@ -163,20 +174,47 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
 void GroundTruthSceneExternal::generate_gt_scene() {
 
-    char command[1024];
+    prepare_directories();
 
-    std::cout << "ground truth images will be stored in " << Dataset::getGroundTruthPath().string() << std::endl;
+    char command[1024];
 
     std::string project = "Movement";
 
-    sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s %s", (Dataset::getBasePath().string()).c_str(),
+    std::vector<std::string> list_of_scenarios = {"carTypesComplete.xml",
+                                                          "crossing8Demo.xml",
+                                                          "crossing8DualExt.xml",
+                                                          "crossing8Static.xml",
+                                                          "HighwayPulk.xml",
+                                                          "invisibleCar.xml",
+                                                          "ParkPerp.xml",
+                                                          "RouteAndPathShapeSCP.xml",
+                                                          "staticCar.xml",
+                                                          "TownActionsPath.xml",
+                                                          "TownPathLong.xml",
+                                                          "traffic_demo2Ext.xml",
+                                                          "trafficDemoClosePath.xml",
+                                                          "trafficDemoPath.xml",
+                                                          "trafficDemoPed.xml",
+                                                          "traffic_demoReverse.xml",
+                                                          "trafficDemoTrailer.xml",
+                                                          "trafficDemoUK.xml",
+                                                          "traffic_demo.xml"
+                                                          "car.xml",
+                                                          "moving_car_near.xml",
+                                                          "moving_car.xml",
+                                                          "moving_truck.xml",
+                                                          "moving.xml",
+                                                          "one.xml",
+                                                          "truck.xml",
+                                                          "two.xml"};
+
+    sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s %s", (m_datasetpath.string()).c_str(),
             project.c_str(), m_scenario.c_str());
     std::cout << command << std::endl;
     system(command);
 
     std::cout << " I am out of bash" << std::endl;
 
-    //Framework::ViresInterface vi;
     std::string m_server;
     boost::filesystem::path m_ts_gt_out_dir;
 
@@ -207,14 +245,17 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     sendSCPMessage(scpSocket, project_name);
     sleep(1);
 
-    std::string::size_type position = scenario_name.find("truck.xml");
+    std::string::size_type position = scenario_name.find(m_scenario);
     if ( position != std::string::npos ) {
-        scenario_name.replace(position, std::string("truck.xml").length(), std::string("traffic_demo.xml"));
+        scenario_name.replace(position, m_scenario.length(), std::string("two"));
     }
 
     readScpNetwork(scpSocket);
 
     sendSCPMessage(scpSocket, scenario_name.c_str());
+
+    readScpNetwork(scpSocket);
+
     sleep(1);
 
     sendSCPMessage(scpSocket, module_manager);
@@ -289,10 +330,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
     }
 
-    sprintf(command, "cd %s; %s", (Dataset::getBasePath().string() + std::string("../../")).c_str(),
+    sprintf(command, "cd %s; %s", (m_datasetpath.string() + std::string("../../")).c_str(),
             "bash vtdStop.sh");
     std::cout << command << std::endl;
     system(command);
+    std::cout << "End of generation" << std::endl;
 }
 
 
@@ -334,10 +376,15 @@ simFrame, const
 
     if (strcmp(data->base.name, "New Character") == 0) {
 
+        trajectory_points.push_back(std::make_pair(std::string(data->base.name), cv::Point2f((float)data->base.pos.x, (float)
+                data->base.pos.y)));
         fprintf(stderr, "INDICATOR: %d %.3lf %.3lf %.3lf %.3lf \n",
                 simFrame, data->base.pos.x,
                 object->base.pos.y, data->base.geo.dimX, data->base.geo.dimY);
     } else if (strcmp(data->base.name, "New Character01") == 0) {
+        trajectory_points.push_back(std::make_pair(std::string(data->base.name), cv::Point2f((float)data->base.pos.x,
+                                                                                         (float)
+                data->base.pos.y)));
         fprintf(stderr, "INDICATOR2: %d %.3lf %.3lf %.3lf %.3lf \n",
                 simFrame, data->base.pos.x,
                 data->base.pos.y, data->base.geo.dimX, data->base.geo.dimY);
@@ -351,10 +398,10 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
     if (!data)
         return;
-    fprintf(stderr, "handleRDBitem: image\n");
-    fprintf(stderr, "    simTime = %.3lf, simFrame = %d, mLastShmFrame = %d\n", simTime, simFrame, getLastShmFrame());
-    fprintf(stderr, "    width / height = %d / %d\n", data->width, data->height);
-    fprintf(stderr, "    dataSize = %d\n", data->imgSize);
+    //fprintf(stderr, "handleRDBitem: image\n");
+    //fprintf(stderr, "    simTime = %.3lf, simFrame = %d, mLastShmFrame = %d\n", simTime, simFrame, getLastShmFrame());
+    //fprintf(stderr, "    width / height = %d / %d\n", data->width, data->height);
+    //fprintf(stderr, "    dataSize = %d\n", data->imgSize);
 
     // ok, I have an image:
     setHaveImage(1);
@@ -391,7 +438,8 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
         if (simFrame > 0) {
             sprintf(file_name_image, "000%03d_10.png", (simFrame - 7));
-            std::string input_image_file_with_path = Dataset::getGroundTruthPath().string() + "/" + file_name_image;
+            std::string input_image_file_with_path = m_generatepath.string() + m_scenario + "/" +
+                    file_name_image;
             save_image.write(input_image_file_with_path);
         }
     } else {
