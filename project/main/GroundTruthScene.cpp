@@ -13,7 +13,6 @@
 #include <vires/vires/viRDBIcd.h>
 #include "GroundTruthScene.h"
 #include "kbhit.h"
-#include "scp.h"
 #include "ViresObjects.h"
 using namespace std::chrono;
 
@@ -25,7 +24,7 @@ void GroundTruthScene::prepare_directories() {
 
     m_generatepath = m_basepath.string() + "image_02/";
 
-    if (!m_basepath.string().compare(CPP_DATASET_PATH) || !m_basepath.string().compare(VIRES_DATASET_PATH)) {
+    if (!m_datasetpath.string().compare(CPP_DATASET_PATH) || !m_datasetpath.string().compare(VIRES_DATASET_PATH)) {
 
         std::cout << "Creating GT Scene directories" << std::endl;
 
@@ -54,8 +53,6 @@ void GroundTruthScene::prepare_directories() {
         std::cout << "Ending GT Scene directories" << std::endl;
 
     }
-
-
 }
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
@@ -208,14 +205,15 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                                                           "truck.xml",
                                                           "two.xml"};
 
-    sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s %s", (m_datasetpath.string()).c_str(),
-            project.c_str(), m_scenario.c_str());
+    sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(), project.c_str());
     std::cout << command << std::endl;
     system(command);
 
     std::cout << " I am out of bash" << std::endl;
 
-    std::string m_server;
+    sleep(5); // Give some time before you send SCP commands.
+
+    // std::string m_server;
     boost::filesystem::path m_ts_gt_out_dir;
 
     int initCounter = 6;
@@ -238,28 +236,36 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         connected_scp_port = true;
     }
 
+    sleep(1); // Give some time before you send the next SCP command.
+
     sendSCPMessage(scpSocket, "<SimCtrl><Apply/></SimCtrl>"); // keine hochkommas.
 
-    sleep(5); // Give some time before you start.
+    sleep(5); // This is very important !! Mimimum 5 seconds of wait, till you start the simulation
 
-    sendSCPMessage(scpSocket, project_name);
-    sleep(1);
+    //sendSCPMessage(scpSocket, project_name);
 
-    std::string::size_type position = scenario_name.find(m_scenario);
-    if ( position != std::string::npos ) {
-        scenario_name.replace(position, m_scenario.length(), std::string("two"));
-    }
-
-    readScpNetwork(scpSocket);
+    //sleep(1);
 
     sendSCPMessage(scpSocket, scenario_name.c_str());
 
-    readScpNetwork(scpSocket);
-
     sleep(1);
 
-    sendSCPMessage(scpSocket, module_manager);
-    sleep(1);
+    sprintf(command, "cd %s../../ ; bash vtdRunScp.sh", (m_datasetpath.string()).c_str());
+    std::cout << command << std::endl;
+    system(command);
+
+    sleep(10);  // Give some time before you start the trigger and module manager ports.
+
+
+    //readScpNetwork(scpSocket);
+
+    //readScpNetwork(scpSocket);
+
+    //sleep(1);
+
+    //sendSCPMessage(scpSocket, module_manager);
+
+    //sleep(1);
 
     // open the network connection to the taskControl (so triggers may be sent)
     fprintf(stderr, "creating network connection....\n");

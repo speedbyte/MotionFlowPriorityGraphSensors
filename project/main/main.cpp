@@ -342,12 +342,11 @@ int main ( int argc, char *argv[]) {
             std::vector<GroundTruthObjects> list_of_gt_objects;
             //TODO - getListOfObjects from VIRES
 
-            std::string scenario = "truck";
             std::string input = "data/stereo_flow/";
             Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, "results");
 
             if ( vires_dataset.gt ) {
-                GroundTruthSceneExternal gt_scene(scenario, list_of_gt_objects);
+                GroundTruthSceneExternal gt_scene("two", list_of_gt_objects);
                 gt_scene.generate_gt_scene();
                 exit(0);
                 //std::vector<GroundTruthObjects> list_of_gt_objects = gt_scene.getListOfObjects();

@@ -1,18 +1,17 @@
 #ifndef _SCP_H
 #define _SCP_H
 
+/*
+ * Order
+ * Projectname
+ * <TaskControl><RDB client="false" enable="true" interface="eth0" portRx="48190" portTx="48190" portType="TCP" /></TaskControl>
+ * ScenarioName
+ */
 
-const char *project_name = "<SimCtrl><Project name=\"Movement\" "
-        "path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current\" "
-        "/></SimCtrl>";
 
-std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario "
-        "filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/truck.xml\" /><Start mode=\"operation\" /></SimCtrl>";
-
-const char *module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\"><Load lib=\"libModuleCameraSensor.so\" "
-        "path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /><Player name=\"New Player\" /><Frustum bottom=\"15.000000\" far=\"40.000000\" left=\"20.000000\" near=\"1.000000\" right=\"20.000000\" top=\"15.000000\" /><Position dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" /><Origin type=\"usk\" /><Cull enable=\"true\" maxObjects=\"10\" /><Port name=\"RDBout\" number=\"48185\" sendEgo=\"true\" type=\"TCP\" /><Filter objectType=\"none\" /><Filter objectType=\"pedestrian\" /><Debug camera=\"false\" culling=\"false\" detection=\"false\" dimensions=\"false\" enable=\"false\" packages=\"false\" position=\"false\" road=\"false\" /></Sensor>";
 
 /*
+ *
 ------------------------------------------------------------
 VT-GUI
 <SimCtrl><Stop /></SimCtrl>
