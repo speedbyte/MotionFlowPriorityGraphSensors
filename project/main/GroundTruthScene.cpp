@@ -246,7 +246,43 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     //sleep(1);
 
+    sendSCPMessage(scpSocket, rdbtrigger_portnumber.c_str());
+
+    sleep(1);
+
     sendSCPMessage(scpSocket, scenario_name.c_str());
+
+    sleep(1);
+
+    sendSCPMessage(scpSocket, module_manager);
+
+    sleep(1);
+
+    sendSCPMessage(scpSocket, camera_parameters.c_str());
+
+    sleep(1);
+
+    sendSCPMessage(scpSocket, display_parameters.c_str());
+
+    sleep(2);
+
+    sendSCPMessage(scpSocket, environment_parameters.c_str());
+
+    sleep(1);
+
+    sendSCPMessage(scpSocket, message_scp.c_str());
+
+    sleep(1);
+
+    //sendSCPMessage(scpSocket, popup_scp.c_str());
+
+    //sleep(1);
+
+    sendSCPMessage(scpSocket, eyepoint.c_str());
+
+    sleep(1);
+
+    sendSCPMessage(scpSocket, elevation.c_str());
 
     sleep(1);
 
@@ -256,16 +292,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     sleep(10);  // Give some time before you start the trigger and module manager ports.
 
-
     //readScpNetwork(scpSocket);
 
     //readScpNetwork(scpSocket);
 
     //sleep(1);
 
-    //sendSCPMessage(scpSocket, module_manager);
-
-    //sleep(1);
 
     // open the network connection to the taskControl (so triggers may be sent)
     fprintf(stderr, "creating network connection....\n");
@@ -280,7 +312,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     if ( moduleManagerSocket != -1 )  { // this is blocking until the network has been opened
         connected_module_manager_port = true;
     }
-
 
     if ( connected_trigger_port && connected_module_manager_port && connected_scp_port ) {
         // now: open the shared memory (try to attach without creating a new segment)
