@@ -242,9 +242,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     sleep(5); // This is very important !! Mimimum 5 seconds of wait, till you start the simulation
 
-    //sendSCPMessage(scpSocket, project_name);
+    sendSCPMessage(scpSocket, project_name.c_str());
 
-    //sleep(1);
+    sleep(1);
 
     sendSCPMessage(scpSocket, rdbtrigger_portnumber.c_str());
 
@@ -254,7 +254,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     sleep(1);
 
-    sendSCPMessage(scpSocket, module_manager);
+    sendSCPMessage(scpSocket, module_manager.c_str());
 
     sleep(1);
 
@@ -367,8 +367,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
     }
 
-    sprintf(command, "cd %s; %s", (m_datasetpath.string() + std::string("../../")).c_str(),
-            "bash vtdStop.sh");
+    sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
     std::cout << command << std::endl;
     system(command);
     std::cout << "End of generation" << std::endl;
