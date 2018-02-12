@@ -10,7 +10,7 @@
 #include <chrono>
 #include <png++/rgb_pixel.hpp>
 #include <png++/image.hpp>
-#include <vires/Common/viRDBIcd.h>
+#include <vires-interface/Common/viRDBIcd.h>
 #include <sys/time.h>
 #include "GroundTruthScene.h"
 #include "kbhit.h"
@@ -225,7 +225,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     setServer(serverName.c_str());
 
     fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n",
-            getShmKey(), getCheckMask(), getForceBuffer());
+            mShmKey, getCheckMask(), getForceBuffer());
 
     bool connected_trigger_port = false;
     bool connected_module_manager_port = false;
@@ -316,16 +316,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     if ( connected_trigger_port && connected_module_manager_port && connected_scp_port ) {
         // open the shared memory for IG image output (try to attach without creating a new segment)
-        fprintf( stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", getShmKey() );
-
-        /*while ( !mIgOutShmPtr )
-        {
-            mIgOutShmPtr = openIgOutShm( mIgOutShmKey, &( mIgOutShmTotalSize ) );
-            usleep( 1000 );     // do not overload the CPU
-        }*/
+        fprintf( stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", mShmKey );
 
         while (!getShmPtr()) {
-            openShm();
+            openShm(mShmKey);
             usleep(1000);     // do not overload the CPU
         }
 

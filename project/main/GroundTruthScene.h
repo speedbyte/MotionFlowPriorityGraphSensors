@@ -6,8 +6,8 @@
 #define MAIN_GROUNDTRUTHSCENE_H
 
 
-#include <vires/Common/viRDBIcd.h>
-#include <vires/vires_common.h>
+#include <vires-interface/Common/viRDBIcd.h>
+#include <vires-interface/vires_common.h>
 #include <iostream>
 #include "Dataset.h"
 #include "ObjectTrajectory.h"
@@ -159,6 +159,9 @@ private:
 
     ushort mImageCount;
 
+    unsigned int mShmKey;      // key of the SHM segment
+
+
 
 public:
 
@@ -210,6 +213,9 @@ public:
         mLastImageId    = 0;
 
         mImageCount = 0;
+
+        mShmKey       = RDB_SHM_ID_IMG_GENERATOR_OUT;      // key of the SHM segment
+
 
     }
 

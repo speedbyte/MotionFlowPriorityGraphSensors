@@ -92,23 +92,31 @@ def parse_arguements(args):
 
             if build_option == "clean":
                 print "cleaning %s" % library;
-                command = "rm -rf cmake-build-debug"
-                if "boost" in library_install: 
-                    os.chdir(library)
-                    command = "./b2 --clean && rm -rf bin.v2" 
-                elif "ffmpeg" in library_install:
-                    os.chdir(library)
-                command = "make clean"
+                os.chdir(library)
+                command = "rm -rf " + library + "/cmake-build-debug"
                 print command
                 call_shell_command(command)
                 command = "rm -rf " + library_install + "/*"
                 print command
                 call_shell_command(command)
+                if "boost" in library_install: 
+                    command = "./b2 --clean && rm -rf bin.v2" 
+                elif "ffmpeg" in library_install:
+                    command = "make clean"
+                else:
+                    command = "echo cmake-build-debug in " + library + " is already deleted"
+#                print command
+                call_shell_command(command)
+                # SYSTEM INSTALL
+                if args.INSTALL_OPTION:
+                    command = "rm -rf /usr/local/include/" + zipped[count][0][0][zipped[count][0][0].find('/')+1:]
+                    print command
+                    #call_shell_command(command)
                 sys.exit(0)
 
             os.chdir(library)
-	    if "kitti" in library_install:
-		os.chdir("cpp")	
+            if "kitti" in library_install:
+                os.chdir("cpp") 
             print "starting building %s with version %s" % (os.getcwd(), metadata)
             if build_option == "manual":
                 raw_input("Press enter to continue")
