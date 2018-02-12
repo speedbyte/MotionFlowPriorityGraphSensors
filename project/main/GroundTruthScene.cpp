@@ -10,7 +10,8 @@
 #include <chrono>
 #include <png++/rgb_pixel.hpp>
 #include <png++/image.hpp>
-#include <vires/vires/viRDBIcd.h>
+#include <vires/Common/viRDBIcd.h>
+#include <sys/time.h>
 #include "GroundTruthScene.h"
 #include "kbhit.h"
 #include "ViresObjects.h"
@@ -314,15 +315,19 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     }
 
     if ( connected_trigger_port && connected_module_manager_port && connected_scp_port ) {
-        // now: open the shared memory (try to attach without creating a new segment)
-        fprintf(stderr, "attaching to shared memory 0x%x....\n", getShmKey());
+        // open the shared memory for IG image output (try to attach without creating a new segment)
+        fprintf( stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", getShmKey() );
+
+        /*while ( !mIgOutShmPtr )
+        {
+            mIgOutShmPtr = openIgOutShm( mIgOutShmKey, &( mIgOutShmTotalSize ) );
+            usleep( 1000 );     // do not overload the CPU
+        }*/
 
         while (!getShmPtr()) {
             openShm();
             usleep(1000);     // do not overload the CPU
         }
-
-        fprintf(stderr, "...attached! Reading now...\n");
 
         // now check the SHM for the time being
         bool breaking = false;
@@ -344,23 +349,74 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 break;
             }
 
-            if (getSimFrame() > MAX_ITERATION_GT) {
+            if (mSimFrame > MAX_ITERATION_GT) {
                 breaking = true;
             }
 
+            int lastSimFrame = mLastNetworkFrame;
+
             readNetwork(moduleManagerSocket);  // this calls parseRDBMessage() in vires_common.cpp
 
-            if (initCounter <= 0)
+            if( lastSimFrame < 0 ) {
+                checkShm();  //empty IG buffer of spurious images
+            }
+
+            bool haveNewFrame = ( lastSimFrame != mLastNetworkFrame );
+
+            // now read IG output
+            if ( mHaveImage )
+                fprintf( stderr, "main: checking for IG image of IG 0\n" );
+
+            while ( mCheckForImage )
+            {
                 checkShm();
+
+                mCheckForImage = !mHaveImage;
+
+                usleep( 10 );
+
+                if ( !mCheckForImage )
+                    fprintf( stderr, "main: got it!\n" );
+            }
+
+            if ( haveNewFrame )
+            {
+                //fprintf( stderr, "main: new simulation frame (%d) available, mLastIGTriggerFrame = %d\n",
+                //                 mLastNetworkFrame, mLastIGTriggerFrame );
+
+                mHaveFirstFrame = true;
+            }
 
             // has an image arrived or do the first frames need to be triggered
             //(first image will arrive with a certain image_02_frame delay only)
-            if (getHaveImage() || (initCounter-- > 0)) {
-                sendRDBTrigger(triggerSocket);
-                std::cout << getSimFrame() << std::endl;
+
+
+            if ( !mHaveFirstImage ||  mHaveImage || haveNewFrame || !mHaveFirstFrame )
+            {
+                // do not initialize too fast
+                if ( !mHaveFirstImage || !mHaveFirstFrame )
+                    usleep( 100000 );   // 10Hz
+
+                bool requestImage = ( mLastNetworkFrame >= ( mLastIGTriggerFrame + mImageSkipFactor ) );
+
+                if ( requestImage )
+                {
+                    mLastIGTriggerFrame = mLastNetworkFrame;
+                    mCheckForImage = true;
+                }
+
+                sendRDBTrigger( triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime );
+
+                // increase internal counters
+                mSimTime += mDeltaTime;
+                mSimFrame++;
+
+                // calculate the timing statistics
+                if ( mHaveImage  )
+                    calcStatistics();
+
+                mHaveImage = false;
             }
-            // ok, reset image indicator
-            setHaveImage(0);
 
             usleep(10000); // sleep for 10 ms
             std::cout << "getting data from VIRES\n";
@@ -380,6 +436,9 @@ void GroundTruthSceneExternal::parseStartOfFrame(const double &simTime, const un
 }
 
 void GroundTruthSceneExternal::parseEndOfFrame(const double &simTime, const unsigned int &simFrame) {
+
+    mLastNetworkFrame = simFrame;
+
     fprintf(stderr, "headers %d\n,", RDB_PKG_ID_END_OF_FRAME);
     fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
@@ -440,7 +499,9 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
     //fprintf(stderr, "    dataSize = %d\n", data->imgSize);
 
     // ok, I have an image:
-    setHaveImage(1);
+    analyzeImage(  data  , simFrame, 0 );
+
+    mHaveImage = 1;
     char *image_data_ = NULL;
     RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
 
@@ -470,10 +531,17 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
             }
         }
 
-        char file_name_image[500];
+        fprintf(stderr, "got a RGB image with %d channels\n", image_info_.imgSize / (image_info_
+                                                                                           .width *
+                                                                                   image_info_.height));
+
+        char file_name_image[50];
+
+        mImageCount++;
+
 
         if (simFrame > 0) {
-            sprintf(file_name_image, "000%03d_10.png", (simFrame - 7));
+            sprintf(file_name_image, "000%03d_10.png", mImageCount);
             std::string input_image_file_with_path = m_generatepath.string() + m_scenario + "/" +
                     file_name_image;
             save_image.write(input_image_file_with_path);
@@ -483,4 +551,81 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
                                                                                            .width *
                                                                                    image_info_.height));
     }
+}
+
+double GroundTruthSceneExternal::getTime()
+{
+    struct timeval tme;
+    gettimeofday(&tme, 0);
+
+    double now = tme.tv_sec + 1.0e-6 * tme.tv_usec;
+
+    if ( mStartTime < 0.0 )
+        mStartTime = now;
+
+    return now;
+}
+
+
+void GroundTruthSceneExternal::calcStatistics()
+{
+    double now = getTime();
+
+    double dt = now - mStartTime;
+
+    if ( dt < 1.e-6 )
+        return;
+
+    fprintf( stderr, "calcStatistics: received %d/%d images in %.3lf seconds (i.e. %.3lf/%.3lf images per second ), total number of errors = %d\n",
+             mTotalNoImages, dt, mTotalNoImages / dt, mTotalErrorCount );
+}
+
+void GroundTruthSceneExternal::analyzeImage( RDB_IMAGE_t* img, const unsigned int & simFrame, unsigned int index )
+{
+    static unsigned int sLastImgSimFrame =  0;
+
+    if ( !img || ( index > 1 ) )
+        return;
+
+    if ( img->id == 0 )
+        return;
+
+    fprintf( stderr, "analyzeImage: simframe = %d, index = %d: have image no. %d, size = %d bytes, pixelFormat = %d\n",
+             simFrame, index, img->id, img->imgSize, img->pixelFormat );
+
+    if ( img->pixelFormat == RDB_PIX_FORMAT_RGB32F )		// some analysis
+    {
+        float *imgData = ( float* ) ( ( ( char* ) img ) + sizeof( RDB_IMAGE_t ) );
+
+        for ( int i = 0; i < 10; i++ )	// first 10 pixels
+        {
+            fprintf( stderr, "r / g / b = %.3f / %.3f / %.3f\n", imgData[0], imgData[1], imgData[2] );
+            imgData += 3;
+        }
+    }
+    else if ( img->pixelFormat == RDB_PIX_FORMAT_RGB8 )		// some analysis
+    {
+        unsigned char *imgData = ( unsigned char* ) ( ( ( char* ) img ) + sizeof( RDB_IMAGE_t ) );
+
+        for ( int i = 0; i < 10; i++ )	// first 10 pixels
+        {
+            fprintf( stderr, "r / g / b = %d / %d / %d\n", imgData[0], imgData[1], imgData[2] );
+            imgData += 3;
+        }
+    }
+
+
+    //if ( ( myImg->id > 3 ) && ( ( myImg->id - mLastImageId ) != mImageSkipFactor ) )
+    if ( ( simFrame != sLastImgSimFrame ) && ( img->id > 3 ) && ( ( simFrame - sLastImgSimFrame ) != mImageSkipFactor ) )
+    {
+        fprintf( stderr, "WARNING: parseRDBMessageEntry: index = %d, delta of image ID out of bounds: delta = %d\n", index, simFrame - sLastImgSimFrame );
+        mTotalErrorCount++;
+    }
+
+    mLastImageId    = img->id;
+    mHaveImage      = true;
+    mHaveFirstImage = true;
+    mTotalNoImages++;
+
+    sLastImgSimFrame = simFrame;
 }

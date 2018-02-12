@@ -6,7 +6,7 @@
 #define MAIN_GROUNDTRUTHSCENE_H
 
 
-#include <vires/vires/viRDBIcd.h>
+#include <vires/Common/viRDBIcd.h>
 #include <vires/vires_common.h>
 #include <iostream>
 #include "Dataset.h"
@@ -79,6 +79,7 @@ public:
 class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::ViresInterface {
 
 private:
+
     MyTrajectory trajectory;
 
     std::vector<std::pair<std::string, cv::Point2f> >trajectory_points;
@@ -123,7 +124,49 @@ private:
 
     std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
 
+    int          mLastNetworkFrame;
+
+    int          mLastIGTriggerFrame ;
+
+    unsigned int mSimFrame;                                 // simulation frame counter
+    double       mSimTime;                               // simulation time
+
+    double       mDeltaTime;                              // simulation step width
+
+    int          mHaveImage ;                                 // is an image available?
+
+    // some stuff for performance measurement
+    double       mStartTime;
+
+
+    unsigned int mFrameNo;
+
+    unsigned int mFrameTime;
+
+    bool         mHaveFirstImage;
+    bool         mHaveFirstFrame;
+    bool         mCheckForImage;
+
+    // image skip factor
+    unsigned int mImageSkipFactor;
+
+    int          mTotalNoImages;
+
+    // total number of errors
+    unsigned int mTotalErrorCount;
+
+    int          mLastImageId;
+
+    ushort mImageCount;
+
+
 public:
+
+    void analyzeImage( RDB_IMAGE_t* img, const unsigned int & simFrame, unsigned int index );
+
+    void calcStatistics();
+
+    double getTime();
 
     GroundTruthSceneExternal(std::string scenario, std::vector<GroundTruthObjects> &list_objects) :
     GroundTruthScene(scenario, list_objects)  {
@@ -132,6 +175,41 @@ public:
         if ( position != std::string::npos ) {
             scenario_name.replace(position, to_replace.length(), std::string(m_scenario));
         }
+
+        mLastNetworkFrame = -1;
+
+        mLastIGTriggerFrame = -1;
+
+        mSimFrame     = 0;                                 // simulation frame counter
+        mSimTime      = 0.0;                               // simulation time
+
+        mDeltaTime    = 0.01;                              // simulation step width
+
+        mHaveImage    = 0;                                 // is an image available?
+
+        // some stuff for performance measurement
+        mStartTime = -1.0;
+
+
+        mFrameNo           = 0;
+
+        mFrameTime         = mDeltaTime;
+
+        mHaveFirstImage = false;
+        mHaveFirstFrame    = false;
+        mCheckForImage  = false;
+
+        // image skip factor
+        mImageSkipFactor = 25;
+
+        mTotalNoImages= 0;
+
+        // total number of errors
+        mTotalErrorCount = 0;
+
+        mLastImageId    = 0;
+
+        mImageCount = 0;
 
     }
 

@@ -26,6 +26,24 @@ IG
 IG
 <Reply entity="imageGenerator"><Window height="600" width="800" x="12" y="90" /></Reply>
 
+AutoCgfDatabase.xml
+
+ <IGconfig>
+   <Database>
+     <Entity attachToScene="1" ID="Terrain" filename="Data/Projects/Current/Databases/Crossing8Course/Crossing8Course.opt.osgb" />
+     <Entity attachToScene="0" ID="ShadowTerrain" filename="Data/Projects/Current/Databases/Crossing8Course/Crossing8Course.shadow.osgb" />
+    <OcclusionFile file="Data/Projects/Current/Databases/Crossing8Course/Crossing8Course.occl" />
+  </Database>
+ </IGconfig>
+
+
+ <IGconfig>
+   <Database>
+     <Entity attachToScene="1" ID="Terrain" filename="Data/Projects/Current/Databases/Town/Ive/townGer.opt.osgb" />
+     <Entity attachToScene="0" ID="ShadowTerrain" filename="Data/Projects/Current/Databases/Town/Ive/townGer.shadow.osgb" />
+    <OcclusionFile file="Data/Projects/Current/Databases/Town/Ive/townGer.occl" />
+  </Database>
+ </IGconfig>
 
  */
 
