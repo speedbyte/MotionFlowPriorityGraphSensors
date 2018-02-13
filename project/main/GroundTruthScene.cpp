@@ -468,7 +468,7 @@ simFrame, const
     viresObjects.objectProperties = *object;
     viresObjects.frame_count = simFrame;
 
-    if ( mSimFrame%10 == 0 ) {
+    if ( ( mSimFrame % mImageSkipFactor== 0 ) && mSimFrame > 1 ) {
 
             trajectory_points.push_back(std::make_pair(std::string(data->base.name), cv::Point2f((float)data->base.pos.x, (float)
                     data->base.pos.y)));
@@ -534,14 +534,13 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
         char file_name_image[50];
 
-        mImageCount++;
 
-
-        if (simFrame > 0) {
+        if (simFrame > 1) {
             sprintf(file_name_image, "000%03d_10.png", mImageCount);
             std::string input_image_file_with_path = m_generatepath.string() + m_scenario + "/" +
                     file_name_image;
             save_image.write(input_image_file_with_path);
+            mImageCount++;
         }
     } else {
         fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize / (image_info_

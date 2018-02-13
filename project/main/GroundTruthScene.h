@@ -94,7 +94,7 @@ private:
 
     std::string image_generator = "<ImageGenerator> <Window width=\"800\" height=\"600\" x=\"0\" y=\"0\" screen=\"0\" border=\"true\"/></ImageGenerator>";
 
-    std::string module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\" > <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> <Player name=\"MovingCar\"/> <Frustum near=\"1.000000\" far=\"40.000000\" left=\"12.500000\" right=\"12.500000\" bottom=\"15.000000\" top=\"15.000000\" /> <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> <Origin type=\"usk\" /> <Cull maxObjects=\"10\" enable=\"true\" /> <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"true\" /> <Filter objectType=\"none\" /><Filter objectType=\"pedestrian\" /> <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> </Sensor>";
+    std::string module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\" > <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> <Player name=\"MovingCar\"/> <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"12.500000\" bottom=\"15.000000\" top=\"15.000000\" /> <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> <Origin type=\"usk\" /> <Cull maxObjects=\"10\" enable=\"true\" /> <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"true\" /> <Filter objectType=\"none\" /><Filter objectType=\"pedestrian\" /> <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> </Sensor>";
 
     // Precipitation intensity needs to be > 0 for snow and rain.
     std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"false\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
@@ -197,7 +197,7 @@ public:
         mCheckForImage  = false;
 
         // image skip factor
-        mImageSkipFactor = 2;
+        mImageSkipFactor = 10;
 
         mTotalNoImages= 0;
 

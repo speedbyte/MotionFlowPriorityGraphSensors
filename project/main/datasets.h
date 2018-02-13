@@ -17,7 +17,7 @@
 
 
 #define MAX_ITERATION_RESULTS 5
-#define MAX_ITERATION_GT 60
+#define MAX_ITERATION_GT 1000
 #define MAX_ITERATION_THETA 360
 #define MAX_SKIPS 2 // 1 means do not generate flow, 2 means generate base flow
 
