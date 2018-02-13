@@ -86,43 +86,37 @@ private:
 
     const std::string to_replace = "traffic_demo";
 
-    std::string project_name = "<SimCtrl><Project name=\"Movement\"path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current\" /></SimCtrl>";
+    std::string apply = "<SimCtrl><Apply/></SimCtrl>";
 
-    std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario "
-            "filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2"
-            ".0/Data/Projects/Current/Scenarios/traffic_demo"
-            ".xml\" /><Start mode=\"operation\" /></SimCtrl>";
+    std::string project_name = "<SimCtrl><Project name=\"Movement\"path=\"/local/git/MotionFlowPriorityGrapSensors/VIRES/VTD.2.0/Data/Projects/Current\" /></SimCtrl>";
 
-    std::string module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\"><Load lib=\"libModuleCameraSensor.so\" "
-            "path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/."
-            "./Distros/Distro/Plugins/ModuleManager\" /><Player name=\"New Player\" /><Frustum bottom=\"15.000000\" "
-            "far=\"40.000000\" left=\"20.000000\" near=\"1.000000\" right=\"20.000000\" top=\"15.000000\" /><Position dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" /><Origin type=\"usk\" /><Cull enable=\"true\" maxObjects=\"10\" /><Port name=\"RDBout\" number=\"48185\" sendEgo=\"true\" type=\"TCP\" /><Filter objectType=\"none\" /><Filter objectType=\"pedestrian\" /><Debug camera=\"false\" culling=\"false\" detection=\"false\" dimensions=\"false\" enable=\"false\" packages=\"false\" position=\"false\" road=\"false\" /></Sensor>";
+    std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/traffic_demo.xml\" /><Start mode=\"operation\" /></SimCtrl>";
 
-    std::string camera_parameters = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"><Frustum far=\"1500.000000\" "
-    "fovHor=\"40.000000\" fovVert=\"30.000000\" near=\"1.000000\" offsetHor=\"0.000000\" offsetVert=\"0"
-            ".000000\"/><PosEyepoint /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set/></Camera>";
+    std::string image_generator = "<ImageGenerator> <Window width=\"800\" height=\"600\" x=\"0\" y=\"0\" screen=\"0\" border=\"true\"/></ImageGenerator>";
 
-    std::string display_parameters = "<Display><SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" "
-            "showCone=\"false\" /><Database enable=\"true\" streetLamps=\"false\" /><VistaOverlay enable=\"false\" "
-            "/></Display>";
+    std::string module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\" > <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> <Player name=\"SpyingCar\"/> <Frustum near=\"1.000000\" far=\"40.000000\" left=\"12.500000\" right=\"12.500000\" bottom=\"15.000000\" top=\"15.000000\" /> <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> <Origin type=\"usk\" /> <Cull maxObjects=\"10\" enable=\"true\" /> <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"true\" /> <Filter objectType=\"none\" /><Filter objectType=\"pedestrian\" /> <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> </Sensor>";
 
     // Precipitation intensity needs to be > 0 for snow and rain.
-    std::string environment_parameters = "<Environment><Friction value=\"1.000000\" /><TimeOfDay "
-            "headlights=\"false\" value=\"39600\" /><Sky cloudState=\"4/8\" visibility=\"100000.000000\" "
-            "/><Precipitation intensity=\"4.000000\" type=\"snow\" /><Road effectScale=\"0.500000\" state=\"wet\" "
-            "/></Environment>";
+    std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"false\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
+    //Rain
+    std::string environment_parameters_rain = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"false\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"rain\" intensity=\"0.500000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
+
+    std::string camera_parameters = "<Camera name=\"VIEW_CAMERA\" showOwner=\"true\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosTether player=\"StaticCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
+
+    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"true\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"true\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
+
+    std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
+
+    std::string eyepoint = "<VIL><EyepointOffset hDeg=\"0.000000\" pDeg=\"0.000000\" rDeg=\"0.000000\" x=\"0.000000\"y=\"0.000000\" z=\"0.000000\" /></VIL>";
+
+    std::string pause = "<SimCtrl> <Pause/> </SimCtrl>";
 
     std::string rdbtrigger_portnumber = "<TaskControl><RDB client=\"false\" enable=\"true\" interface=\"eth0\" portRx=\"48190\" portTx=\"48190\" portType=\"TCP\" /></TaskControl>";
 
-    std::string message_scp = "<Symbol name=\"expl01\" > <Text data=\"Time for snow\" colorRGB=\"0xffff00\" size=\"50"
-            ".0\" /> <PosScreen x=\"0.01\" y=\"0.05\" /></Symbol>";
+    std::string message_scp = "<Symbol name=\"expl01\" > <Text data=\"Time for snow\" colorRGB=\"0xffff00\" size=\"50.0\" /> <PosScreen x=\"0.01\" y=\"0.05\" /></Symbol>";
 
     std::string popup_scp = "<Info level=\"info\"> <Message popup=\"true\" text=\"snow!!!!\"/> </Info>";
 
-    std::string eyepoint = "<VIL><EyepointOffset hDeg=\"30.000000\" pDeg=\"0.000000\" rDeg=\"0.000000\" x=\"0.000000\""
-            " y=\"0.000000\" z=\"0.000000\" /></VIL>";
-
-    std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
 
     int          mLastNetworkFrame;
 
@@ -203,7 +197,7 @@ public:
         mCheckForImage  = false;
 
         // image skip factor
-        mImageSkipFactor = 25;
+        mImageSkipFactor = 2;
 
         mTotalNoImages= 0;
 

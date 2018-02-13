@@ -239,7 +239,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     sleep(1); // Give some time before you send the next SCP command.
 
-    sendSCPMessage(scpSocket, "<SimCtrl><Apply/></SimCtrl>"); // keine hochkommas.
+    sendSCPMessage(scpSocket, apply.c_str());
 
     sleep(5); // This is very important !! Mimimum 5 seconds of wait, till you start the simulation
 
@@ -267,7 +267,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     sleep(2);
 
-    sendSCPMessage(scpSocket, environment_parameters.c_str());
+    sendSCPMessage(scpSocket, environment_parameters_dry.c_str());
 
     sleep(1);
 
@@ -282,6 +282,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     sendSCPMessage(scpSocket, eyepoint.c_str());
 
     sleep(1);
+
 
     sendSCPMessage(scpSocket, elevation.c_str());
 
@@ -329,6 +330,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         while (1) {
 
             // Break out of the loop if the user presses the Esc key
+            /*
             int c = kbhit();
 
             switch (c) {
@@ -337,7 +339,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     break;
                 default:
                     break;
-            }
+            } */
 
             if (breaking) {
                 break;
@@ -359,7 +361,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             // now read IG output
             if ( mHaveImage )
-                fprintf( stderr, "main: checking for IG image of IG 0\n" );
+                fprintf( stderr, "main: checking for IG image\n" );
 
             while ( mCheckForImage )
             {
@@ -369,8 +371,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                 usleep( 10 );
 
-                if ( !mCheckForImage )
-                    fprintf( stderr, "main: got it!\n" );
+                if ( !mCheckForImage ){
+                    //fprintf( stderr, "main: got it!\n" );
+                }
             }
 
             if ( haveNewFrame )
@@ -399,6 +402,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     mCheckForImage = true;
                 }
 
+                //fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s\n", mDeltaTime,
+                //         requestImage ? "true" : "false" );
                 sendRDBTrigger( triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime );
 
                 // increase internal counters
@@ -407,13 +412,13 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                 // calculate the timing statistics
                 if ( mHaveImage  )
-                    calcStatistics();
+                    //calcStatistics();
 
                 mHaveImage = false;
             }
 
             usleep(10000); // sleep for 10 ms
-            std::cout << "getting data from VIRES\n";
+            //std::cout << "getting data from VIRES\n";
         }
     }
 
@@ -425,16 +430,16 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
 
 void GroundTruthSceneExternal::parseStartOfFrame(const double &simTime, const unsigned int &simFrame) {
-    fprintf(stderr, "I am in GroundTruthFlow %d\n,", RDB_PKG_ID_START_OF_FRAME);
-    fprintf(stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
+    //fprintf(stderr, "I am in GroundTruthFlow %d\n,", RDB_PKG_ID_START_OF_FRAME);
+    //fprintf(stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
 void GroundTruthSceneExternal::parseEndOfFrame(const double &simTime, const unsigned int &simFrame) {
 
     mLastNetworkFrame = simFrame;
 
-    fprintf(stderr, "headers %d\n,", RDB_PKG_ID_END_OF_FRAME);
-    fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
+    //fprintf(stderr, "headers %d\n,", RDB_PKG_ID_END_OF_FRAME);
+    //fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
 void GroundTruthSceneExternal::parseEntry(RDB_OBJECT_CFG_t *data, const double &simTime, const unsigned int &
@@ -463,20 +468,13 @@ simFrame, const
     viresObjects.objectProperties = *object;
     viresObjects.frame_count = simFrame;
 
-    if (strcmp(data->base.name, "New Character") == 0) {
+    if ( mSimFrame%10 == 0 ) {
 
-        trajectory_points.push_back(std::make_pair(std::string(data->base.name), cv::Point2f((float)data->base.pos.x, (float)
-                data->base.pos.y)));
-        fprintf(stderr, "INDICATOR: %d %.3lf %.3lf %.3lf %.3lf \n",
-                simFrame, data->base.pos.x,
-                object->base.pos.y, data->base.geo.dimX, data->base.geo.dimY);
-    } else if (strcmp(data->base.name, "New Character01") == 0) {
-        trajectory_points.push_back(std::make_pair(std::string(data->base.name), cv::Point2f((float)data->base.pos.x,
-                                                                                         (float)
-                data->base.pos.y)));
-        fprintf(stderr, "INDICATOR2: %d %.3lf %.3lf %.3lf %.3lf \n",
-                simFrame, data->base.pos.x,
-                data->base.pos.y, data->base.geo.dimX, data->base.geo.dimY);
+            trajectory_points.push_back(std::make_pair(std::string(data->base.name), cv::Point2f((float)data->base.pos.x, (float)
+                    data->base.pos.y)));
+            fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
+                    data->base.name, simFrame, data->base.pos.x, object->base.pos.y, data->base.geo.dimX, data->base
+                            .geo.dimY);
     }
 }
 
@@ -493,9 +491,11 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
     //fprintf(stderr, "    dataSize = %d\n", data->imgSize);
 
     // ok, I have an image:
-    analyzeImage(  data  , simFrame, 0 );
 
-    mHaveImage = 1;
+    //analyzeImage(  data  , simFrame, 0 );
+    mHaveImage      = true;
+    mHaveFirstImage = true;
+
     char *image_data_ = NULL;
     RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
 
@@ -525,9 +525,11 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
             }
         }
 
-        fprintf(stderr, "got a RGB image with %d channels\n", image_info_.imgSize / (image_info_
-                                                                                           .width *
-                                                                                   image_info_.height));
+        fprintf( stderr, "------------------------------------------------------------------------------------\n");
+        fprintf( stderr, "simFrame = %d, simTime = %.3f, dataSize = %d\n", mSimFrame, mSimTime, data->imgSize);
+
+        //fprintf(stderr, "got a RGB image with %d channels\n", image_info_.imgSize / (image_info_.width * image_info_
+        //.height));
 
         char file_name_image[50];
 
@@ -617,8 +619,6 @@ void GroundTruthSceneExternal::analyzeImage( RDB_IMAGE_t* img, const unsigned in
     }
 
     mLastImageId    = img->id;
-    mHaveImage      = true;
-    mHaveFirstImage = true;
     mTotalNoImages++;
 
     sLastImgSimFrame = simFrame;
