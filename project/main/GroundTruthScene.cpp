@@ -496,6 +496,10 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
     mHaveImage      = true;
     mHaveFirstImage = true;
 
+    fprintf( stderr, "------------------------------------------------------------------------------------\n");
+    fprintf( stderr, "simFrame = %d, simTime = %.3f, dataSize = %d\n", mSimFrame, mSimTime, data->imgSize);
+    fprintf( stderr, "------------------------------------------------------------------------------------\n");
+
     char *image_data_ = NULL;
     RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
 
@@ -524,9 +528,6 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
                 save_image.set_pixel(u, v, val);
             }
         }
-
-        fprintf( stderr, "------------------------------------------------------------------------------------\n");
-        fprintf( stderr, "simFrame = %d, simTime = %.3f, dataSize = %d\n", mSimFrame, mSimTime, data->imgSize);
 
         //fprintf(stderr, "got a RGB image with %d channels\n", image_info_.imgSize / (image_info_.width * image_info_
         //.height));
