@@ -162,9 +162,10 @@ int main ( int argc, char *argv[]) {
     ushort depth = CV_8U;
     ushort cn = 3;
 
-    std::vector < std::string> scenarios_list = {""};
+    const std::vector < std::string> scenarios_list = {"two"};
+    const std::vector < std::string> environment_list = {"none", "snow", "rain"};
 
-    for ( ushort i = 0; i< scenarios_list.size(); i++) {
+    for ( ushort i = 0; i< environment_list.size(); i++) {
         if ( cpp_dataset.execute || vires_dataset.execute ) {
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
@@ -205,7 +206,7 @@ int main ( int argc, char *argv[]) {
                 std::string input = "data/stereo_flow/";
                 Dataset::fillDataset(frame_size_vires, depth, cn, VIRES_DATASET_PATH, input, "results");
 
-                GroundTruthSceneExternal gt_scene_vires("two", list_of_gt_objects);
+                GroundTruthSceneExternal gt_scene_vires(scenarios_list[0], environment_list[i], list_of_gt_objects);
                 gt_scene_vires.generate_gt_scene();
 
                 GroundTruthFlow gt_flow_vires(list_of_gt_objects);
@@ -230,7 +231,7 @@ int main ( int argc, char *argv[]) {
 
 
             if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
-                AlgorithmFlow fback( scenarios_list.at(i), list_of_simulated_objects);
+                AlgorithmFlow fback( scenarios_list[0], list_of_simulated_objects);
                 fback.generate_flow_frame(fb, continous_frames, no_noise, list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
@@ -243,7 +244,7 @@ int main ( int argc, char *argv[]) {
             }
 
             if ( (cpp_dataset.lk && cpp_dataset.execute) || (vires_dataset.lk && vires_dataset.execute )) {
-                AlgorithmFlow lkanade(scenarios_list.at(i), list_of_simulated_objects);
+                AlgorithmFlow lkanade(scenarios_list[0], list_of_simulated_objects);
                 lkanade.generate_flow_frame(lk, continous_frames, no_noise, list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {

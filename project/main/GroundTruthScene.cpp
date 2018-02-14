@@ -914,7 +914,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     sleep(2);
 
-    sendSCPMessage(scpSocket, environment_parameters_dry.c_str());
+    sendSCPMessage(scpSocket, m_environment_scp_message.c_str());
 
     sleep(1);
 

@@ -125,7 +125,6 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                     cv::Point2f gt_line_pts = m_list_objects.at(i)->get_line_parameters().at(frame_skip - 1)
                             .at(frame_count).second;
 
-
                     cv::Mat roi;
                     roi = tempMatrix.
                             colRange(cvRound(next_pts.x), cvRound(next_pts.x + width)).
@@ -135,7 +134,7 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                                      static_cast<float>(m_list_objects.at(i)->getObjectId()));
 
                     // cv line is intelligent and it can also project to values not within the frame size including negative values.
-                    cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
+                    //cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                 }
             }
 
