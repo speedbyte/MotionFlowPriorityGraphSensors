@@ -103,7 +103,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
 
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_base_movement(2);
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_base_movement(m_list_simulated_objects.size());
         std::vector<std::vector<bool>  > outer_base_visiblity;
 
         char frame_skip_folder_suffix[50];
@@ -403,16 +403,20 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     float columnBegin = groundtruthobjects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
 
-                    cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin),(cvRound(rowBegin)+height)).colRange
-                            (cvRound(columnBegin),(cvRound(columnBegin)+width));
+                    cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height),(cvRound(rowBegin)+height+height)).colRange
+                            (cvRound(columnBegin-width),(cvRound(columnBegin)+width+width));
 
                     // Here I should write the fact
                     // roi_write = cv::Scalar(i,j,k);
 
+                    cv::Size roi_size;
+                    cv::Point roi_offset;
+                    roi.locateROI(roi_size, roi_offset);
+
                     for (unsigned y = 0; y < roi.rows; y++) {
                         for (unsigned x = 0; x < roi.cols; x++) {
 
-                            base_movement.at(i).push_back(std::make_pair(cv::Point2f(cvRound(columnBegin)+x, cvRound(rowBegin) +y),
+                            base_movement.at(i).push_back(std::make_pair(cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
                                                                    roi.at<cv::Vec2f>(y,x)));
                         }
                     }

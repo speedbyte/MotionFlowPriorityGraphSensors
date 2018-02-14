@@ -703,7 +703,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     //achterbahn2.setDynamic();
 
     //Rectangle rectangle1(5, 5); // width, height
-    Rectangle rectangle2(5,4); // width, height
+    Rectangle rectangle2(20,20); // width, height
     //Rectangle myShape(5, 5); // width, height
     //Circle circle;
     //Ramp ramp;
