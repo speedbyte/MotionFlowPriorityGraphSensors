@@ -13,17 +13,25 @@
 
 
 // Canvas is a kind of Object ( its just a big object, and hence has the same property )
-class Canvas : public GroundTruthObjects {
+class Canvas  {
 
+private:
+
+    WhiteNoise whiteNoise;
+    Rectangle background;
 
 public:
 
+
     // The canvas can move to simulate a moving car. Hence we need trajectory etc.
-    Canvas ( ObjectImageShapeData &image_data_and_shape, ObjectTrajectory &trajectory, ushort startPoint, Noise
-    &noise) : GroundTruthObjects(image_data_and_shape, trajectory, startPoint, noise, "BackgroundCanvas") {
-        image_data_and_shape.process();
+    Canvas( ) : whiteNoise(), background((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height){
+        CameraSensorImage(background, whiteNoise);
+        background.process();
     };
 
+    ObjectImageShapeData getImageShapeAndData() {
+        return background;
+    }
 };
 
 

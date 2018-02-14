@@ -47,7 +47,6 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
     // Additionally stores the frames in a png file
     // Additionally stores the trajectory in a png file
 
-    std::string m_resultordner = "";
     std::map<std::string, double> time_map = {{"generate",     0},
                                               {"ground truth", 0}};
 
@@ -56,7 +55,7 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
     auto tic_all = steady_clock::now();
     auto toc_all = steady_clock::now();
 
-    std::cout << "collision graph will be srored in " << m_basepath << std::endl;
+    std::cout << "collision graph will be srored in " << m_resultordner << std::endl;
     char frame_skip_folder_suffix[50];
     cv::FileStorage fs;
 

@@ -103,6 +103,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
 
 
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_base_movement(2);
+        std::vector<std::vector<bool>  > outer_base_visiblity;
 
         char frame_skip_folder_suffix[50];
         char file_name_image[50];
@@ -191,7 +193,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //draw new ground truth flow.
 
 
-
+            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > base_movement(m_list_simulated_objects.size());
             /*
             if ( frame_count%frame_skip != 0 ) {
                 continue;
@@ -218,7 +220,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //if (image_02_frame.empty())
             //    break;
 
-            std::string input_image_file_with_path = Dataset::getGroundTruthPath().string() + "/image_02/" +
+            std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
                     file_name_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
@@ -349,7 +351,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     next_pts_array = next_pts_healthy;
                 }
 
-                for (unsigned i = 0; i < frame_points.size(); i++) {
+                for (unsigned i = 0; i < next_pts_array.size(); i++) {
                     cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
                 }
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator it ;
@@ -392,7 +394,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 stencilFrame = flowframe.clone();
                 for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
                     //two objects
-                    std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
 
                     int width = m_list_simulated_objects.at(i).getWidth();
                     int height = m_list_simulated_objects.at(i).getHeight();
@@ -411,12 +412,14 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     for (unsigned y = 0; y < roi.rows; y++) {
                         for (unsigned x = 0; x < roi.cols; x++) {
 
-                            base_movement.push_back(std::make_pair(cv::Point2f(cvRound(columnBegin)+x, cvRound(rowBegin) +y),
+                            base_movement.at(i).push_back(std::make_pair(cv::Point2f(cvRound(columnBegin)+x, cvRound(rowBegin) +y),
                                                                    roi.at<cv::Vec2f>(y,x)));
                         }
                     }
 
-                    m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
+                    outer_base_movement.at(i).push_back(base_movement.at(i));
+
+                    //m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
                 }
 
                 //cv::imwrite(temp_result_flow_path, flowframe);
@@ -432,9 +435,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 F_png_write_trajectory.write(temp_result_trajectory_path);
 
                 for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
-                    std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                    base_movement.push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
-                    m_list_simulated_objects.at(i).set_outer_base_movement(base_movement);
+                    base_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
+                    outer_base_movement.at(i).push_back(base_movement.at(i));
                 }
 
                 needToInit = true;
@@ -481,7 +483,13 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             // Display the output image
             cv::imshow(m_resultordner, image_02_frame);
             prevGray = curGray.clone();
+
         }
+
+        for ( ushort i = 0; i < m_list_simulated_objects.size(); i++) {
+            m_list_simulated_objects.at(i).generate_obj_extrapolated_shape_pixel_point_pixel_displacement(outer_base_movement.at(i));
+        }
+
 
         fs.release();
 
@@ -506,9 +514,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGroundTruthPath().string() +
                 std::string(" y axis - ms, x axis - image_02_frame\n'");
         //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
-    }
-    for ( ushort i = 0; i < m_list_simulated_objects.size(); i++) {
-        m_list_simulated_objects.at(i).set_m_obj_extrapolated_shape_pixel_point_pixel_displacement();
     }
 }
 

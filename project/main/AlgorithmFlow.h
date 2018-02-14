@@ -27,18 +27,37 @@ private:
 
     std::vector< Objects*> m_list_simulated_objects_ptr;
 
+    boost::filesystem::path mImageabholOrt;
+
 
 public:
 
-    AlgorithmFlow( std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_simulated_objects(list_simulated_objects)  {
+    AlgorithmFlow( std::string scenario, std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_simulated_objects(list_simulated_objects)  {
+
 
         m_basepath = Dataset::getResultPath();
+
+        mImageabholOrt = Dataset::getGroundTruthPath().string() + "/image_02/" + scenario;
 
         for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++ ) {
 
             m_list_simulated_objects_ptr.push_back(&m_list_simulated_objects.at(i));
         }
     }
+
+    AlgorithmFlow( std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_simulated_objects(list_simulated_objects)  {
+
+
+        m_basepath = Dataset::getResultPath();
+
+        mImageabholOrt = Dataset::getGroundTruthPath().string() + "/image_02/" + "";
+
+        for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++ ) {
+
+            m_list_simulated_objects_ptr.push_back(&m_list_simulated_objects.at(i));
+        }
+    }
+
 
     void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
 

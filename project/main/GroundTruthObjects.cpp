@@ -17,7 +17,7 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
 
     std::cout << "start point "<< current_index << std::endl;
 
-    for (ushort frame_count=0; frame_count < MAX_ITERATION_GT; frame_count++) {
+    for (ushort frame_count=0; frame_count < MAX_ITERATION_GT_SCENE_EVALUATION; frame_count++) {
         // The first frame is the reference frame, hence it is skipped
 
         if ( frame_count > 0 ) {

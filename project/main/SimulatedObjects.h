@@ -14,12 +14,6 @@ private:
 
     static unsigned SimulatedobjectCurrentCount; // assingn object id
 
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
-             m_algo_frame_pixel_point_pixel_displacement;
-
-
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
-
 
 public:
 
@@ -31,15 +25,7 @@ public:
     }
 
 
-    void set_outer_base_movement(std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement) {
-        outer_base_movement.push_back(base_movement);
-    }
-
-    void set_m_obj_extrapolated_shape_pixel_point_pixel_displacement() {
-        m_obj_extrapolated_shape_pixel_point_pixel_displacement.push_back(outer_base_movement);
-        outer_base_movement.clear();
-    }
-
+    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement ) ;
 
 
 };

@@ -80,7 +80,7 @@ void GroundTruthFlow::generate_flow_frame() {
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
-        std::cout << "saving flow files for frame_skip " << frame_skip << std::endl;
+        std::cout << "saving ground truth flow files for frame_skip " << frame_skip << std::endl;
 
         unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0).get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1).size();
         assert(FRAME_COUNT>0);
@@ -146,7 +146,7 @@ void GroundTruthFlow::generate_flow_frame() {
         fs.release();
     }
 
-    std::cout << "end of saving flow files " << std::endl;
+    std::cout << "end of saving ground truth flow files " << std::endl;
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();

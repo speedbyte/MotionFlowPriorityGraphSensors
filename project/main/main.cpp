@@ -159,112 +159,78 @@ int main ( int argc, char *argv[]) {
 
 
 
-    cv::Size_<unsigned> frame_size(1242, 375);
     ushort depth = CV_8U;
     ushort cn = 3;
-    {
-        if ( cpp_dataset.execute ) {
 
-            std::string input = "data/stereo_flow/";
-            Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, "results");
+    std::vector < std::string> scenarios_list = {""};
 
-            // Trajectories
-            NoTrajectory noTrajectory;
-            MyTrajectory myTrajectory2;
-            MyTrajectory myTrajectory1;
-            MyTrajectory myTrajectory;
-            /*
-            myTrajectory1.pushTrajectoryPoints(cv::Point2f(50,25));
-            myTrajectory1.pushTrajectoryPoints(cv::Point2f(100,50));
-            myTrajectory1.pushTrajectoryPoints(cv::Point2f(150,75));
-            myTrajectory1.pushTrajectoryPoints(cv::Point2f(200,100));
-            myTrajectory1.pushTrajectoryPoints(cv::Point2f(250,125));
-
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(700,250));
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(800,225));
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(900,200));
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1000,175));
-            myTrajectory2.pushTrajectoryPoints(cv::Point2f(1100,150));
-*/
-            cv::RNG rng(-1);
-            for ( unsigned i = 0 ; i < MAX_ITERATION_THETA; i++ ) {
-                float a        = (float) rng.uniform(100., 1000.);
-                float b        = (float) rng.uniform(100., 300.);
-                cv::Point2f points(a,b);
-                myTrajectory1.pushTrajectoryPoints(points);
-                myTrajectory2.pushTrajectoryPoints(points);
-            }
-
-            std::cout << myTrajectory1.getTrajectory();
-
-            noTrajectory.process(Dataset::getFrameSize());
-            Achterbahn achterbahn1, achterbahn2;
-            achterbahn1.process(Dataset::getFrameSize());
-            //achterbahn1.setDynamic();
-            achterbahn2.process(Dataset::getFrameSize());
-            //achterbahn2.setDynamic();
-
-            // Shapes
-            Rectangle background(1242, 375);
-            Rectangle rectangle1(5, 5); // width, height
-            Rectangle rectangle2(5, 5); // width, height
-            Rectangle myShape(5, 5); // width, height
-            //Circle circle;
-            //Ramp ramp;
-            //NegativeRamp negativeRamp;
-
-            // Noise
-            WhiteNoise whiteNoise;
-            ColorfulNoise colorfulNoise;
-            NoNoise noNoise;
-
-            // Canvas is itself registered as an Object with a dummy trajectory
-            Canvas canvas(background, noTrajectory, 60, whiteNoise);
-            //GroundTruthObjects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide");
-            GroundTruthObjects obj2(rectangle2, myTrajectory2, 0, colorfulNoise, "rectangle_long");
-            GroundTruthObjects obj3(myShape, myTrajectory1, 0, noNoise, "random_object");
-
-            //GroundTruthObjects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
-            //GroundTruthObjects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
-            //GroundTruthObjects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
+    for ( ushort i = 0; i< scenarios_list.size(); i++) {
+        if ( cpp_dataset.execute || vires_dataset.execute ) {
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
-            //list_of_gt_objects.push_back(obj1);
-            list_of_gt_objects.push_back(obj2);
-            list_of_gt_objects.push_back(obj3);
+            std::vector<SimulatedObjects> list_of_simulated_objects;
 
-            //list_of_gt_objects.push_back(obj3);
-            //list_of_gt_objects.push_back(obj4);
-            //list_of_gt_objects.push_back(obj5);
 
-            if ( cpp_dataset.gt ) {
+            if ( cpp_dataset.execute && cpp_dataset.gt ) {
 
-                GroundTruthSceneInternal gt_scene(canvas, list_of_gt_objects);
-                gt_scene.generate_gt_scene();
+                cv::Size_<unsigned> frame_size(800, 600);
+                std::string input = "data/stereo_flow/";
+                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, "results");
 
-                GroundTruthFlow gt_flow(list_of_gt_objects);
-                gt_flow.generate_flow_frame();
-                gt_flow.generate_collision_points();
+                GroundTruthSceneInternal gt_scene_cpp( list_of_gt_objects);
+                gt_scene_cpp.generate_gt_scene();
+
+                GroundTruthFlow gt_flow_cpp(list_of_gt_objects);
+                gt_flow_cpp.generate_flow_frame();
+                gt_flow_cpp.generate_collision_points();
 
                 VectorRobustness vectorRobustness;
-                //vectorRobustness.generateVectorRobustness(gt_flow);
+                vectorRobustness.generateVectorRobustness(gt_flow_cpp);
+
+                for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
+                    //two objects
+                    int width = list_of_gt_objects.at(i).getWidth();
+                    int height = list_of_gt_objects.at(i).getHeight();
+                    std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
+
+                    SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
+                            .getObjectName(), width, height, extrapolated_visibility);
+                    list_of_simulated_objects.push_back(objects);
+                }
 
             }
-            std::vector<SimulatedObjects> list_of_simulated_objects;
-            for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
-                //two objects
-                std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                int width = list_of_gt_objects.at(i).getWidth();
-                int height = list_of_gt_objects.at(i).getHeight();
-                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
+            if ( vires_dataset.gt && vires_dataset.execute ) {
 
-                SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
-                        .getObjectName(), width, height, extrapolated_visibility);
-                list_of_simulated_objects.push_back(objects);
+                cv::Size_<unsigned> frame_size_vires(800, 600);
+                std::string input = "data/stereo_flow/";
+                Dataset::fillDataset(frame_size_vires, depth, cn, VIRES_DATASET_PATH, input, "results");
+
+                GroundTruthSceneExternal gt_scene_vires("two", list_of_gt_objects);
+                gt_scene_vires.generate_gt_scene();
+
+                GroundTruthFlow gt_flow_vires(list_of_gt_objects);
+                gt_flow_vires.generate_flow_frame();
+                gt_flow_vires.generate_collision_points();
+
+                VectorRobustness vectorRobustness;
+                vectorRobustness.generateVectorRobustness(gt_flow_vires);
+
+                for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
+                    //two objects
+                    int width = list_of_gt_objects.at(i).getWidth();
+                    int height = list_of_gt_objects.at(i).getHeight();
+                    std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
+
+                    SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
+                            .getObjectName(), width, height, extrapolated_visibility);
+                    list_of_simulated_objects.push_back(objects);
+                }
+
             }
 
-            if ( cpp_dataset.fb ) {
-                AlgorithmFlow fback( list_of_simulated_objects);
+
+            if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
+                AlgorithmFlow fback( scenarios_list.at(i), list_of_simulated_objects);
                 fback.generate_flow_frame(fb, continous_frames, no_noise, list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
@@ -273,11 +239,11 @@ int main ( int argc, char *argv[]) {
                 }
                 fback.generate_collision_points();
                 VectorRobustness vectorRobustness;
-                //vectorRobustness.generateVectorRobustness(fback);
+                vectorRobustness.generateVectorRobustness(fback);
             }
 
-            if ( cpp_dataset.lk ) {
-                AlgorithmFlow lkanade(list_of_simulated_objects);
+            if ( (cpp_dataset.lk && cpp_dataset.execute) || (vires_dataset.lk && vires_dataset.execute )) {
+                AlgorithmFlow lkanade(scenarios_list.at(i), list_of_simulated_objects);
                 lkanade.generate_flow_frame(lk, continous_frames, no_noise, list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
@@ -289,7 +255,7 @@ int main ( int argc, char *argv[]) {
                 vectorRobustness.generateVectorRobustness(lkanade);
             }
 
-            if ( cpp_dataset.plot ) {
+            if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 
                 PixelRobustness robust;
                 VectorRobustness vectorRobustness;
@@ -298,14 +264,17 @@ int main ( int argc, char *argv[]) {
                 //PlotFlow::plot(std::string("results_LK_no_noise"));
 
             }
+
         }
     }
+
 
 /* MATLAB_DATASET ------------- */
 
     {
         if ( matlab_dataset.execute ) {
 
+            cv::Size_<unsigned> frame_size(1242, 375);
             std::string input = "data/stereo_flow/image_02";
             Dataset::fillDataset(frame_size, depth, cn, MATLAB_DATASET_PATH, input, "results");
             //AlgorithmFlow algo();
@@ -318,6 +287,7 @@ int main ( int argc, char *argv[]) {
     {
         if ( kitti_flow_dataset.execute ) {
 
+            cv::Size_<unsigned> frame_size(1242, 375);
             Dataset::fillDataset(frame_size, depth, cn, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02",
                                  "results");
             //AlgorithmFlow algo;
@@ -329,70 +299,6 @@ int main ( int argc, char *argv[]) {
             //make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
             //make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");
             //make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/");
-        }
-    }
-
-/* VIRES_DATASET ------------- */
-
-    {
-        if (vires_dataset.execute ) {
-
-            cv::Size_<unsigned> frame_size_vires(1242, 375);
-
-            std::vector<GroundTruthObjects> list_of_gt_objects;
-            //TODO - getListOfObjects from VIRES
-
-            std::string input = "data/stereo_flow/";
-            Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, "results");
-
-            if ( vires_dataset.gt ) {
-                GroundTruthSceneExternal gt_scene("two", list_of_gt_objects);
-                gt_scene.generate_gt_scene();
-                exit(0);
-                //std::vector<GroundTruthObjects> list_of_gt_objects = gt_scene.getListOfObjects();
-
-                std::vector<Objects*> list_of_gt_objects_ptr;
-                /*
-                std::transform(list_of_gt_objects.begin(), list_of_gt_objects.end(), std::back_inserter(list_of_gt_objects_ptr),
-                               [](auto p){ return std::make_unique<Objects>(p); });
-                               */
-
-
-                GroundTruthFlow gt_flow(list_of_gt_objects);
-                gt_flow.generate_flow_frame();
-                gt_flow.generate_collision_points();
-            }
-
-
-            std::vector<SimulatedObjects> list_of_simulated_objects;
-            for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
-                //two objects
-                std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-                int width = list_of_gt_objects.at(i).getWidth();
-                int height = list_of_gt_objects.at(i).getHeight();
-                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
-
-                SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
-                        .getObjectName(), width, height, extrapolated_visibility);
-                list_of_simulated_objects.push_back(objects);
-            }
-
-            AlgorithmFlow fback(list_of_simulated_objects);
-            AlgorithmFlow lkanade(list_of_simulated_objects);
-
-            if ( vires_dataset.lk ) {
-                fback.generate_flow_frame(lk, continous_frames, no_noise, list_of_gt_objects);
-            }
-
-            if ( vires_dataset.fb ) {
-                lkanade.generate_flow_frame(fb, continous_frames, no_noise, list_of_gt_objects);
-            }
-
-            if ( vires_dataset.plot ) {
-                PlotFlow::plot(std::string("results_FB_no_noise"));
-                PlotFlow::plot(std::string("results_LK_no_noise"));
-            }
-            //disparity(dataset_path);
         }
     }
 

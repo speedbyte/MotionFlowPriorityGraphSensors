@@ -57,11 +57,6 @@ public:
         return m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
     }
 
-    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>>> &
-    get_obj_extrapolated_shape_pixel_point_pixel_displacement() const {
-        return m_obj_extrapolated_shape_pixel_point_pixel_displacement;
-    }
-
     int getWidth() const {
         return m_ObjectWidth;
     }
@@ -88,8 +83,6 @@ public:
     unsigned getObjectId() const {
         return m_objectId;
     }
-
-
 };
 
 

@@ -31,6 +31,9 @@ protected:
 
     std::string m_scenario;
 
+    Canvas m_canvas;
+
+
 public:
 
     GroundTruthScene(std::string scenario, std::vector<GroundTruthObjects> &list_objects):m_scenario
@@ -42,15 +45,11 @@ public:
 
     };
 
-    GroundTruthScene(std::vector<GroundTruthObjects> &list_objects):m_list_objects(list_objects) {
-
-        m_basepath = Dataset::getGroundTruthPath();
-
-    };
 
     virtual void generate_gt_scene() {};
 
     void prepare_directories();
+
 
 };
 
@@ -58,14 +57,14 @@ class GroundTruthSceneInternal : public GroundTruthScene {
 
 private:
 
-    Canvas &m_canvas;
 
 public:
 
-    GroundTruthSceneInternal(Canvas &canvas, std::vector<GroundTruthObjects> &list_objects) :
-            m_canvas(canvas), GroundTruthScene(list_objects) {}
+    GroundTruthSceneInternal(std::vector<GroundTruthObjects> &list_objects) :
+             GroundTruthScene("", list_objects) {
+    }
 
-    void generate_gt_scene();
+    void generate_gt_scene() override;
 
     cv::Mat getObjectShape(int index) {
         return m_list_objects.at(index).getImageShapeAndData().get();
@@ -74,6 +73,8 @@ public:
     ~GroundTruthSceneInternal(){
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
+
+
 };
 
 class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::ViresInterface {
@@ -82,7 +83,7 @@ private:
 
     MyTrajectory trajectory;
 
-    std::vector<std::pair<std::string, cv::Point2f> >trajectory_points;
+    std::vector<std::pair<std::string, cv::Point2f> > mtrajectory_points;
 
     const std::string to_replace = "traffic_demo";
 
@@ -141,9 +142,6 @@ private:
     bool         mHaveFirstFrame;
     bool         mCheckForImage;
 
-    // image skip factor
-    unsigned int mImageSkipFactor;
-
     int          mTotalNoImages;
 
     // total number of errors
@@ -155,9 +153,13 @@ private:
 
     unsigned int mShmKey;      // key of the SHM segment
 
+    std::vector<MyTrajectory> myTrajectoryVector;
 
+    // image skip factor
+    static const unsigned short mImageSkipFactor;
 
 public:
+
 
     void analyzeImage( RDB_IMAGE_t* img, const unsigned int & simFrame, unsigned int index );
 
@@ -196,9 +198,6 @@ public:
         mHaveFirstFrame    = false;
         mCheckForImage  = false;
 
-        // image skip factor
-        mImageSkipFactor = 10;
-
         mTotalNoImages= 0;
 
         // total number of errors
@@ -210,10 +209,15 @@ public:
 
         mShmKey       = RDB_SHM_ID_IMG_GENERATOR_OUT;      // key of the SHM segment
 
+        MyTrajectory character_trajectory;
+        MyTrajectory character01_trajectory;
+        myTrajectoryVector.push_back(character_trajectory);
+        myTrajectoryVector.push_back(character01_trajectory);
+
 
     }
 
-    void generate_gt_scene();
+    void generate_gt_scene() override;
 
     void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
 
@@ -232,6 +236,9 @@ public:
     ~GroundTruthSceneExternal(){
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
+
+
+
 
 };
 
