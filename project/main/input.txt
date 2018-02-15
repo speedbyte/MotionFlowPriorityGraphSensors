@@ -4,7 +4,7 @@ EXECUTE = 0
 GT = 1
 LK = 0
 FB = 1
-PLOT = 0
+PLOT = 1
 
 [MATLAB_DATASET]
 PATH = "../../../datasets/matlab_dataset/"
@@ -28,4 +28,4 @@ EXECUTE = 1
 GT = 1
 LK = 0
 FB = 1
-PLOT = 0
+PLOT = 1

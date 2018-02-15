@@ -78,7 +78,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         std::vector<std::vector<bool>  > outer_base_visiblity;
 
         char frame_skip_folder_suffix[50];
-        char file_name_image[50];
+        char file_name_input_image[50];
 
         std::vector<unsigned> x_pts;
         std::vector<double> y_pts;
@@ -163,13 +163,16 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
 
+            if ( frame_count*frame_skip >= MAX_ITERATION_RESULTS) {
+                break;
+            }
 
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > base_movement(m_list_simulated_objects.size());
             /*
             if ( frame_count%frame_skip != 0 ) {
                 continue;
             }*/
-            sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
             flowImage = cv::Scalar(0,0,0);
             assert(flowImage.channels() == 3);
             // Break out of the loop if the user presses the Esc key
@@ -192,7 +195,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //    break;
 
             std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
-                    file_name_image;
+                    file_name_input_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
 
@@ -201,8 +204,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 throw ("No image file found error");
             }
 
-            temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
-            temp_result_trajectory_path = m_trajectory_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
+            temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
+            temp_result_trajectory_path = m_trajectory_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);

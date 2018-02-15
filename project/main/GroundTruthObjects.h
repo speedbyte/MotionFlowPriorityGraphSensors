@@ -51,7 +51,7 @@ public:
 
     {
 
-        assert(m_obj_trajectory.getTrajectory().size() >= MAX_ITERATION_GT_SCENE_EVALUATION);
+        assert(m_obj_trajectory.getTrajectory().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
         m_objectId = objectCurrentCount ;
         image_data_and_shape.process();
         objectCurrentCount += 1;
@@ -65,9 +65,6 @@ public:
                     (), getObjectId());
 
             generate_obj_base_pixel_point_pixel_displacement();
-
-            printf("generating ground truth frame displacement for name %s with object id %u\n", getObjectName().c_str
-                    (), getObjectId());
 
             generate_obj_extrapolated_pixel_point_pixel_displacement( MAX_SKIPS );
 

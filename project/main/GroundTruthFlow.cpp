@@ -40,11 +40,10 @@ void GroundTruthFlow::prepare_directories() {
 
     if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
-        std::cout << "Creating GT Flow directories" << std::endl;
+        std::cout << "prepare gt_flow directories" << std::endl;
 
         OpticalFlow::prepare_directories();
 
-        std::cout << "Ending GT Flow directories" << std::endl;
     }
 }
 
@@ -61,13 +60,10 @@ void GroundTruthFlow::generate_flow_frame() {
     assert(tempGroundTruthImage.channels() == 3);
 
 
-    std::map<std::string, double> time_map = {{"generate",     0},
-                                              {"ground truth", 0}};
+    std::map<std::string, double> time_map = {{"generate_single_flow_image",     0},
+                                              {"generate_all_flow_image", 0}};
 
-    auto tic = steady_clock::now();
-    auto toc = steady_clock::now();
     auto tic_all = steady_clock::now();
-    auto toc_all = steady_clock::now();
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
@@ -87,6 +83,9 @@ void GroundTruthFlow::generate_flow_frame() {
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char file_name_image[50];
+
+            auto tic = steady_clock::now();
+
             std::cout << "frame_count " << frame_count << std::endl;
 
             sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
@@ -142,6 +141,10 @@ void GroundTruthFlow::generate_flow_frame() {
 
             F_png_write.writeExtended(temp_gt_flow_image_path);
 
+            auto toc = steady_clock::now();
+            time_map["generate_single_flow_image"] = duration_cast<milliseconds>(toc - tic).count();
+
+
         }
         fs.release();
     }
@@ -149,9 +152,9 @@ void GroundTruthFlow::generate_flow_frame() {
     std::cout << "end of saving ground truth flow files " << std::endl;
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
-    toc_all = steady_clock::now();
-    time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << "ground truth flow generation time - " << time_map["ground truth"] << "ms" << std::endl;
+    auto toc_all = steady_clock::now();
+    time_map["generate_all_flow_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
+    std::cout << "ground truth flow generation time - " << time_map["generate_all_flow_image"] << "ms" << std::endl;
 
 }
 

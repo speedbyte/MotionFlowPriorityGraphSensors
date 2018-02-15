@@ -161,9 +161,14 @@ int main ( int argc, char *argv[]) {
 
     ushort depth = CV_8U;
     ushort cn = 3;
+    assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
+    assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_IMAGES);
+    assert(MAX_ITERATION_GT_SCENE_GENERATION_IMAGES <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
+
 
     const std::vector < std::string> scenarios_list = {"two"};
     const std::vector < std::string> environment_list = {"none", "snow", "rain"};
+    //const std::vector < std::string> environment_list = {"none"};
 
     for ( ushort i = 0; i< environment_list.size(); i++) {
         if ( cpp_dataset.execute || vires_dataset.execute ) {
@@ -187,8 +192,16 @@ int main ( int argc, char *argv[]) {
                     gt_flow_cpp.generate_flow_frame();
                     gt_flow_cpp.generate_collision_points();
 
-                    VectorRobustness vectorRobustness;
-                    vectorRobustness.generateVectorRobustness(gt_flow_cpp);
+                    if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
+
+                        PixelRobustness robust;
+                        VectorRobustness vectorRobustness;
+                        vectorRobustness.generateVectorRobustness(gt_flow_cpp);
+                        std::string resultordner;
+                        //PlotFlow::plot(std::string("results_FB_no_noise"));
+                        //PlotFlow::plot(std::string("results_LK_no_noise"));
+
+                    }
                 }
             }
             if ( vires_dataset.gt && vires_dataset.execute ) {
@@ -206,8 +219,16 @@ int main ( int argc, char *argv[]) {
                     gt_flow_vires.generate_flow_frame();
                     gt_flow_vires.generate_collision_points();
 
-                    VectorRobustness vectorRobustness;
-                    vectorRobustness.generateVectorRobustness(gt_flow_vires);
+                    if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
+
+                        PixelRobustness robust;
+                        VectorRobustness vectorRobustness;
+                        vectorRobustness.generateVectorRobustness(gt_flow_vires);
+                        std::string resultordner;
+                        //PlotFlow::plot(std::string("results_FB_no_noise"));
+                        //PlotFlow::plot(std::string("results_LK_no_noise"));
+
+                    }
                 }
 
             }
@@ -231,9 +252,19 @@ int main ( int argc, char *argv[]) {
                     list_of_simulated_objects.at(i)
                             .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
                 }
+
                 fback.generate_collision_points();
-                VectorRobustness vectorRobustness;
-                vectorRobustness.generateVectorRobustness(fback);
+
+                if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
+
+                    PixelRobustness robust;
+                    VectorRobustness vectorRobustness;
+                    vectorRobustness.generateVectorRobustness(fback);
+                    std::string resultordner;
+                    //PlotFlow::plot(std::string("results_FB_no_noise"));
+                    //PlotFlow::plot(std::string("results_LK_no_noise"));
+
+                }
             }
 
             if ( (cpp_dataset.lk && cpp_dataset.execute) || (vires_dataset.lk && vires_dataset.execute )) {
@@ -244,20 +275,22 @@ int main ( int argc, char *argv[]) {
                     list_of_simulated_objects.at(i)
                             .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
                 }
+
                 lkanade.generate_collision_points();
-                VectorRobustness vectorRobustness;
-                vectorRobustness.generateVectorRobustness(lkanade);
+
+                if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
+
+                    PixelRobustness robust;
+                    VectorRobustness vectorRobustness;
+                    vectorRobustness.generateVectorRobustness(lkanade);
+                    std::string resultordner;
+                    //PlotFlow::plot(std::string("results_FB_no_noise"));
+                    //PlotFlow::plot(std::string("results_LK_no_noise"));
+
+                }
+
             }
 
-            if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
-
-                PixelRobustness robust;
-                VectorRobustness vectorRobustness;
-                std::string resultordner;
-                //PlotFlow::plot(std::string("results_FB_no_noise"));
-                //PlotFlow::plot(std::string("results_LK_no_noise"));
-
-            }
 
         }
     }

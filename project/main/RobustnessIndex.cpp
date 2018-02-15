@@ -75,9 +75,8 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-            for ( unsigned points = 0 ; points < opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count)
-                                                         .size();
-                  points++ ) {
+            unsigned long POINTS = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).size();
+            for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
                 cv::Point2f collisionpoints = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).at
                         (points);
@@ -122,6 +121,7 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
     }
 */
         fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
+        // send samples_xy_collision to matlab. samples_xy_collision[0][i] is x coordinates, samples_xy_collision[1][i]) is the y coordinate
         for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
             xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
         }
@@ -132,10 +132,10 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
         gp << "set xrange[0:" + std::to_string(Dataset::getFrameSize().width) + "]\n" << "set yrange[0:" + std::to_string(Dataset::getFrameSize().height) + "]\n";
         std::cout << list_gp_lines[0];
         gp << list_gp_lines.at(0);
-        gp << "set title \"" + opticalFlow.getGeneratePath() + "\"\n";
-        gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points)+
-                "'\n";
+        gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
+        gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points) + "'\n";
         gp.send1d(xypoints_collision);
+        std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }
 }
 

@@ -16,16 +16,16 @@
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
 
-#define MAX_ITERATION_RESULTS 5
-#define MAX_ITERATION_GT_SCENE_EVALUATION 5
+#define MAX_ITERATION_RESULTS 90 // generate result. this cannot be more than vector
 
-#define MAX_ITERATION_GT_SCENE_GENERATION_STATIC 5
+#define MAX_ITERATION_GT_SCENE_GENERATION_VECTOR 100   // generate_obj_base_pixel_point_pixel_displacement vector
+#define MAX_ITERATION_GT_SCENE_GENERATION_IMAGES 90   // generate images. this cannot be more than vector
 
-#define MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC 100*IMAGE_SKIP_FACTOR_DYNAMIC
-#define IMAGE_SKIP_FACTOR_DYNAMIC 10
+#define MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC 120*IMAGE_SKIP_FACTOR_DYNAMIC
+#define IMAGE_SKIP_FACTOR_DYNAMIC 5
 
 #define MAX_ITERATION_THETA 360
-#define MAX_SKIPS 2 // 1 means do not generate flow, 2 means generate base flow
+#define MAX_SKIPS 10 // 1 means do not generate flow, 2 means generate base flow
 
 
 typedef enum {

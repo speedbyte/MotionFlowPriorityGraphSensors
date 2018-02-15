@@ -25,8 +25,6 @@ protected:
 
     boost::filesystem::path  m_plots_path;
 
-    std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
-
     std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_collision_points;
 
     std::vector<std::pair<Objects*, Objects* > > m_list_objects_combination;
