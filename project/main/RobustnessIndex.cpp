@@ -67,7 +67,16 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) 
  */
 void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
 
+    FILE *fp = fopen((opticalFlow.getGeneratePath() + "/values.txt").c_str(), "w");
+    cv::FileStorage fs;
+    fs.open((opticalFlow.getGeneratePath() + "/values.xml"), cv::FileStorage::WRITE);
+
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+
+
+        fs << "FRAME_SKIP" << (int)frame_skip;
+        fprintf(fp , "----------FRAME SKIP ---- =  %d\n", frame_skip);
+
         ushort m_valid_collision_points = 0;
         ushort m_invalid_collision_points = 0;
         std::vector<float> xsamples,ysamples;
@@ -122,9 +131,15 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
 */
         fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
         // send samples_xy_collision to matlab. samples_xy_collision[0][i] is x coordinates, samples_xy_collision[1][i]) is the y coordinate
+        // store in hdf5 format.
+
+        fs << "collision_points" << "[";
         for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
             xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
+            fprintf(fp, "%f,%f\n", samples_xy_collision[0][i], samples_xy_collision[1][i]);
+            fs << "{:" << "x" <<  samples_xy_collision[0][i] << "y" << samples_xy_collision[1][i] << "}";
         }
+        fs << "]";
 
         //Plot
         Gnuplot gp;
@@ -133,10 +148,13 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
         std::cout << list_gp_lines[0];
         gp << list_gp_lines.at(0);
         gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points) + "'\n";
-        gp.send1d(xypoints_collision);
+        //gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points) + "'\n";
+        //gp.send1d(xypoints_collision);
         std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }
+
+    fclose(fp);
+    fs.release();
 }
 
 
