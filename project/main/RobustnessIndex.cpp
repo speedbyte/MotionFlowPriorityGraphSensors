@@ -67,7 +67,6 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) 
  */
 void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
 
-
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
         ushort m_valid_collision_points = 0;
         ushort m_invalid_collision_points = 0;
@@ -130,9 +129,10 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
         //Plot
         Gnuplot gp;
         gp << "set xlabel 'x'\nset ylabel 'y'\n";
-        gp << "set xrange[0:1242]\n" << "set yrange[0:375]\n";
+        gp << "set xrange[0:" + std::to_string(Dataset::getFrameSize().width) + "]\n" << "set yrange[0:" + std::to_string(Dataset::getFrameSize().height) + "]\n";
         std::cout << list_gp_lines[0];
         gp << list_gp_lines.at(0);
+        gp << "set title \"" + opticalFlow.getGeneratePath() + "\"\n";
         gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points)+
                 "'\n";
         gp.send1d(xypoints_collision);

@@ -15,10 +15,6 @@ protected:
 
     std::string m_resultordner;
 
-    boost::filesystem::path  m_basepath;
-
-    boost::filesystem::path  m_datasetpath;
-
     boost::filesystem::path  m_generatepath;
 
     boost::filesystem::path  m_collision_obj_path;
@@ -44,6 +40,10 @@ public:
     void prepare_directories();
 
     void generate_collision_points(const std::vector<Objects* > & m_list_objects_ptr);
+
+    std::string getGeneratePath() const {
+        return m_generatepath.string();
+    }
 
 };
 

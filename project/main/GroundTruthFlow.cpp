@@ -36,9 +36,9 @@ void GroundTruthFlow::prepare_directories() {
 
     m_resultordner="/generated";
 
-    m_generatepath = m_basepath.string() + m_resultordner;
+    m_generatepath = Dataset::getGroundTruthPath().string() + m_resultordner;
 
-    if (!Dataset::getBasePath().compare(CPP_DATASET_PATH) || !Dataset::getBasePath().compare(VIRES_DATASET_PATH)) {
+    if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
         std::cout << "Creating GT Flow directories" << std::endl;
 

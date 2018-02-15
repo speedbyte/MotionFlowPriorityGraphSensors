@@ -44,7 +44,7 @@ public:
 
     const static cv::Size_<unsigned> getFrameSize()  ;
 
-    const static boost::filesystem::path getBasePath() ;
+    const static boost::filesystem::path getDatasetPath() ;
 
     const static boost::filesystem::path getGroundTruthPath()  ;
 

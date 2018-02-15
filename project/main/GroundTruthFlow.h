@@ -38,8 +38,6 @@ public:
 
     GroundTruthFlow( std::vector<GroundTruthObjects> &list_objects ) : m_list_gt_objects(list_objects) {
 
-        m_basepath = Dataset::getGroundTruthPath();
-
         for ( unsigned i = 0; i < m_list_gt_objects.size(); i++ ) {
             m_list_gt_objects_ptr.push_back(&m_list_gt_objects.at(i));
         }

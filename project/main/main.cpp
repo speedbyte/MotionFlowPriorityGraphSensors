@@ -175,64 +175,57 @@ int main ( int argc, char *argv[]) {
             if ( cpp_dataset.execute && cpp_dataset.gt ) {
 
                 cv::Size_<unsigned> frame_size(800, 600);
-                std::string input = "data/stereo_flow/";
-                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, "results");
+                std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
+                std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
+                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
 
-                GroundTruthSceneInternal gt_scene_cpp( list_of_gt_objects);
+                GroundTruthSceneInternal gt_scene_cpp(scenarios_list[0], environment_list[i], list_of_gt_objects);
                 gt_scene_cpp.generate_gt_scene();
 
-                GroundTruthFlow gt_flow_cpp(list_of_gt_objects);
-                gt_flow_cpp.generate_flow_frame();
-                gt_flow_cpp.generate_collision_points();
+                if ( environment_list[i] == "none") {
+                    GroundTruthFlow gt_flow_cpp(list_of_gt_objects);
+                    gt_flow_cpp.generate_flow_frame();
+                    gt_flow_cpp.generate_collision_points();
 
-                VectorRobustness vectorRobustness;
-                vectorRobustness.generateVectorRobustness(gt_flow_cpp);
-
-                for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
-                    //two objects
-                    int width = list_of_gt_objects.at(i).getWidth();
-                    int height = list_of_gt_objects.at(i).getHeight();
-                    std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
-
-                    SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
-                            .getObjectName(), width, height, extrapolated_visibility);
-                    list_of_simulated_objects.push_back(objects);
+                    VectorRobustness vectorRobustness;
+                    vectorRobustness.generateVectorRobustness(gt_flow_cpp);
                 }
-
             }
             if ( vires_dataset.gt && vires_dataset.execute ) {
 
                 cv::Size_<unsigned> frame_size_vires(800, 600);
-                std::string input = "data/stereo_flow/";
-                Dataset::fillDataset(frame_size_vires, depth, cn, VIRES_DATASET_PATH, input, "results");
+                std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
+                std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
+                Dataset::fillDataset(frame_size_vires, depth, cn, VIRES_DATASET_PATH, input, output);
 
                 GroundTruthSceneExternal gt_scene_vires(scenarios_list[0], environment_list[i], list_of_gt_objects);
                 gt_scene_vires.generate_gt_scene();
 
-                GroundTruthFlow gt_flow_vires(list_of_gt_objects);
-                gt_flow_vires.generate_flow_frame();
-                gt_flow_vires.generate_collision_points();
+                if ( environment_list[i] == "none") {
+                    GroundTruthFlow gt_flow_vires(list_of_gt_objects);
+                    gt_flow_vires.generate_flow_frame();
+                    gt_flow_vires.generate_collision_points();
 
-                VectorRobustness vectorRobustness;
-                vectorRobustness.generateVectorRobustness(gt_flow_vires);
-
-                for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
-                    //two objects
-                    int width = list_of_gt_objects.at(i).getWidth();
-                    int height = list_of_gt_objects.at(i).getHeight();
-                    std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
-
-                    SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
-                            .getObjectName(), width, height, extrapolated_visibility);
-                    list_of_simulated_objects.push_back(objects);
+                    VectorRobustness vectorRobustness;
+                    vectorRobustness.generateVectorRobustness(gt_flow_vires);
                 }
 
             }
 
+            for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
+                //two objects
+                int width = list_of_gt_objects.at(i).getWidth();
+                int height = list_of_gt_objects.at(i).getHeight();
+                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
+
+                SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
+                        .getObjectName(), width, height, extrapolated_visibility);
+                list_of_simulated_objects.push_back(objects);
+            }
 
             if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
-                AlgorithmFlow fback( scenarios_list[0], list_of_simulated_objects);
-                fback.generate_flow_frame(fb, continous_frames, no_noise, list_of_gt_objects);
+                AlgorithmFlow fback( environment_list[i], list_of_simulated_objects);
+                fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)
@@ -244,8 +237,8 @@ int main ( int argc, char *argv[]) {
             }
 
             if ( (cpp_dataset.lk && cpp_dataset.execute) || (vires_dataset.lk && vires_dataset.execute )) {
-                AlgorithmFlow lkanade(scenarios_list[0], list_of_simulated_objects);
-                lkanade.generate_flow_frame(lk, continous_frames, no_noise, list_of_gt_objects);
+                AlgorithmFlow lkanade(environment_list[i], list_of_simulated_objects);
+                lkanade.generate_flow_frame(lk, continous_frames, environment_list[i], list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)

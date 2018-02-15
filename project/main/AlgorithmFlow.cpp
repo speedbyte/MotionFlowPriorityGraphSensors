@@ -33,7 +33,7 @@ using namespace std::chrono;
  */
 
 
-void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise) {
+void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise) {
 
     m_resultordner = "results_";
 
@@ -51,40 +51,11 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
         }
     }
 
-    switch ( noise ) {
-        case no_noise: {
-            m_resultordner += "no_noise/";
-            break;
-        }
-        case static_bg_noise: {
-            m_resultordner += "static_bg_noise/";
-            break;
-        }
-        case static_fg_noise: {
-            m_resultordner += "static_fg_noise/";
-            break;
-        }
-        case dynamic_bg_noise: {
-            m_resultordner += "dynamic_bg_noise/";
-            break;
-        }
-        case dynamic_fg_noise: {
-            m_resultordner += "dynamic_fg_noise/";
-            break;
-        }
-        default: {
-            throw("algorithm not yet supported");
-        }
-    }
+    m_resultordner += noise + "/";
 
-    m_generatepath = m_basepath.string() + "/" +  m_resultordner;
+    m_generatepath = Dataset::getResultPath().string() + "/" +  m_resultordner;
 
-    if (!Dataset::getBasePath().compare(CPP_DATASET_PATH) || !Dataset::getBasePath().compare(VIRES_DATASET_PATH)) {
-
-        if (boost::filesystem::exists(m_generatepath)) {
-            system(("rm -rf " + m_generatepath.string()).c_str());
-        }
-        boost::filesystem::create_directories(m_generatepath);
+    if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
         std::cout << "Creating Algorithm Flow directories" << std::endl;
 
@@ -95,7 +66,7 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
 }
 
 
-void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise,
+void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise,
                                         const std::vector<GroundTruthObjects> &groundtruthobjects) {
 
     prepare_directories(algo, frame_types, noise);

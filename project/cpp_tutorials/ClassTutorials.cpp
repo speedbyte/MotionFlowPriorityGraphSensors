@@ -68,6 +68,9 @@ int main(int argc, char *argv[]) {
     Derived b;
     Derived2 c;
 
+    Base &d = b;
+    d.
+
     a.printA();
     std::cout << std::endl;
     b.printB();

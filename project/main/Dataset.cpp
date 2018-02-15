@@ -37,7 +37,7 @@ const ushort Dataset::getMakeType() {
     return static_cast<ushort>(CV_MAKETYPE(datasetStruct.m_depth, datasetStruct.m_cn));
 }
 
-const boost::filesystem::path Dataset::getBasePath() {
+const boost::filesystem::path Dataset::getDatasetPath() {
     return datasetStruct.m_dataset_basepath;
 }
 

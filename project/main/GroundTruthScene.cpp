@@ -20,9 +20,9 @@ using namespace std::chrono;
 void GroundTruthScene::prepare_directories() {
 
 
-    m_basepath = Dataset::getGroundTruthPath(); // data/stereo_flow
+    m_groundtruthpath = Dataset::getGroundTruthPath(); // data/stereo_flow
 
-    m_generatepath = m_basepath.string() + "image_02/";
+    m_generatepath = m_groundtruthpath.string() + "/" +  m_environment + "/";
 
     if (!m_datasetpath.string().compare(CPP_DATASET_PATH) || !m_datasetpath.string().compare(VIRES_DATASET_PATH)) {
 
@@ -35,12 +35,6 @@ void GroundTruthScene::prepare_directories() {
 
         char char_dir_append[20];
         boost::filesystem::path path;
-
-        m_generatepath = m_generatepath.string() +  m_scenario + "/";
-
-        if ( !boost::filesystem::exists(m_generatepath)) {
-            boost::filesystem::create_directories(m_generatepath);
-        }
 
         for (int i = 1; i <= m_list_objects.size(); i++) {
 
@@ -758,7 +752,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     std::map<std::string, double> time_map = {{"generate",0},{"ground truth", 0}};
 
-    std::cout << "ground truth images will be stored in " << m_basepath.string() << std::endl;
+    std::cout << "ground truth images will be stored in " << m_groundtruthpath.string() << std::endl;
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
@@ -1073,25 +1067,26 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             std::cout << "End of generation" << std::endl;
             return;
         };
-    }
 
-    try {
+        try {
 
-        Noise noNoise;
-        Rectangle myShape(40,40);
-        GroundTruthObjects character(myShape, myTrajectoryVector.at(0), 0, noNoise, "New Character");
-        GroundTruthObjects character_01(myShape, myTrajectoryVector.at(1), 0, noNoise, "New Character01");
+            Noise noNoise;
+            Rectangle myShape(40,40);
+            GroundTruthObjects character(myShape, myTrajectoryVector.at(0), 0, noNoise, "New Character");
+            GroundTruthObjects character_01(myShape, myTrajectoryVector.at(1), 0, noNoise, "New Character01");
 
-        m_list_objects.push_back(character);
-        m_list_objects.push_back(character_01);
+            m_list_objects.push_back(character);
+            m_list_objects.push_back(character_01);
 
-    }
-    catch (...)
-    {
-        sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
-        std::cout << command << std::endl;
-        system(command);
-        std::cout << "End of generation" << std::endl;
+        }
+        catch (...)
+        {
+            sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
+            std::cout << command << std::endl;
+            system(command);
+            std::cout << "End of generation" << std::endl;
+
+        }
 
     }
 
