@@ -41,7 +41,6 @@ public:
         for ( unsigned i = 0; i < m_list_gt_objects.size(); i++ ) {
             m_list_gt_objects_ptr.push_back(&m_list_gt_objects.at(i));
         }
-
     }
 
     void generate_flow_frame();

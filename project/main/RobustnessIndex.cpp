@@ -61,7 +61,7 @@ void PixelRobustness::generatePixelRobustness(const std::string &resultOrdner) {
 
 void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) {
 
-    calcCovarMatrix(opticalFlow);
+    generateFrameVectorSignature(opticalFlow);
 
 }
 
@@ -72,17 +72,17 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) 
  * 2. The covariance for the Guassian approximation to the distribution of the sample points.
  *
  */
-void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
+void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFlow) {
 
-    FILE *fp = fopen((opticalFlow.getGeneratePath() + "/values.txt").c_str(), "w");
     cv::FileStorage fs;
-    fs.open((opticalFlow.getGeneratePath() + "/values.xml"), cv::FileStorage::WRITE);
+    fs.open((opticalFlow.getGeneratePath() + "/values.yml"), cv::FileStorage::WRITE);
+
+    fs << "APPLICATION" << opticalFlow.getResultOrdner();
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
 
         fs << "FRAME_SKIP" << (int)frame_skip;
-        fprintf(fp , "----------FRAME SKIP ---- =  %d\n", frame_skip);
 
         ushort m_valid_collision_points = 0;
         ushort m_invalid_collision_points = 0;
@@ -96,13 +96,15 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
 
                 cv::Point2f collisionpoints = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).at
                         (points);
+
+                xsamples.push_back(collisionpoints.x/Dataset::getFrameSize().width);
+                ysamples.push_back(collisionpoints.y/Dataset::getFrameSize().height);
+
                 if ( ( collisionpoints.x ) > 0 &&
                      ( collisionpoints.y ) > 0 &&
                      ( collisionpoints.x ) < Dataset::getFrameSize().width  &&
                      ( collisionpoints.y ) < Dataset::getFrameSize().height
                         ) {
-                    xsamples.push_back(collisionpoints.x);
-                    ysamples.push_back(collisionpoints.y);
                     m_valid_collision_points++;
                 }
                 else {
@@ -113,8 +115,8 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
             if (m_valid_collision_points == 0 ) {
                 std::cout << "number of invalid collision points in frame " << frame_count << " are " <<
                         m_invalid_collision_points << std::endl;
-                xsamples.push_back(0);
-                ysamples.push_back(0);
+                //xsamples.push_back(0);
+                //ysamples.push_back(0);
 
             }
         }
@@ -127,7 +129,7 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
         cv::Mat_<float> samples_xy_collision(2, size_collision);
 
 
-        for ( auto i = 0; i < size_collision; i++) {
+        for ( auto i = 1; i < size_collision; i++) { // The first displacement is always nan
             samples_xy_collision(0,i) = xsamples.at(i);
             samples_xy_collision(1,i) = ysamples.at(i);
         }
@@ -143,7 +145,6 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
         fs << "collision_points" << "[";
         for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
             xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
-            fprintf(fp, "%f,%f\n", samples_xy_collision[0][i], samples_xy_collision[1][i]);
             fs << "{:" << "x" <<  samples_xy_collision[0][i] << "y" << samples_xy_collision[1][i] << "}";
         }
         fs << "]";
@@ -160,7 +161,6 @@ void VectorRobustness::calcCovarMatrix(const OpticalFlow &opticalFlow) {
         std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }
 
-    fclose(fp);
     fs.release();
 }
 

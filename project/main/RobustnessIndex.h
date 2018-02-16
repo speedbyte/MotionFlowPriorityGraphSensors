@@ -32,7 +32,7 @@ public:
 
 private:
 
-    void calcCovarMatrix(const OpticalFlow &opticalFlow);
+    void generateFrameVectorSignature(const OpticalFlow &opticalFlow);
     void fitLineForCollisionPoints(cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines );
 
 

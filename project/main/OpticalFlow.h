@@ -43,6 +43,10 @@ public:
         return m_generatepath.string();
     }
 
+    std::string getResultOrdner() const {
+        return m_resultordner;
+    }
+
 };
 
 #endif //MAIN_OPTICALFLOW_H

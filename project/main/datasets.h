@@ -25,7 +25,7 @@
 #define IMAGE_SKIP_FACTOR_DYNAMIC 5
 
 #define MAX_ITERATION_THETA 360
-#define MAX_SKIPS 10 // 1 means do not generate flow, 2 means generate base flow
+#define MAX_SKIPS 2 // 1 means do not generate flow, 2 means generate base flow
 
 
 typedef enum {

@@ -58,8 +58,8 @@ public:
 
         m_ObjectWidth = image_data_and_shape.get().cols;
         m_ObjectHeight = image_data_and_shape.get().rows;
-;
-        if ( objectName.compare("BackgroundCanvas")) {
+
+        if ( m_objectName.compare("BackgroundCanvas")) {
 
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                     (), getObjectId());

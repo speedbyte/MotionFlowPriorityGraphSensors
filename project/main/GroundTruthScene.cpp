@@ -36,7 +36,7 @@ void GroundTruthScene::prepare_directories() {
         char char_dir_append[20];
         boost::filesystem::path path;
 
-        for (int i = 1; i <= m_list_objects.size(); i++) {
+        for (int i = 0; i < m_list_objects.size(); i++) {
 
             sprintf(char_dir_append, "%02d", i);
             m_trajectory_obj_path = m_generatepath.string() + "trajectory_obj_";
@@ -51,7 +51,6 @@ void GroundTruthScene::prepare_directories() {
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
 
-    prepare_directories();
 
     // Trajectories
     MyTrajectory myTrajectory2;
@@ -705,8 +704,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     NoNoise noNoise;
 
     //GroundTruthObjects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide");
-    GroundTruthObjects obj2(rectangle2, myTrajectory1, 0, noNoise, "rectangle_long");
-    GroundTruthObjects obj3(rectangle2, myTrajectory2, 0, noNoise, "random_object");
+    GroundTruthObjects obj2(rectangle2, achterbahn1, 0, noNoise, "rectangle_long");
+    GroundTruthObjects obj3(rectangle2, achterbahn2, 60, noNoise, "random_object");
 
     //GroundTruthObjects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
     //GroundTruthObjects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
@@ -732,6 +731,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     //m_shapes.process();
     //m_trajectories.process(Dataset::getFrameSize());
+
+    prepare_directories();
 
     cv::Mat tempGroundTruthImage;
     tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
@@ -785,15 +786,15 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
             if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
+
                 image_data_and_shape.copyTo(tempGroundTruthImage(
-                        cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
-                                                 .getTrajectory().at(frame_count).x),
-                                 cvRound(m_list_objects.at(i).getTrajectoryPoints()
-                                         .getTrajectory().at(frame_count).y), image_data_and_shape.cols,
-                                 image_data_and_shape.rows)));
+                        cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x),
+                                 cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y),
+                                image_data_and_shape.cols,
+                                image_data_and_shape.rows)));
 
 
-                if (m_list_objects.at(i).getObjectId() == 1) {
+                if (m_list_objects.at(i).getObjectId() == 0) {
                     trajectoryShape = cv::Scalar(255, 0, 0);
                     trajectoryShape.copyTo(tempGroundTruthTrajectory(
                             cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
@@ -802,7 +803,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
                 }
 
-                if (m_list_objects.at(i).getObjectId() == 2) {
+                if (m_list_objects.at(i).getObjectId() == 1) {
                     trajectoryShape = cv::Scalar(0, 255, 0);
                     trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
                             cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
@@ -1178,14 +1179,9 @@ simFrame, const
                                           const unsigned int &totalElem) {
 
     RDB_OBJECT_STATE_t *object = reinterpret_cast<RDB_OBJECT_STATE_t *>(data); /// raw image data
-//        fprintf( stderr, "handleRDBitem: handling object state\n" );
 //        fprintf( stderr, "    simTime = %.3lf, simFrame = %d\n", simTime, simFrame );
-//        fprintf( stderr, "    object = %s, id = %d\n", data->base.name, data->base.id );
-//        fprintf( stderr, "    position = %.3lf / %.3lf / %.3lf\n", data->base.pos.x, data->base.pos.y, data->base
-//                .pos.z );
     ViresObjects viresObjects = ViresObjects();
     viresObjects.objectProperties = *object;
-    viresObjects.frame_count = simFrame;
 
     if ( ( mSimFrame % IMAGE_SKIP_FACTOR_DYNAMIC== 0 ) && mSimFrame > 1 && data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN) {
 
@@ -1197,6 +1193,9 @@ simFrame, const
         std::cout << data->base.type;
         myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)
                 data->base.pos.y));
+    }
+    else {
+        std::cout << data->base.type << std::endl;
     }
 }
 

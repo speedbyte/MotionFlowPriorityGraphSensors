@@ -175,6 +175,8 @@ int main ( int argc, char *argv[]) {
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
             std::vector<SimulatedObjects> list_of_simulated_objects;
+            PixelRobustness robust;
+            VectorRobustness vectorRobustness;
 
 
             if ( cpp_dataset.execute && cpp_dataset.gt ) {
@@ -194,8 +196,6 @@ int main ( int argc, char *argv[]) {
 
                     if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 
-                        PixelRobustness robust;
-                        VectorRobustness vectorRobustness;
                         vectorRobustness.generateVectorRobustness(gt_flow_cpp);
                         std::string resultordner;
                         //PlotFlow::plot(std::string("results_FB_no_noise"));
@@ -221,8 +221,6 @@ int main ( int argc, char *argv[]) {
 
                     if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 
-                        PixelRobustness robust;
-                        VectorRobustness vectorRobustness;
                         vectorRobustness.generateVectorRobustness(gt_flow_vires);
                         std::string resultordner;
                         //PlotFlow::plot(std::string("results_FB_no_noise"));
@@ -257,8 +255,6 @@ int main ( int argc, char *argv[]) {
 
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 
-                    PixelRobustness robust;
-                    VectorRobustness vectorRobustness;
                     vectorRobustness.generateVectorRobustness(fback);
                     std::string resultordner;
                     //PlotFlow::plot(std::string("results_FB_no_noise"));
