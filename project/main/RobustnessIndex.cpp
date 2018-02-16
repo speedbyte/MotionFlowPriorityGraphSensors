@@ -83,13 +83,14 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
 
         m_fs << "FRAME_SKIP" << (int)frame_skip;
 
-        ushort m_valid_collision_points = 0;
-        ushort m_invalid_collision_points = 0;
         std::vector<float> xsamples,ysamples;
 
         unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(frame_skip - 1).size();
 
-        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+        for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+
+            ushort m_valid_collision_points = 0;
+            ushort m_invalid_collision_points = 0;
 
             unsigned long POINTS = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).size();
             for ( unsigned points = 0 ; points < POINTS; points++ ) {
@@ -121,25 +122,16 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
             }
         }
 
-
         std::vector<std::string> list_gp_lines;
-        std::vector<std::pair<double, double>> xypoints_1, xypoints_2, xypoints_3, xypoints_collision;
+        std::vector<std::pair<double, double>> xypoints_collision;
 
         cv::Mat_<float> samples_xy_collision(2, xsamples.size());
 
 
         for ( auto i = 0; i < xsamples.size(); i++) {
-            samples_xy_collision(0,i) = xsamples.at(i);
-            samples_xy_collision(1,i) = ysamples.at(i);
+            samples_xy_collision(0,i) = xsamples.at(i)/10;
+            samples_xy_collision(1,i) = ysamples.at(i)/10;
         }
-
-/*    for ( auto t : ysamples ) {
-        samples_xy_collision.push_back(t);
-    }
-*/
-        fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
-        // send samples_xy_collision to matlab. samples_xy_collision[0][i] is x coordinates, samples_xy_collision[1][i]) is the y coordinate
-        // store in hdf5 format.
 
         m_fs << "collision_points" << "[";
         for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
@@ -148,15 +140,18 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
         }
         m_fs << "]";
 
+
+        // Linear least square
+        fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
+
         //Plot
         Gnuplot gp;
         gp << "set xlabel 'x'\nset ylabel 'y'\n";
-        gp << "set xrange[0:" + std::to_string(Dataset::getFrameSize().width) + "]\n" << "set yrange[0:" + std::to_string(Dataset::getFrameSize().height) + "]\n";
-        std::cout << list_gp_lines[0];
-        gp << list_gp_lines.at(0);
+        gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(800) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(600)  + "]\n";
+        //gp << list_gp_lines.at(0);
         gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        //gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(m_valid_collision_points) + "'\n";
-        //gp.send1d(xypoints_collision);
+        gp << "plot '-' with lines title " + std::string("'collision ") + std::to_string(m_valid_collision_points) + "'\n";
+        gp.send1d(xypoints_collision);
         std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }
 
@@ -164,7 +159,7 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
 
 
 
-void VectorRobustness::fitLineForCollisionPoints(cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines) {
+void VectorRobustness::fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines) {
 
     float m, c;
     std::string coord1;
@@ -206,7 +201,7 @@ void VectorRobustness::fitLineForCollisionPoints(cv::Mat_<float> &samples_xy, st
     m = line[1] / line[0];
     c = line[3] - line[2] * m;
     coord1 = "0," + std::to_string(c);
-    coord2 = std::to_string((375 - c ) / m) + ",375";
+    coord2 = std::to_string((2000 - c ) / m) + ",375";
     gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
     list_gp_lines.push_back(gp_line);
 }
