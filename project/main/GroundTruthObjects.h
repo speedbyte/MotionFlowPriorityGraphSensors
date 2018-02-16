@@ -71,6 +71,8 @@ public:
             generate_obj_extrapolated_shape_pixel_point_pixel_displacement(MAX_SKIPS);
 
             generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( MAX_SKIPS );
+
+            generate_obj_line_parameters(MAX_SKIPS);
         }
     }
 

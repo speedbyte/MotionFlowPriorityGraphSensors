@@ -10,7 +10,13 @@
 
 class RobustnessIndex {
 
+protected:
+
+    cv::FileStorage &m_fs;
+
 public:
+
+    RobustnessIndex(cv::FileStorage &fs): m_fs(fs) {}
 
     void compareFlowData(const std::string &resultOrdner);
 
@@ -20,6 +26,8 @@ public:
 class PixelRobustness : public RobustnessIndex {
 
 public:
+
+    PixelRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
     void generatePixelRobustness(const std::string &resultOrdner);
 
 };
@@ -28,7 +36,10 @@ class VectorRobustness : public RobustnessIndex {
 
 public:
 
+    VectorRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
+
     void generateVectorRobustness(const OpticalFlow &opticalFlow);
+
 
 private:
 

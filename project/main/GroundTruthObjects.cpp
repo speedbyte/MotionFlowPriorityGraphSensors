@@ -55,7 +55,7 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
         else {
             m_obj_base_visibility.push_back(true); // Dangerous because this means the objects in first frame will
             // always be visible, even if they are not.
-            m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(cv::Point2f(0,0), cv::Point2f(0,0)));
+            m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(m_obj_trajectory.getTrajectory().at(current_index) , cv::Point2f(0,0)));
         }
         current_index++;
     }

@@ -51,14 +51,13 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
     // Additionally stores the trajectory in a png file
 
     std::map<std::string, double> time_map = {{"generate",     0},
-                                              {"ground truth", 0}};
+                                              {"generate_flow", 0}};
 
     auto tic = steady_clock::now();
     auto toc = steady_clock::now();
     auto tic_all = steady_clock::now();
     auto toc_all = steady_clock::now();
 
-    std::cout << "collision graph will be srored in " << m_resultordner << std::endl;
     char frame_skip_folder_suffix[50];
     cv::FileStorage fs;
 
@@ -85,16 +84,16 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
-        std::cout << "generating collision points in GroundTruthFlow.cpp " << frame_skip << std::endl;
+        std::cout << "generating collision points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip << std::endl;
 
         std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
         unsigned FRAME_COUNT = (unsigned)(unsigned)m_list_objects.at(0)
                 ->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
-                (frame_skip - 1).size();
+                (frame_skip - 1).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
         assert(FRAME_COUNT>0);
 
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+        for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
             char file_name_image[50];
             std::cout << "frame_count " << frame_count << std::endl;
 
@@ -130,7 +129,7 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                             .at(frame_count).second;
 
                     cv::Point2f gt_line_pts = m_list_objects.at(i)->get_line_parameters().at(frame_skip - 1)
-                            .at(frame_count).second;
+                            .at(frame_count-1).second;  //line parameters run one less than the others.
 
                     cv::Mat roi;
                     roi = tempMatrix.
@@ -141,7 +140,7 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                                      static_cast<float>(m_list_objects.at(i)->getObjectId()));
 
                     // cv line is intelligent and it can also project to values not within the frame size including negative values.
-                    //cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
+                    cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                 }
             }
 
@@ -156,11 +155,11 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
                     cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first->get_line_parameters().at
                                     (frame_skip - 1)
-                            .at(frame_count).first;
+                            .at(frame_count-1).first;
 
                     cv::Point2f lineparameters2 = m_list_objects_combination.at(i).second->get_line_parameters
                                     ().at(frame_skip - 1)
-                            .at(frame_count).first;
+                            .at(frame_count-1).first;
 
                     // first fill rowco
                     cv::Matx<float,2,2> coefficients (-lineparameters1.x,1,-lineparameters2.x,1);
@@ -212,6 +211,6 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
-    time_map["ground truth"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << "ground truth flow generation time - " << time_map["ground truth"] << "ms" << std::endl;
+    time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
+    std::cout << m_resultordner + " flow generation time - " << time_map["generate_flow"] << "ms" << std::endl;
 }

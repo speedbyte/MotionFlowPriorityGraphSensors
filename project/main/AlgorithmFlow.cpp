@@ -310,7 +310,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     next_pts.x = next_pts_array[i].x;
                     next_pts.y = next_pts_array[i].y;
 
-                    std::cout << "next valid points " << next_pts << " displacement " << displacement << std::endl;
+                    //std::cout << "next valid points " << next_pts << " displacement " << displacement << std::endl;
                     next_pts_array[count_good_points++] = next_pts_array[i];
 
                     frame_points.push_back(std::make_pair(next_pts, displacement));

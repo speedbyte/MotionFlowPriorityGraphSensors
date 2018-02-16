@@ -49,18 +49,21 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
 
     }
 
-    generate_obj_line_parameters(max_skips);
 }
 
 
+
 void Objects::generate_obj_line_parameters( const unsigned &max_skips) {
+
+    // starting from here, we reduce the size of the frame_count by 1. This is because, from here we start the calculation of the line.
+    // collision points should also be reduced by 1 hence forth.
 
     //TODO - clean up this section.
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2f, cv::Point2f> > line_parameters;
         const unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
-                (frame_skip - 1).size();
-        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+                (frame_skip - 1).size() - 1;
+        for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 
             if ( m_obj_extrapolated_mean_visibility.at(frame_skip-1).at(frame_count) == true ) {

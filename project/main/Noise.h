@@ -67,14 +67,7 @@ public:
 
     void apply(ObjectImageShapeData &image) override {
 
-        std::cout << "rows"  << image.get().rows << std::endl;
-
-        uchar r = 0;
-        uchar b = 0;
-
-        r = 0;
-        b = 0;
-
+        std::cout << "applying white noise" << std::endl;
         image.get() = cv::Scalar(255,255,255);
     }
 };
@@ -100,6 +93,9 @@ class NoNoise: public Noise {
 
 public:
     void apply(ObjectImageShapeData &image) override {
+
+        std::cout << "plain blue item" << std::endl;
+        image.get() = cv::Scalar(0,255,0);
         // manipulate image with noise and return
     }
 };

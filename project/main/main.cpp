@@ -170,65 +170,53 @@ int main ( int argc, char *argv[]) {
     const std::vector < std::string> environment_list = {"none", "snow", "rain"};
     //const std::vector < std::string> environment_list = {"none"};
 
+    cv::FileStorage fs;
+
     for ( ushort i = 0; i< environment_list.size(); i++) {
         if ( cpp_dataset.execute || vires_dataset.execute ) {
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
             std::vector<SimulatedObjects> list_of_simulated_objects;
-            PixelRobustness robust;
-            VectorRobustness vectorRobustness;
+            SimulatedObjects::SimulatedobjectCurrentCount = 0;
+            PixelRobustness robust(fs);
+            VectorRobustness vectorRobustness(fs);
 
+            if ( vires_dataset.gt && vires_dataset.execute ) {
 
-            if ( cpp_dataset.execute && cpp_dataset.gt ) {
+                cv::Size_<unsigned> frame_size(800, 600);
+                std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
+                std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
+                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
+                GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[i], list_of_gt_objects);
+                gt_scene.generate_gt_scene();
+
+            }
+            else if ( cpp_dataset.execute && cpp_dataset.gt ) {
 
                 cv::Size_<unsigned> frame_size(800, 600);
                 std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
                 std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
+                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[i], list_of_gt_objects);
+                gt_scene.generate_gt_scene();
 
-                GroundTruthSceneInternal gt_scene_cpp(scenarios_list[0], environment_list[i], list_of_gt_objects);
-                gt_scene_cpp.generate_gt_scene();
-
-                if ( environment_list[i] == "none") {
-                    GroundTruthFlow gt_flow_cpp(list_of_gt_objects);
-                    gt_flow_cpp.generate_flow_frame();
-                    gt_flow_cpp.generate_collision_points();
-
-                    if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
-
-                        vectorRobustness.generateVectorRobustness(gt_flow_cpp);
-                        std::string resultordner;
-                        //PlotFlow::plot(std::string("results_FB_no_noise"));
-                        //PlotFlow::plot(std::string("results_LK_no_noise"));
-
-                    }
-                }
             }
-            if ( vires_dataset.gt && vires_dataset.execute ) {
 
-                cv::Size_<unsigned> frame_size_vires(800, 600);
-                std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
-                std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
-                Dataset::fillDataset(frame_size_vires, depth, cn, VIRES_DATASET_PATH, input, output);
 
-                GroundTruthSceneExternal gt_scene_vires(scenarios_list[0], environment_list[i], list_of_gt_objects);
-                gt_scene_vires.generate_gt_scene();
+            if ( environment_list[i] == "none") {
 
-                if ( environment_list[i] == "none") {
-                    GroundTruthFlow gt_flow_vires(list_of_gt_objects);
-                    gt_flow_vires.generate_flow_frame();
-                    gt_flow_vires.generate_collision_points();
+                fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
 
-                    if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
+                GroundTruthFlow gt_flow(list_of_gt_objects);
+                gt_flow.generate_flow_frame();
+                gt_flow.generate_collision_points();
 
-                        vectorRobustness.generateVectorRobustness(gt_flow_vires);
-                        std::string resultordner;
-                        //PlotFlow::plot(std::string("results_FB_no_noise"));
-                        //PlotFlow::plot(std::string("results_LK_no_noise"));
+                if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
 
-                    }
+                    vectorRobustness.generateVectorRobustness(gt_flow);
+                    std::string resultordner;
+
                 }
-
             }
 
             for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
@@ -237,10 +225,10 @@ int main ( int argc, char *argv[]) {
                 int height = list_of_gt_objects.at(i).getHeight();
                 std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects.at(i).get_obj_extrapolated_visibility();
 
-                SimulatedObjects objects(list_of_gt_objects.at(i).getObjectId(), list_of_gt_objects.at(i)
-                        .getObjectName(), width, height, extrapolated_visibility);
+                SimulatedObjects objects( ("simulated_" + list_of_gt_objects.at(i).getObjectName()), width, height, extrapolated_visibility);
                 list_of_simulated_objects.push_back(objects);
             }
+
 
             if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
                 AlgorithmFlow fback( environment_list[i], list_of_simulated_objects);
@@ -249,6 +237,7 @@ int main ( int argc, char *argv[]) {
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     list_of_simulated_objects.at(i)
                             .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
+                    list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS);
                 }
 
                 fback.generate_collision_points();
@@ -257,39 +246,12 @@ int main ( int argc, char *argv[]) {
 
                     vectorRobustness.generateVectorRobustness(fback);
                     std::string resultordner;
-                    //PlotFlow::plot(std::string("results_FB_no_noise"));
-                    //PlotFlow::plot(std::string("results_LK_no_noise"));
 
                 }
             }
-
-            if ( (cpp_dataset.lk && cpp_dataset.execute) || (vires_dataset.lk && vires_dataset.execute )) {
-                AlgorithmFlow lkanade(environment_list[i], list_of_simulated_objects);
-                lkanade.generate_flow_frame(lk, continous_frames, environment_list[i], list_of_gt_objects);
-
-                for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
-                    list_of_simulated_objects.at(i)
-                            .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
-                }
-
-                lkanade.generate_collision_points();
-
-                if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
-
-                    PixelRobustness robust;
-                    VectorRobustness vectorRobustness;
-                    vectorRobustness.generateVectorRobustness(lkanade);
-                    std::string resultordner;
-                    //PlotFlow::plot(std::string("results_FB_no_noise"));
-                    //PlotFlow::plot(std::string("results_LK_no_noise"));
-
-                }
-
-            }
-
-
         }
     }
+    fs.release();
 
 
 /* MATLAB_DATASET ------------- */

@@ -10,14 +10,14 @@
 #include "Objects.h"
 
 class SimulatedObjects : public Objects {
-private:
+public:
 
     static unsigned SimulatedobjectCurrentCount; // assingn object id
 
 
 public:
 
-    SimulatedObjects(unsigned objectId, std::string objectName, int width, int height, std::vector<std::vector<bool> >  extrapolated_visibility) :
+    SimulatedObjects(std::string objectName, int width, int height, std::vector<std::vector<bool> >  extrapolated_visibility) :
             Objects(objectName, width, height, extrapolated_visibility ) {
 
         m_objectId = SimulatedobjectCurrentCount ;

@@ -25,7 +25,7 @@ EXECUTE = 0
 [VIRES_DATASET]
 PATH = "../../../datasets/vires_dataset/"
 EXECUTE = 0
-GT = 1
+GT = 0
 LK = 0
-FB = 1
-PLOT = 1
+FB = 0
+PLOT = 0
