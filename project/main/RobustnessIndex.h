@@ -12,6 +12,8 @@ class RobustnessIndex {
 
 public:
 
+    void compareFlowData(const std::string &resultOrdner);
+
 };
 
 

@@ -11,7 +11,8 @@
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
 
-void PixelRobustness::generatePixelRobustness(const std::string &resultOrdner) {
+
+void RobustnessIndex::compareFlowData(const std::string &resultOrdner) {
 
 
     cv::Mat temp_image;
@@ -50,6 +51,12 @@ void PixelRobustness::generatePixelRobustness(const std::string &resultOrdner) {
         cv::destroyAllWindows();
     }
     //calcCovarMatrix();
+}
+
+void PixelRobustness::generatePixelRobustness(const std::string &resultOrdner) {
+
+
+    // TODO Jaccard Index
 }
 
 void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) {
@@ -202,7 +209,6 @@ void VectorRobustness::fitLineForCollisionPoints(cv::Mat_<float> &samples_xy, st
     c = line[3] - line[2] * m;
     coord1 = "0," + std::to_string(c);
     coord2 = std::to_string((375 - c ) / m) + ",375";
-    //gp_line = "set arrow from 0,0 to $x1,$y2 nohead lc rgb \'red\'\n";
     gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
     list_gp_lines.push_back(gp_line);
 }
