@@ -127,6 +127,10 @@ public:
         std::cout << "print a" << a << std::endl;
     }
 
+    void IamADerviedFunction() {
+
+    }
+
 };
 
 class Derived2: Derived {

@@ -13,7 +13,10 @@ void OpticalFlow::prepare_directories() {
 
     char char_dir_append[20];
 
-    m_datasetpath = Dataset::getBasePath();
+    if (boost::filesystem::exists(m_generatepath)) {
+        system(("rm -rf " + m_generatepath.string()).c_str());
+    }
+    boost::filesystem::create_directories(m_generatepath);
 
     boost::filesystem::path path;
 
@@ -84,6 +87,8 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
         std::cout << "generating collision points in GroundTruthFlow.cpp " << frame_skip << std::endl;
 
+        std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
+
         unsigned FRAME_COUNT = (unsigned)(unsigned)m_list_objects.at(0)
                 ->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
                 (frame_skip - 1).size();
@@ -105,6 +110,8 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
             tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
             tempMatrix = cv::Scalar_<unsigned>(255,255,255);
             assert(tempMatrix.channels() == 3);
+
+            std::vector<cv::Point2f> collision_points;
 
             for (unsigned i = 0; i < m_list_objects.size(); i++) {
 
@@ -137,8 +144,6 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                     //cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                 }
             }
-
-            std::vector<cv::Point2f> collision_points;
 
             for ( unsigned i = 0; i < m_list_objects_combination.size(); i++) {
 

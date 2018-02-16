@@ -32,25 +32,11 @@ private:
 
 public:
 
-    AlgorithmFlow( std::string scenario, std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_simulated_objects(list_simulated_objects)  {
+    AlgorithmFlow( std::string environment, std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_simulated_objects(list_simulated_objects)  {
 
 
-        m_basepath = Dataset::getResultPath();
 
-        mImageabholOrt = Dataset::getGroundTruthPath().string() + "/image_02/" + scenario;
-
-        for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++ ) {
-
-            m_list_simulated_objects_ptr.push_back(&m_list_simulated_objects.at(i));
-        }
-    }
-
-    AlgorithmFlow( std::vector<SimulatedObjects> &list_simulated_objects ) : m_list_simulated_objects(list_simulated_objects)  {
-
-
-        m_basepath = Dataset::getResultPath();
-
-        mImageabholOrt = Dataset::getGroundTruthPath().string() + "/image_02/" + "";
+        mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + environment + "/";
 
         for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++ ) {
 
@@ -59,9 +45,9 @@ public:
     }
 
 
-    void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise);
+    void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise);
 
-    void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, NOISE_TYPES noise,
+    void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise,
                              const std::vector<GroundTruthObjects>& groundtruthobjects);
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f

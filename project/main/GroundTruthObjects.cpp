@@ -15,9 +15,9 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
 
     ushort current_index = m_startPoint;
 
-    std::cout << "start point "<< current_index << std::endl;
+    std::cout << "generate_obj_base_pixel_point_pixel_displacement with start_point " << m_startPoint << std::endl;
 
-    for (ushort frame_count=0; frame_count < MAX_ITERATION_GT_SCENE_EVALUATION; frame_count++) {
+    for (ushort frame_count=0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; frame_count++) {
         // The first frame is the reference frame, hence it is skipped
 
         if ( frame_count > 0 ) {
@@ -71,7 +71,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_point_pixel_displacemen
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool>  multiframe_visibility;
 
-        std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
+        std::cout << "generate_obj_extrapolated_pixel_point_pixel_displacement for frame_skip " << frame_skip << std::endl;
         unsigned long FRAME_COUNT = m_obj_base_pixel_point_pixel_displacement.size();
         assert(FRAME_COUNT>0);
 
@@ -118,6 +118,7 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
         std::vector<std::vector<bool>  > outer_base_visiblity;
 
+        std::cout << "generate_obj_extrapolated_shape_pixel_point_pixel_displacement for frame_skip " << frame_skip << std::endl;
         unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
         assert(FRAME_COUNT>0);
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {

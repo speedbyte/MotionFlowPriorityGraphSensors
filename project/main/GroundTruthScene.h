@@ -21,7 +21,7 @@ class GroundTruthScene  {
 protected:
     std::vector<GroundTruthObjects> &m_list_objects;
 
-    boost::filesystem::path  m_basepath;
+    boost::filesystem::path  m_groundtruthpath;
 
     boost::filesystem::path  m_datasetpath;
 
@@ -31,17 +31,18 @@ protected:
 
     std::string m_scenario;
 
+    std::string m_environment;
+
     Canvas m_canvas;
 
 
 public:
 
-    GroundTruthScene(std::string scenario, std::vector<GroundTruthObjects> &list_objects):m_scenario
-                                                                                                  (scenario),
+    GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects):m_scenario(scenario), m_environment(environment),
     m_list_objects(list_objects) {
 
-        m_datasetpath = Dataset::getBasePath();
-        m_basepath = Dataset::getGroundTruthPath();
+        m_datasetpath = Dataset::getDatasetPath();
+        m_groundtruthpath = Dataset::getGroundTruthPath();
 
     };
 
@@ -60,8 +61,8 @@ private:
 
 public:
 
-    GroundTruthSceneInternal(std::vector<GroundTruthObjects> &list_objects) :
-             GroundTruthScene("", list_objects) {
+    GroundTruthSceneInternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects) :
+    GroundTruthScene(scenario, environment, list_objects) {
     }
 
     void generate_gt_scene() override;
@@ -161,6 +162,7 @@ private:
 
     std::string m_environment_scp_message;
 
+
 public:
 
 
@@ -171,7 +173,7 @@ public:
     double getTime();
 
     GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects) :
-    GroundTruthScene(scenario, list_objects)  {
+    GroundTruthScene(scenario, environment, list_objects) {
 
         std::string::size_type position = scenario_name.find(to_replace);
         if ( position != std::string::npos ) {
