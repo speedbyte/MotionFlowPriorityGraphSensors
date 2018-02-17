@@ -28,10 +28,10 @@ void SimulatedObjects::generate_obj_extrapolated_pixel_centroid_pixel_displaceme
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
-            float next_pts_x = 0.0f;
-            float next_pts_y = 0.0f;
-            float displacement_vector_x = 0.0f;
-            float displacement_vector_y = 0.0f;
+            float mean_pts_x = 0.0f;
+            float mean_pts_y = 0.0f;
+            float mean_displacement_vector_x = 0.0f;
+            float mean_displacement_vector_y = 0.0f;
 
             const unsigned CLUSTER_SIZE = (unsigned)m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at
                     (frame_skip - 1).at(frame_count).size();
@@ -41,19 +41,19 @@ void SimulatedObjects::generate_obj_extrapolated_pixel_centroid_pixel_displaceme
                         .at(frame_count).at(cluster_point).first;
                 cv::Point2f gt_displacement = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).second;
-                next_pts_x += pts.x ;
-                next_pts_y += pts.y ;
-                displacement_vector_x += gt_displacement.x ;
-                displacement_vector_y += gt_displacement.y ;
+                mean_pts_x += pts.x ;
+                mean_pts_y += pts.y ;
+                mean_displacement_vector_x += gt_displacement.x ;
+                mean_displacement_vector_y += gt_displacement.y ;
             }
-            next_pts_x /= (float)CLUSTER_SIZE;
-            next_pts_y /= (float)CLUSTER_SIZE;
-            displacement_vector_x =  displacement_vector_x / (float) CLUSTER_SIZE;
-            displacement_vector_y = displacement_vector_y / (float) CLUSTER_SIZE;
+            mean_pts_x /= (float)CLUSTER_SIZE;
+            mean_pts_y /= (float)CLUSTER_SIZE;
+            mean_displacement_vector_x =  mean_displacement_vector_x / (float) CLUSTER_SIZE;
+            mean_displacement_vector_y = mean_displacement_vector_y / (float) CLUSTER_SIZE;
 
             // I should return the vector instead of points and then normalize it.
-            multiframe_flowvector.push_back(std::make_pair(cv::Point2f(next_pts_x, next_pts_y), cv::Point2f
-                    (displacement_vector_x, displacement_vector_y)));
+            multiframe_flowvector.push_back(std::make_pair(cv::Point2f(mean_pts_x, mean_pts_y), cv::Point2f
+                    (mean_displacement_vector_x, mean_displacement_vector_y)));
             multiframe_visibility.push_back(true);
         }
         m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.push_back(multiframe_flowvector);

@@ -294,10 +294,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     displacement.y = next_pts_array[i].y - prev_pts_array[i].y;
 
                     /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
-                    // auto dist = cv::norm(prev_pts_array[i] - next_pts_array[i]);
+                    auto dist_ = cv::norm(displacement);
                     double dist;
                     dist = pow(displacement.x,2)+pow(displacement.y,2); //calculating distance by euclidean formula
                     dist = sqrt(dist);
+                    assert(dist==dist_);
 
                     if ( dist <= minDist ) {
                         //printf("minimum distance for %i is %f\n", i, dist);
@@ -386,11 +387,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     float columnBegin = groundtruthobjects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
 
-                    float gt_displacement_x = groundtruthobjects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).second.x;
 
-                    float gt_displacement_y = groundtruthobjects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).second.y;
+                    std::cout << "making a stencil on the basis of groundtruth object " << groundtruthobjects.at(i).getObjectId();
+
+                    cv::Point2f gt_displacement = groundtruthobjects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
+                            (frame_skip-1).at(frame_count).second;
 
                     cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height),(cvRound(rowBegin)+height+height)).colRange
                             (cvRound(columnBegin-width),(cvRound(columnBegin)+width+width));
@@ -407,14 +408,18 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         for (unsigned x = 0; x < roi.cols; x++) {
 
                             cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y,x);
-                            if ( algo_displacement.x && algo_displacement.y ) {
-                                if ( (-2 < ( algo_displacement.x - gt_displacement_x ) < 2 ) &&
-                                        (-2 < ( algo_displacement.y - gt_displacement_y ) < 2 ) ) {
-                                    stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(y,x), algo_displacement));
+                            auto dist_gt = cv::norm(gt_displacement);
+                            auto dist_algo = cv::norm(algo_displacement);
+                            if ( dist_algo > 1 ) {
+                                auto angle = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
+                                if ( ( ( std::abs(angle) ) < 10 ) ) {
+                                    // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
+                                    stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
                                 }
+                                base_movement.at(i).push_back(std::make_pair(cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
+                                                                             roi.at<cv::Vec2f>(y,x)));
+
                             }
-                            base_movement.at(i).push_back(std::make_pair(cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
-                                                                         roi.at<cv::Vec2f>(y,x)));
                         }
                     }
 
