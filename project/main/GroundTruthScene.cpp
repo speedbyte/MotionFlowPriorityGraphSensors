@@ -704,7 +704,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     NoNoise noNoise;
 
     //GroundTruthObjects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide");
-    GroundTruthObjects obj2(rectangle2, achterbahn1, 0, colorfulNoise, "rectangle_long");
+    GroundTruthObjects obj2(rectangle2, achterbahn1, 0, noNoise, "rectangle_long");
     GroundTruthObjects obj3(rectangle1, achterbahn2, 60, noNoise, "random_object");
 
     //GroundTruthObjects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");

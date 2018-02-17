@@ -48,7 +48,7 @@ public:
         return m_objectName;
     }
 
-    void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(const unsigned &max_skips);
+    virtual void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(const unsigned &max_skips);
 
     void generate_obj_line_parameters( const unsigned &max_skips);
 

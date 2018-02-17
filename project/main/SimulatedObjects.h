@@ -14,6 +14,11 @@ public:
 
     static unsigned SimulatedobjectCurrentCount; // assingn object id
 
+private:
+
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_obj_extrapolated_stencil_pixel_point_pixel_displacement;
+
 
 public:
 
@@ -27,6 +32,9 @@ public:
 
     void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement ) ;
 
+    void generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement ) ;
+
+    void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const unsigned &max_skips) override;
 
 };
 
