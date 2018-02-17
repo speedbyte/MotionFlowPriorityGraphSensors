@@ -42,8 +42,6 @@ private:
 
     void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const unsigned &max_skips);
 
-    void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const unsigned &max_skips) override;
-
 public:
 
     GroundTruthObjects( ObjectImageShapeData &image_data_and_shape, const ObjectTrajectory &trajectory, ushort
@@ -72,7 +70,8 @@ public:
 
             generate_obj_extrapolated_shape_pixel_point_pixel_displacement(MAX_SKIPS);
 
-            generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( MAX_SKIPS );
+            // m_obj_extrapolated_shape_pixel_point_pixel_displacement
+            generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( MAX_SKIPS , m_obj_extrapolated_shape_pixel_point_pixel_displacement);
 
             generate_obj_line_parameters(MAX_SKIPS);
         }

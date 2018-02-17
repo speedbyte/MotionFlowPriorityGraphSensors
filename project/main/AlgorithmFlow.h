@@ -59,7 +59,7 @@ public:
     void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise);
 
     void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise,
-                             const std::vector<GroundTruthObjects>& groundtruthobjects);
+                             const std::vector<SimulatedObjects>& groundtruthobjects);
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
     &l_pixelmovement );

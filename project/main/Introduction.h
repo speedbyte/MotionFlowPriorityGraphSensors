@@ -240,6 +240,17 @@ Centroid and mean is essentially the same.
 
 
 /**
+ *
+
+    void generate_obj_base_pixel_point_pixel_displacement();
+
+    void generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips);
+
+    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const unsigned &max_skips);
+
+    void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const unsigned &max_skips) override;
+
+
  Project goals:
  From VIRES we get the sensor data such as LIDAR Point Cloud and Images or RADAR Pedesterian detection. But the major
  hurdle is to get the sensor data that also matches the sensor data in the real world? That means the generated

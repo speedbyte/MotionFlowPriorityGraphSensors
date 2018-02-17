@@ -171,6 +171,7 @@ int main ( int argc, char *argv[]) {
     //const std::vector < std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
+    std::vector<SimulatedObjects> list_of_simulated_objects_base;
 
     for ( ushort i = 0; i< environment_list.size(); i++) {
         if ( cpp_dataset.execute || vires_dataset.execute ) {
@@ -214,8 +215,6 @@ int main ( int argc, char *argv[]) {
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
 
                     vectorRobustness.generateVectorRobustness(gt_flow);
-                    std::string resultordner;
-
                 }
             }
 
@@ -231,12 +230,24 @@ int main ( int argc, char *argv[]) {
 
 
             if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
+
                 AlgorithmFlow fback( environment_list[i], list_of_gt_objects, list_of_simulated_objects);
-                fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_gt_objects);
+
+                if ( i == 0 ) { // store the stimulated objects from the ground run.
+                    fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_simulated_objects_base);
+                    for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
+                        SimulatedObjects base_object = list_of_simulated_objects.at(obj_count);
+                        list_of_simulated_objects_base.push_back(base_object);
+                    }
+                }
+                else {
+                    fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_simulated_objects_base);
+                }
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
+                    // m_obj_extrapolated_stencil_pixel_point_pixel_displacement
                     list_of_simulated_objects.at(i)
-                            .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS);
+                            .generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(MAX_SKIPS, list_of_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement());
                     list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS);
                 }
 
@@ -245,7 +256,6 @@ int main ( int argc, char *argv[]) {
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 
                     vectorRobustness.generateVectorRobustness(fback);
-                    std::string resultordner;
 
                 }
             }

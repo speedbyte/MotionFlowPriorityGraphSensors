@@ -48,7 +48,7 @@ public:
         return m_objectName;
     }
 
-    virtual void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(const unsigned &max_skips);
+    void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement);
 
     void generate_obj_line_parameters( const unsigned &max_skips);
 
