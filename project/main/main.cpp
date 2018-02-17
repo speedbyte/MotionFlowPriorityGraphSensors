@@ -231,7 +231,7 @@ int main ( int argc, char *argv[]) {
 
 
             if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
-                AlgorithmFlow fback( environment_list[i], list_of_simulated_objects);
+                AlgorithmFlow fback( environment_list[i], list_of_gt_objects, list_of_simulated_objects);
                 fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_gt_objects);
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {

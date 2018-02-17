@@ -147,10 +147,10 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
         //Plot
         Gnuplot gp;
         gp << "set xlabel 'x'\nset ylabel 'y'\n";
-        //gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(800) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(600)  + "]\n";
-        //gp << list_gp_lines.at(0);
+        gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(50) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(50)  + "]\n";
+        gp << list_gp_lines.at(0);
         gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        gp << "plot '-' with points title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
+        gp << "plot '-' with lines title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
         gp.send1d(xypoints_collision);
         //std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }

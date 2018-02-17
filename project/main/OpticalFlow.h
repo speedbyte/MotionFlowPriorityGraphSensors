@@ -27,7 +27,9 @@ protected:
 
     std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_collision_points;
 
-    std::vector<std::pair<Objects*, Objects* > > m_list_objects_combination;
+    std::vector<std::pair<Objects*, Objects* > > m_list_simulated_objects_combination;
+
+    std::vector<std::pair<Objects*, Objects* > > m_list_gt_objects_combination;
 
 public:
 
@@ -39,6 +41,8 @@ public:
 
     void generate_collision_points(const std::vector<Objects* > & m_list_objects_ptr);
 
+    void generate_collision_points(const std::vector<Objects* > & m_list_gt_objects_ptr, const std::vector<Objects* > & m_list_objects_ptr);
+
     std::string getGeneratePath() const {
         return m_generatepath.string();
     }
@@ -46,6 +50,10 @@ public:
     std::string getResultOrdner() const {
         return m_resultordner;
     }
+
+private:
+    void find_collision_points_given_two_line_parameters(const cv::Point2f lineparameters1, const cv::Point2f lineparameters2,
+                                                                      cv::Mat &tempMatrix, std::vector<cv::Point2f> &collision_points);
 
 };
 
