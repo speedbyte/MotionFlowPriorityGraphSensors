@@ -88,7 +88,7 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
         std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
-        unsigned FRAME_COUNT = (unsigned)(unsigned)m_list_objects.at(0)
+        unsigned FRAME_COUNT = (unsigned)m_list_objects.at(0)
                 ->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
                 (frame_skip - 1).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
         assert(FRAME_COUNT>0);
@@ -120,11 +120,11 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
                 if ( m_list_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count)
                      == true ) {
-                    // gt_displacement
-                    cv::Point2f next_pts = m_list_objects.at(i)->
+
+                    cv::Point2f centroid = m_list_objects.at(i)->
                             get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
                             .at(frame_count).first;
-                    cv::Point2f displacement = m_list_objects.at(i)->
+                    cv::Point2f mean_displacement = m_list_objects.at(i)->
                             get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip- 1)
                             .at(frame_count).second;
 
@@ -133,14 +133,14 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
                     cv::Mat roi;
                     roi = tempMatrix.
-                            colRange(cvRound(next_pts.x), cvRound(next_pts.x + width)).
-                            rowRange(cvRound(next_pts.y), cvRound(next_pts.y + height));
+                            colRange(cvRound(centroid.x), cvRound(centroid.x + width)).
+                            rowRange(cvRound(centroid.y), cvRound(centroid.y + height));
                     //bulk storage
-                    roi = cv::Scalar(displacement.x, displacement.y,
+                    roi = cv::Scalar(mean_displacement.x, mean_displacement.y,
                                      static_cast<float>(m_list_objects.at(i)->getObjectId()));
 
                     // cv line is intelligent and it can also project to values not within the frame size including negative values.
-                    cv::line(tempMatrix, next_pts, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
+                    cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                 }
             }
 
@@ -153,6 +153,9 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                                                                        .at(frame_skip - 1)
                                                                        .at(frame_count) == true )) {
 
+                    // First Freeze lineparamter1 and look for collision points
+                    // Then freeze lineparameter2 and find collision point.
+                    // Then push_back the two points in the vector
                     cv::Point2f lineparameters1 = m_list_objects_combination.at(i).first->get_line_parameters().at
                                     (frame_skip - 1)
                             .at(frame_count-1).first;
@@ -171,6 +174,8 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
                     cv::Matx<float,2,1> result_manual;
                     if ( cv::determinant(coefficients ) != 0 ) {
+
+                        // solve linear equations
                         result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
                         //result_manual = coefficients.solve(rhs);
                         cv::circle(tempMatrix, cv::Point2f(result_manual(0,0), result_manual(1,0)), 5, cv::Scalar(0, 255, 0), -1,
@@ -191,7 +196,7 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
 
             m_frame_collision_points.push_back(collision_points);
 
-            //Create png Matrix with 3 channels: x displacement. y displacment and ObjectId
+            //Create png Matrix with 3 channels: x mean_displacement. y displacment and ObjectId
             for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
                 for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
                     if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5 ) {
