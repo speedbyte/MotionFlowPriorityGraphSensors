@@ -179,6 +179,7 @@ int main ( int argc, char *argv[]) {
             std::vector<GroundTruthObjects> list_of_gt_objects;
             std::vector<SimulatedObjects> list_of_simulated_objects;
             SimulatedObjects::SimulatedobjectCurrentCount = 0;
+            GroundTruthObjects::objectCurrentCount = 0;
             PixelRobustness robust(fs);
             VectorRobustness vectorRobustness(fs);
 
@@ -233,7 +234,7 @@ int main ( int argc, char *argv[]) {
 
                 AlgorithmFlow fback( environment_list[i], list_of_gt_objects, list_of_simulated_objects);
 
-                if ( i == 0 ) { // store the stimulated objects from the ground run.
+                if ( environment_list[i] == "none" ) { // store the stimulated objects from the ground run.
                     fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_simulated_objects_base);
                     for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
                         SimulatedObjects base_object = list_of_simulated_objects.at(obj_count);

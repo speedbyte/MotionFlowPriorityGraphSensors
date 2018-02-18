@@ -249,7 +249,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 }
 
                 // Draw the optical generate_flow_frame map
-                int stepSize = 4;
+                int stepSize = 8;
 
                 if ( fb == algo ) {
                     // Draw the uniform grid of points on the input image along with the motion vectors
@@ -414,10 +414,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                 cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y,x);
                                 auto dist_gt = cv::norm(gt_displacement);
                                 auto dist_algo = cv::norm(algo_displacement);
-                                auto dist = std::abs(dist_gt-dist_algo);
-                                if ( dist < 4 ) {
-                                    auto angle = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
-                                    if ( ( ( std::abs(angle) ) < 10 ) ) {
+                                auto dist_err = std::abs(dist_gt-dist_algo);
+                                if ( dist_err < 4 ) {
+                                    auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
+                                    if ( ( ( std::abs(angle_err) ) < 10 ) ) {
                                         // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
                                         stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
                                     }
@@ -429,6 +429,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         }
                         auto new_stencil_size = stencil_movement.at(i).size();
                         std::cout << new_stencil_size << std::endl;
+                        assert(new_stencil_size>0);
 
                     }
                     else {
@@ -436,12 +437,12 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         std::cout << "making a stencil on the basis of base algorithm object " << base_algo_simulated_object_list.at(i).getObjectId() << std::endl;
 
                         auto COUNT = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                (frame_skip-1).at(frame_count-1).size();
+                                (frame_skip-1).at(frame_count).size();
                         for ( auto count = 0; count < COUNT; count++ ) {
                             float x  = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                    (frame_skip-1).at(frame_count-1).at(count).first.x;
+                                    (frame_skip-1).at(frame_count).at(count).first.x;
                             float y  = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                    (frame_skip-1).at(frame_count-1).at(count).first.y;
+                                    (frame_skip-1).at(frame_count).at(count).first.y;
                             cv::Point2f algo_displacement = flow_frame.at<cv::Vec2f>(y,x);
                             // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
                             stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(x, y), algo_displacement));
@@ -456,9 +457,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                 cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y,x);
                                 auto dist_gt = cv::norm(gt_displacement);
                                 auto dist_algo = cv::norm(algo_displacement);
-                                if ( dist_algo > 1 ) {
-                                    auto angle = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
-                                    if ( ( ( std::abs(angle) ) < 10 ) ) {
+                                auto dist_err = std::abs(dist_gt-dist_algo);
+                                if ( dist_err < 4 ) {
+                                    auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
+                                    if ( ( ( std::abs(angle_err) ) < 10 ) ) {
                                         // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
                                         // the stencil is going to be generated as above
                                         // stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
@@ -491,7 +493,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     base_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
                     stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
                     outer_base_movement.at(i).push_back(base_movement.at(i));
-                    outer_base_movement.at(i).push_back(stencil_movement.at(i));
+                    outer_stencil_movement.at(i).push_back(stencil_movement.at(i));
                 }
 
                 needToInit = true;

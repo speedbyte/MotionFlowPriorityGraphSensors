@@ -16,13 +16,13 @@
 
 class GroundTruthObjects : public CameraSensorImage, public Objects {
 
+public:
+    static unsigned objectCurrentCount; // assingn object id
+
 private:
 
-
-    
     const ushort m_startPoint;
 
-    static unsigned objectCurrentCount; // assingn object id
 
     const ObjectTrajectory &m_obj_trajectory; // TODO use a own copy instead of reference.
 

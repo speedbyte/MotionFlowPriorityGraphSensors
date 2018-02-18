@@ -176,33 +176,37 @@ void OpticalFlow::generate_collision_points(const std::vector<Objects* > & m_lis
                     // Then freeze lineparameter2 and find collision point.
                     // Then push_back the two points in the vector
                     
-                    cv::Point2f lineparameters1 = m_list_simulated_objects_combination.at(i).first->get_line_parameters().at
-                                    (frame_skip - 1)
-                            .at(frame_count-1).first;
+                    for ( auto j = 0; j < 1; j++ ) {
 
-                    cv::Point2f lineparameters2 = m_list_gt_objects_combination.at(i).second->get_line_parameters
-                                    ().at(frame_skip - 1)
-                            .at(frame_count-1).first;
+                        cv::Point2f lineparameters1 = m_list_simulated_objects_combination.at(i).first->get_line_parameters().at
+                                        (frame_skip - 1)
+                                .at(frame_count-1).first;
 
-                    std::cout << "object " << m_list_simulated_objects_combination.at(i).first->getObjectId() << " = " <<
-                              lineparameters1 << " and object " << m_list_simulated_objects_combination.at(i)
-                                      .second->getObjectId() << " = " <<lineparameters2 << std::endl ;
+                        cv::Point2f lineparameters2 = m_list_gt_objects_combination.at(i).second->get_line_parameters
+                                        ().at(frame_skip - 1)
+                                .at(frame_count-1).first;
 
-                    find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
+                        std::cout << "object " << m_list_simulated_objects_combination.at(i).first->getObjectId() << " = " <<
+                                  lineparameters1 << " and object " << m_list_gt_objects_combination.at(i)
+                                          .second->getObjectId() << " = " <<lineparameters2 << std::endl ;
 
-                    cv::Point2f lineparameters3 = m_list_simulated_objects_combination.at(i).first->get_line_parameters().at
-                                    (frame_skip - 1)
-                            .at(frame_count-1).first;
+                        find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
 
-                    cv::Point2f lineparameters4 = m_list_gt_objects_combination.at(i).second->get_line_parameters
-                                    ().at(frame_skip - 1)
-                            .at(frame_count-1).first;
+                        lineparameters1 = m_list_simulated_objects_combination.at(i).second->get_line_parameters().at
+                                        (frame_skip - 1)
+                                .at(frame_count-1).first;
 
-                    std::cout << "object " << m_list_simulated_objects_combination.at(i).first->getObjectId() << " = " <<
-                              lineparameters1 << " and object " << m_list_simulated_objects_combination.at(i)
-                                      .second->getObjectId() << " = " <<lineparameters2 << std::endl ;
+                        lineparameters2 = m_list_gt_objects_combination.at(i).first->get_line_parameters
+                                        ().at(frame_skip - 1)
+                                .at(frame_count-1).first;
 
-                    find_collision_points_given_two_line_parameters(lineparameters3, lineparameters4, tempMatrix, collision_points);
+                        std::cout << "object " << m_list_simulated_objects_combination.at(i).second->getObjectId() << " = " <<
+                                  lineparameters1 << " and object " << m_list_gt_objects_combination.at(i)
+                                          .first->getObjectId() << " = " <<lineparameters2 << std::endl ;
+
+                        find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
+
+                    }
 
                 }
             }

@@ -26,6 +26,7 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
 
             const unsigned CLUSTER_SIZE = (unsigned)obj_extrapolated_blob_pixel_point_pixel_displacement.at
                     (frame_skip - 1).at(frame_count).size();
+            assert(CLUSTER_SIZE>0);
 
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
                 cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
