@@ -390,8 +390,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             (frame_skip-1).at(frame_count).first.x;
 
 
-                    cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-STRETCH_HEIGHT),(cvRound(rowBegin)+STRETCH_HEIGHT+STRETCH_HEIGHT)).colRange
-                            (cvRound(columnBegin-STRETCH_WIDTH),(cvRound(columnBegin)+STRETCH_WIDTH+STRETCH_WIDTH));
+                    cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height),(cvRound(rowBegin)+height+height)).colRange
+                            (cvRound(columnBegin-width),(cvRound(columnBegin)+width+width));
 
                     // Here I should write the fact
                     // roi_write = cv::Scalar(i,j,k);

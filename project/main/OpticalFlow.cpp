@@ -125,10 +125,10 @@ void OpticalFlow::generate_shape_points() {
                                 (frame_skip - 1).at(frame_count).at(j).first.y;
 
 
-                        if  (( x_coordinates > (columnBegin - STRETCH_WIDTH) ) &&
-                                ( x_coordinates < (columnBegin + width + STRETCH_WIDTH )) &&
-                                        (  y_coordinates > (rowBegin - STRETCH_HEIGHT ) )  &&
-                                        ( y_coordinates < ( rowBegin + height + STRETCH_HEIGHT ))
+                        if  (( x_coordinates > (columnBegin - STRETCH_WIDTH_EVAL) ) &&
+                                ( x_coordinates < (columnBegin + width + STRETCH_WIDTH_EVAL )) &&
+                                        (  y_coordinates > (rowBegin - STRETCH_HEIGHT_EVAL ) )  &&
+                                        ( y_coordinates < ( rowBegin + height + STRETCH_HEIGHT_EVAL ))
                                 ) {
                             vollTreffer++;
                         }
