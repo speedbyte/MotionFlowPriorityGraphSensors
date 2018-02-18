@@ -198,7 +198,7 @@ int main ( int argc, char *argv[]) {
             }
             else if ( cpp_dataset.execute && cpp_dataset.gt ) {
 
-                cv::Size_<unsigned> frame_size(1242, 375);
+                cv::Size_<unsigned> frame_size(800, 600);
                 std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
                 std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);

@@ -64,8 +64,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
 
 
-    myTrajectory1.pushTrajectoryPoints(cv::Point2f((float)472.788788, (float)270.661530));
-    myTrajectory2.pushTrajectoryPoints(cv::Point2f((float)104.154800, (float)270.177063));
+    //myTrajectory1.pushTrajectoryPoints(cv::Point2f((float)472.788788, (float)270.661530));
+    //myTrajectory2.pushTrajectoryPoints(cv::Point2f((float)104.154800, (float)270.177063));
 
 
 
@@ -694,7 +694,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     //achterbahn2.setDynamic();
 
     Rectangle rectangle1(5, 5); // width, height
-    Rectangle rectangle2(20,50); // width, height
+    Rectangle rectangle2(20,70); // width, height
     //Rectangle myShape(5, 5); // width, height
     //Circle circle;
     //Ramp ramp;
@@ -703,13 +703,12 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     ColorfulNoise colorfulNoise;
     NoNoise noNoise;
 
-    //GroundTruthObjects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide");
-    GroundTruthObjects obj2(rectangle2, achterbahn1, 90, colorfulNoise, "rectangle_long");
-    GroundTruthObjects obj3(rectangle2, achterbahn2, 120, colorfulNoise, "random_object");
+    //GroundTruthObjects obj2(rectangle2, achterbahn1, 90, colorfulNoise, "rectangle_long");
+    //GroundTruthObjects obj3(rectangle2, achterbahn2, 120, colorfulNoise, "random_object");
 
-    //GroundTruthObjects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
-    //GroundTruthObjects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
-    //GroundTruthObjects obj5(rectangle, circle, 60, colorfulNoise, "rectangle_long");
+    GroundTruthObjects obj2(rectangle2, myTrajectory1, 0, colorfulNoise, "right_man");
+    GroundTruthObjects obj3(rectangle2, myTrajectory2, 0, colorfulNoise, "left_man");
+
 
     //list_of_gt_objects.push_back(obj1);
     m_list_objects.push_back(obj2);
