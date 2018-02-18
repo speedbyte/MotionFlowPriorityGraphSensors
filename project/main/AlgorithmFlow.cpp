@@ -415,9 +415,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                 auto dist_gt = cv::norm(gt_displacement);
                                 auto dist_algo = cv::norm(algo_displacement);
                                 auto dist_err = std::abs(dist_gt-dist_algo);
-                                if ( dist_err < 4 ) {
+                                if ( dist_err < DISTANCE_ERROR_TOLERANCE ) {
                                     auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
-                                    if ( ( ( std::abs(angle_err) ) < 10 ) ) {
+                                    if ( ( ( std::abs(angle_err) ) < ANGLE_ERROR_TOLERANCE ) ) {
                                         // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
                                         stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
                                     }
@@ -458,9 +458,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                 auto dist_gt = cv::norm(gt_displacement);
                                 auto dist_algo = cv::norm(algo_displacement);
                                 auto dist_err = std::abs(dist_gt-dist_algo);
-                                if ( dist_err < 4 ) {
+                                if ( dist_err < DISTANCE_ERROR_TOLERANCE ) {
                                     auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
-                                    if ( ( ( std::abs(angle_err) ) < 10 ) ) {
+                                    if ( ( ( std::abs(angle_err) ) < ANGLE_ERROR_TOLERANCE ) ) {
                                         // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
                                         // the stencil is going to be generated as above
                                         // stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
