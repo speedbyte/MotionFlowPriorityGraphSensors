@@ -43,6 +43,12 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
             mean_displacement_vector_x =  mean_displacement_vector_x / (float) CLUSTER_SIZE;
             mean_displacement_vector_y = mean_displacement_vector_y / (float) CLUSTER_SIZE;
 
+            if ( frame_count > 0 ) {
+                if ( mean_displacement_vector_x == 0 ) {
+                    mean_displacement_vector_x+=0.001;
+                }
+                //assert(std::abs(mean_displacement_vector_y )>0);
+            }
             // I should return the vector instead of points and then normalize it.
             multiframe_flowvector.push_back(std::make_pair(cv::Point2f(mean_pts_x, mean_pts_y), cv::Point2f
                     (mean_displacement_vector_x, mean_displacement_vector_y)));

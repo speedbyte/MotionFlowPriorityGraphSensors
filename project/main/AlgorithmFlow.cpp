@@ -223,11 +223,15 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
             // Calculate optical generate_flow_frame map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
+
+                std::cout << "frame_count " << frame_count << std::endl;
+                fs << "frame_count" << frame_count;
+
                 std::vector<uchar> status;
                 // Initialize parameters for the optical generate_flow_frame algorithm
                 float pyrScale = 0.5;
                 int numLevels = 3;
-                int windowSize = 15;
+                int windowSize = 5;
                 int numIterations = 3;
                 int neighborhoodSize = 5;
                 float stdDeviation = 1.2;
@@ -313,7 +317,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     next_pts.x = next_pts_array[i].x;
                     next_pts.y = next_pts_array[i].y;
 
-                    //std::cout << "next valid points " << next_pts << " displacement " << displacement << std::endl;
+                    std::cout << "next valid points " << next_pts << " displacement " << displacement << std::endl;
                     next_pts_array[count_good_points++] = next_pts_array[i];
 
                     frame_points.push_back(std::make_pair(next_pts, displacement));
@@ -334,8 +338,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator it ;
 
-                std::cout << "frame_count " << frame_count << std::endl;
-                fs << "frame_count" << frame_count;
 
 
                 for ( it = frame_points.begin(); it !=frame_points.end(); it++ )
@@ -388,8 +390,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             (frame_skip-1).at(frame_count).first.x;
 
 
-                    cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height),(cvRound(rowBegin)+height+height)).colRange
-                            (cvRound(columnBegin-width),(cvRound(columnBegin)+width+width));
+                    cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-STRETCH_HEIGHT),(cvRound(rowBegin)+STRETCH_HEIGHT+STRETCH_HEIGHT)).colRange
+                            (cvRound(columnBegin-STRETCH_WIDTH),(cvRound(columnBegin)+STRETCH_WIDTH+STRETCH_WIDTH));
 
                     // Here I should write the fact
                     // roi_write = cv::Scalar(i,j,k);
@@ -404,6 +406,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     // This is for the base model
                     if ( noise == "none") {
 
+                        std::cout << rowBegin << " " << columnBegin << " " << gt_displacement << std::endl;
+
                         std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(i).getObjectId() << std::endl;
 
                         auto COUNT = base_algo_simulated_object_list.size();
@@ -414,6 +418,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                 cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y,x);
                                 auto dist_gt = cv::norm(gt_displacement);
                                 auto dist_algo = cv::norm(algo_displacement);
+                                if ((int)dist_algo < 1  ) {
+                                    continue;
+                                }
                                 auto dist_err = std::abs(dist_gt-dist_algo);
                                 if ( dist_err < DISTANCE_ERROR_TOLERANCE ) {
                                     auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));

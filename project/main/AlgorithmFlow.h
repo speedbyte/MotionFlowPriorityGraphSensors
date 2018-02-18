@@ -73,7 +73,7 @@ public:
     }
 
     void generate_collision_points() {
-        OpticalFlow::generate_collision_points(m_list_gt_objects_ptr, m_list_simulated_objects_ptr);
+        OpticalFlow::generate_collision_points_mean(m_list_gt_objects_ptr, m_list_simulated_objects_ptr);
     };
 
 };

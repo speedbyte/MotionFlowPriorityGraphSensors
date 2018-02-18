@@ -95,7 +95,7 @@ public:
     void apply(ObjectImageShapeData &image) override {
 
         std::cout << "plain blue item" << std::endl;
-        image.get() = cv::Scalar(0,255,0);
+        image.get() = cv::Scalar(255,0,255);
         // manipulate image with noise and return
     }
 };

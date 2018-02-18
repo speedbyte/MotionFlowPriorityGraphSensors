@@ -41,7 +41,9 @@ public:
 
     void generate_collision_points(const std::vector<Objects* > & m_list_objects_ptr);
 
-    void generate_collision_points(const std::vector<Objects* > & m_list_gt_objects_ptr, const std::vector<Objects* > & m_list_objects_ptr);
+    void generate_shape_points(const std::vector<Objects* > & m_list_objects_ptr);
+
+    void generate_collision_points_mean(const std::vector<Objects* > & m_list_gt_objects_ptr, const std::vector<Objects* > & m_list_objects_ptr);
 
     std::string getGeneratePath() const {
         return m_generatepath.string();

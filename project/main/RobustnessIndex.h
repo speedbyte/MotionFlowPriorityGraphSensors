@@ -28,7 +28,10 @@ class PixelRobustness : public RobustnessIndex {
 public:
 
     PixelRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
-    void generatePixelRobustness(const std::string &resultOrdner);
+    void generatePixelRobustness(const OpticalFlow &opticalFlow);
+
+private:
+    void generateFrameJaccardIndex(const OpticalFlow &opticalFlow);
 
 };
 
@@ -37,7 +40,6 @@ class VectorRobustness : public RobustnessIndex {
 public:
 
     VectorRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
-
     void generateVectorRobustness(const OpticalFlow &opticalFlow);
 
 

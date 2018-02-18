@@ -53,13 +53,100 @@ void RobustnessIndex::compareFlowData(const std::string &resultOrdner) {
     //calcCovarMatrix();
 }
 
-void PixelRobustness::generatePixelRobustness(const std::string &resultOrdner) {
+void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) {
+
+    // shape of algorithhm, with shape of ground truth
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+
+
+        m_fs << "FRAME_SKIP" << (int)frame_skip;
+
+        std::vector<float> xsamples,ysamples;
+
+        unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(frame_skip - 1).size();
+
+        for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+
+            ushort m_valid_collision_points = 0;
+            ushort m_invalid_collision_points = 0;
+
+            unsigned long POINTS = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).size();
+            for ( unsigned points = 0 ; points < POINTS; points++ ) {
+
+                cv::Point2f collisionpoints = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).at
+                        (points);
+
+                xsamples.push_back(collisionpoints.x);
+                ysamples.push_back(collisionpoints.y);
+
+                if ( ( collisionpoints.x ) > 0 &&
+                     ( collisionpoints.y ) > 0 &&
+                     ( collisionpoints.x ) < Dataset::getFrameSize().width  &&
+                     ( collisionpoints.y ) < Dataset::getFrameSize().height
+                        ) {
+                    m_valid_collision_points++;
+                }
+                else {
+                    m_invalid_collision_points++;
+                }
+            }
+
+            if (m_valid_collision_points == 0 ) {
+                std::cout << "number of invalid collision points in frame " << frame_count << " are " <<
+                          m_invalid_collision_points << std::endl;
+                //xsamples.push_back(0);
+                //ysamples.push_back(0);
+
+            }
+        }
+
+        std::vector<std::string> list_gp_lines;
+        std::vector<std::pair<double, double>> xypoints_collision;
+
+        cv::Mat_<float> samples_xy_collision(2, xsamples.size());
+
+
+        for ( auto i = 0; i < xsamples.size(); i++) {
+            samples_xy_collision(0,i) = xsamples.at(i)/10;
+            samples_xy_collision(1,i) = ysamples.at(i)/10;
+        }
+
+        m_fs << "collision_points" << "[";
+        for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
+            xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
+            m_fs << "{:" << "x" <<  samples_xy_collision[0][i] << "y" << samples_xy_collision[1][i] << "}";
+        }
+        m_fs << "]";
+
+
+        // Linear least square
+        fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
+
+        //Plot
+        Gnuplot gp;
+        gp << "set xlabel 'x'\nset ylabel 'y'\n";
+        //gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(50) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(50)  + "]\n";
+        gp << list_gp_lines.at(0);
+        gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
+        //gp << "plot '-' with lines title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
+        //gp.send1d(xypoints_collision);
+        //std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
+    }
+
 
 }
 
+void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow) {
+
+    generateFrameJaccardIndex( opticalFlow );
+
+
+}
+
+
 void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) {
 
-    generateFrameVectorSignature(opticalFlow);
+    generateFrameVectorSignature( opticalFlow);
 
 
 }

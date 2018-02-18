@@ -693,8 +693,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     achterbahn2.process(Dataset::getFrameSize());
     //achterbahn2.setDynamic();
 
-    Rectangle rectangle1(20, 20); // width, height
-    Rectangle rectangle2(20,20); // width, height
+    Rectangle rectangle1(5, 5); // width, height
+    Rectangle rectangle2(5,5); // width, height
     //Rectangle myShape(5, 5); // width, height
     //Circle circle;
     //Ramp ramp;
@@ -704,8 +704,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     NoNoise noNoise;
 
     //GroundTruthObjects obj1(rectangle1, achterbahn1, 120, noNoise, "rectangle_wide");
-    GroundTruthObjects obj2(rectangle2, achterbahn1, 0, noNoise, "rectangle_long");
-    GroundTruthObjects obj3(rectangle2, achterbahn2, 60, noNoise, "random_object");
+    GroundTruthObjects obj2(rectangle2, achterbahn1, 90, noNoise, "rectangle_long");
+    GroundTruthObjects obj3(rectangle2, achterbahn2, 120, noNoise, "random_object");
 
     //GroundTruthObjects obj3(rectangle, ramp, 120, noNoise, "rectangle_wide");
     //GroundTruthObjects obj4(rectangle, negativeRamp, 60, colorfulNoise, "rectangle_long");
