@@ -63,58 +63,38 @@ void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) 
 
         std::vector<float> xsamples,ysamples;
 
-        unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(frame_skip - 1).size();
+        unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(frame_skip - 1).size();
 
         for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 
-            ushort m_valid_collision_points = 0;
-            ushort m_invalid_collision_points = 0;
-
-            unsigned long POINTS = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).size();
+            unsigned long POINTS = opticalFlow.getShapePoints().at(frame_skip-1).at(frame_count).size();
             for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-                cv::Point2f collisionpoints = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).at
+                cv::Point2f shapepoints = opticalFlow.getShapePoints().at(frame_skip-1).at(frame_count).at
                         (points);
 
-                xsamples.push_back(collisionpoints.x);
-                ysamples.push_back(collisionpoints.y);
-
-                if ( ( collisionpoints.x ) > 0 &&
-                     ( collisionpoints.y ) > 0 &&
-                     ( collisionpoints.x ) < Dataset::getFrameSize().width  &&
-                     ( collisionpoints.y ) < Dataset::getFrameSize().height
-                        ) {
-                    m_valid_collision_points++;
-                }
-                else {
-                    m_invalid_collision_points++;
-                }
-            }
-
-            if (m_valid_collision_points == 0 ) {
-                std::cout << "number of invalid collision points in frame " << frame_count << " are " <<
-                          m_invalid_collision_points << std::endl;
-                //xsamples.push_back(0);
-                //ysamples.push_back(0);
+                xsamples.push_back(shapepoints.x);
+                ysamples.push_back(shapepoints.y);
 
             }
         }
 
-        std::vector<std::string> list_gp_lines;
-        std::vector<std::pair<double, double>> xypoints_collision;
+        std::string plot_least_square_line_list;
+        std::vector<std::pair<double, double>> xypoints_shape;
 
-        cv::Mat_<float> samples_xy_collision(2, xsamples.size());
+        cv::Mat_<float> samples_xy_shape(2, xsamples.size());
 
 
         for ( auto i = 0; i < xsamples.size(); i++) {
-            samples_xy_collision(0,i) = xsamples.at(i);
-            samples_xy_collision(1,i) = ysamples.at(i);
+            samples_xy_shape(0,i) = xsamples.at(i);
+            samples_xy_shape(1,i) = ysamples.at(i);
         }
 
-        m_fs << "collision_points" << "[";
-        for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
-            xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
-            m_fs << "{:" << "x" <<  samples_xy_collision[0][i] << "y" << samples_xy_collision[1][i] << "}";
+        m_fs << "shape_points" << "[";
+
+        for (unsigned i = 0; i < samples_xy_shape.cols; i++) {
+            xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
+            m_fs << "{:" << "x" <<  samples_xy_shape[0][i] << "y" << samples_xy_shape[1][i] << "}";
         }
         m_fs << "]";
 
@@ -122,11 +102,11 @@ void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) 
         Gnuplot gp;
         gp << "set xlabel 'x'\nset ylabel 'y'\n";
         //gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(50) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(50)  + "]\n";
-        gp << list_gp_lines.at(0);
+        gp << plot_least_square_line_list;
         gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        gp << "plot '-' with lines title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
-        gp.send1d(xypoints_collision);
-        //std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
+        gp << "plot '-' with points title " + std::string("'shape points") + std::to_string(xypoints_shape.size()) + "'\n";
+        gp.send1d(xypoints_shape);
+        //std::cout << m_valid_shape_points << "for frameskip " << frame_skip << std::endl;
     }
 
 
@@ -203,7 +183,7 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
             }
         }
 
-        std::vector<std::string> list_gp_lines;
+        std::string plot_least_square_line_list;
         std::vector<std::pair<double, double>> xypoints_collision;
 
         cv::Mat_<float> samples_xy_collision(2, xsamples.size());
@@ -223,15 +203,15 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
 
 
         // Linear least square
-        fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
+        fitLineForCollisionPoints(samples_xy_collision, plot_least_square_line_list);
 
         //Plot
         Gnuplot gp;
         gp << "set xlabel 'x'\nset ylabel 'y'\n";
         //gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(50) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(50)  + "]\n";
-        gp << list_gp_lines.at(0);
+        gp << plot_least_square_line_list;
         gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        gp << "plot '-' with points  title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
+        gp << "plot '-' with lines  title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
         gp.send1d(xypoints_collision);
         //std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }
@@ -240,7 +220,7 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
 
 
 
-void VectorRobustness::fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines) {
+void VectorRobustness::fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::string &plot_least_square_line_list) {
 
     float m, c;
     std::string coord1;
@@ -284,5 +264,5 @@ void VectorRobustness::fitLineForCollisionPoints(const cv::Mat_<float> &samples_
     coord1 = "0," + std::to_string(c);
     coord2 = std::to_string((2000 - c ) / m) + ",375";
     gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
-    list_gp_lines.push_back(gp_line);
+    plot_least_square_line_list = gp_line;
 }

@@ -30,8 +30,8 @@
 #define DISTANCE_ERROR_TOLERANCE 4
 #define ANGLE_ERROR_TOLERANCE 10
 
-#define STRETCH_HEIGHT 10
-#define STRETCH_WIDTH 10
+#define STRETCH_HEIGHT 50
+#define STRETCH_WIDTH 50
 
 typedef enum {
     continous_frames = 0,

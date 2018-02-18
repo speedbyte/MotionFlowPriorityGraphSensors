@@ -46,7 +46,7 @@ public:
 private:
 
     void generateFrameVectorSignature(const OpticalFlow &opticalFlow);
-    void fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::vector<std::string> &list_gp_lines );
+    void fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::string &list_gp_lines );
 
 
 };

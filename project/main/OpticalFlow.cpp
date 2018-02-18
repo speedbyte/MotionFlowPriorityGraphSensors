@@ -125,10 +125,10 @@ void OpticalFlow::generate_shape_points() {
                                 (frame_skip - 1).at(frame_count).at(j).first.y;
 
 
-                        if  (( x_coordinates > columnBegin ) &&
-                                ( x_coordinates < (columnBegin + width )) &&
-                                        (  y_coordinates > rowBegin )  &&
-                                        ( y_coordinates > ( rowBegin + height ))
+                        if  (( x_coordinates > (columnBegin - STRETCH_WIDTH) ) &&
+                                ( x_coordinates < (columnBegin + width + STRETCH_WIDTH )) &&
+                                        (  y_coordinates > (rowBegin - STRETCH_HEIGHT ) )  &&
+                                        ( y_coordinates < ( rowBegin + height + STRETCH_HEIGHT ))
                                 ) {
                             vollTreffer++;
                         }
@@ -141,7 +141,6 @@ void OpticalFlow::generate_shape_points() {
 
                 }
             }
-
 
             shape_points_average = shape_points;
 
@@ -276,7 +275,7 @@ void OpticalFlow::generate_collision_points() {
                                      static_cast<float>(m_list_gt_objects.at(i).getObjectId()));
 
                     // cv line is intelligent and it can also project to values not within the frame size including negative values.
-                    cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
+                    //cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                 }
             }
 
@@ -455,7 +454,7 @@ void OpticalFlow::generate_collision_points_mean() {
                             static_cast<float>(m_list_simulated_objects.at(i).getObjectId()));
 
                     // cv line is intelligent and it can also project to values not within the frame size including negative values.
-                    cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
+                    // cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                 }
             }
 

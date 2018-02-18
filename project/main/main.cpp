@@ -166,8 +166,8 @@ int main ( int argc, char *argv[]) {
 
 
     const std::vector < std::string> scenarios_list = {"two"};
-    //const std::vector < std::string> environment_list = {"none", "snow", "rain"};
-    const std::vector < std::string> environment_list = {"none"};
+    const std::vector < std::string> environment_list = {"none", "snow", "rain"};
+    //const std::vector < std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
 
@@ -183,7 +183,7 @@ int main ( int argc, char *argv[]) {
             SimulatedObjects::SimulatedobjectCurrentCount = 0;
             GroundTruthObjects::objectCurrentCount = 0;
 
-            PixelRobustness robust(fs);
+            PixelRobustness pixelRobustness(fs);
             VectorRobustness vectorRobustness(fs);
 
             if ( vires_dataset.gt && vires_dataset.execute ) {
@@ -268,6 +268,8 @@ int main ( int argc, char *argv[]) {
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 
                     vectorRobustness.generateVectorRobustness(fback);
+                    pixelRobustness.generatePixelRobustness(fback);
+
 
                 }
             }

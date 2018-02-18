@@ -47,6 +47,11 @@ public:
         return m_frame_skip_collision_points;
     }
 
+    std::vector<std::vector<std::vector<cv::Point2f> > > getShapePoints () const {
+        return m_frame_skip_shape_points;
+    }
+
+
     void prepare_directories();
 
     void generate_collision_points();

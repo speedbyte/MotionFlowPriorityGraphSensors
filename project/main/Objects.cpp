@@ -82,9 +82,16 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips) {
                         m_obj_extrapolated_pixel_centroid_pixel_displacement_mean.at
                                 (frame_skip - 1).at(frame_count).second;
 
+            //assert(std::abs(mean_displacement_vector_y )>0);
+
+
                 float m, c;
                 m = displacement_vector.y / displacement_vector.x;
                 c = next_pts.y - m * next_pts.x;  // c = y - mx
+
+                if ( (int)c == 0 ) {
+                    c += 0.001;
+                }
 
                 //float d = (float) sqrt((double) displacement_vector.x * displacement_vector.x +
                 //                       (double) displacement_vector.y * displacement_vector.y);
