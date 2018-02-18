@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -171,15 +170,19 @@ int main ( int argc, char *argv[]) {
     const std::vector < std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
+
     std::vector<SimulatedObjects> list_of_simulated_objects_base;
 
     for ( ushort i = 0; i< environment_list.size(); i++) {
+
         if ( cpp_dataset.execute || vires_dataset.execute ) {
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
             std::vector<SimulatedObjects> list_of_simulated_objects;
+
             SimulatedObjects::SimulatedobjectCurrentCount = 0;
             GroundTruthObjects::objectCurrentCount = 0;
+
             PixelRobustness robust(fs);
             VectorRobustness vectorRobustness(fs);
 
@@ -204,14 +207,16 @@ int main ( int argc, char *argv[]) {
 
             }
 
-
             if ( environment_list[i] == "none") {
 
                 fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
 
-                GroundTruthFlow gt_flow(list_of_gt_objects);
+                GroundTruthFlow gt_flow(list_of_gt_objects, list_of_simulated_objects);
                 gt_flow.generate_flow_frame();
+
+
                 gt_flow.generate_collision_points();
+
 
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
 
@@ -219,6 +224,7 @@ int main ( int argc, char *argv[]) {
                 }
             }
 
+            list_of_simulated_objects.clear();
             for ( ushort i = 0; i < list_of_gt_objects.size(); i++ ) {
                 //two objects
                 int width = list_of_gt_objects.at(i).getWidth();
@@ -235,14 +241,18 @@ int main ( int argc, char *argv[]) {
                 AlgorithmFlow fback( environment_list[i], list_of_gt_objects, list_of_simulated_objects);
 
                 if ( environment_list[i] == "none" ) { // store the stimulated objects from the ground run.
+
                     fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_simulated_objects_base);
+
                     for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
                         SimulatedObjects base_object = list_of_simulated_objects.at(obj_count);
                         list_of_simulated_objects_base.push_back(base_object);
                     }
                 }
                 else {
+
                     fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_simulated_objects_base);
+
                 }
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
@@ -252,7 +262,8 @@ int main ( int argc, char *argv[]) {
                     list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS);
                 }
 
-                fback.generate_collision_points();
+                fback.generate_collision_points_mean();
+                fback.generate_shape_points();
 
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 

@@ -107,8 +107,8 @@ void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) 
 
 
         for ( auto i = 0; i < xsamples.size(); i++) {
-            samples_xy_collision(0,i) = xsamples.at(i)/10;
-            samples_xy_collision(1,i) = ysamples.at(i)/10;
+            samples_xy_collision(0,i) = xsamples.at(i);
+            samples_xy_collision(1,i) = ysamples.at(i);
         }
 
         m_fs << "collision_points" << "[";
@@ -118,18 +118,14 @@ void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) 
         }
         m_fs << "]";
 
-
-        // Linear least square
-        fitLineForCollisionPoints(samples_xy_collision, list_gp_lines);
-
         //Plot
         Gnuplot gp;
         gp << "set xlabel 'x'\nset ylabel 'y'\n";
         //gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(50) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(50)  + "]\n";
         gp << list_gp_lines.at(0);
         gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        //gp << "plot '-' with lines title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
-        //gp.send1d(xypoints_collision);
+        gp << "plot '-' with lines title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
+        gp.send1d(xypoints_collision);
         //std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }
 
@@ -214,8 +210,8 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
 
 
         for ( auto i = 0; i < xsamples.size(); i++) {
-            samples_xy_collision(0,i) = xsamples.at(i)/10;
-            samples_xy_collision(1,i) = ysamples.at(i)/10;
+            samples_xy_collision(0,i) = xsamples.at(i);
+            samples_xy_collision(1,i) = ysamples.at(i);
         }
 
         m_fs << "collision_points" << "[";
@@ -235,8 +231,8 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
         //gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(50) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(50)  + "]\n";
         gp << list_gp_lines.at(0);
         gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        //gp << "plot '-' with lines title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
-        //gp.send1d(xypoints_collision);
+        gp << "plot '-' with points  title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
+        gp.send1d(xypoints_collision);
         //std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }
 

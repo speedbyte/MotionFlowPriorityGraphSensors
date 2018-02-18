@@ -21,15 +21,6 @@ class AlgorithmFlow : public OpticalFlow {
     // consists of an additional vector wrappper.
 
 private:
-    std::vector<std::pair<SimulatedObjects, SimulatedObjects> > m_list_objects_combination;
-
-    std::vector<SimulatedObjects> &m_list_simulated_objects;
-
-    std::vector<GroundTruthObjects> &m_list_gt_objects;
-
-    std::vector< Objects*> m_list_simulated_objects_ptr;
-
-    std::vector< Objects*> m_list_gt_objects_ptr;
 
     boost::filesystem::path mImageabholOrt;
 
@@ -37,21 +28,9 @@ private:
 public:
 
     AlgorithmFlow( std::string environment, std::vector<GroundTruthObjects> &list_gt_objects, std::vector<SimulatedObjects> &list_simulated_objects ) :
-            m_list_gt_objects(list_gt_objects) , m_list_simulated_objects(list_simulated_objects)  {
-
-
+    OpticalFlow(list_gt_objects, list_simulated_objects) {
 
         mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + environment + "/";
-
-        for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++ ) {
-
-            m_list_simulated_objects_ptr.push_back(&m_list_simulated_objects.at(i));
-        }
-
-        for ( unsigned i = 0; i < m_list_gt_objects.size(); i++ ) {
-
-            m_list_gt_objects_ptr.push_back(&m_list_gt_objects.at(i));
-        }
 
     }
 
@@ -68,12 +47,8 @@ public:
         return m_resultordner;
     }
 
-    std::vector<SimulatedObjects> getSimulatedObjects() {
-        return m_list_simulated_objects;
-    }
-
-    void generate_collision_points() {
-        OpticalFlow::generate_collision_points_mean(m_list_gt_objects_ptr, m_list_simulated_objects_ptr);
+    void generate_collision_points_mean() {
+        OpticalFlow::generate_collision_points_mean();
     };
 
 };

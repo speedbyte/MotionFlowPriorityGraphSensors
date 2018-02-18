@@ -406,6 +406,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     // This is for the base model
                     if ( noise == "none") {
 
+                        assert(m_list_simulated_objects.size() == m_list_gt_objects.size());
+
                         std::cout << rowBegin << " " << columnBegin << " " << gt_displacement << std::endl;
 
                         std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(i).getObjectId() << std::endl;
@@ -441,6 +443,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     }
                     else {
 
+                        assert(m_list_simulated_objects.size() == base_algo_simulated_object_list.size());
                         std::cout << "making a stencil on the basis of base algorithm object " << base_algo_simulated_object_list.at(i).getObjectId() << std::endl;
 
                         auto COUNT = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
@@ -595,4 +598,6 @@ void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixe
     fs << "]" << "}";
     fs << "]";
 }
+
+
 

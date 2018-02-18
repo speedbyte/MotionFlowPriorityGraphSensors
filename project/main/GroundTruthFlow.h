@@ -26,21 +26,12 @@ class GroundTruthFlow : public OpticalFlow {
 
 private:
 
-    std::vector<std::pair<GroundTruthObjects, GroundTruthObjects> > m_list_objects_combination;
-
-    std::vector<GroundTruthObjects> &m_list_gt_objects;
-
-    std::vector<Objects*> m_list_gt_objects_ptr;
-
-
 
 public:
 
-    GroundTruthFlow( std::vector<GroundTruthObjects> &list_objects ) : m_list_gt_objects(list_objects) {
+    GroundTruthFlow( std::vector<GroundTruthObjects> &list_gt_objects, std::vector<SimulatedObjects> &list_simulated_objects ) :
+            OpticalFlow(list_gt_objects, list_simulated_objects) {
 
-        for ( unsigned i = 0; i < m_list_gt_objects.size(); i++ ) {
-            m_list_gt_objects_ptr.push_back(&m_list_gt_objects.at(i));
-        }
     }
 
     void generate_flow_frame();
@@ -52,7 +43,7 @@ public:
     }
 
     void generate_collision_points() {
-        OpticalFlow::generate_collision_points(m_list_gt_objects_ptr);
+        OpticalFlow::generate_collision_points();
     };
 
 

@@ -28,13 +28,8 @@ private:
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_point_pixel_displacement;
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_point_pixel_displacement;
 
     std::vector<std::vector<std::vector<bool> > > m_obj_extrapolated_shape_visibility;
-
-    std::vector<std::pair<cv::Point2f, cv::Point2f> >  getBasePixelpoint_pixelDisplacement() const {
-        return m_obj_base_pixel_point_pixel_displacement;
-    }
 
     void generate_obj_base_pixel_point_pixel_displacement();
 
