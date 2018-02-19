@@ -97,6 +97,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         std::cout << "results will be stored in " << m_resultordner << std::endl;
 
+        /*
         if ( frame_types == video_frames) {
             cv::VideoCapture cap;
             cap.open(Dataset::getGroundTruthPath().string() + "image_02/movement.avi");
@@ -104,7 +105,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 std::cout << "Could not initialize capturing...\n";
                 return;
             }
-        }
+        }*/
         cv::Mat curGray, prevGray;
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
         std::string results_flow_matrix_str = m_flow_occ_path.string() + "/" +
@@ -113,7 +114,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         if ( frame_types == video_frames)
         {
-            boost::filesystem::path video_out_path = Dataset::getResultPath().string() + "/" + std::string("/video/OpticalFlow.avi");
+            boost::filesystem::path video_out_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + "movement.avi" ;
             assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
             //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
             //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );

@@ -26,7 +26,6 @@
 
 extern void read_kitti_calibration(boost::filesystem::path);
 //extern void of_algo(boost::filesystem::path dataset_path, std::string video, std::string algo);
-extern void make_video_from_png(boost::filesystem::path dataset_path, std::string unterordner);
 //extern void disparity(boost::filesystem::path dataset_path);
 extern boost::filesystem::path get_file(const boost::filesystem::path &dataset_path, const boost::filesystem::path
 &subfolder, const boost::filesystem::path &file_name);
@@ -242,7 +241,7 @@ int main ( int argc, char *argv[]) {
 
                 if ( environment_list[i] == "none" ) { // store the stimulated objects from the ground run.
 
-                    fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_simulated_objects_base);
+                    fback.generate_flow_frame(fb, video_frames, environment_list[i], list_of_simulated_objects_base);
 
                     for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
                         SimulatedObjects base_object = list_of_simulated_objects.at(obj_count);
@@ -251,7 +250,7 @@ int main ( int argc, char *argv[]) {
                 }
                 else {
 
-                    fback.generate_flow_frame(fb, continous_frames, environment_list[i], list_of_simulated_objects_base);
+                    fback.generate_flow_frame(fb, video_frames, environment_list[i], list_of_simulated_objects_base);
 
                 }
 

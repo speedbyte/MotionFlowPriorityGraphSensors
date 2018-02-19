@@ -36,8 +36,6 @@ public:
 
     void generate_flow_frame();
 
-    void make_video_from_png(const Dataset &dataset_path, std::string unterordner);
-
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
     }

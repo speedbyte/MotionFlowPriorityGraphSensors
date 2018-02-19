@@ -142,7 +142,15 @@ void OpticalFlow::generate_shape_points() {
                 }
             }
 
-            shape_points_average = shape_points;
+            cv::Point2f shape_average = {0,0};
+            for ( auto i = 0; i < m_list_simulated_objects.size(); i++ ) {
+                shape_average.x += shape_points.at(i).x;
+                shape_average.y += shape_points.at(i).y;
+            }
+            shape_average.x = shape_average.x / m_list_simulated_objects.size();
+            shape_average.y = shape_average.y / m_list_simulated_objects.size();
+
+            shape_points_average.push_back( shape_average );
 
             m_frame_shape_points.push_back(shape_points_average);
 

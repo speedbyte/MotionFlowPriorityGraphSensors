@@ -216,7 +216,8 @@ def yaml_try():
 def yaml_():
 
 
-    yaml_file = open("/local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/two/values.yml", "r")
+    dataset = "vires"
+    yaml_file = open("/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/two/values.yml", "r")
 
     check = yaml_file.readline()
     print check
@@ -227,42 +228,197 @@ def yaml_():
 
         yaml_file.close()
 
-        yaml_file = open("/local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/two/values.yml", "w")
+        yaml_file = open("/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/two/values.yml", "w")
 
         yaml_file.write(read_yaml_file)
 
     yaml_file.close()
+    fig1 = plt.figure()
+    collisionplot1 = fig1.add_subplot(221)
+    collisionplot2 = fig1.add_subplot(222)
+    collisionplot3 = fig1.add_subplot(223)
+    collisionplot4 = fig1.add_subplot(224)
+    plt.suptitle("Scene Vector Robustness")
+    #collisionplot1.set_title('Vector Robustness')
+    collisionplot1.set_xlabel('x')
+    collisionplot1.set_ylabel('y')
+    collisionplot2.set_xlabel('x')
+    collisionplot2.set_ylabel('y')
 
-    #fig = plt.figure()
-    #ax = fig.add_subplot(111)
-    yaml_load = yaml.load(open('/local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/two/values.yml'))
+    fig2 = plt.figure()
+    shapeplot1 = fig2.add_subplot(111)
+    #shapeplot2 = fig.add_subplot(224)
+    shapeplot1.set_title('Scene Pixel Robustness')
+    shapeplot1.set_xlabel('x')
+    shapeplot1.set_ylabel('y')
+    #shapeplot2.set_xlabel('x')
+    #shapeplot2.set_ylabel('y')
+
+    fig3 = plt.figure()
+    collisionplot_all = fig3.add_subplot(111)
+    collisionplot_all.set_title('Scene Vector Robustness')
+    collisionplot_all.set_xlabel('x')
+    collisionplot_all.set_ylabel('y')
+    collisionplot_all.set_xlim([0,600])
+    collisionplot_all.set_ylim([0,800])
+
+
+    yaml_load = yaml.load(open("/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/two/values.yml"))
     #print yaml_load
-    collision_points = yaml_load["collision_pointsframe_skip1_generated"]
-    coordinates = list()
-    for count in range(len(collision_points)):
-        xy = list()
-        xy.append(collision_points[count]["x"])
-        xy.append(collision_points[count]["y"])
-        coordinates.append(xy)
 
-    print coordinates
+    list_of_collision_plots = [collisionplot1, collisionplot2, collisionplot3, collisionplot4]
+
+    list_of_collision_metrics = [
+        "collision_pointsframe_skip1_generated",
+        "collision_pointsframe_skip1results_FB_none_",
+        "collision_pointsframe_skip1results_FB_snow_",
+        "collision_pointsframe_skip1results_FB_rain_"
+    ]
+
+    list_of_shape_metrics = [
+        #"shape_pointsframe_skip1_generated",
+        "shape_pointsframe_skip1results_FB_none_",
+        "shape_pointsframe_skip1results_FB_snow_",
+        "shape_pointsframe_skip1results_FB_rain_"
+    ]
+
+    color_of_collision_metrics = ["red", "green", "blue", "magenta"]
+    color_of_shape_metrics = ["green", "blue", "magenta"]
+
+    assert(len(list_of_collision_metrics) == len(color_of_collision_metrics))
+    assert(len(list_of_shape_metrics) == len(color_of_shape_metrics))
+
+    #-----------------------
+    for no_of_metrics in range(len(list_of_collision_metrics)):
+
+        collision_points_gt = yaml_load[list_of_collision_metrics[0]]
+        collision_points = yaml_load[list_of_collision_metrics[no_of_metrics]]
+
+        coordinates_gt = list()
+        coordinates = list()
+
+        for count in range(len(collision_points)):
+            xy = list()
+            if ( abs(collision_points[count]["x"]) < 1000):
+                xy.append(collision_points[count]["x"])
+                xy.append(collision_points[count]["y"])
+                coordinates.append(xy)
+            else:
+                print "outlier result for %s is %d" % (list_of_collision_metrics[no_of_metrics], collision_points[count]["x"])
+
+        for count in range(len(collision_points_gt)):
+            xy = list()
+            if ( abs(collision_points_gt[count]["x"]) < 1000):
+                xy.append(collision_points_gt[count]["x"])
+                xy.append(collision_points_gt[count]["y"])
+                coordinates_gt.append(xy)
+            else:
+                print "outlier gt"
+
+
+        #print coordinates
+
+        data = np.array(coordinates)
+        x1, y1 = data.T
+
+        data_gt = np.array(coordinates_gt)
+        x1_gt, y1_gt = data_gt.T
+
+        #list_of_collision_plots[no_of_metrics].plot(x1,y1, 'ko-', lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
+        list_of_collision_plots[no_of_metrics].scatter(x1_gt,y1_gt, lw=2,color=color_of_collision_metrics[0], label=list_of_collision_metrics[0])
+        list_of_collision_plots[no_of_metrics].scatter(x1,y1, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
+        legend = list_of_collision_plots[no_of_metrics].legend(loc='upper right', shadow=True, fontsize='x-small')
+        list_of_collision_plots[no_of_metrics].set_xlim([0,800])
+        list_of_collision_plots[no_of_metrics].set_ylim([255,295])
+
+        for count in range(len(coordinates)):
+            list_of_collision_plots[no_of_metrics].plot([coordinates[count][0], coordinates_gt[count][0]], [coordinates[count][1], coordinates_gt[count][1]])
+
+
+    #-----------------------
+
+
+    #-----------------------
+    for no_of_metrics in range(len(list_of_collision_metrics)):
+
+        collision_points_gt = yaml_load[list_of_collision_metrics[0]]
+        collision_points = yaml_load[list_of_collision_metrics[no_of_metrics]]
+
+        coordinates_gt = list()
+        coordinates = list()
+
+        for count in range(len(collision_points)):
+            xy = list()
+            if ( abs(collision_points[count]["x"]) < 1000):
+                xy.append(collision_points[count]["x"])
+                xy.append(collision_points[count]["y"])
+                coordinates.append(xy)
+
+        if ( count == 0):
+
+            for count in range(len(collision_points_gt)):
+                xy = list()
+                if ( abs(collision_points_gt[count]["x"]) < 1000):
+                    xy.append(collision_points_gt[count]["x"])
+                    xy.append(collision_points_gt[count]["y"])
+                    coordinates_gt.append(xy)
+            data_gt = np.array(coordinates_gt)
+            x1_gt, y1_gt = data_gt.T
+            collisionplot_all.scatter(x1_gt,y1_gt, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[0])
+
+
+        #print coordinates_gt
+
+        data = np.array(coordinates)
+        x1, y1 = data.T
+
+        #list_of_collision_plots[no_of_metrics].plot(x1,y1, 'ko-', lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
+        collisionplot_all.scatter(x1,y1, color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
+        legend = collisionplot_all.legend(loc='upper right', shadow=True, fontsize='x-small')
+
+    #-----------------------
+
+    #-----------------------
+    for no_of_metrics in range(len(list_of_shape_metrics)):
+
+        shape_points = yaml_load[list_of_shape_metrics[no_of_metrics]]
+        coordinates = list()
+        for count in range(len(shape_points)):
+            xy = list()
+            xy.append(shape_points[count]["x"])
+            xy.append(shape_points[count]["y"])
+            coordinates.append(xy)
+
+        #print coordinates
+        data = np.array(coordinates)
+        x1, y1 = data.T
+        shapeplot1.scatter(x1,y1, lw=2,color=color_of_shape_metrics[no_of_metrics], label=list_of_shape_metrics[no_of_metrics])
+        legend = shapeplot1.legend(loc='upper right', shadow=True, fontsize='x-small')
+        shapeplot1.set_ylim([0,1])
+        #shapeplot2.plot(x1,y1, lw=2,color=color_of_shape_metrics[no_of_metrics])
+    #-----------------------
+    #plt.show()
+
+    plt.close(fig2)
+    fig1.set_size_inches(18.5, 10.5)
+    fig3.set_size_inches(18.5, 10.5)
+    fig1.savefig('/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/vector_robustness.png', dpi=200)
+    #fig2.set_size_inches(18.5, 10.5)
+    #fig2.savefig('/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/vector_robustness_all.png')
+    fig3.savefig('/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/pixel_robustness.png', dpi=200)
+
+
+def check():
+    fig2 = plt.figure()
+    shapeplot1 = fig2.add_subplot(111)
+
+    coordinates = [[1,2], [10,11], [12,12], [14,15]]
+
     data = np.array(coordinates)
     x1, y1 = data.T
-    plt.plot(x1,y1, lw=2,color='blue')
-
-    collision_points = yaml_load["collision_pointsframe_skip1results_FB_none_"]
-    coordinates = list()
-    for count in range(len(collision_points)):
-        xy = list()
-        xy.append(collision_points[count]["x"])
-        xy.append(collision_points[count]["y"])
-        coordinates.append(xy)
-
-    print coordinates
-    data = np.array(coordinates)
-    x1, y1 = data.T
-
-    plt.plot(x1,y1, lw=2,color='red')
+    shapeplot1.scatter(x1,y1, color='red')
+    shapeplot1.plot([coordinates[0][0], coordinates[1][0]], [coordinates[0][1], coordinates[1][1]])
+    shapeplot1.plot([coordinates[2][0], coordinates[3][0]], [coordinates[2][1], coordinates[3][1]])
 
     plt.show()
 
@@ -291,3 +447,4 @@ if __name__ == '__main__':
     #lemniscate()
     #simple()
     yaml_()
+    #check()

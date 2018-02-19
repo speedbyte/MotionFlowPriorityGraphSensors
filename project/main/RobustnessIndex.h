@@ -18,7 +18,7 @@ public:
 
     RobustnessIndex(cv::FileStorage &fs): m_fs(fs) {}
 
-    void compareFlowData(const std::string &resultOrdner);
+    void make_video_from_png();
 
 };
 
