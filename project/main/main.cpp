@@ -165,8 +165,8 @@ int main ( int argc, char *argv[]) {
 
 
     const std::vector < std::string> scenarios_list = {"two"};
-    const std::vector < std::string> environment_list = {"none", "snow", "rain"};
-    //const std::vector < std::string> environment_list = {"none"};
+    //const std::vector < std::string> environment_list = {"none", "snow", "rain"};
+    const std::vector < std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
 
@@ -215,6 +215,8 @@ int main ( int argc, char *argv[]) {
 
 
                 gt_flow.generate_collision_points();
+
+
 
 
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
@@ -268,8 +270,7 @@ int main ( int argc, char *argv[]) {
 
                     vectorRobustness.generateVectorRobustness(fback);
                     pixelRobustness.generatePixelRobustness(fback);
-
-
+                    vectorRobustness.make_video_from_png(fback.getImageAbholOrt());
                 }
             }
         }

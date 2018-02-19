@@ -51,6 +51,10 @@ public:
         OpticalFlow::generate_collision_points_mean();
     };
 
+    std::string getImageAbholOrt() const {
+        return mImageabholOrt.string();
+    }
+
 };
 
 

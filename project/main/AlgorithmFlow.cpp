@@ -232,10 +232,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 // Initialize parameters for the optical generate_flow_frame algorithm
                 float pyrScale = 0.5;
                 int numLevels = 5;
-                int windowSize = 10;
-                int numIterations = 3;
-                int neighborhoodSize = 3;
-                float stdDeviation = 1.2;
+                int windowSize = 20;
+                int numIterations = 10;
+                int neighborhoodSize = 5;
+                float stdDeviation = 1.1;
 
                 std::vector<float> err;
 
@@ -409,7 +409,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                         assert(m_list_simulated_objects.size() == m_list_gt_objects.size());
 
-                        std::cout << rowBegin << " " << columnBegin << " " << gt_displacement << std::endl;
+                        std::cout << "expected value " << rowBegin << " " << columnBegin << " " << gt_displacement << std::endl;
 
                         std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(i).getObjectId() << std::endl;
 
@@ -439,7 +439,22 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         }
                         auto new_stencil_size = stencil_movement.at(i).size();
                         std::cout << new_stencil_size << std::endl;
-                        assert(new_stencil_size>0);
+
+                        bool hack = true;
+                        if ( hack && new_stencil_size == 0 ) {
+                            stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(0,0), cv::Point2f(0,0)));
+                        }
+                        else {
+                            if ( new_stencil_size == 0 ) {
+                                if ( frame_count == 1 ) {  // Inital frame is quite problematic
+                                    stencil_movement.at(i).push_back(std::make_pair(m_list_gt_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first,
+                                            m_list_gt_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).second));
+                                }
+                                else {
+                                    assert(new_stencil_size>0);
+                                }
+                            }
+                        }
 
                     }
                     else {

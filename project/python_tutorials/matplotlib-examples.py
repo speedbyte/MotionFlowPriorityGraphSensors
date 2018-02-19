@@ -238,7 +238,7 @@ def yaml_():
     collisionplot2 = fig1.add_subplot(222)
     collisionplot3 = fig1.add_subplot(223)
     collisionplot4 = fig1.add_subplot(224)
-    plt.suptitle("Scene Vector Robustness")
+    plt.suptitle("Scene Vector Robustness ( 1 pixel = 1 cm ) ")
     #collisionplot1.set_title('Vector Robustness')
     collisionplot1.set_xlabel('x')
     collisionplot1.set_ylabel('y')
@@ -248,7 +248,7 @@ def yaml_():
     fig2 = plt.figure()
     shapeplot1 = fig2.add_subplot(111)
     #shapeplot2 = fig.add_subplot(224)
-    shapeplot1.set_title('Scene Pixel Robustness')
+    shapeplot1.set_title('Scene Pixel Robustness ( 1 pixel = 1 cm )')
     shapeplot1.set_xlabel('x')
     shapeplot1.set_ylabel('y')
     #shapeplot2.set_xlabel('x')
@@ -256,10 +256,10 @@ def yaml_():
 
     fig3 = plt.figure()
     collisionplot_all = fig3.add_subplot(111)
-    collisionplot_all.set_title('Scene Vector Robustness')
+    collisionplot_all.set_title('Scene Vector Robustness ( 1 pixel = 1 cm )')
     collisionplot_all.set_xlabel('x')
     collisionplot_all.set_ylabel('y')
-    collisionplot_all.set_xlim([0,600])
+    collisionplot_all.set_xlim([-400,900])
     collisionplot_all.set_ylim([0,800])
 
 
@@ -287,7 +287,7 @@ def yaml_():
 
     assert(len(list_of_collision_metrics) == len(color_of_collision_metrics))
     assert(len(list_of_shape_metrics) == len(color_of_shape_metrics))
-
+    offset =  25
     #-----------------------
     for no_of_metrics in range(len(list_of_collision_metrics)):
 
@@ -297,23 +297,23 @@ def yaml_():
         coordinates_gt = list()
         coordinates = list()
 
-        for count in range(len(collision_points)):
+        for count in range(len(collision_points)-offset):
             xy = list()
-            if ( abs(collision_points[count]["x"]) < 1000):
-                xy.append(collision_points[count]["x"])
-                xy.append(collision_points[count]["y"])
+            if ( abs(collision_points[offset + count]["x"]) < 1000 and abs(collision_points[offset + count]["y"]) < 300):
+                xy.append(collision_points[offset + count]["x"])
+                xy.append(collision_points[offset + count]["y"])
                 coordinates.append(xy)
             else:
-                print "outlier result for %s is %d" % (list_of_collision_metrics[no_of_metrics], collision_points[count]["x"])
+                #xy.append(collision_points[offset + count]["x"])
+                #xy.append(collision_points[offset + count]["y"])
+                #coordinates.append(xy)
+                print "outlier result for %s is %d" % (list_of_collision_metrics[no_of_metrics], collision_points[offset + count]["x"])
 
-        for count in range(len(collision_points_gt)):
+        for count in range(len(collision_points_gt)-offset):
             xy = list()
-            if ( abs(collision_points_gt[count]["x"]) < 1000):
-                xy.append(collision_points_gt[count]["x"])
-                xy.append(collision_points_gt[count]["y"])
-                coordinates_gt.append(xy)
-            else:
-                print "outlier gt"
+            xy.append(collision_points_gt[offset + count]["x"])
+            xy.append(collision_points_gt[offset + count]["y"])
+            coordinates_gt.append(xy)
 
 
         #print coordinates
@@ -327,8 +327,8 @@ def yaml_():
         #list_of_collision_plots[no_of_metrics].plot(x1,y1, 'ko-', lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         list_of_collision_plots[no_of_metrics].scatter(x1_gt,y1_gt, lw=2,color=color_of_collision_metrics[0], label=list_of_collision_metrics[0])
         list_of_collision_plots[no_of_metrics].scatter(x1,y1, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
-        legend = list_of_collision_plots[no_of_metrics].legend(loc='upper right', shadow=True, fontsize='x-small')
-        list_of_collision_plots[no_of_metrics].set_xlim([0,800])
+        legend = list_of_collision_plots[no_of_metrics].legend(loc='lower right', shadow=True, fontsize='x-small')
+        list_of_collision_plots[no_of_metrics].set_xlim([-300,900])
         list_of_collision_plots[no_of_metrics].set_ylim([255,295])
 
         for count in range(len(coordinates)):
@@ -344,33 +344,29 @@ def yaml_():
         collision_points_gt = yaml_load[list_of_collision_metrics[0]]
         collision_points = yaml_load[list_of_collision_metrics[no_of_metrics]]
 
-        coordinates_gt = list()
         coordinates = list()
 
-        for count in range(len(collision_points)):
-            xy = list()
-            if ( abs(collision_points[count]["x"]) < 1000):
-                xy.append(collision_points[count]["x"])
-                xy.append(collision_points[count]["y"])
-                coordinates.append(xy)
-
-        if ( count == 0):
-
-            for count in range(len(collision_points_gt)):
+        if ( no_of_metrics == 0):
+            coordinates_gt = list()
+            for count_gt in range(len(collision_points_gt)-offset):
                 xy = list()
-                if ( abs(collision_points_gt[count]["x"]) < 1000):
-                    xy.append(collision_points_gt[count]["x"])
-                    xy.append(collision_points_gt[count]["y"])
+                if ( abs(collision_points_gt[offset + count_gt]["x"]) < 1000):
+                    xy.append(collision_points_gt[offset + count_gt]["x"])
+                    xy.append(collision_points_gt[offset + count_gt]["y"])
                     coordinates_gt.append(xy)
             data_gt = np.array(coordinates_gt)
             x1_gt, y1_gt = data_gt.T
             collisionplot_all.scatter(x1_gt,y1_gt, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[0])
-
-
-        #print coordinates_gt
-
-        data = np.array(coordinates)
-        x1, y1 = data.T
+        else:
+            for count in range(len(collision_points)-offset):
+                xy = list()
+                if ( abs(collision_points[offset + count]["x"]) < 1000):
+                    xy.append(collision_points[offset + count]["x"])
+                    xy.append(collision_points[offset + count]["y"])
+                    coordinates.append(xy)
+            #print coordinates_gt
+            data = np.array(coordinates)
+            x1, y1 = data.T
 
         #list_of_collision_plots[no_of_metrics].plot(x1,y1, 'ko-', lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         collisionplot_all.scatter(x1,y1, color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
@@ -383,10 +379,10 @@ def yaml_():
 
         shape_points = yaml_load[list_of_shape_metrics[no_of_metrics]]
         coordinates = list()
-        for count in range(len(shape_points)):
+        for count in range(len(shape_points)-offset):
             xy = list()
-            xy.append(shape_points[count]["x"])
-            xy.append(shape_points[count]["y"])
+            xy.append(shape_points[offset + count]["x"])
+            xy.append(shape_points[offset + count]["y"])
             coordinates.append(xy)
 
         #print coordinates
@@ -399,13 +395,13 @@ def yaml_():
     #-----------------------
     #plt.show()
 
-    plt.close(fig2)
+    #plt.close(fig2)
     fig1.set_size_inches(18.5, 10.5)
+    fig2.set_size_inches(18.5, 10.5)
     fig3.set_size_inches(18.5, 10.5)
     fig1.savefig('/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/vector_robustness.png', dpi=200)
-    #fig2.set_size_inches(18.5, 10.5)
-    #fig2.savefig('/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/vector_robustness_all.png')
-    fig3.savefig('/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/pixel_robustness.png', dpi=200)
+    fig2.savefig('/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/pixel_robustness.png', dpi=200)
+    fig3.savefig('/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/vector_robustness_all.png', dpi=200)
 
 
 def check():
