@@ -59,8 +59,6 @@ void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
 
-        m_fs << "FRAME_SKIP" << (int)frame_skip;
-
         std::vector<float> xsamples,ysamples;
 
         unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(frame_skip - 1).size();
@@ -90,7 +88,8 @@ void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) 
             samples_xy_shape(1,i) = ysamples.at(i);
         }
 
-        m_fs << "shape_points" << "[";
+        auto position = opticalFlow.getResultOrdner().find('/');
+        m_fs << (std::string("shape_points") + std::string("frame_skip") + std::to_string(frame_skip) + opticalFlow.getResultOrdner().replace(position, 1, "_") ) << "[";
 
         for (unsigned i = 0; i < samples_xy_shape.cols; i++) {
             xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
@@ -137,12 +136,8 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) 
 void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFlow) {
 
 
-    m_fs << "APPLICATION" << opticalFlow.getResultOrdner();
-
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-
-        m_fs << "FRAME_SKIP" << (int)frame_skip;
 
         std::vector<float> xsamples,ysamples;
 
@@ -194,7 +189,9 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
             samples_xy_collision(1,i) = ysamples.at(i);
         }
 
-        m_fs << "collision_points" << "[";
+        auto position = opticalFlow.getResultOrdner().find('/');
+        m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + opticalFlow.getResultOrdner().replace(position, 1, "_") ) << "[";
+
         for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
             xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
             m_fs << "{:" << "x" <<  samples_xy_collision[0][i] << "y" << samples_xy_collision[1][i] << "}";
