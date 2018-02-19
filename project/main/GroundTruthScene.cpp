@@ -703,7 +703,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     ColorfulNoise colorfulNoise;
     NoNoise noNoise;
 
-    GroundTruthObjects obj2(rectangle2, achterbahn1, 90, colorfulNoise, "rectangle_long");
+    GroundTruthObjects obj2(rectangle2, achterbahn1, 0, colorfulNoise, "rectangle_long");
     GroundTruthObjects obj3(rectangle2, achterbahn2, 120, colorfulNoise, "random_object");
 
     //GroundTruthObjects obj2(rectangle2, myTrajectory1, 0, colorfulNoise, "right_man");

@@ -215,6 +215,7 @@ def yaml_try():
 
 def yaml_():
 
+
     yaml_file = open("/local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/two/values.yml", "r")
 
     check = yaml_file.readline()
@@ -232,7 +233,8 @@ def yaml_():
 
     yaml_file.close()
 
-
+    #fig = plt.figure()
+    #ax = fig.add_subplot(111)
     yaml_load = yaml.load(open('/local/git/MotionFlowPriorityGraphSensors/datasets/cpp_dataset/data/stereo_flow/two/values.yml'))
     #print yaml_load
     collision_points = yaml_load["collision_pointsframe_skip1_generated"]
@@ -245,8 +247,23 @@ def yaml_():
 
     print coordinates
     data = np.array(coordinates)
-    x, y = data.T
-    plt.scatter(x,y)
+    x1, y1 = data.T
+    plt.plot(x1,y1, lw=2,color='blue')
+
+    collision_points = yaml_load["collision_pointsframe_skip1results_FB_none_"]
+    coordinates = list()
+    for count in range(len(collision_points)):
+        xy = list()
+        xy.append(collision_points[count]["x"])
+        xy.append(collision_points[count]["y"])
+        coordinates.append(xy)
+
+    print coordinates
+    data = np.array(coordinates)
+    x1, y1 = data.T
+
+    plt.plot(x1,y1, lw=2,color='red')
+
     plt.show()
 
     ###

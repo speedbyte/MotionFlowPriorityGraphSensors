@@ -232,8 +232,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 float pyrScale = 0.5;
                 int numLevels = 5;
                 int windowSize = 10;
-                int numIterations = 10;
-                int neighborhoodSize = 5;
+                int numIterations = 3;
+                int neighborhoodSize = 3;
                 float stdDeviation = 1.2;
 
                 std::vector<float> err;
