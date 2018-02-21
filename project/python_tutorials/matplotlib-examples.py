@@ -217,7 +217,10 @@ def yaml_():
 
 
     dataset = "vires"
-    yaml_file = open("/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/two/values.yml", "r")
+    #file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/two/values.yml"
+    file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
+
+    yaml_file = open(file, "r")
 
     check = yaml_file.readline()
     print check
@@ -228,7 +231,7 @@ def yaml_():
 
         yaml_file.close()
 
-        yaml_file = open("/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/two/values.yml", "w")
+        yaml_file = open(file, "w")
 
         yaml_file.write(read_yaml_file)
 
@@ -263,7 +266,7 @@ def yaml_():
     collisionplot_all.set_ylim([0,800])
 
 
-    yaml_load = yaml.load(open("/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/two/values.yml"))
+    yaml_load = yaml.load(open(file))
     #print yaml_load
 
     list_of_collision_plots = [collisionplot1, collisionplot2, collisionplot3, collisionplot4]
@@ -327,7 +330,7 @@ def yaml_():
         #list_of_collision_plots[no_of_metrics].plot(x1,y1, 'ko-', lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         list_of_collision_plots[no_of_metrics].scatter(x1_gt,y1_gt, lw=2,color=color_of_collision_metrics[0], label=list_of_collision_metrics[0])
         list_of_collision_plots[no_of_metrics].scatter(x1,y1, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
-        legend = list_of_collision_plots[no_of_metrics].legend(loc='lower right', shadow=True, fontsize='x-small')
+        legend = list_of_collision_plots[no_of_metrics].legend(loc='lower right', shadow=True, fontsize='large')
         list_of_collision_plots[no_of_metrics].set_xlim([-300,900])
         list_of_collision_plots[no_of_metrics].set_ylim([255,295])
 
@@ -370,7 +373,7 @@ def yaml_():
 
         #list_of_collision_plots[no_of_metrics].plot(x1,y1, 'ko-', lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         collisionplot_all.scatter(x1,y1, color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
-        legend = collisionplot_all.legend(loc='upper right', shadow=True, fontsize='x-small')
+        legend = collisionplot_all.legend(loc='upper right', shadow=True, fontsize='large')
 
     #-----------------------
 
@@ -389,7 +392,7 @@ def yaml_():
         data = np.array(coordinates)
         x1, y1 = data.T
         shapeplot1.scatter(x1,y1, lw=2,color=color_of_shape_metrics[no_of_metrics], label=list_of_shape_metrics[no_of_metrics])
-        legend = shapeplot1.legend(loc='upper right', shadow=True, fontsize='x-small')
+        legend = shapeplot1.legend(loc='upper right', shadow=True, fontsize='large')
         shapeplot1.set_ylim([0,1])
         #shapeplot2.plot(x1,y1, lw=2,color=color_of_shape_metrics[no_of_metrics])
     #-----------------------
@@ -417,7 +420,6 @@ def check():
     shapeplot1.plot([coordinates[2][0], coordinates[3][0]], [coordinates[2][1], coordinates[3][1]])
 
     plt.show()
-
     ###
 
     #a list:
@@ -433,6 +435,24 @@ def check():
     #key: value
     #the answer: 42
 
+
+
+def read_vkitti_png_flow(flow_fn):
+    "Convert from .png to (h, w, 2) (flow_x, flow_y) float32 array"
+    # read png to bgr in 16 bit unsigned short
+    bgr = cv2.imread(flow_fn, cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH)
+    h, w, _c = bgr.shape
+    assert bgr.dtype == np.uint16 and _c == 3
+    # b == invalid flow flag == 0 for sky or other invalid flow
+    invalid = bgr[..., 0] == 0
+    # g,r == flow_y,x normalized by height,width and scaled to [0;2**16 - 1]
+    out_flow = 2.0 / (2**16 - 1.0) * bgr[..., 2:0:-1].astype('f4') - 1
+    out_flow[..., 0] *= w - 1
+    out_flow[..., 1] *= h - 1
+    out_flow[invalid] = 0  # or another value (e.g., np.nan)
+    return out_flow
+
+
 if __name__ == '__main__':
     #histogram()
     #cam()
@@ -444,3 +464,4 @@ if __name__ == '__main__':
     #simple()
     yaml_()
     #check()
+    vkitti()

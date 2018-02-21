@@ -99,9 +99,9 @@ private:
     std::string module_manager = "<Sensor name=\"Sensor_MM\" type=\"video\" > <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> <Player name=\"MovingCar\"/> <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"12.500000\" bottom=\"15.000000\" top=\"15.000000\" /> <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> <Origin type=\"usk\" /> <Cull maxObjects=\"10\" enable=\"true\" /> <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"true\" /> <Filter objectType=\"none\" /><Filter objectType=\"pedestrian\" /> <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> </Sensor>";
 
     // Precipitation intensity needs to be > 0 for snow and rain.
-    const std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"false\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
+    const std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"auto\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
     //Rain
-    const std::string environment_parameters_wet = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"false\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"rain\" intensity=\"0.500000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
+    const std::string environment_parameters_wet = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"auto\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"rain\" intensity=\"0.500000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
 
     std::string camera_parameters = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosTether player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
@@ -175,6 +175,8 @@ public:
     GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects) :
     GroundTruthScene(scenario, environment, list_objects) {
 
+
+
         std::string::size_type position = scenario_name.find(to_replace);
         if ( position != std::string::npos ) {
             scenario_name.replace(position, to_replace.length(), std::string(m_scenario));
@@ -184,15 +186,24 @@ public:
         if ( environment == "none") {
             m_environment_scp_message = environment_parameters_dry;
         }
+
         else if ( environment == "snow" || environment == "rain" ) {
 
-                m_environment_scp_message = environment_parameters_wet;
-                std::string to_replace = "rain";
-                position = m_environment_scp_message.find(to_replace);
-                if ( position != std::string::npos) {
-                    m_environment_scp_message.replace(position, to_replace.length(), environment );
-                }
+            m_environment_scp_message = environment_parameters_wet;
+            std::string to_replace = "rain";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), environment );
             }
+        }
+        else if ( environment == "night" ) {
+            m_environment_scp_message = environment_parameters_dry;
+            std::string to_replace = "39600";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "79200");
+            }
+        }
 
         mLastNetworkFrame = -1;
 

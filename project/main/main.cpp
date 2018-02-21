@@ -155,8 +155,6 @@ int main ( int argc, char *argv[]) {
 
 /* CPP_DATASET ------------- */
 
-
-
     ushort depth = CV_8U;
     ushort cn = 3;
     assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
@@ -166,7 +164,7 @@ int main ( int argc, char *argv[]) {
 
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow", "rain"};
-    const std::vector < std::string> environment_list = {"none"};
+    const std::vector < std::string> environment_list = {"none", "night"};
 
     cv::FileStorage fs;
 
