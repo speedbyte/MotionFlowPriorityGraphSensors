@@ -22,14 +22,23 @@ EXECUTE = 0
 PATH = "../../../datasets/kitti_raw_dataset/"
 EXECUTE = 0
 
-[KITTI_RAW_CALIBRATION]
-PATH = "../../../datasets/kitti_raw_dataset/data/"
+[VKITTI_RAW_DATASET]
+PATH = "../../../datasets/vkitti_raw_dataset/"
 EXECUTE = 0
 
 [VIRES_DATASET]
 PATH = "../../../datasets/vires_dataset/"
-EXECUTE = 1
+EXECUTE = 0
 GT = 1
 LK = 0
 FB = 1
 PLOT = 1
+
+[RADAR_DATASET]
+PATH = "../../../datasets/radar_dataset/"
+EXECUTE = 0
+GT = 1
+LK = 0
+FB = 1
+PLOT = 1
+
