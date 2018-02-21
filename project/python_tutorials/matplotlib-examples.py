@@ -4,6 +4,7 @@
 import yaml
 import io
 
+import pandas as pd
 import cv2
 import numpy
 from matplotlib import pyplot as plt
@@ -453,6 +454,16 @@ def read_vkitti_png_flow(flow_fn):
     return out_flow
 
 
+def readradardata():
+    filename = "/local/git/MotionFlowPriorityGraphSensors/datasets/radar_dataset/"
+    radardata = pd.read_csv("<filename>", sep=" ", index_col=False)
+
+def vkitti():
+    filename = "/local/git/MotionFlowPriorityGraphSensors/project/main/non_code/0001_fog.txt"
+    mot_data = pd.read_csv(filename, sep=" ", index_col=False)
+    print mot_data
+
+
 if __name__ == '__main__':
     #histogram()
     #cam()
@@ -462,6 +473,6 @@ if __name__ == '__main__':
     #criticalpoint()
     #lemniscate()
     #simple()
-    yaml_()
+    #yaml_()
     #check()
     vkitti()
