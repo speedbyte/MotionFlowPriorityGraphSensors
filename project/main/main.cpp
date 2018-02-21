@@ -78,37 +78,57 @@ int main ( int argc, char *argv[]) {
         bool plot;
     } CONFIG_FILE_DATA;
 
-    CONFIG_FILE_DATA kitti_raw_dataset, kitti_flow_dataset, matlab_dataset, cpp_dataset, vires_dataset;
+    CONFIG_FILE_DATA
+            kitti_raw_dataset,
+            kitti_flow_dataset,
+            matlab_dataset,
+            cpp_dataset,
+            vires_dataset,
+            vkitti_raw_dataset,
+            vkitti_flow_dataset,
+            radar_dataset,
+    ;
 
     try {
         std::strcmp(pt.get<std::string>("MATLAB_DATASET.EXECUTE").c_str(), "0") == 0 ? matlab_dataset.execute = false :
-                matlab_dataset.execute = true;
+                matlab_dataset.execute = true // automate this
+
         std::strcmp(pt.get<std::string>("KITTI_RAW_DATASET.EXECUTE").c_str(), "0") == 0 ? kitti_raw_dataset.execute =
                                                                                                   false :
                 kitti_raw_dataset.execute = true;
+
         std::strcmp(pt.get<std::string>("KITTI_FLOW_DATASET.EXECUTE").c_str(), "0") == 0 ? kitti_flow_dataset.execute =
                                                                                                    false :
                 kitti_flow_dataset.execute = true;
 
         std::strcmp(pt.get<std::string>("CPP_DATASET.EXECUTE").c_str(), "0") == 0 ? cpp_dataset.execute = false :
                 cpp_dataset.execute = true;
+
         std::strcmp(pt.get<std::string>("CPP_DATASET.GT").c_str(), "0") == 0 ? cpp_dataset.gt = false :
         cpp_dataset.gt = true;
+
         std::strcmp(pt.get<std::string>("CPP_DATASET.FB").c_str(), "0") == 0 ? cpp_dataset.fb = false :
                 cpp_dataset.fb = true;
+
         std::strcmp(pt.get<std::string>("CPP_DATASET.LK").c_str(), "0") == 0 ? cpp_dataset.lk = false :
                 cpp_dataset.lk = true;
+
         std::strcmp(pt.get<std::string>("CPP_DATASET.PLOT").c_str(), "0") == 0 ? cpp_dataset.plot = false :
                 cpp_dataset.plot = true;
 
+
         std::strcmp(pt.get<std::string>("VIRES_DATASET.EXECUTE").c_str(), "0") == 0 ? vires_dataset.execute = false :
                 vires_dataset.execute = true;
+
         std::strcmp(pt.get<std::string>("VIRES_DATASET.GT").c_str(), "0") == 0 ? vires_dataset.gt = false :
                 vires_dataset.gt = true;
+
         std::strcmp(pt.get<std::string>("VIRES_DATASET.FB").c_str(), "0") == 0 ? vires_dataset.fb = false :
                 vires_dataset.fb = true;
+
         std::strcmp(pt.get<std::string>("VIRES_DATASET.LK").c_str(), "0") == 0 ? vires_dataset.lk = false :
                 vires_dataset.lk = true;
+
         std::strcmp(pt.get<std::string>("VIRES_DATASET.PLOT").c_str(), "0") == 0 ? vires_dataset.plot = false :
                 vires_dataset.plot = true;
 
@@ -120,6 +140,18 @@ int main ( int argc, char *argv[]) {
         throw;
     }
 
+    /*
+     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset consisting of 50 high resolution monocular
+     * videos ( 21260 frames ) for five different virtual worlds in urban settings under different imaging and weather c
+     * conditions.
+     */
+    if ( vkitti_raw_dataset.execute ) {
+
+    }
+
+    if ( radar_dataset.execute ) {
+
+    }
 
     if ( kitti_raw_dataset.execute ) {
         boost::filesystem::path calib_path = get_file(KITTI_RAW_CALIBRATION_PATH,

@@ -10,6 +10,8 @@
 
 class Objects {
 
+private:
+
 protected:
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_point_pixel_displacement;
