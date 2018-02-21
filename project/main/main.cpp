@@ -78,7 +78,7 @@ int main ( int argc, char *argv[]) {
         bool plot;
     } CONFIG_FILE_DATA;
 
-    CONFIG_FILE_DATA kitti_raw_dataset, kitti_flow_dataset, matlab_dataset, cpp_dataset, vires_dataset;
+    CONFIG_FILE_DATA kitti_raw_dataset, kitti_flow_dataset, matlab_dataset, cpp_dataset, vires_dataset, vkitti_raw_dataset;
 
     try {
         std::strcmp(pt.get<std::string>("MATLAB_DATASET.EXECUTE").c_str(), "0") == 0 ? matlab_dataset.execute = false :
@@ -120,6 +120,14 @@ int main ( int argc, char *argv[]) {
         throw;
     }
 
+    /*
+     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset consisting of 50 high resolution monocular
+     * videos ( 21260 frames ) for five different virtual worlds in urban settings under different imaging and weather c
+     * conditions.
+     */
+    if ( vkitti_raw_dataset.execute ) {
+
+    }
 
     if ( kitti_raw_dataset.execute ) {
         boost::filesystem::path calib_path = get_file(KITTI_RAW_CALIBRATION_PATH,

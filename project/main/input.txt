@@ -14,6 +14,10 @@ EXECUTE = 0
 PATH = "../../../datasets/kitti_flow_dataset/"
 EXECUTE = 0
 
+[VKITTI_FLOW_DATASET]
+PATH = "../../../datasets/vkitti_flow_dataset/"
+EXECUTE = 0
+
 [KITTI_RAW_DATASET]
 PATH = "../../../datasets/kitti_raw_dataset/"
 EXECUTE = 0
