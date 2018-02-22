@@ -119,6 +119,21 @@ private:
 
     std::string popup_scp = "<Info level=\"info\"> <Message popup=\"true\" text=\"snow!!!!\"/> </Info>";
 
+    /*
+
+   0 "<SimCtrl> <Stop/> <LoadScenario filename="traffic_demo.xml" /> <Init mode="operation"/> </SimCtrl>"$
+$
+wait "<SimCtrl> <InitDone place="checkInitConfirmation"/> </SimCtrl>"$
+$
+  +1 "<SimCtrl> <Start/> </SimCtrl>"$
+ +2s "<Symbol name="expl01" > <Text data="Auto-start script has been running for 2s now" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"$
+ +2s "<Symbol name="expl01" > <Text data="Auto-start script has been running for 4s now" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"$
+ +2s "<Symbol name="expl01" > <Text data="Auto-start script has been running for 6s now" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"$
+ +2s "<Symbol name="expl01" > <Text data="Auto-start script has been running for 8s now" colorRGB="0xffff00" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"$
+ +2s "<Symbol name="expl01" duration="1.0" > <Text data="Auto-start script is terminating" colorRGB="0xff0000" size="50.0" /> <PosScreen x="0.01" y="0.05" /></Symbol>"$
+
+     */
+
 
     int          mLastNetworkFrame;
 
