@@ -56,7 +56,7 @@ void GroundTruthScene::setTrajectory(std::vector<cv::Point2f> trajectory, MyTraj
 
 std::vector<cv::Point2f> GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
     cv::FileStorage trajectory;
-    trajectory.open(trajectoryFileName, cv::FileStorage::APPEND);
+    trajectory.open(trajectoryFileName, cv::FileStorage::READ);
     trajectory.release();
 
 }
@@ -235,6 +235,25 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     time_map["generate_all_scene_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
     std::cout << "ground truth scene generation time - " << time_map["generate_all_scene_image"] << "ms" << std::endl;
 
+}
+
+void GroundTruthScene::generate_bird_view() {
+    // the bird view needs the range information of each object
+    // Assuming the camera is mounted on the floor.
+    for ( auto trajectory_index = 0;  trajectory_index <  MAX_ITERATION_RESULTS; trajectory_index++ ) {
+
+        cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
+        for ( auto object_index= 0; object_index < m_list_objects.size(); object_index++ ) {
+            birdview_frame.at(m_list_objects.at(object_index).get_obj_base_pixel_point_pixel_displacement().at(trajectory_index).first.x, m_list_objects.at(object_index).get_obj_range().at(trajectory_index)) = 100;
+            cv::Mat roi_objects;
+            roi_objects = birdview_frame.rowRange(m_list_objects.at(object_index).get_obj_range().at(trajectory_index), m_list_objects.at(object_index).get_obj_dimension().at(trajectory_index).z_offset )
+                    .colRange(m_list_objects.at(object_index).get_obj_range().at(trajectory_index), m_list_objects.at(object_index).get_obj_dimension().at(trajectory_index).x_offset);
+
+        }
+        cv::imwrite("filename", birdview_frame);
+        // time to collide with the object.
+
+    }
 }
 
 void GroundTruthSceneExternal::generate_gt_scene() {

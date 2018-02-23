@@ -233,6 +233,7 @@ int main ( int argc, char *argv[]) {
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
                 GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[i], list_of_gt_objects);
                 gt_scene.generate_gt_scene();
+                gt_scene.generate_bird_view();
 
             }
 

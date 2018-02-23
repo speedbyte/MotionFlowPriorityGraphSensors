@@ -49,6 +49,8 @@ public:
 
     virtual void generate_gt_scene() {};
 
+    void generate_bird_view();
+
     void prepare_directories();
 
 
