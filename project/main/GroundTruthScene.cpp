@@ -72,21 +72,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     std::vector<cv::Point2f> trajectory = readTrajectoryFromFile("filename");
     setTrajectory(trajectory, myTrajectory1);
 
-
-
-    /*
-    myTrajectory1.pushTrajectoryPoints(cv::Point2f(50,25));
-    myTrajectory1.pushTrajectoryPoints(cv::Point2f(100,50));
-    myTrajectory1.pushTrajectoryPoints(cv::Point2f(150,75));
-    myTrajectory1.pushTrajectoryPoints(cv::Point2f(200,100));
-    myTrajectory1.pushTrajectoryPoints(cv::Point2f(250,125));
-
-    myTrajectory2.pushTrajectoryPoints(cv::Point2f(700,250));
-    myTrajectory2.pushTrajectoryPoints(cv::Point2f(800,225));
-    myTrajectory2.pushTrajectoryPoints(cv::Point2f(900,200));
-    myTrajectory2.pushTrajectoryPoints(cv::Point2f(1000,175));
-    myTrajectory2.pushTrajectoryPoints(cv::Point2f(1100,150));
-*/
     /*
     cv::RNG rng(-1);
     for ( unsigned i = 0 ; i < MAX_ITERATION_THETA; i++ ) {
@@ -240,6 +225,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 void GroundTruthScene::generate_bird_view() {
     // the bird view needs the range information of each object
     // Assuming the camera is mounted on the floor.
+/*
     for ( auto trajectory_index = 0;  trajectory_index <  MAX_ITERATION_RESULTS; trajectory_index++ ) {
 
         cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
@@ -254,6 +240,7 @@ void GroundTruthScene::generate_bird_view() {
         // time to collide with the object.
 
     }
+    */
 }
 
 void GroundTruthSceneExternal::generate_gt_scene() {

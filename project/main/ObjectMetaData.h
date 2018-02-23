@@ -6,6 +6,32 @@
 #define MAIN_OBJECTMETADATA_H
 
 
+/*
+%YAML:1.0
+iterationNr: 100
+strings:
+   - "image1.jpg"
+   - Awesomeness
+   - "baboon.jpg"
+Mapping:
+   One: 1
+   Two: 2
+R: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: u
+   data: [ 1, 0, 0, 0, 1, 0, 0, 0, 1 ]
+T: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ 0., 0., 0. ]
+MyData:
+   A: 97
+   X: 3.1415926535897931e+000
+   id: mydata1234
+*/
+
 class ObjectMetaData {
 
 public:
@@ -24,17 +50,17 @@ public:
     //alpha: KITTI-like observation angle of the object in [-pi..pi]
     float alpha_rad;
     //l, t, r, b: KITTI-like 2D 'bbox', respectively left, top, right, bottom bounding box in pixel coordinates (inclusive, (0,0) origin is on the upper left corner of the image)
-    struct bounding_box_m { float bb_left_px, float bb_top_px, float bb_right_px, float bb_bottom_px};
+    struct bounding_box_m { float bb_left_px; float bb_top_px; float bb_right_px; float bb_bottom_px;};
     //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
-    struct object_dimensions_m { float dim_width_m, float dim_height_m, float dim_length_m };
+    struct object_dimensions_m { float dim_width_m; float dim_height_m; float dim_length_m; };
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
-    struct object_location_m { float location_x_m, float location_y_m, float location_z_m };
+    struct object_location_m { float location_x_m; float location_y_m; float location_z_m;};
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D object 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
     //(KITTI convention is ry == 0 iff object is aligned with x-axis and pointing right)
     //rx: rotation around X-axis (pitch) in camera coordinates [-pi..pi]
     //rz: rotation around Z-axis (roll) in camera coordinates [-pi..pi]
-    struct object_rotation_rad { float rotation_ry_yaw_rad, float rotation_rx_pitch_rad, float rotation_rz_roll_rad };
+    struct object_rotation_rad { float rotation_ry_yaw_rad; float rotation_rx_pitch_rad; float rotation_rz_roll_rad; };
     //truncr: (changed in v1.3) object 2D truncation ratio in [0..1] (0: no truncation, 1: entirely truncated)
     bool truncr;
     //occupr: object 2D occupancy ratio (fraction of non-occluded pixels) in [0..1] (0: fully occluded, 1: fully visible, independent of truncation)

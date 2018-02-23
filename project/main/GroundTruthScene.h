@@ -46,6 +46,9 @@ public:
 
     };
 
+    std::vector<cv::Point2f> readTrajectoryFromFile(std::string trajectoryFileName);
+
+    void setTrajectory(std::vector<cv::Point2f> trajectory, MyTrajectory mytrajectory);
 
     virtual void generate_gt_scene() {};
 

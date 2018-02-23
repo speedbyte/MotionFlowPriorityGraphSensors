@@ -1,44 +1,47 @@
-[CPP_DATASET]
-PATH = "../../../datasets/cpp_dataset/"
-EXECUTE = 0
-GT = 1
-LK = 0
-FB = 1
-PLOT = 1
+%YAML:1.0
+%All are mappings
 
-[MATLAB_DATASET]
-PATH = "../../../datasets/matlab_dataset/"
-EXECUTE = 0
+CPP_DATASET:
+   PATH: "../../../datasets/cpp_dataset/"
+   EXECUTE: 1
+   GT: 1
+   LK: 0
+   FB: 1
+   PLOT: 1
 
-[KITTI_FLOW_DATASET]
-PATH = "../../../datasets/kitti_flow_dataset/"
-EXECUTE = 0
+MATLAB_DATASET:
+   PATH: "../../../datasets/matlab_dataset/"
+   EXECUTE: 0
 
-[VKITTI_FLOW_DATASET]
-PATH = "../../../datasets/vkitti_flow_dataset/"
-EXECUTE = 0
+KITTI_FLOW_DATASET:
+   PATH: "../../../datasets/kitti_flow_dataset/"
+   EXECUTE: 0
 
-[KITTI_RAW_DATASET]
-PATH = "../../../datasets/kitti_raw_dataset/"
-EXECUTE = 0
+VKITTI_FLOW_DATASET:
+   PATH: "../../../datasets/vkitti_flow_dataset/"
+   EXECUTE: 0
 
-[VKITTI_RAW_DATASET]
-PATH = "../../../datasets/vkitti_raw_dataset/"
-EXECUTE = 0
+KITTI_RAW_DATASET:
+   PATH: "../../../datasets/kitti_raw_dataset/"
+   EXECUTE: 0
 
-[VIRES_DATASET]
-PATH = "../../../datasets/vires_dataset/"
-EXECUTE = 0
-GT = 1
-LK = 0
-FB = 1
-PLOT = 1
+VKITTI_RAW_DATASET:
+   PATH: "../../../datasets/vkitti_raw_dataset/"
+   EXECUTE: 0
 
-[RADAR_DATASET]
-PATH = "../../../datasets/radar_dataset/"
-EXECUTE = 0
-GT = 1
-LK = 0
-FB = 1
-PLOT = 1
+VIRES_DATASET:
+   PATH: "../../../datasets/vires_dataset/"
+   EXECUTE: 0
+   GT: 1
+   LK: 0
+   FB: 1
+   PLOT: 1
+
+RADAR_DATASET:
+   PATH: "../../../datasets/radar_dataset/"
+   EXECUTE: 0
+   GT: 1
+   LK: 0
+   FB: 1
+   PLOT: 1
 
