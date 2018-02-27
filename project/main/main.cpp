@@ -105,6 +105,7 @@ int main ( int argc, char *argv[]) {
     map_object["VKITTI_FLOW_DATASET"] = &vkitti_flow_dataset;
     map_object["VKITTI_RAW_DATASET"] = &vkitti_raw_dataset;
     map_object["RADAR_DATASET"] = &radar_dataset;
+    map_object["VIRES_DATASET"] = &vires_dataset;
 
     cv::FileNode node;
     for (std::map<std::string ,CONFIG_FILE_DATA*>::iterator it=map_object.begin(); it!=map_object.end(); ++it)  {
