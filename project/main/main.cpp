@@ -89,7 +89,7 @@ int main ( int argc, char *argv[]) {
     ;
 
     cv::FileStorage fs_configfile;
-    fs_configfile.open("../input.txt", cv::FileStorage::READ);
+    fs_configfile.open("../input.yml", cv::FileStorage::READ);
     if (!fs_configfile.isOpened())
     {
         cerr << "Failed to open " << endl;
@@ -106,22 +106,26 @@ int main ( int argc, char *argv[]) {
     map_object["VKITTI_RAW_DATASET"] = vkitti_raw_dataset;
     map_object["RADAR_DATASET"] = radar_dataset;
 
-    cv::FileNode n;
+    cv::FileNode node;
     for (std::map<std::string ,CONFIG_FILE_DATA>::iterator it=map_object.begin(); it!=map_object.end(); ++it)  {
 
         std::cout << it->first << '\n';
-        n = fs_configfile[(*it).first];
-        if ( n.isNone() || n.empty() || n.isMap()) {
+        node = fs_configfile[(*it).first];
+        if ( node.isNone() || node.empty() ) {
             std::cout << (*it).first << " cannot be found" << std::endl;
         }
-        //it->second.path = (n["PATH"]).string();
-        it->second.execute = (int)n["EXECUTE"];
-        it->second.gt = (bool)(int)(n["GT"]);
-        it->second.lk = (bool)(int)(n["LK"]);
-        it->second.fb = (bool)(int)(n["FB"]);
-        it->second.plot = (bool)(int)(n["PLOT"]);
+        it->second.path = node["PATH"].string();
+        it->second.execute = (bool)(int)node["EXECUTE"];
+        it->second.gt = (bool)(int)(node["GT"]);
+        it->second.lk = (bool)(int)(node["LK"]);
+        it->second.fb = (bool)(int)(node["FB"]);
+        it->second.plot = (bool)(int)(node["PLOT"]);
         //map_input_txt_to_main.push_back(map_object);
+        std::cout << it->second.path << " " << it->second.execute << " " << it->second.gt << std::endl;
+
     }
+
+    std::cout << kitti_raw_dataset.path << " " << kitti_raw_dataset.execute << " " << kitti_raw_dataset.gt << std::endl;
 
 
     /*
