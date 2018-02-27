@@ -96,37 +96,34 @@ int main ( int argc, char *argv[]) {
         return 1;
     }
 
-    std::map<std::string, CONFIG_FILE_DATA> map_object;
+    std::map<std::string, CONFIG_FILE_DATA*> map_object;
 
-    map_object["CPP_DATASET"] =  cpp_dataset;
-    map_object["MATLAB_DATASET"] =  matlab_dataset;
-    map_object["KITTI_FLOW_DATASET"] =  kitti_flow_dataset;
-    map_object["KITTI_RAW_DATASET"] =  kitti_raw_dataset;
-    map_object["VKITTI_FLOW_DATASET"] = vkitti_flow_dataset;
-    map_object["VKITTI_RAW_DATASET"] = vkitti_raw_dataset;
-    map_object["RADAR_DATASET"] = radar_dataset;
+    map_object["CPP_DATASET"] =  &cpp_dataset;
+    map_object["MATLAB_DATASET"] =  &matlab_dataset;
+    map_object["KITTI_FLOW_DATASET"] =  &kitti_flow_dataset;
+    map_object["KITTI_RAW_DATASET"] =  &kitti_raw_dataset;
+    map_object["VKITTI_FLOW_DATASET"] = &vkitti_flow_dataset;
+    map_object["VKITTI_RAW_DATASET"] = &vkitti_raw_dataset;
+    map_object["RADAR_DATASET"] = &radar_dataset;
 
     cv::FileNode node;
-    for (std::map<std::string ,CONFIG_FILE_DATA>::iterator it=map_object.begin(); it!=map_object.end(); ++it)  {
+    for (std::map<std::string ,CONFIG_FILE_DATA*>::iterator it=map_object.begin(); it!=map_object.end(); ++it)  {
 
         std::cout << it->first << '\n';
         node = fs_configfile[(*it).first];
         if ( node.isNone() || node.empty() ) {
             std::cout << (*it).first << " cannot be found" << std::endl;
         }
-        it->second.path = node["PATH"].string();
-        it->second.execute = (bool)(int)node["EXECUTE"];
-        it->second.gt = (bool)(int)(node["GT"]);
-        it->second.lk = (bool)(int)(node["LK"]);
-        it->second.fb = (bool)(int)(node["FB"]);
-        it->second.plot = (bool)(int)(node["PLOT"]);
+        it->second->path = node["PATH"].string();
+        it->second->execute = (bool)(int)node["EXECUTE"];
+        it->second->gt = (bool)(int)(node["GT"]);
+        it->second->lk = (bool)(int)(node["LK"]);
+        it->second->fb = (bool)(int)(node["FB"]);
+        it->second->plot = (bool)(int)(node["PLOT"]);
         //map_input_txt_to_main.push_back(map_object);
-        std::cout << it->second.path << " " << it->second.execute << " " << it->second.gt << std::endl;
+        std::cout << it->second->path << " " << it->second->execute << " " << it->second->gt << std::endl;
 
     }
-
-    std::cout << kitti_raw_dataset.path << " " << kitti_raw_dataset.execute << " " << kitti_raw_dataset.gt << std::endl;
-
 
     /*
 D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset consisting of 50 high resolution monocular
