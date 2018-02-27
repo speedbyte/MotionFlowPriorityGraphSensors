@@ -48,16 +48,82 @@ void GroundTruthScene::prepare_directories() {
     }
 }
 
-void GroundTruthScene::setTrajectory(std::vector<cv::Point2f> trajectory, MyTrajectory mytrajectory) {
+void GroundTruthScene::writeTrajectoryInYaml() {
 
+    cv::FileStorage write_fs;
+    write_fs.open("../trajectory.yml", cv::FileStorage::WRITE);
 
+    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
+
+        std::cout << "write yaml file for frame_skip  " << (frame_skip-1) << std::endl;
+
+        char temp_str_fs[20];
+        sprintf (temp_str_fs, "frame_skip_%03d", frame_skip);
+        //write_fs << temp_str_fs << "[";
+
+        unsigned long FRAME_COUNT = m_list_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        assert(FRAME_COUNT>0);
+
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            char temp_str_fc[20];
+            sprintf (temp_str_fc, "frame_count_%03d", frame_count);
+            write_fs << temp_str_fc << "[";
+            for ( int i = 0; i< m_list_objects.size(); i++) {
+                write_fs << "{:" << "name" << m_list_objects.at(i).getObjectName() << "x" <<  m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x << "y" << m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y  << "}";
+            }
+            write_fs << "]";
+        }
+    }
+    //write_fs << "]";
+    write_fs.release();
+
+    /*trajectory_list.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)
+            data->base.pos.y)); */
 
 }
 
 std::vector<cv::Point2f> GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
-    cv::FileStorage trajectory;
-    trajectory.open(trajectoryFileName, cv::FileStorage::READ);
-    trajectory.release();
+
+    cv::FileStorage fs(trajectoryFileName, cv::FileStorage::READ);
+    std::vector<cv::Point2f> traj_points;
+
+    cv::FileNode file_node, file_node_temp;
+    cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
+
+    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
+
+        //std::string temp_str = "frame_skip" + frame_skip;
+        char temp_str_fs[20];
+        sprintf (temp_str_fs, "frame_skip_%03d", frame_skip);
+        std::cout << "read yaml file for frame_skip " << (frame_skip-1) << std::endl;
+        unsigned long FRAME_COUNT = m_list_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        assert(FRAME_COUNT>0);
+
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+
+            char temp_str_fc[20];
+            sprintf(temp_str_fc, "frame_count_%03d", frame_count);
+            file_node = fs[temp_str_fc];
+            if ( file_node.isNone() || file_node.empty() ) {
+                std::cout << temp_str_fc << " cannot be found" << std::endl;
+            }
+            else {
+
+                //std::cout << file_node.size() << " found" << std::endl;
+                file_node_iterator_begin = file_node.begin();
+                file_node_iterator_end = file_node.end();
+
+                for ( file_node_iterator = file_node_iterator_begin; file_node_iterator != file_node_iterator_end;
+                        file_node_iterator++) {
+                    //std::cout << "hello\n";
+                    std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
+                    //traj_points.push_back(cv::Point2f((int)(*file_node_iterator)["x"], (int)(*file_node_iterator)["y"]));
+                }
+            }
+        }
+    }
+    fs.release();
+    return traj_points;
 
 }
 
@@ -68,9 +134,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     MyTrajectory myTrajectory2;
     MyTrajectory myTrajectory1;
     MyTrajectory myTrajectory;
-
-    std::vector<cv::Point2f> trajectory = readTrajectoryFromFile("filename");
-    setTrajectory(trajectory, myTrajectory1);
 
     /*
     cv::RNG rng(-1);
@@ -90,6 +153,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     achterbahn2.process(Dataset::getFrameSize());
     //achterbahn2.setDynamic();
 
+
     Rectangle rectangle1(5, 5); // width, height
     Rectangle rectangle2(20,70); // width, height
     //Rectangle myShape(5, 5); // width, height
@@ -100,33 +164,39 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     ColorfulNoise colorfulNoise;
     NoNoise noNoise;
 
-    GroundTruthObjects obj2(rectangle2, achterbahn1, 60, colorfulNoise, "rectangle_long");
-    GroundTruthObjects obj3(rectangle2, achterbahn2, 120, colorfulNoise, "random_object");
 
-    //GroundTruthObjects obj2(rectangle2, myTrajectory1, 0, colorfulNoise, "right_man");
-    //GroundTruthObjects obj3(rectangle2, myTrajectory2, 0, colorfulNoise, "left_man");
+    if ( m_environment == "none") {
+        boost::filesystem::remove("../trajectory.yml");
 
+        std::string objectName1 = "rectangle_long";
+        GroundTruthObjects obj1(rectangle2, achterbahn1, 60, colorfulNoise, objectName1);
 
-    //list_of_gt_objects.push_back(obj1);
-    m_list_objects.push_back(obj2);
-    m_list_objects.push_back(obj3);
+        std::string objectName2 = "random_object";
+        GroundTruthObjects obj2(rectangle2, achterbahn2, 120, colorfulNoise, objectName2);
 
-    //list_of_gt_objects.push_back(obj3);
-    //list_of_gt_objects.push_back(obj4);
-    //list_of_gt_objects.push_back(obj5);
-    /*
-     * First create an object with an image_data_and_shape
-     * Then define the object trajectory
-     * Then copy the object image_data_and_shape on the object trajectory points
-     * Then store the image in the ground truth image folder
-     *
-     * Then extrapolate the object trajectory with the above image_data_and_shape
-     *
-     * Then store the flow information in the flow folder
-     */
+        m_list_objects.push_back(obj1);
+        m_list_objects.push_back(obj2);
 
-    //m_shapes.process();
-    //m_trajectories.process(Dataset::getFrameSize());
+        writeTrajectoryInYaml();
+
+        /*
+         * First create an object with an image_data_and_shape
+         * Then define the object trajectory
+         * Then copy the object image_data_and_shape on the object trajectory points
+         * Then store the image in the ground truth image folder
+         *
+         * Then extrapolate the object trajectory with the above image_data_and_shape
+         *
+         * Then store the flow information in the flow folder
+         */
+
+        //m_shapes.process();
+        //m_trajectories.process(Dataset::getFrameSize());
+
+    }
+
+    readTrajectoryFromFile("../trajectory.yml");
+    exit(0);
 
     prepare_directories();
 
@@ -369,6 +439,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     }
 
     if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
+
+        m_write_fs.open("../trajectory.yml", cv::FileStorage::WRITE);
+        m_write_fs << "TRAJECTORY" << "[";
+
         // open the shared memory for IG image output (try to attach without creating a new segment)
         fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", mShmKey);
 
@@ -473,12 +547,17 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             }
         }
         catch (...) {
+            m_write_fs.release();
             sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
             std::cout << command << std::endl;
             system(command);
             std::cout << "End of generation" << std::endl;
             return;
         };
+
+        m_write_fs << "]";
+        m_write_fs.release();
+
 
         try {
 
@@ -608,8 +687,10 @@ simFrame, const
 
         printf("%d.pushTrajectoryPoints(cv::Point2f((float)%f, (float)%f))\n", data->base.id, data->base.pos.x, data->base.pos.y);
         std::cout << data->base.type;
-        myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)
-                data->base.pos.y));
+
+        m_write_fs << "{:" << "id" << (int)data->base.id << "x" << data->base.pos.x << "y" << data->base.pos.y;
+        m_write_fs << "}";
+
     }
     else {
         //std::cout << data->base.type << std::endl;

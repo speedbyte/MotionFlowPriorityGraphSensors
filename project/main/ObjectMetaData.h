@@ -133,6 +133,9 @@ public:
     // PATH = "../../../datasets/kitti_raw_dataset/data/"
     // EXECUTE = 0
 
+    void fillData() {
+
+    }
 };
 
 

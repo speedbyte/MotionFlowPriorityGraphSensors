@@ -11,16 +11,21 @@
 void xml_yaml_write() {
 
     //std::srand(time(NULL));
-    boost::filesystem::path fpath("../../../pics_dataset/lena.png");
+    boost::filesystem::path fpath("../../../datasets/pics_dataset/lena.png");
     if ( !boost::filesystem::exists(fpath) ) {
+        std::cerr << "PathNotFound error" << std::endl;
         throw ("FileNotFound error");
     }
-    cv::Mat lena(cv::imread("../../../pics_dataset/lena.png", CV_LOAD_IMAGE_GRAYSCALE));
+    cv::Mat lena(cv::imread("../../../datasets/pics_dataset/lena.png", CV_LOAD_IMAGE_GRAYSCALE));
+    if ( lena.data == NULL ) {
+        std::cerr << "FileNotFound error" << std::endl;
+        throw ("FileNotFound error");
+    }
     // XML and YAML START
     cv::Mat whiteImage1C(8,8,CV_8UC1,cv::Scalar(255));
     cv::Mat whiteImage3C(8,8,CV_8UC3,cv::Scalar(255,0,0));
 
-    cv::FileStorage fs("../../../pics_dataset/test.yml", cv::FileStorage::WRITE);
+    cv::FileStorage fs("../../../datasets/pics_dataset/test.yml", cv::FileStorage::WRITE);
 
     fs << "frameCount" << 5;
     cv::Mat_<double> cameraMatrix(3,3);
@@ -67,7 +72,7 @@ void xml_yaml_write() {
     fs << "]";
     fs.release();
     try {
-        cv::FileStorage yaml_check("../../../pics_dataset/test.yml", cv::FileStorage::READ);
+        cv::FileStorage yaml_check("../../../datasets/pics_dataset/test.yml", cv::FileStorage::READ);
     }
     catch(...) {
         std::cout << "problem in yml file";
@@ -76,8 +81,9 @@ void xml_yaml_write() {
 }
 
 
+
 void xml_yaml_read() {
-    cv::FileStorage fs("../../../pics_dataset/test.yml", cv::FileStorage::READ);
+    cv::FileStorage fs("../../../datasets/pics_dataset/test.yml", cv::FileStorage::READ);
     cv::Mat cameraMatrix;
 
     cv::FileNode file_node, file_node_temp;
@@ -110,7 +116,69 @@ void xml_yaml_read() {
     cv::waitKey(0);
 }
 
-int main (int argc, char *argv[]) {
-    xml_yaml_write();
-    xml_yaml_read();
+
+void nested_yaml() {
+    cv::FileStorage write_fs;
+    write_fs.open("../trajectory.yml", cv::FileStorage::WRITE);
+
+    for ( unsigned i = 1; i < 3 ; i++ ) {
+
+        char temp_str_fs[20];
+        sprintf(temp_str_fs, "i_%03d", i);
+        write_fs << temp_str_fs << "[";
+
+        for (ushort j = 0; j < 4; j++) {
+            char temp_str_fc[20];
+            sprintf(temp_str_fc, "j_%03d", j);
+            write_fs << temp_str_fc << "[";
+            write_fs << "{:" << "name" << "hello" << "x" << 1 << "y" << 2 << "}";
+            write_fs << "]";
+        }
+        write_fs << "]";
+    }
+    write_fs.release();
 }
+
+void read_nested() {
+
+    cv::FileStorage fs("../trajectory.yml", cv::FileStorage::READ);
+    std::vector<cv::Point2f> traj_points;
+
+    cv::FileNode file_node, file_node_temp;
+    cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
+
+    char temp_str_fc[20];
+    sprintf(temp_str_fc, "j_%03d", 1);
+    file_node = fs[temp_str_fc];
+    if ( file_node.isNone() || file_node.empty() ) {
+        std::cout << temp_str_fc << " cannot be found" << std::endl;
+    }
+    else {
+
+        file_node_iterator_begin = file_node.begin();
+        file_node_iterator_end = file_node.end();
+
+        for ( auto i = 0; i < file_node.size() ; i ++ ) {
+
+            std::cout << (*file_node_iterator_begin).name() << file_node.size() << " found" << std::endl;
+
+        }
+    }
+    fs.release();
+
+}
+
+int main (int argc, char *argv[]) {
+    //xml_yaml_write();
+    //xml_yaml_read();
+    //nested_yaml();
+    read_nested();
+}
+
+/*
+ features:
+   - { x:83, y:86, lbp:[ 1, 0, 1, 1, 0, 0, 1, 0 ] }
+   - { x:15, y:93, lbp:[ 1, 1, 0, 0, 0, 1, 0, 0 ] }
+   - { x:86, y:92, lbp:[ 1, 0, 0, 0, 1, 1, 0, 0 ] }
+
+ */

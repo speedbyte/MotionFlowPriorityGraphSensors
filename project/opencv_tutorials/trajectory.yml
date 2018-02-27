@@ -1,0 +1,15 @@
+%YAML:1.0
+---
+i_001:
+   - j_000
+   -
+      - { name:hello, x:1, y:2 }
+   - j_001
+   -
+      - { name:hello, x:1, y:2 }
+   - j_002
+   -
+      - { name:hello, x:1, y:2 }
+   - j_003
+   -
+      - { name:hello, x:1, y:2 }

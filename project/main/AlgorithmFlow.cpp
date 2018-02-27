@@ -231,11 +231,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 std::vector<uchar> status;
                 // Initialize parameters for the optical generate_flow_frame algorithm
                 float pyrScale = 0.5;
-                int numLevels = 5;
-                int windowSize = 20;
-                int numIterations = 10;
+                int numLevels = 3;
+                int windowSize = 10;
+                int numIterations = 5;
                 int neighborhoodSize = 5;
-                float stdDeviation = 1.1;
+                float stdDeviation = 1.5;
 
                 std::vector<float> err;
 

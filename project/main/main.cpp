@@ -187,6 +187,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     cv::FileStorage fs;
 
     std::vector<SimulatedObjects> list_of_simulated_objects_base;
+    std::vector<GroundTruthObjects> list_of_gt_objects_base;
 
     for ( ushort i = 0; i< environment_list.size(); i++) {
 
@@ -217,10 +218,30 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
                 std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
-                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[i], list_of_gt_objects);
-                gt_scene.generate_gt_scene();
-                gt_scene.generate_bird_view();
+                if ( environment_list[i] == "none") {
+                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[i], list_of_gt_objects);
+                    //list_of_gt_objects_base = list_of_gt_objects;
+                    gt_scene.generate_gt_scene();
+                    for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
+                        GroundTruthObjects base_object = list_of_gt_objects.at(obj_count);
+                        list_of_gt_objects_base.push_back(base_object);
+                    }
+                    gt_scene.generate_bird_view();
 
+                }
+                else {
+                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[i], list_of_gt_objects_base);
+                    //list_of_gt_objects = list_of_gt_objects_base;
+                    gt_scene.generate_gt_scene();
+
+                    for ( auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
+                        GroundTruthObjects base_object = list_of_gt_objects_base.at(obj_count);
+                        list_of_gt_objects.push_back(base_object);
+                    }
+
+                    gt_scene.generate_bird_view();
+
+                }
             }
 
             if ( environment_list[i] == "none") {
@@ -229,12 +250,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 GroundTruthFlow gt_flow(list_of_gt_objects, list_of_simulated_objects);
                 gt_flow.generate_flow_frame();
-
-
                 gt_flow.generate_collision_points();
-
-
-
 
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
 

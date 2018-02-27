@@ -35,6 +35,8 @@ protected:
 
     Canvas m_canvas;
 
+    cv::FileStorage m_write_fs;
+
 
 public:
 
@@ -48,7 +50,7 @@ public:
 
     std::vector<cv::Point2f> readTrajectoryFromFile(std::string trajectoryFileName);
 
-    void setTrajectory(std::vector<cv::Point2f> trajectory, MyTrajectory mytrajectory);
+    void writeTrajectoryInYaml();
 
     virtual void generate_gt_scene() {};
 
@@ -263,7 +265,6 @@ public:
         MyTrajectory character01_trajectory;
         myTrajectoryVector.push_back(character_trajectory);
         myTrajectoryVector.push_back(character01_trajectory);
-
 
     }
 
