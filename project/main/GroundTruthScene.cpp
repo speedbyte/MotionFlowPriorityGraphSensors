@@ -196,7 +196,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     }
 
     readTrajectoryFromFile("../trajectory.yml");
-    exit(0);
 
     prepare_directories();
 
@@ -688,8 +687,11 @@ simFrame, const
         printf("%d.pushTrajectoryPoints(cv::Point2f((float)%f, (float)%f))\n", data->base.id, data->base.pos.x, data->base.pos.y);
         std::cout << data->base.type;
 
+
         m_write_fs << "{:" << "id" << (int)data->base.id << "x" << data->base.pos.x << "y" << data->base.pos.y;
         m_write_fs << "}";
+
+        myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
 
     }
     else {

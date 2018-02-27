@@ -3,7 +3,7 @@
 
 CPP_DATASET:
    PATH: "../../../datasets/cpp_dataset/"
-   EXECUTE: 1
+   EXECUTE: 0
    GT: 1
    LK: 0
    FB: 1
@@ -31,7 +31,7 @@ VKITTI_RAW_DATASET:
 
 VIRES_DATASET:
    PATH: "../../../datasets/vires_dataset/"
-   EXECUTE: 0
+   EXECUTE: 1
    GT: 1
    LK: 0
    FB: 1
