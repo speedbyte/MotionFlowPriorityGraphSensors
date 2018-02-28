@@ -41,6 +41,11 @@ protected:
 
     bool m_regenerate_yaml_file;
 
+    std::map<std::string, ObjectTrajectory*> m_mapObjectNameToTrajectory;
+
+    ushort m_objectCount = 0;
+
+
 
 public:
 
@@ -184,8 +189,6 @@ $
 
     unsigned int mShmKey;      // key of the SHM segment
 
-    std::vector<MyTrajectory> myTrajectoryVector;
-
     // image skip factor
     static const unsigned short mImageSkipFactor;
 
@@ -279,11 +282,6 @@ public:
         mImageCount = 0;
 
         mShmKey       = RDB_SHM_ID_IMG_GENERATOR_OUT;      // key of the SHM segment
-
-        MyTrajectory character_trajectory;
-        MyTrajectory character01_trajectory;
-        myTrajectoryVector.push_back(character_trajectory);
-        myTrajectoryVector.push_back(character01_trajectory);
 
     }
 

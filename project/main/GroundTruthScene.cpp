@@ -85,10 +85,8 @@ void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
     cv::FileStorage fs(trajectoryFileName, cv::FileStorage::READ);
     std::vector<cv::Point2f> traj_points;
 
-    cv::FileNode file_node, file_node_temp;
+    cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
-    std::map<std::string, ObjectTrajectory*> mapObjectNameToTrajectory;
-    ushort objectCount = 0;
 
     for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
 
@@ -117,29 +115,23 @@ void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
                 for ( file_node_iterator = file_node_iterator_begin; file_node_iterator != file_node_iterator_end;
                         file_node_iterator++) {
 
-                    if ( mapObjectNameToTrajectory.count((*file_node_iterator)["name"].string()) == 0 ) {
-                        mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()] = m_ptr_customObjectTrajectoryList.at(objectCount);
-                        objectCount+=1;
+                    if ( m_mapObjectNameToTrajectory.count((*file_node_iterator)["name"].string()) == 0 ) {
+                        m_mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
+                        m_objectCount+=1;
                     }
                     //std::cout << "hello\n";
                     std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
-                    (mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()])->pushTrajectoryPoints(cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]));
+                    (m_mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()])->pushTrajectoryPoints(cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]));
                 }
             }
         }
     }
     fs.release();
     //return m_ptr_customObjectTrajectoryList;
-
 }
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
 
-
-    // Trajectories
-    MyTrajectory myTrajectory2;
-    MyTrajectory myTrajectory1;
-    MyTrajectory myTrajectory;
 
     /*
     cv::RNG rng(-1);
@@ -159,27 +151,19 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     achterbahn2.process(Dataset::getFrameSize());
     //achterbahn2.setDynamic();
 
-    std::vector<MyTrajectory> trajectory(2);
-    for ( auto i = 0; i < 2; i++ ) {
-        m_ptr_customObjectTrajectoryList.push_back(&trajectory.at(i));
-    }
-
+    std::vector<MyTrajectory> myTrajectoryVector(2);
 
     Rectangle rectangle1(5, 5); // width, height
     Rectangle rectangle2(20,70); // width, height
-    //Rectangle myShape(5, 5); // width, height
-    //Circle circle;
-    //Ramp ramp;
-    //NegativeRamp negativeRamp;
 
     ColorfulNoise colorfulNoise;
-    NoNoise noNoise;
-
-    //std::vector<ObjectTrajectory *> customTrajectoryLists;
 
     if ( m_environment == "none") {
 
         if ( !m_regenerate_yaml_file  ) {
+            for ( auto i = 0; i < 2; i++ ) {
+                m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
+            }
             readTrajectoryFromFile("../trajectory.yml");
         }
         else {
@@ -341,6 +325,10 @@ void GroundTruthScene::generate_bird_view() {
 }
 
 void GroundTruthSceneExternal::generate_gt_scene() {
+
+    std::vector<MyTrajectory> myTrajectoryVector(2);
+    Noise noNoise;
+    Rectangle myShape(40,40);
 
     prepare_directories();
 
@@ -589,14 +577,41 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         try {
 
-            Noise noNoise;
-            Rectangle myShape(40,40);
-            GroundTruthObjects character(myShape, myTrajectoryVector.at(0), 0, noNoise, "New Character");
-            GroundTruthObjects character_01(myShape, myTrajectoryVector.at(1), 0, noNoise, "New Character01");
 
-            m_list_objects.push_back(character);
-            m_list_objects.push_back(character_01);
+            if ( m_environment == "none") {
 
+                for ( auto i = 0; i < 2; i++ ) {
+                    m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
+                }
+                if ( !m_regenerate_yaml_file  ) {
+                    readTrajectoryFromFile("../trajectory.yml");
+                }
+                else {
+                    boost::filesystem::remove("../trajectory.yml");
+                    m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(0));
+                    m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(1));
+                }
+
+                std::vector<std::string> objectNameList = {"New Character", "New Character01"};
+                std::vector<ushort> startPoint;
+                if ( m_regenerate_yaml_file  ) { // do not read, generate
+                    startPoint = {0,0};
+                }
+                else {
+                    startPoint = {0,0};
+                }
+                for ( auto i = 0; i < m_ptr_customObjectTrajectoryList.size() ; i++) {
+
+                    GroundTruthObjects obj1(myShape, *m_ptr_customObjectTrajectoryList.at(i), startPoint.at(i), noNoise, objectNameList.at(i));
+                    m_list_objects.push_back(obj1);
+                }
+
+                //m_list_objects.push_back(obj1);
+                //m_list_objects.push_back(obj2);
+                if ( m_regenerate_yaml_file  ) {
+                    writeTrajectoryInYaml();
+                }
+            }
         }
         catch (...)
         {
@@ -713,7 +728,15 @@ simFrame, const
         m_write_fs << "{:" << "id" << (int)data->base.id << "x" << data->base.pos.x << "y" << data->base.pos.y;
         m_write_fs << "}";
 
-        myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
+        if ( m_mapObjectNameToTrajectory.count(data->base.name) == 0 ) {
+            m_mapObjectNameToTrajectory[data->base.name] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
+            m_objectCount+=1;
+        }
+        //std::cout << "hello\n";
+        //std::cout << data->base.name << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
+        m_mapObjectNameToTrajectory[data->base.name]->pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
+
+        //myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
 
     }
     else {
