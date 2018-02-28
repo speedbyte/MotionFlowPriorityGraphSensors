@@ -80,13 +80,15 @@ void GroundTruthScene::writeTrajectoryInYaml() {
             data->base.pos.y)); */
 }
 
-std::vector<cv::Point2f> GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
+void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
 
     cv::FileStorage fs(trajectoryFileName, cv::FileStorage::READ);
     std::vector<cv::Point2f> traj_points;
 
     cv::FileNode file_node, file_node_temp;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
+    std::map<std::string, ObjectTrajectory*> mapObjectNameToTrajectory;
+    ushort objectCount = 0;
 
     for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
 
@@ -94,7 +96,8 @@ std::vector<cv::Point2f> GroundTruthScene::readTrajectoryFromFile(std::string tr
         char temp_str_fs[20];
         sprintf (temp_str_fs, "frame_skip_%03d", frame_skip);
         std::cout << "read yaml file for frame_skip " << (frame_skip-1) << std::endl;
-        unsigned long FRAME_COUNT = m_list_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        //unsigned long FRAME_COUNT = m_list_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_VECTOR;
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -113,15 +116,20 @@ std::vector<cv::Point2f> GroundTruthScene::readTrajectoryFromFile(std::string tr
 
                 for ( file_node_iterator = file_node_iterator_begin; file_node_iterator != file_node_iterator_end;
                         file_node_iterator++) {
+
+                    if ( mapObjectNameToTrajectory.count((*file_node_iterator)["name"].string()) == 0 ) {
+                        mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()] = m_ptr_customObjectTrajectoryList.at(objectCount);
+                        objectCount+=1;
+                    }
                     //std::cout << "hello\n";
                     std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
-                    //traj_points.push_back(cv::Point2f((int)(*file_node_iterator)["x"], (int)(*file_node_iterator)["y"]));
+                    (mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()])->pushTrajectoryPoints(cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]));
                 }
             }
         }
     }
     fs.release();
-    return traj_points;
+    //return m_ptr_customObjectTrajectoryList;
 
 }
 
@@ -151,6 +159,11 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     achterbahn2.process(Dataset::getFrameSize());
     //achterbahn2.setDynamic();
 
+    std::vector<MyTrajectory> trajectory(2);
+    for ( auto i = 0; i < 2; i++ ) {
+        m_ptr_customObjectTrajectoryList.push_back(&trajectory.at(i));
+    }
+
 
     Rectangle rectangle1(5, 5); // width, height
     Rectangle rectangle2(20,70); // width, height
@@ -162,19 +175,38 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     ColorfulNoise colorfulNoise;
     NoNoise noNoise;
 
+    //std::vector<ObjectTrajectory *> customTrajectoryLists;
+
     if ( m_environment == "none") {
-        boost::filesystem::remove("../trajectory.yml");
 
-        std::string objectName1 = "rectangle_long";
-        GroundTruthObjects obj1(rectangle2, achterbahn1, 60, colorfulNoise, objectName1);
+        if ( !m_regenerate_yaml_file  ) {
+            readTrajectoryFromFile("../trajectory.yml");
+        }
+        else {
+            boost::filesystem::remove("../trajectory.yml");
+            m_ptr_customObjectTrajectoryList.push_back(&achterbahn1);
+            m_ptr_customObjectTrajectoryList.push_back(&achterbahn2);
+        }
 
-        std::string objectName2 = "random_object";
-        GroundTruthObjects obj2(rectangle2, achterbahn2, 120, colorfulNoise, objectName2);
+        std::vector<std::string> objectNameList = {"rectangle_long", "random_object"};
+        std::vector<ushort> startPoint;
+        if ( m_regenerate_yaml_file  ) { // read
+            startPoint = {60,120};
+        }
+        else {
+            startPoint = {0,0};
+        }
+        for ( auto i = 0; i < m_ptr_customObjectTrajectoryList.size() ; i++) {
 
-        m_list_objects.push_back(obj1);
-        m_list_objects.push_back(obj2);
+            GroundTruthObjects obj1(rectangle2, *m_ptr_customObjectTrajectoryList.at(i), startPoint.at(i), colorfulNoise, objectNameList.at(i));
+            m_list_objects.push_back(obj1);
+        }
 
-        writeTrajectoryInYaml();
+        //m_list_objects.push_back(obj1);
+        //m_list_objects.push_back(obj2);
+        if ( m_regenerate_yaml_file  ) {
+            writeTrajectoryInYaml();
+        }
 
         /*
          * First create an object with an image_data_and_shape
@@ -192,7 +224,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     }
 
-    readTrajectoryFromFile("../trajectory.yml");
 
     prepare_directories();
 

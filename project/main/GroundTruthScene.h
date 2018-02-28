@@ -37,18 +37,22 @@ protected:
 
     cv::FileStorage m_write_fs;
 
+    std::vector<ObjectTrajectory *> m_ptr_customObjectTrajectoryList;
+
+    bool m_regenerate_yaml_file;
+
 
 public:
 
-    GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects):m_scenario(scenario), m_environment(environment),
-    m_list_objects(list_objects) {
+    GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
+    m_list_objects(list_objects), m_regenerate_yaml_file(generate_yaml_file)
+    {
 
         m_datasetpath = Dataset::getDatasetPath();
         m_groundtruthpath = Dataset::getGroundTruthPath();
-
     };
 
-    std::vector<cv::Point2f> readTrajectoryFromFile(std::string trajectoryFileName);
+    void readTrajectoryFromFile(std::string trajectoryFileName);
 
     void writeTrajectoryInYaml();
 
@@ -68,8 +72,8 @@ private:
 
 public:
 
-    GroundTruthSceneInternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects) :
-    GroundTruthScene(scenario, environment, list_objects) {
+    GroundTruthSceneInternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, bool generate_yaml_file) :
+    GroundTruthScene(scenario, environment, list_objects, generate_yaml_file) {
     }
 
     void generate_gt_scene() override;
@@ -205,8 +209,8 @@ public:
 
     double getTime();
 
-    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects) :
-    GroundTruthScene(scenario, environment, list_objects) {
+    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, bool generate_yaml_file) :
+    GroundTruthScene(scenario, environment, list_objects, generate_yaml_file) {
 
 
 

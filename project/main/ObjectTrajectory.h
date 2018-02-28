@@ -34,6 +34,8 @@ public:
 
     virtual void process(cv::Size frame_size) {};
 
+    virtual void pushTrajectoryPoints(cv::Point2f points) {}
+
     std::vector<cv::Point2f> getTrajectory() const {
         return m_trajectory;
     }
@@ -139,7 +141,7 @@ public:
 
     void process(cv::Size frame_size) override;
 
-    void pushTrajectoryPoints(cv::Point2f points) {
+    void pushTrajectoryPoints(cv::Point2f points) override {
         m_trajectory.push_back(points);
     }
 

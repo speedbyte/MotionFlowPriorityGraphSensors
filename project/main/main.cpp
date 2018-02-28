@@ -209,7 +209,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
                 std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
                 Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
-                GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects);
+                GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects, vires_dataset.gt);
                 gt_scene.generate_gt_scene();
 
                 if ( env_index == environment_list.size() ) {
@@ -225,7 +225,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
                 if ( environment_list[env_index] == "none") {
 
-                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects);
+                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects, cpp_dataset.gt);
                     gt_scene.generate_gt_scene();
                     for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
                         list_of_gt_objects_base.push_back(list_of_gt_objects.at(obj_count)) ;
@@ -238,7 +238,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 }
                 else {
-                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base);
+                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, cpp_dataset.gt);
                     gt_scene.generate_gt_scene();
 
                     for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
@@ -257,7 +257,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
                 if ( environment_list[env_index] == "none") {
 
-                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects);
+                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects, cpp_dataset.gt);
                     gt_scene.generate_gt_scene();
                     for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
                         list_of_gt_objects_base.push_back(list_of_gt_objects.at(obj_count)) ;
@@ -270,7 +270,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 }
                 else {
-                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base);
+                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, cpp_dataset.gt);
                     gt_scene.generate_gt_scene();
 
                     for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
