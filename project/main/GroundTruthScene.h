@@ -223,8 +223,8 @@ public:
         }
 
         std::string::size_type position2 = stop.find(to_replace);
-        if ( position != std::string::npos ) {
-            stop.replace(position, to_replace.length(), std::string(m_scenario));
+        if ( position2 != std::string::npos ) {
+            stop.replace(position2, to_replace.length(), std::string(m_scenario));
         }
 
         if ( environment == "none") {

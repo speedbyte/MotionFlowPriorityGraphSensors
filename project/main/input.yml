@@ -6,8 +6,8 @@ CPP_DATASET:
    EXECUTE: 1
    GT: 0
    LK: 0
-   FB: 1
-   PLOT: 1
+   FB: 0
+   PLOT: 0
 
 MATLAB_DATASET:
    PATH: "../../../datasets/matlab_dataset/"
@@ -29,19 +29,19 @@ VKITTI_RAW_DATASET:
    PATH: "../../../datasets/vkitti_raw_dataset/"
    EXECUTE: 0
 
-VIRES_DATASET:
-   PATH: "../../../datasets/vires_dataset/"
-   EXECUTE: 0
-   GT: 1
-   LK: 0
-   FB: 1
-   PLOT: 1
-
 RADAR_DATASET:
    PATH: "../../../datasets/radar_dataset/"
    EXECUTE: 0
    GT: 1
    LK: 0
    FB: 1
+   PLOT: 1
+
+VIRES_DATASET:
+   PATH: "../../../datasets/vires_dataset/"
+   EXECUTE: 0
+   GT: 1
+   LK: 0
+   FB: 0
    PLOT: 1
 

@@ -330,6 +330,18 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     Noise noNoise;
     Rectangle myShape(40,40);
 
+    if ( m_environment == "none") {
+
+        if (!m_regenerate_yaml_file) {
+            readTrajectoryFromFile("../trajectory.yml");
+        } else {
+            boost::filesystem::remove("../trajectory.yml");
+            for (auto i = 0; i < 2; i++) {
+                m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
+            }
+        }
+    }
+
     prepare_directories();
 
     char command[1024];
@@ -456,9 +468,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
 
-        m_write_fs.open("../trajectory.yml", cv::FileStorage::WRITE);
-        m_write_fs << "TRAJECTORY" << "[";
-
         // open the shared memory for IG image output (try to attach without creating a new segment)
         fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", mShmKey);
 
@@ -563,34 +572,15 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             }
         }
         catch (...) {
-            m_write_fs.release();
-            sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
-            std::cout << command << std::endl;
-            system(command);
-            std::cout << "End of generation" << std::endl;
+            stopVires();
             return;
         };
 
-        m_write_fs << "]";
-        m_write_fs.release();
-
+        stopVires();
 
         try {
 
-
             if ( m_environment == "none") {
-
-                for ( auto i = 0; i < 2; i++ ) {
-                    m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
-                }
-                if ( !m_regenerate_yaml_file  ) {
-                    readTrajectoryFromFile("../trajectory.yml");
-                }
-                else {
-                    boost::filesystem::remove("../trajectory.yml");
-                    m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(0));
-                    m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(1));
-                }
 
                 std::vector<std::string> objectNameList = {"New Character", "New Character01"};
                 std::vector<ushort> startPoint;
@@ -615,11 +605,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
         catch (...)
         {
-            sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
-            std::cout << command << std::endl;
-            system(command);
-            std::cout << "End of generation" << std::endl;
-
+            stopVires();
+            return;
         }
     }
 }
@@ -715,32 +702,34 @@ simFrame, const
     ViresObjects viresObjects = ViresObjects();
     viresObjects.objectProperties = *object;
 
-    if ( ( mSimFrame % IMAGE_SKIP_FACTOR_DYNAMIC== 0 ) && mSimFrame > 1 && data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN) {
+    if ( m_environment == "none") {
 
-        fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
+        if ((mSimFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && mSimFrame > 1 &&
+                data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN) {
+
+            fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                     data->base.name, simFrame, data->base.pos.x, object->base.pos.y, data->base.geo.dimX, data->base
                             .geo.dimY);
 
-        printf("%d.pushTrajectoryPoints(cv::Point2f((float)%f, (float)%f))\n", data->base.id, data->base.pos.x, data->base.pos.y);
-        std::cout << data->base.type;
+            printf("%d.pushTrajectoryPoints(cv::Point2f((float)%f, (float)%f))\n", data->base.id, data->base.pos.x,
+                    data->base.pos.y);
+            std::cout << data->base.type;
 
 
-        m_write_fs << "{:" << "id" << (int)data->base.id << "x" << data->base.pos.x << "y" << data->base.pos.y;
-        m_write_fs << "}";
+            if (m_mapObjectNameToTrajectory.count(data->base.name) == 0) {
+                m_mapObjectNameToTrajectory[data->base.name] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
+                m_objectCount += 1;
+            }
+            //std::cout << "hello\n";
+            //std::cout << data->base.name << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
+            m_mapObjectNameToTrajectory[data->base.name]->pushTrajectoryPoints(
+                    cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y));
 
-        if ( m_mapObjectNameToTrajectory.count(data->base.name) == 0 ) {
-            m_mapObjectNameToTrajectory[data->base.name] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
-            m_objectCount+=1;
+            //myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
+
+        } else {
+            //std::cout << data->base.type << std::endl;
         }
-        //std::cout << "hello\n";
-        //std::cout << data->base.name << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
-        m_mapObjectNameToTrajectory[data->base.name]->pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
-
-        //myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
-
-    }
-    else {
-        //std::cout << data->base.type << std::endl;
     }
 }
 
