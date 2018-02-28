@@ -97,6 +97,10 @@ private:
 
     std::string apply = "<SimCtrl><Apply/></SimCtrl>";
 
+    std::string stop = "<SimCtrl> <Stop/> <LoadScenario filename=\"traffic_demo.xml\" /> <Init mode=\"operation\"/> </SimCtrl>";
+
+    std::string start = "<SimCtrl> <Start/> </SimCtrl>";
+
     std::string project_name = "<SimCtrl><Project name=\"Movement\"path=\"/local/git/MotionFlowPriorityGrapSensors/VIRES/VTD.2.0/Data/Projects/Current\" /></SimCtrl>";
 
     std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/traffic_demo.xml\" /><Start mode=\"operation\" /></SimCtrl>";
@@ -187,6 +191,13 @@ $
 
 public:
 
+    void stopVires() {
+        char command[1024];
+        sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
+        std::cout << command << std::endl;
+        system(command);
+        std::cout << "End of generation" << std::endl;
+    }
 
     void analyzeImage( RDB_IMAGE_t* img, const unsigned int & simFrame, unsigned int index );
 
@@ -204,6 +215,10 @@ public:
             scenario_name.replace(position, to_replace.length(), std::string(m_scenario));
         }
 
+        std::string::size_type position2 = stop.find(to_replace);
+        if ( position != std::string::npos ) {
+            stop.replace(position, to_replace.length(), std::string(m_scenario));
+        }
 
         if ( environment == "none") {
             m_environment_scp_message = environment_parameters_dry;

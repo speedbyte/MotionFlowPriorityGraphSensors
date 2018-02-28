@@ -16,8 +16,8 @@ void someFunction(std::vector<std::unique_ptr<Base> > & vec) {
     //pairWisevectorUnique.push_back(std::make_pair( (*it).get(), (*it_next).get() ));
     //pairWisevectorUnique.push_back(std::make_pair( (*it).get(), (*it_next).get() ));
 
-    pairWise.push_back(std::make_pair(std::make_unique<Base>(*(*it).get()), std::make_unique<Base>(*(*it_next).get())));
-    pairWise.push_back(std::make_pair(std::make_unique<Base>(*(*it).get()), std::make_unique<Base>(*(*it_next).get())));
+    //pairWise.push_back(std::make_pair(std::make_unique<Base>(*(*it).get()), std::make_unique<Base>(*(*it_next).get())));
+    //pairWise.push_back(std::make_pair(std::make_unique<Base>(*(*it).get()), std::make_unique<Base>(*(*it_next).get())));
     //pairWise.emplace_back(std::make_unique<Base>(*(*it).get()), std::make_unique<Base>(*(*it_next).get()));
 
     std::cout << pairWise.at(0).first.get()->getA() << std::endl;
@@ -69,7 +69,6 @@ int main(int argc, char *argv[]) {
     Derived2 c;
 
     Base &d = b;
-    d.
 
     a.printA();
     std::cout << std::endl;
@@ -84,6 +83,10 @@ int main(int argc, char *argv[]) {
     derivedObjects.at(0).setA(150);
     derivedObjects.at(1).setA(300);
     std::vector<Base*> vecPtr = {&derivedObjects.at(0), &derivedObjects.at(1)};
+
+    std::vector<Derived> derivedObjectsBase;
+    derivedObjectsBase.push_back(derivedObjects.at(0));
+    //derivedObjectsBase = derivedObjects;
 
 
     /*

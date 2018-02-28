@@ -29,7 +29,7 @@ private:
 
 public:
 
-    GroundTruthFlow( std::vector<GroundTruthObjects> &list_gt_objects, std::vector<SimulatedObjects> &list_simulated_objects ) :
+    GroundTruthFlow( std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects ) :
             OpticalFlow(list_gt_objects, list_simulated_objects) {
 
     }

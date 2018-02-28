@@ -214,12 +214,13 @@ def yaml_try():
     print data
 
 
-def yaml_():
+def motionflow_graphs():
 
 
-    dataset = "vires"
-    #file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/two/values.yml"
-    file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
+    dataset = "cpp"
+    scenario = "two"
+    file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
+    #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
     yaml_file = open(file, "r")
 
@@ -275,19 +276,21 @@ def yaml_():
     list_of_collision_metrics = [
         "collision_pointsframe_skip1_generated",
         "collision_pointsframe_skip1results_FB_none_",
-        "collision_pointsframe_skip1results_FB_snow_",
-        "collision_pointsframe_skip1results_FB_rain_"
+        #"collision_pointsframe_skip1results_FB_snow_",
+        #"collision_pointsframe_skip1results_FB_rain_"
+        "collision_pointsframe_skip1results_FB_night_"
     ]
 
     list_of_shape_metrics = [
-        #"shape_pointsframe_skip1_generated",
+        "shape_pointsframe_skip1_generated",
         "shape_pointsframe_skip1results_FB_none_",
-        "shape_pointsframe_skip1results_FB_snow_",
-        "shape_pointsframe_skip1results_FB_rain_"
+        #"shape_pointsframe_skip1results_FB_snow_",
+        #"shape_pointsframe_skip1results_FB_rain_"
+        "shape_pointsframe_skip1results_FB_night_"
     ]
 
-    color_of_collision_metrics = ["red", "green", "blue", "magenta"]
-    color_of_shape_metrics = ["green", "blue", "magenta"]
+    color_of_collision_metrics = ["red", "green", "blue"]
+    color_of_shape_metrics = ["red", "green", "blue"]
 
     assert(len(list_of_collision_metrics) == len(color_of_collision_metrics))
     assert(len(list_of_shape_metrics) == len(color_of_shape_metrics))
@@ -332,8 +335,8 @@ def yaml_():
         list_of_collision_plots[no_of_metrics].scatter(x1_gt,y1_gt, lw=2,color=color_of_collision_metrics[0], label=list_of_collision_metrics[0])
         list_of_collision_plots[no_of_metrics].scatter(x1,y1, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         legend = list_of_collision_plots[no_of_metrics].legend(loc='lower right', shadow=True, fontsize='large')
-        list_of_collision_plots[no_of_metrics].set_xlim([-300,900])
-        list_of_collision_plots[no_of_metrics].set_ylim([255,295])
+        #list_of_collision_plots[no_of_metrics].set_xlim([-300,900])
+        #list_of_collision_plots[no_of_metrics].set_ylim([255,295])
 
         for count in range(len(coordinates)):
             list_of_collision_plots[no_of_metrics].plot([coordinates[count][0], coordinates_gt[count][0]], [coordinates[count][1], coordinates_gt[count][1]])
@@ -473,6 +476,6 @@ if __name__ == '__main__':
     #criticalpoint()
     #lemniscate()
     #simple()
-    #yaml_()
+    motionflow_graphs()
     #check()
-    vkitti()
+    #vkitti()

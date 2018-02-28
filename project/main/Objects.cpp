@@ -2,6 +2,7 @@
 // Created by veikas on 08.02.18.
 //
 
+#include <iostream>
 #include "Objects.h"
 #include "Dataset.h"
 
@@ -14,6 +15,9 @@ void Objects::generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool> multiframe_visibility;
+
+        std::cout << "generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean for frame_skip " << frame_skip << std::endl;
+
         unsigned long FRAME_COUNT = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
                 .size();
 

@@ -53,6 +53,7 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
             m_obj_base_visibility.push_back(true);
         }
         else {
+
             printf("%s, %u, %u , %f, %f, %f, %f\n", (m_obj_trajectory.getVisibility().at(current_index)?"true":"false"),
                    frame_count,
                    current_index, m_obj_trajectory.getTrajectory().at(current_index).x, m_obj_trajectory.getTrajectory().at(current_index).y,
@@ -60,6 +61,7 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
             m_obj_base_visibility.push_back(true); // Dangerous because this means the objects in first frame will
             // always be visible, even if they are not.
             m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(m_obj_trajectory.getTrajectory().at(current_index) , cv::Point2f(0,0)));
+
         }
         current_index++;
     }
@@ -145,5 +147,20 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
         }
         m_obj_extrapolated_shape_pixel_point_pixel_displacement.push_back(outer_base_movement);
         m_obj_extrapolated_shape_visibility.push_back(outer_base_visiblity);
+        generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(outer_base_movement);
+    }
+}
+
+void GroundTruthObjects::generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement  ) {
+
+    // object image_data_and_shape
+    m_obj_extrapolated_stencil_pixel_point_pixel_displacement = m_obj_extrapolated_shape_pixel_point_pixel_displacement;
+
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+
+        std::cout << "generate_obj_extrapolated_stencil_pixel_point_pixel_displacement for frame_skip " << frame_skip << std::endl;
+        unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
+        assert(FRAME_COUNT>0);
+        m_obj_extrapolated_stencil_pixel_point_pixel_displacement.push_back(outer_stencil_movement);
     }
 }

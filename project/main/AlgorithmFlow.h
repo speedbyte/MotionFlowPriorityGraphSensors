@@ -27,7 +27,7 @@ private:
 
 public:
 
-    AlgorithmFlow( std::string environment, std::vector<GroundTruthObjects> &list_gt_objects, std::vector<SimulatedObjects> &list_simulated_objects ) :
+    AlgorithmFlow( std::string environment, std::vector<Objects*> &list_gt_objects, std::vector<Objects*> &list_simulated_objects ) :
     OpticalFlow(list_gt_objects, list_simulated_objects) {
 
         mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + environment + "/";

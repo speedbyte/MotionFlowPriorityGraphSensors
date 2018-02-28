@@ -78,7 +78,7 @@ void GroundTruthFlow::generate_flow_frame() {
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
         std::cout << "saving ground truth flow files for frame_skip " << frame_skip << std::endl;
 
-        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0).get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1).size();
+        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1).size();
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -105,15 +105,15 @@ void GroundTruthFlow::generate_flow_frame() {
             for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
 
                 // object image_data_and_shape
-                int width = m_list_gt_objects.at(i).getWidth();
-                int height = m_list_gt_objects.at(i).getHeight();
+                int width = m_list_gt_objects.at(i)->getWidth();
+                int height = m_list_gt_objects.at(i)->getHeight();
 
-                if ( m_list_gt_objects.at(i).get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
+                if ( m_list_gt_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
 
                     // gt_displacement
-                    cv::Point2f next_pts = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
+                    cv::Point2f next_pts = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
                             .at(frame_count).first;
-                    cv::Point2f displacement = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip
+                    cv::Point2f displacement = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip
                                                                                                                       - 1).at(frame_count).second;
 
                     cv::Mat roi;
@@ -122,7 +122,7 @@ void GroundTruthFlow::generate_flow_frame() {
                             rowRange(cvRound(next_pts.y), cvRound(next_pts.y + height));
                     //bulk storage
                     roi = cv::Scalar(displacement.x, displacement.y,
-                                     static_cast<float>(m_list_gt_objects.at(i).getObjectId()));
+                                     static_cast<float>(m_list_gt_objects.at(i)->getObjectId()));
 
                 }
             }
@@ -155,6 +155,8 @@ void GroundTruthFlow::generate_flow_frame() {
     auto toc_all = steady_clock::now();
     time_map["generate_all_flow_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
     std::cout << "ground truth flow generation time - " << time_map["generate_all_flow_image"] << "ms" << std::endl;
+
+
 
 }
 

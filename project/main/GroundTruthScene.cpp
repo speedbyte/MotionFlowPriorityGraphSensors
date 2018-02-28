@@ -17,8 +17,8 @@
 #include "ViresObjects.h"
 using namespace std::chrono;
 
-void GroundTruthScene::prepare_directories() {
 
+void GroundTruthScene::prepare_directories() {
 
     m_groundtruthpath = Dataset::getGroundTruthPath(); // data/stereo_flow
 
@@ -44,7 +44,6 @@ void GroundTruthScene::prepare_directories() {
             boost::filesystem::create_directories(path);
 
         }
-
     }
 }
 
@@ -79,7 +78,6 @@ void GroundTruthScene::writeTrajectoryInYaml() {
 
     /*trajectory_list.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)
             data->base.pos.y)); */
-
 }
 
 std::vector<cv::Point2f> GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
@@ -163,7 +161,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     ColorfulNoise colorfulNoise;
     NoNoise noNoise;
-
 
     if ( m_environment == "none") {
         boost::filesystem::remove("../trajectory.yml");
@@ -328,11 +325,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     "car.xml", "moving_car_near.xml", "moving_car.xml", "moving_truck.xml", "moving.xml", "one.xml",
             "truck.xml", "two.xml"};
 
-    sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(), project.c_str());
-    std::cout << command << std::endl;
-    system(command);
-
-    std::cout << " I am out of bash" << std::endl;
+    if ( m_environment == "none") {
+        sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(), project.c_str());
+        std::cout << command << std::endl;
+        system(command);
+        std::cout << " I am out of bash" << std::endl;
+    }
 
     sleep(5); // Give some time before you send SCP commands.
 
@@ -577,14 +575,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             std::cout << "End of generation" << std::endl;
 
         }
-
     }
-
-    sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
-    std::cout << command << std::endl;
-    system(command);
-    std::cout << "End of generation" << std::endl;
-
 }
 
 

@@ -49,8 +49,8 @@ void OpticalFlow::generate_shape_points() {
     // Additionally stores the frames in a png file
     // Additionally stores the trajectory in a png file
 
-    std::vector<std::pair<GroundTruthObjects, GroundTruthObjects > > list_of_gt_objects_combination;
-    std::vector<std::pair<SimulatedObjects, SimulatedObjects > > list_of_simulated_objects_combination;
+    std::vector<std::pair<Objects*, Objects*> > list_of_gt_objects_combination;
+    std::vector<std::pair<Objects*, Objects*> > list_of_simulated_objects_combination;
 
     getCombination(list_of_gt_objects_combination, list_of_simulated_objects_combination);
 
@@ -66,9 +66,9 @@ void OpticalFlow::generate_shape_points() {
     cv::FileStorage fs;
 
     for ( ushort i = 0; i < list_of_simulated_objects_combination.size(); i ++ ) {
-        std::cout << "shape between object id " << list_of_simulated_objects_combination.at(i).first.getObjectId() <<
+        std::cout << "shape between object id " << list_of_simulated_objects_combination.at(i).first->getObjectId() <<
                 " and object id "
-                << list_of_simulated_objects_combination.at(i).second.getObjectId()<< "\n";
+                << list_of_simulated_objects_combination.at(i).second->getObjectId()<< "\n";
     }
 
 
@@ -81,7 +81,7 @@ void OpticalFlow::generate_shape_points() {
         std::vector<std::vector<cv::Point2f> >  m_frame_shape_points;
 
         unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
-                .get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip - 1).size();
+                ->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip - 1).size();
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
@@ -93,24 +93,24 @@ void OpticalFlow::generate_shape_points() {
             std::vector<cv::Point2f> shape_points;
             std::vector<cv::Point2f> shape_points_average;
 
-            int width = m_list_gt_objects.at(0).getWidth();
-            int height = m_list_gt_objects.at(0).getHeight();
+            int width = m_list_gt_objects.at(0)->getWidth();
+            int height = m_list_gt_objects.at(0)->getHeight();
 
 
             for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
-                if ( ( m_list_simulated_objects.at(i).get_obj_extrapolated_visibility().at(frame_skip - 1)
+                if ( ( m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1)
                                .at(frame_count) == true ) ) {
 
-                    auto CLUSTER_COUNT_GT = m_list_gt_objects.at(i).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
+                    auto CLUSTER_COUNT_GT = m_list_gt_objects.at(i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
                             (frame_skip - 1).at(frame_count).size();
 
-                    auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                    auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                             (frame_skip - 1).at(frame_count).size();
 
-                    float rowBegin = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
+                    float rowBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.y;
-                    float columnBegin = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
+                    float columnBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
 
 
@@ -118,26 +118,31 @@ void OpticalFlow::generate_shape_points() {
 
                     ushort vollTreffer = 0;
 
-                    for ( auto j = 0; j < CLUSTER_COUNT_ALGO; j++ ) {
-                        auto x_coordinates =  m_list_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                (frame_skip - 1).at(frame_count).at(j).first.x;
-                        auto y_coordinates = m_list_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                (frame_skip - 1).at(frame_count).at(j).first.y;
+                    if ( m_resultordner != "/generated" ) {
+                        for ( auto j = 0; j < CLUSTER_COUNT_ALGO; j++ ) {
+                            auto x_coordinates =  m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                                    (frame_skip - 1).at(frame_count).at(j).first.x;
+                            auto y_coordinates = m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                                    (frame_skip - 1).at(frame_count).at(j).first.y;
 
 
-                        if  (( x_coordinates > (columnBegin - STRETCH_WIDTH_EVAL) ) &&
-                                ( x_coordinates < (columnBegin + width + STRETCH_WIDTH_EVAL )) &&
+                                if  (( x_coordinates > (columnBegin - STRETCH_WIDTH_EVAL) ) &&
+                                        ( x_coordinates < (columnBegin + width + STRETCH_WIDTH_EVAL )) &&
                                         (  y_coordinates > (rowBegin - STRETCH_HEIGHT_EVAL ) )  &&
                                         ( y_coordinates < ( rowBegin + height + STRETCH_HEIGHT_EVAL ))
-                                ) {
-                            vollTreffer++;
+                                        ) {
+                                    vollTreffer++;
+                                }
+                            }
                         }
+                    else {
+                        vollTreffer = CLUSTER_COUNT_ALGO;
                     }
 
                     float keinTreffer = (CLUSTER_COUNT_ALGO - vollTreffer);
                     shape_points.push_back(cv::Point2f(vollTreffer, keinTreffer));
 
-                    std::cout << "object vollTreffer" << m_list_simulated_objects.at(i).getObjectId() << " = " << vollTreffer << std::endl ;
+                    std::cout << "object vollTreffer" << m_list_simulated_objects.at(i)->getObjectId() << " = " << vollTreffer << std::endl ;
 
                 }
             }
@@ -164,11 +169,12 @@ void OpticalFlow::generate_shape_points() {
     std::cout << m_resultordner + " flow generation time - " << time_map["generate_flow"] << "ms" << std::endl;
 }
 
-void OpticalFlow::getCombination( std::vector<std::pair<GroundTruthObjects, GroundTruthObjects > > &list_of_gt_objects_combination,
-std::vector<std::pair<SimulatedObjects, SimulatedObjects > > &list_of_simulated_objects_combination
+
+void OpticalFlow::getCombination( std::vector<std::pair<Objects*, Objects* > > &list_of_gt_objects_combination,
+std::vector<std::pair<Objects*, Objects*> > &list_of_simulated_objects_combination
 ) {
-    std::vector<GroundTruthObjects>::const_iterator objectIterator = m_list_gt_objects.begin();
-    std::vector<GroundTruthObjects>::const_iterator  objectIteratorNext;
+    std::vector<Objects*>::const_iterator objectIterator = m_list_gt_objects.begin();
+    std::vector<Objects*>::const_iterator  objectIteratorNext;
 
     for ( ; objectIterator < m_list_gt_objects.end() ; objectIterator++ ) {
         for ( objectIteratorNext = objectIterator+1; objectIteratorNext < m_list_gt_objects.end();
@@ -180,8 +186,8 @@ std::vector<std::pair<SimulatedObjects, SimulatedObjects > > &list_of_simulated_
     }
 
 
-    std::vector<SimulatedObjects>::const_iterator objectIteratorSim = m_list_simulated_objects.begin();
-    std::vector<SimulatedObjects>::const_iterator  objectIteratorNextSim;
+    std::vector<Objects*>::const_iterator objectIteratorSim = m_list_simulated_objects.begin();
+    std::vector<Objects*>::const_iterator  objectIteratorNextSim;
 
     for ( ; objectIteratorSim < m_list_simulated_objects.end() ; objectIteratorSim++ ) {
         for ( objectIteratorNextSim = objectIteratorSim+1; objectIteratorNextSim < m_list_simulated_objects.end();
@@ -200,8 +206,8 @@ void OpticalFlow::generate_collision_points() {
     // Additionally stores the frames in a png file
     // Additionally stores the trajectory in a png file
 
-    std::vector<std::pair<GroundTruthObjects, GroundTruthObjects > > list_of_gt_objects_combination;
-    std::vector<std::pair<SimulatedObjects, SimulatedObjects > > list_of_simulated_objects_combination;
+    std::vector<std::pair<Objects*, Objects*> > list_of_gt_objects_combination;
+    std::vector<std::pair<Objects*, Objects*> > list_of_simulated_objects_combination;
 
     getCombination(list_of_gt_objects_combination, list_of_simulated_objects_combination);
 
@@ -219,9 +225,9 @@ void OpticalFlow::generate_collision_points() {
 
 
     for ( ushort i = 0; i < list_of_gt_objects_combination.size(); i ++ ) {
-        std::cout << "collision between object id " << list_of_gt_objects_combination.at(i).first.getObjectId() <<
+        std::cout << "collision between object id " << list_of_gt_objects_combination.at(i).first->getObjectId() <<
                   " and object id "
-                  << list_of_gt_objects_combination.at(i).second.getObjectId()<< "\n";
+                  << list_of_gt_objects_combination.at(i).second->getObjectId()<< "\n";
     }
 
 
@@ -234,7 +240,7 @@ void OpticalFlow::generate_collision_points() {
         std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
         unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)
-                .get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
+                ->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
                         (frame_skip - 1).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
         assert(FRAME_COUNT>0);
 
@@ -258,20 +264,20 @@ void OpticalFlow::generate_collision_points() {
             for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
 
                 // object image_data_and_shape
-                int width = m_list_gt_objects.at(i).getWidth();
-                int height = m_list_gt_objects.at(i).getHeight();
+                int width = m_list_gt_objects.at(i)->getWidth();
+                int height = m_list_gt_objects.at(i)->getHeight();
 
-                if ( m_list_gt_objects.at(i).get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count)
+                if ( m_list_gt_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count)
                      == true ) {
 
-                    cv::Point2f centroid = m_list_gt_objects.at(i).
+                    cv::Point2f centroid = m_list_gt_objects.at(i)->
                                     get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
                             .at(frame_count).first;
-                    cv::Point2f mean_displacement = m_list_gt_objects.at(i).
+                    cv::Point2f mean_displacement = m_list_gt_objects.at(i)->
                                     get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip- 1)
                             .at(frame_count).second;
 
-                    cv::Point2f gt_line_pts = m_list_gt_objects.at(i).get_line_parameters().at(frame_skip - 1)
+                    cv::Point2f gt_line_pts = m_list_gt_objects.at(i)->get_line_parameters().at(frame_skip - 1)
                             .at(frame_count-1).second;  //line parameters run one less than the others.
 
                     cv::Mat roi;
@@ -280,7 +286,7 @@ void OpticalFlow::generate_collision_points() {
                             rowRange(cvRound(centroid.y), cvRound(centroid.y + height));
                     //bulk storage
                     roi = cv::Scalar(mean_displacement.x, mean_displacement.y,
-                                     static_cast<float>(m_list_gt_objects.at(i).getObjectId()));
+                                     static_cast<float>(m_list_gt_objects.at(i)->getObjectId()));
 
                     // cv line is intelligent and it can also project to values not within the frame size including negative values.
                     //cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
@@ -291,9 +297,9 @@ void OpticalFlow::generate_collision_points() {
 
             for ( unsigned i = 0; i < list_of_gt_objects_combination.size(); i++) {
 
-                if ( ( list_of_gt_objects_combination.at(i).first.get_obj_extrapolated_visibility().at(frame_skip
+                if ( ( list_of_gt_objects_combination.at(i).first->get_obj_extrapolated_visibility().at(frame_skip
                                                                                                     - 1)
-                               .at(frame_count) == true ) && ( list_of_gt_objects_combination.at(i).second.
+                               .at(frame_count) == true ) && ( list_of_gt_objects_combination.at(i).second->
                                 get_obj_extrapolated_visibility()
                                                                        .at(frame_skip - 1)
                                                                        .at(frame_count) == true )) {
@@ -301,17 +307,17 @@ void OpticalFlow::generate_collision_points() {
                     // First Freeze lineparamter1 and look for collision points
                     // Then freeze lineparameter2 and find collision point.
                     // Then push_back the two points in the vector
-                    cv::Point2f lineparameters1 = list_of_gt_objects_combination.at(i).first.get_line_parameters().at
+                    cv::Point2f lineparameters1 = list_of_gt_objects_combination.at(i).first->get_line_parameters().at
                                     (frame_skip - 1)
                             .at(frame_count-1).first;
 
-                    cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(i).second.get_line_parameters
+                    cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(i).second->get_line_parameters
                                     ().at(frame_skip - 1)
                             .at(frame_count-1).first;
 
-                    std::cout << "object " << list_of_gt_objects_combination.at(i).first.getObjectId() << " = " <<
+                    std::cout << "object " << list_of_gt_objects_combination.at(i).first->getObjectId() << " = " <<
                               lineparameters1 << " and object " << list_of_gt_objects_combination.at(i)
-                                      .second.getObjectId() << " = " <<lineparameters2 << std::endl ;
+                                      .second->getObjectId() << " = " <<lineparameters2 << std::endl ;
 
                     find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
 
@@ -377,8 +383,8 @@ void OpticalFlow::find_collision_points_given_two_line_parameters(const cv::Poin
 void OpticalFlow::generate_collision_points_mean() {
 
 
-    std::vector<std::pair<GroundTruthObjects, GroundTruthObjects > > list_of_gt_objects_combination;
-    std::vector<std::pair<SimulatedObjects, SimulatedObjects > > list_of_simulated_objects_combination;
+    std::vector<std::pair<Objects*, Objects*> > list_of_gt_objects_combination;
+    std::vector<std::pair<Objects*, Objects* > > list_of_simulated_objects_combination;
 
     getCombination(list_of_gt_objects_combination, list_of_simulated_objects_combination);
 
@@ -399,9 +405,9 @@ void OpticalFlow::generate_collision_points_mean() {
 
 
     for ( ushort i = 0; i < list_of_simulated_objects_combination.size(); i ++ ) {
-        std::cout << "collision between object id " << list_of_simulated_objects_combination.at(i).first.getObjectId() <<
+        std::cout << "collision between object id " << list_of_simulated_objects_combination.at(i).first->getObjectId() <<
                 " and object id "
-                << list_of_simulated_objects_combination.at(i).second.getObjectId()<< "\n";
+                << list_of_simulated_objects_combination.at(i).second->getObjectId()<< "\n";
     }
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
@@ -413,7 +419,7 @@ void OpticalFlow::generate_collision_points_mean() {
         std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
         unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
-                .get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
+                ->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
                 (frame_skip - 1).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
         assert(FRAME_COUNT>0);
 
@@ -437,20 +443,20 @@ void OpticalFlow::generate_collision_points_mean() {
             for (unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
                 // object image_data_and_shape
-                int width = m_list_simulated_objects.at(i).getWidth();
-                int height = m_list_simulated_objects.at(i).getHeight();
+                int width = m_list_simulated_objects.at(i)->getWidth();
+                int height = m_list_simulated_objects.at(i)->getHeight();
 
-                if ( m_list_simulated_objects.at(i).get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count)
+                if ( m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count)
                         == true ) {
 
-                    cv::Point2f centroid = m_list_simulated_objects.at(i).
+                    cv::Point2f centroid = m_list_simulated_objects.at(i)->
                             get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
                             .at(frame_count).first;
-                    cv::Point2f mean_displacement = m_list_simulated_objects.at(i).
+                    cv::Point2f mean_displacement = m_list_simulated_objects.at(i)->
                             get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip- 1)
                             .at(frame_count).second;
 
-                    cv::Point2f gt_line_pts = m_list_simulated_objects.at(i).get_line_parameters().at(frame_skip - 1)
+                    cv::Point2f gt_line_pts = m_list_simulated_objects.at(i)->get_line_parameters().at(frame_skip - 1)
                             .at(frame_count-1).second;  //line parameters run one less than the others.
 
                     cv::Mat roi;
@@ -459,7 +465,7 @@ void OpticalFlow::generate_collision_points_mean() {
                             rowRange(cvRound(centroid.y), cvRound(centroid.y + height));
                     //bulk storage
                     roi = cv::Scalar(mean_displacement.x, mean_displacement.y,
-                            static_cast<float>(m_list_simulated_objects.at(i).getObjectId()));
+                            static_cast<float>(m_list_simulated_objects.at(i)->getObjectId()));
 
                     // cv line is intelligent and it can also project to values not within the frame size including negative values.
                     // cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
@@ -470,9 +476,9 @@ void OpticalFlow::generate_collision_points_mean() {
             std::vector<cv::Point2f> collision_points_average;
             for ( unsigned i = 0; i < list_of_simulated_objects_combination.size(); i++) {
 
-                if ( ( list_of_simulated_objects_combination.at(i).first.get_obj_extrapolated_visibility().at(frame_skip
+                if ( ( list_of_simulated_objects_combination.at(i).first->get_obj_extrapolated_visibility().at(frame_skip
                         - 1)
-                        .at(frame_count) == true ) && ( list_of_simulated_objects_combination.at(i).second.
+                        .at(frame_count) == true ) && ( list_of_simulated_objects_combination.at(i).second->
                         get_obj_extrapolated_visibility()
                         .at(frame_skip - 1)
                         .at(frame_count) == true )) {
@@ -483,31 +489,31 @@ void OpticalFlow::generate_collision_points_mean() {
 
                     for ( auto j = 0; j < 1; j++ ) {
 
-                        cv::Point2f lineparameters1 = list_of_simulated_objects_combination.at(i).first.get_line_parameters().at
+                        cv::Point2f lineparameters1 = list_of_simulated_objects_combination.at(i).first->get_line_parameters().at
                                 (frame_skip - 1)
                                 .at(frame_count-1).first;
 
-                        cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(i).second.get_line_parameters
+                        cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(i).second->get_line_parameters
                                 ().at(frame_skip - 1)
                                 .at(frame_count-1).first;
 
-                        std::cout << "object " << list_of_simulated_objects_combination.at(i).first.getObjectId() << " = " <<
+                        std::cout << "object " << list_of_simulated_objects_combination.at(i).first->getObjectId() << " = " <<
                                 lineparameters1 << " and object " << list_of_gt_objects_combination.at(i)
-                                .second.getObjectId() << " = " <<lineparameters2 << std::endl ;
+                                .second->getObjectId() << " = " <<lineparameters2 << std::endl ;
 
                         OpticalFlow::find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
 
-                        lineparameters1 = list_of_simulated_objects_combination.at(i).second.get_line_parameters().at
+                        lineparameters1 = list_of_simulated_objects_combination.at(i).second->get_line_parameters().at
                                 (frame_skip - 1)
                                 .at(frame_count-1).first;
 
-                        lineparameters2 = list_of_gt_objects_combination.at(i).first.get_line_parameters
+                        lineparameters2 = list_of_gt_objects_combination.at(i).first->get_line_parameters
                                 ().at(frame_skip - 1)
                                 .at(frame_count-1).first;
 
-                        std::cout << "object " << list_of_simulated_objects_combination.at(i).second.getObjectId() << " = " <<
+                        std::cout << "object " << list_of_simulated_objects_combination.at(i).second->getObjectId() << " = " <<
                                 lineparameters1 << " and object " << list_of_gt_objects_combination.at(i)
-                                .first.getObjectId() << " = " <<lineparameters2 << std::endl ;
+                                .first->getObjectId() << " = " <<lineparameters2 << std::endl ;
 
                         find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
 

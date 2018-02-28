@@ -376,8 +376,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
                     //two objects
 
-                    int width = m_list_simulated_objects.at(i).getWidth();
-                    int height = m_list_simulated_objects.at(i).getHeight();
+                    int width = m_list_simulated_objects.at(i)->getWidth();
+                    int height = m_list_simulated_objects.at(i)->getHeight();
 
                     // The stencil should be created by comparing the ground truth data and only taking
                     // those points that is within a boundary.
@@ -385,9 +385,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     // Store the matching points as a stencil.
                     // Find similarity between next_pts_array[i] and get_obj_extrapolated_pixel_point_pixel_displacement(). How many valid displacements in a bigger shape?? And if valid displacement, punch this point.
 
-                    float rowBegin = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
+                    float rowBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.y;
-                    float columnBegin = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
+                    float columnBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
 
 
@@ -402,7 +402,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     cv::Point roi_offset;
                     roi.locateROI(roi_size, roi_offset);
 
-                    cv::Point2f gt_displacement = m_list_gt_objects.at(i).get_obj_extrapolated_pixel_point_pixel_displacement().at
+                    cv::Point2f gt_displacement = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).second;
                     // This is for the base model
                     if ( noise == "none") {
@@ -411,7 +411,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                         std::cout << "expected value " << rowBegin << " " << columnBegin << " " << gt_displacement << std::endl;
 
-                        std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(i).getObjectId() << std::endl;
+                        std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(i)->getObjectId() << std::endl;
 
                         auto COUNT = base_algo_simulated_object_list.size();
                         assert(COUNT==0);
@@ -447,8 +447,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         else {
                             if ( new_stencil_size == 0 ) {
                                 if ( frame_count == 1 ) {  // Inital frame is quite problematic
-                                    stencil_movement.at(i).push_back(std::make_pair(m_list_gt_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first,
-                                            m_list_gt_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).second));
+                                    stencil_movement.at(i).push_back(std::make_pair(m_list_gt_objects.at(i)->get_obj_base_pixel_point_pixel_displacement().at(frame_count).first,
+                                            m_list_gt_objects.at(i)->get_obj_base_pixel_point_pixel_displacement().at(frame_count).second));
                                 }
                                 else {
                                     assert(new_stencil_size>0);
@@ -570,8 +570,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         }
 
         for ( ushort i = 0; i < m_list_simulated_objects.size(); i++) {
-            m_list_simulated_objects.at(i).generate_obj_extrapolated_shape_pixel_point_pixel_displacement(outer_base_movement.at(i));
-            m_list_simulated_objects.at(i).generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(outer_stencil_movement.at(i));
+            m_list_simulated_objects.at(i)->generate_obj_extrapolated_shape_pixel_point_pixel_displacement(outer_base_movement.at(i));
+            m_list_simulated_objects.at(i)->generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(outer_stencil_movement.at(i));
         }
 
 
