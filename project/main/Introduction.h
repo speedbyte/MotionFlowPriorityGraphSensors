@@ -1,8 +1,14 @@
 
 /**
 
+ When will objects collide. Robustness of end point error.
+ Where will objects collide. Robustness of direction vector.
+ If the objects will collide. Robustness of pixel.
 
-Centroid and mean is essentially the same.
+ Penalize object collision that are supposedly closer to collide.
+
+
+ Centroid and mean is essentially the same.
  Centroid distance and average distance is however different. In the latter case , each points are taken and their
  corresponding point is summed up and divided by 2. Where in centroid point, it is essentially the distance between
  centroid A and centroid B.

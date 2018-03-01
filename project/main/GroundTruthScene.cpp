@@ -463,7 +463,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         // open the network connection to the taskControl (so triggers may be sent)
         fprintf(stderr, "creating network connection....\n");
-        int triggerSocket = openNetwork(DEFAULT_PORT);
+        m_triggerSocket = openNetwork(DEFAULT_PORT);
         std::cout << "trigger socket - " << triggerSocket << std::endl;
         if (triggerSocket != -1) { // this is blocking until the network has been opened
             connected_trigger_port = true;
@@ -563,7 +563,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                         //fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s\n", mDeltaTime,
                         //         requestImage ? "true" : "false" );
-                        sendRDBTrigger(triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime);
+                        sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime);
 
                         // increase internal counters
                         mSimTime += mDeltaTime;
@@ -699,18 +699,13 @@ simFrame, const
                                           short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                                           const unsigned int &totalElem) {
 
-    RDB_OBJECT_STATE_t *object = reinterpret_cast<RDB_OBJECT_STATE_t *>(data); /// raw image data
-//        fprintf( stderr, "    simTime = %.3lf, simFrame = %d\n", simTime, simFrame );
-    ViresObjects viresObjects = ViresObjects();
-    viresObjects.objectProperties = *object;
-
     if ( m_environment == "none") {
 
         if ((mSimFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && mSimFrame > 1 &&
                 data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN) {
 
             fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
-                    data->base.name, simFrame, data->base.pos.x, object->base.pos.y, data->base.geo.dimX, data->base
+                    data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
                             .geo.dimY);
 
             if (m_mapObjectNameToTrajectory.count(data->base.name) == 0) {
@@ -798,6 +793,156 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
                                                                                            .width *
                                                                                    image_info_.height));
     }
+}
+
+
+/**
+* handle driver control input and compute vehicle dynamics output
+*/
+void GroundTruthSceneExternal::parseEntry(RDB_DRIVER_CTRL_t *data, const double &simTime, const unsigned int &simFrame,
+        const unsigned short &pkgId, const unsigned short &flags,
+        const unsigned int &elemId, const unsigned int &totalElem) {
+
+    if (!data)
+        return;
+
+    static bool         sVerbose     = true;
+    static bool         sShowMessage = false;
+    static unsigned int sMyPlayerId  = 1;             // this may also be determined from incoming OBJECT_CFG messages
+    static double       sLastSimTime = -1.0;
+
+    fprintf( stderr, "handleRDBitem: handling driver control for player %d\n", data->playerId );
+
+    // is this a new message?
+    //if ( simTime == sLastSimTime )
+    //    return;
+
+    // is this message for me?
+    if ( data->playerId != sMyPlayerId )
+        return;
+
+    // check for valid inputs (only some may be valid)
+    float mdSteeringAngleRequest = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_STEERING_WHEEL ) ? data->steeringWheel / 19.0 : 0.0;
+    float mdThrottlePedal        = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_THROTTLE )       ? data->throttlePedal        : 0.0;
+    float mdBrakePedal           = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_BRAKE )          ? data->brakePedal           : 0.0;
+    float mInputAccel            = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL )      ? data->accelTgt             : 0.0;
+    float mInputSteering         = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING )   ? data->steeringTgt          : 0.0;
+    float mdSteeringRequest      = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING )   ? data->steeringTgt          : 0.0;
+    float mdAccRequest           = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL )      ? data->accelTgt             : 0.0;
+    int   mInputGear             = 0;
+
+    // check the input validity
+    unsigned int validFlagsLat  = RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING | RDB_DRIVER_INPUT_VALIDITY_STEERING_WHEEL;
+    unsigned int validFlagsLong = RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL | RDB_DRIVER_INPUT_VALIDITY_THROTTLE | RDB_DRIVER_INPUT_VALIDITY_BRAKE;
+    unsigned int checkFlags     = data->validityFlags & 0x00000fff;
+
+    if ( checkFlags )
+    {
+        if ( ( checkFlags & validFlagsLat ) && ( checkFlags & validFlagsLong ) )
+            sShowMessage = false;
+        else if ( checkFlags != RDB_DRIVER_INPUT_VALIDITY_GEAR ) // "gear only" is also fine
+        {
+            if ( !sShowMessage )
+                fprintf( stderr, "Invalid driver input for vehicle dynamics" );
+
+            sShowMessage = true;
+        }
+    }
+
+    // use pedals/wheel or targets?
+    bool mUseSteeringTarget = ( ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING ) != 0 );
+    bool mUseAccelTarget    = ( ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL ) != 0 );
+
+    if ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_GEAR )
+    {
+        if ( data->gear == RDB_GEAR_BOX_POS_R )
+            mInputGear = -1;
+        else if ( data->gear == RDB_GEAR_BOX_POS_N )
+            mInputGear = 0;
+        else if ( data->gear == RDB_GEAR_BOX_POS_D )
+            mInputGear = 1;
+        else
+            mInputGear = 1;
+    }
+
+    // now, depending on the inputs, select the control mode and compute outputs
+    if ( mUseSteeringTarget && mUseAccelTarget )
+    {
+        fprintf( stderr, "Compute new vehicle position from acceleration target and steering target.\n" );
+
+        // call your methods here
+    }
+    else if ( !mUseSteeringTarget && !mUseAccelTarget )
+    {
+        fprintf( stderr, "Compute new vehicle position from brake pedal, throttle pedal and steering wheel angle.\n" );
+
+        // call your methods here
+    }
+    else
+    {
+        fprintf( stderr, "Compute new vehicle position from a mix of targets and pedals / steering wheel angle.\n" );
+
+        // call your methods here
+    }
+
+    bool useDummy = true;
+
+    RDB_OBJECT_STATE_t sOwnObjectState;
+
+    // the following assignments are for dummy purposes only
+    // vehicle moves along x-axis with given speed
+    // ignore first message
+    if ( useDummy && ( sLastSimTime >= 0.0 ) )
+    {
+        double speedX = 5.0;    // m/s
+        double speedY = 0.0;    // m/s
+        double speedZ = 0.0;    // m/s
+        double dt     = simTime - sLastSimTime;
+
+        sOwnObjectState.base.id       = sMyPlayerId;
+        sOwnObjectState.base.category = RDB_OBJECT_CATEGORY_PLAYER;
+        sOwnObjectState.base.type     = RDB_OBJECT_TYPE_PLAYER_CAR;
+        strcpy( sOwnObjectState.base.name, "Ego" );
+
+        // dimensions of own vehicle
+        sOwnObjectState.base.geo.dimX = 4.60;
+        sOwnObjectState.base.geo.dimY = 1.86;
+        sOwnObjectState.base.geo.dimZ = 1.60;
+
+        // offset between reference point and center of geometry
+        sOwnObjectState.base.geo.offX = 0.80;
+        sOwnObjectState.base.geo.offY = 0.00;
+        sOwnObjectState.base.geo.offZ = 0.30;
+
+        sOwnObjectState.base.pos.x     += dt * speedX;
+        sOwnObjectState.base.pos.y     += dt * speedY;
+        sOwnObjectState.base.pos.z     += dt * speedZ;
+        sOwnObjectState.base.pos.h     = 0.0;
+        sOwnObjectState.base.pos.p     = 0.0;
+        sOwnObjectState.base.pos.r     = 0.0;
+        sOwnObjectState.base.pos.flags = RDB_COORD_FLAG_POINT_VALID | RDB_COORD_FLAG_ANGLES_VALID;
+
+        sOwnObjectState.ext.speed.x     = speedX;
+        sOwnObjectState.ext.speed.y     = speedY;
+        sOwnObjectState.ext.speed.z     = speedZ;
+        sOwnObjectState.ext.speed.h     = 0.0;
+        sOwnObjectState.ext.speed.p     = 0.0;
+        sOwnObjectState.ext.speed.r     = 0.0;
+        sOwnObjectState.ext.speed.flags = RDB_COORD_FLAG_POINT_VALID | RDB_COORD_FLAG_ANGLES_VALID;
+
+        sOwnObjectState.ext.accel.x     = 0.0;
+        sOwnObjectState.ext.accel.y     = 0.0;
+        sOwnObjectState.ext.accel.z     = 0.0;
+        sOwnObjectState.ext.accel.flags = RDB_COORD_FLAG_POINT_VALID;
+
+        sOwnObjectState.base.visMask    =  RDB_OBJECT_VIS_FLAG_TRAFFIC | RDB_OBJECT_VIS_FLAG_RECORDER;
+    }
+
+    // ok, I have a new object state, so let's send the data
+    sendOwnObjectState( m_triggerSocket, simTime, simFrame );
+
+    // remember last simulation time
+    sLastSimTime = simTime;
 }
 
 double GroundTruthSceneExternal::getTime()
