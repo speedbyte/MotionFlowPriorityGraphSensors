@@ -217,7 +217,7 @@ def yaml_try():
 def motionflow_graphs():
 
 
-    dataset = "cpp"
+    dataset = "vires"
     scenario = "two"
     file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
     #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"

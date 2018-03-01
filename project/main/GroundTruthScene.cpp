@@ -333,6 +333,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     if ( m_environment == "none") {
 
         if (!m_regenerate_yaml_file) {
+            for (auto i = 0; i < 2; i++) {
+                m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
+            }
             readTrajectoryFromFile("../trajectory.yml");
         } else {
             boost::filesystem::remove("../trajectory.yml");
@@ -342,271 +345,270 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
     }
 
-    prepare_directories();
+    if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
+        prepare_directories();
 
-    char command[1024];
+        char command[1024];
 
-    std::string project = "Movement";
+        std::string project = "Movement";
 
-    std::vector<std::string> list_of_scenarios = {"carTypesComplete.xml", "crossing8Demo.xml", "crossing8DualExt.xml",
-            "crossing8Static.xml", "HighwayPulk.xml", "invisibleCar.xml", "ParkPerp.xml", "RouteAndPathShapeSCP.xml",
-            "staticCar.xml", "TownActionsPath.xml", "TownPathLong.xml", "traffic_demo2Ext.xml",
-            "trafficDemoClosePath.xml", "trafficDemoPath.xml", "trafficDemoPed.xml", "traffic_demoReverse.xml",
-            "trafficDemoTrailer.xml", "trafficDemoUK.xml", "traffic_demo.xml"
-                    "car.xml", "moving_car_near.xml", "moving_car.xml", "moving_truck.xml", "moving.xml", "one.xml",
-            "truck.xml", "two.xml"};
+        std::vector<std::string> list_of_scenarios = {"carTypesComplete.xml", "crossing8Demo.xml",
+                "crossing8DualExt.xml",
+                "crossing8Static.xml", "HighwayPulk.xml", "invisibleCar.xml", "ParkPerp.xml",
+                "RouteAndPathShapeSCP.xml",
+                "staticCar.xml", "TownActionsPath.xml", "TownPathLong.xml", "traffic_demo2Ext.xml",
+                "trafficDemoClosePath.xml", "trafficDemoPath.xml", "trafficDemoPed.xml", "traffic_demoReverse.xml",
+                "trafficDemoTrailer.xml", "trafficDemoUK.xml", "traffic_demo.xml"
+                        "car.xml", "moving_car_near.xml", "moving_car.xml", "moving_truck.xml", "moving.xml", "one.xml",
+                "truck.xml", "two.xml"};
 
-    if ( m_environment == "none") {
-        sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(), project.c_str());
+        sleep(5); // Wait before starting vtd again.
+
+        //if ( m_environment == "none") {
+        sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
+                project.c_str());
         std::cout << command << std::endl;
         system(command);
         std::cout << " I am out of bash" << std::endl;
-    }
+        //}
 
-    sleep(5); // Give some time before you send SCP commands.
+        sleep(5); // Give some time before you send SCP commands.
 
-    // std::string m_server;
-    boost::filesystem::path m_ts_gt_out_dir;
+        // std::string m_server;
+        boost::filesystem::path m_ts_gt_out_dir;
 
-    int initCounter = 6;
+        int initCounter = 6;
 
-    // initalize the server variable
-    std::string serverName = "127.0.0.1";
+        // initalize the server variable
+        std::string serverName = "127.0.0.1";
 
-    setServer(serverName.c_str());
+        setServer(serverName.c_str());
 
-    fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n", mShmKey, getCheckMask(),
-            getForceBuffer());
+        fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n", mShmKey, getCheckMask(),
+                getForceBuffer());
 
-    bool connected_trigger_port = false;
-    bool connected_module_manager_port = false;
-    bool connected_scp_port = false;
+        bool connected_trigger_port = false;
+        bool connected_module_manager_port = false;
+        bool connected_scp_port = false;
 
-    int scpSocket = openNetwork(SCP_DEFAULT_PORT);
-    std::cout << "scp socket - " << scpSocket << std::endl;
-    if (scpSocket != -1) { // this is blocking until the network has been opened
-        connected_scp_port = true;
-    }
-
-    sleep(1); // Give some time before you send the next SCP command.
-
-    sendSCPMessage(scpSocket, apply.c_str());
-
-    sleep(5); // This is very important !! Mimimum 5 seconds of wait, till you start the simulation
-
-    sendSCPMessage(scpSocket, project_name.c_str());
-
-    sleep(1);
-
-    sendSCPMessage(scpSocket, rdbtrigger_portnumber.c_str());
-
-    sleep(1);
-
-    sendSCPMessage(scpSocket, scenario_name.c_str());
-
-    sleep(1);
-
-    sendSCPMessage(scpSocket, module_manager.c_str());
-
-    sleep(1);
-
-    sendSCPMessage(scpSocket, camera_parameters.c_str());
-
-    sleep(1);
-
-    sendSCPMessage(scpSocket, display_parameters.c_str());
-
-    sleep(2);
-
-    sendSCPMessage(scpSocket, m_environment_scp_message.c_str());
-
-    sleep(1);
-
-    sendSCPMessage(scpSocket, message_scp.c_str());
-
-    sleep(1);
-
-    //sendSCPMessage(scpSocket, popup_scp.c_str());
-
-    //sleep(1);
-
-    sendSCPMessage(scpSocket, eyepoint.c_str());
-
-    sleep(1);
-
-
-    sendSCPMessage(scpSocket, elevation.c_str());
-
-    sleep(1);
-
-    sprintf(command, "cd %s../../ ; bash vtdRunScp.sh", (m_datasetpath.string()).c_str());
-    std::cout << command << std::endl;
-    system(command);
-
-    sleep(10);  // Give some time before you start the trigger and module manager ports.
-
-    //readScpNetwork(scpSocket);
-
-    //readScpNetwork(scpSocket);
-
-    //sleep(1);
-
-
-    // open the network connection to the taskControl (so triggers may be sent)
-    fprintf(stderr, "creating network connection....\n");
-    int triggerSocket = openNetwork(DEFAULT_PORT);
-    std::cout << "trigger socket - " << triggerSocket << std::endl;
-    if (triggerSocket != -1) { // this is blocking until the network has been opened
-        connected_trigger_port = true;
-    }
-
-    int moduleManagerSocket = openNetwork(DEFAULT_RX_PORT);
-    std::cout << "mm socket - " << moduleManagerSocket << std::endl;
-    if (moduleManagerSocket != -1) { // this is blocking until the network has been opened
-        connected_module_manager_port = true;
-    }
-
-    if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
-
-        // open the shared memory for IG image output (try to attach without creating a new segment)
-        fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", mShmKey);
-
-        while (!getShmPtr()) {
-            openShm(mShmKey);
-            usleep(1000);     // do not overload the CPU
+        int scpSocket = openNetwork(SCP_DEFAULT_PORT);
+        std::cout << "scp socket - " << scpSocket << std::endl;
+        if (scpSocket != -1) { // this is blocking until the network has been opened
+            connected_scp_port = true;
         }
 
-        // now check the SHM for the time being
-        bool breaking = false;
-        int count = 0;
+        sleep(1); // Give some time before you send the next SCP command.
 
-        try {
-            while (1) {
+        sendSCPMessage(scpSocket, apply.c_str());
 
-                // Break out of the loop if the user presses the Esc key
-                /*
-                int c = kbhit();
+        sleep(5); // This is very important !! Mimimum 5 seconds of wait, till you start the simulation
 
-                switch (c) {
-                    case 9:
+        sendSCPMessage(scpSocket, project_name.c_str());
+
+        sleep(1);
+
+        sendSCPMessage(scpSocket, rdbtrigger_portnumber.c_str());
+
+        sleep(1);
+
+        sendSCPMessage(scpSocket, scenario_name.c_str());
+
+        sleep(1);
+
+        sendSCPMessage(scpSocket, module_manager.c_str());
+
+        sleep(1);
+
+        sendSCPMessage(scpSocket, camera_parameters.c_str());
+
+        sleep(1);
+
+        sendSCPMessage(scpSocket, display_parameters.c_str());
+
+        sleep(2);
+
+        sendSCPMessage(scpSocket, m_environment_scp_message.c_str());
+
+        sleep(1);
+
+        sendSCPMessage(scpSocket, message_scp.c_str());
+
+        sleep(1);
+
+        //sendSCPMessage(scpSocket, popup_scp.c_str());
+
+        //sleep(1);
+
+        sendSCPMessage(scpSocket, eyepoint.c_str());
+
+        sleep(1);
+
+
+        sendSCPMessage(scpSocket, elevation.c_str());
+
+        sleep(1);
+
+        sprintf(command, "cd %s../../ ; bash vtdRunScp.sh", (m_datasetpath.string()).c_str());
+        std::cout << command << std::endl;
+        system(command);
+
+        sleep(10);  // Give some time before you start the trigger and module manager ports.
+
+        //readScpNetwork(scpSocket);
+
+        //readScpNetwork(scpSocket);
+
+        //sleep(1);
+
+
+        // open the network connection to the taskControl (so triggers may be sent)
+        fprintf(stderr, "creating network connection....\n");
+        int triggerSocket = openNetwork(DEFAULT_PORT);
+        std::cout << "trigger socket - " << triggerSocket << std::endl;
+        if (triggerSocket != -1) { // this is blocking until the network has been opened
+            connected_trigger_port = true;
+        }
+
+        int moduleManagerSocket = openNetwork(DEFAULT_RX_PORT);
+        std::cout << "mm socket - " << moduleManagerSocket << std::endl;
+        if (moduleManagerSocket != -1) { // this is blocking until the network has been opened
+            connected_module_manager_port = true;
+        }
+
+        if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
+
+            // open the shared memory for IG image output (try to attach without creating a new segment)
+            fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", mShmKey);
+
+            while (!getShmPtr()) {
+                openShm(mShmKey);
+                usleep(1000);     // do not overload the CPU
+            }
+
+            // now check the SHM for the time being
+            bool breaking = false;
+            int count = 0;
+
+            try {
+                while (1) {
+
+                    // Break out of the loop if the user presses the Esc key
+                    /*
+                    int c = kbhit();
+
+                    switch (c) {
+                        case 9:
+                            breaking = true;
+                            break;
+                        default:
+                            break;
+                    } */
+
+                    if (breaking) {
+                        break;
+                    }
+
+                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC) {
                         breaking = true;
-                        break;
-                    default:
-                        break;
-                } */
-
-                if (breaking) {
-                    break;
-                }
-
-                if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC) {
-                    breaking = true;
-                }
-
-                int lastSimFrame = mLastNetworkFrame;
-
-                readNetwork(moduleManagerSocket);  // this calls parseRDBMessage() in vires_common.cpp
-
-                if (lastSimFrame < 0) {
-                    checkShm();  //empty IG buffer of spurious images
-                }
-
-                bool haveNewFrame = (lastSimFrame != mLastNetworkFrame);
-
-                // now read IG output
-                if (mHaveImage)
-                    fprintf(stderr, "main: checking for IG image\n");
-
-                while (mCheckForImage) {
-                    checkShm();
-
-                    mCheckForImage = !mHaveImage;
-
-                    usleep(10);
-
-                    if (!mCheckForImage) {
-                        //fprintf( stderr, "main: got it!\n" );
-                    }
-                }
-
-                if (haveNewFrame) {
-                    //fprintf( stderr, "main: new simulation frame (%d) available, mLastIGTriggerFrame = %d\n",
-                    //                 mLastNetworkFrame, mLastIGTriggerFrame );
-
-                    mHaveFirstFrame = true;
-                }
-
-                // has an image arrived or do the first frames need to be triggered
-                //(first image will arrive with a certain image_02_frame delay only)
-
-
-                if (!mHaveFirstImage || mHaveImage || haveNewFrame || !mHaveFirstFrame) {
-                    // do not initialize too fast
-                    if (!mHaveFirstImage || !mHaveFirstFrame)
-                        usleep(100000);   // 10Hz
-
-                    bool requestImage = (mLastNetworkFrame >= (mLastIGTriggerFrame + IMAGE_SKIP_FACTOR_DYNAMIC));
-
-                    if (requestImage) {
-                        mLastIGTriggerFrame = mLastNetworkFrame;
-                        mCheckForImage = true;
                     }
 
-                    //fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s\n", mDeltaTime,
-                    //         requestImage ? "true" : "false" );
-                    sendRDBTrigger(triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime);
+                    int lastSimFrame = mLastNetworkFrame;
 
-                    // increase internal counters
-                    mSimTime += mDeltaTime;
-                    mSimFrame++;
+                    readNetwork(moduleManagerSocket);  // this calls parseRDBMessage() in vires_common.cpp
 
-                    // calculate the timing statistics
+                    if (lastSimFrame < 0) {
+                        checkShm();  //empty IG buffer of spurious images
+                    }
+
+                    bool haveNewFrame = (lastSimFrame != mLastNetworkFrame);
+
+                    // now read IG output
                     if (mHaveImage)
-                        //calcStatistics();
+                        fprintf(stderr, "main: checking for IG image\n");
 
-                        mHaveImage = false;
+                    while (mCheckForImage) {
+                        checkShm();
+
+                        mCheckForImage = !mHaveImage;
+
+                        usleep(10);
+
+                        if (!mCheckForImage) {
+                            //fprintf( stderr, "main: got it!\n" );
+                        }
+                    }
+
+                    if (haveNewFrame) {
+                        //fprintf( stderr, "main: new simulation frame (%d) available, mLastIGTriggerFrame = %d\n",
+                        //                 mLastNetworkFrame, mLastIGTriggerFrame );
+
+                        mHaveFirstFrame = true;
+                    }
+
+                    // has an image arrived or do the first frames need to be triggered
+                    //(first image will arrive with a certain image_02_frame delay only)
+
+
+                    if (!mHaveFirstImage || mHaveImage || haveNewFrame || !mHaveFirstFrame) {
+                        // do not initialize too fast
+                        if (!mHaveFirstImage || !mHaveFirstFrame)
+                            usleep(100000);   // 10Hz
+
+                        bool requestImage = (mLastNetworkFrame >= (mLastIGTriggerFrame + IMAGE_SKIP_FACTOR_DYNAMIC));
+
+                        if (requestImage) {
+                            mLastIGTriggerFrame = mLastNetworkFrame;
+                            mCheckForImage = true;
+                        }
+
+                        //fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s\n", mDeltaTime,
+                        //         requestImage ? "true" : "false" );
+                        sendRDBTrigger(triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime);
+
+                        // increase internal counters
+                        mSimTime += mDeltaTime;
+                        mSimFrame++;
+
+                        // calculate the timing statistics
+                        if (mHaveImage)
+                            //calcStatistics();
+
+                            mHaveImage = false;
+                    }
+
+                    usleep(10000); // sleep for 10 ms
+                    //std::cout << "getting data from VIRES\n";
                 }
-
-                usleep(10000); // sleep for 10 ms
-                //std::cout << "getting data from VIRES\n";
             }
-        }
-        catch (...) {
+            catch (...) {
+                stopVires();
+                return;
+            };
+
             stopVires();
-            return;
-        };
 
-        stopVires();
-
-        try {
-
-            if ( m_environment == "none") {
-
-                std::vector<std::string> objectNameList = {"New Character", "New Character01"};
-                std::vector<ushort> startPoint;
-                if ( m_regenerate_yaml_file  ) { // do not read, generate
-                    startPoint = {0,0};
-                }
-                else {
-                    startPoint = {0,0};
-                }
-                for ( auto i = 0; i < m_ptr_customObjectTrajectoryList.size() ; i++) {
-
-                    GroundTruthObjects obj1(myShape, *m_ptr_customObjectTrajectoryList.at(i), startPoint.at(i), noNoise, objectNameList.at(i));
-                    m_list_objects.push_back(obj1);
-                }
-
-                //m_list_objects.push_back(obj1);
-                //m_list_objects.push_back(obj2);
-                if ( m_regenerate_yaml_file  ) {
-                    writeTrajectoryInYaml();
-                }
-            }
         }
-        catch (...)
-        {
-            stopVires();
-            return;
+    }
+    if ( m_environment == "none") {
+
+        std::vector<std::string> objectNameList = {"New Character", "New Character01"};
+        std::vector<ushort> startPoint;
+        if ( m_regenerate_yaml_file  ) { // do not read, generate
+            startPoint = {0,0};
+        }
+        else {
+            startPoint = {0,0};
+        }
+        for ( auto i = 0; i < m_ptr_customObjectTrajectoryList.size() ; i++) {
+
+            GroundTruthObjects obj1(myShape, *m_ptr_customObjectTrajectoryList.at(i), startPoint.at(i), noNoise, objectNameList.at(i));
+            m_list_objects.push_back(obj1);
+        }
+
+        //m_list_objects.push_back(obj1);
+        //m_list_objects.push_back(obj2);
+        if ( m_regenerate_yaml_file  ) {
+            writeTrajectoryInYaml();
         }
     }
 }
@@ -710,11 +712,6 @@ simFrame, const
             fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                     data->base.name, simFrame, data->base.pos.x, object->base.pos.y, data->base.geo.dimX, data->base
                             .geo.dimY);
-
-            printf("%d.pushTrajectoryPoints(cv::Point2f((float)%f, (float)%f))\n", data->base.id, data->base.pos.x,
-                    data->base.pos.y);
-            std::cout << data->base.type;
-
 
             if (m_mapObjectNameToTrajectory.count(data->base.name) == 0) {
                 m_mapObjectNameToTrajectory[data->base.name] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
