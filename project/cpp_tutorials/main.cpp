@@ -96,7 +96,7 @@ int main ( int argc, char *argv[]) {
     d = 500;
     printf("%d\n",b) ; // After changing d
 
-    std::cout << "hello" << (5%0)<< (1%1) << (2%1) << (1%2) << (5%3) << (3%5) << (4%1) << (0%4);
+    std::cout << "hello" <<  (1%1) << (2%1) << (1%2) << (5%3) << (3%5) << (4%1) << (0%4) << (1%20);
 
     try {
         throw MyException();

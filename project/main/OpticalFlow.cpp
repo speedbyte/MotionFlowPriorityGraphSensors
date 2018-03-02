@@ -86,10 +86,12 @@ void OpticalFlow::generate_shape_points() {
 
         for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 
+
             std::cout << "frame_count " << frame_count << std::endl;
 
             fs << "frame_count" << frame_count;
 
+            cv::Point2f shape_average = {0,0};
             std::vector<cv::Point2f> shape_points;
             std::vector<cv::Point2f> shape_points_average;
 
@@ -144,14 +146,12 @@ void OpticalFlow::generate_shape_points() {
 
                     std::cout << "object vollTreffer" << m_list_simulated_objects.at(i)->getObjectId() << " = " << vollTreffer << std::endl ;
 
+                    shape_average.x += shape_points.at(i).x;
+                    shape_average.y += shape_points.at(i).y;
+
                 }
             }
 
-            cv::Point2f shape_average = {0,0};
-            for ( auto i = 0; i < m_list_simulated_objects.size(); i++ ) {
-                shape_average.x += shape_points.at(i).x;
-                shape_average.y += shape_points.at(i).y;
-            }
             shape_average.x = shape_average.x / m_list_simulated_objects.size();
             shape_average.y = shape_average.y / m_list_simulated_objects.size();
 

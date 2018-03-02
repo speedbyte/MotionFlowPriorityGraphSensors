@@ -135,6 +135,7 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips) {
                 line_parameters.push_back(std::make_pair(cv::Point2f(m, c), pt2));
             }
             else {
+                // we want to maintain the size of the array.
                 line_parameters.push_back(std::make_pair(cv::Point2f(0.0f, 0.0f), cv::Point2f(0.0f, 0.0f)));
             }
 

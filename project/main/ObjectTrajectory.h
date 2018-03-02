@@ -28,13 +28,18 @@ public:
 
     ObjectTrajectory() {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
-            m_visibility.push_back(true);
+            m_visibility.push_back(false);
+            m_trajectory.push_back(cv::Point2f(-1,-1));
         }
     };
 
     virtual void process(cv::Size frame_size) {};
 
     virtual void pushTrajectoryPoints(cv::Point2f points) {}
+
+    virtual void pushVisibility(bool visibility) {}
+
+    virtual void atFrameNumber(ushort frameNumber, cv::Point2f points, bool visibility) {}
 
     std::vector<cv::Point2f> getTrajectory() const {
         return m_trajectory;
@@ -143,6 +148,15 @@ public:
 
     void pushTrajectoryPoints(cv::Point2f points) override {
         m_trajectory.push_back(points);
+    }
+
+    virtual void pushVisibility(bool visibility) {
+        m_visibility.push_back(visibility);
+    }
+
+    void atFrameNumber(ushort frameNumber, cv::Point2f points, bool visibility) override {
+        m_trajectory.at(frameNumber) = points;
+        m_visibility.at(frameNumber) = visibility;
     }
 
 };

@@ -1,197 +1,166 @@
 %YAML:1.0
 ---
 frame_count_000:
-   - { name:New Character, x:5.1519976806640625e+02,
-       y:2.7716244506835938e+02 }
-   - { name:New Character01, x:5.9843301773071289e+00,
-       y:2.7662475585937500e+02 }
+   - { name:New Character, visible:0, x:-1., y:-1. }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_001:
-   - { name:New Character, x:5.1245153808593750e+02,
-       y:2.7717407226562500e+02 }
-   - { name:New Character01, x:7.4864268302917480e+00,
-       y:2.7664562988281250e+02 }
+   - { name:New Character, visible:1, x:5.1663165283203125e+02,
+       y:2.7715649414062500e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_002:
-   - { name:New Character, x:5.0848504638671875e+02,
-       y:2.7719073486328125e+02 }
-   - { name:New Character01, x:1.0487591743469238e+01,
-       y:2.7667605590820312e+02 }
+   - { name:New Character, visible:1, x:5.1497778320312500e+02,
+       y:2.7716326904296875e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_003:
-   - { name:New Character, x:5.0356072998046875e+02,
-       y:2.7176626586914062e+02 }
-   - { name:New Character01, x:1.6226016998291016e+01,
-       y:2.7671566772460938e+02 }
+   - { name:New Character, visible:1, x:5.1210699462890625e+02,
+       y:2.7717535400390625e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_004:
-   - { name:New Character, x:4.9855828857421875e+02,
-       y:2.7179183959960938e+02 }
-   - { name:New Character01, x:2.3276699066162109e+01,
-       y:2.7676412963867188e+02 }
+   - { name:New Character, visible:1, x:5.0801855468750000e+02,
+       y:2.7719250488281250e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_005:
-   - { name:New Character, x:4.9356994628906250e+02,
-       y:2.7181768798828125e+02 }
-   - { name:New Character01, x:3.1189716339111328e+01,
-       y:2.7681869506835938e+02 }
+   - { name:New Character, visible:1, x:5.0306011962890625e+02,
+       y:2.7176879882812500e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_006:
-   - { name:New Character, x:4.8862835693359375e+02,
-       y:2.7184317016601562e+02 }
-   - { name:New Character01, x:3.9081809997558594e+01,
-       y:2.7687304687500000e+02 }
+   - { name:New Character, visible:1, x:4.9805859375000000e+02,
+       y:2.7179437255859375e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_007:
-   - { name:New Character, x:4.8370236206054688e+02,
-       y:2.7186892700195312e+02 }
-   - { name:New Character01, x:4.6937561035156250e+01,
-       y:2.7692712402343750e+02 }
+   - { name:New Character, visible:1, x:4.9307360839843750e+02,
+       y:2.7182025146484375e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_008:
-   - { name:New Character, x:4.7878033447265625e+02,
-       y:2.7189431762695312e+02 }
-   - { name:New Character01, x:5.4757045745849609e+01,
-       y:2.7698095703125000e+02 }
+   - { name:New Character, visible:1, x:4.8813488769531250e+02,
+       y:2.7184573364257812e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_009:
-   - { name:New Character, x:4.7386727905273438e+02,
-       y:2.7191967773437500e+02 }
-   - { name:New Character01, x:6.2540519714355469e+01,
-       y:2.7703451538085938e+02 }
+   - { name:New Character, visible:1, x:4.8320977783203125e+02,
+       y:2.7187145996093750e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_010:
-   - { name:New Character, x:4.6896789550781250e+02,
-       y:2.7194528198242188e+02 }
-   - { name:New Character01, x:7.0297622680664062e+01,
-       y:2.7708810424804688e+02 }
+   - { name:New Character, visible:1, x:4.7828863525390625e+02,
+       y:2.7189685058593750e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_011:
-   - { name:New Character, x:4.6407226562500000e+02,
-       y:2.7197052001953125e+02 }
-   - { name:New Character01, x:7.8009498596191406e+01,
-       y:2.7168554687500000e+02 }
+   - { name:New Character, visible:1, x:4.7337634277343750e+02,
+       y:2.7192221069335938e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_012:
-   - { name:New Character, x:4.5919049072265625e+02,
-       y:2.7199606323242188e+02 }
-   - { name:New Character01, x:8.5686309814453125e+01,
-       y:2.7175091552734375e+02 }
+   - { name:New Character, visible:1, x:4.6847796630859375e+02,
+       y:2.7194781494140625e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_013:
-   - { name:New Character, x:4.5431237792968750e+02,
-       y:2.7202124023437500e+02 }
-   - { name:New Character01, x:9.3328094482421875e+01,
-       y:2.7181597900390625e+02 }
+   - { name:New Character, visible:1, x:4.6358319091796875e+02,
+       y:2.7197305297851562e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_014:
-   - { name:New Character, x:4.4944305419921875e+02,
-       y:2.7204635620117188e+02 }
-   - { name:New Character01, x:1.0093505859375000e+02,
-       y:2.7188073730468750e+02 }
+   - { name:New Character, visible:1, x:4.5870233154296875e+02,
+       y:2.7199859619140625e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_015:
-   - { name:New Character, x:4.4458752441406250e+02,
-       y:2.7207174682617188e+02 }
-   - { name:New Character01, x:1.0850745391845703e+02,
-       y:2.7194519042968750e+02 }
+   - { name:New Character, visible:1, x:4.5382507324218750e+02,
+       y:2.7202374267578125e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_016:
-   - { name:New Character, x:4.3973541259765625e+02,
-       y:2.7209677124023438e+02 }
-   - { name:New Character01, x:1.1604534149169922e+02,
-       y:2.7200936889648438e+02 }
+   - { name:New Character, visible:1, x:4.4895660400390625e+02,
+       y:2.7204885864257812e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_017:
-   - { name:New Character, x:4.3489727783203125e+02,
-       y:2.7212207031250000e+02 }
-   - { name:New Character01, x:1.2354936218261719e+02,
-       y:2.7207324218750000e+02 }
+   - { name:New Character, visible:1, x:4.4410195922851562e+02,
+       y:2.7207424926757812e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_018:
-   - { name:New Character, x:4.3006256103515625e+02,
-       y:2.7214700317382812e+02 }
-   - { name:New Character01, x:1.3102804565429688e+02,
-       y:2.7213711547851562e+02 }
+   - { name:New Character, visible:1, x:4.3925070190429688e+02,
+       y:2.7209927368164062e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_019:
-   - { name:New Character, x:4.2523626708984375e+02,
-       y:2.7217190551757812e+02 }
-   - { name:New Character01, x:1.3846444702148438e+02,
-       y:2.7220043945312500e+02 }
+   - { name:New Character, visible:1, x:4.3441345214843750e+02,
+       y:2.7212454223632812e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_020:
-   - { name:New Character, x:4.2042407226562500e+02,
-       y:2.7219705200195312e+02 }
-   - { name:New Character01, x:1.4586746215820312e+02,
-       y:2.7226342773437500e+02 }
+   - { name:New Character, visible:1, x:4.2957946777343750e+02,
+       y:2.7214947509765625e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_021:
-   - { name:New Character, x:4.1561486816406250e+02,
-       y:2.7222186279296875e+02 }
-   - { name:New Character01, x:1.5323730468750000e+02,
-       y:2.7232617187500000e+02 }
+   - { name:New Character, visible:1, x:4.2475415039062500e+02,
+       y:2.7217437744140625e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_022:
-   - { name:New Character, x:4.1081994628906250e+02,
-       y:2.7224691772460938e+02 }
-   - { name:New Character01, x:1.6057397460937500e+02,
-       y:2.7238861083984375e+02 }
+   - { name:New Character, visible:1, x:4.1994277954101562e+02,
+       y:2.7219952392578125e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_023:
-   - { name:New Character, x:4.0602780151367188e+02,
-       y:2.7227163696289062e+02 }
-   - { name:New Character01, x:1.6787808227539062e+02,
-       y:2.7245077514648438e+02 }
+   - { name:New Character, visible:1, x:4.1513446044921875e+02,
+       y:2.7222433471679688e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_024:
-   - { name:New Character, x:4.0124411010742188e+02,
-       y:2.7229632568359375e+02 }
-   - { name:New Character01, x:1.7514968872070312e+02,
-       y:2.7251263427734375e+02 }
+   - { name:New Character, visible:1, x:4.1034027099609375e+02,
+       y:2.7224938964843750e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_025:
-   - { name:New Character, x:3.9647460937500000e+02,
-       y:2.7232122802734375e+02 }
-   - { name:New Character01, x:1.8239692687988281e+02,
-       y:2.7257455444335938e+02 }
+   - { name:New Character, visible:1, x:4.0554907226562500e+02,
+       y:2.7227410888671875e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_026:
-   - { name:New Character, x:3.9170782470703125e+02,
-       y:2.7234582519531250e+02 }
-   - { name:New Character01, x:1.8960403442382812e+02,
-       y:2.7263586425781250e+02 }
+   - { name:New Character, visible:1, x:4.0076623535156250e+02,
+       y:2.7229876708984375e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_027:
-   - { name:New Character, x:3.8694952392578125e+02,
-       y:2.7237036132812500e+02 }
-   - { name:New Character01, x:1.9677911376953125e+02,
-       y:2.7269692993164062e+02 }
+   - { name:New Character, visible:1, x:3.9599755859375000e+02,
+       y:2.7232369995117188e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_028:
-   - { name:New Character, x:3.8220535278320312e+02,
-       y:2.7239517211914062e+02 }
-   - { name:New Character01, x:2.0392271423339844e+02,
-       y:2.7275772094726562e+02 }
+   - { name:New Character, visible:1, x:3.9123162841796875e+02,
+       y:2.7234829711914062e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_029:
-   - { name:New Character, x:3.7746368408203125e+02,
-       y:2.7241961669921875e+02 }
-   - { name:New Character01, x:2.1103485107421875e+02,
-       y:2.7281823730468750e+02 }
+   - { name:New Character, visible:1, x:3.8647998046875000e+02,
+       y:2.7237310791015625e+02 }
+   - { name:New Character01, visible:0, x:-1., y:-1. }
 frame_count_030:
-   - { name:New Character, x:3.7273632812500000e+02,
-       y:2.7244433593750000e+02 }
-   - { name:New Character01, x:2.1812617492675781e+02,
-       y:2.7287847900390625e+02 }
+   - { name:New Character, visible:1, x:3.8173083496093750e+02,
+       y:2.7239761352539062e+02 }
+   - { name:New Character01, visible:1, x:2.0463772583007812e+02,
+       y:2.7276385498046875e+02 }
 frame_count_031:
-   - { name:New Character, x:3.6801144409179688e+02,
-       y:2.7246871948242188e+02 }
-   - { name:New Character01, x:2.2523535156250000e+02,
-       y:2.7293844604492188e+02 }
+   - { name:New Character, visible:1, x:3.7698999023437500e+02,
+       y:2.7242205810546875e+02 }
+   - { name:New Character01, visible:1, x:2.1174653625488281e+02,
+       y:2.7282434082031250e+02 }
 frame_count_032:
-   - { name:New Character, x:3.6329473876953125e+02,
-       y:2.7249304199218750e+02 }
-   - { name:New Character01, x:2.3229351806640625e+02,
-       y:2.7299844360351562e+02 }
+   - { name:New Character, visible:1, x:3.7226348876953125e+02,
+       y:2.7244677734375000e+02 }
+   - { name:New Character01, visible:1, x:2.1884068298339844e+02,
+       y:2.7288455200195312e+02 }
 frame_count_033:
-   - { name:New Character, x:3.5859240722656250e+02,
-       y:2.7251760864257812e+02 }
-   - { name:New Character01, x:2.3928091430664062e+02,
-       y:2.7305786132812500e+02 }
+   - { name:New Character, visible:1, x:3.6753930664062500e+02,
+       y:2.7247113037109375e+02 }
+   - { name:New Character01, visible:1, x:2.2594668579101562e+02,
+       y:2.7294451904296875e+02 }
 frame_count_034:
-   - { name:New Character, x:3.5389221191406250e+02,
-       y:2.7254187011718750e+02 }
-   - { name:New Character01, x:2.4623791503906250e+02,
-       y:2.7311706542968750e+02 }
+   - { name:New Character, visible:1, x:3.6282958984375000e+02,
+       y:2.7249575805664062e+02 }
+   - { name:New Character01, visible:1, x:2.3298864746093750e+02,
+       y:2.7300418090820312e+02 }
 frame_count_035:
-   - { name:New Character, x:3.4920657348632812e+02,
-       y:2.7256634521484375e+02 }
-   - { name:New Character01, x:2.5316467285156250e+02,
-       y:2.7317599487304688e+02 }
+   - { name:New Character, visible:1, x:3.5812203979492188e+02,
+       y:2.7252001953125000e+02 }
+   - { name:New Character01, visible:1, x:2.3997308349609375e+02,
+       y:2.7306359863281250e+02 }
 frame_count_036:
-   - { name:New Character, x:3.4452282714843750e+02,
-       y:2.7259051513671875e+02 }
-   - { name:New Character01, x:2.6006140136718750e+02,
-       y:2.7323468017578125e+02 }
+   - { name:New Character, visible:1, x:3.5342266845703125e+02,
+       y:2.7254425048828125e+02 }
+   - { name:New Character01, visible:1, x:2.4693399047851562e+02,
+       y:2.7312304687500000e+02 }
 frame_count_037:
-   - { name:New Character, x:3.3984729003906250e+02,
-       y:2.7261462402343750e+02 }
-   - { name:New Character01, x:2.6692810058593750e+02,
-       y:2.7329309082031250e+02 }
+   - { name:New Character, visible:1, x:3.4873773193359375e+02,
+       y:2.7256875610351562e+02 }
+   - { name:New Character01, visible:1, x:2.5385772705078125e+02,
+       y:2.7318197631835938e+02 }
 frame_count_038:
-   - { name:New Character, x:3.3518621826171875e+02,
-       y:2.7263897705078125e+02 }
-   - { name:New Character01, x:2.7376547241210938e+02,
-       y:2.7335125732421875e+02 }
+   - { name:New Character, visible:1, x:3.4405493164062500e+02,
+       y:2.7259289550781250e+02 }
+   - { name:New Character01, visible:1, x:2.6075146484375000e+02,
+       y:2.7324060058593750e+02 }

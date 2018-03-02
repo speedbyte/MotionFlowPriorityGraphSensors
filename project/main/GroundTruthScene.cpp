@@ -68,7 +68,12 @@ void GroundTruthScene::writeTrajectoryInYaml() {
             sprintf (temp_str_fc, "frame_count_%03d", frame_count);
             write_fs << temp_str_fc << "[";
             for ( int i = 0; i< m_list_objects.size(); i++) {
-                write_fs << "{:" << "name" << m_list_objects.at(i).getObjectName() << "x" <<  m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x << "y" << m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y  << "}";
+                write_fs
+                        << "{:" << "name" << m_list_objects.at(i).getObjectName()
+                        << "visible" << m_list_objects.at(i).get_obj_base_visibility().at(frame_count)
+                        << "x" <<  m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x
+                        << "y" << m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y
+                        << "}";
             }
             write_fs << "]";
         }
@@ -83,7 +88,7 @@ void GroundTruthScene::writeTrajectoryInYaml() {
 void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
 
     cv::FileStorage fs(trajectoryFileName, cv::FileStorage::READ);
-    std::vector<cv::Point2f> traj_points;
+    cv::Point2f traj_point;
 
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
@@ -121,13 +126,13 @@ void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
                     }
                     //std::cout << "hello\n";
                     std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
-                    (m_mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()])->pushTrajectoryPoints(cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]));
+                    traj_point = cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]);
+                    (m_mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()])->atFrameNumber(frame_count, traj_point, (int)(*file_node_iterator)["visible"]);
                 }
             }
         }
     }
     fs.release();
-    //return m_ptr_customObjectTrajectoryList;
 }
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
@@ -707,26 +712,26 @@ simFrame, const
 
     if ( m_environment == "none") {
 
-        if ((mSimFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && mSimFrame > 1 &&
-                data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN) {
+        if ( data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN ) {
+            if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && simFrame >= 0  ) {
 
-            fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
-                    data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
-                            .geo.dimY);
+                fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
+                        data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
+                                .geo.dimY);
 
-            if (m_mapObjectNameToTrajectory.count(data->base.name) == 0) {
-                m_mapObjectNameToTrajectory[data->base.name] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
-                m_objectCount += 1;
+                if (m_mapObjectNameToTrajectory.count(data->base.name) == 0) {
+                    m_mapObjectNameToTrajectory[data->base.name] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
+                    m_objectCount += 1;
+                }
+                //std::cout << "hello\n";
+                //std::cout << data->base.name << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
+                m_mapObjectNameToTrajectory[data->base.name]->atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y), true);
+
+                //myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
+
+            } else {
+                //std::cout << data->base.type << std::endl;
             }
-            //std::cout << "hello\n";
-            //std::cout << data->base.name << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
-            m_mapObjectNameToTrajectory[data->base.name]->pushTrajectoryPoints(
-                    cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y));
-
-            //myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
-
-        } else {
-            //std::cout << data->base.type << std::endl;
         }
     }
 }
@@ -750,7 +755,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
     mHaveFirstImage = true;
 
     fprintf( stderr, "------------------------------------------------------------------------------------\n");
-    fprintf( stderr, "simFrame = %d, simTime = %.3f, dataSize = %d\n", mSimFrame, mSimTime, data->imgSize);
+    fprintf( stderr, "simFrame = %d, simTime = %.3f, dataSize = %d\n", simFrame, mSimTime, data->imgSize);
     fprintf( stderr, "------------------------------------------------------------------------------------\n");
 
     char *image_data_ = NULL;
@@ -788,7 +793,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
         char file_name_image[50];
 
 
-        if (simFrame > 1) {
+        if (simFrame >= IMAGE_SKIP_FACTOR_DYNAMIC) {
             sprintf(file_name_image, "000%03d_10.png", mImageCount);
             std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
             save_image.write(input_image_file_with_path);
@@ -945,7 +950,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_DRIVER_CTRL_t *data, const double 
     }
 
     // ok, I have a new object state, so let's send the data
-    sendOwnObjectState( sOwnObjectState, m_triggerSocket, simTime, simFrame );
+    sendOwnObjectState( sOwnObjectState, m_triggerSocket, simTime, simFrame);
 
     // remember last simulation time
     sLastSimTime = simTime;
@@ -988,7 +993,7 @@ void GroundTruthSceneExternal::analyzeImage( RDB_IMAGE_t* img, const unsigned in
     if ( img->id == 0 )
         return;
 
-    fprintf( stderr, "analyzeImage: simframe = %d, index = %d: have image no. %d, size = %d bytes, pixelFormat = %d\n",
+    fprintf( stderr, "analyzeImage: simFrame = %d, index = %d: have image no. %d, size = %d bytes, pixelFormat = %d\n",
              simFrame, index, img->id, img->imgSize, img->pixelFormat );
 
     if ( img->pixelFormat == RDB_PIX_FORMAT_RGB32F )		// some analysis
@@ -1014,9 +1019,9 @@ void GroundTruthSceneExternal::analyzeImage( RDB_IMAGE_t* img, const unsigned in
 
 
     //if ( ( myImg->id > 3 ) && ( ( myImg->id - mLastImageId ) != IMAGE_SKIP_FACTOR_DYNAMIC ) )
-    if ( ( simFrame != sLastImgSimFrame ) && ( img->id > 3 ) && ( ( simFrame - sLastImgSimFrame ) != IMAGE_SKIP_FACTOR_DYNAMIC ) )
+    if ( ( simFrame!= sLastImgSimFrame ) && ( img->id > 3 ) && ( ( simFrame- sLastImgSimFrame ) != IMAGE_SKIP_FACTOR_DYNAMIC ) )
     {
-        fprintf( stderr, "WARNING: parseRDBMessageEntry: index = %d, delta of image ID out of bounds: delta = %d\n", index, simFrame - sLastImgSimFrame );
+        fprintf( stderr, "WARNING: parseRDBMessageEntry: index = %d, delta of image ID out of bounds: delta = %d\n", index, simFrame- sLastImgSimFrame );
         mTotalErrorCount++;
     }
 

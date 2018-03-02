@@ -135,7 +135,7 @@ private:
 
     std::string start = "<SimCtrl> <Start/> </SimCtrl>";
 
-    std::string project_name = "<SimCtrl><Project name=\"Movement\"path=\"/local/git/MotionFlowPriorityGrapSensors/VIRES/VTD.2.0/Data/Projects/Current\" /></SimCtrl>";
+    std::string project_name = "<SimCtrl><Project name=\"Movement\" path=\"/local/git/MotionFlowPriorityGrapSensors/VIRES/VTD.2.0/Data/Projects/Current\" parameters=\"sync_extern\"/></SimCtrl>";
 
     std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/traffic_demo.xml\" /><Start mode=\"operation\" /></SimCtrl>";
 
@@ -145,7 +145,7 @@ private:
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
-                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"12.500000\" bottom=\"15.000000\" top=\"15.000000\" /> "
+                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"15.000000\" right=\"15.000000\" bottom=\"15.000000\" top=\"15.000000\" /> "
                     "   <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "

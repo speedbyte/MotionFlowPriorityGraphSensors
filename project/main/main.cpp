@@ -183,6 +183,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow", "rain"};
     const std::vector < std::string> environment_list = {"none", "night"};
+    //const std::vector < std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
 
@@ -225,7 +226,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
                     gt_scene.generate_bird_view();
 
-                    if ( env_index == environment_list.size()-1 ) {
+                    if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
                         gt_scene.stopVires();
                     }
 
@@ -240,7 +241,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
                     gt_scene.generate_bird_view();
 
-                    if ( env_index == environment_list.size()-1 ) {
+                    if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
                         gt_scene.stopVires();
                     }
 

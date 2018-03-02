@@ -50,7 +50,7 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
             m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(gt_next_pts, gt_displacement));
-            m_obj_base_visibility.push_back(true);
+            m_obj_base_visibility.push_back(m_obj_trajectory.getVisibility().at(current_index));
         }
         else {
 
@@ -58,10 +58,8 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
                    frame_count,
                    current_index, m_obj_trajectory.getTrajectory().at(current_index).x, m_obj_trajectory.getTrajectory().at(current_index).y,
                    (float)0, (float)0);
-            m_obj_base_visibility.push_back(true); // Dangerous because this means the objects in first frame will
-            // always be visible, even if they are not.
             m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(m_obj_trajectory.getTrajectory().at(current_index) , cv::Point2f(0,0)));
-
+            m_obj_base_visibility.push_back(m_obj_trajectory.getVisibility().at(current_index));
         }
         current_index++;
     }
