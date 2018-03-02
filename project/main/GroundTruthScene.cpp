@@ -364,13 +364,13 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(5); // Wait before starting vtd again.
 
-        //if ( m_environment == "none") {
+        if ( m_environment == "none") {
         sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
                 project.c_str());
         std::cout << command << std::endl;
         system(command);
         std::cout << " I am out of bash" << std::endl;
-        //}
+        }
 
         sleep(5); // Give some time before you send SCP commands.
 
@@ -391,60 +391,62 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         bool connected_module_manager_port = false;
         bool connected_scp_port = false;
 
-        int scpSocket = openNetwork(SCP_DEFAULT_PORT);
-        std::cout << "scp socket - " << scpSocket << std::endl;
-        if (scpSocket != -1) { // this is blocking until the network has been opened
+        //if ( m_environment == "none" ) {
+            m_scpSocket = openNetwork(SCP_DEFAULT_PORT);
+        //}
+        std::cout << "scp socket - " << m_scpSocket << std::endl;
+        if (m_scpSocket != -1) { // this is blocking until the network has been opened
             connected_scp_port = true;
         }
 
         sleep(1); // Give some time before you send the next SCP command.
 
-        sendSCPMessage(scpSocket, apply.c_str());
+        sendSCPMessage(m_scpSocket, apply.c_str());
 
         sleep(5); // This is very important !! Mimimum 5 seconds of wait, till you start the simulation
 
-        sendSCPMessage(scpSocket, project_name.c_str());
+        sendSCPMessage(m_scpSocket, project_name.c_str());
 
         sleep(1);
 
-        sendSCPMessage(scpSocket, rdbtrigger_portnumber.c_str());
+        sendSCPMessage(m_scpSocket, rdbtrigger_portnumber.c_str());
 
         sleep(1);
 
-        sendSCPMessage(scpSocket, scenario_name.c_str());
+        sendSCPMessage(m_scpSocket, scenario_name.c_str());
 
         sleep(1);
 
-        sendSCPMessage(scpSocket, module_manager.c_str());
+        sendSCPMessage(m_scpSocket, module_manager_libModuleCameraSensor.c_str());
 
         sleep(1);
 
-        sendSCPMessage(scpSocket, camera_parameters.c_str());
+        sendSCPMessage(m_scpSocket, camera_parameters.c_str());
 
         sleep(1);
 
-        sendSCPMessage(scpSocket, display_parameters.c_str());
+        sendSCPMessage(m_scpSocket, display_parameters.c_str());
 
         sleep(2);
 
-        sendSCPMessage(scpSocket, m_environment_scp_message.c_str());
+        sendSCPMessage(m_scpSocket, m_environment_scp_message.c_str());
 
         sleep(1);
 
-        sendSCPMessage(scpSocket, message_scp.c_str());
+        sendSCPMessage(m_scpSocket, message_scp.c_str());
 
         sleep(1);
 
-        //sendSCPMessage(scpSocket, popup_scp.c_str());
+        //sendSCPMessage(m_scpSocket, popup_scp.c_str());
 
         //sleep(1);
 
-        sendSCPMessage(scpSocket, eyepoint.c_str());
+        sendSCPMessage(m_scpSocket, eyepoint.c_str());
 
         sleep(1);
 
 
-        sendSCPMessage(scpSocket, elevation.c_str());
+        sendSCPMessage(m_scpSocket, elevation.c_str());
 
         sleep(1);
 
@@ -454,24 +456,29 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(10);  // Give some time before you start the trigger and module manager ports.
 
-        //readScpNetwork(scpSocket);
+        //readScpNetwork(m_scpSocket);
 
-        //readScpNetwork(scpSocket);
+        //readScpNetwork(m_scpSocket);
 
         //sleep(1);
 
 
         // open the network connection to the taskControl (so triggers may be sent)
         fprintf(stderr, "creating network connection....\n");
-        m_triggerSocket = openNetwork(DEFAULT_PORT);
-        std::cout << "trigger socket - " << triggerSocket << std::endl;
-        if (triggerSocket != -1) { // this is blocking until the network has been opened
+        //if ( m_environment == "none") {
+            m_triggerSocket = openNetwork(DEFAULT_PORT);
+        //}
+        std::cout << "trigger socket - " << m_triggerSocket << std::endl;
+        if (m_triggerSocket != -1) { // this is blocking until the network has been opened
             connected_trigger_port = true;
         }
 
-        int moduleManagerSocket = openNetwork(DEFAULT_RX_PORT);
-        std::cout << "mm socket - " << moduleManagerSocket << std::endl;
-        if (moduleManagerSocket != -1) { // this is blocking until the network has been opened
+        //if ( m_environment == "none") {
+            m_moduleManagerSocket_Camera = openNetwork(DEFAULT_RX_PORT);
+        //}
+
+        std::cout << "mm socket - " << m_moduleManagerSocket_Camera << std::endl;
+        if (m_moduleManagerSocket_Camera != -1) { // this is blocking until the network has been opened
             connected_module_manager_port = true;
         }
 
@@ -514,7 +521,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     int lastSimFrame = mLastNetworkFrame;
 
-                    readNetwork(moduleManagerSocket);  // this calls parseRDBMessage() in vires_common.cpp
+                    readNetwork(m_moduleManagerSocket_Camera);  // this calls parseRDBMessage() in vires_common.cpp
 
                     if (lastSimFrame < 0) {
                         checkShm();  //empty IG buffer of spurious images
@@ -585,8 +592,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 return;
             };
 
-            stopVires();
-
+            configVires();
         }
     }
     if ( m_environment == "none") {
@@ -939,7 +945,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_DRIVER_CTRL_t *data, const double 
     }
 
     // ok, I have a new object state, so let's send the data
-    sendOwnObjectState( m_triggerSocket, simTime, simFrame );
+    sendOwnObjectState( sOwnObjectState, m_triggerSocket, simTime, simFrame );
 
     // remember last simulation time
     sLastSimTime = simTime;

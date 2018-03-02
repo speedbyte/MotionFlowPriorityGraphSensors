@@ -14,6 +14,7 @@
 #include "GroundTruthObjects.h"
 #include "Canvas.h"
 #include <map>
+#include <unistd.h>
 
 
 class GroundTruthScene  {
@@ -107,18 +108,16 @@ class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::V
     // <SimCtrl><Pause /></SimCtrl>
     // <SimCtrl><Step size="1" /></SimCtrl>
 
-    /*
-    #define RDB_COORD_TYPE_INERTIAL         0  /**< inertial co-ordinate system              @version 0x0101 */
-    #define RDB_COORD_TYPE_PLAYER           2  /**< player co-ordinate system                @version 0x0100 */
-    #define RDB_COORD_TYPE_SENSOR           3  /**< sensor-specific co-ordinate system       @version 0x0100 */
-    #define RDB_COORD_TYPE_USK              4  /**< universal sensor co-ordinate system      @version 0x0100 */
-    #define RDB_COORD_TYPE_USER             5  /**< relative to a user co-ordinate system    @version 0x0100 */
-    #define RDB_COORD_TYPE_WINDOW           6  /**< window co-ordinates [pixel]              @version 0x0100 */
-    #define RDB_COORD_TYPE_TEXTURE          7  /**< texture co-ordinates [normalized]        @version 0x010C */
-    #define RDB_COORD_TYPE_RELATIVE_START   8  /**< co-ordinate relative to start pos.       @version 0x0110 */
-    #define RDB_COORD_TYPE_GEO              9  /**< geographic co-ordinate                   @version 0x0118 */
-    #define RDB_COORD_TYPE_TRACK           10  /**< track co-ordinate (x=s, y=t )            @version 0x0119 */
-    */
+    //#define RDB_COORD_TYPE_INERTIAL         0  /**< inertial co-ordinate system              @version 0x0101 */
+    //#define RDB_COORD_TYPE_PLAYER           2  /**< player co-ordinate system                @version 0x0100 */
+    //#define RDB_COORD_TYPE_SENSOR           3  /**< sensor-specific co-ordinate system       @version 0x0100 */
+    //#define RDB_COORD_TYPE_USK              4  /**< universal sensor co-ordinate system      @version 0x0100 */
+    //#define RDB_COORD_TYPE_USER             5  /**< relative to a user co-ordinate system    @version 0x0100 */
+    //#define RDB_COORD_TYPE_WINDOW           6  /**< window co-ordinates [pixel]              @version 0x0100 */
+    //#define RDB_COORD_TYPE_TEXTURE          7  /**< texture co-ordinates [normalized]        @version 0x010C */
+    //#define RDB_COORD_TYPE_RELATIVE_START   8  /**< co-ordinate relative to start pos.       @version 0x0110 */
+    //#define RDB_COORD_TYPE_GEO              9  /**< geographic co-ordinate                   @version 0x0118 */
+    //#define RDB_COORD_TYPE_TRACK           10  /**< track co-ordinate (x=s, y=t )            @version 0x0119 */
 
 private:
 
@@ -132,6 +131,8 @@ private:
 
     std::string stop = "<SimCtrl> <Stop/> <LoadScenario filename=\"traffic_demo.xml\" /> <Init mode=\"operation\"/> </SimCtrl>";
 
+    std::string config = "<SimCtrl> <Config/> </SimCtrl>";
+
     std::string start = "<SimCtrl> <Start/> </SimCtrl>";
 
     std::string project_name = "<SimCtrl><Project name=\"Movement\"path=\"/local/git/MotionFlowPriorityGrapSensors/VIRES/VTD.2.0/Data/Projects/Current\" /></SimCtrl>";
@@ -140,22 +141,34 @@ private:
 
     std::string image_generator = "<ImageGenerator> <Window width=\"800\" height=\"600\" x=\"0\" y=\"0\" screen=\"0\" border=\"true\"/></ImageGenerator>";
 
-    std::string module_manager =
-            "<Sensor name=\"Sensor_MM\" type=\"video\" > <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> <Player name=\"MovingCar\"/> <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"12.500000\" bottom=\"15.000000\" top=\"15.000000\" /> <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> <Origin type=\"usk\" /> <Cull maxObjects=\"10\" enable=\"true\" /> <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"true\" /> <Filter objectType=\"none\" /><Filter objectType=\"pedestrian\" /> <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> </Sensor>";
-
-    std::string module_manager_single_ray =
-            "<Sensor name=\"simpleSensor\" type=\"radar\">\n"
-                    "    <Load     lib=\"libModuleSingleRaySensor.so\" path=\"\" persistent=\"true\" />\n"
-                    "    <Frustum  near=\"0.0\" far=\"50.0\" left=\"1.0\" right=\"1.0\" bottom=\"1.0\" top=\"1.0\" />\n"
-                    "    <Cull     maxObjects=\"5\" enable=\"true\" />\n"
-                    "    <Port     name=\"RDBout\" number=\"48195\" type=\"UDP\" sendEgo=\"true\" />\n"
-                    "    <Player   default=\"true\" />\n"
-                    "    <Position dx=\"3.5\" dy=\"0.0\" dz=\"0.5\" dhDeg=\"0.0\" dpDeg=\"0.0\" drDeg=\"0.0\" />\n"
-                    "    <Filter   objectType=\"pedestrian\"/>\n"
-                    "    <Filter   objectType=\"vehicle\"/>\n"
-                    "    <Filter   objectType=\"trafficSign\"/>\n"
-                    "    <Debug    enable=\"false\"/>\n"
+    std::string module_manager_libModuleCameraSensor =
+            "<Sensor name=\"Sensor_MM\" type=\"video\" > "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Player name=\"MovingCar\"/> "
+                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"12.500000\" bottom=\"15.000000\" top=\"15.000000\" /> "
+                    "   <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Origin type=\"usk\" /> "
+                    "   <Cull maxObjects=\"10\" enable=\"true\" /> "
+                    "   <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"true\" /> "
+                    "   <Filter objectType=\"none\" />"
+                    "   <Filter objectType=\"pedestrian\" /> "
+                    "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
                     "</Sensor>";
+
+    std::string module_manager_libModuleSingleRaySensor =
+            "<Sensor name=\"simpleSensor\" type=\"radar\">\n"
+                    "   <Load     lib=\"libModuleSingleRaySensor.so\" path=\"\" persistent=\"true\" />\n"
+                    "   <Frustum  near=\"0.0\" far=\"50.0\" left=\"1.0\" right=\"1.0\" bottom=\"1.0\" top=\"1.0\" />\n"
+                    "   <Cull     maxObjects=\"5\" enable=\"true\" />\n"
+                    "   <Port     name=\"RDBout\" number=\"48195\" type=\"UDP\" sendEgo=\"true\" />\n"
+                    "   <Player   default=\"true\" />\n"
+                    "   <Position dx=\"3.5\" dy=\"0.0\" dz=\"0.5\" dhDeg=\"0.0\" dpDeg=\"0.0\" drDeg=\"0.0\" />\n"
+                    "   <Filter   objectType=\"pedestrian\"/>\n"
+                    "   <Filter   objectType=\"vehicle\"/>\n"
+                    "   <Filter   objectType=\"trafficSign\"/>\n"
+                    "   <Debug    enable=\"false\"/>\n"
+                    "</Sensor>";
+
     // Precipitation intensity needs to be > 0 for snow and rain.
     const std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"auto\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
     //Rain
@@ -165,7 +178,7 @@ private:
 
     std::string camera_parameters = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"true\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
+    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
 
     std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
 
@@ -237,6 +250,11 @@ $
 
     int m_triggerSocket;
 
+    int m_scpSocket;
+
+    int m_moduleManagerSocket_Camera;
+
+
 
 
 public:
@@ -249,7 +267,23 @@ public:
         std::cout << "End of generation" << std::endl;
     }
 
-    void sendOwnObjectState( int & sendSocket, const double & simTime, const unsigned int & simFrame );
+    void configVires() {
+
+        sleep(1);
+
+        sendSCPMessage(m_scpSocket, stop.c_str());
+
+        sleep(1);
+
+        sendSCPMessage(m_scpSocket, config.c_str());
+
+        close(m_scpSocket);
+        close(m_triggerSocket);
+        close(m_moduleManagerSocket_Camera);
+
+
+
+    }
 
     void analyzeImage( RDB_IMAGE_t* img, const unsigned int & simFrame, unsigned int index );
 

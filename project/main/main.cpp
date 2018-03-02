@@ -225,7 +225,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
                     gt_scene.generate_bird_view();
 
-                    if ( env_index == environment_list.size() ) {
+                    if ( env_index == environment_list.size()-1 ) {
                         gt_scene.stopVires();
                     }
 
@@ -240,7 +240,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
                     gt_scene.generate_bird_view();
 
-                    if ( env_index == environment_list.size() ) {
+                    if ( env_index == environment_list.size()-1 ) {
                         gt_scene.stopVires();
                     }
 
