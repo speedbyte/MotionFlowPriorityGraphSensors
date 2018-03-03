@@ -65,10 +65,24 @@ int main(int argc, char *argv[]) {
     /* ------- */
 
     Base a;
+    Base *base_ptr;
     Derived b;
     Derived2 c;
 
+    std::string value = "hello";
     Base &d = b;
+    if ( value == "hello")
+    {
+        Derived der1;
+        base_ptr = &der1;
+
+    }
+    else {
+        DerivedNew der_new;
+        base_ptr = &der_new;
+    }
+
+    base_ptr->printDerived();
 
     a.printA();
     std::cout << std::endl;

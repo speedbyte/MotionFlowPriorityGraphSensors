@@ -101,7 +101,7 @@ void OpticalFlow::generate_shape_points() {
 
             for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
-                if ( ( m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1)
+                if ( ( m_list_simulated_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1)
                                .at(frame_count) == true ) ) {
 
                     auto CLUSTER_COUNT_GT = m_list_gt_objects.at(i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
@@ -144,11 +144,17 @@ void OpticalFlow::generate_shape_points() {
                     float keinTreffer = (CLUSTER_COUNT_ALGO - vollTreffer);
                     shape_points.push_back(cv::Point2f(vollTreffer, keinTreffer));
 
-                    std::cout << "object vollTreffer" << m_list_simulated_objects.at(i)->getObjectId() << " = " << vollTreffer << std::endl ;
+                    std::cout << "vollTreffer for object " << m_list_simulated_objects.at(i)->getObjectId() << " = " << vollTreffer << std::endl ;
 
                     shape_average.x += shape_points.at(i).x;
                     shape_average.y += shape_points.at(i).y;
 
+                }
+                else {
+                    std::cout << "visibility of object " << m_list_simulated_objects.at(i)->getObjectId() << " = " <<
+                            m_list_simulated_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                            - 1)
+                                    .at(frame_count) << " and hence not generating any shape points for this object " <<  std::endl ;
                 }
             }
 
@@ -240,7 +246,7 @@ void OpticalFlow::generate_collision_points() {
         std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
         unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)
-                ->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
+                ->get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at
                         (frame_skip - 1).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
         assert(FRAME_COUNT>0);
 
@@ -267,14 +273,14 @@ void OpticalFlow::generate_collision_points() {
                 int width = m_list_gt_objects.at(i)->getWidth();
                 int height = m_list_gt_objects.at(i)->getHeight();
 
-                if ( m_list_gt_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count)
+                if ( m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count)
                      == true ) {
 
                     cv::Point2f centroid = m_list_gt_objects.at(i)->
-                                    get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
+                                    get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip - 1)
                             .at(frame_count).first;
                     cv::Point2f mean_displacement = m_list_gt_objects.at(i)->
-                                    get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip- 1)
+                                    get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip- 1)
                             .at(frame_count).second;
 
                     cv::Point2f gt_line_pts = m_list_gt_objects.at(i)->get_line_parameters().at(frame_skip - 1)
@@ -297,10 +303,10 @@ void OpticalFlow::generate_collision_points() {
 
             for ( unsigned i = 0; i < list_of_gt_objects_combination.size(); i++) {
 
-                if ( ( list_of_gt_objects_combination.at(i).first->get_obj_extrapolated_visibility().at(frame_skip
+                if ( ( list_of_gt_objects_combination.at(i).first->get_obj_extrapolated_mean_visibility().at(frame_skip
                                                                                                     - 1)
                                .at(frame_count) == true ) && ( list_of_gt_objects_combination.at(i).second->
-                                get_obj_extrapolated_visibility()
+                                get_obj_extrapolated_mean_visibility()
                                                                        .at(frame_skip - 1)
                                                                        .at(frame_count) == true )) {
 
@@ -321,6 +327,15 @@ void OpticalFlow::generate_collision_points() {
 
                     find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
 
+                }
+                else {
+                    std::cout << "object " << list_of_simulated_objects_combination.at(i).first->getObjectId() << " visibility = " <<
+                            list_of_simulated_objects_combination.at(i).first->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                            - 1)
+                                    .at(frame_count) << " and object " << list_of_gt_objects_combination.at(i)
+                            .second->getObjectId() << " visibility = " << list_of_simulated_objects_combination.at(i).second->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                    - 1)
+                            .at(frame_count) << " and hence not generating any collision points for this object combination " <<  std::endl ;
                 }
             }
 
@@ -419,7 +434,7 @@ void OpticalFlow::generate_collision_points_mean() {
         std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
         unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
-                ->get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at
+                ->get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at
                 (frame_skip - 1).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
         assert(FRAME_COUNT>0);
 
@@ -446,14 +461,14 @@ void OpticalFlow::generate_collision_points_mean() {
                 int width = m_list_simulated_objects.at(i)->getWidth();
                 int height = m_list_simulated_objects.at(i)->getHeight();
 
-                if ( m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count)
+                if ( m_list_simulated_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count)
                         == true ) {
 
                     cv::Point2f centroid = m_list_simulated_objects.at(i)->
-                            get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip - 1)
+                            get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip - 1)
                             .at(frame_count).first;
                     cv::Point2f mean_displacement = m_list_simulated_objects.at(i)->
-                            get_obj_extrapolated_pixel_centroid_pixel_displacement_mean().at(frame_skip- 1)
+                            get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip- 1)
                             .at(frame_count).second;
 
                     cv::Point2f gt_line_pts = m_list_simulated_objects.at(i)->get_line_parameters().at(frame_skip - 1)
@@ -476,10 +491,10 @@ void OpticalFlow::generate_collision_points_mean() {
             std::vector<cv::Point2f> collision_points_average;
             for ( unsigned i = 0; i < list_of_simulated_objects_combination.size(); i++) {
 
-                if ( ( list_of_simulated_objects_combination.at(i).first->get_obj_extrapolated_visibility().at(frame_skip
+                if ( ( list_of_simulated_objects_combination.at(i).first->get_obj_extrapolated_mean_visibility().at(frame_skip
                         - 1)
                         .at(frame_count) == true ) && ( list_of_simulated_objects_combination.at(i).second->
-                        get_obj_extrapolated_visibility()
+                        get_obj_extrapolated_mean_visibility()
                         .at(frame_skip - 1)
                         .at(frame_count) == true )) {
 
@@ -519,6 +534,15 @@ void OpticalFlow::generate_collision_points_mean() {
 
                     }
 
+                }
+                else {
+                    std::cout << "object " << list_of_simulated_objects_combination.at(i).first->getObjectId() << " visibility = " <<
+                            list_of_simulated_objects_combination.at(i).first->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                            - 1)
+                                    .at(frame_count) << " and object " << list_of_gt_objects_combination.at(i)
+                            .second->getObjectId() << " visibility = " << list_of_simulated_objects_combination.at(i).second->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                    - 1)
+                            .at(frame_count) << " and hence not generating any collision points for this object combination " <<  std::endl ;
                 }
             }
 

@@ -593,7 +593,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 }
             }
             catch (...) {
-                stopVires();
+                stopSimulation();
                 return;
             };
 

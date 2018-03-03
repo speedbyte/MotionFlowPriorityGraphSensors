@@ -105,6 +105,35 @@ public:
 
 };
 
+class DerivedNew: public Base {
+
+    virtual void printDerived() override {
+        a = 20;
+        std::cout << "virtual derived to be printed " << a << std::endl;
+    }
+
+public:
+    void printB() {
+        std::cout << "in Derived\n";
+        printInherit();
+    }
+
+    void printInherit2() {
+        std::cout << "in derived inherit\n";
+        printInherit();
+    }
+
+    void printA()  {
+        std::cout << "print a" << a << std::endl;
+    }
+
+    void IamADerviedFunction() {
+
+    }
+
+};
+
+
 class Derived: public Base {
 
     virtual void printDerived() override {

@@ -198,92 +198,53 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
             std::vector<Objects *> ptr_list_of_gt_objects;
-
-
-            SimulatedObjects::SimulatedobjectCurrentCount = 0;
             GroundTruthObjects::objectCurrentCount = 0;
 
+            cv::Size_<unsigned> frame_size(800, 600);
+            std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
+            std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
+
+            GroundTruthScene *base_ptr_gt_scene;
 
             if ( vires_dataset.execute ) {
 
-                cv::Size_<unsigned> frame_size(800, 600);
-                std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
-                std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
                 Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
-
-
-                if ( environment_list[env_index] == "none") {
-
-                    GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects, vires_dataset.gt);
-                    gt_scene.generate_gt_scene();
-
-                    for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
-                        list_of_gt_objects_base.push_back(list_of_gt_objects.at(obj_count)) ;
-                    }
-                    for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
-                        ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_count)));
-                    }
-                    ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
-                    gt_scene.generate_bird_view();
-
-                    if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
-                        gt_scene.stopVires();
-                    }
-
-                }
-                else {
-                    GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, vires_dataset.gt);
-                    gt_scene.generate_gt_scene();
-
-                    for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
-                        list_of_gt_objects.push_back(list_of_gt_objects_base.at(obj_count)) ;
-                    }
-                    ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
-                    gt_scene.generate_bird_view();
-
-                    if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
-                        gt_scene.stopVires();
-                    }
-
-                }
-
+                // The first iteration "none" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
+                // through out the life cycle of the program.
+                GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, vires_dataset.gt);
+                base_ptr_gt_scene = &gt_scene;
+                base_ptr_gt_scene->generate_gt_scene();
 
             }
+
             else if ( cpp_dataset.execute  ) {
 
-                cv::Size_<unsigned> frame_size(800, 600);
-                std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
-                std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
+                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects, cpp_dataset.gt);
+                base_ptr_gt_scene = &gt_scene;
+                base_ptr_gt_scene->generate_gt_scene();
 
-                if ( environment_list[env_index] == "none") {
+            }
 
-                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects, cpp_dataset.gt);
-                    gt_scene.generate_gt_scene();
-
-                    for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
-                        list_of_gt_objects_base.push_back(list_of_gt_objects.at(obj_count)) ;
-                    }
-                    for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
-                        ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_count)));
-                    }
-                    ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
-                    gt_scene.generate_bird_view();
-
+            if ( environment_list[env_index] == "none") {
+                for ( auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
+                    ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_count)));
                 }
-                else {
-                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, cpp_dataset.gt);
-                    gt_scene.generate_gt_scene();
+            }
+            for ( auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
+                list_of_gt_objects.push_back(list_of_gt_objects_base.at(obj_count)) ;
+            }
+            ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
+            base_ptr_gt_scene->generate_bird_view();
 
-                    for ( auto obj_count = 0; obj_count < list_of_gt_objects.size(); obj_count++ ) {
-                        list_of_gt_objects.push_back(list_of_gt_objects_base.at(obj_count)) ;
-                    }
-                    ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
-                    gt_scene.generate_bird_view();
+            if ( vires_dataset.execute ) {
+
+                if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
+                    base_ptr_gt_scene->stopSimulation();
                 }
             }
 
-
+            // Generate Groundtruth data flow --------------------------------------
             if ( environment_list[env_index] == "none") {
 
                 fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
@@ -309,13 +270,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         }
     }
 
+    // Generate Algorithm data flow --------------------------------------
     for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
 
         if ( cpp_dataset.execute || vires_dataset.execute ) {
 
             std::vector<SimulatedObjects> list_of_simulated_objects;
             std::vector<Objects *> ptr_list_of_simulated_objects;
-
+            SimulatedObjects::SimulatedobjectCurrentCount = 0;
 
             list_of_simulated_objects.clear();
             for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
@@ -336,19 +298,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 AlgorithmFlow fback( environment_list[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects);
 
-                if ( environment_list[env_index] == "none" ) { // store the stimulated objects from the ground run.
+                fback.generate_flow_frame(fb, video_frames, environment_list[env_index], list_of_simulated_objects_base);
 
-                    fback.generate_flow_frame(fb, video_frames, environment_list[env_index], list_of_simulated_objects_base);
+                if ( environment_list[env_index] == "none" ) { // store the stimulated objects from the ground run.
 
                     for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
                         list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_count));
                     }
                     ptr_list_of_simulated_objects_base = ptr_list_of_simulated_objects;
-
-                }
-                else {
-
-                    fback.generate_flow_frame(fb, video_frames, environment_list[env_index], list_of_simulated_objects_base);
 
                 }
 

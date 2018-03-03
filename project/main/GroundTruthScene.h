@@ -62,12 +62,21 @@ public:
 
     void writeTrajectoryInYaml();
 
-    virtual void generate_gt_scene() {};
+    virtual void generate_gt_scene() {
+        std::cout << "base implementation of generate_gt_scene()" << std::endl;
+    };
 
     void generate_bird_view();
 
     void prepare_directories();
 
+    void stopSimulation() {
+        char command[1024];
+        sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
+        std::cout << command << std::endl;
+        system(command);
+        std::cout << "End of generation" << std::endl;
+    }
 
 };
 
@@ -257,15 +266,8 @@ $
 
 
 
-public:
 
-    void stopVires() {
-        char command[1024];
-        sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
-        std::cout << command << std::endl;
-        system(command);
-        std::cout << "End of generation" << std::endl;
-    }
+public:
 
     void configVires() {
 
