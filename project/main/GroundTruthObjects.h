@@ -27,13 +27,11 @@ private:
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_point_pixel_displacement;
 
-    std::vector<std::vector<std::vector<bool> > > m_obj_extrapolated_shape_visibility;
-
     void generate_obj_base_pixel_point_pixel_displacement();
 
     void generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips);
 
-    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const unsigned &max_skips);
+    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips);
 
     void generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement  ) override;
 
@@ -73,10 +71,10 @@ public:
 
             generate_obj_extrapolated_pixel_point_pixel_displacement( MAX_SKIPS );
 
-            generate_obj_extrapolated_shape_pixel_point_pixel_displacement(MAX_SKIPS);
+            generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(MAX_SKIPS);
 
             // m_obj_extrapolated_shape_pixel_point_pixel_displacement
-            generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( MAX_SKIPS , m_obj_extrapolated_shape_pixel_point_pixel_displacement);
+            generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( MAX_SKIPS , m_obj_extrapolated_shape_pixel_point_pixel_displacement, m_obj_extrapolated_shape_visibility);
 
             generate_obj_line_parameters(MAX_SKIPS);
         }
@@ -87,7 +85,7 @@ public:
     }
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> >  get_obj_base_pixel_point_pixel_displacement()
-    const override {
+    const  {
         return m_obj_base_pixel_point_pixel_displacement;
     }
 

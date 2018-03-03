@@ -113,7 +113,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_point_pixel_displacemen
 }
 
 
-void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const unsigned &max_skips ) {
+void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips ) {
 
 // object image_data_and_shape
 
@@ -122,13 +122,15 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
         std::vector<std::vector<bool>  > outer_base_visiblity;
 
-        std::cout << "generate_obj_extrapolated_shape_pixel_point_pixel_displacement for frame_skip " << frame_skip << std::endl;
+        std::cout << "generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility for frame_skip " << frame_skip << std::endl;
         unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).size();
         assert(FRAME_COUNT>0);
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
             cv::Point2f gt_next_pts = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).at(frame_count).first;
             cv::Point2f gt_displacement = m_obj_extrapolated_pixel_point_pixel_displacement.at(frame_skip - 1).at(frame_count).second;
+
+            bool visibility = m_obj_extrapolated_visibility.at(frame_skip - 1).at(frame_count);
 
             std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
             std::vector<bool> base_visibility;
@@ -137,7 +139,7 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
                 for (unsigned k = 0; k < m_ObjectHeight; k++) {
                     base_movement.push_back(std::make_pair(cv::Point2f(gt_next_pts.x + j, gt_next_pts.y +
                                                                                               k), gt_displacement));
-                    base_visibility.push_back(true);
+                    base_visibility.push_back(visibility);
                 }
             }
             outer_base_movement.push_back(base_movement);

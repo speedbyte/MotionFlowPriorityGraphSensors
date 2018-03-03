@@ -23,7 +23,14 @@ protected:
             m_obj_extrapolated_stencil_pixel_point_pixel_displacement;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
+
+
+    std::vector<bool> m_obj_base_visibility;
+
+    std::vector<std::vector<bool> >  m_obj_extrapolated_visibility;
+
+    std::vector<std::vector<std::vector<bool> > > m_obj_extrapolated_shape_visibility;
 
     std::vector<std::vector<bool> > m_obj_extrapolated_mean_visibility;
 
@@ -35,10 +42,6 @@ protected:
     int m_ObjectHeight;
 
     unsigned m_objectId;
-
-    std::vector<bool> m_obj_base_visibility;
-
-    std::vector<std::vector<bool> >  m_obj_extrapolated_visibility;
 
     const std::string m_objectName;
 
@@ -55,13 +58,13 @@ public:
         return m_objectName;
     }
 
-    void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement);
+    void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility);
 
     void generate_obj_line_parameters( const unsigned &max_skips);
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >    get_obj_extrapolated_pixel_centroid_pixel_displacement_mean()
     const {
-        return m_obj_extrapolated_pixel_centroid_pixel_displacement_mean;
+        return m_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
     }
 
     int getWidth() const {
@@ -94,6 +97,10 @@ public:
         return m_obj_extrapolated_shape_pixel_point_pixel_displacement;
     };
 
+    std::vector<std::vector<std::vector<bool> > > get_obj_extrapolated_shape_visibility() const {
+        return m_obj_extrapolated_shape_visibility;
+    };
+
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > get_obj_extrapolated_stencil_pixel_point_pixel_displacement() const {
         return m_obj_extrapolated_stencil_pixel_point_pixel_displacement;
     };
@@ -102,9 +109,7 @@ public:
         return m_obj_extrapolated_pixel_point_pixel_displacement;
     }
 
-    virtual std::vector<std::pair<cv::Point2f, cv::Point2f> >  get_obj_base_pixel_point_pixel_displacement() const { }
-
-    virtual void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement )  {};
+    virtual void generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement,  std::vector<std::vector<bool> > outer_base_visibility)  {};
 
     virtual void generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement ) {};
 

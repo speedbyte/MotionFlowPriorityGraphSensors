@@ -252,9 +252,9 @@
 
     void generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips);
 
-    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement(const unsigned &max_skips);
+    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips);
 
-    void generate_obj_extrapolated_pixel_centroid_pixel_displacement_mean( const unsigned &max_skips) override;
+    void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( const unsigned &max_skips) override;
 
 
  Project goals:

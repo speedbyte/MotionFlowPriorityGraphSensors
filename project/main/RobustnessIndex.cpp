@@ -241,35 +241,40 @@ void VectorRobustness::fitLineForCollisionPoints(const cv::Mat_<float> &samples_
     cv::Mat mat_samples(1, samples_xy.cols, CV_32FC(2));
 
     std::cout << "\nsamples_xy\n" << samples_xy;
-    cv::calcCovarMatrix(samples_xy, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
 
-    cv::meanStdDev(samples_xy.row(0), mean_x, stddev_x);
-    cv::meanStdDev(samples_xy.row(1), mean_y, stddev_y);
+    if ( !samples_xy.empty() ) {
 
-    //assert(std::floor(mean(0) * 100) == std::floor(mean_x(0) * 100));
-    //assert(std::floor(mean(1) * 100) == std::floor(mean_y(0) * 100));
+        cv::calcCovarMatrix(samples_xy, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
 
-    cv::Mat_<float> stddev(2, 2);
-    stddev << stddev_x[0] * stddev_x[0], stddev_x[0] * stddev_y[0], stddev_x[0] * stddev_y[0], stddev_y[0] *
-                                                                                               stddev_y[0];
-    corr = covar / stddev;
+        cv::meanStdDev(samples_xy.row(0), mean_x, stddev_x);
+        cv::meanStdDev(samples_xy.row(1), mean_y, stddev_y);
 
-    std::cout << "\nMean\n" << mean << "\nCovar\n" << covar <<
-              "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
-              "\ncorr\n" << corr << std::endl;
+        //assert(std::floor(mean(0) * 100) == std::floor(mean_x(0) * 100));
+        //assert(std::floor(mean(1) * 100) == std::floor(mean_y(0) * 100));
+
+        cv::Mat_<float> stddev(2, 2);
+        stddev << stddev_x[0] * stddev_x[0], stddev_x[0] * stddev_y[0], stddev_x[0] * stddev_y[0], stddev_y[0] *
+                                                                                                   stddev_y[0];
+        corr = covar / stddev;
+
+        std::cout << "\nMean\n" << mean << "\nCovar\n" << covar <<
+                  "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
+                  "\ncorr\n" << corr << std::endl;
 
 
-    for (unsigned i = 0; i < samples_xy.cols; i++) {
-        mat_samples.at<cv::Vec<float, 2>>(0, i)[0] = samples_xy[0][i];
-        mat_samples.at<cv::Vec<float, 2>>(0, i)[1] = samples_xy[1][i];
+        for (unsigned i = 0; i < samples_xy.cols; i++) {
+            mat_samples.at<cv::Vec<float, 2>>(0, i)[0] = samples_xy[0][i];
+            mat_samples.at<cv::Vec<float, 2>>(0, i)[1] = samples_xy[1][i];
+        }
+
+        cv::fitLine(mat_samples, line, CV_DIST_L2, 0, 0.01, 0.01); // radius and angle from the origin - a kind of
+        // constraint
+        m = line[1] / line[0];
+        c = line[3] - line[2] * m;
+        coord1 = "0," + std::to_string(c);
+        coord2 = std::to_string((2000 - c ) / m) + ",375";
+        gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
+        plot_least_square_line_list = gp_line;
+
     }
-
-    cv::fitLine(mat_samples, line, CV_DIST_L2, 0, 0.01, 0.01); // radius and angle from the origin - a kind of
-    // constraint
-    m = line[1] / line[0];
-    c = line[3] - line[2] * m;
-    coord1 = "0," + std::to_string(c);
-    coord2 = std::to_string((2000 - c ) / m) + ",375";
-    gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
-    plot_least_square_line_list = gp_line;
 }

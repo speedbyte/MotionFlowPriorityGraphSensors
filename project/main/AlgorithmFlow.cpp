@@ -76,7 +76,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_base_movement(m_list_simulated_objects.size());
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_stencil_movement(m_list_simulated_objects.size());
-        std::vector<std::vector<bool>  > outer_base_visiblity;
+        std::vector<std::vector<std::vector<bool> >  > outer_base_visiblity(m_list_simulated_objects.size());
 
         char frame_skip_folder_suffix[50];
         char file_name_input_image[50];
@@ -170,6 +170,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             }
 
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > base_movement(m_list_simulated_objects.size());
+            std::vector<std::vector<bool>  > base_visibility(m_list_simulated_objects.size());
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > stencil_movement(m_list_simulated_objects.size());
             /*
             if ( frame_count%frame_skip != 0 ) {
@@ -339,8 +340,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator it ;
 
-
-
                 for ( it = frame_points.begin(); it !=frame_points.end(); it++ )
                 {
 
@@ -389,118 +388,135 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             (frame_skip-1).at(frame_count).first.y;
                     float columnBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
+                    bool visibility = m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
+                    if ( visibility ) {
 
+                        cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height),(cvRound(rowBegin)+height+height)).colRange
+                                (cvRound(columnBegin-width),(cvRound(columnBegin)+width+width));
 
-                    cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height),(cvRound(rowBegin)+height+height)).colRange
-                            (cvRound(columnBegin-width),(cvRound(columnBegin)+width+width));
+                        // Here I should write the fact
+                        // roi_write = cv::Scalar(i,j,k);
+                        //
 
-                    // Here I should write the fact
-                    // roi_write = cv::Scalar(i,j,k);
-                    //
+                        cv::Size roi_size;
+                        cv::Point roi_offset;
+                        roi.locateROI(roi_size, roi_offset);
 
-                    cv::Size roi_size;
-                    cv::Point roi_offset;
-                    roi.locateROI(roi_size, roi_offset);
+                        cv::Point2f gt_displacement = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
+                                (frame_skip-1).at(frame_count).second;
+                        // This is for the base model
+                        if ( noise == "none") {
 
-                    cv::Point2f gt_displacement = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).second;
-                    // This is for the base model
-                    if ( noise == "none") {
+                            assert(m_list_simulated_objects.size() == m_list_gt_objects.size());
 
-                        assert(m_list_simulated_objects.size() == m_list_gt_objects.size());
+                            std::cout << "expected value " << rowBegin << " " << columnBegin << " " << gt_displacement << std::endl;
 
-                        std::cout << "expected value " << rowBegin << " " << columnBegin << " " << gt_displacement << std::endl;
+                            std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(i)->getObjectId() << std::endl;
 
-                        std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(i)->getObjectId() << std::endl;
+                            auto COUNT = base_algo_simulated_object_list.size();
+                            assert(COUNT==0);
+                            for (unsigned y = 0; y < roi.rows; y++) {
+                                for (unsigned x = 0; x < roi.cols; x++) {
 
-                        auto COUNT = base_algo_simulated_object_list.size();
-                        assert(COUNT==0);
-                        for (unsigned y = 0; y < roi.rows; y++) {
-                            for (unsigned x = 0; x < roi.cols; x++) {
+                                    cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y,x);
+                                    auto dist_gt = cv::norm(gt_displacement);
+                                    auto dist_algo = cv::norm(algo_displacement);
+                                    if ((int)dist_algo < 1  ) {
+                                        continue;
+                                    }
+                                    auto dist_err = std::abs(dist_gt-dist_algo);
+                                    if ( dist_err < DISTANCE_ERROR_TOLERANCE ) {
+                                        auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
+                                        if ( ( ( std::abs(angle_err) ) < ANGLE_ERROR_TOLERANCE ) ) {
+                                            // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
+                                            stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
+                                            base_movement.at(i).push_back(std::make_pair(cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
+                                                                                         algo_displacement));
+                                            base_visibility.at(i).push_back(visibility);
 
-                                cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y,x);
-                                auto dist_gt = cv::norm(gt_displacement);
-                                auto dist_algo = cv::norm(algo_displacement);
-                                if ((int)dist_algo < 1  ) {
-                                    continue;
+                                        }
+                                    }
                                 }
-                                auto dist_err = std::abs(dist_gt-dist_algo);
-                                if ( dist_err < DISTANCE_ERROR_TOLERANCE ) {
-                                    auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
-                                    if ( ( ( std::abs(angle_err) ) < ANGLE_ERROR_TOLERANCE ) ) {
-                                        // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
-                                        stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
+                            }
+                            auto new_stencil_size = stencil_movement.at(i).size();
+                            std::cout << new_stencil_size << std::endl;
+
+                            bool hack = true;
+                            if ( hack && new_stencil_size == 0 ) {
+                                stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(0,0), cv::Point2f(0,0)));
+                                base_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
+                                base_visibility.at(i).push_back(false);
+                            }
+                            else {
+                                if ( new_stencil_size == 0 ) {
+                                    if ( frame_count == 1 ) {  // Inital frame is quite problematic
+                                        stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(0,0), cv::Point2f(0,0)));
+                                        base_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
+                                        base_visibility.at(i).push_back(false);
+                                    }
+                                    else {
+                                        assert(new_stencil_size>0);
+                                    }
+                                }
+                            }
+                        }
+                        else {
+
+                            assert(m_list_simulated_objects.size() == base_algo_simulated_object_list.size());
+                            std::cout << "making a stencil on the basis of base algorithm object " << base_algo_simulated_object_list.at(i).getObjectId() << std::endl;
+
+                            auto COUNT = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                                    (frame_skip-1).at(frame_count).size();
+                            for ( auto count = 0; count < COUNT; count++ ) {
+                                float x  = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                                        (frame_skip-1).at(frame_count).at(count).first.x;
+                                float y  = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                                        (frame_skip-1).at(frame_count).at(count).first.y;
+                                cv::Point2f algo_displacement = flow_frame.at<cv::Vec2f>(y,x);
+                                // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
+                                stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(x, y), algo_displacement));
+                            }
+
+                            auto new_stencil_size = stencil_movement.at(i).size();
+                            std::cout << new_stencil_size << std::endl;
+
+                            // This is for the noisy model
+                            for (unsigned y = 0; y < roi.rows; y++) {
+                                for (unsigned x = 0; x < roi.cols; x++) {
+                                    cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y,x);
+                                    auto dist_gt = cv::norm(gt_displacement);
+                                    auto dist_algo = cv::norm(algo_displacement);
+                                    auto dist_err = std::abs(dist_gt-dist_algo);
+                                    if ( dist_err < DISTANCE_ERROR_TOLERANCE ) {
+                                        auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
+                                        if ( ( ( std::abs(angle_err) ) < ANGLE_ERROR_TOLERANCE ) ) {
+                                            // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
+                                            // the stencil is going to be generated as above
+                                            // stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
+                                        }
                                     }
                                     base_movement.at(i).push_back(std::make_pair(cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
                                                                                  algo_displacement));
+                                    base_visibility.at(i).push_back(visibility);
 
                                 }
                             }
                         }
-                        auto new_stencil_size = stencil_movement.at(i).size();
-                        std::cout << new_stencil_size << std::endl;
 
-                        bool hack = true;
-                        if ( hack && new_stencil_size == 0 ) {
-                            stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(0,0), cv::Point2f(0,0)));
-                        }
-                        else {
-                            if ( new_stencil_size == 0 ) {
-                                if ( frame_count == 1 ) {  // Inital frame is quite problematic
-                                    stencil_movement.at(i).push_back(std::make_pair(m_list_gt_objects.at(i)->get_obj_base_pixel_point_pixel_displacement().at(frame_count).first,
-                                            m_list_gt_objects.at(i)->get_obj_base_pixel_point_pixel_displacement().at(frame_count).second));
-                                }
-                                else {
-                                    assert(new_stencil_size>0);
-                                }
-                            }
-                        }
+                        outer_base_movement.at(i).push_back(base_movement.at(i));
+                        outer_base_visiblity.at(i).push_back(base_visibility.at(i));
+                        outer_stencil_movement.at(i).push_back(stencil_movement.at(i));
 
                     }
                     else {
+                        base_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
+                        base_visibility.at(i).push_back(false);
+                        stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
+                        outer_base_movement.at(i).push_back(base_movement.at(i));
+                        outer_base_visiblity.at(i).push_back(base_visibility.at(i));
+                        outer_stencil_movement.at(i).push_back(stencil_movement.at(i));
 
-                        assert(m_list_simulated_objects.size() == base_algo_simulated_object_list.size());
-                        std::cout << "making a stencil on the basis of base algorithm object " << base_algo_simulated_object_list.at(i).getObjectId() << std::endl;
-
-                        auto COUNT = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                (frame_skip-1).at(frame_count).size();
-                        for ( auto count = 0; count < COUNT; count++ ) {
-                            float x  = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                    (frame_skip-1).at(frame_count).at(count).first.x;
-                            float y  = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                    (frame_skip-1).at(frame_count).at(count).first.y;
-                            cv::Point2f algo_displacement = flow_frame.at<cv::Vec2f>(y,x);
-                            // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
-                            stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(x, y), algo_displacement));
-                        }
-
-                        auto new_stencil_size = stencil_movement.at(i).size();
-                        std::cout << new_stencil_size << std::endl;
-
-                        // This is for the noisy model
-                        for (unsigned y = 0; y < roi.rows; y++) {
-                            for (unsigned x = 0; x < roi.cols; x++) {
-                                cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y,x);
-                                auto dist_gt = cv::norm(gt_displacement);
-                                auto dist_algo = cv::norm(algo_displacement);
-                                auto dist_err = std::abs(dist_gt-dist_algo);
-                                if ( dist_err < DISTANCE_ERROR_TOLERANCE ) {
-                                    auto angle_err = std::cosh(algo_displacement.dot(gt_displacement) / (dist_gt*dist_algo));
-                                    if ( ( ( std::abs(angle_err) ) < ANGLE_ERROR_TOLERANCE ) ) {
-                                        // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
-                                        // the stencil is going to be generated as above
-                                        // stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
-                                    }
-                                }
-                                base_movement.at(i).push_back(std::make_pair(cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
-                                                                             algo_displacement));
-                            }
-                        }
                     }
-
-                    outer_base_movement.at(i).push_back(base_movement.at(i));
-                    outer_stencil_movement.at(i).push_back(stencil_movement.at(i));
-
                 }
 
                 //cv::imwrite(temp_result_flow_path, flowframe);
@@ -517,8 +533,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
                     base_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
+                    base_visibility.at(i).push_back(false);
                     stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
                     outer_base_movement.at(i).push_back(base_movement.at(i));
+                    outer_base_visiblity.at(i).push_back(base_visibility.at(i));
                     outer_stencil_movement.at(i).push_back(stencil_movement.at(i));
                 }
 
@@ -564,13 +582,13 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             }
 
             // Display the output image
-            cv::imshow(m_resultordner, image_02_frame);
+            //cv::imshow(m_resultordner, image_02_frame);
             prevGray = curGray.clone();
 
         }
 
         for ( ushort i = 0; i < m_list_simulated_objects.size(); i++) {
-            m_list_simulated_objects.at(i)->generate_obj_extrapolated_shape_pixel_point_pixel_displacement(outer_base_movement.at(i));
+            m_list_simulated_objects.at(i)->generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(outer_base_movement.at(i), outer_base_visiblity.at(i));
             m_list_simulated_objects.at(i)->generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(outer_stencil_movement.at(i));
         }
 
