@@ -158,9 +158,10 @@ private:
                     "   <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "
-                    "   <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"true\" /> "
+                    "   <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"false\" /> "
                     "   <Filter objectType=\"none\" />"
                     "   <Filter objectType=\"pedestrian\" /> "
+                    "   <Filter objectType=\"vehicle\" /> "
                     "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
                     "</Sensor>";
 

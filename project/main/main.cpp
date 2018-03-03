@@ -214,6 +214,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, vires_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
                 base_ptr_gt_scene->generate_gt_scene();
+                base_ptr_gt_scene->generate_bird_view();
+
+                if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
+                    base_ptr_gt_scene->stopSimulation();
+                }
 
             }
 
@@ -223,6 +228,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects, cpp_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
                 base_ptr_gt_scene->generate_gt_scene();
+                base_ptr_gt_scene->generate_bird_view();
 
             }
 
@@ -235,14 +241,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 list_of_gt_objects.push_back(list_of_gt_objects_base.at(obj_count)) ;
             }
             ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
-            base_ptr_gt_scene->generate_bird_view();
 
-            if ( vires_dataset.execute ) {
-
-                if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
-                    base_ptr_gt_scene->stopSimulation();
-                }
-            }
 
             // Generate Groundtruth data flow --------------------------------------
             if ( environment_list[env_index] == "none") {
