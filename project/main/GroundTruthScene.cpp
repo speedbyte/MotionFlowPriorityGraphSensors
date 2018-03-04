@@ -83,9 +83,6 @@ void GroundTruthScene::writeTrajectoryInYaml() {
     }
     //write_fs << "]";
     write_fs.release();
-
-    /*trajectory_list.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)
-            data->base.pos.y)); */
 }
 
 void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
@@ -167,12 +164,13 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     if ( m_environment == "none") {
 
+
         if ( !m_regenerate_yaml_file  ) { // dont generate, just read
+
             for ( auto i = 0; i < MAX_ALLOWED_OBJECTS; i++ ) {
 
                 m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
             }
-
             readTrajectoryFromFile("../trajectory.yml");
 
             ushort map_pair_count = 0;
@@ -193,11 +191,13 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             Rectangle rectangle(40,40); // width, height
 
             objectMetaDataList.at(0) = ObjectMetaData(rectangle, dimension, achterbahn, "rectangle_long", 60);
-
+            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
             objectMetaDataList.at(1) = ObjectMetaData(rectangle, dimension, achterbahn, "random_object", 120);
+            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
+
         }
 
-        for ( auto i = 0; i < objectMetaDataList.size() ; i++) {
+        for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
 
             GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectDimension(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
             m_list_objects.push_back(gt_obj);
@@ -207,17 +207,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         if ( m_regenerate_yaml_file  ) {
             writeTrajectoryInYaml();
         }
-
-        /*
-         * First create an object with an image_data_and_shape
-         * Then define the object trajectory
-         * Then copy the object image_data_and_shape on the object trajectory points
-         * Then store the image in the ground truth image folder
-         *
-         * Then extrapolate the object trajectory with the above image_data_and_shape
-         *
-         * Then store the flow information in the flow folder
-         */
     }
 
     prepare_directories();
@@ -354,24 +343,27 @@ void GroundTruthScene::generate_bird_view() {
 
 void GroundTruthSceneExternal::generate_gt_scene() {
 
-    std::vector<MyTrajectory> myTrajectoryVector(MAX_ALLOWED_OBJECTS);
     Noise noNoise;
-    Rectangle myShape(40,40);
 
     std::vector<ObjectMetaData> objectMetaDataList(MAX_ALLOWED_OBJECTS);
-    ObjectMetaData obj1, obj2;
 
     if ( m_environment == "none") {
 
-        if (!m_regenerate_yaml_file) {
-            for (auto i = 0; i < MAX_ALLOWED_OBJECTS; i++) {
-                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
-            }
+        for ( auto i = 0; i < MAX_ALLOWED_OBJECTS; i++ ) {
+
+            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
+        }
+
+        if ( !m_regenerate_yaml_file  ) { // dont generate, just read
+
             readTrajectoryFromFile("../trajectory.yml");
-        } else {
-            boost::filesystem::remove("../trajectory.yml");
-            for (auto i = 0; i < 2; i++) {
-                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
+
+            ushort map_pair_count = 0;
+            for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
+                //std::cout << myPair.first << "\n";
+                objectMetaDataList.at(map_pair_count) = ObjectMetaData(objectMetaDataList.at(map_pair_count).getObjectShape(),
+                                                                       objectMetaDataList.at(map_pair_count).getObjectDimension(), objectMetaDataList.at(map_pair_count).getObjectTrajectory(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
+                map_pair_count++;
             }
         }
     }
@@ -628,22 +620,13 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     }
     if ( m_environment == "none") {
 
-        std::vector<std::string> objectNameList = {"New Character", "New Character01"};
-        std::vector<ushort> startPoint;
-        if ( m_regenerate_yaml_file  ) { // do not read, generate
-            startPoint = {0,0};
-        }
-        else {
-            startPoint = {0,0};
-        }
-        for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
+        for ( auto i = 0; i < objectMetaDataList.size() ; i++) {
 
-            GroundTruthObjects obj1(myShape, m_ptr_customObjectMetaDataList.at(i)->getObjectTrajectory(), startPoint.at(i), noNoise, objectNameList.at(i));
-            m_list_objects.push_back(obj1);
+            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectDimension(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), noNoise, objectMetaDataList.at(i).getObjectName());
+            m_list_objects.push_back(gt_obj);
+
         }
 
-        //m_list_objects.push_back(obj1);
-        //m_list_objects.push_back(obj2);
         if ( m_regenerate_yaml_file  ) {
             writeTrajectoryInYaml();
         }
@@ -736,9 +719,11 @@ simFrame, const
                                           short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                                           const unsigned int &totalElem) {
 
+    cv::Point2f traj_point, dimension_point;
+
     if ( m_environment == "none") {
 
-        if ( data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN ) {
+        if ( data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR ) {
             if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && simFrame >= 0  ) {
 
                 fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
@@ -746,14 +731,18 @@ simFrame, const
                                 .geo.dimY);
 
                 if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
-                    m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
-                    m_objectCount += 1;
-                }
-                //std::cout << "hello\n";
-                //std::cout << data->base.name << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
-                m_mapObjectNameToObjectMetaData[data->base.name]->getObjectTrajectory().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y), true);
 
-                //myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
+                    Rectangle rectangle((int)(data->base.geo.dimX),(int)(data->base.geo.dimY)); // width, height
+                    m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
+                    m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
+                    m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
+                    m_objectCount += 1;
+
+                }
+                traj_point = cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y);
+                dimension_point = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
+                m_mapObjectNameToObjectMetaData[data->base.name]->getObjectTrajectory().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), traj_point, true);
+                (m_mapObjectNameToObjectMetaData[data->base.name])->getObjectDimension().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), dimension_point);
 
             } else {
                 //std::cout << data->base.type << std::endl;

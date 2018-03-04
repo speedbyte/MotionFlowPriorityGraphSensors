@@ -41,8 +41,6 @@ protected:
 
     std::vector<ObjectMetaData *> m_ptr_customObjectMetaDataList;
 
-    std::vector<ObjectImageShapeData *> m_ptr_customObjectImageShapeDataList;
-
     bool m_regenerate_yaml_file;
 
     std::map<std::string, ObjectMetaData*> m_mapObjectNameToObjectMetaData;
