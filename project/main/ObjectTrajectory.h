@@ -39,7 +39,10 @@ public:
 
     virtual void pushVisibility(bool visibility) {}
 
-    virtual void atFrameNumber(ushort frameNumber, cv::Point2f points, bool visibility) {}
+    void atFrameNumber(ushort frameNumber, cv::Point2f points, bool visibility) {
+        m_trajectory.at(frameNumber) = points;
+        m_visibility.at(frameNumber) = visibility;
+    }
 
     std::vector<cv::Point2f> getTrajectory() const {
         return m_trajectory;
@@ -150,13 +153,8 @@ public:
         m_trajectory.push_back(points);
     }
 
-    virtual void pushVisibility(bool visibility) {
+    void pushVisibility(bool visibility) override{
         m_visibility.push_back(visibility);
-    }
-
-    void atFrameNumber(ushort frameNumber, cv::Point2f points, bool visibility) override {
-        m_trajectory.at(frameNumber) = points;
-        m_visibility.at(frameNumber) = visibility;
     }
 
 };

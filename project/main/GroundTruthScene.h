@@ -13,6 +13,7 @@
 #include "ObjectTrajectory.h"
 #include "GroundTruthObjects.h"
 #include "Canvas.h"
+#include "ObjectMetaData.h"
 #include <map>
 #include <unistd.h>
 
@@ -38,13 +39,13 @@ protected:
 
     cv::FileStorage m_write_fs;
 
-    std::vector<ObjectTrajectory *> m_ptr_customObjectTrajectoryList;
+    std::vector<ObjectMetaData *> m_ptr_customObjectMetaDataList;
 
     std::vector<ObjectImageShapeData *> m_ptr_customObjectImageShapeDataList;
 
     bool m_regenerate_yaml_file;
 
-    std::map<std::string, ObjectTrajectory*> m_mapObjectNameToTrajectory;
+    std::map<std::string, ObjectMetaData*> m_mapObjectNameToObjectMetaData;
 
     ushort m_objectCount = 0;
 

@@ -162,6 +162,15 @@ public:
     ushort& getObjectStartPoint() {
         return m_objectMetaData_startPoint;
     }
+
+    void setObjectName(std::string objectName) {
+        m_objectMetaData_name = objectName;
+    }
+
+    void setObjectShape(ObjectImageShapeData objectShape) {
+        m_objectMetaData_shape = objectShape;
+    }
+
 };
 
 

@@ -74,6 +74,8 @@ void GroundTruthScene::writeTrajectoryInYaml() {
                         << "visible" << m_list_objects.at(i).get_obj_base_visibility().at(frame_count)
                         << "x" <<  m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x
                         << "y" << m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y
+                        << "dim_x" << m_list_objects.at(i).getWidth()
+                        << "dim_y" << m_list_objects.at(i).getHeight()
                         << "}";
             }
             write_fs << "]";
@@ -121,14 +123,17 @@ void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
                 for ( file_node_iterator = file_node_iterator_begin; file_node_iterator != file_node_iterator_end;
                         file_node_iterator++) {
 
-                    if ( m_mapObjectNameToTrajectory.count((*file_node_iterator)["name"].string()) == 0 ) {
-                        m_mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
+                    if ( m_mapObjectNameToObjectMetaData.count((*file_node_iterator)["name"].string()) == 0 ) {
+                        m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(m_objectCount);
+                        m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName((*file_node_iterator)["name"].string());
+                        Rectangle rectangle((int)(*file_node_iterator)["dim_x"],(int)(*file_node_iterator)["dim_y"]); // width, height
+                        m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
                         m_objectCount+=1;
                     }
                     //std::cout << "hello\n";
                     std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
                     traj_point = cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]);
-                    (m_mapObjectNameToTrajectory[(*file_node_iterator)["name"].string()])->atFrameNumber(frame_count, traj_point, (int)(*file_node_iterator)["visible"]);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectTrajectory().atFrameNumber(frame_count, traj_point, (int)(*file_node_iterator)["visible"]);
                 }
             }
         }
@@ -151,52 +156,45 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 */
     //std::cout << myTrajectory1.getTrajectory();
 
-    Achterbahn achterbahn, achterbahn1, achterbahn2;
-    achterbahn.process(Dataset::getFrameSize());
-    achterbahn1.process(Dataset::getFrameSize());
-    //achterbahn1.setDynamic();
-    achterbahn2.process(Dataset::getFrameSize());
-    //achterbahn2.setDynamic();
-
-    std::vector<MyTrajectory> myTrajectoryVector(MAX_ALLOWED_OBJECTS);
-
-    Rectangle rectangle(40,40); // width, height
 
     ColorfulNoise colorfulNoise;
 
-    std::vector<ObjectMetaData> objectMetaDataList;
-    ObjectMetaData obj1, obj2;
+    std::vector<ObjectMetaData> objectMetaDataList(MAX_ALLOWED_OBJECTS);
+    //ObjectMetaData obj1, obj2;
 
     if ( m_environment == "none") {
 
         if ( !m_regenerate_yaml_file  ) { // dont generate, just read
             for ( auto i = 0; i < MAX_ALLOWED_OBJECTS; i++ ) {
 
-                m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
+                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
             }
 
             readTrajectoryFromFile("../trajectory.yml");
 
-            obj1 = ObjectMetaData(rectangle, myTrajectoryVector.at(0), "rectangle_long", 0);
-            objectMetaDataList.push_back(obj1);
-
-            obj2 = ObjectMetaData(rectangle, myTrajectoryVector.at(1), "random_object", 0);
-            objectMetaDataList.push_back(obj2);
+            ushort map_pair_count = 0;
+            for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
+                //std::cout << myPair.first << "\n";
+                objectMetaDataList.at(map_pair_count) = ObjectMetaData(objectMetaDataList.at(map_pair_count).getObjectShape(), objectMetaDataList.at(map_pair_count).getObjectTrajectory(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
+                map_pair_count++;
+            }
         }
         else { // genreate yaml file
             boost::filesystem::remove("../trajectory.yml");
 
-            obj1 = ObjectMetaData(rectangle, achterbahn, "rectangle_long", 60);
-            objectMetaDataList.push_back(obj1);
+            Achterbahn achterbahn;
+            achterbahn.process(Dataset::getFrameSize());
+            Rectangle rectangle(40,40); // width, height
 
-            obj2 = ObjectMetaData(rectangle, achterbahn, "random_object", 120);
-            objectMetaDataList.push_back(obj2);
+            objectMetaDataList.at(0) = ObjectMetaData(rectangle, achterbahn, "rectangle_long", 60);
+
+            objectMetaDataList.at(1) = ObjectMetaData(rectangle, achterbahn, "random_object", 120);
         }
 
         for ( auto i = 0; i < objectMetaDataList.size() ; i++) {
 
-            GroundTruthObjects gt_obj1(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
-            m_list_objects.push_back(gt_obj1);
+            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
+            m_list_objects.push_back(gt_obj);
         }
 
         if ( m_regenerate_yaml_file  ) {
@@ -347,17 +345,20 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     Noise noNoise;
     Rectangle myShape(40,40);
 
+    std::vector<ObjectMetaData> objectMetaDataList(MAX_ALLOWED_OBJECTS);
+    ObjectMetaData obj1, obj2;
+
     if ( m_environment == "none") {
 
         if (!m_regenerate_yaml_file) {
             for (auto i = 0; i < MAX_ALLOWED_OBJECTS; i++) {
-                m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
+                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
             }
             readTrajectoryFromFile("../trajectory.yml");
         } else {
             boost::filesystem::remove("../trajectory.yml");
             for (auto i = 0; i < 2; i++) {
-                m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
+                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
             }
         }
     }
@@ -622,9 +623,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         else {
             startPoint = {0,0};
         }
-        for ( auto i = 0; i < m_ptr_customObjectTrajectoryList.size() ; i++) {
+        for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
 
-            GroundTruthObjects obj1(myShape, *m_ptr_customObjectTrajectoryList.at(i), startPoint.at(i), noNoise, objectNameList.at(i));
+            GroundTruthObjects obj1(myShape, m_ptr_customObjectMetaDataList.at(i)->getObjectTrajectory(), startPoint.at(i), noNoise, objectNameList.at(i));
             m_list_objects.push_back(obj1);
         }
 
@@ -731,13 +732,13 @@ simFrame, const
                         data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
                                 .geo.dimY);
 
-                if (m_mapObjectNameToTrajectory.count(data->base.name) == 0) {
-                    m_mapObjectNameToTrajectory[data->base.name] = m_ptr_customObjectTrajectoryList.at(m_objectCount);
+                if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
+                    m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
                     m_objectCount += 1;
                 }
                 //std::cout << "hello\n";
                 //std::cout << data->base.name << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
-                m_mapObjectNameToTrajectory[data->base.name]->atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y), true);
+                m_mapObjectNameToObjectMetaData[data->base.name]->getObjectTrajectory().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y), true);
 
                 //myTrajectoryVector.at(data->base.id-3).pushTrajectoryPoints(cv::Point2f((float)data->base.pos.x, (float)data->base.pos.y));
 
