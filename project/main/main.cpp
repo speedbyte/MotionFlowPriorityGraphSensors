@@ -225,7 +225,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             else if ( cpp_dataset.execute  ) {
 
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
-                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects, cpp_dataset.gt);
+                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, cpp_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
                 base_ptr_gt_scene->generate_gt_scene();
                 base_ptr_gt_scene->generate_bird_view();

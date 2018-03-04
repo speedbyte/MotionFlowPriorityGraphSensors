@@ -1,153 +1,196 @@
 %YAML:1.0
 ---
 frame_count_000:
-   - { name:New Character, visible:0, x:-1., y:-1. }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2857144165039062e+02,
+       y:3.2506915283203125e+02 }
+   - { name:random_object, visible:1, x:3.7142855834960938e+02,
+       y:2.7493084716796875e+02 }
 frame_count_001:
-   - { name:New Character, visible:1, x:5.1663165283203125e+02,
-       y:2.7715649414062500e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2746859741210938e+02,
+       y:3.2416818237304688e+02 }
+   - { name:random_object, visible:1, x:3.7031027221679688e+02,
+       y:2.7402362060546875e+02 }
 frame_count_002:
-   - { name:New Character, visible:1, x:5.1497778320312500e+02,
-       y:2.7716326904296875e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2638079833984375e+02,
+       y:3.2327340698242188e+02 }
+   - { name:random_object, visible:1, x:3.6917614746093750e+02,
+       y:2.7311007690429688e+02 }
 frame_count_003:
-   - { name:New Character, visible:1, x:5.1210699462890625e+02,
-       y:2.7717535400390625e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2530755615234375e+02,
+       y:3.2238467407226562e+02 }
+   - { name:random_object, visible:1, x:3.6802575683593750e+02,
+       y:2.7219018554687500e+02 }
 frame_count_004:
-   - { name:New Character, visible:1, x:5.0801855468750000e+02,
-       y:2.7719250488281250e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2424847412109375e+02,
+       y:3.2150192260742188e+02 }
+   - { name:random_object, visible:1, x:3.6685876464843750e+02,
+       y:2.7126397705078125e+02 }
 frame_count_005:
-   - { name:New Character, visible:1, x:5.0306011962890625e+02,
-       y:2.7176879882812500e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2320300292968750e+02,
+       y:3.2062496948242188e+02 }
+   - { name:random_object, visible:1, x:3.6567486572265625e+02,
+       y:2.7033151245117188e+02 }
 frame_count_006:
-   - { name:New Character, visible:1, x:4.9805859375000000e+02,
-       y:2.7179437255859375e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2217074584960938e+02,
+       y:3.1975369262695312e+02 }
+   - { name:random_object, visible:1, x:3.6447372436523438e+02,
+       y:2.6939288330078125e+02 }
 frame_count_007:
-   - { name:New Character, visible:1, x:4.9307360839843750e+02,
-       y:2.7182025146484375e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2115112304687500e+02,
+       y:3.1888790893554688e+02 }
+   - { name:random_object, visible:1, x:3.6325509643554688e+02,
+       y:2.6844818115234375e+02 }
 frame_count_008:
-   - { name:New Character, visible:1, x:4.8813488769531250e+02,
-       y:2.7184573364257812e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.2014370727539062e+02,
+       y:3.1802740478515625e+02 }
+   - { name:random_object, visible:1, x:3.6201873779296875e+02,
+       y:2.6749768066406250e+02 }
 frame_count_009:
-   - { name:New Character, visible:1, x:4.8320977783203125e+02,
-       y:2.7187145996093750e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1914794921875000e+02,
+       y:3.1717205810546875e+02 }
+   - { name:random_object, visible:1, x:3.6076449584960938e+02,
+       y:2.6654162597656250e+02 }
 frame_count_010:
-   - { name:New Character, visible:1, x:4.7828863525390625e+02,
-       y:2.7189685058593750e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1816336059570312e+02,
+       y:3.1632159423828125e+02 }
+   - { name:random_object, visible:1, x:3.5949218750000000e+02,
+       y:2.6558035278320312e+02 }
 frame_count_011:
-   - { name:New Character, visible:1, x:4.7337634277343750e+02,
-       y:2.7192221069335938e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1718939208984375e+02,
+       y:3.1547586059570312e+02 }
+   - { name:random_object, visible:1, x:3.5820178222656250e+02,
+       y:2.6461428833007812e+02 }
 frame_count_012:
-   - { name:New Character, visible:1, x:4.6847796630859375e+02,
-       y:2.7194781494140625e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1622555541992188e+02,
+       y:3.1463464355468750e+02 }
+   - { name:random_object, visible:1, x:3.5689324951171875e+02,
+       y:2.6364395141601562e+02 }
 frame_count_013:
-   - { name:New Character, visible:1, x:4.6358319091796875e+02,
-       y:2.7197305297851562e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1527130126953125e+02,
+       y:3.1379769897460938e+02 }
+   - { name:random_object, visible:1, x:3.5556661987304688e+02,
+       y:2.6266998291015625e+02 }
 frame_count_014:
-   - { name:New Character, visible:1, x:4.5870233154296875e+02,
-       y:2.7199859619140625e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1432608032226562e+02,
+       y:3.1296484375000000e+02 }
+   - { name:random_object, visible:1, x:3.5422198486328125e+02,
+       y:2.6169314575195312e+02 }
 frame_count_015:
-   - { name:New Character, visible:1, x:4.5382507324218750e+02,
-       y:2.7202374267578125e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1338940429687500e+02,
+       y:3.1213577270507812e+02 }
+   - { name:random_object, visible:1, x:3.5285955810546875e+02,
+       y:2.6071429443359375e+02 }
 frame_count_016:
-   - { name:New Character, visible:1, x:4.4895660400390625e+02,
-       y:2.7204885864257812e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1246072387695312e+02,
+       y:3.1131036376953125e+02 }
+   - { name:random_object, visible:1, x:3.5147955322265625e+02,
+       y:2.5973446655273438e+02 }
 frame_count_017:
-   - { name:New Character, visible:1, x:4.4410195922851562e+02,
-       y:2.7207424926757812e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1153952026367188e+02,
+       y:3.1048828125000000e+02 }
+   - { name:random_object, visible:1, x:3.5008239746093750e+02,
+       y:2.5875491333007812e+02 }
 frame_count_018:
-   - { name:New Character, visible:1, x:4.3925070190429688e+02,
-       y:2.7209927368164062e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.1062524414062500e+02,
+       y:3.0966937255859375e+02 }
+   - { name:random_object, visible:1, x:3.4866848754882812e+02,
+       y:2.5777697753906250e+02 }
 frame_count_019:
-   - { name:New Character, visible:1, x:4.3441345214843750e+02,
-       y:2.7212454223632812e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0971734619140625e+02,
+       y:3.0885333251953125e+02 }
+   - { name:random_object, visible:1, x:3.4723837280273438e+02,
+       y:2.5680236816406250e+02 }
 frame_count_020:
-   - { name:New Character, visible:1, x:4.2957946777343750e+02,
-       y:2.7214947509765625e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0881530761718750e+02,
+       y:3.0803997802734375e+02 }
+   - { name:random_object, visible:1, x:3.4579269409179688e+02,
+       y:2.5583288574218750e+02 }
 frame_count_021:
-   - { name:New Character, visible:1, x:4.2475415039062500e+02,
-       y:2.7217437744140625e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0791860961914062e+02,
+       y:3.0722906494140625e+02 }
+   - { name:random_object, visible:1, x:3.4433227539062500e+02,
+       y:2.5487069702148438e+02 }
 frame_count_022:
-   - { name:New Character, visible:1, x:4.1994277954101562e+02,
-       y:2.7219952392578125e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0702670288085938e+02,
+       y:3.0642031860351562e+02 }
+   - { name:random_object, visible:1, x:3.4285797119140625e+02,
+       y:2.5391824340820312e+02 }
 frame_count_023:
-   - { name:New Character, visible:1, x:4.1513446044921875e+02,
-       y:2.7222433471679688e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0613906860351562e+02,
+       y:3.0561352539062500e+02 }
+   - { name:random_object, visible:1, x:3.4137084960937500e+02,
+       y:2.5297834777832031e+02 }
 frame_count_024:
-   - { name:New Character, visible:1, x:4.1034027099609375e+02,
-       y:2.7224938964843750e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0525512695312500e+02,
+       y:3.0480841064453125e+02 }
+   - { name:random_object, visible:1, x:3.3987200927734375e+02,
+       y:2.5205415344238281e+02 }
 frame_count_025:
-   - { name:New Character, visible:1, x:4.0554907226562500e+02,
-       y:2.7227410888671875e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0437438964843750e+02,
+       y:3.0400479125976562e+02 }
+   - { name:random_object, visible:1, x:3.3836282348632812e+02,
+       y:2.5114926147460938e+02 }
 frame_count_026:
-   - { name:New Character, visible:1, x:4.0076623535156250e+02,
-       y:2.7229876708984375e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0349633789062500e+02,
+       y:3.0320236206054688e+02 }
+   - { name:random_object, visible:1, x:3.3684469604492188e+02,
+       y:2.5026776123046875e+02 }
 frame_count_027:
-   - { name:New Character, visible:1, x:3.9599755859375000e+02,
-       y:2.7232369995117188e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0262039184570312e+02,
+       y:3.0240090942382812e+02 }
+   - { name:random_object, visible:1, x:3.3531930541992188e+02,
+       y:2.4941421508789062e+02 }
 frame_count_028:
-   - { name:New Character, visible:1, x:3.9123162841796875e+02,
-       y:2.7234829711914062e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0174603271484375e+02,
+       y:3.0160021972656250e+02 }
+   - { name:random_object, visible:1, x:3.3378836059570312e+02,
+       y:2.4859381103515625e+02 }
 frame_count_029:
-   - { name:New Character, visible:1, x:3.8647998046875000e+02,
-       y:2.7237310791015625e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:4.0087274169921875e+02,
+       y:3.0079998779296875e+02 }
+   - { name:random_object, visible:1, x:3.3225387573242188e+02,
+       y:2.4781231689453125e+02 }
 frame_count_030:
-   - { name:New Character, visible:1, x:3.8173083496093750e+02,
-       y:2.7239761352539062e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:400., y:300. }
+   - { name:random_object, visible:1, x:3.3071795654296875e+02,
+       y:2.4707623291015625e+02 }
 frame_count_031:
-   - { name:New Character, visible:1, x:3.7698999023437500e+02,
-       y:2.7242205810546875e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:3.9912725830078125e+02,
+       y:2.9920001220703125e+02 }
+   - { name:random_object, visible:1, x:3.2918289184570312e+02,
+       y:2.4639274597167969e+02 }
 frame_count_032:
-   - { name:New Character, visible:1, x:3.7226348876953125e+02,
-       y:2.7244677734375000e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:3.9825396728515625e+02,
+       y:2.9839978027343750e+02 }
+   - { name:random_object, visible:1, x:3.2765118408203125e+02,
+       y:2.4576988220214844e+02 }
 frame_count_033:
-   - { name:New Character, visible:1, x:3.6753930664062500e+02,
-       y:2.7247113037109375e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:3.9737960815429688e+02,
+       y:2.9759909057617188e+02 }
+   - { name:random_object, visible:1, x:3.2612542724609375e+02,
+       y:2.4521653747558594e+02 }
 frame_count_034:
-   - { name:New Character, visible:1, x:3.6282958984375000e+02,
-       y:2.7249575805664062e+02 }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:3.9650366210937500e+02,
+       y:2.9679763793945312e+02 }
+   - { name:random_object, visible:1, x:3.2460852050781250e+02,
+       y:2.4474249267578125e+02 }
 frame_count_035:
-   - { name:New Character, visible:0, x:-1., y:-1. }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:3.9562561035156250e+02,
+       y:2.9599520874023438e+02 }
+   - { name:random_object, visible:1, x:3.2310342407226562e+02,
+       y:2.4435848999023438e+02 }
 frame_count_036:
-   - { name:New Character, visible:0, x:-1., y:-1. }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:3.9474487304687500e+02,
+       y:2.9519158935546875e+02 }
+   - { name:random_object, visible:1, x:3.2161334228515625e+02,
+       y:2.4407623291015625e+02 }
 frame_count_037:
-   - { name:New Character, visible:0, x:-1., y:-1. }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:3.9386093139648438e+02,
+       y:2.9438647460937500e+02 }
+   - { name:random_object, visible:1, x:3.2014157104492188e+02,
+       y:2.4390847778320312e+02 }
 frame_count_038:
-   - { name:New Character, visible:0, x:-1., y:-1. }
-   - { name:New Character01, visible:0, x:-1., y:-1. }
+   - { name:rectangle_long, visible:1, x:3.9297329711914062e+02,
+       y:2.9357968139648438e+02 }
+   - { name:random_object, visible:1, x:3.1869161987304688e+02,
+       y:2.4386889648437500e+02 }

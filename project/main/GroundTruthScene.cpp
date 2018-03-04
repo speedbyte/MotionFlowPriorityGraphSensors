@@ -156,7 +156,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     achterbahn2.process(Dataset::getFrameSize());
     //achterbahn2.setDynamic();
 
-    std::vector<MyTrajectory> myTrajectoryVector(2);
+    std::vector<MyTrajectory> myTrajectoryVector(MAX_ALLOWED_OBJECTS);
 
     Rectangle rectangle1(5, 5); // width, height
     Rectangle rectangle2(20,70); // width, height
@@ -166,7 +166,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     if ( m_environment == "none") {
 
         if ( !m_regenerate_yaml_file  ) {
-            for ( auto i = 0; i < 2; i++ ) {
+            for ( auto i = 0; i < MAX_ALLOWED_OBJECTS; i++ ) {
                 m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
             }
             readTrajectoryFromFile("../trajectory.yml");
@@ -331,14 +331,14 @@ void GroundTruthScene::generate_bird_view() {
 
 void GroundTruthSceneExternal::generate_gt_scene() {
 
-    std::vector<MyTrajectory> myTrajectoryVector(2);
+    std::vector<MyTrajectory> myTrajectoryVector(MAX_ALLOWED_OBJECTS);
     Noise noNoise;
     Rectangle myShape(40,40);
 
     if ( m_environment == "none") {
 
         if (!m_regenerate_yaml_file) {
-            for (auto i = 0; i < 2; i++) {
+            for (auto i = 0; i < MAX_ALLOWED_OBJECTS; i++) {
                 m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
             }
             readTrajectoryFromFile("../trajectory.yml");
