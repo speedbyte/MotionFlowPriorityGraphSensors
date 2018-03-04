@@ -65,6 +65,42 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
     }
 }
 
+void GroundTruthObjects::generate_obj_base_shape_dimensions() {
+
+    //Initialization
+
+    ushort current_index = m_startPoint;
+
+    std::cout << "generate_obj_base_shape_dimensions with start_point " << m_startPoint << std::endl;
+
+    for (ushort frame_count=0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; frame_count++) {
+        // The first frame is the reference frame, hence it is skipped
+
+        cv::Point2f gt_dimensions = {0,0};
+
+        //If we are at the end of the path vector, we need to reset our iterators
+        if (current_index >= m_obj_dimensions.getTrajectoryDimensions().size()) {
+            current_index = 0;
+            gt_dimensions.x = m_obj_dimensions.getTrajectoryDimensions().at(current_index).x ;
+            gt_dimensions.y = m_obj_dimensions.getTrajectoryDimensions().at(current_index).y ;
+
+        } else {
+
+            gt_dimensions.x = m_obj_dimensions.getTrajectoryDimensions().at(current_index).x ;
+            gt_dimensions.y = m_obj_dimensions.getTrajectoryDimensions().at(current_index).y ;
+
+        }
+
+        printf("%s, %u, %u , %f, %f\n", (m_obj_trajectory.getVisibility().at(current_index)?"true":"false"),
+               frame_count,
+               current_index, gt_dimensions.x, gt_dimensions.y);
+
+        // make m_flowvector_with_coordinate_gt with smallest resolution.
+        m_obj_base_shape_dimensions.push_back(gt_dimensions);
+    current_index++;
+    }
+}
+
 void GroundTruthObjects::generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips) {
 
     float temp_flow_x(0);

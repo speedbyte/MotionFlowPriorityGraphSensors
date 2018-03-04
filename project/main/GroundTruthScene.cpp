@@ -74,8 +74,8 @@ void GroundTruthScene::writeTrajectoryInYaml() {
                         << "visible" << m_list_objects.at(i).get_obj_base_visibility().at(frame_count)
                         << "x" <<  m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x
                         << "y" << m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y
-                        << "dim_x" << m_list_objects.at(i).getWidth()
-                        << "dim_y" << m_list_objects.at(i).getHeight()
+                        << "dim_x" << m_list_objects.at(i).get_obj_base_shape_dimensions().at(frame_count).x
+                        << "dim_y" << m_list_objects.at(i).get_obj_base_shape_dimensions().at(frame_count).y
                         << "}";
             }
             write_fs << "]";
@@ -91,7 +91,7 @@ void GroundTruthScene::writeTrajectoryInYaml() {
 void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
 
     cv::FileStorage fs(trajectoryFileName, cv::FileStorage::READ);
-    cv::Point2f traj_point;
+    cv::Point2f traj_point, dimension_point;
 
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
@@ -133,7 +133,10 @@ void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
                     //std::cout << "hello\n";
                     std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
                     traj_point = cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]);
+                    dimension_point = cv::Point2f((int)(*file_node_iterator)["dim_x"], (int)(*file_node_iterator)["dim_y"]);
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectTrajectory().atFrameNumber(frame_count, traj_point, (int)(*file_node_iterator)["visible"]);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectDimension().atFrameNumber(frame_count, dimension_point);
+
                 }
             }
         }
@@ -175,7 +178,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             ushort map_pair_count = 0;
             for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
                 //std::cout << myPair.first << "\n";
-                objectMetaDataList.at(map_pair_count) = ObjectMetaData(objectMetaDataList.at(map_pair_count).getObjectShape(), objectMetaDataList.at(map_pair_count).getObjectTrajectory(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
+                objectMetaDataList.at(map_pair_count) = ObjectMetaData(objectMetaDataList.at(map_pair_count).getObjectShape(),
+                                                                       objectMetaDataList.at(map_pair_count).getObjectDimension(), objectMetaDataList.at(map_pair_count).getObjectTrajectory(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
                 map_pair_count++;
             }
         }
@@ -184,16 +188,18 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
             Achterbahn achterbahn;
             achterbahn.process(Dataset::getFrameSize());
+            ObjectDimensions dimension;
+            dimension.process(Dataset::getFrameSize());
             Rectangle rectangle(40,40); // width, height
 
-            objectMetaDataList.at(0) = ObjectMetaData(rectangle, achterbahn, "rectangle_long", 60);
+            objectMetaDataList.at(0) = ObjectMetaData(rectangle, dimension, achterbahn, "rectangle_long", 60);
 
-            objectMetaDataList.at(1) = ObjectMetaData(rectangle, achterbahn, "random_object", 120);
+            objectMetaDataList.at(1) = ObjectMetaData(rectangle, dimension, achterbahn, "random_object", 120);
         }
 
         for ( auto i = 0; i < objectMetaDataList.size() ; i++) {
 
-            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
+            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectDimension(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
             m_list_objects.push_back(gt_obj);
         }
 

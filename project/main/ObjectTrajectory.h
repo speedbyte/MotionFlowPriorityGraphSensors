@@ -17,6 +17,52 @@
 #include <opencv2/videoio.hpp>
 #include <opencv/cv.hpp>
 
+class ObjectDimensions {
+
+private:
+    std::vector<cv::Point2f> m_dimensions;
+
+public:
+
+    ObjectDimensions() {
+        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
+            m_dimensions.push_back(cv::Point2f(0,0));
+        }
+    }
+
+    void atFrameNumber(ushort frameNumber, cv::Point2f points) {
+        m_dimensions.at(frameNumber) = points;
+    }
+
+    std::vector<cv::Point2f> getTrajectoryDimensions() const {
+        return m_dimensions;
+    }
+
+    void process(cv::Size frame_size) {
+        std::vector<ushort> theta;
+        for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
+            theta.push_back(frame_count);
+        }
+        // Prepare points
+        cv::Point2f l_pixel_position;
+        for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
+
+            l_pixel_position.x = static_cast<float>((frame_size.width/2) + (100 * cos(theta[i] *CV_PI / 180.0) /
+                                                                            (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
+
+            l_pixel_position.y = static_cast<float>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
+                                                                                   sin(theta[i] * CV_PI / 180.0)) /
+                                                                             (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
+
+            l_pixel_position.x /= 10;
+            l_pixel_position.y /= 10;
+
+            m_dimensions.at(i) = (l_pixel_position);
+        }
+    }
+
+};
+
 
 class ObjectTrajectory {
 
