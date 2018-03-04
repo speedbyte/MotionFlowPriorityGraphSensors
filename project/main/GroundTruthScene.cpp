@@ -74,8 +74,8 @@ void GroundTruthScene::writeTrajectoryInYaml() {
                         << "visible" << m_list_objects.at(i).get_obj_base_visibility().at(frame_count)
                         << "x" <<  m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x
                         << "y" << m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y
-                        << "dim_x" << m_list_objects.at(i).get_obj_base_shape_dimensions().at(frame_count).x
-                        << "dim_y" << m_list_objects.at(i).get_obj_base_shape_dimensions().at(frame_count).y
+                        << "dim_x" << m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x
+                        << "dim_y" << m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y
                         << "}";
             }
             write_fs << "]";
@@ -201,6 +201,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
             GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectDimension(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
             m_list_objects.push_back(gt_obj);
+
         }
 
         if ( m_regenerate_yaml_file  ) {
@@ -280,7 +281,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     frame_skip_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
+            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y)).colRange(0,cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x));
             trajectoryShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
+            trajectoryShape = trajectoryShape.rowRange(0, cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y)).colRange(0,cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x));
 
             if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
@@ -288,8 +291,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x),
                                  cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y),
-                                image_data_and_shape.cols,
-                                image_data_and_shape.rows)));
+                                 cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
+                                 cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
 
 
                 if (m_list_objects.at(i).getObjectId() == 0) {
@@ -297,7 +300,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     trajectoryShape.copyTo(tempGroundTruthTrajectory(
                             cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
                                                      .getTrajectory().at(frame_count).x), cvRound(m_list_objects.at
-                                    (i).getTrajectoryPoints().getTrajectory().at(frame_count).y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                                    (i).getTrajectoryPoints().getTrajectory().at(frame_count).y),
+                                     cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
+                                     cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
                     cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
                 }
 
@@ -306,7 +311,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
                             cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
                                                      .getTrajectory().at(frame_count).x), cvRound(m_list_objects.at(i).getTrajectoryPoints()
-                                                                                                                                               .getTrajectory().at(frame_count).y), image_data_and_shape.cols, image_data_and_shape.rows)));
+                                                                                                                                               .getTrajectory().at(frame_count).y),
+                                     cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
+                                     cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
                     cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
                 }
             }

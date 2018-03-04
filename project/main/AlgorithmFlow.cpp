@@ -375,8 +375,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
                     //two objects
 
-                    int width = m_list_simulated_objects.at(i)->getWidth();
-                    int height = m_list_simulated_objects.at(i)->getHeight();
+                    int width = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).x);
+                    int height = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).y);
 
                     // The stencil should be created by comparing the ground truth data and only taking
                     // those points that is within a boundary.

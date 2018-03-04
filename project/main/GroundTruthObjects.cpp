@@ -79,15 +79,15 @@ void GroundTruthObjects::generate_obj_base_shape_dimensions() {
         cv::Point2f gt_dimensions = {0,0};
 
         //If we are at the end of the path vector, we need to reset our iterators
-        if (current_index >= m_obj_dimensions.getTrajectoryDimensions().size()) {
+        if (current_index >= m_obj_dimension.getTrajectoryDimensions().size()) {
             current_index = 0;
-            gt_dimensions.x = m_obj_dimensions.getTrajectoryDimensions().at(current_index).x ;
-            gt_dimensions.y = m_obj_dimensions.getTrajectoryDimensions().at(current_index).y ;
+            gt_dimensions.x = m_obj_dimension.getTrajectoryDimensions().at(current_index).x ;
+            gt_dimensions.y = m_obj_dimension.getTrajectoryDimensions().at(current_index).y ;
 
         } else {
 
-            gt_dimensions.x = m_obj_dimensions.getTrajectoryDimensions().at(current_index).x ;
-            gt_dimensions.y = m_obj_dimensions.getTrajectoryDimensions().at(current_index).y ;
+            gt_dimensions.x = m_obj_dimension.getTrajectoryDimensions().at(current_index).x ;
+            gt_dimensions.y = m_obj_dimension.getTrajectoryDimensions().at(current_index).y ;
 
         }
 
@@ -96,7 +96,7 @@ void GroundTruthObjects::generate_obj_base_shape_dimensions() {
                current_index, gt_dimensions.x, gt_dimensions.y);
 
         // make m_flowvector_with_coordinate_gt with smallest resolution.
-        m_obj_base_shape_dimensions.push_back(gt_dimensions);
+        m_obj_base_shape_dimension.push_back(gt_dimensions);
     current_index++;
     }
 }
@@ -148,6 +148,36 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_point_pixel_displacemen
     }
 }
 
+void GroundTruthObjects::generate_obj_extrapolated_shape_dimension(const unsigned &max_skips) {
+
+    for ( unsigned frame_skip = 1; frame_skip < max_skips ; frame_skip++ ) {
+
+        std::vector<cv::Point2f>  multiframe_flowvector;
+
+        std::cout << "generate_obj_extrapolated_shape_dimension for frame_skip " << frame_skip << std::endl;
+        unsigned long FRAME_COUNT = m_obj_base_shape_dimension.size();
+        assert(FRAME_COUNT>0);
+
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+
+            // The first frame is the reference frame. frame skip 1 means no skips
+            // The below code has to go through consecutive frames
+            if ((frame_count % frame_skip != 0)) {
+            }
+            else {
+                if ( m_obj_base_visibility.at(frame_count) == false) {
+                    // Make all 0
+                    multiframe_flowvector.push_back(m_obj_base_shape_dimension.at(frame_count));
+
+                } else {
+                    multiframe_flowvector.push_back(m_obj_base_shape_dimension.at(frame_count));
+                }
+            }
+        }
+        m_obj_extrapolated_shape_dimension.push_back(multiframe_flowvector);
+    }
+}
+
 
 void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips ) {
 
@@ -171,8 +201,11 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
             std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
             std::vector<bool> base_visibility;
 
-            for (unsigned j = 0; j < m_ObjectWidth; j++) {
-                for (unsigned k = 0; k < m_ObjectHeight; k++) {
+            int ObjectWidth = cvRound(m_obj_extrapolated_shape_dimension.at(frame_skip-1).at(frame_count).x);
+            int ObjectHeight = cvRound(m_obj_extrapolated_shape_dimension.at(frame_skip-1).at(frame_count).y);
+
+            for (unsigned j = 0; j < ObjectWidth; j++) {
+                for (unsigned k = 0; k < ObjectHeight; k++) {
                     base_movement.push_back(std::make_pair(cv::Point2f(gt_next_pts.x + j, gt_next_pts.y +
                                                                                               k), gt_displacement));
                     base_visibility.push_back(visibility);

@@ -95,9 +95,6 @@ void OpticalFlow::generate_shape_points() {
             std::vector<cv::Point2f> shape_points;
             std::vector<cv::Point2f> shape_points_average;
 
-            int width = m_list_gt_objects.at(0)->getWidth();
-            int height = m_list_gt_objects.at(0)->getHeight();
-
 
             for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
@@ -120,7 +117,10 @@ void OpticalFlow::generate_shape_points() {
 
                     ushort vollTreffer = 0;
 
-                    if ( m_resultordner != "/generated" ) {
+                    int width = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).x);
+                    int height = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).y);
+
+                    if ( m_resultordner != "/generated" ) {  // for real algorithms
                         for ( auto j = 0; j < CLUSTER_COUNT_ALGO; j++ ) {
                             auto x_coordinates =  m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                     (frame_skip - 1).at(frame_count).at(j).first.x;
@@ -270,8 +270,8 @@ void OpticalFlow::generate_collision_points() {
             for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
 
                 // object image_data_and_shape
-                int width = m_list_gt_objects.at(i)->getWidth();
-                int height = m_list_gt_objects.at(i)->getHeight();
+                int width = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).x);
+                int height = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).y);
 
                 if ( m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count)
                      == true ) {
@@ -458,8 +458,6 @@ void OpticalFlow::generate_collision_points_mean() {
             for (unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
                 // object image_data_and_shape
-                int width = m_list_simulated_objects.at(i)->getWidth();
-                int height = m_list_simulated_objects.at(i)->getHeight();
 
                 if ( m_list_simulated_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count)
                         == true ) {
@@ -475,6 +473,10 @@ void OpticalFlow::generate_collision_points_mean() {
                             .at(frame_count-1).second;  //line parameters run one less than the others.
 
                     cv::Mat roi;
+
+                    int width = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).x);
+                    int height = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).y);
+
                     roi = tempMatrix.
                             colRange(cvRound(centroid.x), cvRound(centroid.x + width)).
                             rowRange(cvRound(centroid.y), cvRound(centroid.y + height));

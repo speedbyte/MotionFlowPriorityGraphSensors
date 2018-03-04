@@ -25,17 +25,19 @@ private:
 
     const ObjectTrajectory m_obj_trajectory;
 
-    const ObjectDimensions m_obj_dimensions;
+    const ObjectDimensions m_obj_dimension;
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_point_pixel_displacement;
 
-    std::vector<cv::Point2f> m_obj_base_shape_dimensions;
+    std::vector<cv::Point2f> m_obj_base_shape_dimension;
 
     void generate_obj_base_pixel_point_pixel_displacement();
 
     void generate_obj_base_shape_dimensions();
 
     void generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips);
+
+    void generate_obj_extrapolated_shape_dimension(const unsigned &max_skips);
 
     void generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips);
 
@@ -53,8 +55,6 @@ public:
         image_data_and_shape.process();
         objectCurrentCount += 1;
 
-        m_ObjectWidth = image_data_and_shape.get().cols;
-        m_ObjectHeight = image_data_and_shape.get().rows;
         if ( m_objectName.compare("BackgroundCanvas")) {
 
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
@@ -70,7 +70,7 @@ public:
     }
 
     GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectDimensions dimension, const ObjectTrajectory trajectory, ushort
-    startPoint, Noise &noise, std::string objectName) : m_obj_dimensions(dimension), m_obj_trajectory(trajectory), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
+    startPoint, Noise &noise, std::string objectName) : m_obj_dimension(dimension), m_obj_trajectory(trajectory), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
                                                         Objects(objectName)
 
     {
@@ -79,8 +79,6 @@ public:
         image_data_and_shape.process();
         objectCurrentCount += 1;
 
-        m_ObjectWidth = image_data_and_shape.get().cols;
-        m_ObjectHeight = image_data_and_shape.get().rows;
         if ( m_objectName.compare("BackgroundCanvas")) {
 
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
@@ -104,6 +102,8 @@ public:
 
             generate_obj_extrapolated_pixel_point_pixel_displacement( MAX_SKIPS );
 
+            generate_obj_extrapolated_shape_dimension( MAX_SKIPS );
+
             generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(MAX_SKIPS);
 
             // m_obj_extrapolated_shape_pixel_point_pixel_displacement
@@ -122,9 +122,9 @@ public:
         return m_obj_base_pixel_point_pixel_displacement;
     }
 
-    std::vector<cv::Point2f> get_obj_base_shape_dimensions()
+    std::vector<cv::Point2f> get_obj_base_shape_dimension()
     const  {
-        return m_obj_base_shape_dimensions;
+        return m_obj_base_shape_dimension;
     }
 
     ushort getStartPoint() const {

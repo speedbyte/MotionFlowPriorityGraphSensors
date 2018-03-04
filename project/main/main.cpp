@@ -281,8 +281,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             list_of_simulated_objects.clear();
             for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
                 //two objects
-                int width = list_of_gt_objects_base.at(obj_count).getWidth();
-                int height = list_of_gt_objects_base.at(obj_count).getHeight();
+                int width = list_of_gt_objects_base.at(obj_count).getInertialWidth();
+                int height = list_of_gt_objects_base.at(obj_count).getInertialHeight();
                 std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects_base.at(obj_count).get_obj_extrapolated_visibility();
 
                 SimulatedObjects objects( ("simulated_" + list_of_gt_objects_base.at(obj_count).getObjectName()), width, height, extrapolated_visibility);

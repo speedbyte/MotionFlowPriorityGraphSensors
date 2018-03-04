@@ -16,6 +16,8 @@ protected:
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_point_pixel_displacement;
 
+    std::vector<std::vector<cv::Point2f> > m_obj_extrapolated_shape_dimension;
+
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_obj_extrapolated_shape_pixel_point_pixel_displacement;
 
@@ -37,9 +39,9 @@ protected:
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             m_obj_line_parameters;
 
-    int m_ObjectWidth;
+    int m_ObjectInertialWidth;
 
-    int m_ObjectHeight;
+    int m_ObjectInertialHeight;
 
     unsigned m_objectId;
 
@@ -51,7 +53,7 @@ public:
 
     Objects( std::string objectName) : m_objectName(objectName) {}
 
-    Objects( std::string objectName, int width, int height, std::vector<std::vector<bool> >  extrapolated_visibility) : m_objectName(objectName) , m_ObjectWidth(width), m_ObjectHeight
+    Objects( std::string objectName, int width, int height, std::vector<std::vector<bool> >  extrapolated_visibility) : m_objectName(objectName) , m_ObjectInertialWidth(width), m_ObjectInertialHeight
             (height), m_obj_extrapolated_visibility(extrapolated_visibility) {}
 
     std::string getObjectName() const {
@@ -67,12 +69,12 @@ public:
         return m_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
     }
 
-    int getWidth() const {
-        return m_ObjectWidth;
+    int getInertialWidth() const {
+        return m_ObjectInertialWidth;
     }
 
-    int getHeight() const {
-        return m_ObjectHeight;
+    int getInertialHeight() const {
+        return m_ObjectInertialHeight;
     }
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_line_parameters() const {
@@ -82,6 +84,11 @@ public:
     std::vector<std::vector<bool> >  get_obj_extrapolated_visibility()
     const {
         return m_obj_extrapolated_visibility;
+    }
+
+    std::vector<std::vector<cv::Point2f> >  get_obj_extrapolated_shape_dimension()
+    const {
+        return m_obj_extrapolated_shape_dimension;
     }
 
     std::vector<bool>  get_obj_base_visibility()
