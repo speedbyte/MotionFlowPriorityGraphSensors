@@ -14,7 +14,7 @@ class CameraSensorImage : public SensorImage {
 protected:
 
     Noise &m_noise;
-    ObjectImageShapeData &m_image_data_and_shape; // TODO use a own copy instead of reference.
+    ObjectImageShapeData m_image_data_and_shape; // TODO use a own copy instead of reference.
     cv::Matx33f camaera_intrinsic_parameters;
     cv::Matx33f camaera_pose_parameters;
 

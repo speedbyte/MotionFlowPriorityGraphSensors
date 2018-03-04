@@ -15,6 +15,7 @@
 #include "GroundTruthScene.h"
 #include "kbhit.h"
 #include "ViresObjects.h"
+#include "ObjectMetaData.h"
 using namespace std::chrono;
 
 
@@ -150,7 +151,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 */
     //std::cout << myTrajectory1.getTrajectory();
 
-    Achterbahn achterbahn1, achterbahn2;
+    Achterbahn achterbahn, achterbahn1, achterbahn2;
+    achterbahn.process(Dataset::getFrameSize());
     achterbahn1.process(Dataset::getFrameSize());
     //achterbahn1.setDynamic();
     achterbahn2.process(Dataset::getFrameSize());
@@ -158,41 +160,45 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     std::vector<MyTrajectory> myTrajectoryVector(MAX_ALLOWED_OBJECTS);
 
-    Rectangle rectangle1(5, 5); // width, height
-    Rectangle rectangle2(20,70); // width, height
+    Rectangle rectangle(40,40); // width, height
 
     ColorfulNoise colorfulNoise;
 
+    std::vector<ObjectMetaData> objectMetaDataList;
+    ObjectMetaData obj1, obj2;
+
     if ( m_environment == "none") {
 
-        if ( !m_regenerate_yaml_file  ) {
+        if ( !m_regenerate_yaml_file  ) { // dont generate, just read
             for ( auto i = 0; i < MAX_ALLOWED_OBJECTS; i++ ) {
+
                 m_ptr_customObjectTrajectoryList.push_back(&myTrajectoryVector.at(i));
             }
+
             readTrajectoryFromFile("../trajectory.yml");
+
+            obj1 = ObjectMetaData(rectangle, myTrajectoryVector.at(0), "rectangle_long", 0);
+            objectMetaDataList.push_back(obj1);
+
+            obj2 = ObjectMetaData(rectangle, myTrajectoryVector.at(1), "random_object", 0);
+            objectMetaDataList.push_back(obj2);
         }
-        else {
+        else { // genreate yaml file
             boost::filesystem::remove("../trajectory.yml");
-            m_ptr_customObjectTrajectoryList.push_back(&achterbahn1);
-            m_ptr_customObjectTrajectoryList.push_back(&achterbahn2);
+
+            obj1 = ObjectMetaData(rectangle, achterbahn, "rectangle_long", 60);
+            objectMetaDataList.push_back(obj1);
+
+            obj2 = ObjectMetaData(rectangle, achterbahn, "random_object", 120);
+            objectMetaDataList.push_back(obj2);
         }
 
-        std::vector<std::string> objectNameList = {"rectangle_long", "random_object"};
-        std::vector<ushort> startPoint;
-        if ( m_regenerate_yaml_file  ) { // read
-            startPoint = {60,120};
-        }
-        else {
-            startPoint = {0,0};
-        }
-        for ( auto i = 0; i < m_ptr_customObjectTrajectoryList.size() ; i++) {
+        for ( auto i = 0; i < objectMetaDataList.size() ; i++) {
 
-            GroundTruthObjects obj1(rectangle2, *m_ptr_customObjectTrajectoryList.at(i), startPoint.at(i), colorfulNoise, objectNameList.at(i));
-            m_list_objects.push_back(obj1);
+            GroundTruthObjects gt_obj1(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
+            m_list_objects.push_back(gt_obj1);
         }
 
-        //m_list_objects.push_back(obj1);
-        //m_list_objects.push_back(obj2);
         if ( m_regenerate_yaml_file  ) {
             writeTrajectoryInYaml();
         }
@@ -207,16 +213,11 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
          *
          * Then store the flow information in the flow folder
          */
-
-        //m_shapes.process();
-        //m_trajectories.process(Dataset::getFrameSize());
-
     }
-
 
     prepare_directories();
 
-    cv::Mat tempGroundTruthImage;
+    cv::Mat tempGroundTruthImage, tempGroundTruthImageBase;
     tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
     assert(tempGroundTruthImage.channels() == 3);
 
@@ -244,6 +245,17 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     auto tic_all = steady_clock::now();
 
+    // apply black noise in case of night
+    if ( m_environment == "night") {
+        BlackNoise noise;
+        ObjectImageShapeData newCanvas = m_canvas.getCanvasShapeAndData();
+        noise.apply(newCanvas);
+        tempGroundTruthImageBase = newCanvas.get().clone();
+    }
+    else {
+        tempGroundTruthImageBase = m_canvas.getCanvasShapeAndData().get().clone();
+    }
+
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
 
         auto tic = steady_clock::now();
@@ -251,9 +263,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
         std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
 
-        tempGroundTruthImage = m_canvas.getImageShapeAndData().get().clone();
 
         //draw new ground truth image.
+        tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
         char frame_skip_folder_suffix[50];
 

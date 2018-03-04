@@ -34,7 +34,10 @@ MyData:
 
 class ObjectMetaData {
 
-public:
+    ObjectImageShapeData m_objectMetaData_shape;
+    ObjectTrajectory m_objectMetaData_trajectory;
+    std::string m_objectMetaData_name;
+    ushort m_objectMetaData_startPoint;
 
     //Each line contains one object annotation with the following columns:
     //frame: frame index in the video (starts from 0)
@@ -133,8 +136,31 @@ public:
     // PATH = "../../../datasets/kitti_raw_dataset/data/"
     // EXECUTE = 0
 
+
+public:
+
+    ObjectMetaData() {};
+    ObjectMetaData(ObjectImageShapeData shape, ObjectTrajectory trajectory, std::string name, ushort startPoint) :
+    m_objectMetaData_shape(shape), m_objectMetaData_trajectory(trajectory), m_objectMetaData_name(name), m_objectMetaData_startPoint(startPoint) {} ;
+
     void fillData() {
 
+    }
+
+    ObjectImageShapeData& getObjectShape() {
+        return m_objectMetaData_shape;
+    }
+
+    ObjectTrajectory& getObjectTrajectory() {
+        return m_objectMetaData_trajectory;
+    }
+
+    std::string& getObjectName() {
+        return m_objectMetaData_name;
+    }
+
+    ushort& getObjectStartPoint() {
+        return m_objectMetaData_startPoint;
     }
 };
 

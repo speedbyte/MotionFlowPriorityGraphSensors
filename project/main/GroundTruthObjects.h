@@ -37,7 +37,7 @@ private:
 
 public:
 
-    GroundTruthObjects( ObjectImageShapeData &image_data_and_shape, const ObjectTrajectory trajectory, ushort
+    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectTrajectory trajectory, ushort
     startPoint, Noise &noise, std::string objectName) : m_obj_trajectory(trajectory), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
                                                         Objects(objectName)
 

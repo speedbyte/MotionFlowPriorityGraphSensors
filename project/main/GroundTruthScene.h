@@ -40,6 +40,8 @@ protected:
 
     std::vector<ObjectTrajectory *> m_ptr_customObjectTrajectoryList;
 
+    std::vector<ObjectImageShapeData *> m_ptr_customObjectImageShapeDataList;
+
     bool m_regenerate_yaml_file;
 
     std::map<std::string, ObjectTrajectory*> m_mapObjectNameToTrajectory;

@@ -12,13 +12,26 @@ class ObjectImageShapeData {
 protected:
 
     cv::Mat m_data;
+    ushort m_objectWidth;
+    ushort m_objectHeight;
 
 public:
 
-    ObjectImageShapeData(int width, int height ) {
+    ObjectImageShapeData() {};
+
+    ObjectImageShapeData(ushort width, ushort height ) : m_objectWidth(width), m_objectHeight
+            (height) {
         m_data.create(height, width, CV_8UC3);
     }
     virtual void process() {};
+
+    ushort getWidth() {
+        return m_objectWidth;
+    }
+
+    ushort getHeight() {
+        return m_objectHeight;
+    }
 
     cv::Mat get() {
         return m_data;
@@ -32,23 +45,13 @@ public:
 class Rectangle :  public ObjectImageShapeData {
 
 private:
-    ushort m_objectWidth;
-    ushort m_objectHeight;
 
 public:
 
-    Rectangle(ushort width, ushort height) : ObjectImageShapeData(width, height), m_objectWidth(width), m_objectHeight
-            (height) {};
+    Rectangle(ushort width, ushort height) : ObjectImageShapeData(width, height) {};
 
     void process() override ;
 
-    ushort getWidth() {
-        return m_objectWidth;
-    }
-
-    ushort getHeight() {
-        return m_objectHeight;
-    }
 };
 
 #endif //MAIN_OBJECTSHAPE_H

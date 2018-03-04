@@ -31,6 +31,17 @@ public:
     }
 };
 
+class BlackNoise : public Noise {
+
+public:
+    void apply(ObjectImageShapeData &image) override {
+
+        std::cout << "applying black noise" << std::endl;
+        image.get() = cv::Scalar(0,0,0);
+    }
+
+};
+
 class ColorfulNoise : public Noise {
 
 public:

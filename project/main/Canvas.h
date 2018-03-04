@@ -29,7 +29,7 @@ public:
         background.process();
     };
 
-    ObjectImageShapeData getImageShapeAndData() {
+    ObjectImageShapeData getCanvasShapeAndData() {
         return background;
     }
 };
