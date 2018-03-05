@@ -123,7 +123,7 @@ void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
                     if ( m_mapObjectNameToObjectMetaData.count((*file_node_iterator)["name"].string()) == 0 ) {
                         m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(m_objectCount);
                         m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName((*file_node_iterator)["name"].string());
-                        Rectangle rectangle((int)(*file_node_iterator)["dim_x"],(int)(*file_node_iterator)["dim_y"]); // width, height
+                        Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
                         m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
                         m_objectCount+=1;
                     }
@@ -188,7 +188,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             achterbahn.process(Dataset::getFrameSize());
             ObjectDimensions dimension;
             dimension.process(Dataset::getFrameSize());
-            Rectangle rectangle(40,40); // width, height
+            Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
 
             objectMetaDataList.at(0) = ObjectMetaData(rectangle, dimension, achterbahn, "rectangle_long", 60);
             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
