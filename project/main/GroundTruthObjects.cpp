@@ -25,41 +25,41 @@ void GroundTruthObjects::generate_obj_base_pixel_point_pixel_displacement() {
             cv::Point2f gt_next_pts = {0,0}, gt_displacement = {0,0};
 
             //If we are at the end of the path vector, we need to reset our iterators
-            if (current_index >= m_obj_trajectory.getTrajectory().size()) {
+            if (current_index >= m_obj_position.getPosition().size()) {
                 current_index = 0;
-                gt_displacement.x = m_obj_trajectory.getTrajectory().at(current_index).x - m_obj_trajectory.getTrajectory().at
-                        (m_obj_trajectory.getTrajectory().size() - 1).x;
-                gt_displacement.y = m_obj_trajectory.getTrajectory().at(current_index).y - m_obj_trajectory.getTrajectory().at
-                        (m_obj_trajectory.getTrajectory().size() - 1).y;
-                gt_next_pts = m_obj_trajectory.getTrajectory().at(current_index);
+                gt_displacement.x = m_obj_position.getPosition().at(current_index).x - m_obj_position.getPosition().at
+                        (m_obj_position.getPosition().size() - 1).x;
+                gt_displacement.y = m_obj_position.getPosition().at(current_index).y - m_obj_position.getPosition().at
+                        (m_obj_position.getPosition().size() - 1).y;
+                gt_next_pts = m_obj_position.getPosition().at(current_index);
 
             } else {
 
-                gt_displacement.x = m_obj_trajectory.getTrajectory().at(current_index).x - m_obj_trajectory.getTrajectory().at
+                gt_displacement.x = m_obj_position.getPosition().at(current_index).x - m_obj_position.getPosition().at
                         (current_index - (ushort) 1).x;
-                gt_displacement.y = m_obj_trajectory.getTrajectory().at(current_index).y - m_obj_trajectory.getTrajectory().at
+                gt_displacement.y = m_obj_position.getPosition().at(current_index).y - m_obj_position.getPosition().at
                         (current_index - (ushort) 1).y;
-                gt_next_pts = m_obj_trajectory.getTrajectory().at(current_index);
+                gt_next_pts = m_obj_position.getPosition().at(current_index);
 
             }
 
-            printf("%s, %u, %u , %f, %f, %f, %f\n", (m_obj_trajectory.getVisibility().at(current_index)?"true":"false"),
+            printf("%s, %u, %u , %f, %f, %f, %f\n", (m_obj_position.getVisibility().at(current_index)?"true":"false"),
                     frame_count,
                    current_index, gt_next_pts.x, gt_next_pts.y,
                    gt_displacement.x, gt_displacement.y);
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
             m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(gt_next_pts, gt_displacement));
-            m_obj_base_visibility.push_back(m_obj_trajectory.getVisibility().at(current_index));
+            m_obj_base_visibility.push_back(m_obj_position.getVisibility().at(current_index));
         }
         else {
 
-            printf("%s, %u, %u , %f, %f, %f, %f\n", (m_obj_trajectory.getVisibility().at(current_index)?"true":"false"),
+            printf("%s, %u, %u , %f, %f, %f, %f\n", (m_obj_position.getVisibility().at(current_index)?"true":"false"),
                    frame_count,
-                   current_index, m_obj_trajectory.getTrajectory().at(current_index).x, m_obj_trajectory.getTrajectory().at(current_index).y,
+                   current_index, m_obj_position.getPosition().at(current_index).x, m_obj_position.getPosition().at(current_index).y,
                    (float)0, (float)0);
-            m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(m_obj_trajectory.getTrajectory().at(current_index) , cv::Point2f(0,0)));
-            m_obj_base_visibility.push_back(m_obj_trajectory.getVisibility().at(current_index));
+            m_obj_base_pixel_point_pixel_displacement.push_back(std::make_pair(m_obj_position.getPosition().at(current_index) , cv::Point2f(0,0)));
+            m_obj_base_visibility.push_back(m_obj_position.getVisibility().at(current_index));
         }
         current_index++;
     }
@@ -79,19 +79,19 @@ void GroundTruthObjects::generate_obj_base_shape_dimensions() {
         cv::Point2f gt_dimensions = {0,0};
 
         //If we are at the end of the path vector, we need to reset our iterators
-        if (current_index >= m_obj_dimension.getTrajectoryDimensions().size()) {
+        if (current_index >= m_obj_dimension.getObjectDimensions().size()) {
             current_index = 0;
-            gt_dimensions.x = m_obj_dimension.getTrajectoryDimensions().at(current_index).x ;
-            gt_dimensions.y = m_obj_dimension.getTrajectoryDimensions().at(current_index).y ;
+            gt_dimensions.x = m_obj_dimension.getObjectDimensions().at(current_index).x ;
+            gt_dimensions.y = m_obj_dimension.getObjectDimensions().at(current_index).y ;
 
         } else {
 
-            gt_dimensions.x = m_obj_dimension.getTrajectoryDimensions().at(current_index).x ;
-            gt_dimensions.y = m_obj_dimension.getTrajectoryDimensions().at(current_index).y ;
+            gt_dimensions.x = m_obj_dimension.getObjectDimensions().at(current_index).x ;
+            gt_dimensions.y = m_obj_dimension.getObjectDimensions().at(current_index).y ;
 
         }
 
-        printf("%s, %u, %u , %f, %f\n", (m_obj_trajectory.getVisibility().at(current_index)?"true":"false"),
+        printf("%s, %u, %u , %f, %f\n", (m_obj_position.getVisibility().at(current_index)?"true":"false"),
                frame_count,
                current_index, gt_dimensions.x, gt_dimensions.y);
 
@@ -210,6 +210,10 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
                                                                                               k), gt_displacement));
                     base_visibility.push_back(visibility);
                 }
+            }
+            if ( visibility == false ) {
+                base_movement.push_back(std::make_pair(cv::Point2f(0,0), cv::Point2f(0,0)));
+                base_visibility.push_back(visibility);
             }
             outer_base_movement.push_back(base_movement);
             outer_base_visiblity.push_back(base_visibility);

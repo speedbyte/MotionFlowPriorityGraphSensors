@@ -10,7 +10,7 @@
 #include <vires-interface/vires_common.h>
 #include <iostream>
 #include "Dataset.h"
-#include "ObjectTrajectory.h"
+#include "ObjectPosition.h"
 #include "GroundTruthObjects.h"
 #include "Canvas.h"
 #include "ObjectMetaData.h"
@@ -29,7 +29,7 @@ protected:
 
     boost::filesystem::path  m_generatepath;
 
-    boost::filesystem::path  m_trajectory_obj_path;
+    boost::filesystem::path  m_position_obj_path;
 
     std::string m_scenario;
 
@@ -59,9 +59,9 @@ public:
         m_groundtruthpath = Dataset::getGroundTruthPath();
     };
 
-    void readTrajectoryFromFile(std::string trajectoryFileName);
+    void readPositionFromFile(std::string positionFileName);
 
-    void writeTrajectoryInYaml();
+    void writePositionInYaml();
 
     virtual void generate_gt_scene() {
         std::cout << "base implementation of generate_gt_scene()" << std::endl;
@@ -78,6 +78,8 @@ public:
         system(command);
         std::cout << "End of generation" << std::endl;
     }
+
+    void generate_bounding_box();
 
 };
 
@@ -131,9 +133,9 @@ class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::V
 
 private:
 
-    MyTrajectory trajectory;
+    MyPosition position;
 
-    std::vector<std::pair<std::string, cv::Point2f> > mtrajectory_points;
+    std::vector<std::pair<std::string, cv::Point2f> > mposition_points;
 
     const std::string to_replace = "traffic_demo";
 
@@ -155,7 +157,7 @@ private:
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
-                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"15.000000\" right=\"15.000000\" bottom=\"15.000000\" top=\"15.000000\" /> "
+                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"35.000000\" right=\"15.000000\" bottom=\"15.000000\" top=\"15.000000\" /> "
                     "   <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "

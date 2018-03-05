@@ -29,28 +29,39 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             float mean_displacement_vector_y = 0.0f;
             bool mean_visibility = false;
 
+            bool visibility = obj_extrapolated_blob_visibility.at(frame_skip-1).at(frame_count).at(0);
+
             const unsigned CLUSTER_SIZE = (unsigned)obj_extrapolated_blob_pixel_point_pixel_displacement.at
                     (frame_skip - 1).at(frame_count).size();
-            assert(CLUSTER_SIZE>0);
+            if ( visibility == true ) {
+                assert(CLUSTER_SIZE>0);
+            }
 
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
                 cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).first;
                 cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).second;
-                bool visibility = obj_extrapolated_blob_visibility.at(frame_skip-1).at(frame_count).at(0);
                 mean_pts_x += pts.x ;
                 mean_pts_y += pts.y ;
                 mean_displacement_vector_x += gt_displacement.x ;
                 mean_displacement_vector_y += gt_displacement.y ;
                 mean_visibility = visibility;
             }
-            mean_pts_x /= (float)CLUSTER_SIZE;
-            mean_pts_y /= (float)CLUSTER_SIZE;
-            mean_displacement_vector_x =  mean_displacement_vector_x / (float) CLUSTER_SIZE;
-            mean_displacement_vector_y = mean_displacement_vector_y / (float) CLUSTER_SIZE;
-            mean_visibility = mean_visibility;
+            if ( CLUSTER_SIZE == 0 ) {
+                mean_pts_x = 0;
+                mean_pts_y = 0;
+                mean_displacement_vector_x =  0;
+                mean_displacement_vector_y = 0;
+            }
+            else {
+                mean_pts_x /= (float)CLUSTER_SIZE;
+                mean_pts_y /= (float)CLUSTER_SIZE;
+                mean_displacement_vector_x =  mean_displacement_vector_x / (float) CLUSTER_SIZE;
+                mean_displacement_vector_y = mean_displacement_vector_y / (float) CLUSTER_SIZE;
+            }
 
+            mean_visibility = mean_visibility;
             if ( frame_count > 0 ) {
                 if ( mean_displacement_vector_x == 0 ) {
                     mean_displacement_vector_x+=0.001;

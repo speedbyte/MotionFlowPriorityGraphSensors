@@ -376,3 +376,77 @@ int main() {
 
 }
 
+
+
+void GroundTruthSceneExternal::calcBBFrom3DPosition(int screen_width, int screen_height, cv::Point3d cam_pos, float fov_v, float pixSize = 2.2e-6){
+    std::vector<cv::Point3f> bounding_points_3d;
+    //all 8 3d bounding box points of an object
+    //VTD center of object with z = 0!
+    //dimension of real world
+    bounding_points_3d.push_back(cv::Point3d(  m_realworld_dim.length/2,  m_realworld_dim.width/2, 0));
+    bounding_points_3d.push_back(cv::Point3d( -m_realworld_dim.length/2,  m_realworld_dim.width/2, 0));
+    bounding_points_3d.push_back(cv::Point3d(  m_realworld_dim.length/2, -m_realworld_dim.width/2, 0));
+    bounding_points_3d.push_back(cv::Point3d( -m_realworld_dim.length/2, -m_realworld_dim.width/2, 0));
+    bounding_points_3d.push_back(cv::Point3d(  m_realworld_dim.length/2,  m_realworld_dim.width/2, m_realworld_dim.height));
+    bounding_points_3d.push_back(cv::Point3d( -m_realworld_dim.length/2,  m_realworld_dim.width/2, m_realworld_dim.height));
+    bounding_points_3d.push_back(cv::Point3d(  m_realworld_dim.length/2, -m_realworld_dim.width/2, m_realworld_dim.height));
+    bounding_points_3d.push_back(cv::Point3d( -m_realworld_dim.length/2, -m_realworld_dim.width/2, m_realworld_dim.height));
+
+    std::vector<cv::Point2d> bounding_points_2d;
+
+    float width = screen_width, height = screen_height;
+    float fovv = fov_v / 180. * M_PI; // [rad]
+    float distToImagePlane = 0.5 * height / tan(fovv/2); // [px]
+    float pxSize = pixSize; // [m/px]
+    cv::Point3d toMeter = cv::Point3d(pxSize, pxSize, 1);
+    float z = distToImagePlane * pxSize; // [m]
+
+    cv::Point2d min(2000,2000), max(0,0);
+    //transformation matrix to transform to camera location
+    QMatrix4x4 toCamPos;
+    toCamPos.translate(-cam_pos); //translate camera pos
+
+
+    //iterate over bounding points and add transformed points to path to print
+    for(cv::Point3d p: bounding_points_3d){
+        //calculate correct bounding box point by adding offset to reference point (for VTD  = read middle axle of the car)
+        p+=getDimensionOffset();  // get dimension offset
+        cv::Point3d pos = getRealworldPos();  // get real world position from perfect sensor
+
+        //transformation matrix for offset to center of roi and the 3d bounding box point p
+        QMatrix4x4 toPosition;
+        QQuaternion rot = getRealWorldOrientation().getRotation();  // hpr
+        toPosition.translate(rot * (p));
+        //first translate to camera pos
+        pos = toCamPos * pos;
+        //then translate and rotate to 3d bounding box point
+        pos = toPosition * pos;
+
+        //transform from sensor coordinates to camera coordinates
+        pos = cv::Point3d(pos.y(), pos.z(),pos.x());
+
+        //scale 3D point back onto image
+        pos = pos * (z / pos.z());
+        //convert meter to pixel
+        pos = pos / toMeter;
+        bounding_points_2d.push_back(cv::Point2d(width/2 - pos.x(), height/2 - pos.y()));
+    }
+    //get min and max for x, y to get the correct 2d bounding box
+    for(QPoint p : bounding_points_2d){
+        if(p.x() < min.x()){
+            min.setX(p.x());
+        }
+        if(p.y() < min.y()){
+            min.setY(p.y());
+        }
+        if(p.x() > max.x()){
+            max.setX(p.x());
+        }
+        if(p.y() > max.y()){
+            max.setY(p.y());
+        }
+    }
+    m_bb.setTopLeft(min);
+    m_bb.setBottomRight(max);
+}
+

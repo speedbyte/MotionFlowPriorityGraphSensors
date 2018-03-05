@@ -89,7 +89,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
 
-        FlowImageExtended F_png_write_trajectory(Dataset::getFrameSize().width, Dataset::getFrameSize()
+        FlowImageExtended F_png_write_position(Dataset::getFrameSize().width, Dataset::getFrameSize()
                 .height);
 
 
@@ -154,7 +154,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         error.at(0) = 0;
         error.at(1) = 0;
 
-        std::string temp_result_flow_path, temp_result_trajectory_path;
+        std::string temp_result_flow_path, temp_result_position_path;
         cv::FileStorage fs;
         fs.open(results_flow_matrix_str, cv::FileStorage::WRITE);
         std::vector<cv::Point2f> next_pts_healthy;
@@ -209,7 +209,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             }
 
             temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
-            temp_result_trajectory_path = m_trajectory_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
+            temp_result_position_path = m_position_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
@@ -349,9 +349,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     // TODO - store objectId instead of 1.0. also convert to 2s complement by the below formula.
                     store_in_yaml(fs, (*it).first, (*it).second ); // coordinate - > movement y(row),x(col) ; x,y
 
-                    F_png_write_trajectory.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
-                    F_png_write_trajectory.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
-                    F_png_write_trajectory.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+                    F_png_write_position.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
+                    F_png_write_position.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
+                    F_png_write_position.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
 
                 }
 
@@ -521,7 +521,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 //cv::imwrite(temp_result_flow_path, flowframe);
                 F_png_write.write(temp_result_flow_path);
-                F_png_write_trajectory.write(temp_result_trajectory_path);
+                F_png_write_position.write(temp_result_position_path);
 
             }
 
@@ -529,7 +529,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 std::cout << "skipping first frame frame count " << frame_count << std::endl;
                 // But still write the data for completion
                 F_png_write.write(temp_result_flow_path);
-                F_png_write_trajectory.write(temp_result_trajectory_path);
+                F_png_write_position.write(temp_result_position_path);
 
                 for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
                     base_movement.at(i).push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
@@ -632,6 +632,4 @@ void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixe
     fs << "]" << "}";
     fs << "]";
 }
-
-
 

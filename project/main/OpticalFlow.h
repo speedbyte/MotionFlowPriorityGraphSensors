@@ -23,7 +23,7 @@ protected:
 
     boost::filesystem::path  m_flow_occ_path;
 
-    boost::filesystem::path  m_trajectory_occ_path;
+    boost::filesystem::path  m_position_occ_path;
 
     boost::filesystem::path  m_plots_path;
 

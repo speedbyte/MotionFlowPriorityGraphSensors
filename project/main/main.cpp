@@ -15,7 +15,7 @@
 #include "datasets.h"
 #include "GroundTruthFlow.h"
 #include "AlgorithmFlow.h"
-#include "ObjectTrajectory.h"
+#include "ObjectPosition.h"
 #include "GroundTruthScene.h"
 #include "GroundTruthObjects.h"
 #include "RobustnessIndex.h"
@@ -179,11 +179,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_IMAGES);
     assert(MAX_ITERATION_GT_SCENE_GENERATION_IMAGES <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
 
-
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow", "rain"};
-    const std::vector < std::string> environment_list = {"none", "night"};
-    //const std::vector < std::string> environment_list = {"none"};
+    //const std::vector < std::string> environment_list = {"none", "night"};
+    const std::vector < std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
 
@@ -213,7 +212,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 // through out the life cycle of the program.
                 GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, vires_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
+                base_ptr_gt_scene->prepare_directories();
                 base_ptr_gt_scene->generate_gt_scene();
+                base_ptr_gt_scene->generate_bounding_box();
                 base_ptr_gt_scene->generate_bird_view();
 
                 if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
@@ -227,6 +228,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
                 GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, cpp_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
+                base_ptr_gt_scene->prepare_directories();
                 base_ptr_gt_scene->generate_gt_scene();
                 base_ptr_gt_scene->generate_bird_view();
 

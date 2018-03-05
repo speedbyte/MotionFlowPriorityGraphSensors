@@ -25,33 +25,44 @@ void GroundTruthScene::prepare_directories() {
 
     m_generatepath = m_groundtruthpath.string() + "/" +  m_environment + "/";
 
-    if (!m_datasetpath.string().compare(CPP_DATASET_PATH) || !m_datasetpath.string().compare(VIRES_DATASET_PATH)) {
+    if ( m_regenerate_yaml_file ) {
+        if (!m_datasetpath.string().compare(CPP_DATASET_PATH) || !m_datasetpath.string().compare(VIRES_DATASET_PATH)) {
 
-        std::cout << "prepare gt_scene directories" << std::endl;
+            std::cout << "prepare gt_scene directories" << std::endl;
 
-        if (boost::filesystem::exists(m_generatepath)) {
-            system(("rm -rf " + m_generatepath.string()).c_str());
-        }
-        boost::filesystem::create_directories(m_generatepath);
+            if (boost::filesystem::exists(m_generatepath)) {
+                system(("rm -rf " + m_generatepath.string()).c_str());
+            }
+            boost::filesystem::create_directories(m_generatepath);
 
-        char char_dir_append[20];
-        boost::filesystem::path path;
+            char char_dir_append[20];
+            boost::filesystem::path path;
 
-        for (int i = 0; i < m_list_objects.size(); i++) {
+            for (int i = 0; i < m_list_objects.size(); i++) {
 
-            sprintf(char_dir_append, "%02d", i);
-            m_trajectory_obj_path = m_generatepath.string() + "trajectory_obj_";
-            path = m_trajectory_obj_path.string() + char_dir_append;
-            boost::filesystem::create_directories(path);
+                sprintf(char_dir_append, "%02d", i);
+                m_position_obj_path = m_generatepath.string() + "position_obj_";
+                path = m_position_obj_path.string() + char_dir_append;
+                boost::filesystem::create_directories(path);
 
+            }
         }
     }
+    else {
+        // post processing step
+        boost::filesystem::path bbox_dir = m_generatepath.string() + "bounding_box/";
+        if (boost::filesystem::exists(m_generatepath)) {
+            system(("rm -rf " + bbox_dir.string()).c_str());
+        }
+        boost::filesystem::create_directories(bbox_dir);
+    }
+
 }
 
-void GroundTruthScene::writeTrajectoryInYaml() {
+void GroundTruthScene::writePositionInYaml() {
 
     cv::FileStorage write_fs;
-    write_fs.open("../trajectory.yml", cv::FileStorage::WRITE);
+    write_fs.open("../position.yml", cv::FileStorage::WRITE);
 
     for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
 
@@ -85,10 +96,10 @@ void GroundTruthScene::writeTrajectoryInYaml() {
     write_fs.release();
 }
 
-void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
+void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
-    cv::FileStorage fs(trajectoryFileName, cv::FileStorage::READ);
-    cv::Point2f traj_point, dimension_point;
+    cv::FileStorage fs(positionFileName, cv::FileStorage::READ);
+    cv::Point2f traj_point, dimension_point, offset_point;
 
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
@@ -130,8 +141,9 @@ void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
                     //std::cout << "hello\n";
                     std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
                     traj_point = cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]);
+                    offset_point = cv::Point2f((double)(*file_node_iterator)["off_x"], (double)(*file_node_iterator)["off_y"]);
                     dimension_point = cv::Point2f((int)(*file_node_iterator)["dim_x"], (int)(*file_node_iterator)["dim_y"]);
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectTrajectory().atFrameNumber(frame_count, traj_point, (int)(*file_node_iterator)["visible"]);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPosition().atFrameNumber(frame_count, traj_point, offset_point, (int)(*file_node_iterator)["visible"]);
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectDimension().atFrameNumber(frame_count, dimension_point);
 
                 }
@@ -139,6 +151,85 @@ void GroundTruthScene::readTrajectoryFromFile(std::string trajectoryFileName) {
         }
     }
     fs.release();
+}
+
+void GroundTruthScene::generate_bounding_box(void) {
+
+
+    cv::Mat tempGroundTruthImage, tempGroundTruthImageBase;
+    //tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
+    //assert(tempGroundTruthImage.channels() == 3);
+
+    std::map<std::string, double> time_map = {{"generate_single_scene_image",0},{"generate_all_scene_image", 0}};
+
+    std::cout << "generate_bounding_box at " << m_generatepath.string() + "bounding_box/" << std::endl;
+
+    char file_name_image[50], file_name_image_output[50];
+
+    cv::Mat image_data_and_shape;
+
+    const ushort frame_skip = 1; // image is generated only once irrespective of skips.
+
+    auto tic_all = steady_clock::now();
+
+
+    for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
+
+        auto tic = steady_clock::now();
+
+        sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+        std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
+
+        sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count*frame_skip);
+        std::string output_image_file_with_path = m_generatepath.string() + "bounding_box/" + file_name_image_output;
+
+        tempGroundTruthImageBase = cv::imread(input_image_file_with_path , CV_LOAD_IMAGE_COLOR);
+        if (  tempGroundTruthImage.data == NULL ) {
+            std::cout << "no image found";
+        }
+
+        //draw new ground truth image.
+        tempGroundTruthImage = tempGroundTruthImageBase.clone();
+
+        char frame_skip_folder_suffix[50];
+
+        for ( unsigned  i = 0; i < m_list_objects.size(); i++ ) {
+
+            sprintf(frame_skip_folder_suffix, "%02d", m_list_objects.at(i).getObjectId());
+
+            //image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
+            //image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y)).colRange(0,cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x));
+
+            if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
+                    ) {
+
+                //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x/2))),
+                cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.x),
+                        cvRound(m_list_objects.at(i).get_obj_base_pixel_point_pixel_displacement().at(frame_count).first.y),
+                        cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
+                cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y));
+
+
+                //image_data_and_shape.copyTo(tempGroundTruthImage(boundingbox));
+
+                cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0,255,0), 1, 8, 0  );
+
+            }
+        }
+
+        cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+        cv::imshow("BB", tempGroundTruthImage);
+        //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+        cv::waitKey(0);
+        auto toc = steady_clock::now();
+        time_map["generate_single_scene_image"] = duration_cast<milliseconds>(toc - tic).count();
+
+    }
+
+    auto toc_all = steady_clock::now();
+    time_map["generate_all_scene_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
+    std::cout << "ground truth scene generation time - " << time_map["generate_all_scene_image"] << "ms" << std::endl;
+
 }
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
@@ -150,11 +241,11 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         float a        = (float) rng.uniform(100., 1000.);
         float b        = (float) rng.uniform(100., 300.);
         cv::Point2f points(a,b);
-        myTrajectory1.pushTrajectoryPoints(points);
-        myTrajectory2.pushTrajectoryPoints(points);
+        myPosition1.pushPositionPoints(points);
+        myPosition2.pushPositionPoints(points);
     }
 */
-    //std::cout << myTrajectory1.getTrajectory();
+    //std::cout << myPosition1.getPosition();
 
 
     ColorfulNoise colorfulNoise;
@@ -171,18 +262,18 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
                 m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
             }
-            readTrajectoryFromFile("../trajectory.yml");
+            readPositionFromFile("../position.yml");
 
             ushort map_pair_count = 0;
             for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
                 //std::cout << myPair.first << "\n";
                 objectMetaDataList.at(map_pair_count) = ObjectMetaData(objectMetaDataList.at(map_pair_count).getObjectShape(),
-                                                                       objectMetaDataList.at(map_pair_count).getObjectDimension(), objectMetaDataList.at(map_pair_count).getObjectTrajectory(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
+                                                                       objectMetaDataList.at(map_pair_count).getObjectDimension(), objectMetaDataList.at(map_pair_count).getObjectPosition(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
                 map_pair_count++;
             }
         }
         else { // genreate yaml file
-            boost::filesystem::remove("../trajectory.yml");
+            boost::filesystem::remove("../position.yml");
 
             Achterbahn achterbahn;
             achterbahn.process(Dataset::getFrameSize());
@@ -199,31 +290,29 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
 
-            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectDimension(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
+            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectDimension(), objectMetaDataList.at(i).getObjectPosition(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
             m_list_objects.push_back(gt_obj);
 
         }
 
         if ( m_regenerate_yaml_file  ) {
-            writeTrajectoryInYaml();
+            writePositionInYaml();
         }
     }
-
-    prepare_directories();
 
     cv::Mat tempGroundTruthImage, tempGroundTruthImageBase;
     tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
     assert(tempGroundTruthImage.channels() == 3);
 
-    cv::Mat tempGroundTruthTrajectory;
-    tempGroundTruthTrajectory.create(Dataset::getFrameSize(), CV_32FC3);
-    assert(tempGroundTruthTrajectory.channels() == 3);
-    tempGroundTruthTrajectory = cv::Scalar::all(255);
+    cv::Mat tempGroundTruthPosition;
+    tempGroundTruthPosition.create(Dataset::getFrameSize(), CV_32FC3);
+    assert(tempGroundTruthPosition.channels() == 3);
+    tempGroundTruthPosition = cv::Scalar::all(255);
 
-    cv::Mat tempGroundTruthTrajectory_2;
-    tempGroundTruthTrajectory_2.create(Dataset::getFrameSize(), CV_32FC3);
-    assert(tempGroundTruthTrajectory_2.channels() == 3);
-    tempGroundTruthTrajectory_2 = cv::Scalar::all(255);
+    cv::Mat tempGroundTruthPosition_2;
+    tempGroundTruthPosition_2.create(Dataset::getFrameSize(), CV_32FC3);
+    assert(tempGroundTruthPosition_2.channels() == 3);
+    tempGroundTruthPosition_2 = cv::Scalar::all(255);
 
 
     std::map<std::string, double> time_map = {{"generate_single_scene_image",0},{"generate_all_scene_image", 0}};
@@ -233,7 +322,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     char file_name_image[50];
 
     cv::Mat image_data_and_shape;
-    cv::Mat trajectoryShape;
+    cv::Mat positionShape;
 
     const ushort frame_skip = 1; // image is generated only once irrespective of skips.
 
@@ -266,13 +355,13 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         for ( unsigned  i = 0; i < m_list_objects.size(); i++ ) {
 
             sprintf(frame_skip_folder_suffix, "%02d", m_list_objects.at(i).getObjectId());
-            std::string trajectory_image_file_with_path = m_trajectory_obj_path.string() +
+            std::string position_image_file_with_path = m_position_obj_path.string() +
                     frame_skip_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
             image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y)).colRange(0,cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x));
-            trajectoryShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            trajectoryShape = trajectoryShape.rowRange(0, cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y)).colRange(0,cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x));
+            positionShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
+            positionShape = positionShape.rowRange(0, cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y)).colRange(0,cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x));
 
             if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
@@ -285,25 +374,25 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
 
                 if (m_list_objects.at(i).getObjectId() == 0) {
-                    trajectoryShape = cv::Scalar(255, 0, 0);
-                    trajectoryShape.copyTo(tempGroundTruthTrajectory(
-                            cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
-                                                     .getTrajectory().at(frame_count).x), cvRound(m_list_objects.at
-                                    (i).getTrajectoryPoints().getTrajectory().at(frame_count).y),
+                    positionShape = cv::Scalar(255, 0, 0);
+                    positionShape.copyTo(tempGroundTruthPosition(
+                            cv::Rect(cvRound(m_list_objects.at(i).getPositionPoints()
+                                                     .getPosition().at(frame_count).x), cvRound(m_list_objects.at
+                                    (i).getPositionPoints().getPosition().at(frame_count).y),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
-                    cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory);
+                    cv::imwrite(position_image_file_with_path, tempGroundTruthPosition);
                 }
 
                 if (m_list_objects.at(i).getObjectId() == 1) {
-                    trajectoryShape = cv::Scalar(0, 255, 0);
-                    trajectoryShape.copyTo(tempGroundTruthTrajectory_2(
-                            cv::Rect(cvRound(m_list_objects.at(i).getTrajectoryPoints()
-                                                     .getTrajectory().at(frame_count).x), cvRound(m_list_objects.at(i).getTrajectoryPoints()
-                                                                                                                                               .getTrajectory().at(frame_count).y),
+                    positionShape = cv::Scalar(0, 255, 0);
+                    positionShape.copyTo(tempGroundTruthPosition_2(
+                            cv::Rect(cvRound(m_list_objects.at(i).getPositionPoints()
+                                                     .getPosition().at(frame_count).x), cvRound(m_list_objects.at(i).getPositionPoints()
+                                                                                                                                               .getPosition().at(frame_count).y),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
-                    cv::imwrite(trajectory_image_file_with_path, tempGroundTruthTrajectory_2);
+                    cv::imwrite(position_image_file_with_path, tempGroundTruthPosition_2);
                 }
             }
         }
@@ -324,14 +413,14 @@ void GroundTruthScene::generate_bird_view() {
     // the bird view needs the range information of each object
     // Assuming the camera is mounted on the floor.
 /*
-    for ( auto trajectory_index = 0;  trajectory_index <  MAX_ITERATION_RESULTS; trajectory_index++ ) {
+    for ( auto position_index = 0;  position_index <  MAX_ITERATION_RESULTS; position_index++ ) {
 
         cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
         for ( auto object_index= 0; object_index < m_list_objects.size(); object_index++ ) {
-            birdview_frame.at(m_list_objects.at(object_index).get_obj_base_pixel_point_pixel_displacement().at(trajectory_index).first.x, m_list_objects.at(object_index).get_obj_range().at(trajectory_index)) = 100;
+            birdview_frame.at(m_list_objects.at(object_index).get_obj_base_pixel_point_pixel_displacement().at(position_index).first.x, m_list_objects.at(object_index).get_obj_range().at(position_index)) = 100;
             cv::Mat roi_objects;
-            roi_objects = birdview_frame.rowRange(m_list_objects.at(object_index).get_obj_range().at(trajectory_index), m_list_objects.at(object_index).get_obj_dimension().at(trajectory_index).z_offset )
-                    .colRange(m_list_objects.at(object_index).get_obj_range().at(trajectory_index), m_list_objects.at(object_index).get_obj_dimension().at(trajectory_index).x_offset);
+            roi_objects = birdview_frame.rowRange(m_list_objects.at(object_index).get_obj_range().at(position_index), m_list_objects.at(object_index).get_obj_dimension().at(position_index).z_offset )
+                    .colRange(m_list_objects.at(object_index).get_obj_range().at(position_index), m_list_objects.at(object_index).get_obj_dimension().at(position_index).x_offset);
 
         }
         cv::imwrite("filename", birdview_frame);
@@ -356,20 +445,19 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         if ( !m_regenerate_yaml_file  ) { // dont generate, just read
 
-            readTrajectoryFromFile("../trajectory.yml");
+            readPositionFromFile("../position.yml");
 
             ushort map_pair_count = 0;
             for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
                 //std::cout << myPair.first << "\n";
                 objectMetaDataList.at(map_pair_count) = ObjectMetaData(objectMetaDataList.at(map_pair_count).getObjectShape(),
-                                                                       objectMetaDataList.at(map_pair_count).getObjectDimension(), objectMetaDataList.at(map_pair_count).getObjectTrajectory(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
+                                                                       objectMetaDataList.at(map_pair_count).getObjectDimension(), objectMetaDataList.at(map_pair_count).getObjectPosition(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
                 map_pair_count++;
             }
         }
     }
 
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
-        prepare_directories();
 
         char command[1024];
 
@@ -618,18 +706,23 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             configVires();
         }
     }
-    if ( m_environment == "none") {
+    try {
+        if ( m_environment == "none") {
 
-        for ( auto i = 0; i < objectMetaDataList.size() ; i++) {
+            for ( auto i = 0; i < objectMetaDataList.size() ; i++) {
 
-            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectDimension(), objectMetaDataList.at(i).getObjectTrajectory(), objectMetaDataList.at(i).getObjectStartPoint(), noNoise, objectMetaDataList.at(i).getObjectName());
-            m_list_objects.push_back(gt_obj);
+                GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectDimension(), objectMetaDataList.at(i).getObjectPosition(), objectMetaDataList.at(i).getObjectStartPoint(), noNoise, objectMetaDataList.at(i).getObjectName());
+                m_list_objects.push_back(gt_obj);
 
+            }
+
+            if ( m_regenerate_yaml_file  ) {
+                writePositionInYaml();
+            }
         }
-
-        if ( m_regenerate_yaml_file  ) {
-            writeTrajectoryInYaml();
-        }
+    }
+    catch (...) {
+        stopSimulation();
     }
 }
 
@@ -711,6 +804,7 @@ simFrame, const
     RDB_OBJECT_CFG_t *object = reinterpret_cast<RDB_OBJECT_CFG_t *>(data); /// raw image data
     std::cout << object->type;
 
+
 }
 
 void GroundTruthSceneExternal::parseEntry(RDB_OBJECT_STATE_t *data, const double &simTime, const unsigned int &
@@ -719,7 +813,7 @@ simFrame, const
                                           short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                                           const unsigned int &totalElem) {
 
-    cv::Point2f traj_point, dimension_point;
+    cv::Point2f traj_point, dimension_point, offset_point;
 
     if ( m_environment == "none") {
 
@@ -741,8 +835,9 @@ simFrame, const
                 }
                 traj_point = cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y);
                 dimension_point = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
-                m_mapObjectNameToObjectMetaData[data->base.name]->getObjectTrajectory().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), traj_point, true);
-                (m_mapObjectNameToObjectMetaData[data->base.name])->getObjectDimension().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), dimension_point);
+                offset_point = cv::Point2f((float) data->base.geo.offX, (float) data->base.geo.offY);
+                m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPosition().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), traj_point, offset_point, true);
+                m_mapObjectNameToObjectMetaData[data->base.name]->getObjectDimension().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), dimension_point);
 
             } else {
                 //std::cout << data->base.type << std::endl;
@@ -806,7 +901,6 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
         //.height));
 
         char file_name_image[50];
-
 
         if (simFrame >= IMAGE_SKIP_FACTOR_DYNAMIC) {
             sprintf(file_name_image, "000%03d_10.png", mImageCount);
@@ -1045,3 +1139,19 @@ void GroundTruthSceneExternal::analyzeImage( RDB_IMAGE_t* img, const unsigned in
 
     sLastImgSimFrame = simFrame;
 }
+
+
+
+/**
+ * @brief calcBBFrom3DPosition
+ *
+ * For the camera sensor the GT data from VTD is slightly shifted. Therefore we try to get better
+ * bounding boxes by calculating the bounding box on the image from the 3D data delivered by the perfect
+ * sensor.
+ * @param screen_width      width of VTD display
+ * @param screen_height     height of VTD display
+ * @param cam_pos           position of camera relative to vehicle point of origin
+ * @param fov_v             vertical fov of the VTD camera
+ * @param pixSize           pixel size
+ */
+

@@ -12,7 +12,7 @@
 
 
 #include "kitti/log_colormap.h"
-#include "ObjectTrajectory.h"
+#include "ObjectPosition.h"
 #include "datasets.h"
 
 
@@ -33,7 +33,7 @@ void Achterbahn::process(cv::Size frame_size) {
                                                                                    sin(theta[i] * CV_PI / 180.0)) /
                 (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
 
-        m_trajectory.at(i) = (l_pixel_position);
+        m_position.at(i) = (l_pixel_position);
         m_visibility.at(i) = true;
     }
 }
@@ -52,7 +52,7 @@ void Circle::process(cv::Size frame_size) {
 
         l_pixel_position.y = static_cast<float>( frame_size.height/2 + 100 * sin(theta[i]));
 
-        m_trajectory.at(i) = (l_pixel_position);
+        m_position.at(i) = (l_pixel_position);
         m_visibility.at(i) = true;
     }
 }
@@ -75,7 +75,7 @@ void Ramp::process(cv::Size frame_size) {
 
         l_pixel_position.y = static_cast<float>(0 + (theta[i]));
 
-        m_trajectory.at(i) = (l_pixel_position);
+        m_position.at(i) = (l_pixel_position);
         m_visibility.at(i) = true;
     }
 }
@@ -98,16 +98,16 @@ void NegativeRamp::process(cv::Size frame_size) {
 
         l_pixel_position.y = static_cast<float>(0  + (theta[i]));
 
-        m_trajectory.at(i) = (l_pixel_position);
+        m_position.at(i) = (l_pixel_position);
         m_visibility.at(i) = true;
     }
 }
 
-void NoTrajectory::process(cv::Size frame_size) {
+void NoPosition::process(cv::Size frame_size) {
 
 };
 
-void MyTrajectory::process(cv::Size frame_size) {
+void MyPosition::process(cv::Size frame_size) {
 
 };
 

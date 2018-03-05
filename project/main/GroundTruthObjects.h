@@ -9,7 +9,7 @@
 // GroundTruthObjects are either CameraSensorImage or RadarSensorImage
 
 #include "Dataset.h"
-#include "ObjectTrajectory.h"
+#include "ObjectPosition.h"
 #include "datasets.h"
 #include "CameraSensorImage.h"
 #include "Objects.h"
@@ -23,7 +23,7 @@ private:
 
     const ushort m_startPoint;
 
-    const ObjectTrajectory m_obj_trajectory;
+    const ObjectPosition m_obj_position;
 
     const ObjectDimensions m_obj_dimension;
 
@@ -45,36 +45,12 @@ private:
 
 public:
 
-    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectTrajectory trajectory, ushort
-    startPoint, Noise &noise, std::string objectName) : m_obj_trajectory(trajectory), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
+    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectDimensions dimension, const ObjectPosition position, ushort
+    startPoint, Noise &noise, std::string objectName) : m_obj_dimension(dimension), m_obj_position(position), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
                                                         Objects(objectName)
 
     {
-        assert(m_obj_trajectory.getTrajectory().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
-        m_objectId = objectCurrentCount ;
-        image_data_and_shape.process();
-        objectCurrentCount += 1;
-
-        if ( m_objectName.compare("BackgroundCanvas")) {
-
-            printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
-                    (), getObjectId());
-
-            generate_obj_base_pixel_point_pixel_displacement();
-
-            generate_obj_base_shape_dimensions();
-
-            beginGroundTruthGeneration();
-
-        }
-    }
-
-    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectDimensions dimension, const ObjectTrajectory trajectory, ushort
-    startPoint, Noise &noise, std::string objectName) : m_obj_dimension(dimension), m_obj_trajectory(trajectory), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
-                                                        Objects(objectName)
-
-    {
-        assert(m_obj_trajectory.getTrajectory().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
+        assert(m_obj_position.getPosition().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
         m_objectId = objectCurrentCount ;
         image_data_and_shape.process();
         objectCurrentCount += 1;
@@ -113,8 +89,8 @@ public:
         }
     }
 
-    ObjectTrajectory getTrajectoryPoints() const {
-        return m_obj_trajectory;
+    ObjectPosition getPositionPoints() const {
+        return m_obj_position;
     }
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> >  get_obj_base_pixel_point_pixel_displacement()

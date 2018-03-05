@@ -32,8 +32,8 @@ void OpticalFlow::prepare_directories() {
         path =  m_flow_occ_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
-        m_trajectory_occ_path = m_generatepath.string() + "/trajectory_occ_";
-        path =  m_trajectory_occ_path.string() + char_dir_append;
+        m_position_occ_path = m_generatepath.string() + "/position_occ_";
+        path =  m_position_occ_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
         m_plots_path = m_generatepath.string() + "/plots_";
@@ -47,7 +47,7 @@ void OpticalFlow::generate_shape_points() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
-    // Additionally stores the trajectory in a png file
+    // Additionally stores the position in a png file
 
     std::vector<std::pair<Objects*, Objects*> > list_of_gt_objects_combination;
     std::vector<std::pair<Objects*, Objects*> > list_of_simulated_objects_combination;
@@ -210,7 +210,7 @@ void OpticalFlow::generate_collision_points() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
-    // Additionally stores the trajectory in a png file
+    // Additionally stores the position in a png file
 
     std::vector<std::pair<Objects*, Objects*> > list_of_gt_objects_combination;
     std::vector<std::pair<Objects*, Objects*> > list_of_simulated_objects_combination;
@@ -348,7 +348,7 @@ void OpticalFlow::generate_collision_points() {
                         F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
                         F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
                         F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
-                        //trajectory.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
+                        //position.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
                     }
                 }
             }
@@ -405,7 +405,7 @@ void OpticalFlow::generate_collision_points_mean() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
-    // Additionally stores the trajectory in a png file
+    // Additionally stores the position in a png file
 
     std::map<std::string, double> time_map = {{"generate",     0},
             {"generate_flow", 0}};
@@ -565,7 +565,7 @@ void OpticalFlow::generate_collision_points_mean() {
                         F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
                         F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
                         F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
-                        //trajectory.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
+                        //position.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
                     }
                 }
             }

@@ -8,7 +8,7 @@
 
 #include "Dataset.h"
 #include "PlotFlow.h"
-#include "ObjectTrajectory.h"
+#include "ObjectPosition.h"
 #include "GroundTruthScene.h"
 #include "FlowImageExtended.h"
 #include "OpticalFlow.h"

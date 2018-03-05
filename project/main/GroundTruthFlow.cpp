@@ -22,7 +22,7 @@
 #include <unordered_map>
 #include <bits/unordered_map.h>
 
-#include "ObjectTrajectory.h"
+#include "ObjectPosition.h"
 #include "Dataset.h"
 #include "GroundTruthScene.h"
 
@@ -51,7 +51,7 @@ void GroundTruthFlow::generate_flow_frame() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
-    // Additionally stores the trajectory in a png file
+    // Additionally stores the position in a png file
 
     prepare_directories();
 
@@ -134,7 +134,7 @@ void GroundTruthFlow::generate_flow_frame() {
                         F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
                         F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
                         F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
-                        //trajectory.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
+                        //position.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
                     }
                 }
             }

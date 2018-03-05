@@ -34,7 +34,7 @@ public:
         m_dimensions.at(frameNumber) = points;
     }
 
-    std::vector<cv::Point2f> getTrajectoryDimensions() const {
+    std::vector<cv::Point2f> getObjectDimensions() const {
         return m_dimensions;
     }
 
@@ -44,54 +44,57 @@ public:
             theta.push_back(frame_count);
         }
         // Prepare points
-        cv::Point2f l_pixel_position;
+        cv::Point2f l_pixel_dimension;
         for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
 
-            l_pixel_position.x = static_cast<float>((frame_size.width/2) + (100 * cos(theta[i] *CV_PI / 180.0) /
+            l_pixel_dimension.x = static_cast<float>((frame_size.width/2) + (100 * cos(theta[i] *CV_PI / 180.0) /
                                                                             (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
 
-            l_pixel_position.y = static_cast<float>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
+            l_pixel_dimension.y = static_cast<float>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
                                                                                    sin(theta[i] * CV_PI / 180.0)) /
                                                                              (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
 
-            l_pixel_position.x /= 10;
-            l_pixel_position.y /= 10;
+            l_pixel_dimension.x /= 10;
+            l_pixel_dimension.y /= 10;
 
-            m_dimensions.at(i) = (l_pixel_position);
+            m_dimensions.at(i) = (l_pixel_dimension);
         }
     }
 
 };
 
 
-class ObjectTrajectory {
+class ObjectPosition {
 
 protected:
-    std::vector<cv::Point2f> m_trajectory;
+    std::vector<cv::Point2f> m_position;
+    std::vector<cv::Point2f> m_offset;
     std::vector<bool> m_visibility;
 
 public:
 
-    ObjectTrajectory() {
+    ObjectPosition() {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
             m_visibility.push_back(false);
-            m_trajectory.push_back(cv::Point2f(-1,-1));
+            m_position.push_back(cv::Point2f(-1,-1));
+            m_offset.push_back(cv::Point2f(0,0));
         }
     };
 
     virtual void process(cv::Size frame_size) {};
 
-    virtual void pushTrajectoryPoints(cv::Point2f points) {}
+    virtual void pushPositionPoints(cv::Point2f points) {}
 
     virtual void pushVisibility(bool visibility) {}
 
-    void atFrameNumber(ushort frameNumber, cv::Point2f points, bool visibility) {
-        m_trajectory.at(frameNumber) = points;
+    void atFrameNumber(ushort frameNumber, cv::Point2f position, cv::Point2f offset, bool visibility) {
+        m_position.at(frameNumber) = position;
+        m_offset.at(frameNumber) = offset;
         m_visibility.at(frameNumber) = visibility;
     }
 
-    std::vector<cv::Point2f> getTrajectory() const {
-        return m_trajectory;
+    std::vector<cv::Point2f> getPosition() const {
+        return m_position;
     }
 
     std::vector<bool> getVisibility() const {
@@ -104,7 +107,7 @@ public:
         for (ushort i = 0; i < MAX_ITERATION_THETA / 20; i++) {
             ushort index = (ushort) rng.uniform(0, 360);
             m_visibility.at(index) = false;
-            m_trajectory.at(index) = cv::Point2f(0.0f, 0.0f);
+            m_position.at(index) = cv::Point2f(0.0f, 0.0f);
         }
         for ( auto t : m_visibility ) {
             std::cout << t;
@@ -137,7 +140,7 @@ public:
     }
 };
 
-class Achterbahn : public ObjectTrajectory {
+class Achterbahn : public ObjectPosition {
 
 public:
 
@@ -147,7 +150,7 @@ public:
 
 };
 
-class Circle : public ObjectTrajectory {
+class Circle : public ObjectPosition {
 
 public:
 
@@ -157,7 +160,7 @@ public:
 
 };
 
-class Ramp : public ObjectTrajectory {
+class Ramp : public ObjectPosition {
 
 public:
 
@@ -167,7 +170,7 @@ public:
 
 };
 
-class NegativeRamp : public ObjectTrajectory {
+class NegativeRamp : public ObjectPosition {
 
 public:
 
@@ -177,26 +180,26 @@ public:
 
 };
 
-class NoTrajectory: public ObjectTrajectory {
+class NoPosition: public ObjectPosition {
 
 public:
 
-    NoTrajectory() {};
+    NoPosition() {};
 
     void process(cv::Size frame_size) override;
 
 };
 
-class MyTrajectory: public ObjectTrajectory {
+class MyPosition: public ObjectPosition {
 
 public:
 
-    MyTrajectory() {};
+    MyPosition() {};
 
     void process(cv::Size frame_size) override;
 
-    void pushTrajectoryPoints(cv::Point2f points) override {
-        m_trajectory.push_back(points);
+    void pushPositionPoints(cv::Point2f points) override {
+        m_position.push_back(points);
     }
 
     void pushVisibility(bool visibility) override{

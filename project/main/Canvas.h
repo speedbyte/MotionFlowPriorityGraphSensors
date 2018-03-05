@@ -23,7 +23,7 @@ private:
 public:
 
 
-    // The canvas can move to simulate a moving car. Hence we need trajectory etc.
+    // The canvas can move to simulate a moving car. Hence we need position etc.
     Canvas( ) : whiteNoise(), background((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height){
         CameraSensorImage(background, whiteNoise);
         background.process();
