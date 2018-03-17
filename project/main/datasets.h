@@ -18,7 +18,7 @@
 
 #define MAX_ITERATION_RESULTS 50 // 60 generate result. this cannot be more than vector
 
-#define MAX_ITERATION_GT_SCENE_GENERATION_VECTOR MAX_ITERATION_RESULTS+1   // generate_obj_base_pixel_point_pixel_displacement vector
+#define MAX_ITERATION_GT_SCENE_GENERATION_VECTOR MAX_ITERATION_RESULTS+1   // generate_obj_base_pixel_position_pixel_displacement vector
 #define MAX_ITERATION_GT_SCENE_GENERATION_IMAGES MAX_ITERATION_RESULTS   // generate images. this cannot be more than vector
 
 #define MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC (MAX_ITERATION_RESULTS)*IMAGE_SKIP_FACTOR_DYNAMIC + IMAGE_SKIP_FACTOR_DYNAMIC*5  // 70

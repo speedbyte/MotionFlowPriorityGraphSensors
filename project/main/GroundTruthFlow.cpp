@@ -22,7 +22,7 @@
 #include <unordered_map>
 #include <bits/unordered_map.h>
 
-#include "ObjectPosition.h"
+#include "ObjectPixelPosition.h"
 #include "Dataset.h"
 #include "GroundTruthScene.h"
 

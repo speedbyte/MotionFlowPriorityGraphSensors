@@ -248,9 +248,9 @@
 /**
  *
 
-    void generate_obj_base_pixel_point_pixel_displacement();
+    void generate_obj_base_pixel_position_pixel_displacement();
 
-    void generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips);
+    void generate_obj_extrapolated_pixel_position_pixel_displacement(const unsigned &max_skips);
 
     void generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips);
 

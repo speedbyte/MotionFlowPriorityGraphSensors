@@ -107,9 +107,9 @@ void OpticalFlow::generate_shape_points() {
                     auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                             (frame_skip - 1).at(frame_count).size();
 
-                    float rowBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
+                    float rowBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.y;
-                    float columnBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_point_pixel_displacement().at
+                    float columnBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
 
 

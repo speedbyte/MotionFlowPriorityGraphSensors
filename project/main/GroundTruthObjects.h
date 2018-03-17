@@ -9,7 +9,7 @@
 // GroundTruthObjects are either CameraSensorImage or RadarSensorImage
 
 #include "Dataset.h"
-#include "ObjectPosition.h"
+#include "ObjectPixelPosition.h"
 #include "datasets.h"
 #include "CameraSensorImage.h"
 #include "Objects.h"
@@ -23,19 +23,19 @@ private:
 
     const ushort m_startPoint;
 
-    const ObjectPosition m_obj_position;
+    const ObjectPixelPosition m_obj_position;
 
     const ObjectDimensions m_obj_dimension;
 
-    std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_point_pixel_displacement;
+    std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_position_pixel_displacement;
 
     std::vector<cv::Point2f> m_obj_base_shape_dimension;
 
-    void generate_obj_base_pixel_point_pixel_displacement();
+    void generate_obj_base_pixel_position_pixel_displacement();
 
     void generate_obj_base_shape_dimensions();
 
-    void generate_obj_extrapolated_pixel_point_pixel_displacement(const unsigned &max_skips);
+    void generate_obj_extrapolated_pixel_position_pixel_displacement(const unsigned &max_skips);
 
     void generate_obj_extrapolated_shape_dimension(const unsigned &max_skips);
 
@@ -45,7 +45,7 @@ private:
 
 public:
 
-    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectDimensions dimension, const ObjectPosition position, ushort
+    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectDimensions dimension, const ObjectPixelPosition position, ushort
     startPoint, Noise &noise, std::string objectName) : m_obj_dimension(dimension), m_obj_position(position), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
                                                         Objects(objectName)
 
@@ -60,7 +60,7 @@ public:
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                     (), getObjectId());
 
-            generate_obj_base_pixel_point_pixel_displacement();
+            generate_obj_base_pixel_position_pixel_displacement();
 
             generate_obj_base_shape_dimensions();
 
@@ -76,7 +76,7 @@ public:
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                     (), getObjectId());
 
-            generate_obj_extrapolated_pixel_point_pixel_displacement( MAX_SKIPS );
+            generate_obj_extrapolated_pixel_position_pixel_displacement( MAX_SKIPS );
 
             generate_obj_extrapolated_shape_dimension( MAX_SKIPS );
 
@@ -89,13 +89,13 @@ public:
         }
     }
 
-    ObjectPosition getPositionPoints() const {
+    ObjectPixelPosition getPositionPoints() const {
         return m_obj_position;
     }
 
-    std::vector<std::pair<cv::Point2f, cv::Point2f> >  get_obj_base_pixel_point_pixel_displacement()
+    std::vector<std::pair<cv::Point2f, cv::Point2f> >  get_obj_base_pixel_position_pixel_displacement()
     const  {
-        return m_obj_base_pixel_point_pixel_displacement;
+        return m_obj_base_pixel_position_pixel_displacement;
     }
 
     std::vector<cv::Point2f> get_obj_base_shape_dimension()

@@ -15,7 +15,7 @@
 #include "datasets.h"
 #include "GroundTruthFlow.h"
 #include "AlgorithmFlow.h"
-#include "ObjectPosition.h"
+#include "ObjectPixelPosition.h"
 #include "GroundTruthScene.h"
 #include "GroundTruthObjects.h"
 #include "RobustnessIndex.h"
@@ -270,6 +270,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             }
         }
     }
+
+    /*
+     To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
+     */
 
     // Generate Algorithm data flow --------------------------------------
     for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {

@@ -23,6 +23,13 @@ public:
 };
 
 
+class MagnitudeRobusntess : public RobustnessIndex {
+
+public:
+    MagnitudeRobusntess(cv::FileStorage &fs) : RobustnessIndex(fs) {};
+
+};
+
 class PixelRobustness : public RobustnessIndex {
 
 public:

@@ -12,7 +12,7 @@
 
 
 #include "kitti/log_colormap.h"
-#include "ObjectPosition.h"
+#include "ObjectPixelPosition.h"
 #include "datasets.h"
 
 

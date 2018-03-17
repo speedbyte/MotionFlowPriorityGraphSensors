@@ -31,6 +31,30 @@ public:
     }
 };
 
+class GobalScaleChange: public Noise {
+
+};
+
+class GlobalGammaChange: public Noise {
+
+};
+
+
+class Vignetting : public Noise {
+
+};
+
+
+class GuassianNoise: public Noise {
+
+public:
+    void apply(ObjectImageShapeData &image) override {
+        //cv::GaussianBlur();// manipulate image with noise on this and return
+    }
+
+};
+
+
 class BlackNoise : public Noise {
 
 public:
@@ -84,15 +108,6 @@ public:
 };
 
 
-class GuassianNoise: public Noise {
-
-public:
-    void apply(ObjectImageShapeData &image) override {
-        //cv::GaussianBlur();// manipulate image with noise on this and return
-    }
-
-};
-
 class Reflection: public Noise {
 public:
     void apply(ObjectImageShapeData &image) override{
@@ -110,7 +125,6 @@ public:
         // manipulate image with noise and return
     }
 };
-
 
 
 

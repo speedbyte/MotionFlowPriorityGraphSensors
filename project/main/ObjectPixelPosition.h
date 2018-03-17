@@ -34,7 +34,7 @@ public:
         m_dimensions.at(frameNumber) = points;
     }
 
-    std::vector<cv::Point2f> getObjectDimensions() const {
+    std::vector<cv::Point2f> getObjectPixelDimensions() const {
         return m_dimensions;
     }
 
@@ -64,7 +64,7 @@ public:
 };
 
 
-class ObjectPosition {
+class ObjectPixelPosition {
 
 protected:
     std::vector<cv::Point2f> m_position;
@@ -73,7 +73,7 @@ protected:
 
 public:
 
-    ObjectPosition() {
+    ObjectPixelPosition() {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
             m_visibility.push_back(false);
             m_position.push_back(cv::Point2f(-1,-1));
@@ -140,7 +140,7 @@ public:
     }
 };
 
-class Achterbahn : public ObjectPosition {
+class Achterbahn : public ObjectPixelPosition {
 
 public:
 
@@ -150,7 +150,7 @@ public:
 
 };
 
-class Circle : public ObjectPosition {
+class Circle : public ObjectPixelPosition {
 
 public:
 
@@ -160,7 +160,7 @@ public:
 
 };
 
-class Ramp : public ObjectPosition {
+class Ramp : public ObjectPixelPosition {
 
 public:
 
@@ -170,7 +170,7 @@ public:
 
 };
 
-class NegativeRamp : public ObjectPosition {
+class NegativeRamp : public ObjectPixelPosition {
 
 public:
 
@@ -180,7 +180,7 @@ public:
 
 };
 
-class NoPosition: public ObjectPosition {
+class NoPosition: public ObjectPixelPosition {
 
 public:
 
@@ -190,7 +190,7 @@ public:
 
 };
 
-class MyPosition: public ObjectPosition {
+class MyPosition: public ObjectPixelPosition {
 
 public:
 
