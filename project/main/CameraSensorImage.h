@@ -13,8 +13,8 @@ class CameraSensorImage : public SensorImage {
 // How does object look like from the perspective of a camera?
 protected:
 
-    Noise &m_noise;
-    ObjectImageShapeData m_image_data_and_shape; // TODO use a own copy instead of reference.
+    Noise &m_noise; // TODO use a own copy instead of reference.
+    ObjectImageShapeData m_image_data_and_shape;
     cv::Matx33f camaera_intrinsic_parameters;
     cv::Matx33f camaera_pose_parameters;
 
