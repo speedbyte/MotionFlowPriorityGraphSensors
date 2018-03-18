@@ -15,7 +15,7 @@
 #include "datasets.h"
 #include "GroundTruthFlow.h"
 #include "AlgorithmFlow.h"
-#include "ObjectPixelPosition.h"
+#include "ObjectSceneGroundTruth.h"
 #include "GroundTruthScene.h"
 #include "GroundTruthObjects.h"
 #include "RobustnessIndex.h"

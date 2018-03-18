@@ -36,8 +36,7 @@ MyData:
 class ObjectMetaData {
 
     ObjectImageShapeData m_objectMetaData_shape;
-    ObjectPixelPosition m_objectMetaData_position;
-    ObjectDimensions m_objectMetaData_dimension;
+    ObjectSceneGroundTruth m_objectMetaData_position;
 
     std::string m_objectMetaData_name;
     ushort m_objectMetaData_startPoint;
@@ -46,8 +45,8 @@ class ObjectMetaData {
 public:
 
     ObjectMetaData() {};
-    ObjectMetaData(ObjectImageShapeData shape, ObjectDimensions dimension, ObjectPixelPosition position, std::string name, ushort startPoint) :
-    m_objectMetaData_shape(shape), m_objectMetaData_dimension(dimension), m_objectMetaData_position(position), m_objectMetaData_name(name), m_objectMetaData_startPoint(startPoint) {} ;
+    ObjectMetaData(ObjectImageShapeData shape, ObjectSceneGroundTruth position, std::string name, ushort startPoint) :
+    m_objectMetaData_shape(shape), m_objectMetaData_position(position), m_objectMetaData_name(name), m_objectMetaData_startPoint(startPoint) {} ;
 
     void fillData() {
 
@@ -57,12 +56,8 @@ public:
         return m_objectMetaData_shape;
     }
 
-    ObjectPixelPosition& getObjectPixelPosition() {
+    ObjectSceneGroundTruth& getObjectPixelPosition() {
         return m_objectMetaData_position;
-    }
-
-    ObjectDimensions& getObjectPixelDimension() {
-        return m_objectMetaData_dimension;
     }
 
     std::string& getObjectName() {

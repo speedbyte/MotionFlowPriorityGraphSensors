@@ -60,6 +60,7 @@ public:
     std::string cad_3d_model;
     //color: the name of the color of the object
     std::string color;
+    struct object_offset_m { float offset_x; float offset_y; float offset_z; } m_object_offset;
 
     /*
      Remarks about 3D information
@@ -123,69 +124,21 @@ public:
 };
 
 
-class ObjectDimensions {
 
-private:
-    std::vector<cv::Point2f> m_dimensions;
-
-public:
-
-    ObjectDimensions() {
-        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
-            m_dimensions.push_back(cv::Point2f(0,0));
-        }
-    }
-
-    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point2f points) {
-        m_dimensions.at(frameNumber) = points;
-    }
-
-    std::vector<cv::Point2f> getObjectPixelDimensions() const {
-        return m_dimensions;
-    }
-
-    void process(cv::Size frame_size) {
-        std::vector<ushort> theta;
-        for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
-            theta.push_back(frame_count);
-        }
-        // Prepare points
-        cv::Point2f l_pixel_dimension;
-        for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
-
-            l_pixel_dimension.x = static_cast<float>((frame_size.width/2) + (100 * cos(theta[i] *CV_PI / 180.0) /
-                                                                            (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
-
-            l_pixel_dimension.y = static_cast<float>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
-                                                                                   sin(theta[i] * CV_PI / 180.0)) /
-                                                                             (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
-
-            l_pixel_dimension.x /= 10;
-            l_pixel_dimension.y /= 10;
-
-            m_dimensions.at(i) = (l_pixel_dimension);
-        }
-    }
-
-};
-
-
-class ObjectPixelPosition {
+class ObjectSceneGroundTruth {
 
 protected:
     std::vector<cv::Point2f> m_pixel_position;
     std::vector<STRUCT_GT_ALL> m_gt_all;
-    std::vector<cv::Point2f> m_offset;
 
     std::vector<bool> m_visibility;
 
 public:
 
-    ObjectPixelPosition() {
+    ObjectSceneGroundTruth() {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
             m_visibility.push_back(false);
             m_pixel_position.push_back(cv::Point2f(-1,-1));
-            m_offset.push_back(cv::Point2f(0,0));
             //m_gt_all.push_back({cv::Point2f(0,0), cv::Point2f(0,0)});
         }
     };
@@ -196,9 +149,12 @@ public:
 
     virtual void pushVisibility(bool visibility) {}
 
-    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point2f position, cv::Point2f offset) {
+    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point2f position, cv::Point2f offset, cv::Point2f dimensions) {
         m_pixel_position.at(frameNumber) = position;
-        m_offset.at(frameNumber) = offset;
+        m_gt_all.at(frameNumber).m_object_offset.offset_x = offset.x;
+        m_gt_all.at(frameNumber).m_object_offset.offset_y = offset.y;
+        m_gt_all.at(frameNumber).m_object_dimensions.dim_height_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_dimensions.dim_length_m = dimensions.y;
     }
 
     void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point2f position, cv::Point2f orientation) {
@@ -264,7 +220,7 @@ public:
     }
 };
 
-class Achterbahn : public ObjectPixelPosition {
+class Achterbahn : public ObjectSceneGroundTruth {
 
 public:
 
@@ -274,7 +230,7 @@ public:
 
 };
 
-class Circle : public ObjectPixelPosition {
+class Circle : public ObjectSceneGroundTruth {
 
 public:
 
@@ -284,7 +240,7 @@ public:
 
 };
 
-class Ramp : public ObjectPixelPosition {
+class Ramp : public ObjectSceneGroundTruth {
 
 public:
 
@@ -294,7 +250,7 @@ public:
 
 };
 
-class NegativeRamp : public ObjectPixelPosition {
+class NegativeRamp : public ObjectSceneGroundTruth {
 
 public:
 
@@ -304,7 +260,7 @@ public:
 
 };
 
-class NoPosition: public ObjectPixelPosition {
+class NoPosition: public ObjectSceneGroundTruth {
 
 public:
 
@@ -314,7 +270,7 @@ public:
 
 };
 
-class MyPosition: public ObjectPixelPosition {
+class MyPosition: public ObjectSceneGroundTruth {
 
 public:
 

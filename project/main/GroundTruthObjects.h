@@ -9,7 +9,7 @@
 // GroundTruthObjects are either CameraSensorImage or RadarSensorImage
 
 #include "Dataset.h"
-#include "ObjectPixelPosition.h"
+#include "ObjectSceneGroundTruth.h"
 #include "datasets.h"
 #include "CameraSensorImage.h"
 #include "Objects.h"
@@ -23,9 +23,7 @@ private:
 
     const ushort m_startPoint;
 
-    const ObjectPixelPosition m_obj_position;
-
-    const ObjectDimensions m_obj_dimension;
+    const ObjectSceneGroundTruth m_obj_groundtruth_data;
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_position_pixel_displacement;
 
@@ -47,24 +45,22 @@ private:
 
 public:
 
-    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectDimensions dimension, const ObjectPixelPosition position, ushort
-    startPoint, Noise &noise, std::string objectName) : m_obj_dimension(dimension), m_obj_position(position), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
+    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectSceneGroundTruth gt_data, ushort
+    startPoint, Noise &noise, std::string objectName) : m_obj_groundtruth_data(gt_data), m_startPoint(startPoint),CameraSensorImage(image_data_and_shape, noise),
                                                         Objects(objectName)
 
     {
-        assert(m_obj_position.getPixelPosition().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
+        assert(m_obj_groundtruth_data.getPixelPosition().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
         m_objectId = objectCurrentCount ;
         image_data_and_shape.process();
         objectCurrentCount += 1;
 
-        if ( m_objectName.compare("BackgroundCanvas")) {
+        if ( m_objectName != "BackgroundCanvas" ) {
 
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                     (), getObjectId());
 
             generate_obj_base_pixel_position_pixel_displacement();
-
-            generate_obj_base_shape_dimensions();
 
             beginGroundTruthGeneration();
 
@@ -91,8 +87,8 @@ public:
         }
     }
 
-    ObjectPixelPosition getPositionPoints() const {
-        return m_obj_position;
+    ObjectSceneGroundTruth getGroundTruthDetails() const {
+        return m_obj_groundtruth_data;
     }
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> >  get_obj_base_pixel_position_pixel_displacement()

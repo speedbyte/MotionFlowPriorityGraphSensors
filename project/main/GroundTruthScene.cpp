@@ -150,10 +150,9 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
                     dimension_pixel = cv::Point2f((int)(*file_node_iterator)["dim_x"], (int)(*file_node_iterator)["dim_y"]);
 
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelPosition().atFrameNumberCameraSensor(frame_count, position_pixel, offset_pixel);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelPosition().atFrameNumberCameraSensor(frame_count, position_pixel, offset_pixel, dimension_pixel);
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelPosition().atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk);
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelPosition().atFrameNumberVisibility(frame_count, (int)(*file_node_iterator)["visible"]);
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelDimension().atFrameNumberCameraSensor(frame_count, dimension_pixel);
 
                 }
             }
@@ -278,7 +277,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
                 //std::cout << myPair.first << "\n";
                 objectMetaDataList.at(map_pair_count) = ObjectMetaData(objectMetaDataList.at(map_pair_count).getObjectShape(),
-                                                                       objectMetaDataList.at(map_pair_count).getObjectPixelDimension(), objectMetaDataList.at(map_pair_count).getObjectPixelPosition(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
+                                                                       objectMetaDataList.at(map_pair_count).getObjectPixelPosition(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
                 map_pair_count++;
             }
         }
@@ -287,20 +286,18 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
             Achterbahn achterbahn;
             achterbahn.process(Dataset::getFrameSize());
-            ObjectDimensions dimension;
-            dimension.process(Dataset::getFrameSize());
             Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
 
-            objectMetaDataList.at(0) = ObjectMetaData(rectangle, dimension, achterbahn, "rectangle_long", 60);
+            objectMetaDataList.at(0) = ObjectMetaData(rectangle, achterbahn, "rectangle_long", 60);
             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
-            objectMetaDataList.at(1) = ObjectMetaData(rectangle, dimension, achterbahn, "random_object", 120);
+            objectMetaDataList.at(1) = ObjectMetaData(rectangle, achterbahn, "random_object", 120);
             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
 
         }
 
         for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
 
-            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectPixelDimension(), objectMetaDataList.at(i).getObjectPixelPosition(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
+            GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectPixelPosition(), objectMetaDataList.at(i).getObjectStartPoint(), colorfulNoise, objectMetaDataList.at(i).getObjectName());
             m_list_objects.push_back(gt_obj);
 
         }
@@ -386,9 +383,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 if (m_list_objects.at(i).getObjectId() == 0) {
                     positionShape = cv::Scalar(255, 0, 0);
                     positionShape.copyTo(tempGroundTruthPosition(
-                            cv::Rect(cvRound(m_list_objects.at(i).getPositionPoints()
+                            cv::Rect(cvRound(m_list_objects.at(i).getGroundTruthDetails()
                                                      .getPixelPosition().at(frame_count).x), cvRound(m_list_objects.at
-                                    (i).getPositionPoints().getPixelPosition().at(frame_count).y),
+                                    (i).getGroundTruthDetails().getPixelPosition().at(frame_count).y),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
                     cv::imwrite(position_image_file_with_path, tempGroundTruthPosition);
@@ -397,8 +394,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 if (m_list_objects.at(i).getObjectId() == 1) {
                     positionShape = cv::Scalar(0, 255, 0);
                     positionShape.copyTo(tempGroundTruthPosition_2(
-                            cv::Rect(cvRound(m_list_objects.at(i).getPositionPoints()
-                                                     .getPixelPosition().at(frame_count).x), cvRound(m_list_objects.at(i).getPositionPoints()
+                            cv::Rect(cvRound(m_list_objects.at(i).getGroundTruthDetails()
+                                                     .getPixelPosition().at(frame_count).x), cvRound(m_list_objects.at(i).getGroundTruthDetails()
                                                                                                                                                .getPixelPosition().at(frame_count).y),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
@@ -461,7 +458,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
                 //std::cout << myPair.first << "\n";
                 objectMetaDataList.at(map_pair_count) = ObjectMetaData(objectMetaDataList.at(map_pair_count).getObjectShape(),
-                                                                       objectMetaDataList.at(map_pair_count).getObjectPixelDimension(), objectMetaDataList.at(map_pair_count).getObjectPixelPosition(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
+                                                                       objectMetaDataList.at(map_pair_count).getObjectPixelPosition(), objectMetaDataList.at(map_pair_count).getObjectName(), 0);
                 map_pair_count++;
             }
         }
@@ -728,7 +725,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             for ( auto i = 0; i < objectMetaDataList.size() ; i++) {
 
-                GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectPixelDimension(), objectMetaDataList.at(i).getObjectPixelPosition(), objectMetaDataList.at(i).getObjectStartPoint(), noNoise, objectMetaDataList.at(i).getObjectName());
+                GroundTruthObjects gt_obj(objectMetaDataList.at(i).getObjectShape(), objectMetaDataList.at(i).getObjectPixelPosition(), objectMetaDataList.at(i).getObjectStartPoint(), noNoise, objectMetaDataList.at(i).getObjectName());
                 m_list_objects.push_back(gt_obj);
 
             }
@@ -854,9 +851,8 @@ simFrame, const
                     position_pixel = cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y);
                     dimension_pixel = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
                     offset_pixel = cv::Point2f((float) data->base.geo.offX, (float) data->base.geo.offY);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelPosition().atFrameNumberCameraSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset_pixel);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelPosition().atFrameNumberCameraSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset_pixel, dimension_pixel);
                     m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelPosition().atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelDimension().atFrameNumberCameraSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), dimension_pixel);
                 }
                 else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
                     position_usk = cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y);

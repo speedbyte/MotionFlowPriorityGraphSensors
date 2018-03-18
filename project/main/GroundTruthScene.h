@@ -10,7 +10,7 @@
 #include <vires-interface/vires_common.h>
 #include <iostream>
 #include "Dataset.h"
-#include "ObjectPixelPosition.h"
+#include "ObjectSceneGroundTruth.h"
 #include "GroundTruthObjects.h"
 #include "Canvas.h"
 #include "ObjectMetaData.h"

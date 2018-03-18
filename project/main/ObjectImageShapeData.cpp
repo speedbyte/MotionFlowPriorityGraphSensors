@@ -3,7 +3,7 @@
 //
 
 #include "ObjectImageShapeData.h"
-#include "ObjectPixelPosition.h"
+#include "ObjectSceneGroundTruth.h"
 
 
 void Rectangle::process() {
