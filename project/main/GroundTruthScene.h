@@ -153,7 +153,7 @@ private:
 
     std::string image_generator = "<ImageGenerator> <Window width=\"800\" height=\"600\" x=\"0\" y=\"0\" screen=\"0\" border=\"true\"/></ImageGenerator>";
 
-    std::string module_manager_libModuleCameraSensor =
+    std::string module_manager_libModuleSensor =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
@@ -167,6 +167,9 @@ private:
                     "   <Filter objectType=\"vehicle\" /> "
                     "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
                     "</Sensor>";
+
+    std::string module_manager_libModuleCameraSensor;
+    std::string module_manager_libModulePerfectSensor;
 
     std::string module_manager_libModuleSingleRaySensor =
             "<Sensor name=\"simpleSensor\" type=\"radar\">\n"
@@ -267,6 +270,8 @@ $
 
     int m_moduleManagerSocket_Camera;
 
+    int m_moduleManagerSocket_Perfect;
+
 
 
 
@@ -311,6 +316,16 @@ public:
         if ( position2 != std::string::npos ) {
             stop.replace(position2, to_replace.length(), std::string(m_scenario));
         }
+
+        module_manager_libModuleCameraSensor = module_manager_libModuleSensor;
+        module_manager_libModulePerfectSensor = module_manager_libModuleSensor;
+
+        std::string to_replace = std::to_string(DEFAULT_RX_PORT);
+        position = module_manager_libModulePerfectSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT));
+        }
+
 
         if ( environment == "none") {
             m_environment_scp_message = environment_parameters_dry;

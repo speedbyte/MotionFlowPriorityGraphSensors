@@ -85,6 +85,8 @@ void GroundTruthScene::writePositionInYaml() {
                         << "visible" << m_list_objects.at(i).get_obj_base_visibility().at(frame_count)
                         << "x" <<  m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x
                         << "y" << m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y
+                        << "x_usk" <<  m_list_objects.at(i).get_obj_base_all().at(frame_count).m_object_location.location_x_m
+                        << "y_usk" <<  m_list_objects.at(i).get_obj_base_all().at(frame_count).m_object_location.location_y_m
                         << "dim_x" << m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x
                         << "dim_y" << m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y
                         << "}";
@@ -99,7 +101,7 @@ void GroundTruthScene::writePositionInYaml() {
 void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
     cv::FileStorage fs(positionFileName, cv::FileStorage::READ);
-    cv::Point2f position_pixel, dimension_pixel, offset_pixel;
+    cv::Point2f position_pixel, dimension_pixel, offset_pixel, orientation_usk, position_usk;
 
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
@@ -142,9 +144,16 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                     std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x"] << " " << (double)(*file_node_iterator)["y"] << std::endl;
                     position_pixel = cv::Point2f((double)(*file_node_iterator)["x"], (double)(*file_node_iterator)["y"]);
                     offset_pixel = cv::Point2f((double)(*file_node_iterator)["off_x"], (double)(*file_node_iterator)["off_y"]);
+
+                    position_usk = cv::Point2f((double)(*file_node_iterator)["x_usk"], (double)(*file_node_iterator)["y_usk"]);
+                    orientation_usk = cv::Point2f((double)(*file_node_iterator)["h"], (double)(*file_node_iterator)["p"]);
+
                     dimension_pixel = cv::Point2f((int)(*file_node_iterator)["dim_x"], (int)(*file_node_iterator)["dim_y"]);
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelPosition().atFrameNumber(frame_count, position_pixel, offset_pixel, (int)(*file_node_iterator)["visible"]);
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelDimension().atFrameNumber(frame_count, dimension_pixel);
+
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelPosition().atFrameNumberCameraSensor(frame_count, position_pixel, offset_pixel);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelPosition().atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelPosition().atFrameNumberVisibility(frame_count, (int)(*file_node_iterator)["visible"]);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->getObjectPixelDimension().atFrameNumberCameraSensor(frame_count, dimension_pixel);
 
                 }
             }
@@ -246,7 +255,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         myPosition2.pushPositionPoints(points);
     }
 */
-    //std::cout << myPosition1.getPosition();
+    //std::cout << myPosition1.getPixelPosition();
 
 
     ColorfulNoise colorfulNoise;
@@ -378,8 +387,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     positionShape = cv::Scalar(255, 0, 0);
                     positionShape.copyTo(tempGroundTruthPosition(
                             cv::Rect(cvRound(m_list_objects.at(i).getPositionPoints()
-                                                     .getPosition().at(frame_count).x), cvRound(m_list_objects.at
-                                    (i).getPositionPoints().getPosition().at(frame_count).y),
+                                                     .getPixelPosition().at(frame_count).x), cvRound(m_list_objects.at
+                                    (i).getPositionPoints().getPixelPosition().at(frame_count).y),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
                     cv::imwrite(position_image_file_with_path, tempGroundTruthPosition);
@@ -389,8 +398,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     positionShape = cv::Scalar(0, 255, 0);
                     positionShape.copyTo(tempGroundTruthPosition_2(
                             cv::Rect(cvRound(m_list_objects.at(i).getPositionPoints()
-                                                     .getPosition().at(frame_count).x), cvRound(m_list_objects.at(i).getPositionPoints()
-                                                                                                                                               .getPosition().at(frame_count).y),
+                                                     .getPixelPosition().at(frame_count).x), cvRound(m_list_objects.at(i).getPositionPoints()
+                                                                                                                                               .getPixelPosition().at(frame_count).y),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).x),
                                      cvRound(m_list_objects.at(i).get_obj_base_shape_dimension().at(frame_count).y))));
                     cv::imwrite(position_image_file_with_path, tempGroundTruthPosition_2);
@@ -533,6 +542,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
+        sendSCPMessage(m_scpSocket, module_manager_libModulePerfectSensor.c_str());
+
+        sleep(1);
+
         sendSCPMessage(m_scpSocket, camera_parameters.c_str());
 
         sleep(1);
@@ -587,6 +600,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         //if ( m_environment == "none") {
             m_moduleManagerSocket_Camera = openNetwork(DEFAULT_RX_PORT);
+            m_moduleManagerSocket_Perfect = openNetwork(DEFAULT_RX_PORT_PERFECT);
         //}
 
         std::cout << "mm socket - " << m_moduleManagerSocket_Camera << std::endl;
@@ -816,7 +830,7 @@ simFrame, const
                                           short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                                           const unsigned int &totalElem) {
 
-    cv::Point2f position_pixel, dimension_pixel, offset_pixel;
+    cv::Point2f position_pixel, dimension_pixel, offset_pixel, position_usk, orientation_usk;
 
     if ( m_environment == "none") {
 
@@ -840,8 +854,15 @@ simFrame, const
                     position_pixel = cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y);
                     dimension_pixel = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
                     offset_pixel = cv::Point2f((float) data->base.geo.offX, (float) data->base.geo.offY);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelPosition().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset_pixel, true);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelDimension().atFrameNumber((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), dimension_pixel);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelPosition().atFrameNumberCameraSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset_pixel);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelPosition().atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelDimension().atFrameNumberCameraSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), dimension_pixel);
+                }
+                else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
+                    position_usk = cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y);
+                    orientation_usk = cv::Point2f((float) data->base.pos.h, (float) data->base.pos.p);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelPosition().atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->getObjectPixelPosition().atFrameNumberPerfectSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk);
                 }
             } else {
                 //std::cout << data->base.type << std::endl;

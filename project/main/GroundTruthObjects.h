@@ -29,6 +29,8 @@ private:
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_position_pixel_displacement;
 
+    std::vector<STRUCT_GT_ALL> m_obj_base_all;
+
     std::vector<cv::Point2f> m_obj_base_shape_dimension;
 
     void generate_obj_base_pixel_position_pixel_displacement();
@@ -50,7 +52,7 @@ public:
                                                         Objects(objectName)
 
     {
-        assert(m_obj_position.getPosition().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
+        assert(m_obj_position.getPixelPosition().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
         m_objectId = objectCurrentCount ;
         image_data_and_shape.process();
         objectCurrentCount += 1;
@@ -102,6 +104,12 @@ public:
     const  {
         return m_obj_base_shape_dimension;
     }
+
+    std::vector<STRUCT_GT_ALL> get_obj_base_all()
+    const  {
+        return m_obj_base_all;
+    }
+
 
     ushort getStartPoint() const {
         return m_startPoint;

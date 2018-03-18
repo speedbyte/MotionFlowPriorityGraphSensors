@@ -23,23 +23,27 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement() {
         if ( frame_count > 0 ) {
 
             cv::Point2f gt_next_pts = {0,0}, gt_displacement = {0,0};
+            STRUCT_GT_ALL gt_all;
 
             //If we are at the end of the path vector, we need to reset our iterators
-            if (current_index >= m_obj_position.getPosition().size()) {
+            if (current_index >= m_obj_position.getPixelPosition().size()) {
                 current_index = 0;
-                gt_displacement.x = m_obj_position.getPosition().at(current_index).x - m_obj_position.getPosition().at
-                        (m_obj_position.getPosition().size() - 1).x;
-                gt_displacement.y = m_obj_position.getPosition().at(current_index).y - m_obj_position.getPosition().at
-                        (m_obj_position.getPosition().size() - 1).y;
-                gt_next_pts = m_obj_position.getPosition().at(current_index);
+                gt_displacement.x = m_obj_position.getPixelPosition().at(current_index).x - m_obj_position.getPixelPosition().at
+                        (m_obj_position.getPixelPosition().size() - 1).x;
+                gt_displacement.y = m_obj_position.getPixelPosition().at(current_index).y - m_obj_position.getPixelPosition().at
+                        (m_obj_position.getPixelPosition().size() - 1).y;
+                gt_next_pts = m_obj_position.getPixelPosition().at(current_index);
+
+                gt_all = m_obj_position.getAll().at(current_index);
 
             } else {
 
-                gt_displacement.x = m_obj_position.getPosition().at(current_index).x - m_obj_position.getPosition().at
+                gt_displacement.x = m_obj_position.getPixelPosition().at(current_index).x - m_obj_position.getPixelPosition().at
                         (current_index - (ushort) 1).x;
-                gt_displacement.y = m_obj_position.getPosition().at(current_index).y - m_obj_position.getPosition().at
+                gt_displacement.y = m_obj_position.getPixelPosition().at(current_index).y - m_obj_position.getPixelPosition().at
                         (current_index - (ushort) 1).y;
-                gt_next_pts = m_obj_position.getPosition().at(current_index);
+                gt_next_pts = m_obj_position.getPixelPosition().at(current_index);
+                gt_all = m_obj_position.getAll().at(current_index);
 
             }
 
@@ -50,15 +54,17 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement() {
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_next_pts, gt_displacement));
+            m_obj_base_all.push_back(gt_all);
             m_obj_base_visibility.push_back(m_obj_position.getVisibility().at(current_index));
+
         }
         else {
 
             printf("%s, %u, %u , %f, %f, %f, %f\n", (m_obj_position.getVisibility().at(current_index)?"true":"false"),
                    frame_count,
-                   current_index, m_obj_position.getPosition().at(current_index).x, m_obj_position.getPosition().at(current_index).y,
+                   current_index, m_obj_position.getPixelPosition().at(current_index).x, m_obj_position.getPixelPosition().at(current_index).y,
                    (float)0, (float)0);
-            m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(m_obj_position.getPosition().at(current_index) , cv::Point2f(0,0)));
+            m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(m_obj_position.getPixelPosition().at(current_index) , cv::Point2f(0,0)));
             m_obj_base_visibility.push_back(m_obj_position.getVisibility().at(current_index));
         }
         current_index++;
