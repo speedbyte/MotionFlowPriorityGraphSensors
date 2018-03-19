@@ -36,7 +36,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
                         (gt_data.getPixelPosition().size() - 1).y;
                 gt_next_pts = gt_data.getPixelPosition().at(current_index);
 
-                gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions.dim_length_m;
+                gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m;
                 gt_dimensions.y = gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m;
 
                 gt_all = gt_data.getAll().at(current_index);
@@ -48,7 +48,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
                 gt_displacement.y = gt_data.getPixelPosition().at(current_index).y - gt_data.getPixelPosition().at
                         (current_index - (ushort) 1).y;
                 gt_next_pts = gt_data.getPixelPosition().at(current_index);
-                gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions.dim_length_m;
+                gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m;
                 gt_dimensions.y = gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m;
 
                 gt_all = gt_data.getAll().at(current_index);
@@ -131,7 +131,7 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_dimension(const unsigne
 
     for ( unsigned frame_skip = 1; frame_skip < max_skips ; frame_skip++ ) {
 
-        std::vector<cv::Point2f>  multiframe_flowvector;
+        std::vector<cv::Point2f>  multiframe_dimension;
 
         std::cout << "generate_obj_extrapolated_shape_dimension for frame_skip " << frame_skip << std::endl;
         unsigned long FRAME_COUNT = m_obj_base_all.size();
@@ -146,14 +146,14 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_dimension(const unsigne
             else {
                 if ( m_obj_base_visibility.at(frame_count) == false) {
                     // Make all 0
-                    multiframe_flowvector.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_length_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
+                    multiframe_dimension.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_width_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
 
                 } else {
-                    multiframe_flowvector.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_length_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
+                    multiframe_dimension.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_width_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
                 }
             }
         }
-        m_obj_extrapolated_shape_dimension.push_back(multiframe_flowvector);
+        m_obj_extrapolated_shape_dimension.push_back(multiframe_dimension);
     }
 }
 

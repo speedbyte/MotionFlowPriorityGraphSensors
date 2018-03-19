@@ -391,12 +391,12 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     bool visibility = m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
                     if ( visibility ) {
 
-                        cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height),(cvRound(rowBegin)+height+height)).colRange
-                                (cvRound(columnBegin-width),(cvRound(columnBegin)+width+width));
+                        cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height/10),(cvRound(rowBegin)+height+height/10)).colRange
+                                (cvRound(columnBegin-width/10),(cvRound(columnBegin)+width+width/10));
 
                         // Here I should write the fact
                         // roi_write = cv::Scalar(i,j,k);
-                        //
+                         //
 
                         cv::Size roi_size;
                         cv::Point roi_offset;

@@ -87,7 +87,7 @@ void GroundTruthScene::writePositionInYaml() {
                         << "y" << m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y
                         << "x_usk" <<  m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_location.location_x_m
                         << "y_usk" <<  m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_location.location_y_m
-                        << "dim_x" << m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m
+                        << "dim_x" << m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m
                         << "dim_y" << m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m
                         << "}";
             }
@@ -215,7 +215,7 @@ void GroundTruthScene::generate_bounding_box(void) {
                 //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m/2))),
                 cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
                         cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
-                        cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m),
+                        cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m),
                 cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m));
 
 
@@ -226,7 +226,7 @@ void GroundTruthScene::generate_bounding_box(void) {
             }
         }
 
-        cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+        //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
         //cv::imshow("BB", tempGroundTruthImage);
         cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
         //cv::waitKey(0);
@@ -366,9 +366,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     frame_skip_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m));
+            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m));
             positionShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            positionShape = positionShape.rowRange(0, cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m));
+            positionShape = positionShape.rowRange(0, cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m));
 
             if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
@@ -376,7 +376,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
                                  cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
-                                 cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m),
+                                 cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m),
                                  cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m))));
 
             }

@@ -92,20 +92,22 @@ void OpticalFlow::generate_shape_points() {
             fs << "frame_count" << frame_count;
 
             cv::Point2f shape_average = {0,0};
-            std::vector<cv::Point2f> shape_points;
+            std::vector<cv::Point2f> shape_points(m_list_simulated_objects.size());
             std::vector<cv::Point2f> shape_points_average;
 
 
             for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
+
+                auto CLUSTER_COUNT_GT = m_list_gt_objects.at(i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
+                        (frame_skip - 1).at(frame_count).size();
+
+                auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                        (frame_skip - 1).at(frame_count).size();
+
                 if ( ( m_list_simulated_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1)
                                .at(frame_count) == true ) ) {
 
-                    auto CLUSTER_COUNT_GT = m_list_gt_objects.at(i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
-                            (frame_skip - 1).at(frame_count).size();
-
-                    auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                            (frame_skip - 1).at(frame_count).size();
 
                     float rowBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.y;
@@ -142,7 +144,7 @@ void OpticalFlow::generate_shape_points() {
                     }
 
                     float keinTreffer = (CLUSTER_COUNT_ALGO - vollTreffer);
-                    shape_points.push_back(cv::Point2f(vollTreffer, keinTreffer));
+                    shape_points.at(i) = (cv::Point2f(vollTreffer, keinTreffer));
 
                     std::cout << "vollTreffer for object " << m_list_simulated_objects.at(i)->getObjectId() << " = " << vollTreffer << std::endl ;
 
@@ -155,6 +157,12 @@ void OpticalFlow::generate_shape_points() {
                             m_list_simulated_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip
                                             - 1)
                                     .at(frame_count) << " and hence not generating any shape points for this object " <<  std::endl ;
+
+                    shape_points.at(i) = (cv::Point2f(0, CLUSTER_COUNT_ALGO));
+                    shape_average.x += shape_points.at(i).x;
+                    shape_average.y += shape_points.at(i).y;
+
+
                 }
             }
 

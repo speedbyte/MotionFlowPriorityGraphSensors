@@ -153,7 +153,7 @@ public:
         m_pixel_position.at(frameNumber) = position;
         m_gt_all.at(frameNumber).m_object_offset.offset_x = offset.x;
         m_gt_all.at(frameNumber).m_object_offset.offset_y = offset.y;
-        m_gt_all.at(frameNumber).m_object_dimensions.dim_length_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_dimensions.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_dimensions.dim_height_m = dimensions.y;
     }
 

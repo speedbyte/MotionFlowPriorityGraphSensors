@@ -166,7 +166,8 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
 
                 xsamples.push_back(collisionpoints.x);
                 ysamples.push_back(collisionpoints.y);
-
+                m_valid_collision_points++;
+                /*
                 if ( ( collisionpoints.x ) > 0 &&
                      ( collisionpoints.y ) > 0 &&
                      ( collisionpoints.x ) < Dataset::getFrameSize().width  &&
@@ -177,6 +178,7 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
                 else {
                     m_invalid_collision_points++;
                 }
+                */
             }
 
             if (m_valid_collision_points == 0 ) {
