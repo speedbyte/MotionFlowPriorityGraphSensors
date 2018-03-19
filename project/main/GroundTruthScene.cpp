@@ -227,9 +227,9 @@ void GroundTruthScene::generate_bounding_box(void) {
         }
 
         cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-        cv::imshow("BB", tempGroundTruthImage);
-        //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
-        cv::waitKey(0);
+        //cv::imshow("BB", tempGroundTruthImage);
+        cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+        //cv::waitKey(0);
         auto toc = steady_clock::now();
         time_map["generate_single_scene_image"] = duration_cast<milliseconds>(toc - tic).count();
 

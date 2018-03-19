@@ -65,9 +65,6 @@ public:
 
         if ( m_objectName.compare("BackgroundCanvas")) {
 
-            printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
-                    (), getObjectId());
-
             generate_obj_extrapolated_pixel_position_pixel_displacement( MAX_SKIPS );
 
             generate_obj_extrapolated_shape_dimension( MAX_SKIPS );

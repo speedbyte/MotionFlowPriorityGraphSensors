@@ -20,11 +20,12 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
     for (ushort frame_count=0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; frame_count++) {
         // The first frame is the reference frame, hence it is skipped
 
+        STRUCT_GT_ALL gt_all = {};
+
         if ( frame_count > 0 ) {
 
             cv::Point2f gt_next_pts = {0,0}, gt_displacement = {0,0};
             cv::Point2f gt_dimensions = {0,0};
-            STRUCT_GT_ALL gt_all;
 
             //If we are at the end of the path vector, we need to reset our iterators
             if (current_index >= gt_data.getPixelPosition().size()) {
@@ -54,14 +55,11 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
             }
 
-            printf("%s, %u, %u , %f, %f, %f, %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
+            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
                     frame_count,
                    current_index, gt_next_pts.x, gt_next_pts.y,
-                   gt_displacement.x, gt_displacement.y);
+                   gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y);
 
-            printf("%s, %u, %u , %f, %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
-                   frame_count,
-                   current_index, gt_dimensions.x, gt_dimensions.y);
             // make m_flowvector_with_coordinate_gt with smallest resolution.
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_next_pts, gt_displacement));
             m_obj_base_visibility.push_back(gt_data.getVisibility().at(current_index));
@@ -76,6 +74,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
                    (float)0, (float)0);
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_data.getPixelPosition().at(current_index) , cv::Point2f(0,0)));
             m_obj_base_visibility.push_back(gt_data.getVisibility().at(current_index));
+            m_obj_base_all.push_back(gt_all);
         }
         current_index++;
     }
@@ -207,7 +206,7 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
 void GroundTruthObjects::generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement  ) {
 
     // object image_data_and_shape
-    m_obj_extrapolated_stencil_pixel_point_pixel_displacement = m_obj_extrapolated_shape_pixel_point_pixel_displacement;
+    //m_obj_extrapolated_stencil_pixel_point_pixel_displacement = m_obj_extrapolated_shape_pixel_point_pixel_displacement;
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
