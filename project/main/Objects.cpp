@@ -42,11 +42,23 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                         .at(frame_count).at(cluster_point).first;
                 cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).second;
+
+                // 1. MEAN - add all displacement and points and divide by total size.
+                // 2. THRESHOLD MEAN - add all displacement and points that are within a boundary and divide by total found size
+                // 3. VOTED MEAN - create vote of the displacement and points and only accept values that have the highest number of occurence
+                // 4. RANKED MEAN - create ranks of the displacment and points by accepting only those values that are on the boundary and edges and ignoring the rest.
+                // 1 st method
                 mean_pts_x += pts.x ;
                 mean_pts_y += pts.y ;
                 mean_displacement_vector_x += gt_displacement.x ;
                 mean_displacement_vector_y += gt_displacement.y ;
                 mean_visibility = visibility;
+
+                // 2nd method
+
+                // 3rd method
+
+                // 4th method
             }
             if ( CLUSTER_SIZE == 0 ) {
                 mean_pts_x = 0;
@@ -77,7 +89,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
         m_obj_extrapolated_mean_visibility.push_back(multiframe_visibility);
 
     }
-
 }
 
 
