@@ -633,3 +633,66 @@ void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixe
     fs << "]";
 }
 
+
+
+void AlgorithmFlow::visualiseStencil(void) {
+
+    cv::Mat tempGroundTruthImage, tempGroundTruthImageBase;
+
+    std::map<std::string, double> time_map = {{"generate_single_scene_image", 0},
+                                              {"generate_all_scene_image",    0}};
+
+    std::cout << "visualise stencil at " << m_generatepath.string() + "bounding_box/" << std::endl;
+
+    char file_name_image[50], file_name_image_output[50];
+
+    cv::Mat image_data_and_shape;
+
+    const ushort frame_skip = 1; // image is generated only once irrespective of skips.
+
+    auto tic_all = steady_clock::now();
+
+    for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
+
+        auto tic = steady_clock::now();
+
+        sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
+        std::string input_image_file_with_path = mImageabholOrt.string() + file_name_image;
+
+        sprintf(file_name_image_output, "000%03d_10_stencil.png", frame_count * frame_skip);
+        std::string output_image_file_with_path = m_generatepath.string() + "bounding_box/" + file_name_image_output;
+
+        tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
+        if (tempGroundTruthImageBase.data == NULL) {
+            std::cout << "no image found";
+            exit(0);
+        }
+
+        //draw new ground truth image.
+        tempGroundTruthImage = tempGroundTruthImageBase.clone();
+
+        char frame_skip_folder_suffix[50];
+
+        for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
+
+            sprintf(frame_skip_folder_suffix, "%02d", m_list_gt_objects.at(i)->getObjectId());
+
+            if ((m_list_gt_objects.at(i)->get_obj_base_visibility().at(frame_count))
+                    ) {
+
+                const unsigned CLUSTER_SIZE = (unsigned) m_list_gt_objects.at(
+                        i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                        (frame_skip - 1).at(frame_count).size();
+                for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+
+                    cv::Point2f pts = m_list_gt_objects.at(
+                                    i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(frame_skip - 1)
+                            .at(frame_count).at(cluster_point).first;
+
+                    cv::circle(tempGroundTruthImage, (cv::Point)pts, 0.5, cv::Scalar(255, 0, 0), 1, 8);
+
+                }
+            }
+        }
+    }
+}

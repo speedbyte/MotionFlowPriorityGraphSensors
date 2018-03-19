@@ -55,6 +55,8 @@ public:
         return mImageabholOrt.string();
     }
 
+    void visualiseStencil(void);
+
 };
 
 

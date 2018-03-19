@@ -323,6 +323,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 fback.generate_collision_points_mean();
                 fback.generate_shape_points();
+                fback.visualiseStencil();
 
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 

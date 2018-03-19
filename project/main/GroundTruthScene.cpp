@@ -193,7 +193,7 @@ void GroundTruthScene::generate_bounding_box(void) {
         std::string output_image_file_with_path = m_generatepath.string() + "bounding_box/" + file_name_image_output;
 
         tempGroundTruthImageBase = cv::imread(input_image_file_with_path , CV_LOAD_IMAGE_COLOR);
-        if (  tempGroundTruthImage.data == NULL ) {
+        if (  tempGroundTruthImageBase.data == NULL ) {
             std::cout << "no image found";
         }
 
@@ -213,15 +213,20 @@ void GroundTruthScene::generate_bounding_box(void) {
                     ) {
 
                 //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m/2))),
-                cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
-                        cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
-                        cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m),
-                cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m));
+                cv::Rect boundingbox = cv::Rect(
+                        cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(
+                                frame_count).first.x),
+                        cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(
+                                frame_count).first.y),
+                        cvRound(m_list_objects.at(i).getGroundTruthDetails().at(
+                                frame_count).m_object_dimensions.dim_width_m),
+                        cvRound(m_list_objects.at(i).getGroundTruthDetails().at(
+                                frame_count).m_object_dimensions.dim_height_m));
 
 
                 //image_data_and_shape.copyTo(tempGroundTruthImage(boundingbox));
 
-                cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0,255,0), 1, 8, 0  );
+                cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
 
             }
         }
