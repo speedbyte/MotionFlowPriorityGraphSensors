@@ -41,7 +41,14 @@ void OpticalFlow::prepare_directories() {
         path =  m_plots_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
+        // post processing step
+        boost::filesystem::path bbox_dir = m_generatepath.string() + "bounding_box/";
+        if (boost::filesystem::exists(m_generatepath)) {
+            system(("rm -rf " + bbox_dir.string()).c_str());
+        }
+        boost::filesystem::create_directories(bbox_dir);
     }
+
 }
 
 void OpticalFlow::generate_shape_points() {
