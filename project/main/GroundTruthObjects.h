@@ -11,8 +11,8 @@
 #include "Dataset.h"
 #include "ObjectSceneGroundTruth.h"
 #include "datasets.h"
-#include "CameraSensorImage.h"
 #include "Objects.h"
+#include "SensorImage.h"
 
 class GroundTruthObjects : public CameraSensorImage, public Objects {
 

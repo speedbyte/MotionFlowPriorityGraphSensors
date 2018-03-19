@@ -130,7 +130,6 @@ class ObjectSceneGroundTruth {
 protected:
     std::vector<cv::Point2f> m_pixel_position;
     std::vector<STRUCT_GT_ALL> m_gt_all;
-
     std::vector<bool> m_visibility;
 
 public:
@@ -139,7 +138,8 @@ public:
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
             m_visibility.push_back(false);
             m_pixel_position.push_back(cv::Point2f(-1,-1));
-            //m_gt_all.push_back({cv::Point2f(0,0), cv::Point2f(0,0)});
+            STRUCT_GT_ALL s = {};
+            m_gt_all.push_back(s);
         }
     };
 
