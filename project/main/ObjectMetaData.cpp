@@ -25,11 +25,11 @@ void Achterbahn::process(cv::Size frame_size) {
     cv::Point2f l_pixel_position;
     for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
 
-        l_pixel_position.x = static_cast<float>((frame_size.width/2) + (100 * cos(theta[i] *CV_PI / 180.0) /
-                                                                        (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
+        l_pixel_position.x = static_cast<float>((frame_size.width/2) + (100 * cos(theta[i*5] *CV_PI / 180.0) /
+                                                                        (1.0 + std::pow(sin(theta[i*5] * CV_PI / 180.0), 2))));
 
-        l_pixel_position.y = static_cast<float>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
-                                                                               sin(theta[i] * CV_PI / 180.0)) /
+        l_pixel_position.y = static_cast<float>((frame_size.height/2) + (55 * (cos(theta[i*5] * CV_PI / 180.0) *
+                                                                               sin(theta[i*5] * CV_PI / 180.0)) /
                                                                          (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
 
         m_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);

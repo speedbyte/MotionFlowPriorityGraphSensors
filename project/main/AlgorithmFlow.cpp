@@ -416,30 +416,20 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             for (unsigned y = 0; y < roi.rows; y++) {
                                 for (unsigned x = 0; x < roi.cols; x++) {
 
-                                    if ( x%STENCIL_GRID_COMPRESSOR == 0 && y%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of 5 pixels to reduce data
+                                    if ( x%STENCIL_GRID_COMPRESSOR == 0 && y%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of x pixels to reduce data
 
                                         cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y, x);
-                                        auto dist_gt = cv::norm(gt_displacement);
                                         auto dist_algo = cv::norm(algo_displacement);
-                                        /*if ( dist_algo < 0.1 ) {
+                                        if ( dist_algo < 0.1 ) {
                                             continue;
-                                        }*/
-                                        auto dist_err = std::abs(dist_gt - dist_algo);
-                                        if (dist_err < DISTANCE_ERROR_TOLERANCE) {
-                                            auto angle_err = std::cosh(
-                                                    algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
-                                            if (((std::abs(angle_err)) < ANGLE_ERROR_TOLERANCE)) {
-                                                // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
-                                                stencil_movement.at(i).push_back(
-                                                        std::make_pair(cv::Point2f(roi_offset.x + x, roi_offset.y + y),
-                                                                       algo_displacement));
-                                                base_movement.at(i).push_back(std::make_pair(
-                                                        cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
-                                                        algo_displacement));
-                                                base_visibility.at(i).push_back(visibility);
-
-                                            }
                                         }
+                                        stencil_movement.at(i).push_back(
+                                                std::make_pair(cv::Point2f(roi_offset.x + x, roi_offset.y + y),
+                                                               algo_displacement));
+                                        base_movement.at(i).push_back(std::make_pair(
+                                                cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
+                                                algo_displacement));
+                                        base_visibility.at(i).push_back(visibility);
                                     }
                                 }
                             }

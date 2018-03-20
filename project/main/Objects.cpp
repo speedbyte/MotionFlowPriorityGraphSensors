@@ -34,15 +34,28 @@ void Objects::post_processing_obj_extrapolated_stencil_pixel_points_pixel_displa
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
                 cv::Point2f pts = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).first;
-                cv::Point2f gt_displacement = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
+                cv::Point2f displacement = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).second;
 
+                auto distance = cv::norm(displacement);
+                /*if ( dist_algo < 0.1 ) {
+                    continue;
+                }
+                auto dist_err = std::abs(dist_gt - dist_algo);
+                if (dist_err < DISTANCE_ERROR_TOLERANCE) {
+                    auto angle_err = std::cosh(
+                            algo_displacement.dot(displacement) / (dist_gt * dist_algo));
+                    if (((std::abs(angle_err)) < ANGLE_ERROR_TOLERANCE)) {
+
+                        multiframe_method_mean_inner.push_back(std::make_pair(pts,displacement));
+
+                    }
+                }*/
                 // 1. MEAN - add all displacement and points and divide by total size.
                 // 2. THRESHOLD MEAN - add all displacement and points that are within a boundary and divide by total found size
                 // 3. VOTED MEAN - create vote of the displacement and points and only accept values that have the highest number of occurence
                 // 4. RANKED MEAN - create ranks of the displacment and points by accepting only those values that are on the boundary and edges and ignoring the rest.
                 // 1 st method
-                multiframe_method_mean_inner.push_back(std::make_pair(pts,gt_displacement));
 
                 // 2nd method
 
