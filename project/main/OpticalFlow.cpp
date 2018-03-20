@@ -42,13 +42,12 @@ void OpticalFlow::prepare_directories() {
         boost::filesystem::create_directories(path);
 
         // post processing step
-        boost::filesystem::path bbox_dir = m_generatepath.string() + "bounding_box/";
+        boost::filesystem::path bbox_dir = m_generatepath.string() + "stencil/";
         if (boost::filesystem::exists(m_generatepath)) {
             system(("rm -rf " + bbox_dir.string()).c_str());
         }
         boost::filesystem::create_directories(bbox_dir);
     }
-
 }
 
 void OpticalFlow::generate_shape_points() {
@@ -169,7 +168,6 @@ void OpticalFlow::generate_shape_points() {
                     shape_points.at(i) = (cv::Point2f(0, CLUSTER_COUNT_ALGO));
                     shape_average.x += shape_points.at(i).x;
                     shape_average.y += shape_points.at(i).y;
-
 
                 }
             }
