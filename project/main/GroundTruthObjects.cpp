@@ -125,7 +125,6 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
     }
 }
 
-
 void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips ) {
 
 // object image_data_and_shape
@@ -153,7 +152,7 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
 
             for (unsigned j = 0; j < ObjectWidth; j++) {
                 for (unsigned k = 0; k < ObjectHeight; k++) {
-                    if ( j%STENCIL_GRID_COMPRESSOR == 0 && k%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of 5 pixels to reduce data
+                    if ( j%STENCIL_GRID_COMPRESSOR == 0 && k%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of x pixels to reduce data
                         base_movement.push_back(std::make_pair(cv::Point2f(gt_next_pts.x + j, gt_next_pts.y +
                                                                                               k), gt_displacement));
                         base_visibility.push_back(visibility);

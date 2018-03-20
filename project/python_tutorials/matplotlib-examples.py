@@ -217,7 +217,7 @@ def yaml_try():
 def motionflow_graphs():
 
 
-    dataset = "vires"
+    dataset = "cpp"
     scenario = "two"
     file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
     #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
@@ -278,7 +278,7 @@ def motionflow_graphs():
         "collision_pointsframe_skip1results_FB_none_",
         #"collision_pointsframe_skip1results_FB_snow_",
         #"collision_pointsframe_skip1results_FB_rain_"
-        "collision_pointsframe_skip1results_FB_night_"
+        #"collision_pointsframe_skip1results_FB_night_"
     ]
 
     list_of_shape_metrics = [
@@ -286,11 +286,11 @@ def motionflow_graphs():
         "shape_pointsframe_skip1results_FB_none_",
         #"shape_pointsframe_skip1results_FB_snow_",
         #"shape_pointsframe_skip1results_FB_rain_"
-        "shape_pointsframe_skip1results_FB_night_"
+        #"shape_pointsframe_skip1results_FB_night_"
     ]
 
-    color_of_collision_metrics = ["red", "green", "blue"]
-    color_of_shape_metrics = ["red", "green", "blue"]
+    color_of_collision_metrics = ["red", "green"]
+    color_of_shape_metrics = ["red", "green"]
 
     assert(len(list_of_collision_metrics) == len(color_of_collision_metrics))
     assert(len(list_of_shape_metrics) == len(color_of_shape_metrics))
@@ -333,7 +333,7 @@ def motionflow_graphs():
 
         #list_of_collision_plots[no_of_metrics].plot(x1,y1, 'ko-', lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         list_of_collision_plots[no_of_metrics].scatter(x1_gt,y1_gt, lw=2,color=color_of_collision_metrics[0], label=list_of_collision_metrics[0])
-        list_of_collision_plots[no_of_metrics].scat ter(x1,y1, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
+        list_of_collision_plots[no_of_metrics].scatter(x1,y1, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         legend = list_of_collision_plots[no_of_metrics].legend(loc='lower right', shadow=True, fontsize='large')
         #list_of_collision_plots[no_of_metrics].set_xlim([-300,900])
         #list_of_collision_plots[no_of_metrics].set_ylim([255,295])

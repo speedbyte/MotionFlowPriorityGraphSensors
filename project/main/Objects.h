@@ -17,6 +17,8 @@ protected:
 
     std::vector<STRUCT_GT_ALL> m_obj_base_all;
 
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_stencil_postprocessing_method_mean;
+
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_position_pixel_displacement;
 
     std::vector<std::vector<cv::Point2f> > m_obj_extrapolated_shape_dimension;
@@ -63,7 +65,10 @@ public:
         return m_objectName;
     }
 
+    void post_processing_obj_extrapolated_stencil_pixel_points_pixel_displacement( );
+
     void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility);
+
 
     void generate_obj_line_parameters( const unsigned &max_skips);
 

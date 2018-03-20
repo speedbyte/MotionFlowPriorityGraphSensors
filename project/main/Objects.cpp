@@ -7,6 +7,56 @@
 #include "Dataset.h"
 
 
+void Objects::post_processing_obj_extrapolated_stencil_pixel_points_pixel_displacement( ) {
+
+    // A blob can be either a stencil or a shape
+
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > multiframe_method_mean_outer;
+
+        std::cout << "generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement for frame_skip " << frame_skip << " for object name " << m_objectName << " " << std::endl;
+
+        unsigned long FRAME_COUNT = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
+                .size();
+
+        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+// gt_displacement
+            std::vector<std::pair<cv::Point2f, cv::Point2f> >  multiframe_method_mean_inner;
+
+            bool visibility = m_obj_extrapolated_shape_visibility.at(frame_skip-1).at(frame_count).at(0);
+
+            const unsigned CLUSTER_SIZE = (unsigned)m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at
+                    (frame_skip - 1).at(frame_count).size();
+            if ( visibility == true ) {
+                assert(CLUSTER_SIZE>0);
+            }
+
+            for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                cv::Point2f pts = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
+                        .at(frame_count).at(cluster_point).first;
+                cv::Point2f gt_displacement = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
+                        .at(frame_count).at(cluster_point).second;
+
+                // 1. MEAN - add all displacement and points and divide by total size.
+                // 2. THRESHOLD MEAN - add all displacement and points that are within a boundary and divide by total found size
+                // 3. VOTED MEAN - create vote of the displacement and points and only accept values that have the highest number of occurence
+                // 4. RANKED MEAN - create ranks of the displacment and points by accepting only those values that are on the boundary and edges and ignoring the rest.
+                // 1 st method
+                multiframe_method_mean_inner.push_back(std::make_pair(pts,gt_displacement));
+
+                // 2nd method
+
+                // 3rd method
+
+                // 4th method
+            }
+            multiframe_method_mean_outer.push_back(multiframe_method_mean_inner);
+        }
+        m_stencil_postprocessing_method_mean.push_back(multiframe_method_mean_outer);
+    }
+}
+
+
 void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( const unsigned &max_skips,
                                                                                          const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_blob_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility) {
 
