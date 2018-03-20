@@ -127,8 +127,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         const int MAX_COUNT = 5000;
 
-        cv::namedWindow(m_resultordner, CV_WINDOW_AUTOSIZE);
-
         auto tic = steady_clock::now();
         auto toc = steady_clock::now();
 
@@ -162,6 +160,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
+
+            cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
 
             if ( frame_count*frame_skip >= MAX_ITERATION_RESULTS) {
                 break;
@@ -583,7 +583,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             }
 
             // Display the output image
-            cv::imshow(m_resultordner, image_02_frame);
+            cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
+            cv::waitKey(0);
             prevGray = curGray.clone();
 
         }
@@ -651,9 +652,10 @@ void AlgorithmFlow::visualiseStencil(void) {
 
         for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
 
+            /*---------------------------------------------------------------------------------*/
             tempGroundTruthImage = cv::Scalar::all(255);
 
-            sprintf(file_name_image_output, "000%03d_10_stencil_base.png", frame_count * frame_skip);
+            sprintf(file_name_image_output, "000%03d_10_stencil_gt.png", frame_count * frame_skip);
             std::string output_image_file_with_path =
                     m_generatepath.string() + "stencil/" + file_name_image_output;
 
@@ -677,20 +679,17 @@ void AlgorithmFlow::visualiseStencil(void) {
                                         frame_skip - 1)
                                 .at(frame_count).at(cluster_point).second;
 
-                        cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
-
                         cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 255, 0), 1, 8);
-                        //cv::arrowedLine(tempGroundTruthImageBase, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
 
                     }
                 }
             }
-
             cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            /*---------------------------------------------------------------------------------*/
 
             tempGroundTruthImage = cv::Scalar::all(255);
 
-            sprintf(file_name_image_output, "000%03d_10_stencil.png", frame_count * frame_skip);
+            sprintf(file_name_image_output, "000%03d_10_stencil_algo.png", frame_count * frame_skip);
             output_image_file_with_path =
                     m_generatepath.string() + "stencil/" + file_name_image_output;
 
@@ -714,15 +713,85 @@ void AlgorithmFlow::visualiseStencil(void) {
                                         frame_skip - 1)
                                 .at(frame_count).at(cluster_point).second;
 
-                        cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
-
                         cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 0, 255), 1, 8);
-                        //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
 
                     }
                 }
             }
             cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            /*---------------------------------------------------------------------------------*/
+
+            tempGroundTruthImage = cv::Scalar::all(255);
+
+            sprintf(file_name_image_output, "000%03d_10_displ_gt.png", frame_count * frame_skip);
+            output_image_file_with_path =
+                    m_generatepath.string() + "stencil/" + file_name_image_output;
+
+            for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
+
+                if ((m_list_gt_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count)
+                )) {
+
+                    const unsigned CLUSTER_SIZE = (unsigned) m_list_gt_objects.at(
+                            i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            (frame_skip - 1).at(frame_count).size();
+                    for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+
+                        cv::Point2f pts = m_list_gt_objects.at(
+                                        i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        frame_skip - 1)
+                                .at(frame_count).at(cluster_point).first;
+
+                        cv::Point2f displacement = m_list_gt_objects.at(
+                                        i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        frame_skip - 1)
+                                .at(frame_count).at(cluster_point).second;
+
+                        cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
+
+                        cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
+
+                    }
+                }
+            }
+            cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            /*---------------------------------------------------------------------------------*/
+
+            tempGroundTruthImage = cv::Scalar::all(255);
+
+            sprintf(file_name_image_output, "000%03d_10_displ_algo.png", frame_count * frame_skip);
+            output_image_file_with_path =
+                    m_generatepath.string() + "stencil/" + file_name_image_output;
+
+            for (unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
+
+                if ((m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count)
+                )) {
+
+                    const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
+                            i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            (frame_skip - 1).at(frame_count).size();
+                    for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+
+                        cv::Point2f pts = m_list_simulated_objects.at(
+                                        i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        frame_skip - 1)
+                                .at(frame_count).at(cluster_point).first;
+
+                        cv::Point2f displacement = m_list_simulated_objects.at(
+                                        i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        frame_skip - 1)
+                                .at(frame_count).at(cluster_point).second;
+
+                        cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
+
+                        cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
+
+                    }
+                }
+            }
+            cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            /*---------------------------------------------------------------------------------*/
 
             tempGroundTruthImage = cv::Scalar::all(255);
 
