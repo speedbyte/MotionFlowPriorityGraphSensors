@@ -7,12 +7,15 @@
 
 
 #include <opencv2/core/types.hpp>
+#include "ObjectMetaData.h"
 
 class Objects {
 
 private:
 
 protected:
+
+    std::vector<STRUCT_GT_ALL> m_obj_base_all;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_position_pixel_displacement;
 
@@ -98,6 +101,10 @@ public:
 
     unsigned getObjectId() const {
         return m_objectId;
+    }
+
+    std::vector<STRUCT_GT_ALL> getGroundTruthDetails() const {
+        return m_obj_base_all;
     }
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > get_obj_extrapolated_shape_pixel_point_pixel_displacement() const {

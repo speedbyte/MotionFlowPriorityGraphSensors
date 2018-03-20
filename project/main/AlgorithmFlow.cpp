@@ -655,13 +655,13 @@ void AlgorithmFlow::visualiseStencil(void) {
     cv::Mat image_data_and_shape;
 
     const ushort frame_skip = 1; // image is generated only once irrespective of skips.
+    cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
+
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
 
         for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
 
-            auto tic = steady_clock::now();
-
-            cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3, cv::Scalar(255,255,255)), tempGroundTruthImageBase(Dataset::getFrameSize(), CV_8UC3, cv::Scalar(255,255,255));
+            tempGroundTruthImage = cv::Scalar::all(255);
 
             sprintf(file_name_image_output, "000%03d_10_stencil_base.png", frame_count * frame_skip);
             std::string output_image_file_with_path =
@@ -689,14 +689,16 @@ void AlgorithmFlow::visualiseStencil(void) {
 
                         cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
 
-                        cv::circle(tempGroundTruthImageBase, pts, 1.5, cv::Scalar(0, 255, 0), 1, 8);
+                        cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 255, 0), 1, 8);
                         //cv::arrowedLine(tempGroundTruthImageBase, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
 
                     }
                 }
             }
 
-            cv::imwrite(output_image_file_with_path, tempGroundTruthImageBase);
+            cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+
+            tempGroundTruthImage = cv::Scalar::all(255);
 
             sprintf(file_name_image_output, "000%03d_10_stencil.png", frame_count * frame_skip);
             output_image_file_with_path =
@@ -728,6 +730,37 @@ void AlgorithmFlow::visualiseStencil(void) {
                         //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
 
                     }
+                }
+            }
+            cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+
+            tempGroundTruthImage = cv::Scalar::all(255);
+
+            sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+            std::string input_image_file_with_path = mImageabholOrt.string() + file_name_image;
+
+            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count*frame_skip);
+            output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
+
+            cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+            tempGroundTruthImage = cv::Scalar::all(255);
+            tempGroundTruthImage = tempGroundTruthImageBase.clone();
+
+            for ( unsigned  i = 0; i < m_list_gt_objects.size(); i++ ) {
+
+                if ( ( m_list_gt_objects.at(i)->get_obj_base_visibility().at(frame_count))
+                        ) {
+
+                    //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m/2))),
+                    cv::Rect boundingbox = cv::Rect(
+                            cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-(ushort)1).at(frame_count).first.x),
+                            cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-(ushort)1).at(frame_count).first.y),
+                            cvRound(m_list_gt_objects.at(i)->getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m),
+                            cvRound(m_list_gt_objects.at(i)->getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m));
+
+
+                    cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+
                 }
             }
             cv::imwrite(output_image_file_with_path, tempGroundTruthImage);

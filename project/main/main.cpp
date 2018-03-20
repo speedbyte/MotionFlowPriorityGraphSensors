@@ -213,7 +213,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 base_ptr_gt_scene = &gt_scene;
                 base_ptr_gt_scene->prepare_directories();
                 base_ptr_gt_scene->generate_gt_scene();
-                base_ptr_gt_scene->generate_bounding_box();
                 base_ptr_gt_scene->generate_bird_view();
 
                 if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {

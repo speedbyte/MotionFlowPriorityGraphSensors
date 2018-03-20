@@ -73,8 +73,6 @@ public:
         std::cout << "End of generation" << std::endl;
     }
 
-    void generate_bounding_box();
-
 };
 
 class GroundTruthSceneInternal : public GroundTruthScene {

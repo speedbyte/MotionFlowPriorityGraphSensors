@@ -25,8 +25,6 @@ private:
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_position_pixel_displacement;
 
-    std::vector<STRUCT_GT_ALL> m_obj_base_all;
-
     void generate_obj_base_pixel_position_pixel_displacement(ObjectMetaData gt_data);
 
     void generate_obj_extrapolated_pixel_position_pixel_displacement(const unsigned &max_skips);
@@ -71,10 +69,6 @@ public:
 
             generate_obj_line_parameters(MAX_SKIPS);
         }
-    }
-
-    std::vector<STRUCT_GT_ALL> getGroundTruthDetails() const {
-        return m_obj_base_all;
     }
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> >  get_obj_base_pixel_position_pixel_displacement()
