@@ -22,7 +22,6 @@
 #include <unordered_map>
 #include <bits/unordered_map.h>
 
-#include "ObjectSceneGroundTruth.h"
 #include "Dataset.h"
 #include "GroundTruthScene.h"
 

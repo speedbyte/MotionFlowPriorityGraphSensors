@@ -9,7 +9,7 @@
 unsigned GroundTruthObjects::objectCurrentCount = 0;
 
 
-void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(ObjectSceneGroundTruth gt_data) {
+void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(ObjectMetaData gt_data) {
 
     //Initialization
 
@@ -20,65 +20,50 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
     for (ushort frame_count=0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; frame_count++) {
         // The first frame is the reference frame, hence it is skipped
 
-        STRUCT_GT_ALL gt_all = {};
+        if ( frame_count == 0 ) {
 
-        if ( frame_count > 0 ) {
+            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
+                   frame_count,
+                   current_index, gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m,
+                   (float)0, (float)0, gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m, gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m
+            );
 
+            m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(cv::Point2f(gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m) , cv::Point2f(0,0)));
+
+        }
+        else {
             cv::Point2f gt_next_pts = {0,0}, gt_displacement = {0,0};
             cv::Point2f gt_dimensions = {0,0};
 
+            gt_next_pts = cv::Point2f(gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m);
+
+            gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m;
+            gt_dimensions.y = gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m;
+
             //If we are at the end of the path vector, we need to reset our iterators
-            if (current_index >= gt_data.getPixelPosition().size()) {
+            if (current_index >= gt_data.getAll().size()) {
                 current_index = 0;
-                gt_displacement.x = gt_data.getPixelPosition().at(current_index).x - gt_data.getPixelPosition().at
-                        (gt_data.getPixelPosition().size() - 1).x;
-                gt_displacement.y = gt_data.getPixelPosition().at(current_index).y - gt_data.getPixelPosition().at
-                        (gt_data.getPixelPosition().size() - 1).y;
-                gt_next_pts = gt_data.getPixelPosition().at(current_index);
-
-                gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m;
-                gt_dimensions.y = gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m;
-
-                gt_all = gt_data.getAll().at(current_index);
+                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_px.location_x_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_px.location_x_m;
+                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_px.location_y_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_px.location_y_m;
 
             } else {
 
-                gt_displacement.x = gt_data.getPixelPosition().at(current_index).x - gt_data.getPixelPosition().at
-                        (current_index - (ushort) 1).x;
-                gt_displacement.y = gt_data.getPixelPosition().at(current_index).y - gt_data.getPixelPosition().at
-                        (current_index - (ushort) 1).y;
-                gt_next_pts = gt_data.getPixelPosition().at(current_index);
-                gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m;
-                gt_dimensions.y = gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m;
-
-                gt_all = gt_data.getAll().at(current_index);
+                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_px.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_px.location_x_m;
+                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_px.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_px.location_y_m;
 
             }
 
             printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
-                    frame_count,
+                   frame_count,
                    current_index, gt_next_pts.x, gt_next_pts.y,
                    gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y);
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_next_pts, gt_displacement));
-            m_obj_base_visibility.push_back(gt_data.getVisibility().at(current_index));
-            m_obj_base_all.push_back(gt_all);
 
         }
-        else {
-
-            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
-                   frame_count,
-                   current_index, gt_data.getPixelPosition().at(current_index).x, gt_data.getPixelPosition().at(current_index).y,
-                   (float)0, (float)0, gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m, gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m
-            );
-
-            m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_data.getPixelPosition().at(current_index) , cv::Point2f(0,0)));
-            m_obj_base_visibility.push_back(gt_data.getVisibility().at(current_index));
-            gt_all = gt_data.getAll().at(current_index);
-            m_obj_base_all.push_back(gt_all);
-        }
+        m_obj_base_visibility.push_back(gt_data.getVisibility().at(current_index));
+        m_obj_base_all.push_back(gt_data.getAll().at(current_index));
         current_index++;
     }
 }
@@ -92,6 +77,8 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool>  multiframe_visibility;
+        std::vector<cv::Point2f>  multiframe_dimension;
+
 
         std::cout << "generate_obj_extrapolated_pixel_position_pixel_displacement for frame_skip " << frame_skip << std::endl;
         unsigned long FRAME_COUNT = m_obj_base_pixel_position_pixel_displacement.size();
@@ -116,47 +103,25 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
                                     (frame_count).first, cv::Point2f(0,0)));
                     multiframe_visibility.push_back(false);
 
+                    multiframe_dimension.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_width_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
+
+
                 } else {
                     multiframe_flowvector.push_back
                             (std::make_pair(m_obj_base_pixel_position_pixel_displacement.at
                                     (frame_count).first, cv::Point2f(temp_flow_x, temp_flow_y)));
                     multiframe_visibility.push_back(true);
+
+                    multiframe_dimension.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_width_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
+
                 }
                 temp_flow_x = 0, temp_flow_y = 0;
             }
         }
         m_obj_extrapolated_pixel_position_pixel_displacement.push_back(multiframe_flowvector);
         m_obj_extrapolated_visibility.push_back(multiframe_visibility);
-    }
-}
-
-void GroundTruthObjects::generate_obj_extrapolated_shape_dimension(const unsigned &max_skips) {
-
-    for ( unsigned frame_skip = 1; frame_skip < max_skips ; frame_skip++ ) {
-
-        std::vector<cv::Point2f>  multiframe_dimension;
-
-        std::cout << "generate_obj_extrapolated_shape_dimension for frame_skip " << frame_skip << std::endl;
-        unsigned long FRAME_COUNT = m_obj_base_all.size();
-        assert(FRAME_COUNT>0);
-
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-
-            // The first frame is the reference frame. frame skip 1 means no skips
-            // The below code has to go through consecutive frames
-            if ((frame_count % frame_skip != 0)) {
-            }
-            else {
-                if ( m_obj_base_visibility.at(frame_count) == false) {
-                    // Make all 0
-                    multiframe_dimension.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_width_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
-
-                } else {
-                    multiframe_dimension.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_width_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
-                }
-            }
-        }
         m_obj_extrapolated_shape_dimension.push_back(multiframe_dimension);
+
     }
 }
 

@@ -6,17 +6,11 @@
 #define MAIN_GROUNDTRUTHSCENE_H
 
 
-#include <vires-interface/Common/viRDBIcd.h>
-#include <vires-interface/vires_common.h>
-#include <iostream>
-#include "Dataset.h"
-#include "ObjectSceneGroundTruth.h"
-#include "GroundTruthObjects.h"
-#include "Canvas.h"
-#include "ObjectMetaData.h"
 #include <map>
 #include <unistd.h>
-
+#include "Canvas.h"
+#include "ObjectMetaData.h"
+#include <vires-interface/vires_common.h>
 
 class GroundTruthScene  {
 
@@ -132,8 +126,6 @@ class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::V
     //#define RDB_COORD_TYPE_TRACK           10  /**< track co-ordinate (x=s, y=t )            @version 0x0119 */
 
 private:
-
-    MyPosition position;
 
     std::vector<std::pair<std::string, cv::Point2f> > mposition_points;
 

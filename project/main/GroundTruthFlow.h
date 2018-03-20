@@ -8,7 +8,6 @@
 
 #include "Dataset.h"
 #include "PlotFlow.h"
-#include "ObjectSceneGroundTruth.h"
 #include "GroundTruthScene.h"
 #include "FlowImageExtended.h"
 #include "OpticalFlow.h"
