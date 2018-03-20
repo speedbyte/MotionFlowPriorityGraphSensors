@@ -214,7 +214,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
             cv::Mat flow_frame( Dataset::getFrameSize(), CV_32FC2 );
 
-            std::vector<cv::Point2f> next_pts_array;
+            std::vector<cv::Point2f> next_pts_array, displacement_array;
             tic = steady_clock::now();
 
             //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
@@ -286,7 +286,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_points;
                 for (unsigned i = 0; i < next_pts_array.size(); i++) {
 
-                    int minDist = 1;
+                    float minDist = 0.5;
 
                     // Check if the status vector is good
                     if (!status[i])
@@ -319,12 +319,14 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                     // std::cout << "next valid points " << next_pts << " displacement " << displacement << std::endl;
                     next_pts_array[count_good_points++] = next_pts_array[i];
+                    displacement_array.push_back(displacement);
 
                     frame_points.push_back(std::make_pair(next_pts, displacement));
 
                 }
 
                 next_pts_array.resize(count_good_points); // this is required for LK. For FB, anyways the frame will
+                assert(displacement_array.size() == count_good_points);
                 // be completely calculated every time.
 
                 if ( next_pts_array.size() == 0 ) {
@@ -336,27 +338,26 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
                 }
 
-                std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator it ;
+                std::vector<cv::Point2f>::iterator it, it2 ;
 
-                for ( it = frame_points.begin(); it !=frame_points.end(); it++ )
+                for ( it = next_pts_array.begin(), it2 = displacement_array.begin(); it !=next_pts_array.end(); it++, it2++ )
                 {
 
-                    F_png_write.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
-                    F_png_write.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
-                    F_png_write.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+                    F_png_write.setFlowU((*it).x,(*it).y,(*it2).x);
+                    F_png_write.setFlowV((*it).x,(*it).y,(*it2).y);
+                    F_png_write.setValid((*it).x,(*it).y,(bool)1.0f);
                     // TODO - store objectId instead of 1.0. also convert to 2s complement by the below formula.
-                    store_in_yaml(fs, (*it).first, (*it).second ); // coordinate - > movement y(row),x(col) ; x,y
 
-                    F_png_write_position.setFlowU((*it).first.x,(*it).first.y,(*it).second.x);
-                    F_png_write_position.setFlowV((*it).first.x,(*it).first.y,(*it).second.y);
-                    F_png_write_position.setValid((*it).first.x,(*it).first.y,(bool)1.0f);
+                    F_png_write_position.setFlowU((*it).x,(*it).y,(*it2).x);
+                    F_png_write_position.setFlowV((*it).x,(*it).y,(*it2).y);
+                    F_png_write_position.setValid((*it).x,(*it).y,(bool)1.0f);
 
                 }
 
                 cv::Mat flowframe;
                 flowframe.create(Dataset::getFrameSize(), CV_32FC3);
 
-                cv::MatIterator_<cv::Vec3f> it_flowframe = flowframe.begin<cv::Vec3f>();
+                ??cv::MatIterator_<cv::Vec3f> it_flowframe = flowframe.begin<cv::Vec3f>();
                 for (unsigned i = 0; it_flowframe != flowframe.end<cv::Vec3f>(); it_flowframe++ ) {
                     for ( unsigned j = 0; j < 3; j++ ) {
                         float temp = *(F_png_write.data_ + i );
