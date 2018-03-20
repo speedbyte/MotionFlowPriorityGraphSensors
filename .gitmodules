@@ -98,3 +98,6 @@
 [submodule "libs/rob_devkit_flow"]
 	path = libs/rob_devkit_flow
 	url = http://cvlibs.net:3000/ageiger/rob_devkit.git
+[submodule "libs/MPI-Sintel-testing_devkit"]
+	path = libs/MPI-Sintel-testing_devkit
+	url = git@atreus.informatik.uni-tuebingen.de:Veikas/MPI-Sintel-testing_devkit.git

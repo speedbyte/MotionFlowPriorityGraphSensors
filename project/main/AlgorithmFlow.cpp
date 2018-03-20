@@ -690,7 +690,7 @@ void AlgorithmFlow::visualiseStencil(void) {
                         cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
 
                         cv::circle(tempGroundTruthImageBase, pts, 1.5, cv::Scalar(0, 255, 0), 1, 8);
-                        cv::arrowedLine(tempGroundTruthImageBase, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
+                        //cv::arrowedLine(tempGroundTruthImageBase, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
 
                     }
                 }
@@ -725,7 +725,7 @@ void AlgorithmFlow::visualiseStencil(void) {
                         cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
 
                         cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 0, 255), 1, 8);
-                        cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
+                        //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
 
                     }
                 }
