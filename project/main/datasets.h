@@ -38,6 +38,7 @@
 #define STRETCH_HEIGHT_EVAL 5
 #define STRETCH_WIDTH_EVAL 5
 
+#define STENCIL_GRID 5
 
 typedef enum {
     continous_frames = 0,

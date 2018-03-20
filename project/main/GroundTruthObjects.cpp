@@ -68,12 +68,15 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
         }
         else {
 
-            printf("%s, %u, %u , %f, %f, %f, %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
+            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
                    frame_count,
                    current_index, gt_data.getPixelPosition().at(current_index).x, gt_data.getPixelPosition().at(current_index).y,
-                   (float)0, (float)0);
+                   (float)0, (float)0, gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m, gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m
+            );
+
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_data.getPixelPosition().at(current_index) , cv::Point2f(0,0)));
             m_obj_base_visibility.push_back(gt_data.getVisibility().at(current_index));
+            gt_all = gt_data.getAll().at(current_index);
             m_obj_base_all.push_back(gt_all);
         }
         current_index++;
@@ -185,7 +188,7 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
 
             for (unsigned j = 0; j < ObjectWidth; j++) {
                 for (unsigned k = 0; k < ObjectHeight; k++) {
-                    if ( j%5 == 0 && k%5 == 0 ) { // only entertain multiple of 5 pixels to reduce data
+                    if ( j%STENCIL_GRID == 0 && k%STENCIL_GRID == 0 ) { // only entertain multiple of 5 pixels to reduce data
                         base_movement.push_back(std::make_pair(cv::Point2f(gt_next_pts.x + j, gt_next_pts.y +
                                                                                               k), gt_displacement));
                         base_visibility.push_back(visibility);

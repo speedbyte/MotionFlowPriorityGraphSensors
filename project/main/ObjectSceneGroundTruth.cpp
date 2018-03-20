@@ -35,6 +35,9 @@ void Achterbahn::process(cv::Size frame_size) {
 
         m_pixel_position.at(i) = (l_pixel_position);
         m_visibility.at(i) = true;
+        m_gt_all.at(i).m_object_dimensions.dim_width_m = 30;
+        m_gt_all.at(i).m_object_dimensions.dim_height_m = 70;
+
     }
 }
 

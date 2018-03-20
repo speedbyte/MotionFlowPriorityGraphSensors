@@ -635,7 +635,7 @@ void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixe
 
 void AlgorithmFlow::visualiseStencil(void) {
 
-    cv::Mat tempGroundTruthImage, tempGroundTruthImageBase;
+    cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3), tempGroundTruthImageBase;
 
     std::cout << "visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
 
@@ -664,7 +664,7 @@ void AlgorithmFlow::visualiseStencil(void) {
             }
 
             //draw new ground truth image.
-            tempGroundTruthImage = tempGroundTruthImageBase.clone();
+            //tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
             char frame_skip_folder_suffix[50];
 
@@ -698,8 +698,8 @@ void AlgorithmFlow::visualiseStencil(void) {
             }
             for (unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
-                if ((m_list_simulated_objects.at(i)->get_obj_base_visibility().at(frame_count))
-                        ) {
+                if ((m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count)
+                        )) {
 
                     const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
                             i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
