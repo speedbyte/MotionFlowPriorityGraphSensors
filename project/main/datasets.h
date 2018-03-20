@@ -38,7 +38,8 @@
 #define STRETCH_HEIGHT_EVAL 5
 #define STRETCH_WIDTH_EVAL 5
 
-#define STENCIL_GRID 5
+#define STENCIL_GRID_COMPRESSOR 2  // every x pixels
+#define STENCIL_GRID_EXTENDER 10 // 10 % more than the original size
 
 typedef enum {
     continous_frames = 0,

@@ -124,36 +124,38 @@ void OpticalFlow::generate_shape_points() {
 
                     // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
-                    ushort vollTreffer = 0;
+                    float vollTreffer = 0;
 
                     int width = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).x);
                     int height = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).y);
 
-                    if ( m_resultordner != "/generated" ) {  // for real algorithms
+                    float keinTreffer;
+
+                    if ( m_resultordner == "/generated" ) {  // for ground truth
+                        vollTreffer = CLUSTER_COUNT_GT;
+                        keinTreffer = (CLUSTER_COUNT_GT - vollTreffer);
+                        }
+                    else { // for real algorithms
                         for ( auto j = 0; j < CLUSTER_COUNT_ALGO; j++ ) {
                             auto x_coordinates =  m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                     (frame_skip - 1).at(frame_count).at(j).first.x;
                             auto y_coordinates = m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                     (frame_skip - 1).at(frame_count).at(j).first.y;
 
-
-                                if  (( x_coordinates > (columnBegin - STRETCH_WIDTH_EVAL) ) &&
-                                        ( x_coordinates < (columnBegin + width + STRETCH_WIDTH_EVAL )) &&
-                                        (  y_coordinates > (rowBegin - STRETCH_HEIGHT_EVAL ) )  &&
-                                        ( y_coordinates < ( rowBegin + height + STRETCH_HEIGHT_EVAL ))
+                                if ((x_coordinates > (columnBegin - width / STENCIL_GRID_EXTENDER)) &&
+                                    (x_coordinates < (columnBegin + width + width / STENCIL_GRID_EXTENDER)) &&
+                                    (y_coordinates > (rowBegin - height / STENCIL_GRID_EXTENDER)) &&
+                                    (y_coordinates < (rowBegin + height + height / STENCIL_GRID_EXTENDER))
                                         ) {
                                     vollTreffer++;
                                 }
-                            }
                         }
-                    else {
-                        vollTreffer = CLUSTER_COUNT_ALGO;
+                        keinTreffer = ((float)CLUSTER_COUNT_ALGO - vollTreffer);
                     }
-
-                    float keinTreffer = (CLUSTER_COUNT_ALGO - vollTreffer);
                     shape_points.at(i) = (cv::Point2f(vollTreffer, keinTreffer));
 
                     std::cout << "vollTreffer for object " << m_list_simulated_objects.at(i)->getObjectId() << " = " << vollTreffer << std::endl ;
+                    std::cout << "keinTreffer for object " << m_list_simulated_objects.at(i)->getObjectId() << " = " << keinTreffer << std::endl ;
 
                     shape_average.x += shape_points.at(i).x;
                     shape_average.y += shape_points.at(i).y;

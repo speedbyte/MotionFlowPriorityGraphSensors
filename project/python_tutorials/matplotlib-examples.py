@@ -333,7 +333,7 @@ def motionflow_graphs():
 
         #list_of_collision_plots[no_of_metrics].plot(x1,y1, 'ko-', lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         list_of_collision_plots[no_of_metrics].scatter(x1_gt,y1_gt, lw=2,color=color_of_collision_metrics[0], label=list_of_collision_metrics[0])
-        list_of_collision_plots[no_of_metrics].scatter(x1,y1, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
+        list_of_collision_plots[no_of_metrics].scat ter(x1,y1, lw=2,color=color_of_collision_metrics[no_of_metrics], label=list_of_collision_metrics[no_of_metrics])
         legend = list_of_collision_plots[no_of_metrics].legend(loc='lower right', shadow=True, fontsize='large')
         #list_of_collision_plots[no_of_metrics].set_xlim([-300,900])
         #list_of_collision_plots[no_of_metrics].set_ylim([255,295])

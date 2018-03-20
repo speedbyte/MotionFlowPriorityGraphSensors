@@ -71,7 +71,7 @@ void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) 
 
         unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(frame_skip - 1).size();
 
-        for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
             unsigned long POINTS = opticalFlow.getShapePoints().at(frame_skip-1).at(frame_count).size();
             for ( unsigned points = 0 ; points < POINTS; points++ ) {
@@ -153,7 +153,7 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
 
         unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(frame_skip - 1).size();
 
-        for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
             ushort m_valid_collision_points = 0;
             ushort m_invalid_collision_points = 0;
