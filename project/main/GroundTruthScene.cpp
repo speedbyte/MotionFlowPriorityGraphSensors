@@ -86,12 +86,12 @@ void GroundTruthScene::writePositionInYaml() {
                 write_fs
                         << "{:" << "name" << m_list_objects.at(i).getObjectName()
                         << "visible" << m_list_objects.at(i).get_obj_base_visibility().at(frame_count)
-                        << "x" <<  m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_location_px.location_x_m
-                        << "y" << m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_location_px.location_y_m
-                        << "x_usk" <<  m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_location_m.location_x_m
-                        << "y_usk" <<  m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_location_m.location_y_m
-                        << "dim_x" << m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m
-                        << "dim_y" << m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m
+                        << "x" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_x_m
+                        << "y" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_y_m
+                        << "x_usk" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_x_m
+                        << "y_usk" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_y_m
+                        << "dim_x" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m
+                        << "dim_y" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m
                         << "}";
             }
             write_fs << "]";
@@ -210,7 +210,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             objectMetaDataList.at(0) = achterbahn;
             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
-            achterbahn = Achterbahn(rectangle, "random_object", 30);
+            achterbahn = Achterbahn(rectangle, "random_object", 120);
             achterbahn.process(Dataset::getFrameSize());
             objectMetaDataList.at(1) = achterbahn;
             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
@@ -288,9 +288,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     frame_skip_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m));
+            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m));
             positionShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            positionShape = positionShape.rowRange(0, cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m));
+            positionShape = positionShape.rowRange(0, cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m));
 
             if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
@@ -298,8 +298,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
                                  cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
-                                 cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m),
-                                 cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m))));
+                                 cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_count).at(frame_skip-1).m_object_dimensions.dim_width_m),
+                                 cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_count).at(frame_skip-1).m_object_dimensions.dim_height_m))));
 
             }
         }

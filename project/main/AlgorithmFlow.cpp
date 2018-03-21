@@ -206,7 +206,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
 
-            cv::Mat flow_frame( Dataset::getFrameSize(), CV_32FC2 );
+            cv::Mat flowFrame( Dataset::getFrameSize(), CV_32FC2 );
 
             std::vector<cv::Point2f> next_pts_array, displacement_array;
             tic = steady_clock::now();
@@ -240,7 +240,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                              err, winSize, 5, termcrit, 0, 0.001);
                 }
                 else if ( fb == algo ) {
-                    cv::calcOpticalFlowFarneback(prevGray, curGray, flow_frame, pyrScale, numLevels, windowSize,
+                    cv::calcOpticalFlowFarneback(prevGray, curGray, flowFrame, pyrScale, numLevels, windowSize,
                                                  numIterations, neighborhoodSize, stdDeviation,
                                                  cv::OPTFLOW_FARNEBACK_GAUSSIAN);
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
@@ -258,7 +258,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     for (int row = 0; row < image_02_frame.rows; row += stepSize) {
                         for (int col = 0; col < image_02_frame.cols; col += stepSize) {
 
-                            cv::Point2f algorithmMovement ( flow_frame.at<cv::Point2f>(row, col).x, flow_frame
+                            cv::Point2f algorithmMovement ( flowFrame.at<cv::Point2f>(row, col).x, flowFrame
                                     .at<cv::Point2f>(row, col).y );
 
 
@@ -340,7 +340,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 }
 
                 cv::Mat stencilFrame(Dataset::getFrameSize(), CV_32FC3, cv::Scalar(0,0,0));
+                stencilFrame = flowFrame.clone();
 
+                /*
                 cv::MatIterator_<cv::Vec3f> it_flowframe = stencilFrame.begin<cv::Vec3f>();
                 for (unsigned i = 0; it_flowframe != stencilFrame.end<cv::Vec3f>(); it_flowframe++ ) {
                     for ( unsigned j = 0; j < 3; j++ ) {
@@ -348,24 +350,18 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         // std::min(temp*64.0f+32768.0f,65535.0f),0.0f)
                         i++;
                     }
-                }
+                }*/
 
                 for ( ushort i = 0; i < m_list_simulated_objects.size(); i++ ) {
-                    //two objects
-
-                    int width = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).x);
-                    int height = cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_shape_dimension().at(frame_skip-1).at(frame_count).y);
-
-                    // The stencil should be created by comparing the ground truth data and only taking
-                    // those points that is within a boundary.
-                    // Call ground truth point, call, width and height. Find, matching points in the Algorihtm flow.
-                    // Store the matching points as a stencil.
-                    // Find similarity between next_pts_array[i] and get_obj_extrapolated_pixel_position_pixel_displacement(). How many valid displacements in a bigger shape?? And if valid displacement, punch this point.
 
                     float columnBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
                     float rowBegin = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.y;
+
+                    int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m);
+                    int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m);
+
                     bool visibility = m_list_simulated_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
                     if ( visibility ) {
 
@@ -447,7 +443,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                         (frame_skip-1).at(frame_count).at(count).first.x;
                                 float y  = base_algo_simulated_object_list.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                         (frame_skip-1).at(frame_count).at(count).first.y;
-                                cv::Point2f algo_displacement = flow_frame.at<cv::Vec2f>(y,x);
+                                cv::Point2f algo_displacement = flowFrame.at<cv::Vec2f>(y,x);
                                 // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
                                 stencil_movement.at(i).push_back(std::make_pair(cv::Point2f(x, y), algo_displacement));
                             }
@@ -557,7 +553,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
             // Display the output image
             cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
-            cv::waitKey(0);
+            //cv::waitKey(0);
             prevGray = curGray.clone();
 
         }
@@ -783,12 +779,12 @@ void AlgorithmFlow::visualiseStencil(void) {
                 if ( ( m_list_gt_objects.at(i)->get_obj_base_visibility().at(frame_count))
                         ) {
 
-                    //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_objects.at(i).getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m/2))),
+                    //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_count).m_object_dimensions.dim_length_m/2))),
                     cv::Rect boundingbox = cv::Rect(
-                            cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-(ushort)1).at(frame_count).first.x),
-                            cvRound(m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-(ushort)1).at(frame_count).first.y),
-                            cvRound(m_list_gt_objects.at(i)->getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_width_m),
-                            cvRound(m_list_gt_objects.at(i)->getGroundTruthDetails().at(frame_count).m_object_dimensions.dim_height_m));
+                            cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_x_m),
+                            cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_y_m),
+                            cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m),
+                            cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m));
 
 
                     cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);

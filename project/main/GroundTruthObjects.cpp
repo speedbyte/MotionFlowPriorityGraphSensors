@@ -77,7 +77,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool>  multiframe_visibility;
-        std::vector<cv::Point2f>  multiframe_dimension;
+        std::vector<STRUCT_GT_ALL> multiframe_all;
 
 
         std::cout << "generate_obj_extrapolated_pixel_position_pixel_displacement for frame_skip " << frame_skip << std::endl;
@@ -102,17 +102,14 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
                             (std::make_pair(m_obj_base_pixel_position_pixel_displacement.at
                                     (frame_count).first, cv::Point2f(0,0)));
                     multiframe_visibility.push_back(false);
-
-                    multiframe_dimension.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_width_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
-
+                    multiframe_all.push_back(m_obj_base_all.at(frame_count));
 
                 } else {
                     multiframe_flowvector.push_back
                             (std::make_pair(m_obj_base_pixel_position_pixel_displacement.at
                                     (frame_count).first, cv::Point2f(temp_flow_x, temp_flow_y)));
                     multiframe_visibility.push_back(true);
-
-                    multiframe_dimension.push_back(cv::Point2f(m_obj_base_all.at(frame_count).m_object_dimensions.dim_width_m, m_obj_base_all.at(frame_count).m_object_dimensions.dim_height_m));
+                    multiframe_all.push_back(m_obj_base_all.at(frame_count));
 
                 }
                 temp_flow_x = 0, temp_flow_y = 0;
@@ -120,7 +117,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
         }
         m_obj_extrapolated_pixel_position_pixel_displacement.push_back(multiframe_flowvector);
         m_obj_extrapolated_visibility.push_back(multiframe_visibility);
-        m_obj_extrapolated_shape_dimension.push_back(multiframe_dimension);
+        m_obj_extrapolated_all.push_back(multiframe_all);
 
     }
 }
@@ -147,8 +144,8 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
             std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
             std::vector<bool> base_visibility;
 
-            int ObjectWidth = cvRound(m_obj_extrapolated_shape_dimension.at(frame_skip-1).at(frame_count).x);
-            int ObjectHeight = cvRound(m_obj_extrapolated_shape_dimension.at(frame_skip-1).at(frame_count).y);
+            int ObjectWidth = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m);
+            int ObjectHeight = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m);
 
             for (unsigned j = 0; j < ObjectWidth; j++) {
                 for (unsigned k = 0; k < ObjectHeight; k++) {

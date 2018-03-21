@@ -17,11 +17,11 @@ protected:
 
     std::vector<STRUCT_GT_ALL> m_obj_base_all;
 
+    std::vector<std::vector<STRUCT_GT_ALL> > m_obj_extrapolated_all;
+
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_stencil_postprocessing_method_mean;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_position_pixel_displacement;
-
-    std::vector<std::vector<cv::Point2f> > m_obj_extrapolated_shape_dimension;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_obj_extrapolated_shape_pixel_point_pixel_displacement;
@@ -94,11 +94,6 @@ public:
         return m_obj_extrapolated_visibility;
     }
 
-    std::vector<std::vector<cv::Point2f> >  get_obj_extrapolated_shape_dimension()
-    const {
-        return m_obj_extrapolated_shape_dimension;
-    }
-
     std::vector<bool>  get_obj_base_visibility()
     const {
         return m_obj_base_visibility;
@@ -108,8 +103,8 @@ public:
         return m_objectId;
     }
 
-    std::vector<STRUCT_GT_ALL> getGroundTruthDetails() const {
-        return m_obj_base_all;
+    std::vector<std::vector<STRUCT_GT_ALL> > getExtrapolatedGroundTruthDetails() const {
+        return m_obj_extrapolated_all;
     }
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > get_obj_extrapolated_shape_pixel_point_pixel_displacement() const {

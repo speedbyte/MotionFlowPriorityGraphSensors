@@ -127,8 +127,6 @@ private:
 
     std::vector<std::pair<std::string, cv::Point2f> > mposition_points;
 
-    const std::string to_replace = "traffic_demo";
-
     std::string apply = "<SimCtrl><Apply/></SimCtrl>";
 
     std::string stop = "<SimCtrl> <Stop/> <LoadScenario filename=\"traffic_demo.xml\" /> <Init mode=\"operation\"/> </SimCtrl>";
@@ -297,6 +295,8 @@ public:
 
 
 
+        std::string to_replace = "traffic_demo";
+
         std::string::size_type position = scenario_name.find(to_replace);
         if ( position != std::string::npos ) {
             scenario_name.replace(position, to_replace.length(), std::string(m_scenario));
@@ -310,11 +310,19 @@ public:
         module_manager_libModuleCameraSensor = module_manager_libModuleSensor;
         module_manager_libModulePerfectSensor = module_manager_libModuleSensor;
 
-        std::string to_replace = std::to_string(DEFAULT_RX_PORT);
+        to_replace = std::to_string(DEFAULT_RX_PORT);
         position = module_manager_libModulePerfectSensor.find(to_replace);
         if ( position != std::string::npos) {
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT));
         }
+
+        to_replace = "libModuleCameraSensor";
+        position = module_manager_libModulePerfectSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "libModulePerfectSensor");
+        }
+
+        std::cout << module_manager_libModulePerfectSensor;
 
 
         if ( environment == "none") {
