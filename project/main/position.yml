@@ -1,107 +1,80 @@
 %YAML:1.0
 ---
 frame_count_000:
-   - { name:rectangle_long, visible:1, x:4.2857144165039062e+02,
-       y:3.2506915283203125e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.7142855834960938e+02,
-       y:2.7493084716796875e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
+   - { name:SpyingCar, visible:1, x:5.2222206115722656e+01,
+       y:2.7054000854492188e+02, dim_x:1.0444441223144531e+02,
+       dim_y:1.1166893005371094e+02, x_usk:1.3232866287231445e+01,
+       y_usk:7.6735415458679199e+00, dim_x_usk:2.5139999389648438e+00,
+       dim_y_usk:1.4800000190734863e+00, speed_x:-7.8997902572154999e-02,
+       speed_y:-1.3866404294967651e+00 }
+   - { name:New Character, visible:1, x:5.1663165283203125e+02,
+       y:2.7715649414062500e+02, dim_x:1.2813385009765625e+01,
+       dim_y:4.9622970581054688e+01, x_usk:1.9342163085937500e+01,
+       y_usk:-2.5390591621398926e+00, dim_x_usk:3.0671301484107971e-01,
+       dim_y_usk:3.3163401484489441e-01, speed_x:2.6667557656764984e-02,
+       speed_y:2.4226240813732147e-01 }
 frame_count_001:
-   - { name:rectangle_long, visible:1, x:4.2746859741210938e+02,
-       y:3.2416818237304688e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.7031027221679688e+02,
-       y:2.7402362060546875e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
+   - { name:SpyingCar, visible:1, x:5.6133342742919922e+01,
+       y:2.7051922607421875e+02, dim_x:1.1226668548583984e+02,
+       dim_y:1.1174783325195312e+02, x_usk:1.3224965095520020e+01,
+       y_usk:7.5348777770996094e+00, dim_x_usk:2.5139999389648438e+00,
+       dim_y_usk:1.4800000190734863e+00, speed_x:-7.9011522233486176e-02,
+       speed_y:-1.3866397142410278e+00 }
+   - { name:New Character, visible:1, x:5.1497778320312500e+02,
+       y:2.7716326904296875e+02, dim_x:1.2776000976562500e+01,
+       dim_y:4.9608261108398438e+01, x_usk:1.9347501754760742e+01,
+       y_usk:-2.4988405704498291e+00, dim_x_usk:3.0671301484107971e-01,
+       dim_y_usk:3.3163401484489441e-01, speed_x:6.4636051654815674e-02,
+       speed_y:5.4108965396881104e-01 }
 frame_count_002:
-   - { name:rectangle_long, visible:1, x:4.2638079833984375e+02,
-       y:3.2327340698242188e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.6917614746093750e+02,
-       y:2.7311007690429688e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
+   - { name:SpyingCar, visible:1, x:6.0049331665039062e+01,
+       y:2.7049835205078125e+02, dim_x:1.2009866333007812e+02,
+       dim_y:1.1182682800292969e+02, x_usk:1.3217063903808594e+01,
+       y_usk:7.3962135314941406e+00, dim_x_usk:2.5139999389648438e+00,
+       dim_y_usk:1.4800000190734863e+00, speed_x:-7.9023733735084534e-02,
+       speed_y:-1.3866389989852905e+00 }
+   - { name:New Character, visible:1, x:5.1210699462890625e+02,
+       y:2.7717535400390625e+02, dim_x:1.2710937500000000e+01,
+       dim_y:4.9582000732421875e+01, x_usk:1.9357040405273438e+01,
+       y_usk:-2.4290132522583008e+00, dim_x_usk:3.0671301484107971e-01,
+       dim_y_usk:3.3163401484489441e-01, speed_x:1.0283058881759644e-01,
+       speed_y:8.4022420644760132e-01 }
 frame_count_003:
-   - { name:rectangle_long, visible:1, x:4.2530755615234375e+02,
-       y:3.2238467407226562e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.6802575683593750e+02,
-       y:2.7219018554687500e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
+   - { name:SpyingCar, visible:1, x:6.3970230102539062e+01,
+       y:2.7047747802734375e+02, dim_x:1.2794046020507812e+02,
+       dim_y:1.1190592956542969e+02, x_usk:1.3209160804748535e+01,
+       y_usk:7.2575497627258301e+00, dim_x_usk:2.5139999389648438e+00,
+       dim_y_usk:1.4800000190734863e+00, speed_x:-7.9034708440303802e-02,
+       speed_y:-1.3866382837295532e+00 }
+   - { name:New Character, visible:1, x:5.0801855468750000e+02,
+       y:2.7719250488281250e+02, dim_x:1.2618438720703125e+01,
+       dim_y:4.9544769287109375e+01, x_usk:1.9370586395263672e+01,
+       y_usk:-2.3294327259063721e+00, dim_x_usk:3.0671301484107971e-01,
+       dim_y_usk:3.3163401484489441e-01, speed_x:1.4079909026622772e-01,
+       speed_y:1.1390515565872192e+00 }
 frame_count_004:
-   - { name:rectangle_long, visible:1, x:4.2424847412109375e+02,
-       y:3.2150192260742188e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.6685876464843750e+02,
-       y:2.7126397705078125e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
+   - { name:SpyingCar, visible:1, x:6.7896011352539062e+01,
+       y:2.7045657348632812e+02, dim_x:1.3579202270507812e+02,
+       dim_y:1.1198515319824219e+02, x_usk:1.3201256752014160e+01,
+       y_usk:7.1188859939575195e+00, dim_x_usk:2.5139999389648438e+00,
+       dim_y_usk:1.4800000190734863e+00, speed_x:-7.9044513404369354e-02,
+       speed_y:-1.3866378068923950e+00 }
+   - { name:New Character, visible:1, x:5.0306011962890625e+02,
+       y:2.7176879882812500e+02, dim_x:1.2557739257812500e+01,
+       dim_y:4.9570404052734375e+01, x_usk:1.9386980056762695e+01,
+       y_usk:-2.2090847492218018e+00, dim_x_usk:3.0671301484107971e-01,
+       dim_y_usk:3.3163401484489441e-01, speed_x:1.6385404765605927e-01,
+       speed_y:1.2115952968597412e+00 }
 frame_count_005:
-   - { name:rectangle_long, visible:1, x:4.2320300292968750e+02,
-       y:3.2062496948242188e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.6567486572265625e+02,
-       y:2.7033151245117188e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_006:
-   - { name:rectangle_long, visible:1, x:4.2217074584960938e+02,
-       y:3.1975369262695312e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.6447372436523438e+02,
-       y:2.6939288330078125e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_007:
-   - { name:rectangle_long, visible:1, x:4.2115112304687500e+02,
-       y:3.1888790893554688e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.6325509643554688e+02,
-       y:2.6844818115234375e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_008:
-   - { name:rectangle_long, visible:1, x:4.2014370727539062e+02,
-       y:3.1802740478515625e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.6201873779296875e+02,
-       y:2.6749768066406250e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_009:
-   - { name:rectangle_long, visible:1, x:4.1914794921875000e+02,
-       y:3.1717205810546875e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.6076449584960938e+02,
-       y:2.6654162597656250e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_010:
-   - { name:rectangle_long, visible:1, x:4.1816336059570312e+02,
-       y:3.1632159423828125e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.5949218750000000e+02,
-       y:2.6558035278320312e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_011:
-   - { name:rectangle_long, visible:1, x:4.1718939208984375e+02,
-       y:3.1547586059570312e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.5820178222656250e+02,
-       y:2.6461428833007812e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_012:
-   - { name:rectangle_long, visible:1, x:4.1622555541992188e+02,
-       y:3.1463464355468750e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.5689324951171875e+02,
-       y:2.6364395141601562e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_013:
-   - { name:rectangle_long, visible:1, x:4.1527130126953125e+02,
-       y:3.1379769897460938e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.5556661987304688e+02,
-       y:2.6266998291015625e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_014:
-   - { name:rectangle_long, visible:1, x:4.1432608032226562e+02,
-       y:3.1296484375000000e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.5422198486328125e+02,
-       y:2.6169314575195312e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_015:
-   - { name:rectangle_long, visible:1, x:4.1338940429687500e+02,
-       y:3.1213577270507812e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.5285955810546875e+02,
-       y:2.6071429443359375e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_016:
-   - { name:rectangle_long, visible:1, x:4.1246072387695312e+02,
-       y:3.1131036376953125e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.5147955322265625e+02,
-       y:2.5973446655273438e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_017:
-   - { name:rectangle_long, visible:1, x:4.1153952026367188e+02,
-       y:3.1048828125000000e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.5008239746093750e+02,
-       y:2.5875491333007812e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_018:
-   - { name:rectangle_long, visible:1, x:4.1062524414062500e+02,
-       y:3.0966937255859375e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.4866848754882812e+02,
-       y:2.5777697753906250e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_019:
-   - { name:rectangle_long, visible:1, x:4.0971734619140625e+02,
-       y:3.0885333251953125e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.4723837280273438e+02,
-       y:2.5680236816406250e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-frame_count_020:
-   - { name:rectangle_long, visible:1, x:4.0881530761718750e+02,
-       y:3.0803997802734375e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
-   - { name:random_object, visible:1, x:3.4579269409179688e+02,
-       y:2.5583288574218750e+02, x_usk:0., y_usk:0., dim_x:30., dim_y:70. }
+   - { name:SpyingCar, visible:1, x:7.1826705932617188e+01,
+       y:2.7043566894531250e+02, dim_x:1.4365341186523438e+02,
+       dim_y:1.1206446838378906e+02, x_usk:1.3193351745605469e+01,
+       y_usk:6.9802222251892090e+00, dim_x_usk:2.5139999389648438e+00,
+       dim_y_usk:1.4800000190734863e+00, speed_x:-7.9053297638893127e-02,
+       speed_y:-1.3866372108459473e+00 }
+   - { name:New Character, visible:1, x:4.9805859375000000e+02,
+       y:2.7179437255859375e+02, dim_x:1.2534912109375000e+01,
+       dim_y:4.9525360107421875e+01, x_usk:1.9403369903564453e+01,
+       y_usk:-2.0879192352294922e+00, dim_x_usk:3.0671301484107971e-01,
+       dim_y_usk:3.3163401484489441e-01, speed_x:1.6385404765605927e-01,
+       speed_y:1.2115952968597412e+00 }

@@ -33,13 +33,16 @@ protected:
 
     cv::FileStorage m_write_fs;
 
-    std::vector<ObjectMetaData *> m_ptr_customObjectMetaDataList;
-
     bool m_regenerate_yaml_file;
+
+    std::vector<ObjectMetaData> objectMetaDataList;
+
+    std::vector<ObjectMetaData *> m_ptr_customObjectMetaDataList;
 
     std::map<std::string, ObjectMetaData*> m_mapObjectNameToObjectMetaData;
 
     ushort m_objectCount = 0;
+
 
 
 
@@ -51,6 +54,10 @@ public:
 
         m_datasetpath = Dataset::getDatasetPath();
         m_groundtruthpath = Dataset::getGroundTruthPath();
+        for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
+            ObjectMetaData objMetaData;
+            objectMetaDataList.push_back(objMetaData);
+        }
     };
 
     void readPositionFromFile(std::string positionFileName);
@@ -322,8 +329,11 @@ public:
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "libModulePerfectSensor");
         }
 
-        std::cout << module_manager_libModulePerfectSensor;
-
+        to_replace = "Sensor_MM";
+        position = module_manager_libModulePerfectSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
+        }
 
         if ( environment == "none") {
             m_environment_scp_message = environment_parameters_dry;

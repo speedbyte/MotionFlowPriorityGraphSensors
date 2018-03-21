@@ -46,43 +46,67 @@ public:
     //Each line contains one object annotation with the following columns:
     //frame: frame index in the video (starts from 0)
     ushort frame_no;
+
     //tid: track identification number (unique for each object instance)
     ushort tid;
+
     //label: KITTI-like name of the 'type' of the object (Car, Van, DontCare)
     std::string label;
+
     //truncated: (changed name in v1.3) KITTI-like truncation flag (0: not truncated, 1: truncated, 2: heavily truncated, marked as “DontCare”)
     bool truncated;
+
     //occluded: (changed name in v1.3) KITTI-like occlusion flag  (0: not occluded, 1; occluded, 2: heavily occluded, marked as “DontCare”)
     bool occluded;
+
     //alpha: KITTI-like observation angle of the object in [-pi..pi]
     float alpha_rad;
+
     //l, t, r, b: KITTI-like 2D 'bbox', respectively left, top, right, bottom bounding box in pixel coordinates (inclusive, (0,0) origin is on the upper left corner of the image)
     struct bounding_box_m { float bb_left_px; float bb_top_px; float bb_right_px; float bb_bottom_px;} m_bounding_box;
+
     //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
-    struct object_dimensions_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions;
+    struct object_dimensions_px { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_px;
+
+    //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
+    struct object_dimensions_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_m;
+
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_px { float location_x_m; float location_y_m; float location_z_m;} m_object_location_px;
+
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_m;
+
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D object 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
     //(KITTI convention is ry == 0 iff object is aligned with x-axis and pointing right)
     //rx: rotation around X-axis (pitch) in camera coordinates [-pi..pi]
     //rz: rotation around Z-axis (roll) in camera coordinates [-pi..pi]
     struct object_rotation_rad { float rotation_ry_yaw_rad; float rotation_rx_pitch_rad; float rotation_rz_roll_rad; } m_object_rotation_rad;
+
     //truncr: (changed in v1.3) object 2D truncation ratio in [0..1] (0: no truncation, 1: entirely truncated)
     bool truncr;
+
     //occupr: object 2D occupancy ratio (fraction of non-occluded pixels) in [0..1] (0: fully occluded, 1: fully visible, independent of truncation)
     bool occupr;
+
     //orig_label: original KITTI-like name of the 'type' of the object ignoring the 'DontCare' rules (allows to know original type of DontCare objects)
     std::string orig_label;
+
     //moving: 0/1 flag to indicate whether the object is really moving between this frame and the next one
     bool moving;
+
     //model: the name of the 3D model used to render the object (can be used for fine-grained recognition)
     std::string cad_3d_model;
+
     //color: the name of the color of the object
     std::string color;
+
+    //offset. where is the position determined on the object ( center of gravity )
     struct object_offset_m { float offset_x; float offset_y; float offset_z; } m_object_offset;
+
+    //speed of the object
+    struct object_speed_m { float x; float y; float z; } m_object_speed;
 
     /*
      Remarks about 3D information
@@ -214,16 +238,23 @@ public:
         m_gt_all.at(frameNumber).m_object_offset.offset_y = offset.y;
         m_gt_all.at(frameNumber).m_object_offset.offset_x = offset.x;
 
-        m_gt_all.at(frameNumber).m_object_dimensions.dim_width_m = dimensions.x;
-        m_gt_all.at(frameNumber).m_object_dimensions.dim_height_m = dimensions.y;
+        m_gt_all.at(frameNumber).m_object_dimensions_px.dim_width_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
     }
 
-    void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point2f position, cv::Point2f orientation) {
+    void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point2f position, cv::Point2f orientation, cv::Point2f dimensions, cv::Point2f speed) {
         m_gt_all.at(frameNumber).m_object_location_m.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_m.location_y_m = position.y;
 
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_yaw_rad = orientation.x;
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_pitch_rad = orientation.y;
+
+        m_gt_all.at(frameNumber).m_object_dimensions_m.dim_width_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_dimensions_m.dim_height_m = dimensions.y;
+
+        m_gt_all.at(frameNumber).m_object_speed.x = speed.x;
+        m_gt_all.at(frameNumber).m_object_speed.y = speed.y;
+
     }
 
     void atFrameNumberVisibility(ushort frameNumber, bool visibility) {

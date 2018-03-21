@@ -126,8 +126,8 @@ void OpticalFlow::generate_shape_points() {
 
                     float vollTreffer = 0;
 
-                    int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m);
-                    int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m);
+                    int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                    int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
                     float keinTreffer;
 
@@ -286,8 +286,8 @@ void OpticalFlow::generate_collision_points() {
             for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
 
                 // object image_data_and_shape
-                int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m);
-                int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m);
+                int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
                 if ( m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count)
                      == true ) {
@@ -490,8 +490,8 @@ void OpticalFlow::generate_collision_points_mean() {
 
                     cv::Mat roi;
 
-                    int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m);
-                    int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m);
+                    int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                    int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
                     roi = tempMatrix.
                             colRange(cvRound(centroid.x), cvRound(centroid.x + width)).

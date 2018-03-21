@@ -88,10 +88,14 @@ void GroundTruthScene::writePositionInYaml() {
                         << "visible" << m_list_objects.at(i).get_obj_base_visibility().at(frame_count)
                         << "x" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_x_m
                         << "y" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_y_m
+                        << "dim_x" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m
+                        << "dim_y" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m
                         << "x_usk" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_x_m
                         << "y_usk" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_y_m
-                        << "dim_x" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m
-                        << "dim_y" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m
+                        << "dim_x_usk" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_width_m
+                        << "dim_y_usk" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_height_m
+                        << "speed_x" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.x
+                        << "speed_y" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.y
                         << "}";
             }
             write_fs << "]";
@@ -104,7 +108,7 @@ void GroundTruthScene::writePositionInYaml() {
 void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
     cv::FileStorage fs(positionFileName, cv::FileStorage::READ);
-    cv::Point2f position_pixel, dimension_pixel, offset_pixel, orientation_usk, position_usk;
+    cv::Point2f position_pixel, dimension_pixel, offset_pixel, orientation_usk, position_usk, dimension_usk, speed_usk;
 
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
@@ -152,9 +156,12 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                     orientation_usk = cv::Point2f((double)(*file_node_iterator)["h"], (double)(*file_node_iterator)["p"]);
 
                     dimension_pixel = cv::Point2f((int)(*file_node_iterator)["dim_x"], (int)(*file_node_iterator)["dim_y"]);
+                    dimension_usk = cv::Point2f((int)(*file_node_iterator)["dim_x_usk"], (int)(*file_node_iterator)["dim_y_usk"]);
+
+                    speed_usk = cv::Point2f((int)(*file_node_iterator)["speed_x"], (int)(*file_node_iterator)["speed_y"]);
 
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(frame_count, position_pixel, offset_pixel, dimension_pixel);
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk, dimension_usk, speed_usk);
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(frame_count, (int)(*file_node_iterator)["visible"]);
 
                 }
@@ -178,8 +185,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
 
     ColorfulNoise colorfulNoise;
-
-    std::vector<ObjectMetaData> objectMetaDataList(MAX_ALLOWED_OBJECTS);
 
     if ( m_environment == "none") {
 
@@ -288,9 +293,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     frame_skip_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m));
+            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m));
             positionShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            positionShape = positionShape.rowRange(0, cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m));
+            positionShape = positionShape.rowRange(0, cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m));
 
             if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
@@ -298,8 +303,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
                                  cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
-                                 cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_count).at(frame_skip-1).m_object_dimensions.dim_width_m),
-                                 cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_count).at(frame_skip-1).m_object_dimensions.dim_height_m))));
+                                 cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                                 cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m))));
 
             }
         }
@@ -341,14 +346,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     Noise noNoise;
 
-    std::vector<ObjectMetaData> objectMetaDataList(MAX_ALLOWED_OBJECTS);
-
     if ( m_environment == "none") {
-
-        for ( auto i = 0; i < MAX_ALLOWED_OBJECTS; i++ ) {
-
-            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
-        }
 
         if ( !m_regenerate_yaml_file  ) { // dont generate, just read
 
@@ -725,7 +723,7 @@ simFrame, const
                                           short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                                           const unsigned int &totalElem) {
 
-    cv::Point2f position_pixel, dimension_pixel, offset_pixel, position_usk, orientation_usk;
+    cv::Point2f position_pixel, dimension_pixel, offset_pixel, position_usk, orientation_usk, dimension_usk, speed_usk;
 
     if ( m_environment == "none") {
 
@@ -738,6 +736,7 @@ simFrame, const
 
                 if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
 
+                    m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
                     Rectangle rectangle((int)(data->base.geo.dimX),(int)(data->base.geo.dimY)); // width, height
                     m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
                     m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
@@ -755,8 +754,10 @@ simFrame, const
                 else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
                     position_usk = cv::Point2f((float) data->base.pos.x, (float) data->base.pos.y);
                     orientation_usk = cv::Point2f((float) data->base.pos.h, (float) data->base.pos.p);
+                    dimension_usk = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
+                    speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_usk, speed_usk);
                 }
             } else {
                 //std::cout << data->base.type << std::endl;

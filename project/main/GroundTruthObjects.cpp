@@ -25,7 +25,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
                    frame_count,
                    current_index, gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m,
-                   (float)0, (float)0, gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m, gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m
+                   (float)0, (float)0, gt_data.getAll().at(current_index).m_object_dimensions_px.dim_width_m, gt_data.getAll().at(current_index).m_object_dimensions_px.dim_height_m
             );
 
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(cv::Point2f(gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m) , cv::Point2f(0,0)));
@@ -37,8 +37,8 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
             gt_next_pts = cv::Point2f(gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m);
 
-            gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions.dim_width_m;
-            gt_dimensions.y = gt_data.getAll().at(current_index).m_object_dimensions.dim_height_m;
+            gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions_px.dim_width_m;
+            gt_dimensions.y = gt_data.getAll().at(current_index).m_object_dimensions_px.dim_height_m;
 
             //If we are at the end of the path vector, we need to reset our iterators
             if (current_index >= gt_data.getAll().size()) {
@@ -144,8 +144,8 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
             std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
             std::vector<bool> base_visibility;
 
-            int ObjectWidth = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions.dim_width_m);
-            int ObjectHeight = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions.dim_height_m);
+            int ObjectWidth = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+            int ObjectHeight = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
             for (unsigned j = 0; j < ObjectWidth; j++) {
                 for (unsigned k = 0; k < ObjectHeight; k++) {
