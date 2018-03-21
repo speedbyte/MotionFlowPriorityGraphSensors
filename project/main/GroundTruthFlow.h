@@ -28,25 +28,24 @@ private:
 
 public:
 
-    GroundTruthFlow( std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects ) :
-            OpticalFlow(list_gt_objects, list_simulated_objects) {
+    GroundTruthFlow( std::vector<Objects *> &list_gt_objects ) :
+            OpticalFlow(list_gt_objects) {
 
     }
 
     void generate_flow_frame();
 
+    void generate_shape_points();
+
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
     }
 
-    void generate_collision_points() {
-        OpticalFlow::generate_collision_points();
-    };
-
-
 private:
 
     void prepare_directories();
+
+
 
 };
 

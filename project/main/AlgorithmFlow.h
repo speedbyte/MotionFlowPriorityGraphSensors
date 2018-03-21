@@ -22,13 +22,17 @@ class AlgorithmFlow : public OpticalFlow {
 
 private:
 
+    std::vector<Objects *> &m_list_simulated_base_objects;
+
+    std::vector<Objects *> &m_list_simulated_objects;
+
     boost::filesystem::path mImageabholOrt;
 
 
 public:
 
-    AlgorithmFlow( std::string environment, std::vector<Objects*> &list_gt_objects, std::vector<Objects*> &list_simulated_objects ) :
-    OpticalFlow(list_gt_objects, list_simulated_objects) {
+    AlgorithmFlow( std::string environment, std::vector<Objects*> &list_gt_objects, std::vector<Objects*> &list_simulated_base_objects, std::vector<Objects*> &list_simulated_objects ) :
+    OpticalFlow(list_gt_objects), m_list_simulated_base_objects(list_simulated_base_objects), m_list_simulated_objects(list_simulated_objects) {
 
         mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + environment + "/";
 
@@ -37,8 +41,7 @@ public:
 
     void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise);
 
-    void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise,
-                             const std::vector<SimulatedObjects>& groundtruthobjects);
+    void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise);
 
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
     &l_pixelmovement );
@@ -47,9 +50,9 @@ public:
         return m_resultordner;
     }
 
-    void generate_collision_points_mean() {
-        OpticalFlow::generate_collision_points_mean();
-    };
+    void generate_collision_points_mean();
+
+    void generate_shape_points();
 
     std::string getImageAbholOrt() const {
         return mImageabholOrt.string();

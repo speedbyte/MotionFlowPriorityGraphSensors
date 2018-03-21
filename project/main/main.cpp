@@ -248,7 +248,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
 
-                GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base, ptr_list_of_gt_objects);
+                GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base);
                 gt_flow.generate_flow_frame();
 
                 gt_flow.generate_collision_points();
@@ -299,9 +299,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
 
-                AlgorithmFlow fback( environment_list[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects);
+                AlgorithmFlow fback( environment_list[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects);
 
-                fback.generate_flow_frame(fb, video_frames, environment_list[env_index], list_of_simulated_objects_base);
+                fback.generate_flow_frame(fb, video_frames, environment_list[env_index]);
 
                 if ( environment_list[env_index] == "none" ) { // store the stimulated objects from the ground run.
 

@@ -101,3 +101,6 @@
 [submodule "libs/MPI-Sintel-testing_devkit"]
 	path = libs/MPI-Sintel-testing_devkit
 	url = git@atreus.informatik.uni-tuebingen.de:Veikas/MPI-Sintel-testing_devkit.git
+[submodule "overleaf/paper_1"]
+	path = overleaf/paper_1
+	url = https://git.overleaf.com/14794321bbsqftzqrvrb

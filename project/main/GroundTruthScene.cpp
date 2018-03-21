@@ -62,10 +62,10 @@ void GroundTruthScene::prepare_directories() {
 
 }
 
-void GroundTruthScene::writePositionInYaml() {
+void GroundTruthScene::writePositionInYaml(std::string suffix) {
 
     cv::FileStorage write_fs;
-    write_fs.open("../position.yml", cv::FileStorage::WRITE);
+    write_fs.open("../position_"+suffix+".yml", cv::FileStorage::WRITE);
 
     for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
 
@@ -195,7 +195,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
                 m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
             }
-            readPositionFromFile("../position.yml");
+            readPositionFromFile("../position_cpp.yml");
 
             ushort map_pair_count = 0;
             for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
@@ -204,7 +204,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             }
         }
         else { // genreate yaml file
-            boost::filesystem::remove("../position.yml");
+            boost::filesystem::remove("../position_vires.yml");
 
             Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
 
@@ -230,7 +230,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         }
 
         if ( m_regenerate_yaml_file  ) {
-            writePositionInYaml();
+            writePositionInYaml("cpp");
         }
     }
 
@@ -350,7 +350,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         if ( !m_regenerate_yaml_file  ) { // dont generate, just read
 
-            readPositionFromFile("../position.yml");
+            readPositionFromFile("../position_vires.yml");
 
             ushort map_pair_count = 0;
             for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
@@ -627,7 +627,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             }
 
             if ( m_regenerate_yaml_file  ) {
-                writePositionInYaml();
+                writePositionInYaml("vires");
             }
         }
     }

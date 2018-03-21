@@ -29,19 +29,19 @@ protected:
 
     std::vector<Objects *> &m_list_gt_objects;
 
-    std::vector<Objects *> &m_list_simulated_objects;
-
     std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_collision_points;
 
     std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_shape_points;
 
+    void getCombination( const std::vector<Objects *> &m_list_objects, std::vector<std::pair<Objects*, Objects*> > &list_of_objects_combination);
+
+    void find_collision_points_given_two_line_parameters(const cv::Point2f lineparameters1, const cv::Point2f lineparameters2,
+                                                         cv::Mat &tempMatrix, std::vector<cv::Point2f> &collision_points);
 
 public:
 
-
-
-    OpticalFlow( std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects ) :
-    m_list_gt_objects(list_gt_objects), m_list_simulated_objects(list_simulated_objects) { };
+    OpticalFlow( std::vector<Objects *> &list_gt_objects ) :
+    m_list_gt_objects(list_gt_objects) { };
 
     std::vector<std::vector<std::vector<cv::Point2f> > > getCollisionPoints () const {
         return m_frame_skip_collision_points;
@@ -58,8 +58,6 @@ public:
 
     void generate_shape_points();
 
-    void generate_collision_points_mean();
-
     std::string getGeneratePath() const {
         return m_generatepath.string();
     }
@@ -69,11 +67,6 @@ public:
     }
 
 private:
-    void find_collision_points_given_two_line_parameters(const cv::Point2f lineparameters1, const cv::Point2f lineparameters2,
-                                                                      cv::Mat &tempMatrix, std::vector<cv::Point2f> &collision_points);
-
-    void getCombination( std::vector<std::pair<Objects*, Objects*> > &list_of_gt_objects_combination,
-    std::vector<std::pair<Objects*, Objects*> > &list_of_simulated_objects_combination);
 
 };
 

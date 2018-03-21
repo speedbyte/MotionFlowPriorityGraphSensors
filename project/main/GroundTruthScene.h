@@ -62,7 +62,7 @@ public:
 
     void readPositionFromFile(std::string positionFileName);
 
-    void writePositionInYaml();
+    void writePositionInYaml(std::string suffix);
 
     virtual void generate_gt_scene() {
         std::cout << "base implementation of generate_gt_scene()" << std::endl;

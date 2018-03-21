@@ -326,7 +326,7 @@ def motionflow_graphs():
         #print coordinates
 
         data = np.array(coordinates)
-        x1, y1 = data.T
+b        x1, y1 = data.T
 
         data_gt = np.array(coordinates_gt)
         x1_gt, y1_gt = data_gt.T
