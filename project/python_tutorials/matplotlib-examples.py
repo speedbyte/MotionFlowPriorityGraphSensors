@@ -252,7 +252,8 @@ def motionflow_graphs():
     collisionplot_all.set_ylabel('y')
     collisionplot_all.set_xlim([-400,900])
     collisionplot_all.set_ylim([0,800])
-    legend = collisionplot_all.legend(loc='upper right', shadow=True, fontsize='x-small')
+    legend = shapeplot1.legend(loc='center right', shadow=True, fontsize='x-small')
+    #legend = collisionplot_all.legend(loc='upper right', shadow=True, fontsize='x-small')
 
 
     yaml_load = yaml.load(open(file))
@@ -335,8 +336,10 @@ def motionflow_graphs():
             coordinates.append(xy)
         data = np.array(coordinates)
         x1, y1 = data.T
-        shapeplot1.plot(x1, y1, 'ko-', lw=2, color=color_of_shape_metrics[no_of_metrics], label=list_of_shape_metrics[no_of_metrics])
+        shapeplot1.plot(x1, y1, 'ko-', lw=2, color=color_of_shape_metrics[no_of_metrics],label=list_of_shape_metrics[no_of_metrics])
+        shapeplot1.legend()
         shapeplot1.set_ylim([0,1])
+        shapeplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
     fig1.set_size_inches(18.5, 10.5)
     fig2.set_size_inches(18.5, 10.5)
@@ -344,6 +347,8 @@ def motionflow_graphs():
     fig1.savefig('/local/tmp/eaes/vector_robustness.png', dpi=200)
     fig2.savefig('/local/tmp/eaes/pixel_robustness.png', dpi=200)
     fig3.savefig('/local/tmp/eaes/vector_robustness_all.png', dpi=200)
+
+
 
 
 def check():
