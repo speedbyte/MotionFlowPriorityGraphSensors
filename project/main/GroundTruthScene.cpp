@@ -141,6 +141,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                         file_node_iterator++) {
 
                     if ( m_mapObjectNameToObjectMetaData.count((*file_node_iterator)["name"].string()) == 0 ) {
+                        m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
                         m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(m_objectCount);
                         m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName((*file_node_iterator)["name"].string());
                         Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
@@ -191,10 +192,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         if ( !m_regenerate_yaml_file  ) { // dont generate, just read
 
-            for ( auto i = 0; i < MAX_ALLOWED_OBJECTS; i++ ) {
-
-                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(i));
-            }
             readPositionFromFile("../position_cpp.yml");
 
             ushort map_pair_count = 0;

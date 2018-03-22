@@ -180,8 +180,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow", "rain"};
-    //const std::vector < std::string> environment_list = {"none", "night"};
-    const std::vector < std::string> environment_list = {"none"};
+    const std::vector < std::string> environment_list = {"none", "night"};
+    //const std::vector < std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
 
@@ -308,8 +308,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
                         list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_count));
                     }
-                    ptr_list_of_simulated_objects_base = ptr_list_of_simulated_objects;
-
+                    for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
+                        ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_count));
+                    }
                 }
 
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
@@ -321,7 +322,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 fback.generate_collision_points_mean();
                 fback.generate_shape_points();
-                fback.visualiseStencil();
+                if ( env_index == environment_list.size()-1 ) {
+                    fback.visualiseStencil();
+                }
 
                 if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
 
