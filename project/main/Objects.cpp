@@ -71,7 +71,7 @@ void Objects::post_processing_obj_extrapolated_stencil_pixel_points_pixel_displa
 
 
 void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( const unsigned &max_skips,
-                                                                                         const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_blob_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility) {
+                                                                                         const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_blob_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, std::string post_processing_algorithm) {
 
     // A blob can be either a stencil or a shape
 
@@ -148,7 +148,15 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                     (mean_displacement_vector_x, mean_displacement_vector_y)));
             multiframe_visibility.push_back(mean_visibility);
         }
-        m_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector);
+        if ( post_processing_algorithm == "ground_truth") {
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean.push_back(multiframe_flowvector);
+        }
+        else {
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean.push_back(multiframe_flowvector);
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_threshold_mean.push_back(multiframe_flowvector);
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_voted_mean.push_back(multiframe_flowvector);
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_ranked_mean.push_back(multiframe_flowvector);
+        }
         m_obj_extrapolated_mean_visibility.push_back(multiframe_visibility);
 
     }
@@ -163,16 +171,16 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips) {
     //TODO - clean up this section.
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
         std::vector<std::pair<cv::Point2f, cv::Point2f> > line_parameters;
-        const unsigned long FRAME_COUNT = m_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at
+        const unsigned long FRAME_COUNT = m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean.at
                 (frame_skip - 1).size() - 1;
         for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 
             if ( m_obj_extrapolated_mean_visibility.at(frame_skip-1).at(frame_count) == true ) {
-                cv::Point2f next_pts = m_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at
+                cv::Point2f next_pts = m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean.at
                         (frame_skip - 1).at(frame_count).first;
                 cv::Point2f  displacement_vector =
-                        m_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at
+                        m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean.at
                                 (frame_skip - 1).at(frame_count).second;
 
             //assert(std::abs(mean_displacement_vector_y )>0);

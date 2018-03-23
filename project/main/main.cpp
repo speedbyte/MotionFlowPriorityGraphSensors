@@ -316,7 +316,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     // m_obj_extrapolated_stencil_pixel_point_pixel_displacement
                     list_of_simulated_objects.at(i)
-                            .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(MAX_SKIPS, list_of_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(), list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility());
+                            .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(MAX_SKIPS, list_of_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(), list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(), "algorithm");
                     list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS);
                 }
 
@@ -329,32 +329,22 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         }
     }
 
+    PixelRobustness pixelRobustness(fs);
+    VectorRobustness vectorRobustness(fs);
+
     if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
 
-        PixelRobustness pixelRobustness(fs);
-        VectorRobustness vectorRobustness(fs);
-
-        vectorRobustness.generateVectorRobustness(gt_flow);
-        pixelRobustness.generatePixelRobustness(gt_flow);
-
+        pixelRobustness.generatePixelRobustness(gt_flow, list_of_algorithm_flow[0]);
+        vectorRobustness.generateVectorRobustness(gt_flow, list_of_algorithm_flow[0]);
         vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
 
-    }
-
-    for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
-        if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
-
-            PixelRobustness pixelRobustness(fs);
-            VectorRobustness vectorRobustness(fs);
-
-            vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index]);
-            pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index]);
-
+        for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
+            pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0] );
+            vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
             vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
-
         }
-    }
 
+    }
     fs.release();
 
 

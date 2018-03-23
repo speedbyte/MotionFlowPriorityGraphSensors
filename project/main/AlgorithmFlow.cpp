@@ -609,18 +609,23 @@ void AlgorithmFlow::generate_shape_points() {
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
+        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > obj_extrapolated_stencil_pixel_point_pixel_displacement;
+
+        for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
+            obj_extrapolated_stencil_pixel_point_pixel_displacement.push_back(m_list_simulated_objects.at(
+                    i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement());
+        }
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
         std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip << std::endl;
 
-        std::vector<std::vector<cv::Point2f> >  m_frame_shape_points;
+        std::vector<std::vector<cv::Point2f> >  frame_shape_points;
 
         unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
                 ->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip - 1).size();
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
-
 
             std::cout << "frame_count " << frame_count << std::endl;
 
@@ -633,11 +638,7 @@ void AlgorithmFlow::generate_shape_points() {
 
             for ( unsigned i = 0; i < m_list_simulated_objects.size(); i++) {
 
-
-                auto CLUSTER_COUNT_GT = m_list_gt_objects.at(i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
-                        (frame_skip - 1).at(frame_count).size();
-
-                auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                auto CLUSTER_COUNT_ALGO = obj_extrapolated_stencil_pixel_point_pixel_displacement.at(i).at
                         (frame_skip - 1).at(frame_count).size();
 
                 if ( ( m_list_simulated_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1)
@@ -659,15 +660,11 @@ void AlgorithmFlow::generate_shape_points() {
 
                     float keinTreffer;
 
-                    if ( m_resultordner == "/generated" ) {  // for ground truth
-                        vollTreffer = CLUSTER_COUNT_GT;
-                        keinTreffer = (CLUSTER_COUNT_GT - vollTreffer);
-                    }
-                    else { // for real algorithms
+                    if ( m_resultordner != "/generated" ) {   // this is unncecessary, because this function is in AlgorithmFlow, still I will leave this.
                         for ( auto j = 0; j < CLUSTER_COUNT_ALGO; j++ ) {
-                            auto x_coordinates =  m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            auto x_coordinates =  obj_extrapolated_stencil_pixel_point_pixel_displacement.at(i).at
                                     (frame_skip - 1).at(frame_count).at(j).first.x;
-                            auto y_coordinates = m_list_simulated_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            auto y_coordinates = obj_extrapolated_stencil_pixel_point_pixel_displacement.at(i).at
                                     (frame_skip - 1).at(frame_count).at(j).first.y;
 
                             if ((x_coordinates > (columnBegin - width / STENCIL_GRID_EXTENDER)) &&
@@ -707,10 +704,10 @@ void AlgorithmFlow::generate_shape_points() {
 
             shape_points_average.push_back( shape_average );
 
-            m_frame_shape_points.push_back(shape_points_average);
+            frame_shape_points.push_back(shape_points_average);
 
         }
-        m_frame_skip_shape_points.push_back(m_frame_shape_points);
+        m_frame_skip_shape_points.push_back(frame_shape_points);
     }
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);

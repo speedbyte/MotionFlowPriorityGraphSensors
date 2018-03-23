@@ -50,7 +50,6 @@ void OpticalFlow::prepare_directories() {
     }
 }
 
-
 void OpticalFlow::getCombination( const std::vector<Objects *> &m_list_objects, std::vector<std::pair<Objects*, Objects* > > &list_of_objects_combination) {
     std::vector<Objects*>::const_iterator objectIterator = m_list_objects.begin();
     std::vector<Objects*>::const_iterator  objectIteratorNext;

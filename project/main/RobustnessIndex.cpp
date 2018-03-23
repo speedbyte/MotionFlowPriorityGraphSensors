@@ -60,7 +60,7 @@ void RobustnessIndex::make_video_from_png(const std::string &videoOrdner) {
     video_write.release();
 }
 
-void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow) {
+void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo) {
 
     // shape of algorithhm, with shape of ground truth
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
@@ -68,14 +68,14 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow) {
 
         std::vector<float> xsamples,ysamples;
 
-        unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(frame_skip - 1).size();
+        unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(frame_skip - 1).size();
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-            unsigned long POINTS = opticalFlow.getShapePoints().at(frame_skip-1).at(frame_count).size();
+            unsigned long POINTS = opticalFlow_gt.getShapePoints().at(frame_skip-1).at(frame_count).size();
             for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-                cv::Point2f shapepoints = opticalFlow.getShapePoints().at(frame_skip-1).at(frame_count).at
+                cv::Point2f shapepoints = opticalFlow_gt.getShapePoints().at(frame_skip-1).at(frame_count).at
                         (points);
 
                 xsamples.push_back(shapepoints.x);
@@ -97,8 +97,8 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow) {
             samples_xy_shape(1,i) = xsamples.at(i) / ( xsamples.at(i) + ysamples.at(i) );
         }
 
-        auto position = opticalFlow.getResultOrdner().find('/');
-        m_fs << (std::string("shape_points") + std::string("frame_skip") + std::to_string(frame_skip) + opticalFlow.getResultOrdner().replace(position, 1, "_") ) << "[";
+        auto position = opticalFlow_gt.getResultOrdner().find('/');
+        m_fs << (std::string("shape_points") + std::string("frame_skip") + std::to_string(frame_skip) + opticalFlow_gt.getResultOrdner().replace(position, 1, "_") ) << "[";
 
         for (unsigned i = 0; i < samples_xy_shape.cols; i++) {
             xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
@@ -110,24 +110,24 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow) {
 }
 
 
-void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) {
+void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo) {
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
 
         std::vector<float> xsamples,ysamples;
 
-        unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(frame_skip - 1).size();
+        unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(frame_skip - 1).size();
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
             ushort m_valid_collision_points = 0;
             ushort m_invalid_collision_points = 0;
 
-            unsigned long POINTS = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).size();
+            unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(frame_count).size();
             for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-                cv::Point2f collisionpoints = opticalFlow.getCollisionPoints().at(frame_skip-1).at(frame_count).at
+                cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(frame_count).at
                         (points);
 
                 xsamples.push_back(collisionpoints.x);
@@ -167,8 +167,8 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) 
             samples_xy_collision(1,i) = ysamples.at(i);
         }
 
-        auto position = opticalFlow.getResultOrdner().find('/');
-        m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + opticalFlow.getResultOrdner().replace(position, 1, "_") ) << "[";
+        auto position = opticalFlow_gt.getResultOrdner().find('/');
+        m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + opticalFlow_gt.getResultOrdner().replace(position, 1, "_") ) << "[";
 
         for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
             xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));

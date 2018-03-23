@@ -214,9 +214,6 @@ void GroundTruthFlow::generate_shape_points() {
                 auto CLUSTER_COUNT_GT = m_list_gt_objects.at(i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
                         (frame_skip - 1).at(frame_count).size();
 
-                auto CLUSTER_COUNT_ALGO = m_list_gt_objects.at(i)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                        (frame_skip - 1).at(frame_count).size();
-
                 if ( ( m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1)
                                .at(frame_count) == true ) ) {
 
@@ -224,7 +221,7 @@ void GroundTruthFlow::generate_shape_points() {
 
                     float keinTreffer;
 
-                    if ( m_resultordner == "/generated" ) {  // for ground truth
+                    if ( m_resultordner == "/generated" ) {  // this is unncecessary, because this function is in GroundTruthFlow, still I will leave this.
                         vollTreffer = CLUSTER_COUNT_GT;
                         keinTreffer = (CLUSTER_COUNT_GT - vollTreffer);
                     }
@@ -243,7 +240,7 @@ void GroundTruthFlow::generate_shape_points() {
                                                                                                         - 1)
                                       .at(frame_count) << " and hence not generating any shape points for this object " <<  std::endl ;
 
-                    shape_points.at(i) = (cv::Point2f(0, CLUSTER_COUNT_ALGO));
+                    shape_points.at(i) = (cv::Point2f(0, CLUSTER_COUNT_GT));
                     shape_average.x += shape_points.at(i).x;
                     shape_average.y += shape_points.at(i).y;
 

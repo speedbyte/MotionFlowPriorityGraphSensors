@@ -30,8 +30,13 @@ protected:
             m_obj_extrapolated_stencil_pixel_point_pixel_displacement;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
-
+                m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean;
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_threshold_mean;
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_voted_mean;
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
+            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_ranked_mean;
 
     std::vector<bool> m_obj_base_visibility;
 
@@ -67,14 +72,14 @@ public:
 
     void post_processing_obj_extrapolated_stencil_pixel_points_pixel_displacement( );
 
-    void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility);
+    void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, std::string post_processing_algorithm);
 
 
     void generate_obj_line_parameters( const unsigned &max_skips);
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >    get_obj_extrapolated_mean_pixel_centroid_pixel_displacement()
     const {
-        return m_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
+        return m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean;
     }
 
     int getInertialWidth() const {
