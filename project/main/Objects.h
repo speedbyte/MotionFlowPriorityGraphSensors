@@ -29,14 +29,8 @@ protected:
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_obj_extrapolated_stencil_pixel_point_pixel_displacement;
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-                m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean;
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_threshold_mean;
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_voted_mean;
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_ranked_mean;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
 
     std::vector<bool> m_obj_base_visibility;
 
@@ -46,8 +40,8 @@ protected:
 
     std::vector<std::vector<bool> > m_obj_extrapolated_mean_visibility;
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            m_obj_line_parameters;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_list_obj_line_parameters;
 
     int m_ObjectInertialWidth;
 
@@ -75,11 +69,11 @@ public:
     void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, std::string post_processing_algorithm);
 
 
-    void generate_obj_line_parameters( const unsigned &max_skips);
+    void generate_obj_line_parameters( const unsigned &max_skips, std::string post_processing_algorithm);
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >    get_obj_extrapolated_mean_pixel_centroid_pixel_displacement()
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement()
     const {
-        return m_obj_extrapolated_mean_pixel_centroid_pixel_displacement_centroid_mean;
+        return m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
     }
 
     int getInertialWidth() const {
@@ -90,8 +84,8 @@ public:
         return m_ObjectInertialHeight;
     }
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_line_parameters() const {
-        return m_obj_line_parameters;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > get_line_parameters() const {
+        return m_list_obj_line_parameters;
     }
 
     std::vector<std::vector<bool> >  get_obj_extrapolated_visibility()

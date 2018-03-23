@@ -756,7 +756,7 @@ void AlgorithmFlow::generate_collision_points_mean() {
         std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
 
         unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
-                ->get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at
+                ->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at
                         (frame_skip - 1).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
         assert(FRAME_COUNT>0);
 
@@ -785,13 +785,13 @@ void AlgorithmFlow::generate_collision_points_mean() {
                      == true ) {
 
                     cv::Point2f centroid = m_list_simulated_objects.at(i)->
-                                    get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip - 1)
+                                    get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(frame_skip - 1)
                             .at(frame_count).first;
                     cv::Point2f mean_displacement = m_list_simulated_objects.at(i)->
-                                    get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip- 1)
+                                    get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(frame_skip- 1)
                             .at(frame_count).second;
 
-                    cv::Point2f gt_line_pts = m_list_simulated_objects.at(i)->get_line_parameters().at(frame_skip - 1)
+                    cv::Point2f gt_line_pts = m_list_simulated_objects.at(i)->get_line_parameters().at(0).at(frame_skip - 1)
                             .at(frame_count-1).second;  //line parameters run one less than the others.
 
                     cv::Mat roi;
@@ -828,12 +828,12 @@ void AlgorithmFlow::generate_collision_points_mean() {
 
                     for ( auto j = 0; j < 1; j++ ) {
 
-                        cv::Point2f lineparameters1 = list_of_simulated_objects_combination.at(i).first->get_line_parameters().at
+                        cv::Point2f lineparameters1 = list_of_simulated_objects_combination.at(i).first->get_line_parameters().at(0).at
                                         (frame_skip - 1)
                                 .at(frame_count-1).first;
 
                         cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(i).second->get_line_parameters
-                                        ().at(frame_skip - 1)
+                                        ().at(0).at(frame_skip - 1)
                                 .at(frame_count-1).first;
 
                         std::cout << "object " << list_of_simulated_objects_combination.at(i).first->getObjectId() << " = " <<
@@ -842,12 +842,12 @@ void AlgorithmFlow::generate_collision_points_mean() {
 
                         OpticalFlow::find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
 
-                        lineparameters1 = list_of_simulated_objects_combination.at(i).second->get_line_parameters().at
+                        lineparameters1 = list_of_simulated_objects_combination.at(i).second->get_line_parameters().at(0).at
                                         (frame_skip - 1)
                                 .at(frame_count-1).first;
 
                         lineparameters2 = list_of_gt_objects_combination.at(i).first->get_line_parameters
-                                        ().at(frame_skip - 1)
+                                        ().at(0).at(frame_skip - 1)
                                 .at(frame_count-1).first;
 
                         std::cout << "object " << list_of_simulated_objects_combination.at(i).second->getObjectId() << " = " <<

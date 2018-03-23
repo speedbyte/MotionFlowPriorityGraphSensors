@@ -77,7 +77,7 @@ void GroundTruthFlow::generate_flow_frame() {
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
         std::cout << "saving ground truth flow files for frame_skip " << frame_skip << std::endl;
 
-        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)->get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip - 1).size();
+        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(frame_skip - 1).size();
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -110,9 +110,9 @@ void GroundTruthFlow::generate_flow_frame() {
                 if ( m_list_gt_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
 
                     // gt_displacement
-                    cv::Point2f next_pts = m_list_gt_objects.at(i)->get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip - 1)
+                    cv::Point2f next_pts = m_list_gt_objects.at(i)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(frame_skip - 1)
                             .at(frame_count).first;
-                    cv::Point2f displacement = m_list_gt_objects.at(i)->get_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip
+                    cv::Point2f displacement = m_list_gt_objects.at(i)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(frame_skip
                                                                                                                       - 1).at(frame_count).second;
 
                     cv::Mat roi;

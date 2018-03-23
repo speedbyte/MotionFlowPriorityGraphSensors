@@ -317,7 +317,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     // m_obj_extrapolated_stencil_pixel_point_pixel_displacement
                     list_of_simulated_objects.at(i)
                             .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(MAX_SKIPS, list_of_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(), list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(), "algorithm");
-                    list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS);
+                    list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS, "algorithm");
                 }
 
                 list_of_algorithm_flow[env_index].generate_collision_points_mean();
