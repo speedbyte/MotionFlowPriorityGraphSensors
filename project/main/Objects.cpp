@@ -3,71 +3,9 @@
 //
 
 #include <iostream>
+#include <map>
 #include "Objects.h"
 #include "Dataset.h"
-
-
-void Objects::post_processing_obj_extrapolated_stencil_pixel_points_pixel_displacement( ) {
-
-    // A blob can be either a stencil or a shape
-
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
-        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > multiframe_method_mean_outer;
-
-        std::cout << "generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement for frame_skip " << frame_skip << " for object name " << m_objectName << " " << std::endl;
-
-        unsigned long FRAME_COUNT = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
-                .size();
-
-        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-// gt_displacement
-            std::vector<std::pair<cv::Point2f, cv::Point2f> >  multiframe_method_mean_inner;
-
-            bool visibility = m_obj_extrapolated_shape_visibility.at(frame_skip-1).at(frame_count).at(0);
-
-            const unsigned CLUSTER_SIZE = (unsigned)m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at
-                    (frame_skip - 1).at(frame_count).size();
-            if ( visibility == true ) {
-                assert(CLUSTER_SIZE>0);
-            }
-
-            for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
-                cv::Point2f pts = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
-                        .at(frame_count).at(cluster_point).first;
-                cv::Point2f displacement = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(frame_skip - 1)
-                        .at(frame_count).at(cluster_point).second;
-
-                auto distance = cv::norm(displacement);
-                /*if ( dist_algo < 0.1 ) {
-                    continue;
-                }
-                auto dist_err = std::abs(dist_gt - dist_algo);
-                if (dist_err < DISTANCE_ERROR_TOLERANCE) {
-                    auto angle_err = std::cosh(
-                            algo_displacement.dot(displacement) / (dist_gt * dist_algo));
-                    if (((std::abs(angle_err)) < ANGLE_ERROR_TOLERANCE)) {
-
-                        multiframe_method_mean_inner.push_back(std::make_pair(pts,displacement));
-
-                    }
-                }*/
-                // 1. MEAN - add all displacement and points and divide by total size.
-                // 2. THRESHOLD MEAN - add all displacement and points that are within a boundary and divide by total found size
-                // 3. VOTED MEAN - create vote of the displacement and points and only accept values that have the highest number of occurence
-                // 4. RANKED MEAN - create ranks of the displacment and points by accepting only those values that are on the boundary and edges and ignoring the rest.
-                // 1 st method
-
-                // 2nd method
-
-                // 3rd method
-
-                // 4th method
-            }
-            multiframe_method_mean_outer.push_back(multiframe_method_mean_inner);
-        }
-        m_stencil_postprocessing_method_mean.push_back(multiframe_method_mean_outer);
-    }
-}
 
 
 void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( const unsigned &max_skips,
@@ -94,6 +32,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
+            std::cout << frame_count << std::endl;
+
             float mean_pts_centroid_mean_x = 0.0f;
             float mean_pts_centroid_mean_y = 0.0f;
             float mean_displacement_vector_centroid_mean_x = 0.0f;
@@ -113,6 +53,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             float mean_pts_ranked_mean_y = 0.0f;
             float mean_displacement_vector_ranked_mean_x = 0.0f;
             float mean_displacement_vector_ranked_mean_y = 0.0f;
+
+            std::vector<float> data_x, data_y;
 
             bool mean_visibility = false;
 
@@ -141,13 +83,11 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 // Nothing to do
 
                 // preprocesing 2nd method
-                gt_displacement_prev_min.x = std::min(gt_displacement_prev_min.x, gt_displacement.x );
-                gt_displacement_prev_min.y = std::min(gt_displacement_prev_min.y, gt_displacement.y );
-                gt_displacement_prev_max.x = std::max(gt_displacement_prev_max.x, gt_displacement.x );
-                gt_displacement_prev_max.y = std::max(gt_displacement_prev_max.y, gt_displacement.y );
+                // Nothing to do
 
                 // 3rd method
-                // create histogram of values.
+                data_x.push_back(gt_displacement.x);
+                data_y.push_back(gt_displacement.y);
 
                 mean_pts_voted_mean_x += pts.x ;
                 mean_pts_voted_mean_y += pts.y ;
@@ -162,6 +102,17 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
                 mean_visibility = visibility;
             }
+
+            gt_displacement_prev_min.x = *std::min_element(data_x.begin(), data_x.end());
+            gt_displacement_prev_min.y = *std::min_element(data_y.begin(), data_y.end());
+            gt_displacement_prev_max.x = *std::max_element(data_x.begin(), data_x.end());
+            gt_displacement_prev_max.y = *std::max_element(data_y.begin(), data_y.end());
+            // create histogram of values.
+            std::map<int, int> histogram;
+            for (const auto& e : data_x) {
+                ++histogram[e];
+            }
+            for (const auto& x : histogram) std::cout << x.first << " histogram " << x.second <<"\n";
 
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
                 cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
