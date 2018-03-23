@@ -180,8 +180,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow", "rain"};
-    const std::vector < std::string> environment_list = {"none", "night"};
+    std::vector < std::string> environment_list = {"none", "night"};
     //const std::vector < std::string> environment_list = {"none"};
+
+    std::string *ptr_environment_index;
+
 
     cv::FileStorage fs;
 
@@ -189,6 +192,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::vector<GroundTruthObjects> list_of_gt_objects_base;
     std::vector<SimulatedObjects> list_of_simulated_objects_base;
     std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
+
+    GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base);
 
     for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
 
@@ -248,23 +253,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
 
-                GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base);
                 gt_flow.generate_flow_frame();
 
                 gt_flow.generate_collision_points();
                 gt_flow.generate_shape_points(); // this is to just create Jaccard Index  =  1
 
-                if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
-
-                    PixelRobustness pixelRobustness(fs);
-                    VectorRobustness vectorRobustness(fs);
-
-                    vectorRobustness.generateVectorRobustness(gt_flow);
-                    pixelRobustness.generatePixelRobustness(gt_flow);
-
-                    vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
-
-                }
             }
         }
     }
@@ -272,6 +265,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     /*
      To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
      */
+    std::vector<Objects *> ptr_list_of_simulated_objects;
+    std::vector<AlgorithmFlow> list_of_algorithm_flow;
+    for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
+        AlgorithmFlow fback(ptr_environment_index, ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                            ptr_list_of_simulated_objects);
+        list_of_algorithm_flow.push_back(fback);
+    }
 
     // Generate Algorithm data flow --------------------------------------
     for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
@@ -279,7 +279,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         if ( cpp_dataset.execute || vires_dataset.execute ) {
 
             std::vector<SimulatedObjects> list_of_simulated_objects;
-            std::vector<Objects *> ptr_list_of_simulated_objects;
+            ptr_list_of_simulated_objects.clear();
             SimulatedObjects::SimulatedobjectCurrentCount = 0;
 
             list_of_simulated_objects.clear();
@@ -299,9 +299,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
 
-                AlgorithmFlow fback( environment_list[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects);
+                ptr_environment_index = &environment_list[env_index];
 
-                fback.generate_flow_frame(fb, video_frames, environment_list[env_index]);
+                list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index]);
 
                 if ( environment_list[env_index] == "none" ) { // store the stimulated objects from the ground run.
 
@@ -320,26 +320,41 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS);
                 }
 
-                fback.generate_collision_points_mean();
-                fback.generate_shape_points();
-                if ( env_index == environment_list.size()-1 ) {
-                    fback.visualiseStencil();
-                }
-
-                if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
-
-                    PixelRobustness pixelRobustness(fs);
-                    VectorRobustness vectorRobustness(fs);
-
-                    vectorRobustness.generateVectorRobustness(fback);
-                    pixelRobustness.generatePixelRobustness(fback);
-
-                    vectorRobustness.make_video_from_png(fback.getImageAbholOrt());
-
+                list_of_algorithm_flow[env_index].generate_collision_points_mean();
+                list_of_algorithm_flow[env_index].generate_shape_points();
+                if ( environment_list[env_index] != "none" ) {
+                    list_of_algorithm_flow[env_index].visualiseStencil();
                 }
             }
         }
     }
+
+    if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
+
+        PixelRobustness pixelRobustness(fs);
+        VectorRobustness vectorRobustness(fs);
+
+        vectorRobustness.generateVectorRobustness(gt_flow);
+        pixelRobustness.generatePixelRobustness(gt_flow);
+
+        vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
+
+    }
+
+    for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
+        if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute )) {
+
+            PixelRobustness pixelRobustness(fs);
+            VectorRobustness vectorRobustness(fs);
+
+            vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index]);
+            pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index]);
+
+            vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
+
+        }
+    }
+
     fs.release();
 
 

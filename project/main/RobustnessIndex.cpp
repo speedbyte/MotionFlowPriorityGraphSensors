@@ -8,7 +8,6 @@
 #include "Dataset.h"
 #include "datasets.h"
 #include "OpticalFlow.h"
-#include <gnuplot-iostream/gnuplot-iostream.h>
 
 
 void RobustnessIndex::make_video_from_png(const std::string &videoOrdner) {
@@ -61,7 +60,7 @@ void RobustnessIndex::make_video_from_png(const std::string &videoOrdner) {
     video_write.release();
 }
 
-void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) {
+void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow) {
 
     // shape of algorithhm, with shape of ground truth
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
@@ -106,45 +105,12 @@ void PixelRobustness::generateFrameJaccardIndex(const OpticalFlow &opticalFlow) 
             m_fs << "{:" << "x" <<  samples_xy_shape[0][i] << "y" << samples_xy_shape[1][i] << "}";
         }
         m_fs << "]";
-
-        //Plot
-        Gnuplot gp;
-        gp << "set xlabel 'x'\nset ylabel 'y'\n";
-        //gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(50) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(50)  + "]\n";
-        gp << plot_least_square_line_list;
-        gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        //gp << "plot '-' with points title " + std::string("'shape points") + std::to_string(xypoints_shape.size()) + "'\n";
-        //gp.send1d(xypoints_shape);
-        //std::cout << m_valid_shape_points << "for frameskip " << frame_skip << std::endl;
     }
-
-
-}
-
-void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow) {
-
-    generateFrameJaccardIndex( opticalFlow );
-
 
 }
 
 
 void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow) {
-
-    generateFrameVectorSignature( opticalFlow);
-
-
-}
-
-
-/**
- * Given any number of vectors, the function will compute
- * 1. The mean of the gaussian approximaiton to the distribution of the sample points.
- * 2. The covariance for the Guassian approximation to the distribution of the sample points.
- *
- */
-void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFlow) {
-
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
@@ -183,7 +149,7 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
 
             if (m_valid_collision_points == 0 ) {
                 std::cout << "number of invalid collision points in frame " << frame_count << " are " <<
-                        m_invalid_collision_points << std::endl;
+                          m_invalid_collision_points << std::endl;
                 //xsamples.push_back(0);
                 //ysamples.push_back(0);
 
@@ -214,19 +180,8 @@ void VectorRobustness::generateFrameVectorSignature(const OpticalFlow &opticalFl
         // Linear least square
         fitLineForCollisionPoints(samples_xy_collision, plot_least_square_line_list);
 
-        //Plot
-        Gnuplot gp;
-        gp << "set xlabel 'x'\nset ylabel 'y'\n";
-        //gp << "set xrange[" + std::to_string(0) + ":" + std::to_string(50) + "]\n" << "set yrange[" + std::to_string(0) + ":" + std::to_string(50)  + "]\n";
-        gp << plot_least_square_line_list;
-        gp << "set title \"" + opticalFlow.getGeneratePath() + " with frameskips = " + std::to_string(frame_skip) + "\"\n";
-        //gp << "plot '-' with lines  title " + std::string("'collision ") + std::to_string(xypoints_collision.size()) + "'\n";
-        //gp.send1d(xypoints_collision);
-        //std::cout << m_valid_collision_points << "for frameskip " << frame_skip << std::endl;
     }
-
 }
-
 
 
 void VectorRobustness::fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::string &plot_least_square_line_list) {

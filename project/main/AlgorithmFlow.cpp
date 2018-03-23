@@ -35,6 +35,7 @@ using namespace std::chrono;
 
 void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise) {
 
+    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + *m_ptr_environment + "/";
     m_resultordner = "results_";
 
     switch ( algo ) {
