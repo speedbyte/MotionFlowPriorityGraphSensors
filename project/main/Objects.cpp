@@ -113,19 +113,19 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             int max_voted_index_x, max_voted_index_y;
 
             for (const auto& x : histogram_x) {
-                std::cout << x.first << " histogram " << x.second <<"\n";
                 if ( max_voted.x  <= x.second  ) {
                     max_voted.x = x.second;
                     max_voted_index_x = x.first;
                     mean_displacement_vector_voted_mean_x = x.first;
+                    std::cout << x.first << " histogram " << x.second <<"endx\n";
                 }
             }
             for (const auto& y : histogram_y) {
-                std::cout << y.first << " histogram " << y.second <<"\n";
                 if ( max_voted.y  <= y.second  ) {
                     max_voted.y = y.second;
                     max_voted_index_y = y.first;
                     mean_displacement_vector_voted_mean_y = y.first ;
+                    std::cout << y.first << " histogram " << y.second <<"endy\n";
                 }
             }
 
@@ -176,14 +176,12 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 }
 
                 // 3rd method
-                if ( std::round(gt_displacement.x*100)/100 >=  (mean_displacement_vector_voted_mean_x-abs(mean_displacement_vector_voted_mean_x/(float)10) ) &&
-                        std::round(gt_displacement.x*100)/100 <=  (mean_displacement_vector_voted_mean_x+abs(mean_displacement_vector_voted_mean_x/(float)10) ) )
+                if ( std::round(gt_displacement.x*100)/100 ==  (mean_displacement_vector_voted_mean_x ))
                 {
                     mean_pts_voted_mean_x += pts.x ;
                     cluster_size_voted_mean_x++;
                 }
-                if ( std::round(gt_displacement.y*100)/100 >=  (mean_displacement_vector_voted_mean_y-abs(mean_displacement_vector_voted_mean_y/10) ) &&
-                        std::round(gt_displacement.y*100)/100 <=  (mean_displacement_vector_voted_mean_y+abs(mean_displacement_vector_voted_mean_y/10) ) )
+                if ( std::round(gt_displacement.y*100)/100 >=  (mean_displacement_vector_voted_mean_y))
                 {
                     mean_pts_voted_mean_y += pts.y ;
                     cluster_size_voted_mean_y++;
@@ -197,8 +195,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
                 mean_visibility = visibility;
             }
-
-
 
             if ( frame_count > 0 ) {
                 assert(cluster_size_centroid_mean_x > 0);
@@ -244,7 +240,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
         }
 
-
         if ( post_processing_algorithm == "ground_truth") {
             outer_multiframe_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector_centroid_mean);
         }
@@ -275,28 +270,30 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
     else {
         COUNT = 4;
     }
-
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > list_obj_line_parameters;
     for ( unsigned i = 0; i < COUNT; i++ ) {
+
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_line_parameters;
 
         for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
 
-            std::cout << "generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement for frame_skip " << frame_skip << " for object name " << m_objectName << " " << std::endl;
+            std::cout << "generate_obj_line_parameters for frame_skip " << frame_skip << " for object name " << m_objectName << " " << std::endl;
 
-            std::vector<std::pair<cv::Point2f, cv::Point2f> > line_parameters;
+            std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_line_parameters;
+
             const unsigned long FRAME_COUNT =
-                    m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(i).at
-                            (frame_skip - 1).size() - 1;
+                    m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip - 1).at
+                            (i).size() - 1;
 
             for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 
                 if (m_obj_extrapolated_mean_visibility.at(frame_skip - 1).at(frame_count) == true) {
-                    cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(i).at
-                            (frame_skip - 1).at(frame_count).first;
+                    cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip-1).at
+                            (i).at(frame_count).first;
                     cv::Point2f displacement_vector =
-                            m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(i).at
-                                    (frame_skip - 1).at(frame_count).second;
+                            m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip-1).at
+                                    (i).at(frame_count).second;
 
                     //assert(std::abs(mean_displacement_vector_y )>0);
 
@@ -342,15 +339,16 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
                             pt2.y = 0;
                         }
                     }
-                    line_parameters.push_back(std::make_pair(cv::Point2f(m, c), pt2));
+                    frame_line_parameters.push_back(std::make_pair(cv::Point2f(m, c), pt2));
                 } else {
                     // we want to maintain the size of the array.
-                    line_parameters.push_back(std::make_pair(cv::Point2f(0.0f, 0.0f), cv::Point2f(0.0f, 0.0f)));
+                    frame_line_parameters.push_back(std::make_pair(cv::Point2f(0.0f, 0.0f), cv::Point2f(0.0f, 0.0f)));
                 }
             }
-            outer_line_parameters.push_back(line_parameters);
+            outer_line_parameters.push_back(frame_line_parameters);
         }
-        m_list_obj_line_parameters.push_back(outer_line_parameters);
+        list_obj_line_parameters.push_back(outer_line_parameters);
     }
+    m_list_obj_line_parameters = list_obj_line_parameters;
 }
 

@@ -93,129 +93,134 @@ void OpticalFlow::generate_collision_points() {
                   << list_of_gt_objects_combination.at(i).second->getObjectId()<< "\n";
     }
 
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > list_frame_skip_collision_points;
 
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+    for ( unsigned i = 0; i < 4; i++ ) {
 
-        sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
+        std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_collision_points;
 
-        std::cout << "generating collision points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip << std::endl;
+        for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
+            sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
-        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)
-                ->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at
-                        (frame_skip - 1).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
-        assert(FRAME_COUNT>0);
+            std::cout << "generating collision points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip << std::endl;
 
-        for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
-            char file_name_image[50];
-            std::cout << "frame_count " << frame_count << std::endl;
+            std::vector<std::vector<cv::Point2f> >  frame_collision_points;
 
-            sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
-            std::string temp_collision_image_path =
-                    m_collision_obj_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
+            unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)
+                    ->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip-1).at
+                            (0).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
+            assert(FRAME_COUNT>0);
 
-            fs << "frame_count" << frame_count;
+            for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+                char file_name_image[50];
+                std::cout << "frame_count " << frame_count << std::endl;
 
-            FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+                sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+                std::string temp_collision_image_path =
+                        m_collision_obj_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
 
-            cv::Mat tempMatrix;
-            tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
-            tempMatrix = cv::Scalar_<unsigned>(255,255,255);
-            assert(tempMatrix.channels() == 3);
+                fs << "frame_count" << frame_count;
 
-            for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
+                FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-                // object image_data_and_shape
-                int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
-                int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+                cv::Mat tempMatrix;
+                tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
+                tempMatrix = cv::Scalar_<unsigned>(255,255,255);
+                assert(tempMatrix.channels() == 3);
 
-                if ( m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count)
-                     == true ) {
+                for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
 
-                    cv::Point2f centroid = m_list_gt_objects.at(i)->
-                                    get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(frame_skip - 1)
-                            .at(frame_count).first;
-                    cv::Point2f mean_displacement = m_list_gt_objects.at(i)->
-                                    get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(frame_skip- 1)
-                            .at(frame_count).second;
+                    // object image_data_and_shape
+                    int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                    int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                    cv::Point2f gt_line_pts = m_list_gt_objects.at(i)->get_line_parameters().at(0).at(frame_skip - 1)
-                            .at(frame_count-1).second;  //line parameters run one less than the others.
+                    if ( m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count)
+                         == true ) {
 
-                    cv::Mat roi;
-                    roi = tempMatrix.
-                            colRange(cvRound(centroid.x), cvRound(centroid.x + width)).
-                            rowRange(cvRound(centroid.y), cvRound(centroid.y + height));
-                    //bulk storage
-                    roi = cv::Scalar(mean_displacement.x, mean_displacement.y,
-                                     static_cast<float>(m_list_gt_objects.at(i)->getObjectId()));
+                        cv::Point2f centroid = m_list_gt_objects.at(i)->
+                                        get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip-1).at(0)
+                                .at(frame_count).first;
+                        cv::Point2f mean_displacement = m_list_gt_objects.at(i)->
+                                        get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip-1).at(0)
+                                .at(frame_count).second;
 
-                    // cv line is intelligent and it can also project to values not within the frame size including negative values.
-                    //cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
-                }
-            }
+                        cv::Point2f gt_line_pts = m_list_gt_objects.at(i)->get_line_parameters().at(0).at(frame_skip - 1)
+                                .at(frame_count-1).second;  //line parameters run one less than the others.
 
-            std::vector<cv::Point2f> collision_points;
+                        cv::Mat roi;
+                        roi = tempMatrix.
+                                colRange(cvRound(centroid.x), cvRound(centroid.x + width)).
+                                rowRange(cvRound(centroid.y), cvRound(centroid.y + height));
+                        //bulk storage
+                        roi = cv::Scalar(mean_displacement.x, mean_displacement.y,
+                                         static_cast<float>(m_list_gt_objects.at(i)->getObjectId()));
 
-            for ( unsigned i = 0; i < list_of_gt_objects_combination.size(); i++) {
-
-                if ( ( list_of_gt_objects_combination.at(i).first->get_obj_extrapolated_mean_visibility().at(frame_skip
-                                                                                                    - 1)
-                               .at(frame_count) == true ) && ( list_of_gt_objects_combination.at(i).second->
-                                get_obj_extrapolated_mean_visibility()
-                                                                       .at(frame_skip - 1)
-                                                                       .at(frame_count) == true )) {
-
-                    // First Freeze lineparamter1 and look for collision points
-                    // Then freeze lineparameter2 and find collision point.
-                    // Then push_back the two points in the vector
-                    cv::Point2f lineparameters1 = list_of_gt_objects_combination.at(i).first->get_line_parameters().at(0).at
-                                    (frame_skip - 1)
-                            .at(frame_count-1).first;
-
-                    cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(i).second->get_line_parameters
-                                    ().at(0).at(frame_skip - 1)
-                            .at(frame_count-1).first;
-
-                    std::cout << "object " << list_of_gt_objects_combination.at(i).first->getObjectId() << " = " <<
-                              lineparameters1 << " and object " << list_of_gt_objects_combination.at(i)
-                                      .second->getObjectId() << " = " <<lineparameters2 << std::endl ;
-
-                    find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
-
-                }
-                else {
-                    std::cout << "object " << list_of_gt_objects_combination.at(i).first->getObjectId() << " visibility = " <<
-                            list_of_gt_objects_combination.at(i).first->get_obj_extrapolated_mean_visibility().at(frame_skip
-                                            - 1)
-                                    .at(frame_count) << " and object " << list_of_gt_objects_combination.at(i)
-                            .second->getObjectId() << " visibility = " << list_of_gt_objects_combination.at(i).second->get_obj_extrapolated_mean_visibility().at(frame_skip
-                                    - 1)
-                            .at(frame_count) << " and hence not generating any collision points for this object combination " <<  std::endl ;
-                }
-            }
-
-            m_frame_collision_points.push_back(collision_points);
-
-            //Create png Matrix with 3 channels: x mean_displacement. y displacment and ObjectId
-            for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
-                for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
-                    if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5 ) {
-                        F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
-                        F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
-                        F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
-                        //position.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
+                        // cv line is intelligent and it can also project to values not within the frame size including negative values.
+                        //cv::line(tempMatrix, centroid, gt_line_pts, cv::Scalar(0, 255, 0), 3, cv::LINE_AA, 0);
                     }
                 }
+
+                std::vector<cv::Point2f> collision_points;
+
+                for ( unsigned i = 0; i < list_of_gt_objects_combination.size(); i++) {
+
+                    if ( ( list_of_gt_objects_combination.at(i).first->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                                                                                        - 1)
+                                   .at(frame_count) == true ) && ( list_of_gt_objects_combination.at(i).second->
+                                    get_obj_extrapolated_mean_visibility()
+                                                                           .at(frame_skip - 1)
+                                                                           .at(frame_count) == true )) {
+
+                        // First Freeze lineparamter1 and look for collision points
+                        // Then freeze lineparameter2 and find collision point.
+                        // Then push_back the two points in the vector
+                        cv::Point2f lineparameters1 = list_of_gt_objects_combination.at(i).first->get_line_parameters().at(0).at
+                                        (frame_skip - 1)
+                                .at(frame_count-1).first;
+
+                        cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(i).second->get_line_parameters
+                                        ().at(0).at(frame_skip - 1)
+                                .at(frame_count-1).first;
+
+                        std::cout << "object " << list_of_gt_objects_combination.at(i).first->getObjectId() << " = " <<
+                                  lineparameters1 << " and object " << list_of_gt_objects_combination.at(i)
+                                          .second->getObjectId() << " = " <<lineparameters2 << std::endl ;
+
+                        find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, tempMatrix, collision_points);
+
+                    }
+                    else {
+                        std::cout << "object " << list_of_gt_objects_combination.at(i).first->getObjectId() << " visibility = " <<
+                                list_of_gt_objects_combination.at(i).first->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                                - 1)
+                                        .at(frame_count) << " and object " << list_of_gt_objects_combination.at(i)
+                                .second->getObjectId() << " visibility = " << list_of_gt_objects_combination.at(i).second->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                        - 1)
+                                .at(frame_count) << " and hence not generating any collision points for this object combination " <<  std::endl ;
+                    }
+                }
+
+                frame_collision_points.push_back(collision_points);
+
+                //Create png Matrix with 3 channels: x mean_displacement. y displacment and ObjectId
+                for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
+                    for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
+                        if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5 ) {
+                            F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
+                            F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
+                            F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
+                            //position.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
+                        }
+                    }
+                }
+
+                F_png_write.writeExtended(temp_collision_image_path);
             }
-
-            F_png_write.writeExtended(temp_collision_image_path);
-
+            outer_frame_skip_collision_points.push_back(frame_collision_points);
         }
-        m_frame_skip_collision_points.push_back(m_frame_collision_points);
+        list_frame_skip_collision_points.push_back(outer_frame_skip_collision_points);
     }
-
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();

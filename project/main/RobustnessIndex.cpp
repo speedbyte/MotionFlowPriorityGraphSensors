@@ -127,7 +127,7 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
             unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(frame_count).size();
             for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-                cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(frame_count).at
+                cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(0).at(frame_count).at
                         (points);
 
                 xsamples.push_back(collisionpoints.x);

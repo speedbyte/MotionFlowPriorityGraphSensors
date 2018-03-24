@@ -29,7 +29,7 @@ protected:
 
     std::vector<Objects *> &m_list_gt_objects;
 
-    std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_collision_points;
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > m_list_frame_skip_collision_points;
 
     std::vector<std::vector<std::vector<cv::Point2f> > > m_frame_skip_shape_points;
 
@@ -43,8 +43,8 @@ public:
     OpticalFlow( std::vector<Objects *> &list_gt_objects ) :
     m_list_gt_objects(list_gt_objects) { };
 
-    std::vector<std::vector<std::vector<cv::Point2f> > > getCollisionPoints () const {
-        return m_frame_skip_collision_points;
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getCollisionPoints () const {
+        return m_list_frame_skip_collision_points;
     }
 
     std::vector<std::vector<std::vector<cv::Point2f> > > getShapePoints () const {
