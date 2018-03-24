@@ -117,14 +117,14 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
 
         std::vector<float> xsamples,ysamples;
 
-        unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(frame_skip - 1).size();
+        unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(frame_skip - 1).at(0).size();
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
             ushort m_valid_collision_points = 0;
             ushort m_invalid_collision_points = 0;
 
-            unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(frame_count).size();
+            unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(0).at(frame_count).size();
             for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
                 cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(0).at(frame_count).at

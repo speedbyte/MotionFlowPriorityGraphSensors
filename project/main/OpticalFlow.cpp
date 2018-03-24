@@ -221,6 +221,7 @@ void OpticalFlow::generate_collision_points() {
         }
         list_frame_skip_collision_points.push_back(outer_frame_skip_collision_points);
     }
+    m_list_frame_skip_collision_points = list_frame_skip_collision_points;
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
