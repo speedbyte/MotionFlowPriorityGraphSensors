@@ -292,6 +292,7 @@ def motionflow_graphs():
         xy.append(collision_points_gt[offset_gt + count]["x"])
         xy.append(collision_points_gt[offset_gt + count]["y"])
         coordinates_gt.append(xy)
+
     print coordinates_gt
     data_gt = np.array(coordinates_gt)
     x1_gt, y1_gt = data_gt.T

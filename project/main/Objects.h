@@ -30,6 +30,9 @@ protected:
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
 
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_list_obj_extrapolated_shape_parameters;
+
     std::vector<bool> m_obj_base_visibility;
 
     std::vector<std::vector<bool> >  m_obj_extrapolated_visibility;
@@ -84,6 +87,9 @@ public:
         return m_list_obj_line_parameters;
     }
 
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > get_shape_parameters() const {
+        return m_list_obj_extrapolated_shape_parameters;
+    }
     std::vector<std::vector<bool> >  get_obj_extrapolated_visibility()
     const {
         return m_obj_extrapolated_visibility;
