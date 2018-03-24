@@ -85,8 +85,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 // Nothing to do
 
                 // 3rd method
-                data_x.push_back(gt_displacement.x);
-                data_y.push_back(gt_displacement.y);
+                data_x.push_back(std::round(gt_displacement.x*100)/100);
+                data_y.push_back(std::round(gt_displacement.y*100)/100);
 
                 // 4th method
                 mean_pts_ranked_mean_x += pts.x ;
@@ -176,14 +176,14 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 }
 
                 // 3rd method
-                if ( gt_displacement.x >=  (mean_displacement_vector_voted_mean_x-abs(mean_displacement_vector_voted_mean_x/(float)10) ) &&
-                     gt_displacement.x <=  (mean_displacement_vector_voted_mean_x+abs(mean_displacement_vector_voted_mean_x/(float)10) ) )
+                if ( std::round(gt_displacement.x*100)/100 >=  (mean_displacement_vector_voted_mean_x-abs(mean_displacement_vector_voted_mean_x/(float)10) ) &&
+                        std::round(gt_displacement.x*100)/100 <=  (mean_displacement_vector_voted_mean_x+abs(mean_displacement_vector_voted_mean_x/(float)10) ) )
                 {
                     mean_pts_voted_mean_x += pts.x ;
                     cluster_size_voted_mean_x++;
                 }
-                if ( gt_displacement.y >=  (mean_displacement_vector_voted_mean_y-abs(mean_displacement_vector_voted_mean_y/10) ) &&
-                     gt_displacement.y <=  (mean_displacement_vector_voted_mean_y+abs(mean_displacement_vector_voted_mean_y/10) ) )
+                if ( std::round(gt_displacement.y*100)/100 >=  (mean_displacement_vector_voted_mean_y-abs(mean_displacement_vector_voted_mean_y/10) ) &&
+                        std::round(gt_displacement.y*100)/100 <=  (mean_displacement_vector_voted_mean_y+abs(mean_displacement_vector_voted_mean_y/10) ) )
                 {
                     mean_pts_voted_mean_y += pts.y ;
                     cluster_size_voted_mean_y++;
