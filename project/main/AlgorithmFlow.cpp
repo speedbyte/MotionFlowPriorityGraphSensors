@@ -747,13 +747,14 @@ void AlgorithmFlow::generate_collision_points_mean() {
                   << list_of_simulated_objects_combination.at(i).second->getObjectId()<< "\n";
     }
 
+
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
         std::cout << "generating collision points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip << std::endl;
 
-        std::vector<std::vector<cv::Point2f> >  m_frame_collision_points;
+        std::vector<std::vector<cv::Point2f> >  frame_collision_points;
 
         unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
                 ->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at
@@ -878,7 +879,7 @@ void AlgorithmFlow::generate_collision_points_mean() {
                 }
             }
 
-            m_frame_collision_points.push_back(collision_points_average);
+            frame_collision_points.push_back(collision_points_average);
 
             //Create png Matrix with 3 channels: x mean_displacement. y displacment and ObjectId
             for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
@@ -895,7 +896,7 @@ void AlgorithmFlow::generate_collision_points_mean() {
             F_png_write.writeExtended(temp_collision_image_path);
 
         }
-        m_frame_skip_collision_points.push_back(m_frame_collision_points);
+        m_frame_skip_collision_points.push_back(frame_collision_points);
     }
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
