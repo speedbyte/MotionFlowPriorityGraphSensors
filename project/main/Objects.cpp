@@ -102,9 +102,12 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             gt_displacement_threshold_max.x = *std::max_element(data_x.begin(), data_x.end());
             gt_displacement_threshold_max.y = *std::max_element(data_y.begin(), data_y.end());
             // create histogram of values.
-            std::map<int, int> histogram_x, histogram_y;
+            std::map<float, int> histogram_x, histogram_y;
             for (const auto& e : data_x) {
                 ++histogram_x[e];
+            }
+            for (const auto& e : data_y) {
+                ++histogram_y[e];
             }
             cv::Point2f max_voted = {};
             int max_voted_index_x, max_voted_index_y;
@@ -114,6 +117,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 if ( max_voted.x  <= x.second  ) {
                     max_voted.x = x.second;
                     max_voted_index_x = x.first;
+                    mean_displacement_vector_voted_mean_x = x.first;
                 }
             }
             for (const auto& y : histogram_y) {
@@ -121,10 +125,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 if ( max_voted.y  <= y.second  ) {
                     max_voted.y = y.second;
                     max_voted_index_y = y.first;
+                    mean_displacement_vector_voted_mean_y = y.first ;
                 }
             }
-            mean_displacement_vector_voted_mean_x = histogram_x[max_voted_index_x] ;
-            mean_displacement_vector_voted_mean_y = histogram_y[max_voted_index_y] ;
 
             unsigned cluster_size_centroid_mean_x=CLUSTER_SIZE,
                     cluster_size_centroid_mean_y=CLUSTER_SIZE,
@@ -150,34 +153,37 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 mean_displacement_vector_centroid_mean_y += gt_displacement.y ;
 
                 // 2nd method
-                if ( gt_displacement.x >=  (gt_displacement_threshold_min.x-gt_displacement_threshold_min.x/10 ) &&
-                        gt_displacement.x <=  (gt_displacement_threshold_min.x+gt_displacement_threshold_min.x/10 ) ||
-                        gt_displacement.x >=  (gt_displacement_threshold_max.x-gt_displacement_threshold_max.x/10 ) &&
-                        gt_displacement.x <=  (gt_displacement_threshold_max.x+gt_displacement_threshold_max.x/10 ) )
-                {
-                    mean_pts_threshold_mean_x += pts.x ;
-                    mean_displacement_vector_threshold_mean_x += gt_displacement.x ;
-                    mean_pts_threshold_mean_y += pts.y ;
-                    mean_displacement_vector_threshold_mean_y += gt_displacement.y ;
-                    cluster_size_threshold_mean_x++;
+                mean_pts_threshold_mean_x += pts.x ;
+                mean_pts_threshold_mean_y += pts.y ;
+                cluster_size_threshold_mean_x++;
+                cluster_size_threshold_mean_y++;
+
+
+                if ( gt_displacement.x >  ((gt_displacement_threshold_min.x+gt_displacement_threshold_max.x)/2 )  )  {
+                    mean_displacement_vector_threshold_mean_x += gt_displacement_threshold_max.x ;
                 }
-                if ( gt_displacement.y>  (gt_displacement_threshold_max.y-gt_displacement_threshold_max.y/10 ) &&
-                     gt_displacement.y <  (gt_displacement_threshold_min.y+gt_displacement_threshold_min.y/10 ) )
-                {
-                    mean_pts_threshold_mean_y += pts.y ;
-                    mean_displacement_vector_threshold_mean_y += gt_displacement.y ;
-                    cluster_size_threshold_mean_y++;
+
+                if ( gt_displacement.x <=  ((gt_displacement_threshold_min.x+gt_displacement_threshold_max.x)/2 )  )  {
+                    mean_displacement_vector_threshold_mean_x += gt_displacement_threshold_min.x ;
+                }
+
+                if ( gt_displacement.y >  ((gt_displacement_threshold_min.x+gt_displacement_threshold_max.x)/2 )  )  {
+                    mean_displacement_vector_threshold_mean_x += gt_displacement_threshold_max.x ;
+                }
+
+                if ( gt_displacement.y <  ((gt_displacement_threshold_min.x+gt_displacement_threshold_max.x)/2 )  )  {
+                    mean_displacement_vector_threshold_mean_x += gt_displacement_threshold_min.x ;
                 }
 
                 // 3rd method
-                if ( gt_displacement.x >  (mean_displacement_vector_voted_mean_x-mean_displacement_vector_voted_mean_x/10 ) &&
-                     gt_displacement.x <  (mean_displacement_vector_voted_mean_x+mean_displacement_vector_voted_mean_x/10 ) )
+                if ( gt_displacement.x >=  (mean_displacement_vector_voted_mean_x-abs(mean_displacement_vector_voted_mean_x/(float)10) ) &&
+                     gt_displacement.x <=  (mean_displacement_vector_voted_mean_x+abs(mean_displacement_vector_voted_mean_x/(float)10) ) )
                 {
                     mean_pts_voted_mean_x += pts.x ;
                     cluster_size_voted_mean_x++;
                 }
-                if ( gt_displacement.y >  (mean_displacement_vector_voted_mean_y-mean_displacement_vector_voted_mean_y/10 ) &&
-                     gt_displacement.y <  (mean_displacement_vector_voted_mean_y+mean_displacement_vector_voted_mean_y/10 ) )
+                if ( gt_displacement.y >=  (mean_displacement_vector_voted_mean_y-abs(mean_displacement_vector_voted_mean_y/10) ) &&
+                     gt_displacement.y <=  (mean_displacement_vector_voted_mean_y+abs(mean_displacement_vector_voted_mean_y/10) ) )
                 {
                     mean_pts_voted_mean_y += pts.y ;
                     cluster_size_voted_mean_y++;
@@ -191,6 +197,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
                 mean_visibility = visibility;
             }
+
 
 
             if ( frame_count > 0 ) {
@@ -239,7 +246,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
 
         if ( post_processing_algorithm == "ground_truth") {
-            outer_multiframe_flowvector_centroid_mean.push_back(multiframe_flowvector_centroid_mean);
+            outer_multiframe_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector_centroid_mean);
         }
         else {
             outer_multiframe_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector_centroid_mean);
@@ -248,7 +255,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             outer_multiframe_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector_ranked_mean);
         }
 
-        m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_flowvector_centroid_mean);
+        m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_mean_pixel_centroid_pixel_displacement);
 
         m_obj_extrapolated_mean_visibility.push_back(multiframe_visibility);
     }
@@ -259,6 +266,7 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
 
     // starting from here, we reduce the size of the frame_count by 1. This is because, from here we start the calculation of the line.
     // collision points should also be reduced by 1 hence forth.
+
 
     unsigned COUNT;
     if ( post_processing_algorithm == "ground_truth") {
@@ -272,6 +280,9 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_line_parameters;
 
         for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
+
+            std::cout << "generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement for frame_skip " << frame_skip << " for object name " << m_objectName << " " << std::endl;
+
             std::vector<std::pair<cv::Point2f, cv::Point2f> > line_parameters;
             const unsigned long FRAME_COUNT =
                     m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(i).at
