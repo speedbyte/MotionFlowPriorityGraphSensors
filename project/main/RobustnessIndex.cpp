@@ -112,74 +112,84 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt,
 
 void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo) {
 
+    auto position = opticalFlow_gt.getResultOrdner().find('/');
+    std::string suffix = opticalFlow_gt.getResultOrdner().replace(position, 1, "_");
+    unsigned COUNT;
+    if ( suffix == "_generated") {
+        COUNT = 1;
+    }
+    else {
+        COUNT = 4;
+    }
+
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
+        for ( unsigned i = 0; i < COUNT; i++ ) {
+            std::vector<float> xsamples,ysamples;
 
-        std::vector<float> xsamples,ysamples;
+            unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(frame_skip - 1).at(i).size();
 
-        unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(frame_skip - 1).at(0).size();
+            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+                ushort m_valid_collision_points = 0;
+                ushort m_invalid_collision_points = 0;
 
-            ushort m_valid_collision_points = 0;
-            ushort m_invalid_collision_points = 0;
+                unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(i).at(frame_count).size();
+                for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-            unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(0).at(frame_count).size();
-            for ( unsigned points = 0 ; points < POINTS; points++ ) {
+                    cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(i).at(frame_count).at
+                            (points);
 
-                cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(0).at(frame_count).at
-                        (points);
-
-                xsamples.push_back(collisionpoints.x);
-                ysamples.push_back(collisionpoints.y);
-                m_valid_collision_points++;
-                /*
-                if ( ( collisionpoints.x ) > 0 &&
-                     ( collisionpoints.y ) > 0 &&
-                     ( collisionpoints.x ) < Dataset::getFrameSize().width  &&
-                     ( collisionpoints.y ) < Dataset::getFrameSize().height
-                        ) {
+                    xsamples.push_back(collisionpoints.x);
+                    ysamples.push_back(collisionpoints.y);
                     m_valid_collision_points++;
+                    /*
+                    if ( ( collisionpoints.x ) > 0 &&
+                         ( collisionpoints.y ) > 0 &&
+                         ( collisionpoints.x ) < Dataset::getFrameSize().width  &&
+                         ( collisionpoints.y ) < Dataset::getFrameSize().height
+                            ) {
+                        m_valid_collision_points++;
+                    }
+                    else {
+                        m_invalid_collision_points++;
+                    }
+                    */
                 }
-                else {
-                    m_invalid_collision_points++;
+
+                if (m_valid_collision_points == 0 ) {
+                    std::cout << "number of invalid collision points in frame " << frame_count << " are " <<
+                              m_invalid_collision_points << std::endl;
+                    //xsamples.push_back(0);
+                    //ysamples.push_back(0);
+
                 }
-                */
             }
 
-            if (m_valid_collision_points == 0 ) {
-                std::cout << "number of invalid collision points in frame " << frame_count << " are " <<
-                          m_invalid_collision_points << std::endl;
-                //xsamples.push_back(0);
-                //ysamples.push_back(0);
+            std::string plot_least_square_line_list;
+            std::vector<std::pair<double, double>> xypoints_collision;
 
+            cv::Mat_<float> samples_xy_collision(2, xsamples.size());
+
+
+            for ( auto i = 0; i < xsamples.size(); i++) {
+                samples_xy_collision(0,i) = xsamples.at(i);
+                samples_xy_collision(1,i) = ysamples.at(i);
             }
+
+            m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + std::string("_postprocessing_") + std::to_string(i) + suffix ) << "[";
+
+            for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
+                xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
+                m_fs << "{:" << "x" <<  samples_xy_collision[0][i] << "y" << samples_xy_collision[1][i] << "}";
+            }
+            m_fs << "]";
+
+
+            // Linear least square
+            fitLineForCollisionPoints(samples_xy_collision, plot_least_square_line_list);
+
         }
-
-        std::string plot_least_square_line_list;
-        std::vector<std::pair<double, double>> xypoints_collision;
-
-        cv::Mat_<float> samples_xy_collision(2, xsamples.size());
-
-
-        for ( auto i = 0; i < xsamples.size(); i++) {
-            samples_xy_collision(0,i) = xsamples.at(i);
-            samples_xy_collision(1,i) = ysamples.at(i);
-        }
-
-        auto position = opticalFlow_gt.getResultOrdner().find('/');
-        m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + opticalFlow_gt.getResultOrdner().replace(position, 1, "_") ) << "[";
-
-        for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
-            xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));
-            m_fs << "{:" << "x" <<  samples_xy_collision[0][i] << "y" << samples_xy_collision[1][i] << "}";
-        }
-        m_fs << "]";
-
-
-        // Linear least square
-        fitLineForCollisionPoints(samples_xy_collision, plot_least_square_line_list);
-
     }
 }
 
