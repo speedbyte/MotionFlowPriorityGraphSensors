@@ -62,49 +62,61 @@ void RobustnessIndex::make_video_from_png(const std::string &videoOrdner) {
 
 void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo) {
 
+    auto position = opticalFlow_gt.getResultOrdner().find('/');
+    std::string suffix = opticalFlow_gt.getResultOrdner().replace(position, 1, "_");
+    unsigned COUNT;
+    if ( suffix == "_generated") {
+        COUNT = 1;
+    }
+    else {
+        COUNT = 4;
+    }
+
     // shape of algorithhm, with shape of ground truth
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
+        for ( unsigned post_processing_index = 0; post_processing_index < COUNT; post_processing_index++ ) {
 
-        std::vector<float> xsamples,ysamples;
 
-        unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(frame_skip - 1).size();
+            std::vector<float> xsamples, ysamples;
 
-        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(frame_skip - 1).size();
 
-            unsigned long POINTS = opticalFlow_gt.getShapePoints().at(frame_skip-1).at(frame_count).size();
-            for ( unsigned points = 0 ; points < POINTS; points++ ) {
+            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                cv::Point2f shapepoints = opticalFlow_gt.getShapePoints().at(frame_skip-1).at(frame_count).at
-                        (points);
+                unsigned long POINTS = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(frame_count).size();
+                for (unsigned points = 0; points < POINTS; points++) {
 
-                xsamples.push_back(shapepoints.x);
-                ysamples.push_back(shapepoints.y);
+                    cv::Point2f shapepoints = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(post_processing_index).at(frame_count).at
+                            (points);
 
+                    xsamples.push_back(shapepoints.x);
+                    ysamples.push_back(shapepoints.y);
+
+                }
             }
+
+            std::string plot_least_square_line_list;
+            std::vector<std::pair<double, double>> xypoints_shape;
+
+            cv::Mat_<float> samples_xy_shape(2, xsamples.size());
+
+
+            // Calculate Jaccard Index
+            for (auto i = 0; i < xsamples.size(); i++) {
+                samples_xy_shape(0, i) = i + 1; //xsamples.at(i);
+                samples_xy_shape(1, i) = xsamples.at(i) / (xsamples.at(i) + ysamples.at(i));
+            }
+
+            m_fs << (std::string("shape_points") + std::string("frame_skip") + std::to_string(frame_skip) +
+                     std::string("_postprocessing_") + std::to_string(post_processing_index) + suffix) << "[";
+
+            for (unsigned i = 0; i < samples_xy_shape.cols; i++) {
+                xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
+                m_fs << "{:" << "x" << samples_xy_shape[0][i] << "y" << samples_xy_shape[1][i] << "}";
+            }
+            m_fs << "]";
         }
-
-
-        std::string plot_least_square_line_list;
-        std::vector<std::pair<double, double>> xypoints_shape;
-
-        cv::Mat_<float> samples_xy_shape(2, xsamples.size());
-
-
-        // Calculate Jaccard Index
-        for ( auto i = 0; i < xsamples.size(); i++) {
-            samples_xy_shape(0,i) = i+1; //xsamples.at(i);
-            samples_xy_shape(1,i) = xsamples.at(i) / ( xsamples.at(i) + ysamples.at(i) );
-        }
-
-        auto position = opticalFlow_gt.getResultOrdner().find('/');
-        m_fs << (std::string("shape_points") + std::string("frame_skip") + std::to_string(frame_skip) + opticalFlow_gt.getResultOrdner().replace(position, 1, "_") ) << "[";
-
-        for (unsigned i = 0; i < samples_xy_shape.cols; i++) {
-            xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
-            m_fs << "{:" << "x" <<  samples_xy_shape[0][i] << "y" << samples_xy_shape[1][i] << "}";
-        }
-        m_fs << "]";
     }
 
 }
@@ -124,20 +136,20 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        for ( unsigned i = 0; i < COUNT; i++ ) {
+        for ( unsigned post_processing_index = 0; post_processing_index < COUNT; post_processing_index++ ) {
             std::vector<float> xsamples,ysamples;
 
-            unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(frame_skip - 1).at(i).size();
+            unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(frame_skip - 1).at(post_processing_index).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 ushort m_valid_collision_points = 0;
                 ushort m_invalid_collision_points = 0;
 
-                unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(i).at(frame_count).size();
+                unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(post_processing_index).at(frame_count).size();
                 for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-                    cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(i).at(frame_count).at
+                    cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(post_processing_index).at(frame_count).at
                             (points);
 
                     xsamples.push_back(collisionpoints.x);
@@ -177,7 +189,7 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
                 samples_xy_collision(1,i) = ysamples.at(i);
             }
 
-            m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + std::string("_postprocessing_") + std::to_string(i) + suffix ) << "[";
+            m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + std::string("_postprocessing_") + std::to_string(post_processing_index) + suffix ) << "[";
 
             for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
                 xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));

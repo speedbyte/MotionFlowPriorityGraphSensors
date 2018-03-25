@@ -13,7 +13,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
     // A blob can be either a stencil or a shape
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > outer_multiframe_mean_pixel_centroid_pixel_displacement;
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > outer_multiframe_shape_parameters;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  >  > outer_multiframe_shape_parameters;
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
 
@@ -23,11 +23,11 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 multiframe_flowvector_voted_mean,
                 multiframe_flowvector_ranked_mean;
 
-        std::vector<std::pair<cv::Point2f, cv::Point2f> >
-                multiframe_shape_parameters_centroid_mean,
-                multiframe_shape_parameters_threshold_mean,
-                multiframe_shape_parameters_voted_mean,
-                multiframe_shape_parameters_ranked_mean;
+        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
+                outer_multiframe_shape_parameters_centroid_mean,
+                outer_multiframe_shape_parameters_threshold_mean,
+                outer_multiframe_shape_parameters_voted_mean,
+                outer_multiframe_shape_parameters_ranked_mean;
 
         std::vector<bool> multiframe_visibility;
 
@@ -38,6 +38,12 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
+
+            std::vector<std::pair<cv::Point2f, cv::Point2f> >
+                    multiframe_shape_parameters_centroid_mean,
+                    multiframe_shape_parameters_threshold_mean,
+                    multiframe_shape_parameters_voted_mean,
+                    multiframe_shape_parameters_ranked_mean;
 
             std::cout << frame_count << std::endl;
 
@@ -274,14 +280,17 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                     (mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y)));
 
 
-
+            outer_multiframe_shape_parameters_centroid_mean.push_back(multiframe_shape_parameters_centroid_mean);
+            outer_multiframe_shape_parameters_threshold_mean.push_back(multiframe_shape_parameters_threshold_mean);
+            outer_multiframe_shape_parameters_voted_mean.push_back(multiframe_shape_parameters_voted_mean);
+            outer_multiframe_shape_parameters_ranked_mean.push_back(multiframe_shape_parameters_ranked_mean);
             multiframe_visibility.push_back(mean_visibility);
 
         }
 
         if ( post_processing_algorithm == "ground_truth") {
             outer_multiframe_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector_centroid_mean);
-            outer_multiframe_shape_parameters.push_back(multiframe_shape_parameters_centroid_mean);
+            outer_multiframe_shape_parameters.push_back(outer_multiframe_shape_parameters_centroid_mean);
         }
         else {
             outer_multiframe_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector_centroid_mean);
@@ -289,10 +298,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             outer_multiframe_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector_voted_mean);
             outer_multiframe_mean_pixel_centroid_pixel_displacement.push_back(multiframe_flowvector_ranked_mean);
 
-            outer_multiframe_shape_parameters.push_back(multiframe_shape_parameters_centroid_mean);
-            outer_multiframe_shape_parameters.push_back(multiframe_shape_parameters_threshold_mean);
-            outer_multiframe_shape_parameters.push_back(multiframe_shape_parameters_voted_mean);
-            outer_multiframe_shape_parameters.push_back(multiframe_shape_parameters_ranked_mean);
+            outer_multiframe_shape_parameters.push_back(outer_multiframe_shape_parameters_centroid_mean);
+            outer_multiframe_shape_parameters.push_back(outer_multiframe_shape_parameters_threshold_mean);
+            outer_multiframe_shape_parameters.push_back(outer_multiframe_shape_parameters_voted_mean);
+            outer_multiframe_shape_parameters.push_back(outer_multiframe_shape_parameters_ranked_mean);
         }
 
         m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_mean_pixel_centroid_pixel_displacement);

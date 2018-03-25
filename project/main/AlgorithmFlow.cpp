@@ -606,110 +606,130 @@ void AlgorithmFlow::generate_shape_points() {
                   << list_of_simulated_objects_combination.at(obj_index).second->getObjectId()<< "\n";
     }
 
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > list_frame_skip_shape_points;
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > obj_extrapolated_stencil_pixel_point_pixel_displacement;
+        std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_shape_points;
 
-        for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++ ) {
-            obj_extrapolated_stencil_pixel_point_pixel_displacement.push_back(m_list_simulated_objects.at(
-                    obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement());
+        std::vector<std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > > obj_extrapolated_algo_shape_pixel_point_pixel_displacement;
+
+        for (ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
+            obj_extrapolated_algo_shape_pixel_point_pixel_displacement.push_back(m_list_simulated_objects.at(
+                    obj_index)->get_shape_parameters());
         }
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
-        std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip << std::endl;
+        std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
+                  << std::endl;
+        for (unsigned post_processing_index = 0; post_processing_index < 4; post_processing_index++) {
 
-        std::vector<std::vector<cv::Point2f> >  frame_shape_points;
+            std::vector<std::vector<cv::Point2f> > frame_shape_points;
 
-        unsigned FRAME_COUNT = (unsigned)m_list_simulated_objects.at(0)
-                ->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip - 1).size();
-        assert(FRAME_COUNT>0);
+            unsigned FRAME_COUNT = (unsigned) m_list_simulated_objects.at(0)
+                    ->get_shape_parameters().at(frame_skip - 1).at(post_processing_index).size();
 
-        for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+            assert(FRAME_COUNT > 0);
 
-            std::cout << "frame_count " << frame_count << std::endl;
+            for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 
-            fs << "frame_count" << frame_count;
+                std::cout << "frame_count " << frame_count << std::endl;
 
-            cv::Point2f shape_average = {0,0};
-            std::vector<cv::Point2f> shape_points(m_list_simulated_objects.size());
-            std::vector<cv::Point2f> shape_points_average;
+                fs << "frame_count" << frame_count;
 
-
-            for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++ ) {
-
-                auto CLUSTER_COUNT_ALGO = obj_extrapolated_stencil_pixel_point_pixel_displacement.at(obj_index).at
-                        (frame_skip - 1).at(frame_count).size();
-
-                if ( ( m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1)
-                               .at(frame_count) == true ) ) {
+                cv::Point2f shape_average = {0, 0};
+                std::vector<cv::Point2f> shape_points(m_list_simulated_objects.size());
+                std::vector<cv::Point2f> shape_points_average;
 
 
-                    float rowBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).first.y;
-                    float columnBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).first.x;
+                for (ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
+
+                    auto CLUSTER_COUNT_ALGO = obj_extrapolated_algo_shape_pixel_point_pixel_displacement.at(
+                            obj_index).at(frame_skip - 1).at(post_processing_index).at(frame_count).size();
+
+                    if ((m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(
+                                    frame_skip - 1)
+                                 .at(frame_count) == true)) {
 
 
-                    // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
+                        float rowBegin = m_list_gt_objects.at(
+                                obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                                (frame_skip - 1).at(frame_count).first.y;
+                        float columnBegin = m_list_gt_objects.at(
+                                obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                                (frame_skip - 1).at(frame_count).first.x;
 
-                    float vollTreffer = 0;
 
-                    int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
-                    int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+                        // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
-                    float keinTreffer;
+                        float vollTreffer = 0;
 
-                    if ( m_resultordner != "/generated" ) {   // this is unncecessary, because this function is in AlgorithmFlow, still I will leave this.
-                        for ( auto j = 0; j < CLUSTER_COUNT_ALGO; j++ ) {
-                            auto x_coordinates =  obj_extrapolated_stencil_pixel_point_pixel_displacement.at(obj_index).at
-                                    (frame_skip - 1).at(frame_count).at(j).first.x;
-                            auto y_coordinates = obj_extrapolated_stencil_pixel_point_pixel_displacement.at(obj_index).at
-                                    (frame_skip - 1).at(frame_count).at(j).first.y;
+                        int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                        int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                            if ((x_coordinates > (columnBegin - width / STENCIL_GRID_EXTENDER)) &&
-                                (x_coordinates < (columnBegin + width + width / STENCIL_GRID_EXTENDER)) &&
-                                (y_coordinates > (rowBegin - height / STENCIL_GRID_EXTENDER)) &&
-                                (y_coordinates < (rowBegin + height + height / STENCIL_GRID_EXTENDER))
-                                    ) {
-                                vollTreffer++;
+                        float keinTreffer;
+
+                        if (m_resultordner !=
+                            "/generated") {   // this is unncecessary, because this function is in AlgorithmFlow, still I will leave this.
+                            for (auto j = 0; j < CLUSTER_COUNT_ALGO; j++) {
+                                auto x_coordinates = obj_extrapolated_algo_shape_pixel_point_pixel_displacement.at(
+                                        obj_index).at
+                                        (frame_skip - 1).at(post_processing_index).at(frame_count).at(j).first.x;
+                                auto y_coordinates = obj_extrapolated_algo_shape_pixel_point_pixel_displacement.at(
+                                        obj_index).at
+                                        (frame_skip - 1).at(post_processing_index).at(frame_count).at(j).first.y;
+
+                                if ((x_coordinates > (columnBegin - width / STENCIL_GRID_EXTENDER)) &&
+                                    (x_coordinates < (columnBegin + width + width / STENCIL_GRID_EXTENDER)) &&
+                                    (y_coordinates > (rowBegin - height / STENCIL_GRID_EXTENDER)) &&
+                                    (y_coordinates < (rowBegin + height + height / STENCIL_GRID_EXTENDER))
+                                        ) {
+                                    vollTreffer++;
+                                }
                             }
+                            keinTreffer = ((float) CLUSTER_COUNT_ALGO - vollTreffer);
                         }
-                        keinTreffer = ((float)CLUSTER_COUNT_ALGO - vollTreffer);
+                        shape_points.at(obj_index) = (cv::Point2f(vollTreffer, keinTreffer));
+
+                        std::cout << "vollTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId()
+                                  << " = " << vollTreffer << std::endl;
+                        std::cout << "keinTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId()
+                                  << " = " << keinTreffer << std::endl;
+
+                        shape_average.x += shape_points.at(obj_index).x;
+                        shape_average.y += shape_points.at(obj_index).y;
+
+                    } else {
+                        std::cout << "visibility of object " << m_list_simulated_objects.at(obj_index)->getObjectId()
+                                  << " = " <<
+                                  m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(
+                                                  frame_skip
+                                                  - 1)
+                                          .at(frame_count)
+                                  << " and hence not generating any shape points for this object " << std::endl;
+
+                        shape_points.at(obj_index) = (cv::Point2f(0, CLUSTER_COUNT_ALGO));
+                        shape_average.x += shape_points.at(obj_index).x;
+                        shape_average.y += shape_points.at(obj_index).y;
+
                     }
-                    shape_points.at(obj_index) = (cv::Point2f(vollTreffer, keinTreffer));
-
-                    std::cout << "vollTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId() << " = " << vollTreffer << std::endl ;
-                    std::cout << "keinTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId() << " = " << keinTreffer << std::endl ;
-
-                    shape_average.x += shape_points.at(obj_index).x;
-                    shape_average.y += shape_points.at(obj_index).y;
-
                 }
-                else {
-                    std::cout << "visibility of object " << m_list_simulated_objects.at(obj_index)->getObjectId() << " = " <<
-                              m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip
-                                                                                                        - 1)
-                                      .at(frame_count) << " and hence not generating any shape points for this object " <<  std::endl ;
 
-                    shape_points.at(obj_index) = (cv::Point2f(0, CLUSTER_COUNT_ALGO));
-                    shape_average.x += shape_points.at(obj_index).x;
-                    shape_average.y += shape_points.at(obj_index).y;
+                shape_average.x = shape_average.x / m_list_simulated_objects.size();
+                shape_average.y = shape_average.y / m_list_simulated_objects.size();
 
-                }
+                shape_points_average.push_back(shape_average);
+
+                frame_shape_points.push_back(shape_points_average);
+
             }
-
-            shape_average.x = shape_average.x / m_list_simulated_objects.size();
-            shape_average.y = shape_average.y / m_list_simulated_objects.size();
-
-            shape_points_average.push_back( shape_average );
-
-            frame_shape_points.push_back(shape_points_average);
-
+            outer_frame_skip_shape_points.push_back(frame_shape_points);
         }
-        m_frame_skip_shape_points.push_back(frame_shape_points);
+        list_frame_skip_shape_points.push_back(outer_frame_skip_shape_points);
     }
-
+    m_frame_skip_shape_points = list_frame_skip_shape_points;
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
@@ -749,9 +769,10 @@ void AlgorithmFlow::generate_collision_points_mean() {
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > list_frame_skip_collision_points;
 
-    std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_collision_points;
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+
+        std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_collision_points;
 
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
