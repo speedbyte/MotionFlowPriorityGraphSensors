@@ -77,14 +77,13 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt,
 
         for ( unsigned post_processing_index = 0; post_processing_index < COUNT; post_processing_index++ ) {
 
-
             std::vector<float> xsamples, ysamples;
 
-            unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(frame_skip - 1).size();
+            unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(post_processing_index).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                unsigned long POINTS = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(frame_count).size();
+                unsigned long POINTS = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(post_processing_index).at(frame_count).size();
                 for (unsigned points = 0; points < POINTS; points++) {
 
                     cv::Point2f shapepoints = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(post_processing_index).at(frame_count).at

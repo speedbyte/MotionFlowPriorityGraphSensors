@@ -612,12 +612,6 @@ void AlgorithmFlow::generate_shape_points() {
 
         std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_shape_points;
 
-        std::vector<std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > > obj_extrapolated_algo_shape_pixel_point_pixel_displacement;
-
-        for (ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
-            obj_extrapolated_algo_shape_pixel_point_pixel_displacement.push_back(m_list_simulated_objects.at(
-                    obj_index)->get_shape_parameters());
-        }
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
         std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
@@ -644,8 +638,8 @@ void AlgorithmFlow::generate_shape_points() {
 
                 for (ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
 
-                    auto CLUSTER_COUNT_ALGO = obj_extrapolated_algo_shape_pixel_point_pixel_displacement.at(
-                            obj_index).at(frame_skip - 1).at(post_processing_index).at(frame_count).size();
+                    auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(
+                            obj_index)->get_shape_parameters().at(frame_skip - 1).at(post_processing_index).at(frame_count).size();
 
                     if ((m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(
                                     frame_skip - 1)
@@ -674,11 +668,11 @@ void AlgorithmFlow::generate_shape_points() {
                         if (m_resultordner !=
                             "/generated") {   // this is unncecessary, because this function is in AlgorithmFlow, still I will leave this.
                             for (auto j = 0; j < CLUSTER_COUNT_ALGO; j++) {
-                                auto x_coordinates = obj_extrapolated_algo_shape_pixel_point_pixel_displacement.at(
-                                        obj_index).at
+                                auto x_coordinates = m_list_simulated_objects.at(
+                                        obj_index)->get_shape_parameters().at
                                         (frame_skip - 1).at(post_processing_index).at(frame_count).at(j).first.x;
-                                auto y_coordinates = obj_extrapolated_algo_shape_pixel_point_pixel_displacement.at(
-                                        obj_index).at
+                                auto y_coordinates = m_list_simulated_objects.at(
+                                        obj_index)->get_shape_parameters().at
                                         (frame_skip - 1).at(post_processing_index).at(frame_count).at(j).first.y;
 
                                 if ((x_coordinates > (columnBegin - width / STENCIL_GRID_EXTENDER)) &&
@@ -723,7 +717,6 @@ void AlgorithmFlow::generate_shape_points() {
                 shape_points_average.push_back(shape_average);
 
                 frame_shape_points.push_back(shape_points_average);
-
             }
             outer_frame_skip_shape_points.push_back(frame_shape_points);
         }

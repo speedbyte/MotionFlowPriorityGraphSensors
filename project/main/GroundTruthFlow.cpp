@@ -183,80 +183,92 @@ void GroundTruthFlow::generate_shape_points() {
                   << list_of_gt_objects_combination.at(i).second->getObjectId()<< "\n";
     }
 
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > list_frame_skip_shape_points;
+
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+
+        std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_shape_points;
 
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
-        std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip << std::endl;
+        std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
+                  << std::endl;
+        for (unsigned post_processing_index = 0; post_processing_index < 1; post_processing_index++) {
 
-        std::vector<std::vector<cv::Point2f> >  m_frame_shape_points;
+            std::vector<std::vector<cv::Point2f> > frame_shape_points;
 
-        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)
-                ->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip - 1).size();
-        assert(FRAME_COUNT>0);
+            unsigned FRAME_COUNT = (unsigned) m_list_gt_objects.at(0)
+                    ->get_shape_parameters().at(frame_skip - 1).at(post_processing_index).size();
 
-        for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+            assert(FRAME_COUNT > 0);
 
-
-            std::cout << "frame_count " << frame_count << std::endl;
-
-            fs << "frame_count" << frame_count;
-
-            cv::Point2f shape_average = {0,0};
-            std::vector<cv::Point2f> shape_points(m_list_gt_objects.size());
-            std::vector<cv::Point2f> shape_points_average;
+            for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 
 
-            for ( unsigned i = 0; i < m_list_gt_objects.size(); i++) {
+                std::cout << "frame_count " << frame_count << std::endl;
+
+                fs << "frame_count" << frame_count;
+
+                cv::Point2f shape_average = {0, 0};
+                std::vector<cv::Point2f> shape_points(m_list_gt_objects.size());
+                std::vector<cv::Point2f> shape_points_average;
 
 
-                auto CLUSTER_COUNT_GT = m_list_gt_objects.at(i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
-                        (frame_skip - 1).at(frame_count).size();
+                for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
 
-                if ( ( m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1)
-                               .at(frame_count) == true ) ) {
 
-                    float vollTreffer = 0;
+                    auto CLUSTER_COUNT_GT = m_list_gt_objects.at(
+                            i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
+                            (frame_skip - 1).at(frame_count).size();
 
-                    float keinTreffer;
+                    if ((m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1)
+                                 .at(frame_count) == true)) {
 
-                    if ( m_resultordner == "/generated" ) {  // this is unncecessary, because this function is in GroundTruthFlow, still I will leave this.
-                        vollTreffer = CLUSTER_COUNT_GT;
-                        keinTreffer = (CLUSTER_COUNT_GT - vollTreffer);
+                        float vollTreffer = 0;
+
+                        float keinTreffer;
+
+                        if (m_resultordner ==
+                            "/generated") {  // this is unncecessary, because this function is in GroundTruthFlow, still I will leave this.
+                            vollTreffer = CLUSTER_COUNT_GT;
+                            keinTreffer = (CLUSTER_COUNT_GT - vollTreffer);
+                        }
+                        shape_points.at(i) = (cv::Point2f(vollTreffer, keinTreffer));
+
+                        std::cout << "vollTreffer for object " << m_list_gt_objects.at(i)->getObjectId() << " = "
+                                  << vollTreffer << std::endl;
+                        std::cout << "keinTreffer for object " << m_list_gt_objects.at(i)->getObjectId() << " = "
+                                  << keinTreffer << std::endl;
+
+                        shape_average.x += shape_points.at(i).x;
+                        shape_average.y += shape_points.at(i).y;
+
+                    } else {
+                        std::cout << "visibility of object " << m_list_gt_objects.at(i)->getObjectId() << " = " <<
+                                  m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip
+                                                                                                     - 1)
+                                          .at(frame_count)
+                                  << " and hence not generating any shape points for this object " << std::endl;
+
+                        shape_points.at(i) = (cv::Point2f(0, CLUSTER_COUNT_GT));
+                        shape_average.x += shape_points.at(i).x;
+                        shape_average.y += shape_points.at(i).y;
+
                     }
-                    shape_points.at(i) = (cv::Point2f(vollTreffer, keinTreffer));
-
-                    std::cout << "vollTreffer for object " << m_list_gt_objects.at(i)->getObjectId() << " = " << vollTreffer << std::endl ;
-                    std::cout << "keinTreffer for object " << m_list_gt_objects.at(i)->getObjectId() << " = " << keinTreffer << std::endl ;
-
-                    shape_average.x += shape_points.at(i).x;
-                    shape_average.y += shape_points.at(i).y;
-
                 }
-                else {
-                    std::cout << "visibility of object " << m_list_gt_objects.at(i)->getObjectId() << " = " <<
-                              m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip
-                                                                                                        - 1)
-                                      .at(frame_count) << " and hence not generating any shape points for this object " <<  std::endl ;
 
-                    shape_points.at(i) = (cv::Point2f(0, CLUSTER_COUNT_GT));
-                    shape_average.x += shape_points.at(i).x;
-                    shape_average.y += shape_points.at(i).y;
+                shape_average.x = shape_average.x / m_list_gt_objects.size();
+                shape_average.y = shape_average.y / m_list_gt_objects.size();
 
-                }
+                shape_points_average.push_back(shape_average);
+
+                frame_shape_points.push_back(shape_points_average);
             }
-
-            shape_average.x = shape_average.x / m_list_gt_objects.size();
-            shape_average.y = shape_average.y / m_list_gt_objects.size();
-
-            shape_points_average.push_back( shape_average );
-
-            m_frame_shape_points.push_back(shape_points_average);
-
+            outer_frame_skip_shape_points.push_back(frame_shape_points);
         }
-        m_frame_skip_shape_points.push_back(m_frame_shape_points);
+        list_frame_skip_shape_points.push_back(outer_frame_skip_shape_points);
     }
-
+    m_frame_skip_shape_points = list_frame_skip_shape_points;
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
