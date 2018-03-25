@@ -231,7 +231,7 @@ void GroundTruthFlow::generate_shape_points() {
                         if (m_resultordner ==
                             "/generated") {  // this is unncecessary, because this function is in GroundTruthFlow, still I will leave this.
                             vollTreffer = CLUSTER_COUNT_GT;
-                            keinTreffer = (CLUSTER_COUNT_GT - vollTreffer);
+                            keinTreffer = (CLUSTER_COUNT_GT);
                         }
                         shape_points.at(i) = (cv::Point2f(vollTreffer, keinTreffer));
 

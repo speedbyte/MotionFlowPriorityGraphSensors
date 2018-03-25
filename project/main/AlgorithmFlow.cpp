@@ -683,7 +683,7 @@ void AlgorithmFlow::generate_shape_points() {
                                     vollTreffer++;
                                 }
                             }
-                            keinTreffer = ((float) CLUSTER_COUNT_ALGO - vollTreffer);
+                            keinTreffer = ((float) CLUSTER_COUNT_ALGO);
                         }
                         shape_points.at(obj_index) = (cv::Point2f(vollTreffer, keinTreffer));
 

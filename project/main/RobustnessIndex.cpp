@@ -103,8 +103,8 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt,
 
             // Calculate Jaccard Index
             for (auto i = 0; i < xsamples.size(); i++) {
-                samples_xy_shape(0, i) = i + 1; //xsamples.at(i);
-                samples_xy_shape(1, i) = xsamples.at(i) / (xsamples.at(i) + ysamples.at(i));
+                samples_xy_shape(0, i) = xsamples.at(i); //xsamples.at(i);
+                samples_xy_shape(1, i) = ysamples.at(i);
             }
 
             m_fs << (std::string("shape_points") + std::string("frame_skip") + std::to_string(frame_skip) +
@@ -112,7 +112,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt,
 
             for (unsigned i = 0; i < samples_xy_shape.cols; i++) {
                 xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
-                m_fs << "{:" << "x" << samples_xy_shape[0][i] << "y" << samples_xy_shape[1][i] << "}";
+                m_fs << "{:" << "good_pixels" << samples_xy_shape[0][i] << "total_pixels" << samples_xy_shape[1][i] << "}";
             }
             m_fs << "]";
         }
