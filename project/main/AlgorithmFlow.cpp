@@ -383,21 +383,21 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                             auto COUNT = m_list_simulated_base_objects.size();
                             assert(COUNT==0);
-                            for (unsigned y = 0; y < roi.rows; y++) {
-                                for (unsigned x = 0; x < roi.cols; x++) {
+                            for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
+                                for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
-                                    if ( x%STENCIL_GRID_COMPRESSOR == 0 && y%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of x pixels to reduce data
+                                    if ( col_index%STENCIL_GRID_COMPRESSOR == 0 && row_index%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of col_index pixels to reduce data
 
-                                        cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y, x);
+                                        cv::Point2f algo_displacement = roi.at<cv::Vec2f>(row_index, col_index);
                                         auto dist_algo = cv::norm(algo_displacement);
                                         if ( dist_algo < 0.1 ) {
                                             continue;
                                         }
                                         stencil_movement.at(obj_index).push_back(
-                                                std::make_pair(cv::Point2f(roi_offset.x + x, roi_offset.y + y),
+                                                std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
                                                                algo_displacement));
                                         base_movement.at(obj_index).push_back(std::make_pair(
-                                                cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
+                                                cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
                                                 algo_displacement));
                                         base_visibility.at(obj_index).push_back(visibility);
                                     }
@@ -420,7 +420,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                 float y  = m_list_simulated_base_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                         (frame_skip-1).at(frame_count).at(count).first.y;
                                 cv::Point2f algo_displacement = flowFrame.at<cv::Vec2f>(y,x);
-                                // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
                                 stencil_movement.at(obj_index).push_back(std::make_pair(cv::Point2f(x, y), algo_displacement));
                             }
 
@@ -428,12 +427,12 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             std::cout << new_stencil_size << std::endl;
 
                             // This is for the noisy model
-                            for (unsigned y = 0; y < roi.rows; y++) {
-                                for (unsigned x = 0; x < roi.cols; x++) {
+                            for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
+                                for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
-                                    if (x % STENCIL_GRID_COMPRESSOR == 0 && y % STENCIL_GRID_COMPRESSOR ==
+                                    if (row_index % STENCIL_GRID_COMPRESSOR == 0 && col_index % STENCIL_GRID_COMPRESSOR ==
                                                                     0) { // only entertain multiple of 5 pixels to reduce data
-                                        cv::Point2f algo_displacement = roi.at<cv::Vec2f>(y, x);
+                                        cv::Point2f algo_displacement = roi.at<cv::Vec2f>(row_index, col_index);
                                         auto dist_gt = cv::norm(gt_displacement);
                                         auto dist_algo = cv::norm(algo_displacement);
                                         auto dist_err = std::abs(dist_gt - dist_algo);
@@ -441,13 +440,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                             auto angle_err = std::cosh(
                                                     algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
                                             if (((std::abs(angle_err)) < ANGLE_ERROR_TOLERANCE)) {
-                                                // If I return the centroid of the ground truth, then the centroid of the simulated object would be the same as the ground truth object
-                                                // the stencil is going to be generated as above
                                                 // stencil_movement.at(obj_index).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
                                             }
                                         }
                                         base_movement.at(obj_index).push_back(
-                                                std::make_pair(cv::Point2f((roi_offset.x + x), (roi_offset.y + y)),
+                                                std::make_pair(cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
                                                                algo_displacement));
                                         base_visibility.at(obj_index).push_back(visibility);
 
@@ -640,11 +637,13 @@ void AlgorithmFlow::generate_shape_points() {
 
                     auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(
                             obj_index)->get_shape_parameters().at(frame_skip - 1).at(post_processing_index).at(frame_count).size();
+                    const unsigned CLUSTER_SIZE_STENCIL_BASE = (unsigned)m_list_simulated_base_objects.at(
+                            obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            (frame_skip - 1).at(frame_count).size();
 
                     if ((m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(
                                     frame_skip - 1)
                                  .at(frame_count) == true)) {
-
 
                         float rowBegin = m_list_gt_objects.at(
                                 obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
@@ -652,7 +651,6 @@ void AlgorithmFlow::generate_shape_points() {
                         float columnBegin = m_list_gt_objects.at(
                                 obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                                 (frame_skip - 1).at(frame_count).first.x;
-
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
@@ -683,7 +681,7 @@ void AlgorithmFlow::generate_shape_points() {
                                     vollTreffer++;
                                 }
                             }
-                            keinTreffer = ((float) CLUSTER_COUNT_ALGO);
+                            keinTreffer = ((float) CLUSTER_SIZE_STENCIL_BASE);
                         }
                         shape_points.at(obj_index) = (cv::Point2f(vollTreffer, keinTreffer));
 

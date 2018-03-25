@@ -338,7 +338,7 @@ def motionflow_pixelgraphs():
     yaml_file.close()
 
     fig2 = plt.figure()
-    plt.suptitle("Pixel Vector Robustness ( 1 pixel = 1 cm ) ")
+    plt.suptitle("Postprocessing Pixel Robustness")
 
     shapeplot0 = fig2.add_subplot(221)
     shapeplot1 = fig2.add_subplot(222)
@@ -350,14 +350,19 @@ def motionflow_pixelgraphs():
     shapeplot2.set_title('shape_pointsframe_skip1_postprocessing_2')
     shapeplot3.set_title('shape_pointsframe_skip1_postprocessing_3')
 
-    shapeplot0.set_xlabel('good_pixels')
-    shapeplot0.set_ylabel('total_pixels')
-    shapeplot1.set_xlabel('good_pixels')
-    shapeplot1.set_ylabel('total_pixels')
-    shapeplot2.set_xlabel('good_pixels')
-    shapeplot2.set_ylabel('total_pixels')
-    shapeplot3.set_xlabel('good_pixels')
-    shapeplot3.set_ylabel('total_pixels')
+    shapeplot0.set_xlabel('frame_count')
+    shapeplot0.set_ylabel('noise_pixels/no_noise_pixels')
+    shapeplot1.set_xlabel('frame_count')
+    shapeplot1.set_ylabel('noise_pixels/no_noise_pixels')
+    shapeplot2.set_xlabel('frame_count')
+    shapeplot2.set_ylabel('noise_pixels/no_noise_pixels')
+    shapeplot3.set_xlabel('frame_count')
+    shapeplot3.set_ylabel('noise_pixels/no_noise_pixels')
+
+    shapeplot0.set_ylim([0, 1])
+    shapeplot1.set_ylim([0, 1])
+    shapeplot2.set_ylim([0, 1])
+    shapeplot3.set_ylim([0, 1])
     legend = shapeplot1.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
@@ -382,7 +387,7 @@ def motionflow_pixelgraphs():
     offset_index=0
     num=0
 
-    for no_of_metrics in range(2):
+    for no_of_metrics in range(2): # two a pair
 
         for x in range(4):
 
@@ -429,8 +434,86 @@ def motionflow_pixelgraphs():
         offset_index=offset_index+4
 
     fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig('/local/tmp/eaes/pixel_robustness.png', dpi=200)
+    fig2.savefig('/local/tmp/eaes/pixel_robustness_post_processing_algorithm', dpi=200)
 
+
+def motionflow_pixelgraphs_gt():
+
+    dataset = "cpp"
+    scenario = "two"
+    file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
+    #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
+
+    yaml_file = open(file, "r")
+    check = yaml_file.readline()
+    print check
+    if ("YAML:1.0" in check ):
+        read_yaml_file = yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
+        read_yaml_file = read_yaml_file.replace(':', ': ')
+        yaml_file.close()
+        yaml_file = open(file, "w")
+        yaml_file.write(read_yaml_file)
+
+    yaml_file.close()
+
+    fig2 = plt.figure()
+    plt.suptitle("OpticalFlow Pixel Robustness")
+
+    shapeplot0 = fig2.add_subplot(111)
+
+    shapeplot0.set_title('shape_pointsframe_skip1_farneback_0')
+
+    shapeplot0.set_xlabel('frame_count')
+    shapeplot0.set_ylabel('no_noise_pixels/ground_truth_pixels')
+
+    shapeplot0.set_ylim([0, 1])
+    legend = shapeplot0.legend(loc='center right', shadow=True, fontsize='x-small')
+
+    yaml_load = yaml.load(open(file))
+
+    list_of_shape_metrics = [
+        "shape_pointsframe_skip1_postprocessing_0_generated",
+        "shape_pointsframe_skip1_postprocessing_0results_FB_none_",
+    ]
+
+    color_of_shape_metrics = ["red", "black"]
+
+    assert(len(list_of_shape_metrics)/1 == len(color_of_shape_metrics))
+
+    offset=0
+    offset_index=0
+    num=0
+
+    for no_of_metrics in range(2): # two a pair
+
+        for x in range(1):
+
+            shape_points = yaml_load[list_of_shape_metrics[offset_index*no_of_metrics+x]]
+            print offset_index*no_of_metrics+x
+            shape = list()
+            for count in range(len(shape_points)-offset):
+                xy = list()
+                xy.append(shape_points[offset + count]["good_pixels"])
+                xy.append(shape_points[offset + count]["total_pixels"])
+                shape.append(xy)
+            data = np.array(shape)
+            if ( x == 0):
+                x0, y0 = data.T
+                y0 = x0/y0
+            if ( x == 1):
+                x1, y1 = data.T
+                y1 = x1/y1
+
+            x0 = np.arange(0.0, 5.0, 1)
+
+        shapeplot0.plot(x0, y0, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        #shapeplot1.legend()
+        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        offset_index=offset_index+1
+
+    fig2.set_size_inches(18.5, 10.5)
+    fig2.savefig('/local/tmp/eaes/pixel_robustness_optical_flow.png', dpi=200)
 
 
 def check():
@@ -498,6 +581,7 @@ if __name__ == '__main__':
     #criticalpoint()
     #lemniscate()
     #simple()
+    motionflow_pixelgraphs_gt()
     motionflow_pixelgraphs()
     #motionflow_vectorgraphs()
     #check()
