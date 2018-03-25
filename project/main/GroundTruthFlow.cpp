@@ -202,7 +202,7 @@ void GroundTruthFlow::generate_shape_points() {
 
             assert(FRAME_COUNT > 0);
 
-            for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+            for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
 
                 std::cout << "frame_count " << frame_count << std::endl;

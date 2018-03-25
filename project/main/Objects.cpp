@@ -342,7 +342,7 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
 
             const unsigned long FRAME_COUNT =
                     m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip - 1).at
-                            (i).size() - 1;
+                            (i).size();
 
             for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement

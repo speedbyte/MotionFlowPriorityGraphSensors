@@ -625,7 +625,7 @@ void AlgorithmFlow::generate_shape_points() {
 
             assert(FRAME_COUNT > 0);
 
-            for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+            for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 std::cout << "frame_count " << frame_count << std::endl;
 
@@ -776,12 +776,11 @@ void AlgorithmFlow::generate_collision_points_mean() {
 
             std::vector<std::vector<cv::Point2f> > frame_collision_points;
 
-            unsigned FRAME_COUNT = (unsigned) m_list_simulated_objects.at(0)
-                    ->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip - 1).at
-                            (0).size() - 1; // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
-            assert(FRAME_COUNT > 0);
+            unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)
+                    ->get_line_parameters().at(frame_skip-1).at(0).size(); // we store the flow image here and hence it starts at 1. Correspondingly the size reduces.
+            assert(FRAME_COUNT>0);
 
-            for (ushort frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+            for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
                 char file_name_image[50];
                 std::cout << "frame_count " << frame_count << std::endl;
 
@@ -803,29 +802,26 @@ void AlgorithmFlow::generate_collision_points_mean() {
                     // object image_data_and_shape
 
                     if (m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(
-                            frame_count)
+                            frame_count+1)
                         == true) {
 
                         cv::Point2f centroid = m_list_simulated_objects.at(obj_index)->
                                         get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(
                                         frame_skip - 1).at(post_processing_index)
-                                .at(frame_count).first;
+                                .at(frame_count+1).first;
                         cv::Point2f mean_displacement = m_list_simulated_objects.at(obj_index)->
                                         get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(
                                         frame_skip - 1).at(post_processing_index)
-                                .at(frame_count).second;
-
-                        cv::Point2f gt_line_pts = m_list_simulated_objects.at(obj_index)->get_line_parameters().at(frame_skip - 1).at(post_processing_index)
-                                .at(frame_count - 1).second;  //line parameters run one less than the others.
+                                .at(frame_count+1).second;
 
                         cv::Mat roi;
 
                         int width = cvRound(
                                 m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                                        frame_count).m_object_dimensions_px.dim_width_m);
+                                        frame_count+1).m_object_dimensions_px.dim_width_m);
                         int height = cvRound(
                                 m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                                        frame_count).m_object_dimensions_px.dim_height_m);
+                                        frame_count+1).m_object_dimensions_px.dim_height_m);
 
                         roi = tempMatrix.
                                 colRange(cvRound(centroid.x), cvRound(centroid.x + width)).
@@ -846,10 +842,10 @@ void AlgorithmFlow::generate_collision_points_mean() {
                     if ((list_of_simulated_objects_combination.at(obj_index).first->get_obj_extrapolated_mean_visibility().at(
                                     frame_skip
                                     - 1)
-                                 .at(frame_count) == true) && (list_of_simulated_objects_combination.at(obj_index).second->
+                                 .at(frame_count+1) == true) && (list_of_simulated_objects_combination.at(obj_index).second->
                                     get_obj_extrapolated_mean_visibility()
                                                                        .at(frame_skip - 1)
-                                                                       .at(frame_count) == true)) {
+                                                                       .at(frame_count+1) == true)) {
 
                         // First Freeze lineparamter1 and look for collision points
                         // Then freeze lineparameter2 and find collision point.
@@ -860,12 +856,12 @@ void AlgorithmFlow::generate_collision_points_mean() {
                             cv::Point2f lineparameters1 = list_of_simulated_objects_combination.at(
                                             obj_index).first->get_line_parameters().at(frame_skip - 1).at
                                             (post_processing_index)
-                                    .at(frame_count - 1).first;
+                                    .at(frame_count).first;
 
                             cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(
                                             obj_index).second->get_line_parameters
                                             ().at(frame_skip - 1).at(0)
-                                    .at(frame_count - 1).first;
+                                    .at(frame_count).first;
 
                             std::cout << "object " << list_of_simulated_objects_combination.at(obj_index).first->getObjectId()
                                       << " = " <<
@@ -879,11 +875,11 @@ void AlgorithmFlow::generate_collision_points_mean() {
                             lineparameters1 = list_of_simulated_objects_combination.at(
                                             obj_index).second->get_line_parameters().at(frame_skip - 1).at
                                             (post_processing_index)
-                                    .at(frame_count - 1).first;
+                                    .at(frame_count).first;
 
                             lineparameters2 = list_of_gt_objects_combination.at(obj_index).first->get_line_parameters
                                             ().at(frame_skip - 1).at(0)
-                                    .at(frame_count - 1).first;
+                                    .at(frame_count).first;
 
                             std::cout << "object " << list_of_simulated_objects_combination.at(obj_index).second->getObjectId()
                                       << " = " <<
@@ -901,12 +897,12 @@ void AlgorithmFlow::generate_collision_points_mean() {
                                   list_of_simulated_objects_combination.at(
                                                   obj_index).first->get_obj_extrapolated_mean_visibility().at(frame_skip
                                                                                                       - 1)
-                                          .at(frame_count) << " and object " << list_of_gt_objects_combination.at(obj_index)
+                                          .at(frame_count+1) << " and object " << list_of_gt_objects_combination.at(obj_index)
                                           .second->getObjectId() << " visibility = "
                                   << list_of_simulated_objects_combination.at(
                                                   obj_index).second->get_obj_extrapolated_mean_visibility().at(frame_skip
                                                                                                        - 1)
-                                          .at(frame_count)
+                                          .at(frame_count+1)
                                   << " and hence not generating any collision points for this object combination "
                                   << std::endl;
                     }

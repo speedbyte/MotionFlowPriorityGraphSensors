@@ -35,10 +35,3 @@ frame_count_004:
    - { name:random_object, visible:1, x:3.6685876464843750e+02,
        y:2.7126397705078125e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
        dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
-frame_count_005:
-   - { name:rectangle_long, visible:1, x:4.2320300292968750e+02,
-       y:3.2062496948242188e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
-       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
-   - { name:random_object, visible:1, x:3.6567486572265625e+02,
-       y:2.7033151245117188e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
-       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
