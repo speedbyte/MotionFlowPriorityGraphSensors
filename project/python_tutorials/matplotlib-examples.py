@@ -214,7 +214,7 @@ def yaml_try():
     print data
 
 
-def motionflow_graphs():
+def motionflow_vectorgraphs():
 
     dataset = "cpp"
     scenario = "two"
@@ -238,13 +238,6 @@ def motionflow_graphs():
     collisionplot1.set_xlabel('x')
     collisionplot1.set_ylabel('y')
 
-    fig2 = plt.figure()
-    shapeplot1 = fig2.add_subplot(111)
-    shapeplot1.set_title('Scene Pixel Robustness ( 1 pixel = 1 cm )')
-    shapeplot1.set_xlabel('x')
-    shapeplot1.set_ylabel('y')
-    legend = shapeplot1.legend(loc='center right', shadow=True, fontsize='x-small')
-
     fig3 = plt.figure()
     collisionplot_all = fig3.add_subplot(111)
     collisionplot_all.set_title('Scene Vector Robustness ( 1 pixel = 1 cm )')
@@ -267,16 +260,7 @@ def motionflow_graphs():
         "collision_pointsframe_skip1results_FB_night_"
     ]
 
-    list_of_shape_metrics = [
-        "shape_pointsframe_skip1_generated",
-        "shape_pointsframe_skip1results_FB_none_",
-        #"shape_pointsframe_skip1results_FB_snow_",
-        #"shape_pointsframe_skip1results_FB_rain_"
-        "shape_pointsframe_skip1results_FB_night_"
-    ]
-
     color_of_collision_metrics = ["green", "red", "black"]
-    color_of_shape_metrics = ["green", "red", "black"]
 
     assert(len(list_of_collision_metrics) == len(color_of_collision_metrics))
     assert(len(list_of_shape_metrics) == len(color_of_shape_metrics))
@@ -327,28 +311,125 @@ def motionflow_graphs():
         #for count in range(len(coordinates)):
         #    list_of_collision_plots[no_of_metrics+1].plot([coordinates_gt[count][0], coordinates[count][0]], [coordinates_gt[count][1], coordinates[count][1]])
 
-    for no_of_metrics in range(len(list_of_shape_metrics)):
-        shape_points = yaml_load[list_of_shape_metrics[no_of_metrics]]
-        coordinates = list()
-        for count in range(len(shape_points)-offset):
-            xy = list()
-            xy.append(shape_points[offset + count]["x"])
-            xy.append(shape_points[offset + count]["y"])
-            coordinates.append(xy)
-        data = np.array(coordinates)
-        x1, y1 = data.T
-        shapeplot1.plot(x1, y1, 'ko-', lw=2, color=color_of_shape_metrics[no_of_metrics],label=list_of_shape_metrics[no_of_metrics])
-        shapeplot1.legend()
-        shapeplot1.set_ylim([0,1])
-        shapeplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
     fig1.set_size_inches(18.5, 10.5)
-    fig2.set_size_inches(18.5, 10.5)
     fig3.set_size_inches(18.5, 10.5)
     fig1.savefig('/local/tmp/eaes/vector_robustness.png', dpi=200)
-    fig2.savefig('/local/tmp/eaes/pixel_robustness.png', dpi=200)
     fig3.savefig('/local/tmp/eaes/vector_robustness_all.png', dpi=200)
 
+
+def motionflow_pixelgraphs():
+
+    dataset = "cpp"
+    scenario = "two"
+    file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
+    #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
+
+    yaml_file = open(file, "r")
+    check = yaml_file.readline()
+    print check
+    if ("YAML:1.0" in check ):
+        read_yaml_file = yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
+        read_yaml_file = read_yaml_file.replace(':', ': ')
+        yaml_file.close()
+        yaml_file = open(file, "w")
+        yaml_file.write(read_yaml_file)
+
+    yaml_file.close()
+
+    fig2 = plt.figure()
+    plt.suptitle("Pixel Vector Robustness ( 1 pixel = 1 cm ) ")
+
+    shapeplot0 = fig2.add_subplot(221)
+    shapeplot1 = fig2.add_subplot(222)
+    shapeplot2 = fig2.add_subplot(223)
+    shapeplot3 = fig2.add_subplot(224)
+
+    shapeplot0.set_title('shape_pointsframe_skip1_postprocessing_0')
+    shapeplot1.set_title('shape_pointsframe_skip1_postprocessing_1')
+    shapeplot2.set_title('shape_pointsframe_skip1_postprocessing_2')
+    shapeplot3.set_title('shape_pointsframe_skip1_postprocessing_3')
+
+    shapeplot0.set_xlabel('good_pixels')
+    shapeplot0.set_ylabel('total_pixels')
+    shapeplot1.set_xlabel('good_pixels')
+    shapeplot1.set_ylabel('total_pixels')
+    shapeplot2.set_xlabel('good_pixels')
+    shapeplot2.set_ylabel('total_pixels')
+    shapeplot3.set_xlabel('good_pixels')
+    shapeplot3.set_ylabel('total_pixels')
+    legend = shapeplot1.legend(loc='center right', shadow=True, fontsize='x-small')
+
+    yaml_load = yaml.load(open(file))
+
+    list_of_shape_metrics = [
+        #"shape_pointsframe_skip1_postprocessing_0_generated",
+        "shape_pointsframe_skip1_postprocessing_0results_FB_none_",
+        "shape_pointsframe_skip1_postprocessing_1results_FB_none_",
+        "shape_pointsframe_skip1_postprocessing_2results_FB_none_",
+        "shape_pointsframe_skip1_postprocessing_3results_FB_none_",
+        "shape_pointsframe_skip1_postprocessing_1results_FB_night_",
+        "shape_pointsframe_skip1_postprocessing_0results_FB_night_",
+        "shape_pointsframe_skip1_postprocessing_2results_FB_night_",
+        "shape_pointsframe_skip1_postprocessing_3results_FB_night_",
+    ]
+
+    color_of_shape_metrics = ["red", "black"]
+
+    assert(len(list_of_shape_metrics)/4 == len(color_of_shape_metrics))
+
+    offset=0
+    offset_index=0
+    num=0
+
+    for no_of_metrics in range(2):
+
+        for x in range(4):
+
+            shape_points = yaml_load[list_of_shape_metrics[offset_index*no_of_metrics+x]]
+            print offset_index*no_of_metrics+x
+            shape = list()
+            for count in range(len(shape_points)-offset):
+                xy = list()
+                xy.append(shape_points[offset + count]["good_pixels"])
+                xy.append(shape_points[offset + count]["total_pixels"])
+                shape.append(xy)
+            data = np.array(shape)
+            if ( x == 0):
+                x0, y0 = data.T
+                y0 = x0/y0
+            if ( x == 1):
+                x1, y1 = data.T
+                y1 = x1/y1
+            if ( x == 2):
+                x2, y2 = data.T
+                y2 = x2/y2
+            if ( x == 3):
+                x3, y3 = data.T
+                y3 = x3/y3
+
+            x0 = np.arange(0.0, 5.0, 1)
+
+        shapeplot0.plot(x0, y0, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        #shapeplot1.legend()
+        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        shapeplot1.plot(x0, y1, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        #shapeplot1.legend()
+        shapeplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        shapeplot2.plot(x0, y2, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        #shapeplot1.legend()
+        shapeplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        shapeplot3.plot(x0, y3, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        #shapeplot1.legend()
+        shapeplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        offset_index=offset_index+4
+
+    fig2.set_size_inches(18.5, 10.5)
+    fig2.savefig('/local/tmp/eaes/pixel_robustness.png', dpi=200)
 
 
 
@@ -417,6 +498,7 @@ if __name__ == '__main__':
     #criticalpoint()
     #lemniscate()
     #simple()
-    motionflow_graphs()
+    motionflow_pixelgraphs()
+    #motionflow_vectorgraphs()
     #check()
     #vkitti()
