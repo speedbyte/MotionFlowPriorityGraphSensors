@@ -524,7 +524,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
             // Display the output image
             //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
-            cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
+            //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
             cv::imwrite(temp_result_position_path, image_02_frame);
             prevGray = curGray.clone();
 
@@ -661,11 +661,28 @@ void AlgorithmFlow::generate_shape_points() {
                         int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
                                 frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                        float keinTreffer;
+                        float baseTreffer;
+
+                        cv::Point2f gt_displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                                (frame_skip-1).at(frame_count).second;
+                        auto dist_gt = cv::norm(gt_displacement);
 
                         if (m_resultordner !=
                             "/generated") {   // this is unncecessary, because this function is in AlgorithmFlow, still I will leave this.
-                            for (auto j = 0; j < CLUSTER_COUNT_ALGO; j++) {
+                            // check here, how many actually lie within the ground truth.
+
+                            for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
+                                cv::Point2f mean_displacement = m_list_simulated_objects.at(obj_index)->
+                                                get_shape_parameters().at(
+                                                frame_skip - 1).at(post_processing_index)
+                                        .at(frame_count).at(cluster_count).second;
+                                auto dist_algo = cv::norm(mean_displacement);
+                                auto dist_err = std::abs(dist_gt - dist_algo);
+                                if (dist_err < DISTANCE_ERROR_TOLERANCE) {
+                                    vollTreffer++;
+                                    }
+                                }
+                                /*
                                 auto x_coordinates = m_list_simulated_objects.at(
                                         obj_index)->get_shape_parameters().at
                                         (frame_skip - 1).at(post_processing_index).at(frame_count).at(j).first.x;
@@ -680,15 +697,17 @@ void AlgorithmFlow::generate_shape_points() {
                                         ) {
                                     vollTreffer++;
                                 }
-                            }
-                            keinTreffer = ((float) CLUSTER_SIZE_STENCIL_BASE);
+                            }*/
+
+                            //vollTreffer = ((float) CLUSTER_COUNT_ALGO);
+                            baseTreffer = ((float) CLUSTER_SIZE_STENCIL_BASE);
                         }
-                        shape_points.at(obj_index) = (cv::Point2f(vollTreffer, keinTreffer));
+                        shape_points.at(obj_index) = (cv::Point2f(vollTreffer, baseTreffer));
 
                         std::cout << "vollTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId()
                                   << " = " << vollTreffer << std::endl;
-                        std::cout << "keinTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId()
-                                  << " = " << keinTreffer << std::endl;
+                        std::cout << "baseTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId()
+                                  << " = " << baseTreffer << std::endl;
 
                         shape_average.x += shape_points.at(obj_index).x;
                         shape_average.y += shape_points.at(obj_index).y;

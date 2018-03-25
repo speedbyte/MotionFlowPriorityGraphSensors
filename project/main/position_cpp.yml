@@ -35,3 +35,143 @@ frame_count_004:
    - { name:random_object, visible:1, x:3.6685876464843750e+02,
        y:2.7126397705078125e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
        dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_005:
+   - { name:rectangle_long, visible:1, x:4.2320300292968750e+02,
+       y:3.2062496948242188e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.6567486572265625e+02,
+       y:2.7033151245117188e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_006:
+   - { name:rectangle_long, visible:1, x:4.2217074584960938e+02,
+       y:3.1975369262695312e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.6447372436523438e+02,
+       y:2.6939288330078125e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_007:
+   - { name:rectangle_long, visible:1, x:4.2115112304687500e+02,
+       y:3.1888790893554688e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.6325509643554688e+02,
+       y:2.6844818115234375e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_008:
+   - { name:rectangle_long, visible:1, x:4.2014370727539062e+02,
+       y:3.1802740478515625e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.6201873779296875e+02,
+       y:2.6749768066406250e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_009:
+   - { name:rectangle_long, visible:1, x:4.1914794921875000e+02,
+       y:3.1717205810546875e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.6076449584960938e+02,
+       y:2.6654162597656250e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_010:
+   - { name:rectangle_long, visible:1, x:4.1816336059570312e+02,
+       y:3.1632159423828125e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.5949218750000000e+02,
+       y:2.6558035278320312e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_011:
+   - { name:rectangle_long, visible:1, x:4.1718939208984375e+02,
+       y:3.1547586059570312e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.5820178222656250e+02,
+       y:2.6461428833007812e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_012:
+   - { name:rectangle_long, visible:1, x:4.1622555541992188e+02,
+       y:3.1463464355468750e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.5689324951171875e+02,
+       y:2.6364395141601562e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_013:
+   - { name:rectangle_long, visible:1, x:4.1527130126953125e+02,
+       y:3.1379769897460938e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.5556661987304688e+02,
+       y:2.6266998291015625e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_014:
+   - { name:rectangle_long, visible:1, x:4.1432608032226562e+02,
+       y:3.1296484375000000e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.5422198486328125e+02,
+       y:2.6169314575195312e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_015:
+   - { name:rectangle_long, visible:1, x:4.1338940429687500e+02,
+       y:3.1213577270507812e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.5285955810546875e+02,
+       y:2.6071429443359375e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_016:
+   - { name:rectangle_long, visible:1, x:4.1246072387695312e+02,
+       y:3.1131036376953125e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.5147955322265625e+02,
+       y:2.5973446655273438e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_017:
+   - { name:rectangle_long, visible:1, x:4.1153952026367188e+02,
+       y:3.1048828125000000e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.5008239746093750e+02,
+       y:2.5875491333007812e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_018:
+   - { name:rectangle_long, visible:1, x:4.1062524414062500e+02,
+       y:3.0966937255859375e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.4866848754882812e+02,
+       y:2.5777697753906250e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_019:
+   - { name:rectangle_long, visible:1, x:4.0971734619140625e+02,
+       y:3.0885333251953125e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.4723837280273438e+02,
+       y:2.5680236816406250e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_020:
+   - { name:rectangle_long, visible:1, x:4.0881530761718750e+02,
+       y:3.0803997802734375e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.4579269409179688e+02,
+       y:2.5583288574218750e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_021:
+   - { name:rectangle_long, visible:1, x:4.0791860961914062e+02,
+       y:3.0722906494140625e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.4433227539062500e+02,
+       y:2.5487069702148438e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_022:
+   - { name:rectangle_long, visible:1, x:4.0702670288085938e+02,
+       y:3.0642031860351562e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.4285797119140625e+02,
+       y:2.5391824340820312e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_023:
+   - { name:rectangle_long, visible:1, x:4.0613906860351562e+02,
+       y:3.0561352539062500e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.4137084960937500e+02,
+       y:2.5297834777832031e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+frame_count_024:
+   - { name:rectangle_long, visible:1, x:4.0525512695312500e+02,
+       y:3.0480841064453125e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
+   - { name:random_object, visible:1, x:3.3987200927734375e+02,
+       y:2.5205415344238281e+02, dim_x:30., dim_y:70., x_usk:0., y_usk:0.,
+       dim_x_usk:0., dim_y_usk:0., speed_x:0., speed_y:0. }
