@@ -465,6 +465,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
+        sendSCPMessage(m_scpSocket, bbox.c_str());
+
+        sleep(1);
+
         sprintf(command, "cd %s../../ ; bash vtdRunScp.sh", (m_datasetpath.string()).c_str());
         std::cout << command << std::endl;
         system(command);

@@ -235,7 +235,7 @@ def motionflow_vectorgraphs_no_noise():
     yaml_file.close()
 
     fig2 = plt.figure()
-    plt.suptitle("OpticalFlow Vector Robustness base algorithm no noise")
+    plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
 
     collisionplot0 = fig2.add_subplot(221)
     collisionplot1 = fig2.add_subplot(222)
@@ -369,7 +369,7 @@ def motionflow_vectorgraphs_noise():
     yaml_file.close()
 
     fig2 = plt.figure()
-    plt.suptitle("Postprocessing Vector Robustness under different realistic noise conditions")
+    plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
 
     collisionplot0 = fig2.add_subplot(221)
     collisionplot1 = fig2.add_subplot(222)
@@ -512,7 +512,7 @@ def motionflow_pixelgraphs_noise():
     yaml_file.close()
 
     fig2 = plt.figure()
-    plt.suptitle("Postprocessing Pixel Robustness under different realistic noise conditions")
+    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
 
     shapeplot0 = fig2.add_subplot(221)
     shapeplot1 = fig2.add_subplot(222)
@@ -630,7 +630,7 @@ def motionflow_pixelgraphs_no_noise():
     yaml_file.close()
 
     fig2 = plt.figure()
-    plt.suptitle("OpticalFlow Pixel Robustness base algorithm no noise")
+    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
 
     shapeplot0 = fig2.add_subplot(221)
     shapeplot1 = fig2.add_subplot(222)

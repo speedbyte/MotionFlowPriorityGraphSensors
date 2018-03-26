@@ -181,7 +181,7 @@ private:
                     "</Sensor>";
 
     // Precipitation intensity needs to be > 0 for snow and rain.
-    const std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"auto\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
+    const std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"auto\" /> <Sky cloudState=\"0/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
     //Rain
     const std::string environment_parameters_wet = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"auto\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"rain\" intensity=\"0.500000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
 
@@ -189,7 +189,7 @@ private:
 
     std::string camera_parameters = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
+    std::string display_parameters = "<Display>  <SensorSymbols enable=\"true\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"true\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
 
     std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
 
@@ -202,6 +202,8 @@ private:
     std::string message_scp = "<Symbol name=\"expl01\" > <Text data=\"Time for snow\" colorRGB=\"0xffff00\" size=\"50.0\" /> <PosScreen x=\"0.01\" y=\"0.05\" /></Symbol>";
 
     std::string popup_scp = "<Info level=\"info\"> <Message popup=\"true\" text=\"snow!!!!\"/> </Info>";
+
+    std::string bbox = "<Symbol name=\"BBCar\"> <BoundingBox player=\"SpyingCar\" /> </Symbol>";
 
     /*
 
@@ -339,15 +341,51 @@ public:
             m_environment_scp_message = environment_parameters_dry;
         }
 
-        else if ( environment == "snow" || environment == "rain" ) {
+        else if ( environment == "snow_low"  ) {
 
             m_environment_scp_message = environment_parameters_wet;
             std::string to_replace = "rain";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
-                m_environment_scp_message.replace(position, to_replace.length(), environment );
+                m_environment_scp_message.replace(position, to_replace.length(), "snow");
+            }
+            to_replace = "100000.000000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "60");
             }
         }
+
+        else if ( environment == "snow_moderate"  ) {
+
+            m_environment_scp_message = environment_parameters_wet;
+            std::string to_replace = "rain";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "snow");
+            }
+            to_replace = "100000.000000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "40");
+            }
+        }
+
+        else if ( environment == "snow_high"  ) {
+
+            m_environment_scp_message = environment_parameters_wet;
+            std::string to_replace = "rain";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "snow");
+            }
+            to_replace = "100000.000000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "20");
+            }
+        }
+
         else if ( environment == "night" ) {
             m_environment_scp_message = environment_parameters_dry;
             std::string to_replace = "39600";
