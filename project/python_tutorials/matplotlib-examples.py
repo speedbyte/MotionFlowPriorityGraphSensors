@@ -19,6 +19,7 @@ from math import pi
 
 import random
 
+environment_list = ["none", "night"]
 
 def histogram():
     # Build a vector of 10000 normal deviates with variance 0.5^2 and mean 2
@@ -237,42 +238,27 @@ def motionflow_vectorgraphs_no_noise():
     fig2 = plt.figure()
     plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
 
-    collisionplot0 = fig2.add_subplot(221)
-    collisionplot1 = fig2.add_subplot(222)
-    collisionplot2 = fig2.add_subplot(223)
-    collisionplot3 = fig2.add_subplot(224)
+    collisionplot0 = fig2.add_subplot(111)
 
-    collisionplot0.set_title('collision_pointsframe_skip1_postprocessing_0')
-    collisionplot1.set_title('collision_pointsframe_skip1_postprocessing_1')
-    collisionplot2.set_title('collision_pointsframe_skip1_postprocessing_2')
-    collisionplot3.set_title('collision_pointsframe_skip1_postprocessing_3')
+    collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
 
     collisionplot0.set_xlabel('frame_count')
-    collisionplot0.set_ylabel('deviation noise_pixels-no_noise_pixels')
-    collisionplot1.set_xlabel('frame_count')
-    collisionplot1.set_ylabel('deviation noise_pixels-no_noise_pixels')
-    collisionplot2.set_xlabel('frame_count')
-    collisionplot2.set_ylabel('deviation noise_pixels-no_noise_pixels')
-    collisionplot3.set_xlabel('frame_count')
-    collisionplot3.set_ylabel('deviation noise_pixels-no_noise_pixels')
+    collisionplot0.set_ylabel('deviation [noise_pixels-no_noise_total_pixels]')
 
     #collisionplot0.set_ylim([0, 100])
-    #collisionplot1.set_ylim([0, 100])
-    #collisionplot2.set_ylim([0, 100])
-    #collisionplot3.set_ylim([0, 100])
-    legend = collisionplot1.legend(loc='center right', shadow=True, fontsize='x-small')
+    legend = collisionplot0.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
 
     list_of_collision_metrics = [
-        "collision_pointsframe_skip1_postprocessing_0_generated",
-        "collision_pointsframe_skip1_postprocessing_0results_FB_none_",
-        "collision_pointsframe_skip1_postprocessing_1results_FB_none_",
-        "collision_pointsframe_skip1_postprocessing_2results_FB_none_",
-        "collision_pointsframe_skip1_postprocessing_3results_FB_none_",
+        "collision_pointsframe_skip1_dataprocessing_0_generated",
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
     ]
 
-    color_of_collision_metrics = ["red", "black"]
+    color_of_collision_metrics = ["red", "green", "blue", "black"]
 
     #assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
@@ -326,26 +312,26 @@ def motionflow_vectorgraphs_no_noise():
 
             x0 = np.arange(0.0, len(collision_points), 1)
 
-        collisionplot0.plot(x0, y0, 'ko-', lw=2, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot1.plot(x0, y1, 'ko-', lw=2, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y1, 'ko-', lw=1, color=color_of_collision_metrics[1+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
-        collisionplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot2.plot(x0, y2, 'ko-', lw=2, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y2, 'ko-', lw=1, color=color_of_collision_metrics[2+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
-        collisionplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot3.plot(x0, y3, 'ko-', lw=2, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y3, 'ko-', lw=1, color=color_of_collision_metrics[3+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
-        collisionplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
         offset_index=offset_index+4
 
     fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig('/local/tmp/eaes/vector_robustness_optical_flow', dpi=200)
+    fig2.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/vector_robustness_optical_flow', dpi=200)
 
 
 
@@ -368,27 +354,36 @@ def motionflow_vectorgraphs_noise():
 
     yaml_file.close()
 
+    fig0 = plt.figure()
+    plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
+
+    fig1 = plt.figure()
+    plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
+
     fig2 = plt.figure()
     plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
 
-    collisionplot0 = fig2.add_subplot(221)
-    collisionplot1 = fig2.add_subplot(222)
-    collisionplot2 = fig2.add_subplot(223)
-    collisionplot3 = fig2.add_subplot(224)
+    fig3 = plt.figure()
+    plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
 
-    collisionplot0.set_title('collision_pointsframe_skip1_postprocessing_0')
-    collisionplot1.set_title('collision_pointsframe_skip1_postprocessing_1')
-    collisionplot2.set_title('collision_pointsframe_skip1_postprocessing_2')
-    collisionplot3.set_title('collision_pointsframe_skip1_postprocessing_3')
+    collisionplot0 = fig0.add_subplot(111)
+    collisionplot1 = fig1.add_subplot(111)
+    collisionplot2 = fig2.add_subplot(111)
+    collisionplot3 = fig3.add_subplot(111)
+
+    collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
+    collisionplot1.set_title('collision_pointsframe_skip1_dataprocessing_1')
+    collisionplot2.set_title('collision_pointsframe_skip1_dataprocessing_2')
+    collisionplot3.set_title('collision_pointsframe_skip1_dataprocessing_3')
 
     collisionplot0.set_xlabel('frame_count')
-    collisionplot0.set_ylabel('deviation noise_pixels-no_noise_pixels')
+    collisionplot0.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
     collisionplot1.set_xlabel('frame_count')
-    collisionplot1.set_ylabel('deviation noise_pixels-no_noise_pixels')
+    collisionplot1.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
     collisionplot2.set_xlabel('frame_count')
-    collisionplot2.set_ylabel('deviation noise_pixels-no_noise_pixels')
+    collisionplot2.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
     collisionplot3.set_xlabel('frame_count')
-    collisionplot3.set_ylabel('deviation noise_pixels-no_noise_pixels')
+    collisionplot3.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
 
     collisionplot0.set_ylim([0, 100])
     collisionplot1.set_ylim([0, 100])
@@ -399,14 +394,14 @@ def motionflow_vectorgraphs_noise():
     yaml_load = yaml.load(open(file))
 
     list_of_collision_metrics = [
-        "collision_pointsframe_skip1_postprocessing_0results_FB_none_",
-        "collision_pointsframe_skip1_postprocessing_1results_FB_none_",
-        "collision_pointsframe_skip1_postprocessing_2results_FB_none_",
-        "collision_pointsframe_skip1_postprocessing_3results_FB_none_",
-        "collision_pointsframe_skip1_postprocessing_1results_FB_night_",
-        "collision_pointsframe_skip1_postprocessing_0results_FB_night_",
-        "collision_pointsframe_skip1_postprocessing_2results_FB_night_",
-        "collision_pointsframe_skip1_postprocessing_3results_FB_night_",
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_night_",
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_night_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_night_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_night_",
     ]
 
     color_of_collision_metrics = ["red", "black"]
@@ -441,7 +436,7 @@ def motionflow_vectorgraphs_noise():
 
             x0 = np.arange(0.0, 5.0, 1)
 
-    for no_of_metrics in range(2): # none, night, ...
+    for no_of_metrics in range(len(environment_list)): # none, night, ...
 
         for x in range(4):
 
@@ -469,26 +464,32 @@ def motionflow_vectorgraphs_noise():
 
             x0 = np.arange(0.0, len(collision_points), 1)
 
-        collisionplot0.plot(x0, y0, 'ko-', lw=2, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot1.plot(x0, y1, 'ko-', lw=2, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot1.plot(x0, y1, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot2.plot(x0, y2, 'ko-', lw=2, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot2.plot(x0, y2, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot3.plot(x0, y3, 'ko-', lw=2, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot3.plot(x0, y3, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
         offset_index=offset_index+4
 
+    fig0.set_size_inches(18.5, 10.5)
+    fig0.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/vector_robustness_data_processing_algorithm_0', dpi=200)
+    fig1.set_size_inches(18.5, 10.5)
+    fig1.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/vector_robustness_data_processing_algorithm_1', dpi=200)
     fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig('/local/tmp/eaes/vector_robustness_post_processing_algorithm', dpi=200)
+    fig2.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/vector_robustness_data_processing_algorithm_2', dpi=200)
+    fig3.set_size_inches(18.5, 10.5)
+    fig3.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/vector_robustness_data_processing_algorithm_3', dpi=200)
 
 
 
@@ -511,27 +512,33 @@ def motionflow_pixelgraphs_noise():
 
     yaml_file.close()
 
+    fig0 = plt.figure()
+    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
+    fig1 = plt.figure()
+    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
     fig2 = plt.figure()
     plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
+    fig3 = plt.figure()
+    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
 
-    shapeplot0 = fig2.add_subplot(221)
-    shapeplot1 = fig2.add_subplot(222)
-    shapeplot2 = fig2.add_subplot(223)
-    shapeplot3 = fig2.add_subplot(224)
+    shapeplot0 = fig0.add_subplot(111)
+    shapeplot1 = fig1.add_subplot(111)
+    shapeplot2 = fig2.add_subplot(111)
+    shapeplot3 = fig3.add_subplot(111)
 
-    shapeplot0.set_title('shape_pointsframe_skip1_postprocessing_0')
-    shapeplot1.set_title('shape_pointsframe_skip1_postprocessing_1')
-    shapeplot2.set_title('shape_pointsframe_skip1_postprocessing_2')
-    shapeplot3.set_title('shape_pointsframe_skip1_postprocessing_3')
+    shapeplot0.set_title('shape_pointsframe_skip1_dataprocessing_0')
+    shapeplot1.set_title('shape_pointsframe_skip1_dataprocessing_1')
+    shapeplot2.set_title('shape_pointsframe_skip1_dataprocessing_2')
+    shapeplot3.set_title('shape_pointsframe_skip1_dataprocessing_3')
 
     shapeplot0.set_xlabel('frame_count')
-    shapeplot0.set_ylabel('noise_pixels/no_noise_pixels')
+    shapeplot0.set_ylabel('noise_good_pixels/no_noise_total_pixels')
     shapeplot1.set_xlabel('frame_count')
-    shapeplot1.set_ylabel('noise_pixels/no_noise_pixels')
+    shapeplot1.set_ylabel('noise_good_pixels/no_noise_total_pixels')
     shapeplot2.set_xlabel('frame_count')
-    shapeplot2.set_ylabel('noise_pixels/no_noise_pixels')
+    shapeplot2.set_ylabel('noise_good_pixels/no_noise_total_pixels')
     shapeplot3.set_xlabel('frame_count')
-    shapeplot3.set_ylabel('noise_pixels/no_noise_pixels')
+    shapeplot3.set_ylabel('noise_good_pixels/no_noise_total_pixels')
 
     shapeplot0.set_ylim([0, 1])
     shapeplot1.set_ylim([0, 1])
@@ -542,14 +549,14 @@ def motionflow_pixelgraphs_noise():
     yaml_load = yaml.load(open(file))
 
     list_of_shape_metrics = [
-        "shape_pointsframe_skip1_postprocessing_0results_FB_none_",
-        "shape_pointsframe_skip1_postprocessing_1results_FB_none_",
-        "shape_pointsframe_skip1_postprocessing_2results_FB_none_",
-        "shape_pointsframe_skip1_postprocessing_3results_FB_none_",
-        "shape_pointsframe_skip1_postprocessing_1results_FB_night_",
-        "shape_pointsframe_skip1_postprocessing_0results_FB_night_",
-        "shape_pointsframe_skip1_postprocessing_2results_FB_night_",
-        "shape_pointsframe_skip1_postprocessing_3results_FB_night_",
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_none_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_none_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_night_",
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_night_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_night_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_night_",
     ]
 
     color_of_shape_metrics = ["red", "black"]
@@ -559,10 +566,18 @@ def motionflow_pixelgraphs_noise():
     offset=1
     offset_index=0
     num=0
+    y0_mean_list = list()
+    y1_mean_list = list()
+    y2_mean_list = list()
+    y3_mean_list = list()
 
-    for no_of_metrics in range(2): #none, night
+    for no_of_metrics in range(len(environment_list)): #none, night
 
         for x in range(4):
+            y0_mean = 0
+            y1_mean = 0
+            y2_mean = 0
+            y3_mean = 0
 
             shape_points = yaml_load[list_of_shape_metrics[offset_index*no_of_metrics+x]]
             print offset_index*no_of_metrics+x
@@ -588,26 +603,56 @@ def motionflow_pixelgraphs_noise():
 
             x0 = np.arange(0.0, len(shape_points)-1, 1)
 
-        shapeplot0.plot(x0, y0, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        for n,i in enumerate(y0):
+            y0_mean=y0_mean+i
+        for n,i in enumerate(y1):
+            y1_mean=y1_mean+i
+        for n,i in enumerate(y2):
+            y2_mean=y2_mean+i
+        for n,i in enumerate(y3):
+            y3_mean=y3_mean+i
+        y0_mean = y0_mean/(n+1)
+        y1_mean = y1_mean/(n+1)
+        y2_mean = y2_mean/(n+1)
+        y3_mean = y3_mean/(n+1)
+        y0_mean_list.append(y0_mean)
+        y1_mean_list.append(y1_mean)
+        y2_mean_list.append(y2_mean)
+        y3_mean_list.append(y3_mean)
+
+        shapeplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
         shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        shapeplot1.plot(x0, y1, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        shapeplot1.plot(x0, y1, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
         shapeplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        shapeplot2.plot(x0, y2, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        shapeplot2.plot(x0, y2, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
         shapeplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        shapeplot3.plot(x0, y3, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        shapeplot3.plot(x0, y3, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
         shapeplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
         offset_index=offset_index+4
 
+        print "Table 2 " + environment_list[no_of_metrics]
+        print y0_mean_list[no_of_metrics]
+        print y1_mean_list[no_of_metrics]
+        print y2_mean_list[no_of_metrics]
+        print y3_mean_list[no_of_metrics]
+
+
+    fig0.set_size_inches(18.5, 10.5)
+    fig0.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/pixel_robustness_data_processing_algorithm_0', dpi=200)
+    fig1.set_size_inches(18.5, 10.5)
+    fig1.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/pixel_robustness_data_processing_algorithm_1', dpi=200)
     fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig('/local/tmp/eaes/pixel_robustness_post_processing_algorithm', dpi=200)
+    fig2.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/pixel_robustness_data_processing_algorithm_2', dpi=200)
+    fig3.set_size_inches(18.5, 10.5)
+    fig3.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/pixel_robustness_data_processing_algorithm_3', dpi=200)
 
 
 def motionflow_pixelgraphs_no_noise():
@@ -632,43 +677,28 @@ def motionflow_pixelgraphs_no_noise():
     fig2 = plt.figure()
     plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
 
-    shapeplot0 = fig2.add_subplot(221)
-    shapeplot1 = fig2.add_subplot(222)
-    shapeplot2 = fig2.add_subplot(223)
-    shapeplot3 = fig2.add_subplot(224)
+    shapeplot0 = fig2.add_subplot(111)
 
-    shapeplot0.set_title('shape_pointsframe_skip1_postprocessing_0')
-    shapeplot1.set_title('shape_pointsframe_skip1_postprocessing_1')
-    shapeplot2.set_title('shape_pointsframe_skip1_postprocessing_2')
-    shapeplot3.set_title('shape_pointsframe_skip1_postprocessing_3')
+    shapeplot0.set_title('shape_pointsframe_skip1_dataprocessing_0')
 
     shapeplot0.set_xlabel('frame_count')
-    shapeplot0.set_ylabel('noise_pixels/no_noise_pixels')
-    shapeplot1.set_xlabel('frame_count')
-    shapeplot1.set_ylabel('noise_pixels/no_noise_pixels')
-    shapeplot2.set_xlabel('frame_count')
-    shapeplot2.set_ylabel('noise_pixels/no_noise_pixels')
-    shapeplot3.set_xlabel('frame_count')
-    shapeplot3.set_ylabel('noise_pixels/no_noise_pixels')
+    shapeplot0.set_ylabel('no_noise_good_pixels/no_noise_total_pixels')
 
     shapeplot0.set_ylim([0, 1])
-    shapeplot1.set_ylim([0, 1])
-    shapeplot2.set_ylim([0, 1])
-    shapeplot3.set_ylim([0, 1])
-    legend = shapeplot1.legend(loc='center right', shadow=True, fontsize='x-small')
+    legend = shapeplot0.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
 
 
     list_of_shape_metrics = [
-        "shape_pointsframe_skip1_postprocessing_0_generated",
-        "shape_pointsframe_skip1_postprocessing_0results_FB_none_",
-        "shape_pointsframe_skip1_postprocessing_1results_FB_none_",
-        "shape_pointsframe_skip1_postprocessing_2results_FB_none_",
-        "shape_pointsframe_skip1_postprocessing_3results_FB_none_",
+        "shape_pointsframe_skip1_dataprocessing_0_generated",
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_none_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_none_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
     ]
 
-    color_of_shape_metrics = ["red", "black"]
+    color_of_shape_metrics = ["red", "green", "blue", "black"]
 
     #assert(len(list_of_shape_metrics)/1 == len(color_of_shape_metrics))
 
@@ -723,26 +753,26 @@ def motionflow_pixelgraphs_no_noise():
 
             x0 = np.arange(0.0, len(shape_points)-1, 1)
 
-        shapeplot0.plot(x0, y0, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        shapeplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
         shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        shapeplot1.plot(x0, y1, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        shapeplot0.plot(x0, y1, 'ko-', lw=1, color=color_of_shape_metrics[1+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
-        shapeplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        shapeplot2.plot(x0, y2, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        shapeplot0.plot(x0, y2, 'ko-', lw=1, color=color_of_shape_metrics[2+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
-        shapeplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        shapeplot3.plot(x0, y3, 'ko-', lw=2, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
+        shapeplot0.plot(x0, y3, 'ko-', lw=1, color=color_of_shape_metrics[3+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
-        shapeplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
         offset_index=offset_index+4
 
     fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig('/local/tmp/eaes/pixel_robustness_optical_flow.png', dpi=200)
+    fig2.savefig('/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/pixel_robustness_optical_flow.png', dpi=200)
 
 
 def check():

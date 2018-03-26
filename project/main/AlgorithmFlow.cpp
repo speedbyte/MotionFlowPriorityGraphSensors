@@ -613,12 +613,12 @@ void AlgorithmFlow::generate_shape_points() {
 
         std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
                   << std::endl;
-        for (unsigned post_processing_index = 0; post_processing_index < 4; post_processing_index++) {
+        for (unsigned data_processing_index = 0; data_processing_index < 4; data_processing_index++) {
 
             std::vector<std::vector<cv::Point2f> > frame_shape_points;
 
             unsigned FRAME_COUNT = (unsigned) m_list_simulated_objects.at(0)
-                    ->get_shape_parameters().at(frame_skip - 1).at(post_processing_index).size();
+                    ->get_shape_parameters().at(frame_skip - 1).at(data_processing_index).size();
 
             assert(FRAME_COUNT > 0);
 
@@ -636,7 +636,7 @@ void AlgorithmFlow::generate_shape_points() {
                 for (ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
 
                     auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(
-                            obj_index)->get_shape_parameters().at(frame_skip - 1).at(post_processing_index).at(frame_count).size();
+                            obj_index)->get_shape_parameters().at(frame_skip - 1).at(data_processing_index).at(frame_count).size();
                     const unsigned CLUSTER_SIZE_STENCIL_BASE = (unsigned)m_list_simulated_base_objects.at(
                             obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                             (frame_skip - 1).at(frame_count).size();
@@ -674,7 +674,7 @@ void AlgorithmFlow::generate_shape_points() {
                             for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
                                 cv::Point2f mean_displacement = m_list_simulated_objects.at(obj_index)->
                                                 get_shape_parameters().at(
-                                                frame_skip - 1).at(post_processing_index)
+                                                frame_skip - 1).at(data_processing_index)
                                         .at(frame_count).at(cluster_count).second;
                                 auto dist_algo = cv::norm(mean_displacement);
                                 auto dist_err = std::abs(dist_gt - dist_algo);
@@ -685,10 +685,10 @@ void AlgorithmFlow::generate_shape_points() {
                                 /*
                                 auto x_coordinates = m_list_simulated_objects.at(
                                         obj_index)->get_shape_parameters().at
-                                        (frame_skip - 1).at(post_processing_index).at(frame_count).at(j).first.x;
+                                        (frame_skip - 1).at(data_processing_index).at(frame_count).at(j).first.x;
                                 auto y_coordinates = m_list_simulated_objects.at(
                                         obj_index)->get_shape_parameters().at
-                                        (frame_skip - 1).at(post_processing_index).at(frame_count).at(j).first.y;
+                                        (frame_skip - 1).at(data_processing_index).at(frame_count).at(j).first.y;
 
                                 if ((x_coordinates > (columnBegin - width / STENCIL_GRID_EXTENDER)) &&
                                     (x_coordinates < (columnBegin + width + width / STENCIL_GRID_EXTENDER)) &&
@@ -789,7 +789,7 @@ void AlgorithmFlow::generate_collision_points_mean() {
         std::cout << "generating collision points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
                   << std::endl;
 
-        for ( unsigned post_processing_index = 0; post_processing_index < 4; post_processing_index++ ) {
+        for ( unsigned data_processing_index = 0; data_processing_index < 4; data_processing_index++ ) {
 
             std::vector<std::vector<cv::Point2f> > frame_collision_points;
 
@@ -824,11 +824,11 @@ void AlgorithmFlow::generate_collision_points_mean() {
 
                         cv::Point2f centroid = m_list_simulated_objects.at(obj_index)->
                                         get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(
-                                        frame_skip - 1).at(post_processing_index)
+                                        frame_skip - 1).at(data_processing_index)
                                 .at(frame_count+1).first;
                         cv::Point2f mean_displacement = m_list_simulated_objects.at(obj_index)->
                                         get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(
-                                        frame_skip - 1).at(post_processing_index)
+                                        frame_skip - 1).at(data_processing_index)
                                 .at(frame_count+1).second;
 
                         cv::Mat roi;
@@ -872,7 +872,7 @@ void AlgorithmFlow::generate_collision_points_mean() {
 
                             cv::Point2f lineparameters1 = list_of_simulated_objects_combination.at(
                                             obj_index).first->get_line_parameters().at(frame_skip - 1).at
-                                            (post_processing_index)
+                                            (data_processing_index)
                                     .at(frame_count).first;
 
                             cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(
@@ -891,7 +891,7 @@ void AlgorithmFlow::generate_collision_points_mean() {
 
                             lineparameters1 = list_of_simulated_objects_combination.at(
                                             obj_index).second->get_line_parameters().at(frame_skip - 1).at
-                                            (post_processing_index)
+                                            (data_processing_index)
                                     .at(frame_count).first;
 
                             lineparameters2 = list_of_gt_objects_combination.at(obj_index).first->get_line_parameters

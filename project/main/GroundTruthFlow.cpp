@@ -193,12 +193,12 @@ void GroundTruthFlow::generate_shape_points() {
 
         std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
                   << std::endl;
-        for (unsigned post_processing_index = 0; post_processing_index < 1; post_processing_index++) {
+        for (unsigned data_processing_index = 0; data_processing_index < 1; data_processing_index++) {
 
             std::vector<std::vector<cv::Point2f> > frame_shape_points;
 
             unsigned FRAME_COUNT = (unsigned) m_list_gt_objects.at(0)
-                    ->get_shape_parameters().at(frame_skip - 1).at(post_processing_index).size();
+                    ->get_shape_parameters().at(frame_skip - 1).at(data_processing_index).size();
 
             assert(FRAME_COUNT > 0);
 
