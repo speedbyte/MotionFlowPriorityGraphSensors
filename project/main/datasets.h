@@ -41,6 +41,8 @@
 #define STENCIL_GRID_COMPRESSOR 2  // every x pixels
 #define STENCIL_GRID_EXTENDER 10 // 10 % more than the original size
 
+#define DO_STENCIL_GRID_EXTENSION 0
+
 typedef enum {
     continous_frames = 0,
     pariwise_frames = 1,

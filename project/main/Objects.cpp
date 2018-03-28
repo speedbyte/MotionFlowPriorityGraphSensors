@@ -68,6 +68,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             float mean_displacement_vector_ranked_mean_y = 0.0f;
 
             std::vector<float> data_x, data_y;
+            std::vector<float> data_x_pts, data_y_pts;
 
             bool mean_visibility = false;
 
@@ -80,6 +81,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             }
 
             cv::Point2f gt_displacement_threshold_min, gt_displacement_threshold_max;
+
+            cv::Point2f gt_pts_compare;
+            cv::Point2f gt_displacement_compare;
 
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
                 cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
@@ -103,7 +107,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 data_y.push_back(std::round(gt_displacement.y*100)/100);
 
                 // preprocesing 4th method
-                // Nothing to do
+                data_x_pts.push_back(pts.x);
+                data_y_pts.push_back(pts.y);
 
                 mean_visibility = visibility;
             }
@@ -112,7 +117,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             gt_displacement_threshold_min.y = *std::min_element(data_y.begin(), data_y.end());
             gt_displacement_threshold_max.x = *std::max_element(data_x.begin(), data_x.end());
             gt_displacement_threshold_max.y = *std::max_element(data_y.begin(), data_y.end());
-            // create histogram of values.
+
+            // create histogram of values for displacement.
             std::map<float, int> histogram_x, histogram_y;
             for (const auto& e : data_x) {
                 ++histogram_x[e];
@@ -125,15 +131,40 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             for (const auto& x : histogram_x) {
                 if ( max_voted.x  <= x.second  ) {
                     max_voted.x = x.second;
-                    mean_displacement_vector_voted_mean_x = x.first;
+                    gt_displacement_compare.x = x.first;
                     std::cout << x.first << " histogram " << x.second <<"endx\n";
                 }
             }
             for (const auto& y : histogram_y) {
                 if ( max_voted.y  <= y.second  ) {
                     max_voted.y = y.second;
-                    mean_displacement_vector_voted_mean_y = y.first ;
+                    gt_displacement_compare.y = y.first ;
                     std::cout << y.first << " histogram " << y.second <<"endy\n";
+                }
+            }
+
+            // create histogram of values for displacement.
+            std::map<float, int> histogram_x_pts, histogram_y_pts;
+            for (const auto& e : data_x_pts) {
+                ++histogram_x_pts[e];
+            }
+            for (const auto& e : data_y_pts) {
+                ++histogram_y_pts[e];
+            }
+            cv::Point2f max_voted_pts = {};
+
+            for (const auto& x : histogram_x_pts) {
+                if ( max_voted_pts.x  <= x.second  ) {
+                    max_voted_pts.x = x.second;
+                    gt_pts_compare.x = x.first;
+                    std::cout << x.first << " histogram_pts " << x.second <<"endx\n";
+                }
+            }
+            for (const auto& y : histogram_y_pts) {
+                if ( max_voted_pts.y  <= y.second  ) {
+                    max_voted_pts.y = y.second;
+                    gt_pts_compare.y = y.first ;
+                    std::cout << y.first << " histogram_pts " << y.second <<"endy\n";
                 }
             }
 
@@ -197,42 +228,39 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                         (temp_displacement.x, temp_displacement.y)));
 
                 // 3rd method
-                bool x_found = false, y_found = false;
-                if ( std::round(gt_displacement.x*100)/100 ==  (mean_displacement_vector_voted_mean_x ))
+                if ( std::round(gt_displacement.x*100)/100 ==  (gt_displacement_compare.x) &&
+                        std::round(gt_displacement.y*100)/100 ==  (gt_displacement_compare.y))
                 {
-                    x_found = true;
-                }
-                if ( std::round(gt_displacement.y*100)/100 >=  (mean_displacement_vector_voted_mean_y))
-                {
-                    y_found = true;
-                }
-                if ( x_found && y_found ) {
                     mean_displacement_vector_voted_mean_x += std::round(gt_displacement.x*100)/100 ;
-                    mean_pts_voted_mean_x += pts.x ;
-                    cluster_size_voted_mean_x++;
-
                     mean_displacement_vector_voted_mean_y += std::round(gt_displacement.y*100)/100 ;
-                    mean_pts_voted_mean_y += pts.y ;
-                    cluster_size_voted_mean_y++;
-
-                    if ( mean_displacement_vector_voted_mean_x == 0 ) { //hack
-                        mean_displacement_vector_voted_mean_x=0.0001;
-                    }
-
-
                     multiframe_shape_parameters_voted_mean.push_back(std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
                             (std::round(gt_displacement.x*100)/100, std::round(gt_displacement.y*100)/100)));
+                    cluster_size_voted_mean_x++;
+                    cluster_size_voted_mean_y++;
+                }
+                else if ( std::round(gt_displacement.x*100)/100 ==  (gt_displacement_compare.x) ||
+                        std::round(gt_displacement.y*100)/100 ==  (gt_displacement_compare.y))
+                {
+                    mean_displacement_vector_voted_mean_x += std::round(gt_displacement.x*100)/100 ;
+                    mean_displacement_vector_voted_mean_y += std::round(gt_displacement.y*100)/100 ;
+                    multiframe_shape_parameters_voted_mean.push_back(std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
+                            (std::round(gt_displacement.x*100)/100, std::round(gt_displacement.y*100)/100)));
+                    cluster_size_voted_mean_x++;
+                    cluster_size_voted_mean_y++;
                 }
 
                 // 4th method
-                mean_pts_ranked_mean_x += pts.x ;
-                mean_pts_ranked_mean_y += pts.y ;
-                mean_displacement_vector_ranked_mean_x += gt_displacement.x ;
-                mean_displacement_vector_ranked_mean_y += gt_displacement.y ;
-                cluster_size_ranked_mean_x++;
-                cluster_size_ranked_mean_y++;
-                multiframe_shape_parameters_ranked_mean.push_back(std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                        (gt_displacement.x, gt_displacement.y)));
+                if ( pts.x ==  (gt_pts_compare.x) || pts.y ==  (gt_pts_compare.y))
+                {
+                    mean_pts_ranked_mean_x += pts.x ;
+                    mean_pts_ranked_mean_y += pts.y ;
+                    mean_displacement_vector_ranked_mean_x += gt_displacement.x ;
+                    mean_displacement_vector_ranked_mean_y += gt_displacement.y ;
+                    cluster_size_ranked_mean_x++;
+                    cluster_size_ranked_mean_y++;
+                    multiframe_shape_parameters_ranked_mean.push_back(std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
+                            (gt_displacement.x, gt_displacement.y)));
+                }
 
                 mean_visibility = visibility;
             }
@@ -262,8 +290,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             mean_pts_voted_mean_y /= (float)cluster_size_voted_mean_y;
             mean_displacement_vector_voted_mean_x /= (float) cluster_size_voted_mean_x;
             mean_displacement_vector_voted_mean_y /= (float) cluster_size_voted_mean_y;
-
-            //hack
 
 
             mean_pts_ranked_mean_x /= (float)cluster_size_ranked_mean_x;

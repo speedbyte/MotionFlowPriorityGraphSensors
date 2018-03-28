@@ -180,10 +180,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow_low", "rain_low"};
-    //std::vector < std::string> environment_list = {"none", "night"};
+    std::vector < std::string> environment_list = {"none", "night"};
     //std::vector < std::string> environment_list = {"none", "snow_low", "snow_moderate", "snow_high"};
 
-    std::vector < std::string> environment_list = {"none"};
+    //std::vector < std::string> environment_list = {"none"};
 
     std::string *ptr_environment_index;
 
@@ -325,7 +325,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 list_of_algorithm_flow[env_index].generate_collision_points_mean();
                 list_of_algorithm_flow[env_index].generate_shape_points();
                 if ( environment_list[env_index] != "none" ) {
-                    //list_of_algorithm_flow[env_index].visualiseStencil();
+                    list_of_algorithm_flow[env_index].visualiseStencil();
                 }
             }
         }

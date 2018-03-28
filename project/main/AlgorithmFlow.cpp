@@ -359,8 +359,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     bool visibility = m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
                     if ( visibility ) {
 
-                        cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-height/STENCIL_GRID_EXTENDER),(cvRound(rowBegin)+height+height/STENCIL_GRID_EXTENDER)).colRange
-                                (cvRound(columnBegin-width/STENCIL_GRID_EXTENDER),(cvRound(columnBegin)+width+width/STENCIL_GRID_EXTENDER));
+                        cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER)),(cvRound(rowBegin)+height+(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER))).colRange
+                                (cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)),(cvRound(columnBegin)+width+(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)));
 
                         cv::Size roi_size;
                         cv::Point roi_offset;
@@ -1129,8 +1129,35 @@ void AlgorithmFlow::visualiseStencil(void) {
             cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 
-            tempGroundTruthImage = cv::Scalar::all(255);
+            for ( unsigned data_processing_index = 0; data_processing_index < 4; data_processing_index++ ) {
+                tempGroundTruthImage = cv::Scalar::all(255);
 
+                sprintf(file_name_image_output, "000%03d_10_pixel_algo_%d.png", frame_count * frame_skip, data_processing_index);
+                output_image_file_with_path =
+                        m_generatepath.string() + "stencil/" + file_name_image_output;
+
+                for (unsigned obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
+
+                    if ((m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
+                            frame_skip - 1).at(frame_count)
+                    )) {
+
+                        const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
+                                obj_index)->get_shape_parameters().at(frame_skip - 1).at(data_processing_index).at(frame_count).size();
+
+                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+
+                            cv::Point2f pts = m_list_simulated_objects.at(
+                                            obj_index)->get_shape_parameters().at(frame_skip - 1).at(data_processing_index).at(frame_count).at(cluster_point).first;
+                            cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 0, 255), 1, 8);
+
+                        }
+                    }
+                }
+                cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            }
+            /*---------------------------------------------------------------------------------*/
+            tempGroundTruthImage = cv::Scalar::all(255);
             sprintf(file_name_image_output, "000%03d_10_pixel_algo.png", frame_count * frame_skip);
             output_image_file_with_path =
                     m_generatepath.string() + "stencil/" + file_name_image_output;
@@ -1138,7 +1165,7 @@ void AlgorithmFlow::visualiseStencil(void) {
             for (unsigned obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
 
                 if ((m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count)
-                        )) {
+                )) {
 
                     const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
                             obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
@@ -1162,7 +1189,6 @@ void AlgorithmFlow::visualiseStencil(void) {
             }
             cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
-
             tempGroundTruthImage = cv::Scalar::all(255);
 
             sprintf(file_name_image_output, "000%03d_10_flow_gt.png", frame_count * frame_skip);
