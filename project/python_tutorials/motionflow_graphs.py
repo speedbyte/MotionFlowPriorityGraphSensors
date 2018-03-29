@@ -491,7 +491,7 @@ def motionflow_vectorgraphs_no_noise():
         print y3_mean_list[no_of_metrics]
 
     fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig(output_folder + '+vector_robustness_optical_flow', dpi=200)
+    fig2.savefig(output_folder + 'vector_robustness_optical_flow', dpi=200)
 
 
 

@@ -51,9 +51,13 @@ public:
                 val.green = 0;
                 val.blue  = 0;
                 if (isValid(u,v)) {
-                    val.red   = (uint16_t)std::max(std::min(getFlowU(u,v)*64.0f+32768.0f,65535.0f),0.0f);
-                    val.green = (uint16_t)std::max(std::min(getFlowV(u,v)*64.0f+32768.0f,65535.0f),0.0f);
-                    val.blue  = (uint16_t)getObjectId(u,v);
+                    //val.red   = (uint16_t)std::max(std::min(getFlowU(u,v)*64.0f+32768.0f,65535.0f),0.0f);
+                    //val.green = (uint16_t)std::max(std::min(getFlowV(u,v)*64.0f+32768.0f,65535.0f),0.0f);
+                    //val.blue  = (uint16_t)getObjectId(u,v);
+                    val.red   = (uint16_t)(getFlowU(u,v));
+                    val.green = (uint16_t)(getFlowV(u,v));
+                    val.blue  = (uint16_t)65535;
+                    //val.blue  = (uint16_t)getObjectId(u,v);
                 }
                 image.set_pixel(u,v,val);
             }
