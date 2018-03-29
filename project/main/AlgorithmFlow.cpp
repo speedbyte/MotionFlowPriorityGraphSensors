@@ -242,7 +242,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 }
 
                 // Draw the optical generate_flow_frame map
-                int stepSize = 4;
+                int stepSize = STEP_SIZE;
 
                 if ( fb == algo ) {
                     // Circles to indicate the uniform grid of points
@@ -356,10 +356,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             (frame_skip-1).at(frame_count).first.x;
                     float rowBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.y;
-                    if ( cvRound(rowBegin)%2 != 0 ) {
+                    if ( cvRound(rowBegin)%2 != 0 && STEP_SIZE %2 != 0 )   {
                         rowBegin+=1;
                     }
-                    if ( cvRound(columnBegin)%2 != 0 ) {
+                    if ( cvRound(columnBegin)%2 != 0 && STEP_SIZE%2 != 0 ) {
                         columnBegin+=1;
                     }
 
@@ -434,12 +434,19 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             auto COUNT = m_list_simulated_base_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                     (frame_skip-1).at(frame_count).size();
                             for ( auto count = 0; count < COUNT; count++ ) {
+
                                 float x  = m_list_simulated_base_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                         (frame_skip-1).at(frame_count).at(count).first.x;
                                 float y  = m_list_simulated_base_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                         (frame_skip-1).at(frame_count).at(count).first.y;
-                                cv::Point2f algo_displacement = flowFrame.at<cv::Vec2f>(y,x);
-                                stencil_movement.at(obj_index).push_back(std::make_pair(cv::Point2f(x, y), algo_displacement));
+
+                                for ( auto next_pts_index = 0; next_pts_index < next_pts_array.size(); next_pts_index++ ) {
+                                    if ( (( x ) == next_pts_array.at(next_pts_index).x) &&
+                                         (( y ) == next_pts_array.at(next_pts_index).y)) {
+                                        cv::Point2f algo_displacement = flowFrame.at<cv::Vec2f>(y,x);
+                                        stencil_movement.at(obj_index).push_back(std::make_pair(cv::Point2f(x, y), algo_displacement));
+                                    }
+                                }
                             }
 
                             auto new_stencil_size = stencil_movement.at(obj_index).size();
@@ -718,8 +725,12 @@ void AlgorithmFlow::generate_shape_points() {
                                 }
                             }*/
 
-                            //vollTreffer = ((float) CLUSTER_COUNT_ALGO);
-                            baseTreffer = ((float) CLUSTER_SIZE_STENCIL_BASE);
+                            if ( *m_ptr_environment == "none") {
+                                baseTreffer = ((float) CLUSTER_COUNT_ALGO);
+                            }
+                            else {
+                                baseTreffer = ((float) CLUSTER_SIZE_STENCIL_BASE);
+                            }
                         }
                         shape_points.at(obj_index) = (cv::Point2f(vollTreffer, baseTreffer));
 
