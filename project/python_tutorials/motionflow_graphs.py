@@ -43,11 +43,11 @@ def motionflow_pixelgraphs_no_noise():
     yaml_file.close()
 
     fig2 = plt.figure()
-    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
+    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
 
     shapeplot0 = fig2.add_subplot(111)
 
-    shapeplot0.set_title('shape_pointsframe_skip1_dataprocessing_0')
+    #shapeplot0.set_title('shape_pointsframe_skip1_dataprocessing_0')
 
     shapeplot0.set_xlabel('frame_count')
     shapeplot0.set_ylabel('no_noise_good_pixels/no_noise_total_pixels')
@@ -196,23 +196,23 @@ def motionflow_pixelgraphs_noise():
     yaml_file.close()
 
     fig0 = plt.figure()
-    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
+    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
     fig1 = plt.figure()
-    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
+    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
     fig2 = plt.figure()
-    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
+    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
     fig3 = plt.figure()
-    plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
+    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
 
     shapeplot0 = fig0.add_subplot(111)
     shapeplot1 = fig1.add_subplot(111)
     shapeplot2 = fig2.add_subplot(111)
     shapeplot3 = fig3.add_subplot(111)
 
-    shapeplot0.set_title('shape_pointsframe_skip1_dataprocessing_0')
-    shapeplot1.set_title('shape_pointsframe_skip1_dataprocessing_1')
-    shapeplot2.set_title('shape_pointsframe_skip1_dataprocessing_2')
-    shapeplot3.set_title('shape_pointsframe_skip1_dataprocessing_3')
+    #shapeplot0.set_title('shape_pointsframe_skip1_dataprocessing_0')
+    #shapeplot1.set_title('shape_pointsframe_skip1_dataprocessing_1')
+    #shapeplot2.set_title('shape_pointsframe_skip1_dataprocessing_2')
+    #shapeplot3.set_title('shape_pointsframe_skip1_dataprocessing_3')
 
     shapeplot0.set_xlabel('frame_count')
     shapeplot0.set_ylabel('noise_good_pixels/no_noise_total_pixels')
@@ -361,11 +361,11 @@ def motionflow_vectorgraphs_no_noise():
     yaml_file.close()
 
     fig2 = plt.figure()
-    plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
+    #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
 
     collisionplot0 = fig2.add_subplot(111)
 
-    collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
+    #collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
 
     collisionplot0.set_xlabel('frame_count')
     collisionplot0.set_ylabel('deviation [noise_pixels-no_noise_total_pixels]')
@@ -515,26 +515,26 @@ def motionflow_vectorgraphs_noise():
     yaml_file.close()
 
     fig0 = plt.figure()
-    plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
+    #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
 
     fig1 = plt.figure()
-    plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
+    #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
 
     fig2 = plt.figure()
-    plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
+    #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
 
     fig3 = plt.figure()
-    plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
+    #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
 
     collisionplot0 = fig0.add_subplot(111)
     collisionplot1 = fig1.add_subplot(111)
     collisionplot2 = fig2.add_subplot(111)
     collisionplot3 = fig3.add_subplot(111)
 
-    collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
-    collisionplot1.set_title('collision_pointsframe_skip1_dataprocessing_1')
-    collisionplot2.set_title('collision_pointsframe_skip1_dataprocessing_2')
-    collisionplot3.set_title('collision_pointsframe_skip1_dataprocessing_3')
+    #collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
+    #collisionplot1.set_title('collision_pointsframe_skip1_dataprocessing_1')
+    #collisionplot2.set_title('collision_pointsframe_skip1_dataprocessing_2')
+    #collisionplot3.set_title('collision_pointsframe_skip1_dataprocessing_3')
 
     collisionplot0.set_xlabel('frame_count')
     collisionplot0.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
