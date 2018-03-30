@@ -11,7 +11,7 @@
 
 using namespace std::chrono;
 
-void OpticalFlow::CannyEdgeDetection(std::string temp_result_flow_path) {
+void OpticalFlow::CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path) {
 
     cv::Mat src, src_gray;
     cv::Mat dst, detected_edges, blurred_image;
@@ -37,7 +37,7 @@ void OpticalFlow::CannyEdgeDetection(std::string temp_result_flow_path) {
     cv::cvtColor( src, src_gray, CV_BGR2GRAY );
 
     /// Create a window
-    cv::namedWindow( window_name, CV_WINDOW_AUTOSIZE );
+    //cv::namedWindow( window_name, CV_WINDOW_AUTOSIZE );
 
     /// Create a Trackbar for user to enter threshold
     //cv::createTrackbar( "Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold );
@@ -52,10 +52,10 @@ void OpticalFlow::CannyEdgeDetection(std::string temp_result_flow_path) {
     dst = cv::Scalar::all(0);
 
     src.copyTo( dst, detected_edges);
-    cv::imshow( window_name, dst );
+    cv::imwrite( temp_result_edge_path, dst );
 
     /// Wait until user exit program by pressing a key
-    cv::waitKey(0);
+    //cv::waitKey(0);
 }
 
 

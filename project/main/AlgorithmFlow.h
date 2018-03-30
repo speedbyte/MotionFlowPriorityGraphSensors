@@ -43,6 +43,8 @@ public:
 
     void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise);
 
+    void generate_edge_contour();
+
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
     &l_pixelmovement );
 

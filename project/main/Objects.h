@@ -28,6 +28,9 @@ protected:
             m_obj_extrapolated_stencil_pixel_point_pixel_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_obj_extrapolated_edge_pixel_point_pixel_displacement;
+
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >
@@ -132,6 +135,7 @@ public:
 
     virtual void generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement ) {};
 
+    virtual void generate_obj_extrapolated_edge_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_edge_movement ) {};
 
 
 };

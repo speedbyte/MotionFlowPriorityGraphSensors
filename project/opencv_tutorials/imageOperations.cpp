@@ -184,7 +184,7 @@ int canny( )
 
 
 void sobel() {
-    cv::Mat img = cv::imread("image.jpg");
+    cv::Mat img = cv::imread("../../../datasets/pics_dataset/lena.png", CV_LOAD_IMAGE_COLOR); //CV_LOAD_IMAGE_COLOR=1
     cv::Mat grey;
     cv::cvtColor(img, grey, CV_BGR2GRAY);
 
@@ -198,6 +198,7 @@ void sobel() {
 
     cv::namedWindow("image", CV_WINDOW_AUTOSIZE);
     cv::imshow("image", draw);
+    cv::waitKey(0);
 }
 
 void absdiff(cv::Mat &kittisrc1, cv::Mat &kittisrc2) {
@@ -258,6 +259,7 @@ int main ( int argc, char *argv[] ) {
     duration    // Max track duration ('timestamp' units)
     ); */
 
+    sobel();
     canny();
 
     return(0);

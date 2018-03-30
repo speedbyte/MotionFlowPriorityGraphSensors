@@ -304,6 +304,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 ptr_environment_index = &environment_list[env_index];
 
                 list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index]);
+                list_of_algorithm_flow[env_index].generate_edge_contour();
 
                 if ( environment_list[env_index] == "none" ) { // store the stimulated objects from the ground run.
 

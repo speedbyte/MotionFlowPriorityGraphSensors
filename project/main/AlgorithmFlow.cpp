@@ -67,6 +67,119 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
 }
 
 
+void AlgorithmFlow::generate_edge_contour() {
+
+    for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
+
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_edge_movement(m_list_simulated_objects.size());
+
+        char frame_skip_folder_suffix[50];
+        char file_name_input_image[50];
+
+        std::cout << "edge counter results will be stored in " << m_resultordner << std::endl;
+
+        /*
+        if ( frame_types == video_frames) {
+            cv::VideoCapture cap;
+            cap.open(Dataset::getGroundTruthPath().string() + "image_02/movement.avi");
+            if (!cap.isOpened()) {
+                std::cout << "Could not initialize capturing...\n";
+                return;
+            }
+        }*/
+        sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
+        std::string results_flow_matrix_str = m_flow_occ_path.string() + "/" +
+                                              frame_skip_folder_suffix + "/" + "result_flow.yaml";
+
+        const int MAX_COUNT = 5000;
+
+        auto tic = steady_clock::now();
+        auto toc = steady_clock::now();
+
+        std::string temp_result_flow_path;
+
+        std::cout << "creating edge files for frame_skip " << frame_skip << std::endl;
+        std::vector<std::pair<cv::Point2f, cv::Point2f> > next_pts_array;
+
+        for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
+            //draw new ground truth flow.
+
+            if ( frame_count*frame_skip >= MAX_ITERATION_RESULTS) {
+                break;
+            }
+
+            sprintf(file_name_input_image, "000%03d_edge_10.png", frame_count*frame_skip);
+
+            temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
+
+            cv::Mat edge_02_frame = cv::imread(temp_result_flow_path, CV_LOAD_IMAGE_COLOR);
+            if ( edge_02_frame.data == NULL ) {
+                std::cerr << temp_result_flow_path << " not found" << std::endl;
+                throw ("No image file found error");
+            }
+
+            cv::Mat edge_02_frame_gray;
+            cv::cvtColor(edge_02_frame, edge_02_frame_gray, CV_RGB2GRAY);
+
+            // Calculate optical generate_flow_frame map using LK algorithm
+            std::cout << "frame_count " << frame_count << std::endl;
+
+            if ( frame_count > 0 ) {
+                for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++ ) {
+
+                    bool visibility = m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
+                    if ( visibility ) {
+
+                        // This is for the base model
+                        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > edge_movement(m_list_simulated_objects.size());
+
+                        assert(m_list_simulated_objects.size() == m_list_gt_objects.size());
+
+                        next_pts_array = m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(frame_skip-1).at(frame_count);
+
+                        std::cout << "making a edge contour on the basis of groundtruth object " << m_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
+
+                        //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
+                        //cv::imshow("edge", edge_02_frame);
+                        //cv::waitKey(0);
+
+                        //std::cout << roi_offset.x + col_index << std::endl;
+                        auto COUNT = next_pts_array.size();
+                        for ( ushort next_pts_index = 0; next_pts_index < COUNT; next_pts_index++ ) {
+
+                            //printf("gray %u\n", edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)));
+                            if ( edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)) != 0 ) {
+                                edge_movement.at(obj_index).push_back(
+                                        std::make_pair(next_pts_array.at(next_pts_index).first,
+                                                       next_pts_array.at(next_pts_index).second));
+                            }
+                        }
+
+                        auto new_edge_size = edge_movement.at(obj_index).size();
+                        std::cout << new_edge_size << std::endl;
+                        assert(new_edge_size != 0);
+
+                        outer_edge_movement.at(obj_index).push_back(edge_movement.at(obj_index));
+
+                    }
+                    else {
+
+                        for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++ ) {
+                            outer_edge_movement.at(obj_index).push_back(
+                                    {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
+                        }
+                    }
+                }
+            }
+        }
+
+        for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
+            m_list_simulated_objects.at(obj_index)->generate_obj_extrapolated_edge_pixel_point_pixel_displacement(outer_edge_movement.at(obj_index));
+        }
+    }
+}
+
+
 void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise ) {
 
     prepare_directories(algo, frame_types, noise);
@@ -78,7 +191,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         std::vector<std::vector<std::vector<bool> >  > outer_base_visiblity(m_list_simulated_objects.size());
 
         char frame_skip_folder_suffix[50];
-        char file_name_input_image[50];
+        char file_name_input_image[50], file_name_input_image_edge[50];
 
         std::vector<unsigned> x_pts;
         std::vector<double> y_pts;
@@ -146,7 +259,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         error.at(0) = 0;
         error.at(1) = 0;
 
-        std::string temp_result_flow_path, temp_result_position_path;
+        std::string temp_result_flow_path, temp_result_position_path, temp_result_edge_path;
         std::vector<cv::Point2f> next_pts_healthy;
 
         std::cout << "creating flow files for frame_skip " << frame_skip << std::endl;
@@ -164,6 +277,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 continue;
             }*/
             sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
+            sprintf(file_name_input_image_edge, "000%03d_edge_10.png", frame_count*frame_skip);
             // Break out of the loop if the user presses the Esc key
             char c = (char) cv::waitKey(10);
             switch (c) {
@@ -194,6 +308,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             }
 
             temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
+            temp_result_edge_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image_edge;
             temp_result_position_path = m_position_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
 
             // Convert to grayscale
@@ -426,54 +541,72 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             assert(m_list_simulated_objects.size() == m_list_simulated_base_objects.size());
                             std::cout << "making a stencil on the basis of base algorithm object " << m_list_simulated_base_objects.at(obj_index)->getObjectId() << std::endl;
 
+                            for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
+                                for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
+
+                                    if ( col_index%STENCIL_GRID_COMPRESSOR == 0 && row_index%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of col_index pixels to reduce data
+
+                                        cv::Point2f algo_displacement = roi.at<cv::Vec2f>(row_index, col_index);
+                                        auto dist_algo = cv::norm(algo_displacement);
+                                        if ( dist_algo < 0.1 ) {
+                                            continue;
+                                        }
+                                        //std::cout << roi_offset.x + col_index << std::endl;
+                                        for ( auto next_pts_index = 0; next_pts_index < next_pts_array.size(); next_pts_index++ ) {
+                                            if ( (( roi_offset.x + col_index ) == next_pts_array.at(next_pts_index).x) &&
+                                                 (( roi_offset.y + row_index ) == next_pts_array.at(next_pts_index).y)) {
+                                                stencil_movement.at(obj_index).push_back(
+                                                        std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
+                                                                       algo_displacement));
+
+                                                auto dist_gt = cv::norm(gt_displacement);
+                                                auto dist_err = std::abs(dist_gt - dist_algo);
+                                                if (dist_err < DISTANCE_ERROR_TOLERANCE) {
+                                                    auto angle_err = std::cosh(
+                                                            algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
+                                                    if (((std::abs(angle_err)) < ANGLE_ERROR_TOLERANCE)) {
+                                                        // stencil_movement.at(obj_index).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
+                                                    }
+                                                }
+                                                base_movement.at(obj_index).push_back(
+                                                        std::make_pair(cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
+                                                                       algo_displacement));
+                                                base_visibility.at(obj_index).push_back(visibility);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            /*
                             auto COUNT = m_list_simulated_base_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                     (frame_skip-1).at(frame_count).size();
                             for ( auto count = 0; count < COUNT; count++ ) {
 
-                                float x  = m_list_simulated_base_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                        (frame_skip-1).at(frame_count).at(count).first.x;
-                                float y  = m_list_simulated_base_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                        (frame_skip-1).at(frame_count).at(count).first.y;
+                                float x = m_list_simulated_base_objects.at(
+                                        obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                                        (frame_skip - 1).at(frame_count).at(count).first.x;
+                                float y = m_list_simulated_base_objects.at(
+                                        obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                                        (frame_skip - 1).at(frame_count).at(count).first.y;
 
-                                for ( auto next_pts_index = 0; next_pts_index < next_pts_array.size(); next_pts_index++ ) {
-                                    if ( (( x ) == next_pts_array.at(next_pts_index).x) &&
-                                         (( y ) == next_pts_array.at(next_pts_index).y)) {
-                                        cv::Point2f algo_displacement = flowFrame.at<cv::Vec2f>(y,x);
-                                        stencil_movement.at(obj_index).push_back(std::make_pair(cv::Point2f(x, y), algo_displacement));
+                                for (auto next_pts_index = 0;
+                                     next_pts_index < next_pts_array.size(); next_pts_index++) {
+                                    if (((x) == next_pts_array.at(next_pts_index).x) &&
+                                        ((y) == next_pts_array.at(next_pts_index).y)) {
+                                        cv::Point2f algo_displacement = flowFrame.at<cv::Vec2f>(y, x);
+                                        stencil_movement.at(obj_index).push_back(
+                                                std::make_pair(cv::Point2f(x, y), algo_displacement));
                                     }
                                 }
                             }
-
-                            auto new_stencil_size = stencil_movement.at(obj_index).size();
-                            std::cout << new_stencil_size << std::endl;
-                            assert(new_stencil_size != 0);
-
-                            // This is for the noisy model
-                            for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
-                                for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
-
-                                    if (row_index % STENCIL_GRID_COMPRESSOR == 0 && col_index % STENCIL_GRID_COMPRESSOR ==
-                                                                    0) { // only entertain multiple of 5 pixels to reduce data
-                                        cv::Point2f algo_displacement = roi.at<cv::Vec2f>(row_index, col_index);
-                                        auto dist_gt = cv::norm(gt_displacement);
-                                        auto dist_algo = cv::norm(algo_displacement);
-                                        auto dist_err = std::abs(dist_gt - dist_algo);
-                                        if (dist_err < DISTANCE_ERROR_TOLERANCE) {
-                                            auto angle_err = std::cosh(
-                                                    algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
-                                            if (((std::abs(angle_err)) < ANGLE_ERROR_TOLERANCE)) {
-                                                // stencil_movement.at(obj_index).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
-                                            }
-                                        }
-                                        base_movement.at(obj_index).push_back(
-                                                std::make_pair(cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
-                                                               algo_displacement));
-                                        base_visibility.at(obj_index).push_back(visibility);
-
-                                    }
-                                }
-                            }
+                            */
                         }
+
+                        auto new_stencil_size = stencil_movement.at(obj_index).size();
+                        std::cout << new_stencil_size << std::endl;
+                        assert(new_stencil_size != 0);
+
 
                         outer_base_movement.at(obj_index).push_back(base_movement.at(obj_index));
                         outer_base_visiblity.at(obj_index).push_back(base_visibility.at(obj_index));
@@ -506,7 +639,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 needToInit = true;
             }
 
-            CannyEdgeDetection(temp_result_flow_path);
+            CannyEdgeDetection(temp_result_flow_path, temp_result_edge_path);
 
             if ( needToInit && algo == lk) { //|| ( frame_count%4 == 0) ) {
                 //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.

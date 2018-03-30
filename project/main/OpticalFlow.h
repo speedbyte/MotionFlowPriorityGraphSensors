@@ -66,7 +66,7 @@ public:
         return m_resultordner;
     }
 
-    void CannyEdgeDetection(std::string temp_result_flow_path);
+    void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
 
 
 private:

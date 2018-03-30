@@ -21,3 +21,8 @@ void SimulatedObjects::generate_obj_extrapolated_stencil_pixel_point_pixel_displ
 
 }
 
+void SimulatedObjects::generate_obj_extrapolated_edge_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_edge_movement) {
+
+    m_obj_extrapolated_edge_pixel_point_pixel_displacement.push_back(outer_edge_movement);
+
+}
