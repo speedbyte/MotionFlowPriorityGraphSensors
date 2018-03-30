@@ -37,6 +37,8 @@ public:
 
     void generate_shape_points();
 
+    void generate_edge_contour();
+
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
     }

@@ -61,13 +61,9 @@ public:
 
         if ( m_objectName != "BackgroundCanvas") {
 
-            generate_obj_extrapolated_pixel_position_pixel_displacement( MAX_SKIPS );
+            generate_obj_extrapolated_pixel_position_pixel_displacement(MAX_SKIPS);
 
             generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(MAX_SKIPS);
-
-            generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( MAX_SKIPS , m_obj_extrapolated_shape_pixel_point_pixel_displacement, m_obj_extrapolated_shape_visibility, "ground_truth");
-
-            generate_obj_line_parameters(MAX_SKIPS, "ground_truth");
         }
     }
 

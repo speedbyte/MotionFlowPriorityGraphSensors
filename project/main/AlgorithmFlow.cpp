@@ -171,6 +171,12 @@ void AlgorithmFlow::generate_edge_contour() {
                     }
                 }
             }
+            else {
+                for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++ ) {
+                    outer_edge_movement.at(obj_index).push_back(
+                            {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
+                }
+            }
         }
 
         for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
@@ -541,6 +547,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             assert(m_list_simulated_objects.size() == m_list_simulated_base_objects.size());
                             std::cout << "making a stencil on the basis of base algorithm object " << m_list_simulated_base_objects.at(obj_index)->getObjectId() << std::endl;
 
+
                             for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                                 for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
@@ -579,6 +586,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             }
 
                             /*
+
                             auto COUNT = m_list_simulated_base_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                     (frame_skip-1).at(frame_count).size();
                             for ( auto count = 0; count < COUNT; count++ ) {
@@ -792,6 +800,8 @@ void AlgorithmFlow::generate_shape_points() {
 
                 for (ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
 
+                    auto CLUSTER_COUNT_GT = m_list_gt_objects.at(
+                            obj_index)->get_shape_parameters().at(frame_skip - 1).at(0).at(frame_count).size();
                     auto CLUSTER_COUNT_ALGO = m_list_simulated_objects.at(
                             obj_index)->get_shape_parameters().at(frame_skip - 1).at(data_processing_index).at(frame_count).size();
                     const unsigned CLUSTER_SIZE_STENCIL_BASE = (unsigned)m_list_simulated_base_objects.at(
@@ -857,10 +867,10 @@ void AlgorithmFlow::generate_shape_points() {
                             }*/
 
                             if ( *m_ptr_environment == "none") {
-                                baseTreffer = ((float) CLUSTER_COUNT_ALGO);
+                                baseTreffer = ((float) CLUSTER_COUNT_GT);
                             }
                             else {
-                                baseTreffer = ((float) CLUSTER_SIZE_STENCIL_BASE);
+                                baseTreffer = ((float) CLUSTER_COUNT_GT);
                             }
                         }
                         shape_points.at(obj_index) = (cv::Point2f(vollTreffer, baseTreffer));

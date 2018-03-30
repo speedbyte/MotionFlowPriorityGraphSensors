@@ -30,8 +30,6 @@ public:
 
     void generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement ) override;
 
-    void generate_obj_extrapolated_edge_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_edge_movement ) override;
-
 };
 
 

@@ -255,7 +255,15 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
 
+
                 gt_flow.generate_flow_frame();
+                gt_flow.generate_edge_contour();
+
+                for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
+                    ptr_list_of_gt_objects.at(obj_count)->generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( MAX_SKIPS , ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_pixel_point_pixel_displacement(), ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_visibility(), ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "ground_truth");
+                    ptr_list_of_gt_objects.at(obj_count)->generate_obj_line_parameters(MAX_SKIPS, "ground_truth");
+                }
+
 
                 gt_flow.generate_collision_points();
                 gt_flow.generate_shape_points(); // this is to just create Jaccard Index  =  1
@@ -319,7 +327,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                     // m_obj_extrapolated_stencil_pixel_point_pixel_displacement
                     list_of_simulated_objects.at(i)
-                            .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(MAX_SKIPS, list_of_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(), list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(), "algorithm");
+                            .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(MAX_SKIPS, list_of_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(), list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(), list_of_simulated_objects.at(i).get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "algorithm");
                     list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS, "algorithm");
                 }
 

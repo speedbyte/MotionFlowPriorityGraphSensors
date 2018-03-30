@@ -212,7 +212,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             objectMetaDataList.at(0) = achterbahn;
             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
-            achterbahn = Achterbahn(rectangle, "random_object", 120);
+            achterbahn = Achterbahn(rectangle, "random_object", 90);
             achterbahn.process(Dataset::getFrameSize());
             objectMetaDataList.at(1) = achterbahn;
             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));

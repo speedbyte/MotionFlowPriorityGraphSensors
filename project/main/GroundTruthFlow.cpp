@@ -77,7 +77,7 @@ void GroundTruthFlow::generate_flow_frame() {
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
         std::cout << "saving ground truth flow files for frame_skip " << frame_skip << std::endl;
 
-        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip-1).at(0).size();
+        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -116,9 +116,8 @@ void GroundTruthFlow::generate_flow_frame() {
                 if ( m_list_gt_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
 
                     // gt_displacement
-                    cv::Point2f next_pts = m_list_gt_objects.at(i)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip-1).at(0)
-                            .at(frame_count).first;
-                    cv::Point2f displacement = m_list_gt_objects.at(i)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip-1).at(0).at(frame_count).second;
+                    cv::Point2f next_pts = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).first;
+                    cv::Point2f displacement = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).second;
 
                     cv::Mat roi;
                     roi = tempMatrix.
@@ -169,6 +168,125 @@ void GroundTruthFlow::generate_flow_frame() {
     std::cout << "ground truth flow generation time - " << time_map["generate_all_flow_image"] << "ms" << std::endl;
 
 }
+
+void GroundTruthFlow::generate_edge_contour() {
+
+    for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
+
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_edge_movement(m_list_gt_objects.size());
+
+        char frame_skip_folder_suffix[50];
+        char file_name_input_image[50];
+
+        std::cout << "edge counter results will be stored in " << m_resultordner << std::endl;
+
+        /*
+        if ( frame_types == video_frames) {
+            cv::VideoCapture cap;
+            cap.open(Dataset::getGroundTruthPath().string() + "image_02/movement.avi");
+            if (!cap.isOpened()) {
+                std::cout << "Could not initialize capturing...\n";
+                return;
+            }
+        }*/
+        sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
+        std::string results_flow_matrix_str = m_flow_occ_path.string() + "/" +
+                                              frame_skip_folder_suffix + "/" + "result_flow.yaml";
+
+        const int MAX_COUNT = 5000;
+
+        auto tic = steady_clock::now();
+        auto toc = steady_clock::now();
+
+        std::string temp_result_flow_path;
+
+        std::cout << "creating edge files for frame_skip " << frame_skip << std::endl;
+        std::vector<std::pair<cv::Point2f, cv::Point2f> > next_pts_array;
+
+        for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
+            //draw new ground truth flow.
+
+            if ( frame_count*frame_skip >= MAX_ITERATION_RESULTS) {
+                break;
+            }
+
+            sprintf(file_name_input_image, "000%03d_edge_10.png", frame_count*frame_skip);
+
+            temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
+
+            cv::Mat edge_02_frame = cv::imread(temp_result_flow_path, CV_LOAD_IMAGE_COLOR);
+            if ( edge_02_frame.data == NULL ) {
+                std::cerr << temp_result_flow_path << " not found" << std::endl;
+                throw ("No image file found error");
+            }
+
+            cv::Mat edge_02_frame_gray;
+            cv::cvtColor(edge_02_frame, edge_02_frame_gray, CV_RGB2GRAY);
+
+            // Calculate optical generate_flow_frame map using LK algorithm
+            std::cout << "frame_count " << frame_count << std::endl;
+
+            if ( frame_count > 0 ) {
+                for ( ushort obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++ ) {
+
+                    bool visibility = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
+                    if ( visibility ) {
+
+                        // This is for the base model
+                        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > edge_movement(m_list_gt_objects.size());
+
+                        assert(m_list_gt_objects.size() == m_list_gt_objects.size());
+
+                        next_pts_array = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(frame_skip-1).at(frame_count);
+
+                        std::cout << "making a edge contour on the basis of groundtruth object " << m_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
+
+                        //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
+                        //cv::imshow("edge", edge_02_frame);
+                        //cv::waitKey(0);
+
+                        //std::cout << roi_offset.x + col_index << std::endl;
+                        auto COUNT = next_pts_array.size();
+                        for ( ushort next_pts_index = 0; next_pts_index < COUNT; next_pts_index++ ) {
+
+                            //printf("gray %u\n", edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)));
+                            if ( edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)) != 0 ) {
+                                edge_movement.at(obj_index).push_back(
+                                        std::make_pair(next_pts_array.at(next_pts_index).first,
+                                                       next_pts_array.at(next_pts_index).second));
+                            }
+                        }
+
+                        auto new_edge_size = edge_movement.at(obj_index).size();
+                        std::cout << new_edge_size << std::endl;
+                        assert(new_edge_size != 0);
+
+                        outer_edge_movement.at(obj_index).push_back(edge_movement.at(obj_index));
+
+                    }
+                    else {
+
+                        for ( ushort obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++ ) {
+                            outer_edge_movement.at(obj_index).push_back(
+                                    {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
+                        }
+                    }
+                }
+            }
+            else {
+                for ( ushort obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++ ) {
+                    outer_edge_movement.at(obj_index).push_back(
+                            {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
+                }
+            }
+        }
+
+        for ( ushort obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
+            m_list_gt_objects.at(obj_index)->generate_obj_extrapolated_edge_pixel_point_pixel_displacement(outer_edge_movement.at(obj_index));
+        }
+    }
+}
+
 
 void GroundTruthFlow::generate_shape_points() {
 

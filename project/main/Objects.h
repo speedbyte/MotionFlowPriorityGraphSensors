@@ -68,7 +68,7 @@ public:
         return m_objectName;
     }
 
-    void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, std::string post_processing_algorithm);
+    void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(const unsigned &max_skips, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_stencil_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_edge_pixel_point_pixel_displacement, std::string post_processing_algorithm);
 
 
     void generate_obj_line_parameters( const unsigned &max_skips, std::string post_processing_algorithm);
@@ -127,6 +127,11 @@ public:
         return m_obj_extrapolated_stencil_pixel_point_pixel_displacement;
     };
 
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > get_obj_extrapolated_edge_pixel_point_pixel_displacement() const {
+        return m_obj_extrapolated_edge_pixel_point_pixel_displacement;
+    };
+
+
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  get_obj_extrapolated_pixel_position_pixel_displacement() const {
         return m_obj_extrapolated_pixel_position_pixel_displacement;
     }
@@ -135,7 +140,9 @@ public:
 
     virtual void generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement ) {};
 
-    virtual void generate_obj_extrapolated_edge_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_edge_movement ) {};
+    void generate_obj_extrapolated_edge_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_edge_movement ) {
+        m_obj_extrapolated_edge_pixel_point_pixel_displacement.push_back(outer_edge_movement);
+    };
 
 
 };
