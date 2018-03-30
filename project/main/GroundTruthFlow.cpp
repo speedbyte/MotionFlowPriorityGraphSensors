@@ -119,25 +119,33 @@ void GroundTruthFlow::generate_flow_frame() {
                             colRange(cvRound(next_pts.x), cvRound(next_pts.x + width)).
                             rowRange(cvRound(next_pts.y), cvRound(next_pts.y + height));
                     //bulk storage
+                    //roi = cv::Scalar(displacement.x, displacement.y,
+                    //                 static_cast<float>(m_list_gt_objects.at(i)->getObjectId()));
                     roi = cv::Scalar(displacement.x, displacement.y,
-                                     static_cast<float>(m_list_gt_objects.at(i)->getObjectId()));
+                                     static_cast<float>(1.0f));
 
                 }
             }
 
             //Create png Matrix with 3 channels: x displacement. y displacment and ObjectId
+            // v corresponds to next row.
             for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
-                for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
-                    if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5 ) {
-                        F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
-                        F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
-                        F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
+                for (int32_t col = 0; col < Dataset::getFrameSize().width; col++) {  // cols
+                    if (tempMatrix.at<cv::Vec3f>(row, col)[2] > 0.5 ) {
+                        /*inline void setFlowU (const int32_t u,const int32_t v,const float val) {
+                            data_[3*(v*width_+u)+0] = val;
+                        }*/
+                        F_png_write.setFlowU(col, row, tempMatrix.at<cv::Vec3f>(row, col)[0]);
+                        F_png_write.setFlowV(col, row, tempMatrix.at<cv::Vec3f>(row, col)[1]);
+                        //F_png_write.setObjectId(col, row, tempMatrix.at<cv::Vec3f>(row, col)[2]);
+                        F_png_write.setValid(col, row, true);
                         //position.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
                     }
                 }
             }
 
             F_png_write.writeExtended(temp_gt_flow_image_path);
+            CannyEdgeDetection(temp_gt_flow_image_path);
 
             auto toc = steady_clock::now();
             time_map["generate_single_flow_image"] = duration_cast<milliseconds>(toc - tic).count();
@@ -226,19 +234,19 @@ void GroundTruthFlow::generate_shape_points() {
 
                         float vollTreffer = 0;
 
-                        float keinTreffer;
+                        float baseTreffer;
 
                         if (m_resultordner ==
                             "/generated") {  // this is unncecessary, because this function is in GroundTruthFlow, still I will leave this.
                             vollTreffer = CLUSTER_COUNT_GT;
-                            keinTreffer = (CLUSTER_COUNT_GT);
+                            baseTreffer = CLUSTER_COUNT_GT;
                         }
-                        shape_points.at(i) = (cv::Point2f(vollTreffer, keinTreffer));
+                        shape_points.at(i) = (cv::Point2f(vollTreffer, baseTreffer));
 
                         std::cout << "vollTreffer for object " << m_list_gt_objects.at(i)->getObjectId() << " = "
                                   << vollTreffer << std::endl;
-                        std::cout << "keinTreffer for object " << m_list_gt_objects.at(i)->getObjectId() << " = "
-                                  << keinTreffer << std::endl;
+                        std::cout << "baseTreffer for object " << m_list_gt_objects.at(i)->getObjectId() << " = "
+                                  << baseTreffer << std::endl;
 
                         shape_average.x += shape_points.at(i).x;
                         shape_average.y += shape_points.at(i).y;

@@ -117,8 +117,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             printf("Writer eingerichtet\n");
         }
 
-        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_8UC3);
-        cv::Mat flowImage(Dataset::getFrameSize(), CV_32FC3);
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
 
         cv::Size subPixWinSize(10, 10), winSize(21, 21);
 
@@ -165,8 +164,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 continue;
             }*/
             sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
-            flowImage = cv::Scalar(0,0,0);
-            assert(flowImage.channels() == 3);
             // Break out of the loop if the user presses the Esc key
             char c = (char) cv::waitKey(10);
             switch (c) {
@@ -203,6 +200,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
 
             cv::Mat flowFrame( Dataset::getFrameSize(), CV_32FC2 );
+            flowFrame = cv::Scalar_<float>(0,0);
 
             std::vector<cv::Point2f> next_pts_array, displacement_array;
             tic = steady_clock::now();
@@ -249,8 +247,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     //cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
                     prev_pts_array.clear();
                     next_pts_array.clear();
-                    for (int row = 0; row < image_02_frame.rows; row += stepSize) {
-                        for (int col = 0; col < image_02_frame.cols; col += stepSize) {
+                    for (int32_t row = 0; row < Dataset::getFrameSize().height; row += stepSize) { // rows
+                        for (int32_t col = 0; col < Dataset::getFrameSize().width; col += stepSize) {  // cols
 
                             cv::Point2f algorithmMovement ( flowFrame.at<cv::Point2f>(row, col).x, flowFrame
                                     .at<cv::Point2f>(row, col).y );
@@ -327,13 +325,13 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 for ( it = next_pts_array.begin(), it2 = displacement_array.begin(); it !=next_pts_array.end(); it++, it2++ )
                 {
 
-                    F_png_write.setFlowU((*it).x,(*it).y,65535);
-                    F_png_write.setFlowV((*it).x,(*it).y,65535);
-                    F_png_write.setValid((*it).x,(*it).y,1.0f);
+                    //F_png_write.setFlowU((*it).x,(*it).y,65535);
+                    //F_png_write.setFlowV((*it).x,(*it).y,65535);
+                    //F_png_write.setValid((*it).x,(*it).y,1.0f);
 
-                    //F_png_write.setFlowU((*it).x,(*it).y,(*it2).x);
-                    //F_png_write.setFlowV((*it).x,(*it).y,(*it2).y);
-                    //F_png_write.setValid((*it).x,(*it).y,(bool)1.0f);
+                    F_png_write.setFlowU((*it).x,(*it).y,(*it2).x);
+                    F_png_write.setFlowV((*it).x,(*it).y,(*it2).y);
+                    F_png_write.setValid((*it).x,(*it).y,true);
                     // TODO - store objectId instead of 1.0. The flow vectors are automatically converted to 2's complement in the writeFlowField
                 }
 
@@ -422,9 +420,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                     }
                                 }
                             }
-                            auto new_stencil_size = stencil_movement.at(obj_index).size();
-                            std::cout << new_stencil_size << std::endl;
-                            assert(new_stencil_size != 0);
                         }
                         else {
 
@@ -451,6 +446,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                             auto new_stencil_size = stencil_movement.at(obj_index).size();
                             std::cout << new_stencil_size << std::endl;
+                            assert(new_stencil_size != 0);
 
                             // This is for the noisy model
                             for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
@@ -509,6 +505,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 needToInit = true;
             }
+
+            CannyEdgeDetection(temp_result_flow_path);
 
             if ( needToInit && algo == lk) { //|| ( frame_count%4 == 0) ) {
                 //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.
