@@ -1332,6 +1332,7 @@ void AlgorithmFlow::visualiseStencil(void) {
             }
             /*---------------------------------------------------------------------------------*/
             tempGroundTruthImage = cv::Scalar::all(255);
+            FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
             sprintf(file_name_image_output, "000%03d_10_flow_gt.png", frame_count * frame_skip);
             output_image_file_with_path =
@@ -1359,12 +1360,17 @@ void AlgorithmFlow::visualiseStencil(void) {
 
                         cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
 
+                        F_png_write.setFlowU(pts.x,pts.y,displacement.x);
+                        F_png_write.setFlowV(pts.x,pts.y,displacement.y);
+                        F_png_write.setValid(pts.x,pts.y,true);
+
                         cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
 
                     }
                 }
             }
-            cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            F_png_write.writeExtended(output_image_file_with_path);
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 
             tempGroundTruthImage = cv::Scalar::all(255);
