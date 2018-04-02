@@ -28,6 +28,6 @@ release/
 *.o
 *.swp
 *.mat
-matlab/
+
 *.png
 
