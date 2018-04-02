@@ -88,7 +88,7 @@ void GroundTruthFlow::generate_flow_frame() {
             std::cout << "frame_count " << frame_count << std::endl;
 
             sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
-            sprintf(file_name_image_edge, "000%03d_edge_10.png", frame_count*frame_skip);
+            sprintf(file_name_image_edge, "000%03d_10_edge.png", frame_count*frame_skip);
 
             std::string temp_gt_flow_image_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                     file_name_image;

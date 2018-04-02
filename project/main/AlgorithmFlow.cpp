@@ -108,7 +108,7 @@ void AlgorithmFlow::generate_edge_contour() {
                 break;
             }
 
-            sprintf(file_name_input_image, "000%03d_edge_10.png", frame_count*frame_skip);
+            sprintf(file_name_input_image, "000%03d_10_edge.png", frame_count*frame_skip);
 
             temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
 
