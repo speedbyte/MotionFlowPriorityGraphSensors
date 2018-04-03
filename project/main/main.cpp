@@ -273,7 +273,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
      */
     std::vector<Objects *> ptr_list_of_simulated_objects;
     std::vector<AlgorithmFlow> list_of_algorithm_flow;
-    for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
+    for ( ushort obj_count = 0; obj_count < environment_list.size(); obj_count++ ) {
         AlgorithmFlow fback(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
                             ptr_list_of_simulated_objects);
         list_of_algorithm_flow.push_back(fback);

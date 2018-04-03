@@ -133,7 +133,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 if (max_voted.x <= x.second) {
                     max_voted.x = x.second;
                     gt_displacement_compare.x = x.first;
-                    std::cout << x.first << " histogram " << x.second << "endy\n";
+                    std::cout << x.first << " histogram " << x.second << "endx\n";
                 }
             }
             std::cout << gt_displacement_compare.x << " histogram " << max_voted.x << "endx\n";

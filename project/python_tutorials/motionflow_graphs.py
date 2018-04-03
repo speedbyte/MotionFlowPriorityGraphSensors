@@ -588,10 +588,10 @@ def motionflow_vectorgraphs_noise():
     collisionplot3.set_xlabel('frame_count')
     collisionplot3.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
 
-    collisionplot0.set_ylim([0, 900])
-    collisionplot1.set_ylim([0, 900])
-    collisionplot2.set_ylim([0, 900])
-    collisionplot3.set_ylim([0, 900])
+    #collisionplot0.set_ylim([0, 900])
+    #collisionplot1.set_ylim([0, 900])
+    #collisionplot2.set_ylim([0, 900])
+    #collisionplot3.set_ylim([0, 900])
     legend = collisionplot1.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
