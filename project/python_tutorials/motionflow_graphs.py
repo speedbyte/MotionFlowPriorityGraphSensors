@@ -774,7 +774,7 @@ if __name__ == '__main__':
     motionflow_vectorgraphs_no_noise()
     motionflow_vectorgraphs_noise()
 
-    histogramm()
+    #histogramm()
 
     #motionflow_vectorgraphs()
     #check()

@@ -37,7 +37,7 @@ void OpticalFlow::CannyEdgeDetection(std::string temp_result_flow_path, std::str
     cv::cvtColor( src, src_gray, CV_BGR2GRAY );
 
     /// Create a window
-    //cv::namedWindow( window_name, CV_WINDOW_AUTOSIZE );
+    cv::namedWindow( window_name, CV_WINDOW_AUTOSIZE );
 
     /// Create a Trackbar for user to enter threshold
     //cv::createTrackbar( "Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold );
@@ -53,6 +53,8 @@ void OpticalFlow::CannyEdgeDetection(std::string temp_result_flow_path, std::str
 
     src.copyTo( dst, detected_edges);
     cv::imwrite( temp_result_edge_path, dst );
+
+    cv::imshow( window_name, dst);
 
     /// Wait until user exit program by pressing a key
     //cv::waitKey(0);
@@ -91,7 +93,7 @@ void OpticalFlow::prepare_directories() {
         boost::filesystem::create_directories(path);
 
         // post processing step
-        boost::filesystem::path bbox_dir = m_generatepath.string() + "stencil/";
+        boost::filesystem::path bbox_dir = m_generatepath.string() + "/stencil/";
         if (boost::filesystem::exists(m_generatepath)) {
             system(("rm -rf " + bbox_dir.string()).c_str());
         }
@@ -270,7 +272,7 @@ void OpticalFlow::generate_collision_points() {
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << m_resultordner + " flow generation time - " << time_map["generate_flow"] << "ms" << std::endl;
+    std::cout << m_resultordner + " collision generation time - " << time_map["generate_flow"] << "ms" << std::endl;
 }
 
 

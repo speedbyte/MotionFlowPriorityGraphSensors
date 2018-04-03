@@ -180,16 +180,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow_low", "rain_low"};
-    std::vector < std::string> environment_list = {"none", "night"};
-    //std::vector < std::string> environment_list = {"none", "snow_low", "snow_moderate", "snow_high"};
+    //std::vector < std::string> environment_list = {"none", "night"};
+    std::vector < std::string> environment_list = {"none", "snow_low", "snow_moderate", "snow_high"};
 
     //std::vector < std::string> environment_list = {"none"};
 
-    std::string *ptr_environment_index;
-
-
     cv::FileStorage fs;
-
 
     std::vector<GroundTruthObjects> list_of_gt_objects_base;
     std::vector<SimulatedObjects> list_of_simulated_objects_base;
@@ -257,7 +253,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
 
                 gt_flow.generate_flow_frame();
-                gt_flow.generate_edge_contour();
+                //gt_flow.generate_edge_contour();
 
                 for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
                     ptr_list_of_gt_objects.at(obj_count)->generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( MAX_SKIPS , ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_pixel_point_pixel_displacement(), ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_visibility(), ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "ground_truth");
@@ -278,7 +274,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::vector<Objects *> ptr_list_of_simulated_objects;
     std::vector<AlgorithmFlow> list_of_algorithm_flow;
     for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
-        AlgorithmFlow fback(ptr_environment_index, ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+        AlgorithmFlow fback(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
                             ptr_list_of_simulated_objects);
         list_of_algorithm_flow.push_back(fback);
     }
@@ -309,8 +305,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
 
-                ptr_environment_index = &environment_list[env_index];
-
                 list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index]);
                 list_of_algorithm_flow[env_index].generate_edge_contour();
 
@@ -332,8 +326,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
 
                 list_of_algorithm_flow[env_index].generate_collision_points_mean();
-                list_of_algorithm_flow[env_index].generate_shape_points();
-                if ( environment_list[env_index] != "none" ) {
+                list_of_algorithm_flow[env_index].generate_shape_points(environment_list[env_index]);
+                if ( env_index == environment_list.size()-1 ) {
                     list_of_algorithm_flow[env_index].visualiseStencil();
                 }
             }

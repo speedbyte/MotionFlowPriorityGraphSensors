@@ -15,7 +15,7 @@
 class GroundTruthScene  {
 
 protected:
-    std::vector<GroundTruthObjects> &m_list_objects;
+    std::vector<GroundTruthObjects> &m_list_gt_objects;
 
     boost::filesystem::path  m_groundtruthpath;
 
@@ -49,7 +49,7 @@ protected:
 public:
 
     GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
-    m_list_objects(list_objects), m_regenerate_yaml_file(generate_yaml_file)
+    m_list_gt_objects(list_objects), m_regenerate_yaml_file(generate_yaml_file)
     {
 
         m_datasetpath = Dataset::getDatasetPath();
@@ -71,6 +71,8 @@ public:
     void generate_bird_view();
 
     void prepare_directories();
+
+    void visualiseBoundingBox();
 
     void stopSimulation() {
         char command[1024];
@@ -96,7 +98,7 @@ public:
     void generate_gt_scene() override;
 
     cv::Mat getObjectShape(int index) {
-        return m_list_objects.at(index).getImageShapeAndData().get();
+        return m_list_gt_objects.at(index).getImageShapeAndData().get();
     }
 
     ~GroundTruthSceneInternal(){
@@ -181,15 +183,15 @@ private:
                     "</Sensor>";
 
     // Precipitation intensity needs to be > 0 for snow and rain.
-    const std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"auto\" /> <Sky cloudState=\"0/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
+    const std::string environment_parameters_dry = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"off\" /> <Sky cloudState=\"0/8\" visibility=\"100000.000000\" /><Precipitation type=\"none\" intensity=\"0.000000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
     //Rain
-    const std::string environment_parameters_wet = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"auto\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"rain\" intensity=\"0.500000\" /><Road state=\"dry\" effectScale=\"0.500000\" /></Environment>";
+    const std::string environment_parameters_wet = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"off\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"rain\" intensity=\"0.500000\" /><Road state=\"dry\" effectScale=\"0.600000\" /></Environment>";
 
     std::string camera_parameters_tethered = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosTether player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
     std::string camera_parameters = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string display_parameters = "<Display>  <SensorSymbols enable=\"true\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"true\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
+    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
 
     std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
 
@@ -352,7 +354,12 @@ public:
             to_replace = "100000.000000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
-                m_environment_scp_message.replace(position, to_replace.length(), "60");
+                m_environment_scp_message.replace(position, to_replace.length(), "100000.000000");
+            }
+            to_replace = "0.500000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "0.300000");
             }
         }
 
@@ -364,10 +371,15 @@ public:
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "snow");
             }
-            to_replace = "100000.000000";
+            to_replace = "4/8";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
-                m_environment_scp_message.replace(position, to_replace.length(), "40");
+                m_environment_scp_message.replace(position, to_replace.length(), "6/8");
+            }
+            to_replace = "0.500000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "0.500000");
             }
         }
 
@@ -379,10 +391,15 @@ public:
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "snow");
             }
-            to_replace = "100000.000000";
+            to_replace = "4/8";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
-                m_environment_scp_message.replace(position, to_replace.length(), "20");
+                m_environment_scp_message.replace(position, to_replace.length(), "8/8");
+            }
+            to_replace = "0.500000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "0.900000");
             }
         }
 

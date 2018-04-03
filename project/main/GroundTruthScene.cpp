@@ -14,6 +14,7 @@
 #include <vires-interface/Common/viRDBIcd.h>
 #include <sys/time.h>
 #include <opencv2/imgcodecs/imgcodecs_c.h>
+#include <opencv/cv.hpp>
 #include "GroundTruthScene.h"
 #include "kbhit.h"
 #include "ViresObjects.h"
@@ -21,6 +22,70 @@
 
 using namespace std::chrono;
 
+void GroundTruthScene::visualiseBoundingBox(void) {
+
+    std::cout << "visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
+
+    char file_name_image[50], file_name_image_output[50];
+
+    cv::Mat image_data_and_shape;
+
+    const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
+    cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
+
+    for (int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++) {
+
+        for (ushort frame_count = 1; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++)
+        {
+            //ushort frame_count = 3;
+
+            std::cout << "frame_count " << frame_count << std::endl;
+
+            std::string output_image_file_with_path;
+            /*---------------------------------------------------------------------------------*/
+            tempGroundTruthImage = cv::Scalar::all(255);
+
+            sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
+            std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
+
+            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count * frame_skip);
+            output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
+
+            cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+            tempGroundTruthImage = cv::Scalar::all(255);
+            tempGroundTruthImage = tempGroundTruthImageBase.clone();
+
+            for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
+
+                if ((m_list_gt_objects.at(obj_index).get_obj_base_visibility().at(frame_count))
+                        ) {
+
+                    //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_count).m_object_dimensions_px.dim_length_m/2))),
+                    cv::Rect boundingbox = cv::Rect(
+                            cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_location_px.location_x_m-
+                                    cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m)),
+                            cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_location_px.location_y_m),
+                            cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m));
+
+                    cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+
+                }
+            }
+            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            cv::imshow("BB", tempGroundTruthImage);
+            cv::waitKey(0);
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            /*---------------------------------------------------------------------------------*/
+        }
+    }
+    cv::destroyAllWindows();
+}
 
 void GroundTruthScene::prepare_directories() {
 
@@ -41,7 +106,7 @@ void GroundTruthScene::prepare_directories() {
             char char_dir_append[20];
             boost::filesystem::path path;
 
-            for (int i = 0; i < m_list_objects.size(); i++) {
+            for (int i = 0; i < m_list_gt_objects.size(); i++) {
 
                 sprintf(char_dir_append, "%02d", i);
                 m_position_obj_path = m_generatepath.string() + "position_obj_";
@@ -75,27 +140,27 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
         sprintf (temp_str_fs, "frame_skip_%03d", frame_skip);
         //write_fs << temp_str_fs << "[";
 
-        unsigned long FRAME_COUNT = m_list_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char temp_str_fc[20];
             sprintf (temp_str_fc, "frame_count_%03d", frame_count);
             write_fs << temp_str_fc << "[";
-            for ( int i = 0; i< m_list_objects.size(); i++) {
+            for ( int i = 0; i< m_list_gt_objects.size(); i++) {
                 write_fs
-                        << "{:" << "name" << m_list_objects.at(i).getObjectName()
-                        << "visible" << m_list_objects.at(i).get_obj_base_visibility().at(frame_count)
-                        << "x" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_x_m
-                        << "y" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_y_m
-                        << "dim_x" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m
-                        << "dim_y" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m
-                        << "x_usk" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_x_m
-                        << "y_usk" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_y_m
-                        << "dim_x_usk" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_width_m
-                        << "dim_y_usk" << m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_height_m
-                        << "speed_x" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.x
-                        << "speed_y" <<  m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.y
+                        << "{:" << "name" << m_list_gt_objects.at(i).getObjectName()
+                        << "visible" << m_list_gt_objects.at(i).get_obj_base_visibility().at(frame_count)
+                        << "x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_x_m
+                        << "y" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_y_m
+                        << "dim_x" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m
+                        << "dim_y" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m
+                        << "x_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_x_m
+                        << "y_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_y_m
+                        << "dim_x_usk" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_width_m
+                        << "dim_y_usk" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_height_m
+                        << "speed_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.x
+                        << "speed_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.y
                         << "}";
             }
             write_fs << "]";
@@ -119,7 +184,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
         char temp_str_fs[20];
         sprintf (temp_str_fs, "frame_skip_%03d", frame_skip);
         std::cout << "read yaml file for frame_skip " << (frame_skip-1) << std::endl;
-        //unsigned long FRAME_COUNT = m_list_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
         unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_VECTOR;
         assert(FRAME_COUNT>0);
 
@@ -222,13 +287,16 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
 
             GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(i)->getObjectShape(), *m_ptr_customObjectMetaDataList.at(i), m_ptr_customObjectMetaDataList.at(i)->getObjectStartPoint(), colorfulNoise, m_ptr_customObjectMetaDataList.at(i)->getObjectName());
-            m_list_objects.push_back(gt_obj);
+            m_list_gt_objects.push_back(gt_obj);
 
         }
 
         if ( m_regenerate_yaml_file  ) {
             writePositionInYaml("cpp");
         }
+
+        visualiseBoundingBox();
+
     }
 
     cv::Mat tempGroundTruthImage, tempGroundTruthImageBase;
@@ -283,25 +351,25 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         char frame_skip_folder_suffix[50];
 
-        for ( unsigned  i = 0; i < m_list_objects.size(); i++ ) {
+        for ( unsigned  i = 0; i < m_list_gt_objects.size(); i++ ) {
 
-            sprintf(frame_skip_folder_suffix, "%02d", m_list_objects.at(i).getObjectId());
+            sprintf(frame_skip_folder_suffix, "%02d", m_list_gt_objects.at(i).getObjectId());
             std::string position_image_file_with_path = m_position_obj_path.string() +
                     frame_skip_folder_suffix + "/" + file_name_image;
 
-            image_data_and_shape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m));
-            positionShape = m_list_objects.at(i).getImageShapeAndData().get().clone();
-            positionShape = positionShape.rowRange(0, cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)).colRange(0,cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m));
+            image_data_and_shape = m_list_gt_objects.at(i).getImageShapeAndData().get().clone();
+            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)).colRange(0,cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m));
+            positionShape = m_list_gt_objects.at(i).getImageShapeAndData().get().clone();
+            positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)).colRange(0,cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m));
 
-            if ( ( m_list_objects.at(i).get_obj_base_visibility().at(frame_count))
+            if ( ( m_list_gt_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
-                        cv::Rect(cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
-                                 cvRound(m_list_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
-                                 cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m),
-                                 cvRound(m_list_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m))));
+                        cv::Rect(cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
+                                 cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
+                                 cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                                 cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m))));
 
             }
         }
@@ -325,11 +393,11 @@ void GroundTruthScene::generate_bird_view() {
     for ( auto position_index = 0;  position_index <  MAX_ITERATION_RESULTS; position_index++ ) {
 
         cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
-        for ( auto object_index= 0; object_index < m_list_objects.size(); object_index++ ) {
-            birdview_frame.at(m_list_objects.at(object_index).get_obj_base_pixel_position_pixel_displacement().at(position_index).first.x, m_list_objects.at(object_index).get_obj_range().at(position_index)) = 100;
+        for ( auto object_index= 0; object_index < m_list_gt_objects.size(); object_index++ ) {
+            birdview_frame.at(m_list_gt_objects.at(object_index).get_obj_base_pixel_position_pixel_displacement().at(position_index).first.x, m_list_gt_objects.at(object_index).get_obj_range().at(position_index)) = 100;
             cv::Mat roi_objects;
-            roi_objects = birdview_frame.rowRange(m_list_objects.at(object_index).get_obj_range().at(position_index), m_list_objects.at(object_index).get_obj_dimension().at(position_index).z_offset )
-                    .colRange(m_list_objects.at(object_index).get_obj_range().at(position_index), m_list_objects.at(object_index).get_obj_dimension().at(position_index).x_offset);
+            roi_objects = birdview_frame.rowRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).z_offset )
+                    .colRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).x_offset);
 
         }
         cv::imwrite("filename", birdview_frame);
@@ -465,7 +533,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, bbox.c_str());
+        //sendSCPMessage(m_scpSocket, bbox.c_str());
 
         sleep(1);
 
@@ -623,13 +691,16 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
 
                 GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(i)->getObjectShape(), *m_ptr_customObjectMetaDataList.at(i), m_ptr_customObjectMetaDataList.at(i)->getObjectStartPoint(), noNoise, m_ptr_customObjectMetaDataList.at(i)->getObjectName());
-                m_list_objects.push_back(gt_obj);
+                m_list_gt_objects.push_back(gt_obj);
 
             }
 
             if ( m_regenerate_yaml_file  ) {
                 writePositionInYaml("vires");
             }
+
+            //visualiseBoundingBox();
+
         }
     }
     catch (...) {

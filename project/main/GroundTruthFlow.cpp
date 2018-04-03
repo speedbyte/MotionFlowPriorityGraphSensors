@@ -150,7 +150,7 @@ void GroundTruthFlow::generate_flow_frame() {
             }
 
             F_png_write.writeExtended(temp_gt_flow_image_path);
-            CannyEdgeDetection(temp_gt_flow_image_path, temp_result_edge_path);
+            //CannyEdgeDetection(temp_gt_flow_image_path, temp_result_edge_path);
 
             auto toc = steady_clock::now();
             time_map["generate_single_flow_image"] = duration_cast<milliseconds>(toc - tic).count();
@@ -239,14 +239,14 @@ void GroundTruthFlow::generate_edge_contour() {
 
                         next_pts_array = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(frame_skip-1).at(frame_count);
 
-                        std::cout << "making a edge contour on the basis of groundtruth object " << m_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
-
                         //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
                         //cv::imshow("edge", edge_02_frame);
                         //cv::waitKey(0);
 
                         //std::cout << roi_offset.x + col_index << std::endl;
                         auto COUNT = next_pts_array.size();
+                        std::cout << "making a edge contour on the basis of groundtruth object " << m_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
+                        std::cout << "base count " << COUNT << std::endl;
                         for ( ushort next_pts_index = 0; next_pts_index < COUNT; next_pts_index++ ) {
 
                             //printf("gray %u\n", edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)));

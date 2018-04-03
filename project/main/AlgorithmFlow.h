@@ -26,15 +26,13 @@ private:
 
     std::vector<Objects *> &m_list_simulated_objects;
 
-    std::string* &m_ptr_environment;
-
     boost::filesystem::path mImageabholOrt;
 
 
 public:
 
-    AlgorithmFlow( std::string* &environment, std::vector<Objects*> &list_gt_objects, std::vector<Objects*> &list_simulated_base_objects, std::vector<Objects*> &list_simulated_objects ) :
-    OpticalFlow(list_gt_objects), m_ptr_environment(environment), m_list_simulated_base_objects(list_simulated_base_objects), m_list_simulated_objects(list_simulated_objects) {
+    AlgorithmFlow( std::vector<Objects*> &list_gt_objects, std::vector<Objects*> &list_simulated_base_objects, std::vector<Objects*> &list_simulated_objects ) :
+    OpticalFlow(list_gt_objects), m_list_simulated_base_objects(list_simulated_base_objects), m_list_simulated_objects(list_simulated_objects) {
 
     }
 
@@ -54,7 +52,7 @@ public:
 
     void generate_collision_points_mean();
 
-    void generate_shape_points();
+    void generate_shape_points(std::string noise);
 
     std::string getImageAbholOrt() const {
         return mImageabholOrt.string();
