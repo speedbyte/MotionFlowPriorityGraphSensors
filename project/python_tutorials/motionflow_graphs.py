@@ -400,6 +400,22 @@ def motionflow_vectorgraphs_no_noise():
         "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
+
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_low_",
+
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_",
+
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_high_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_high_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_high_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_high_",
+
     ]
 
     color_of_collision_metrics = ["red", "green", "blue", "black"]
