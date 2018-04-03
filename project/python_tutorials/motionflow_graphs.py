@@ -19,6 +19,32 @@ from math import pi
 
 import random
 
+
+def histogramm():
+
+    with open("hist") as test:
+        hist = []
+        for line in test:
+            hist.append(line.rstrip())
+
+    ybuf = []
+    y = []
+
+    for line in hist:
+        type = line.split(" ")
+        ybuf.append(type[2])
+
+    for l in ybuf:
+        y.append(float(l[:2]))
+
+    print(y)
+
+    plt.xlabel("counter")
+    plt.ylabel("displacement", )
+
+    plt.hist(y,align="left",bins = 30)
+    plt.show()
+
 environment_list = ["none", "night"]
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
@@ -699,10 +725,13 @@ if __name__ == '__main__':
     #criticalpoint()
     #lemniscate()
     #simple()
+
     motionflow_pixelgraphs_no_noise()
     motionflow_pixelgraphs_noise()
     motionflow_vectorgraphs_no_noise()
     motionflow_vectorgraphs_noise()
+
+    histogramm()
 
     #motionflow_vectorgraphs()
     #check()

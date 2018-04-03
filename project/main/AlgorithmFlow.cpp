@@ -283,7 +283,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 continue;
             }*/
             sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
-            sprintf(file_name_input_image_edge, "000%03d_edge_10.png", frame_count*frame_skip);
+            sprintf(file_name_input_image_edge, "000%03d_10_edge.png", frame_count*frame_skip);
             // Break out of the loop if the user presses the Esc key
             char c = (char) cv::waitKey(10);
             switch (c) {
