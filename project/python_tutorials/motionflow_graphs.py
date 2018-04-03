@@ -18,7 +18,7 @@ import matplotlib as mp
 from math import pi
 
 import random
-environment_list = ["none", "night"]
+environment_list = ["none","night","snow_low_", "snow_moderate_", "snow_high_"]
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
@@ -206,6 +206,7 @@ def motionflow_pixelgraphs_no_noise():
 
 def motionflow_pixelgraphs_noise():
 
+    print "Start Noise "
     yaml_file = open(file, "r")
     check = yaml_file.readline()
     print check
@@ -259,15 +260,33 @@ def motionflow_pixelgraphs_noise():
         "shape_pointsframe_skip1_dataprocessing_1results_FB_none_",
         "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
+
         "shape_pointsframe_skip1_dataprocessing_1results_FB_night_",
         "shape_pointsframe_skip1_dataprocessing_0results_FB_night_",
         "shape_pointsframe_skip1_dataprocessing_2results_FB_night_",
         "shape_pointsframe_skip1_dataprocessing_3results_FB_night_",
+
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_snow_low_",
+
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_",
+
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_high_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_high_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_high_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_snow_high_",
+
     ]
 
-    color_of_shape_metrics = ["red", "black"]
+    color_of_shape_metrics = ["red", "black","green","yellow","orange"]
 
     assert(len(list_of_shape_metrics)/4 == len(color_of_shape_metrics))
+    print "Länge", len(list_of_shape_metrics)/4
 
     offset=1
     offset_index=0
@@ -286,6 +305,9 @@ def motionflow_pixelgraphs_noise():
 
         for x in range(4):
 
+            print "Offset", offset_index
+            print "Debug", offset_index*no_of_metrics+x
+            print list_of_shape_metrics[offset_index*no_of_metrics+x]
             shape_points = yaml_load[list_of_shape_metrics[offset_index*no_of_metrics+x]]
             print offset_index*no_of_metrics+x
             shape = list()
@@ -343,7 +365,7 @@ def motionflow_pixelgraphs_noise():
         #shapeplot1.legend()
         shapeplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        offset_index=offset_index+4
+        offset_index=offset_index+1
 
         print "Table 2 " + environment_list[no_of_metrics]
         print y0_mean_list[no_of_metrics]
@@ -401,24 +423,11 @@ def motionflow_vectorgraphs_no_noise():
         "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
 
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_low_",
 
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_",
-
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_high_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_high_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_high_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_high_",
 
     ]
 
-    color_of_collision_metrics = ["red", "green", "blue", "black"]
+    color_of_collision_metrics = ["red", "green", "blue", "black","orange"]
 
     #assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
@@ -592,9 +601,25 @@ def motionflow_vectorgraphs_noise():
         "collision_pointsframe_skip1_dataprocessing_0results_FB_night_",
         "collision_pointsframe_skip1_dataprocessing_2results_FB_night_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_night_",
+
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_low_",
+
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_",
+
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_high_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_high_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_high_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_high_",
+
     ]
 
-    color_of_collision_metrics = ["red", "black"]
+    color_of_collision_metrics = ["red", "black","yellow","green","orange"]
 
     assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
@@ -698,7 +723,7 @@ def motionflow_vectorgraphs_noise():
         #collisionplot1.legend()
         collisionplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        offset_index=offset_index+4
+        offset_index=offset_index+1
 
         print "Table 4 " + environment_list[no_of_metrics]
         print y0_mean_list[no_of_metrics]
