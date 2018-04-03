@@ -51,13 +51,12 @@ def histogramm():
     f.savefig(output_folder + 'histogramm.png', dpi= 200)
 
 
+dataset = "vires"
+scenario = "two"
+file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
+#file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
 def motionflow_pixelgraphs_no_noise():
-
-    dataset = "cpp"
-    scenario = "two"
-    file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
-    #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
     yaml_file = open(file, "r")
     check = yaml_file.readline()
@@ -206,11 +205,6 @@ def motionflow_pixelgraphs_no_noise():
 
 
 def motionflow_pixelgraphs_noise():
-
-    dataset = "cpp"
-    scenario = "two"
-    file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
-    #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
     yaml_file = open(file, "r")
     check = yaml_file.readline()
@@ -372,10 +366,6 @@ def motionflow_pixelgraphs_noise():
 
 def motionflow_vectorgraphs_no_noise():
 
-    dataset = "cpp"
-    scenario = "two"
-    file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
-    #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
     yaml_file = open(file, "r")
     check = yaml_file.readline()
@@ -525,11 +515,6 @@ def motionflow_vectorgraphs_no_noise():
 
 
 def motionflow_vectorgraphs_noise():
-
-    dataset = "cpp"
-    scenario = "two"
-    file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
-    #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
     yaml_file = open(file, "r")
     check = yaml_file.readline()
