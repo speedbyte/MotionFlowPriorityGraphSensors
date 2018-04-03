@@ -30,23 +30,28 @@ def histogramm():
         for line in test:
             hist.append(line.rstrip())
 
+    xbuf = []
     ybuf = []
     y = []
 
     for line in hist:
         type = line.split(" ")
-        ybuf.append(type[2])
+        xbuf.append(float(type[0]))
+        l = type[2]
+        for i in range(0,int(l[:-4])):
+            ybuf.append(float(type[0]))
 
-    for l in ybuf:
-        y.append(float(l[:-4]))
-
-    print(y)
+    print(ybuf)
 
     fig1 = plt.figure()
-    plt.xlabel("counter")
-    plt.ylabel("displacement", )
+    plt.xlabel("Displacement")
+    plt.ylabel("Counter", )
 
-    plt.hist(y,bins=range(1,30), align='left', rwidth=1)
+    y = np.asarray(ybuf)
+    bins = xbuf
+    print bins
+
+    plt.hist(y.astype('float'),bins=bins, align='left', rwidth=0.5)
     plt.show()
     fig1.savefig(output_folder + 'histogramm.png', dpi= 200)
     plt.close('all')
@@ -203,7 +208,7 @@ def motionflow_pixelgraphs_no_noise():
 
     #fig2.set_size_inches(18.5, 10.5)
     fig2.savefig(output_folder + 'pixel_robustness_optical_flow.png', bbox_inches='tight',dpi=200)
-    plt.close("all")
+#    plt.close('all')
 
 
 def motionflow_pixelgraphs_noise():
@@ -540,7 +545,7 @@ def motionflow_vectorgraphs_no_noise():
     fig2.savefig(output_folder + 'vector_robustness_optical_flow', bbox_inches='tight',dpi=200)
 
 
-    plt.close("all")
+#    plt.close("all")
 
 
 def motionflow_vectorgraphs_noise():
