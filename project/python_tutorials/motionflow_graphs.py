@@ -49,8 +49,7 @@ def histogramm():
     plt.hist(y,align="left",bins = 30)
     plt.show()
     fig1.savefig(output_folder + 'histogramm.png', dpi= 200)
-
-    plt.close(fig1)
+    plt.close('all')
 
 
 dataset = "vires"
@@ -96,7 +95,7 @@ def motionflow_pixelgraphs_no_noise():
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
     ]
 
-    color_of_shape_metrics = ["red", "green", "blue", "black"]
+    color_of_shape_metrics = ["blue", "brown","gray","black"]
 
     #assert(len(list_of_shape_metrics)/1 == len(color_of_shape_metrics))
 
@@ -204,7 +203,7 @@ def motionflow_pixelgraphs_no_noise():
 
     #fig2.set_size_inches(18.5, 10.5)
     fig2.savefig(output_folder + 'pixel_robustness_optical_flow.png', bbox_inches='tight',dpi=200)
-    plt.close(fig2)
+    plt.close("all")
 
 
 def motionflow_pixelgraphs_noise():
@@ -286,7 +285,7 @@ def motionflow_pixelgraphs_noise():
 
     ]
 
-    color_of_shape_metrics = ["red", "black","green","yellow"]
+    color_of_shape_metrics = ["blue", "brown","gray","black"]
 
     assert(len(list_of_shape_metrics)/4 == len(color_of_shape_metrics))
     print "Länge", len(list_of_shape_metrics)/4
@@ -387,10 +386,7 @@ def motionflow_pixelgraphs_noise():
    # fig3.set_size_inches(18.5, 10.5)
     fig3.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
 
-    plt.close(fig0)
-    plt.close(fig1)
-    plt.close(fig2)
-    plt.close(fig3)
+ #   plt.close("all")
 
 def motionflow_vectorgraphs_no_noise():
 
@@ -433,7 +429,7 @@ def motionflow_vectorgraphs_no_noise():
 
     ]
 
-    color_of_collision_metrics = ["red", "green", "blue", "black","orange"]
+    color_of_collision_metrics = ["blue", "brown","gray","black"]
 
     #assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
@@ -544,7 +540,7 @@ def motionflow_vectorgraphs_no_noise():
     fig2.savefig(output_folder + 'vector_robustness_optical_flow', bbox_inches='tight',dpi=200)
 
 
-    plt.close(fig2)
+    plt.close("all")
 
 
 def motionflow_vectorgraphs_noise():
@@ -627,7 +623,7 @@ def motionflow_vectorgraphs_noise():
 
     ]
 
-    color_of_collision_metrics  = ["red", "black","green","yellow",]
+    color_of_collision_metrics  = ["blue", "brown","gray","black"]
 
 
     assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
@@ -749,10 +745,7 @@ def motionflow_vectorgraphs_noise():
    # fig3.set_size_inches(18.5, 10.5)
     fig3.savefig(output_folder + 'vector_robustness_data_processing_algorithm_3',bbox_inches='tight', dpi=200)
 
-    plt.close(fig0)
-    plt.close(fig1)
-    plt.close(fig2)
-    plt.close(fig3)
+    plt.close('all')
 
 
 
@@ -774,7 +767,7 @@ if __name__ == '__main__':
     motionflow_vectorgraphs_no_noise()
     motionflow_vectorgraphs_noise()
 
-    #histogramm()
+    histogramm()
 
     #motionflow_vectorgraphs()
     #check()
