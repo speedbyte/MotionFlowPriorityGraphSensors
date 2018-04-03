@@ -1147,6 +1147,7 @@ void AlgorithmFlow::visualiseStencil(void) {
 
     const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
+    FlowImageExtended F_png_write;
 
     for ( int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++ ) {
 
@@ -1330,9 +1331,10 @@ void AlgorithmFlow::visualiseStencil(void) {
                 }
                 cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             }
+
             /*---------------------------------------------------------------------------------*/
             tempGroundTruthImage = cv::Scalar::all(255);
-            FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+            F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
             sprintf(file_name_image_output, "000%03d_10_flow_gt.png", frame_count * frame_skip);
             output_image_file_with_path =
@@ -1374,6 +1376,7 @@ void AlgorithmFlow::visualiseStencil(void) {
             /*---------------------------------------------------------------------------------*/
 
             tempGroundTruthImage = cv::Scalar::all(255);
+            F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
             sprintf(file_name_image_output, "000%03d_10_flow_base_algo.png", frame_count * frame_skip);
             output_image_file_with_path =
@@ -1401,12 +1404,17 @@ void AlgorithmFlow::visualiseStencil(void) {
 
                         cv::Point2f next_pts = cv::Point2f(pts.x+displacement.x, pts.y+displacement.y);
 
+                        F_png_write.setFlowU(pts.x,pts.y,displacement.x);
+                        F_png_write.setFlowV(pts.x,pts.y,displacement.y);
+                        F_png_write.setValid(pts.x,pts.y,true);
+
                         cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(255, 0, 0), 1, 8, 0, 0.25);
 
                     }
                 }
             }
-            cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            F_png_write.writeExtended(output_image_file_with_path);
             /*---------------------------------------------------------------------------------*/
 
             tempGroundTruthImage = cv::Scalar::all(255);
@@ -1437,12 +1445,17 @@ void AlgorithmFlow::visualiseStencil(void) {
 
                             cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
 
+                            F_png_write.setFlowU(pts.x,pts.y,displacement.x);
+                            F_png_write.setFlowV(pts.x,pts.y,displacement.y);
+                            F_png_write.setValid(pts.x,pts.y,true);
+
                             cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
 
                         }
                     }
                 }
-                cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+                //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+                F_png_write.writeExtended(output_image_file_with_path);
             }
         }
     }
