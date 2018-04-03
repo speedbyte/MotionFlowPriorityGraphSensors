@@ -24,7 +24,7 @@ using namespace std::chrono;
 
 void GroundTruthScene::visualiseBoundingBox(void) {
 
-    std::cout << "visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
+    std::cout << "visualise boudning box at " << m_generatepath.string() + "stencil/" << std::endl;
 
     char file_name_image[50], file_name_image_output[50];
 
@@ -266,7 +266,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             }
         }
         else { // genreate yaml file
-            boost::filesystem::remove("../position_vires.yml");
+            boost::filesystem::remove("../position_cpp.yml");
 
             Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
 
@@ -295,7 +295,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             writePositionInYaml("cpp");
         }
 
-        visualiseBoundingBox();
+        //visualiseBoundingBox();
 
     }
 
