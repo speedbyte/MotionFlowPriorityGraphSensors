@@ -491,7 +491,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     if ( visibility ) {
 
                         cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER)),(cvRound(rowBegin)+height+(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER))).colRange
-                                (cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)),(cvRound(columnBegin)+width+(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)));
+                                //(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)),(cvRound(columnBegin)+width+(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)));
+                        (cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)-width),(cvRound(columnBegin)+width+width+(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)));
 
                         cv::Size roi_size;
                         cv::Point roi_offset;
