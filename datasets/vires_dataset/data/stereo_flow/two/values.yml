@@ -1,0 +1,395 @@
+---
+shape_pointsframe_skip1_dataprocessing_0_generated: 
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+   - { good_pixels: 525., total_pixels: 525. }
+collision_pointsframe_skip1_dataprocessing_0_generated: 
+   - { x: -2.2254431152343750e+02, y: -1.8429608154296875e+02 }
+   - { x: 2.0089611816406250e+02, y: 1.6028277587890625e+02 }
+   - { x: 2.8495446777343750e+02, y: 2.2856726074218750e+02 }
+   - { x: 3.2061373901367188e+02, y: 2.5745004272460938e+02 }
+   - { x: 3.3985006713867188e+02, y: 2.7296414184570312e+02 }
+   - { x: 3.5197695922851562e+02, y: 2.8268676757812500e+02 }
+   - { x: 3.5995071411132812e+02, y: 2.8903399658203125e+02 }
+   - { x: 3.6567834472656250e+02, y: 2.9355053710937500e+02 }
+   - { x: 3.6977777099609375e+02, y: 2.9673986816406250e+02 }
+shape_pointsframe_skip1_dataprocessing_0results_FB_none_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 486., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 4.7450000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 475., total_pixels: 503. }
+   - { good_pixels: 472., total_pixels: 502. }
+   - { good_pixels: 475., total_pixels: 503. }
+   - { good_pixels: 491., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 466., total_pixels: 503. }
+   - { good_pixels: 4.8850000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 456., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_1results_FB_none_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 5., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 2.4150000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 5.5000000000000000e+00, total_pixels: 503. }
+   - { good_pixels: 236., total_pixels: 502. }
+   - { good_pixels: 5., total_pixels: 503. }
+   - { good_pixels: 48., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 5.0000000000000000e-01, total_pixels: 503. }
+   - { good_pixels: 58., total_pixels: 503. }
+   - { good_pixels: 0., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_2results_FB_none_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 3.5950000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 3.3450000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 3.4050000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 396., total_pixels: 502. }
+   - { good_pixels: 3.3550000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 3.5950000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 309., total_pixels: 503. }
+   - { good_pixels: 366., total_pixels: 503. }
+   - { good_pixels: 3.5350000000000000e+02, total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_3results_FB_none_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 47., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 4.7500000000000000e+01, total_pixels: 503. }
+   - { good_pixels: 4.7500000000000000e+01, total_pixels: 503. }
+   - { good_pixels: 4.7500000000000000e+01, total_pixels: 502. }
+   - { good_pixels: 47., total_pixels: 503. }
+   - { good_pixels: 4.8500000000000000e+01,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 4.5500000000000000e+01, total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 45., total_pixels: 502. }
+collision_pointsframe_skip1_dataprocessing_0results_FB_none_: 
+   - { x: 4.2877673339843750e+02, y: 3.4588079833984375e+02 }
+   - { x: 3.8949542236328125e+02, y: 3.1356469726562500e+02 }
+   - { x: 4.3621905517578125e+02, y: 3.5118963623046875e+02 }
+   - { x: 4.0303503417968750e+02, y: 3.2368115234375000e+02 }
+   - { x: 4.4207467651367188e+02, y: 3.5500762939453125e+02 }
+   - { x: 3.9094622802734375e+02, y: 3.1378915405273438e+02 }
+   - { x: 4.2994177246093750e+02, y: 3.4356124877929688e+02 }
+   - { x: 3.9780856323242188e+02, y: 3.1921121215820312e+02 }
+   - { x: 4.3783239746093750e+02, y: 3.4884799194335938e+02 }
+collision_pointsframe_skip1_dataprocessing_1results_FB_none_: 
+   - { x: 4.1269274902343750e+02, y: 3.3276205444335938e+02 }
+   - { x: 4.1186071777343750e+02, y: 3.3173358154296875e+02 }
+   - { x: 4.1106323242187500e+02, y: 3.3073358154296875e+02 }
+   - { x: 4.1092202758789062e+02, y: 3.3025503540039062e+02 }
+   - { x: 4.1010028076171875e+02, y: 3.2923358154296875e+02 }
+   - { x: 4.0934472656250000e+02, y: 3.2826205444335938e+02 }
+   - { x: 4.0851379394531250e+02, y: 3.2723361206054688e+02 }
+   - { x: 4.0772351074218750e+02, y: 3.2623358154296875e+02 }
+   - { x: 4.0754461669921875e+02, y: 3.2575503540039062e+02 }
+collision_pointsframe_skip1_dataprocessing_2results_FB_none_: 
+   - { x: -8.5276079177856445e-01, y: -3.8517949581146240e+00 }
+   - { x: -2.5206949234008789e+01, y: -2.3918733596801758e+01 }
+   - { x: -1.9426465988159180e+01, y: -1.9498888015747070e+01 }
+   - { x: -4.1981529235839844e+01, y: -3.8314643859863281e+01 }
+   - { x: -2.0702747344970703e+01, y: -2.1660587310791016e+01 }
+   - { x: 3.8536075592041016e+01, y: 2.8040744781494141e+01 }
+   - { x: -5.4827743530273438e+01, y: -5.1915546417236328e+01 }
+   - { x: -3.8177398681640625e+01, y: -3.8113842010498047e+01 }
+   - { x: 5.3412063598632812e+01, y: 3.8830310821533203e+01 }
+collision_pointsframe_skip1_dataprocessing_3results_FB_none_: 
+   - { x: 4.3602081298828125e+02, y: 3.5175366210937500e+02 }
+   - { x: 3.9967880249023438e+02, y: 3.2198135375976562e+02 }
+   - { x: 4.4859417724609375e+02, y: 3.6106286621093750e+02 }
+   - { x: 4.2110583496093750e+02, y: 3.3849392700195312e+02 }
+   - { x: 4.4529223632812500e+02, y: 3.5749725341796875e+02 }
+   - { x: 3.9602050781250000e+02, y: 3.1821087646484375e+02 }
+   - { x: 4.4155633544921875e+02, y: 3.5327575683593750e+02 }
+   - { x: 3.9431140136718750e+02, y: 3.1640057373046875e+02 }
+   - { x: 4.4425054931640625e+02, y: 3.5427587890625000e+02 }
+
+
+
+
+shape_pointsframe_skip1_dataprocessing_0results_FB_snow_low_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 2.0450000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 439., total_pixels: 502. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 2.0450000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 439., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_1results_FB_snow_low_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 2.0450000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 439., total_pixels: 502. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 2.0450000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 439., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_2results_FB_snow_low_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 3.0250000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 3.0750000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 3.1050000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 3.9150000000000000e+02, total_pixels: 502. }
+   - { good_pixels: 309., total_pixels: 503. }
+   - { good_pixels: 303., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 3.0950000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 309., total_pixels: 503. }
+   - { good_pixels: 387., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_3results_FB_snow_low_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 46., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 502. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 46., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 502. }
+
+
+
+shape_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 474., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 4.7350000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 4.7250000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 470., total_pixels: 502. }
+   - { good_pixels: 473., total_pixels: 503. }
+   - { good_pixels: 4.8050000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 4.7550000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 4.7550000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 476., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 2.0450000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 404., total_pixels: 503. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 439., total_pixels: 502. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 2.0450000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 439., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 3.0250000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 3.0750000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 3.1050000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 3.9150000000000000e+02, total_pixels: 502. }
+   - { good_pixels: 309., total_pixels: 503. }
+   - { good_pixels: 302., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 3.0950000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 309., total_pixels: 503. }
+   - { good_pixels: 387., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 46., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 502. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 46., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 42., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 502. }
+
+
+
+shape_pointsframe_skip1_dataprocessing_0results_FB_snow_high_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 471., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 4.7350000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 4.7250000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 470., total_pixels: 502. }
+   - { good_pixels: 471., total_pixels: 503. }
+   - { good_pixels: 4.8050000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 4.7550000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 4.7550000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 476., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_1results_FB_snow_high_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 2.0450000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 401., total_pixels: 503. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 439., total_pixels: 502. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 2.0450000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 409., total_pixels: 503. }
+   - { good_pixels: 439., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_2results_FB_snow_high_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 3.0250000000000000e+02,
+       total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 3.0750000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 3.1050000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 3.9150000000000000e+02, total_pixels: 502. }
+   - { good_pixels: 301., total_pixels: 503. }
+   - { good_pixels: 302., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 3.0950000000000000e+02, total_pixels: 503. }
+   - { good_pixels: 309., total_pixels: 503. }
+   - { good_pixels: 387., total_pixels: 502. }
+shape_pointsframe_skip1_dataprocessing_3results_FB_snow_high_: 
+   - { good_pixels: 0., total_pixels: 1. }
+   - { good_pixels: 46., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 41., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 502. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 46., total_pixels: 5.0450000000000000e+02 }
+   - { good_pixels: 42., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 503. }
+   - { good_pixels: 49., total_pixels: 502. }
+
+
+
+collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_: 
+   - { x: 4.2807901000976562e+02, y: 3.4531045532226562e+02 }
+   - { x: 4.1068432617187500e+02, y: 3.3098028564453125e+02 }
+   - { x: 4.0954449462890625e+02, y: 3.2983709716796875e+02 }
+   - { x: 4.2184771728515625e+02, y: 3.3936163330078125e+02 }
+   - { x: 4.0483392333984375e+02, y: 3.2563360595703125e+02 }
+   - { x: 3.9174963378906250e+02, y: 3.1441534423828125e+02 }
+   - { x: 3.9923913574218750e+02, y: 3.2054766845703125e+02 }
+   - { x: 3.9799151611328125e+02, y: 3.1930139160156250e+02 }
+   - { x: 3.9129595947265625e+02, y: 3.1336944580078125e+02 }
+collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_: 
+   - { x: 4.1269274902343750e+02, y: 3.3276205444335938e+02 }
+   - { x: 4.1186071777343750e+02, y: 3.3173358154296875e+02 }
+   - { x: 4.1106323242187500e+02, y: 3.3073358154296875e+02 }
+   - { x: 4.1092202758789062e+02, y: 3.3025503540039062e+02 }
+   - { x: 4.1010028076171875e+02, y: 3.2923358154296875e+02 }
+   - { x: 4.0934472656250000e+02, y: 3.2826205444335938e+02 }
+   - { x: 4.0851379394531250e+02, y: 3.2723361206054688e+02 }
+   - { x: 4.0772351074218750e+02, y: 3.2623358154296875e+02 }
+   - { x: 4.0754461669921875e+02, y: 3.2575503540039062e+02 }
+collision_pointsframe_skip1_dataprocessing_2results_FB_snow_low_: 
+   - { x: -8.0145549774169922e-01, y: -3.8099136352539062e+00 }
+   - { x: -1.8026916503906250e+01, y: -1.8013134002685547e+01 }
+   - { x: -1.9855739593505859e+01, y: -1.9837797164916992e+01 }
+   - { x: -3.1392822265625000e+01, y: -2.9488889694213867e+01 }
+   - { x: -2.5253936767578125e+01, y: -2.5230609893798828e+01 }
+   - { x: 3.8454490661621094e+01, y: 2.7977973937988281e+01 }
+   - { x: -3.2984786987304688e+01, y: -3.2963104248046875e+01 }
+   - { x: -3.7813404083251953e+01, y: -3.7790847778320312e+01 }
+   - { x: 4.3542045593261719e+01, y: 3.1356765747070312e+01 }
+collision_pointsframe_skip1_dataprocessing_3results_FB_snow_low_: 
+   - { x: 4.4172161865234375e+02, y: 3.5641470336914062e+02 }
+   - { x: 3.9336083984375000e+02, y: 3.1714166259765625e+02 }
+   - { x: 3.9474371337890625e+02, y: 3.1820727539062500e+02 }
+   - { x: 4.3577563476562500e+02, y: 3.5072125244140625e+02 }
+   - { x: 3.9060577392578125e+02, y: 3.1485021972656250e+02 }
+   - { x: 3.7797967529296875e+02, y: 3.0411373901367188e+02 }
+   - { x: 3.7920733642578125e+02, y: 3.0500003051757812e+02 }
+   - { x: 3.7784234619140625e+02, y: 3.0368194580078125e+02 }
+   - { x: 3.7952252197265625e+02, y: 3.0495477294921875e+02 }
+
+
+
+collision_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_: 
+   - { x: 4.2807901000976562e+02, y: 3.4531045532226562e+02 }
+   - { x: 4.1068432617187500e+02, y: 3.3038028564453125e+02 }
+   - { x: 4.0954449462890625e+02, y: 3.2983709716796875e+02 }
+   - { x: 4.2184771728515625e+02, y: 3.3936163330078125e+02 }
+   - { x: 4.0483392333984375e+02, y: 3.2563340595703125e+02 }
+   - { x: 3.9174963378906250e+02, y: 3.1441534423828125e+02 }
+   - { x: 3.9923913574218750e+02, y: 3.2054766845703125e+02 }
+   - { x: 3.9799151611328125e+02, y: 3.1930139160156250e+02 }
+   - { x: 3.9129595947265625e+02, y: 3.1336944580078125e+02 }
+collision_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_: 
+   - { x: 4.1269274902343750e+02, y: 3.3276205444335938e+02 }
+   - { x: 4.1186071777343750e+02, y: 3.3173358154296875e+02 }
+   - { x: 4.1106323242187500e+02, y: 3.3073358154296875e+02 }
+   - { x: 4.1092202758789062e+02, y: 3.3025503540039062e+02 }
+   - { x: 4.1010028076171875e+02, y: 3.2923358154296875e+02 }
+   - { x: 4.0934472656250000e+02, y: 3.2826255444335938e+02 }
+   - { x: 4.0851379394531250e+02, y: 3.2723361206054688e+02 }
+   - { x: 4.0772351074218750e+02, y: 3.2623358154296875e+02 }
+   - { x: 4.0754461669921875e+02, y: 3.2575503540039062e+02 }
+collision_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_: 
+   - { x: -8.0145549774169922e-01, y: -3.8099136352539062e+00 }
+   - { x: -1.8026916503906250e+01, y: -1.8013134002685547e+01 }
+   - { x: -1.9855739593505859e+01, y: -1.9837797164916992e+01 }
+   - { x: -3.1392822265625000e+01, y: -2.9488889694263867e+01 }
+   - { x: -2.5253936767578125e+01, y: -2.5230609893798828e+01 }
+   - { x: 3.8454490661621094e+01, y: 2.7977973937988281e+01 }
+   - { x: -3.2984786987304688e+01, y: -3.2963104248046875e+01 }
+   - { x: -3.7813404083251953e+01, y: -3.7790847778320312e+01 }
+   - { x: 4.3542045593261719e+01, y: 3.1356765747070312e+01 }
+collision_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_: 
+   - { x: 4.4172161865234375e+02, y: 3.5641470336914062e+02 }
+   - { x: 3.9336083984375000e+02, y: 3.1714166259765625e+02 }
+   - { x: 3.9474371337890625e+02, y: 3.1820727539062500e+02 }
+   - { x: 4.3577563474562500e+02, y: 3.5072125244140625e+02 }
+   - { x: 3.9060577392578125e+02, y: 3.1485021972656250e+02 }
+   - { x: 3.7797967529296875e+02, y: 3.0411373901367188e+02 }
+   - { x: 3.7920733642578125e+02, y: 3.0500003051757812e+02 }
+   - { x: 3.7784234619140625e+02, y: 3.0368194580078125e+02 }
+   - { x: 3.7952252197265625e+02, y: 3.0495477294921875e+02 }
+
+
+collision_pointsframe_skip1_dataprocessing_0results_FB_snow_high_: 
+   - { x: 4.2807901000976562e+02, y: 3.4531045532226562e+02 }
+   - { x: 4.1068432617187500e+02, y: 3.3038028564453125e+02 }
+   - { x: 4.0954449462890625e+02, y: 3.2983709716796875e+02 }
+   - { x: 4.2184771728515625e+02, y: 3.3936163330078125e+02 }
+   - { x: 4.0483392333984375e+02, y: 3.2563340595703125e+02 }
+   - { x: 3.9174963378906250e+02, y: 3.1441534423828125e+02 }
+   - { x: 3.9923913574218750e+02, y: 3.2054766845703125e+02 }
+   - { x: 3.9799151611328125e+02, y: 3.1930139160156250e+02 }
+   - { x: 3.9129595947265625e+02, y: 3.1336944580078125e+02 }
+collision_pointsframe_skip1_dataprocessing_1results_FB_snow_high_: 
+   - { x: 4.1269274902343750e+02, y: 3.3276205444335938e+02 }
+   - { x: 4.1186071777343750e+02, y: 3.3173358154296875e+02 }
+   - { x: 4.1106323242187500e+02, y: 3.3073358154296875e+02 }
+   - { x: 4.1092202758789062e+02, y: 3.3025503540039062e+02 }
+   - { x: 4.1010028076131875e+02, y: 3.2923358154296885e+02 }
+   - { x: 4.0934472656250000e+02, y: 3.2826255444335938e+02 }
+   - { x: 4.0851379394531250e+02, y: 3.2723361206054688e+02 }
+   - { x: 4.0772351074218750e+02, y: 3.2623358154296875e+02 }
+   - { x: 4.0754461669921875e+02, y: 3.2575503540039062e+02 }
+collision_pointsframe_skip1_dataprocessing_2results_FB_snow_high_: 
+   - { x: -8.0145549774169922e-01, y: -3.8099136352539062e+00 }
+   - { x: -1.8026916503906250e+01, y: -1.8013134002685547e+01 }
+   - { x: -1.9855739593505859e+01, y: -1.9837797164916992e+01 }
+   - { x: -3.1392822265625000e+01, y: -2.9488889694263867e+01 }
+   - { x: -2.5253936767578125e+01, y: -2.5230609893798828e+01 }
+   - { x: 3.845449023421094e+01, y: 2.7977973937988281e+01 }
+   - { x: -3.2984786987304688e+01, y: -3.2963104248046875e+01 }
+   - { x: -3.7813404083251953e+01, y: -3.7790847778320312e+01 }
+   - { x: 4.3542045593261719e+01, y: 3.1356765747070312e+01 }
+collision_pointsframe_skip1_dataprocessing_3results_FB_snow_high_: 
+   - { x: 4.4172161865234375e+02, y: 3.5641470336914062e+02 }
+   - { x: 3.9336083984375000e+02, y: 3.1714166259765625e+02 }
+   - { x: 3.9474371337890625e+02, y: 3.1820727539062500e+02 }
+   - { x: 4.3577563474562500e+02, y: 3.5072125244140625e+02 }
+   - { x: 3.9060577392578125e+02, y: 3.1485021972676250e+02 }
+   - { x: 3.7797967529596875e+02, y: 3.0411373901367188e+02 }
+   - { x: 3.7920733642578125e+02, y: 3.0500003051757812e+02 }
+   - { x: 3.7784234619140625e+02, y: 3.0368194580078125e+02 }
+   - { x: 3.7952252197265625e+02, y: 3.0495477294921875e+02 }
+
+
+

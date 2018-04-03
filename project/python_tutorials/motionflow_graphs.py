@@ -18,7 +18,7 @@ import matplotlib as mp
 from math import pi
 
 import random
-environment_list = ["none","night","snow_low_", "snow_moderate_", "snow_high_"]
+environment_list = ["none","snow_low_", "snow_moderate_", "snow_high_"]#night
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
@@ -42,13 +42,15 @@ def histogramm():
 
     print(y)
 
-    f = plt.figure()
+    fig1 = plt.figure()
     plt.xlabel("counter")
     plt.ylabel("displacement", )
 
     plt.hist(y,align="left",bins = 30)
     plt.show()
-    f.savefig(output_folder + 'histogramm.png', dpi= 200)
+    fig1.savefig(output_folder + 'histogramm.png', dpi= 200)
+
+    plt.close(fig1)
 
 
 dataset = "vires"
@@ -202,6 +204,7 @@ def motionflow_pixelgraphs_no_noise():
 
     #fig2.set_size_inches(18.5, 10.5)
     fig2.savefig(output_folder + 'pixel_robustness_optical_flow.png', bbox_inches='tight',dpi=200)
+    plt.close(fig2)
 
 
 def motionflow_pixelgraphs_noise():
@@ -261,10 +264,10 @@ def motionflow_pixelgraphs_noise():
         "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
 
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_night_",
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_night_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_night_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_1results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_0results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_2results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_3results_FB_night_",
 
         "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
         "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
@@ -283,7 +286,7 @@ def motionflow_pixelgraphs_noise():
 
     ]
 
-    color_of_shape_metrics = ["red", "black","green","yellow","orange"]
+    color_of_shape_metrics = ["red", "black","green","yellow"]
 
     assert(len(list_of_shape_metrics)/4 == len(color_of_shape_metrics))
     print "Länge", len(list_of_shape_metrics)/4
@@ -353,6 +356,7 @@ def motionflow_pixelgraphs_noise():
         #shapeplot1.legend()
         shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
+
         shapeplot1.plot(x0, y1, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
         #shapeplot1.legend()
         shapeplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
@@ -383,8 +387,10 @@ def motionflow_pixelgraphs_noise():
    # fig3.set_size_inches(18.5, 10.5)
     fig3.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
 
-
-
+    plt.close(fig0)
+    plt.close(fig1)
+    plt.close(fig2)
+    plt.close(fig3)
 
 def motionflow_vectorgraphs_no_noise():
 
@@ -538,6 +544,8 @@ def motionflow_vectorgraphs_no_noise():
     fig2.savefig(output_folder + 'vector_robustness_optical_flow', bbox_inches='tight',dpi=200)
 
 
+    plt.close(fig2)
+
 
 def motionflow_vectorgraphs_noise():
 
@@ -597,10 +605,10 @@ def motionflow_vectorgraphs_noise():
         "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_night_",
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_night_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_night_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_night_",
+#        "collision_pointsframe_skip1_dataprocessing_1results_FB_night_",
+#        "collision_pointsframe_skip1_dataprocessing_0results_FB_night_",
+#        "collision_pointsframe_skip1_dataprocessing_2results_FB_night_",
+#        "collision_pointsframe_skip1_dataprocessing_3results_FB_night_",
 
         "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
         "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
@@ -619,7 +627,8 @@ def motionflow_vectorgraphs_noise():
 
     ]
 
-    color_of_collision_metrics = ["red", "black","yellow","green","orange"]
+    color_of_collision_metrics  = ["red", "black","green","yellow",]
+
 
     assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
@@ -739,6 +748,11 @@ def motionflow_vectorgraphs_noise():
     fig2.savefig(output_folder + 'vector_robustness_data_processing_algorithm_2',bbox_inches='tight', dpi=200)
    # fig3.set_size_inches(18.5, 10.5)
     fig3.savefig(output_folder + 'vector_robustness_data_processing_algorithm_3',bbox_inches='tight', dpi=200)
+
+    plt.close(fig0)
+    plt.close(fig1)
+    plt.close(fig2)
+    plt.close(fig3)
 
 
 
