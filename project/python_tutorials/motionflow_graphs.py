@@ -46,7 +46,7 @@ def histogramm():
     plt.xlabel("counter")
     plt.ylabel("displacement", )
 
-    plt.hist(y,align="left",bins = 30)
+    plt.hist(y,bins=range(1,30), align='left', rwidth=1)
     plt.show()
     fig1.savefig(output_folder + 'histogramm.png', dpi= 200)
     plt.close('all')
