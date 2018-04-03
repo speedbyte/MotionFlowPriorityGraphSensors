@@ -18,6 +18,9 @@ import matplotlib as mp
 from math import pi
 
 import random
+environment_list = ["none", "night"]
+#output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
+output_folder = '/local/tmp/eaes/'
 
 
 def histogramm():
@@ -35,19 +38,19 @@ def histogramm():
         ybuf.append(type[2])
 
     for l in ybuf:
-        y.append(float(l[:2]))
+        y.append(float(l[:-4]))
 
     print(y)
 
+    f = plt.figure()
     plt.xlabel("counter")
     plt.ylabel("displacement", )
 
     plt.hist(y,align="left",bins = 30)
     plt.show()
+    f.savefig(output_folder + 'histogramm.png', dpi= 200)
 
-environment_list = ["none", "night"]
-#output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
-output_folder = '/local/tmp/eaes/'
+
 
 def motionflow_pixelgraphs_no_noise():
 
@@ -198,8 +201,8 @@ def motionflow_pixelgraphs_no_noise():
         print y2_mean_list[no_of_metrics]
         print y3_mean_list[no_of_metrics]
 
-    fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig(output_folder + 'pixel_robustness_optical_flow.png', dpi=200)
+    #fig2.set_size_inches(18.5, 10.5)
+    fig2.savefig(output_folder + 'pixel_robustness_optical_flow.png', bbox_inches='tight',dpi=200)
 
 
 def motionflow_pixelgraphs_noise():
@@ -355,14 +358,14 @@ def motionflow_pixelgraphs_noise():
         print y3_mean_list[no_of_metrics]
 
 
-    fig0.set_size_inches(18.5, 10.5)
-    fig0.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_0', dpi=200)
-    fig1.set_size_inches(18.5, 10.5)
-    fig1.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_1', dpi=200)
-    fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_2', dpi=200)
-    fig3.set_size_inches(18.5, 10.5)
-    fig3.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_3', dpi=200)
+   # fig0.set_size_inches(18.5, 10.5)
+    fig0.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_0',bbox_inches='tight', dpi=200)
+   # fig1.set_size_inches(18.5, 10.5)
+    fig1.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
+   # fig2.set_size_inches(18.5, 10.5)
+    fig2.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
+   # fig3.set_size_inches(18.5, 10.5)
+    fig3.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
 
 
 
@@ -516,8 +519,8 @@ def motionflow_vectorgraphs_no_noise():
         print y2_mean_list[no_of_metrics]
         print y3_mean_list[no_of_metrics]
 
-    fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig(output_folder + 'vector_robustness_optical_flow', dpi=200)
+    #fig2.set_size_inches(18.5, 10.5)
+    fig2.savefig(output_folder + 'vector_robustness_optical_flow', bbox_inches='tight',dpi=200)
 
 
 
@@ -702,14 +705,14 @@ def motionflow_vectorgraphs_noise():
         print y2_mean_list[no_of_metrics]
         print y3_mean_list[no_of_metrics]
 
-    fig0.set_size_inches(18.5, 10.5)
-    fig0.savefig(output_folder + 'vector_robustness_data_processing_algorithm_0', dpi=200)
-    fig1.set_size_inches(18.5, 10.5)
-    fig1.savefig(output_folder + 'vector_robustness_data_processing_algorithm_1', dpi=200)
-    fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig(output_folder + 'vector_robustness_data_processing_algorithm_2', dpi=200)
-    fig3.set_size_inches(18.5, 10.5)
-    fig3.savefig(output_folder + 'vector_robustness_data_processing_algorithm_3', dpi=200)
+   # fig0.set_size_inches(18.5, 10.5)
+    fig0.savefig(output_folder + 'vector_robustness_data_processing_algorithm_0',bbox_inches='tight', dpi=200)
+    #fig1.set_size_inches(18.5, 10.5)
+    fig1.savefig(output_folder + 'vector_robustness_data_processing_algorithm_1',bbox_inches='tight', dpi=200)
+   # fig2.set_size_inches(18.5, 10.5)
+    fig2.savefig(output_folder + 'vector_robustness_data_processing_algorithm_2',bbox_inches='tight', dpi=200)
+   # fig3.set_size_inches(18.5, 10.5)
+    fig3.savefig(output_folder + 'vector_robustness_data_processing_algorithm_3',bbox_inches='tight', dpi=200)
 
 
 
