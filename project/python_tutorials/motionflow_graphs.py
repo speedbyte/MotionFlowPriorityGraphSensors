@@ -622,15 +622,13 @@ def motionflow_vectorgraphs_noise():
     yaml_load = yaml.load(open(file))
 
     list_of_collision_metrics = [
+
         "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
-#        "collision_pointsframe_skip1_dataprocessing_1results_FB_night_",
-#        "collision_pointsframe_skip1_dataprocessing_0results_FB_night_",
-#        "collision_pointsframe_skip1_dataprocessing_2results_FB_night_",
-#        "collision_pointsframe_skip1_dataprocessing_3results_FB_night_",
 
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
         "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
         "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_low_",
@@ -649,6 +647,8 @@ def motionflow_vectorgraphs_noise():
 
     color_of_collision_metrics  = ["blue", "gray", "brown", "black"]
 
+
+    print len(list_of_collision_metrics)
 
     assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
@@ -786,12 +786,12 @@ if __name__ == '__main__':
     #lemniscate()
     #simple()
 
-#    motionflow_pixelgraphs_no_noise()
+    motionflow_pixelgraphs_no_noise()
     motionflow_pixelgraphs_noise()
-#    motionflow_vectorgraphs_no_noise()
-#    motionflow_vectorgraphs_noise()
+    motionflow_vectorgraphs_no_noise()
+    motionflow_vectorgraphs_noise()
 
-  #  histogramm()
+    histogramm()
 
     #motionflow_vectorgraphs()
     #check()
