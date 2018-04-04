@@ -48,10 +48,17 @@ def histogramm():
     plt.ylabel("Counter", )
 
     y = np.asarray(ybuf)
-    bins = xbuf
+    bins = xbuf # use for small bars
+    bins = range(-10,10)
     print bins
 
-    plt.hist(y.astype('float'),bins=bins, align='left', rwidth=0.5)
+    x,y,_ = plt.hist(y.astype('float'),bins=bins, align='left', rwidth=0.5,)
+
+    maxIndex = np.argmax(x)
+    print maxIndex
+
+    plt.bar(bins[0]+maxIndex,max(x),color='red',width=0.5)
+
     plt.show()
     fig1.savefig(output_folder + 'histogramm.png', dpi= 200)
     plt.close('all')
