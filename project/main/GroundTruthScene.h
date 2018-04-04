@@ -356,6 +356,11 @@ public:
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "100000.000000");
             }
+            to_replace = "100000.000000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "100.000000");
+            }
             to_replace = "0.500000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
@@ -376,6 +381,11 @@ public:
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "6/8");
             }
+            to_replace = "100000.000000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "60.000000");
+            }
             to_replace = "0.500000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
@@ -395,6 +405,11 @@ public:
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "8/8");
+            }
+            to_replace = "100000.000000";
+            position = m_environment_scp_message.find(to_replace);
+            if ( position != std::string::npos) {
+                m_environment_scp_message.replace(position, to_replace.length(), "40.000000");
             }
             to_replace = "0.500000";
             position = m_environment_scp_message.find(to_replace);

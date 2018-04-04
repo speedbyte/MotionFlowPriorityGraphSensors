@@ -100,7 +100,7 @@ def motionflow_pixelgraphs_no_noise():
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
     ]
 
-    color_of_shape_metrics = ["blue", "brown","gray","black"]
+    color_of_shape_metrics = ["red", "green", "yellow", "black"]
 
     #assert(len(list_of_shape_metrics)/1 == len(color_of_shape_metrics))
 
@@ -290,7 +290,7 @@ def motionflow_pixelgraphs_noise():
 
     ]
 
-    color_of_shape_metrics = ["blue", "brown","gray","black"]
+    color_of_shape_metrics = ["blue", "gray", "brown", "black"]
 
     assert(len(list_of_shape_metrics)/4 == len(color_of_shape_metrics))
     print "Länge", len(list_of_shape_metrics)/4
@@ -434,7 +434,7 @@ def motionflow_vectorgraphs_no_noise():
 
     ]
 
-    color_of_collision_metrics = ["blue", "brown","gray","black"]
+    color_of_collision_metrics = ["red", "green", "yellow", "black"]
 
     #assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
@@ -628,7 +628,7 @@ def motionflow_vectorgraphs_noise():
 
     ]
 
-    color_of_collision_metrics  = ["blue", "brown","gray","black"]
+    color_of_collision_metrics  = ["blue", "gray", "brown", "black"]
 
 
     assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
