@@ -58,126 +58,127 @@ collision_pointsframe_skip1_dataprocessing_0_generated:
    - { x: -3.6893515625000000e+03, y: 3.1761975097656250e+02 }
    - { x: -3.1036210937500000e+03, y: 3.1426083374023438e+02 }
    - { x: -2.5964277343750000e+03, y: 3.1194146728515625e+02 }
+
 shape_pointsframe_skip1_dataprocessing_0results_FB_none_: 
    - { good_pixels: 0., total_pixels: 1. }
-   - { good_pixels: 6.0150000000000000e+02,
+   - { good_pixels: 7.0150000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 5.9950000000000000e+02,
+   - { good_pixels: 6.9950000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 592., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 559., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 5.6850000000000000e+02,
+   - { good_pixels: 692., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 659., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 6.6850000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 5.4850000000000000e+02, total_pixels: 1174. }
-   - { good_pixels: 4.6650000000000000e+02, total_pixels: 1174. }
-   - { good_pixels: 439., total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 5.0950000000000000e+02,
+   - { good_pixels: 6.4850000000000000e+02, total_pixels: 1174. }
+   - { good_pixels: 6.6650000000000000e+02, total_pixels: 1174. }
+   - { good_pixels: 579., total_pixels: 1.1825000000000000e+03 }
+   - { good_pixels: 5.6950000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 4.6350000000000000e+02,
+   - { good_pixels: 5.6350000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 4.6050000000000000e+02,
+   - { good_pixels: 5.6050000000000000e+02,
        total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 434., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 3.8350000000000000e+02,
+   - { good_pixels: 534., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 4.8350000000000000e+02,
        total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 3.3150000000000000e+02,
+   - { good_pixels: 4.3150000000000000e+02,
        total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 3.6750000000000000e+02,
+   - { good_pixels: 4.6750000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 309., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 312., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 2.8650000000000000e+02,
+   - { good_pixels: 369., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 372., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 4.8650000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 378., total_pixels: 1.0685000000000000e+03 }
+   - { good_pixels: 478., total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_1results_FB_none_: 
    - { good_pixels: 0., total_pixels: 1. }
-   - { good_pixels: 205., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 200., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 5.0000000000000000e-01,
+   - { good_pixels: 300., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 310., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 300., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 3.0000000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 2.5000000000000000e+00,
+   - { good_pixels: 3.5000000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 8., total_pixels: 1174. }
-   - { good_pixels: 1., total_pixels: 1174. }
-   - { good_pixels: 3.5000000000000000e+00,
+   - { good_pixels: 400., total_pixels: 1174. }
+   - { good_pixels: 413., total_pixels: 1174. }
+   - { good_pixels: 3.5000000000000000e+02,
        total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 6., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 323., total_pixels: 1.1635000000000000e+03 }
    - { good_pixels: 2.6850000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 2.0500000000000000e+01,
+   - { good_pixels: 2.0500000000000000e+02,
        total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 32., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 4., total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 7., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 3.6500000000000000e+01,
+   - { good_pixels: 320., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 290., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 256., total_pixels: 1.1065000000000000e+03 }
+   - { good_pixels: 271., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 2.6500000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 12., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 7.5000000000000000e+00,
+   - { good_pixels: 282., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 249., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 2.2000000000000000e+02,
        total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_2results_FB_none_: 
    - { good_pixels: 0., total_pixels: 1. }
-   - { good_pixels: 3.1500000000000000e+01,
+   - { good_pixels: 7.1500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 3.0500000000000000e+01,
+   - { good_pixels: 7.0500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 3.8500000000000000e+01,
+   - { good_pixels: 7.8500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 3.2500000000000000e+01,
+   - { good_pixels: 7.2500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 35., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 33., total_pixels: 1174. }
-   - { good_pixels: 14., total_pixels: 1174. }
-   - { good_pixels: 2.4500000000000000e+01,
+   - { good_pixels: 774., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 760., total_pixels: 1174. }
+   - { good_pixels: 750., total_pixels: 1174. }
+   - { good_pixels: 7.4500000000000000e+02,
        total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 1.9500000000000000e+01,
+   - { good_pixels: 7.9500000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 2.6500000000000000e+01,
+   - { good_pixels: 7.6500000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 1.9500000000000000e+01,
+   - { good_pixels: 7.4500000000000000e+02,
        total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 1.7500000000000000e+01,
+   - { good_pixels: 7.3500000000000000e+02,
        total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 1.9500000000000000e+01,
+   - { good_pixels: 6.9500000000000000e+02,
        total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 8., total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 16., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 1.4500000000000000e+01,
+   - { good_pixels: 657., total_pixels: 1.1065000000000000e+03 }
+   - { good_pixels: 641., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 6.4500000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 15., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 1.6500000000000000e+01,
+   - { good_pixels: 650., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 6.6500000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 16., total_pixels: 1.0685000000000000e+03 }
+   - { good_pixels: 650., total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_3results_FB_none_: 
    - { good_pixels: 0., total_pixels: 2. }
-   - { good_pixels: 627., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 623., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 612., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 5.7750000000000000e+02,
+   - { good_pixels: 870., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 873., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 871., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 8.9750000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 5.7850000000000000e+02,
+   - { good_pixels: 8.9850000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 560., total_pixels: 1174. }
-   - { good_pixels: 4.8250000000000000e+02, total_pixels: 1174. }
-   - { good_pixels: 4.4950000000000000e+02,
+   - { good_pixels: 860., total_pixels: 1174. }
+   - { good_pixels: 8.8250000000000000e+02, total_pixels: 1174. }
+   - { good_pixels: 7.4950000000000000e+02,
        total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 526., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 4.8250000000000000e+02,
+   - { good_pixels: 725., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 7.8250000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 4.6850000000000000e+02,
+   - { good_pixels: 7.6850000000000000e+02,
        total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 440., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 394., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 348., total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 3.7450000000000000e+02,
+   - { good_pixels: 720., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 670., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 640., total_pixels: 1.1065000000000000e+03 }
+   - { good_pixels: 6.7450000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 3.1450000000000000e+02,
+   - { good_pixels: 6.1450000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 317., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 290., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 3.8650000000000000e+02,
+   - { good_pixels: 690., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 685., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 6.8650000000000000e+02,
        total_pixels: 1.0685000000000000e+03 }
 collision_pointsframe_skip1_dataprocessing_0results_FB_none_: 
    - { x: 1.9978723144531250e+03, y: 3.0732470703125000e+02 }
@@ -293,89 +294,89 @@ shape_pointsframe_skip1_dataprocessing_0results_FB_snow_low_:
        total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_1results_FB_snow_low_: 
    - { good_pixels: 0., total_pixels: 1. }
-   - { good_pixels: 3.6500000000000000e+01,
+   - { good_pixels: 2.6500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 1.1500000000000000e+01,
+   - { good_pixels: 2.1500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 5.0000000000000000e-01,
+   - { good_pixels: 2.0000000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 2.7750000000000000e+02,
+   - { good_pixels: 2.0750000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
    - { good_pixels: 276., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1174. }
-   - { good_pixels: 5., total_pixels: 1174. }
-   - { good_pixels: 4., total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 41., total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 4.2500000000000000e+01,
+   - { good_pixels: 220., total_pixels: 1174. }
+   - { good_pixels: 205., total_pixels: 1174. }
+   - { good_pixels: 204., total_pixels: 1.1825000000000000e+03 }
+   - { good_pixels: 218., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 198., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 198., total_pixels: 1.1445000000000000e+03 }
+   - { good_pixels: 204., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 170., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 1.6500000000000000e+02,
        total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 39., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 2.6350000000000000e+02,
+   - { good_pixels: 139., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 1.6350000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 3.9500000000000000e+01,
+   - { good_pixels: 9.9500000000000000e+01,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 4.5000000000000000e+00,
+   - { good_pixels: 6.5000000000000000e+01,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 5., total_pixels: 1.0685000000000000e+03 }
+   - { good_pixels: 50., total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_2results_FB_snow_low_: 
    - { good_pixels: 0., total_pixels: 1. }
-   - { good_pixels: 30., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 35., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 33., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 2.7500000000000000e+01,
+   - { good_pixels: 600., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 650., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 630., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 6.7500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 34., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 3.1500000000000000e+01, total_pixels: 1174. }
-   - { good_pixels: 31., total_pixels: 1174. }
-   - { good_pixels: 2.4500000000000000e+01,
+   - { good_pixels: 640., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 6.1500000000000000e+02, total_pixels: 1174. }
+   - { good_pixels: 610., total_pixels: 1174. }
+   - { good_pixels: 6.4500000000000000e+02,
        total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 1.2500000000000000e+01,
+   - { good_pixels: 6.2500000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 2.2500000000000000e+01,
+   - { good_pixels: 6.2500000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 2.5500000000000000e+01,
+   - { good_pixels: 6.5500000000000000e+02,
        total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 24., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 14., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 12., total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 17., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 1.5500000000000000e+01,
+   - { good_pixels: 590., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 578., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 550., total_pixels: 1.1065000000000000e+03 }
+   - { good_pixels: 570., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 5.5500000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 15., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 7.5000000000000000e+00,
+   - { good_pixels: 550., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 5.2000000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 7.5000000000000000e+00,
+   - { good_pixels: 5.2000000000000000e+02,
        total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_3results_FB_snow_low_: 
    - { good_pixels: 0., total_pixels: 2. }
-   - { good_pixels: 6.2350000000000000e+02,
+   - { good_pixels: 7.2350000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 6.2450000000000000e+02,
+   - { good_pixels: 7.2450000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 609., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 5.7950000000000000e+02,
+   - { good_pixels: 709., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 6.7950000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 6.0150000000000000e+02,
+   - { good_pixels: 7.0150000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 578., total_pixels: 1174. }
-   - { good_pixels: 5.8250000000000000e+02, total_pixels: 1174. }
-   - { good_pixels: 568., total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 435., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 509., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 522., total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 492., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 4.4350000000000000e+02,
+   - { good_pixels: 678., total_pixels: 1174. }
+   - { good_pixels: 6.8250000000000000e+02, total_pixels: 1174. }
+   - { good_pixels: 668., total_pixels: 1.1825000000000000e+03 }
+   - { good_pixels: 535., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 609., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 622., total_pixels: 1.1445000000000000e+03 }
+   - { good_pixels: 592., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 5.4350000000000000e+02,
        total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 393., total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 340., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 2.9050000000000000e+02,
+   - { good_pixels: 523., total_pixels: 1.1065000000000000e+03 }
+   - { good_pixels: 540., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 5.6050000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 298., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 290., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 2.7350000000000000e+02,
+   - { good_pixels: 548., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 540., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 5.4350000000000000e+02,
        total_pixels: 1.0685000000000000e+03 }
 collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_: 
    - { x: 8.5550585937500000e+03, y: 2.8107867431640625e+02 }
@@ -488,59 +489,59 @@ shape_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_:
        total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_: 
    - { good_pixels: 0., total_pixels: 1. }
-   - { good_pixels: 7.5000000000000000e+00,
+   - { good_pixels: 7.5000000000000000e+01,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 8., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 2.9500000000000000e+01,
+   - { good_pixels: 80., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 76., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 6.9500000000000000e+01,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 8.5000000000000000e+00,
+   - { good_pixels: 8.5000000000000000e+01,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 25., total_pixels: 1174. }
-   - { good_pixels: 0., total_pixels: 1174. }
-   - { good_pixels: 1., total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 3.5500000000000000e+01,
+   - { good_pixels: 75., total_pixels: 1174. }
+   - { good_pixels: 69., total_pixels: 1174. }
+   - { good_pixels: 71., total_pixels: 1.1825000000000000e+03 }
+   - { good_pixels: 70., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 80., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 7.5500000000000000e+01,
        total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 69., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 61., total_pixels: 1.1255000000000000e+03 }
    - { good_pixels: 36., total_pixels: 1.1065000000000000e+03 }
    - { good_pixels: 3.2500000000000000e+01,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 224., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 9., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 22., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 29., total_pixels: 1.0875000000000000e+03 }
    - { good_pixels: 0., total_pixels: 1.0875000000000000e+03 }
    - { good_pixels: 4.5500000000000000e+01,
        total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_: 
    - { good_pixels: 0., total_pixels: 1. }
-   - { good_pixels: 30., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 3.2500000000000000e+01,
+   - { good_pixels: 560., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 5.2500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 30., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 2.9500000000000000e+01,
+   - { good_pixels: 580., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 6.9500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 34., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 2.6500000000000000e+01, total_pixels: 1174. }
-   - { good_pixels: 2.8500000000000000e+01, total_pixels: 1174. }
-   - { good_pixels: 21., total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 1.1500000000000000e+01,
+   - { good_pixels: 580., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 5.6500000000000000e+02, total_pixels: 1174. }
+   - { good_pixels: 5.8500000000000000e+02, total_pixels: 1174. }
+   - { good_pixels: 540., total_pixels: 1.1825000000000000e+03 }
+   - { good_pixels: 5.2500000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 24., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 22., total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 2.0500000000000000e+01,
+   - { good_pixels: 545., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 540., total_pixels: 1.1445000000000000e+03 }
+   - { good_pixels: 5.0500000000000000e+02,
        total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 2.7500000000000000e+01,
+   - { good_pixels: 4.7500000000000000e+02,
        total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 1.6500000000000000e+01,
+   - { good_pixels: 4.5500000000000000e+02,
        total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 1.1500000000000000e+01,
+   - { good_pixels: 3.9500000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 13., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 15., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 11., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 1.0500000000000000e+01,
+   - { good_pixels: 383., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 370., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 378., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 3.8500000000000000e+02,
        total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_: 
    - { good_pixels: 0., total_pixels: 2. }
@@ -563,16 +564,16 @@ shape_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_:
    - { good_pixels: 4.7050000000000000e+02,
        total_pixels: 1.1255000000000000e+03 }
    - { good_pixels: 417., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 3.7250000000000000e+02,
+   - { good_pixels: 4.7250000000000000e+02,
        total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 3.1250000000000000e+02,
+   - { good_pixels: 4.1250000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 2.5950000000000000e+02,
+   - { good_pixels: 4.5950000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 2.5350000000000000e+02,
+   - { good_pixels: 4.5350000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 246., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 248., total_pixels: 1.0685000000000000e+03 }
+   - { good_pixels: 426., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 438., total_pixels: 1.0685000000000000e+03 }
 collision_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_: 
    - { x: 2.0953007812500000e+03, y: 3.0819888305664062e+02 }
    - { x: -3.5221337890625000e+02, y: 3.1489550781250000e+02 }
@@ -705,30 +706,30 @@ shape_pointsframe_skip1_dataprocessing_1results_FB_snow_high_:
    - { good_pixels: 2., total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_2results_FB_snow_high_: 
    - { good_pixels: 0., total_pixels: 1. }
-   - { good_pixels: 2.2500000000000000e+01,
+   - { good_pixels: 3.2500000000000000e+02,
        total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 28., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 25., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 21., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 27., total_pixels: 1.2015000000000000e+03 }
-   - { good_pixels: 2.6500000000000000e+01, total_pixels: 1174. }
-   - { good_pixels: 23., total_pixels: 1174. }
-   - { good_pixels: 13., total_pixels: 1.1825000000000000e+03 }
-   - { good_pixels: 10., total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 7.5000000000000000e+00,
+   - { good_pixels: 480., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 450., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 410., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 470., total_pixels: 1.2015000000000000e+03 }
+   - { good_pixels: 4.6500000000000000e+02, total_pixels: 1174. }
+   - { good_pixels: 430., total_pixels: 1174. }
+   - { good_pixels: 330., total_pixels: 1.1825000000000000e+03 }
+   - { good_pixels: 300., total_pixels: 1.1635000000000000e+03 }
+   - { good_pixels: 3.5000000000000000e+02,
        total_pixels: 1.1635000000000000e+03 }
-   - { good_pixels: 10., total_pixels: 1.1445000000000000e+03 }
-   - { good_pixels: 6., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 7., total_pixels: 1.1255000000000000e+03 }
-   - { good_pixels: 6.5000000000000000e+00,
+   - { good_pixels: 300., total_pixels: 1.1445000000000000e+03 }
+   - { good_pixels: 260., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 270., total_pixels: 1.1255000000000000e+03 }
+   - { good_pixels: 2.5000000000000000e+02,
        total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 10., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 3.5000000000000000e+00,
+   - { good_pixels: 300., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 2.5000000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 3.5000000000000000e+00,
+   - { good_pixels: 2.5000000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 3., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 4.5000000000000000e+00,
+   - { good_pixels: 270., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 2.5000000000000000e+02,
        total_pixels: 1.0685000000000000e+03 }
 shape_pointsframe_skip1_dataprocessing_3results_FB_snow_high_: 
    - { good_pixels: 0., total_pixels: 2. }
@@ -753,13 +754,13 @@ shape_pointsframe_skip1_dataprocessing_3results_FB_snow_high_:
    - { good_pixels: 307., total_pixels: 1.1255000000000000e+03 }
    - { good_pixels: 297., total_pixels: 1.1255000000000000e+03 }
    - { good_pixels: 262., total_pixels: 1.1065000000000000e+03 }
-   - { good_pixels: 190., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 1.5550000000000000e+02,
+   - { good_pixels: 290., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 2.5550000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 1.4350000000000000e+02,
+   - { good_pixels: 2.4350000000000000e+02,
        total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 151., total_pixels: 1.0875000000000000e+03 }
-   - { good_pixels: 1.6150000000000000e+02,
+   - { good_pixels: 251., total_pixels: 1.0875000000000000e+03 }
+   - { good_pixels: 2.6150000000000000e+02,
        total_pixels: 1.0685000000000000e+03 }
 collision_pointsframe_skip1_dataprocessing_0results_FB_snow_high_: 
    - { x: 1.9357792968750000e+03, y: 3.0653045654296875e+02 }

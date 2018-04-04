@@ -66,10 +66,10 @@ def histogramm():
 
 dataset = "vires"
 scenario = "two"
-file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
+file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" +scenario + "/values.yml"
 #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
-def motionflow_pixelgraphs_no_noise():
+def motionflow_pixelgraphs_no_noise(): ##done
 
     yaml_file = open(file, "r")
     check = yaml_file.readline()
@@ -107,7 +107,7 @@ def motionflow_pixelgraphs_no_noise():
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
     ]
 
-    color_of_shape_metrics = ["red", "green", "yellow", "black"]
+    color_of_shape_metrics = ["yellow", "green", "red", "black"]
 
     #assert(len(list_of_shape_metrics)/1 == len(color_of_shape_metrics))
 
@@ -275,11 +275,6 @@ def motionflow_pixelgraphs_noise():
         "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
 
-#        "shape_pointsframe_skip1_dataprocessing_1results_FB_night_",
-#        "shape_pointsframe_skip1_dataprocessing_0results_FB_night_",
-#        "shape_pointsframe_skip1_dataprocessing_2results_FB_night_",
-#        "shape_pointsframe_skip1_dataprocessing_3results_FB_night_",
-
         "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
         "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
         "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
@@ -291,8 +286,19 @@ def motionflow_pixelgraphs_noise():
         "shape_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_",
 
         "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_high_",
+
         "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_high_",
+
         "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_high_",
+
+
+#        "shape_pointsframe_skip1_dataprocessing_1results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_0results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_2results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_3results_FB_night_",
+
+
+
         "shape_pointsframe_skip1_dataprocessing_3results_FB_snow_high_",
 
     ]
@@ -320,9 +326,9 @@ def motionflow_pixelgraphs_noise():
         for x in range(4):
 
             print "Offset", offset_index
-            print "Debug", offset_index*no_of_metrics+x
-            print list_of_shape_metrics[offset_index*no_of_metrics+x]
-            shape_points = yaml_load[list_of_shape_metrics[offset_index*no_of_metrics+x]]
+            print "Debug", offset_index+x
+            print list_of_shape_metrics[offset_index+x]
+            shape_points = yaml_load[list_of_shape_metrics[offset_index+x]]
             print offset_index*no_of_metrics+x
             shape = list()
             for count in range(len(shape_points)-offset):
@@ -333,15 +339,22 @@ def motionflow_pixelgraphs_noise():
             data = np.array(shape)
             if ( x == 0):
                 x0, y0 = data.T
+                print x0,y0
                 y0 = x0/y0
             if ( x == 1):
                 x1, y1 = data.T
+                print x1,y1
+
                 y1 = x1/y1
             if ( x == 2):
                 x2, y2 = data.T
+                print x2,y2
+
                 y2 = x2/y2
             if ( x == 3):
                 x3, y3 = data.T
+                print x3,y3
+
                 y3 = x3/y3
 
             x0 = np.arange(0.0, len(shape_points)-1, 1)
@@ -380,7 +393,7 @@ def motionflow_pixelgraphs_noise():
         #shapeplot1.legend()
         shapeplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        offset_index=offset_index+1
+        offset_index=offset_index+4
 
         print "Table 2 " + environment_list[no_of_metrics]
         print y0_mean_list[no_of_metrics]
@@ -618,7 +631,6 @@ def motionflow_vectorgraphs_noise():
 #        "collision_pointsframe_skip1_dataprocessing_2results_FB_night_",
 #        "collision_pointsframe_skip1_dataprocessing_3results_FB_night_",
 
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
         "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
         "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_low_",
@@ -774,12 +786,12 @@ if __name__ == '__main__':
     #lemniscate()
     #simple()
 
-    motionflow_pixelgraphs_no_noise()
+#    motionflow_pixelgraphs_no_noise()
     motionflow_pixelgraphs_noise()
-    motionflow_vectorgraphs_no_noise()
-    motionflow_vectorgraphs_noise()
+#    motionflow_vectorgraphs_no_noise()
+#    motionflow_vectorgraphs_noise()
 
-    histogramm()
+  #  histogramm()
 
     #motionflow_vectorgraphs()
     #check()
