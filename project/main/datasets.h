@@ -17,7 +17,7 @@
 
 #define STEP_SIZE 1
 
-#define MAX_ITERATION_RESULTS 20 // 60 generate result. this cannot be more than vector
+#define MAX_ITERATION_RESULTS 10 // 60 generate result. this cannot be more than vector
 
 #define MAX_ITERATION_GT_SCENE_GENERATION_VECTOR MAX_ITERATION_RESULTS   // generate_obj_base_pixel_position_pixel_displacement vector
 #define MAX_ITERATION_GT_SCENE_GENERATION_IMAGES MAX_ITERATION_RESULTS   // generate images. this cannot be more than vector
@@ -39,7 +39,7 @@
 #define STRETCH_HEIGHT_EVAL 5
 #define STRETCH_WIDTH_EVAL 5
 
-#define STENCIL_GRID_COMPRESSOR 3  // every x pixels
+#define STENCIL_GRID_COMPRESSOR 1  // every x pixels
 #define STENCIL_GRID_EXTENDER 10 // 10 % more than the original size
 
 #define DO_STENCIL_GRID_EXTENSION 0

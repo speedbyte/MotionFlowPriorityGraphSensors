@@ -231,28 +231,32 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                         std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
                                 (temp_displacement.x, temp_displacement.y)));
 
+                mean_pts_voted_mean_x +=  pts.x;
+                mean_pts_voted_mean_y +=  pts.y;
+                mean_displacement_vector_voted_mean_x += gt_displacement_compare.x;
+                mean_displacement_vector_voted_mean_y += gt_displacement_compare.y;
+                multiframe_shape_parameters_voted_mean.push_back(
+                        std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
+                                (gt_displacement_compare.x, gt_displacement_compare.y)));
+                cluster_size_voted_mean_x++;
+                cluster_size_voted_mean_y++;
+
+                /*
                 // 3rd method
-                if (std::round(gt_displacement.x * 100) / 100 == (gt_displacement_compare.x) &&
-                        std::round(gt_displacement.y * 100) / 100 == (gt_displacement_compare.y)) {
-                    mean_displacement_vector_voted_mean_x += std::round(gt_displacement.x * 100) / 100;
-                    mean_displacement_vector_voted_mean_y += std::round(gt_displacement.y * 100) / 100;
+                if (((std::round(gt_displacement.x * 100) / 100) < (gt_displacement_compare.x) + (gt_displacement_compare.x)/10.0f &&
+                        (std::round(gt_displacement.x * 100) / 100) > (gt_displacement_compare.x) - (gt_displacement_compare.x)/10.0f ) ||
+                        std::round(gt_displacement.y * 100) / 100 == (gt_displacement_compare.y))
+                    mean_pts_voted_mean_x +=  pts.x;
+                    mean_pts_voted_mean_y +=  pts.y;
+                    mean_displacement_vector_voted_mean_x += gt_displacement_compare.x;
+                    mean_displacement_vector_voted_mean_y += gt_displacement_compare.y;
                     multiframe_shape_parameters_voted_mean.push_back(
                             std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                                    (std::round(gt_displacement.x * 100) / 100,
-                                            std::round(gt_displacement.y * 100) / 100)));
-                    cluster_size_voted_mean_x++;
-                    cluster_size_voted_mean_y++;
-                } else if (std::round(gt_displacement.x * 100) / 100 == (gt_displacement_compare.x) ||
-                        std::round(gt_displacement.y * 100) / 100 == (gt_displacement_compare.y)) {
-                    mean_displacement_vector_voted_mean_x += std::round(gt_displacement.x * 100) / 100;
-                    mean_displacement_vector_voted_mean_y += std::round(gt_displacement.y * 100) / 100;
-                    multiframe_shape_parameters_voted_mean.push_back(
-                            std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                                    (std::round(gt_displacement.x * 100) / 100,
-                                            std::round(gt_displacement.y * 100) / 100)));
+                                    (gt_displacement_compare.x, gt_displacement_compare.y)));
                     cluster_size_voted_mean_x++;
                     cluster_size_voted_mean_y++;
                 }
+                */
 
                 // 4th method
                 mean_pts_ranked_mean_x += pts.x;

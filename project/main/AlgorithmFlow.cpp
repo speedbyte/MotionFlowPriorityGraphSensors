@@ -840,21 +840,10 @@ void AlgorithmFlow::generate_shape_points(std::string noise) {
                                     frame_skip - 1)
                                  .at(frame_count) == true)) {
 
-                        float rowBegin = m_list_gt_objects.at(
-                                obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                                (frame_skip - 1).at(frame_count).first.y;
-                        float columnBegin = m_list_gt_objects.at(
-                                obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                                (frame_skip - 1).at(frame_count).first.x;
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
                         float vollTreffer = 0;
-
-                        int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m);
-                        int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
                         float baseTreffer;
 
@@ -1443,6 +1432,7 @@ void AlgorithmFlow::visualiseStencil(void) {
             /*---------------------------------------------------------------------------------*/
 
             tempGroundTruthImage = cv::Scalar::all(255);
+            F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
             for ( unsigned data_processing_index = 0; data_processing_index < 4; data_processing_index++ ) {
                 tempGroundTruthImage = cv::Scalar::all(255);

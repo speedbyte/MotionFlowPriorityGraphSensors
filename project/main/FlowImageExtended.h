@@ -23,7 +23,9 @@ public:
 
     FlowImageExtended(const FlowImage &F) : FlowImage(F) {}
 
-    FlowImageExtended(const int32_t width, const int32_t height) : FlowImage(width, height) {}
+    FlowImageExtended(const int32_t width, const int32_t height) : FlowImage(width, height) {
+
+    }
 
     FlowImageExtended(const float *data, const int32_t width, const int32_t height) : FlowImage(data, width, height) {}
 

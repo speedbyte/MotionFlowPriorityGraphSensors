@@ -18,12 +18,6 @@ import matplotlib as mp
 from math import pi
 
 import random
-
-dataset = "vires"
-scenario = "two"
-file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" +scenario + "/values.yml"
-#file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
-
 environment_list = ["none","snow_low_", "snow_moderate_", "snow_high_"]#night
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
@@ -54,26 +48,21 @@ def histogramm():
     plt.ylabel("Counter", )
 
     y = np.asarray(ybuf)
-    bins = xbuf # use for small bars
-    bins = range(-10,10)
+    bins = xbuf
     print bins
 
-    x,y,_ = plt.hist(y.astype('float'),bins=bins, align='left', rwidth=0.5,)
-
-    maxIndex = np.argmax(x)
-    print maxIndex
-
-    plt.bar(bins[0]+maxIndex,max(x),color='red',width=0.5)
-
+    plt.hist(y.astype('float'),bins=bins, align='left', rwidth=0.5)
     plt.show()
     fig1.savefig(output_folder + 'histogramm.png', dpi= 200)
     plt.close('all')
 
 
-def motionflow_pixelgraphs_no_noise(): ##done
+dataset = "vires"
+scenario = "two"
+file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" + scenario + "/values.yml"
+#file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
-    offset=1
-    offset_index=0
+def motionflow_pixelgraphs_no_noise():
 
     yaml_file = open(file, "r")
     check = yaml_file.readline()
@@ -111,17 +100,20 @@ def motionflow_pixelgraphs_no_noise(): ##done
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
     ]
 
-    color_of_shape_metrics = ["yellow", "green", "red", "black"]
+    color_of_shape_metrics = ["blue", "brown","gray","black"]
 
     #assert(len(list_of_shape_metrics)/1 == len(color_of_shape_metrics))
 
+    offset=1
+    offset_index=0
     num=0
 
     for no_of_metrics in range(1): #generated
 
         for x in range(1):
 
-            shape_points = yaml_load[list_of_shape_metrics[offset_index+x]]
+            shape_points = yaml_load[list_of_shape_metrics[offset_index*no_of_metrics+x]]
+            print offset_index*no_of_metrics+x
             shape = list()
             for count in range(len(shape_points)-offset):
                 xy = list()
@@ -149,7 +141,8 @@ def motionflow_pixelgraphs_no_noise(): ##done
 
         for x in range(4):
 
-            shape_points = yaml_load[list_of_shape_metrics[offset_index+1+x]]
+            shape_points = yaml_load[list_of_shape_metrics[offset_index*no_of_metrics+1+x]]
+            print offset_index*no_of_metrics+1+x
             shape = list()
             for count in range(len(shape_points)-offset):
                 xy = list()
@@ -220,9 +213,6 @@ def motionflow_pixelgraphs_no_noise(): ##done
 
 def motionflow_pixelgraphs_noise():
 
-    offset=1
-    offset_index=0
-
     print "Start Noise "
     yaml_file = open(file, "r")
     check = yaml_file.readline()
@@ -239,7 +229,7 @@ def motionflow_pixelgraphs_noise():
     fig0 = plt.figure()
     #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
     fig1 = plt.figure()
-    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
+    #plt.suptitle("Ratio of good pixels to total found no noise stencil PIXELS")
     fig2 = plt.figure()
     #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
     fig3 = plt.figure()
@@ -278,6 +268,11 @@ def motionflow_pixelgraphs_noise():
         "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
 
+#        "shape_pointsframe_skip1_dataprocessing_1results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_0results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_2results_FB_night_",
+#        "shape_pointsframe_skip1_dataprocessing_3results_FB_night_",
+
         "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
         "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
         "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
@@ -295,11 +290,13 @@ def motionflow_pixelgraphs_noise():
 
     ]
 
-    color_of_shape_metrics = ["blue", "gray", "brown", "black"]
+    color_of_shape_metrics = ["blue", "brown","gray","black"]
 
     assert(len(list_of_shape_metrics)/4 == len(color_of_shape_metrics))
     print "Länge", len(list_of_shape_metrics)/4
 
+    offset=1
+    offset_index=0
     num=0
     y0_mean_list = list()
     y1_mean_list = list()
@@ -315,7 +312,11 @@ def motionflow_pixelgraphs_noise():
 
         for x in range(4):
 
-            shape_points = yaml_load[list_of_shape_metrics[offset_index+x]]
+            print "Offset", offset_index
+            print "Debug", offset_index*no_of_metrics+x
+            print list_of_shape_metrics[offset_index*no_of_metrics+x]
+            shape_points = yaml_load[list_of_shape_metrics[offset_index*no_of_metrics+x]]
+            print offset_index*no_of_metrics+x
             shape = list()
             for count in range(len(shape_points)-offset):
                 xy = list()
@@ -325,22 +326,15 @@ def motionflow_pixelgraphs_noise():
             data = np.array(shape)
             if ( x == 0):
                 x0, y0 = data.T
-                print x0,y0
                 y0 = x0/y0
             if ( x == 1):
                 x1, y1 = data.T
-                print x1,y1
-
                 y1 = x1/y1
             if ( x == 2):
                 x2, y2 = data.T
-                print x2,y2
-
                 y2 = x2/y2
             if ( x == 3):
                 x3, y3 = data.T
-                print x3,y3
-
                 y3 = x3/y3
 
             x0 = np.arange(0.0, len(shape_points)-1, 1)
@@ -379,7 +373,7 @@ def motionflow_pixelgraphs_noise():
         #shapeplot1.legend()
         shapeplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        offset_index=offset_index+4
+        offset_index=offset_index+1
 
         print "Table 2 " + environment_list[no_of_metrics]
         print y0_mean_list[no_of_metrics]
@@ -387,7 +381,8 @@ def motionflow_pixelgraphs_noise():
         print y2_mean_list[no_of_metrics]
         print y3_mean_list[no_of_metrics]
 
-# fig0.set_size_inches(18.5, 10.5)
+
+   # fig0.set_size_inches(18.5, 10.5)
     fig0.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_0',bbox_inches='tight', dpi=200)
    # fig1.set_size_inches(18.5, 10.5)
     fig1.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
@@ -400,9 +395,6 @@ def motionflow_pixelgraphs_noise():
 
 def motionflow_vectorgraphs_no_noise():
 
-
-    offset=1
-    offset_index=0
 
     yaml_file = open(file, "r")
     check = yaml_file.readline()
@@ -442,10 +434,12 @@ def motionflow_vectorgraphs_no_noise():
 
     ]
 
-    color_of_collision_metrics = ["red", "green", "yellow", "black"]
+    color_of_collision_metrics = ["blue", "brown","gray","black"]
 
     #assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
+    offset=0
+    offset_index=0
     num=0
 
     for no_of_metrics in range(1): # generated
@@ -453,8 +447,8 @@ def motionflow_vectorgraphs_no_noise():
 
         for x in range(1):
 
-            collision_points = yaml_load[list_of_collision_metrics[offset_index+x]]
-            print "collision index no noise" , offset_index+x
+            collision_points = yaml_load[list_of_collision_metrics[offset_index*no_of_metrics+x]]
+            print offset_index*no_of_metrics+x
             collision = list()
             for count in range(len(collision_points)-offset):
                 xy = list()
@@ -481,8 +475,8 @@ def motionflow_vectorgraphs_no_noise():
 
         for x in range(4):
 
-            collision_points = yaml_load[list_of_collision_metrics[offset_index+1+x]]
-            print "collision index no noise dataprocessing" , offset_index+x
+            collision_points = yaml_load[list_of_collision_metrics[offset_index*no_of_metrics+1+x]]
+            print offset_index*no_of_metrics+1+x
             collision = list()
             for count in range(len(collision_points)-offset):
                 xy = list()
@@ -503,7 +497,7 @@ def motionflow_vectorgraphs_no_noise():
                 x3, y3 = data.T
                 y3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
 
-            x0 = np.arange(0.0, len(collision_points)-1, 1)
+            x0 = np.arange(0.0, len(collision_points), 1)
 
         for n,i in enumerate(y0):
             y0_mean=y0_mean+i
@@ -555,9 +549,6 @@ def motionflow_vectorgraphs_no_noise():
 
 
 def motionflow_vectorgraphs_noise():
-
-    offset=1
-    offset_index=0
 
     yaml_file = open(file, "r")
     check = yaml_file.readline()
@@ -611,11 +602,14 @@ def motionflow_vectorgraphs_noise():
     yaml_load = yaml.load(open(file))
 
     list_of_collision_metrics = [
-
         "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
+#        "collision_pointsframe_skip1_dataprocessing_1results_FB_night_",
+#        "collision_pointsframe_skip1_dataprocessing_0results_FB_night_",
+#        "collision_pointsframe_skip1_dataprocessing_2results_FB_night_",
+#        "collision_pointsframe_skip1_dataprocessing_3results_FB_night_",
 
         "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
         "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
@@ -634,21 +628,21 @@ def motionflow_vectorgraphs_noise():
 
     ]
 
-    color_of_collision_metrics  = ["blue", "gray", "brown", "black"]
+    color_of_collision_metrics  = ["blue", "brown","gray","black"]
 
-
-    print len(list_of_collision_metrics)
 
     assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
 
+    offset=0
+    offset_index=0
     num=0
 
     for no_of_metrics in range(1): # generated
 
         for x in range(4):
 
-            collision_points = yaml_load[list_of_collision_metrics[offset_index+x]]
-            print offset_index+x
+            collision_points = yaml_load[list_of_collision_metrics[offset_index*no_of_metrics+x]]
+            print offset_index*no_of_metrics+x
             collision = list()
             for count in range(len(collision_points)-offset):
                 xy = list()
@@ -682,7 +676,8 @@ def motionflow_vectorgraphs_noise():
         for x in range(4):
 
 
-            collision_points = yaml_load[list_of_collision_metrics[offset_index+x]]
+            collision_points = yaml_load[list_of_collision_metrics[offset_index*no_of_metrics+x]]
+            print offset_index*no_of_metrics+x
             collision = list()
             for count in range(len(collision_points)-offset):
                 xy = list()
@@ -703,8 +698,7 @@ def motionflow_vectorgraphs_noise():
                 x3, y3 = data.T
                 y3 = numpy.sqrt((x3_base - x3) ** 2 + (y3_base - y3) ** 2)
 
-            x0 = np.arange(0.0, len(collision_points)-1, 1)
-
+            x0 = np.arange(0.0, len(collision_points), 1)
 
         for n,i in enumerate(y0):
             y0_mean=y0_mean+i
@@ -739,7 +733,7 @@ def motionflow_vectorgraphs_noise():
         #collisionplot1.legend()
         collisionplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        offset_index=offset_index+4
+        offset_index=offset_index+1
 
         print "Table 4 " + environment_list[no_of_metrics]
         print y0_mean_list[no_of_metrics]

@@ -54,6 +54,34 @@ void usage()
 
 
 int main ( int argc, char *argv[]) {
+
+
+
+
+    cv::Mat image = cv::imread("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_algo_3.png", cv::IMREAD_ANYCOLOR);
+
+    cv::namedWindow("dd", CV_WINDOW_AUTOSIZE);
+    cv::imshow("dd", image);
+    cv::waitKey(0);
+
+    cv::Mat image_mod = image.clone();
+    std::cout << image_mod.channels();
+    cv::Vec3b color = {255, 255, 255};
+    for ( ushort x = 0; x < image_mod.cols; x++) {
+        for ( ushort y = 0; y < image_mod.rows; y++) {
+            if  (image_mod.at<cv::Vec3b>(y,x)[0] == 0 && image_mod.at<cv::Vec3b>(y,x)[1] == 0 && image_mod.at<cv::Vec3b>(y,x)[2] == 0) {
+                image_mod.at<cv::Vec3b>(y,x) = color;
+            }
+        }
+    }
+
+    cv::namedWindow("dd", CV_WINDOW_AUTOSIZE);
+    cv::imshow("dd", image_mod);
+    cv::imwrite("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_algo_3_mod.png", image_mod);
+    cv::waitKey(0);
+    return  0;
+
+
     // Thread 2: Read two kitti image files without rain. The two image files are from kitti
 
 
@@ -181,9 +209,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow_low", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    std::vector < std::string> environment_list = {"none", "snow_low", "snow_moderate", "snow_high"};
+    //std::vector < std::string> environment_list = {"none", "snow_low", "snow_moderate", "snow_high"};
 
-    //std::vector < std::string> environment_list = {"none"};
+    std::vector < std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
 
@@ -326,7 +354,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
 
                 list_of_algorithm_flow[env_index].generate_collision_points_mean();
-                list_of_algorithm_flow[env_index].generate_shape_points(environment_list[env_index]);
+                //list_of_algorithm_flow[env_index].generate_shape_points(environment_list[env_index]);
                 if ( env_index == environment_list.size()-1 ) {
                     list_of_algorithm_flow[env_index].visualiseStencil();
                 }

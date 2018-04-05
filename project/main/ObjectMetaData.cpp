@@ -18,7 +18,7 @@
 
 void Achterbahn::process(cv::Size frame_size) {
     std::vector<ushort> theta;
-    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count+=2) {
+    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count+=1) {
         theta.push_back(frame_count);
     }
     // Prepare points
