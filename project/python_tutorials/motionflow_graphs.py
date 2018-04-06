@@ -28,6 +28,7 @@ environment_list = ["none","snow_low_", "snow_moderate_", "snow_high_"]#night
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
+OUTLIER = 1000
 
 def histogramm():
 
@@ -437,9 +438,6 @@ def motionflow_vectorgraphs_no_noise():
         "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
-
-
-
     ]
 
     color_of_collision_metrics = ["red", "green", "yellow", "black"]
@@ -493,17 +491,22 @@ def motionflow_vectorgraphs_no_noise():
             if ( x == 0):
                 x0, y0 = data.T
                 y0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
+                y0 = y0/100
             if ( x == 1):
                 x1, y1 = data.T
                 y1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
+                y1 = y1/100
             if ( x == 2):
                 x2, y2 = data.T
                 y2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
+                y2 = y2/100
             if ( x == 3):
                 x3, y3 = data.T
                 y3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
+                y3 = y3/100
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
+        #y0 = np.array(800, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200)
 
         for n,i in enumerate(y0):
             y0_mean=y0_mean+i
@@ -518,10 +521,15 @@ def motionflow_vectorgraphs_no_noise():
         y1_mean = y1_mean/(n+1)
         y2_mean = y2_mean/(n+1)
         y3_mean = y3_mean/(n+1)
+
         y0_mean_list.append(y0_mean)
         y1_mean_list.append(y1_mean)
         y2_mean_list.append(y2_mean)
         y3_mean_list.append(y3_mean)
+
+        print "collision no noise points"
+        print y2
+        print y3
 
         collisionplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
@@ -636,7 +644,6 @@ def motionflow_vectorgraphs_noise():
 
     color_of_collision_metrics  = ["blue", "gray", "brown", "black"]
 
-
     print len(list_of_collision_metrics)
 
     assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
@@ -693,27 +700,40 @@ def motionflow_vectorgraphs_noise():
             if ( x == 0):
                 x0, y0 = data.T
                 y0 = numpy.sqrt((x0_base - x0) ** 2 + (y0_base - y0) ** 2)
+                y0 = y0/100
             if ( x == 1):
                 x1, y1 = data.T
                 y1 = numpy.sqrt((x1_base - x1) ** 2 + (y1_base - y1) ** 2)
+                y1 = y1/100
             if ( x == 2):
                 x2, y2 = data.T
                 y2 = numpy.sqrt((x2_base - x2) ** 2 + (y2_base - y2) ** 2)
+                y2 = y2/100
             if ( x == 3):
                 x3, y3 = data.T
                 y3 = numpy.sqrt((x3_base - x3) ** 2 + (y3_base - y3) ** 2)
+                y3 = y3/100
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
 
 
         for n,i in enumerate(y0):
-            y0_mean=y0_mean+i
+            if ( i > OUTLIER):
+                y0[n] = y0[n-1]
+            y0_mean=y0_mean+y0[n]
         for n,i in enumerate(y1):
-            y1_mean=y1_mean+i
+            if ( i > OUTLIER):
+                y1[n] = y1[n-1]
+            y1_mean=y1_mean+y1[n]
         for n,i in enumerate(y2):
-            y2_mean=y2_mean+i
+            if ( i > OUTLIER):
+                y2[n] = y2[n-1]
+            y2_mean=y2_mean+y2[n]
         for n,i in enumerate(y3):
-            y3_mean=y3_mean+i
+            if ( i > OUTLIER):
+                y3[n] = y3[n-1]
+            y3_mean=y3_mean+y3[n]
+
         y0_mean = y0_mean/(n+1)
         y1_mean = y1_mean/(n+1)
         y2_mean = y2_mean/(n+1)
@@ -757,9 +777,6 @@ def motionflow_vectorgraphs_noise():
     fig3.savefig(output_folder + 'vector_robustness_data_processing_algorithm_3',bbox_inches='tight', dpi=200)
 
     plt.close('all')
-
-
-
 
 
 

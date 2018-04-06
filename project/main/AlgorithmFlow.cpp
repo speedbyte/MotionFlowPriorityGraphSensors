@@ -152,12 +152,17 @@ void AlgorithmFlow::generate_edge_contour() {
                                 edge_movement.at(obj_index).push_back(
                                         std::make_pair(next_pts_array.at(next_pts_index).first,
                                                        next_pts_array.at(next_pts_index).second));
+                                //std::cout << "jayy " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
+
+                            }
+                            else {
+                                //std::cout << "nopes " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
                             }
                         }
 
                         auto new_edge_size = edge_movement.at(obj_index).size();
                         std::cout << new_edge_size << std::endl;
-                        //assert(new_edge_size != 0);
+                        assert(new_edge_size != 0);
 
                         outer_edge_movement.at(obj_index).push_back(edge_movement.at(obj_index));
 
@@ -895,7 +900,7 @@ void AlgorithmFlow::generate_shape_points(std::string noise) {
                         std::cout << "vollTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId()
                                   << " = " << vollTreffer << std::endl;
                         std::cout << "baseTreffer for object " << m_list_simulated_objects.at(obj_index)->getObjectId()
-                                  << " = " << baseTreffer << std::endl;
+                                  << " = " << CLUSTER_COUNT_GT << std::endl;
 
                         shape_average.x += shape_points.at(obj_index).x;
                         shape_average.y += shape_points.at(obj_index).y;
