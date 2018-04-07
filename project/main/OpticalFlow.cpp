@@ -37,7 +37,7 @@ void OpticalFlow::CannyEdgeDetection(std::string temp_result_flow_path, std::str
     cv::cvtColor( src, src_gray, CV_BGR2GRAY );
 
     /// Create a window
-    cv::namedWindow( window_name, CV_WINDOW_AUTOSIZE );
+    //cv::namedWindow( window_name, CV_WINDOW_AUTOSIZE );
 
     /// Create a Trackbar for user to enter threshold
     //cv::createTrackbar( "Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold );
@@ -54,7 +54,7 @@ void OpticalFlow::CannyEdgeDetection(std::string temp_result_flow_path, std::str
     src.copyTo( dst, detected_edges);
     cv::imwrite( temp_result_edge_path, dst );
 
-    cv::imshow( window_name, dst);
+    //cv::imshow( window_name, dst);
 
     /// Wait until user exit program by pressing a key
     //cv::waitKey(0);
