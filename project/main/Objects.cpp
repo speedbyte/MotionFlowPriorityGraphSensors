@@ -243,8 +243,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                     mean_pts_voted_mean_y +=  WEIGHT*pts.y;
                     mean_displacement_vector_voted_mean_x += WEIGHT*gt_displacement_compare.x;
                     mean_displacement_vector_voted_mean_y += WEIGHT*gt_displacement_compare.y;
-                    cluster_size_voted_mean_x++;
-                    cluster_size_voted_mean_y++;
+                    cluster_size_voted_mean_x += WEIGHT;
+                    cluster_size_voted_mean_y += WEIGHT;
                 }
 
                 // 4th method
