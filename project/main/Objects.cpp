@@ -269,10 +269,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 const unsigned CLUSTER_EDGE_SIZE = (unsigned) obj_extrapolated_edge_pixel_point_pixel_displacement.at
                         (frame_skip - 1).at(frame_count).size();
 
-                ushort WEIGHT = 1;
+                ushort WEIGHT = 100;
 
                 for (unsigned cluster_point = 0; cluster_point < CLUSTER_EDGE_SIZE; cluster_point++) {
-
 
                     cv::Point2f pts_edge = obj_extrapolated_edge_pixel_point_pixel_displacement.at(
                                     frame_skip - 1)
@@ -290,17 +289,18 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 }
             }
 
-            mean_displacement_vector_ranked_mean_x /= (float) cluster_size_ranked_mean_x;
-            mean_displacement_vector_ranked_mean_y /= (float) cluster_size_ranked_mean_y;
-
-            cluster_size_ranked_mean_x = 0;
-            cluster_size_ranked_mean_y = 0;
+            //cluster_size_ranked_mean_x = 0;
+            //cluster_size_ranked_mean_y = 0;
 
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
 
                 cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
                         .at(frame_count).at(cluster_point).first;
+                cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
+                        .at(frame_count).at(cluster_point).second;
 
+                mean_displacement_vector_ranked_mean_x += gt_displacement.x;
+                mean_displacement_vector_ranked_mean_y += gt_displacement.y;
                 mean_pts_ranked_mean_x += pts.x;
                 mean_pts_ranked_mean_y += pts.y;
                 cluster_size_ranked_mean_x++;
@@ -338,6 +338,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
             mean_pts_ranked_mean_x /= (float)cluster_size_ranked_mean_x;
             mean_pts_ranked_mean_y /= (float)cluster_size_ranked_mean_y;
+            mean_displacement_vector_ranked_mean_x /= (float) cluster_size_ranked_mean_x;
+            mean_displacement_vector_ranked_mean_y /= (float) cluster_size_ranked_mean_y;
 
             if ( frame_count > 0 ) {
                 assert(std::abs(mean_displacement_vector_centroid_mean_x )>0 || std::abs(mean_displacement_vector_centroid_mean_y )>0);

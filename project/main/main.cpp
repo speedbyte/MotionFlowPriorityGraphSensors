@@ -358,9 +358,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
 
                 list_of_algorithm_flow[env_index].generate_collision_points_mean();
-                list_of_algorithm_flow[env_index].generate_shape_points(environment_list[env_index]);
+                //list_of_algorithm_flow[env_index].generate_shape_points(environment_list[env_index]);
                 if ( env_index == environment_list.size()-1 ) {
-                    list_of_algorithm_flow[env_index].visualiseStencil();
+                    //list_of_algorithm_flow[env_index].visualiseStencil();
                 }
             }
         }
@@ -378,7 +378,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
             for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
-                pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0] );
+                //pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0] );
                 vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                 vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
             }
