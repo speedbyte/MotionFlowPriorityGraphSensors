@@ -238,7 +238,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                         (std::round(gt_displacement.x * 100) / 100) >= ((gt_displacement_compare.x) - (gt_displacement_compare.x)/10.0f)) ||
                         ((std::round(gt_displacement.y * 100) / 100) < ((gt_displacement_compare.y) + (gt_displacement_compare.y)/10.0f) &&
                          (std::round(gt_displacement.y * 100) / 100) >= ((gt_displacement_compare.y) - (gt_displacement_compare.y)/10.0f))
-                        )
+                        ) {
                     mean_pts_voted_mean_x +=  WEIGHT*pts.x;
                     mean_pts_voted_mean_y +=  WEIGHT*pts.y;
                     mean_displacement_vector_voted_mean_x += WEIGHT*gt_displacement_compare.x;
