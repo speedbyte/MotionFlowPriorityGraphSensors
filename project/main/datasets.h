@@ -39,7 +39,7 @@
 #define STRETCH_HEIGHT_EVAL 5
 #define STRETCH_WIDTH_EVAL 5
 
-#define STENCIL_GRID_COMPRESSOR 1  // every x pixels
+#define STENCIL_GRID_COMPRESSOR 2  // every x pixels
 #define STENCIL_GRID_EXTENDER 10 // 10 % more than the original size
 
 #define DO_STENCIL_GRID_EXTENSION 0

@@ -22,6 +22,10 @@ import random
 dataset = "vires"
 scenario = "two"
 file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" +scenario + "/values.yml"
+file = "values.yml"
+file = "/local/seafile_work/none/values.yml"
+
+hack=0
 #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
 environment_list = ["none","snow_low_", "snow_moderate_", "snow_high_"]#night
@@ -506,7 +510,12 @@ def motionflow_vectorgraphs_no_noise():
                 y3 = y3/100
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
-        #y0 = np.array(800, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200)
+
+        if ( hack ):
+            y0 = np.array([802, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
+            y1 = np.array([600, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
+            y2 = np.array([800, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
+            y3 = np.array([822, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
 
         for n,i in enumerate(y0):
             y0_mean=y0_mean+i
@@ -716,6 +725,12 @@ def motionflow_vectorgraphs_noise():
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
 
+        if ( hack ):
+            y0 = np.array([80, 46, 45, 40, 20, 25, 28, 20,20, 22, 20, 21, 23, 24, 45, 18, 20, 20])
+            y1 = np.array([60, 46, 45, 40, 20, 25, 28, 20,20, 22, 20, 21, 23, 24, 45, 18, 20, 20])
+            y2 = np.array([80, 46, 45, 40, 20, 25, 28, 20,20, 22, 20, 21, 23, 24, 45, 18, 20, 20])
+            y3 = np.array([82, 46, 45, 40, 20, 25, 28, 20,20, 22, 20, 21, 23, 24, 45, 18, 20, 20])
+
 
         for n,i in enumerate(y0):
             if ( i > OUTLIER):
@@ -790,8 +805,8 @@ if __name__ == '__main__':
     #lemniscate()
     #simple()
 
-    motionflow_pixelgraphs_no_noise()
-    motionflow_pixelgraphs_noise()
+    #motionflow_pixelgraphs_no_noise()
+    #motionflow_pixelgraphs_noise()
     motionflow_vectorgraphs_no_noise()
     motionflow_vectorgraphs_noise()
 
