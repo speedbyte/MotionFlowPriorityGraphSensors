@@ -133,7 +133,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 if (max_voted.x <= x.second) {
                     max_voted.x = x.second;
                     gt_displacement_compare.x = x.first;
-                    std::cout << x.first << " histogram " << x.second << "endx\n";
+                    //std::cout << x.first << " histogram " << x.second << "endx\n";
                 }
             }
             std::cout << gt_displacement_compare.x << " histogram " << max_voted.x << "endx\n";
@@ -348,6 +348,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 multiframe_shape_parameters_ranked_mean.at(cluster_point).second = cv::Point2f(mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y);
                 multiframe_shape_parameters_voted_mean.at(cluster_point).second = cv::Point2f(mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y);
             }
+
+            std::cout << "mean_displacement_vector_voted_mean_x " << mean_displacement_vector_voted_mean_x << " mean_displacement_vector_ranked_mean_x " << mean_displacement_vector_ranked_mean_x << std::endl;
+            std::cout << "mean_displacement_vector_centroid_mean_x " << mean_displacement_vector_centroid_mean_x << " mean_displacement_vector_threshold_mean_x " << mean_displacement_vector_threshold_mean_x << std::endl;
 
             if ( frame_count > 0 ) {
                 assert(std::abs(mean_displacement_vector_centroid_mean_x )>0 || std::abs(mean_displacement_vector_centroid_mean_y )>0);

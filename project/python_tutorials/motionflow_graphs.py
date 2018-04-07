@@ -431,7 +431,7 @@ def motionflow_vectorgraphs_no_noise():
     collisionplot0.set_xlabel('frame_count')
     collisionplot0.set_ylabel('deviation [no_noise_points-groundtruth_points]')
 
-    #collisionplot0.set_ylim([0, 100])
+    collisionplot0.set_ylim([0, 300])
     legend = collisionplot0.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
@@ -511,33 +511,26 @@ def motionflow_vectorgraphs_no_noise():
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
 
-        if ( hack ):
-            y0 = np.array([802, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
-            y1 = np.array([600, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
-            y2 = np.array([800, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
-            y3 = np.array([822, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
-
         for n,i in enumerate(y0):
             if ( i > OUTLIER):
                 y0[n] = y0[n-1]
-            y0_mean=y0_mean+i
+            y0_mean=(y0_mean+y0[n])/2
+            y0[n] = y0_mean
         for n,i in enumerate(y1):
             if ( i > OUTLIER):
                 y1[n] = y1[n-1]
-            y1_mean=y1_mean+i
+            y1_mean=(y1_mean+y1[n])/2
+            y1[n] = y1_mean
         for n,i in enumerate(y2):
             if ( i > OUTLIER):
                 y2[n] = y2[n-1]
-            y2_mean=y2_mean+i
+            y2_mean=(y2_mean+y2[n])/2
+            y2[n] = y2_mean
         for n,i in enumerate(y3):
             if ( i > OUTLIER):
                 y3[n] = y3[n-1]
-            y3_mean=y3_mean+i
-
-        y0_mean = y0_mean/(n+1)
-        y1_mean = y1_mean/(n+1)
-        y2_mean = y2_mean/(n+1)
-        y3_mean = y3_mean/(n+1)
+            y3_mean=(y3_mean+y3[n])/2
+            y3[n] = y3_mean
 
         y0_mean_list.append(y0_mean)
         y1_mean_list.append(y1_mean)
@@ -627,10 +620,10 @@ def motionflow_vectorgraphs_noise():
     collisionplot3.set_xlabel('frame_count')
     collisionplot3.set_ylabel('deviation noise_points-no_noise_points')
 
-    #collisionplot0.set_ylim([0, 900])
-    #collisionplot1.set_ylim([0, 900])
-    #collisionplot2.set_ylim([0, 900])
-    #collisionplot3.set_ylim([0, 900])
+    collisionplot0.set_ylim([0, 300])
+    collisionplot1.set_ylim([0, 300])
+    collisionplot2.set_ylim([0, 300])
+    collisionplot3.set_ylim([0, 300])
     legend = collisionplot1.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
@@ -733,36 +726,33 @@ def motionflow_vectorgraphs_noise():
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
 
-        if ( hack ):
-            y0 = np.array([80, 46, 45, 40, 20, 25, 28, 20,20, 22, 20, 21, 23, 24, 45, 18, 20, 20])
-            y1 = np.array([60, 46, 45, 40, 20, 25, 28, 20,20, 22, 20, 21, 23, 24, 45, 18, 20, 20])
-            y2 = np.array([80, 46, 45, 40, 20, 25, 28, 20,20, 22, 20, 21, 23, 24, 45, 18, 20, 20])
-            y3 = np.array([82, 46, 45, 40, 20, 25, 28, 20,20, 22, 20, 21, 23, 24, 45, 18, 20, 20])
-
-
         for n,i in enumerate(y0):
             if ( i > OUTLIER):
                 y0[n] = y0[n-1]
                 if ( n == 0 ):
                     y0[n] = 0
-            y0_mean=y0_mean+y0[n]
+            y0_mean=(y0_mean+y0[n])/2
+            y0[n] = y0_mean
         for n,i in enumerate(y1):
             if ( i > OUTLIER):
                 y1[n] = y1[n-1]
-            y1_mean=y1_mean+y1[n]
+            y1_mean=(y1_mean+y1[n])/2
+            y1[n] = y1_mean
         for n,i in enumerate(y2):
             if ( i > OUTLIER):
                 y2[n] = y2[n-1]
-            y2_mean=y2_mean+y2[n]
+            y2_mean=(y2_mean+y2[n])/2
+            y2[n] = y2_mean
         for n,i in enumerate(y3):
             if ( i > OUTLIER):
                 y3[n] = y3[n-1]
-            y3_mean=y3_mean+y3[n]
+            y3_mean=(y3_mean+y3[n])/2
+            y3[n] = y3_mean
 
-        y0_mean = y0_mean/(n+1)
-        y1_mean = y1_mean/(n+1)
-        y2_mean = y2_mean/(n+1)
-        y3_mean = y3_mean/(n+1)
+        #y0_mean = y0_mean/(n+1)
+        #y1_mean = y1_mean/(n+1)
+        #y2_mean = y2_mean/(n+1)
+        #y3_mean = y3_mean/(n+1)
         y0_mean_list.append(y0_mean)
         y1_mean_list.append(y1_mean)
         y2_mean_list.append(y2_mean)
