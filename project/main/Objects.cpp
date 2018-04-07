@@ -280,6 +280,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                                     frame_skip - 1)
                             .at(frame_count).at(cluster_point).second;
 
+                    mean_pts_ranked_mean_x += WEIGHT * pts_edge.x;
+                    mean_pts_ranked_mean_y += WEIGHT * pts_edge.y;
 
                     mean_displacement_vector_ranked_mean_x += WEIGHT * gt_displacement.x;
                     mean_displacement_vector_ranked_mean_y += WEIGHT * gt_displacement.y;
