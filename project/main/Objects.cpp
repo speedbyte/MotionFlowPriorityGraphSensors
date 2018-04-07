@@ -296,9 +296,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 mean_displacement_vector_ranked_mean_y += gt_displacement.y;
                 cluster_size_ranked_mean_x++;
                 cluster_size_ranked_mean_y++;
-                // 4th method
                 multiframe_shape_parameters_ranked_mean.push_back(std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                        (mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y)));
+                        (0, 0)));
 
 
                 mean_pts_voted_mean_x +=  pts.x;
@@ -309,7 +308,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 cluster_size_voted_mean_y++;
                 multiframe_shape_parameters_voted_mean.push_back(
                         std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                                (gt_displacement_compare.x, gt_displacement_compare.y)));
+                                (0, 0)));
             }
 
             if ( frame_count > 0 ) {
@@ -342,6 +341,13 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             mean_pts_ranked_mean_y /= (float)cluster_size_ranked_mean_y;
             mean_displacement_vector_ranked_mean_x /= (float) cluster_size_ranked_mean_x;
             mean_displacement_vector_ranked_mean_y /= (float) cluster_size_ranked_mean_y;
+
+
+            for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+
+                multiframe_shape_parameters_ranked_mean.at(cluster_point).second = cv::Point2f(mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y);
+                multiframe_shape_parameters_voted_mean.at(cluster_point).second = cv::Point2f(mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y);
+            }
 
             if ( frame_count > 0 ) {
                 assert(std::abs(mean_displacement_vector_centroid_mean_x )>0 || std::abs(mean_displacement_vector_centroid_mean_y )>0);

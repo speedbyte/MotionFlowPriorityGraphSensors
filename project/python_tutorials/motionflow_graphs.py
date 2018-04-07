@@ -32,7 +32,7 @@ environment_list = ["none","snow_low_", "snow_moderate_", "snow_high_"]#night
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
-OUTLIER = 1000
+OUTLIER = 400
 
 def histogramm():
 
@@ -429,7 +429,7 @@ def motionflow_vectorgraphs_no_noise():
     #collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
 
     collisionplot0.set_xlabel('frame_count')
-    collisionplot0.set_ylabel('deviation [noise_pixels-no_noise_total_pixels]')
+    collisionplot0.set_ylabel('deviation [no_noise_points-groundtruth_points]')
 
     #collisionplot0.set_ylim([0, 100])
     legend = collisionplot0.legend(loc='center right', shadow=True, fontsize='x-small')
@@ -518,12 +518,20 @@ def motionflow_vectorgraphs_no_noise():
             y3 = np.array([822, 460, 450, 400, 200, 250, 280, 200,200, 220, 200, 210, 230, 240, 450, 180, 200, 200])
 
         for n,i in enumerate(y0):
+            if ( i > OUTLIER):
+                y0[n] = y0[n-1]
             y0_mean=y0_mean+i
         for n,i in enumerate(y1):
+            if ( i > OUTLIER):
+                y1[n] = y1[n-1]
             y1_mean=y1_mean+i
         for n,i in enumerate(y2):
+            if ( i > OUTLIER):
+                y2[n] = y2[n-1]
             y2_mean=y2_mean+i
         for n,i in enumerate(y3):
+            if ( i > OUTLIER):
+                y3[n] = y3[n-1]
             y3_mean=y3_mean+i
 
         y0_mean = y0_mean/(n+1)
@@ -611,13 +619,13 @@ def motionflow_vectorgraphs_noise():
     #collisionplot3.set_title('collision_pointsframe_skip1_dataprocessing_3')
 
     collisionplot0.set_xlabel('frame_count')
-    collisionplot0.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
+    collisionplot0.set_ylabel('deviation noise_points-no_noise_points')
     collisionplot1.set_xlabel('frame_count')
-    collisionplot1.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
+    collisionplot1.set_ylabel('deviation noise_points-no_noise_points')
     collisionplot2.set_xlabel('frame_count')
-    collisionplot2.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
+    collisionplot2.set_ylabel('deviation noise_points-no_noise_points')
     collisionplot3.set_xlabel('frame_count')
-    collisionplot3.set_ylabel('deviation noise_pixels-no_noise_total_pixels')
+    collisionplot3.set_ylabel('deviation noise_points-no_noise_points')
 
     #collisionplot0.set_ylim([0, 900])
     #collisionplot1.set_ylim([0, 900])
@@ -735,6 +743,8 @@ def motionflow_vectorgraphs_noise():
         for n,i in enumerate(y0):
             if ( i > OUTLIER):
                 y0[n] = y0[n-1]
+                if ( n == 0 ):
+                    y0[n] = 0
             y0_mean=y0_mean+y0[n]
         for n,i in enumerate(y1):
             if ( i > OUTLIER):
