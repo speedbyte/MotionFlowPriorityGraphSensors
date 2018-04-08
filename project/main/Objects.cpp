@@ -209,18 +209,16 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 if (gt_displacement.x > ((gt_displacement_threshold_min.x + gt_displacement_threshold_max.x) / 2)) {
                     mean_displacement_vector_threshold_mean_x += gt_displacement_threshold_max.x;
                     temp_displacement.x = gt_displacement_threshold_max.x;
-                } else if (gt_displacement.x <=
-                        ((gt_displacement_threshold_min.x + gt_displacement_threshold_max.x) / 2)) {
+                } else {
                     mean_displacement_vector_threshold_mean_x += gt_displacement_threshold_min.x;
                     temp_displacement.x = gt_displacement_threshold_min.x;
                 }
 
-                if (gt_displacement.y > ((gt_displacement_threshold_min.x + gt_displacement_threshold_max.x) / 2)) {
-                    mean_displacement_vector_threshold_mean_x += gt_displacement_threshold_max.x;
+                if (gt_displacement.y > ((gt_displacement_threshold_min.y + gt_displacement_threshold_max.y) / 2)) {
+                    mean_displacement_vector_threshold_mean_y += gt_displacement_threshold_max.y;
                     temp_displacement.y = gt_displacement_threshold_max.y;
-                } else if (gt_displacement.y <=
-                        ((gt_displacement_threshold_min.x + gt_displacement_threshold_max.x) / 2)) {
-                    mean_displacement_vector_threshold_mean_x += gt_displacement_threshold_min.x;
+                } else  {
+                    mean_displacement_vector_threshold_mean_y += gt_displacement_threshold_min.y;
                     temp_displacement.y = gt_displacement_threshold_min.y;
                 }
                 mean_pts_threshold_mean_x += pts.x;
@@ -300,12 +298,12 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                         (0, 0)));
 
 
-                mean_pts_voted_mean_x +=  pts.x;
-                mean_pts_voted_mean_y +=  pts.y;
-                mean_displacement_vector_voted_mean_x += gt_displacement.x;
-                mean_displacement_vector_voted_mean_y += gt_displacement.y;
-                cluster_size_voted_mean_x++;
-                cluster_size_voted_mean_y++;
+                //mean_pts_voted_mean_x +=  pts.x;
+                //mean_pts_voted_mean_y +=  pts.y;
+                //mean_displacement_vector_voted_mean_x += gt_displacement.x;
+                //mean_displacement_vector_voted_mean_y += gt_displacement.y;
+                //cluster_size_voted_mean_x++;
+                //cluster_size_voted_mean_y++;
                 multiframe_shape_parameters_voted_mean.push_back(
                         std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
                                 (0, 0)));
