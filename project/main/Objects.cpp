@@ -362,8 +362,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
             for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
 
-                multiframe_shape_parameters_ranked_mean.at(cluster_point).second = cv::Point2f(mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y);
                 multiframe_shape_parameters_voted_mean.at(cluster_point).second = cv::Point2f(mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y);
+                multiframe_shape_parameters_ranked_mean.at(cluster_point).second = cv::Point2f(mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y);
+
             }
 
             std::cout << "mean_displacement_vector_voted_mean_x " << mean_displacement_vector_voted_mean_x << " mean_displacement_vector_ranked_mean_x " << mean_displacement_vector_ranked_mean_x << std::endl;
