@@ -258,7 +258,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 const unsigned CLUSTER_EDGE_SIZE = (unsigned) obj_extrapolated_edge_pixel_point_pixel_displacement.at
                         (frame_skip - 1).at(frame_count).size();
 
-                ushort WEIGHT = 100;
+                ushort WEIGHT = 10;
 
                 for (unsigned cluster_point = 0; cluster_point < CLUSTER_EDGE_SIZE; cluster_point++) {
 

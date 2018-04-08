@@ -108,6 +108,10 @@ void AlgorithmFlow::generate_edge_contour() {
                 break;
             }
 
+            cv::Mat objectEdgeFrame( Dataset::getFrameSize(), CV_8UC1 );
+            objectEdgeFrame = cv::Scalar_<char>(0);
+
+
             sprintf(file_name_input_image, "000%03d_10_edge.png", frame_count*frame_skip);
 
             temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
@@ -127,6 +131,7 @@ void AlgorithmFlow::generate_edge_contour() {
             if ( frame_count > 0 ) {
                 for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++ ) {
 
+                    objectEdgeFrame = cv::Scalar_<char>(0);
                     bool visibility = m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
                     if ( visibility ) {
 
@@ -139,9 +144,6 @@ void AlgorithmFlow::generate_edge_contour() {
 
                         std::cout << "making a edge contour on the basis of groundtruth object " << m_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
-                        //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
-                        //cv::imshow("edge", edge_02_frame);
-                        //cv::waitKey(0);
 
                         //std::cout << roi_offset.x + col_index << std::endl;
                         auto COUNT = next_pts_array.size();
@@ -149,6 +151,8 @@ void AlgorithmFlow::generate_edge_contour() {
 
                             //printf("gray %u\n", edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)));
                             if ( edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)) != 0 ) {
+
+                                objectEdgeFrame.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)) = 255;
                                 edge_movement.at(obj_index).push_back(
                                         std::make_pair(next_pts_array.at(next_pts_index).first,
                                                        next_pts_array.at(next_pts_index).second));
@@ -159,6 +163,11 @@ void AlgorithmFlow::generate_edge_contour() {
                                 //std::cout << "nopes " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
                             }
                         }
+
+                        //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
+                        //cv::imshow("edge", objectEdgeFrame);
+                        //cv::waitKey(0);
+
 
                         auto new_edge_size = edge_movement.at(obj_index).size();
                         std::cout << new_edge_size << std::endl;
@@ -242,6 +251,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         }
 
         cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
+        cv::Mat tempGroundTruthImageBase = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
 
         cv::Size subPixWinSize(10, 10), winSize(21, 21);
 
@@ -312,6 +322,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     file_name_input_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
+            tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
+
 
             if ( image_02_frame.data == NULL ) {
                 std::cerr << input_image_file_with_path << " not found" << std::endl;
@@ -474,6 +486,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     }
                 }*/
 
+
                 for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++ ) {
 
                     float columnBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
@@ -492,12 +505,33 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
                     int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
+                    float offset_x = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_x;
+                    float offset_y = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_y;
+
                     bool visibility = m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
                     if ( visibility ) {
 
-                        cv::Mat roi = stencilFrame.rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER)),(cvRound(rowBegin)+height+(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER))).colRange
-                                //(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)),(cvRound(columnBegin)+width+(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)));
-                        (cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)-width),(cvRound(columnBegin)+width+width+(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)));
+
+                        cv::Rect boundingbox = cv::Rect(
+                                cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                        frame_skip - 1).at(frame_count).m_object_location_px.location_x_m),
+                                cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                        frame_skip - 1).at(frame_count).m_object_location_px.location_y_m),
+                                cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                        frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                                cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                        frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m));
+
+                        cv::Rect boundingbox2 = cv::Rect(columnBegin-offset_x*width, rowBegin+offset_y*height, width, height+offset_y*height );
+
+                        //cv::rectangle(tempGroundTruthImageBase, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+                        cv::rectangle(tempGroundTruthImageBase, boundingbox2, cv::Scalar(0, 255, 255), 1, 8, 0);
+
+                        cv::Mat roi = stencilFrame.
+                                rowRange(cvRound(rowBegin+offset_y*height-(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER)),
+                                         (cvRound(rowBegin+offset_y*height+height+offset_y*height+(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER)))).
+                                colRange(cvRound(columnBegin-offset_x*width-(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)),
+                                         (cvRound(columnBegin-offset_x*width)+width+(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)));
 
                         cv::Size roi_size;
                         cv::Point roi_offset;
@@ -661,6 +695,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                     }
                 }
+
+                //cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
+                //cv::imshow("bb", tempGroundTruthImageBase);
+                //cv::waitKey(0);
 
                 F_png_write.writeExtended(temp_result_flow_path);
             }
@@ -1181,39 +1219,6 @@ void AlgorithmFlow::visualiseStencil(void) {
 
             if ( 0 ) {
 
-                /*---------------------------------------------------------------------------------*/
-                tempGroundTruthImage = cv::Scalar::all(255);
-
-                sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
-                std::string input_image_file_with_path = mImageabholOrt.string() + file_name_image;
-
-                sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count * frame_skip);
-                output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
-
-                cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
-                tempGroundTruthImage = cv::Scalar::all(255);
-                tempGroundTruthImage = tempGroundTruthImageBase.clone();
-
-                for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
-
-                    if ((m_list_gt_objects.at(obj_index)->get_obj_base_visibility().at(frame_count))
-                            ) {
-
-                        cv::Rect boundingbox = cv::Rect(
-                                cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                        frame_skip - 1).at(frame_count).m_object_location_px.location_x_m),
-                                cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                        frame_skip - 1).at(frame_count).m_object_location_px.location_y_m),
-                                cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                        frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m),
-                                cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                        frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m));
-
-                        cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
-
-                    }
-                }
-                cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
                 /*---------------------------------------------------------------------------------*/
                 tempGroundTruthImage = cv::Scalar::all(0);
 

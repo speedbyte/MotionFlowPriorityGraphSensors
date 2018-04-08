@@ -161,6 +161,8 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
                         << "dim_y_usk" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_height_m
                         << "speed_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.x
                         << "speed_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.y
+                        << "off_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_x
+                        << "off_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_y
                         << "}";
             }
             write_fs << "]";
