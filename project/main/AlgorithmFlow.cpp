@@ -696,9 +696,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     }
                 }
 
-                //cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
-                //cv::imshow("bb", tempGroundTruthImageBase);
-                //cv::waitKey(0);
+                cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
+                cv::imshow("bb", tempGroundTruthImageBase);
+                cv::waitKey(0);
 
                 F_png_write.writeExtended(temp_result_flow_path);
             }

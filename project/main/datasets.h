@@ -15,7 +15,7 @@
 
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
-#define STEP_SIZE 1
+#define STEP_SIZE 5
 
 #define MAX_ITERATION_RESULTS 20 // 60 generate result. this cannot be more than vector
 
