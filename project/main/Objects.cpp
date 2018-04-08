@@ -217,8 +217,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 mean_pts_moving_avg_mean_y += pts.y;
                 mean_displacement_vector_moving_avg_mean_x += gt_displacement.x;
                 mean_displacement_vector_moving_avg_mean_y += gt_displacement.y;
-                mean_displacement_vector_moving_avg_mean_x /= 2;
-                mean_displacement_vector_moving_avg_mean_y /= 2;
+                if ( cluster_point > 0 ) {
+                    mean_displacement_vector_moving_avg_mean_x /= 2;
+                    mean_displacement_vector_moving_avg_mean_y /= 2;
+                }
                 cluster_size_moving_avg_mean_x++;
                 cluster_size_moving_avg_mean_y++;
                 multiframe_shape_parameters_moving_avg_mean.push_back(
