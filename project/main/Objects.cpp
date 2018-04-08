@@ -232,18 +232,37 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
                 // 3rd method
                 ushort WEIGHT = 100;
-                if (((std::round(gt_displacement.x * 100) / 100) < ((gt_displacement_compare.x) + (gt_displacement_compare.x)/10.0f) &&
-                        (std::round(gt_displacement.x * 100) / 100) >= ((gt_displacement_compare.x) - (gt_displacement_compare.x)/10.0f)) ||
-                        ((std::round(gt_displacement.y * 100) / 100) < ((gt_displacement_compare.y) + (gt_displacement_compare.y)/10.0f) &&
-                         (std::round(gt_displacement.y * 100) / 100) >= ((gt_displacement_compare.y) - (gt_displacement_compare.y)/10.0f))
+                if (std::abs(gt_displacement.x) < std::abs((gt_displacement_compare.x) + (gt_displacement_compare.x)/10.0f) &&
+                        (gt_displacement.x >= std::abs((gt_displacement_compare.x) - (gt_displacement_compare.x)/10.0f))
                         ) {
                     mean_pts_voted_mean_x +=  WEIGHT*pts.x;
-                    mean_pts_voted_mean_y +=  WEIGHT*pts.y;
                     mean_displacement_vector_voted_mean_x += WEIGHT*gt_displacement_compare.x;
-                    mean_displacement_vector_voted_mean_y += WEIGHT*gt_displacement_compare.y;
                     cluster_size_voted_mean_x += WEIGHT;
+                }
+
+                if (std::abs(gt_displacement.y) < std::abs((gt_displacement_compare.y) + (gt_displacement.y)/10.0f) &&
+                                         std::abs(gt_displacement.y)  >= std::abs((gt_displacement_compare.y) - (gt_displacement.y)/10.0f))
+                {
+                    mean_pts_voted_mean_y +=  WEIGHT*pts.y;
+                    mean_displacement_vector_voted_mean_y += WEIGHT*gt_displacement_compare.y;
                     cluster_size_voted_mean_y += WEIGHT;
                 }
+                else {
+                    if ( frame_count > 0 ) {
+                        //std::cout << std::abs(gt_displacement.y) << std::endl;
+                        //std::cout << std::abs((gt_displacement_compare.y) + (gt_displacement.y)/2.0f) << std::endl;
+                        //std::cout << std::abs((gt_displacement_compare.y) - (gt_displacement.y)/2.0f) << std::endl;
+                    }
+                }
+
+                mean_pts_voted_mean_x +=  pts.x;
+                mean_pts_voted_mean_y +=  pts.y;
+
+                mean_displacement_vector_voted_mean_x += gt_displacement_compare.x;
+                cluster_size_voted_mean_x += 1;
+
+                mean_displacement_vector_voted_mean_y += gt_displacement_compare.y;
+                cluster_size_voted_mean_y += 1;
 
                 // 4th method
 
