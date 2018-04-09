@@ -155,7 +155,7 @@ private:
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"35.000000\" right=\"15.000000\" bottom=\"15.000000\" top=\"15.000000\" /> "
-                    "   <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Position dx=\"5.500000\" dy=\"0.000000\" dz=\"0.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "
                     "   <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"false\" /> "
@@ -167,6 +167,7 @@ private:
 
     std::string module_manager_libModuleCameraSensor;
     std::string module_manager_libModulePerfectSensor;
+    std::string module_manager_libModulePerfectSensorInertial;
 
     std::string module_manager_libModuleSingleRaySensor =
             "<Sensor name=\"simpleSensor\" type=\"radar\">\n"
@@ -187,9 +188,13 @@ private:
     //Rain
     const std::string environment_parameters_wet = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"off\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"rain\" intensity=\"0.500000\" /><Road state=\"dry\" effectScale=\"0.600000\" /></Environment>";
 
-    std::string camera_parameters_tethered = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosTether player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
+    std::string view_parameters_tethered = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosTether player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string camera_parameters = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
+    std::string view_parameters_eyepoint = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
+            "<PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
+
+    std::string view_parameters_sensorpoint = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
+            "<PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"false\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
     std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
 
@@ -271,6 +276,7 @@ $
 
     int m_moduleManagerSocket_Perfect;
 
+    int m_moduleManagerSocket_PerfectInertial;
 
 
 
@@ -320,6 +326,7 @@ public:
 
         module_manager_libModuleCameraSensor = module_manager_libModuleSensor;
         module_manager_libModulePerfectSensor = module_manager_libModuleSensor;
+        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor;
 
         to_replace = std::to_string(DEFAULT_RX_PORT);
         position = module_manager_libModulePerfectSensor.find(to_replace);
@@ -338,6 +345,31 @@ public:
         if ( position != std::string::npos) {
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
         }
+
+        to_replace = std::to_string(DEFAULT_RX_PORT);
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT_INERTIAL));
+        }
+
+        to_replace = "libModuleCameraSensor";
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "libModulePerfectSensor");
+        }
+
+        to_replace = "Sensor_MM";
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "Sensor_MM_Perfect_Inertial");
+        }
+
+        to_replace = "usk";
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
+        }
+
 
         if ( environment == "none") {
             m_environment_scp_message = environment_parameters_dry;

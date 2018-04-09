@@ -70,6 +70,7 @@ public:
 
     //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
     struct object_dimensions_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_m;
+    struct object_dimensions_inertial_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_inertial_m;
 
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_px { float location_x_m; float location_y_m; float location_z_m;} m_object_location_px;
@@ -77,12 +78,15 @@ public:
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_m;
 
+    struct object_location_inertial_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_inertial_m;
+
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D object 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
     //(KITTI convention is ry == 0 iff object is aligned with x-axis and pointing right)
     //rx: rotation around X-axis (pitch) in camera coordinates [-pi..pi]
     //rz: rotation around Z-axis (roll) in camera coordinates [-pi..pi]
     struct object_rotation_rad { float rotation_ry_yaw_rad; float rotation_rx_pitch_rad; float rotation_rz_roll_rad; } m_object_rotation_rad;
+    struct object_rotation_inertial_rad { float rotation_ry_yaw_rad; float rotation_rx_pitch_rad; float rotation_rz_roll_rad; } m_object_rotation_inertial_rad;
 
     //truncr: (changed in v1.3) object 2D truncation ratio in [0..1] (0: no truncation, 1: entirely truncated)
     bool truncr;
@@ -107,6 +111,7 @@ public:
 
     //speed of the object
     struct object_speed_m { float x; float y; float z; } m_object_speed;
+    struct object_speed_inertial_m { float x; float y; float z; } m_object_speed_inertial;
 
     /*
      Remarks about 3D information
@@ -230,10 +235,11 @@ public:
 
     virtual void pushVisibility(bool visibility) {}
 
-    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point2f position, cv::Point2f offset, cv::Point2f dimensions) {
+    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point2f offset, cv::Point2f dimensions) {
         //m_pixel_position.at(frameNumber) = position;
         m_gt_all.at(frameNumber).m_object_location_px.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_px.location_y_m = position.y;
+        m_gt_all.at(frameNumber).m_object_location_px.location_z_m = position.z;
 
         m_gt_all.at(frameNumber).m_object_offset.offset_y = offset.y;
         m_gt_all.at(frameNumber).m_object_offset.offset_x = offset.x;
@@ -242,9 +248,10 @@ public:
         m_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
     }
 
-    void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point2f position, cv::Point2f orientation, cv::Point2f dimensions, cv::Point2f speed) {
+    void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point3f position, cv::Point2f orientation, cv::Point2f dimensions, cv::Point2f speed) {
         m_gt_all.at(frameNumber).m_object_location_m.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_m.location_y_m = position.y;
+        m_gt_all.at(frameNumber).m_object_location_m.location_z_m = position.z;
 
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_yaw_rad = orientation.x;
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_pitch_rad = orientation.y;
@@ -254,6 +261,22 @@ public:
 
         m_gt_all.at(frameNumber).m_object_speed.x = speed.x;
         m_gt_all.at(frameNumber).m_object_speed.y = speed.y;
+
+    }
+
+    void atFrameNumberPerfectSensorInertial(ushort frameNumber, cv::Point3f position, cv::Point2f orientation, cv::Point2f dimensions, cv::Point2f speed) {
+        m_gt_all.at(frameNumber).m_object_location_inertial_m.location_x_m = position.x;
+        m_gt_all.at(frameNumber).m_object_location_inertial_m.location_y_m = position.y;
+        m_gt_all.at(frameNumber).m_object_location_inertial_m.location_z_m = position.z;
+
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_yaw_rad = orientation.x;
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_pitch_rad = orientation.y;
+
+        m_gt_all.at(frameNumber).m_object_dimensions_inertial_m.dim_width_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_dimensions_inertial_m.dim_height_m = dimensions.y;
+
+        m_gt_all.at(frameNumber).m_object_speed_inertial.x = speed.x;
+        m_gt_all.at(frameNumber).m_object_speed_inertial.y = speed.y;
 
     }
 

@@ -5,6 +5,8 @@
 #ifndef MAIN_DATASETS_H_H
 #define MAIN_DATASETS_H_H
 
+#define DEFAULT_RX_PORT_PERFECT_INERTIAL     48187   /* for image port it should be 48192 */
+
 #define KITTI_FLOW_DATASET_PATH "../../../datasets/kitti_flow_dataset/"
 #define KITTI_RAW_DATASET_PATH "../../../datasets/kitti_raw_dataset/"
 

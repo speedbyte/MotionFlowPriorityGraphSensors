@@ -187,9 +187,9 @@ void GroundTruthFlow::generate_flow_frame() {
                 }
             }
 
-            cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
-            cv::imshow("bb", tempGroundTruthImageBase);
-            cv::waitKey(0);
+            //cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("bb", tempGroundTruthImageBase);
+            //cv::waitKey(0);
 
             F_png_write.writeExtended(temp_gt_flow_image_path);
             //CannyEdgeDetection(temp_gt_flow_image_path, temp_result_edge_path);

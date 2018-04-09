@@ -220,12 +220,18 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 if ( cluster_point > 0 ) {
                     mean_displacement_vector_moving_avg_mean_x /= 2;
                     mean_displacement_vector_moving_avg_mean_y /= 2;
+                    multiframe_shape_parameters_moving_avg_mean.push_back(
+                            std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
+                                    (mean_displacement_vector_moving_avg_mean_x, mean_displacement_vector_moving_avg_mean_y)));
+                }
+                else {
+                    multiframe_shape_parameters_moving_avg_mean.push_back(
+                            std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
+                                    (gt_displacement.x, gt_displacement.y)));
+
                 }
                 cluster_size_moving_avg_mean_x++;
                 cluster_size_moving_avg_mean_y++;
-                multiframe_shape_parameters_moving_avg_mean.push_back(
-                        std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                                (gt_displacement.x, gt_displacement.y)));
 
                 // 2nd method
 

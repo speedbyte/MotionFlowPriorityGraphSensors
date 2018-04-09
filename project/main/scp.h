@@ -23,7 +23,7 @@ std::string module_manager = "<Sensor name="Sensor_MM" type="video" > <Load lib=
  std::string environment_parameters = "<Environment> <Friction value="1.000000" /> <TimeOfDay value="39600"
  headlights="false" /> <Sky cloudState="4/8" visibility="100000.000000" /><Precipitation type="rain" intensity="0.500000" /><Road state="dry" effectScale="0.500000" /></Environment>";
 
-std::string camera_parameters = "<Camera name="VIEW_CAMERA" showOwner="true"> <Frustum near="0.100000" far="1501.000000" fovHor="60.000000" fovVert="40.000000" offsetHor="0.000000" offsetVert="0.000000" /> <PosTether player="StaticCar" distance="6.000000" azimuth="0.000000" elevation="0.261799" slew="1" /> <ViewRelative dh="0.000000" dp="0.000000" dr="0.000000" /><Set /> </Camera>";
+std::string view_parameters = "<Camera name="VIEW_CAMERA" showOwner="true"> <Frustum near="0.100000" far="1501.000000" fovHor="60.000000" fovVert="40.000000" offsetHor="0.000000" offsetVert="0.000000" /> <PosTether player="StaticCar" distance="6.000000" azimuth="0.000000" elevation="0.261799" slew="1" /> <ViewRelative dh="0.000000" dp="0.000000" dr="0.000000" /><Set /> </Camera>";
 
 std::string display_parameters = "<Display>  <SensorSymbols enable="false" sensor="Sensor_MM" showCone="true" /> <SensorSymbols enable="false" sensor="Sensor_MM" showCone="true" /> <Database enable="true" streetLamps="false"/> <VistaOverlay enable="false" /> </Display>";
 
