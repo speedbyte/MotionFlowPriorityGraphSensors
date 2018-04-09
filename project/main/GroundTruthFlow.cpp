@@ -33,6 +33,8 @@ using namespace std::chrono;
 
 void GroundTruthFlow::prepare_directories() {
 
+    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/none/";
+
     m_resultordner="/generated";
 
     m_generatepath = Dataset::getGroundTruthPath().string() + m_resultordner;
@@ -80,22 +82,30 @@ void GroundTruthFlow::generate_flow_frame() {
         unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
         assert(FRAME_COUNT>0);
 
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-            char file_name_image[50], file_name_image_edge[50];
+        cv::Mat tempGroundTruthImageBase = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
 
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            
+            char file_name_input_image[50], file_name_image_edge[50];
+
+            
             auto tic = steady_clock::now();
 
             std::cout << "frame_count " << frame_count << std::endl;
 
-            sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
             sprintf(file_name_image_edge, "000%03d_edge_10.png", frame_count*frame_skip);
 
             std::string temp_gt_flow_image_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
-                    file_name_image;
+                    file_name_input_image;
 
             std::string temp_result_edge_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                                                   file_name_image_edge;
 
+            std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
+                                                     file_name_input_image;
+
+            tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
 
             fs << "frame_count" << frame_count;
 
@@ -107,17 +117,45 @@ void GroundTruthFlow::generate_flow_frame() {
             assert(tempMatrix.channels() == 3);
 
 
-            for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
+            for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
 
                 // object image_data_and_shape
-                int width = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
-                int height = cvRound(m_list_gt_objects.at(i)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                if ( m_list_gt_objects.at(i)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
+                float columnBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                        (frame_skip-1).at(frame_count).first.x;
+                float rowBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                        (frame_skip-1).at(frame_count).first.y;
+
+                int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+
+                float offset_x = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_x;
+                float offset_y = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_y;
+                
+
+                if ( m_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
 
                     // gt_displacement
-                    cv::Point2f next_pts = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).first;
-                    cv::Point2f displacement = m_list_gt_objects.at(i)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).second;
+                    cv::Point2f next_pts = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).first;
+                    cv::Point2f displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).second;
+
+                    cv::Rect boundingbox = cv::Rect(
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_location_px.location_x_m),
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_location_px.location_y_m),
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m));
+
+                    cv::Rect boundingbox2 = cv::Rect(columnBegin-offset_x*width, rowBegin+offset_y*height, width, height+offset_y*height );
+                    cv::Rect boundingbox3 = cv::Rect(columnBegin, rowBegin+height, width, height);
+
+                    cv::rectangle(tempGroundTruthImageBase, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+                    cv::rectangle(tempGroundTruthImageBase, boundingbox2, cv::Scalar(0, 0, 255), 1, 8, 0);
+                    cv::rectangle(tempGroundTruthImageBase, boundingbox3, cv::Scalar(255, 0, 0), 1, 8, 0);
+                  
 
                     cv::Mat roi;
                     roi = tempMatrix.
@@ -125,7 +163,7 @@ void GroundTruthFlow::generate_flow_frame() {
                             rowRange(cvRound(next_pts.y), cvRound(next_pts.y + height));
                     //bulk storage
                     //roi = cv::Scalar(displacement.x, displacement.y,
-                    //                 static_cast<float>(m_list_gt_objects.at(i)->getObjectId()));
+                    //                 static_cast<float>(m_list_gt_objects.at(obj_index)->getObjectId()));
                     roi = cv::Scalar(displacement.x, displacement.y,
                                      static_cast<float>(1.0f));
 
@@ -148,6 +186,10 @@ void GroundTruthFlow::generate_flow_frame() {
                     }
                 }
             }
+
+            cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
+            cv::imshow("bb", tempGroundTruthImageBase);
+            cv::waitKey(0);
 
             F_png_write.writeExtended(temp_gt_flow_image_path);
             //CannyEdgeDetection(temp_gt_flow_image_path, temp_result_edge_path);

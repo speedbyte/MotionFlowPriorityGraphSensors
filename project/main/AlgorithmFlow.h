@@ -26,8 +26,6 @@ private:
 
     std::vector<Objects *> &m_list_simulated_objects;
 
-    boost::filesystem::path mImageabholOrt;
-
 
 public:
 

@@ -17,6 +17,8 @@ protected:
 
     std::string m_resultordner;
 
+    boost::filesystem::path mImageabholOrt;
+
     boost::filesystem::path  m_generatepath;
 
     boost::filesystem::path  m_collision_obj_path;
