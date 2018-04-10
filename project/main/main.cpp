@@ -57,8 +57,8 @@ int main ( int argc, char *argv[]) {
 
 
 
-    /*
-    cv::Mat image = cv::imread("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/flow_occ_01/000003_10_edge.png", cv::IMREAD_ANYCOLOR);
+
+    cv::Mat image = cv::imread("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_algo_3.png", cv::IMREAD_ANYCOLOR);
 
     cv::namedWindow("dd", CV_WINDOW_AUTOSIZE);
     cv::imshow("dd", image);
@@ -74,16 +74,16 @@ int main ( int argc, char *argv[]) {
                 image_mod.at<cv::Vec3b>(y,x) = color;
             }
             else {
-                image_mod.at<cv::Vec3b>(y,x) = color_edge;
+                //image_mod.at<cv::Vec3b>(y,x) = color_edge;
             }
         }
     }
     cv::namedWindow("dd", CV_WINDOW_AUTOSIZE);
     cv::imshow("dd", image_mod);
-    cv::imwrite("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/flow_occ_01/000003_10_edge_mod.png", image_mod);
+    cv::imwrite("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_algo_3_mod.png", image_mod);
     cv::waitKey(0);
     return  0;
-    */
+
 
 
     // Thread 2: Read two kitti image files without rain. The two image files are from kitti

@@ -14,7 +14,7 @@
     name = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_flow_base_algo.png');
     temp = imread(name);
     flow = flow_read(name);
-    res = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_base_algo.png');
+    res = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_flow_color_base_algo.png');
     t = flow_to_color(flow,20);
     imwrite(t,res); 
 
@@ -29,7 +29,7 @@
     f1 = flow(:,:,1);
     f2 = flow(:,:,2);
     f3 = flow(:,:,3);
-    res = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_algo_%01d.png',x);
+    res = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_flow_color_algo_%01d.png',x);
     t = flow_to_color(flow,20);
     
     imwrite(t,res);
