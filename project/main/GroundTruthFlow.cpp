@@ -61,7 +61,7 @@ void GroundTruthFlow::generate_flow_frame() {
     assert(tempGroundTruthImage.channels() == 3);
 
 
-    std::map<std::string, double> time_map = {{"generate_single_flow_image",     0},
+    std::map<std::string, double> time_map = {{"generate_single_flow_image", 0},
                                               {"generate_all_flow_image", 0}};
 
     auto tic_all = steady_clock::now();
@@ -82,30 +82,22 @@ void GroundTruthFlow::generate_flow_frame() {
         unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
         assert(FRAME_COUNT>0);
 
-        cv::Mat tempGroundTruthImageBase = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
-
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             
             char file_name_input_image[50], file_name_image_edge[50];
 
-            
             auto tic = steady_clock::now();
 
             std::cout << "frame_count " << frame_count << std::endl;
 
             sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
-            sprintf(file_name_image_edge, "000%03d_edge_10.png", frame_count*frame_skip);
+            sprintf(file_name_image_edge, "000%03d_10_edge.png", frame_count*frame_skip);
 
             std::string temp_gt_flow_image_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                     file_name_input_image;
 
             std::string temp_result_edge_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                                                   file_name_image_edge;
-
-            std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
-                                                     file_name_input_image;
-
-            tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
 
             fs << "frame_count" << frame_count;
 
@@ -116,46 +108,18 @@ void GroundTruthFlow::generate_flow_frame() {
             tempMatrix = cv::Scalar_<unsigned>(255,255,255);
             assert(tempMatrix.channels() == 3);
 
-
             for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
 
                 // object image_data_and_shape
 
-                float columnBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                        (frame_skip-1).at(frame_count).first.x;
-                float rowBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                        (frame_skip-1).at(frame_count).first.y;
-
                 int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
                 int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
-
-                float offset_x = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_x;
-                float offset_y = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_y;
-                
 
                 if ( m_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
 
                     // gt_displacement
                     cv::Point2f next_pts = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).first;
                     cv::Point2f displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).second;
-
-                    cv::Rect boundingbox = cv::Rect(
-                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                    frame_skip - 1).at(frame_count).m_object_location_px.location_x_m),
-                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                    frame_skip - 1).at(frame_count).m_object_location_px.location_y_m),
-                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m),
-                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m));
-
-                    cv::Rect boundingbox2 = cv::Rect(columnBegin-offset_x*width, rowBegin+offset_y*height, width, height+offset_y*height );
-                    cv::Rect boundingbox3 = cv::Rect(columnBegin, rowBegin+height, width, height);
-
-                    cv::rectangle(tempGroundTruthImageBase, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
-                    cv::rectangle(tempGroundTruthImageBase, boundingbox2, cv::Scalar(0, 0, 255), 1, 8, 0);
-                    cv::rectangle(tempGroundTruthImageBase, boundingbox3, cv::Scalar(255, 0, 0), 1, 8, 0);
-                  
 
                     cv::Mat roi;
                     roi = tempMatrix.
@@ -187,12 +151,8 @@ void GroundTruthFlow::generate_flow_frame() {
                 }
             }
 
-            cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
-            cv::imshow("bb", tempGroundTruthImageBase);
-            cv::waitKey(0);
-
             F_png_write.writeExtended(temp_gt_flow_image_path);
-            //CannyEdgeDetection(temp_gt_flow_image_path, temp_result_edge_path);
+            CannyEdgeDetection(temp_gt_flow_image_path, temp_result_edge_path);
 
             auto toc = steady_clock::now();
             time_map["generate_single_flow_image"] = duration_cast<milliseconds>(toc - tic).count();
@@ -252,7 +212,7 @@ void GroundTruthFlow::generate_edge_contour() {
                 break;
             }
 
-            sprintf(file_name_input_image, "000%03d_edge_10.png", frame_count*frame_skip);
+            sprintf(file_name_input_image, "000%03d_10_edge.png", frame_count*frame_skip);
 
             temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
 
@@ -282,7 +242,7 @@ void GroundTruthFlow::generate_edge_contour() {
                         next_pts_array = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(frame_skip-1).at(frame_count);
 
                         //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
-                        //cv::imshow("edge", edge_02_frame);
+                        //cv::imshow("edge", edge_02_frame_gray);
                         //cv::waitKey(0);
 
                         //std::cout << roi_offset.x + col_index << std::endl;
@@ -301,7 +261,7 @@ void GroundTruthFlow::generate_edge_contour() {
 
                         auto new_edge_size = edge_movement.at(obj_index).size();
                         std::cout << new_edge_size << std::endl;
-                        assert(new_edge_size != 0);
+                        //assert(new_edge_size != 0);
 
                         outer_edge_movement.at(obj_index).push_back(edge_movement.at(obj_index));
 
@@ -395,8 +355,7 @@ void GroundTruthFlow::generate_shape_points() {
                             i)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at
                             (frame_skip - 1).at(frame_count).size();
 
-                    if ((m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1)
-                                 .at(frame_count) == true)) {
+                    if (m_list_gt_objects.at(i)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) == true) {
 
                         float vollTreffer = 0;
 
@@ -447,6 +406,179 @@ void GroundTruthFlow::generate_shape_points() {
     toc_all = steady_clock::now();
     time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
     std::cout << m_resultordner + " flow generation time - " << time_map["generate_flow"] << "ms" << std::endl;
+}
+
+
+void GroundTruthFlow::visualiseStencil(void) {
+
+    std::cout << "visualise stencil at " << m_generatepath.string() + "/stencil/" << std::endl;
+
+    char file_name_image_output[50], file_name_input_image[50];
+
+    cv::Mat image_data_and_shape;
+
+
+    const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
+    cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
+    FlowImageExtended F_png_write;
+
+    for ( int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++ ) {
+
+        for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++)
+        {
+
+            std::cout << "frame_count " << frame_count << std::endl;
+            std::string output_image_file_with_path;
+
+            /*---------------------------------------------------------------------------------*/
+            tempGroundTruthImage = cv::Scalar::all(0);
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
+
+            std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
+                                                     file_name_input_image;
+
+            tempGroundTruthImage = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
+
+            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count * frame_skip);
+            output_image_file_with_path =
+                    m_generatepath.string() + "/stencil/" + file_name_image_output;
+
+            auto tic = steady_clock::now();
+            auto toc = tic;
+            float time_elapsed;
+
+            for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
+
+                if ((m_list_gt_objects.at(obj_index)->get_obj_base_visibility().at(frame_count))
+                        ) {
+
+                    float columnBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                            (frame_skip-1).at(frame_count).first.x;
+                    float rowBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                            (frame_skip-1).at(frame_count).first.y;
+
+                    int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                    int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+
+                    float offset_x = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_x;
+                    float offset_y = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_y;
+
+
+                    cv::Rect boundingbox = cv::Rect(
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_location_px.location_x_m),
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_location_px.location_y_m),
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m));
+
+                    cv::Rect boundingbox2 = cv::Rect(columnBegin-offset_x*width, rowBegin+offset_y*height, width, height+offset_y*height );
+                    //cv::Rect boundingbox3 = cv::Rect(columnBegin, rowBegin+height, width, height);
+
+                    cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+                    cv::rectangle(tempGroundTruthImage, boundingbox2, cv::Scalar(0, 0, 255), 1, 8, 0);
+                    //cv::rectangle(tempGroundTruthImage, boundingbox3, cv::Scalar(255, 0, 0), 1, 8, 0);
+
+                    cv::Point2f pts_mean = m_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(
+                                    frame_skip - 1).at(frame_count).first;
+                    cv::Point2f pts_basic = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(
+                            frame_skip - 1).at(frame_count).first;
+
+                    cv::Point2f displacement = m_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(
+                            frame_skip - 1).at(frame_count).second;
+
+                    cv::Point2f next_pts = cv::Point2f(pts_basic.x + displacement.x*10, pts_basic.y + displacement.y*10);
+
+                    cv::arrowedLine(tempGroundTruthImage, pts_basic, next_pts, cv::Scalar(0,0,255), 2);
+
+
+                }
+            }
+            cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+
+            /*---------------------------------------------------------------------------------*/
+            tempGroundTruthImage = cv::Scalar::all(255);
+
+            sprintf(file_name_image_output, "000%03d_10_pixel_gt.png", frame_count * frame_skip);
+            output_image_file_with_path =
+                    m_generatepath.string() + "/stencil/" + file_name_image_output;
+
+            for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
+
+                if ((m_list_gt_objects.at(obj_index)->get_obj_base_visibility().at(frame_count))
+                        ) {
+
+                    const unsigned CLUSTER_SIZE = (unsigned) m_list_gt_objects.at(
+                            obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            (frame_skip - 1).at(frame_count).size();
+                    for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+
+                        cv::Point2f pts = m_list_gt_objects.at(
+                                        obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        frame_skip - 1)
+                                .at(frame_count).at(cluster_point).first;
+
+                        cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 255, 0), 1, 8);
+
+                    }
+                }
+            }
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+
+            /*---------------------------------------------------------------------------------*/
+            tempGroundTruthImage = cv::Scalar::all(255);
+            F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+
+            sprintf(file_name_image_output, "000%03d_10_flow_gt.png", frame_count * frame_skip);
+            output_image_file_with_path =
+                    m_generatepath.string() + "/stencil/" + file_name_image_output;
+
+            for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
+
+                if ((m_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(
+                        frame_count)
+                )) {
+
+                    unsigned CLUSTER_SIZE = (unsigned) m_list_gt_objects.at(
+                            obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            (frame_skip - 1).at(frame_count).size();
+                    for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+
+
+                        cv::Point2f pts = m_list_gt_objects.at(
+                                        obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        frame_skip - 1)
+                                .at(frame_count).at(cluster_point).first;
+
+                        cv::Point2f displacement = m_list_gt_objects.at(
+                                        obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        frame_skip - 1)
+                                .at(frame_count).at(cluster_point).second;
+
+
+                        cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
+
+                        F_png_write.setFlowU(pts.x, pts.y, displacement.x);
+                        F_png_write.setFlowV(pts.x, pts.y, displacement.y);
+                        F_png_write.setValid(pts.x, pts.y, true);
+
+                        //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
+
+                    }
+                }
+            }
+
+            //F_png_write.writeExtended(output_image_file_with_path);
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+
+            //cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("bb", tempGroundTruthImageBase);
+            //cv::waitKey(0);
+
+        }
+    }
 }
 
 

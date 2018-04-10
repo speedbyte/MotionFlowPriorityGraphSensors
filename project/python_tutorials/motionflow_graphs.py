@@ -22,8 +22,6 @@ import random
 dataset = "vires"
 scenario = "two"
 file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" +scenario + "/values.yml"
-file = "values.yml"
-#file = "/local/seafile_work/none/values.yml"
 
 hack=0
 #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
@@ -807,8 +805,8 @@ if __name__ == '__main__':
 
     motionflow_pixelgraphs_no_noise()
     motionflow_pixelgraphs_noise()
-    #motionflow_vectorgraphs_no_noise()
-    #motionflow_vectorgraphs_noise()
+    motionflow_vectorgraphs_no_noise()
+    motionflow_vectorgraphs_noise()
 
     #histogramm()
 

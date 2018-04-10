@@ -69,8 +69,7 @@ public:
     struct object_dimensions_px { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_px;
 
     //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
-    struct object_dimensions_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_m;
-    struct object_dimensions_inertial_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_inertial_m;
+    struct object_realworld_dim_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_realworld_dim_m;
 
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_px { float location_x_m; float location_y_m; float location_z_m;} m_object_location_px;
@@ -256,8 +255,8 @@ public:
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_yaw_rad = orientation.x;
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_pitch_rad = orientation.y;
 
-        m_gt_all.at(frameNumber).m_object_dimensions_m.dim_width_m = dimensions.x;
-        m_gt_all.at(frameNumber).m_object_dimensions_m.dim_height_m = dimensions.y;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;
 
         m_gt_all.at(frameNumber).m_object_speed.x = speed.x;
         m_gt_all.at(frameNumber).m_object_speed.y = speed.y;
@@ -272,8 +271,8 @@ public:
         m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_yaw_rad = orientation.x;
         m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_pitch_rad = orientation.y;
 
-        m_gt_all.at(frameNumber).m_object_dimensions_inertial_m.dim_width_m = dimensions.x;
-        m_gt_all.at(frameNumber).m_object_dimensions_inertial_m.dim_height_m = dimensions.y;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;
 
         m_gt_all.at(frameNumber).m_object_speed_inertial.x = speed.x;
         m_gt_all.at(frameNumber).m_object_speed_inertial.y = speed.y;
@@ -291,6 +290,8 @@ public:
     std::vector<bool> getVisibility() const {
         return m_visibility;
     }
+
+    void calcBBFrom3DPosition(int screen_width, int screen_height, cv::Point3d cam_pos, float fov_v, float pixSize = 2.2e-6);
 
     void setDynamic() {
 

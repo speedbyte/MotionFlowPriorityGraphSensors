@@ -162,10 +162,8 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
                         << "z_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_inertial_m.location_z_m
                         << "dim_x_camera" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m
                         << "dim_y_camera" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m
-                        << "dim_x_usk" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_width_m
-                        << "dim_y_usk" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_m.dim_height_m
-                        << "dim_x_inertial" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_inertial_m.dim_width_m
-                        << "dim_y_inertial" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_inertial_m.dim_height_m
+                        << "dim_x_realworld" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_realworld_dim_m.dim_width_m
+                        << "dim_y_realworld" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_realworld_dim_m.dim_height_m
                         << "speed_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.x
                         << "speed_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.y
                         << "speed_x_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.x
@@ -815,8 +813,8 @@ simFrame, const
 
     cv::Point3f position_inertial, position_usk, position_pixel;
     cv::Point2f dimension_pixel, offset_pixel;
-    cv::Point2f orientation_usk, dimension_usk, speed_usk;
-    cv::Point2f orientation_inertial, dimension_inertial, speed_inertial;
+    cv::Point2f orientation_usk, dimension_realworld, speed_usk;
+    cv::Point2f orientation_inertial, speed_inertial;
 
     if ( m_environment == "none") {
 
@@ -847,17 +845,17 @@ simFrame, const
                 else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
                     position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
                     orientation_usk = cv::Point2f((float) data->base.pos.h, (float) data->base.pos.p);
-                    dimension_usk = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
+                    dimension_realworld = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
                     speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_usk, speed_usk);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_realworld, speed_usk);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
                 else if ( data->base.pos.type == RDB_COORD_TYPE_INERTIAL ) {
                     position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
                     orientation_inertial = cv::Point2f((float) data->base.pos.h, (float) data->base.pos.p);
-                    dimension_inertial = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
+                    dimension_realworld = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
                     speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_inertial, speed_inertial);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_realworld, speed_inertial);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
             } else {

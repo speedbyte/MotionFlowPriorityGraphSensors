@@ -37,6 +37,8 @@ public:
 
     void generate_shape_points();
 
+    void visualiseStencil(void);
+
     void generate_edge_contour();
 
     ~GroundTruthFlow(){

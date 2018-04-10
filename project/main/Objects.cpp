@@ -5,8 +5,9 @@
 #include <iostream>
 #include <map>
 #include "Objects.h"
-#include "Dataset.h"
+#include <chrono>
 
+using namespace std::chrono;
 
 void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( const unsigned &max_skips,
                                                                                          const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_blob_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_edge_pixel_point_pixel_displacement, std::string post_processing_algorithm) {
@@ -14,6 +15,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
     // A blob can be either a stencil or a shape
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > outer_multiframe_mean_pixel_centroid_pixel_displacement;
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  >  > outer_multiframe_shape_parameters;
+
+    auto tic = steady_clock::now();
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
 
@@ -458,6 +461,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
         m_list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters);
 
         m_obj_extrapolated_mean_visibility.push_back(multiframe_visibility);
+
+        auto time_elapsed = duration_cast<milliseconds>(steady_clock::now()- tic).count();
+        std::cout << time_elapsed << std::endl;
+
     }
 }
 

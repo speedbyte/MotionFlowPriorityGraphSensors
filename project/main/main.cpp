@@ -56,8 +56,7 @@ void usage()
 int main ( int argc, char *argv[]) {
 
 
-
-
+    /*
     cv::Mat image = cv::imread("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_algo_3.png", cv::IMREAD_ANYCOLOR);
 
     cv::namedWindow("dd", CV_WINDOW_AUTOSIZE);
@@ -83,7 +82,7 @@ int main ( int argc, char *argv[]) {
     cv::imwrite("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_algo_3_mod.png", image_mod);
     cv::waitKey(0);
     return  0;
-
+    */
 
 
     // Thread 2: Read two kitti image files without rain. The two image files are from kitti
@@ -213,9 +212,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector < std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "snow_low", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    std::vector < std::string> environment_list = {"none", "snow_low", "snow_moderate", "snow_high"};
-
-    //std::vector < std::string> environment_list = {"none"};
+    //std::vector < std::string> environment_list = {"none", "snow_low", "snow_moderate", "snow_high"};
+    std::vector <std::string> environment_list = {"none"};
 
     cv::FileStorage fs;
 
@@ -285,12 +283,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
 
                 gt_flow.generate_flow_frame();
-                //gt_flow.generate_edge_contour();
 
                 for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
                     ptr_list_of_gt_objects.at(obj_count)->generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( MAX_SKIPS , ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_pixel_point_pixel_displacement(), ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_visibility(), ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "ground_truth");
                     ptr_list_of_gt_objects.at(obj_count)->generate_obj_line_parameters(MAX_SKIPS, "ground_truth");
                 }
+
+                gt_flow.generate_edge_contour();
+                gt_flow.visualiseStencil();
 
 
                 gt_flow.generate_collision_points();
