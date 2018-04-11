@@ -44,7 +44,7 @@ protected:
 
     std::vector<std::vector<bool> > m_obj_extrapolated_mean_visibility;
 
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+    std::vector<std::vector<std::vector<cv::Point2f > > >
             m_list_obj_line_parameters;
 
     int m_ObjectInertialWidth;
@@ -84,7 +84,7 @@ public:
         return m_ObjectInertialHeight;
     }
 
-    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_line_parameters() const {
+    const std::vector<std::vector<std::vector<cv::Point2f > > > &get_line_parameters() const {
         return m_list_obj_line_parameters;
     }
 

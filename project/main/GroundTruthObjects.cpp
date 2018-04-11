@@ -32,7 +32,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
         }
         else {
-            cv::Point2f gt_next_pts = {0,0}, gt_displacement = {0,0};
+            cv::Point2f gt_next_pts = {0,0}, gt_displacement = {0,0}, gt_displacement_inertial = {0,0}, gt_displacement_usk = {0,0};
             cv::Point2f gt_dimensions = {0,0};
 
             gt_next_pts = cv::Point2f(gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m);
@@ -42,16 +42,33 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
             //If we are at the end of the path vector, we need to reset our iterators
             if (current_index >= gt_data.getAll().size()) {
+
                 current_index = 0;
                 gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_px.location_x_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_px.location_x_m;
                 gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_px.location_y_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_px.location_y_m;
+
+                gt_displacement_inertial.x = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_inertial_m.location_x_m;
+                gt_displacement_inertial.y = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_inertial_m.location_y_m;
+                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_x_m;
+                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_y_m;
 
             } else {
 
                 gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_px.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_px.location_x_m;
                 gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_px.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_px.location_y_m;
 
+                gt_displacement_inertial.x = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_inertial_m.location_x_m;
+                gt_displacement_inertial.y = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_inertial_m.location_y_m;
+
+                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_x_m;
+                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_y_m;
+
+
             }
+
+            auto dist_inertial = cv::norm(gt_displacement_inertial);
+            auto dist_usk = cv::norm(gt_displacement_usk);
+            //assert(std::round(dist_inertial*1000)/1000 == std::round(dist_usk*1000)/1000);
 
             printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
                    frame_count,
@@ -156,7 +173,7 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
                     }
                 }
             }
-            if ( visibility == false ) {
+            if ( !visibility ) {
                 base_movement.push_back(std::make_pair(cv::Point2f(0,0), cv::Point2f(0,0)));
                 base_visibility.push_back(visibility);
             }

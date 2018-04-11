@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3")
 #target_compile_definitions(my_target PRIVATE FOO=1 BAR=1)
 #set_source_files_properties(foo.cpp PROPERTIES COMPILE_DEFINITIONS -DFOO=1)
 
-find_package(OpenCV COMPONENTS core highgui imgcodecs imgproc videoio video REQUIRED)
+find_package(OpenCV COMPONENTS core highgui imgcodecs imgproc videoio video calib3d REQUIRED)
 find_package(Boost COMPONENTS system filesystem iostreams REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -49,3 +49,6 @@ target_link_libraries(video_operations ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
 add_executable(birdview birdview.cpp)
 target_link_libraries(birdview ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+
+add_executable(transform tranformation.cpp)
+target_link_libraries(transform ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )

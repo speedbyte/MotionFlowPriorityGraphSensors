@@ -168,8 +168,15 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
                         << "speed_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.y
                         << "speed_x_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.x
                         << "speed_y_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.y
+                        << "speed_z_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.z
                         << "off_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_x
                         << "off_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_y
+                        << "h_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_ry_yaw_rad
+                        << "p_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_rx_pitch_rad
+                        << "r_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_rz_roll_rad
+                        << "h_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_inertial_rad.rotation_ry_yaw_rad
+                        << "p_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_inertial_rad.rotation_rx_pitch_rad
+                        << "r_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_inertial_rad.rotation_rz_roll_rad
                         << "}";
             }
             write_fs << "]";
@@ -182,8 +189,15 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
 void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
     cv::FileStorage fs(positionFileName, cv::FileStorage::READ);
-    cv::Point2f dimension_pixel, offset_pixel, orientation_usk, dimension_usk, speed_usk;
-    cv::Point3f position_usk, position_pixel;
+
+    cv::Point2f offset_pixel, speed_usk, speed_inertial;
+    cv::Point2f dimension_pixel, dimension_realworld;
+    cv::Point3f position_inertial, position_usk, position_pixel;
+    cv::Point3f position_inertial_pre, position_usk_pre, position_pixel_pre;
+
+    cv::Point3f orientation_inertial, orientation_usk;
+
+
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
 
@@ -206,7 +220,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                 std::cout << temp_str_fc << " cannot be found" << std::endl;
             }
             else {
-
+                
                 //std::cout << file_node.size() << " found" << std::endl;
                 file_node_iterator_begin = file_node.begin();
                 file_node_iterator_end = file_node.end();
@@ -224,20 +238,30 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                     }
 
                     std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x_camera"] << " " << (double)(*file_node_iterator)["y_camera"] << std::endl;
+
                     position_pixel = cv::Point3f((double)(*file_node_iterator)["x_camera"], (double)(*file_node_iterator)["y_camera"], (double)(*file_node_iterator)["z_camera"]);
+                    position_usk = cv::Point3f((double)(*file_node_iterator)["x_usk"], (double)(*file_node_iterator)["y_usk"], (double)(*file_node_iterator)["z_usk"]);
+                    position_inertial = cv::Point3f((double)(*file_node_iterator)["x_inertial"], (double)(*file_node_iterator)["y_inertial"], (double)(*file_node_iterator)["z_inertial"]);
+
                     offset_pixel = cv::Point2f((double)(*file_node_iterator)["off_x"], (double)(*file_node_iterator)["off_y"]);
 
-                    position_usk = cv::Point3f((double)(*file_node_iterator)["x_usk"], (double)(*file_node_iterator)["y_usk"], (double)(*file_node_iterator)["z_usk"]);
-                    orientation_usk = cv::Point2f((double)(*file_node_iterator)["h"], (double)(*file_node_iterator)["p"]);
+                    orientation_usk = cv::Point3f((double)(*file_node_iterator)["h_usk"], (double)(*file_node_iterator)["p_usk"], (double)(*file_node_iterator)["r_usk"]);
+
+                    orientation_inertial = cv::Point3f((double)(*file_node_iterator)["h_inertial"], (double)(*file_node_iterator)["p_inertial"], (double)(*file_node_iterator)["r_inertial"]);
 
                     dimension_pixel = cv::Point2f((int)(*file_node_iterator)["dim_x_camera"], (int)(*file_node_iterator)["dim_y_camera"]);
-                    dimension_usk = cv::Point2f((int)(*file_node_iterator)["dim_x_usk"], (int)(*file_node_iterator)["dim_y_usk"]);
+                    dimension_realworld = cv::Point2f((int)(*file_node_iterator)["dim_x_realworld"], (int)(*file_node_iterator)["dim_y_realworld"]);
 
                     speed_usk = cv::Point2f((int)(*file_node_iterator)["speed_x"], (int)(*file_node_iterator)["speed_y"]);
 
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(frame_count, position_pixel, offset_pixel, dimension_pixel);
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk, dimension_usk, speed_usk);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk, dimension_realworld, speed_usk);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(frame_count, position_inertial, orientation_inertial, dimension_realworld, speed_inertial);
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(frame_count, (int)(*file_node_iterator)["visible"]);
+
+                    position_inertial_pre = position_inertial;
+                    position_pixel_pre = position_pixel;
+                    position_usk_pre = position_usk;
 
                 }
             }
@@ -813,8 +837,8 @@ simFrame, const
 
     cv::Point3f position_inertial, position_usk, position_pixel;
     cv::Point2f dimension_pixel, offset_pixel;
-    cv::Point2f orientation_usk, dimension_realworld, speed_usk;
-    cv::Point2f orientation_inertial, speed_inertial;
+    cv::Point2f speed_inertial, dimension_realworld, speed_usk;
+    cv::Point3f orientation_usk, orientation_inertial;
 
     if ( m_environment == "none") {
 
@@ -844,7 +868,7 @@ simFrame, const
                 }
                 else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
                     position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
-                    orientation_usk = cv::Point2f((float) data->base.pos.h, (float) data->base.pos.p);
+                    orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
                     dimension_realworld = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
                     speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_realworld, speed_usk);
@@ -852,7 +876,7 @@ simFrame, const
                 }
                 else if ( data->base.pos.type == RDB_COORD_TYPE_INERTIAL ) {
                     position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
-                    orientation_inertial = cv::Point2f((float) data->base.pos.h, (float) data->base.pos.p);
+                    orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
                     dimension_realworld = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
                     speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_realworld, speed_inertial);

@@ -247,13 +247,14 @@ public:
         m_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
     }
 
-    void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point3f position, cv::Point2f orientation, cv::Point2f dimensions, cv::Point2f speed) {
+    void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point2f dimensions, cv::Point2f speed) {
         m_gt_all.at(frameNumber).m_object_location_m.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_m.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_m.location_z_m = position.z;
 
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_yaw_rad = orientation.x;
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_pitch_rad = orientation.y;
+        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rz_roll_rad = orientation.y;
 
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;
@@ -263,13 +264,14 @@ public:
 
     }
 
-    void atFrameNumberPerfectSensorInertial(ushort frameNumber, cv::Point3f position, cv::Point2f orientation, cv::Point2f dimensions, cv::Point2f speed) {
+    void atFrameNumberPerfectSensorInertial(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point2f dimensions, cv::Point2f speed) {
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_z_m = position.z;
 
         m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_yaw_rad = orientation.x;
         m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_pitch_rad = orientation.y;
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rz_roll_rad = orientation.z;
 
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;

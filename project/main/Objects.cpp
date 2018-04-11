@@ -88,7 +88,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             const unsigned CLUSTER_SIZE = (unsigned) obj_extrapolated_blob_pixel_point_pixel_displacement.at
                     (frame_skip - 1).at(frame_count).size();
 
-            if (visibility == true) {
+            if (visibility) {
                 assert(CLUSTER_SIZE > 0);
             }
 
@@ -483,9 +483,9 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
         COUNT = 4;
     }
 
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > list_obj_line_parameters;
+    std::vector<std::vector<std::vector<cv::Point2f > > > list_obj_line_parameters;
 
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_line_parameters;
+    std::vector<std::vector<cv::Point2f > > outer_line_parameters;
 
     for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
 
@@ -494,57 +494,64 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
 
         for ( unsigned i = 0; i < COUNT; i++ ) {
 
-            std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_line_parameters;
+            std::vector<cv::Point2f > frame_line_parameters;
 
             const unsigned long FRAME_COUNT =
                     m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip - 1).at
                             (i).size();
 
-            for (unsigned frame_count = 1; frame_count < FRAME_COUNT; frame_count++) {
+            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 
                 if (m_obj_extrapolated_mean_visibility.at(frame_skip - 1).at(frame_count) == true) {
-                    cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip-1).at
-                            (i).at(frame_count).first;
-                    cv::Point2f displacement_vector =
-                            m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip-1).at
-                                    (i).at(frame_count).second;
 
-                    //assert(std::abs(mean_displacement_vector_y )>0);
+                    if ( frame_count > 0 ) {
+                        cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip-1).at
+                                (i).at(frame_count).first;
+                        cv::Point2f displacement_vector =
+                                m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip-1).at
+                                        (i).at(frame_count).second;
 
-                    float m, c;
-                    m = displacement_vector.y / displacement_vector.x;
-                    c = next_pts.y - m * next_pts.x;  // c = y - mx
+                        assert(displacement_vector.x !=0 );
 
-                    if ((int) c == 0) {
-                        c += 0.001;
-                    }
+                        float m, c;
+                        m = displacement_vector.y / displacement_vector.x;
+                        c = next_pts.y - m * next_pts.x;  // c = y - mx
 
-                    //float d = (float) sqrt((double) displacement_vector.x * displacement_vector.x +
-                    //                       (double) displacement_vector.y * displacement_vector.y);
-                    //displacement_vector.x /= d; // normalized vector in x
-                    //displacement_vector.y /= d; // normalized vector in y
+                        assert(c!=0);
 
-                    cv::Point2f pt2;
-
-                    if (std::isinf(m)) {
-                        if (displacement_vector.y > 0.0f) {  // going up
-                            pt2.x = next_pts.x;
-                            pt2.y = Dataset::getFrameSize().height;
-                        } else {  // going down
-                            pt2.x = next_pts.x;
-                            pt2.y = 0;
+                        if ((int) c == 0) {
+                            c += 0.001;
                         }
-                    } else if (m == 0) {
-                        //std::cout << frame_count << " " << next_pts<<  " " << m << " " << displacement_vector << std::endl;
-                        if (std::signbit(m)) { //  going left
-                            pt2.x = 0;
-                            pt2.y = next_pts.y;
-                        } else {  // going right
-                            pt2.x = Dataset::getFrameSize().width;
-                            pt2.y = next_pts.y;
+
+                        //float d = (float) sqrt((double) displacement_vector.x * displacement_vector.x +
+                        //                       (double) displacement_vector.y * displacement_vector.y);
+                        //displacement_vector.x /= d; // normalized vector in x
+                        //displacement_vector.y /= d; // normalized vector in y
+
+                        cv::Point2f pt2;
+
+                        assert(std::isinf(m) == 0);
+
+                        if (std::isinf(m)) {
+                            if (displacement_vector.y > 0.0f) {  // going up
+                                pt2.x = next_pts.x;
+                                pt2.y = Dataset::getFrameSize().height;
+                            } else {  // going down
+                                pt2.x = next_pts.x;
+                                pt2.y = 0;
+                            }
+                        } else if (m == 0) {
+                            //std::cout << frame_count << " " << next_pts<<  " " << m << " " << displacement_vector << std::endl;
+                            if (std::signbit(m)) { //  going left
+                                pt2.x = 0;
+                                pt2.y = next_pts.y;
+                            } else {  // going right
+                                pt2.x = Dataset::getFrameSize().width;
+                                pt2.y = next_pts.y;
+                            }
                         }
-                    } else {
+
                         //std::cout << frame_count << " " << next_pts <<  " " << m << " " << pt2<< std::endl;
                         if (displacement_vector.y > 0.0f) {
                             pt2.x = (Dataset::getFrameSize().height - c) / m; //
@@ -553,11 +560,15 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
                             pt2.x = (-c / m); //
                             pt2.y = 0;
                         }
+
+                        frame_line_parameters.push_back(cv::Point2f(m, c));
+                    } else {
+                        frame_line_parameters.push_back(cv::Point2f(0.0f, 0.0f));
                     }
-                    frame_line_parameters.push_back(std::make_pair(cv::Point2f(m, c), pt2));
-                } else {
-                    // we want to maintain the size of the array.
-                    frame_line_parameters.push_back(std::make_pair(cv::Point2f(0.0f, 0.0f), cv::Point2f(0.0f, 0.0f)));
+
+                }
+                else {
+                    frame_line_parameters.push_back(cv::Point2f(0.0f, 0.0f));
                 }
             }
             outer_line_parameters.push_back(frame_line_parameters);
