@@ -157,12 +157,15 @@ void ObjectMetaData::calcBBFrom3DPosition(int screen_width, int screen_height, c
         toPosition.translate(rot * (p));
 
         cv::Point3d objPositionRelativeToPerfectOrigin = cv::Point3d(m_gt_all.at(0).m_object_location_inertial_m.location_x_m, m_gt_all.at(0).m_object_location_inertial_m.location_y_m, m_gt_all.at(0).m_object_location_inertial_m.location_z_m);  // get real world position from perfect sensor
+
         //first translate to camera pos
         objPositionRelativetoCamera = toCamPos * objPositionRelativeToPerfectOrigin;
+
         //then translate and rotate to 3d bounding box point
         boundingBoxPositionRelativetoCamera = toPosition * objPositionRelativetoCamera;
+
         //transform from sensor coordinates to camera coordinates
-        pos = cv::Point3d(pos.y(), pos.z(),pos.x());
+        pos = cv::Point3d(boundingBoxPositionRelativetoCamera.y(), boundingBoxPositionRelativetoCamera.z(), boundingBoxPositionRelativetoCamera.x());
 
         //scale 3D point back onto image
         pos = pos * ((distToImagePlane * pxSize) /*m*/ / pos.z());

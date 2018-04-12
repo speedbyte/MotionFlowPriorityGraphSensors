@@ -70,8 +70,8 @@ void real_to_camera() {
     std::cout <<  nose_end_point2D << std::endl;
 
     // Display image.
-    cv::imshow("Output", im);
-    cv::waitKey(0);
+    //cv::imshow("Output", im);
+    //cv::waitKey(0);
 }
 
 void camera_to_real() {
@@ -105,6 +105,7 @@ void camera_to_real() {
 
 
     cv::solvePnP(objectPoints, imagePoints, camera_matrix, dist_coeffs, rvec, tvec);
+    std::cout << rvec;
     cv::Rodrigues(rvec,rotationMatrix);
     cv::Mat uvPoint = cv::Mat::ones(3,1,cv::DataType<double>::type); //u,v,1
     uvPoint.at<double>(0,0) = 363.; //got this point using mouse callback
@@ -121,6 +122,8 @@ void camera_to_real() {
 /// Function header
 void thresh_callback(int, void* );
 
+int thresh = 100;
+cv::Mat src_gray;
 
 /** @function thresh_callback */
 void thresh_callback(int, void* )
@@ -128,8 +131,6 @@ void thresh_callback(int, void* )
     cv::Mat threshold_output;
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
-    int thresh = 100;
-    cv::Mat src_gray;
 
     /// Detect edges using Threshold
     cv::threshold( src_gray, threshold_output, thresh, 255, cv::THRESH_BINARY );
@@ -163,6 +164,8 @@ void thresh_callback(int, void* )
     cv::namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
     cv::imshow( "Contours", drawing );
 }
+
+
 
 int main ( int argc, char *argv[] ) {
 
@@ -240,21 +243,27 @@ int main ( int argc, char *argv[] ) {
 
 
 
+    float rotMat[9] = {0,0,0,0,0,0,0,0,0};
+    float tv[3] = {0,0,0};
+
+    // OpenCV rotation and translation matrix in one
+    float RTMat[] = {rotMat[0], rotMat[3], rotMat[6], 0.0f,
+                     rotMat[1], rotMat[4], rotMat[7], 0.0f,
+                     rotMat[2], rotMat[5], rotMat[8], 0.0f,
+                     tv[0], -tv[1], -tv[2], 1.0f};
     
 
-    cv::namedWindow("transform", CV_WINDOW_AUTOSIZE);
     cv::imshow("transform", image);
     cv::waitKey(0);
 
     cv::Matx33d transform = {};
     cv::destroyAllWindows();
 
-#if 0
-    cv::Mat src; cv::Mat src_gray;
-    int thresh = 100;
+
+    cv::Mat src;
     int max_thresh = 255;
     /// Load source image and convert it to gray
-    src = cv::imread( "000011_10.png", 1 );
+    src = cv::imread( "../000011_10.png", 1 );
 
     /// Convert image to gray and blur it
     cv::cvtColor( src, src_gray, CV_BGR2GRAY );
@@ -269,8 +278,8 @@ int main ( int argc, char *argv[] ) {
     thresh_callback( 0 , 0);
 
     cv::waitKey(0);
-#endif
 
-    //real_to_camera();
+
+    real_to_camera();
 
 }
