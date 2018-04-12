@@ -65,7 +65,7 @@ void GroundTruthScene::visualiseBoundingBox(void) {
                             cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
                                     frame_skip - 1).at(frame_count).m_object_location_px.location_x_m-
                                     cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
-                                    frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m)),
+                                            frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m)),
                             cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
                                     frame_skip - 1).at(frame_count).m_object_location_px.location_y_m),
                             cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
@@ -222,7 +222,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                 std::cout << temp_str_fc << " cannot be found" << std::endl;
             }
             else {
-                
+
                 //std::cout << file_node.size() << " found" << std::endl;
                 file_node_iterator_begin = file_node.begin();
                 file_node_iterator_end = file_node.end();
@@ -402,9 +402,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
-                                 cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
-                                 cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m),
-                                 cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m))));
+                                cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
+                                cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                                cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m))));
 
             }
         }
@@ -424,22 +424,22 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 void GroundTruthScene::generate_bird_view() {
     // the bird view needs the range information of each object
     // Assuming the camera is mounted on the floor.
-/*
-    for ( auto position_index = 0;  position_index <  MAX_ITERATION_RESULTS; position_index++ ) {
+    /*
+        for ( auto position_index = 0;  position_index <  MAX_ITERATION_RESULTS; position_index++ ) {
 
-        cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
-        for ( auto object_index= 0; object_index < m_list_gt_objects.size(); object_index++ ) {
-            birdview_frame.at(m_list_gt_objects.at(object_index).get_obj_base_pixel_position_pixel_displacement().at(position_index).first.x, m_list_gt_objects.at(object_index).get_obj_range().at(position_index)) = 100;
-            cv::Mat roi_objects;
-            roi_objects = birdview_frame.rowRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).z_offset )
-                    .colRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).x_offset);
+            cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
+            for ( auto object_index= 0; object_index < m_list_gt_objects.size(); object_index++ ) {
+                birdview_frame.at(m_list_gt_objects.at(object_index).get_obj_base_pixel_position_pixel_displacement().at(position_index).first.x, m_list_gt_objects.at(object_index).get_obj_range().at(position_index)) = 100;
+                cv::Mat roi_objects;
+                roi_objects = birdview_frame.rowRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).z_offset )
+                        .colRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).x_offset);
+
+            }
+            cv::imwrite("filename", birdview_frame);
+            // time to collide with the object.
 
         }
-        cv::imwrite("filename", birdview_frame);
-        // time to collide with the object.
-
-    }
-    */
+        */
 }
 
 void GroundTruthSceneExternal::generate_gt_scene() {
@@ -479,11 +479,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         sleep(5); // Wait before starting vtd again.
 
         if ( m_environment == "none") {
-        sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
-                project.c_str());
-        std::cout << command << std::endl;
-        system(command);
-        std::cout << " I am out of bash" << std::endl;
+            sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
+                    project.c_str());
+            std::cout << command << std::endl;
+            system(command);
+            std::cout << " I am out of bash" << std::endl;
         }
 
         sleep(5); // Give some time before you send SCP commands.
@@ -506,7 +506,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         bool connected_scp_port = false;
 
         //if ( m_environment == "none" ) {
-            m_scpSocket = openNetwork(SCP_DEFAULT_PORT);
+        m_scpSocket = openNetwork(SCP_DEFAULT_PORT);
         //}
         std::cout << "scp socket - " << m_scpSocket << std::endl;
         if (m_scpSocket != -1) { // this is blocking until the network has been opened
@@ -592,7 +592,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         // open the network connection to the taskControl (so triggers may be sent)
         fprintf(stderr, "creating network connection....\n");
         //if ( m_environment == "none") {
-            m_triggerSocket = openNetwork(DEFAULT_PORT);
+        m_triggerSocket = openNetwork(DEFAULT_PORT);
         //}
         std::cout << "trigger socket - " << m_triggerSocket << std::endl;
         if (m_triggerSocket != -1) { // this is blocking until the network has been opened
@@ -600,9 +600,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
 
         //if ( m_environment == "none") {
-            m_moduleManagerSocket_Camera = openNetwork(DEFAULT_RX_PORT);
-            m_moduleManagerSocket_Perfect = openNetwork(DEFAULT_RX_PORT_PERFECT);
-            m_moduleManagerSocket_PerfectInertial = openNetwork(DEFAULT_RX_PORT_PERFECT_INERTIAL);
+        m_moduleManagerSocket_Camera = openNetwork(DEFAULT_RX_PORT);
+        m_moduleManagerSocket_Perfect = openNetwork(DEFAULT_RX_PORT_PERFECT);
+        m_moduleManagerSocket_PerfectInertial = openNetwork(DEFAULT_RX_PORT_PERFECT_INERTIAL);
         //}
 
         std::cout << "mm socket - " << m_moduleManagerSocket_Camera << std::endl;
@@ -624,30 +624,13 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             bool breaking = false;
             int count = 0;
 
+            int lastSimFrame = -1; // parseEndOfFrame
             try {
                 while (1) {
-
-                    // Break out of the loop if the user presses the Esc key
-                    /*
-                    int c = kbhit();
-
-                    switch (c) {
-                        case 9:
-                            breaking = true;
-                            break;
-                        default:
-                            break;
-                    } */
 
                     if (breaking) {
                         break;
                     }
-
-                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC) {
-                        breaking = true;
-                    }
-
-                    int lastSimFrame = mLastNetworkFrame;
 
                     readNetwork(m_moduleManagerSocket_Camera);  // this calls parseRDBMessage() in vires_common.cpp
 
@@ -655,11 +638,49 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     readNetwork(m_moduleManagerSocket_PerfectInertial);  // this calls parseRDBMessage() in vires_common.cpp
 
-                    if (lastSimFrame < 0) {
-                        checkShm();  //empty IG buffer of spurious images
+                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC) {
+                        breaking = true;
                     }
 
-                    bool haveNewFrame = (lastSimFrame != mLastNetworkFrame);
+                    bool haveNewFrame = false;
+
+                    if (lastSimFrame < 0) {
+                        std::cerr << "Removing spurious images" << std::endl;
+                        checkShm();  //empty IG buffer of spurious images
+                    } else {
+                        haveNewFrame = (lastSimFrame != mLastNetworkFrame);
+                    }
+
+                    lastSimFrame = mLastNetworkFrame;
+
+                    if (!mHaveFirstImage || mHaveImage || haveNewFrame || !mHaveFirstFrame) {
+                        // do not initialize too fast
+                        if (!mHaveFirstImage || !mHaveFirstFrame)
+                            usleep(100000);   // 10Hz
+
+                        bool requestImage = (mLastNetworkFrame >= (mLastIGTriggerFrame + IMAGE_SKIP_FACTOR_DYNAMIC));
+
+                        if (requestImage) {
+                            //std::cout << mLastNetworkFrame << " " << mLastIGTriggerFrame << std::endl;
+                            mLastIGTriggerFrame = mLastNetworkFrame;
+                            mCheckForImage = true;
+                        }
+
+                        //fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s\n", mDeltaTime,
+                        //         requestImage ? "true" : "false" );
+                        sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime);
+
+                        // increase internal counters
+                        mSimTime += mDeltaTime;
+                        mSimFrame++;
+
+                        // calculate the timing statistics
+                        if (mHaveImage)
+                            //calcStatistics();
+
+                            mHaveImage = false;
+                    }
+
 
                     // now read IG output
                     if (mHaveImage)
@@ -686,34 +707,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     // has an image arrived or do the first frames need to be triggered
                     //(first image will arrive with a certain image_02_frame delay only)
-
-
-                    if (!mHaveFirstImage || mHaveImage || haveNewFrame || !mHaveFirstFrame) {
-                        // do not initialize too fast
-                        if (!mHaveFirstImage || !mHaveFirstFrame)
-                            usleep(100000);   // 10Hz
-
-                        bool requestImage = (mLastNetworkFrame >= (mLastIGTriggerFrame + IMAGE_SKIP_FACTOR_DYNAMIC));
-
-                        if (requestImage) {
-                            mLastIGTriggerFrame = mLastNetworkFrame;
-                            mCheckForImage = true;
-                        }
-
-                        //fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s\n", mDeltaTime,
-                        //         requestImage ? "true" : "false" );
-                        sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime);
-
-                        // increase internal counters
-                        mSimTime += mDeltaTime;
-                        mSimFrame++;
-
-                        // calculate the timing statistics
-                        if (mHaveImage)
-                            //calcStatistics();
-
-                            mHaveImage = false;
-                    }
 
                     usleep(10000); // sleep for 10 ms
                     //std::cout << "getting data from VIRES\n";
@@ -753,15 +746,14 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
 void GroundTruthSceneExternal::parseStartOfFrame(const double &simTime, const unsigned int &simFrame) {
     //fprintf(stderr, "I am in GroundTruthFlow %d\n,", RDB_PKG_ID_START_OF_FRAME);
-    //fprintf(stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
+    //mHaveFirstFrame = true;
+    fprintf(stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
 void GroundTruthSceneExternal::parseEndOfFrame(const double &simTime, const unsigned int &simFrame) {
 
     mLastNetworkFrame = simFrame;
-
-    //fprintf(stderr, "headers %d\n,", RDB_PKG_ID_END_OF_FRAME);
-    //fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
+    fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
 /** ------ state of an object (may be extended by the next structure) ------- */
@@ -822,8 +814,8 @@ typedef struct
 
 void GroundTruthSceneExternal::parseEntry(RDB_OBJECT_CFG_t *data, const double &simTime, const unsigned int &
 simFrame, const
-                                          unsigned short &pkgId, const unsigned short &flags,
-                                          const unsigned int &elemId, const unsigned int &totalElem) {
+unsigned short &pkgId, const unsigned short &flags,
+        const unsigned int &elemId, const unsigned int &totalElem) {
 
     RDB_OBJECT_CFG_t *object = reinterpret_cast<RDB_OBJECT_CFG_t *>(data); /// raw image data
     std::cout << object->type;
@@ -833,9 +825,9 @@ simFrame, const
 
 void GroundTruthSceneExternal::parseEntry(RDB_OBJECT_STATE_t *data, const double &simTime, const unsigned int &
 simFrame, const
-                                          unsigned
-                                          short &pkgId, const unsigned short &flags, const unsigned int &elemId,
-                                          const unsigned int &totalElem) {
+unsigned
+short &pkgId, const unsigned short &flags, const unsigned int &elemId,
+        const unsigned int &totalElem) {
 
     cv::Point3f position_inertial, position_usk, position_pixel, dimension_realworld;
     cv::Point2f dimension_pixel, offset_pixel;
@@ -845,7 +837,7 @@ simFrame, const
     if ( m_environment == "none") {
 
         if ( data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR ) {
-            if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && simFrame > 0  ) {
+            if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && mHaveFirstImage  ) {
 
                 fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                         data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
@@ -892,25 +884,23 @@ simFrame, const
 }
 
 void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTime, const unsigned int &simFrame,
-                                          const
-                                          unsigned short &pkgId, const unsigned short &flags,
-                                          const unsigned int &elemId, const unsigned int &totalElem) {
+        const
+        unsigned short &pkgId, const unsigned short &flags,
+        const unsigned int &elemId, const unsigned int &totalElem) {
 
     if (!data)
         return;
-    //fprintf(stderr, "handleRDBitem: image\n");
+    fprintf(stderr, "handleRDBitem: image at simFrame %d\n", simFrame);
     //fprintf(stderr, "    simTime = %.3lf, simFrame = %d, mLastShmFrame = %d\n", simTime, simFrame, getLastShmFrame());
     //fprintf(stderr, "    width / height = %d / %d\n", data->width, data->height);
     //fprintf(stderr, "    dataSize = %d\n", data->imgSize);
 
-    // ok, I have an image:
+    // ok, I have an image, but it might be the first one
 
     //analyzeImage(  data  , simFrame, 0 );
-    mHaveImage      = true;
-    mHaveFirstImage = true;
 
 
-    if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && simFrame > 0  ) {
+    if ( mHaveFirstImage  ) { // always ignore the first image.
 
         char *image_data_ = NULL;
         RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
@@ -961,6 +951,13 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
                     image_info_.height));
         }
     }
+    else {
+        std::cerr << "ignoring first image" << std::endl;
+        mHaveFirstImage = true;
+    }
+
+    mHaveImage      = true;
+
 }
 
 
@@ -1137,7 +1134,7 @@ void GroundTruthSceneExternal::calcStatistics()
         return;
 
     fprintf( stderr, "calcStatistics: received %d/%d images in %.3lf seconds (i.e. %.3lf/%.3lf images per second ), total number of errors = %d\n",
-             mTotalNoImages, dt, mTotalNoImages / dt, mTotalErrorCount );
+            mTotalNoImages, dt, mTotalNoImages / dt, mTotalErrorCount );
 }
 
 void GroundTruthSceneExternal::analyzeImage( RDB_IMAGE_t* img, const unsigned int & simFrame, unsigned int index )
@@ -1151,7 +1148,7 @@ void GroundTruthSceneExternal::analyzeImage( RDB_IMAGE_t* img, const unsigned in
         return;
 
     fprintf( stderr, "analyzeImage: simFrame = %d, index = %d: have image no. %d, size = %d bytes, pixelFormat = %d\n",
-             simFrame, index, img->id, img->imgSize, img->pixelFormat );
+            simFrame, index, img->id, img->imgSize, img->pixelFormat );
 
     if ( img->pixelFormat == RDB_PIX_FORMAT_RGB32F )		// some analysis
     {

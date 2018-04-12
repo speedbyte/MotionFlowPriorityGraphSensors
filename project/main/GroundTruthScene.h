@@ -230,7 +230,7 @@ $
      */
 
 
-    int          mLastNetworkFrame;
+    int          mLastNetworkFrame = -1;
 
     int          mLastIGTriggerFrame ;
 
