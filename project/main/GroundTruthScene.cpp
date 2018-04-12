@@ -164,6 +164,7 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
                         << "dim_y_camera" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m
                         << "dim_x_realworld" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_realworld_dim_m.dim_width_m
                         << "dim_y_realworld" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_realworld_dim_m.dim_height_m
+                        << "dim_z_realworld" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_realworld_dim_m.dim_length_m
                         << "speed_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.x
                         << "speed_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.y
                         << "speed_x_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.x
@@ -171,6 +172,7 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
                         << "speed_z_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.z
                         << "off_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_x
                         << "off_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_y
+                        << "off_z" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_z
                         << "h_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_ry_yaw_rad
                         << "p_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_rx_pitch_rad
                         << "r_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_rz_roll_rad
@@ -191,8 +193,8 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     cv::FileStorage fs(positionFileName, cv::FileStorage::READ);
 
     cv::Point2f offset_pixel, speed_usk, speed_inertial;
-    cv::Point2f dimension_pixel, dimension_realworld;
-    cv::Point3f position_inertial, position_usk, position_pixel;
+    cv::Point2f dimension_pixel;
+    cv::Point3f position_inertial, position_usk, position_pixel, dimension_realworld;
     cv::Point3f position_inertial_pre, position_usk_pre, position_pixel_pre;
 
     cv::Point3f orientation_inertial, orientation_usk;
@@ -250,7 +252,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                     orientation_inertial = cv::Point3f((double)(*file_node_iterator)["h_inertial"], (double)(*file_node_iterator)["p_inertial"], (double)(*file_node_iterator)["r_inertial"]);
 
                     dimension_pixel = cv::Point2f((int)(*file_node_iterator)["dim_x_camera"], (int)(*file_node_iterator)["dim_y_camera"]);
-                    dimension_realworld = cv::Point2f((int)(*file_node_iterator)["dim_x_realworld"], (int)(*file_node_iterator)["dim_y_realworld"]);
+                    dimension_realworld = cv::Point3f((double)(*file_node_iterator)["dim_x_realworld"], (double)(*file_node_iterator)["dim_y_realworld"], (double)(*file_node_iterator)["dim_z_realworld"]);
 
                     speed_usk = cv::Point2f((int)(*file_node_iterator)["speed_x"], (int)(*file_node_iterator)["speed_y"]);
 
@@ -541,7 +543,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, view_parameters_eyepoint.c_str());
+        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams.c_str());
 
         sleep(1);
 
@@ -671,7 +673,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                         usleep(10);
 
                         if (!mCheckForImage) {
-                            //fprintf( stderr, "main: got it!\n" );
+                            fprintf( stderr, "main: got it! at %d\n", mSimFrame );
                         }
                     }
 
@@ -835,15 +837,15 @@ simFrame, const
                                           short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                                           const unsigned int &totalElem) {
 
-    cv::Point3f position_inertial, position_usk, position_pixel;
+    cv::Point3f position_inertial, position_usk, position_pixel, dimension_realworld;
     cv::Point2f dimension_pixel, offset_pixel;
-    cv::Point2f speed_inertial, dimension_realworld, speed_usk;
+    cv::Point2f speed_inertial, speed_usk;
     cv::Point3f orientation_usk, orientation_inertial;
 
     if ( m_environment == "none") {
 
         if ( data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR ) {
-            if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && simFrame >= 0  ) {
+            if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && simFrame > 0  ) {
 
                 fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                         data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
@@ -869,7 +871,7 @@ simFrame, const
                 else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
                     position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
                     orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
-                    dimension_realworld = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
+                    dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY, (float) data->base.geo.dimZ);
                     speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_realworld, speed_usk);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
@@ -877,7 +879,7 @@ simFrame, const
                 else if ( data->base.pos.type == RDB_COORD_TYPE_INERTIAL ) {
                     position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
                     orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
-                    dimension_realworld = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
+                    dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY, (float) data->base.geo.dimZ);
                     speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_realworld, speed_inertial);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
@@ -907,54 +909,57 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
     mHaveImage      = true;
     mHaveFirstImage = true;
 
-    fprintf( stderr, "------------------------------------------------------------------------------------\n");
-    fprintf( stderr, "simFrame = %d, simTime = %.3f, dataSize = %d\n", simFrame, mSimTime, data->imgSize);
-    fprintf( stderr, "------------------------------------------------------------------------------------\n");
 
-    char *image_data_ = NULL;
-    RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
+    if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && simFrame > 0  ) {
 
-    /// RDB image information of \see image_data_
-    RDB_IMAGE_t image_info_;
-    memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
+        char *image_data_ = NULL;
+        RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
 
-    if (NULL == image_data_) {
-        image_data_ = reinterpret_cast<char *>(malloc(image_info_.imgSize));
-    } else {
-        image_data_ = reinterpret_cast<char *>(realloc(image_data_, image_info_.imgSize));
-    }
-    // jump data header
-    memcpy(image_data_, reinterpret_cast<char *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
+        /// RDB image information of \see image_data_
+        RDB_IMAGE_t image_info_;
+        memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
 
-    if (image_info_.imgSize == image_info_.width * image_info_.height * 3) {
-        png::image<png::rgb_pixel> save_image(image_info_.width, image_info_.height);
-        unsigned int count = 0;
-        for (int32_t v = 0; v < image_info_.height; v++) {
-            for (int32_t u = 0; u < image_info_.width; u++) {
-                png::rgb_pixel val;
-                val.red = (unsigned char) image_data_[count++];
-                val.green = (unsigned char) image_data_[count++];
-                val.blue = (unsigned char) image_data_[count++];
-                //val.alpha = (unsigned char)image_data_[count++];
-                save_image.set_pixel(u, v, val);
-            }
+        if (NULL == image_data_) {
+            image_data_ = reinterpret_cast<char *>(malloc(image_info_.imgSize));
+        } else {
+            image_data_ = reinterpret_cast<char *>(realloc(image_data_, image_info_.imgSize));
         }
+        // jump data header
+        memcpy(image_data_, reinterpret_cast<char *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
 
-        //fprintf(stderr, "got a RGB image with %d channels\n", image_info_.imgSize / (image_info_.width * image_info_
-        //.height));
+        if (image_info_.imgSize == image_info_.width * image_info_.height * 3) {
+            png::image<png::rgb_pixel> save_image(image_info_.width, image_info_.height);
+            unsigned int count = 0;
+            for (int32_t v = 0; v < image_info_.height; v++) {
+                for (int32_t u = 0; u < image_info_.width; u++) {
+                    png::rgb_pixel val;
+                    val.red = (unsigned char) image_data_[count++];
+                    val.green = (unsigned char) image_data_[count++];
+                    val.blue = (unsigned char) image_data_[count++];
+                    //val.alpha = (unsigned char)image_data_[count++];
+                    save_image.set_pixel(u, v, val);
+                }
+            }
 
-        char file_name_image[50];
+            //fprintf(stderr, "got a RGB image with %d channels\n", image_info_.imgSize / (image_info_.width * image_info_
+            //.height));
 
-        if (simFrame >= IMAGE_SKIP_FACTOR_DYNAMIC) {
+            char file_name_image[50];
+
+            fprintf( stderr, "------------------------------------------------------------------------------------\n");
+            fprintf( stderr, "saving image at simFrame = %d, simTime = %.3f, dataSize = %d\n", simFrame, mSimTime, data->imgSize);
+            fprintf( stderr, "------------------------------------------------------------------------------------\n");
             sprintf(file_name_image, "000%03d_10.png", mImageCount);
             std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
             save_image.write(input_image_file_with_path);
             mImageCount++;
+
         }
-    } else {
-        fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize / (image_info_
-                                                                                           .width *
-                                                                                   image_info_.height));
+        else {
+            fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize / (image_info_
+                    .width *
+                    image_info_.height));
+        }
     }
 }
 

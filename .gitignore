@@ -28,6 +28,5 @@ release/
 *.o
 *.swp
 *.mat
-
 *.png
-
+*.avi

@@ -154,8 +154,8 @@ private:
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
-                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"35.000000\" right=\"15.000000\" bottom=\"15.000000\" top=\"15.000000\" /> "
-                    "   <Position dx=\"5.500000\" dy=\"0.000000\" dz=\"0.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"40.000000\" right=\"40.000000\" bottom=\"10.000000\" top=\"10.000000\" /> "
+                    "   <Position dx=\"2.000000\" dy=\"0.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "
                     "   <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"false\" /> "
@@ -188,12 +188,14 @@ private:
     //Rain
     const std::string environment_parameters_wet = "<Environment> <Friction value=\"1.000000\" /> <TimeOfDay value=\"39600\" headlights=\"off\" /> <Sky cloudState=\"4/8\" visibility=\"100000.000000\" /><Precipitation type=\"rain\" intensity=\"0.500000\" /><Road state=\"dry\" effectScale=\"0.600000\" /></Environment>";
 
-    std::string view_parameters_tethered = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosTether player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
+    std::string view_parameters_tethered_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> <PosTether player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string view_parameters_eyepoint = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
+    std::string view_parameters_eyepoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string view_parameters_sensorpoint = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
+    std::string view_parameters_sensorpoint_intrinsicparams = "<Camera name=\"VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"980\" focalY=\"980\" height=\"375\" near=\"0.100000\" principalX=\"621\" principalY=\"187\" width=\"1242\" /><PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
+
+    std::string view_parameters_sensorpoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"false\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
     std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
