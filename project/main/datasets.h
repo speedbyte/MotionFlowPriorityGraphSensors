@@ -25,7 +25,7 @@
 #define MAX_ITERATION_GT_SCENE_GENERATION_IMAGES MAX_ITERATION_RESULTS   // generate images. this cannot be more than vector
 
 #define MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC (MAX_ITERATION_RESULTS)*IMAGE_SKIP_FACTOR_DYNAMIC + IMAGE_SKIP_FACTOR_DYNAMIC*5  // generate always five images more than required.
-#define IMAGE_SKIP_FACTOR_DYNAMIC 10  // 10
+#define IMAGE_SKIP_FACTOR_DYNAMIC 1  // 10
 
 #define MAX_ITERATION_THETA 360
 #define MAX_SKIPS 2 // 1 means do not generate flow, 2 means generate base flow
@@ -34,6 +34,8 @@
 #define ANGLE_ERROR_TOLERANCE 5
 
 #define MAX_ALLOWED_OBJECTS 3
+
+#define MAX_DUMPS 10
 
 //#define STRETCH_HEIGHT 50
 //#define STRETCH_WIDTH 50

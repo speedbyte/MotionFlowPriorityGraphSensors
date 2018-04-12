@@ -230,6 +230,7 @@ $
      */
 
 
+    bool m_dumpFirstFrame = true;
     unsigned int mFirstIgnoredFrame = 65535;
     int          mLastNetworkFrame = -1;
 
@@ -261,7 +262,7 @@ $
 
     int          mLastImageId;
 
-    ushort mImageCount;
+    int mImageCount=-1;
 
     unsigned int mShmKey;      // key of the SHM segment
 
@@ -492,7 +493,7 @@ public:
 
         mLastImageId    = 0;
 
-        mImageCount = 0;
+        mImageCount = -1;
 
         mShmKey       = RDB_SHM_ID_IMG_GENERATOR_OUT;      // key of the SHM segment
 

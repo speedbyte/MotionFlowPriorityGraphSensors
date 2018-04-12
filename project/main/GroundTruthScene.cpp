@@ -632,7 +632,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                         break;
                     }
 
-                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC) {
+                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC+MAX_DUMPS) {
                         breaking = true;
                     }
 
@@ -661,7 +661,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                         }
 
                         //bool requestImage = (mLastNetworkFrame >= (mLastIGTriggerFrame + IMAGE_SKIP_FACTOR_DYNAMIC));
-                        bool requestImage = ((mLastNetworkFrame % IMAGE_SKIP_FACTOR_DYNAMIC*1000) == 0);
+                        bool requestImage = ((mLastNetworkFrame % IMAGE_SKIP_FACTOR_DYNAMIC*10000) == 0);
                         mLastNetworkFrame++;
 
                         if (requestImage) {
@@ -669,7 +669,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                             mLastIGTriggerFrame = mLastNetworkFrame;
                             mCheckForImage = true;
                             fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s at simFrame %d\n", mDeltaTime, requestImage ? "true" : "false", mSimFrame );
-                            sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, requestImage, 0.1);
+                            if ( m_dumpFirstFrame ) {
+                                sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, false, 0.01);
+                            }
+                            else {
+                                sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, true, 0.1);
+                            }
                         }
 
                         // calculate the timing statistics
@@ -685,7 +690,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                         mCheckForImage = !mHaveImage;
 
                         if (!mCheckForImage) {
-                            fprintf( stderr, "main: got it! at %d\n", mSimFrame );
+                            //fprintf( stderr, "main: got it! at %d\n", mSimFrame );
                             mHaveImage = false;
                         }
 
@@ -696,6 +701,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     if (haveNewFrame ) {
                         mSimTime += mDeltaTime;
                         mSimFrame++;
+                        if ( mSimFrame == MAX_DUMPS ) {
+                            m_dumpFirstFrame = false;
+                        }
                         haveNewFrame = false;
                         mHaveFirstFrame = true;
 
@@ -756,7 +764,7 @@ void GroundTruthSceneExternal::parseStartOfFrame(const double &simTime, const un
 void GroundTruthSceneExternal::parseEndOfFrame(const double &simTime, const unsigned int &simFrame) {
 
     //mLastNetworkFrame = simFrame;
-    fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
+    //fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
 /** ------ state of an object (may be extended by the next structure) ------- */
@@ -840,12 +848,13 @@ short &pkgId, const unsigned short &flags, const unsigned int &elemId,
     if ( m_environment == "none") {
 
         if ( data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR ) {
-            if ( mHaveFirstImage ) {
+            if ( !m_dumpFirstFrame && (mImageCount>=0) ) {
 
+                /*
                 fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                         data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
                                 .geo.dimY);
-
+*/
                 if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
 
                     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
@@ -857,27 +866,31 @@ short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                 }
                 if ( data->base.pos.type == RDB_COORD_TYPE_WINDOW )
                 {
+                    fprintf( stderr, "------------------------------------------------------------------------------------\n");
+                    fprintf( stderr, "saving ground truth for simFrame = %d, simTime %f\n", simFrame, simTime);
+                    fprintf( stderr, "------------------------------------------------------------------------------------\n");
+
                     position_pixel = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, float(data->base.pos.z));
                     dimension_pixel = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
                     offset_pixel = cv::Point2f((float) data->base.geo.offX, (float) data->base.geo.offY);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset_pixel, dimension_pixel);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset_pixel, dimension_pixel);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
                 else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
                     position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
                     orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
                     dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY, (float) data->base.geo.dimZ);
                     speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_realworld, speed_usk);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_realworld, speed_usk);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
                 else if ( data->base.pos.type == RDB_COORD_TYPE_INERTIAL ) {
                     position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
                     orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
                     dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY, (float) data->base.geo.dimZ);
                     speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_realworld, speed_inertial);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)(simFrame/IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_realworld, speed_inertial);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
             } else {
                 //std::cout << data->base.type << std::endl;
@@ -893,7 +906,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
     if (!data)
         return;
-    fprintf(stderr, "handleRDBitem: image at simFrame %d\n", simFrame);
+    //fprintf(stderr, "handleRDBitem: image at simFrame %d\n", simFrame);
     //fprintf(stderr, "    simTime = %.3lf, simFrame = %d, mLastShmFrame = %d\n", simTime, simFrame, getLastShmFrame());
     //fprintf(stderr, "    width / height = %d / %d\n", data->width, data->height);
     //fprintf(stderr, "    dataSize = %d\n", data->imgSize);
@@ -935,19 +948,22 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
                 }
             }
 
-            //fprintf(stderr, "got a RGB image with %d channels\n", image_info_.imgSize / (image_info_.width * image_info_
-            //.height));
-
             char file_name_image[50];
 
-            fprintf( stderr, "------------------------------------------------------------------------------------\n");
-            fprintf( stderr, "saving image at simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n", simFrame, mSimTime, data->imgSize, data->id);
-            fprintf( stderr, "------------------------------------------------------------------------------------\n");
-            sprintf(file_name_image, "000%03d_10.png", mImageCount);
-            std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
-            save_image.write(input_image_file_with_path);
-            mImageCount++;
-
+            if ( !m_dumpFirstFrame  ) {
+                fprintf( stderr, "------------------------------------------------------------------------------------\n");
+                fprintf( stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n", simFrame, simTime, data->imgSize, data->id);
+                fprintf( stderr, "------------------------------------------------------------------------------------\n");
+                mImageCount++;
+                sprintf(file_name_image, "000%03d_10.png", mImageCount);
+                std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
+                save_image.write(input_image_file_with_path);
+            }
+            else {
+                fprintf( stderr, "------------------------------------------------------------------------------------\n");
+                fprintf( stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n", simFrame, simTime, data->imgSize, data->id);
+                fprintf( stderr, "------------------------------------------------------------------------------------\n");
+            }
         }
         else {
             fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize / (image_info_.width * image_info_.height));
