@@ -230,6 +230,7 @@ $
      */
 
 
+    unsigned int mFirstIgnoredFrame = 65535;
     int          mLastNetworkFrame = -1;
 
     int          mLastIGTriggerFrame ;
@@ -515,6 +516,10 @@ public:
 
     void parseEntry( RDB_DRIVER_CTRL_t *data, const double & simTime, const unsigned int & simFrame, const
     unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &totalElem );
+
+    void parseEntry( RDB_TRIGGER_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
+            const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) override;
+
 
     ~GroundTruthSceneExternal(){
         std::cout << "killing previous GroundTruthScene object\n" ;

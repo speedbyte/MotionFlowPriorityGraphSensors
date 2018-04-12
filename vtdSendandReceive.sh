@@ -17,7 +17,7 @@ echo $PROJECT
 echo "this script pid = $$"
 SOURCE_DIR=$(pwd)
 echo $SOURCE_DIR
-VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.0/bin
+VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.1/bin
 VIRES_DATASET_DIR=$SOURCE_DIR/datasets/vires_dataset
 
 cd $VIRES_DIR 

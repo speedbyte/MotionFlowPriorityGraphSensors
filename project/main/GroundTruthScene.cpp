@@ -632,20 +632,20 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                         break;
                     }
 
+                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC) {
+                        breaking = true;
+                    }
+
                     readNetwork(m_moduleManagerSocket_Camera);  // this calls parseRDBMessage() in vires_common.cpp
 
                     readNetwork(m_moduleManagerSocket_Perfect);  // this calls parseRDBMessage() in vires_common.cpp
 
                     readNetwork(m_moduleManagerSocket_PerfectInertial);  // this calls parseRDBMessage() in vires_common.cpp
 
-                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC) {
-                        breaking = true;
-                    }
-
                     bool haveNewFrame = false;
 
-                    if (lastSimFrame < 0) {
-                        std::cerr << "Removing spurious images" << std::endl;
+                    if (mLastNetworkFrame < 0) {
+                        std::cerr << "Flushing images in shared memory" << std::endl;
                         checkShm();  //empty IG buffer of spurious images
                     } else {
                         haveNewFrame = (lastSimFrame != mLastNetworkFrame);
@@ -655,56 +655,51 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     if (!mHaveFirstImage || mHaveImage || haveNewFrame || !mHaveFirstFrame) {
                         // do not initialize too fast
-                        if (!mHaveFirstImage || !mHaveFirstFrame)
-                            usleep(100000);   // 10Hz
+                        if (!mHaveFirstImage || !mHaveFirstFrame) {
+                            // only in the beginning.
+                            usleep(100000);
+                        }
 
-                        bool requestImage = (mLastNetworkFrame >= (mLastIGTriggerFrame + IMAGE_SKIP_FACTOR_DYNAMIC));
+                        //bool requestImage = (mLastNetworkFrame >= (mLastIGTriggerFrame + IMAGE_SKIP_FACTOR_DYNAMIC));
+                        bool requestImage = ((mLastNetworkFrame % IMAGE_SKIP_FACTOR_DYNAMIC*1000) == 0);
+                        mLastNetworkFrame++;
 
                         if (requestImage) {
                             //std::cout << mLastNetworkFrame << " " << mLastIGTriggerFrame << std::endl;
                             mLastIGTriggerFrame = mLastNetworkFrame;
                             mCheckForImage = true;
+                            fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s at simFrame %d\n", mDeltaTime, requestImage ? "true" : "false", mSimFrame );
+                            sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, requestImage, 0.1);
                         }
 
-                        //fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s\n", mDeltaTime,
-                        //         requestImage ? "true" : "false" );
-                        sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, requestImage, mDeltaTime);
-
-                        // increase internal counters
-                        mSimTime += mDeltaTime;
-                        mSimFrame++;
-
                         // calculate the timing statistics
-                        if (mHaveImage)
+                        if (mHaveImage) {
                             //calcStatistics();
-
-                            mHaveImage = false;
+                        }
                     }
 
-
-                    // now read IG output
-                    if (mHaveImage)
-                        fprintf(stderr, "main: checking for IG image\n");
-
                     while (mCheckForImage) {
+
                         checkShm();
 
                         mCheckForImage = !mHaveImage;
 
-                        usleep(10);
-
                         if (!mCheckForImage) {
                             fprintf( stderr, "main: got it! at %d\n", mSimFrame );
+                            mHaveImage = false;
                         }
+
+                        usleep(10);
                     }
 
-                    if (haveNewFrame) {
-                        //fprintf( stderr, "main: new simulation frame (%d) available, mLastIGTriggerFrame = %d\n",
-                        //                 mLastNetworkFrame, mLastIGTriggerFrame );
-
+                    // increase internal counters
+                    if (haveNewFrame ) {
+                        mSimTime += mDeltaTime;
+                        mSimFrame++;
+                        haveNewFrame = false;
                         mHaveFirstFrame = true;
-                    }
 
+                    }
                     // has an image arrived or do the first frames need to be triggered
                     //(first image will arrive with a certain image_02_frame delay only)
 
@@ -744,15 +739,23 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 }
 
 
+void GroundTruthSceneExternal::parseEntry( RDB_TRIGGER_t *data, const double & simTime, const unsigned int &
+simFrame, const unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId,
+        const unsigned int & totalElem )
+{
+    fprintf(stderr, "RDBTrigger answer = %.3f, simFrame = %d\n", simTime, simFrame);
+}
+
+
 void GroundTruthSceneExternal::parseStartOfFrame(const double &simTime, const unsigned int &simFrame) {
     //fprintf(stderr, "I am in GroundTruthFlow %d\n,", RDB_PKG_ID_START_OF_FRAME);
     //mHaveFirstFrame = true;
-    fprintf(stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
+    //fprintf(stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
 void GroundTruthSceneExternal::parseEndOfFrame(const double &simTime, const unsigned int &simFrame) {
 
-    mLastNetworkFrame = simFrame;
+    //mLastNetworkFrame = simFrame;
     fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
@@ -837,7 +840,7 @@ short &pkgId, const unsigned short &flags, const unsigned int &elemId,
     if ( m_environment == "none") {
 
         if ( data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR ) {
-            if ((simFrame % IMAGE_SKIP_FACTOR_DYNAMIC == 0) && mHaveFirstImage  ) {
+            if ( mHaveFirstImage ) {
 
                 fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                         data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
@@ -905,6 +908,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
         char *image_data_ = NULL;
         RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
 
+
         /// RDB image information of \see image_data_
         RDB_IMAGE_t image_info_;
         memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
@@ -937,7 +941,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
             char file_name_image[50];
 
             fprintf( stderr, "------------------------------------------------------------------------------------\n");
-            fprintf( stderr, "saving image at simFrame = %d, simTime = %.3f, dataSize = %d\n", simFrame, mSimTime, data->imgSize);
+            fprintf( stderr, "saving image at simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n", simFrame, mSimTime, data->imgSize, data->id);
             fprintf( stderr, "------------------------------------------------------------------------------------\n");
             sprintf(file_name_image, "000%03d_10.png", mImageCount);
             std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
@@ -946,18 +950,17 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
         }
         else {
-            fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize / (image_info_
-                    .width *
-                    image_info_.height));
+            fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize / (image_info_.width * image_info_.height));
         }
+        mHaveImage      = true;
     }
     else {
-        std::cerr << "ignoring first image" << std::endl;
-        mHaveFirstImage = true;
+            if ( mFirstIgnoredFrame == simFrame ) {
+                mHaveFirstImage = true;
+            }
+            mFirstIgnoredFrame = simFrame;
+            std::cerr << "ignoring images from first frame" << std::endl;
     }
-
-    mHaveImage      = true;
-
 }
 
 
