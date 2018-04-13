@@ -50,8 +50,6 @@ public:
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                     (), getObjectId());
 
-            generate_obj_bounding_box();
-
             generate_obj_base_pixel_position_pixel_displacement(gt_data);
 
             beginGroundTruthGeneration();

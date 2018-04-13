@@ -82,6 +82,8 @@ public:
         std::cout << "End of generation" << std::endl;
     }
 
+    void calcBBFrom3DPosition();
+
 };
 
 class GroundTruthSceneInternal : public GroundTruthScene {

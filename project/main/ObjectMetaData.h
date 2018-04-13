@@ -84,8 +84,10 @@ public:
     //(KITTI convention is ry == 0 iff object is aligned with x-axis and pointing right)
     //rx: rotation around X-axis (pitch) in camera coordinates [-pi..pi]
     //rz: rotation around Z-axis (roll) in camera coordinates [-pi..pi]
-    struct object_rotation_rad { float rotation_ry_yaw_rad; float rotation_rx_pitch_rad; float rotation_rz_roll_rad; } m_object_rotation_rad;
-    struct object_rotation_inertial_rad { float rotation_ry_yaw_rad; float rotation_rx_pitch_rad; float rotation_rz_roll_rad; } m_object_rotation_inertial_rad;
+    struct object_rotation_rad { float rotation_rx_roll_rad; float rotation_ry_pitch_rad; float rotation_rz_yaw_rad;} m_object_rotation_rad;
+    struct object_rotation_inertial_rad { float rotation_rx_roll_rad; float rotation_ry_pitch_rad; float rotation_rz_yaw_rad; } m_object_rotation_inertial_rad;
+
+    struct object_distances { float sensor_to_obj; float total_distance_covered; } m_object_distances;
 
     //truncr: (changed in v1.3) object 2D truncation ratio in [0..1] (0: no truncation, 1: entirely truncated)
     bool truncr;
@@ -234,14 +236,15 @@ public:
 
     virtual void pushVisibility(bool visibility) {}
 
-    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point2f offset, cv::Point2f dimensions) {
+    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions) {
         //m_pixel_position.at(frameNumber) = position;
         m_gt_all.at(frameNumber).m_object_location_px.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_px.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_px.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_offset.offset_y = offset.y;
         m_gt_all.at(frameNumber).m_object_offset.offset_x = offset.x;
+        m_gt_all.at(frameNumber).m_object_offset.offset_y = offset.y;
+        m_gt_all.at(frameNumber).m_object_offset.offset_z = offset.z;
 
         m_gt_all.at(frameNumber).m_object_dimensions_px.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
@@ -252,9 +255,9 @@ public:
         m_gt_all.at(frameNumber).m_object_location_m.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_m.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_yaw_rad = orientation.x;
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_pitch_rad = orientation.y;
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rz_roll_rad = orientation.y;
+        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_roll_rad = orientation.x;
+        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_pitch_rad = orientation.y;
+        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rz_yaw_rad = orientation.y;
 
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;
@@ -270,9 +273,9 @@ public:
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_yaw_rad = orientation.x;
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_pitch_rad = orientation.y;
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rz_roll_rad = orientation.z;
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_roll_rad = orientation.x;
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_pitch_rad = orientation.y;
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rz_yaw_rad = orientation.z;
 
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;
