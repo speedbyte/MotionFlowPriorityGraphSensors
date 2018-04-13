@@ -113,58 +113,5 @@ void NoPosition::process(cv::Size frame_size) {
 
 };
 
-#if 0
-void ObjectMetaData::calcBBFrom3DPosition(int screen_width, int screen_height, cv::Point3d cam_pos, float fov_v, float pixSize = 2.2e-6){
-
-
-    cv::Point2d min(2000,2000), max(0,0);
-
-    //iterate over bounding points and add transformed points to path to print
-    for(cv::Point3d p: bounding_points_3d){
-
-
-
-        //transformation matrix for offset to center of roi and the 3d bounding box point p
-        QMatrix4x4 toPosition;
-        QQuaternion rot = getRealWorldOrientation().getRotation();  // hpr
-        toPosition.translate(rot * (p));
-
-        cv::Point3d objPositionRelativeToPerfectOrigin = cv::Point3d(m_gt_all.at(0).m_object_location_inertial_m.location_x_m, m_gt_all.at(0).m_object_location_inertial_m.location_y_m, m_gt_all.at(0).m_object_location_inertial_m.location_z_m);  // get real world position from perfect sensor
-
-        //first translate to camera pos
-        objPositionRelativetoCamera = toCamPos * objPositionRelativeToPerfectOrigin;
-
-        //then translate and rotate to 3d bounding box point
-        boundingBoxPositionRelativetoCamera = toPosition * objPositionRelativetoCamera;
-
-        //transform from sensor coordinates to camera coordinates
-        pos = cv::Point3d(boundingBoxPositionRelativetoCamera.y(), boundingBoxPositionRelativetoCamera.z(), boundingBoxPositionRelativetoCamera.x());
-
-        //scale 3D point back onto image
-        pos = pos * ((distToImagePlane * pxSize) /*m*/ / pos.z());
-        //convert meter to pixel
-        pos = pos / toMeter;
-        bounding_points_2d.push_back(cv::Point2d(width/2 - pos.x(), height/2 - pos.y()));
-    }
-    //get min and max for x, y to get the correct 2d bounding box
-    for(QPoint p : bounding_points_2d){
-        if(p.x() < min.x()){
-            min.setX(p.x());
-        }
-        if(p.y() < min.y()){
-            min.setY(p.y());
-        }
-        if(p.x() > max.x()){
-            max.setX(p.x());
-        }
-        if(p.y() > max.y()){
-            max.setY(p.y());
-        }
-    }
-    m_bb.setTopLeft(min);
-    m_bb.setBottomRight(max);
-}
-
-#endif
 
 

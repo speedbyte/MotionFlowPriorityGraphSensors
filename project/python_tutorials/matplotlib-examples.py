@@ -18,6 +18,9 @@ import matplotlib as mp
 from math import pi
 
 import random
+from matplotlib import pyplot
+from mpl_toolkits.mplot3d import Axes3D
+import random
 
 environment_list = ["none", "night"]
 
@@ -75,7 +78,42 @@ def histogram_image():
     plt.show()
 
 def threedplot():
-    
+
+    fig = pyplot.figure()
+    ax = Axes3D(fig)
+
+    list_box_points = list(
+    [-59.574017, 2470.1152, 9.5,
+    -61.094013, 2470.1152, 9.5,
+    -59.574017, 2467.6011, 9.5,
+    -61.094013, 2467.6011, 9.5,
+    -59.574017, 2470.1152, 10.98,
+    -61.094013, 2470.1152, 10.98,
+    -59.574017, 2467.6011, 10.98,
+    -61.094013, 2467.6011, 10.98])
+    sequence_containing_x_vals = list()
+    sequence_containing_y_vals = list()
+    sequence_containing_z_vals = list()
+
+    for n in range(len(list_box_points)/3):
+
+        print n
+        sequence_containing_x_vals.append(list_box_points[3*n]) #list(range(0, 100))
+        sequence_containing_y_vals.append(list_box_points[3*n+1])
+        sequence_containing_z_vals.append(list_box_points[3*n+2])
+        n = n+3
+
+    print sequence_containing_x_vals
+
+
+
+    #random.shuffle(sequence_containing_x_vals)
+    #random.shuffle(sequence_containing_y_vals)
+    #random.shuffle(sequence_containing_z_vals)
+
+    ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
+    pyplot.show()
+
     fig = plt.figure(figsize=plt.figaspect(0.5))
     ax = fig.add_subplot(1, 2, 1, projection='3d')
     # note this: you can skip rows!
@@ -275,10 +313,11 @@ if __name__ == '__main__':
     objp = np.zeros((6*7,3), np.float32)
     objp[:,:2] = np.mgrid[0:7,0:6].T.reshape(-1,2)
     print objp
+
     #histogram()
     #cam()
     #histogram_image()
-    #threedplot()
+    threedplot()
     #sphere()
     #criticalpoint()
     #lemniscate()
@@ -287,3 +326,4 @@ if __name__ == '__main__':
     #motionflow_vectorgraphs()
     #check()
     #vkitti()
+

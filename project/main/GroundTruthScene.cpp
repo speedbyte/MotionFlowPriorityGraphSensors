@@ -635,6 +635,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 bounding_points_3d.push_back(cv::Point3d(  dim_length/2, -dim_width/2, dim_height));
                 bounding_points_3d.push_back(cv::Point3d( -dim_length/2, -dim_width/2, dim_height));
                 */
+
                 cv::Point3f final;
 
                 // Translate to cam position
@@ -646,14 +647,22 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 // Vertices of bounding box with h,p,r = 0
                 final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(dim_length/2, dim_width/2, 0));
                 bounding_points_3d.push_back(final);
-                bounding_points_3d.push_back(cv::Point3d( cam_inertial_x + -dim_length/2,  cam_inertial_x +  dim_width/2, 0));
-                bounding_points_3d.push_back(cv::Point3d( cam_inertial_x +  dim_length/2,  cam_inertial_x + -dim_width/2, 0));
-                bounding_points_3d.push_back(cv::Point3d( cam_inertial_x + -dim_length/2,  cam_inertial_x + -dim_width/2, 0));
-                bounding_points_3d.push_back(cv::Point3d( cam_inertial_x +  dim_length/2,  cam_inertial_x +  dim_width/2, dim_height));
-                bounding_points_3d.push_back(cv::Point3d( cam_inertial_x + -dim_length/2,  cam_inertial_x +  dim_width/2, dim_height));
-                bounding_points_3d.push_back(cv::Point3d( cam_inertial_x +  dim_length/2,  cam_inertial_x + -dim_width/2, dim_height));
-                bounding_points_3d.push_back(cv::Point3d( cam_inertial_x + -dim_length/2,  cam_inertial_x + -dim_width/2, dim_height));
+                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f( -dim_length/2,   dim_width/2, 0));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(  dim_length/2,  -dim_width/2, 0));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f( -dim_length/2,  -dim_width/2, 0));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(  dim_length/2,   dim_width/2, dim_height));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f( -dim_length/2,   dim_width/2, dim_height));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(  dim_length/2,  -dim_width/2, dim_height));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f( -dim_length/2,  -dim_width/2, dim_height));
+                bounding_points_3d.push_back(final);
 
+                cv::Mat image(1242,375,CV_8UC3);
 
                 // Rotate the points.
                 // Rotation matrix. Since this is a passive transformation ( axis rotation ), we negate the angle.
@@ -694,12 +703,20 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 cam_rotated_y = cam_rotated(1);
                 cam_rotated_z = cam_rotated(2);
 
-
                 float distToImagePlane = 0.5 *  Dataset::getFrameSize().height / tan(40.0 * M_PI / 180 /2); // [px] from camera position.
 
                 float pxSize = 2.2e-6; // [m/px]
 
-                cv::Point3d toMeter = cv::Point3d(pxSize, pxSize, 1);
+                cv::Point3f toMeter = cv::Point3d(pxSize, pxSize, 1);
+
+                //transform from sensor coordinates to camera coordinates
+                cv::Point3f pos = cv::Point3f(cam_rotated_y, cam_rotated_z, cam_rotated_x);
+
+                //scale 3D point back onto image
+                pos = pos * ((distToImagePlane * pxSize) /*m*/ / pos.z);
+
+                //convert meter to pixel
+                pos = cv::Point3f(pos.x / toMeter.x, pos.y/toMeter.y, pos.z/toMeter.z);
 
                 auto dist = cv::norm(cv::Point2f(cam_rotated_x, cam_rotated_y));
                 auto dist_usk = cv::norm(cv::Point2f( m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
