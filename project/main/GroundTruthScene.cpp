@@ -1,4 +1,4 @@
-//
+    //
 // Created by veikas on 27.01.18.
 //
 
@@ -140,7 +140,7 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
         sprintf (temp_str_fs, "frame_skip_%03d", frame_skip);
         //write_fs << temp_str_fs << "[";
 
-        unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC;
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
