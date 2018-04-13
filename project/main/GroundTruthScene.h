@@ -84,6 +84,8 @@ public:
 
     void calcBBFrom3DPosition();
 
+    void playground();
+
 };
 
 class GroundTruthSceneInternal : public GroundTruthScene {
