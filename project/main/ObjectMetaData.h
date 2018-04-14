@@ -47,6 +47,8 @@ typedef struct object_realworld_dim_m { float dim_width_m; float dim_height_m; f
 
 typedef struct object_rotation_inertial_rad { float rotation_rx_roll_rad; float rotation_ry_pitch_rad; float rotation_rz_yaw_rad; } object_rotation_inertial_rad_str;
 
+//offset. Shift of point from the center of mass
+typedef struct object_offset_m { float offset_x; float offset_y; float offset_z; } object_offset_m_str;
 
 
 class STRUCT_GT_ALL {
@@ -116,8 +118,7 @@ public:
     //color: the name of the color of the object
     std::string color;
 
-    //offset. where is the position determined on the object ( center of gravity )
-    struct object_offset_m { float offset_x; float offset_y; float offset_z; } m_object_offset;
+    object_offset_m_str m_object_offset_m;
 
     //speed of the object
     struct object_speed_m { float x; float y; float z; } m_object_speed;
@@ -251,9 +252,9 @@ public:
         m_gt_all.at(frameNumber).m_object_location_px.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_px.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_offset.offset_x = offset.x;
-        m_gt_all.at(frameNumber).m_object_offset.offset_y = offset.y;
-        m_gt_all.at(frameNumber).m_object_offset.offset_z = offset.z;
+        m_gt_all.at(frameNumber).m_object_offset_m.offset_x = offset.x;
+        m_gt_all.at(frameNumber).m_object_offset_m.offset_y = offset.y;
+        m_gt_all.at(frameNumber).m_object_offset_m.offset_z = offset.z;
 
         m_gt_all.at(frameNumber).m_object_dimensions_px.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
@@ -287,9 +288,9 @@ public:
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_roll_rad = orientation.x;
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_pitch_rad = orientation.y;
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rz_yaw_rad = orientation.z;
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rz_yaw_rad = orientation.x; //h
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_pitch_rad = orientation.y; //p
+        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_roll_rad = orientation.z; //r
 
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;

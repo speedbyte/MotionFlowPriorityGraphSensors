@@ -42,6 +42,10 @@ typedef struct sensor_location_carrier_m { float location_x_m; float location_y_
 
 typedef struct sensor_rotation_carrier_rad { float rotation_rx_roll_rad; float rotation_ry_pitch_rad; float rotation_rz_yaw_rad; } sensor_rotation_carrier_rad_str;
 
+//offset. Shift of point from the center of mass
+typedef struct sensor_offset_m { float offset_x; float offset_y; float offset_z; } sensor_offset_m_str;
+
+typedef struct sensor_fov_rad { float horizontal; float vertical; float horizontal_offset; float vertical_offset; } sensor_fov_rad_str;
 
 
 class STRUCT_GT_SENSORS_ALL {
@@ -107,8 +111,9 @@ public:
     //color: the name of the color of the sensor
     std::string color;
 
-    //offset. where is the position determined on the sensor ( center of gravity )
-    struct sensor_offset_m { float offset_x; float offset_y; float offset_z; } m_sensor_offset;
+    sensor_offset_m_str m_sensor_offset_m;
+
+    sensor_fov_rad_str m_sensor_fov_rad;
 
     /*
      Remarks about 3D information
@@ -213,24 +218,26 @@ public:
 
     virtual void pushVisibility(bool visibility) {}
 
-    void atFrameNumberSensorState(ushort frameNumber, cv::Point3f position_carrier, cv::Point3f orientation_carrier,  cv::Point3f orientation_sensor, cv::Point3f offset_sensor ) {
+    void atFrameNumberSensorState(ushort frameNumber, cv::Point3f position_carrier, cv::Point3f orientation_carrier,  cv::Point3f orientation_sensor, cv::Point3f offset_sensor, cv::Point2f fov ) {
 
         m_sensor_gt_all.at(frameNumber).m_sensor_location_carrier_m.location_x_m = position_carrier.x;
         m_sensor_gt_all.at(frameNumber).m_sensor_location_carrier_m.location_y_m = position_carrier.y;
         m_sensor_gt_all.at(frameNumber).m_sensor_location_carrier_m.location_z_m = position_carrier.z;
 
-        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad = orientation_carrier.x;
-        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad = orientation_carrier.y;
-        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad = orientation_carrier.z;
+        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad = orientation_carrier.x; //h
+        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad = orientation_carrier.y; //p
+        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad = orientation_carrier.z; //r
 
-
-        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_rad.rotation_rx_roll_rad = orientation_sensor.x;
+        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_rad.rotation_rz_yaw_rad = orientation_sensor.x;
         m_sensor_gt_all.at(frameNumber).m_sensor_rotation_rad.rotation_ry_pitch_rad = orientation_sensor.y;
-        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_rad.rotation_rz_yaw_rad = orientation_sensor.z;
+        m_sensor_gt_all.at(frameNumber).m_sensor_rotation_rad.rotation_rx_roll_rad = orientation_sensor.z;
 
-        m_sensor_gt_all.at(frameNumber).m_sensor_offset.offset_x = offset_sensor.x;
-        m_sensor_gt_all.at(frameNumber).m_sensor_offset.offset_y = offset_sensor.y;
-        m_sensor_gt_all.at(frameNumber).m_sensor_offset.offset_z = offset_sensor.z;
+        m_sensor_gt_all.at(frameNumber).m_sensor_offset_m.offset_x = offset_sensor.x;
+        m_sensor_gt_all.at(frameNumber).m_sensor_offset_m.offset_y = offset_sensor.y;
+        m_sensor_gt_all.at(frameNumber).m_sensor_offset_m.offset_z = offset_sensor.z;
+
+        m_sensor_gt_all.at(frameNumber).m_sensor_fov_rad.horizontal = fov.x;
+        m_sensor_gt_all.at(frameNumber).m_sensor_fov_rad.vertical = fov.y;
 
 
     }
