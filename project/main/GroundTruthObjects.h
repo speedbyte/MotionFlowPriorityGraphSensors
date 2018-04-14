@@ -78,9 +78,16 @@ public:
         return m_image_data_and_shape;
     }
 
-    void setBoundingBoxPoints(ushort frame_skip, ushort frameNumber, cv::Point2f bbox_points) {
+    void setBoundingBoxPoints(ushort frame_skip, ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
 
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_left_px = bbox_points;
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(0);
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(1);
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(2);
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(3);
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(4);
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(5);
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(6);
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(7);
 
     }
 

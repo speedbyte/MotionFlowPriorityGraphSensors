@@ -1,4 +1,4 @@
-    //
+//
 // Created by veikas on 27.01.18.
 //
 
@@ -36,8 +36,7 @@ void GroundTruthScene::visualiseBoundingBox(void) {
 
     for (int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++) {
 
-        for (ushort frame_count = 1; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++)
-        {
+        for (ushort frame_count = 1; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
             //ushort frame_count = 3;
 
             std::cout << "frame_count " << frame_count << std::endl;
@@ -64,7 +63,7 @@ void GroundTruthScene::visualiseBoundingBox(void) {
                     //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_count).m_object_dimensions_px.m_object_realworld_dim_m.dim_length_m_m/2))),
                     cv::Rect boundingbox = cv::Rect(
                             cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
-                                    frame_skip - 1).at(frame_count).m_object_location_px.location_x_m-
+                                    frame_skip - 1).at(frame_count).m_object_location_px.location_x_m -
                                     cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
                                             frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m)),
                             cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
@@ -76,14 +75,28 @@ void GroundTruthScene::visualiseBoundingBox(void) {
 
                     //cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
 
-                    cv::circle(tempGroundTruthImage, cv::Point2f(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
-                            frame_skip - 1).at(frame_count).m_object_location_px.location_x_m, m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
-                            frame_skip - 1).at(frame_count).m_object_location_px.location_y_m), 1.5, cv::Scalar(0,255,0), 3, 8);
+                    cv::circle(tempGroundTruthImage,
+                               cv::Point2f(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                                       frame_skip - 1).at(frame_count).m_object_location_px.location_x_m,
+                                           m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                                                   frame_skip - 1).at(frame_count).m_object_location_px.location_y_m),
+                               1.5, cv::Scalar(0, 255, 0), 3, 8);
 
-                    cv::circle(tempGroundTruthImage, cv::Point2f(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
-                            frame_skip - 1).at(frame_count).m_bounding_box.bb_left_px.x, m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
-                            frame_skip - 1).at(frame_count).m_bounding_box.bb_left_px.y), 3, cv::Scalar(0,0,255), 3, 8);
 
+                    std::vector<cv::Point2f> box = {
+                            m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_lower_bottom_px,
+                            m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_lower_left_px,
+                            m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_lower_top_px,
+                            m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_lower_right_px,
+                            m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_higher_bottom_px,
+                            m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_higher_left_px,
+                            m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_higher_top_px,
+                            m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_higher_right_px
+                    };
+
+                    for ( auto i = 0; i < 3; i++ ) {
+                        cv::line(tempGroundTruthImage, box.at(i), box.at(i+1), cv::Scalar(0, 0, 255),2);
+                    }
                 }
             }
 
@@ -101,9 +114,9 @@ void GroundTruthScene::prepare_directories() {
 
     m_groundtruthpath = Dataset::getGroundTruthPath(); // data/stereo_flow
 
-    m_generatepath = m_groundtruthpath.string() + "/" +  m_environment + "/";
+    m_generatepath = m_groundtruthpath.string() + "/" + m_environment + "/";
 
-    if ( m_regenerate_yaml_file ) {
+    if (m_regenerate_yaml_file) {
         if (!m_datasetpath.string().compare(CPP_DATASET_PATH) || !m_datasetpath.string().compare(VIRES_DATASET_PATH)) {
 
             std::cout << "prepare gt_scene directories" << std::endl;
@@ -125,8 +138,7 @@ void GroundTruthScene::prepare_directories() {
 
             }
         }
-    }
-    else {
+    } else {
         // post processing step
         boost::filesystem::path bbox_dir = m_generatepath.string() + "bounding_box/";
         if (boost::filesystem::exists(m_generatepath)) {
@@ -140,104 +152,148 @@ void GroundTruthScene::prepare_directories() {
 void GroundTruthScene::writePositionInYaml(std::string suffix) {
 
     cv::FileStorage write_fs;
-    write_fs.open("../position_"+suffix+".yml", cv::FileStorage::WRITE);
+    write_fs.open("../position_" + suffix + ".yml", cv::FileStorage::WRITE);
 
-    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        std::cout << "write yaml file for frame_skip  " << (frame_skip-1) << std::endl;
+        std::cout << "write yaml file for frame_skip  " << (frame_skip - 1) << std::endl;
 
         char temp_str_fs[20];
-        sprintf (temp_str_fs, "frame_skip_%03d", frame_skip);
+        sprintf(temp_str_fs, "frame_skip_%03d", frame_skip);
         //write_fs << temp_str_fs << "[";
 
         unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC;
-        assert(FRAME_COUNT>0);
+        assert(FRAME_COUNT > 0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char temp_str_fc[20];
-            sprintf (temp_str_fc, "frame_count_%03d", frame_count);
+            sprintf(temp_str_fc, "frame_count_%03d", frame_count);
             write_fs << temp_str_fc << "[";
-            for ( int i = 0; i< m_list_gt_objects.size(); i++) {
+            for (int i = 0; i < m_list_gt_objects.size(); i++) {
                 write_fs
 
                         << "{:" << "name" << m_list_gt_objects.at(i).getObjectName()
 
                         << "visible" << m_ptr_customObjectMetaDataList.at(i)->getVisibility().at(frame_count)
 
-                        << "x_camera" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_px.location_x_m
-                        << "y_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_px.location_y_m
-                        << "z_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_px.location_z_m
+                        << "x_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_px.location_x_m
+                        << "y_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_px.location_y_m
+                        << "z_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_px.location_z_m
 
-                        << "x_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_inertial_m.location_x_m
-                        << "y_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_inertial_m.location_y_m
-                        << "z_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_inertial_m.location_z_m
+                        << "x_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_inertial_m.location_x_m
+                        << "y_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_inertial_m.location_y_m
+                        << "z_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_inertial_m.location_z_m
 
-                        << "x_usk" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_m.location_x_m
-                        << "y_usk" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_m.location_y_m
-                        << "z_usk" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_m.location_z_m
+                        << "x_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_m.location_x_m
+                        << "y_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_m.location_y_m
+                        << "z_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_location_m.location_z_m
 
-                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m
-                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m
+                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_dimensions_px.dim_width_m
+                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_dimensions_px.dim_height_m
 
-                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_realworld_dim_m.dim_width_m
-                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_realworld_dim_m.dim_height_m
-                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_realworld_dim_m.dim_length_m
+                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_realworld_dim_m.dim_width_m
+                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_realworld_dim_m.dim_height_m
+                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_realworld_dim_m.dim_length_m
 
-                        << "speed_x_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.x
-                        << "speed_y_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.y
-                        << "speed_z_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.z
+                        << "speed_x_inertial"
+                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.x
+                        << "speed_y_inertial"
+                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.y
+                        << "speed_z_inertial"
+                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.z
 
-                        << "speed_x" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed.x
-                        << "speed_y" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed.y
+                        << "speed_x" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed.x
+                        << "speed_y" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed.y
 
-                        << "off_x" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_x
-                        << "off_y" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_y
-                        << "off_z" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_z
+                        << "off_x"
+                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_x
+                        << "off_y"
+                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_y
+                        << "off_z"
+                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_z
 
-                        << "h_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_rotation_inertial_rad.rotation_rz_yaw_rad
-                        << "p_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_rotation_inertial_rad.rotation_ry_pitch_rad
-                        << "r_inertial" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_rotation_inertial_rad.rotation_rx_roll_rad
+                        << "h_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_rotation_inertial_rad.rotation_rz_yaw_rad
+                        << "p_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_rotation_inertial_rad.rotation_ry_pitch_rad
+                        << "r_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_rotation_inertial_rad.rotation_rx_roll_rad
 
-                        << "h_usk" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_rotation_rad.rotation_rz_yaw_rad
-                        << "p_usk" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_rotation_rad.rotation_ry_pitch_rad
-                        << "r_usk" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_rotation_rad.rotation_rx_roll_rad
+                        << "h_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_rotation_rad.rotation_rz_yaw_rad
+                        << "p_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_rotation_rad.rotation_ry_pitch_rad
+                        << "r_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_rotation_rad.rotation_rx_roll_rad
 
-                        << "dist_cam_to_obj" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_distances.sensor_to_obj
-                        << "total_distance_covered" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_distances.total_distance_covered
+                        << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_distances.sensor_to_obj
+                        << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        frame_count).m_object_distances.total_distance_covered
 
                         << "}";  //dont close the brace yet
             }
-            for ( int i = 0; i< m_list_gt_sensors.size(); i++) {
+            for (int i = 0; i < m_list_gt_sensors.size(); i++) {
                 write_fs
 
                         << "{:" << "name" << m_list_gt_sensors.at(i).getSensorName()
 
                         << "visible" << m_ptr_customSensorMetaDataList.at(i)->getVisibility().at(frame_count)
 
-                        << "x_carrier" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_carrier_m.location_x_m
-                        << "y_carrier" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_carrier_m.location_y_m
-                        << "z_carrier" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_carrier_m.location_z_m
+                        << "x_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_location_carrier_m.location_x_m
+                        << "y_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_location_carrier_m.location_y_m
+                        << "z_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_location_carrier_m.location_z_m
 
                         //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_m.location_x_m
                         //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_m.location_y_m
                         //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_m.location_z_m
 
-                        << "h_carrier" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad
-                        << "p_carrier" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad
-                        << "r_carrier" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad
+                        << "h_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad
+                        << "p_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad
+                        << "r_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad
 
-                        << "h_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_rotation_rad.rotation_rz_yaw_rad
-                        << "p_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_rotation_rad.rotation_ry_pitch_rad
-                        << "r_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_rotation_rad.rotation_rx_roll_rad
+                        << "h_sensor" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_rotation_rad.rotation_rz_yaw_rad
+                        << "p_sensor" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_rotation_rad.rotation_ry_pitch_rad
+                        << "r_sensor" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_rotation_rad.rotation_rx_roll_rad
 
-                        << "off_x_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_x
-                        << "off_y_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_y
-                        << "off_z_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_z
+                        << "off_x_sensor"
+                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_x
+                        << "off_y_sensor"
+                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_y
+                        << "off_z_sensor"
+                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_z
 
-                        << "fov_horizontal" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_fov_rad.horizontal
-                        << "fov_vertical" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_fov_rad.vertical
-                        << "fov_horizontal_off" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_fov_rad.horizontal_offset
-                        << "fov_vertical_off" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_fov_rad.vertical_offset
+                        << "fov_horizontal"
+                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_fov_rad.horizontal
+                        << "fov_vertical"
+                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_fov_rad.vertical
+                        << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_fov_rad.horizontal_offset
+                        << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        frame_count).m_sensor_fov_rad.vertical_offset
 
                         << "}";
             }
@@ -265,102 +321,144 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
 
-    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         //std::string temp_str = "frame_skip" + frame_skip;
         char temp_str_fs[20];
-        sprintf (temp_str_fs, "frame_skip_%03d", frame_skip);
-        std::cout << "read yaml file for frame_skip " << (frame_skip-1) << std::endl;
+        sprintf(temp_str_fs, "frame_skip_%03d", frame_skip);
+        std::cout << "read yaml file for frame_skip " << (frame_skip - 1) << std::endl;
         //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
         unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;
-        assert(FRAME_COUNT>0);
+        assert(FRAME_COUNT > 0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
             char temp_str_fc[20];
             sprintf(temp_str_fc, "frame_count_%03d", frame_count);
             file_node = fs[temp_str_fc];
-            if ( file_node.isNone() || file_node.empty() ) {
+            if (file_node.isNone() || file_node.empty()) {
                 std::cout << temp_str_fc << " cannot be found" << std::endl;
-            }
-            else {
+            } else {
 
                 //std::cout << file_node.size() << " found" << std::endl;
                 file_node_iterator_begin = file_node.begin();
                 file_node_iterator_end = file_node.end();
 
-                for ( file_node_iterator = file_node_iterator_begin; file_node_iterator != file_node_iterator_end;
-                        file_node_iterator++) {
+                for (file_node_iterator = file_node_iterator_begin; file_node_iterator != file_node_iterator_end;
+                     file_node_iterator++) {
 
-                    if ( ((*file_node_iterator)["name"].string()).find("Sensor") == std::string::npos ) {
+                    if (((*file_node_iterator)["name"].string()).find("Sensor") == std::string::npos) {
 
-                        if ( m_mapObjectNameToObjectMetaData.count((*file_node_iterator)["name"].string()) == 0 ) {
+                        if (m_mapObjectNameToObjectMetaData.count((*file_node_iterator)["name"].string()) == 0) {
                             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
-                            m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(m_objectCount);
-                            m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName((*file_node_iterator)["name"].string());
-                            Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
+                            m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(
+                                    m_objectCount);
+                            m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(
+                                    (*file_node_iterator)["name"].string());
+                            Rectangle rectangle(Dataset::getFrameSize().width,
+                                                Dataset::getFrameSize().height); // width, height
                             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
-                            m_objectCount+=1;
+                            m_objectCount += 1;
                         }
 
-                        std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x_camera"] << " " << (double)(*file_node_iterator)["y_camera"] << std::endl;
+                        std::cout << (*file_node_iterator)["name"].string() << " "
+                                  << (double) (*file_node_iterator)["x_camera"] << " "
+                                  << (double) (*file_node_iterator)["y_camera"] << std::endl;
 
-                        position_pixel = cv::Point3f((double)(*file_node_iterator)["x_camera"], (double)(*file_node_iterator)["y_camera"], (double)(*file_node_iterator)["z_camera"]);
+                        position_pixel = cv::Point3f((double) (*file_node_iterator)["x_camera"],
+                                                     (double) (*file_node_iterator)["y_camera"],
+                                                     (double) (*file_node_iterator)["z_camera"]);
 
-                        position_inertial = cv::Point3f((double)(*file_node_iterator)["x_inertial"], (double)(*file_node_iterator)["y_inertial"], (double)(*file_node_iterator)["z_inertial"]);
+                        position_inertial = cv::Point3f((double) (*file_node_iterator)["x_inertial"],
+                                                        (double) (*file_node_iterator)["y_inertial"],
+                                                        (double) (*file_node_iterator)["z_inertial"]);
 
-                        position_usk = cv::Point3f((double)(*file_node_iterator)["x_usk"], (double)(*file_node_iterator)["y_usk"], (double)(*file_node_iterator)["z_usk"]);
+                        position_usk = cv::Point3f((double) (*file_node_iterator)["x_usk"],
+                                                   (double) (*file_node_iterator)["y_usk"],
+                                                   (double) (*file_node_iterator)["z_usk"]);
 
-                        dimension_pixel = cv::Point2f((int)(*file_node_iterator)["dim_x_camera"], (int)(*file_node_iterator)["dim_y_camera"]);
+                        dimension_pixel = cv::Point2f((int) (*file_node_iterator)["dim_x_camera"],
+                                                      (int) (*file_node_iterator)["dim_y_camera"]);
 
-                        dimension_realworld = cv::Point3f((double)(*file_node_iterator)["dim_x_realworld"], (double)(*file_node_iterator)["dim_y_realworld"], (double)(*file_node_iterator)["dim_z_realworld"]);
+                        dimension_realworld = cv::Point3f((double) (*file_node_iterator)["dim_x_realworld"],
+                                                          (double) (*file_node_iterator)["dim_y_realworld"],
+                                                          (double) (*file_node_iterator)["dim_z_realworld"]);
 
-                        speed_inertial = cv::Point2f((int)(*file_node_iterator)["speed_inertial"], (int)(*file_node_iterator)["speed_inertial"]);
+                        speed_inertial = cv::Point2f((int) (*file_node_iterator)["speed_inertial"],
+                                                     (int) (*file_node_iterator)["speed_inertial"]);
 
-                        speed_usk = cv::Point2f((int)(*file_node_iterator)["speed_x"], (int)(*file_node_iterator)["speed_y"]);
+                        speed_usk = cv::Point2f((int) (*file_node_iterator)["speed_x"],
+                                                (int) (*file_node_iterator)["speed_y"]);
 
-                        offset = cv::Point3f((double)(*file_node_iterator)["off_x"], (double)(*file_node_iterator)["off_y"], (double)(*file_node_iterator)["off_z"]);
+                        offset = cv::Point3f((double) (*file_node_iterator)["off_x"],
+                                             (double) (*file_node_iterator)["off_y"],
+                                             (double) (*file_node_iterator)["off_z"]);
 
-                        orientation_inertial = cv::Point3f((double)(*file_node_iterator)["h_inertial"], (double)(*file_node_iterator)["p_inertial"], (double)(*file_node_iterator)["r_inertial"]);
+                        orientation_inertial = cv::Point3f((double) (*file_node_iterator)["h_inertial"],
+                                                           (double) (*file_node_iterator)["p_inertial"],
+                                                           (double) (*file_node_iterator)["r_inertial"]);
 
-                        orientation_usk = cv::Point3f((double)(*file_node_iterator)["h_usk"], (double)(*file_node_iterator)["p_usk"], (double)(*file_node_iterator)["r_usk"]);
+                        orientation_usk = cv::Point3f((double) (*file_node_iterator)["h_usk"],
+                                                      (double) (*file_node_iterator)["p_usk"],
+                                                      (double) (*file_node_iterator)["r_usk"]);
 
-                        totalDistanceTravelled = (float)(*file_node_iterator)["total_distance_covered"];
+                        totalDistanceTravelled = (float) (*file_node_iterator)["total_distance_covered"];
 
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(frame_count, position_pixel, offset, dimension_pixel, totalDistanceTravelled);
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk, dimension_realworld, speed_usk, totalDistanceTravelled);
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(frame_count, position_inertial, orientation_inertial, dimension_realworld, speed_inertial, totalDistanceTravelled);
+                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(
+                                frame_count, position_pixel, offset, dimension_pixel, totalDistanceTravelled);
+                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(
+                                frame_count, position_usk, orientation_usk, dimension_realworld, speed_usk,
+                                totalDistanceTravelled);
+                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(
+                                frame_count, position_inertial, orientation_inertial, dimension_realworld,
+                                speed_inertial, totalDistanceTravelled);
 
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(frame_count, (int)(*file_node_iterator)["visible"]);
+                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
+                                frame_count, (int) (*file_node_iterator)["visible"]);
 
                         position_inertial_pre = position_inertial;
                         position_pixel_pre = position_pixel;
                         position_usk_pre = position_usk;
 
-                    }
-                    else {
-                        if ( m_mapSensorNameToSensorMetaData.count((*file_node_iterator)["name"].string()) == 0 ) {
+                    } else {
+                        if (m_mapSensorNameToSensorMetaData.count((*file_node_iterator)["name"].string()) == 0) {
                             m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
-                            m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
-                            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName((*file_node_iterator)["name"].string());
-                            m_sensorCount+=1;
+                            m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customSensorMetaDataList.at(
+                                    m_sensorCount);
+                            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(
+                                    (*file_node_iterator)["name"].string());
+                            m_sensorCount += 1;
                         }
 
-                        std::cout << (*file_node_iterator)["name"].string() << " " << (double)(*file_node_iterator)["x_carrier"] << " " << (double)(*file_node_iterator)["y_carrier"] << std::endl;
+                        std::cout << (*file_node_iterator)["name"].string() << " "
+                                  << (double) (*file_node_iterator)["x_carrier"] << " "
+                                  << (double) (*file_node_iterator)["y_carrier"] << std::endl;
 
-                        position_inertial = cv::Point3f((double)(*file_node_iterator)["x_carrier"], (double)(*file_node_iterator)["y_carrier"], (double)(*file_node_iterator)["z_carrier"]);
+                        position_inertial = cv::Point3f((double) (*file_node_iterator)["x_carrier"],
+                                                        (double) (*file_node_iterator)["y_carrier"],
+                                                        (double) (*file_node_iterator)["z_carrier"]);
 
-                        offset = cv::Point3f((double)(*file_node_iterator)["off_x_sensor"], (double)(*file_node_iterator)["off_y_sensor"], (double)(*file_node_iterator)["off_z_sensor"]);
+                        offset = cv::Point3f((double) (*file_node_iterator)["off_x_sensor"],
+                                             (double) (*file_node_iterator)["off_y_sensor"],
+                                             (double) (*file_node_iterator)["off_z_sensor"]);
 
-                        orientation_inertial = cv::Point3f((double)(*file_node_iterator)["h_carrier"], (double)(*file_node_iterator)["p_carrier"], (double)(*file_node_iterator)["r_carrier"]);
+                        orientation_inertial = cv::Point3f((double) (*file_node_iterator)["h_carrier"],
+                                                           (double) (*file_node_iterator)["p_carrier"],
+                                                           (double) (*file_node_iterator)["r_carrier"]);
 
-                        orientation_usk = cv::Point3f((double)(*file_node_iterator)["h_sensor"], (double)(*file_node_iterator)["p_sensor"], (double)(*file_node_iterator)["r_sensor"]);
+                        orientation_usk = cv::Point3f((double) (*file_node_iterator)["h_sensor"],
+                                                      (double) (*file_node_iterator)["p_sensor"],
+                                                      (double) (*file_node_iterator)["r_sensor"]);
 
-                        sensor_fov = cv::Point2f((double)(*file_node_iterator)["fov_horizontal"], (double)(*file_node_iterator)["fov_vertical"]);
+                        sensor_fov = cv::Point2f((double) (*file_node_iterator)["fov_horizontal"],
+                                                 (double) (*file_node_iterator)["fov_vertical"]);
 
-                        (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberSensorState(frame_count, position_inertial, orientation_inertial, orientation_usk, offset, sensor_fov);
+                        (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberSensorState(
+                                frame_count, position_inertial, orientation_inertial, orientation_usk, offset,
+                                sensor_fov);
 
-                        (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(frame_count, (int)(*file_node_iterator)["visible"]);
+                        (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
+                                frame_count, (int) (*file_node_iterator)["visible"]);
                     }
                 }
             }
@@ -384,20 +482,19 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     ColorfulNoise colorfulNoise;
 
-    if ( m_environment == "none") {
+    if (m_environment == "none") {
 
 
-        if ( !m_regenerate_yaml_file  ) { // dont generate, just read
+        if (!m_regenerate_yaml_file) { // dont generate, just read
 
             readPositionFromFile("../position_cpp.yml");
 
             ushort map_pair_count = 0;
-            for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
+            for (const auto &myPair : m_mapObjectNameToObjectMetaData) {
                 std::cout << myPair.first << "\n";
                 map_pair_count++;
             }
-        }
-        else { // genreate yaml file
+        } else { // genreate yaml file
             boost::filesystem::remove("../position_cpp.yml");
 
             Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
@@ -416,20 +513,25 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         }
 
-        for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
+        for (auto i = 0; i < m_ptr_customObjectMetaDataList.size(); i++) {
 
-            GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(i)->getObjectShape(), *m_ptr_customObjectMetaDataList.at(i), m_ptr_customObjectMetaDataList.at(i)->getObjectStartPoint(), colorfulNoise, m_ptr_customObjectMetaDataList.at(i)->getObjectName());
+            GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(i)->getObjectShape(),
+                                      *m_ptr_customObjectMetaDataList.at(i),
+                                      m_ptr_customObjectMetaDataList.at(i)->getObjectStartPoint(), colorfulNoise,
+                                      m_ptr_customObjectMetaDataList.at(i)->getObjectName());
             m_list_gt_objects.push_back(gt_obj);
 
         }
 
-        for ( auto i = 0; i < m_ptr_customSensorMetaDataList.size() ; i++) {
+        for (auto i = 0; i < m_ptr_customSensorMetaDataList.size(); i++) {
 
-            Sensors gt_sen( *m_ptr_customSensorMetaDataList.at(i), m_ptr_customSensorMetaDataList.at(i)->getSensorStartPoint(), &colorfulNoise, m_ptr_customSensorMetaDataList.at(i)->getSensorName());
+            Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(i),
+                           m_ptr_customSensorMetaDataList.at(i)->getSensorStartPoint(), &colorfulNoise,
+                           m_ptr_customSensorMetaDataList.at(i)->getSensorName());
             m_list_gt_sensors.push_back(gt_sen);
         }
 
-        if ( m_regenerate_yaml_file  ) {
+        if (m_regenerate_yaml_file) {
             writePositionInYaml("cpp");
         }
 
@@ -452,7 +554,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     tempGroundTruthPosition_2 = cv::Scalar::all(255);
 
 
-    std::map<std::string, double> time_map = {{"generate_single_scene_image",0},{"generate_all_scene_image", 0}};
+    std::map<std::string, double> time_map = {{"generate_single_scene_image", 0},
+                                              {"generate_all_scene_image",    0}};
 
     std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << std::endl;
 
@@ -466,13 +569,12 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     auto tic_all = steady_clock::now();
 
     // apply black noise in case of night
-    if ( m_environment == "night") {
+    if (m_environment == "night") {
         BlackNoise noise;
         ObjectImageShapeData newCanvas = m_canvas.getCanvasShapeAndData();
         newCanvas.applyNoise(&noise);
         tempGroundTruthImageBase = newCanvas.get().clone();
-    }
-    else {
+    } else {
         tempGroundTruthImageBase = m_canvas.getCanvasShapeAndData().get().clone();
     }
 
@@ -480,7 +582,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         auto tic = steady_clock::now();
 
-        sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+        sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
         std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
 
 
@@ -489,25 +591,37 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         char frame_skip_folder_suffix[50];
 
-        for ( unsigned  i = 0; i < m_list_gt_objects.size(); i++ ) {
+        for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
 
             sprintf(frame_skip_folder_suffix, "%02d", m_list_gt_objects.at(i).getObjectId());
             std::string position_image_file_with_path = m_position_obj_path.string() +
-                    frame_skip_folder_suffix + "/" + file_name_image;
+                                                        frame_skip_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_gt_objects.at(i).getImageShapeAndData().get().clone();
-            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)).colRange(0,cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m));
+            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(
+                    i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    frame_count).m_object_dimensions_px.dim_height_m)).colRange(0, cvRound(m_list_gt_objects.at(
+                    i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    frame_count).m_object_dimensions_px.dim_width_m));
             positionShape = m_list_gt_objects.at(i).getImageShapeAndData().get().clone();
-            positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)).colRange(0,cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m));
+            positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(
+                    i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    frame_count).m_object_dimensions_px.dim_height_m)).colRange(0, cvRound(m_list_gt_objects.at(
+                    i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    frame_count).m_object_dimensions_px.dim_width_m));
 
-            if ( ( m_list_gt_objects.at(i).get_obj_base_visibility().at(frame_count))
+            if ((m_list_gt_objects.at(i).get_obj_base_visibility().at(frame_count))
                     ) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
-                        cv::Rect(cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x),
-                                cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.y),
-                                cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m),
-                                cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m))));
+                        cv::Rect(cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(
+                                frame_count).first.x),
+                                 cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(
+                                         frame_count).first.y),
+                                 cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(
+                                         frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                                 cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(
+                                         frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m))));
 
             }
         }
@@ -545,11 +659,12 @@ void GroundTruthScene::generate_bird_view() {
         */
 }
 
-    void GroundTruthScene::calcBBFrom3DPosition() {
+
+void GroundTruthScene::calcBBFrom3DPosition() {
 
     cv::FileStorage write_fs;
 
-    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         char temp_str_fs[20];
         sprintf(temp_str_fs, "frame_skip_%03d", frame_skip);
@@ -562,28 +677,33 @@ void GroundTruthScene::generate_bird_view() {
 
         {//ushort frame_count = 0;
 
-            for ( int i = 0; i< m_list_gt_objects.size(); i++) {
+            for (int i = 0; i < m_list_gt_objects.size(); i++) {
 
-                std::vector<cv::Point3f> bounding_points_3d;
-                //all 8 3d bounding box points of an object
-                //VTD center of object with z = 0!
-                //dimension of real world
-                object_realworld_dim_m_str m_object_realworld_dim_m = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                std::vector<cv::Point3f> bounding_points_3d(8);
+                std::vector<cv::Point2f> bounding_points_2d(8);
+
+                object_realworld_dim_m_str m_object_realworld_dim_m = m_list_gt_objects.at(
+                        i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_realworld_dim_m;
 
-                object_location_inertial_m_str pos_obj_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                object_location_inertial_m_str pos_obj_inertial = m_list_gt_objects.at(
+                        i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_location_inertial_m;
 
-                object_rotation_inertial_rad_str orientation_obj_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                object_rotation_inertial_rad_str orientation_obj_inertial = m_list_gt_objects.at(
+                        i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_rotation_inertial_rad;
 
-                sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_list_gt_sensors.at(
+                        0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_sensor_location_carrier_m;
 
-                sensor_fov_rad_str fov_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).
+                sensor_fov_rad_str fov_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(
+                        frame_skip - 1).
                         at(frame_count).m_sensor_fov_rad;
 
-                sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_list_gt_sensors.at(
+                        0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_sensor_rotation_carrier_rad;
 
                 float offset_x = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
@@ -593,78 +713,79 @@ void GroundTruthScene::generate_bird_view() {
                 float offset_z = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_offset_m.offset_z;
 
-                float h_mat = 0;
-                float p_mat = 0;
-                float r_mat = 0;
+/*
+ * assuming vehicle co-ordinate system of the object.
+ * create a box placed on z = 0 ( street level ). Find 8 points of the box.
+ *
+ */
+                bounding_points_3d.at(0) = cv::Point3f(m_object_realworld_dim_m.dim_length_m / 2, -m_object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(1) = cv::Point3f(m_object_realworld_dim_m.dim_length_m / 2, m_object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(2) = cv::Point3f(-m_object_realworld_dim_m.dim_length_m / 2, m_object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(3) = cv::Point3f(-m_object_realworld_dim_m.dim_length_m / 2, -m_object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(4) = cv::Point3f(m_object_realworld_dim_m.dim_length_m / 2, -m_object_realworld_dim_m.dim_width_m / 2, m_object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(5) = cv::Point3f(m_object_realworld_dim_m.dim_length_m / 2, m_object_realworld_dim_m.dim_width_m / 2, m_object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(6) = cv::Point3f(-m_object_realworld_dim_m.dim_length_m / 2, m_object_realworld_dim_m.dim_width_m / 2, m_object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(7) = cv::Point3f(-m_object_realworld_dim_m.dim_length_m / 2, -m_object_realworld_dim_m.dim_width_m / 2, m_object_realworld_dim_m.dim_height_m);
 
                 cv::Point3f final;
-
-                h_mat = orientation_obj_inertial.rotation_rz_yaw_rad;
-                p_mat = orientation_obj_inertial.rotation_ry_pitch_rad;
-                r_mat = orientation_obj_inertial.rotation_rx_roll_rad;
-
-                // Vertices of bounding box
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(m_object_realworld_dim_m.dim_length_m/2, m_object_realworld_dim_m.dim_width_m/2, 0), cv::Point3f(h_mat, p_mat, r_mat));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, 0), cv::Point3f(h_mat, p_mat, r_mat));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, 0), cv::Point3f(h_mat, p_mat, r_mat));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, 0), cv::Point3f(h_mat, p_mat, r_mat));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m), cv::Point3f(h_mat, p_mat, r_mat));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m), cv::Point3f(h_mat, p_mat, r_mat));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m), cv::Point3f(h_mat, p_mat, r_mat));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m), cv::Point3f(h_mat, p_mat, r_mat));
-                bounding_points_3d.push_back(final);
-
-
-                h_mat = sensor_rotation_carrier_rad.rotation_rz_yaw_rad;
-                p_mat = sensor_rotation_carrier_rad.rotation_ry_pitch_rad;
-                r_mat = sensor_rotation_carrier_rad.rotation_rx_roll_rad;
-
-                // this is a passive transformation ( chaning the axis ), hence we need to negate.
-                // Rotation matrix. Since this is a passive transformation ( axis rotation ), we negate the angle.
-                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m),
-                        cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m, -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(-h_mat, -p_mat, -r_mat));
-
-
-                cv::Mat image(cv::Size(1242,375),CV_8UC3, cv::Scalar::all(255));
-
-
-                float cam_rotated_x = final.x;
-                float cam_rotated_y = final.y;
-                float cam_rotated_z = final.z;
-
-
-                float distToImagePlane = 0.5 *  Dataset::getFrameSize().height / tan(fov_rad.vertical/2); // [px] from camera position.
+                float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad.vertical / 2); // [px] from camera position.
 
                 float pxSize = 2.2e-6; // [m/px]
 
-                //transform to VTD coordinates, x = depth
-                cv::Point3f pos = cv::Point3f(cam_rotated_y, cam_rotated_z, cam_rotated_x);
 
-                //scale 3D point back onto image
-                pos = pos * ((distToImagePlane * pxSize) /*m*/ / pos.z);
+                for ( auto i = 0; i < 8; i++ ) {
 
-                //convert meter to pixel
-                pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
+                    //Add the offset for each point. These points are in the vehicle coordinate system.
+                    //Rotate the axis to inertial coordinate system. -hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
+                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(offset_x, offset_y, offset_z),cv::Point3f(-orientation_obj_inertial.rotation_rz_yaw_rad,-orientation_obj_inertial.rotation_ry_pitch_rad,-orientation_obj_inertial.rotation_rx_roll_rad));
 
-                // Change from optical axis to origin ( top, left )
-                float x_image =  Dataset::getFrameSize().width/2 - pos.x;
-                float y_image =  Dataset::getFrameSize().height/2 - pos.y;
+                    //Translate the axis to the master origin. add the BB vector to the object position.
+                    //Now we are in the master co-ordinate system.
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m,
+                                                                                                          pos_obj_inertial.location_z_m), cv::Point3f(0,0,0));
 
-                m_list_gt_objects.at(i).setBoundingBoxPoints(frame_skip - 1, frame_count, cv::Point2f(x_image, y_image));
+                    // Change to sensor object by changing the axis to the sensor object.
+                    // Rotate the axis to enter the USK co-ordinate system.
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m,
+                                                                                  -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(-sensor_rotation_carrier_rad.rotation_rz_yaw_rad, -sensor_rotation_carrier_rad.rotation_ry_pitch_rad, -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
 
+                    // The resulting points are the bounding box points in the USK co-ordinate system.
+                    bounding_points_3d.at(i) = final;
+
+                    //transform to VTD coordinates, x = depth
+                    //scale 3D point back onto image
+                    float cam_rotated_x = final.x;
+                    float cam_rotated_y = final.y;
+                    float cam_rotated_z = final.z;
+
+                    //transform to VTD coordinates, x = depth
+                    cv::Point3f pos = cv::Point3f(cam_rotated_y, cam_rotated_z, cam_rotated_x);
+
+                    //scale 3D point back onto image
+                    pos = pos * ((distToImagePlane * pxSize) /*m*/ / pos.z);
+
+                    //convert meter to pixel
+                    pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
+
+                    // Change from optical axis to origin ( top, left )
+                    float x_image =  Dataset::getFrameSize().width/2 - pos.x;
+                    float y_image =  Dataset::getFrameSize().height/2 - pos.y;
+
+                    bounding_points_2d.at(i) = cv::Point2f(x_image, y_image);
+
+                }
+
+                m_list_gt_objects.at(i).setBoundingBoxPoints(frame_skip - 1, frame_count, bounding_points_2d);
+
+                /*
                 auto dist = cv::norm(cv::Point2f(cam_rotated_x, cam_rotated_y));
-                auto dist_usk = cv::norm(cv::Point2f( m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_location_m.location_x_m,  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_location_m.location_y_m));
-                assert(std::abs(dist-dist_usk)<0.01);
-                std::cout << "distance is " << dist << " for " << m_list_gt_objects.at(i).getObjectName() << std::endl;
+                auto dist_usk = cv::norm(
+                        cv::Point2f(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                                frame_count).m_object_location_m.location_x_m,
+                                    m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                                            frame_count).m_object_location_m.location_y_m));
+                assert(std::abs(dist - dist_usk) < 0.01);
+                std::cout << "distance is " << dist << " for " << m_list_gt_objects.at(i).getObjectName() << std::endl; */
             }
         }
     }
@@ -674,14 +795,14 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     Noise noNoise;
 
-    if ( m_environment == "none") {
+    if (m_environment == "none") {
 
-        if ( !m_regenerate_yaml_file  ) { // dont generate, just read
+        if (!m_regenerate_yaml_file) { // dont generate, just read
 
             readPositionFromFile("../position_vires.yml");
 
             ushort map_pair_count = 0;
-            for ( const auto &myPair : m_mapObjectNameToObjectMetaData ) {
+            for (const auto &myPair : m_mapObjectNameToObjectMetaData) {
                 std::cout << myPair.first << "\n";
                 map_pair_count++;
             }
@@ -695,18 +816,22 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         std::string project = "Movement";
 
         std::vector<std::string> list_of_scenarios = {"carTypesComplete.xml", "crossing8Demo.xml",
-                "crossing8DualExt.xml",
-                "crossing8Static.xml", "HighwayPulk.xml", "invisibleCar.xml", "ParkPerp.xml",
-                "RouteAndPathShapeSCP.xml",
-                "staticCar.xml", "TownActionsPath.xml", "TownPathLong.xml", "traffic_demo2Ext.xml",
-                "trafficDemoClosePath.xml", "trafficDemoPath.xml", "trafficDemoPed.xml", "traffic_demoReverse.xml",
-                "trafficDemoTrailer.xml", "trafficDemoUK.xml", "traffic_demo.xml"
-                        "car.xml", "moving_car_near.xml", "moving_car.xml", "moving_truck.xml", "moving.xml", "one.xml",
-                "truck.xml", "two.xml"};
+                                                      "crossing8DualExt.xml",
+                                                      "crossing8Static.xml", "HighwayPulk.xml", "invisibleCar.xml",
+                                                      "ParkPerp.xml",
+                                                      "RouteAndPathShapeSCP.xml",
+                                                      "staticCar.xml", "TownActionsPath.xml", "TownPathLong.xml",
+                                                      "traffic_demo2Ext.xml",
+                                                      "trafficDemoClosePath.xml", "trafficDemoPath.xml",
+                                                      "trafficDemoPed.xml", "traffic_demoReverse.xml",
+                                                      "trafficDemoTrailer.xml", "trafficDemoUK.xml", "traffic_demo.xml"
+                                                              "car.xml", "moving_car_near.xml", "moving_car.xml",
+                                                      "moving_truck.xml", "moving.xml", "one.xml",
+                                                      "truck.xml", "two.xml"};
 
         sleep(5); // Wait before starting vtd again.
 
-        if ( m_environment == "none") {
+        if (m_environment == "none") {
             sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
                     project.c_str());
             std::cout << command << std::endl;
@@ -860,7 +985,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                         break;
                     }
 
-                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC+MAX_DUMPS) {
+                    if (mSimFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC + MAX_DUMPS) {
                         breaking = true;
                     }
 
@@ -868,7 +993,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     readNetwork(m_moduleManagerSocket_Perfect);  // this calls parseRDBMessage() in vires_common.cpp
 
-                    readNetwork(m_moduleManagerSocket_PerfectInertial);  // this calls parseRDBMessage() in vires_common.cpp
+                    readNetwork(
+                            m_moduleManagerSocket_PerfectInertial);  // this calls parseRDBMessage() in vires_common.cpp
 
                     bool haveNewFrame = false;
 
@@ -889,19 +1015,20 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                         }
 
                         //bool requestImage = (mLastNetworkFrame >= (mLastIGTriggerFrame + IMAGE_SKIP_FACTOR_DYNAMIC));
-                        bool requestImage = ((mLastNetworkFrame % IMAGE_SKIP_FACTOR_DYNAMIC*10000) == 0);
+                        bool requestImage = ((mLastNetworkFrame % IMAGE_SKIP_FACTOR_DYNAMIC * 10000) == 0);
                         mLastNetworkFrame++;
 
                         if (requestImage) {
                             //std::cout << mLastNetworkFrame << " " << mLastIGTriggerFrame << std::endl;
                             mLastIGTriggerFrame = mLastNetworkFrame;
                             mCheckForImage = true;
-                            fprintf( stderr, "------------------------------------------------------------------------------------\n");
-                            fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s \n", mDeltaTime, requestImage ? "true" : "false");
-                            if ( m_dumpFirstFrame ) {
+                            fprintf(stderr,
+                                    "------------------------------------------------------------------------------------\n");
+                            fprintf(stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s \n",
+                                    mDeltaTime, requestImage ? "true" : "false");
+                            if (m_dumpFirstFrame) {
                                 sendRDBTrigger(m_triggerSocket, mSimTime, 0, false, 0.01);
-                            }
-                            else {
+                            } else {
                                 sendRDBTrigger(m_triggerSocket, mSimTime, 0, true, 0.1);
                             }
                         }
@@ -927,10 +1054,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     }
 
                     // increase internal counters
-                    if (haveNewFrame ) {
+                    if (haveNewFrame) {
                         mSimTime += mDeltaTime;
                         mSimFrame++;
-                        if ( mSimFrame == MAX_DUMPS ) {
+                        if (mSimFrame == MAX_DUMPS) {
                             m_dumpFirstFrame = false;
                         }
                         haveNewFrame = false;
@@ -953,23 +1080,28 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
     }
     try {
-        if ( m_environment == "none") {
+        if (m_environment == "none") {
 
-            for ( auto i = 0; i < m_ptr_customObjectMetaDataList.size() ; i++) {
+            for (auto i = 0; i < m_ptr_customObjectMetaDataList.size(); i++) {
 
-                GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(i)->getObjectShape(), *m_ptr_customObjectMetaDataList.at(i), m_ptr_customObjectMetaDataList.at(i)->getObjectStartPoint(), noNoise, m_ptr_customObjectMetaDataList.at(i)->getObjectName());
+                GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(i)->getObjectShape(),
+                                          *m_ptr_customObjectMetaDataList.at(i),
+                                          m_ptr_customObjectMetaDataList.at(i)->getObjectStartPoint(), noNoise,
+                                          m_ptr_customObjectMetaDataList.at(i)->getObjectName());
                 m_list_gt_objects.push_back(gt_obj);
 
             }
 
-            for ( auto i = 0; i < m_ptr_customSensorMetaDataList.size() ; i++) {
+            for (auto i = 0; i < m_ptr_customSensorMetaDataList.size(); i++) {
 
-                Sensors gt_sen( *m_ptr_customSensorMetaDataList.at(i), m_ptr_customSensorMetaDataList.at(i)->getSensorStartPoint(), &noNoise, m_ptr_customSensorMetaDataList.at(i)->getSensorName());
+                Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(i),
+                               m_ptr_customSensorMetaDataList.at(i)->getSensorStartPoint(), &noNoise,
+                               m_ptr_customSensorMetaDataList.at(i)->getSensorName());
                 m_list_gt_sensors.push_back(gt_sen);
             }
 
 
-            if ( m_regenerate_yaml_file  ) {
+            if (m_regenerate_yaml_file) {
                 writePositionInYaml("vires");
             }
 
@@ -984,10 +1116,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 }
 
 
-void GroundTruthSceneExternal::parseEntry( RDB_TRIGGER_t *data, const double & simTime, const unsigned int &
-simFrame, const unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId,
-        const unsigned int & totalElem )
-{
+void GroundTruthSceneExternal::parseEntry(RDB_TRIGGER_t *data, const double &simTime, const unsigned int &
+simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsigned int &elemId,
+                                          const unsigned int &totalElem) {
     fprintf(stderr, "RDBTrigger answer = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
@@ -1005,65 +1136,61 @@ void GroundTruthSceneExternal::parseEndOfFrame(const double &simTime, const unsi
 }
 
 /** ------ state of an object (may be extended by the next structure) ------- */
-typedef struct
-{
-    uint32_t            id;                         /**< unique object ID                                              @unit _                                   */
-    uint8_t             category;                   /**< object category                                               @unit @link RDB_OBJECT_CATEGORY @endlink  */
-    uint8_t             type;                       /**< object type                                                   @unit @link RDB_OBJECT_TYPE     @endlink  */
-    uint16_t            visMask;                    /**< visibility mask                                               @unit @link RDB_OBJECT_VIS_FLAG @endlink  */
-    char                name[RDB_SIZE_OBJECT_NAME]; /**< symbolic name                                                 @unit _                                   */
-    RDB_GEOMETRY_t      geo;                        /**< info about object's geometry                                  @unit m,m,m,m,m,m                         */
-    RDB_COORD_t         pos;                        /**< position and orientation of object's reference point          @unit m,m,m,rad,rad,rad                   */
-    uint32_t            parent;                     /**< unique ID of parent object                                    @unit _                                   */
-    uint16_t            cfgFlags;                   /**< configuration flags                                           @unit @link RDB_OBJECT_CFG_FLAG @endlink  */
-    int16_t             cfgModelId;                 /**< visual model ID (configuration parameter)                     @unit _                                   */
+typedef struct {
+    uint32_t id;                         /**< unique object ID                                              @unit _                                   */
+    uint8_t category;                   /**< object category                                               @unit @link RDB_OBJECT_CATEGORY @endlink  */
+    uint8_t type;                       /**< object type                                                   @unit @link RDB_OBJECT_TYPE     @endlink  */
+    uint16_t visMask;                    /**< visibility mask                                               @unit @link RDB_OBJECT_VIS_FLAG @endlink  */
+    char name[RDB_SIZE_OBJECT_NAME]; /**< symbolic name                                                 @unit _                                   */
+    RDB_GEOMETRY_t geo;                        /**< info about object's geometry                                  @unit m,m,m,m,m,m                         */
+    RDB_COORD_t pos;                        /**< position and orientation of object's reference point          @unit m,m,m,rad,rad,rad                   */
+    uint32_t parent;                     /**< unique ID of parent object                                    @unit _                                   */
+    uint16_t cfgFlags;                   /**< configuration flags                                           @unit @link RDB_OBJECT_CFG_FLAG @endlink  */
+    int16_t cfgModelId;                 /**< visual model ID (configuration parameter)                     @unit _                                   */
 } RDB_OBJECT_STATE_BASE_DUMMY_t;
 
 /** ------ extended object data (e.g. for dynamic objects) ------- */
-typedef struct
-{
-    RDB_COORD_t         speed;                      /**< speed and rates                                               @unit m/s,m/s,m/s,rad/s,rad/s,rad/s           */
-    RDB_COORD_t         accel;                      /**< acceleration                                                  @unit m/s2,m/s2,m/s2,rad/s2,rad/s2/rad/s2     */
-    float               traveledDist;               /**< traveled distance                                             @unit m                                      a */
-    uint32_t            spare[3];                   /**< reserved for future use                                       @unit _                                       */
+typedef struct {
+    RDB_COORD_t speed;                      /**< speed and rates                                               @unit m/s,m/s,m/s,rad/s,rad/s,rad/s           */
+    RDB_COORD_t accel;                      /**< acceleration                                                  @unit m/s2,m/s2,m/s2,rad/s2,rad/s2/rad/s2     */
+    float traveledDist;               /**< traveled distance                                             @unit m                                      a */
+    uint32_t spare[3];                   /**< reserved for future use                                       @unit _                                       */
 } RDB_OBJECT_STATE_EXT_DUMMY_t;
 
 /** ------ sensor definition and state ------ */
-typedef struct
-{
-    uint32_t    id;                          /**< id of the sensor                                      @unit _                                      */
-    uint8_t     type;                        /**< type of the sensor                                    @unit @link RDB_SENSOR_TYPE     @endlink     */
-    uint8_t     hostCategory;                /**< category of the object hosting the sensor             @unit @link RDB_OBJECT_CATEGORY @endlink     */
-    uint16_t    spare0;                      /**< for future use                                        @unit _                                      */
-    uint32_t    hostId;                      /**< unique id of the sensor's host                        @unit _                                      */
-    char        name[RDB_SIZE_OBJECT_NAME];  /**< name of the sensor                                    @unit _                                      */
-    float       fovHV[2];                    /**< field-of-view (horizontal/vertical)                   @unit rad,rad                                */
-    float       clipNF[2];                   /**< clipping ranges (near/far)                            @unit m,m                                    */
+typedef struct {
+    uint32_t id;                          /**< id of the sensor                                      @unit _                                      */
+    uint8_t type;                        /**< type of the sensor                                    @unit @link RDB_SENSOR_TYPE     @endlink     */
+    uint8_t hostCategory;                /**< category of the object hosting the sensor             @unit @link RDB_OBJECT_CATEGORY @endlink     */
+    uint16_t spare0;                      /**< for future use                                        @unit _                                      */
+    uint32_t hostId;                      /**< unique id of the sensor's host                        @unit _                                      */
+    char name[RDB_SIZE_OBJECT_NAME];  /**< name of the sensor                                    @unit _                                      */
+    float fovHV[2];                    /**< field-of-view (horizontal/vertical)                   @unit rad,rad                                */
+    float clipNF[2];                   /**< clipping ranges (near/far)                            @unit m,m                                    */
     RDB_COORD_t pos;                         /**< position and orientation of sensor's reference point  @unit m,m,m,rad,rad,rad                      */
     RDB_COORD_t originCoordSys;              /**< position and orientation of sensor's coord origin     @unit m,m,m,rad,rad,rad                      */
-    float       fovOffHV[2];                 /**< field-of-view offset (horizontal/vertical)            @unit rad, rad                              B */
-    int32_t     spare[2];                    /**< for future use                                        @unit _                                      */
+    float fovOffHV[2];                 /**< field-of-view offset (horizontal/vertical)            @unit rad, rad                              B */
+    int32_t spare[2];                    /**< for future use                                        @unit _                                      */
 } RDB_SENSOR_STATE_DUMMY_t;
 
 /** ------ information about an object registered within a sensor ------ */
-typedef struct
-{
-    uint8_t     category;    /**< object category                                                                @unit @link RDB_OBJECT_CATEGORY    @endlink   */
-    uint8_t     type;        /**< object type                                                                    @unit @link RDB_OBJECT_TYPE        @endlink   */
-    uint16_t    flags;       /**< sensor object flags                                                            @unit @link RDB_SENSOR_OBJECT_FLAG @endlink   */
-    uint32_t    id;          /**< id of the object                                                               @unit _                                       */
-    uint32_t    sensorId;    /**< id of the detecting sensor                                                     @unit _                                       */
-    double      dist;        /**< distance between object and referring device                                   @unit m                                       */
+typedef struct {
+    uint8_t category;    /**< object category                                                                @unit @link RDB_OBJECT_CATEGORY    @endlink   */
+    uint8_t type;        /**< object type                                                                    @unit @link RDB_OBJECT_TYPE        @endlink   */
+    uint16_t flags;       /**< sensor object flags                                                            @unit @link RDB_SENSOR_OBJECT_FLAG @endlink   */
+    uint32_t id;          /**< id of the object                                                               @unit _                                       */
+    uint32_t sensorId;    /**< id of the detecting sensor                                                     @unit _                                       */
+    double dist;        /**< distance between object and referring device                                   @unit m                                       */
     RDB_COORD_t sensorPos;   /**< position and orientation of object in sensor coord                             @unit m,m,m,rad,rad,rad                       */
-    int8_t      occlusion;   /**< degree of occlusion for viewer (-1 = not valid, 0..127 = 0..100% occlusion)    @unit [-1, 0..127]                            */
-    uint8_t     spare0[3];   /**< for future use                                                                 @unit _                                       */
-    uint32_t    spare[3];    /**< for future use                                                                 @unit _                                       */
+    int8_t occlusion;   /**< degree of occlusion for viewer (-1 = not valid, 0..127 = 0..100% occlusion)    @unit [-1, 0..127]                            */
+    uint8_t spare0[3];   /**< for future use                                                                 @unit _                                       */
+    uint32_t spare[3];    /**< for future use                                                                 @unit _                                       */
 } RDB_SENSOR_OBJECT_DUMMY_t;
 
 void GroundTruthSceneExternal::parseEntry(RDB_OBJECT_CFG_t *data, const double &simTime, const unsigned int &
 simFrame, const
-unsigned short &pkgId, const unsigned short &flags,
-        const unsigned int &elemId, const unsigned int &totalElem) {
+                                          unsigned short &pkgId, const unsigned short &flags,
+                                          const unsigned int &elemId, const unsigned int &totalElem) {
 
     RDB_OBJECT_CFG_t *object = reinterpret_cast<RDB_OBJECT_CFG_t *>(data); /// raw image data
     std::cout << object->type;
@@ -1071,42 +1198,44 @@ unsigned short &pkgId, const unsigned short &flags,
 
 }
 
-void GroundTruthSceneExternal::parseEntry( RDB_SENSOR_STATE_t *data, const double & simTime, const unsigned int & simFrame,
-        const unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
+void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_STATE_t *data, const double &simTime, const unsigned int &simFrame,
+                                          const unsigned short &pkgId, const unsigned short &flags,
+                                          const unsigned int &elemId, const unsigned int &totalElem) {
 
     cv::Point3f position_sensor_carrier, orientation_sensor_carrier, position_sensor, orientation_sensor, offset_sensor;
     cv::Point2f fov;
 
-    if ( m_environment == "none") {
+    if (m_environment == "none") {
 
-        if ( data->type == RDB_SENSOR_TYPE_VIDEO || data->type == RDB_SENSOR_TYPE_RADAR ) {
-        if (!m_dumpFirstFrame && (mImageCount >= 0)) {
+        if (data->type == RDB_SENSOR_TYPE_VIDEO || data->type == RDB_SENSOR_TYPE_RADAR) {
+            if (!m_dumpFirstFrame && (mImageCount >= 0)) {
 
-            fprintf( stderr, "saving sensor truth for simFrame = %d, simTime %f %s\n", simFrame, simTime, data->name);
+                fprintf(stderr, "saving sensor truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
+                        data->name);
 
-            if (m_mapSensorNameToSensorMetaData.count(data->name) == 0) {
+                if (m_mapSensorNameToSensorMetaData.count(data->name) == 0) {
 
-                m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
-                m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
-                m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
-                m_sensorCount += 1;
-            }
+                    m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
+                    m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
+                    m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
+                    m_sensorCount += 1;
+                }
 
-            position_sensor_carrier = cv::Point3f((float) data->originCoordSys.x, (float) data->originCoordSys.y,
-                    (float) data->originCoordSys.z);
-            orientation_sensor_carrier = cv::Point3f((float) data->originCoordSys.h, (float) data->originCoordSys.p,
-                    (float) data->originCoordSys.r);
+                position_sensor_carrier = cv::Point3f((float) data->originCoordSys.x, (float) data->originCoordSys.y,
+                                                      (float) data->originCoordSys.z);
+                orientation_sensor_carrier = cv::Point3f((float) data->originCoordSys.h, (float) data->originCoordSys.p,
+                                                         (float) data->originCoordSys.r);
 
-            offset_sensor = cv::Point3f((float) data->pos.x, (float) data->pos.y,
-                    (float) data->pos.z);
-            orientation_sensor = cv::Point3f((float) data->pos.h, (float) data->pos.p,
-                    (float) data->pos.r);
+                offset_sensor = cv::Point3f((float) data->pos.x, (float) data->pos.y,
+                                            (float) data->pos.z);
+                orientation_sensor = cv::Point3f((float) data->pos.h, (float) data->pos.p,
+                                                 (float) data->pos.r);
 
-            fov = cv::Point2f(data->fovHV[0], data->fovHV[1]);
+                fov = cv::Point2f(data->fovHV[0], data->fovHV[1]);
 
-            m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
-                    (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_sensor_carrier,
-                    orientation_sensor_carrier, orientation_sensor, offset_sensor, fov);
+                m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
+                        (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_sensor_carrier,
+                        orientation_sensor_carrier, orientation_sensor, offset_sensor, fov);
             }
         }
     }
@@ -1114,9 +1243,9 @@ void GroundTruthSceneExternal::parseEntry( RDB_SENSOR_STATE_t *data, const doubl
 
 void GroundTruthSceneExternal::parseEntry(RDB_OBJECT_STATE_t *data, const double &simTime, const unsigned int &
 simFrame, const
-unsigned
-short &pkgId, const unsigned short &flags, const unsigned int &elemId,
-        const unsigned int &totalElem) {
+                                          unsigned
+                                          short &pkgId, const unsigned short &flags, const unsigned int &elemId,
+                                          const unsigned int &totalElem) {
 
     cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
     cv::Point2f dimension_pixel;
@@ -1125,56 +1254,71 @@ short &pkgId, const unsigned short &flags, const unsigned int &elemId,
     float dist_cam_to_obj;
     float total_distance_travelled;
 
-    if ( m_environment == "none") {
+    if (m_environment == "none") {
 
-        if ( data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR ) {
-            if ( !m_dumpFirstFrame && (mImageCount>=0) ) {
+        if (data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR) {
+            if (!m_dumpFirstFrame && (mImageCount >= 0)) {
 
                 /*
                 fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                         data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
                                 .geo.dimY);
 */
-                fprintf( stderr, "saving ground truth for simFrame = %d, simTime %f %s\n", simFrame, simTime, data->base.name);
+                fprintf(stderr, "saving ground truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
+                        data->base.name);
 
                 if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
 
                     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
-                    Rectangle rectangle((int)(data->base.geo.dimX),(int)(data->base.geo.dimY)); // width, height
+                    Rectangle rectangle((int) (data->base.geo.dimX), (int) (data->base.geo.dimY)); // width, height
                     m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
                     m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
                     m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
                     m_objectCount += 1;
                 }
-                if ( data->base.pos.type == RDB_COORD_TYPE_WINDOW )
-                {
+                if (data->base.pos.type == RDB_COORD_TYPE_WINDOW) {
 
-                    position_pixel = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, float(data->base.pos.z));
+                    position_pixel = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                                 float(data->base.pos.z));
                     dimension_pixel = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
-                    offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY, (float) data->base.geo.offZ);
-                    total_distance_travelled =  data->ext.traveledDist;
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor((ushort)((simFrame-MAX_DUMPS-2)/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset, dimension_pixel, total_distance_travelled);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-2)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
-                }
-                else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
+                    offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY,
+                                         (float) data->base.geo.offZ);
+                    total_distance_travelled = data->ext.traveledDist;
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor(
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset,
+                            dimension_pixel, total_distance_travelled);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                } else if (data->base.pos.type == RDB_COORD_TYPE_USK) {
 
-                    position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
-                    orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
-                    dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY, (float) data->base.geo.dimZ);
+                    position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                               (float) data->base.pos.z);
+                    orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p,
+                                                  (float) data->base.pos.r);
+                    dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY,
+                                                      (float) data->base.geo.dimZ);
                     speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-                    total_distance_travelled =  data->ext.traveledDist;
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)((simFrame-MAX_DUMPS-2)/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-2)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
-                }
-                else if ( data->base.pos.type == RDB_COORD_TYPE_INERTIAL ) {
+                    total_distance_travelled = data->ext.traveledDist;
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor(
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_usk,
+                            orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                } else if (data->base.pos.type == RDB_COORD_TYPE_INERTIAL) {
 
-                    position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
-                    orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
-                    dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY, (float) data->base.geo.dimZ);
+                    position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                                    (float) data->base.pos.z);
+                    orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p,
+                                                       (float) data->base.pos.r);
+                    dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY,
+                                                      (float) data->base.geo.dimZ);
                     speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-                    total_distance_travelled =  data->ext.traveledDist;
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)((simFrame-MAX_DUMPS-2)/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-2)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                    total_distance_travelled = data->ext.traveledDist;
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial(
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial,
+                            orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
             } else {
                 //std::cout << data->base.type << std::endl;
@@ -1184,9 +1328,9 @@ short &pkgId, const unsigned short &flags, const unsigned int &elemId,
 }
 
 void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTime, const unsigned int &simFrame,
-        const
-        unsigned short &pkgId, const unsigned short &flags,
-        const unsigned int &elemId, const unsigned int &totalElem) {
+                                          const
+                                          unsigned short &pkgId, const unsigned short &flags,
+                                          const unsigned int &elemId, const unsigned int &totalElem) {
 
     if (!data)
         return;
@@ -1200,7 +1344,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
     //analyzeImage(  data  , simFrame, 0 );
 
 
-    if ( mHaveFirstImage  ) { // always ignore the first image.
+    if (mHaveFirstImage) { // always ignore the first image.
 
         char *image_data_ = NULL;
         RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
@@ -1234,28 +1378,28 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
             char file_name_image[50];
 
-            if ( !m_dumpFirstFrame  ) {
-                fprintf( stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n", simFrame, simTime, data->imgSize, data->id);
+            if (!m_dumpFirstFrame) {
+                fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                        simFrame, simTime, data->imgSize, data->id);
                 mImageCount++;
                 sprintf(file_name_image, "000%03d_10.png", mImageCount);
                 std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
                 save_image.write(input_image_file_with_path);
+            } else {
+                fprintf(stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                        simFrame, simTime, data->imgSize, data->id);
             }
-            else {
-                fprintf( stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n", simFrame, simTime, data->imgSize, data->id);
-            }
+        } else {
+            fprintf(stderr, "ignoring file with %d channels\n",
+                    image_info_.imgSize / (image_info_.width * image_info_.height));
         }
-        else {
-            fprintf(stderr, "ignoring file with %d channels\n", image_info_.imgSize / (image_info_.width * image_info_.height));
+        mHaveImage = true;
+    } else {
+        if (mFirstIgnoredFrame == simFrame) {
+            mHaveFirstImage = true;
         }
-        mHaveImage      = true;
-    }
-    else {
-            if ( mFirstIgnoredFrame == simFrame ) {
-                mHaveFirstImage = true;
-            }
-            mFirstIgnoredFrame = simFrame;
-            std::cerr << "ignoring images from first frame" << std::endl;
+        mFirstIgnoredFrame = simFrame;
+        std::cerr << "ignoring images from first frame" << std::endl;
     }
 }
 
@@ -1264,87 +1408,82 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 * handle driver control input and compute vehicle dynamics output
 */
 void GroundTruthSceneExternal::parseEntry(RDB_DRIVER_CTRL_t *data, const double &simTime, const unsigned int &simFrame,
-        const unsigned short &pkgId, const unsigned short &flags,
-        const unsigned int &elemId, const unsigned int &totalElem) {
+                                          const unsigned short &pkgId, const unsigned short &flags,
+                                          const unsigned int &elemId, const unsigned int &totalElem) {
 
     if (!data)
         return;
 
-    static bool         sVerbose     = true;
-    static bool         sShowMessage = false;
-    static unsigned int sMyPlayerId  = 1;             // this may also be determined from incoming OBJECT_CFG messages
-    static double       sLastSimTime = -1.0;
+    static bool sVerbose = true;
+    static bool sShowMessage = false;
+    static unsigned int sMyPlayerId = 1;             // this may also be determined from incoming OBJECT_CFG messages
+    static double sLastSimTime = -1.0;
 
-    fprintf( stderr, "handleRDBitem: handling driver control for player %d\n", data->playerId );
+    fprintf(stderr, "handleRDBitem: handling driver control for player %d\n", data->playerId);
 
     // is this a new message?
     //if ( simTime == sLastSimTime )
     //    return;
 
     // is this message for me?
-    if ( data->playerId != sMyPlayerId )
+    if (data->playerId != sMyPlayerId)
         return;
 
     // check for valid inputs (only some may be valid)
-    float mdSteeringAngleRequest = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_STEERING_WHEEL ) ? data->steeringWheel / 19.0 : 0.0;
-    float mdThrottlePedal        = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_THROTTLE )       ? data->throttlePedal        : 0.0;
-    float mdBrakePedal           = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_BRAKE )          ? data->brakePedal           : 0.0;
-    float mInputAccel            = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL )      ? data->accelTgt             : 0.0;
-    float mInputSteering         = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING )   ? data->steeringTgt          : 0.0;
-    float mdSteeringRequest      = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING )   ? data->steeringTgt          : 0.0;
-    float mdAccRequest           = ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL )      ? data->accelTgt             : 0.0;
-    int   mInputGear             = 0;
+    float mdSteeringAngleRequest = (data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_STEERING_WHEEL) ?
+                                   data->steeringWheel / 19.0 : 0.0;
+    float mdThrottlePedal = (data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_THROTTLE) ? data->throttlePedal : 0.0;
+    float mdBrakePedal = (data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_BRAKE) ? data->brakePedal : 0.0;
+    float mInputAccel = (data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL) ? data->accelTgt : 0.0;
+    float mInputSteering = (data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING) ? data->steeringTgt : 0.0;
+    float mdSteeringRequest = (data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING) ? data->steeringTgt : 0.0;
+    float mdAccRequest = (data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL) ? data->accelTgt : 0.0;
+    int mInputGear = 0;
 
     // check the input validity
-    unsigned int validFlagsLat  = RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING | RDB_DRIVER_INPUT_VALIDITY_STEERING_WHEEL;
-    unsigned int validFlagsLong = RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL | RDB_DRIVER_INPUT_VALIDITY_THROTTLE | RDB_DRIVER_INPUT_VALIDITY_BRAKE;
-    unsigned int checkFlags     = data->validityFlags & 0x00000fff;
+    unsigned int validFlagsLat = RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING | RDB_DRIVER_INPUT_VALIDITY_STEERING_WHEEL;
+    unsigned int validFlagsLong =
+            RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL | RDB_DRIVER_INPUT_VALIDITY_THROTTLE | RDB_DRIVER_INPUT_VALIDITY_BRAKE;
+    unsigned int checkFlags = data->validityFlags & 0x00000fff;
 
-    if ( checkFlags )
-    {
-        if ( ( checkFlags & validFlagsLat ) && ( checkFlags & validFlagsLong ) )
+    if (checkFlags) {
+        if ((checkFlags & validFlagsLat) && (checkFlags & validFlagsLong))
             sShowMessage = false;
-        else if ( checkFlags != RDB_DRIVER_INPUT_VALIDITY_GEAR ) // "gear only" is also fine
+        else if (checkFlags != RDB_DRIVER_INPUT_VALIDITY_GEAR) // "gear only" is also fine
         {
-            if ( !sShowMessage )
-                fprintf( stderr, "Invalid driver input for vehicle dynamics" );
+            if (!sShowMessage)
+                fprintf(stderr, "Invalid driver input for vehicle dynamics");
 
             sShowMessage = true;
         }
     }
 
     // use pedals/wheel or targets?
-    bool mUseSteeringTarget = ( ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING ) != 0 );
-    bool mUseAccelTarget    = ( ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL ) != 0 );
+    bool mUseSteeringTarget = ((data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_STEERING) != 0);
+    bool mUseAccelTarget = ((data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_TGT_ACCEL) != 0);
 
-    if ( data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_GEAR )
-    {
-        if ( data->gear == RDB_GEAR_BOX_POS_R )
+    if (data->validityFlags & RDB_DRIVER_INPUT_VALIDITY_GEAR) {
+        if (data->gear == RDB_GEAR_BOX_POS_R)
             mInputGear = -1;
-        else if ( data->gear == RDB_GEAR_BOX_POS_N )
+        else if (data->gear == RDB_GEAR_BOX_POS_N)
             mInputGear = 0;
-        else if ( data->gear == RDB_GEAR_BOX_POS_D )
+        else if (data->gear == RDB_GEAR_BOX_POS_D)
             mInputGear = 1;
         else
             mInputGear = 1;
     }
 
     // now, depending on the inputs, select the control mode and compute outputs
-    if ( mUseSteeringTarget && mUseAccelTarget )
-    {
-        fprintf( stderr, "Compute new vehicle position from acceleration target and steering target.\n" );
+    if (mUseSteeringTarget && mUseAccelTarget) {
+        fprintf(stderr, "Compute new vehicle position from acceleration target and steering target.\n");
 
         // call your methods here
-    }
-    else if ( !mUseSteeringTarget && !mUseAccelTarget )
-    {
-        fprintf( stderr, "Compute new vehicle position from brake pedal, throttle pedal and steering wheel angle.\n" );
+    } else if (!mUseSteeringTarget && !mUseAccelTarget) {
+        fprintf(stderr, "Compute new vehicle position from brake pedal, throttle pedal and steering wheel angle.\n");
 
         // call your methods here
-    }
-    else
-    {
-        fprintf( stderr, "Compute new vehicle position from a mix of targets and pedals / steering wheel angle.\n" );
+    } else {
+        fprintf(stderr, "Compute new vehicle position from a mix of targets and pedals / steering wheel angle.\n");
 
         // call your methods here
     }
@@ -1356,17 +1495,16 @@ void GroundTruthSceneExternal::parseEntry(RDB_DRIVER_CTRL_t *data, const double 
     // the following assignments are for dummy purposes only
     // vehicle moves along x-axis with given speed
     // ignore first message
-    if ( useDummy && ( sLastSimTime >= 0.0 ) )
-    {
+    if (useDummy && (sLastSimTime >= 0.0)) {
         double speedX = 5.0;    // m/s
         double speedY = 0.0;    // m/s
         double speedZ = 0.0;    // m/s
-        double dt     = simTime - sLastSimTime;
+        double dt = simTime - sLastSimTime;
 
-        sOwnObjectState.base.id       = sMyPlayerId;
+        sOwnObjectState.base.id = sMyPlayerId;
         sOwnObjectState.base.category = RDB_OBJECT_CATEGORY_PLAYER;
-        sOwnObjectState.base.type     = RDB_OBJECT_TYPE_PLAYER_CAR;
-        strcpy( sOwnObjectState.base.name, "Ego" );
+        sOwnObjectState.base.type = RDB_OBJECT_TYPE_PLAYER_CAR;
+        strcpy(sOwnObjectState.base.name, "Ego");
 
         // dimensions of own vehicle
         sOwnObjectState.base.geo.dimX = 4.60;
@@ -1378,107 +1516,105 @@ void GroundTruthSceneExternal::parseEntry(RDB_DRIVER_CTRL_t *data, const double 
         sOwnObjectState.base.geo.offY = 0.00;
         sOwnObjectState.base.geo.offZ = 0.30;
 
-        sOwnObjectState.base.pos.x     += dt * speedX;
-        sOwnObjectState.base.pos.y     += dt * speedY;
-        sOwnObjectState.base.pos.z     += dt * speedZ;
-        sOwnObjectState.base.pos.h     = 0.0;
-        sOwnObjectState.base.pos.p     = 0.0;
-        sOwnObjectState.base.pos.r     = 0.0;
+        sOwnObjectState.base.pos.x += dt * speedX;
+        sOwnObjectState.base.pos.y += dt * speedY;
+        sOwnObjectState.base.pos.z += dt * speedZ;
+        sOwnObjectState.base.pos.h = 0.0;
+        sOwnObjectState.base.pos.p = 0.0;
+        sOwnObjectState.base.pos.r = 0.0;
         sOwnObjectState.base.pos.flags = RDB_COORD_FLAG_POINT_VALID | RDB_COORD_FLAG_ANGLES_VALID;
 
-        sOwnObjectState.ext.speed.x     = speedX;
-        sOwnObjectState.ext.speed.y     = speedY;
-        sOwnObjectState.ext.speed.z     = speedZ;
-        sOwnObjectState.ext.speed.h     = 0.0;
-        sOwnObjectState.ext.speed.p     = 0.0;
-        sOwnObjectState.ext.speed.r     = 0.0;
+        sOwnObjectState.ext.speed.x = speedX;
+        sOwnObjectState.ext.speed.y = speedY;
+        sOwnObjectState.ext.speed.z = speedZ;
+        sOwnObjectState.ext.speed.h = 0.0;
+        sOwnObjectState.ext.speed.p = 0.0;
+        sOwnObjectState.ext.speed.r = 0.0;
         sOwnObjectState.ext.speed.flags = RDB_COORD_FLAG_POINT_VALID | RDB_COORD_FLAG_ANGLES_VALID;
 
-        sOwnObjectState.ext.accel.x     = 0.0;
-        sOwnObjectState.ext.accel.y     = 0.0;
-        sOwnObjectState.ext.accel.z     = 0.0;
+        sOwnObjectState.ext.accel.x = 0.0;
+        sOwnObjectState.ext.accel.y = 0.0;
+        sOwnObjectState.ext.accel.z = 0.0;
         sOwnObjectState.ext.accel.flags = RDB_COORD_FLAG_POINT_VALID;
 
-        sOwnObjectState.base.visMask    =  RDB_OBJECT_VIS_FLAG_TRAFFIC | RDB_OBJECT_VIS_FLAG_RECORDER;
+        sOwnObjectState.base.visMask = RDB_OBJECT_VIS_FLAG_TRAFFIC | RDB_OBJECT_VIS_FLAG_RECORDER;
     }
 
     // ok, I have a new object state, so let's send the data
-    sendOwnObjectState( sOwnObjectState, m_triggerSocket, simTime, simFrame);
+    sendOwnObjectState(sOwnObjectState, m_triggerSocket, simTime, simFrame);
 
     // remember last simulation time
     sLastSimTime = simTime;
 }
 
-double GroundTruthSceneExternal::getTime()
-{
+double GroundTruthSceneExternal::getTime() {
     struct timeval tme;
     gettimeofday(&tme, 0);
 
     double now = tme.tv_sec + 1.0e-6 * tme.tv_usec;
 
-    if ( mStartTime < 0.0 )
+    if (mStartTime < 0.0)
         mStartTime = now;
 
     return now;
 }
 
 
-void GroundTruthSceneExternal::calcStatistics()
-{
+void GroundTruthSceneExternal::calcStatistics() {
     double now = getTime();
 
     double dt = now - mStartTime;
 
-    if ( dt < 1.e-6 )
+    if (dt < 1.e-6)
         return;
 
-    fprintf( stderr, "calcStatistics: received %d/%d images in %.3lf seconds (i.e. %.3lf/%.3lf images per second ), total number of errors = %d\n",
-            mTotalNoImages, dt, mTotalNoImages / dt, mTotalErrorCount );
+    fprintf(stderr,
+            "calcStatistics: received %d/%d images in %.3lf seconds (i.e. %.3lf/%.3lf images per second ), total number of errors = %d\n",
+            mTotalNoImages, dt, mTotalNoImages / dt, mTotalErrorCount);
 }
 
-void GroundTruthSceneExternal::analyzeImage( RDB_IMAGE_t* img, const unsigned int & simFrame, unsigned int index )
-{
-    static unsigned int sLastImgSimFrame =  0;
+void GroundTruthSceneExternal::analyzeImage(RDB_IMAGE_t *img, const unsigned int &simFrame, unsigned int index) {
+    static unsigned int sLastImgSimFrame = 0;
 
-    if ( !img || ( index > 1 ) )
+    if (!img || (index > 1))
         return;
 
-    if ( img->id == 0 )
+    if (img->id == 0)
         return;
 
-    fprintf( stderr, "analyzeImage: simFrame = %d, index = %d: have image no. %d, size = %d bytes, pixelFormat = %d\n",
-            simFrame, index, img->id, img->imgSize, img->pixelFormat );
+    fprintf(stderr, "analyzeImage: simFrame = %d, index = %d: have image no. %d, size = %d bytes, pixelFormat = %d\n",
+            simFrame, index, img->id, img->imgSize, img->pixelFormat);
 
-    if ( img->pixelFormat == RDB_PIX_FORMAT_RGB32F )		// some analysis
+    if (img->pixelFormat == RDB_PIX_FORMAT_RGB32F)        // some analysis
     {
-        float *imgData = ( float* ) ( ( ( char* ) img ) + sizeof( RDB_IMAGE_t ) );
+        float *imgData = (float *) (((char *) img) + sizeof(RDB_IMAGE_t));
 
-        for ( int i = 0; i < 10; i++ )	// first 10 pixels
+        for (int i = 0; i < 10; i++)    // first 10 pixels
         {
-            fprintf( stderr, "r / g / b = %.3f / %.3f / %.3f\n", imgData[0], imgData[1], imgData[2] );
+            fprintf(stderr, "r / g / b = %.3f / %.3f / %.3f\n", imgData[0], imgData[1], imgData[2]);
             imgData += 3;
         }
-    }
-    else if ( img->pixelFormat == RDB_PIX_FORMAT_RGB8 )		// some analysis
+    } else if (img->pixelFormat == RDB_PIX_FORMAT_RGB8)        // some analysis
     {
-        unsigned char *imgData = ( unsigned char* ) ( ( ( char* ) img ) + sizeof( RDB_IMAGE_t ) );
+        unsigned char *imgData = (unsigned char *) (((char *) img) + sizeof(RDB_IMAGE_t));
 
-        for ( int i = 0; i < 10; i++ )	// first 10 pixels
+        for (int i = 0; i < 10; i++)    // first 10 pixels
         {
-            fprintf( stderr, "r / g / b = %d / %d / %d\n", imgData[0], imgData[1], imgData[2] );
+            fprintf(stderr, "r / g / b = %d / %d / %d\n", imgData[0], imgData[1], imgData[2]);
             imgData += 3;
         }
     }
 
 
     //if ( ( myImg->id > 3 ) && ( ( myImg->id - mLastImageId ) != IMAGE_SKIP_FACTOR_DYNAMIC ) )
-    if ( ( simFrame!= sLastImgSimFrame ) && ( img->id > 3 ) && ( ( simFrame- sLastImgSimFrame ) != IMAGE_SKIP_FACTOR_DYNAMIC ) )
-    {
-        fprintf( stderr, "WARNING: parseRDBMessageEntry: index = %d, delta of image ID out of bounds: delta = %d\n", index, simFrame- sLastImgSimFrame );
+    if ((simFrame != sLastImgSimFrame) && (img->id > 3) &&
+        ((simFrame - sLastImgSimFrame) != IMAGE_SKIP_FACTOR_DYNAMIC)) {
+        fprintf(stderr, "WARNING: parseRDBMessageEntry: index = %d, delta of image ID out of bounds: delta = %d\n",
+                index, simFrame - sLastImgSimFrame);
         mTotalErrorCount++;
     }
 
-    mLastImageId    = img->id;
+    mLastImageId = img->id;
     mTotalNoImages++;
 
     sLastImgSimFrame = simFrame;

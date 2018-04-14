@@ -75,7 +75,16 @@ public:
     float alpha_rad;
 
     //l, t, r, b: KITTI-like 2D 'bbox', respectively left, top, right, bottom bounding box in pixel coordinates (inclusive, (0,0) origin is on the upper left corner of the image)
-    struct bounding_box_m { cv::Point2f bb_left_px; cv::Point2f bb_top_px; cv::Point2f bb_right_px; cv::Point2f bb_bottom_px;} m_bounding_box;
+    struct bounding_box_m { 
+        cv::Point2f bb_lower_bottom_px; 
+        cv::Point2f bb_lower_right_px; 
+        cv::Point2f bb_lower_top_px; 
+        cv::Point2f bb_lower_left_px;
+        cv::Point2f bb_higher_bottom_px;
+        cv::Point2f bb_higher_right_px;
+        cv::Point2f bb_higher_top_px;
+        cv::Point2f bb_higher_left_px;
+    } m_bounding_box;
 
     object_dimensions_px_str m_object_dimensions_px;
 
