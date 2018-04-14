@@ -664,7 +664,7 @@ void GroundTruthScene::generate_bird_view() {
                 float x_image =  Dataset::getFrameSize().width/2 - pos.x;
                 float y_image =  Dataset::getFrameSize().height/2 - pos.y;
 
-                cv::circle(image, cv::Point2f(x_image, y_image), 1, cv::Scalar(0,255,0));
+                cv::circle(image, cv::Point2f(x_image, y_image), 1.5, cv::Scalar(0,255,0), 3, 8);
                 cv::imshow("check", image);
                 cv::waitKey(0);
 
