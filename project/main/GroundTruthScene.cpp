@@ -61,7 +61,7 @@ void GroundTruthScene::visualiseBoundingBox(void) {
                 if ((m_list_gt_objects.at(obj_index).get_obj_base_visibility().at(frame_count))
                         ) {
 
-                    //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_count).m_object_dimensions_px.dim_length_m/2))),
+                    //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_count).m_object_dimensions_px.m_object_realworld_dim_m.dim_length_m_m/2))),
                     cv::Rect boundingbox = cv::Rect(
                             cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
                                     frame_skip - 1).at(frame_count).m_object_location_px.location_x_m-
@@ -446,115 +446,7 @@ void GroundTruthScene::generate_bird_view() {
         */
 }
 
-    void GroundTruthScene::playground() {
-
-        cv::FileStorage write_fs;
-
-        for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
-
-            char temp_str_fs[20];
-            sprintf(temp_str_fs, "frame_skip_%03d", frame_skip);
-            //write_fs << temp_str_fs << "[";
-
-            unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC;
-            assert(FRAME_COUNT > 0);
-
-            //for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) //{
-
-            {ushort frame_count = 0;
-
-                for ( int i = 0; i< m_list_gt_objects.size(); i++) {
-
-                    std::vector<cv::Point3f> bounding_points_3d;
-                    //all 8 3d bounding box points of an object
-                    //VTD center of object with z = 0!
-                    //dimension of real world
-
-                    float dim_length = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_realworld_dim_m.dim_length_m;
-                    float dim_width = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_realworld_dim_m.dim_width_m;
-                    float dim_height = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_realworld_dim_m.dim_height_m;
-
-                    float h = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_rotation_inertial_rad.rotation_rz_yaw_rad;
-                    float p = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_rotation_inertial_rad.rotation_ry_pitch_rad;
-                    float r = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_rotation_inertial_rad.rotation_rx_roll_rad;
-
-                    h = 0.78;//2.205;
-                    p = 0;
-                    r = 0;
-
-                    float pos_obj_x_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_location_inertial_m.location_x_m;
-                    float pos_obj_y_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_location_inertial_m.location_y_m;
-                    float pos_obj_z_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_location_inertial_m.location_z_m;
-
-                    float pos_cam_x_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_location_inertial_m.location_x_m;
-                    float pos_cam_y_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_location_inertial_m.location_y_m;
-                    float pos_cam_z_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_location_inertial_m.location_z_m;
-
-                    pos_cam_x_inertial = 1; //-48.790;
-                    pos_cam_y_inertial = 1; //2461.080;
-                    pos_cam_z_inertial = 0; //9.5;
-
-                    float offset_x = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_offset.offset_x;
-                    float offset_y = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_offset.offset_y;
-                    float offset_z = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                            frame_count).m_object_offset.offset_z;
-
-                    /*
-                    bounding_points_3d.push_back(cv::Point3d(  dim_length/2,  dim_width/2, 0));
-                    bounding_points_3d.push_back(cv::Point3d( -dim_length/2,  dim_width/2, 0));
-                    bounding_points_3d.push_back(cv::Point3d(  dim_length/2, -dim_width/2, 0));
-                    bounding_points_3d.push_back(cv::Point3d( -dim_length/2, -dim_width/2, 0));
-                    bounding_points_3d.push_back(cv::Point3d(  dim_length/2,  dim_width/2, dim_height));
-                    bounding_points_3d.push_back(cv::Point3d( -dim_length/2,  dim_width/2, dim_height));
-                    bounding_points_3d.push_back(cv::Point3d(  dim_length/2, -dim_width/2, dim_height));
-                    bounding_points_3d.push_back(cv::Point3d( -dim_length/2, -dim_width/2, dim_height));
-                    */
-
-                    pos_obj_x_inertial = 4; pos_obj_y_inertial = 3; pos_obj_z_inertial = 0;
-                    // Translate to cam position
-                    float cam_inertial_x = pos_obj_x_inertial - pos_cam_x_inertial ;
-                    float cam_inertial_y = pos_obj_y_inertial - pos_cam_y_inertial ;
-                    float cam_inertial_z = pos_obj_z_inertial - pos_cam_z_inertial ;
-
-                    // Rotate the points.
-                    // Rotation matrix around object (0,0,0)
-                    float c = (float)cos(h); // compute trig. functions only once
-                    float s = (float)sin(h);
-
-                    float cam_rotated_x = cam_inertial_x * c + cam_inertial_y * s;
-                    float cam_rotated_y = -cam_inertial_x * s + cam_inertial_y * c;
-                    float cam_rotated_z = cam_inertial_z;
-
-
-                    float distToImagePlane = 0.5 *  Dataset::getFrameSize().height / tan(40.0 * M_PI / 180 /2); // [px] from camera position.
-
-                    float pxSize = 2.2e-6; // [m/px]
-
-                    cv::Point3d toMeter = cv::Point3d(pxSize, pxSize, 1);
-
-                    auto dist = cv::norm(cv::Point2f(cam_rotated_x, cam_rotated_y));
-                    std::cout << "distance is " << dist << " for " << m_list_gt_objects.at(i).getObjectName() << std::endl;
-                }
-            }
-        }
-        exit(0);
-    }
-
-void GroundTruthScene::calcBBFrom3DPosition() {
+    void GroundTruthScene::calcBBFrom3DPosition() {
 
     cv::FileStorage write_fs;
 
@@ -577,13 +469,11 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 //all 8 3d bounding box points of an object
                 //VTD center of object with z = 0!
                 //dimension of real world
+                m_object_realworld_dim_m_str m_object_realworld_dim_m = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                        frame_count).m_object_realworld_dim_m;
 
-                float dim_length = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_realworld_dim_m.dim_length_m;
-                float dim_width = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_realworld_dim_m.dim_width_m;
-                float dim_height = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_realworld_dim_m.dim_height_m;
+                m_object_location_inertial_str pos_obj_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                        frame_count).m_object_location_inertial_m;
 
                 float h_obj = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_rotation_inertial_rad.rotation_rz_yaw_rad;
@@ -595,13 +485,6 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 float h_sensor = 2.205;
                 float p_sensor = 0;
                 float r_sensor = 0;
-
-                float pos_obj_x_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_location_inertial_m.location_x_m;
-                float pos_obj_y_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_location_inertial_m.location_y_m;
-                float pos_obj_z_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_location_inertial_m.location_z_m;
 
                 float pos_cam_x_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_location_inertial_m.location_x_m;
@@ -625,41 +508,30 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 float r_mat = 0;
                 float p_mat = 0;
 
-                /*
-                bounding_points_3d.push_back(cv::Point3d(  dim_length/2,  dim_width/2, 0));
-                bounding_points_3d.push_back(cv::Point3d( -dim_length/2,  dim_width/2, 0));
-                bounding_points_3d.push_back(cv::Point3d(  dim_length/2, -dim_width/2, 0));
-                bounding_points_3d.push_back(cv::Point3d( -dim_length/2, -dim_width/2, 0));
-                bounding_points_3d.push_back(cv::Point3d(  dim_length/2,  dim_width/2, dim_height));
-                bounding_points_3d.push_back(cv::Point3d( -dim_length/2,  dim_width/2, dim_height));
-                bounding_points_3d.push_back(cv::Point3d(  dim_length/2, -dim_width/2, dim_height));
-                bounding_points_3d.push_back(cv::Point3d( -dim_length/2, -dim_width/2, dim_height));
-                */
-
                 cv::Point3f final;
 
                 // Translate to cam position
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(-pos_cam_x_inertial, -pos_cam_y_inertial, -pos_cam_z_inertial));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(-pos_cam_x_inertial, -pos_cam_y_inertial, -pos_cam_z_inertial));
                 float cam_inertial_x = final.x ;
                 float cam_inertial_y = final.y ;
                 float cam_inertial_z = final.z ;
 
                 // Vertices of bounding box with h,p,r = 0
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(dim_length/2, dim_width/2, 0));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(m_object_realworld_dim_m.dim_length_m/2, m_object_realworld_dim_m.dim_width_m/2, 0));
                 bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f( -dim_length/2,   dim_width/2, 0));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, 0));
                 bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(  dim_length/2,  -dim_width/2, 0));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, 0));
                 bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f( -dim_length/2,  -dim_width/2, 0));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, 0));
                 bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(  dim_length/2,   dim_width/2, dim_height));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
                 bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f( -dim_length/2,   dim_width/2, dim_height));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
                 bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f(  dim_length/2,  -dim_width/2, dim_height));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
                 bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_x_inertial, pos_obj_y_inertial, pos_obj_z_inertial), cv::Point3f( -dim_length/2,  -dim_width/2, dim_height));
+                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
                 bounding_points_3d.push_back(final);
 
                 cv::Mat image(1242,375,CV_8UC3);

@@ -37,6 +37,13 @@ MyData:
    id: mydata1234
 */
 
+typedef struct object_location_inertial_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_inertial_str;
+
+//w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
+typedef struct object_dimensions_px { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_px_str;
+
+//w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
+typedef struct object_realworld_dim_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_realworld_dim_m_str;
 
 
 class STRUCT_GT_ALL {
@@ -65,19 +72,16 @@ public:
     //l, t, r, b: KITTI-like 2D 'bbox', respectively left, top, right, bottom bounding box in pixel coordinates (inclusive, (0,0) origin is on the upper left corner of the image)
     struct bounding_box_m { float bb_left_px; float bb_top_px; float bb_right_px; float bb_bottom_px;} m_bounding_box;
 
-    //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
-    struct object_dimensions_px { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_px;
+    m_object_dimensions_px_str m_object_dimensions_px;
 
-    //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
-    struct object_realworld_dim_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_realworld_dim_m;
-
+    m_object_realworld_dim_m_str m_object_realworld_dim_m;
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_px { float location_x_m; float location_y_m; float location_z_m;} m_object_location_px;
 
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_m;
 
-    struct object_location_inertial_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_inertial_m;
+    m_object_location_inertial_str m_object_location_inertial_m;
 
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D object 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
