@@ -575,20 +575,22 @@ void GroundTruthScene::generate_bird_view() {
                 cam_rotated_y = cam_rotated(1);
                 cam_rotated_z = cam_rotated(2);
 
-                float distToImagePlane = 0.5 *  Dataset::getFrameSize().height / tan(40.0 * M_PI / 180 /2); // [px] from camera position.
+                float distToImagePlane = 0.5 *  Dataset::getFrameSize().height / tan(20.0 * M_PI / 180 /2); // [px] from camera position.
 
                 float pxSize = 2.2e-6; // [m/px]
 
-                cv::Point3f toMeter = cv::Point3d(pxSize, pxSize, 1);
-
-                //transform from sensor coordinates to camera coordinates
+                //transform to VTD coordinates, x = depth
                 cv::Point3f pos = cv::Point3f(cam_rotated_y, cam_rotated_z, cam_rotated_x);
 
                 //scale 3D point back onto image
                 pos = pos * ((distToImagePlane * pxSize) /*m*/ / pos.z);
 
                 //convert meter to pixel
-                pos = cv::Point3f(pos.x / toMeter.x, pos.y/toMeter.y, pos.z/toMeter.z);
+                pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
+
+                // Change from optical axis to origin ( top, left )
+                float x_image =  Dataset::getFrameSize().width/2 - pos.x;
+                float y_image =  Dataset::getFrameSize().height/2 - pos.y;
 
                 auto dist = cv::norm(cv::Point2f(cam_rotated_x, cam_rotated_y));
                 auto dist_usk = cv::norm(cv::Point2f( m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(

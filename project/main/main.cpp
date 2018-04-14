@@ -231,7 +231,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::vector<Objects *> ptr_list_of_gt_objects;
             GroundTruthObjects::objectCurrentCount = 0;
 
-            cv::Size_<unsigned> frame_size(800, 600);
+            cv::Size_<unsigned> frame_size(1242, 375);
             std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
             std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
 
