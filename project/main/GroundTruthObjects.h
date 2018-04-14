@@ -78,6 +78,13 @@ public:
         return m_image_data_and_shape;
     }
 
+    void setBoundingBoxPoints(ushort frame_skip, ushort frameNumber, cv::Point2f bbox_points) {
+
+        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_left_px = bbox_points;
+
+    }
+
+
 
 };
 

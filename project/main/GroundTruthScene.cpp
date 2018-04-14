@@ -74,10 +74,19 @@ void GroundTruthScene::visualiseBoundingBox(void) {
                             cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
                                     frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m));
 
-                    cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+                    //cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+
+                    cv::circle(tempGroundTruthImage, cv::Point2f(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                            frame_skip - 1).at(frame_count).m_object_location_px.location_x_m, m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                            frame_skip - 1).at(frame_count).m_object_location_px.location_y_m), 1.5, cv::Scalar(0,255,0), 3, 8);
+
+                    cv::circle(tempGroundTruthImage, cv::Point2f(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                            frame_skip - 1).at(frame_count).m_bounding_box.bb_left_px.x, m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
+                            frame_skip - 1).at(frame_count).m_bounding_box.bb_left_px.y), 3, cv::Scalar(0,0,255), 3, 8);
 
                 }
             }
+
             cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
             cv::imshow("BB", tempGroundTruthImage);
             cv::waitKey(0);
@@ -424,7 +433,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             writePositionInYaml("cpp");
         }
 
-        //visualiseBoundingBox();
+        visualiseBoundingBox();
 
     }
 
@@ -664,9 +673,7 @@ void GroundTruthScene::generate_bird_view() {
                 float x_image =  Dataset::getFrameSize().width/2 - pos.x;
                 float y_image =  Dataset::getFrameSize().height/2 - pos.y;
 
-                cv::circle(image, cv::Point2f(x_image, y_image), 1.5, cv::Scalar(0,255,0), 3, 8);
-                cv::imshow("check", image);
-                cv::waitKey(0);
+                m_list_gt_objects.at(i).setBoundingBoxPoints(frame_skip - 1, frame_count, cv::Point2f(x_image, y_image));
 
                 auto dist = cv::norm(cv::Point2f(cam_rotated_x, cam_rotated_y));
                 auto dist_usk = cv::norm(cv::Point2f( m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
@@ -983,6 +990,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             }
 
             calcBBFrom3DPosition();
+            visualiseBoundingBox();
 
         }
     }
