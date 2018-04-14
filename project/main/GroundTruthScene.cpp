@@ -616,7 +616,7 @@ void GroundTruthScene::generate_bird_view() {
                 final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
                 bounding_points_3d.push_back(final);
 
-                cv::Mat image(1242,375,CV_8UC3);
+                cv::Mat image(cv::Size(1242,375),CV_8UC3, cv::Scalar::all(255));
 
                 h_mat = orientation_obj_inertial.rotation_rz_yaw_rad;
                 p_mat = orientation_obj_inertial.rotation_ry_pitch_rad;
@@ -663,6 +663,10 @@ void GroundTruthScene::generate_bird_view() {
                 // Change from optical axis to origin ( top, left )
                 float x_image =  Dataset::getFrameSize().width/2 - pos.x;
                 float y_image =  Dataset::getFrameSize().height/2 - pos.y;
+
+                cv::circle(image, cv::Point2f(x_image, y_image), 1, cv::Scalar(0,255,0));
+                cv::imshow("check", image);
+                cv::waitKey(0);
 
                 auto dist = cv::norm(cv::Point2f(cam_rotated_x, cam_rotated_y));
                 auto dist_usk = cv::norm(cv::Point2f( m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
