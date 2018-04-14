@@ -25,7 +25,7 @@ public:
 
     // The canvas can move to simulate a moving car. Hence we need position etc.
     Canvas( ) : whiteNoise(), background((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height){
-        CameraSensorImage(background, whiteNoise);
+        CameraSensor(background, whiteNoise);
         background.process();
     };
 

@@ -152,39 +152,77 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
                 write_fs
                         << "{:" << "name" << m_list_gt_objects.at(i).getObjectName()
                         << "visible" << m_list_gt_objects.at(i).get_obj_base_visibility().at(frame_count)
+                        //<< "x_camera" <<  m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_location_px.location_x_m
                         << "x_camera" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_x_m
                         << "y_camera" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_y_m
                         << "z_camera" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_px.location_z_m
+
                         << "x_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_x_m
                         << "y_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_y_m
                         << "z_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_m.location_z_m
+
                         << "x_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_inertial_m.location_x_m
                         << "y_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_inertial_m.location_y_m
                         << "z_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_location_inertial_m.location_z_m
+
                         << "dim_x_camera" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m
                         << "dim_y_camera" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m
+
                         << "dim_x_realworld" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_realworld_dim_m.dim_width_m
                         << "dim_y_realworld" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_realworld_dim_m.dim_height_m
                         << "dim_z_realworld" << m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_realworld_dim_m.dim_length_m
+
                         << "speed_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.x
                         << "speed_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed.y
+
                         << "speed_x_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.x
                         << "speed_y_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.y
                         << "speed_z_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_speed_inertial.z
+
                         << "off_x" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_x
                         << "off_y" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_y
                         << "off_z" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset.offset_z
+
                         << "h_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_rz_yaw_rad
                         << "p_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_ry_pitch_rad
                         << "r_usk" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_rad.rotation_rx_roll_rad
+
                         << "h_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_inertial_rad.rotation_rz_yaw_rad
                         << "p_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_inertial_rad.rotation_ry_pitch_rad
                         << "r_inertial" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_rotation_inertial_rad.rotation_rx_roll_rad
+
                         << "dist_cam_to_obj" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_distances.sensor_to_obj
                         << "total_distance_covered" <<  m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_distances.total_distance_covered
 
+                        << "}";  //dont close the brace yet
+            }
+            for ( int i = 0; i< m_list_gt_sensors.size(); i++) {
+                write_fs
+
+                        << "{:" << "name" << m_list_gt_sensors.at(i).getSensorName()
+                        << "visible" << m_list_gt_sensors.at(i).get_sen_base_visibility().at(frame_count)
+
+                        << "x_carrier" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_location_carrier_m.location_x_m
+                        << "y_carrier" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_location_carrier_m.location_y_m
+                        << "z_carrier" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_location_carrier_m.location_z_m
+                        << "h_carrier" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad
+                        << "p_carrier" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad
+                        << "r_carrier" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad
+
+                        //<< "x_sensor" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_location_m.location_x_m
+                        //<< "y_sensor" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_location_m.location_y_m
+                        //<< "z_sensor" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_location_m.location_z_m
+
+                        << "h_sensor" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_rotation_rad.rotation_rz_yaw_rad
+                        << "p_sensor" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_rotation_rad.rotation_ry_pitch_rad
+                        << "r_sensor" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_rotation_rad.rotation_rx_roll_rad
+                        << "off_x" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_offset.offset_x
+                        << "off_y" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_offset.offset_y
+                        << "off_z" <<  m_list_gt_sensors.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_sensor_offset.offset_z
+
                         << "}";
             }
+
             write_fs << "]";
         }
     }
@@ -200,6 +238,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     cv::Point2f dimension_pixel;
     cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
     cv::Point3f position_inertial_pre, position_usk_pre, position_pixel_pre;
+    float totalDistanceTravelled;
 
     cv::Point3f orientation_inertial, orientation_usk;
 
@@ -260,9 +299,12 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
                     speed_usk = cv::Point2f((int)(*file_node_iterator)["speed_x"], (int)(*file_node_iterator)["speed_y"]);
 
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(frame_count, position_pixel, offset, dimension_pixel);
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk, dimension_realworld, speed_usk);
-                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(frame_count, position_inertial, orientation_inertial, dimension_realworld, speed_inertial);
+                    totalDistanceTravelled = (float)(*file_node_iterator)["total_distance_covered"];
+
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(frame_count, position_pixel, offset, dimension_pixel, totalDistanceTravelled);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(frame_count, position_usk, orientation_usk, dimension_realworld, speed_usk, totalDistanceTravelled);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(frame_count, position_inertial, orientation_inertial, dimension_realworld, speed_inertial, totalDistanceTravelled);
+
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(frame_count, (int)(*file_node_iterator)["visible"]);
 
                     position_inertial_pre = position_inertial;
@@ -330,6 +372,12 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         }
 
+        for ( auto i = 0; i < m_ptr_customSensorMetaDataList.size() ; i++) {
+
+            Sensors gt_sen( *m_ptr_customSensorMetaDataList.at(i), m_ptr_customSensorMetaDataList.at(i)->getSensorStartPoint(), &colorfulNoise, m_ptr_customSensorMetaDataList.at(i)->getSensorName());
+            m_list_gt_sensors.push_back(gt_sen);
+        }
+
         if ( m_regenerate_yaml_file  ) {
             writePositionInYaml("cpp");
         }
@@ -370,7 +418,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     if ( m_environment == "night") {
         BlackNoise noise;
         ObjectImageShapeData newCanvas = m_canvas.getCanvasShapeAndData();
-        noise.apply(newCanvas);
+        newCanvas.applyNoise(&noise);
         tempGroundTruthImageBase = newCanvas.get().clone();
     }
     else {
@@ -469,18 +517,14 @@ void GroundTruthScene::generate_bird_view() {
                 //all 8 3d bounding box points of an object
                 //VTD center of object with z = 0!
                 //dimension of real world
-                m_object_realworld_dim_m_str m_object_realworld_dim_m = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                object_realworld_dim_m_str m_object_realworld_dim_m = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_realworld_dim_m;
 
-                m_object_location_inertial_str pos_obj_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                object_location_inertial_m_str pos_obj_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_location_inertial_m;
 
-                float h_obj = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_rotation_inertial_rad.rotation_rz_yaw_rad;
-                float p_obj = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_rotation_inertial_rad.rotation_ry_pitch_rad;
-                float r_obj = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_object_rotation_inertial_rad.rotation_rx_roll_rad;
+                object_rotation_inertial_rad_str orientation_obj_inertial = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                        frame_count).m_object_rotation_inertial_rad;
 
                 float h_sensor = 2.205;
                 float p_sensor = 0;
@@ -543,9 +587,9 @@ void GroundTruthScene::generate_bird_view() {
                 float s = (float)sin(-h_sensor);
 
 
-                h_mat = h_obj;
-                r_mat = r_obj;
-                p_mat = p_obj;
+                h_mat = orientation_obj_inertial.rotation_rz_yaw_rad;
+                r_mat = orientation_obj_inertial.rotation_rx_roll_rad;
+                p_mat = orientation_obj_inertial.rotation_ry_pitch_rad;
 
                 cv::Matx33d rot_matrix_object = {
                         cos(p_mat)*cos(h_mat) ,  -cos(r_mat)*sin(h_mat) + sin(r_mat)*sin(p_mat)*cos(h_mat),   sin(r_mat)*sin(h_mat) + cos(r_mat)*sin(p_mat)*cos(h_mat),
@@ -830,12 +874,13 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                             //std::cout << mLastNetworkFrame << " " << mLastIGTriggerFrame << std::endl;
                             mLastIGTriggerFrame = mLastNetworkFrame;
                             mCheckForImage = true;
-                            fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s at simFrame %d\n", mDeltaTime, requestImage ? "true" : "false", mSimFrame );
+                            fprintf( stderr, "------------------------------------------------------------------------------------\n");
+                            fprintf( stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = %s \n", mDeltaTime, requestImage ? "true" : "false");
                             if ( m_dumpFirstFrame ) {
-                                sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, false, 0.01);
+                                sendRDBTrigger(m_triggerSocket, mSimTime, 0, false, 0.01);
                             }
                             else {
-                                sendRDBTrigger(m_triggerSocket, mSimTime, mSimFrame, true, 0.1);
+                                sendRDBTrigger(m_triggerSocket, mSimTime, 0, true, 0.1);
                             }
                         }
 
@@ -894,6 +939,13 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 m_list_gt_objects.push_back(gt_obj);
 
             }
+
+            for ( auto i = 0; i < m_ptr_customSensorMetaDataList.size() ; i++) {
+
+                Sensors gt_sen( *m_ptr_customSensorMetaDataList.at(i), m_ptr_customSensorMetaDataList.at(i)->getSensorStartPoint(), &noNoise, m_ptr_customSensorMetaDataList.at(i)->getSensorName());
+                m_list_gt_sensors.push_back(gt_sen);
+            }
+
 
             if ( m_regenerate_yaml_file  ) {
                 writePositionInYaml("vires");
@@ -996,6 +1048,44 @@ unsigned short &pkgId, const unsigned short &flags,
 
 }
 
+void GroundTruthSceneExternal::parseEntry( RDB_SENSOR_STATE_t *data, const double & simTime, const unsigned int & simFrame,
+        const unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) {
+
+    cv::Point3f position_sensor_carrier, orientation_sensor_carrier, position_sensor, orientation_sensor, offset_sensor;
+
+    if ( m_environment == "none") {
+
+        if ( data->type == RDB_SENSOR_TYPE_VIDEO || data->type == RDB_SENSOR_TYPE_RADAR ) {
+        if (!m_dumpFirstFrame && (mImageCount >= 0)) {
+
+            fprintf( stderr, "saving sensor truth for simFrame = %d, simTime %f %s\n", simFrame, simTime, data->name);
+
+            if (m_mapSensorNameToSensorMetaData.count(data->name) == 0) {
+
+                m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
+                m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
+                m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
+                m_sensorCount += 1;
+            }
+
+            position_sensor_carrier = cv::Point3f((float) data->originCoordSys.x, (float) data->originCoordSys.y,
+                    (float) data->originCoordSys.z);
+            orientation_sensor_carrier = cv::Point3f((float) data->originCoordSys.h, (float) data->originCoordSys.p,
+                    (float) data->originCoordSys.r);
+
+            offset_sensor = cv::Point3f((float) data->pos.x, (float) data->pos.y,
+                    (float) data->pos.z);
+            orientation_sensor = cv::Point3f((float) data->pos.h, (float) data->pos.p,
+                    (float) data->pos.r);
+
+            m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
+                    (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), position_sensor_carrier,
+                    orientation_sensor_carrier, orientation_sensor, offset_sensor);
+            }
+        }
+    }
+}
+
 void GroundTruthSceneExternal::parseEntry(RDB_OBJECT_STATE_t *data, const double &simTime, const unsigned int &
 simFrame, const
 unsigned
@@ -1006,6 +1096,8 @@ short &pkgId, const unsigned short &flags, const unsigned int &elemId,
     cv::Point2f dimension_pixel;
     cv::Point2f speed_inertial, speed_usk;
     cv::Point3f orientation_usk, orientation_inertial;
+    float dist_cam_to_obj;
+    float total_distance_travelled;
 
     if ( m_environment == "none") {
 
@@ -1017,6 +1109,8 @@ short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                         data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
                                 .geo.dimY);
 */
+                fprintf( stderr, "saving ground truth for simFrame = %d, simTime %f %s\n", simFrame, simTime, data->base.name);
+
                 if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
 
                     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
@@ -1028,30 +1122,32 @@ short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                 }
                 if ( data->base.pos.type == RDB_COORD_TYPE_WINDOW )
                 {
-                    fprintf( stderr, "------------------------------------------------------------------------------------\n");
-                    fprintf( stderr, "saving ground truth for simFrame = %d, simTime %f\n", simFrame, simTime);
-                    fprintf( stderr, "------------------------------------------------------------------------------------\n");
 
                     position_pixel = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, float(data->base.pos.z));
                     dimension_pixel = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
                     offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY, (float) data->base.geo.offZ);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset, dimension_pixel);
+                    total_distance_travelled =  data->ext.traveledDist;
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset, dimension_pixel, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
                 else if ( data->base.pos.type == RDB_COORD_TYPE_USK ) {
+
                     position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
                     orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
                     dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY, (float) data->base.geo.dimZ);
                     speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_realworld, speed_usk);
+                    total_distance_travelled =  data->ext.traveledDist;
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_usk, orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
                 else if ( data->base.pos.type == RDB_COORD_TYPE_INERTIAL ) {
+
                     position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y, (float) data->base.pos.z);
                     orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p, (float) data->base.pos.r);
                     dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY, (float) data->base.geo.dimZ);
                     speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_realworld, speed_inertial);
+                    total_distance_travelled =  data->ext.traveledDist;
+                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial, orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility((ushort)((simFrame-MAX_DUMPS-1)/IMAGE_SKIP_FACTOR_DYNAMIC), true);
                 }
             } else {
@@ -1113,18 +1209,14 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
             char file_name_image[50];
 
             if ( !m_dumpFirstFrame  ) {
-                fprintf( stderr, "------------------------------------------------------------------------------------\n");
                 fprintf( stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n", simFrame, simTime, data->imgSize, data->id);
-                fprintf( stderr, "------------------------------------------------------------------------------------\n");
                 mImageCount++;
                 sprintf(file_name_image, "000%03d_10.png", mImageCount);
                 std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
                 save_image.write(input_image_file_with_path);
             }
             else {
-                fprintf( stderr, "------------------------------------------------------------------------------------\n");
                 fprintf( stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n", simFrame, simTime, data->imgSize, data->id);
-                fprintf( stderr, "------------------------------------------------------------------------------------\n");
             }
         }
         else {

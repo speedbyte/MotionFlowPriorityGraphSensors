@@ -37,13 +37,16 @@ MyData:
    id: mydata1234
 */
 
-typedef struct object_location_inertial_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_inertial_str;
+typedef struct object_location_inertial_m { float location_x_m; float location_y_m; float location_z_m;} object_location_inertial_m_str;
 
 //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
-typedef struct object_dimensions_px { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_dimensions_px_str;
+typedef struct object_dimensions_px { float dim_width_m; float dim_height_m; float dim_length_m; } object_dimensions_px_str;
 
 //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
-typedef struct object_realworld_dim_m { float dim_width_m; float dim_height_m; float dim_length_m; } m_object_realworld_dim_m_str;
+typedef struct object_realworld_dim_m { float dim_width_m; float dim_height_m; float dim_length_m; } object_realworld_dim_m_str;
+
+typedef struct object_rotation_inertial_rad { float rotation_rx_roll_rad; float rotation_ry_pitch_rad; float rotation_rz_yaw_rad; } object_rotation_inertial_rad_str;
+
 
 
 class STRUCT_GT_ALL {
@@ -72,16 +75,17 @@ public:
     //l, t, r, b: KITTI-like 2D 'bbox', respectively left, top, right, bottom bounding box in pixel coordinates (inclusive, (0,0) origin is on the upper left corner of the image)
     struct bounding_box_m { float bb_left_px; float bb_top_px; float bb_right_px; float bb_bottom_px;} m_bounding_box;
 
-    m_object_dimensions_px_str m_object_dimensions_px;
+    object_dimensions_px_str m_object_dimensions_px;
 
-    m_object_realworld_dim_m_str m_object_realworld_dim_m;
+    object_realworld_dim_m_str m_object_realworld_dim_m;
+
+    object_location_inertial_m_str m_object_location_inertial_m;
+
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_px { float location_x_m; float location_y_m; float location_z_m;} m_object_location_px;
 
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_m;
-
-    m_object_location_inertial_str m_object_location_inertial_m;
 
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D object 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
@@ -89,7 +93,8 @@ public:
     //rx: rotation around X-axis (pitch) in camera coordinates [-pi..pi]
     //rz: rotation around Z-axis (roll) in camera coordinates [-pi..pi]
     struct object_rotation_rad { float rotation_rx_roll_rad; float rotation_ry_pitch_rad; float rotation_rz_yaw_rad;} m_object_rotation_rad;
-    struct object_rotation_inertial_rad { float rotation_rx_roll_rad; float rotation_ry_pitch_rad; float rotation_rz_yaw_rad; } m_object_rotation_inertial_rad;
+
+    object_rotation_inertial_rad_str m_object_rotation_inertial_rad;
 
     struct object_distances { float sensor_to_obj; float total_distance_covered; } m_object_distances;
 
@@ -240,7 +245,7 @@ public:
 
     virtual void pushVisibility(bool visibility) {}
 
-    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions) {
+    void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions, float total_distance_travelled) {
         //m_pixel_position.at(frameNumber) = position;
         m_gt_all.at(frameNumber).m_object_location_px.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_px.location_y_m = position.y;
@@ -252,16 +257,19 @@ public:
 
         m_gt_all.at(frameNumber).m_object_dimensions_px.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
+
+        m_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
+
     }
 
-    void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point3f dimensions, cv::Point2f speed) {
+    void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point3f dimensions, cv::Point2f speed, float total_distance_travelled) {
         m_gt_all.at(frameNumber).m_object_location_m.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_m.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_m.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_roll_rad = orientation.x;
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_pitch_rad = orientation.y;
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rz_yaw_rad = orientation.y;
+        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rz_yaw_rad = orientation.x; //h
+        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_pitch_rad = orientation.y; //p
+        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_roll_rad = orientation.x; //r
 
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
         m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;
@@ -270,9 +278,11 @@ public:
         m_gt_all.at(frameNumber).m_object_speed.x = speed.x;
         m_gt_all.at(frameNumber).m_object_speed.y = speed.y;
 
+        m_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
+
     }
 
-    void atFrameNumberPerfectSensorInertial(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point3f dimensions, cv::Point2f speed) {
+    void atFrameNumberPerfectSensorInertial(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point3f dimensions, cv::Point2f speed, float total_distance_travelled) {
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_x_m = position.x;
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_y_m = position.y;
         m_gt_all.at(frameNumber).m_object_location_inertial_m.location_z_m = position.z;
@@ -287,6 +297,8 @@ public:
 
         m_gt_all.at(frameNumber).m_object_speed_inertial.x = speed.x;
         m_gt_all.at(frameNumber).m_object_speed_inertial.y = speed.y;
+
+        m_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
 
     }
 

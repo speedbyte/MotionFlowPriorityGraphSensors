@@ -2,13 +2,12 @@
 // Created by veikas on 28.01.18.
 //
 
-#ifndef MAIN_OBJECTSHAPE_H
-#define MAIN_OBJECTSHAPE_H
+#ifndef MAIN_SENSORIMAGESHAPEDATA_H
+#define MAIN_SENSORIMAGESHAPEDATA_H
 
 #include <opencv2/core/mat.hpp>
-#include "Noise.h"
 
-class ObjectImageShapeData {
+class SensorImageShapeData {
 
 protected:
 
@@ -18,19 +17,13 @@ protected:
 
 public:
 
-    ObjectImageShapeData() {};
+    SensorImageShapeData() {};
 
-    ObjectImageShapeData(ushort width, ushort height ) : m_objectWidth(width), m_objectHeight
+    SensorImageShapeData(ushort width, ushort height ) : m_objectWidth(width), m_objectHeight
             (height) {
         m_data.create(height, width, CV_8UC3);
     }
-
     virtual void process() {};
-
-    void applyNoise(Noise *noise) {
-
-        noise->apply(m_data);
-    }
 
     ushort getWidth() {
         return m_objectWidth;
@@ -49,16 +42,16 @@ public:
     }
 };
 
-class Rectangle :  public ObjectImageShapeData {
+class Rectangle :  public SensorImageShapeData {
 
 private:
 
 public:
 
-    Rectangle(ushort width, ushort height) : ObjectImageShapeData(width, height) {};
+    Rectangle(ushort width, ushort height) : SensorImageShapeData(width, height) {};
 
     void process() override ;
 
 };
 
-#endif //MAIN_OBJECTSHAPE_H
+#endif //MAIN_SENSORIMAGESHAPEDATA_H

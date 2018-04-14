@@ -19,6 +19,8 @@
 #include "GroundTruthObjects.h"
 #include "RobustnessIndex.h"
 
+#include "Sensors.h"
+
 
 //extern bool eval(std::string result_sha, Mail *mail);
 //extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
@@ -218,6 +220,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     cv::FileStorage fs;
 
     std::vector<GroundTruthObjects> list_of_gt_objects_base;
+    std::vector<Sensors> list_of_gt_sensors_base;
+
     std::vector<SimulatedObjects> list_of_simulated_objects_base;
     std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
 
@@ -242,7 +246,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
                 // The first iteration "none" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
-                GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, vires_dataset.gt);
+                GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, list_of_gt_sensors_base, vires_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
                 base_ptr_gt_scene->prepare_directories();
                 base_ptr_gt_scene->generate_gt_scene();
@@ -258,7 +262,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             else if ( cpp_dataset.execute  ) {
 
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
-                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, cpp_dataset.gt);
+                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
                 base_ptr_gt_scene->prepare_directories();
                 base_ptr_gt_scene->generate_gt_scene();

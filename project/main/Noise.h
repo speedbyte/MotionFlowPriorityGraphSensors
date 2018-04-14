@@ -8,7 +8,6 @@
 
 #include <opencv2/imgproc.hpp>
 #include <iostream>
-#include "ObjectImageShapeData.h"
 
 //class SensorImage;
 
@@ -16,7 +15,7 @@ class Noise {
 
 public:
 
-    virtual void apply(ObjectImageShapeData &image) {
+    virtual void apply(cv::Mat &image) {
 
         clear(); // restore original image without noise and then apply
         append();
@@ -48,7 +47,7 @@ class Vignetting : public Noise {
 class GuassianNoise: public Noise {
 
 public:
-    void apply(ObjectImageShapeData &image) override {
+    void apply(cv::Mat &image) override {
         //cv::GaussianBlur();// manipulate image with noise on this and return
     }
 
@@ -58,10 +57,10 @@ public:
 class BlackNoise : public Noise {
 
 public:
-    void apply(ObjectImageShapeData &image) override {
+    void apply(cv::Mat &image) override {
 
         std::cout << "applying black noise" << std::endl;
-        image.get() = cv::Scalar(0,0,0);
+        image = cv::Scalar(0,0,0);
     }
 
 };
@@ -70,9 +69,9 @@ class ColorfulNoise : public Noise {
 
 public:
 
-    void apply(ObjectImageShapeData &image) override {
+    void apply(cv::Mat &image) override {
 
-        std::cout << "rows"  << image.get().rows << std::endl;
+        std::cout << "rows"  << image.rows << std::endl;
 
         uchar r = 0;
         uchar b = 0;
@@ -80,11 +79,11 @@ public:
         r = 0;
         b = 0;
 
-        for (int k = 0; k < ( image.get().rows - 1); k++) {
-            for (int j = 0; j < (image.get().cols -1 ); j++) {
-                image.get().at<cv::Vec3b>(k, j)[0] = b;
-                image.get().at<cv::Vec3b>(k, j)[1] = 0;
-                image.get().at<cv::Vec3b>(k, j)[2] = r;
+        for (int k = 0; k < ( image.rows - 1); k++) {
+            for (int j = 0; j < (image.cols -1 ); j++) {
+                image.at<cv::Vec3b>(k, j)[0] = b;
+                image.at<cv::Vec3b>(k, j)[1] = 0;
+                image.at<cv::Vec3b>(k, j)[2] = r;
                 r = r + (uchar)2;
                 b = b + (uchar)2;
                 if (r > 254)
@@ -100,17 +99,17 @@ class WhiteNoise : public Noise {
 
 public:
 
-    void apply(ObjectImageShapeData &image) override {
+    void apply(cv::Mat &image) override {
 
         std::cout << "applying white noise" << std::endl;
-        image.get() = cv::Scalar(255,255,255);
+        image = cv::Scalar(255,255,255);
     }
 };
 
 
 class Reflection: public Noise {
 public:
-    void apply(ObjectImageShapeData &image) override{
+    void apply(cv::Mat &image) override{
         // manipulate image with noise and return
     }
 };
@@ -118,10 +117,10 @@ public:
 class NoNoise: public Noise {
 
 public:
-    void apply(ObjectImageShapeData &image) override {
+    void apply(cv::Mat &image) override {
 
         std::cout << "plain blue item" << std::endl;
-        image.get() = cv::Scalar(255,0,255);
+        image = cv::Scalar(255,0,255);
         // manipulate image with noise and return
     }
 };

@@ -10,12 +10,15 @@
 #include <unistd.h>
 #include "Canvas.h"
 #include "ObjectMetaData.h"
+#include "Sensors.h"
 #include <vires-interface/vires_common.h>
 
 class GroundTruthScene  {
 
 protected:
     std::vector<GroundTruthObjects> &m_list_gt_objects;
+
+    std::vector<Sensors> &m_list_gt_sensors;
 
     boost::filesystem::path  m_groundtruthpath;
 
@@ -43,13 +46,20 @@ protected:
 
     ushort m_objectCount = 0;
 
+    std::vector<SensorMetaData> sensorMetaDataList;
+
+    std::vector<SensorMetaData *> m_ptr_customSensorMetaDataList;
+
+    std::map<std::string, SensorMetaData*> m_mapSensorNameToSensorMetaData;
+
+    ushort m_sensorCount = 0;
 
 
 
 public:
 
-    GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
-    m_list_gt_objects(list_objects), m_regenerate_yaml_file(generate_yaml_file)
+    GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
+    m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file)
     {
 
         m_datasetpath = Dataset::getDatasetPath();
@@ -57,6 +67,10 @@ public:
         for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
             ObjectMetaData objMetaData;
             objectMetaDataList.push_back(objMetaData);
+        }
+        for (int i = 0; i < MAX_ALLOWED_SENSORS; ++i) {
+            SensorMetaData senMetaData;
+            sensorMetaDataList.push_back(senMetaData);
         }
     };
 
@@ -95,15 +109,11 @@ private:
 
 public:
 
-    GroundTruthSceneInternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, bool generate_yaml_file) :
-    GroundTruthScene(scenario, environment, list_objects, generate_yaml_file) {
+    GroundTruthSceneInternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
+    GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
     }
 
     void generate_gt_scene() override;
-
-    cv::Mat getObjectShape(int index) {
-        return m_list_gt_objects.at(index).getImageShapeAndData().get();
-    }
 
     ~GroundTruthSceneInternal(){
         std::cout << "killing previous GroundTruthScene object\n" ;
@@ -162,7 +172,7 @@ private:
                     "   <Position dx=\"2.000000\" dy=\"0.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "
-                    "   <Port name=\"RDBout\" number=\"48185\" type=\"TCP\" sendEgo=\"false\" /> "
+                    "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"true\" /> "
                     "   <Filter objectType=\"none\" />"
                     "   <Filter objectType=\"pedestrian\" /> "
                     "   <Filter objectType=\"vehicle\" /> "
@@ -315,9 +325,8 @@ public:
 
     double getTime();
 
-    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, bool generate_yaml_file) :
-    GroundTruthScene(scenario, environment, list_objects, generate_yaml_file) {
-
+    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
+    GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
 
 
         std::string to_replace = "traffic_demo";
@@ -333,10 +342,17 @@ public:
         }
 
         module_manager_libModuleCameraSensor = module_manager_libModuleSensor;
+
+        to_replace = std::to_string(65535);
+        position = module_manager_libModuleCameraSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT));
+        }
+
         module_manager_libModulePerfectSensor = module_manager_libModuleSensor;
         module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor;
 
-        to_replace = std::to_string(DEFAULT_RX_PORT);
+        to_replace = std::to_string(65535);
         position = module_manager_libModulePerfectSensor.find(to_replace);
         if ( position != std::string::npos) {
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT));
@@ -354,7 +370,7 @@ public:
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
         }
 
-        to_replace = std::to_string(DEFAULT_RX_PORT);
+        to_replace = std::to_string(65535);
         position = module_manager_libModulePerfectSensorInertial.find(to_replace);
         if ( position != std::string::npos) {
             module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT_INERTIAL));
@@ -524,6 +540,9 @@ public:
 
     void parseEntry( RDB_TRIGGER_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
             const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) override;
+
+    void parseEntry( RDB_SENSOR_STATE_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
+            const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
 
 
     ~GroundTruthSceneExternal(){

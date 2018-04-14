@@ -47,6 +47,7 @@ protected:
     std::vector<std::vector<std::vector<cv::Point2f > > >
             m_list_obj_line_parameters;
 
+
     int m_ObjectInertialWidth;
 
     int m_ObjectInertialHeight;
