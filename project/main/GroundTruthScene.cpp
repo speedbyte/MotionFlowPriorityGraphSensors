@@ -580,8 +580,8 @@ void GroundTruthScene::generate_bird_view() {
                 sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_sensor_location_carrier_m;
 
-                sensor_fov_rad_str fov_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                        frame_count).m_sensor_fov_rad;
+                sensor_fov_rad_str fov_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).
+                        at(frame_count).m_sensor_fov_rad;
 
                 sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_sensor_rotation_carrier_rad;
@@ -599,61 +599,45 @@ void GroundTruthScene::generate_bird_view() {
 
                 cv::Point3f final;
 
-                // this is a passive transformation ( chaning the axis ), hence we need to negate.
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m),
-                        cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m, -pos_sensor_carrier_inertial.location_z_m));
-
-                float cam_inertial_x = final.x ;
-                float cam_inertial_y = final.y ;
-                float cam_inertial_z = final.z ;
-
-                // Vertices of bounding box with h,p,r = 0
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(m_object_realworld_dim_m.dim_length_m/2, m_object_realworld_dim_m.dim_width_m/2, 0));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, 0));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, 0));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, 0));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
-                bounding_points_3d.push_back(final);
-                final = Utils::translate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m));
-                bounding_points_3d.push_back(final);
-
-                cv::Mat image(cv::Size(1242,375),CV_8UC3, cv::Scalar::all(255));
-
                 h_mat = orientation_obj_inertial.rotation_rz_yaw_rad;
                 p_mat = orientation_obj_inertial.rotation_ry_pitch_rad;
                 r_mat = orientation_obj_inertial.rotation_rx_roll_rad;
 
-                cv::Matx33d rot_matrix_object = {
-                        cos(p_mat)*cos(h_mat) ,  -cos(r_mat)*sin(h_mat) + sin(r_mat)*sin(p_mat)*cos(h_mat),   sin(r_mat)*sin(h_mat) + cos(r_mat)*sin(p_mat)*cos(h_mat),
-                        cos(p_mat)*sin(h_mat) ,  cos(r_mat)*cos(h_mat) + sin(r_mat)*sin(p_mat)*sin(h_mat) ,  -sin(r_mat)*cos(h_mat) + cos(r_mat)*sin(p_mat)*sin(h_mat),
-                        -sin(p_mat)           ,  sin(r_mat)*cos(p_mat)                                    ,   cos(r_mat)*cos(p_mat)};
+                // Vertices of bounding box
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(m_object_realworld_dim_m.dim_length_m/2, m_object_realworld_dim_m.dim_width_m/2, 0), cv::Point3f(h_mat, p_mat, r_mat));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, 0), cv::Point3f(h_mat, p_mat, r_mat));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, 0), cv::Point3f(h_mat, p_mat, r_mat));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, 0), cv::Point3f(h_mat, p_mat, r_mat));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m), cv::Point3f(h_mat, p_mat, r_mat));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,   m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m), cv::Point3f(h_mat, p_mat, r_mat));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f(  m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m), cv::Point3f(h_mat, p_mat, r_mat));
+                bounding_points_3d.push_back(final);
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m), cv::Point3f( -m_object_realworld_dim_m.dim_length_m/2,  -m_object_realworld_dim_m.dim_width_m/2, m_object_realworld_dim_m.dim_height_m), cv::Point3f(h_mat, p_mat, r_mat));
+                bounding_points_3d.push_back(final);
 
 
+                h_mat = sensor_rotation_carrier_rad.rotation_rz_yaw_rad;
+                p_mat = sensor_rotation_carrier_rad.rotation_ry_pitch_rad;
+                r_mat = sensor_rotation_carrier_rad.rotation_rx_roll_rad;
+
+                // this is a passive transformation ( chaning the axis ), hence we need to negate.
                 // Rotation matrix. Since this is a passive transformation ( axis rotation ), we negate the angle.
-                h_mat = -sensor_rotation_carrier_rad.rotation_rz_yaw_rad;
-                p_mat = -sensor_rotation_carrier_rad.rotation_ry_pitch_rad;
-                r_mat = -sensor_rotation_carrier_rad.rotation_rx_roll_rad;
-
-                cv::Matx33d rot_matrix_sensor = {
-                        cos(p_mat)*cos(h_mat) ,  -cos(r_mat)*sin(h_mat) + sin(r_mat)*sin(p_mat)*cos(h_mat),   sin(r_mat)*sin(h_mat) + cos(r_mat)*sin(p_mat)*cos(h_mat),
-                        cos(p_mat)*sin(h_mat) ,  cos(r_mat)*cos(h_mat) + sin(r_mat)*sin(p_mat)*sin(h_mat) ,  -sin(r_mat)*cos(h_mat) + cos(r_mat)*sin(p_mat)*sin(h_mat),
-                        -sin(p_mat)           ,  sin(r_mat)*cos(p_mat)                                    ,   cos(r_mat)*cos(p_mat)};
+                final = Utils::translate_and_rotate_points(cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m, pos_obj_inertial.location_z_m),
+                        cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m, -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(-h_mat, -p_mat, -r_mat));
 
 
-                cv::Vec3f cam_inertial = {cam_inertial_x, cam_inertial_y, cam_inertial_z};
-                cv::Matx31f cam_rotated = rot_matrix_sensor*cam_inertial;
+                cv::Mat image(cv::Size(1242,375),CV_8UC3, cv::Scalar::all(255));
 
-                float cam_rotated_x = cam_rotated(0);
-                float cam_rotated_y = cam_rotated(1);
-                float cam_rotated_z = cam_rotated(2);
+
+                float cam_rotated_x = final.x;
+                float cam_rotated_y = final.y;
+                float cam_rotated_z = final.z;
 
 
                 float distToImagePlane = 0.5 *  Dataset::getFrameSize().height / tan(fov_rad.vertical/2); // [px] from camera position.

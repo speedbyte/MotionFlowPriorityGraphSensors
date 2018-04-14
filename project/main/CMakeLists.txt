@@ -21,7 +21,7 @@ set(SOURCE_FILES
         KittiSubmitInterface.cpp ObjectMetaData.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
         video_capture.cpp GroundTruthFlow.cpp  AlgorithmFlow.cpp kbhit.cpp Dataset.cpp PlotFlow.cpp
         GroundTruthScene.cpp ObjectImageShapeData.cpp GroundTruthObjects.cpp Noise.cpp Noise.h Canvas.cpp Canvas.h SensorImage.cpp
-        SensorImage.h FlowImageExtended.cpp RobustnessIndex.cpp RobustnessIndex.h OpticalFlow.cpp OpticalFlow.h SimulatedObjects.cpp SimulatedObjects.h Objects.cpp Objects.h Sensors.cpp SensorMetaData.h)
+        SensorImage.h FlowImageExtended.cpp RobustnessIndex.cpp RobustnessIndex.h OpticalFlow.cpp OpticalFlow.h SimulatedObjects.cpp SimulatedObjects.h Objects.cpp Objects.h Sensors.cpp SensorMetaData.h Utils.h)
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries( main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png viresrdb)
