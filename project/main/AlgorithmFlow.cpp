@@ -171,7 +171,7 @@ void AlgorithmFlow::generate_edge_contour() {
 
                         auto new_edge_size = edge_movement.at(obj_index).size();
                         std::cout << new_edge_size << std::endl;
-                        assert(new_edge_size != 0);
+                        //assert(new_edge_size != 0);
 
                         outer_edge_movement.at(obj_index).push_back(edge_movement.at(obj_index));
 

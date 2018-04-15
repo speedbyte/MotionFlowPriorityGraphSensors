@@ -451,6 +451,14 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                         std::make_pair(cv::Point2f(mean_pts_ranked_mean_x, mean_pts_ranked_mean_y), cv::Point2f
                                 (mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y)));
 
+                if ( frame_count > 0 ) {
+                    assert(mean_displacement_vector_moving_avg_mean_x!=0);
+                    assert(mean_displacement_vector_simple_avg_mean_x!=0);
+                    assert(mean_displacement_vector_ranked_mean_x!=0);
+                    assert(mean_displacement_vector_voted_mean_x!=0);
+                    assert(mean_displacement_vector_threshold_mean_x!=0);
+                }
+
 
                 outer_multiframe_flow_vector_simple_avg_mean.push_back(multiframe_flowvector_moving_avg_mean);
                 outer_multiframe_flow_vector_moving_avg_mean.push_back(multiframe_flowvector_moving_avg_mean);
@@ -582,8 +590,6 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
                         cv::Point2f displacement_vector =
                                 m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(frame_skip-1).at
                                         (i).at(frame_count).second;
-
-                        assert(displacement_vector.x !=0 );
 
                         float m, c;
                         m = displacement_vector.y / displacement_vector.x;

@@ -563,7 +563,7 @@ void GroundTruthFlow::visualiseStencil(void) {
                         F_png_write.setFlowV(pts.x, pts.y, displacement.y);
                         F_png_write.setValid(pts.x, pts.y, true);
 
-                        //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
+                        cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
 
                     }
                 }
