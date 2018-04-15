@@ -281,9 +281,9 @@ public:
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_pitch_rad = orientation.y; //p
         m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_roll_rad = orientation.x; //r
 
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.z;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.y;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.z;
 
         m_gt_all.at(frameNumber).m_object_speed.x = speed.x;
         m_gt_all.at(frameNumber).m_object_speed.y = speed.y;
@@ -301,9 +301,9 @@ public:
         m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_pitch_rad = orientation.y; //p
         m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_roll_rad = orientation.z; //r
 
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.x;
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.y;
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.z;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.x;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.y;
+        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.z;
 
         m_gt_all.at(frameNumber).m_object_speed_inertial.x = speed.x;
         m_gt_all.at(frameNumber).m_object_speed_inertial.y = speed.y;

@@ -36,7 +36,7 @@ void GroundTruthScene::visualiseBoundingBox(void) {
 
     for (int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++) {
 
-        for (ushort frame_count = 1; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
+        for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
             //ushort frame_count = 3;
 
             std::cout << "frame_count " << frame_count << std::endl;
@@ -94,8 +94,10 @@ void GroundTruthScene::visualiseBoundingBox(void) {
                             m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_bounding_box.bb_higher_right_px
                     };
 
-                    for ( auto i = 0; i < 3; i++ ) {
-                        cv::line(tempGroundTruthImage, box.at(i), box.at(i+1), cv::Scalar(0, 0, 255),2);
+
+                    for ( auto i = 0; i < 8; i++ ) {
+                        std::cout << box.at(i) << std::endl;
+                        cv::circle(tempGroundTruthImage, box.at(i), 2, cv::Scalar(0, 0, 255), 3);
                     }
                 }
             }
@@ -169,80 +171,80 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
             char temp_str_fc[20];
             sprintf(temp_str_fc, "frame_count_%03d", frame_count);
             write_fs << temp_str_fc << "[";
-            for (int i = 0; i < m_list_gt_objects.size(); i++) {
+            for (int obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
                 write_fs
 
-                        << "{:" << "name" << m_list_gt_objects.at(i).getObjectName()
+                        << "{:" << "name" << m_list_gt_objects.at(obj_index).getObjectName()
 
-                        << "visible" << m_ptr_customObjectMetaDataList.at(i)->getVisibility().at(frame_count)
+                        << "visible" << m_ptr_customObjectMetaDataList.at(obj_index)->getVisibility().at(frame_count)
 
-                        << "x_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_px.location_x_m
-                        << "y_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_px.location_y_m
-                        << "z_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "z_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_px.location_z_m
 
-                        << "x_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "x_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m.location_x_m
-                        << "y_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "y_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m.location_y_m
-                        << "z_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "z_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m.location_z_m
 
-                        << "x_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "x_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_m.location_x_m
-                        << "y_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "y_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_m.location_y_m
-                        << "z_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "z_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_m.location_z_m
 
-                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_dimensions_px.dim_width_m
-                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_dimensions_px.dim_height_m
 
-                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m.dim_width_m
-                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m.dim_height_m
-                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m.dim_length_m
 
                         << "speed_x_inertial"
-                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.x
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.x
                         << "speed_y_inertial"
-                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.y
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.y
                         << "speed_z_inertial"
-                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed_inertial.z
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.z
 
-                        << "speed_x" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed.x
-                        << "speed_y" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_speed.y
+                        << "speed_x" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed.x
+                        << "speed_y" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed.y
 
                         << "off_x"
-                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_x
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_x
                         << "off_y"
-                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_y
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_y
                         << "off_z"
-                        << m_ptr_customObjectMetaDataList.at(i)->getAll().at(frame_count).m_object_offset_m.offset_z
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_z
 
-                        << "h_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "h_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad.rotation_rz_yaw_rad
-                        << "p_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "p_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad.rotation_ry_pitch_rad
-                        << "r_inertial" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "r_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad.rotation_rx_roll_rad
 
-                        << "h_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "h_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_rad.rotation_rz_yaw_rad
-                        << "p_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "p_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_rad.rotation_ry_pitch_rad
-                        << "r_usk" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "r_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_rad.rotation_rx_roll_rad
 
-                        << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_distances.sensor_to_obj
-                        << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(i)->getAll().at(
+                        << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_distances.total_distance_covered
 
                         << "}";  //dont close the brace yet
@@ -513,12 +515,12 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         }
 
-        for (auto i = 0; i < m_ptr_customObjectMetaDataList.size(); i++) {
+        for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
-            GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(i)->getObjectShape(),
-                                      *m_ptr_customObjectMetaDataList.at(i),
-                                      m_ptr_customObjectMetaDataList.at(i)->getObjectStartPoint(), colorfulNoise,
-                                      m_ptr_customObjectMetaDataList.at(i)->getObjectName());
+            GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape(),
+                                      *m_ptr_customObjectMetaDataList.at(obj_index),
+                                      m_ptr_customObjectMetaDataList.at(obj_index)->getObjectStartPoint(), colorfulNoise,
+                                      m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName());
             m_list_gt_objects.push_back(gt_obj);
 
         }
@@ -591,36 +593,36 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         char frame_skip_folder_suffix[50];
 
-        for (unsigned i = 0; i < m_list_gt_objects.size(); i++) {
+        for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
 
-            sprintf(frame_skip_folder_suffix, "%02d", m_list_gt_objects.at(i).getObjectId());
+            sprintf(frame_skip_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
             std::string position_image_file_with_path = m_position_obj_path.string() +
                                                         frame_skip_folder_suffix + "/" + file_name_image;
 
-            image_data_and_shape = m_list_gt_objects.at(i).getImageShapeAndData().get().clone();
+            image_data_and_shape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
             image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(
-                    i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                     frame_count).m_object_dimensions_px.dim_height_m)).colRange(0, cvRound(m_list_gt_objects.at(
-                    i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                     frame_count).m_object_dimensions_px.dim_width_m));
-            positionShape = m_list_gt_objects.at(i).getImageShapeAndData().get().clone();
+            positionShape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
             positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(
-                    i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                     frame_count).m_object_dimensions_px.dim_height_m)).colRange(0, cvRound(m_list_gt_objects.at(
-                    i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                     frame_count).m_object_dimensions_px.dim_width_m));
 
-            if ((m_list_gt_objects.at(i).get_obj_base_visibility().at(frame_count))
+            if ((m_list_gt_objects.at(obj_index).get_obj_base_visibility().at(frame_count))
                     ) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
-                        cv::Rect(cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(
+                        cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(
                                 frame_count).first.x),
-                                 cvRound(m_list_gt_objects.at(i).get_obj_base_pixel_position_pixel_displacement().at(
+                                 cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(
                                          frame_count).first.y),
-                                 cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(
+                                 cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
                                          frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m),
-                                 cvRound(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(
+                                 cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(
                                          frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m))));
 
             }
@@ -677,40 +679,36 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
         {//ushort frame_count = 0;
 
-            for (int i = 0; i < m_list_gt_objects.size(); i++) {
+            for (int obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
 
                 std::vector<cv::Point3f> bounding_points_3d(8);
                 std::vector<cv::Point2f> bounding_points_2d(8);
 
-                object_realworld_dim_m_str m_object_realworld_dim_m = m_list_gt_objects.at(
-                        i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                object_realworld_dim_m_str object_realworld_dim_m = m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_realworld_dim_m;
 
-                object_location_inertial_m_str pos_obj_inertial = m_list_gt_objects.at(
-                        i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                object_location_inertial_m_str pos_obj_inertial = m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_location_inertial_m;
 
-                object_rotation_inertial_rad_str orientation_obj_inertial = m_list_gt_objects.at(
-                        i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                object_rotation_inertial_rad_str orientation_obj_inertial = m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_rotation_inertial_rad;
 
-                sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_list_gt_sensors.at(
-                        0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_sensor_location_carrier_m;
 
-                sensor_fov_rad_str fov_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(
-                        frame_skip - 1).
-                        at(frame_count).m_sensor_fov_rad;
+                sensor_fov_rad_str fov_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(frame_count).m_sensor_fov_rad;
 
-                sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_list_gt_sensors.at(
-                        0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_sensor_rotation_carrier_rad;
 
-                float offset_x = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                sensor_offset_m_str sensor_offset_m = m_list_gt_sensors.at(0).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                        frame_count).m_sensor_offset_m;
+
+                float offset_x = m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_offset_m.offset_x;
-                float offset_y = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                float offset_y = m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_offset_m.offset_y;
-                float offset_z = m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                float offset_z = m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                         frame_count).m_object_offset_m.offset_z;
 
 /*
@@ -718,25 +716,25 @@ void GroundTruthScene::calcBBFrom3DPosition() {
  * create a box placed on z = 0 ( street level ). Find 8 points of the box.
  *
  */
-                bounding_points_3d.at(0) = cv::Point3f(m_object_realworld_dim_m.dim_length_m / 2, -m_object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(1) = cv::Point3f(m_object_realworld_dim_m.dim_length_m / 2, m_object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(2) = cv::Point3f(-m_object_realworld_dim_m.dim_length_m / 2, m_object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(3) = cv::Point3f(-m_object_realworld_dim_m.dim_length_m / 2, -m_object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(4) = cv::Point3f(m_object_realworld_dim_m.dim_length_m / 2, -m_object_realworld_dim_m.dim_width_m / 2, m_object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(5) = cv::Point3f(m_object_realworld_dim_m.dim_length_m / 2, m_object_realworld_dim_m.dim_width_m / 2, m_object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(6) = cv::Point3f(-m_object_realworld_dim_m.dim_length_m / 2, m_object_realworld_dim_m.dim_width_m / 2, m_object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(7) = cv::Point3f(-m_object_realworld_dim_m.dim_length_m / 2, -m_object_realworld_dim_m.dim_width_m / 2, m_object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(0) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(1) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(2) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(3) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(4) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(5) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(6) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(7) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
 
                 cv::Point3f final;
                 float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad.vertical / 2); // [px] from camera position.
 
-                float pxSize = 2.2e-6; // [m/px]
+                float pxSize = 1; // [m/px]
 
 
                 for ( auto i = 0; i < 8; i++ ) {
 
                     //Add the offset for each point. These points are in the vehicle coordinate system.
-                    //Rotate the axis to inertial coordinate system. -hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
+                    //Rotate tje axis to inertial coordinate system. -hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
                     final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(offset_x, offset_y, offset_z),cv::Point3f(-orientation_obj_inertial.rotation_rz_yaw_rad,-orientation_obj_inertial.rotation_ry_pitch_rad,-orientation_obj_inertial.rotation_rx_roll_rad));
 
                     //Translate the axis to the master origin. add the BB vector to the object position.
@@ -749,16 +747,27 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m,
                                                                                   -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(-sensor_rotation_carrier_rad.rotation_rz_yaw_rad, -sensor_rotation_carrier_rad.rotation_ry_pitch_rad, -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
 
+                    // Translate to cam position in the car
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-sensor_offset_m.offset_x, -sensor_offset_m.offset_y, -sensor_offset_m.offset_z), cv::Point3f(0,0,0));
+
+                    auto dist = cv::norm(cv::Point2f(final.x, final.y));
+                    auto dist_usk = cv::norm(
+                            cv::Point2f(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                                    frame_count).m_object_location_m.location_x_m,
+                                        m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                                                frame_count).m_object_location_m.location_y_m));
+                    //assert(std::abs(dist - dist_usk) < std::max(std::max(object_realworld_dim_m.dim_length_m, object_realworld_dim_m.dim_height_m), object_realworld_dim_m.dim_width_m));
+                    std::cout << "distance is " << dist << " for " << m_list_gt_objects.at(obj_index).getObjectName() << std::endl;
+
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
-
                     //transform to VTD coordinates, x = depth
                     //scale 3D point back onto image
                     float cam_rotated_x = final.x;
                     float cam_rotated_y = final.y;
                     float cam_rotated_z = final.z;
 
-                    //transform to VTD coordinates, x = depth
+                    //transform to VTD coordinates, x = depth, y = width, z = height
                     cv::Point3f pos = cv::Point3f(cam_rotated_y, cam_rotated_z, cam_rotated_x);
 
                     //scale 3D point back onto image
@@ -768,24 +777,16 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
 
                     // Change from optical axis to origin ( top, left )
-                    float x_image =  Dataset::getFrameSize().width/2 - pos.x;
+                    float x_stimage =  Dataset::getFrameSize().width/2 - pos.x;
                     float y_image =  Dataset::getFrameSize().height/2 - pos.y;
 
                     bounding_points_2d.at(i) = cv::Point2f(x_image, y_image);
 
                 }
 
-                m_list_gt_objects.at(i).setBoundingBoxPoints(frame_skip - 1, frame_count, bounding_points_2d);
+                m_list_gt_objects.at(obj_index).setBoundingBoxPoints(frame_skip - 1, frame_count, bounding_points_2d);
 
-                /*
-                auto dist = cv::norm(cv::Point2f(cam_rotated_x, cam_rotated_y));
-                auto dist_usk = cv::norm(
-                        cv::Point2f(m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                                frame_count).m_object_location_m.location_x_m,
-                                    m_list_gt_objects.at(i).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
-                                            frame_count).m_object_location_m.location_y_m));
-                assert(std::abs(dist - dist_usk) < 0.01);
-                std::cout << "distance is " << dist << " for " << m_list_gt_objects.at(i).getObjectName() << std::endl; */
+
             }
         }
     }
@@ -1082,12 +1083,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     try {
         if (m_environment == "none") {
 
-            for (auto i = 0; i < m_ptr_customObjectMetaDataList.size(); i++) {
+            for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
-                GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(i)->getObjectShape(),
-                                          *m_ptr_customObjectMetaDataList.at(i),
-                                          m_ptr_customObjectMetaDataList.at(i)->getObjectStartPoint(), noNoise,
-                                          m_ptr_customObjectMetaDataList.at(i)->getObjectName());
+                GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape(),
+                                          *m_ptr_customObjectMetaDataList.at(obj_index),
+                                          m_ptr_customObjectMetaDataList.at(obj_index)->getObjectStartPoint(), noNoise,
+                                          m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName());
                 m_list_gt_objects.push_back(gt_obj);
 
             }

@@ -80,7 +80,7 @@ public:
     struct sensor_location_px { float location_x_m; float location_y_m; float location_z_m;} m_sensor_location_px;
 
     //x3d, y3d, z3d: KITTI-like 3D sensor 'location', respectively x, y, z in camera coordinates in meters
-    struct sensor_location_m { float location_x_m; float location_y_m; float location_z_m;} m_sensor_location_m;
+    struct sensor_location_m { float location_x_m; float location_y_m; float location_z_m;} m_sensor_location_m_str;
 
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D sensor 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
