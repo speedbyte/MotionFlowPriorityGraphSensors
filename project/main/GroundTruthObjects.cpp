@@ -50,8 +50,9 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
                 gt_displacement_inertial.x = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_inertial_m.location_x_m;
                 gt_displacement_inertial.y = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_inertial_m.location_y_m;
-                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_x_m;
-                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_y_m;
+
+                gt_displacement_usk.x = gt_data.getAll().at(current_index).m_object_location_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_x_m;
+                gt_displacement_usk.y = gt_data.getAll().at(current_index).m_object_location_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_y_m;
 
             } else {
 
@@ -61,8 +62,8 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
                 gt_displacement_inertial.x = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_inertial_m.location_x_m;
                 gt_displacement_inertial.y = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_inertial_m.location_y_m;
 
-                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_x_m;
-                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_y_m;
+                gt_displacement_usk.x = gt_data.getAll().at(current_index).m_object_location_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_x_m;
+                gt_displacement_usk.y = gt_data.getAll().at(current_index).m_object_location_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_y_m;
 
 
             }

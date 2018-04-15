@@ -55,26 +55,18 @@ void GroundTruthScene::visualiseBoundingBox(void) {
             tempGroundTruthImage = cv::Scalar::all(255);
             tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
-            for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+            for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size()-1; obj_index++) {
 
                 if ((m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).occluded == false)
                         ) {
 
-                    //cv::Rect boundingbox =  cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(frame_count).first.x - (cvRound(m_list_gt_objects.at(obj_index).getExtrapolatedGroundTruthDetails().at(frame_count).m_object_dimensions_px.m_object_realworld_dim_m.dim_length_m_m/2))),
                     cv::Rect boundingbox = cv::Rect(
-                            cvRound(m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_location_px.location_x_m -
-                                    cvRound(m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m)),
-                            cvRound(m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_location_px.location_y_m),
-                            cvRound(m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
-                            cvRound(m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m));
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_location_px.location_x_m),
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_location_px.location_y_m),
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m));
 
-                    //cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
-
-                    cv::circle(tempGroundTruthImage,
-                               cv::Point2f(m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_location_px.location_x_m,
-                                           m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_location_px.location_y_m),
-                               1.5, cv::Scalar(0, 255, 0), 3, 8);
-
+                    cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
 
                     std::vector<cv::Point2f> box = {
                             m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_bottom_px,
@@ -87,23 +79,32 @@ void GroundTruthScene::visualiseBoundingBox(void) {
                             m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_right_px
                     };
 
+                    cv::Rect boundingbox2 = cv::Rect(
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_left_px.x),
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_left_px.y),
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m));
+
+                    cv::rectangle(tempGroundTruthImage, boundingbox2, cv::Scalar(0, 0, 255), 1, 8, 0);
 
                     for ( auto i = 0; i < 1; i++ ) {
                         std::cout << box.at(i) << std::endl;
-                        cv::circle(tempGroundTruthImage, box.at(i), 2, cv::Scalar(0, 0, 255), 3);
+                        cv::circle(tempGroundTruthImage, box.at(3), 2, cv::Scalar(0, 0, 255), 3);
                     }
                 }
             }
 
-            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            cv::imshow("BB", tempGroundTruthImage);
-            cv::waitKey(0);
+
+            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("BB", tempGroundTruthImage);
+            //cv::waitKey(0);
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
         }
     }
     cv::destroyAllWindows();
 }
+
 
 void GroundTruthScene::prepare_directories() {
 
@@ -474,24 +475,24 @@ void GroundTruthScene::startEvaluating(std::string dataset, Noise noise) {
     visualiseBoundingBox();
 
 
-    for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+    for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size()-1; obj_index++) {
 
         GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape(),
                                   m_ptr_customObjectMetaDataList.at(obj_index)->getObjectStartPoint(), noise,
                                   m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName());
         m_list_gt_objects.push_back(gt_obj);
-        gt_obj.beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
+        m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
 
     }
 
-    for (auto i = 0; i < m_ptr_customSensorMetaDataList.size(); i++) {
+    for (auto obj_index = 0; obj_index < m_ptr_customSensorMetaDataList.size(); obj_index++) {
 
-        Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(i),
-                       m_ptr_customSensorMetaDataList.at(i)->getSensorStartPoint(), &noise,
-                       m_ptr_customSensorMetaDataList.at(i)->getSensorName());
+        Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(obj_index),
+                       m_ptr_customSensorMetaDataList.at(obj_index)->getSensorStartPoint(), &noise,
+                       m_ptr_customSensorMetaDataList.at(obj_index)->getSensorName());
         m_list_gt_sensors.push_back(gt_sen);
+        m_list_gt_sensors.at(obj_index).beginGroundTruthGeneration(*m_ptr_customSensorMetaDataList.at(obj_index));
     }
-
 
 }
 

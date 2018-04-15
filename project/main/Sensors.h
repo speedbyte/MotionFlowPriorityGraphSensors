@@ -38,12 +38,14 @@ public:
 
     Sensors (const SensorMetaData gt_data, ushort startPoint, Noise *noise, const std::string sensorName) : m_startPoint(startPoint), m_sensorName(sensorName) {
 
+        //image_data_and_shape.process();
+
+    }
+
+    void beginGroundTruthGeneration(SensorMetaData &gt_data) {
         generate_sen_base_pixel_position_pixel_displacement(gt_data);
 
         generate_sen_extrapolated_pixel_position_pixel_displacement(MAX_SKIPS);
-
-        //image_data_and_shape.process();
-
     }
 
     const std::string &getSensorName() const {
