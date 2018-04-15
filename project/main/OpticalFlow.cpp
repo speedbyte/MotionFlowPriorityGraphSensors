@@ -297,8 +297,6 @@ void OpticalFlow::find_collision_points_given_two_line_parameters(const cv::Poin
         // solve linear equations
         result_manual = (cv::Matx<float,2,2>)coefficients.inv()*rhs;
         //result_manual = coefficients.solve(rhs);
-        cv::circle(tempMatrix, cv::Point2f(result_manual(0,0), result_manual(1,0)), 5, cv::Scalar(0, 255, 0), -1,
-                cv::LINE_AA);
 
         std::cout << "collision points x = " << result_manual(0,0) << " and y = " << result_manual(1,0) << std::endl ;
         collision_points.push_back(cv::Point2f(result_manual(0,0), result_manual(1,0)));

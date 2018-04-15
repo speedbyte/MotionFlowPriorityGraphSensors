@@ -533,7 +533,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             outer_multiframe_shape_parameters.push_back(outer_multiframe_shape_parameters_ranked_mean);
         }
 
-        m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_mean_pixel_centroid_pixel_displacement);
+        m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement = outer_multiframe_mean_pixel_centroid_pixel_displacement);
 
         m_list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters);
 

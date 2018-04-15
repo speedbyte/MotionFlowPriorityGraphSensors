@@ -519,6 +519,7 @@ void GroundTruthFlow::visualiseStencil(void) {
                                         frame_skip - 1)
                                 .at(frame_count).at(cluster_point).first;
 
+
                         cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 255, 0), 1, 8);
 
                     }
