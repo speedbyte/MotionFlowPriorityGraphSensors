@@ -43,5 +43,5 @@ VIRES_DATASET:
    GT: 0
    LK: 0
    FB: 0
-   PLOT: 0
+   PLOT: 1
 

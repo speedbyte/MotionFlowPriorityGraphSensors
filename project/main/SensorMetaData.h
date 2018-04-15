@@ -68,6 +68,9 @@ public:
     //occluded: (changed name in v1.3) KITTI-like occlusion flag  (0: not occluded, 1; occluded, 2: heavily occluded, marked as “DontCare”)
     bool occluded;
 
+    //occluded: (changed name in v1.3) KITTI-like occlusion flag  (0: not occluded, 1; occluded, 2: heavily occluded, marked as “DontCare”)
+    ushort visMask;
+
     //alpha: KITTI-like observation angle of the sensor in [-pi..pi]
     float alpha_rad;
 
@@ -180,7 +183,6 @@ class SensorMetaData {
 
 protected:
     std::vector<STRUCT_GT_SENSORS_ALL> m_sensor_gt_all;
-    std::vector<bool> m_visibility;
 
 private:
 
@@ -193,7 +195,6 @@ public:
 
     SensorMetaData() {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
-            m_visibility.push_back(false);
             STRUCT_GT_SENSORS_ALL s = {};
             m_sensor_gt_all.push_back(s);
         }
@@ -202,11 +203,14 @@ public:
     SensorMetaData(std::string name, ushort startPoint) :
             m_sensorMetaData_name(name), m_sensorMetaData_startPoint(startPoint) {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
-            m_visibility.push_back(false);
             STRUCT_GT_SENSORS_ALL s = {};
             m_sensor_gt_all.push_back(s);
         }
     } ;
+
+    void setStartPoint(ushort startPoint) {
+        m_sensorMetaData_startPoint = startPoint;
+    }
 
     void fillData() {
 
@@ -242,18 +246,12 @@ public:
 
     }
 
-
-
     void atFrameNumberVisibility(ushort frameNumber, bool visibility) {
-        m_visibility.at(frameNumber) = visibility;
+        m_sensor_gt_all.at(frameNumber).occluded = visibility;
     }
 
     std::vector<STRUCT_GT_SENSORS_ALL> getAll() const {
         return m_sensor_gt_all;
-    }
-
-    std::vector<bool> getVisibility() const {
-        return m_visibility;
     }
 
     ushort& getSensorStartPoint() {
@@ -268,42 +266,40 @@ public:
         m_sensorMetaData_name = sensorName;
     }
 
-    void calcBBFrom3DPosition(int screen_width, int screen_height, cv::Point3d cam_pos, float fov_v, float pixSize = 2.2e-6);
-
     void setDynamic() {
 
         cv::RNG rng(cv::getTickCount());
         for (ushort i = 0; i < MAX_ITERATION_THETA / 20; i++) {
             ushort index = (ushort) rng.uniform(0, 360);
-            m_visibility.at(index) = false;
+            m_sensor_gt_all.at(index).visMask = 0;
             //TODO - set pixel position
         }
-        for ( auto t : m_visibility ) {
-            std::cout << t;
+        for ( auto t : m_sensor_gt_all) {
+            std::cout << t.visMask;
         }
         std::cout << std::endl;
 
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
 
-            if (i < (m_visibility.size() - 1) && m_visibility.at(i + (ushort) 1) == false) {
-                m_visibility.at(i) = false;
+            if (i < (m_sensor_gt_all.size() - 1) && m_sensor_gt_all.at(i + 1).visMask == 0) {
+                m_sensor_gt_all.at(i).visMask = 0;
             }
         }
 
-        for ( auto t : m_visibility ) {
-            std::cout << t;
+        for ( auto t : m_sensor_gt_all ) {
+            std::cout << t.visMask;
         }
 
         std::cout << std::endl;
         for (ushort i = MAX_ITERATION_THETA; i > 0; i--) {
 
-            if (i < (m_visibility.size() - 1) && m_visibility.at(i - (ushort) 1) == false) {
-                m_visibility.at(i) = false;
+            if (i < (m_sensor_gt_all.size() - 1) && m_sensor_gt_all.at(i - 1).visMask == 0) {
+                m_sensor_gt_all.at(i).visMask = 0;
             }
         }
 
-        for ( auto t : m_visibility ) {
-            std::cout << t;
+        for ( auto t : m_sensor_gt_all ) {
+            std::cout << t.visMask;
         }
         std::cout << std::endl;
     }

@@ -170,8 +170,8 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
 
                         << "{:" << "name" << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName()
 
-                        << "visible" << m_ptr_customObjectMetaDataList.at(obj_index)->getVisibility().at(frame_count)
-
+                        << "visMask" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        frame_count).visMask
                         << "x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_px.location_x_m
                         << "y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
@@ -248,7 +248,7 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
 
                         << "{:" << "name" << m_list_gt_sensors.at(i).getSensorName()
 
-                        << "visible" << m_ptr_customSensorMetaDataList.at(i)->getVisibility().at(frame_count)
+                        << "visible" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).visMask
 
                         << "x_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
                         frame_count).m_sensor_location_carrier_m.location_x_m
@@ -354,6 +354,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                             Rectangle rectangle(Dataset::getFrameSize().width,
                                                 Dataset::getFrameSize().height); // width, height
                             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
+                            m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
                             m_objectCount += 1;
                         }
 
@@ -410,7 +411,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                                 speed_inertial, totalDistanceTravelled);
 
                         (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
-                                frame_count, (int) (*file_node_iterator)["visible"]);
+                                frame_count, (int) (*file_node_iterator)["visMask"]);
 
                         position_inertial_pre = position_inertial;
                         position_pixel_pre = position_pixel;
@@ -423,6 +424,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                                     m_sensorCount);
                             m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(
                                     (*file_node_iterator)["name"].string());
+                            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
                             m_sensorCount += 1;
                         }
 
@@ -1271,7 +1273,7 @@ simFrame, const
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset,
                             dimension_pixel, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
                 } else if (data->base.pos.type == RDB_COORD_TYPE_USK) {
 
                     position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
@@ -1286,7 +1288,7 @@ simFrame, const
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_usk,
                             orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
                 } else if (data->base.pos.type == RDB_COORD_TYPE_INERTIAL) {
 
                     position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
@@ -1301,7 +1303,7 @@ simFrame, const
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial,
                             orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), true);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
                 }
             } else {
                 //std::cout << data->base.type << std::endl;

@@ -32,11 +32,11 @@ void Achterbahn::process(cv::Size frame_size) {
                                                                                sin(theta[i] * CV_PI / 180.0)) /
                                                                          (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
 
-        m_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);
-        m_gt_all.at(i).m_object_location_px.location_y_m  = (l_pixel_position.y);
-        m_visibility.at(i) = true;
-        m_gt_all.at(i).m_object_dimensions_px.dim_width_m = 30;
-        m_gt_all.at(i).m_object_dimensions_px.dim_height_m = 70;
+        m_object_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);
+        m_object_gt_all.at(i).m_object_location_px.location_y_m  = (l_pixel_position.y);
+        m_object_gt_all.at(i).occluded = true;
+        m_object_gt_all.at(i).m_object_dimensions_px.dim_width_m = 30;
+        m_object_gt_all.at(i).m_object_dimensions_px.dim_height_m = 70;
 
     }
 }
@@ -55,9 +55,9 @@ void Circle::process(cv::Size frame_size) {
 
         l_pixel_position.y = static_cast<float>( frame_size.height/2 + 100 * sin(theta[i]));
 
-        m_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);
-        m_gt_all.at(i).m_object_location_px.location_y_m  = (l_pixel_position.y);
-        m_visibility.at(i) = true;
+        m_object_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);
+        m_object_gt_all.at(i).m_object_location_px.location_y_m  = (l_pixel_position.y);
+        m_object_gt_all.at(i).occluded;
     }
 }
 
@@ -79,9 +79,9 @@ void Ramp::process(cv::Size frame_size) {
 
         l_pixel_position.y = static_cast<float>(0 + (theta[i]));
 
-        m_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);
-        m_gt_all.at(i).m_object_location_px.location_y_m  = (l_pixel_position.y);
-        m_visibility.at(i) = true;
+        m_object_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);
+        m_object_gt_all.at(i).m_object_location_px.location_y_m  = (l_pixel_position.y);
+        m_object_gt_all.at(i).occluded;
     }
 }
 
@@ -103,9 +103,9 @@ void NegativeRamp::process(cv::Size frame_size) {
 
         l_pixel_position.y = static_cast<float>(0  + (theta[i]));
 
-        m_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);
-        m_gt_all.at(i).m_object_location_px.location_y_m  = (l_pixel_position.y);
-        m_visibility.at(i) = true;
+        m_object_gt_all.at(i).m_object_location_px.location_x_m  = (l_pixel_position.x);
+        m_object_gt_all.at(i).m_object_location_px.location_y_m  = (l_pixel_position.y);
+        m_object_gt_all.at(i).occluded = true;
     }
 }
 

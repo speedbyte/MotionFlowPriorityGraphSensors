@@ -51,7 +51,7 @@ typedef struct object_rotation_inertial_rad { float rotation_rx_roll_rad; float 
 typedef struct object_offset_m { float offset_x; float offset_y; float offset_z; } object_offset_m_str;
 
 
-class STRUCT_GT_ALL {
+class STRUCT_GT_OBJECTS_ALL {
 
 public:
 
@@ -70,6 +70,10 @@ public:
 
     //occluded: (changed name in v1.3) KITTI-like occlusion flag  (0: not occluded, 1; occluded, 2: heavily occluded, marked as “DontCare”)
     bool occluded;
+
+    //occluded: (changed name in v1.3) KITTI-like occlusion flag  (0: not occluded, 1; occluded, 2: heavily occluded, marked as “DontCare”)
+    ushort visMask;
+
 
     //alpha: KITTI-like observation angle of the object in [-pi..pi]
     float alpha_rad;
@@ -197,31 +201,27 @@ public:
 class ObjectMetaData {
 
 protected:
-    std::vector<STRUCT_GT_ALL> m_gt_all;
-    std::vector<bool> m_visibility;
+    std::vector<STRUCT_GT_OBJECTS_ALL> m_object_gt_all;
 
 private:
     ObjectImageShapeData m_objectMetaData_shape;
     std::string m_objectMetaData_name;
     ushort m_objectMetaData_startPoint;
 
-
 public:
 
     ObjectMetaData() {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
-            m_visibility.push_back(false);
-            STRUCT_GT_ALL s = {};
-            m_gt_all.push_back(s);
+            STRUCT_GT_OBJECTS_ALL s = {};
+            m_object_gt_all.push_back(s);
         }
     };
 
     ObjectMetaData(ObjectImageShapeData shape, std::string name, ushort startPoint) :
             m_objectMetaData_shape(shape), m_objectMetaData_name(name), m_objectMetaData_startPoint(startPoint) {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
-            m_visibility.push_back(false);
-            STRUCT_GT_ALL s = {};
-            m_gt_all.push_back(s);
+            STRUCT_GT_OBJECTS_ALL s = {};
+            m_object_gt_all.push_back(s);
         }
     } ;
 
@@ -249,6 +249,10 @@ public:
         m_objectMetaData_shape = objectShape;
     }
 
+    void setStartPoint(ushort startPoint) {
+        m_objectMetaData_startPoint = startPoint;
+    }
+
     virtual void process(cv::Size frame_size) {};
 
     virtual void pushPositionPoints(cv::Point2f points) {}
@@ -257,123 +261,117 @@ public:
 
     void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions, float total_distance_travelled) {
         //m_pixel_position.at(frameNumber) = position;
-        m_gt_all.at(frameNumber).m_object_location_px.location_x_m = position.x;
-        m_gt_all.at(frameNumber).m_object_location_px.location_y_m = position.y;
-        m_gt_all.at(frameNumber).m_object_location_px.location_z_m = position.z;
+        m_object_gt_all.at(frameNumber).m_object_location_px.location_x_m = position.x;
+        m_object_gt_all.at(frameNumber).m_object_location_px.location_y_m = position.y;
+        m_object_gt_all.at(frameNumber).m_object_location_px.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_offset_m.offset_x = offset.x;
-        m_gt_all.at(frameNumber).m_object_offset_m.offset_y = offset.y;
-        m_gt_all.at(frameNumber).m_object_offset_m.offset_z = offset.z;
+        m_object_gt_all.at(frameNumber).m_object_offset_m.offset_x = offset.x;
+        m_object_gt_all.at(frameNumber).m_object_offset_m.offset_y = offset.y;
+        m_object_gt_all.at(frameNumber).m_object_offset_m.offset_z = offset.z;
 
-        m_gt_all.at(frameNumber).m_object_dimensions_px.dim_width_m = dimensions.x;
-        m_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
+        m_object_gt_all.at(frameNumber).m_object_dimensions_px.dim_width_m = dimensions.x;
+        m_object_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
 
-        m_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
+        m_object_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
 
     }
 
     void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point3f dimensions, cv::Point2f speed, float total_distance_travelled) {
-        m_gt_all.at(frameNumber).m_object_location_m.location_x_m = position.x;
-        m_gt_all.at(frameNumber).m_object_location_m.location_y_m = position.y;
-        m_gt_all.at(frameNumber).m_object_location_m.location_z_m = position.z;
+        m_object_gt_all.at(frameNumber).m_object_location_m.location_x_m = position.x;
+        m_object_gt_all.at(frameNumber).m_object_location_m.location_y_m = position.y;
+        m_object_gt_all.at(frameNumber).m_object_location_m.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rz_yaw_rad = orientation.x; //h
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_pitch_rad = orientation.y; //p
-        m_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_roll_rad = orientation.x; //r
+        m_object_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rz_yaw_rad = orientation.x; //h
+        m_object_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_pitch_rad = orientation.y; //p
+        m_object_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_roll_rad = orientation.x; //r
 
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.x;
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.y;
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.z;
+        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.x;
+        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.y;
+        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.z;
 
-        m_gt_all.at(frameNumber).m_object_speed.x = speed.x;
-        m_gt_all.at(frameNumber).m_object_speed.y = speed.y;
+        m_object_gt_all.at(frameNumber).m_object_speed.x = speed.x;
+        m_object_gt_all.at(frameNumber).m_object_speed.y = speed.y;
 
-        m_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
+        m_object_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
 
     }
 
     void atFrameNumberPerfectSensorInertial(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point3f dimensions, cv::Point2f speed, float total_distance_travelled) {
-        m_gt_all.at(frameNumber).m_object_location_inertial_m.location_x_m = position.x;
-        m_gt_all.at(frameNumber).m_object_location_inertial_m.location_y_m = position.y;
-        m_gt_all.at(frameNumber).m_object_location_inertial_m.location_z_m = position.z;
+        m_object_gt_all.at(frameNumber).m_object_location_inertial_m.location_x_m = position.x;
+        m_object_gt_all.at(frameNumber).m_object_location_inertial_m.location_y_m = position.y;
+        m_object_gt_all.at(frameNumber).m_object_location_inertial_m.location_z_m = position.z;
 
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rz_yaw_rad = orientation.x; //h
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_pitch_rad = orientation.y; //p
-        m_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_roll_rad = orientation.z; //r
+        m_object_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rz_yaw_rad = orientation.x; //h
+        m_object_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_pitch_rad = orientation.y; //p
+        m_object_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_roll_rad = orientation.z; //r
 
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.x;
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.y;
-        m_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.z;
+        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.x;
+        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.y;
+        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.z;
 
-        m_gt_all.at(frameNumber).m_object_speed_inertial.x = speed.x;
-        m_gt_all.at(frameNumber).m_object_speed_inertial.y = speed.y;
+        m_object_gt_all.at(frameNumber).m_object_speed_inertial.x = speed.x;
+        m_object_gt_all.at(frameNumber).m_object_speed_inertial.y = speed.y;
 
-        m_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
+        m_object_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
 
     }
 
     void setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
 
-        m_gt_all.at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(0);
-        m_gt_all.at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(1);
-        m_gt_all.at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(2);
-        m_gt_all.at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(3);
-        m_gt_all.at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(4);
-        m_gt_all.at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(5);
-        m_gt_all.at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(6);
-        m_gt_all.at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(7);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(0);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(1);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(2);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(3);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(4);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(5);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(6);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(7);
 
     }
 
 
-    void atFrameNumberVisibility(ushort frameNumber, bool visibility) {
-        m_visibility.at(frameNumber) = visibility;
+    void atFrameNumberVisibility(ushort frameNumber, ushort visibility) {
+        m_object_gt_all.at(frameNumber).visMask = visibility;
     }
 
-    std::vector<STRUCT_GT_ALL> getAll() const {
-        return m_gt_all;
+    std::vector<STRUCT_GT_OBJECTS_ALL> getAll() const {
+        return m_object_gt_all;
     }
-
-    std::vector<bool> getVisibility() const {
-        return m_visibility;
-    }
-
-    void calcBBFrom3DPosition(int screen_width, int screen_height, cv::Point3d cam_pos, float fov_v, float pixSize = 2.2e-6);
 
     void setDynamic() {
 
         cv::RNG rng(cv::getTickCount());
         for (ushort i = 0; i < MAX_ITERATION_THETA / 20; i++) {
             ushort index = (ushort) rng.uniform(0, 360);
-            m_visibility.at(index) = false;
+            m_object_gt_all.at(index).visMask = 0;
             //TODO - set pixel position
         }
-        for ( auto t : m_visibility ) {
-            std::cout << t;
+        for ( auto t : m_object_gt_all) {
+            std::cout << t.visMask;
         }
         std::cout << std::endl;
 
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
 
-            if (i < (m_visibility.size() - 1) && m_visibility.at(i + (ushort) 1) == false) {
-                m_visibility.at(i) = false;
+            if (i < (m_object_gt_all.size() - 1) && m_object_gt_all.at(i + (ushort) 1).visMask == 0) {
+                m_object_gt_all.at(i).visMask = 0;
             }
         }
 
-        for ( auto t : m_visibility ) {
-            std::cout << t;
+        for ( auto t : m_object_gt_all ) {
+            std::cout << t.visMask;
         }
 
         std::cout << std::endl;
         for (ushort i = MAX_ITERATION_THETA; i > 0; i--) {
 
-            if (i < (m_visibility.size() - 1) && m_visibility.at(i - (ushort) 1) == false) {
-                m_visibility.at(i) = false;
+            if (i < (m_object_gt_all.size() - 1) && m_object_gt_all.at(i - (ushort) 1).visMask == 0) {
+                m_object_gt_all.at(i).visMask = 0;
             }
         }
 
-        for ( auto t : m_visibility ) {
-            std::cout << t;
+        for ( auto t : m_object_gt_all ) {
+            std::cout << t.visMask;
         }
         std::cout << std::endl;
     }

@@ -15,9 +15,9 @@ private:
 
 protected:
 
-    std::vector<STRUCT_GT_ALL> m_obj_base_all;
+    std::vector<STRUCT_GT_OBJECTS_ALL> m_obj_base_all;
 
-    std::vector<std::vector<STRUCT_GT_ALL> > m_obj_extrapolated_all;
+    std::vector<std::vector<STRUCT_GT_OBJECTS_ALL> > m_obj_extrapolated_all;
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_position_pixel_displacement;
 
@@ -107,7 +107,7 @@ public:
         return m_objectId;
     }
 
-    const std::vector<std::vector<STRUCT_GT_ALL> > &getExtrapolatedGroundTruthDetails() const {
+    const std::vector<std::vector<STRUCT_GT_OBJECTS_ALL> > &getExtrapolatedGroundTruthDetails() const {
         return m_obj_extrapolated_all;
     }
 

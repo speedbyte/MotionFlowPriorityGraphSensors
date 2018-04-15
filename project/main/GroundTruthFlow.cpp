@@ -449,8 +449,7 @@ void GroundTruthFlow::visualiseStencil(void) {
 
             for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
 
-                if ((m_list_gt_objects.at(obj_index)->get_obj_base_visibility().at(frame_count))
-                        ) {
+                if ((m_list_gt_objects.at(obj_index)->get_obj_base_visibility().at(frame_count))) {
 
                     float columnBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                             (frame_skip-1).at(frame_count).first.x;
@@ -481,13 +480,13 @@ void GroundTruthFlow::visualiseStencil(void) {
                     cv::rectangle(tempGroundTruthImage, boundingbox2, cv::Scalar(0, 0, 255), 1, 8, 0);
                     //cv::rectangle(tempGroundTruthImage, boundingbox3, cv::Scalar(255, 0, 0), 1, 8, 0);
 
-                    cv::Point2f pts_mean = m_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(
-                                    frame_skip - 1).at(frame_count).first;
+                    cv::Point2f pts_mean = m_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip-1).
+                            at(0).at(frame_count).first;
                     cv::Point2f pts_basic = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(
                             frame_skip - 1).at(frame_count).first;
 
-                    cv::Point2f displacement = m_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(0).at(
-                            frame_skip - 1).at(frame_count).second;
+                    cv::Point2f displacement = m_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip - 1).at(
+                            0).at(frame_count).second;
 
                     cv::Point2f next_pts = cv::Point2f(pts_basic.x + displacement.x*10, pts_basic.y + displacement.y*10);
 

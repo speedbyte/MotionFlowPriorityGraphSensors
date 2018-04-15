@@ -23,7 +23,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
         if ( frame_count == 0 ) {
 
-            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
+            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getAll().at(current_index).visMask?"true":"false"),
                    frame_count,
                    current_index, gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m,
                    (float)0, (float)0, gt_data.getAll().at(current_index).m_object_dimensions_px.dim_width_m, gt_data.getAll().at(current_index).m_object_dimensions_px.dim_height_m
@@ -72,7 +72,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             auto dist_usk = cv::norm(gt_displacement_usk);
             //assert(std::round(dist_inertial*1000)/1000 == std::round(dist_usk*1000)/1000);
 
-            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getVisibility().at(current_index)?"true":"false"),
+            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getAll().at(current_index).visMask?"true":"false"),
                    frame_count,
                    current_index, gt_next_pts.x, gt_next_pts.y,
                    gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y);
@@ -81,7 +81,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_next_pts, gt_displacement));
 
         }
-        m_obj_base_visibility.push_back(gt_data.getVisibility().at(current_index));
+        m_obj_base_visibility.push_back((bool)(gt_data.getAll().at(current_index).visMask));
         m_obj_base_all.push_back(gt_data.getAll().at(current_index));
         current_index++;
     }
@@ -96,7 +96,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool>  multiframe_visibility;
-        std::vector<STRUCT_GT_ALL> multiframe_all;
+        std::vector<STRUCT_GT_OBJECTS_ALL> multiframe_all;
 
 
         std::cout << "generate_obj_extrapolated_pixel_position_pixel_displacement for frame_skip " << frame_skip << std::endl;
