@@ -770,6 +770,8 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     //transform to VTD coordinates, x = depth, y = width, z = height
                     cv::Point3f pos = cv::Point3f(cam_rotated_y, cam_rotated_z, cam_rotated_x);
 
+                    cv::Point3f pos_fx = 980*pos/pos.z + cv::Point3f(621,187,0);
+
                     //scale 3D point back onto image
                     pos = pos * ((distToImagePlane * pxSize) / pos.z);
 
