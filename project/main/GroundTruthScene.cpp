@@ -728,7 +728,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 cv::Point3f final;
                 float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad.vertical / 2); // [px] from camera position.
 
-                float pxSize = 1; // [m/px]
+                float pxSize = 2.2e-6; // [m/px]
 
 
                 for ( auto i = 0; i < 8; i++ ) {
@@ -771,13 +771,13 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     cv::Point3f pos = cv::Point3f(cam_rotated_y, cam_rotated_z, cam_rotated_x);
 
                     //scale 3D point back onto image
-                    pos = pos * ((distToImagePlane * pxSize) /*m*/ / pos.z);
+                    pos = pos * ((distToImagePlane * pxSize) / pos.z);
 
                     //convert meter to pixel
                     pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
 
                     // Change from optical axis to origin ( top, left )
-                    float x_stimage =  Dataset::getFrameSize().width/2 - pos.x;
+                    float x_image =  Dataset::getFrameSize().width/2 - pos.x;
                     float y_image =  Dataset::getFrameSize().height/2 - pos.y;
 
                     bounding_points_2d.at(i) = cv::Point2f(x_image, y_image);
