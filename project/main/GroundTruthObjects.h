@@ -19,15 +19,13 @@ class GroundTruthObjects : public Objects {
 public:
     static unsigned objectCurrentCount; // assingn object id
 
+    void generate_obj_base_pixel_position_pixel_displacement(ObjectMetaData gt_data);
+
 private:
 
     const ushort m_startPoint;
 
     ObjectImageShapeData m_image_data_and_shape;
-
-    std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_position_pixel_displacement;
-
-    void generate_obj_base_pixel_position_pixel_displacement(ObjectMetaData gt_data);
 
     void generate_obj_extrapolated_pixel_position_pixel_displacement(const unsigned &max_skips);
 
@@ -37,31 +35,24 @@ private:
 
 public:
 
-    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, const ObjectMetaData gt_data, ushort
-    startPoint, Noise noise, std::string objectName) : m_image_data_and_shape(image_data_and_shape), m_startPoint(startPoint), Objects(objectName)
+    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, ushort startPoint, Noise noise, std::string objectName) : m_image_data_and_shape(image_data_and_shape), m_startPoint(startPoint), Objects(objectName)
 
     {
-        assert(gt_data.getAll().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
         m_objectId = objectCurrentCount ;
         image_data_and_shape.process();
         image_data_and_shape.applyNoise(&noise);
         objectCurrentCount += 1;
 
-        if ( m_objectName != "BackgroundCanvas" ) {
+    }
+
+    void beginGroundTruthGeneration(ObjectMetaData gt_data) {
+
+        if ( m_objectName != "BackgroundCanvas") {
 
             printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
                     (), getObjectId());
 
             generate_obj_base_pixel_position_pixel_displacement(gt_data);
-
-            beginGroundTruthGeneration();
-
-        }
-    }
-
-    void beginGroundTruthGeneration() {
-
-        if ( m_objectName != "BackgroundCanvas") {
 
             generate_obj_extrapolated_pixel_position_pixel_displacement(MAX_SKIPS);
 
@@ -77,21 +68,6 @@ public:
     ObjectImageShapeData getImageShapeAndData() const {
         return m_image_data_and_shape;
     }
-
-    void setBoundingBoxPoints(ushort frame_skip, ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
-
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(0);
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(1);
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(2);
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(3);
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(4);
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(5);
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(6);
-        m_obj_extrapolated_all.at(frame_skip).at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(7);
-
-    }
-
-
 
 };
 

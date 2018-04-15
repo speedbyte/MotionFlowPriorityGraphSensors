@@ -58,6 +58,7 @@ protected:
 
 public:
 
+
     GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
     m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file)
     {
@@ -73,6 +74,8 @@ public:
             sensorMetaDataList.push_back(senMetaData);
         }
     };
+
+    void startEvaluating(std::string dataset, Noise noise);
 
     void readPositionFromFile(std::string positionFileName);
 

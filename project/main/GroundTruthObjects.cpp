@@ -12,6 +12,7 @@ unsigned GroundTruthObjects::objectCurrentCount = 0;
 void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(ObjectMetaData gt_data) {
 
     //Initialization
+    assert(gt_data.getAll().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
 
     ushort current_index = m_startPoint;
 

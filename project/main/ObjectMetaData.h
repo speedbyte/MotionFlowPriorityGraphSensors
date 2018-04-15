@@ -312,6 +312,20 @@ public:
 
     }
 
+    void setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
+
+        m_gt_all.at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(0);
+        m_gt_all.at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(1);
+        m_gt_all.at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(2);
+        m_gt_all.at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(3);
+        m_gt_all.at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(4);
+        m_gt_all.at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(5);
+        m_gt_all.at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(6);
+        m_gt_all.at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(7);
+
+    }
+
+
     void atFrameNumberVisibility(ushort frameNumber, bool visibility) {
         m_visibility.at(frameNumber) = visibility;
     }

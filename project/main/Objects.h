@@ -19,6 +19,8 @@ protected:
 
     std::vector<std::vector<STRUCT_GT_ALL> > m_obj_extrapolated_all;
 
+    std::vector<std::pair<cv::Point2f, cv::Point2f> > m_obj_base_pixel_position_pixel_displacement;
+
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_obj_extrapolated_pixel_position_pixel_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
