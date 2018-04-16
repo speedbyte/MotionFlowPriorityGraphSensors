@@ -35,13 +35,13 @@ RADAR_DATASET:
    GT: 1
    LK: 0
    FB: 1
+
    PLOT: 1
 
 VIRES_DATASET:
    PATH: "../../../datasets/vires_dataset/"
    EXECUTE: 1
    GT: 0
-
    LK: 0
    FB: 1
    PLOT: 1

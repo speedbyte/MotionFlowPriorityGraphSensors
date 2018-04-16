@@ -55,7 +55,7 @@ void GroundTruthScene::visualiseBoundingBox(void) {
             tempGroundTruthImage = cv::Scalar::all(255);
             tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
-            for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size()-1; obj_index++) {
+            for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
                 if ((m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).occluded == false)
                         ) {
@@ -906,7 +906,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         sleep(1);
 
         sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_openglfrustum.c_str());
-
+        //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams.c_str());
         sleep(1);
 
         sendSCPMessage(m_scpSocket, display_parameters.c_str());
