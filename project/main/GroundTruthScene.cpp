@@ -105,6 +105,25 @@ void GroundTruthScene::visualiseBoundingBox(void) {
     cv::destroyAllWindows();
 }
 
+cv::Point2f GroundTruthScene::worldToCamera(cv::Point3f pos) {
+
+    sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(0).m_sensor_fov_rad;
+
+    float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad.vertical / 2); // [px] from camera position.
+    float pxSize = 2.2e-6; // [m/px]
+    //scale 3D point back onto image
+    pos = pos * ((distToImagePlane * pxSize) / pos.z);
+
+    //convert meter to pixel
+    pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
+
+    // Change from optical axis to origin ( top, left )
+    float x_image =  Dataset::getFrameSize().width/2 - pos.x;
+    float y_image =  Dataset::getFrameSize().height/2 - pos.y;
+
+    return cv::Point2f(x_image, y_image);
+
+}
 
 void GroundTruthScene::prepare_directories() {
 
@@ -475,7 +494,7 @@ void GroundTruthScene::startEvaluating(std::string dataset, Noise noise) {
     }
 
     calcBBFrom3DPosition();
-    visualiseBoundingBox();
+    //visualiseBoundingBox();
 
 
     for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size()-1; obj_index++) {
@@ -671,6 +690,12 @@ void GroundTruthScene::generate_bird_view() {
 void GroundTruthScene::calcBBFrom3DPosition() {
 
     cv::FileStorage write_fs;
+    char file_name_image[50], file_name_image_output[50];
+
+    cv::Mat image_data_and_shape;
+
+    const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
+    cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
@@ -681,9 +706,19 @@ void GroundTruthScene::calcBBFrom3DPosition() {
         unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;
         assert(FRAME_COUNT > 0);
 
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) //{
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-        {//ushort frame_count = 0;
+            tempGroundTruthImage = cv::Scalar::all(255);
+
+            sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
+            std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
+
+            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count * frame_skip);
+            //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
+
+            cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+            tempGroundTruthImage = cv::Scalar::all(255);
+            tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
             for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
@@ -696,12 +731,13 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 object_location_inertial_m_str pos_obj_inertial = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m;
 
+                object_location_m_str object_location_m = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        frame_count).m_object_location_m;
+
                 object_rotation_inertial_rad_str orientation_obj_inertial = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad;
 
                 sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_ptr_customSensorMetaDataList.at(0)->getAll().at(frame_count).m_sensor_location_carrier_m;
-
-                sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(frame_count).m_sensor_fov_rad;
 
                 sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad;
@@ -721,43 +757,43 @@ void GroundTruthScene::calcBBFrom3DPosition() {
  * create a box placed on z = 0 ( street level ). Find 8 points of the box.
  *
  */
-                bounding_points_3d.at(0) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(1) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(2) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(0) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(1) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(2) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
                 bounding_points_3d.at(3) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(4) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(5) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(6) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(4) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(5) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(6) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
                 bounding_points_3d.at(7) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
                 bounding_points_3d.at(8) = cv::Point3f(0,0,0); // This is the position of the object
 
                 cv::Point3f final;
-                float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad.vertical / 2); // [px] from camera position.
-
-                float pxSize = 2.2e-6; // [m/px]
 
 
                 for ( auto i = 0; i < 9; i++ ) {
 
                     //Add the offset for each point. These points are in the vehicle coordinate system.
-                    //Rotate tje axis to inertial coordinate system. -hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
-                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(offset_x, offset_y, offset_z),cv::Point3f(-orientation_obj_inertial.rotation_rz_yaw_rad,-orientation_obj_inertial.rotation_ry_pitch_rad,-orientation_obj_inertial.rotation_rx_roll_rad));
+                    //Then rotate the box to inertial coordinate system. hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
+                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(offset_x, offset_y, offset_z),cv::Point3f(orientation_obj_inertial.rotation_rz_yaw_rad,orientation_obj_inertial.rotation_ry_pitch_rad, orientation_obj_inertial.rotation_rx_roll_rad));
 
                     //Translate the axis to the master origin. add the BB vector to the object position.
                     //Now we are in the master co-ordinate system.
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m,
-                                                                                                          pos_obj_inertial.location_z_m), cv::Point3f(0,0,0));
+                                                                                  pos_obj_inertial.location_z_m), cv::Point3f(0,0,0));
 
                     // Change to sensor object by changing the axis to the sensor object.
-                    // Rotate the axis to enter the USK co-ordinate system.
-                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m,
-                                                                                  -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(-sensor_rotation_carrier_rad.rotation_rz_yaw_rad, -sensor_rotation_carrier_rad.rotation_ry_pitch_rad, -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m, -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(0,0,0));
 
+                    // now rotate
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(0,0,0), cv::Point3f(-sensor_rotation_carrier_rad.rotation_rz_yaw_rad, -sensor_rotation_carrier_rad.rotation_ry_pitch_rad, -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
+
+                    // We are in the sensor objecz, hence we dont need to rotate the sensor carrier.
                     // Translate to cam position in the car
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(-sensor_offset_m.offset_x, -sensor_offset_m.offset_y, -sensor_offset_m.offset_z), cv::Point3f(0,0,0));
 
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
+
                     //transform to VTD coordinates, x = depth
                     //scale 3D point back onto image
                     float cam_rotated_x = final.x;
@@ -769,33 +805,63 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                     cv::Point3f pos_fx = 980*pos/pos.z + cv::Point3f(621,187,0);
 
-                    //scale 3D point back onto image
-                    pos = pos * ((distToImagePlane * pxSize) / pos.z);
+                    cv::Point2f camPoint = worldToCamera(pos);
 
-                    //convert meter to pixel
-                    pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
-
-                    // Change from optical axis to origin ( top, left )
-                    float x_image =  Dataset::getFrameSize().width/2 - pos.x;
-                    float y_image =  Dataset::getFrameSize().height/2 - pos.y;
-
-                    bounding_points_2d.at(i) = cv::Point2f(x_image, y_image);
+                    bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
 
                 }
 
-                auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x+sensor_offset_m.offset_x, bounding_points_3d.at(8).y));
+                std::cout << bounding_points_2d << std::endl;
+
+                auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x+sensor_offset_m.offset_x, bounding_points_3d.at(8).y+sensor_offset_m.offset_y));
                 auto dist_usk = cv::norm(
                         cv::Point2f(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                 frame_count).m_object_location_m.location_x_m,
                                     m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                             frame_count).m_object_location_m.location_y_m));
-                assert(std::abs(dist - dist_usk) < 1);
+                //assert(std::abs(dist - dist_usk) < 1);
                 std::cout << "distance is " << dist << " for " << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName() << std::endl;
 
                 m_ptr_customObjectMetaDataList.at(obj_index)->setBoundingBoxPoints(frame_count, bounding_points_2d);
 
+                cv::Point2f xx = worldToCamera(cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m, object_location_m.location_x_m));
 
+                if ((m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).occluded == false)
+                        ) {
+
+                    cv::Rect boundingbox = cv::Rect(
+                            cvRound(xx.x),
+                            cvRound(xx.y),
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m));
+
+                    cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+
+                    std::vector<cv::Point2f> box = {
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_bottom_px,
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_left_px,
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_top_px,
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_right_px,
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_bottom_px,
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_left_px,
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_top_px,
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_right_px
+                    };
+
+                    for ( auto i = 0; i < 8; i++ ) {
+                        std::cout << box.at(i) << std::endl;
+                        cv::circle(tempGroundTruthImage, box.at(i), 2, cv::Scalar(0, 0, 255), 3);
+                    }
+                    cv::rectangle(tempGroundTruthImage, cv::boundingRect(box), cv::Scalar(0, 0, 255), 1, 8, 0);
+                }
             }
+
+            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            cv::imshow("BB", tempGroundTruthImage);
+            cv::waitKey(0);
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            /*---------------------------------------------------------------------------------*/
+
         }
     }
 }

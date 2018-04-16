@@ -50,6 +50,9 @@ typedef struct object_rotation_inertial_rad { float rotation_rx_roll_rad; float 
 //offset. Shift of point from the center of mass
 typedef struct object_offset_m { float offset_x; float offset_y; float offset_z; } object_offset_m_str;
 
+//x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
+typedef struct object_location_m { float location_x_m; float location_y_m; float location_z_m;} object_location_m_str;
+
 
 class STRUCT_GT_OBJECTS_ALL {
 
@@ -99,8 +102,7 @@ public:
     //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
     struct object_location_px { float location_x_m; float location_y_m; float location_z_m;} m_object_location_px;
 
-    //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
-    struct object_location_m { float location_x_m; float location_y_m; float location_z_m;} m_object_location_m;
+    object_location_m_str m_object_location_m;
 
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D object 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
@@ -318,14 +320,14 @@ public:
 
     void setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
 
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(0);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(1);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(2);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(3);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(4);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(5);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(6);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(7);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(7);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(6);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(4);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(5);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(3);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(2);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(0);
+        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(1);
 
     }
 

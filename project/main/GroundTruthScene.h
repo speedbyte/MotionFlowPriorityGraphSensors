@@ -101,7 +101,7 @@ public:
 
     void calcBBFrom3DPosition();
 
-    void playground();
+    cv::Point2f worldToCamera(cv::Point3f point);
 
 };
 
