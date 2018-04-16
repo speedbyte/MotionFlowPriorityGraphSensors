@@ -13,8 +13,20 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                                                                                          const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_blob_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_edge_pixel_point_pixel_displacement, std::string post_processing_algorithm) {
 
     // A blob can be either a stencil or a shape
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > outer_multiframe_mean_pixel_centroid_pixel_displacement;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  >  > outer_multiframe_shape_parameters;
+
+    unsigned COUNT;
+    if ( post_processing_algorithm == "ground_truth") {
+        COUNT = 1;
+    }
+    else {
+        COUNT = 4;
+    }
+
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > list_obj_mean_pixel_centroid_pixel_displacement;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  >  > list_obj_shape_parameters;
+
+    std::vector<std::pair<cv::Point2f, cv::Point2f> >  outer_multiframe_mean_pixel_centroid_pixel_displacement;
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > outer_multiframe_shape_parameters;
 
     auto tic = steady_clock::now();
 
