@@ -243,52 +243,52 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
 
                         << "}";  //dont close the brace yet
             }
-            for (int i = 0; i < m_list_gt_sensors.size(); i++) {
+            for (int sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.size(); sen_index++) {
                 write_fs
 
-                        << "{:" << "name" << m_list_gt_sensors.at(i).getSensorName()
+                        << "{:" << "name" << m_ptr_customSensorMetaDataList.at(sen_index)->getSensorName()
 
-                        << "visible" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).visMask
+                        << "visible" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).visMask
 
-                        << "x_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "x_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_location_carrier_m.location_x_m
-                        << "y_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "y_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_location_carrier_m.location_y_m
-                        << "z_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "z_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_location_carrier_m.location_z_m
 
-                        //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_m.location_x_m
-                        //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_m.location_y_m
-                        //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_location_m.location_z_m
+                        //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_x_m
+                        //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_y_m
+                        //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_z_m
 
-                        << "h_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "h_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad
-                        << "p_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "p_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad
-                        << "r_carrier" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "r_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad
 
-                        << "h_sensor" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "h_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_rad.rotation_rz_yaw_rad
-                        << "p_sensor" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "p_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_rad.rotation_ry_pitch_rad
-                        << "r_sensor" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "r_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_rad.rotation_rx_roll_rad
 
                         << "off_x_sensor"
-                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_x
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_x
                         << "off_y_sensor"
-                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_y
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_y
                         << "off_z_sensor"
-                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_offset_m.offset_z
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_z
 
                         << "fov_horizontal"
-                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_fov_rad.horizontal
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_fov_rad.horizontal
                         << "fov_vertical"
-                        << m_ptr_customSensorMetaDataList.at(i)->getAll().at(frame_count).m_sensor_fov_rad.vertical
-                        << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_fov_rad.vertical
+                        << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_fov_rad.horizontal_offset
-                        << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(i)->getAll().at(
+                        << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         frame_count).m_sensor_fov_rad.vertical_offset
 
                         << "}";
