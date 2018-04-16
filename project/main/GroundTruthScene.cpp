@@ -95,9 +95,9 @@ void GroundTruthScene::visualiseBoundingBox(void) {
             }
 
 
-            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            //cv::imshow("BB", tempGroundTruthImage);
-            //cv::waitKey(0);
+            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            cv::imshow("BB", tempGroundTruthImage);
+            cv::waitKey(0);
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
         }
@@ -329,6 +329,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
+            std::cout << frame_count << std::endl;
             char temp_str_fc[20];
             sprintf(temp_str_fc, "frame_count_%03d", frame_count);
             file_node = fs[temp_str_fc];
@@ -904,7 +905,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams.c_str());
+        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_openglfrustum.c_str());
 
         sleep(1);
 
@@ -1080,6 +1081,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 }
             }
             catch (...) {
+                std::cerr << "Error in generation" << std::endl;
                 stopSimulation();
                 return;
             };
@@ -1090,12 +1092,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     try {
         if (m_environment == "none") {
 
-
             startEvaluating("vires", noNoise);
 
         }
     }
-    catch (std::bad_alloc e) {
+    catch (...) {
+        std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
         stopSimulation();
     }
 }
@@ -1203,6 +1205,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_STATE_t *data, const double
                     m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
                     m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
                     m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
+                    m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
                     m_sensorCount += 1;
                 }
 
@@ -1259,6 +1262,7 @@ simFrame, const
                     m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
                     m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
                     m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
+                    m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
                     m_objectCount += 1;
                 }
                 if (data->base.pos.type == RDB_COORD_TYPE_WINDOW) {

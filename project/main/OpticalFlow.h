@@ -31,7 +31,11 @@ protected:
 
     std::vector<Objects *> &m_list_gt_objects;
 
-    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > m_list_frame_skip_collision_points;
+    std::vector<Objects *> &m_list_simulated_objects_base;
+
+    std::vector<Objects *> &m_list_simulated_objects;
+
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_collision_points;
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > m_frame_skip_shape_points;
 
@@ -42,8 +46,8 @@ protected:
 
 public:
 
-    OpticalFlow( std::vector<Objects *> &list_gt_objects ) :
-    m_list_gt_objects(list_gt_objects) { };
+    OpticalFlow( std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects_base, std::vector<Objects *> &list_simulated_objects ) :
+    m_list_gt_objects(list_gt_objects), m_list_simulated_objects_base(list_simulated_objects_base), m_list_simulated_objects(list_simulated_objects)  { };
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getCollisionPoints () const {
         return m_list_frame_skip_collision_points;
@@ -57,6 +61,10 @@ public:
     void prepare_directories();
 
     void generate_collision_points();
+
+    void generate_edge_contour();
+
+    void visualiseStencil(void);
 
     void generate_shape_points();
 

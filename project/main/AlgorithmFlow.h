@@ -22,15 +22,12 @@ class AlgorithmFlow : public OpticalFlow {
 
 private:
 
-    std::vector<Objects *> &m_list_simulated_base_objects;
-
-    std::vector<Objects *> &m_list_simulated_objects;
 
 
 public:
 
     AlgorithmFlow( std::vector<Objects*> &list_gt_objects, std::vector<Objects*> &list_simulated_base_objects, std::vector<Objects*> &list_simulated_objects ) :
-    OpticalFlow(list_gt_objects), m_list_simulated_base_objects(list_simulated_base_objects), m_list_simulated_objects(list_simulated_objects) {
+    OpticalFlow(list_gt_objects, list_simulated_base_objects, list_simulated_objects) {
 
     }
 
@@ -39,18 +36,12 @@ public:
 
     void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise);
 
-    void generate_edge_contour();
-
     void store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
     &l_pixelmovement );
 
     const std::string getResultOrdner() const {
         return m_resultordner;
     }
-
-    void generate_collision_points_mean();
-
-    void generate_shape_points(std::string noise);
 
     std::string getImageAbholOrt() const {
         return mImageabholOrt.string();

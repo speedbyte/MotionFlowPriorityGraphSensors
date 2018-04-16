@@ -375,3 +375,75 @@ int main() {
         /* Scratch GT ends*/
 
 }
+
+
+void calcBBFrom3DPosition(int screen_width, int screen_height, QVector3D cam_pos, float fov_v, float pixSize = 2.2e-6){
+    std::vector<QVector3D> bounding_points_3d;
+    //all 8 3d bounding box points of an object
+    //VTD center of object with z = 0!
+    bounding_points_3d.push_back(QVector3D(  m_realworld_dim.length/2,  m_realworld_dim.width/2, 0));
+    bounding_points_3d.push_back(QVector3D( -m_realworld_dim.length/2,  m_realworld_dim.width/2, 0));
+    bounding_points_3d.push_back(QVector3D(  m_realworld_dim.length/2, -m_realworld_dim.width/2, 0));
+    bounding_points_3d.push_back(QVector3D( -m_realworld_dim.length/2, -m_realworld_dim.width/2, 0));
+    bounding_points_3d.push_back(QVector3D(  m_realworld_dim.length/2,  m_realworld_dim.width/2, m_realworld_dim.height));
+    bounding_points_3d.push_back(QVector3D( -m_realworld_dim.length/2,  m_realworld_dim.width/2, m_realworld_dim.height));
+    bounding_points_3d.push_back(QVector3D(  m_realworld_dim.length/2, -m_realworld_dim.width/2, m_realworld_dim.height));
+    bounding_points_3d.push_back(QVector3D( -m_realworld_dim.length/2, -m_realworld_dim.width/2, m_realworld_dim.height));
+
+    std::vector<QPoint> bounding_points_2d;
+
+    qreal width = screen_width, height = screen_height;
+    qreal fovv = fov_v / 180. * M_PI; // [rad]
+    qreal distToImagePlane = 0.5 * height / tan(fovv/2); // [px]
+    qreal pxSize = pixSize; // [m/px]
+    QVector3D toMeter = QVector3D(pxSize, pxSize, 1);
+    qreal z = distToImagePlane * pxSize; // [m]
+
+    QPoint min(2000,2000), max(0,0);
+    //transformation matrix to transform to camera location
+    QMatrix4x4 toCamPos;
+    toCamPos.translate(-cam_pos); //translate camera pos
+
+
+    //iterate over bounding points and add transformed points to path to print
+    for(QVector3D p: bounding_points_3d){
+        //calculate correct bounding box point by adding offset to reference point (for VTD  = read middle axle of the car)
+        p+=getDimensionOffset();
+        QVector3D pos = getRealworldPos();
+
+        //transformation matrix for offset to center of roi and the 3d bounding box point p
+        QMatrix4x4 toPosition;
+        QQuaternion rot = getRealWorldOrientation().getRotation();
+        toPosition.translate(rot * (p));
+        //first translate to camera pos
+        pos = toCamPos * pos;
+        //then translate and rotate to 3d bounding box point
+        pos = toPosition * pos;
+
+        //transform from sensor coordinates to camera coordinates
+        pos = QVector3D(pos.y(), pos.z(),pos.x());
+
+        //scale 3D point back onto image
+        pos = pos * (z / pos.z());
+        //convert meter to pixel
+        pos = pos / toMeter;
+        bounding_points_2d.push_back(QPoint(width/2 - pos.x(), height/2 - pos.y()));
+    }
+    //get min and max for x, y to get the correct 2d bounding box
+    for(QPoint p : bounding_points_2d){
+        if(p.x() < min.x()){
+            min.setX(p.x());
+        }
+        if(p.y() < min.y()){
+            min.setY(p.y());
+        }
+        if(p.x() > max.x()){
+            max.setX(p.x());
+        }
+        if(p.y() > max.y()){
+            max.setY(p.y());
+        }
+    }
+    m_bb.setTopLeft(min);
+    m_bb.setBottomRight(max);
+}

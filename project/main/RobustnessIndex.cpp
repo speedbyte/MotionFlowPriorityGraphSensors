@@ -73,20 +73,20 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt,
     }
 
     // shape of algorithhm, with shape of ground truth
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+    for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {
 
-        for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {
+        for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
             std::vector<float> xsamples, ysamples;
 
-            unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(data_processing_index).size();
+            unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(data_processing_index).at(frame_skip - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                unsigned long POINTS = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(data_processing_index).at(frame_count).size();
+                unsigned long POINTS = opticalFlow_gt.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
                 for (unsigned points = 0; points < POINTS; points++) {
 
-                    cv::Point2f shapepoints = opticalFlow_gt.getShapePoints().at(frame_skip - 1).at(data_processing_index).at(frame_count).at
+                    cv::Point2f shapepoints = opticalFlow_gt.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).at
                             (points);
 
                     xsamples.push_back(shapepoints.x);
@@ -133,22 +133,24 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
         COUNT = 4;
     }
 
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+    for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {
+        for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {
             std::vector<float> xsamples,ysamples;
 
-            unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(frame_skip - 1).at(data_processing_index).size();
+            unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(data_processing_index).at(frame_skip - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 ushort m_valid_collision_points = 0;
                 ushort m_invalid_collision_points = 0;
 
-                unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(data_processing_index).at(frame_count).size();
+                unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(data_processing_index).at(frame_skip-1).at(frame_count).size();
+
                 for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-                    cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(frame_skip-1).at(data_processing_index).at(frame_count).at
+                    //    std::vector<std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > >
+                    cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(data_processing_index).at(frame_skip-1).at(frame_count).at
                             (points);
 
                     xsamples.push_back(collisionpoints.x);

@@ -134,6 +134,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
                 temp_flow_x = 0, temp_flow_y = 0;
             }
         }
+
         m_obj_extrapolated_pixel_position_pixel_displacement.push_back(multiframe_flowvector);
         m_obj_extrapolated_visibility.push_back(multiframe_visibility);
         m_obj_extrapolated_all.push_back(multiframe_all);

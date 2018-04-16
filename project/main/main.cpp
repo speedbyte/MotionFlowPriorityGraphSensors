@@ -225,7 +225,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::vector<SimulatedObjects> list_of_simulated_objects_base;
     std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
 
-    GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base);
+    GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_gt_objects_base);
 
     for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
 
@@ -235,7 +235,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::vector<Objects *> ptr_list_of_gt_objects;
             GroundTruthObjects::objectCurrentCount = 0;
 
-            cv::Size_<unsigned> frame_size(1242, 375);
+            cv::Size_<unsigned> frame_size(800, 600);
             std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
             std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
 
@@ -361,10 +361,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS, "algorithm");
                 }
 
-                list_of_algorithm_flow[env_index].generate_collision_points_mean();
-                list_of_algorithm_flow[env_index].generate_shape_points(environment_list[env_index]);
+                list_of_algorithm_flow[env_index].generate_collision_points();
+                list_of_algorithm_flow[env_index].generate_shape_points();
                 if ( env_index == environment_list.size()-1 ) {
-                    list_of_algorithm_flow[env_index].visualiseStencil();
+                    //list_of_algorithm_flow[env_index].visualiseStencil();
                 }
             }
         }

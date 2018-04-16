@@ -175,7 +175,7 @@ private:
                     "   <Position dx=\"2.000000\" dy=\"0.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "
-                    "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"true\" /> "
+                    "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"false\" /> "
                     "   <Filter objectType=\"none\" />"
                     "   <Filter objectType=\"pedestrian\" /> "
                     "   <Filter objectType=\"vehicle\" /> "

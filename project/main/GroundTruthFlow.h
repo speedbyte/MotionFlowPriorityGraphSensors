@@ -28,18 +28,12 @@ private:
 
 public:
 
-    GroundTruthFlow( std::vector<Objects *> &list_gt_objects ) :
-            OpticalFlow(list_gt_objects) {
-
+    GroundTruthFlow( std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects, std::vector<Objects *> &list_simulated_objects_base ) :
+            OpticalFlow(list_gt_objects, list_simulated_objects, list_simulated_objects_base) {
     }
 
     void generate_flow_frame();
 
-    void generate_shape_points();
-
-    void visualiseStencil(void);
-
-    void generate_edge_contour();
 
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
