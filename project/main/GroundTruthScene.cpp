@@ -134,12 +134,12 @@ void GroundTruthScene::prepare_directories() {
             }
         }
     } else {
-        // post processing step
+        // post processing step. At the moment I dont need this.
         boost::filesystem::path bbox_dir = m_generatepath.string() + "bounding_box/";
         if (boost::filesystem::exists(m_generatepath)) {
             system(("rm -rf " + bbox_dir.string()).c_str());
         }
-        boost::filesystem::create_directories(bbox_dir);
+        //boost::filesystem::create_directories(bbox_dir);
     }
 
 }
@@ -779,7 +779,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     bounding_points_3d.at(i) = final;
 
 
-                    cv::Point2f camPoint = Utils::worldToCamera(final, fov_rad.vertical);
+                    cv::Point2f camPoint = Utils::worldToCamera(final, fov_rad.vertical, 980, 980);
 
                     bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
 
@@ -796,7 +796,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                 m_ptr_customObjectMetaDataList.at(obj_index)->setBoundingBoxPoints(frame_count, bounding_points_2d);
 
-                cv::Point2f xx = Utils::worldToCamera(cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m, object_location_m.location_x_m), fov_rad.vertical);
+                cv::Point2f xx = Utils::worldToCamera(cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m, object_location_m.location_x_m), fov_rad.vertical, 980, 980);
 
                 if ((m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).occluded == false)
                         ) {
@@ -830,9 +830,9 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 }
             }
 
-            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            //cv::imshow("BB", tempGroundTruthImage);
-            //cv::waitKey(0);
+            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            cv::imshow("BB", tempGroundTruthImage);
+            cv::waitKey(0);
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 

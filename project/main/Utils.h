@@ -37,16 +37,19 @@ public:
     }
 
 
-    static cv::Point2f worldToCamera(cv::Point3f final, float fov_rad) {
+    static cv::Point2f worldToCamera(cv::Point3f final, float fov_rad, float fx, float fy) {
 
         //transform to VTD coordinates, x = depth, y = width, z = height. Hence the camera co-ordinates needs to be changed similarly.
         cv::Point3f pos = cv::Point3f(-final.y, -final.z, final.x);
 
-        cv::Point3f pos_fx = 980*pos/pos.z + cv::Point3f(621,187,0);
+        float fx_x =  pos.x * fx /pos.z;
+        float fy_y =  pos.y * fy /pos.z;
 
         float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad/ 2); // [px] from camera position.
         float pxSize = 2.2e-6; // [m/px]
         //scale 3D point back onto image. row and column are calculated from the optical center.
+
+
         float x = pos.x * ((distToImagePlane) / pos.z);
         float y = pos.y * ((distToImagePlane) / pos.z);
 
