@@ -43,7 +43,32 @@ public:
     }
 
 
+    static cv::Point2f worldToCamera(cv::Point3f final, float fov_rad) {
+
+        //transform to VTD coordinates, x = depth, y = width, z = height
+        cv::Point3f pos = cv::Point3f(-final.y, -final.z, final.x);
+
+        cv::Point3f pos_fx = 980*pos/pos.z + cv::Point3f(621,187,0);
+
+        float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad/ 2); // [px] from camera position.
+        float pxSize = 2.2e-6; // [m/px]
+        //scale 3D point back onto image
+        pos = pos * ((distToImagePlane * pxSize) / pos.z);
+
+        //convert meter to pixel
+        pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
+
+        // Change from optical axis to origin ( top, left )
+        float x_image =  Dataset::getFrameSize().width/2 + pos.x;
+        float y_image =  Dataset::getFrameSize().height/2 + pos.y;
+
+        return cv::Point2f(x_image, y_image);
+
+    }
+
+
 };
+
 
 
 #endif //MAIN_UTILS_H

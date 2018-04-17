@@ -101,8 +101,6 @@ public:
 
     void calcBBFrom3DPosition();
 
-    cv::Point2f worldToCamera(cv::Point3f point);
-
 };
 
 class GroundTruthSceneInternal : public GroundTruthScene {

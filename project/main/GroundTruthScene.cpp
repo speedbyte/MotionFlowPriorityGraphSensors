@@ -105,26 +105,6 @@ void GroundTruthScene::visualiseBoundingBox(void) {
     cv::destroyAllWindows();
 }
 
-cv::Point2f GroundTruthScene::worldToCamera(cv::Point3f pos) {
-
-    sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(0).m_sensor_fov_rad;
-
-    float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad.vertical / 2); // [px] from camera position.
-    float pxSize = 2.2e-6; // [m/px]
-    //scale 3D point back onto image
-    pos = pos * ((distToImagePlane * pxSize) / pos.z);
-
-    //convert meter to pixel
-    pos = cv::Point3f(pos.x / pxSize, pos.y/pxSize, pos.z/1);
-
-    // Change from optical axis to origin ( top, left )
-    float x_image =  Dataset::getFrameSize().width/2 - pos.x;
-    float y_image =  Dataset::getFrameSize().height/2 - pos.y;
-
-    return cv::Point2f(x_image, y_image);
-
-}
-
 void GroundTruthScene::prepare_directories() {
 
     m_groundtruthpath = Dataset::getGroundTruthPath(); // data/stereo_flow
@@ -757,7 +737,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
  * create a box placed on z = 0 ( street level ). Find 8 points of the box.
  *
  */
-                bounding_points_3d.at(0) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(0) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m/ 2, 0);
                 bounding_points_3d.at(1) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
                 bounding_points_3d.at(2) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
                 bounding_points_3d.at(3) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
@@ -765,16 +745,20 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 bounding_points_3d.at(5) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
                 bounding_points_3d.at(6) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
                 bounding_points_3d.at(7) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(8) = cv::Point3f(0,0,0); // This is the position of the object
+                bounding_points_3d.at(8) = cv::Point3f(-offset_x,-offset_y,-offset_z); // This is the position of the object
 
                 cv::Point3f final;
+
+                sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(0).m_sensor_fov_rad;
 
 
                 for ( auto i = 0; i < 9; i++ ) {
 
                     //Add the offset for each point. These points are in the vehicle coordinate system.
+                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(offset_x, offset_y, offset_z),cv::Point3f(0,0,0));
+
                     //Then rotate the box to inertial coordinate system. hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
-                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(offset_x, offset_y, offset_z),cv::Point3f(orientation_obj_inertial.rotation_rz_yaw_rad,orientation_obj_inertial.rotation_ry_pitch_rad, orientation_obj_inertial.rotation_rx_roll_rad));
+                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(0,0,0),cv::Point3f(orientation_obj_inertial.rotation_rz_yaw_rad,orientation_obj_inertial.rotation_ry_pitch_rad, orientation_obj_inertial.rotation_rx_roll_rad));
 
                     //Translate the axis to the master origin. add the BB vector to the object position.
                     //Now we are in the master co-ordinate system.
@@ -784,28 +768,21 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     // Change to sensor object by changing the axis to the sensor object.
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m, -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(0,0,0));
 
-                    // now rotate
+                    // now rotate the axis to align to the car
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(0,0,0), cv::Point3f(-sensor_rotation_carrier_rad.rotation_rz_yaw_rad, -sensor_rotation_carrier_rad.rotation_ry_pitch_rad, -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
 
-                    // We are in the sensor objecz, hence we dont need to rotate the sensor carrier.
+                    // We are in the vehicle coordinate system now.
                     // Translate to cam position in the car
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(-sensor_offset_m.offset_x, -sensor_offset_m.offset_y, -sensor_offset_m.offset_z), cv::Point3f(0,0,0));
 
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
 
-                    //transform to VTD coordinates, x = depth
-                    //scale 3D point back onto image
-                    float cam_rotated_x = final.x;
-                    float cam_rotated_y = final.y;
-                    float cam_rotated_z = final.z;
 
-                    //transform to VTD coordinates, x = depth, y = width, z = height
-                    cv::Point3f pos = cv::Point3f(cam_rotated_y, cam_rotated_z, cam_rotated_x);
+                    //final = Utils::translate_and_rotate_points(final, cv::Point3f(0,0,0), cv::Point3f(-M_PI/2,0,M_PI/2));
 
-                    cv::Point3f pos_fx = 980*pos/pos.z + cv::Point3f(621,187,0);
 
-                    cv::Point2f camPoint = worldToCamera(pos);
+                    cv::Point2f camPoint = Utils::worldToCamera(final, fov_rad.vertical);
 
                     bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
 
@@ -813,7 +790,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                 std::cout << bounding_points_2d << std::endl;
 
-                auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x+sensor_offset_m.offset_x, bounding_points_3d.at(8).y+sensor_offset_m.offset_y));
+                auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y+sensor_offset_m.offset_y));
                 auto dist_usk = cv::norm(
                         cv::Point2f(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                 frame_count).m_object_location_m.location_x_m,
@@ -824,7 +801,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                 m_ptr_customObjectMetaDataList.at(obj_index)->setBoundingBoxPoints(frame_count, bounding_points_2d);
 
-                cv::Point2f xx = worldToCamera(cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m, object_location_m.location_x_m));
+                cv::Point2f xx = Utils::worldToCamera(cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m, object_location_m.location_x_m), fov_rad.vertical);
 
                 if ((m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).occluded == false)
                         ) {
