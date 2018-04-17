@@ -437,8 +437,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                           << std::endl;
 
                 if (frame_count > 0) {
-                    assert(std::abs(mean_displacement_vector_simple_avg_mean_x) > 0 ||
-                           std::abs(mean_displacement_vector_simple_avg_mean_y) > 0);
                     assert(mean_displacement_vector_moving_avg_mean_x!=0);
                     assert(mean_displacement_vector_simple_avg_mean_x!=0);
                     assert(mean_displacement_vector_ranked_mean_x!=0);

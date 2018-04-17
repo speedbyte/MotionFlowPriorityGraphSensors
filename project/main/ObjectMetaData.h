@@ -56,6 +56,8 @@ typedef struct object_location_m { float location_x_m; float location_y_m; float
 //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
 typedef struct region_of_interest_px { float x; float y; float width; float height;} region_of_interest_px_str;
 
+//x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
+typedef struct object_location_px { float location_x_m; float location_y_m; float location_z_m; cv::Point2f cog_px;} object_location_px_str;
 
 class STRUCT_GT_OBJECTS_ALL {
 
@@ -102,10 +104,9 @@ public:
 
     object_location_inertial_m_str m_object_location_inertial_m;
 
-    //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
-    struct object_location_px { float location_x_m; float location_y_m; float location_z_m;} m_object_location_px;
-
     object_location_m_str m_object_location_m;
+
+    object_location_px_str m_object_location_px;
 
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D object 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
@@ -341,6 +342,9 @@ public:
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = roi_2d.y;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.width = roi_2d.width;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.height = roi_2d.height;
+
+        m_object_gt_all.at(frameNumber).m_object_location_px.cog_px = bbox_points.at(8);
+
 
 
     }

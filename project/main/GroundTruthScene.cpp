@@ -745,7 +745,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 bounding_points_3d.at(5) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
                 bounding_points_3d.at(6) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
                 bounding_points_3d.at(7) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(8) = cv::Point3f(0,0,0); // This is the position of the object
+                bounding_points_3d.at(8) = cv::Point3f(0,0,object_realworld_dim_m.dim_height_m/2); // This is the center of gravity
 
                 cv::Point3f final;
 
@@ -778,9 +778,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
 
-
                     cv::Point2f camPoint = Utils::worldToCamera(final, fov_rad.vertical, 980, 980);
-
                     bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
 
                 }
@@ -830,9 +828,9 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 }
             }
 
-            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            cv::imshow("BB", tempGroundTruthImage);
-            cv::waitKey(0);
+            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("BB", tempGroundTruthImage);
+            //cv::waitKey(0);
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 
