@@ -477,7 +477,7 @@ void GroundTruthScene::startEvaluating(std::string dataset, Noise noise) {
     //visualiseBoundingBox();
 
 
-    for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size()-1; obj_index++) {
+    for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
         GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape(),
                                   m_ptr_customObjectMetaDataList.at(obj_index)->getObjectStartPoint(), noise,
@@ -745,7 +745,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 bounding_points_3d.at(5) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
                 bounding_points_3d.at(6) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
                 bounding_points_3d.at(7) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(8) = cv::Point3f(-offset_x,-offset_y,-offset_z); // This is the position of the object
+                bounding_points_3d.at(8) = cv::Point3f(0,0,0); // This is the position of the object
 
                 cv::Point3f final;
 
@@ -772,14 +772,11 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(0,0,0), cv::Point3f(-sensor_rotation_carrier_rad.rotation_rz_yaw_rad, -sensor_rotation_carrier_rad.rotation_ry_pitch_rad, -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
 
                     // We are in the vehicle coordinate system now.
-                    // Translate to cam position in the car
-                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-sensor_offset_m.offset_x, -sensor_offset_m.offset_y, -sensor_offset_m.offset_z), cv::Point3f(0,0,0));
+                    // Translate to cam position in the car ... The offset_x should be negative - but it doesnt work !!!!!!
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(sensor_offset_m.offset_x, -sensor_offset_m.offset_y, -sensor_offset_m.offset_z), cv::Point3f(0,0,0));
 
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
-
-
-                    //final = Utils::translate_and_rotate_points(final, cv::Point3f(0,0,0), cv::Point3f(-M_PI/2,0,M_PI/2));
 
 
                     cv::Point2f camPoint = Utils::worldToCamera(final, fov_rad.vertical);
@@ -788,9 +785,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                 }
 
-                std::cout << bounding_points_2d << std::endl;
-
-                auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y+sensor_offset_m.offset_y));
+                auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x+sensor_offset_m.offset_x, bounding_points_3d.at(8).y+sensor_offset_m.offset_y));
                 auto dist_usk = cv::norm(
                         cv::Point2f(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                 frame_count).m_object_location_m.location_x_m,
@@ -826,16 +821,18 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     };
 
                     for ( auto i = 0; i < 8; i++ ) {
-                        std::cout << box.at(i) << std::endl;
+                        //std::cout << box.at(i) << std::endl;
                         cv::circle(tempGroundTruthImage, box.at(i), 2, cv::Scalar(0, 0, 255), 3);
                     }
+                    cv::Rect box_points = cv::boundingRect(box);
                     cv::rectangle(tempGroundTruthImage, cv::boundingRect(box), cv::Scalar(0, 0, 255), 1, 8, 0);
+
                 }
             }
 
-            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            cv::imshow("BB", tempGroundTruthImage);
-            cv::waitKey(0);
+            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("BB", tempGroundTruthImage);
+            //cv::waitKey(0);
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 

@@ -53,6 +53,9 @@ typedef struct object_offset_m { float offset_x; float offset_y; float offset_z;
 //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
 typedef struct object_location_m { float location_x_m; float location_y_m; float location_z_m;} object_location_m_str;
 
+//x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
+typedef struct region_of_interest_px { float x; float y; float width; float height;} region_of_interest_px_str;
+
 
 class STRUCT_GT_OBJECTS_ALL {
 
@@ -112,6 +115,8 @@ public:
     struct object_rotation_rad { float rotation_rx_roll_rad; float rotation_ry_pitch_rad; float rotation_rz_yaw_rad;} m_object_rotation_rad;
 
     object_rotation_inertial_rad_str m_object_rotation_inertial_rad;
+
+    region_of_interest_px_str m_region_of_interest_px;
 
     struct object_distances { float sensor_to_obj; float total_distance_covered; } m_object_distances;
 
@@ -328,6 +333,15 @@ public:
         m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(2);
         m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(0);
         m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(1);
+
+        cv::Rect roi_2d = cv::boundingRect(bbox_points);
+        std::cout << roi_2d << std::endl;
+
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = roi_2d.x;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = roi_2d.y;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width = roi_2d.width;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.height = roi_2d.height;
+
 
     }
 

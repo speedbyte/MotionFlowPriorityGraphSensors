@@ -70,7 +70,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
             auto dist_inertial = cv::norm(gt_displacement_inertial);
             auto dist_usk = cv::norm(gt_displacement_usk);
-            //assert(std::round(dist_inertial*1000)/1000 == std::round(dist_usk*1000)/1000);
+            assert(std::round(dist_inertial*1000)/1000 == std::round(dist_usk*1000)/1000);
 
             printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getAll().at(current_index).visMask?"true":"false"),
                    frame_count,

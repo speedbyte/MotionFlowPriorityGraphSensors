@@ -228,7 +228,7 @@ void OpticalFlow::generate_edge_contour() {
 
                         auto new_edge_size = edge_movement.at(obj_index).size();
                         std::cout << new_edge_size << std::endl;
-                        //assert(new_edge_size != 0);
+                        assert(new_edge_size != 0);
 
                         outer_edge_movement.at(obj_index).push_back(edge_movement.at(obj_index));
 
@@ -728,17 +728,18 @@ void OpticalFlow::visualiseStencil(void) {
 
                 if ((m_list_gt_objects.at(obj_index)->get_obj_base_visibility().at(frame_count))) {
 
-                    float columnBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).first.x;
-                    float rowBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).first.y;
+                    float columnBegin = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (frame_skip-1).at(frame_count).m_region_of_interest_px.x;
+                    float rowBegin = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (frame_skip-1).at(frame_count).m_region_of_interest_px.y;
 
                     int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
                     int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                    float offset_x = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset_m.offset_x;
-                    float offset_y = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset_m.offset_y;
-
+                    int width_roi = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (frame_skip-1).at(frame_count).m_region_of_interest_px.width);
+                    int height_roi = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (frame_skip-1).at(frame_count).m_region_of_interest_px.height);
 
                     cv::Rect boundingbox = cv::Rect(
                             cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
@@ -750,11 +751,11 @@ void OpticalFlow::visualiseStencil(void) {
                             cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
                                     frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m));
 
-                    cv::Rect boundingbox2 = cv::Rect(columnBegin-offset_x*width, rowBegin+offset_y*height, width, height+offset_y*height );
-                    //cv::Rect boundingbox3 = cv::Rect(columnBegin, rowBegin+height, width, height);
+                    cv::Rect boundingbox2 = cv::Rect(columnBegin, rowBegin, width, height );
+                    cv::Rect boundingbox3 = cv::Rect(columnBegin, rowBegin, width_roi, height_roi);
 
-                    cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
-                    cv::rectangle(tempGroundTruthImage, boundingbox2, cv::Scalar(0, 0, 255), 1, 8, 0);
+                    cv::rectangle(tempGroundTruthImage, boundingbox2, cv::Scalar(0, 255, 0), 1, 8, 0);
+                    cv::rectangle(tempGroundTruthImage, boundingbox3, cv::Scalar(0, 0, 255), 1, 8, 0);
                     //cv::rectangle(tempGroundTruthImage, boundingbox3, cv::Scalar(255, 0, 0), 1, 8, 0);
 
                     cv::Point2f pts_mean = m_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(frame_skip-1).

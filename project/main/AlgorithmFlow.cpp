@@ -352,10 +352,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 for ( ushort obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++ ) {
 
-                    float columnBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).first.x;
-                    float rowBegin = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                            (frame_skip-1).at(frame_count).first.y;
+                    float columnBegin = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (frame_skip-1).at(frame_count).m_region_of_interest_px.x;
+                    float rowBegin = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (frame_skip-1).at(frame_count).m_region_of_interest_px.y;
                     /*
                     if ( cvRound(rowBegin)%2 != 0 && STEP_SIZE %2 != 0 )   {
                         rowBegin+=1;
@@ -368,17 +368,14 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
                     int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                    float offset_x = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset_m.offset_x;
-                    float offset_y = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_offset_m.offset_y;
-
                     bool visibility = m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
                     if ( visibility ) {
 
                         cv::Mat roi = stencilFrame.
-                                rowRange(cvRound(rowBegin+offset_y*height-(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER)),
-                                         (cvRound(rowBegin+offset_y*height+height+offset_y*height+(DO_STENCIL_GRID_EXTENSION*height/STENCIL_GRID_EXTENDER)))).
-                                colRange(cvRound(columnBegin-offset_x*width-(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)),
-                                         (cvRound(columnBegin-offset_x*width)+width+(DO_STENCIL_GRID_EXTENSION*width/STENCIL_GRID_EXTENDER)));
+                                rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
+                                         (cvRound(rowBegin+height+(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)))).
+                                colRange(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
+                                         (cvRound(columnBegin+width+(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER))));
 
                         cv::Size roi_size;
                         cv::Point roi_offset;
