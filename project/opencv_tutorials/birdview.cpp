@@ -11,7 +11,7 @@ int main( int argc, char* argv[] ) {
 
     if( argc != 5 ) {
         cout << "\nERROR: too few parameters\n";
-        help( argv );
+        //help( argv );
         return -1;
     }
 

@@ -187,7 +187,7 @@ int samples_lkdemo(boost::filesystem::path dataset_path) {
 
 int main (int argc, char *argv[]) {
 
-    boost::filesystem::path input_video_file = "../../../video_dataset/megamind.avi";
+    boost::filesystem::path input_video_file = "../../../datasets/vires_dataset/data/stereo_flow/two/none/movement_video.avi";
     boost::filesystem::path input_camera;
     try {
         if (boost::filesystem::exists(input_video_file) == 0) {

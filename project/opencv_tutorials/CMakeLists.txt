@@ -47,8 +47,18 @@ target_link_libraries(data_persistence ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 add_executable(video_operations video_operations.cpp)
 target_link_libraries(video_operations ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
+add_executable(kalman kalman.cpp)
+target_link_libraries(kalman ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+
 add_executable(birdview birdview.cpp)
 target_link_libraries(birdview ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
-add_executable(transform tranformation.cpp)
+add_executable(pinhole pinhole.cpp)
+target_link_libraries(pinhole ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+
+add_executable(camera_calibration camera_calibration.cpp)
+target_link_libraries(camera_calibration ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+
+
+add_executable(transform facePoseEstimation.cpp)
 target_link_libraries(transform ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
