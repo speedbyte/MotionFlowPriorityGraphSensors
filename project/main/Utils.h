@@ -47,8 +47,6 @@ public:
 
         float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad/ 2); // [px] from camera position.
         float pxSize = 2.2e-6; // [m/px]
-        //scale 3D point back onto image. row and column are calculated from the optical center.
-
 
         float x = pos.x * ((distToImagePlane) / pos.z);
         float y = pos.y * ((distToImagePlane) / pos.z);
@@ -60,7 +58,6 @@ public:
         return cv::Point2f(x_image, y_image);
 
     }
-
 
 };
 
