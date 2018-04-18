@@ -59,6 +59,9 @@ typedef struct region_of_interest_px { float x; float y; float width; float heig
 //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
 typedef struct object_location_px { float location_x_m; float location_y_m; float location_z_m; cv::Point2f cog_px;} object_location_px_str;
 
+//x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
+typedef struct object_occlusion { signed char occlusion_px; signed char occlusion_usk; signed char occlusion_inertial; } object_occlusion_str;
+
 class STRUCT_GT_OBJECTS_ALL {
 
 public:
@@ -77,7 +80,7 @@ public:
     bool truncated;
 
     //occluded: (changed name in v1.3) KITTI-like occlusion flag  (0: not occluded, 1; occluded, 2: heavily occluded, marked as “DontCare”)
-    bool occluded;
+    ushort occluded;
 
     //occluded: (changed name in v1.3) KITTI-like occlusion flag  (0: not occluded, 1; occluded, 2: heavily occluded, marked as “DontCare”)
     ushort visMask;
@@ -107,6 +110,8 @@ public:
     object_location_m_str m_object_location_m;
 
     object_location_px_str m_object_location_px;
+
+    object_occlusion_str m_object_occlusion;
 
     //(center of bottom face of 3D bounding box)
     //ry: KITTI-like 3D object 'rotation_y', rotation around Y-axis (yaw) in camera coordinates [-pi..pi]
@@ -349,6 +354,17 @@ public:
 
     }
 
+    void atFrameNumberOcclusionWindow(ushort frameNumber, signed char occlusion) {
+        m_object_gt_all.at(frameNumber).m_object_occlusion.occlusion_px = occlusion;
+    }
+
+    void atFrameNumberOcclusionUsk(ushort frameNumber, signed char occlusion) {
+        m_object_gt_all.at(frameNumber).m_object_occlusion.occlusion_usk= occlusion;
+    }
+
+    void atFrameNumberOcclusionInertial(ushort frameNumber, signed char occlusion) {
+        m_object_gt_all.at(frameNumber).m_object_occlusion.occlusion_inertial = occlusion;
+    }
 
     void atFrameNumberVisibility(ushort frameNumber, ushort visibility) {
         m_object_gt_all.at(frameNumber).visMask = visibility;

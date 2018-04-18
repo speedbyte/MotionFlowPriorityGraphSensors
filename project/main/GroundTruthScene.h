@@ -52,6 +52,10 @@ protected:
 
     std::map<std::string, SensorMetaData*> m_mapSensorNameToSensorMetaData;
 
+    std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
+
+    std::map<unsigned int, std::string> m_mapObjectIdToObjectName;
+
     ushort m_sensorCount = 0;
 
 
@@ -245,14 +249,10 @@ $
      */
 
 
-    bool m_dumpFirstFrame = true;
+    bool m_breaking = false;
+    bool m_dumpInitialFrames = true;
     unsigned int mFirstIgnoredFrame = 65535;
     int          mLastNetworkFrame = -1;
-
-    int          mLastIGTriggerFrame ;
-
-    unsigned int mSimFrame;                                 // simulation frame counter
-    double       mSimTime;                               // simulation time
 
     double       mDeltaTime;                              // simulation step width
 
@@ -261,21 +261,14 @@ $
     // some stuff for performance measurement
     double       mStartTime;
 
-
-    unsigned int mFrameNo;
-
-    unsigned int mFrameTime;
-
-    bool         mHaveFirstImage;
     bool         mHaveFirstFrame;
+    bool         mHaveFirstImage;
     bool         mCheckForImage;
 
     int          mTotalNoImages;
 
     // total number of errors
     unsigned int mTotalErrorCount;
-
-    int          mLastImageId;
 
     int mImageCount=-1;
 
@@ -484,13 +477,6 @@ public:
             }
         }
 
-        mLastNetworkFrame = -1;
-
-        mLastIGTriggerFrame = -1;
-
-        mSimFrame     = 0;                                 // simulation frame counter
-        mSimTime      = 0.0;                               // simulation time
-
         mDeltaTime    = 0.01;                              // simulation step width
 
         mHaveImage    = 0;                                 // is an image available?
@@ -498,21 +484,14 @@ public:
         // some stuff for performance measurement
         mStartTime = -1.0;
 
-
-        mFrameNo           = 0;
-
-        mFrameTime         = mDeltaTime;
-
-        mHaveFirstImage = false;
         mHaveFirstFrame    = false;
+        mHaveFirstImage    = false;
         mCheckForImage  = false;
 
         mTotalNoImages= 0;
 
         // total number of errors
         mTotalErrorCount = 0;
-
-        mLastImageId    = 0;
 
         mImageCount = -1;
 
@@ -540,10 +519,15 @@ public:
     unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &totalElem );
 
     void parseEntry( RDB_TRIGGER_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
-            const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem ) override;
+            const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
 
     void parseEntry( RDB_SENSOR_STATE_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
             const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
+
+    void parseEntry(RDB_SENSOR_OBJECT_t *data, const double &simTime, const unsigned int &
+    simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsigned int &elemId,
+            const unsigned int &totalElem);
+
 
 
     ~GroundTruthSceneExternal(){
