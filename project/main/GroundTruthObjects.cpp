@@ -80,7 +80,12 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_cog_pts, gt_displacement));
 
         }
-        m_obj_base_visibility.push_back((bool)(gt_data.getAll().at(current_index).visMask));
+        if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_usk == 0 ) {
+            m_obj_base_visibility.push_back((bool)(true));
+        }
+        else{
+            m_obj_base_visibility.push_back((bool)(false));
+        }
         m_obj_base_all.push_back(gt_data.getAll().at(current_index));
         current_index++;
     }

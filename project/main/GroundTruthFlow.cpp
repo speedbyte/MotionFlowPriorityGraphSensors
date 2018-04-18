@@ -70,8 +70,7 @@ void GroundTruthFlow::generate_flow_frame() {
 
     char frame_skip_folder_suffix[50];
     cv::FileStorage fs;
-    fs.open(m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + "gt_flow.yaml",
-            cv::FileStorage::WRITE);
+    //fs.open(m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + "gt_flow.yaml", cv::FileStorage::WRITE);
 
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
@@ -94,6 +93,9 @@ void GroundTruthFlow::generate_flow_frame() {
             sprintf(file_name_image_edge, "000%03d_10_edge.png", frame_count*frame_skip);
 
             std::string temp_gt_flow_image_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
+                    file_name_input_image;
+
+            std::string temp_gt_image_path = mImageabholOrt.string() + "/" +
                     file_name_input_image;
 
             std::string temp_result_edge_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
@@ -159,7 +161,7 @@ void GroundTruthFlow::generate_flow_frame() {
             }
 
             F_png_write.writeExtended(temp_gt_flow_image_path);
-            CannyEdgeDetection(temp_gt_flow_image_path, temp_result_edge_path);
+            CannyEdgeDetection(temp_gt_image_path, temp_result_edge_path);
 
             auto toc = steady_clock::now();
             time_map["generate_single_flow_image"] = duration_cast<milliseconds>(toc - tic).count();

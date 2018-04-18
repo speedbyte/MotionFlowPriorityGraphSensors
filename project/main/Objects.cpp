@@ -481,7 +481,18 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 multiframe_flowvector_ranked_mean.push_back(std::make_pair(cv::Point2f(mean_pts_ranked_mean_x, mean_pts_ranked_mean_y)
                         , cv::Point2f(mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y)));
 
-                //TODO: shape
+
+                multiframe_shape_parameters_simple_avg_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0,0))});
+                multiframe_shape_parameters_moving_avg_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0,0))});
+                multiframe_shape_parameters_threshold_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0,0))});
+                multiframe_shape_parameters_voted_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0,0))});
+                multiframe_shape_parameters_ranked_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0,0))});
+
 
                 multiframe_visibility.push_back(mean_visibility);
 
