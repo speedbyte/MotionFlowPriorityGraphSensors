@@ -213,11 +213,11 @@ void OpticalFlow::generate_edge_contour() {
                                 edge_movement.at(obj_index).push_back(
                                         std::make_pair(next_pts_array.at(next_pts_index).first,
                                                 next_pts_array.at(next_pts_index).second));
-                                //std::cout << "jayy " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
+                                std::cout << "jayy " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
 
                             }
                             else {
-                                //std::cout << "nopes " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
+                                std::cout << "nopes " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
                             }
                         }
 

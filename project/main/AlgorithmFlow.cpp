@@ -236,7 +236,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 else if ( fb == algo ) {
                     cv::calcOpticalFlowFarneback(prevGray, curGray, flowFrame, pyrScale, numLevels, windowSize,
                                                  numIterations, neighborhoodSize, stdDeviation,
-                                                 cv::OPTFLOW_FARNEBACK_GAUSSIAN);
+                                                 cv::OPTFLOW_USE_INITIAL_FLOW);
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
                 }
 
@@ -519,10 +519,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                                 }
                             }
+                            std::cout << new_stencil_size << "hacked" << next_pts_array.size() << std::endl;
                         }
 
+
                         new_stencil_size = stencil_movement.at(obj_index).size();
-                        std::cout << new_stencil_size << " " << next_pts_array.size() << std::endl;
                         assert(new_stencil_size != 0);
 
 

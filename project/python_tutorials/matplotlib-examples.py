@@ -263,7 +263,7 @@ def check():
     data = np.array(coordinates)
     x1, y1 = data.T
     shapeplot1.scatter(x1,y1, color='red')
-    shapeplot1.plot([coordinates[0][0], coordinates[1][0]], [coordinates[0][1], coordinates[1][1]])
+    shapeplot1.plot([coordinates[0][0], coordinates[1][0]], [coordinates[0][], coordinates[1][1]])
     shapeplot1.plot([coordinates[2][0], coordinates[3][0]], [coordinates[2][1], coordinates[3][1]])
 
     plt.show()
