@@ -87,7 +87,7 @@ static void run(int argc, char** argv) {
   Mat flow;
 
   float start = (float)getTickCount();
-  calcOpticalFlowSF(frame1, frame2,
+  cv::calcOpticalFlowSF(frame1, frame2,
                     flow,
                     3, 2, 4, 4.1, 25.5, 18, 55.0, 25.5, 0.35, 18, 55.0, 25.5, 10);
   printf(APP_NAME "calcOpticalFlowSF : %lf sec\n", (getTickCount() - start) / getTickFrequency());

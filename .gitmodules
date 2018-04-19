@@ -104,3 +104,6 @@
 [submodule "overleaf/paper_1"]
 	path = overleaf/paper_1
 	url = https://git.overleaf.com/14794321bbsqftzqrvrb
+[submodule "libs/opencv_contrib"]
+	path = libs/opencv_contrib
+	url = https://github.com/opencv/opencv_contrib.git

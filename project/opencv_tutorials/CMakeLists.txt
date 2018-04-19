@@ -82,6 +82,9 @@ target_link_libraries(video_operations ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 add_executable(kalman ${SAMPLE_DIR}/kalman.cpp)
 target_link_libraries(kalman ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
+add_executable(simpleflow ${SAMPLE_DIR}/simpleflow_demo.cpp)
+target_link_libraries(simpleflow ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+
 add_executable(birdview birdview.cpp)
 target_link_libraries(birdview ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 

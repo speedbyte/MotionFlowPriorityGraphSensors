@@ -152,7 +152,11 @@ def parse_arguements(args):
                 "--enable-nonfree "\
                 "--enable-openssl "
             else:
+                extra_cmake_option=""
                 if "opencv" in library_install:
+                    extra_cmake_option ="-DOPENCV_EXTRA_MODULES_PATH="+library+"/../opencv_contrib/modules "
+                    exit
+                    print extra_cmake_option
                     if "/usr/local" in pkg_config_path_ffmpeg:
                         print "correct ffmpeg path while building opencv ", pkg_config_path_ffmpeg.strip('\n')
                     else:
@@ -162,8 +166,8 @@ def parse_arguements(args):
                         sys.exit(-1)
                 call_shell_command("mkdir -p cmake-build-debug")
                 os.chdir("cmake-build-debug")
-                command  =  "cmake -Wno -dev -Wl,-rpath=/usr/local/lib " \
-                            \
+                command  =  "cmake -Wno -dev -Wl,-rpath=/usr/local/lib " +\
+                            extra_cmake_option +\
                             "-DENABLE_PRECOMPILED_HEADERS=OFF " \
                             "-DCMAKE_BUILD_TYPE=DEBUG " \
                             "-DCMAKE_INSTALL_PREFIX=" + library_install + " " + \
