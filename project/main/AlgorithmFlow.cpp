@@ -504,18 +504,18 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                                 for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
-                                        cv::Point2f algo_displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).second;
-                                        //std::cout << roi_offset.x + col_index << std::endl;
-                                        stencil_movement.at(obj_index).push_back(
-                                                std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
-                                                        algo_displacement));
-                                        base_movement.at(obj_index).push_back(std::make_pair(
-                                                cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
-                                                algo_displacement));
-                                        base_visibility.at(obj_index).push_back(visibility);
-                                        F_png_write.setFlowU(roi_offset.x + col_index,roi_offset.y + row_index, algo_displacement.x);
-                                        F_png_write.setFlowV(roi_offset.x + col_index,roi_offset.y + row_index, algo_displacement.y);
-                                        F_png_write.setValid(roi_offset.x + col_index,roi_offset.y + row_index, true);
+                                    cv::Point2f algo_displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).second;
+                                    //std::cout << roi_offset.x + col_index << std::endl;
+                                    stencil_movement.at(obj_index).push_back(
+                                            std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
+                                                    algo_displacement));
+                                    base_movement.at(obj_index).push_back(std::make_pair(
+                                            cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
+                                            algo_displacement));
+                                    base_visibility.at(obj_index).push_back(visibility);
+                                    F_png_write.setFlowU(roi_offset.x + col_index,roi_offset.y + row_index, algo_displacement.x);
+                                    F_png_write.setFlowV(roi_offset.x + col_index,roi_offset.y + row_index, algo_displacement.y);
+                                    F_png_write.setValid(roi_offset.x + col_index,roi_offset.y + row_index, true);
 
                                 }
                             }
@@ -651,173 +651,3 @@ void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixe
 }
 
 
-void AlgorithmFlow::visualiseStencil(void) {
-
-    std::cout << "visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
-
-    char file_name_image[50], file_name_image_output[50];
-
-    cv::Mat image_data_and_shape;
-
-    const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
-    cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
-    FlowImageExtended F_png_write;
-
-    for ( unsigned data_processing_index = 0; data_processing_index < 4; data_processing_index++ ) {
-
-        for (int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++) {
-
-            for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
-
-                std::cout << "frame_count " << frame_count << std::endl;
-                std::string output_image_file_with_path;
-
-                /*---------------------------------------------------------------------------------*/
-                tempGroundTruthImage = cv::Scalar::all(0);
-
-                sprintf(file_name_image_output, "000%03d_10_stencil_base_algo.png", frame_count * frame_skip);
-                output_image_file_with_path =
-                        m_generatepath.string() + "stencil/" + file_name_image_output;
-
-                for (unsigned obj_index = 0; obj_index < m_list_simulated_objects_base.size(); obj_index++) {
-
-                    if ((m_list_simulated_objects_base.at(obj_index)->get_obj_extrapolated_visibility().at(
-                            frame_skip - 1).at(frame_count)
-                    )) {
-
-                        const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects_base.at(
-                                obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                (frame_skip - 1).at(frame_count).size();
-                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
-
-                            cv::Point2f pts = m_list_simulated_objects_base.at(
-                                            obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
-                                            frame_skip - 1)
-                                    .at(frame_count).at(cluster_point).first;
-
-                            cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(255, 255, 255), 1, 8);
-
-                        }
-                    }
-                }
-                cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
-                /*---------------------------------------------------------------------------------*/
-                tempGroundTruthImage = cv::Scalar::all(255);
-
-                sprintf(file_name_image_output, "000%03d_10_pixel_algo_%d.png", frame_count * frame_skip,
-                        data_processing_index);
-                output_image_file_with_path =
-                        m_generatepath.string() + "stencil/" + file_name_image_output;
-
-                for (unsigned obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
-
-                    if ((m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
-                            frame_skip - 1).at(frame_count)
-                    )) {
-
-                        const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
-                                obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
-                                frame_count).size();
-
-                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
-
-                            cv::Point2f pts = m_list_simulated_objects.at(
-                                    obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).first;
-                            cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 0, 255), 1, 8);
-
-                        }
-                    }
-                }
-                cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
-                /*---------------------------------------------------------------------------------*/
-
-                tempGroundTruthImage = cv::Scalar::all(255);
-                F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
-
-                sprintf(file_name_image_output, "000%03d_10_flow_base_%d.png", frame_count * frame_skip,
-                        data_processing_index);
-                output_image_file_with_path =
-                        m_generatepath.string() + "stencil/" + file_name_image_output;
-
-                for (unsigned obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
-
-                    if ((m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
-                            frame_skip - 1).at(
-                            frame_count)
-                    )) {
-
-                        const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
-                                obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
-                                frame_count).size();
-
-                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
-
-                            cv::Point2f pts = m_list_simulated_objects.at(
-                                    obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).first;
-
-                            cv::Point2f displacement = m_list_simulated_objects.at(
-                                    obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).second;
-
-                            cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
-
-                            F_png_write.setFlowU(pts.x, pts.y, displacement.x);
-                            F_png_write.setFlowV(pts.x, pts.y, displacement.y);
-                            F_png_write.setValid(pts.x, pts.y, true);
-
-                            //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
-                        }
-                    }
-                }
-                //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
-                F_png_write.writeExtended(output_image_file_with_path);
-                /*---------------------------------------------------------------------------------*/
-
-                tempGroundTruthImage = cv::Scalar::all(255);
-                F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
-
-                sprintf(file_name_image_output, "000%03d_10_flow_algo_%d.png", frame_count * frame_skip,
-                        data_processing_index);
-                output_image_file_with_path =
-                        m_generatepath.string() + "stencil/" + file_name_image_output;
-
-                for (unsigned obj_index = 0; obj_index < m_list_simulated_objects.size(); obj_index++) {
-
-                    if ((m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
-                            frame_skip - 1).at(
-                            frame_count)
-                    )) {
-
-                        const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
-                                obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
-                                frame_count).size();
-
-                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
-
-                            cv::Point2f pts = m_list_simulated_objects.at(
-                                    obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).first;
-
-                            cv::Point2f displacement = m_list_simulated_objects.at(
-                                    obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).second;
-
-                            cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
-
-                            F_png_write.setFlowU(pts.x, pts.y, displacement.x);
-                            F_png_write.setFlowV(pts.x, pts.y, displacement.y);
-                            F_png_write.setValid(pts.x, pts.y, true);
-
-                            //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
-                        }
-                    }
-                }
-                //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
-                F_png_write.writeExtended(output_image_file_with_path);
-            }
-        }
-    }
-    std::cout << "end visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
-}

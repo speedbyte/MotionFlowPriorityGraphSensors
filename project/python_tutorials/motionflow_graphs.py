@@ -27,6 +27,8 @@ hack=0
 #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
 environment_list = ["none","snow_low_", "snow_moderate_", "snow_high_"]#night
+environment_list = ["none",]
+
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
@@ -808,7 +810,7 @@ if __name__ == '__main__':
     motionflow_vectorgraphs_no_noise()
     motionflow_vectorgraphs_noise()
 
-    #histogramm()
+    histogramm()
 
     #motionflow_vectorgraphs()
     #check()

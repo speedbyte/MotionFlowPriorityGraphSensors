@@ -295,7 +295,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
 
                 gt_flow.generate_edge_contour();
-                gt_flow.visualiseStencil();
+                //gt_flow.visualiseStencil();
 
 
                 gt_flow.generate_collision_points();

@@ -13,18 +13,18 @@ static inline Point calcPoint(Point2f center, double R, double angle)
 static void help()
 {
     printf( "\nExamle of c calls to OpenCV's Kalman filter.\n"
-"   Tracking of rotating point.\n"
-"   Rotation speed is constant.\n"
-"   Both state and measurements vectors are 1D (a point angle),\n"
-"   Measurement is the real point angle + gaussian noise.\n"
-"   The real and the estimated points are connected with yellow line segment,\n"
-"   the real and the measured points are connected with red line segment.\n"
-"   (if Kalman filter works correctly,\n"
-"    the yellow segment should be shorter than the red one).\n"
-            "\n"
-"   Pressing any key (except ESC) will reset the tracking with a different speed.\n"
-"   Pressing ESC will stop the program.\n"
-            );
+                    "   Tracking of rotating point.\n"
+                    "   Rotation speed is constant.\n"
+                    "   Both state and measurements vectors are 1D (a point angle),\n"
+                    "   Measurement is the real point angle + gaussian noise.\n"
+                    "   The real and the estimated points are connected with yellow line segment,\n"
+                    "   the real and the measured points are connected with red line segment.\n"
+                    "   (if Kalman filter works correctly,\n"
+                    "    the yellow segment should be shorter than the red one).\n"
+                    "\n"
+                    "   Pressing any key (except ESC) will reset the tracking with a different speed.\n"
+                    "   Pressing ESC will stop the program.\n"
+    );
 }
 
 int main(int, char**)
@@ -40,7 +40,9 @@ int main(int, char**)
     for(;;)
     {
         randn( state, Scalar::all(0), Scalar::all(0.1) );
-        KF.transitionMatrix = *(Mat_<float>(2, 2) << 1, 1, 0, 1);
+        cv::Mat_<float> val(2,2);
+        val << 1, 1, 0, 1 ;
+        KF.transitionMatrix = val;
 
         setIdentity(KF.measurementMatrix);
         setIdentity(KF.processNoiseCov, Scalar::all(1e-5));
@@ -69,7 +71,7 @@ int main(int, char**)
             Point measPt = calcPoint(center, R, measAngle);
 
             // plot points
-            #define drawCross( center, color, d )                                 \
+#define drawCross( center, color, d )                                 \
                 line( img, Point( center.x - d, center.y - d ),                \
                              Point( center.x + d, center.y + d ), color, 1, CV_AA, 0); \
                 line( img, Point( center.x + d, center.y - d ),                \

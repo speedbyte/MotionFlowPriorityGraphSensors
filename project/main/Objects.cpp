@@ -565,7 +565,7 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
 
         for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
 
-            std::cout << "generate_obj_line_parameters for frame_skip " << frame_skip << " for object name " << m_objectName << " " << std::endl;
+            std::cout << "generate_obj_line_parameters for frame_skip " << frame_skip << " for data_processing_indeX " << data_processing_index << " for object name " << m_objectName << " " << std::endl;
 
             std::vector<cv::Point2f > frame_line_parameters;
 
