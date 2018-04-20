@@ -334,24 +334,41 @@ void OpticalFlow::generate_shape_points() {
                         cv::Point2f gt_displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                                 (frame_skip-1).at(frame_count).second;
                         auto dist_gt = cv::norm(gt_displacement);
+                        auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
 
-                        if (m_resultordner ==
-                                "/generated") {
+                        if (m_resultordner == "/generated") {
+
                             vollTreffer = CLUSTER_COUNT_GT;
                             baseTreffer = CLUSTER_COUNT_GT;
                         }
                         else {
                             for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
-                                cv::Point2f mean_displacement = list_of_current_objects.at(obj_index)->
+                                
+                                cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
                                                 get_shape_parameters().at(data_processing_index
-                                                ).at(frame_skip - 1)
-                                        .at(frame_count).at(cluster_count).second;
-                                auto dist_algo = cv::norm(mean_displacement);
+                                                ).at(frame_skip - 1).at(frame_count).at(cluster_count).second;
+
+                                auto dist_algo = cv::norm(algo_displacement);
                                 auto dist_err = std::abs(dist_gt - dist_algo);
+
+                                auto angle_algo = std::tanh(algo_displacement.y/algo_displacement.x);
+
+                                auto angle_err = angle_algo - angle_gt;
+                                auto angle_err_dot = std::cosh(
+                                        algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
+
+                                //assert(angle_err_dot==angle_err);
+
+                                /*
                                 if (dist_err < DISTANCE_ERROR_TOLERANCE) {
                                     vollTreffer++;
+                                }*/
+
+                                if (((std::abs(angle_err*180/CV_PI)) < ANGLE_ERROR_TOLERANCE)) {
+                                    vollTreffer++;
                                 }
+
                             }
                             /*
                             auto x_coordinates = list_of_current_objects.at(
@@ -440,16 +457,20 @@ void OpticalFlow::generate_collision_points() {
     std::vector<Objects*> list_of_current_objects;
     std::vector<std::pair<Objects*, Objects* > > list_of_current_objects_combination;
 
+    ushort START;
+
     unsigned COUNT;
     if ( m_resultordner == "/generated") {
         COUNT = 1;
         list_of_current_objects = m_list_gt_objects;
         list_of_current_objects_combination = list_of_gt_objects_combination;
+        START = 1;
     }
     else {
         COUNT = 4;
         list_of_current_objects = m_list_simulated_objects;
         list_of_current_objects_combination = list_of_simulated_objects_combination;
+        START = 0;
     }
 
     for ( ushort obj_index = 0; obj_index < list_of_current_objects_combination.size(); obj_index++ ) {
@@ -477,7 +498,7 @@ void OpticalFlow::generate_collision_points() {
             
             assert(FRAME_COUNT > 0);
 
-            for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            for (ushort frame_count = START; frame_count < FRAME_COUNT; frame_count++) {
 
                 std::cout << "frame_count " << frame_count << " for data_processing_index " << data_processing_index<< std::endl;
 

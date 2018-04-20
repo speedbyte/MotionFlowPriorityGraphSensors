@@ -32,8 +32,8 @@ environment_list = ["none",]
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
-OUTLIER = 4000
-SCALE = 10
+OUTLIER = 100000
+SCALE = 100
 
 def histogramm():
 
@@ -336,17 +336,14 @@ def motionflow_pixelgraphs_noise():
             if ( x == 1):
                 x1, y1 = data.T
                 print x1,y1
-
                 y1 = x1/y1
             if ( x == 2):
                 x2, y2 = data.T
                 print x2,y2
-
                 y2 = x2/y2
             if ( x == 3):
                 x3, y3 = data.T
                 print x3,y3
-
                 y3 = x3/y3
 
             x0 = np.arange(0.0, len(shape_points)-1, 1)
@@ -432,7 +429,6 @@ def motionflow_vectorgraphs_no_noise():
     collisionplot0.set_xlabel('frame_count')
     collisionplot0.set_ylabel('deviation [no_noise_points-groundtruth_points]')
 
-    collisionplot0.set_ylim([0, OUTLIER])
     legend = collisionplot0.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
@@ -496,77 +492,82 @@ def motionflow_vectorgraphs_no_noise():
             if ( x == 0):
                 x0, y0 = data.T
                 y0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
-                y0 = y0/SCALE
             if ( x == 1):
                 x1, y1 = data.T
                 y1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
-                y1 = y1/SCALE
             if ( x == 2):
                 x2, y2 = data.T
                 y2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
-                y2 = y2/SCALE
             if ( x == 3):
                 x3, y3 = data.T
                 y3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
-                y3 = y3/SCALE
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
 
         for n,i in enumerate(y0):
             if ( i > OUTLIER):
                 y0[n] = y0[n-1]
-            y0_mean=(y0_mean+y0[n])/2
-            y0[n] = y0_mean
+                if ( n == 0 ):
+                    y0[n] = 0
+            y0_mean=(y0_mean+y0[n])
+            #y0_mean=(y0_mean+y0[n])/2
+            #y0[n] = y0_mean
         for n,i in enumerate(y1):
             if ( i > OUTLIER):
                 y1[n] = y1[n-1]
-            y1_mean=(y1_mean+y1[n])/2
-            y1[n] = y1_mean
+            y1_mean=(y1_mean+y1[n])
+            #y1_mean=(y1_mean+y1[n])/2
+            #y1[n] = y1_mean
         for n,i in enumerate(y2):
             if ( i > OUTLIER):
                 y2[n] = y2[n-1]
-            y2_mean=(y2_mean+y2[n])/2
-            y2[n] = y2_mean
+            y2_mean=(y2_mean+y2[n])
+            #y2_mean=(y2_mean+y2[n])/2
+            #y2[n] = y2_mean
         for n,i in enumerate(y3):
             if ( i > OUTLIER):
                 y3[n] = y3[n-1]
-            y3_mean=(y3_mean+y3[n])/2
-            y3[n] = y3_mean
+            y3_mean=(y3_mean+y3[n])
+            #y3_mean=(y3_mean+y3[n])/2
+            #y3[n] = y3_mean
 
-        y0_mean_list.append(y0_mean)
-        y1_mean_list.append(y1_mean)
-        y2_mean_list.append(y2_mean)
-        y3_mean_list.append(y3_mean)
 
-        print "collision no noise points"
-        print y2
-        print y3
-
-        collisionplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y0/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot0.plot(x0, y1, 'ko-', lw=1, color=color_of_collision_metrics[1+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y1/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[1+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot0.plot(x0, y2, 'ko-', lw=1, color=color_of_collision_metrics[2+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y2/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[2+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot0.plot(x0, y3, 'ko-', lw=1, color=color_of_collision_metrics[3+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y3/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[3+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
         offset_index=offset_index+4
 
+        y0_mean = y0_mean/(n+1)
+        y1_mean = y1_mean/(n+1)
+        y2_mean = y2_mean/(n+1)
+        y3_mean = y3_mean/(n+1)
+        y0_mean_list.append(y0_mean)
+        y1_mean_list.append(y1_mean)
+        y2_mean_list.append(y2_mean)
+        y3_mean_list.append(y3_mean)
+
         print "Table 3 " + environment_list[no_of_metrics]
-        print y0_mean_list[no_of_metrics]
-        print y1_mean_list[no_of_metrics]
-        print y2_mean_list[no_of_metrics]
-        print y3_mean_list[no_of_metrics]
+        print y0_mean_list[no_of_metrics]/SCALE
+        print y1_mean_list[no_of_metrics]/SCALE
+        print y2_mean_list[no_of_metrics]/SCALE
+        print y3_mean_list[no_of_metrics]/SCALE
 
     #fig2.set_size_inches(18.5, 10.5)
+    Y_MAX = max(numpy.amax(y0/SCALE), numpy.amax(y1/SCALE), numpy.amax(y2/SCALE), numpy.amax(y3/SCALE)) + 100
+    collisionplot0.set_ylim([0, Y_MAX])
     fig2.savefig(output_folder + 'vector_robustness_optical_flow', bbox_inches='tight',dpi=200)
 
 
@@ -732,28 +733,32 @@ def motionflow_vectorgraphs_noise():
                 y0[n] = y0[n-1]
                 if ( n == 0 ):
                     y0[n] = 0
-            y0_mean=(y0_mean+y0[n])/2
-            y0[n] = y0_mean
+            y0_mean=(y0_mean+y0[n])
+            #y0_mean=(y0_mean+y0[n])/2
+            #y0[n] = y0_mean
         for n,i in enumerate(y1):
             if ( i > OUTLIER):
                 y1[n] = y1[n-1]
-            y1_mean=(y1_mean+y1[n])/2
-            y1[n] = y1_mean
+            y1_mean=(y1_mean+y1[n])
+            #y1_mean=(y1_mean+y1[n])/2
+            #y1[n] = y1_mean
         for n,i in enumerate(y2):
             if ( i > OUTLIER):
                 y2[n] = y2[n-1]
-            y2_mean=(y2_mean+y2[n])/2
-            y2[n] = y2_mean
+            y2_mean=(y2_mean+y2[n])
+            #y2_mean=(y2_mean+y2[n])/2
+            #y2[n] = y2_mean
         for n,i in enumerate(y3):
             if ( i > OUTLIER):
                 y3[n] = y3[n-1]
-            y3_mean=(y3_mean+y3[n])/2
-            y3[n] = y3_mean
+            y3_mean=(y3_mean+y3[n])
+            #y3_mean=(y3_mean+y3[n])/2
+            #y3[n] = y3_mean
 
-        #y0_mean = y0_mean/(n+1)
-        #y1_mean = y1_mean/(n+1)
-        #y2_mean = y2_mean/(n+1)
-        #y3_mean = y3_mean/(n+1)
+        y0_mean = y0_mean/(n+1)
+        y1_mean = y1_mean/(n+1)
+        y2_mean = y2_mean/(n+1)
+        y3_mean = y3_mean/(n+1)
         y0_mean_list.append(y0_mean)
         y1_mean_list.append(y1_mean)
         y2_mean_list.append(y2_mean)
@@ -778,10 +783,10 @@ def motionflow_vectorgraphs_noise():
         offset_index=offset_index+4
 
         print "Table 4 " + environment_list[no_of_metrics]
-        print y0_mean_list[no_of_metrics]
-        print y1_mean_list[no_of_metrics]
-        print y2_mean_list[no_of_metrics]
-        print y3_mean_list[no_of_metrics]
+        print y0_mean_list[no_of_metrics]/SCALE
+        print y1_mean_list[no_of_metrics]/SCALE
+        print y2_mean_list[no_of_metrics]/SCALE
+        print y3_mean_list[no_of_metrics]/SCALE
 
    # fig0.set_size_inches(18.5, 10.5)
     fig0.savefig(output_folder + 'vector_robustness_data_processing_algorithm_0',bbox_inches='tight', dpi=200)
