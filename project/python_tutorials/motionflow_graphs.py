@@ -26,13 +26,14 @@ file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/d
 hack=0
 #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
-environment_list = ["none","snow_low_", "snow_moderate_", "snow_high_"]#night
+environment_list = ["none","light_snow_", "mild_snow_", "heavy_snow_"]#night
 environment_list = ["none",]
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
-OUTLIER = 400
+OUTLIER = 4000
+SCALE = 10
 
 def histogramm():
 
@@ -283,24 +284,24 @@ def motionflow_pixelgraphs_noise():
         "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
 
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_snow_low_",
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_light_snow_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_light_snow_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_light_snow_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_light_snow_",
 
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_",
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_",
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_mild_snow_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_mild_snow_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_mild_snow_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_mild_snow_",
 
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_snow_high_",
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_snow_high_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_snow_high_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_snow_high_",
+        "shape_pointsframe_skip1_dataprocessing_0results_FB_heavy_snow_",
+        "shape_pointsframe_skip1_dataprocessing_1results_FB_heavy_snow_",
+        "shape_pointsframe_skip1_dataprocessing_2results_FB_heavy_snow_",
+        "shape_pointsframe_skip1_dataprocessing_3results_FB_heavy_snow_",
 
     ]
 
-    color_of_shape_metrics = ["blue", "gray", "brown", "black"]
+    color_of_shape_metrics = ["red", "green", "yellow", "black"]
 
     assert(len(list_of_shape_metrics)/4 == len(color_of_shape_metrics))
     print "Länge", len(list_of_shape_metrics)/4
@@ -431,7 +432,7 @@ def motionflow_vectorgraphs_no_noise():
     collisionplot0.set_xlabel('frame_count')
     collisionplot0.set_ylabel('deviation [no_noise_points-groundtruth_points]')
 
-    collisionplot0.set_ylim([0, 300])
+    collisionplot0.set_ylim([0, OUTLIER])
     legend = collisionplot0.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
@@ -495,19 +496,19 @@ def motionflow_vectorgraphs_no_noise():
             if ( x == 0):
                 x0, y0 = data.T
                 y0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
-                y0 = y0/100
+                y0 = y0/SCALE
             if ( x == 1):
                 x1, y1 = data.T
                 y1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
-                y1 = y1/100
+                y1 = y1/SCALE
             if ( x == 2):
                 x2, y2 = data.T
                 y2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
-                y2 = y2/100
+                y2 = y2/SCALE
             if ( x == 3):
                 x3, y3 = data.T
                 y3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
-                y3 = y3/100
+                y3 = y3/SCALE
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
 
@@ -620,10 +621,10 @@ def motionflow_vectorgraphs_noise():
     collisionplot3.set_xlabel('frame_count')
     collisionplot3.set_ylabel('deviation noise_points-no_noise_points')
 
-    collisionplot0.set_ylim([0, 300])
-    collisionplot1.set_ylim([0, 300])
-    collisionplot2.set_ylim([0, 300])
-    collisionplot3.set_ylim([0, 300])
+    collisionplot0.set_ylim([0, OUTLIER])
+    collisionplot1.set_ylim([0, OUTLIER])
+    collisionplot2.set_ylim([0, OUTLIER])
+    collisionplot3.set_ylim([0, OUTLIER])
     legend = collisionplot1.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
@@ -635,24 +636,24 @@ def motionflow_vectorgraphs_noise():
         "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
         "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
 
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_low_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_low_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_low_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_low_",
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_light_snow_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_light_snow_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_light_snow_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_light_snow_",
 
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_moderate_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_moderate_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_moderate_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_moderate_",
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_mild_snow_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_mild_snow_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_mild_snow_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_mild_snow_",
 
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_snow_high_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_snow_high_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_snow_high_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_snow_high_",
+        "collision_pointsframe_skip1_dataprocessing_0results_FB_heavy_snow_",
+        "collision_pointsframe_skip1_dataprocessing_1results_FB_heavy_snow_",
+        "collision_pointsframe_skip1_dataprocessing_2results_FB_heavy_snow_",
+        "collision_pointsframe_skip1_dataprocessing_3results_FB_heavy_snow_",
 
     ]
 
-    color_of_collision_metrics  = ["blue", "gray", "brown", "black"]
+    color_of_collision_metrics  = ["red", "green", "yellow", "black"]
 
     print len(list_of_collision_metrics)
 
@@ -710,19 +711,19 @@ def motionflow_vectorgraphs_noise():
             if ( x == 0):
                 x0, y0 = data.T
                 y0 = numpy.sqrt((x0_base - x0) ** 2 + (y0_base - y0) ** 2)
-                y0 = y0/100
+                y0 = y0/SCALE
             if ( x == 1):
                 x1, y1 = data.T
                 y1 = numpy.sqrt((x1_base - x1) ** 2 + (y1_base - y1) ** 2)
-                y1 = y1/100
+                y1 = y1/SCALE
             if ( x == 2):
                 x2, y2 = data.T
                 y2 = numpy.sqrt((x2_base - x2) ** 2 + (y2_base - y2) ** 2)
-                y2 = y2/100
+                y2 = y2/SCALE
             if ( x == 3):
                 x3, y3 = data.T
                 y3 = numpy.sqrt((x3_base - x3) ** 2 + (y3_base - y3) ** 2)
-                y3 = y3/100
+                y3 = y3/SCALE
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
 
@@ -810,7 +811,7 @@ if __name__ == '__main__':
     motionflow_vectorgraphs_no_noise()
     motionflow_vectorgraphs_noise()
 
-    histogramm()
+    #histogramm()
 
     #motionflow_vectorgraphs()
     #check()

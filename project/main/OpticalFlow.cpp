@@ -202,7 +202,7 @@ void OpticalFlow::generate_edge_contour() {
 
                         //std::cout << roi_offset.x + col_index << std::endl;
                         auto COUNT = next_pts_array.size();
-                        std::cout << "making a edge contour on the basis of groundtruth object " << list_of_current_objects.at(obj_index)->getObjectId() << std::endl;
+                        std::cout << "making a edge contour on the basis of " << m_resultordner << " " << list_of_current_objects.at(obj_index)->getObjectId() << std::endl;
                         std::cout << "base count " << COUNT << std::endl;
                         for ( ushort next_pts_index = 0; next_pts_index < COUNT; next_pts_index++ ) {
 
@@ -678,12 +678,12 @@ void OpticalFlow::visualiseStencil(void) {
                         const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects_base.at(
                                 obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                                 (frame_skip - 1).at(frame_count).size();
-                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                        for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_list_simulated_objects_base.at(
                                             obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
                                             frame_skip - 1)
-                                    .at(frame_count).at(cluster_point).first;
+                                    .at(frame_count).at(cluster_index).first;
 
                             cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(255, 255, 255), 1, 8);
 
@@ -709,11 +709,11 @@ void OpticalFlow::visualiseStencil(void) {
                                 obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
                                 frame_count).size();
 
-                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                        for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_list_simulated_objects.at(
                                     obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).first;
+                                    frame_skip - 1).at(frame_count).at(cluster_index).first;
                             cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 0, 255), 1, 8);
 
                         }
@@ -741,15 +741,15 @@ void OpticalFlow::visualiseStencil(void) {
                                 obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
                                 frame_count).size();
 
-                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                        for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_list_simulated_objects.at(
                                     obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).first;
+                                    frame_skip - 1).at(frame_count).at(cluster_index).first;
 
                             cv::Point2f displacement = m_list_simulated_objects.at(
                                     obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).second;
+                                    frame_skip - 1).at(frame_count).at(cluster_index).second;
 
                             cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
 
@@ -784,15 +784,15 @@ void OpticalFlow::visualiseStencil(void) {
                                 obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
                                 frame_count).size();
 
-                        for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                        for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_list_simulated_objects.at(
                                     obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).first;
+                                    frame_skip - 1).at(frame_count).at(cluster_index).first;
 
                             cv::Point2f displacement = m_list_simulated_objects.at(
                                     obj_index)->get_shape_parameters().at(data_processing_index).at(
-                                    frame_skip - 1).at(frame_count).at(cluster_point).second;
+                                    frame_skip - 1).at(frame_count).at(cluster_index).second;
 
                             cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
 
@@ -907,12 +907,12 @@ void OpticalFlow::visualiseStencil(void) {
                     const unsigned CLUSTER_SIZE = (unsigned) m_list_gt_objects.at(
                             obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                             (frame_skip - 1).at(frame_count).size();
-                    for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                         cv::Point2f pts = m_list_gt_objects.at(
                                         obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
                                         frame_skip - 1)
-                                .at(frame_count).at(cluster_point).first;
+                                .at(frame_count).at(cluster_index).first;
 
 
                         cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 255, 0), 1, 8);
@@ -939,18 +939,18 @@ void OpticalFlow::visualiseStencil(void) {
                     unsigned CLUSTER_SIZE = (unsigned) m_list_gt_objects.at(
                             obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
                             (frame_skip - 1).at(frame_count).size();
-                    for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
 
                         cv::Point2f pts = m_list_gt_objects.at(
                                         obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
                                         frame_skip - 1)
-                                .at(frame_count).at(cluster_point).first;
+                                .at(frame_count).at(cluster_index).first;
 
                         cv::Point2f displacement = m_list_gt_objects.at(
                                         obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
                                         frame_skip - 1)
-                                .at(frame_count).at(cluster_point).second;
+                                .at(frame_count).at(cluster_index).second;
 
 
                         cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);

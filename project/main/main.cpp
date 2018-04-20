@@ -212,9 +212,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     assert(MAX_ITERATION_GT_SCENE_GENERATION_IMAGES <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
 
     const std::vector < std::string> scenarios_list = {"two"};
-    //const std::vector < std::string> environment_list = {"none", "snow_low", "rain_low"};
+    //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    //std::vector < std::string> environment_list = {"none", "snow_low", "snow_moderate", "snow_high"};
+    //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
     std::vector <std::string> environment_list = {"none"};
 
     cv::FileStorage fs;

@@ -393,7 +393,7 @@ public:
             m_environment_scp_message = environment_parameters_dry;
         }
 
-        else if ( environment == "snow_low"  ) {
+        else if ( environment == "light_snow"  ) {
 
             m_environment_scp_message = environment_parameters_wet;
             std::string to_replace = "rain";
@@ -401,16 +401,16 @@ public:
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "snow");
             }
-            to_replace = "100000.000000";
+            to_replace = "4/8";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
-                m_environment_scp_message.replace(position, to_replace.length(), "100000.000000");
+                m_environment_scp_message.replace(position, to_replace.length(), "4/8");
             }
-            to_replace = "100000.000000";
+            /*to_replace = "100000.000000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "100.000000");
-            }
+            }*/
             to_replace = "0.500000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
@@ -418,7 +418,7 @@ public:
             }
         }
 
-        else if ( environment == "snow_moderate"  ) {
+        else if ( environment == "mild_snow"  ) {
 
             m_environment_scp_message = environment_parameters_wet;
             std::string to_replace = "rain";
@@ -431,11 +431,11 @@ public:
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "6/8");
             }
-            to_replace = "100000.000000";
+            /*to_replace = "100000.000000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "60.000000");
-            }
+            }*/
             to_replace = "0.500000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
@@ -443,7 +443,7 @@ public:
             }
         }
 
-        else if ( environment == "snow_high"  ) {
+        else if ( environment == "heavy_snow"  ) {
 
             m_environment_scp_message = environment_parameters_wet;
             std::string to_replace = "rain";
@@ -456,11 +456,11 @@ public:
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "8/8");
             }
-            to_replace = "100000.000000";
+            /*to_replace = "100000.000000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
                 m_environment_scp_message.replace(position, to_replace.length(), "40.000000");
-            }
+            }*/
             to_replace = "0.500000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {

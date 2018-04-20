@@ -1226,7 +1226,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_STATE_t *data, const double
 
         if (data->type == RDB_SENSOR_TYPE_VIDEO || data->type == RDB_SENSOR_TYPE_RADAR) {
 
-            if (!m_dumpInitialFrames && (mImageCount >= 0) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
+            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
 
                 fprintf(stderr, "saving sensor truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
                         data->name);
@@ -1254,7 +1254,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_STATE_t *data, const double
                 fov = cv::Point2f(data->fovHV[0], data->fovHV[1]);
 
                 m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
-                        (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), position_sensor_carrier,
+                        (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_sensor_carrier,
                         orientation_sensor_carrier, orientation_sensor, offset_sensor, fov);
             }
         }
@@ -1277,7 +1277,7 @@ simFrame, const
     if (m_environment == "none") {
 
         if (data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR) {
-            if (!m_dumpInitialFrames && (mImageCount >= 0) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
+            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
 
                 /*
                 fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
@@ -1307,10 +1307,10 @@ simFrame, const
                                          (float) data->base.geo.offZ);
                     total_distance_travelled = data->ext.traveledDist;
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset,
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset,
                             dimension_pixel, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
 
                 } else if (data->base.pos.type == RDB_COORD_TYPE_USK) {
 
@@ -1323,10 +1323,10 @@ simFrame, const
                     speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     total_distance_travelled = data->ext.traveledDist;
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), position_usk,
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_usk,
                             orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
 
                 } else if (data->base.pos.type == RDB_COORD_TYPE_INERTIAL) {
 
@@ -1339,10 +1339,10 @@ simFrame, const
                     speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     total_distance_travelled = data->ext.traveledDist;
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial,
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial,
                             orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
                     m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
                 }
             } else {
                 //std::cout << data->base.type << std::endl;
@@ -1366,7 +1366,7 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
     if (m_environment == "none") {
 
         if (data->type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->type == RDB_OBJECT_TYPE_PLAYER_CAR) {
-            if (!m_dumpInitialFrames && (mImageCount >= 0) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
+            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
 
                 //fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                 //        data->name, simFrame, data->pos.x, data->pos.y, data->geo.dimX, data->
@@ -1388,15 +1388,15 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
                 if (data->sensorPos.type == RDB_COORD_TYPE_WINDOW) {
 
                     m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
                 } else if (data->sensorPos.type == RDB_COORD_TYPE_USK) {
 
                     m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionUsk(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
                 } else if (data->sensorPos.type== RDB_COORD_TYPE_INERTIAL) {
 
                     m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionInertial(
-                            (ushort) ((simFrame - MAX_DUMPS - 1) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
+                            (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
                 }
             } else {
                 //std::cout << data->base.type << std::endl;
@@ -1464,12 +1464,18 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
             char file_name_image[50];
 
             if (!m_dumpInitialFrames) {
-                fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
-                        simFrame, simTime, data->imgSize, data->id);
-                mImageCount++;
                 sprintf(file_name_image, "000%03d_10.png", mImageCount);
                 std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
-                save_image.write(input_image_file_with_path);
+                if ( simFrame > (MAX_DUMPS+1) ) {
+                    fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                            simFrame, simTime, data->imgSize, data->id);
+                    save_image.write(input_image_file_with_path);
+                }
+                else {
+                    fprintf(stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                            simFrame, simTime, data->imgSize, data->id);
+                }
+                mImageCount++;
             } else {
                 fprintf(stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                         simFrame, simTime, data->imgSize, data->id);

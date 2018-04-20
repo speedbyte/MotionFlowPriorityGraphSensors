@@ -519,7 +519,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                                 }
                             }
-                            std::cout << new_stencil_size << "hacked" << next_pts_array.size() << std::endl;
+                            std::cout << stencil_movement.at(obj_index).size() << "hacked" << next_pts_array.size() << std::endl;
                         }
 
 
@@ -600,9 +600,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
             // Display the output image
             //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
-            //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
+            cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
             cv::imwrite(temp_result_position_path, image_02_frame);
-            //cv::waitKey(0);
+            cv::waitKey(100);
+            cv::destroyAllWindows();
             prevGray = curGray.clone();
 
         }

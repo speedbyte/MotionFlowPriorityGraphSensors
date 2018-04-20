@@ -77,6 +77,9 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt,
 
         for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
+            std::cout << "generating pixel robustness in RobustnessIndex.cpp for " << suffix << " " << frame_skip
+                    << " for dataprocessing " << data_processing_index << std::endl;
+
             std::vector<float> xsamples, ysamples;
 
             unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(data_processing_index).at(frame_skip - 1).size();
@@ -134,7 +137,11 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
     }
 
     for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {
+
         for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+
+            std::cout << "generating vector robustness in RobustnessIndex.cpp for " << suffix << " " << frame_skip
+                    << " for dataprocessing " << data_processing_index << std::endl;
 
             std::vector<float> xsamples,ysamples;
 

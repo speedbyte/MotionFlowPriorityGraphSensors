@@ -21,9 +21,8 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
     for (ushort frame_count=0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; frame_count++) {
         // The first frame is the reference frame, hence it is skipped
 
-        cv::Point2f gt_cog_pts = {0,0}, gt_displacement = {0,0}, gt_displacement_inertial = {0,0}, gt_displacement_usk = {0,0};
-        gt_cog_pts = gt_data.getAll().at(current_index).m_object_location_px.cog_px;
 
+        cv::Point2f gt_displacement = {0,0}, gt_displacement_inertial = {0,0}, gt_displacement_usk = {0,0};
         cv::Point2f gt_dimensions = {0,0};
 
         gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions_px.dim_width_m;
@@ -33,7 +32,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
             printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getAll().at(current_index).visMask?"true":"false"),
                    frame_count,
-                   current_index, gt_cog_pts.x, gt_cog_pts.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
+                   current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
             );
 
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(cv::Point2f(gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m) , cv::Point2f(0,0)));
@@ -45,8 +44,8 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             if (current_index >= gt_data.getAll().size()) {
 
                 current_index = 0;
-                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_px.location_x_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_px.location_x_m;
-                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_px.location_y_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_px.location_y_m;
+                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_px.cog_px.x - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_px.cog_px.x;
+                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_px.cog_px.y - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_px.cog_px.y;
 
                 gt_displacement_inertial.x = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_inertial_m.location_x_m;
                 gt_displacement_inertial.y = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(gt_data.getAll().size() - 1).m_object_location_inertial_m.location_y_m;
@@ -56,8 +55,8 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
             } else {
 
-                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_px.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_px.location_x_m;
-                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_px.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_px.location_y_m;
+                gt_displacement.x = gt_data.getAll().at(current_index).m_object_location_px.cog_px.x - gt_data.getAll().at(current_index-(ushort)1).m_object_location_px.cog_px.x;
+                gt_displacement.y = gt_data.getAll().at(current_index).m_object_location_px.cog_px.y - gt_data.getAll().at(current_index-(ushort)1).m_object_location_px.cog_px.y;
 
                 gt_displacement_inertial.x = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_inertial_m.location_x_m;
                 gt_displacement_inertial.y = gt_data.getAll().at(current_index).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_inertial_m.location_y_m;
@@ -73,11 +72,11 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
             printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getAll().at(current_index).visMask?"true":"false"),
                    frame_count,
-                   current_index, gt_cog_pts.x, gt_cog_pts.y,
+                   current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y,
                    gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y);
 
             // make m_flowvector_with_coordinate_gt with smallest resolution.
-            m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_cog_pts, gt_displacement));
+            m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_data.getAll().at(current_index).m_object_location_px.cog_px, gt_displacement));
 
         }
         if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_usk == 0 ) {

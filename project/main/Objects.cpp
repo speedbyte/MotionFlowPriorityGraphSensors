@@ -117,11 +117,11 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 cv::Point2f gt_pts_compare;
                 cv::Point2f gt_displacement_compare;
 
-                for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
                     cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
-                            .at(frame_count).at(cluster_point).first;
+                            .at(frame_count).at(cluster_index).first;
                     cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
-                            .at(frame_count).at(cluster_point).second;
+                            .at(frame_count).at(cluster_index).second;
 
                     // 1. CENTROID MEAN - add all displacement and points and divide by total size.
                     // 2. THRESHOLD MEAN - add all displacement and points that are within a boundary and divide by total found size
@@ -214,11 +214,11 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                         cluster_size_ranked_mean_x = 0,
                         cluster_size_ranked_mean_y = 0;
 
-                for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
                     cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
-                            .at(frame_count).at(cluster_point).first;
+                            .at(frame_count).at(cluster_index).first;
                     cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
-                            .at(frame_count).at(cluster_point).second;
+                            .at(frame_count).at(cluster_index).second;
 
                     // 1. MEAN - add all displacement and points and divide by total size.
                     // 2. THRESHOLD MEAN - add all displacement and points that are within a boundary and divide by total found size
@@ -240,7 +240,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                     mean_pts_moving_avg_mean_y += pts.y;
                     mean_displacement_vector_moving_avg_mean_x += gt_displacement.x;
                     mean_displacement_vector_moving_avg_mean_y += gt_displacement.y;
-                    if (cluster_point > 0) {
+                    if (cluster_index > 0) {
                         mean_displacement_vector_moving_avg_mean_x /= 2;
                         mean_displacement_vector_moving_avg_mean_y /= 2;
                         frame_shape_parameters_moving_avg_mean.push_back(
@@ -331,14 +331,14 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
                     ushort WEIGHT = 10;
 
-                    for (unsigned cluster_point = 0; cluster_point < CLUSTER_EDGE_SIZE; cluster_point++) {
+                    for (unsigned cluster_edge_index = 0; cluster_edge_index < CLUSTER_EDGE_SIZE; cluster_edge_index++) {
 
                         cv::Point2f pts_edge = obj_extrapolated_edge_pixel_point_pixel_displacement.at(
                                         frame_skip - 1)
-                                .at(frame_count).at(cluster_point).first;
+                                .at(frame_count).at(cluster_edge_index).first;
                         cv::Point2f gt_displacement = obj_extrapolated_edge_pixel_point_pixel_displacement.at(
                                         frame_skip - 1)
-                                .at(frame_count).at(cluster_point).second;
+                                .at(frame_count).at(cluster_edge_index).second;
 
                         mean_pts_ranked_mean_x += WEIGHT * pts_edge.x;
                         mean_pts_ranked_mean_y += WEIGHT * pts_edge.y;
@@ -354,12 +354,12 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 //cluster_size_ranked_mean_x = 0;
                 //cluster_size_ranked_mean_y = 0;
 
-                for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                     cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
-                            .at(frame_count).at(cluster_point).first;
+                            .at(frame_count).at(cluster_index).first;
                     cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(frame_skip - 1)
-                            .at(frame_count).at(cluster_point).second;
+                            .at(frame_count).at(cluster_index).second;
 
                     mean_pts_ranked_mean_x += pts.x;
                     mean_pts_ranked_mean_y += pts.y;
@@ -367,8 +367,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                     mean_displacement_vector_ranked_mean_y += gt_displacement.y;
                     cluster_size_ranked_mean_x++;
                     cluster_size_ranked_mean_y++;
-                    frame_shape_parameters_ranked_mean.push_back(std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                            (0, 0)));
+                    frame_shape_parameters_ranked_mean.push_back(std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f(0, 0)));
 
                     //mean_pts_voted_mean_x +=  pts.x;
                     //mean_pts_voted_mean_y +=  pts.y;
@@ -376,9 +375,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                     //mean_displacement_vector_voted_mean_y += gt_displacement.y;
                     //cluster_size_voted_mean_x++;
                     //cluster_size_voted_mean_y++;
-                    frame_shape_parameters_voted_mean.push_back(
-                            std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                                    (0, 0)));
+                    frame_shape_parameters_voted_mean.push_back(std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f(0, 0)));
                 }
 
                 if (frame_count > 0) {
@@ -420,11 +417,11 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
                 mean_displacement_vector_ranked_mean_y /= (float) cluster_size_ranked_mean_y;
 
 
-                for (unsigned cluster_point = 0; cluster_point < CLUSTER_SIZE; cluster_point++) {
+                for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
-                    frame_shape_parameters_voted_mean.at(cluster_point).second = cv::Point2f(
+                    frame_shape_parameters_voted_mean.at(cluster_index).second = cv::Point2f(
                             mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y);
-                    frame_shape_parameters_ranked_mean.at(cluster_point).second = cv::Point2f(
+                    frame_shape_parameters_ranked_mean.at(cluster_index).second = cv::Point2f(
                             mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y);
 
                 }
@@ -559,9 +556,10 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
 
     std::vector<std::vector<std::vector<cv::Point2f > > > list_obj_line_parameters;
 
-    std::vector<std::vector<cv::Point2f > > outer_line_parameters;
 
     for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {
+
+        std::vector<std::vector<cv::Point2f > > outer_line_parameters;
 
         for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
 
