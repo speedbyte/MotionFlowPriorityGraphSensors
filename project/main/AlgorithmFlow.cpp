@@ -372,10 +372,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     if ( visibility ) {
 
                         cv::Mat roi = stencilFrame.
-                                rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
-                                         (cvRound(rowBegin+height+(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)))).
-                                colRange(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
-                                         (cvRound(columnBegin+width+(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER))));
+                                rowRange(cvRound(rowBegin-height*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
+                                         (cvRound(rowBegin+height+height*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)))).
+                                colRange(cvRound(columnBegin-width*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
+                                         (cvRound(columnBegin+width+width*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER))));
 
                         cv::Size roi_size;
                         cv::Point roi_offset;
@@ -558,7 +558,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 needToInit = true;
             }
 
-            CannyEdgeDetection(temp_result_flow_path, temp_result_edge_path);
+            CannyEdgeDetection(input_image_file_with_path, temp_result_edge_path);
 
             if ( needToInit && algo == lk) { //|| ( frame_count%4 == 0) ) {
                 //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.
@@ -600,9 +600,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
             // Display the output image
             //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
-            cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
-            cv::imwrite(temp_result_position_path, image_02_frame);
-            cv::waitKey(100);
+            //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
+            //cv::imwrite(temp_result_position_path, image_02_frame);
+            //cv::waitKey(100);
             cv::destroyAllWindows();
             prevGray = curGray.clone();
 

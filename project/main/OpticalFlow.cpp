@@ -223,7 +223,7 @@ void OpticalFlow::generate_edge_contour() {
 
                         //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
                         //cv::imshow("edge", objectEdgeFrame);
-                        //cv::waitKey(0);
+                        //cv::waitKey(2000);
 
 
                         auto new_edge_size = edge_movement.at(obj_index).size();
