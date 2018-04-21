@@ -37,6 +37,8 @@ protected:
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_collision_points;
 
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_line_angles;
+
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > m_frame_skip_shape_points;
 
     void getCombination( const std::vector<Objects *> &m_list_objects, std::vector<std::pair<Objects*, Objects*> > &list_of_objects_combination);
@@ -51,6 +53,10 @@ public:
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getCollisionPoints () const {
         return m_list_frame_skip_collision_points;
+    }
+
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getLineAngles () const {
+        return m_list_frame_skip_line_angles;
     }
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getShapePoints () const {

@@ -60,10 +60,10 @@ void RobustnessIndex::make_video_from_png(const std::string &videoOrdner) {
     video_write.release();
 }
 
-void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo) {
+void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo) {
 
-    auto position = opticalFlow_gt.getResultOrdner().find('/');
-    std::string suffix = opticalFlow_gt.getResultOrdner().replace(position, 1, "_");
+    auto position = opticalFlow.getResultOrdner().find('/');
+    std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
     unsigned COUNT;
     if ( suffix == "_generated") {
         COUNT = 1;
@@ -82,14 +82,14 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt,
 
             std::vector<float> xsamples, ysamples;
 
-            unsigned long FRAME_COUNT = opticalFlow_gt.getShapePoints().at(data_processing_index).at(frame_skip - 1).size();
+            unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(data_processing_index).at(frame_skip - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                unsigned long POINTS = opticalFlow_gt.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
+                unsigned long POINTS = opticalFlow.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
                 for (unsigned points = 0; points < POINTS; points++) {
 
-                    cv::Point2f shapepoints = opticalFlow_gt.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).at
+                    cv::Point2f shapepoints = opticalFlow.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).at
                             (points);
 
                     xsamples.push_back(shapepoints.x);
@@ -124,10 +124,10 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_gt,
 }
 
 
-void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo) {
+void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo) {
 
-    auto position = opticalFlow_gt.getResultOrdner().find('/');
-    std::string suffix = opticalFlow_gt.getResultOrdner().replace(position, 1, "_");
+    auto position = opticalFlow.getResultOrdner().find('/');
+    std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
     unsigned COUNT;
     if ( suffix == "_generated") {
         COUNT = 1;
@@ -144,25 +144,33 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
                     << " for dataprocessing " << data_processing_index << std::endl;
 
             std::vector<float> xsamples,ysamples;
+            std::vector<float> xsamples_line,ysamples_line;
 
-            unsigned long FRAME_COUNT = opticalFlow_gt.getCollisionPoints().at(data_processing_index).at(frame_skip - 1).size();
+            unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(data_processing_index).at(frame_skip - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 ushort m_valid_collision_points = 0;
                 ushort m_invalid_collision_points = 0;
 
-                unsigned long POINTS = opticalFlow_gt.getCollisionPoints().at(data_processing_index).at(frame_skip-1).at(frame_count).size();
+                unsigned long POINTS = opticalFlow.getCollisionPoints().at(data_processing_index).at(frame_skip-1).at(frame_count).size();
 
                 for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
                     //    std::vector<std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > >
-                    cv::Point2f collisionpoints = opticalFlow_gt.getCollisionPoints().at(data_processing_index).at(frame_skip-1).at(frame_count).at
+                    cv::Point2f collisionpoints = opticalFlow.getCollisionPoints().at(data_processing_index).at(frame_skip-1).at(frame_count).at
                             (points);
 
                     xsamples.push_back(collisionpoints.x);
                     ysamples.push_back(collisionpoints.y);
                     m_valid_collision_points++;
+
+                    cv::Point2f lineangles = opticalFlow.getLineAngles().at(data_processing_index).at(frame_skip-1).at(frame_count).at
+                            (points);
+
+                    xsamples_line.push_back(std::tanh(lineangles.x)*180/CV_PI);
+                    ysamples_line.push_back(std::tanh(lineangles.y)*180/CV_PI);
+
                     /*
                     if ( ( collisionpoints.x ) > 0 &&
                          ( collisionpoints.y ) > 0 &&
@@ -188,6 +196,7 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
 
             std::string plot_least_square_line_list;
             std::vector<std::pair<double, double>> xypoints_collision;
+            std::vector<std::pair<double, double>> xypoints_lineangles;
 
             cv::Mat_<float> samples_xy_collision(2, xsamples.size());
 
@@ -205,6 +214,14 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_g
             }
             m_fs << "]";
 
+
+            m_fs << (std::string("line_angles") + std::string("frame_skip") + std::to_string(frame_skip) + std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix ) << "[";
+
+            for (unsigned i = 0; i < xsamples_line.size(); i++) {
+                xypoints_lineangles.push_back(std::make_pair(xsamples_line.at(i), ysamples_line.at(i)));
+                m_fs << "{:" << "obj1" <<  xypoints_lineangles.at(i).first << "obj2" << xypoints_lineangles.at(i).second << "}";
+            }
+            m_fs << "]";
 
             // Linear least square
             fitLineForCollisionPoints(samples_xy_collision, plot_least_square_line_list);

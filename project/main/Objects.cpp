@@ -596,31 +596,31 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
                     if ( frame_count > 0 ) {
                         cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(data_processing_index).at
                                 (frame_skip-1).at(frame_count).first;
-                        cv::Point2f displacement_vector =
+                        cv::Point2f mean_displacement_vector =
                                 m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(data_processing_index).at
                                         (frame_skip-1).at(frame_count).second;
 
                         float m, c;
-                        m = displacement_vector.y / displacement_vector.x;
+                        m = mean_displacement_vector.y / mean_displacement_vector.x;
                         c = next_pts.y - m * next_pts.x;  // c = y - mx
-
+                        
                         assert(c!=0);
 
                         if ((int) c == 0) {
                             c += 0.001;
                         }
 
-                        //float d = (float) sqrt((double) displacement_vector.x * displacement_vector.x +
-                        //                       (double) displacement_vector.y * displacement_vector.y);
-                        //displacement_vector.x /= d; // normalized vector in x
-                        //displacement_vector.y /= d; // normalized vector in y
+                        //float d = (float) sqrt((double) mean_displacement_vector.x * mean_displacement_vector.x +
+                        //                       (double) mean_displacement_vector.y * mean_displacement_vector.y);
+                        //mean_displacement_vector.x /= d; // normalized vector in x
+                        //mean_displacement_vector.y /= d; // normalized vector in y
 
                         cv::Point2f pt2;
 
                         assert(std::isinf(m) == 0);
 
                         if (std::isinf(m)) {
-                            if (displacement_vector.y > 0.0f) {  // going up
+                            if (mean_displacement_vector.y > 0.0f) {  // going up
                                 pt2.x = next_pts.x;
                                 pt2.y = Dataset::getFrameSize().height;
                             } else {  // going down
@@ -628,7 +628,7 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
                                 pt2.y = 0;
                             }
                         } else if (m == 0) {
-                            //std::cout << frame_count << " " << next_pts<<  " " << m << " " << displacement_vector << std::endl;
+                            //std::cout << frame_count << " " << next_pts<<  " " << m << " " << mean_displacement_vector << std::endl;
                             if (std::signbit(m)) { //  going left
                                 pt2.x = 0;
                                 pt2.y = next_pts.y;
@@ -638,16 +638,16 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
                             }
                         }
 
-                        //std::cout << frame_count << " " << next_pts <<  " " << m << " " << pt2<< std::endl;
-                        if (displacement_vector.y > 0.0f) {
+                        if (mean_displacement_vector.y > 0.0f) {
                             pt2.x = (Dataset::getFrameSize().height - c) / m; //
                             pt2.y = Dataset::getFrameSize().height;
-                        } else if (displacement_vector.y < 0.0f) {
+                        } else if (mean_displacement_vector.y < 0.0f) {
                             pt2.x = (-c / m); //
                             pt2.y = 0;
                         }
 
                         frame_line_parameters.push_back(cv::Point2f(m, c));
+
                     } else {
                         frame_line_parameters.push_back(cv::Point2f(0.0f, 0.0f));
                     }
@@ -656,7 +656,11 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
                 else {
                     frame_line_parameters.push_back(cv::Point2f(0.0f, 0.0f));
                 }
+
             }
+
+            std::cout << frame_line_parameters << std::endl;
+
             outer_line_parameters.push_back(frame_line_parameters);
         }
         list_obj_line_parameters.push_back(outer_line_parameters);
