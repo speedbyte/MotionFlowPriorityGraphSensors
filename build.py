@@ -62,7 +62,7 @@ def parse_arguements(args):
         submodule_tag = subprocess.check_output(command, shell=True)
         submodule_tag = submodule_tag.strip('\n')
         submodule_metadata.append((submodule_dir[count], submodule_tag))
-        if "libs/opencv" in submodule_dir[count]:
+        if "libs/opencv" == submodule_dir[count]:
             build_properties[count] = args.OPENCV_OPTION
         if "libs/pcl" in submodule_dir[count]:
             build_properties[count] = args.PCL_OPTION

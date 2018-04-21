@@ -23,7 +23,6 @@ dataset = "vires"
 scenario = "two"
 file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" +scenario + "/values.yml"
 
-hack=0
 #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
 environment_list = ["none","light_snow_", "mild_snow_", "heavy_snow_"]#night
@@ -33,7 +32,7 @@ environment_list = ["none",]
 output_folder = '/local/tmp/eaes/'
 
 OUTLIER = 100000
-SCALE = 100
+SCALE = 1
 
 def histogramm():
 
@@ -331,19 +330,15 @@ def motionflow_pixelgraphs_noise():
             data = np.array(shape)
             if ( x == 0):
                 x0, y0 = data.T
-                print x0,y0
                 y0 = x0/y0
             if ( x == 1):
                 x1, y1 = data.T
-                print x1,y1
                 y1 = x1/y1
             if ( x == 2):
                 x2, y2 = data.T
-                print x2,y2
                 y2 = x2/y2
             if ( x == 3):
                 x3, y3 = data.T
-                print x3,y3
                 y3 = x3/y3
 
             x0 = np.arange(0.0, len(shape_points)-1, 1)
@@ -419,17 +414,22 @@ def motionflow_vectorgraphs_no_noise():
 
     yaml_file.close()
 
+    fig1 = plt.figure()
     fig2 = plt.figure()
     #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
 
+    deviationplot0 = fig1.add_subplot(111)
     collisionplot0 = fig2.add_subplot(111)
 
-    #collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
+    #deviationplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
 
-    collisionplot0.set_xlabel('frame_count')
-    collisionplot0.set_ylabel('deviation [no_noise_points-groundtruth_points]')
+    deviationplot0.set_xlabel('frame_count')
+    deviationplot0.set_ylabel('deviation [no_noise_points-groundtruth_points]')
 
-    legend = collisionplot0.legend(loc='center right', shadow=True, fontsize='x-small')
+    collisionplot0.set_xlabel('X')
+    collisionplot0.set_ylabel('Y')
+
+    legend = deviationplot0.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
 
@@ -441,9 +441,9 @@ def motionflow_vectorgraphs_no_noise():
         "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
     ]
 
-    color_of_collision_metrics = ["red", "green", "yellow", "black"]
+    color_of_collision_metrics = ["blue", "red", "green", "yellow", "black"]
 
-    #assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
+    assert(len(list_of_collision_metrics) == len(color_of_collision_metrics))
 
     num=0
 
@@ -463,20 +463,19 @@ def motionflow_vectorgraphs_no_noise():
             data = np.array(collision)
             if ( x == 0):
                 x0_gt, y0_gt = data.T
+                dev0_gt = numpy.sqrt((x0_gt - x0_gt) ** 2 + (y0_gt - y0_gt) ** 2)
 
-            x0 = np.arange(0.0, 4.0, 1)
-
-    y0_mean_list = list()
-    y1_mean_list = list()
-    y2_mean_list = list()
-    y3_mean_list = list()
+    dev0_mean_list = list()
+    dev1_mean_list = list()
+    dev2_mean_list = list()
+    dev3_mean_list = list()
 
     for no_of_metrics in range(1): # none
 
-        y0_mean = 0
-        y1_mean = 0
-        y2_mean = 0
-        y3_mean = 0
+        dev0_mean = 0
+        dev1_mean = 0
+        dev2_mean = 0
+        dev3_mean = 0
 
         for x in range(4):
 
@@ -491,84 +490,121 @@ def motionflow_vectorgraphs_no_noise():
             data = np.array(collision)
             if ( x == 0):
                 x0, y0 = data.T
-                y0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
+                dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
             if ( x == 1):
                 x1, y1 = data.T
-                y1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
+                dev1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
             if ( x == 2):
                 x2, y2 = data.T
-                y2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
+                dev2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
             if ( x == 3):
                 x3, y3 = data.T
-                y3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
+                dev3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
 
-            x0 = np.arange(0.0, len(collision_points)-1, 1)
+            frame_number = np.arange(0.0, len(collision_points)-1, 1)
 
-        for n,i in enumerate(y0):
+        for n,i in enumerate(dev0):
             if ( i > OUTLIER):
-                y0[n] = y0[n-1]
+                dev0[n] = dev0[n-1]
                 if ( n == 0 ):
-                    y0[n] = 0
-            y0_mean=(y0_mean+y0[n])
-            #y0_mean=(y0_mean+y0[n])/2
-            #y0[n] = y0_mean
-        for n,i in enumerate(y1):
+                    dev0[n] = 0
+            dev0_mean=(dev0_mean+dev0[n])
+            #dev0_mean=(dev0_mean+dev0[n])/2
+            #dev0[n] = dev0_mean
+        for n,i in enumerate(dev1):
             if ( i > OUTLIER):
-                y1[n] = y1[n-1]
-            y1_mean=(y1_mean+y1[n])
-            #y1_mean=(y1_mean+y1[n])/2
-            #y1[n] = y1_mean
-        for n,i in enumerate(y2):
+                dev1[n] = dev1[n-1]
+            dev1_mean=(dev1_mean+dev1[n])
+            #dev1_mean=(dev1_mean+dev1[n])/2
+            #dev1[n] = dev1_mean
+        for n,i in enumerate(dev2):
             if ( i > OUTLIER):
-                y2[n] = y2[n-1]
-            y2_mean=(y2_mean+y2[n])
-            #y2_mean=(y2_mean+y2[n])/2
-            #y2[n] = y2_mean
-        for n,i in enumerate(y3):
+                dev2[n] = dev2[n-1]
+            dev2_mean=(dev2_mean+dev2[n])
+            #dev2_mean=(dev2_mean+dev2[n])/2
+            #dev2[n] = dev2_mean
+        for n,i in enumerate(dev3):
             if ( i > OUTLIER):
-                y3[n] = y3[n-1]
-            y3_mean=(y3_mean+y3[n])
-            #y3_mean=(y3_mean+y3[n])/2
-            #y3[n] = y3_mean
+                dev3[n] = dev3[n-1]
+            dev3_mean=(dev3_mean+dev3[n])
+            #dev3_mean=(dev3_mean+dev3[n])/2
+            #dev3[n] = dev3_mean
 
 
-        collisionplot0.plot(x0, y0/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        deviationplot0.plot(frame_number, dev0_gt/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        deviationplot0.plot(frame_number, dev0/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[1+no_of_metrics], label=list_of_collision_metrics[1+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        deviationplot0.plot(frame_number, dev1/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[2+no_of_metrics], label=list_of_collision_metrics[2+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        deviationplot0.plot(frame_number, dev2/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[3+no_of_metrics], label=list_of_collision_metrics[3+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        deviationplot0.plot(frame_number, dev3/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[4+no_of_metrics], label=list_of_collision_metrics[4+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+
+        index_x0_gt_sorted = np.argsort(x0_gt)
+        index_x0_sorted = np.argsort(x0)
+        index_x1_sorted = np.argsort(x1)
+        index_x2_sorted = np.argsort(x2)
+        index_x3_sorted = np.argsort(x3)
+        print x0
+        print index_x0_gt_sorted
+
+        collisionplot0.plot(x0_gt, y0_gt/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot0.plot(x0, y1/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[1+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x0, y0/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[1+no_of_metrics], label=list_of_collision_metrics[1+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot0.plot(x0, y2/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[2+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x1, y1/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[2+no_of_metrics], label=list_of_collision_metrics[2+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot0.plot(x0, y3/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[3+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        collisionplot0.plot(x2, y2/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[3+no_of_metrics], label=list_of_collision_metrics[3+no_of_metrics])
         #collisionplot1.legend()
         collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+        collisionplot0.plot(x3, y3/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[4+no_of_metrics], label=list_of_collision_metrics[4+no_of_metrics])
+        #collisionplot1.legend()
+        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
 
         offset_index=offset_index+4
 
-        y0_mean = y0_mean/(n+1)
-        y1_mean = y1_mean/(n+1)
-        y2_mean = y2_mean/(n+1)
-        y3_mean = y3_mean/(n+1)
-        y0_mean_list.append(y0_mean)
-        y1_mean_list.append(y1_mean)
-        y2_mean_list.append(y2_mean)
-        y3_mean_list.append(y3_mean)
+        dev0_mean = dev0_mean/(n+1)
+        dev1_mean = dev1_mean/(n+1)
+        dev2_mean = dev2_mean/(n+1)
+        dev3_mean = dev3_mean/(n+1)
+        dev0_mean_list.append(dev0_mean)
+        dev1_mean_list.append(dev1_mean)
+        dev2_mean_list.append(dev2_mean)
+        dev3_mean_list.append(dev3_mean)
 
         print "Table 3 " + environment_list[no_of_metrics]
-        print y0_mean_list[no_of_metrics]/SCALE
-        print y1_mean_list[no_of_metrics]/SCALE
-        print y2_mean_list[no_of_metrics]/SCALE
-        print y3_mean_list[no_of_metrics]/SCALE
+        print dev0_mean_list[no_of_metrics]/SCALE
+        print dev1_mean_list[no_of_metrics]/SCALE
+        print dev2_mean_list[no_of_metrics]/SCALE
+        print dev3_mean_list[no_of_metrics]/SCALE
 
     #fig2.set_size_inches(18.5, 10.5)
-    Y_MAX = max(numpy.amax(y0/SCALE), numpy.amax(y1/SCALE), numpy.amax(y2/SCALE), numpy.amax(y3/SCALE)) + 100
+    DEV_MAX = max(numpy.amax(dev0_gt/SCALE), numpy.amax(dev0/SCALE), numpy.amax(dev1/SCALE), numpy.amax(dev2/SCALE), numpy.amax(dev3/SCALE)) + 100
+    Y_MAX = max(numpy.amax(y0_gt/SCALE), numpy.amax(y0/SCALE), numpy.amax(y1/SCALE), numpy.amax(y2/SCALE), numpy.amax(y3/SCALE)) + 100
+    deviationplot0.set_ylim([0, DEV_MAX])
     collisionplot0.set_ylim([0, Y_MAX])
-    fig2.savefig(output_folder + 'vector_robustness_optical_flow', bbox_inches='tight',dpi=200)
+    fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
+    fig2.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
 #    plt.close("all")
@@ -603,30 +639,30 @@ def motionflow_vectorgraphs_noise():
     fig3 = plt.figure()
     #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
 
-    collisionplot0 = fig0.add_subplot(111)
-    collisionplot1 = fig1.add_subplot(111)
-    collisionplot2 = fig2.add_subplot(111)
-    collisionplot3 = fig3.add_subplot(111)
+    deviationplot0 = fig0.add_subplot(111)
+    deviationplot1 = fig1.add_subplot(111)
+    deviationplot2 = fig2.add_subplot(111)
+    deviationplot3 = fig3.add_subplot(111)
 
-    #collisionplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
-    #collisionplot1.set_title('collision_pointsframe_skip1_dataprocessing_1')
-    #collisionplot2.set_title('collision_pointsframe_skip1_dataprocessing_2')
-    #collisionplot3.set_title('collision_pointsframe_skip1_dataprocessing_3')
+    #deviationplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
+    #deviationplot1.set_title('collision_pointsframe_skip1_dataprocessing_1')
+    #deviationplot2.set_title('collision_pointsframe_skip1_dataprocessing_2')
+    #deviationplot3.set_title('collision_pointsframe_skip1_dataprocessing_3')
 
-    collisionplot0.set_xlabel('frame_count')
-    collisionplot0.set_ylabel('deviation noise_points-no_noise_points')
-    collisionplot1.set_xlabel('frame_count')
-    collisionplot1.set_ylabel('deviation noise_points-no_noise_points')
-    collisionplot2.set_xlabel('frame_count')
-    collisionplot2.set_ylabel('deviation noise_points-no_noise_points')
-    collisionplot3.set_xlabel('frame_count')
-    collisionplot3.set_ylabel('deviation noise_points-no_noise_points')
+    deviationplot0.set_xlabel('frame_count')
+    deviationplot0.set_ylabel('deviation noise_points-no_noise_points')
+    deviationplot1.set_xlabel('frame_count')
+    deviationplot1.set_ylabel('deviation noise_points-no_noise_points')
+    deviationplot2.set_xlabel('frame_count')
+    deviationplot2.set_ylabel('deviation noise_points-no_noise_points')
+    deviationplot3.set_xlabel('frame_count')
+    deviationplot3.set_ylabel('deviation noise_points-no_noise_points')
 
-    collisionplot0.set_ylim([0, OUTLIER])
-    collisionplot1.set_ylim([0, OUTLIER])
-    collisionplot2.set_ylim([0, OUTLIER])
-    collisionplot3.set_ylim([0, OUTLIER])
-    legend = collisionplot1.legend(loc='center right', shadow=True, fontsize='x-small')
+    deviationplot0.set_ylim([0, OUTLIER])
+    deviationplot1.set_ylim([0, OUTLIER])
+    deviationplot2.set_ylim([0, OUTLIER])
+    deviationplot3.set_ylim([0, OUTLIER])
+    legend = deviationplot1.legend(loc='center right', shadow=True, fontsize='x-small')
 
     yaml_load = yaml.load(open(file))
 
@@ -686,17 +722,17 @@ def motionflow_vectorgraphs_noise():
 
             x0 = np.arange(0.0, 5.0, 1)
 
-    y0_mean_list = list()
-    y1_mean_list = list()
-    y2_mean_list = list()
-    y3_mean_list = list()
+    dev0_mean_list = list()
+    dev1_mean_list = list()
+    dev2_mean_list = list()
+    dev3_mean_list = list()
 
     for no_of_metrics in range(len(environment_list)): # none
 
-        y0_mean = 0
-        y1_mean = 0
-        y2_mean = 0
-        y3_mean = 0
+        dev0_mean = 0
+        dev1_mean = 0
+        dev2_mean = 0
+        dev3_mean = 0
 
         for x in range(4):
 
@@ -711,83 +747,81 @@ def motionflow_vectorgraphs_noise():
             data = np.array(collision)
             if ( x == 0):
                 x0, y0 = data.T
-                y0 = numpy.sqrt((x0_base - x0) ** 2 + (y0_base - y0) ** 2)
-                y0 = y0/SCALE
+                dev0 = numpy.sqrt((x0_base - x0) ** 2 + (y0_base - y0) ** 2)
             if ( x == 1):
                 x1, y1 = data.T
-                y1 = numpy.sqrt((x1_base - x1) ** 2 + (y1_base - y1) ** 2)
-                y1 = y1/SCALE
+                dev1 = numpy.sqrt((x1_base - x1) ** 2 + (y1_base - y1) ** 2)
             if ( x == 2):
                 x2, y2 = data.T
-                y2 = numpy.sqrt((x2_base - x2) ** 2 + (y2_base - y2) ** 2)
-                y2 = y2/SCALE
+                dev2 = numpy.sqrt((x2_base - x2) ** 2 + (y2_base - y2) ** 2)
             if ( x == 3):
                 x3, y3 = data.T
-                y3 = numpy.sqrt((x3_base - x3) ** 2 + (y3_base - y3) ** 2)
-                y3 = y3/SCALE
+                dev3 = numpy.sqrt((x3_base - x3) ** 2 + (y3_base - y3) ** 2)
 
             x0 = np.arange(0.0, len(collision_points)-1, 1)
 
-        for n,i in enumerate(y0):
+        for n,i in enumerate(dev0):
             if ( i > OUTLIER):
-                y0[n] = y0[n-1]
+                dev0[n] = dev0[n-1]
                 if ( n == 0 ):
-                    y0[n] = 0
-            y0_mean=(y0_mean+y0[n])
-            #y0_mean=(y0_mean+y0[n])/2
-            #y0[n] = y0_mean
-        for n,i in enumerate(y1):
+                    dev0[n] = 0
+            dev0_mean=(dev0_mean+dev0[n])
+            #dev0_mean=(dev0_mean+dev0[n])/2
+            #dev0[n] = dev0_mean
+        for n,i in enumerate(dev1):
             if ( i > OUTLIER):
-                y1[n] = y1[n-1]
-            y1_mean=(y1_mean+y1[n])
-            #y1_mean=(y1_mean+y1[n])/2
-            #y1[n] = y1_mean
-        for n,i in enumerate(y2):
+                dev1[n] = dev1[n-1]
+            dev1_mean=(dev1_mean+dev1[n])
+            #dev1_mean=(dev1_mean+dev1[n])/2
+            #dev1[n] = dev1_mean
+        for n,i in enumerate(dev2):
             if ( i > OUTLIER):
-                y2[n] = y2[n-1]
-            y2_mean=(y2_mean+y2[n])
-            #y2_mean=(y2_mean+y2[n])/2
-            #y2[n] = y2_mean
-        for n,i in enumerate(y3):
+                dev2[n] = dev2[n-1]
+            dev2_mean=(dev2_mean+dev2[n])
+            #dev2_mean=(dev2_mean+dev2[n])/2
+            #dev2[n] = dev2_mean
+        for n,i in enumerate(dev3):
             if ( i > OUTLIER):
-                y3[n] = y3[n-1]
-            y3_mean=(y3_mean+y3[n])
-            #y3_mean=(y3_mean+y3[n])/2
-            #y3[n] = y3_mean
+                dev3[n] = dev3[n-1]
+            dev3_mean=(dev3_mean+dev3[n])
+            #dev3_mean=(dev3_mean+dev3[n])/2
+            #dev3[n] = dev3_mean
 
-        y0_mean = y0_mean/(n+1)
-        y1_mean = y1_mean/(n+1)
-        y2_mean = y2_mean/(n+1)
-        y3_mean = y3_mean/(n+1)
-        y0_mean_list.append(y0_mean)
-        y1_mean_list.append(y1_mean)
-        y2_mean_list.append(y2_mean)
-        y3_mean_list.append(y3_mean)
+        dev0_mean = dev0_mean/(n+1)
+        dev1_mean = dev1_mean/(n+1)
+        dev2_mean = dev2_mean/(n+1)
+        dev3_mean = dev3_mean/(n+1)
+        dev0_mean_list.append(dev0_mean)
+        dev1_mean_list.append(dev1_mean)
+        dev2_mean_list.append(dev2_mean)
+        dev3_mean_list.append(dev3_mean)
 
-        collisionplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        deviationplot0.plot(x0, dev0/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot1.plot(x0, y1, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        deviationplot1.plot(x0, dev1/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot2.plot(x0, y2, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        deviationplot2.plot(x0, dev2/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        collisionplot3.plot(x0, y3, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+        deviationplot3.plot(x0, dev3/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
+        #deviationplot1.legend()
+        deviationplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
         offset_index=offset_index+4
 
         print "Table 4 " + environment_list[no_of_metrics]
-        print y0_mean_list[no_of_metrics]/SCALE
-        print y1_mean_list[no_of_metrics]/SCALE
-        print y2_mean_list[no_of_metrics]/SCALE
-        print y3_mean_list[no_of_metrics]/SCALE
+        print dev0_mean_list[no_of_metrics]/SCALE
+        print dev1_mean_list[no_of_metrics]/SCALE
+        print dev2_mean_list[no_of_metrics]/SCALE
+        print dev3_mean_list[no_of_metrics]/SCALE
 
+    Y_MAX = max(numpy.amax(dev0/SCALE), numpy.amax(dev1/SCALE), numpy.amax(dev2/SCALE), numpy.amax(dev3/SCALE)) + 100
+    deviationplot0.set_ylim([0, Y_MAX])
    # fig0.set_size_inches(18.5, 10.5)
     fig0.savefig(output_folder + 'vector_robustness_data_processing_algorithm_0',bbox_inches='tight', dpi=200)
     #fig1.set_size_inches(18.5, 10.5)
@@ -811,10 +845,10 @@ if __name__ == '__main__':
     #lemniscate()
     #simple()
 
-    motionflow_pixelgraphs_no_noise()
-    motionflow_pixelgraphs_noise()
+    #motionflow_pixelgraphs_no_noise()
+    #motionflow_pixelgraphs_noise()
     motionflow_vectorgraphs_no_noise()
-    motionflow_vectorgraphs_noise()
+    #motionflow_vectorgraphs_noise()
 
     #histogramm()
 
