@@ -447,8 +447,10 @@ def motionflow_vectorgraphs_no_noise():
 
     num=0
 
+    delete_point_array = np.array([-65535])
     for no_of_metrics in range(1): # generated
 
+        dev0_gt_mean = 0
 
         for x in range(1):
 
@@ -463,7 +465,17 @@ def motionflow_vectorgraphs_no_noise():
             data = np.array(collision)
             if ( x == 0):
                 x0_gt, y0_gt = data.T
+                x0_gt = np.setdiff1d(x0_gt, delete_point_array)
+                y0_gt = np.setdiff1d(y0_gt, delete_point_array)
                 dev0_gt = numpy.sqrt((x0_gt - x0_gt) ** 2 + (y0_gt - y0_gt) ** 2)
+
+        dev0_gt_mean_list = list()
+
+        for n,i in enumerate(dev0_gt):
+            dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
+
+        dev0_gt_mean = dev0_gt_mean/(n+1)
+        dev0_gt_mean_list.append(dev0_gt_mean)
 
     dev0_mean_list = list()
     dev1_mean_list = list()
@@ -490,21 +502,29 @@ def motionflow_vectorgraphs_no_noise():
             data = np.array(collision)
             if ( x == 0):
                 x0, y0 = data.T
+                x0 = np.setdiff1d(x0, delete_point_array)
+                y0 = np.setdiff1d(y0, delete_point_array)
                 dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
             if ( x == 1):
                 x1, y1 = data.T
+                x1 = np.setdiff1d(x1, delete_point_array)
+                y1 = np.setdiff1d(y1, delete_point_array)
                 dev1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
             if ( x == 2):
                 x2, y2 = data.T
+                x2 = np.setdiff1d(x2, delete_point_array)
+                y2 = np.setdiff1d(y2, delete_point_array)
                 dev2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
             if ( x == 3):
                 x3, y3 = data.T
+                x3 = np.setdiff1d(x3, delete_point_array)
+                y3 = np.setdiff1d(y3, delete_point_array)
                 dev3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
 
-            frame_number = np.arange(0.0, len(collision_points)-1, 1)
+            frame_number = np.arange(0.0, len(x0_gt), 1)
 
         for n,i in enumerate(dev0):
-            if ( i > OUTLIER):
+            if ( abs(i) > OUTLIER):
                 dev0[n] = dev0[n-1]
                 if ( n == 0 ):
                     dev0[n] = 0
@@ -593,6 +613,7 @@ def motionflow_vectorgraphs_no_noise():
         dev3_mean_list.append(dev3_mean)
 
         print "Table 3 " + environment_list[no_of_metrics]
+        print dev0_gt_mean_list[no_of_metrics]/SCALE
         print dev0_mean_list[no_of_metrics]/SCALE
         print dev1_mean_list[no_of_metrics]/SCALE
         print dev2_mean_list[no_of_metrics]/SCALE
@@ -601,8 +622,10 @@ def motionflow_vectorgraphs_no_noise():
     #fig2.set_size_inches(18.5, 10.5)
     DEV_MAX = max(numpy.amax(dev0_gt/SCALE), numpy.amax(dev0/SCALE), numpy.amax(dev1/SCALE), numpy.amax(dev2/SCALE), numpy.amax(dev3/SCALE)) + 100
     Y_MAX = max(numpy.amax(y0_gt/SCALE), numpy.amax(y0/SCALE), numpy.amax(y1/SCALE), numpy.amax(y2/SCALE), numpy.amax(y3/SCALE)) + 100
+    Y_MIN = max(numpy.amin(y0_gt/SCALE), numpy.amin(y0/SCALE), numpy.amin(y1/SCALE), numpy.amin(y2/SCALE), numpy.amin(y3/SCALE)) - 100
     deviationplot0.set_ylim([0, DEV_MAX])
-    collisionplot0.set_ylim([0, Y_MAX])
+    collisionplot0.set_ylim([Y_MIN, Y_MAX])
+    #plt.show()
     fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
     fig2.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
@@ -845,7 +868,7 @@ if __name__ == '__main__':
     #lemniscate()
     #simple()
 
-    #motionflow_pixelgraphs_no_noise()
+    motionflow_pixelgraphs_no_noise()
     #motionflow_pixelgraphs_noise()
     motionflow_vectorgraphs_no_noise()
     #motionflow_vectorgraphs_noise()

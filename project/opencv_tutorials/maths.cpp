@@ -214,8 +214,6 @@ void cartToPolar() {
     cv::Matx<float,3,1> angle;
     cv::cartToPolar(xpts, ypts, magnitude, angle);
 
-
-
     std::cout << "\nsamples_xy\n" << xy;
     std::cout << "\nmagnitude\n" << magnitude.t();
     std::cout << "\nangle\n" << (angle.t() * ( 180. / CV_PI ))<< std::endl;
@@ -508,6 +506,9 @@ int main ( int argc, char *argv[]) {
     //eigen();
     std::cout << "\nlinear least square----------------------------------------------" << std::endl;
     //linearLeastSquare();
+    std::cout << "\nangle----------------------------------------------" << std::endl;
+    angle_and_magnitude()
+
 
 
     return 0;

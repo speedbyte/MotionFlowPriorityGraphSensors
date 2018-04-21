@@ -542,8 +542,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
         list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_flowvector_voted_mean);
         list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_flowvector_ranked_mean);
 
+        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_simple_avg_mean);
         list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_moving_avg_mean);
-        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_threshold_mean);
         list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_voted_mean);
         list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_ranked_mean);
 
@@ -560,8 +560,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 
 void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::string post_processing_algorithm) {
 
-    // starting from here, we reduce the size of the frame_count by 1. This is because, from here we start the calculation of the line.
-    // collision points should also be reduced by 1 hence forth.
+
+    /// BEWARE !! I am in Cartesian co-ordinate system here.
+
 
     unsigned COUNT;
     if ( post_processing_algorithm == "ground_truth") {
@@ -601,6 +602,10 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
                                         (frame_skip-1).at(frame_count).second;
 
                         float m, c;
+                        //Invert Y co-ordinates to match Cartesian co-ordinate system. This is just for the line angle and
+                        //collision points. This is because, the camera origin are upper left and Cartesian is lower left
+                        mean_displacement_vector.y = -mean_displacement_vector.y;
+                        next_pts.y = -next_pts.y;
                         m = mean_displacement_vector.y / mean_displacement_vector.x;
                         c = next_pts.y - m * next_pts.x;  // c = y - mx
                         
@@ -666,6 +671,7 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
         list_obj_line_parameters.push_back(outer_line_parameters);
     }
     m_list_obj_line_parameters = list_obj_line_parameters;
+    assert(m_list_obj_line_parameters.at(0).at(0).size() == m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(0).size());
     std::cout << "line done" << std::endl;
 }
 

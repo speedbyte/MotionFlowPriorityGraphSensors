@@ -499,6 +499,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                         auto new_stencil_size = stencil_movement.at(obj_index).size();
                         std::cout << new_stencil_size << " " << next_pts_array.size() << std::endl;
+                        assert(new_stencil_size != 0);
 
                         if ( new_stencil_size == 0 ) {
                             for (unsigned row_index = 0; row_index < roi.rows; row_index++) {

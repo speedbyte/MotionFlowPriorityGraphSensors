@@ -256,6 +256,7 @@ void OpticalFlow::generate_edge_contour() {
     }
 }
 
+
 void OpticalFlow::generate_shape_points() {
 
     std::vector<Objects*> list_of_current_objects;
@@ -279,7 +280,6 @@ void OpticalFlow::generate_shape_points() {
     auto toc_all = steady_clock::now();
 
     char frame_skip_folder_suffix[50];
-    cv::FileStorage fs;
 
     for (unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++) {
 
@@ -303,7 +303,6 @@ void OpticalFlow::generate_shape_points() {
 
                 std::cout << "frame_count " << frame_count << " for data_processing_index " << data_processing_index<< std::endl;
 
-                fs << "frame_count" << frame_count;
 
                 cv::Point2f shape_average = {0, 0};
                 std::vector<cv::Point2f> frame_shape_points;
@@ -312,16 +311,10 @@ void OpticalFlow::generate_shape_points() {
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                     auto CLUSTER_COUNT_GT = m_list_gt_objects.at(
-                            obj_index)->get_shape_parameters().at(0).at(frame_skip - 1).at(frame_count).size();
+                            obj_index)->get_shape_parameters().at(0).at(frame_skip - 1).at(frame_count).size()/STEP_SIZE;
 
                     auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
                             obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
-
-                    /*
-                    const unsigned CLUSTER_SIZE_STENCIL_BASE = (unsigned)list_of_current_objects_base.at(
-                            obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                            (frame_skip - 1).at(frame_count).size();
-                    */
 
                     if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) == true) {
 
@@ -452,25 +445,21 @@ void OpticalFlow::generate_collision_points() {
     auto toc_all = steady_clock::now();
 
     char frame_skip_folder_suffix[50];
-    cv::FileStorage fs;
 
     std::vector<Objects*> list_of_current_objects;
     std::vector<std::pair<Objects*, Objects* > > list_of_current_objects_combination;
 
-    ushort START;
 
     unsigned COUNT;
     if ( m_resultordner == "/generated") {
         COUNT = 1;
         list_of_current_objects = m_list_gt_objects;
         list_of_current_objects_combination = list_of_gt_objects_combination;
-        START = 1;
     }
     else {
         COUNT = 4;
         list_of_current_objects = m_list_simulated_objects;
         list_of_current_objects_combination = list_of_simulated_objects_combination;
-        START = 0;
     }
 
     for ( ushort obj_index = 0; obj_index < list_of_current_objects_combination.size(); obj_index++ ) {
@@ -500,12 +489,11 @@ void OpticalFlow::generate_collision_points() {
             
             assert(FRAME_COUNT > 0);
 
-            for (ushort frame_count = START; frame_count < FRAME_COUNT; frame_count++) {
+            for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 std::cout << "frame_count " << frame_count << " for data_processing_index " << data_processing_index<< std::endl;
 
-                fs << "frame_count" << frame_count;
-               
+
                 std::vector<cv::Point2f> frame_collision_points;
                 std::vector<cv::Point2f> frame_collision_points_average;
                 std::vector<cv::Point2f> frame_line_angles;
@@ -516,7 +504,6 @@ void OpticalFlow::generate_collision_points() {
                 std::string temp_collision_image_path =
                         m_collision_obj_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
 
-                fs << "frame_count" << frame_count;
 
                 FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
@@ -580,12 +567,17 @@ void OpticalFlow::generate_collision_points() {
                         find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2,
                                 tempMatrix, frame_collision_points);
 
-                        assert(temp_line_parameters1!=lineparameters1);
+                        if ( frame_count > 0 ) {
+                            assert(temp_line_parameters1!=lineparameters1);
+                        }
 
                         frame_line_angles.push_back(cv::Point2f(temp_line_parameters1.x,lineparameters1.x));
 
 
                     } else {
+
+                        frame_collision_points.push_back(cv::Point2f(-1, -1));
+                        frame_collision_points.push_back(cv::Point2f(-1, -1));
                         std::cout << "object "
                                 << list_of_current_objects_combination.at(obj_index).first->getObjectId()
                                 << " visibility = " <<
@@ -615,6 +607,10 @@ void OpticalFlow::generate_collision_points() {
                                         ((frame_collision_points.at(i).y + frame_collision_points.at(i + 1).y) /
                                                 2)));
                     }
+                    else {
+                        /*frame_collision_points_average.push_back(
+                                cv::Point2f(-1,-1));*/
+                    }
                 }
 
                 //Create png Matrix with 3 channels: x mean_displacement. y displacment and ObjectId
@@ -624,7 +620,6 @@ void OpticalFlow::generate_collision_points() {
                             F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
                             F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
                             F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
-                            //position.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
                         }
                     }
                 }
@@ -642,6 +637,7 @@ void OpticalFlow::generate_collision_points() {
         m_list_frame_skip_collision_points.push_back(outer_frame_skip_collision_points);
         m_list_frame_skip_line_angles.push_back(outer_frame_skip_line_angles);
     }
+
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
