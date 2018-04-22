@@ -10,7 +10,7 @@ import cv2
 import numpy
 from matplotlib import pyplot as plt
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import axes3d
 import scipy
 from scipy.interpolate import griddata
 import matplotlib as mp
@@ -503,7 +503,8 @@ class Graph(object):
         self.color_index = 0
 
         if ( self.number_of_plots >= 1 ):
-            self.fig1 = plt.figure()
+            self.fig1 = plt.figure(figsize=plt.figaspect(0.5))
+            #self.ax = axes3d(self.fig1)
             plot1 = self.fig1.add_subplot(111)
             self.list_of_plots.append(plot1)
 
@@ -524,6 +525,10 @@ class Graph(object):
 
         #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
 
+
+    def plot_3d(self, plot_configuration_list):
+
+        self.ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
 
 
     def plot_all(self, plot_configuration_list):
@@ -621,143 +626,70 @@ class YAMLParser(object):
 
 def scenario_displacement_occurence():
 
+
     offset=1
     offset_index=0
 
     yaml_file_handle = YAMLParser(file)
     yaml_load = yaml_file_handle.load()
 
-
-    delete_point_array = np.array([-65535])
-    for no_of_metrics in range(1): # generated
-
-        dev0_gt_mean = 0
-
-        for x in range(1):
-
-            scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[offset_index+x]]
-            print "displacement_occurence index no noise" , offset_index+x
-            displacement_occurence = list()
-            for count in range(len(scenario_displacement_occurence)-offset):
-                xy = list()
-                xy.append(scenario_displacement_occurence[offset + count]["x"])
-                xy.append(scenario_displacement_occurence[offset + count]["y"])
-                displacement_occurence.append(xy)
-            data = np.array(displacement_occurence)
-            if ( x == 0):
-                x0_gt, y0_gt = data.T
-                x0_gt = np.setdiff1d(x0_gt, delete_point_array)
-                y0_gt = np.setdiff1d(y0_gt, delete_point_array)
-
-        dev0_gt_mean_list = list()
-
-        for n,i in enumerate(dev0_gt):
-            dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
-
-        dev0_gt_mean = dev0_gt_mean/(n+1)
-        dev0_gt_mean_list.append(dev0_gt_mean)
-
-    dev0_mean_list = list()
-
-    for no_of_metrics in range(1): # none
-
-        dev0_mean = 0
-
-        for x in range(1):
-
-            scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[offset_index+1+x]]
-            print "displacement_occurence index no noise dataprocessing" , offset_index+x
-            displacement_occurence = list()
-            for count in range(len(scenario_displacement_occurence)-offset):
-                xy = list()
-                xy.append(scenario_displacement_occurence[offset + count]["x"])
-                xy.append(scenario_displacement_occurence[offset + count]["y"])
-                displacement_occurence.append(xy)
-            data = np.array(displacement_occurence)
-            if ( x == 0):
-                x0, y0 = data.T
-                x0 = np.setdiff1d(x0, delete_point_array)
-                y0 = np.setdiff1d(y0, delete_point_array)
-                dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
-
-            frame_count = np.arange(0.0, len(x0_gt), 1)
-
-        for n,i in enumerate(dev0):
-            if ( abs(i) > OUTLIER):
-                dev0[n] = dev0[n-1]
-                if ( n == 0 ):
-                    dev0[n] = 0
-            dev0_mean=(dev0_mean+dev0[n])
-
-
-    displacement_occurenceplot0.plot(frame_count, y0_gt/SCALE, 'ko-', lw=1, color=color_of_displacement_occurence_metrics[0+no_of_metrics], label=list_of_displacement_occurence_metrics[0+no_of_metrics])
-    #displacement_occurenceplot1.legend()
-    displacement_occurenceplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-    index_x0_gt_sorted = np.argsort(x0_gt)
-    print x0
-    print index_x0_gt_sorted
-
-
-    offset_index=offset_index+4
-
-    dev0_mean = dev0_mean/(n+1)
-    dev0_mean_list.append(dev0_mean)
-
-    print "Table 3 " + environment_list[no_of_metrics]
-    print dev0_gt_mean_list[no_of_metrics]/SCALE
-    print dev0_mean_list[no_of_metrics]/SCALE
-
-
+    #ax = fig.add_subplot(111, projection='3d')
     fig1 = plt.figure()
-    ax = Axes3D(fig1)
+    ax1 = fig1.add_subplot(111, projection='3d')
 
-    #plt.suptitle("displacement_occurence of displacement_occurence points between ground truth and scenes without noise")
+    fig2 = plt.figure()
+    ax2 = fig2.add_subplot(111, projection='3d')
 
-    displacement_occurenceplot0 = fig1.add_subplot(111)
-
-    #displacement_occurenceplot0.set_title('scenario_displacement_occurenceframe_skip1_dataprocessing_0')
-
-    displacement_occurenceplot0.set_xlabel('frame_count')
-    displacement_occurenceplot0.set_ylabel('displacement_occurence [no_noise_points-groundtruth_points]')
-
-    legend = displacement_occurenceplot0.legend(loc='center right', shadow=True, fontsize='x-small')
+    X, Y, Z = axes3d.get_test_data(0.1)
+    #ax.plot_wireframe(X, Y, Z, rstride=5, cstride=5)
 
 
-    #fig2.set_size_inches(18.5, 10.5)
-    #DEV_MAX = max(numpy.amax(dev0_gt/SCALE), numpy.amax(dev0/SCALE), numpy.amax(dev1/SCALE), numpy.amax(dev2/SCALE), numpy.amax(dev3/SCALE)) + 100
-    #Y_MAX = max(numpy.amax(y0_gt/SCALE), numpy.amax(y0/SCALE), numpy.amax(y1/SCALE), numpy.amax(y2/SCALE), numpy.amax(y3/SCALE)) + 100
-    #Y_MIN = max(numpy.amin(y0_gt/SCALE), numpy.amin(y0/SCALE), numpy.amin(y1/SCALE), numpy.amin(y2/SCALE), numpy.amin(y3/SCALE)) - 100
-    displacement_occurenceplot0.set_ylim([0, 100])
-    #plt.show()
-    fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
+    for x in range(2): # generated
+
+        scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[x]]
+        occurences = list()
+        for count in range(len(scenario_displacement_occurence)):
+            xyz = list()
+            xyz.append(scenario_displacement_occurence[count]["x"])
+            xyz.append(scenario_displacement_occurence[count]["y"])
+            xyz.append(scenario_displacement_occurence[count]["occurence"])
+            occurences.append(xyz)
+
+        data = np.array(occurences)
+
+        if ( x == 0 ):
+            x_gt, y_gt, occurence_gt = data.T
+            print x_gt
+        if ( x == 1 ):
+            x, y, occurence = data.T
 
 
 
-    ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
-    plt.show()
 
-    fig = plt.figure(figsize=plt.figaspect(0.5))
-    ax = fig.add_subplot(1, 2, 1, projection='3d')
-    # note this: you can skip rows!
-    my_data = np.genfromtxt('file1.csv', delimiter=',', skiprows=1)
-    X = my_data[:,0]
-    Y = my_data[:,1]
-    Z = my_data[:,2]
+    ax1.set_xlabel('X Label')
+    ax1.set_ylabel('Y Label')
+    ax1.set_zlabel('Z Label')
 
-    xi = np.linspace(X.min(),X.max(),100)
-    yi = np.linspace(Y.min(),Y.max(),100)
-    # VERY IMPORTANT, to tell matplotlib how is your data organized
-    zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='cubic')
+    ax1.set_xlim([numpy.amin(x_gt), numpy.amax(x_gt)])
+    ax1.set_ylim([numpy.amin(y_gt), numpy.amax(y_gt)])
+    ax1.set_zlim([0, numpy.amax(occurence_gt)])
 
-    CS = plt.contour(xi,yi,zi,15,linewidths=0.5,color='k')
-    ax = fig.add_subplot(1, 2, 2, projection='3d')
+    ax2.set_xlim([numpy.amin(x), numpy.amax(x)])
+    ax2.set_ylim([numpy.amin(y), numpy.amax(y)])
 
-    xig, yig = np.meshgrid(xi, yi)
+    print numpy.amin(x_gt)
+    print numpy.amax(x_gt)
 
-    surf = ax.plot_surface(xig, yig, zi, linewidth=0)
+    #ax1.set_ylim([-10,10])
 
-    plt.show()
+    ax1.bar(x_gt, y_gt, occurence_gt)#, zdir='y', color='r', alpha=0.8 )
+    ax2.plot_wireframe(x, y, occurence)
+
+
+    graph = Graph(1)
+    fig1.savefig(output_folder + '3d_plot_gt.png', dpi= 200)
+    fig2.savefig(output_folder + '3d_plot_algo.png', dpi= 200)
+
 
 
 
@@ -768,10 +700,11 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    motionflow_pixelgraphs_no_noise()
-    motionflow_pixelgraphs_noise()
-    motionflow_vectorgraphs_no_noise()
-    motionflow_vectorgraphs_noise()
+    scenario_displacement_occurence()
+    #motionflow_pixelgraphs_no_noise()
+    #motionflow_pixelgraphs_noise()
+    #motionflow_vectorgraphs_no_noise()
+    #motionflow_vectorgraphs_noise()
 
     #histogramm()
 

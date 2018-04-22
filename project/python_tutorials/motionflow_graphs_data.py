@@ -40,6 +40,8 @@ assert(len(list_of_shape_metrics_noise)/4 == len(color_of_shape_metrics_noise))
 
 
 
+
+
 list_of_collision_metrics_no_noise = [
     "collision_pointsframe_skip1_dataprocessing_0_generated",
     "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
@@ -84,5 +86,6 @@ list_of_displacement_occurence_metrics = [
     "scenario_displacement_occurenceframe_skip1_dataprocessing_0_generated",
     "scenario_displacement_occurenceframe_skip1_dataprocessing_0results_FB_none_",
 ]
+
 color_of_displacement_occurence_metrics = ["blue", "red"]
 assert(len(list_of_displacement_occurence_metrics) == len(color_of_displacement_occurence_metrics))

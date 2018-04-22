@@ -16,8 +16,7 @@ scenario_displacement_occurenceframe_skip1_dataprocessing_0_generated:
    - { x: 0., y: 0., occurence: 6360 }
    - { x: 5.9000000953674316e+00, y: 0., occurence: 6130 }
    - { x: 6., y: 0., occurence: 18491 }
-   - { x: 65535., y: 65535., occurence: 10 }
-collision_pointsframe_skip1_dataprocessing_0_generated: 
+collision_pointsframe_skip1_dataprocessing_0_generated:
    - { x: -65535., y: -65535. }
    - { x: 1.7590437500000000e+04, y: -4.0698968505859375e+02 }
    - { x: 1.7572546875000000e+04, y: -4.0858154296875000e+02 }
@@ -982,8 +981,7 @@ scenario_displacement_occurenceframe_skip1_dataprocessing_0results_FB_none_:
    - { x: 1.0800000190734863e+01, y: 2.5999999046325684e+00, occurence: 1 }
    - { x: 1.0800000190734863e+01, y: 2.7999999523162842e+00, occurence: 1 }
    - { x: 1.1199999809265137e+01, y: 3.2000000476837158e+00, occurence: 1 }
-   - { x: 65535., y: 65535., occurence: 4639 }
-shape_pointsframe_skip1_dataprocessing_1results_FB_none_: 
+shape_pointsframe_skip1_dataprocessing_1results_FB_none_:
    - { good_pixels: 0., total_pixels: 3180. }
    - { good_pixels: 5.0850000000000000e+02, total_pixels: 3165. }
    - { good_pixels: 498., total_pixels: 3.1495000000000000e+03 }

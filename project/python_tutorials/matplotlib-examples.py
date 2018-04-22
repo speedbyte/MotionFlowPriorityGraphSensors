@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # _*_ encoding=utf-8 _*_
 
+from mpl_toolkits.mplot3d import axes3d
+
 import yaml
 import io
 import math
@@ -75,20 +77,19 @@ def histogram_image():
 #         plt.xlim([0,256])
     plt.show()
 
-def threedplot():
-
+def boundingbox():
     fig = plt.figure()
     ax = Axes3D(fig)
 
     list_box_points = list(
-    [-59.574017, 2470.1152, 9.5,
-    -61.094013, 2470.1152, 9.5,
-    -59.574017, 2467.6011, 9.5,
-    -61.094013, 2467.6011, 9.5,
-    -59.574017, 2470.1152, 10.98,
-    -61.094013, 2470.1152, 10.98,
-    -59.574017, 2467.6011, 10.98,
-    -61.094013, 2467.6011, 10.98])
+        [-59.574017, 2470.1152, 9.5,
+         -61.094013, 2470.1152, 9.5,
+         -59.574017, 2467.6011, 9.5,
+         -61.094013, 2467.6011, 9.5,
+         -59.574017, 2470.1152, 10.98,
+         -61.094013, 2470.1152, 10.98,
+         -59.574017, 2467.6011, 10.98,
+         -61.094013, 2467.6011, 10.98])
     sequence_containing_x_vals = list()
     sequence_containing_y_vals = list()
     sequence_containing_z_vals = list()
@@ -112,29 +113,24 @@ def threedplot():
     ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
     plt.show()
 
-    fig = plt.figure(figsize=plt.figaspect(0.5))
-    ax = fig.add_subplot(1, 2, 1, projection='3d')
-    # note this: you can skip rows!
-    my_data = np.genfromtxt('file1.csv', delimiter=',', skiprows=1)
-    X = my_data[:,0]
-    Y = my_data[:,1]
-    Z = my_data[:,2]
-    
-    xi = np.linspace(X.min(),X.max(),100)
-    yi = np.linspace(Y.min(),Y.max(),100)
-    # VERY IMPORTANT, to tell matplotlib how is your data organized
-    zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='cubic')
-    
-    CS = plt.contour(xi,yi,zi,15,linewidths=0.5,color='k')
-    ax = fig.add_subplot(1, 2, 2, projection='3d')
-    
-    xig, yig = np.meshgrid(xi, yi)
-    
-    surf = ax.plot_surface(xig, yig, zi,
-            linewidth=0)
-    
-    plt.show()
-    
+
+def threedplot():
+
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+    # load some test data for demonstration and plot a wireframe
+    X, Y, Z = axes3d.get_test_data(0.1)
+    ax.plot_wireframe(X, Y, Z, rstride=5, cstride=5)
+
+    # rotate the axes and update
+    for angle in range(0, 360):
+        ax.view_init(30, angle)
+        plt.draw()
+        plt.pause(.001)
+
+
 def sphere():
     npoints=100
     fig = plt.figure()
@@ -316,6 +312,7 @@ if __name__ == '__main__':
     #cam()
     #histogram_image()
     threedplot()
+    #boundingbox()
     #sphere()
     #criticalpoint()
     #lemniscate()
