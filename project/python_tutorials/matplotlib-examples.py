@@ -11,14 +11,12 @@ import numpy
 from matplotlib import pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
 import scipy
 from scipy.interpolate import griddata
 import matplotlib as mp
 from math import pi
 
 import random
-from matplotlib import pyplot
 from mpl_toolkits.mplot3d import Axes3D
 import random
 
@@ -79,7 +77,7 @@ def histogram_image():
 
 def threedplot():
 
-    fig = pyplot.figure()
+    fig = plt.figure()
     ax = Axes3D(fig)
 
     list_box_points = list(
@@ -112,7 +110,7 @@ def threedplot():
     #random.shuffle(sequence_containing_z_vals)
 
     ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
-    pyplot.show()
+    plt.show()
 
     fig = plt.figure(figsize=plt.figaspect(0.5))
     ax = fig.add_subplot(1, 2, 1, projection='3d')

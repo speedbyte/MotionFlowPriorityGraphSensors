@@ -11,13 +11,14 @@ import numpy
 from matplotlib import pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
 import scipy
 from scipy.interpolate import griddata
 import matplotlib as mp
 from math import pi
 
 import random
+
+from motionflow_graphs_data import *
 
 dataset = "vires"
 scenario = "two"
@@ -80,54 +81,18 @@ def motionflow_pixelgraphs_no_noise(): ##done
     offset=1
     offset_index=0
 
-    yaml_file = open(file, "r")
-    check = yaml_file.readline()
-    print check
-    if ("YAML:1.0" in check ):
-        read_yaml_file = yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
-        read_yaml_file = read_yaml_file.replace(':', ': ')
-        yaml_file.close()
-        yaml_file = open(file, "w")
-        yaml_file.write(read_yaml_file)
+    yaml_file_handle = YAMLParser(file)
+    yaml_load = yaml_file_handle.load()
 
-    yaml_file.close()
-
-    fig2 = plt.figure()
-    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
-
-    shapeplot0 = fig2.add_subplot(111)
-
-    #shapeplot0.set_title('shape_pointsframe_skip1_dataprocessing_0')
-
-    shapeplot0.set_xlabel('frame_count')
-    shapeplot0.set_ylabel('no_noise_good_pixels/no_noise_total_pixels')
-
-    shapeplot0.set_ylim([0, 1])
-    legend = shapeplot0.legend(loc='center right', shadow=True, fontsize='x-small')
-
-    yaml_load = yaml.load(open(file))
-
-
-    list_of_shape_metrics = [
-        "shape_pointsframe_skip1_dataprocessing_0_generated",
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_none_",
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_none_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
-    ]
-
-    color_of_shape_metrics = ["red", "green", "yellow", "black"]
-
-    #assert(len(list_of_shape_metrics)/1 == len(color_of_shape_metrics))
-
-    num=0
+    graph = Graph(1)
 
     for no_of_metrics in range(1): #generated
 
         for x in range(1):
 
-            shape_points = yaml_load[list_of_shape_metrics[offset_index+x]]
+            shape_points = yaml_load[list_of_shape_metrics_no_noise[offset_index+x]]
             shape = list()
+            frame_count = np.arange(0.0, len(shape_points)-1, 1)
             for count in range(len(shape_points)-offset):
                 xy = list()
                 xy.append(shape_points[offset + count]["good_pixels"])
@@ -138,8 +103,6 @@ def motionflow_pixelgraphs_no_noise(): ##done
                 x0_gt, y0_gt = data.T
                 y0_gt = x0_gt/y0_gt
 
-            x0 = np.arange(0.0, 4.0, 1)
-
     y0_mean_list = list()
     y1_mean_list = list()
     y2_mean_list = list()
@@ -154,7 +117,7 @@ def motionflow_pixelgraphs_no_noise(): ##done
 
         for x in range(4):
 
-            shape_points = yaml_load[list_of_shape_metrics[offset_index+1+x]]
+            shape_points = yaml_load[list_of_shape_metrics_no_noise[offset_index+1+x]]
             shape = list()
             for count in range(len(shape_points)-offset):
                 xy = list()
@@ -175,7 +138,6 @@ def motionflow_pixelgraphs_no_noise(): ##done
                 x3, y3 = data.T
                 y3 = x3/y3
 
-            x0 = np.arange(0.0, len(shape_points)-1, 1)
 
         for n,i in enumerate(y0):
             y0_mean=y0_mean+i
@@ -194,21 +156,6 @@ def motionflow_pixelgraphs_no_noise(): ##done
         y2_mean_list.append(y2_mean)
         y3_mean_list.append(y3_mean)
 
-        shapeplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
-        #shapeplot1.legend()
-        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        shapeplot0.plot(x0, y1, 'ko-', lw=1, color=color_of_shape_metrics[1+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
-        #shapeplot1.legend()
-        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        shapeplot0.plot(x0, y2, 'ko-', lw=1, color=color_of_shape_metrics[2+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
-        #shapeplot1.legend()
-        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        shapeplot0.plot(x0, y3, 'ko-', lw=1, color=color_of_shape_metrics[3+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
-        #shapeplot1.legend()
-        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
         offset_index=offset_index+4
 
@@ -218,9 +165,18 @@ def motionflow_pixelgraphs_no_noise(): ##done
         print y2_mean_list[no_of_metrics]
         print y3_mean_list[no_of_metrics]
 
-    #fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig(output_folder + 'pixel_robustness_optical_flow.png', bbox_inches='tight',dpi=200)
-#    plt.close('all')
+    plot_1 = ('frame_count',
+              'no_noise_good_pixels/no_noise_total_pixels',
+              [frame_count, frame_count, frame_count, frame_count, frame_count],
+              [y0_gt, y0, y1, y2, y3],
+              color_of_shape_metrics_no_noise,
+              list_of_shape_metrics_no_noise,
+              "shape_pointsframe_skip1_dataprocessing_0"
+              )
+    graph.plot_all([plot_1])
+
+    graph.plot_show_shape_no_noise()
+
 
 
 def motionflow_pixelgraphs_noise():
@@ -228,90 +184,17 @@ def motionflow_pixelgraphs_noise():
     offset=1
     offset_index=0
 
+    yaml_file_handle = YAMLParser(file)
+    yaml_load = yaml_file_handle.load()
+
     print "Start Noise "
-    yaml_file = open(file, "r")
-    check = yaml_file.readline()
-    print check
-    if ("YAML:1.0" in check ):
-        read_yaml_file = yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
-        read_yaml_file = read_yaml_file.replace(':', ': ')
-        yaml_file.close()
-        yaml_file = open(file, "w")
-        yaml_file.write(read_yaml_file)
 
-    yaml_file.close()
-
-    fig0 = plt.figure()
-    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
-    fig1 = plt.figure()
-    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
-    fig2 = plt.figure()
-    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
-    fig3 = plt.figure()
-    #plt.suptitle("Ratio of good pixels to total found no noise stencil pixels")
-
-    shapeplot0 = fig0.add_subplot(111)
-    shapeplot1 = fig1.add_subplot(111)
-    shapeplot2 = fig2.add_subplot(111)
-    shapeplot3 = fig3.add_subplot(111)
-
-    #shapeplot0.set_title('shape_pointsframe_skip1_dataprocessing_0')
-    #shapeplot1.set_title('shape_pointsframe_skip1_dataprocessing_1')
-    #shapeplot2.set_title('shape_pointsframe_skip1_dataprocessing_2')
-    #shapeplot3.set_title('shape_pointsframe_skip1_dataprocessing_3')
-
-    shapeplot0.set_xlabel('frame_count')
-    shapeplot0.set_ylabel('noise_good_pixels/no_noise_total_pixels')
-    shapeplot1.set_xlabel('frame_count')
-    shapeplot1.set_ylabel('noise_good_pixels/no_noise_total_pixels')
-    shapeplot2.set_xlabel('frame_count')
-    shapeplot2.set_ylabel('noise_good_pixels/no_noise_total_pixels')
-    shapeplot3.set_xlabel('frame_count')
-    shapeplot3.set_ylabel('noise_good_pixels/no_noise_total_pixels')
-
-    shapeplot0.set_ylim([0, 1])
-    shapeplot1.set_ylim([0, 1])
-    shapeplot2.set_ylim([0, 1])
-    shapeplot3.set_ylim([0, 1])
-    legend = shapeplot1.legend(loc='center right', shadow=True, fontsize='x-small')
-
-    yaml_load = yaml.load(open(file))
-
-    list_of_shape_metrics = [
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_none_",
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_none_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
-
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_light_snow_",
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_light_snow_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_light_snow_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_light_snow_",
-
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_mild_snow_",
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_mild_snow_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_mild_snow_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_mild_snow_",
-
-        "shape_pointsframe_skip1_dataprocessing_0results_FB_heavy_snow_",
-        "shape_pointsframe_skip1_dataprocessing_1results_FB_heavy_snow_",
-        "shape_pointsframe_skip1_dataprocessing_2results_FB_heavy_snow_",
-        "shape_pointsframe_skip1_dataprocessing_3results_FB_heavy_snow_",
-
-    ]
-
-    color_of_shape_metrics = ["red", "green", "yellow", "black"]
-
-    assert(len(list_of_shape_metrics)/4 == len(color_of_shape_metrics))
-    print "Länge", len(list_of_shape_metrics)/4
-
-    num=0
     y0_mean_list = list()
     y1_mean_list = list()
     y2_mean_list = list()
     y3_mean_list = list()
 
-    for no_of_metrics in range(len(environment_list)): #none, night
+    for no_of_metrics in range(len(environment_list)):
 
         y0_mean = 0
         y1_mean = 0
@@ -320,7 +203,8 @@ def motionflow_pixelgraphs_noise():
 
         for x in range(4):
 
-            shape_points = yaml_load[list_of_shape_metrics[offset_index+x]]
+            shape_points = yaml_load[list_of_shape_metrics_noise[offset_index+x]]
+            frame_count = np.arange(0.0, len(shape_points)-1, 1)
             shape = list()
             for count in range(len(shape_points)-offset):
                 xy = list()
@@ -331,17 +215,58 @@ def motionflow_pixelgraphs_noise():
             if ( x == 0):
                 x0, y0 = data.T
                 y0 = x0/y0
+                plot1 = ('frame_count',
+                         'noise_good_pixels/no_noise_total_pixels',
+                         [frame_count],
+                         y0,
+                         color_of_shape_metrics_noise,
+                         list_of_shape_metrics_noise,
+                         "shape_pointsframe_skip1_dataprocessing_0"
+                         )
             if ( x == 1):
                 x1, y1 = data.T
                 y1 = x1/y1
+                plot2 = ('frame_count',
+                         'noise_good_pixels/no_noise_total_pixels',
+                         [frame_count],
+                         y1,
+                         color_of_shape_metrics_noise,
+                         list_of_shape_metrics_noise,
+                         "shape_pointsframe_skip1_dataprocessing_1"
+                         )
             if ( x == 2):
                 x2, y2 = data.T
                 y2 = x2/y2
+                plot3 = ('frame_count',
+                         'noise_good_pixels/no_noise_total_pixels',
+                         [frame_count],
+                         y2,
+                         color_of_shape_metrics_noise,
+                         list_of_shape_metrics_noise,
+                         "shape_pointsframe_skip1_dataprocessing_2"
+                         )
             if ( x == 3):
                 x3, y3 = data.T
                 y3 = x3/y3
+                plot4 = ('frame_count',
+                         'noise_good_pixels/no_noise_total_pixels',
+                         [frame_count],
+                         y3,
+                         color_of_shape_metrics_noise,
+                         list_of_shape_metrics_noise,
+                         "shape_pointsframe_skip1_dataprocessing_3"
+                         )
 
-            x0 = np.arange(0.0, len(shape_points)-1, 1)
+        graph = Graph(
+
+        )
+
+        graph.plot_all([plot1, plot2, plot3, plot4])
+
+        offset_index=offset_index+4
+
+
+
 
         for n,i in enumerate(y0):
             y0_mean=y0_mean+i
@@ -360,41 +285,19 @@ def motionflow_pixelgraphs_noise():
         y2_mean_list.append(y2_mean)
         y3_mean_list.append(y3_mean)
 
-        shapeplot0.plot(x0, y0, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
-        #shapeplot1.legend()
-        shapeplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+    graph.plot_show_noise()
 
 
-        shapeplot1.plot(x0, y1, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
-        #shapeplot1.legend()
-        shapeplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+    print "Table 2 " + environment_list[no_of_metrics]
+    print y0_mean_list[no_of_metrics]
+    print y1_mean_list[no_of_metrics]
+    print y2_mean_list[no_of_metrics]
+    print y3_mean_list[no_of_metrics]
 
-        shapeplot2.plot(x0, y2, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
-        #shapeplot1.legend()
-        shapeplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        shapeplot3.plot(x0, y3, 'ko-', lw=1, color=color_of_shape_metrics[0+no_of_metrics], label=list_of_shape_metrics[0+no_of_metrics])
-        #shapeplot1.legend()
-        shapeplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        offset_index=offset_index+4
 
-        print "Table 2 " + environment_list[no_of_metrics]
-        print y0_mean_list[no_of_metrics]
-        print y1_mean_list[no_of_metrics]
-        print y2_mean_list[no_of_metrics]
-        print y3_mean_list[no_of_metrics]
-
-# fig0.set_size_inches(18.5, 10.5)
-    fig0.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_0',bbox_inches='tight', dpi=200)
-   # fig1.set_size_inches(18.5, 10.5)
-    fig1.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
-   # fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
-   # fig3.set_size_inches(18.5, 10.5)
-    fig3.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
-
- #   plt.close("all")
 
 def motionflow_vectorgraphs_no_noise():
 
@@ -402,235 +305,159 @@ def motionflow_vectorgraphs_no_noise():
     offset=1
     offset_index=0
 
-    yaml_file = open(file, "r")
-    check = yaml_file.readline()
-    print check
-    if ("YAML:1.0" in check ):
-        read_yaml_file = yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
-        read_yaml_file = read_yaml_file.replace(':', ': ')
-        yaml_file.close()
-        yaml_file = open(file, "w")
-        yaml_file.write(read_yaml_file)
-
-    yaml_file.close()
-
-    fig1 = plt.figure()
-    fig2 = plt.figure()
-    #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
-
-    deviationplot0 = fig1.add_subplot(111)
-    collisionplot0 = fig2.add_subplot(111)
-
-    #deviationplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
-
-    deviationplot0.set_xlabel('frame_count')
-    deviationplot0.set_ylabel('deviation [no_noise_points-groundtruth_points]')
-
-    collisionplot0.set_xlabel('X')
-    collisionplot0.set_ylabel('Y')
-
-    legend = deviationplot0.legend(loc='center right', shadow=True, fontsize='x-small')
-
-    yaml_load = yaml.load(open(file))
-
-    list_of_collision_metrics = [
-        "collision_pointsframe_skip1_dataprocessing_0_generated",
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
-    ]
-
-    color_of_collision_metrics = ["blue", "red", "green", "yellow", "black"]
-
-    assert(len(list_of_collision_metrics) == len(color_of_collision_metrics))
-
-    num=0
+    yaml_file_handle = YAMLParser(file)
+    yaml_load = yaml_file_handle.load()
 
     delete_point_array = np.array([-65535])
-    for no_of_metrics in range(1): # generated
 
-        dev0_gt_mean = 0
+    collision_points = yaml_load[list_of_collision_metrics_no_noise[offset_index]]
+    collision = list()
+    for count in range(len(collision_points)-offset):
+        xy = list()
+        xy.append(collision_points[offset + count]["x"])
+        xy.append(collision_points[offset + count]["y"])
+        collision.append(xy)
 
-        for x in range(1):
+    data = np.array(collision)
+    x0_gt, y0_gt = data.T
+    x0_gt = np.setdiff1d(x0_gt, delete_point_array)
+    y0_gt = np.setdiff1d(y0_gt, delete_point_array)
+    dev0_gt = numpy.sqrt((x0_gt - x0_gt) ** 2 + (y0_gt - y0_gt) ** 2)
 
-            collision_points = yaml_load[list_of_collision_metrics[offset_index+x]]
-            print "collision index no noise" , offset_index+x
-            collision = list()
-            for count in range(len(collision_points)-offset):
-                xy = list()
-                xy.append(collision_points[offset + count]["x"])
-                xy.append(collision_points[offset + count]["y"])
-                collision.append(xy)
-            data = np.array(collision)
-            if ( x == 0):
-                x0_gt, y0_gt = data.T
-                x0_gt = np.setdiff1d(x0_gt, delete_point_array)
-                y0_gt = np.setdiff1d(y0_gt, delete_point_array)
-                dev0_gt = numpy.sqrt((x0_gt - x0_gt) ** 2 + (y0_gt - y0_gt) ** 2)
 
-        dev0_gt_mean_list = list()
+    offset_index=0
 
-        for n,i in enumerate(dev0_gt):
-            dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
+    for x in range(4):
 
-        dev0_gt_mean = dev0_gt_mean/(n+1)
-        dev0_gt_mean_list.append(dev0_gt_mean)
+        collision_points = yaml_load[list_of_collision_metrics_no_noise[offset_index+1+x]]
+        collision = list()
+        for count in range(len(collision_points)-offset):
+            xy = list()
+            xy.append(collision_points[offset + count]["x"])
+            xy.append(collision_points[offset + count]["y"])
+            collision.append(xy)
+        data = np.array(collision)
+        if ( x == 0):
+            x0, y0 = data.T
+            x0 = np.setdiff1d(x0, delete_point_array)
+            y0 = np.setdiff1d(y0, delete_point_array)
+            dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
+        if ( x == 1):
+            x1, y1 = data.T
+            x1 = np.setdiff1d(x1, delete_point_array)
+            y1 = np.setdiff1d(y1, delete_point_array)
+            dev1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
+        if ( x == 2):
+            x2, y2 = data.T
+            x2 = np.setdiff1d(x2, delete_point_array)
+            y2 = np.setdiff1d(y2, delete_point_array)
+            dev2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
+        if ( x == 3):
+            x3, y3 = data.T
+            x3 = np.setdiff1d(x3, delete_point_array)
+            y3 = np.setdiff1d(y3, delete_point_array)
+            dev3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
+
+    offset_index=offset_index+4
+
+
+
+    dev0_gt_mean = 0
+    dev0_mean = 0
+    dev1_mean = 0
+    dev2_mean = 0
+    dev3_mean = 0
+
+    for n,i in enumerate(dev0):
+        if ( abs(i) > OUTLIER):
+            dev0[n] = dev0[n-1]
+            if ( n == 0 ):
+                dev0[n] = 0
+        dev0_mean=(dev0_mean+dev0[n])
+        #dev0_mean=(dev0_mean+dev0[n])/2
+        #dev0[n] = dev0_mean
+    for n,i in enumerate(dev1):
+        if ( i > OUTLIER):
+            dev1[n] = dev1[n-1]
+        dev1_mean=(dev1_mean+dev1[n])
+        #dev1_mean=(dev1_mean+dev1[n])/2
+        #dev1[n] = dev1_mean
+    for n,i in enumerate(dev2):
+        if ( i > OUTLIER):
+            dev2[n] = dev2[n-1]
+        dev2_mean=(dev2_mean+dev2[n])
+        #dev2_mean=(dev2_mean+dev2[n])/2
+        #dev2[n] = dev2_mean
+    for n,i in enumerate(dev3):
+        if ( i > OUTLIER):
+            dev3[n] = dev3[n-1]
+        dev3_mean=(dev3_mean+dev3[n])
+        #dev3_mean=(dev3_mean+dev3[n])/2
+        #dev3[n] = dev3_mean
+
+
+    index_x0_gt_sorted = np.argsort(x0_gt)
+    index_x0_sorted = np.argsort(x0)
+    index_x1_sorted = np.argsort(x1)
+    index_x2_sorted = np.argsort(x2)
+    index_x3_sorted = np.argsort(x3)
+    print x0
+    print index_x0_gt_sorted
+
+    dev0_gt_mean_list = list()
+
+    for n,i in enumerate(dev0_gt):
+        dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
+
+    dev0_gt_mean = dev0_gt_mean/(n+1)
+    dev0_gt_mean_list.append(dev0_gt_mean)
 
     dev0_mean_list = list()
     dev1_mean_list = list()
     dev2_mean_list = list()
     dev3_mean_list = list()
 
-    for no_of_metrics in range(1): # none
+    dev0_mean = dev0_mean/(n+1)
+    dev1_mean = dev1_mean/(n+1)
+    dev2_mean = dev2_mean/(n+1)
+    dev3_mean = dev3_mean/(n+1)
+    dev0_mean_list.append(dev0_mean)
+    dev1_mean_list.append(dev1_mean)
+    dev2_mean_list.append(dev2_mean)
+    dev3_mean_list.append(dev3_mean)
 
-        dev0_mean = 0
-        dev1_mean = 0
-        dev2_mean = 0
-        dev3_mean = 0
+    print "Table 3 " + environment_list[0]
+    print dev0_gt_mean_list[0]/SCALE
+    print dev0_mean_list[0]/SCALE
+    print dev1_mean_list[0]/SCALE
+    print dev2_mean_list[0]/SCALE
+    print dev3_mean_list[0]/SCALE
 
-        for x in range(4):
-
-            collision_points = yaml_load[list_of_collision_metrics[offset_index+1+x]]
-            print "collision index no noise dataprocessing" , offset_index+x
-            collision = list()
-            for count in range(len(collision_points)-offset):
-                xy = list()
-                xy.append(collision_points[offset + count]["x"])
-                xy.append(collision_points[offset + count]["y"])
-                collision.append(xy)
-            data = np.array(collision)
-            if ( x == 0):
-                x0, y0 = data.T
-                x0 = np.setdiff1d(x0, delete_point_array)
-                y0 = np.setdiff1d(y0, delete_point_array)
-                dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
-            if ( x == 1):
-                x1, y1 = data.T
-                x1 = np.setdiff1d(x1, delete_point_array)
-                y1 = np.setdiff1d(y1, delete_point_array)
-                dev1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
-            if ( x == 2):
-                x2, y2 = data.T
-                x2 = np.setdiff1d(x2, delete_point_array)
-                y2 = np.setdiff1d(y2, delete_point_array)
-                dev2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
-            if ( x == 3):
-                x3, y3 = data.T
-                x3 = np.setdiff1d(x3, delete_point_array)
-                y3 = np.setdiff1d(y3, delete_point_array)
-                dev3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
-
-            frame_number = np.arange(0.0, len(x0_gt), 1)
-
-        for n,i in enumerate(dev0):
-            if ( abs(i) > OUTLIER):
-                dev0[n] = dev0[n-1]
-                if ( n == 0 ):
-                    dev0[n] = 0
-            dev0_mean=(dev0_mean+dev0[n])
-            #dev0_mean=(dev0_mean+dev0[n])/2
-            #dev0[n] = dev0_mean
-        for n,i in enumerate(dev1):
-            if ( i > OUTLIER):
-                dev1[n] = dev1[n-1]
-            dev1_mean=(dev1_mean+dev1[n])
-            #dev1_mean=(dev1_mean+dev1[n])/2
-            #dev1[n] = dev1_mean
-        for n,i in enumerate(dev2):
-            if ( i > OUTLIER):
-                dev2[n] = dev2[n-1]
-            dev2_mean=(dev2_mean+dev2[n])
-            #dev2_mean=(dev2_mean+dev2[n])/2
-            #dev2[n] = dev2_mean
-        for n,i in enumerate(dev3):
-            if ( i > OUTLIER):
-                dev3[n] = dev3[n-1]
-            dev3_mean=(dev3_mean+dev3[n])
-            #dev3_mean=(dev3_mean+dev3[n])/2
-            #dev3[n] = dev3_mean
+    frame_number = np.arange(0.0, len(x0_gt), 1)
 
 
-        deviationplot0.plot(frame_number, dev0_gt/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+    graph = Graph(2)
 
-        deviationplot0.plot(frame_number, dev0/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[1+no_of_metrics], label=list_of_collision_metrics[1+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+    plot1 = ('frame_count',
+             'deviation [no_noise_points-groundtruth_points]',
+             [frame_number, frame_number, frame_number, frame_number, frame_number],
+             [dev0_gt, dev0, dev1, dev2, dev3],
+             color_of_collision_metrics_no_noise,
+             list_of_collision_metrics_no_noise,
+             "deviation_pointsframe_skip1_dataprocessing_0"
+             )
 
-        deviationplot0.plot(frame_number, dev1/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[2+no_of_metrics], label=list_of_collision_metrics[2+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+    plot2 = ('X', 'Y',
+             [x0_gt, x0, x1, x2, x3],
+             [y0_gt, y0, y1, y2, y3],
+             color_of_collision_metrics_no_noise,
+             list_of_collision_metrics_no_noise,
+             "collision_pointsframe_skip1_dataprocessing_0"
+             )
 
-        deviationplot0.plot(frame_number, dev2/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[3+no_of_metrics], label=list_of_collision_metrics[3+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+    graph.plot_all([plot1, plot2])
+    graph.plot_show_no_noise()
 
-        deviationplot0.plot(frame_number, dev3/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[4+no_of_metrics], label=list_of_collision_metrics[4+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-
-        index_x0_gt_sorted = np.argsort(x0_gt)
-        index_x0_sorted = np.argsort(x0)
-        index_x1_sorted = np.argsort(x1)
-        index_x2_sorted = np.argsort(x2)
-        index_x3_sorted = np.argsort(x3)
-        print x0
-        print index_x0_gt_sorted
-
-        collisionplot0.plot(x0_gt, y0_gt/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        collisionplot0.plot(x0, y0/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[1+no_of_metrics], label=list_of_collision_metrics[1+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        collisionplot0.plot(x1, y1/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[2+no_of_metrics], label=list_of_collision_metrics[2+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        collisionplot0.plot(x2, y2/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[3+no_of_metrics], label=list_of_collision_metrics[3+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        collisionplot0.plot(x3, y3/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[4+no_of_metrics], label=list_of_collision_metrics[4+no_of_metrics])
-        #collisionplot1.legend()
-        collisionplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-
-        offset_index=offset_index+4
-
-        dev0_mean = dev0_mean/(n+1)
-        dev1_mean = dev1_mean/(n+1)
-        dev2_mean = dev2_mean/(n+1)
-        dev3_mean = dev3_mean/(n+1)
-        dev0_mean_list.append(dev0_mean)
-        dev1_mean_list.append(dev1_mean)
-        dev2_mean_list.append(dev2_mean)
-        dev3_mean_list.append(dev3_mean)
-
-        print "Table 3 " + environment_list[no_of_metrics]
-        print dev0_gt_mean_list[no_of_metrics]/SCALE
-        print dev0_mean_list[no_of_metrics]/SCALE
-        print dev1_mean_list[no_of_metrics]/SCALE
-        print dev2_mean_list[no_of_metrics]/SCALE
-        print dev3_mean_list[no_of_metrics]/SCALE
-
-    #fig2.set_size_inches(18.5, 10.5)
-    DEV_MAX = max(numpy.amax(dev0_gt/SCALE), numpy.amax(dev0/SCALE), numpy.amax(dev1/SCALE), numpy.amax(dev2/SCALE), numpy.amax(dev3/SCALE)) + 100
-    Y_MAX = max(numpy.amax(y0_gt/SCALE), numpy.amax(y0/SCALE), numpy.amax(y1/SCALE), numpy.amax(y2/SCALE), numpy.amax(y3/SCALE)) + 100
-    Y_MIN = max(numpy.amin(y0_gt/SCALE), numpy.amin(y0/SCALE), numpy.amin(y1/SCALE), numpy.amin(y2/SCALE), numpy.amin(y3/SCALE)) - 100
-    deviationplot0.set_ylim([0, DEV_MAX])
-    collisionplot0.set_ylim([Y_MIN, Y_MAX])
-    #plt.show()
-    fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
-    fig2.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
-
-
-#    plt.close("all")
 
 
 def motionflow_vectorgraphs_noise():
@@ -638,94 +465,16 @@ def motionflow_vectorgraphs_noise():
     offset=1
     offset_index=0
 
-    yaml_file = open(file, "r")
-    check = yaml_file.readline()
-    print check
-    if ("YAML:1.0" in check ):
-        read_yaml_file = yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
-        read_yaml_file = read_yaml_file.replace(':', ': ')
-        yaml_file.close()
-        yaml_file = open(file, "w")
-        yaml_file.write(read_yaml_file)
 
-    yaml_file.close()
+    yaml_file_handle = YAMLParser(file)
+    yaml_load = yaml_file_handle.load()
 
-    fig0 = plt.figure()
-    #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
-
-    fig1 = plt.figure()
-    #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
-
-    fig2 = plt.figure()
-    #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
-
-    fig3 = plt.figure()
-    #plt.suptitle("Deviation of collision points between scenes without noise and scenes with noise")
-
-    deviationplot0 = fig0.add_subplot(111)
-    deviationplot1 = fig1.add_subplot(111)
-    deviationplot2 = fig2.add_subplot(111)
-    deviationplot3 = fig3.add_subplot(111)
-
-    #deviationplot0.set_title('collision_pointsframe_skip1_dataprocessing_0')
-    #deviationplot1.set_title('collision_pointsframe_skip1_dataprocessing_1')
-    #deviationplot2.set_title('collision_pointsframe_skip1_dataprocessing_2')
-    #deviationplot3.set_title('collision_pointsframe_skip1_dataprocessing_3')
-
-    deviationplot0.set_xlabel('frame_count')
-    deviationplot0.set_ylabel('deviation noise_points-no_noise_points')
-    deviationplot1.set_xlabel('frame_count')
-    deviationplot1.set_ylabel('deviation noise_points-no_noise_points')
-    deviationplot2.set_xlabel('frame_count')
-    deviationplot2.set_ylabel('deviation noise_points-no_noise_points')
-    deviationplot3.set_xlabel('frame_count')
-    deviationplot3.set_ylabel('deviation noise_points-no_noise_points')
-
-    deviationplot0.set_ylim([0, OUTLIER])
-    deviationplot1.set_ylim([0, OUTLIER])
-    deviationplot2.set_ylim([0, OUTLIER])
-    deviationplot3.set_ylim([0, OUTLIER])
-    legend = deviationplot1.legend(loc='center right', shadow=True, fontsize='x-small')
-
-    yaml_load = yaml.load(open(file))
-
-    list_of_collision_metrics = [
-
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
-
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_light_snow_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_light_snow_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_light_snow_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_light_snow_",
-
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_mild_snow_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_mild_snow_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_mild_snow_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_mild_snow_",
-
-        "collision_pointsframe_skip1_dataprocessing_0results_FB_heavy_snow_",
-        "collision_pointsframe_skip1_dataprocessing_1results_FB_heavy_snow_",
-        "collision_pointsframe_skip1_dataprocessing_2results_FB_heavy_snow_",
-        "collision_pointsframe_skip1_dataprocessing_3results_FB_heavy_snow_",
-
-    ]
-
-    color_of_collision_metrics  = ["red", "green", "yellow", "black"]
-
-    print len(list_of_collision_metrics)
-
-    assert(len(list_of_collision_metrics)/4 == len(color_of_collision_metrics))
-
-    num=0
 
     for no_of_metrics in range(1): # generated
 
         for x in range(4):
 
-            collision_points = yaml_load[list_of_collision_metrics[offset_index+x]]
+            collision_points = yaml_load[list_of_collision_metrics_noise[offset_index+x]]
             print offset_index+x
             collision = list()
             for count in range(len(collision_points)-offset):
@@ -750,7 +499,9 @@ def motionflow_vectorgraphs_noise():
     dev2_mean_list = list()
     dev3_mean_list = list()
 
-    for no_of_metrics in range(len(environment_list)): # none
+    graph = Graph( 4 )
+
+    for no_of_metrics in range(len(environment_list)):
 
         dev0_mean = 0
         dev1_mean = 0
@@ -759,9 +510,9 @@ def motionflow_vectorgraphs_noise():
 
         for x in range(4):
 
-
-            collision_points = yaml_load[list_of_collision_metrics[offset_index+x]]
+            collision_points = yaml_load[list_of_collision_metrics_noise[offset_index+x]]
             collision = list()
+            x0 = np.arange(0.0, len(collision_points)-1, 1)
             for count in range(len(collision_points)-offset):
                 xy = list()
                 xy.append(collision_points[offset + count]["x"])
@@ -771,17 +522,56 @@ def motionflow_vectorgraphs_noise():
             if ( x == 0):
                 x0, y0 = data.T
                 dev0 = numpy.sqrt((x0_base - x0) ** 2 + (y0_base - y0) ** 2)
+
             if ( x == 1):
                 x1, y1 = data.T
                 dev1 = numpy.sqrt((x1_base - x1) ** 2 + (y1_base - y1) ** 2)
+
             if ( x == 2):
                 x2, y2 = data.T
                 dev2 = numpy.sqrt((x2_base - x2) ** 2 + (y2_base - y2) ** 2)
+
             if ( x == 3):
                 x3, y3 = data.T
                 dev3 = numpy.sqrt((x3_base - x3) ** 2 + (y3_base - y3) ** 2)
 
-            x0 = np.arange(0.0, len(collision_points)-1, 1)
+
+        plot1 = ('frame_count',
+                 'deviation [noise_points-nonoise_points]',
+                 [x0],
+                 [dev0],
+                 color_of_collision_metrics_noise,
+                 list_of_collision_metrics_noise,
+                 "vector_robustness_data_processing_algorithm_0"
+                 )
+        plot2 = ('frame_count',
+                 'deviation [noise_points-nonoise_points]',
+                 [x0],
+                 [dev1],
+                 color_of_collision_metrics_noise,
+                 list_of_collision_metrics_noise,
+                 "vector_robustness_data_processing_algorithm_1"
+                 )
+        plot3 = ('frame_count',
+                 'deviation [noise_points-nonoise_points]',
+                 [x0],
+                 [dev2],
+                 color_of_collision_metrics_noise,
+                 list_of_collision_metrics_noise,
+                 "vector_robustness_data_processing_algorithm_2"
+                 )
+        plot4 = ('frame_count',
+                 'deviation [noise_points-nonoise_points]',
+                 [x0],
+                 [dev3],
+                 color_of_collision_metrics_noise,
+                 list_of_collision_metrics_noise,
+                 "vector_robustness_data_processing_algorithm_3"
+                 )
+
+        graph.plot_all_noise([plot1, plot2, plot3, plot4])
+
+
 
         for n,i in enumerate(dev0):
             if ( i > OUTLIER):
@@ -819,22 +609,6 @@ def motionflow_vectorgraphs_noise():
         dev2_mean_list.append(dev2_mean)
         dev3_mean_list.append(dev3_mean)
 
-        deviationplot0.plot(x0, dev0/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        deviationplot1.plot(x0, dev1/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot1.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        deviationplot2.plot(x0, dev2/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot2.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        deviationplot3.plot(x0, dev3/SCALE, 'ko-', lw=1, color=color_of_collision_metrics[0+no_of_metrics], label=list_of_collision_metrics[0+no_of_metrics])
-        #deviationplot1.legend()
-        deviationplot3.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
         offset_index=offset_index+4
 
         print "Table 4 " + environment_list[no_of_metrics]
@@ -843,18 +617,165 @@ def motionflow_vectorgraphs_noise():
         print dev2_mean_list[no_of_metrics]/SCALE
         print dev3_mean_list[no_of_metrics]/SCALE
 
-    Y_MAX = max(numpy.amax(dev0/SCALE), numpy.amax(dev1/SCALE), numpy.amax(dev2/SCALE), numpy.amax(dev3/SCALE)) + 100
-    deviationplot0.set_ylim([0, Y_MAX])
-   # fig0.set_size_inches(18.5, 10.5)
-    fig0.savefig(output_folder + 'vector_robustness_data_processing_algorithm_0',bbox_inches='tight', dpi=200)
-    #fig1.set_size_inches(18.5, 10.5)
-    fig1.savefig(output_folder + 'vector_robustness_data_processing_algorithm_1',bbox_inches='tight', dpi=200)
-   # fig2.set_size_inches(18.5, 10.5)
-    fig2.savefig(output_folder + 'vector_robustness_data_processing_algorithm_2',bbox_inches='tight', dpi=200)
-   # fig3.set_size_inches(18.5, 10.5)
-    fig3.savefig(output_folder + 'vector_robustness_data_processing_algorithm_3',bbox_inches='tight', dpi=200)
+    graph.plot_show_noise()
 
-    plt.close('all')
+
+
+class Graph(object):
+
+    def __init__(self, number_of_plots):
+
+        self.number_of_plots = number_of_plots
+        self.list_of_plots = []
+        self.color_index = 0
+
+        if ( self.number_of_plots >= 1 ):
+            self.fig1 = plt.figure()
+            plot1 = self.fig1.add_subplot(111)
+            self.list_of_plots.append(plot1)
+
+        if ( self.number_of_plots >= 2 ):
+            self.fig2 = plt.figure()
+            self.plot2 = self.fig2.add_subplot(111)
+            self.list_of_plots.append(self.plot2)
+
+        if ( self.number_of_plots >= 3 ):
+            self.fig3 = plt.figure()
+            self.plot3 = self.fig3.add_subplot(111)
+            self.list_of_plots.append(self.plot3)
+
+        if ( self.number_of_plots >= 4 ):
+            self.fig4 = plt.figure()
+            self.plot4 = self.fig4.add_subplot(111)
+            self.list_of_plots.append(self.plot4)
+
+        #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
+
+
+
+
+    def plot_all(self, plot_configuration_list):
+
+        number_of_plots = 0
+        self.plot_configuration_list = plot_configuration_list
+
+        while(number_of_plots < self.number_of_plots ):
+
+            no_of_metrics = 0
+            self.boundary = []
+            self.list_of_plots[number_of_plots].set_xlabel(self.plot_configuration_list[number_of_plots][0])
+            self.list_of_plots[number_of_plots].set_ylabel(self.plot_configuration_list[number_of_plots][1])
+            legend = self.list_of_plots[number_of_plots].legend(loc='center right', shadow=True, fontsize='x-small')
+
+            MAX=0
+            MIN=0
+            for x in range(len(self.plot_configuration_list[number_of_plots][3])):
+
+                print x
+
+                self.list_of_plots[number_of_plots].plot(self.plot_configuration_list[number_of_plots][2][x], self.plot_configuration_list[number_of_plots][3][x]/SCALE, 'ko-', lw=1, color=self.plot_configuration_list[number_of_plots][4][x], label=self.plot_configuration_list[number_of_plots][5][x])
+                #pltplot1.legend()
+                self.list_of_plots[number_of_plots].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+                self.list_of_plots[number_of_plots].set_title(self.plot_configuration_list[number_of_plots][6])
+                MAX = max(numpy.amax(self.plot_configuration_list[number_of_plots][3][x]/SCALE), MAX) + 100
+                MIN = min(numpy.amin(self.plot_configuration_list[number_of_plots][3][x]/SCALE), MIN) + 100
+                self.boundary.append((MAX, MIN))
+
+            number_of_plots += 1
+
+
+    def plot_all_noise(self, plot_configuration_list):
+
+        number_of_plots = 0
+        self.plot_configuration_list = plot_configuration_list
+
+        while(number_of_plots < self.number_of_plots ):
+
+            no_of_metrics = 0
+            self.boundary = []
+            self.list_of_plots[number_of_plots].set_xlabel(self.plot_configuration_list[number_of_plots][0])
+            self.list_of_plots[number_of_plots].set_ylabel(self.plot_configuration_list[number_of_plots][1])
+            legend = self.list_of_plots[number_of_plots].legend(loc='center right', shadow=True, fontsize='x-small')
+
+            MAX=0
+            MIN=0
+
+            for x in range(len(self.plot_configuration_list[number_of_plots][3])):
+
+                self.list_of_plots[number_of_plots].plot(self.plot_configuration_list[number_of_plots][2][x], self.plot_configuration_list[number_of_plots][3][x]/SCALE, 'ko-', lw=1, color=self.plot_configuration_list[number_of_plots][4][x], label=self.plot_configuration_list[number_of_plots][5][x])
+                #pltplot1.legend()
+                self.list_of_plots[number_of_plots].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+                self.list_of_plots[number_of_plots].set_title(self.plot_configuration_list[number_of_plots][6])
+                MAX = max(numpy.amax(self.plot_configuration_list[number_of_plots][3][x]/SCALE), MAX) + 100
+                MIN = min(numpy.amin(self.plot_configuration_list[number_of_plots][3][x]/SCALE), MIN) + 100
+                self.boundary.append((MAX, MIN))
+
+                number_of_plots += 1
+        self.color_index += 1
+
+
+    def plot_show_no_noise(self):
+
+        #self.list_of_plots[0].set_ylim([0, self.boundary[0][1]])
+        self.fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
+
+        #self.list_of_plots[0].set_ylim([0, self.boundary[1][1]])
+        self.fig2.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
+
+        #plt.close("all")
+        #fig2.set_size_inches(18.5, 10.5)
+
+    def plot_show_shape_no_noise(self):
+
+        #self.list_of_plots[0].set_ylim([0, self.boundary[0][1]])
+        self.fig1.savefig(output_folder + 'pixel_robustness_optical_flow.png', bbox_inches='tight',dpi=200)
+        #plt.close("all")
+        #fig2.set_size_inches(18.5, 10.5)
+
+    def plot_show_noise(self):
+
+        #self.list_of_plots[0].set_ylim([0, self.boundary[0][1]])
+        self.fig1.savefig(output_folder + 'vector_robustness_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
+        #self.list_of_plots[0].set_ylim([0, self.boundary[1][1]])
+        self.fig2.savefig(output_folder + 'vector_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
+        #self.list_of_plots[0].set_ylim([0, self.boundary[0][1]])
+        self.fig3.savefig(output_folder + 'vector_robustness_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
+        #self.list_of_plots[0].set_ylim([0, self.boundary[1][1]])
+        self.fig4.savefig(output_folder + 'vector_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
+
+
+    def plot_show_shape_noise(self):
+        self.fig1.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_0', bbox_inches='tight', dpi=200)
+        self.fig2.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
+        self.fig3.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
+        self.fig4.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
+
+
+
+
+class YAMLParser(object):
+
+    def __init__(self, filename):
+        self.file = filename
+        self.yaml_file = open(file, "r")
+        check = self.yaml_file.readline()
+        print check
+        if ("YAML:1.0" in check ):
+            read_yaml_file = self.yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
+            read_yaml_file = self.read_yaml_file.replace(':', ': ')
+            self.yaml_file.close()
+            self.yaml_file = open(file, "w")
+            self.yaml_file.write(read_yaml_file)
+            self.yaml_file.close()
+
+
+    def close(self):
+        if ( self.yaml_file != None ):
+            self.yaml_file.close()
+
+    def load(self):
+        yaml_load = yaml.load(open(self.file))
+        return yaml_load
 
 
 def scenario_displacement_occurence():
@@ -862,43 +783,9 @@ def scenario_displacement_occurence():
     offset=1
     offset_index=0
 
-    yaml_file = open(file, "r")
-    check = yaml_file.readline()
-    print check
-    if ("YAML:1.0" in check ):
-        read_yaml_file = yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
-        read_yaml_file = read_yaml_file.replace(':', ': ')
-        yaml_file.close()
-        yaml_file = open(file, "w")
-        yaml_file.write(read_yaml_file)
+    yaml_file_handle = YAMLParser(file)
+    yaml_load = yaml_file_handle.load()
 
-    yaml_file.close()
-
-    fig1 = plt.figure()
-
-    #plt.suptitle("displacement_occurence of displacement_occurence points between ground truth and scenes without noise")
-
-    displacement_occurenceplot0 = fig1.add_subplot(111)
-
-    #displacement_occurenceplot0.set_title('scenario_displacement_occurenceframe_skip1_dataprocessing_0')
-
-    displacement_occurenceplot0.set_xlabel('frame_count')
-    displacement_occurenceplot0.set_ylabel('displacement_occurence [no_noise_points-groundtruth_points]')
-
-    legend = displacement_occurenceplot0.legend(loc='center right', shadow=True, fontsize='x-small')
-
-    yaml_load = yaml.load(open(file))
-
-    list_of_displacement_occurence_metrics = [
-        "scenario_displacement_occurenceframe_skip1_dataprocessing_0_generated",
-        "scenario_displacement_occurenceframe_skip1_dataprocessing_0results_FB_none_",
-    ]
-
-    color_of_displacement_occurence_metrics = ["blue", "red"]
-
-    assert(len(list_of_displacement_occurence_metrics) == len(color_of_displacement_occurence_metrics))
-
-    num=0
 
     delete_point_array = np.array([-65535])
     for no_of_metrics in range(1): # generated
@@ -960,79 +847,54 @@ def scenario_displacement_occurence():
                 if ( n == 0 ):
                     dev0[n] = 0
             dev0_mean=(dev0_mean+dev0[n])
-        for n,i in enumerate(dev1):
-            if ( i > OUTLIER):
-                dev1[n] = dev1[n-1]
-            dev1_mean=(dev1_mean+dev1[n])
-        for n,i in enumerate(dev2):
-            if ( i > OUTLIER):
-                dev2[n] = dev2[n-1]
-            dev2_mean=(dev2_mean+dev2[n])
-        for n,i in enumerate(dev3):
-            if ( i > OUTLIER):
-                dev3[n] = dev3[n-1]
-            dev3_mean=(dev3_mean+dev3[n])
-
-        displacement_occurenceplot0.plot(frame_number, dev0_gt/SCALE, 'ko-', lw=1, color=color_of_displacement_occurence_metrics[0+no_of_metrics], label=list_of_displacement_occurence_metrics[0+no_of_metrics])
-        #displacement_occurenceplot1.legend()
-        displacement_occurenceplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-
-        index_x0_gt_sorted = np.argsort(x0_gt)
-        print x0
-        print index_x0_gt_sorted
 
 
-        offset_index=offset_index+4
+    displacement_occurenceplot0.plot(frame_number, y0_gt/SCALE, 'ko-', lw=1, color=color_of_displacement_occurence_metrics[0+no_of_metrics], label=list_of_displacement_occurence_metrics[0+no_of_metrics])
+    #displacement_occurenceplot1.legend()
+    displacement_occurenceplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
-        dev0_mean = dev0_mean/(n+1)
-        dev0_mean_list.append(dev0_mean)
+    index_x0_gt_sorted = np.argsort(x0_gt)
+    print x0
+    print index_x0_gt_sorted
 
-        print "Table 3 " + environment_list[no_of_metrics]
-        print dev0_gt_mean_list[no_of_metrics]/SCALE
-        print dev0_mean_list[no_of_metrics]/SCALE
+
+    offset_index=offset_index+4
+
+    dev0_mean = dev0_mean/(n+1)
+    dev0_mean_list.append(dev0_mean)
+
+    print "Table 3 " + environment_list[no_of_metrics]
+    print dev0_gt_mean_list[no_of_metrics]/SCALE
+    print dev0_mean_list[no_of_metrics]/SCALE
+
+
+    fig1 = plt.figure()
+    ax = Axes3D(fig1)
+
+    #plt.suptitle("displacement_occurence of displacement_occurence points between ground truth and scenes without noise")
+
+    displacement_occurenceplot0 = fig1.add_subplot(111)
+
+    #displacement_occurenceplot0.set_title('scenario_displacement_occurenceframe_skip1_dataprocessing_0')
+
+    displacement_occurenceplot0.set_xlabel('frame_count')
+    displacement_occurenceplot0.set_ylabel('displacement_occurence [no_noise_points-groundtruth_points]')
+
+    legend = displacement_occurenceplot0.legend(loc='center right', shadow=True, fontsize='x-small')
+
 
     #fig2.set_size_inches(18.5, 10.5)
     #DEV_MAX = max(numpy.amax(dev0_gt/SCALE), numpy.amax(dev0/SCALE), numpy.amax(dev1/SCALE), numpy.amax(dev2/SCALE), numpy.amax(dev3/SCALE)) + 100
     #Y_MAX = max(numpy.amax(y0_gt/SCALE), numpy.amax(y0/SCALE), numpy.amax(y1/SCALE), numpy.amax(y2/SCALE), numpy.amax(y3/SCALE)) + 100
     #Y_MIN = max(numpy.amin(y0_gt/SCALE), numpy.amin(y0/SCALE), numpy.amin(y1/SCALE), numpy.amin(y2/SCALE), numpy.amin(y3/SCALE)) - 100
-    deviationplot0.set_ylim([0, 100])
+    displacement_occurenceplot0.set_ylim([0, 100])
     #plt.show()
     fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
 
-    fig = pyplot.figure()
-    ax = Axes3D(fig)
 
-    list_box_points = list(
-        [-59.574017, 2470.1152, 9.5,
-         -61.094013, 2470.1152, 9.5,
-         -59.574017, 2467.6011, 9.5,
-         -61.094013, 2467.6011, 9.5,
-         -59.574017, 2470.1152, 10.98,
-         -61.094013, 2470.1152, 10.98,
-         -59.574017, 2467.6011, 10.98,
-         -61.094013, 2467.6011, 10.98])
-    sequence_containing_x_vals = list()
-    sequence_containing_y_vals = list()
-    sequence_containing_z_vals = list()
-
-    for n in range(len(list_box_points)/3):
-
-        print n
-        sequence_containing_x_vals.append(list_box_points[3*n]) #list(range(0, 100))
-        sequence_containing_y_vals.append(list_box_points[3*n+1])
-        sequence_containing_z_vals.append(list_box_points[3*n+2])
-        n = n+3
-
-    print sequence_containing_x_vals
-
-
-
-    #random.shuffle(sequence_containing_x_vals)
-    #random.shuffle(sequence_containing_y_vals)
-    #random.shuffle(sequence_containing_z_vals)
 
     ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
-    pyplot.show()
+    plt.show()
 
     fig = plt.figure(figsize=plt.figaspect(0.5))
     ax = fig.add_subplot(1, 2, 1, projection='3d')
@@ -1075,7 +937,7 @@ if __name__ == '__main__':
     motionflow_pixelgraphs_no_noise()
     #motionflow_pixelgraphs_noise()
     motionflow_vectorgraphs_no_noise()
-    #motionflow_vectorgraphs_noise()
+    motionflow_vectorgraphs_noise()
 
     #histogramm()
 
