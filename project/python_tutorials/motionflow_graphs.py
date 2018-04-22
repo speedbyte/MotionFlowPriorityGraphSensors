@@ -194,6 +194,8 @@ def motionflow_pixelgraphs_noise():
     y2_mean_list = list()
     y3_mean_list = list()
 
+    graph = Graph(4)
+
     for no_of_metrics in range(len(environment_list)):
 
         y0_mean = 0
@@ -215,56 +217,52 @@ def motionflow_pixelgraphs_noise():
             if ( x == 0):
                 x0, y0 = data.T
                 y0 = x0/y0
-                plot1 = ('frame_count',
-                         'noise_good_pixels/no_noise_total_pixels',
-                         [frame_count],
-                         y0,
-                         color_of_shape_metrics_noise,
-                         list_of_shape_metrics_noise,
-                         "shape_pointsframe_skip1_dataprocessing_0"
-                         )
             if ( x == 1):
                 x1, y1 = data.T
                 y1 = x1/y1
-                plot2 = ('frame_count',
-                         'noise_good_pixels/no_noise_total_pixels',
-                         [frame_count],
-                         y1,
-                         color_of_shape_metrics_noise,
-                         list_of_shape_metrics_noise,
-                         "shape_pointsframe_skip1_dataprocessing_1"
-                         )
             if ( x == 2):
                 x2, y2 = data.T
                 y2 = x2/y2
-                plot3 = ('frame_count',
-                         'noise_good_pixels/no_noise_total_pixels',
-                         [frame_count],
-                         y2,
-                         color_of_shape_metrics_noise,
-                         list_of_shape_metrics_noise,
-                         "shape_pointsframe_skip1_dataprocessing_2"
-                         )
             if ( x == 3):
                 x3, y3 = data.T
                 y3 = x3/y3
-                plot4 = ('frame_count',
-                         'noise_good_pixels/no_noise_total_pixels',
-                         [frame_count],
-                         y3,
-                         color_of_shape_metrics_noise,
-                         list_of_shape_metrics_noise,
-                         "shape_pointsframe_skip1_dataprocessing_3"
-                         )
-
-        graph = Graph(
-
-        )
-
-        graph.plot_all([plot1, plot2, plot3, plot4])
 
         offset_index=offset_index+4
 
+        plot1 = ('frame_count',
+                 'noise_good_pixels/no_noise_total_pixels',
+                 [frame_count],
+                 y0,
+                 color_of_shape_metrics_noise,
+                 list_of_shape_metrics_noise,
+                 "shape_pointsframe_skip1_dataprocessing_0"
+                 )
+        plot2 = ('frame_count',
+                 'noise_good_pixels/no_noise_total_pixels',
+                 [frame_count],
+                 y1,
+                 color_of_shape_metrics_noise,
+                 list_of_shape_metrics_noise,
+                 "shape_pointsframe_skip1_dataprocessing_1"
+                 )
+        plot3 = ('frame_count',
+                 'noise_good_pixels/no_noise_total_pixels',
+                 [frame_count],
+                 y2,
+                 color_of_shape_metrics_noise,
+                 list_of_shape_metrics_noise,
+                 "shape_pointsframe_skip1_dataprocessing_2"
+                 )
+        plot4 = ('frame_count',
+                 'noise_good_pixels/no_noise_total_pixels',
+                 [frame_count],
+                 y3,
+                 color_of_shape_metrics_noise,
+                 list_of_shape_metrics_noise,
+                 "shape_pointsframe_skip1_dataprocessing_3"
+                 )
+
+        graph.plot_all([plot1, plot2, plot3, plot4])
 
 
 
@@ -286,7 +284,7 @@ def motionflow_pixelgraphs_noise():
         y3_mean_list.append(y3_mean)
 
 
-    graph.plot_show_noise()
+    graph.plot_show_shape_noise()
 
 
     print "Table 2 " + environment_list[no_of_metrics]
@@ -456,7 +454,7 @@ def motionflow_vectorgraphs_no_noise():
              )
 
     graph.plot_all([plot1, plot2])
-    graph.plot_show_no_noise()
+    graph.plot_show_vector_no_noise()
 
 
 
@@ -569,7 +567,7 @@ def motionflow_vectorgraphs_noise():
                  "vector_robustness_data_processing_algorithm_3"
                  )
 
-        graph.plot_all_noise([plot1, plot2, plot3, plot4])
+        graph.plot_all([plot1, plot2, plot3, plot4])
 
 
 
@@ -617,7 +615,7 @@ def motionflow_vectorgraphs_noise():
         print dev2_mean_list[no_of_metrics]/SCALE
         print dev3_mean_list[no_of_metrics]/SCALE
 
-    graph.plot_show_noise()
+    graph.plot_show_vector_noise()
 
 
 
@@ -653,7 +651,6 @@ class Graph(object):
 
 
 
-
     def plot_all(self, plot_configuration_list):
 
         number_of_plots = 0
@@ -682,39 +679,10 @@ class Graph(object):
                 self.boundary.append((MAX, MIN))
 
             number_of_plots += 1
-
-
-    def plot_all_noise(self, plot_configuration_list):
-
-        number_of_plots = 0
-        self.plot_configuration_list = plot_configuration_list
-
-        while(number_of_plots < self.number_of_plots ):
-
-            no_of_metrics = 0
-            self.boundary = []
-            self.list_of_plots[number_of_plots].set_xlabel(self.plot_configuration_list[number_of_plots][0])
-            self.list_of_plots[number_of_plots].set_ylabel(self.plot_configuration_list[number_of_plots][1])
-            legend = self.list_of_plots[number_of_plots].legend(loc='center right', shadow=True, fontsize='x-small')
-
-            MAX=0
-            MIN=0
-
-            for x in range(len(self.plot_configuration_list[number_of_plots][3])):
-
-                self.list_of_plots[number_of_plots].plot(self.plot_configuration_list[number_of_plots][2][x], self.plot_configuration_list[number_of_plots][3][x]/SCALE, 'ko-', lw=1, color=self.plot_configuration_list[number_of_plots][4][x], label=self.plot_configuration_list[number_of_plots][5][x])
-                #pltplot1.legend()
-                self.list_of_plots[number_of_plots].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-                self.list_of_plots[number_of_plots].set_title(self.plot_configuration_list[number_of_plots][6])
-                MAX = max(numpy.amax(self.plot_configuration_list[number_of_plots][3][x]/SCALE), MAX) + 100
-                MIN = min(numpy.amin(self.plot_configuration_list[number_of_plots][3][x]/SCALE), MIN) + 100
-                self.boundary.append((MAX, MIN))
-
-                number_of_plots += 1
         self.color_index += 1
 
 
-    def plot_show_no_noise(self):
+    def plot_show_vector_no_noise(self):
 
         #self.list_of_plots[0].set_ylim([0, self.boundary[0][1]])
         self.fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
@@ -732,7 +700,7 @@ class Graph(object):
         #plt.close("all")
         #fig2.set_size_inches(18.5, 10.5)
 
-    def plot_show_noise(self):
+    def plot_show_vector_noise(self):
 
         #self.list_of_plots[0].set_ylim([0, self.boundary[0][1]])
         self.fig1.savefig(output_folder + 'vector_robustness_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
@@ -935,7 +903,7 @@ if __name__ == '__main__':
     #simple()
 
     motionflow_pixelgraphs_no_noise()
-    #motionflow_pixelgraphs_noise()
+    motionflow_pixelgraphs_noise()
     motionflow_vectorgraphs_no_noise()
     motionflow_vectorgraphs_noise()
 
