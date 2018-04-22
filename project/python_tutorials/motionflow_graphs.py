@@ -86,6 +86,9 @@ def motionflow_pixelgraphs_no_noise(): ##done
 
     graph = Graph(1)
 
+    x0_list = list()
+    y0_list = list()
+
     for no_of_metrics in range(1): #generated
 
         for x in range(1):
@@ -99,22 +102,19 @@ def motionflow_pixelgraphs_no_noise(): ##done
                 xy.append(shape_points[offset + count]["total_pixels"])
                 shape.append(xy)
             data = np.array(shape)
-            if ( x == 0):
-                x0_gt, y0_gt = data.T
-                y0_gt = x0_gt/y0_gt
+            x0_gt, y0_gt = data.T
+            y0_gt = x0_gt/y0_gt
+
+            x0_list.append(frame_count)
+            y0_list.append(y0_gt)
 
     y0_mean_list = list()
-    y1_mean_list = list()
-    y2_mean_list = list()
-    y3_mean_list = list()
 
     for no_of_metrics in range(1): # none
 
-        y0_mean = 0
-        y1_mean = 0
-        y2_mean = 0
-        y3_mean = 0
+        print "Table 1 " + environment_list[no_of_metrics]
 
+        y0_mean = 0
         for x in range(4):
 
             shape_points = yaml_load[list_of_shape_metrics_no_noise[offset_index+1+x]]
@@ -125,56 +125,32 @@ def motionflow_pixelgraphs_no_noise(): ##done
                 xy.append(shape_points[offset + count]["total_pixels"])
                 shape.append(xy)
             data = np.array(shape)
-            if ( x == 0):
-                x0, y0 = data.T
-                y0 = x0/y0
-            if ( x == 1):
-                x1, y1 = data.T
-                y1 = x1/y1
-            if ( x == 2):
-                x2, y2 = data.T
-                y2 = x2/y2
-            if ( x == 3):
-                x3, y3 = data.T
-                y3 = x3/y3
+            x0, y0 = data.T
+            y0 = x0/y0
+            for n,i in enumerate(y0):
+                y0_mean=y0_mean+i
+            y0_mean = y0_mean/(n+1)
+            y0_mean_list.append(y0_mean)
+            frame_count = np.arange(0.0, len(x0), 1)
 
+            x0_list.append(frame_count)
+            y0_list.append(y0)
 
-        for n,i in enumerate(y0):
-            y0_mean=y0_mean+i
-        for n,i in enumerate(y1):
-            y1_mean=y1_mean+i
-        for n,i in enumerate(y2):
-            y2_mean=y2_mean+i
-        for n,i in enumerate(y3):
-            y3_mean=y3_mean+i
-        y0_mean = y0_mean/(n+1)
-        y1_mean = y1_mean/(n+1)
-        y2_mean = y2_mean/(n+1)
-        y3_mean = y3_mean/(n+1)
-        y0_mean_list.append(y0_mean)
-        y1_mean_list.append(y1_mean)
-        y2_mean_list.append(y2_mean)
-        y3_mean_list.append(y3_mean)
-
+            print y0_mean_list[x]
 
         offset_index=offset_index+4
 
-        print "Table 1 " + environment_list[no_of_metrics]
-        print y0_mean_list[no_of_metrics]
-        print y1_mean_list[no_of_metrics]
-        print y2_mean_list[no_of_metrics]
-        print y3_mean_list[no_of_metrics]
 
-    plot_1 = ('frame_count',
-              'no_noise_good_pixels/no_noise_total_pixels',
-              [frame_count, frame_count, frame_count, frame_count, frame_count],
-              [y0_gt, y0, y1, y2, y3],
-              color_of_shape_metrics_no_noise,
-              list_of_shape_metrics_no_noise,
-              "shape_pointsframe_skip1_dataprocessing_0"
-              )
-    graph.plot_all([plot_1])
+    plot1 = ('frame_count',
+             'no_noise_good_pixels/no_noise_total_pixels',
+             x0_list,
+             y0_list,
+             color_of_shape_metrics_no_noise,
+             list_of_shape_metrics_no_noise,
+             "shape_pointsframe_skip1_dataprocessing_0"
+             )
 
+    graph.plot_all([plot1])
     graph.plot_show_shape_no_noise()
 
 
@@ -190,18 +166,15 @@ def motionflow_pixelgraphs_noise():
     print "Start Noise "
 
     y0_mean_list = list()
-    y1_mean_list = list()
-    y2_mean_list = list()
-    y3_mean_list = list()
 
     graph = Graph(4)
 
     for no_of_metrics in range(len(environment_list)):
 
         y0_mean = 0
-        y1_mean = 0
-        y2_mean = 0
-        y3_mean = 0
+        print "Table 2 " + environment_list[no_of_metrics]
+
+        list_of_plots = list()
 
         for x in range(4):
 
@@ -213,85 +186,32 @@ def motionflow_pixelgraphs_noise():
                 xy.append(shape_points[offset + count]["total_pixels"])
                 shape.append(xy)
             data = np.array(shape)
-            if ( x == 0):
-                x0, y0 = data.T
-                y0 = x0/y0
-            if ( x == 1):
-                x1, y1 = data.T
-                y1 = x1/y1
-            if ( x == 2):
-                x2, y2 = data.T
-                y2 = x2/y2
-            if ( x == 3):
-                x3, y3 = data.T
-                y3 = x3/y3
+            x0, y0 = data.T
+            y0 = x0/y0
+            for n,i in enumerate(y0):
+                y0_mean=y0_mean+i
+            y0_mean = y0_mean/(n+1)
+            y0_mean_list.append(y0_mean)
+            frame_count = np.arange(0.0, len(x0), 1)
+            plot1 = ('frame_count',
+                     'noise_good_pixels/no_noise_total_pixels',
+                     [frame_count],
+                     [y0],
+                     color_of_shape_metrics_noise,
+                     list_of_shape_metrics_noise,
+                     "shape_pointsframe_skip1_dataprocessing_0"
+                     )
+            list_of_plots.append(plot1)
+
+            print y0_mean_list[x]
 
         offset_index=offset_index+4
-        frame_count = np.arange(0.0, len(x0), 1)
-
-        plot1 = ('frame_count',
-                 'noise_good_pixels/no_noise_total_pixels',
-                 [frame_count],
-                 [y0],
-                 color_of_shape_metrics_noise,
-                 list_of_shape_metrics_noise,
-                 "shape_pointsframe_skip1_dataprocessing_0"
-                 )
-        plot2 = ('frame_count',
-                 'noise_good_pixels/no_noise_total_pixels',
-                 [frame_count],
-                 [y1],
-                 color_of_shape_metrics_noise,
-                 list_of_shape_metrics_noise,
-                 "shape_pointsframe_skip1_dataprocessing_1"
-                 )
-        plot3 = ('frame_count',
-                 'noise_good_pixels/no_noise_total_pixels',
-                 [frame_count],
-                 [y2],
-                 color_of_shape_metrics_noise,
-                 list_of_shape_metrics_noise,
-                 "shape_pointsframe_skip1_dataprocessing_2"
-                 )
-        plot4 = ('frame_count',
-                 'noise_good_pixels/no_noise_total_pixels',
-                 [frame_count],
-                 [y3],
-                 color_of_shape_metrics_noise,
-                 list_of_shape_metrics_noise,
-                 "shape_pointsframe_skip1_dataprocessing_3"
-                 )
-
-        graph.plot_all([plot1, plot2, plot3, plot4])
-
-
-
-        for n,i in enumerate(y0):
-            y0_mean=y0_mean+i
-        for n,i in enumerate(y1):
-            y1_mean=y1_mean+i
-        for n,i in enumerate(y2):
-            y2_mean=y2_mean+i
-        for n,i in enumerate(y3):
-            y3_mean=y3_mean+i
-        y0_mean = y0_mean/(n+1)
-        y1_mean = y1_mean/(n+1)
-        y2_mean = y2_mean/(n+1)
-        y3_mean = y3_mean/(n+1)
-        y0_mean_list.append(y0_mean)
-        y1_mean_list.append(y1_mean)
-        y2_mean_list.append(y2_mean)
-        y3_mean_list.append(y3_mean)
+        graph.plot_all(list_of_plots)
 
 
     graph.plot_show_shape_noise()
 
 
-    print "Table 2 " + environment_list[no_of_metrics]
-    print y0_mean_list[no_of_metrics]
-    print y1_mean_list[no_of_metrics]
-    print y2_mean_list[no_of_metrics]
-    print y3_mean_list[no_of_metrics]
 
 
 
@@ -306,6 +226,16 @@ def motionflow_vectorgraphs_no_noise():
 
     delete_point_array = np.array([-65535])
 
+    dev0_gt_mean = 0
+    dev0_mean = 0
+    dev0_gt_mean_list = list()
+    dev0_mean_list = list()
+
+    x0_list = list()
+    y0_list = list()
+    x0_coll_list = list()
+    y0_coll_list = list()
+
     collision_points = yaml_load[list_of_collision_metrics_no_noise[offset_index]]
     collision = list()
     for count in range(len(collision_points)-offset):
@@ -319,6 +249,19 @@ def motionflow_vectorgraphs_no_noise():
     x0_gt = np.setdiff1d(x0_gt, delete_point_array)
     y0_gt = np.setdiff1d(y0_gt, delete_point_array)
     dev0_gt = numpy.sqrt((x0_gt - x0_gt) ** 2 + (y0_gt - y0_gt) ** 2)
+    for n,i in enumerate(dev0_gt):
+        dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
+
+    dev0_gt_mean = dev0_gt_mean/(n+1)
+    dev0_gt_mean_list.append(dev0_gt_mean)
+
+    frame_count = np.arange(0.0, len(x0_gt), 1)
+
+    x0_list.append(frame_count)
+    y0_list.append(dev0_gt)
+
+    x0_coll_list.append(x0_gt)
+    y0_coll_list.append(y0_gt)
 
 
     offset_index=0
@@ -333,126 +276,61 @@ def motionflow_vectorgraphs_no_noise():
             xy.append(collision_points[offset + count]["y"])
             collision.append(xy)
         data = np.array(collision)
-        if ( x == 0):
-            x0, y0 = data.T
-            x0 = np.setdiff1d(x0, delete_point_array)
-            y0 = np.setdiff1d(y0, delete_point_array)
-            dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
-        if ( x == 1):
-            x1, y1 = data.T
-            x1 = np.setdiff1d(x1, delete_point_array)
-            y1 = np.setdiff1d(y1, delete_point_array)
-            dev1 = numpy.sqrt((x0_gt - x1) ** 2 + (y0_gt - y1) ** 2)
-        if ( x == 2):
-            x2, y2 = data.T
-            x2 = np.setdiff1d(x2, delete_point_array)
-            y2 = np.setdiff1d(y2, delete_point_array)
-            dev2 = numpy.sqrt((x0_gt - x2) ** 2 + (y0_gt - y2) ** 2)
-        if ( x == 3):
-            x3, y3 = data.T
-            x3 = np.setdiff1d(x3, delete_point_array)
-            y3 = np.setdiff1d(y3, delete_point_array)
-            dev3 = numpy.sqrt((x0_gt - x3) ** 2 + (y0_gt - y3) ** 2)
+        x0, y0 = data.T
+        x0 = np.setdiff1d(x0, delete_point_array)
+        y0 = np.setdiff1d(y0, delete_point_array)
+        dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
+        for n,i in enumerate(dev0):
+            if ( abs(i) > OUTLIER):
+                dev0[n] = dev0[n-1]
+                if ( n == 0 ):
+                    dev0[n] = 0
+            dev0_mean=(dev0_mean+dev0[n])
+            #dev0_mean=(dev0_mean+dev0[n])/2
+            #dev0[n] = dev0_mean
+        dev0_mean = dev0_mean/(n+1)
+        dev0_mean_list.append(dev0_mean)
+
+        x0_list.append(frame_count)
+        y0_list.append(dev0)
+
+        x0_coll_list.append(x0)
+        y0_coll_list.append(y0)
+
 
     offset_index=offset_index+4
 
 
-
-    dev0_gt_mean = 0
-    dev0_mean = 0
-    dev1_mean = 0
-    dev2_mean = 0
-    dev3_mean = 0
-
-    for n,i in enumerate(dev0):
-        if ( abs(i) > OUTLIER):
-            dev0[n] = dev0[n-1]
-            if ( n == 0 ):
-                dev0[n] = 0
-        dev0_mean=(dev0_mean+dev0[n])
-        #dev0_mean=(dev0_mean+dev0[n])/2
-        #dev0[n] = dev0_mean
-    for n,i in enumerate(dev1):
-        if ( i > OUTLIER):
-            dev1[n] = dev1[n-1]
-        dev1_mean=(dev1_mean+dev1[n])
-        #dev1_mean=(dev1_mean+dev1[n])/2
-        #dev1[n] = dev1_mean
-    for n,i in enumerate(dev2):
-        if ( i > OUTLIER):
-            dev2[n] = dev2[n-1]
-        dev2_mean=(dev2_mean+dev2[n])
-        #dev2_mean=(dev2_mean+dev2[n])/2
-        #dev2[n] = dev2_mean
-    for n,i in enumerate(dev3):
-        if ( i > OUTLIER):
-            dev3[n] = dev3[n-1]
-        dev3_mean=(dev3_mean+dev3[n])
-        #dev3_mean=(dev3_mean+dev3[n])/2
-        #dev3[n] = dev3_mean
-
-
-    index_x0_gt_sorted = np.argsort(x0_gt)
-    index_x0_sorted = np.argsort(x0)
-    index_x1_sorted = np.argsort(x1)
-    index_x2_sorted = np.argsort(x2)
-    index_x3_sorted = np.argsort(x3)
-    print x0
-    print index_x0_gt_sorted
-
-    dev0_gt_mean_list = list()
-
-    for n,i in enumerate(dev0_gt):
-        dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
-
-    dev0_gt_mean = dev0_gt_mean/(n+1)
-    dev0_gt_mean_list.append(dev0_gt_mean)
-
-    dev0_mean_list = list()
-    dev1_mean_list = list()
-    dev2_mean_list = list()
-    dev3_mean_list = list()
-
-    dev0_mean = dev0_mean/(n+1)
-    dev1_mean = dev1_mean/(n+1)
-    dev2_mean = dev2_mean/(n+1)
-    dev3_mean = dev3_mean/(n+1)
-    dev0_mean_list.append(dev0_mean)
-    dev1_mean_list.append(dev1_mean)
-    dev2_mean_list.append(dev2_mean)
-    dev3_mean_list.append(dev3_mean)
-
-    print "Table 3 " + environment_list[0]
-    print dev0_gt_mean_list[0]/SCALE
-    print dev0_mean_list[0]/SCALE
-    print dev1_mean_list[0]/SCALE
-    print dev2_mean_list[0]/SCALE
-    print dev3_mean_list[0]/SCALE
-
-    frame_count = np.arange(0.0, len(x0_gt), 1)
-
-
-    graph = Graph(2)
-
     plot1 = ('frame_count',
              'deviation [no_noise_points-groundtruth_points]',
-             [frame_count, frame_count, frame_count, frame_count, frame_count],
-             [dev0_gt, dev0, dev1, dev2, dev3],
+             x0_list,
+             y0_list,
              color_of_collision_metrics_no_noise,
              list_of_collision_metrics_no_noise,
              "deviation_pointsframe_skip1_dataprocessing_0"
              )
 
     plot2 = ('X', 'Y',
-             [x0_gt, x0, x1, x2, x3],
-             [y0_gt, y0, y1, y2, y3],
+             x0_coll_list,
+             y0_coll_list,
              color_of_collision_metrics_no_noise,
              list_of_collision_metrics_no_noise,
              "collision_pointsframe_skip1_dataprocessing_0"
              )
 
+    index_x0_gt_sorted = np.argsort(x0_gt)
+
+    print "Table 3 " + environment_list[0]
+    print dev0_gt_mean_list[0]/SCALE
+    print dev0_mean_list[0   ]/SCALE
+    print dev0_mean_list[1]/SCALE
+    print dev0_mean_list[2]/SCALE
+    print dev0_mean_list[3]/SCALE
+
+    graph = Graph(2)
     graph.plot_all([plot1, plot2])
     graph.plot_show_vector_no_noise()
+
 
 
 
@@ -471,7 +349,6 @@ def motionflow_vectorgraphs_noise():
         for x in range(4):
 
             collision_points = yaml_load[list_of_collision_metrics_noise[offset_index+x]]
-            print offset_index+x
             collision = list()
             for count in range(len(collision_points)-offset):
                 xy = list()
@@ -666,8 +543,6 @@ class Graph(object):
             MIN=0
             for x in range(len(self.plot_configuration_list[number_of_plots][3])):
 
-                print x
-
                 self.list_of_plots[number_of_plots].plot(self.plot_configuration_list[number_of_plots][2][x], self.plot_configuration_list[number_of_plots][3][x]/SCALE, 'ko-', lw=1, color=self.plot_configuration_list[number_of_plots][4][x], label=self.plot_configuration_list[number_of_plots][5][x])
                 #pltplot1.legend()
                 self.list_of_plots[number_of_plots].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
@@ -725,7 +600,7 @@ class YAMLParser(object):
         self.file = filename
         self.yaml_file = open(file, "r")
         check = self.yaml_file.readline()
-        print check
+        print "yaml check" , check
         if ("YAML:1.0" in check ):
             read_yaml_file = self.yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
             read_yaml_file = self.read_yaml_file.replace(':', ': ')
@@ -891,14 +766,7 @@ def scenario_displacement_occurence():
 
 
 if __name__ == '__main__':
-    #histogram()
-    #cam()
-    #histogram_image()
-    #threedplot()
-    #sphere()
-    #criticalpoint()
-    #lemniscate()
-    #simple()
+
 
     motionflow_pixelgraphs_no_noise()
     motionflow_pixelgraphs_noise()
@@ -907,6 +775,3 @@ if __name__ == '__main__':
 
     #histogramm()
 
-    #motionflow_vectorgraphs()
-    #check()
-    #vkitti()
