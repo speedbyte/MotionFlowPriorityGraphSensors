@@ -281,6 +281,8 @@ void OpticalFlow::generate_shape_points() {
 
     char frame_skip_folder_suffix[50];
 
+    std::vector<std::map<std::pair<float, float>, int> > outer_frame_skip_scenario_displacement_occurence;
+
     for (unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++) {
 
         std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_shape_points;
@@ -288,6 +290,7 @@ void OpticalFlow::generate_shape_points() {
         for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
             std::vector<std::vector<cv::Point2f> > outer_frame_shape_points;
+            std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
             sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
@@ -330,10 +333,27 @@ void OpticalFlow::generate_shape_points() {
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
 
+
                         if (m_resultordner == "/generated") {
 
                             vollTreffer = CLUSTER_COUNT_GT;
                             baseTreffer = CLUSTER_COUNT_GT;
+
+                            if ( data_processing_index == 0 ) {
+                                if ( scenario_displacement_occurence.count(std::make_pair(std::round(gt_displacement.x*10)/10,std::round(gt_displacement.y*10)/10)) ) {
+                                    scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*10)/10,std::round(gt_displacement.y*10)/10)] = scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*10)/10,std::round(gt_displacement.y*10)/10)] + CLUSTER_COUNT_GT;
+                                }
+                                else {
+                                    scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*10)/10,std::round(gt_displacement.y*10)/10)] = CLUSTER_COUNT_GT;
+                                }
+
+                                if ( scenario_displacement_occurence.count(std::make_pair(65535,65535)) ) {
+                                    scenario_displacement_occurence[std::make_pair(65535,65535)] = scenario_displacement_occurence[std::make_pair(65535,65535)] + 1;
+                                }
+                                else {
+                                    scenario_displacement_occurence[std::make_pair(65535,65535)] = 1;
+                                }
+                            }
                         }
                         else {
                             for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
@@ -341,6 +361,23 @@ void OpticalFlow::generate_shape_points() {
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
                                                 get_shape_parameters().at(data_processing_index
                                                 ).at(frame_skip - 1).at(frame_count).at(cluster_count).second;
+
+                                if ( data_processing_index == 0 ) {
+                                    if ( scenario_displacement_occurence.count(std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)) ) {
+                                        scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] = scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] + 1;
+                                    }
+                                    else {
+                                        scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] = 1;
+                                    }
+
+                                    if ( scenario_displacement_occurence.count(std::make_pair(65535,65535)) ) {
+                                        scenario_displacement_occurence[std::make_pair(65535,65535)] = scenario_displacement_occurence[std::make_pair(65535,65535)] + 1;
+                                    }
+                                    else {
+                                        scenario_displacement_occurence[std::make_pair(65535,65535)] = 1;
+                                    }
+
+                                }
 
                                 auto dist_algo = cv::norm(algo_displacement);
                                 auto dist_err = std::abs(dist_gt - dist_algo);
@@ -417,9 +454,14 @@ void OpticalFlow::generate_shape_points() {
                 outer_frame_shape_points.push_back(frame_shape_points_average);
             }
             outer_frame_skip_shape_points.push_back(outer_frame_shape_points);
+            outer_frame_skip_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
+
         }
         m_frame_skip_shape_points.push_back(outer_frame_skip_shape_points);
     }
+
+    m_frame_skip_scenario_displacement_occurence = outer_frame_skip_scenario_displacement_occurence;
+
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
     toc_all = steady_clock::now();
     time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();

@@ -1,1230 +1,1057 @@
+%YAML:1.0
 ---
-shape_pointsframe_skip1_dataprocessing_0_generated: 
-   - { good_pixels: 3180., total_pixels: 3180. }
-   - { good_pixels: 3165., total_pixels: 3165. }
-   - { good_pixels: 3.1495000000000000e+03,
-       total_pixels: 3.1495000000000000e+03 }
-   - { good_pixels: 3.1745000000000000e+03,
-       total_pixels: 3.1745000000000000e+03 }
-   - { good_pixels: 3.1595000000000000e+03,
-       total_pixels: 3.1595000000000000e+03 }
-   - { good_pixels: 3144., total_pixels: 3144. }
-   - { good_pixels: 3.1285000000000000e+03,
-       total_pixels: 3.1285000000000000e+03 }
-   - { good_pixels: 3113., total_pixels: 3113. }
-   - { good_pixels: 3098., total_pixels: 3098. }
-   - { good_pixels: 3058., total_pixels: 3058. }
-   - { good_pixels: 3.0275000000000000e+03,
-       total_pixels: 3.0275000000000000e+03 }
-   - { good_pixels: 3.0035000000000000e+03,
-       total_pixels: 3.0035000000000000e+03 }
-   - { good_pixels: 2973., total_pixels: 2973. }
-   - { good_pixels: 2.9275000000000000e+03,
-       total_pixels: 2.9275000000000000e+03 }
-   - { good_pixels: 2.8815000000000000e+03,
-       total_pixels: 2.8815000000000000e+03 }
-   - { good_pixels: 2.8205000000000000e+03,
-       total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 2.8205000000000000e+03,
-       total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 2.8055000000000000e+03,
-       total_pixels: 2.8055000000000000e+03 }
-   - { good_pixels: 2768., total_pixels: 2768. }
-   - { good_pixels: 2753., total_pixels: 2753. }
-   - { good_pixels: 2.7225000000000000e+03,
-       total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 2.7225000000000000e+03,
-       total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 2731., total_pixels: 2731. }
-   - { good_pixels: 2746., total_pixels: 2746. }
-   - { good_pixels: 2670., total_pixels: 2670. }
-   - { good_pixels: 2.6625000000000000e+03,
-       total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 2.6625000000000000e+03,
-       total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 2640., total_pixels: 2640. }
-   - { good_pixels: 2640., total_pixels: 2640. }
-   - { good_pixels: 2603., total_pixels: 2603. }
-   - { good_pixels: 2603., total_pixels: 2603. }
-   - { good_pixels: 2.5665000000000000e+03,
-       total_pixels: 2.5665000000000000e+03 }
-   - { good_pixels: 2.5155000000000000e+03,
-       total_pixels: 2.5155000000000000e+03 }
-   - { good_pixels: 2.4795000000000000e+03,
-       total_pixels: 2.4795000000000000e+03 }
-   - { good_pixels: 2451., total_pixels: 2451. }
-   - { good_pixels: 2401., total_pixels: 2401. }
-   - { good_pixels: 2352., total_pixels: 2352. }
-   - { good_pixels: 2303., total_pixels: 2303. }
-   - { good_pixels: 2.2615000000000000e+03,
-       total_pixels: 2.2615000000000000e+03 }
-   - { good_pixels: 2.2135000000000000e+03,
-       total_pixels: 2.2135000000000000e+03 }
-   - { good_pixels: 2.1525000000000000e+03,
-       total_pixels: 2.1525000000000000e+03 }
-   - { good_pixels: 2.0925000000000000e+03,
-       total_pixels: 2.0925000000000000e+03 }
-   - { good_pixels: 2033., total_pixels: 2033. }
-   - { good_pixels: 1974., total_pixels: 1974. }
-   - { good_pixels: 1903., total_pixels: 1903. }
-   - { good_pixels: 1846., total_pixels: 1846. }
-   - { good_pixels: 1885., total_pixels: 1885. }
-   - { good_pixels: 1.8335000000000000e+03,
-       total_pixels: 1.8335000000000000e+03 }
-   - { good_pixels: 1.7655000000000000e+03,
-       total_pixels: 1.7655000000000000e+03 }
-   - { good_pixels: 1.7115000000000000e+03,
-       total_pixels: 1.7115000000000000e+03 }
-   - { good_pixels: 1652., total_pixels: 1652. }
-   - { good_pixels: 1585., total_pixels: 1585. }
-   - { good_pixels: 1521., total_pixels: 1521. }
-   - { good_pixels: 1458., total_pixels: 1458. }
-   - { good_pixels: 1396., total_pixels: 1396. }
-   - { good_pixels: 1.3465000000000000e+03,
-       total_pixels: 1.3465000000000000e+03 }
-   - { good_pixels: 1.2865000000000000e+03,
-       total_pixels: 1.2865000000000000e+03 }
-   - { good_pixels: 1.2275000000000000e+03,
-       total_pixels: 1.2275000000000000e+03 }
-   - { good_pixels: 1181., total_pixels: 1181. }
-   - { good_pixels: 1.1235000000000000e+03,
-       total_pixels: 1.1235000000000000e+03 }
-   - { good_pixels: 1.0665000000000000e+03,
-       total_pixels: 1.0665000000000000e+03 }
-   - { good_pixels: 1011., total_pixels: 1011. }
-   - { good_pixels: 9.5650000000000000e+02,
-       total_pixels: 9.5650000000000000e+02 }
-   - { good_pixels: 936., total_pixels: 936. }
-   - { good_pixels: 936., total_pixels: 936. }
-   - { good_pixels: 9.1550000000000000e+02,
-       total_pixels: 9.1550000000000000e+02 }
-   - { good_pixels: 917., total_pixels: 917. }
-   - { good_pixels: 9.3850000000000000e+02,
-       total_pixels: 9.3850000000000000e+02 }
-   - { good_pixels: 950., total_pixels: 950. }
-   - { good_pixels: 9.5050000000000000e+02,
-       total_pixels: 9.5050000000000000e+02 }
-   - { good_pixels: 961., total_pixels: 961. }
-   - { good_pixels: 967., total_pixels: 967. }
-   - { good_pixels: 9.7750000000000000e+02,
-       total_pixels: 9.7750000000000000e+02 }
-   - { good_pixels: 967., total_pixels: 967. }
-   - { good_pixels: 977., total_pixels: 977. }
-collision_pointsframe_skip1_dataprocessing_0_generated: 
-   - { x: -65535., y: -65535. }
-   - { x: 1.7590437500000000e+04, y: -4.0698968505859375e+02 }
-   - { x: 1.7572546875000000e+04, y: -4.0858154296875000e+02 }
-   - { x: 1.7965562500000000e+04, y: -4.1015222167968750e+02 }
-   - { x: 4.7634323120117188e+02, y: -3.5982138061523438e+02 }
-   - { x: 6.6567968750000000e+03, y: -3.7760235595703125e+02 }
-   - { x: 6.6690781250000000e+03, y: -3.7707324218750000e+02 }
-   - { x: 6.5884218750000000e+03, y: -3.7722406005859375e+02 }
-   - { x: 5.7575546875000000e+03, y: -3.7229040527343750e+02 }
-   - { x: 5.1752968750000000e+03, y: -3.6880700683593750e+02 }
-   - { x: 4.5684921875000000e+03, y: -3.6517318725585938e+02 }
-   - { x: 3.8565351562500000e+03, y: -3.6091091918945312e+02 }
-   - { x: 3.4146679687500000e+03, y: -3.5827621459960938e+02 }
-   - { x: 2.9400781250000000e+03, y: -3.5520922851562500e+02 }
-   - { x: 2.5771484375000000e+03, y: -3.5329901123046875e+02 }
-   - { x: 2.2320937500000000e+03, y: -3.5123107910156250e+02 }
-   - { x: 1.9922363281250000e+03, y: -3.4982025146484375e+02 }
-   - { x: 1.7815917968750000e+03, y: -3.4857641601562500e+02 }
-   - { x: 1.5972187500000000e+03, y: -3.4749493408203125e+02 }
-   - { x: 1.4738574218750000e+03, y: -3.4676644897460938e+02 }
-   - { x: 1.3807558593750000e+03, y: -3.4614013671875000e+02 }
-   - { x: 1.2909453125000000e+03, y: -3.4571478271484375e+02 }
-   - { x: 1.1987480468750000e+03, y: -3.4517675781250000e+02 }
-   - { x: 1.1362089843750000e+03, y: -3.4483065795898438e+02 }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: 5.0926171875000000e+02, y: -3.4102944946289062e+02 }
-   - { x: 5.0371533203125000e+02, y: -3.4103247070312500e+02 }
-   - { x: 4.9255712890625000e+02, y: -3.4098767089843750e+02 }
-   - { x: 4.8292358398437500e+02, y: -3.4095034790039062e+02 }
-   - { x: 4.7363720703125000e+02, y: -3.4091384887695312e+02 }
-   - { x: 4.7016064453125000e+02, y: -3.4041076660156250e+02 }
-   - { x: 4.6213598632812500e+02, y: -3.4038757324218750e+02 }
-   - { x: 4.5428051757812500e+02, y: -3.4034402465820312e+02 }
-   - { x: 4.4776708984375000e+02, y: -3.4034277343750000e+02 }
-   - { x: 4.4191845703125000e+02, y: -3.4032534790039062e+02 }
-   - { x: 4.3618884277343750e+02, y: -3.4031591796875000e+02 }
-   - { x: 4.3129919433593750e+02, y: -3.4030429077148438e+02 }
-   - { x: 4.2936743164062500e+02, y: -3.4031646728515625e+02 }
-   - { x: 4.2560144042968750e+02, y: -3.4031161499023438e+02 }
-   - { x: 4.2167224121093750e+02, y: -3.4029229736328125e+02 }
-   - { x: 4.1833776855468750e+02, y: -3.4031066894531250e+02 }
-   - { x: 4.1692291259765625e+02, y: -3.4031988525390625e+02 }
-   - { x: 4.1658505249023438e+02, y: -3.4034167480468750e+02 }
-   - { x: 4.1772689819335938e+02, y: -3.4036752319335938e+02 }
-   - { x: 4.1864245605468750e+02, y: -3.4039547729492188e+02 }
-   - { x: 4.1836517333984375e+02, y: -3.4039752197265625e+02 }
-   - { x: 4.1632699584960938e+02, y: -3.4041830444335938e+02 }
-   - { x: 4.1599505615234375e+02, y: -3.4044140625000000e+02 }
-   - { x: 4.1688336181640625e+02, y: -3.4046304321289062e+02 }
-   - { x: 4.1644720458984375e+02, y: -3.4048556518554688e+02 }
-   - { x: 4.1708367919921875e+02, y: -3.4050399780273438e+02 }
-   - { x: 4.1688745117187500e+02, y: -3.4052053833007812e+02 }
-   - { x: 4.1852636718750000e+02, y: -3.4053765869140625e+02 }
-   - { x: 4.1859582519531250e+02, y: -3.4057369995117188e+02 }
-line_anglesframe_skip1_dataprocessing_0_generated: 
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1.5943183004856110e-01, obj2: -2.5300410389900208e-01 }
-   - { obj1: -1.6488710045814514e-01, obj2: -2.5856429338455200e-01 }
-   - { obj1: -1.6474807262420654e-01, obj2: -2.5783956050872803e-01 }
-   - { obj1: -1.5962028503417969e-01, obj2: 5.6563728332519531e+01 }
-   - { obj1: -1.6476601362228394e-01, obj2: -3.4421253204345703e-01 }
-   - { obj1: -1.5991178154945374e-01, obj2: -3.3841165900230408e-01 }
-   - { obj1: -1.6341981291770935e-01, obj2: -3.4406560659408569e-01 }
-   - { obj1: -1.3712878525257111e-01, obj2: -3.4447583556175232e-01 }
-   - { obj1: -1.1895913630723953e-01, obj2: -3.4439381957054138e-01 }
-   - { obj1: -8.7845101952552795e-02, obj2: -3.4433189034461975e-01 }
-   - { obj1: -3.8006860762834549e-02, obj2: -3.4425529837608337e-01 }
-   - { obj1: 4.0238928049802780e-03, obj2: -3.4418147802352905e-01 }
-   - { obj1: 6.9662570953369141e-02, obj2: -3.3878988027572632e-01 }
-   - { obj1: 1.2744887173175812e-01, obj2: -3.4450024366378784e-01 }
-   - { obj1: 2.0948539674282074e-01, obj2: -3.4394711256027222e-01 }
-   - { obj1: 2.8577059507369995e-01, obj2: -3.4435528516769409e-01 }
-   - { obj1: 3.7330135703086853e-01, obj2: -3.4427526593208313e-01 }
-   - { obj1: 4.5213013887405396e-01, obj2: -3.4468773007392883e-01 }
-   - { obj1: 5.3618794679641724e-01, obj2: -3.4411469101905823e-01 }
-   - { obj1: 6.1757886409759521e-01, obj2: -3.3864086866378784e-01 }
-   - { obj1: 7.0074135065078735e-01, obj2: -3.4443894028663635e-01 }
-   - { obj1: 7.7820539474487305e-01, obj2: -3.4386640787124634e-01 }
-   - { obj1: 8.6491608619689941e-01, obj2: -3.4475877881050110e-01 }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: 3.8885402679443359e+00, obj2: -3.3846276998519897e-01 }
-   - { obj1: 4.1535391807556152e+00, obj2: -3.4448671340942383e-01 }
-   - { obj1: 4.4487376213073730e+00, obj2: -3.4388145804405212e-01 }
-   - { obj1: 4.7733016014099121e+00, obj2: -3.4478014707565308e-01 }
-   - { obj1: 5.1456680297851562e+00, obj2: -3.4417080879211426e-01 }
-   - { obj1: 5.5622773170471191e+00, obj2: -3.4406602382659912e-01 }
-   - { obj1: 6.0536751747131348e+00, obj2: -3.4444928169250488e-01 }
-   - { obj1: 6.6137156486511230e+00, obj2: -3.3867385983467102e-01 }
-   - { obj1: 7.2983441352844238e+00, obj2: -3.4424275159835815e-01 }
-   - { obj1: 8.0820446014404297e+00, obj2: -3.4413141012191772e-01 }
-   - { obj1: 9.0768404006958008e+00, obj2: -3.4453186392784119e-01 }
-   - { obj1: 1.0317707061767578e+01, obj2: -3.4440839290618896e-01 }
-   - { obj1: 1.1973117828369141e+01, obj2: -3.4430611133575439e-01 }
-   - { obj1: 1.4195133209228516e+01, obj2: -3.4419441223144531e-01 }
-   - { obj1: 1.7329879760742188e+01, obj2: -3.3833286166191101e-01 }
-   - { obj1: 2.2265563964843750e+01, obj2: -3.4447282552719116e-01 }
-   - { obj1: 2.9728822708129883e+01, obj2: -3.4434854984283447e-01 }
-   - { obj1: 4.5180282592773438e+01, obj2: -3.4423941373825073e-01 }
-   - { obj1: 5.7290481567382812e+01, obj2: -3.4463441371917725e-01 }
-   - { obj1: -5.3528682708740234e+01, obj2: -3.4400501847267151e-01 }
-   - { obj1: -3.6731822967529297e+01, obj2: -3.3860173821449280e-01 }
-   - { obj1: -2.6376998901367188e+01, obj2: -3.4427565336227417e-01 }
-   - { obj1: -2.0340623855590820e+01, obj2: -3.4466314315795898e-01 }
-   - { obj1: -1.7569492340087891e+01, obj2: -3.4403398633003235e-01 }
-   - { obj1: -1.5276733398437500e+01, obj2: -3.4442991018295288e-01 }
-   - { obj1: -1.3595110893249512e+01, obj2: -3.4429499506950378e-01 }
-   - { obj1: -1.2297472000122070e+01, obj2: -3.4418472647666931e-01 }
-   - { obj1: -1.1663011550903320e+01, obj2: -3.3870866894721985e-01 }
-   - { obj1: -1.0860816001892090e+01, obj2: -3.4445008635520935e-01 }
-shape_pointsframe_skip1_dataprocessing_0results_FB_none_: 
-   - { good_pixels: 0., total_pixels: 3180. }
-   - { good_pixels: 493., total_pixels: 3165. }
-   - { good_pixels: 4.8950000000000000e+02,
-       total_pixels: 3.1495000000000000e+03 }
-   - { good_pixels: 5.0050000000000000e+02,
-       total_pixels: 3.1745000000000000e+03 }
-   - { good_pixels: 501., total_pixels: 3.1595000000000000e+03 }
-   - { good_pixels: 4.9450000000000000e+02, total_pixels: 3144. }
-   - { good_pixels: 494., total_pixels: 3.1285000000000000e+03 }
-   - { good_pixels: 492., total_pixels: 3113. }
-   - { good_pixels: 485., total_pixels: 3098. }
-   - { good_pixels: 4.7350000000000000e+02, total_pixels: 3058. }
-   - { good_pixels: 4.3150000000000000e+02,
-       total_pixels: 3.0275000000000000e+03 }
-   - { good_pixels: 4.0950000000000000e+02,
-       total_pixels: 3.0035000000000000e+03 }
-   - { good_pixels: 404., total_pixels: 2973. }
-   - { good_pixels: 3.9850000000000000e+02,
-       total_pixels: 2.9275000000000000e+03 }
-   - { good_pixels: 3.9150000000000000e+02,
-       total_pixels: 2.8815000000000000e+03 }
-   - { good_pixels: 3.6650000000000000e+02,
-       total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 352., total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 347., total_pixels: 2.8055000000000000e+03 }
-   - { good_pixels: 314., total_pixels: 2768. }
-   - { good_pixels: 3.1550000000000000e+02, total_pixels: 2753. }
-   - { good_pixels: 304., total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 285., total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 2.7950000000000000e+02, total_pixels: 2731. }
-   - { good_pixels: 296., total_pixels: 2746. }
-   - { good_pixels: 2.7350000000000000e+02, total_pixels: 2670. }
-   - { good_pixels: 278., total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 2.8250000000000000e+02,
-       total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 274., total_pixels: 2640. }
-   - { good_pixels: 2.7550000000000000e+02, total_pixels: 2640. }
-   - { good_pixels: 254., total_pixels: 2603. }
-   - { good_pixels: 279., total_pixels: 2603. }
-   - { good_pixels: 259., total_pixels: 2.5665000000000000e+03 }
-   - { good_pixels: 2.4350000000000000e+02,
-       total_pixels: 2.5155000000000000e+03 }
-   - { good_pixels: 2.4550000000000000e+02,
-       total_pixels: 2.4795000000000000e+03 }
-   - { good_pixels: 232., total_pixels: 2451. }
-   - { good_pixels: 239., total_pixels: 2401. }
-   - { good_pixels: 230., total_pixels: 2352. }
-   - { good_pixels: 2.1250000000000000e+02, total_pixels: 2303. }
-   - { good_pixels: 2.2350000000000000e+02,
-       total_pixels: 2.2615000000000000e+03 }
-   - { good_pixels: 1.8150000000000000e+02,
-       total_pixels: 2.2135000000000000e+03 }
-   - { good_pixels: 170., total_pixels: 2.1525000000000000e+03 }
-   - { good_pixels: 173., total_pixels: 2.0925000000000000e+03 }
-   - { good_pixels: 1.7650000000000000e+02, total_pixels: 2033. }
-   - { good_pixels: 1.5950000000000000e+02, total_pixels: 1974. }
-   - { good_pixels: 1.5050000000000000e+02, total_pixels: 1903. }
-   - { good_pixels: 152., total_pixels: 1846. }
-   - { good_pixels: 150., total_pixels: 1885. }
-   - { good_pixels: 142., total_pixels: 1.8335000000000000e+03 }
-   - { good_pixels: 121., total_pixels: 1.7655000000000000e+03 }
-   - { good_pixels: 1.3250000000000000e+02,
-       total_pixels: 1.7115000000000000e+03 }
-   - { good_pixels: 1.2850000000000000e+02, total_pixels: 1652. }
-   - { good_pixels: 1.1550000000000000e+02, total_pixels: 1585. }
-   - { good_pixels: 1.1250000000000000e+02, total_pixels: 1521. }
-   - { good_pixels: 116., total_pixels: 1458. }
-   - { good_pixels: 80., total_pixels: 1396. }
-   - { good_pixels: 9.6500000000000000e+01,
-       total_pixels: 1.3465000000000000e+03 }
-   - { good_pixels: 7.1500000000000000e+01,
-       total_pixels: 1.2865000000000000e+03 }
-   - { good_pixels: 78., total_pixels: 1.2275000000000000e+03 }
-   - { good_pixels: 5.9500000000000000e+01, total_pixels: 1181. }
-   - { good_pixels: 77., total_pixels: 1.1235000000000000e+03 }
-   - { good_pixels: 54., total_pixels: 1.0665000000000000e+03 }
-   - { good_pixels: 1.7500000000000000e+01, total_pixels: 1011. }
-   - { good_pixels: 11., total_pixels: 9.5650000000000000e+02 }
-   - { good_pixels: 8., total_pixels: 936. }
-   - { good_pixels: 9.5000000000000000e+00, total_pixels: 936. }
-   - { good_pixels: 7., total_pixels: 9.1550000000000000e+02 }
-   - { good_pixels: 11., total_pixels: 917. }
-   - { good_pixels: 1.9500000000000000e+01,
-       total_pixels: 9.3850000000000000e+02 }
-   - { good_pixels: 2.6500000000000000e+01, total_pixels: 950. }
-   - { good_pixels: 2.1500000000000000e+01,
-       total_pixels: 9.5050000000000000e+02 }
-   - { good_pixels: 3.9500000000000000e+01, total_pixels: 961. }
-   - { good_pixels: 3.6500000000000000e+01, total_pixels: 967. }
-   - { good_pixels: 4.8500000000000000e+01,
-       total_pixels: 9.7750000000000000e+02 }
-   - { good_pixels: 3.6500000000000000e+01, total_pixels: 967. }
-   - { good_pixels: 54., total_pixels: 977. }
-shape_pointsframe_skip1_dataprocessing_1results_FB_none_: 
-   - { good_pixels: 0., total_pixels: 3180. }
-   - { good_pixels: 5.0850000000000000e+02, total_pixels: 3165. }
-   - { good_pixels: 498., total_pixels: 3.1495000000000000e+03 }
-   - { good_pixels: 508., total_pixels: 3.1745000000000000e+03 }
-   - { good_pixels: 503., total_pixels: 3.1595000000000000e+03 }
-   - { good_pixels: 5.0150000000000000e+02, total_pixels: 3144. }
-   - { good_pixels: 4.9550000000000000e+02,
-       total_pixels: 3.1285000000000000e+03 }
-   - { good_pixels: 495., total_pixels: 3113. }
-   - { good_pixels: 502., total_pixels: 3098. }
-   - { good_pixels: 4.8350000000000000e+02, total_pixels: 3058. }
-   - { good_pixels: 4.2650000000000000e+02,
-       total_pixels: 3.0275000000000000e+03 }
-   - { good_pixels: 4.1850000000000000e+02,
-       total_pixels: 3.0035000000000000e+03 }
-   - { good_pixels: 407., total_pixels: 2973. }
-   - { good_pixels: 401., total_pixels: 2.9275000000000000e+03 }
-   - { good_pixels: 397., total_pixels: 2.8815000000000000e+03 }
-   - { good_pixels: 371., total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 359., total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 349., total_pixels: 2.8055000000000000e+03 }
-   - { good_pixels: 3.1550000000000000e+02, total_pixels: 2768. }
-   - { good_pixels: 3.1850000000000000e+02, total_pixels: 2753. }
-   - { good_pixels: 314., total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 289., total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 2.8450000000000000e+02, total_pixels: 2731. }
-   - { good_pixels: 299., total_pixels: 2746. }
-   - { good_pixels: 2.8350000000000000e+02, total_pixels: 2670. }
-   - { good_pixels: 2.9450000000000000e+02,
-       total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 290., total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 2.8150000000000000e+02, total_pixels: 2640. }
-   - { good_pixels: 2.7850000000000000e+02, total_pixels: 2640. }
-   - { good_pixels: 2.5850000000000000e+02, total_pixels: 2603. }
-   - { good_pixels: 2.9150000000000000e+02, total_pixels: 2603. }
-   - { good_pixels: 2.6250000000000000e+02,
-       total_pixels: 2.5665000000000000e+03 }
-   - { good_pixels: 2.5650000000000000e+02,
-       total_pixels: 2.5155000000000000e+03 }
-   - { good_pixels: 272., total_pixels: 2.4795000000000000e+03 }
-   - { good_pixels: 2.4550000000000000e+02, total_pixels: 2451. }
-   - { good_pixels: 2.5050000000000000e+02, total_pixels: 2401. }
-   - { good_pixels: 2.5350000000000000e+02, total_pixels: 2352. }
-   - { good_pixels: 2.2550000000000000e+02, total_pixels: 2303. }
-   - { good_pixels: 226., total_pixels: 2.2615000000000000e+03 }
-   - { good_pixels: 1.8250000000000000e+02,
-       total_pixels: 2.2135000000000000e+03 }
-   - { good_pixels: 164., total_pixels: 2.1525000000000000e+03 }
-   - { good_pixels: 181., total_pixels: 2.0925000000000000e+03 }
-   - { good_pixels: 1.7250000000000000e+02, total_pixels: 2033. }
-   - { good_pixels: 1.4350000000000000e+02, total_pixels: 1974. }
-   - { good_pixels: 134., total_pixels: 1903. }
-   - { good_pixels: 1.4650000000000000e+02, total_pixels: 1846. }
-   - { good_pixels: 1.3850000000000000e+02, total_pixels: 1885. }
-   - { good_pixels: 133., total_pixels: 1.8335000000000000e+03 }
-   - { good_pixels: 110., total_pixels: 1.7655000000000000e+03 }
-   - { good_pixels: 125., total_pixels: 1.7115000000000000e+03 }
-   - { good_pixels: 124., total_pixels: 1652. }
-   - { good_pixels: 1.0950000000000000e+02, total_pixels: 1585. }
-   - { good_pixels: 106., total_pixels: 1521. }
-   - { good_pixels: 1.1750000000000000e+02, total_pixels: 1458. }
-   - { good_pixels: 79., total_pixels: 1396. }
-   - { good_pixels: 9.6500000000000000e+01,
-       total_pixels: 1.3465000000000000e+03 }
-   - { good_pixels: 58., total_pixels: 1.2865000000000000e+03 }
-   - { good_pixels: 84., total_pixels: 1.2275000000000000e+03 }
-   - { good_pixels: 5.6500000000000000e+01, total_pixels: 1181. }
-   - { good_pixels: 6.8500000000000000e+01,
-       total_pixels: 1.1235000000000000e+03 }
-   - { good_pixels: 44., total_pixels: 1.0665000000000000e+03 }
-   - { good_pixels: 1.6500000000000000e+01, total_pixels: 1011. }
-   - { good_pixels: 12., total_pixels: 9.5650000000000000e+02 }
-   - { good_pixels: 9.5000000000000000e+00, total_pixels: 936. }
-   - { good_pixels: 15., total_pixels: 936. }
-   - { good_pixels: 7., total_pixels: 9.1550000000000000e+02 }
-   - { good_pixels: 11., total_pixels: 917. }
-   - { good_pixels: 21., total_pixels: 9.3850000000000000e+02 }
-   - { good_pixels: 2.4500000000000000e+01, total_pixels: 950. }
-   - { good_pixels: 3.0500000000000000e+01,
-       total_pixels: 9.5050000000000000e+02 }
-   - { good_pixels: 3.5500000000000000e+01, total_pixels: 961. }
-   - { good_pixels: 31., total_pixels: 967. }
-   - { good_pixels: 49., total_pixels: 9.7750000000000000e+02 }
-   - { good_pixels: 3.6500000000000000e+01, total_pixels: 967. }
-   - { good_pixels: 49., total_pixels: 977. }
-shape_pointsframe_skip1_dataprocessing_2results_FB_none_: 
-   - { good_pixels: 0., total_pixels: 3180. }
-   - { good_pixels: 579., total_pixels: 3165. }
-   - { good_pixels: 568., total_pixels: 3.1495000000000000e+03 }
-   - { good_pixels: 5.7050000000000000e+02,
-       total_pixels: 3.1745000000000000e+03 }
-   - { good_pixels: 5.6450000000000000e+02,
-       total_pixels: 3.1595000000000000e+03 }
-   - { good_pixels: 5.8450000000000000e+02, total_pixels: 3144. }
-   - { good_pixels: 586., total_pixels: 3.1285000000000000e+03 }
-   - { good_pixels: 5.9850000000000000e+02, total_pixels: 3113. }
-   - { good_pixels: 6.0950000000000000e+02, total_pixels: 3098. }
-   - { good_pixels: 582., total_pixels: 3058. }
-   - { good_pixels: 555., total_pixels: 3.0275000000000000e+03 }
-   - { good_pixels: 542., total_pixels: 3.0035000000000000e+03 }
-   - { good_pixels: 522., total_pixels: 2973. }
-   - { good_pixels: 532., total_pixels: 2.9275000000000000e+03 }
-   - { good_pixels: 540., total_pixels: 2.8815000000000000e+03 }
-   - { good_pixels: 497., total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 507., total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 483., total_pixels: 2.8055000000000000e+03 }
-   - { good_pixels: 5.0550000000000000e+02, total_pixels: 2768. }
-   - { good_pixels: 497., total_pixels: 2753. }
-   - { good_pixels: 4.7550000000000000e+02,
-       total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 4.6650000000000000e+02,
-       total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 4.5650000000000000e+02, total_pixels: 2731. }
-   - { good_pixels: 475., total_pixels: 2746. }
-   - { good_pixels: 467., total_pixels: 2670. }
-   - { good_pixels: 4.6950000000000000e+02,
-       total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 468., total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 4.6650000000000000e+02, total_pixels: 2640. }
-   - { good_pixels: 4.7550000000000000e+02, total_pixels: 2640. }
-   - { good_pixels: 468., total_pixels: 2603. }
-   - { good_pixels: 454., total_pixels: 2603. }
-   - { good_pixels: 4.3850000000000000e+02,
-       total_pixels: 2.5665000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 2.5155000000000000e+03 }
-   - { good_pixels: 431., total_pixels: 2.4795000000000000e+03 }
-   - { good_pixels: 435., total_pixels: 2451. }
-   - { good_pixels: 437., total_pixels: 2401. }
-   - { good_pixels: 431., total_pixels: 2352. }
-   - { good_pixels: 432., total_pixels: 2303. }
-   - { good_pixels: 432., total_pixels: 2.2615000000000000e+03 }
-   - { good_pixels: 3.9850000000000000e+02,
-       total_pixels: 2.2135000000000000e+03 }
-   - { good_pixels: 392., total_pixels: 2.1525000000000000e+03 }
-   - { good_pixels: 3.7550000000000000e+02,
-       total_pixels: 2.0925000000000000e+03 }
-   - { good_pixels: 3.8050000000000000e+02, total_pixels: 2033. }
-   - { good_pixels: 357., total_pixels: 1974. }
-   - { good_pixels: 3.5650000000000000e+02, total_pixels: 1903. }
-   - { good_pixels: 3.5650000000000000e+02, total_pixels: 1846. }
-   - { good_pixels: 377., total_pixels: 1885. }
-   - { good_pixels: 3.6150000000000000e+02,
-       total_pixels: 1.8335000000000000e+03 }
-   - { good_pixels: 1.9500000000000000e+01,
-       total_pixels: 1.7655000000000000e+03 }
-   - { good_pixels: 26., total_pixels: 1.7115000000000000e+03 }
-   - { good_pixels: 247., total_pixels: 1652. }
-   - { good_pixels: 268., total_pixels: 1585. }
-   - { good_pixels: 251., total_pixels: 1521. }
-   - { good_pixels: 220., total_pixels: 1458. }
-   - { good_pixels: 2.1050000000000000e+02, total_pixels: 1396. }
-   - { good_pixels: 2.2450000000000000e+02,
-       total_pixels: 1.3465000000000000e+03 }
-   - { good_pixels: 182., total_pixels: 1.2865000000000000e+03 }
-   - { good_pixels: 195., total_pixels: 1.2275000000000000e+03 }
-   - { good_pixels: 1.7150000000000000e+02, total_pixels: 1181. }
-   - { good_pixels: 1.4050000000000000e+02,
-       total_pixels: 1.1235000000000000e+03 }
-   - { good_pixels: 125., total_pixels: 1.0665000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1011. }
-   - { good_pixels: 0., total_pixels: 9.5650000000000000e+02 }
-   - { good_pixels: 0., total_pixels: 936. }
-   - { good_pixels: 0., total_pixels: 936. }
-   - { good_pixels: 18., total_pixels: 9.1550000000000000e+02 }
-   - { good_pixels: 0., total_pixels: 917. }
-   - { good_pixels: 7.1500000000000000e+01,
-       total_pixels: 9.3850000000000000e+02 }
-   - { good_pixels: 0., total_pixels: 950. }
-   - { good_pixels: 26., total_pixels: 9.5050000000000000e+02 }
-   - { good_pixels: 26., total_pixels: 961. }
-   - { good_pixels: 0., total_pixels: 967. }
-   - { good_pixels: 26., total_pixels: 9.7750000000000000e+02 }
-   - { good_pixels: 26., total_pixels: 967. }
-   - { good_pixels: 0., total_pixels: 977. }
-shape_pointsframe_skip1_dataprocessing_3results_FB_none_: 
-   - { good_pixels: 0., total_pixels: 3180. }
-   - { good_pixels: 579., total_pixels: 3165. }
-   - { good_pixels: 5.5050000000000000e+02,
-       total_pixels: 3.1495000000000000e+03 }
-   - { good_pixels: 5.7050000000000000e+02,
-       total_pixels: 3.1745000000000000e+03 }
-   - { good_pixels: 5.6450000000000000e+02,
-       total_pixels: 3.1595000000000000e+03 }
-   - { good_pixels: 5.6550000000000000e+02, total_pixels: 3144. }
-   - { good_pixels: 568., total_pixels: 3.1285000000000000e+03 }
-   - { good_pixels: 5.8050000000000000e+02, total_pixels: 3113. }
-   - { good_pixels: 584., total_pixels: 3098. }
-   - { good_pixels: 558., total_pixels: 3058. }
-   - { good_pixels: 555., total_pixels: 3.0275000000000000e+03 }
-   - { good_pixels: 542., total_pixels: 3.0035000000000000e+03 }
-   - { good_pixels: 522., total_pixels: 2973. }
-   - { good_pixels: 5.1250000000000000e+02,
-       total_pixels: 2.9275000000000000e+03 }
-   - { good_pixels: 5.2050000000000000e+02,
-       total_pixels: 2.8815000000000000e+03 }
-   - { good_pixels: 497., total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 481., total_pixels: 2.8205000000000000e+03 }
-   - { good_pixels: 483., total_pixels: 2.8055000000000000e+03 }
-   - { good_pixels: 480., total_pixels: 2768. }
-   - { good_pixels: 4.7150000000000000e+02, total_pixels: 2753. }
-   - { good_pixels: 451., total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 447., total_pixels: 2.7225000000000000e+03 }
-   - { good_pixels: 437., total_pixels: 2731. }
-   - { good_pixels: 4.5550000000000000e+02, total_pixels: 2746. }
-   - { good_pixels: 467., total_pixels: 2670. }
-   - { good_pixels: 4.6950000000000000e+02,
-       total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 468., total_pixels: 2.6625000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 2640. }
-   - { good_pixels: 0., total_pixels: 2640. }
-   - { good_pixels: 0., total_pixels: 2603. }
-   - { good_pixels: 0., total_pixels: 2603. }
-   - { good_pixels: 4.3850000000000000e+02,
-       total_pixels: 2.5665000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 2.5155000000000000e+03 }
-   - { good_pixels: 431., total_pixels: 2.4795000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 2451. }
-   - { good_pixels: 437., total_pixels: 2401. }
-   - { good_pixels: 431., total_pixels: 2352. }
-   - { good_pixels: 432., total_pixels: 2303. }
-   - { good_pixels: 432., total_pixels: 2.2615000000000000e+03 }
-   - { good_pixels: 3.9850000000000000e+02,
-       total_pixels: 2.2135000000000000e+03 }
-   - { good_pixels: 392., total_pixels: 2.1525000000000000e+03 }
-   - { good_pixels: 3.7550000000000000e+02,
-       total_pixels: 2.0925000000000000e+03 }
-   - { good_pixels: 3.8050000000000000e+02, total_pixels: 2033. }
-   - { good_pixels: 357., total_pixels: 1974. }
-   - { good_pixels: 3.5650000000000000e+02, total_pixels: 1903. }
-   - { good_pixels: 3.5650000000000000e+02, total_pixels: 1846. }
-   - { good_pixels: 351., total_pixels: 1885. }
-   - { good_pixels: 3.6150000000000000e+02,
-       total_pixels: 1.8335000000000000e+03 }
-   - { good_pixels: 2.9250000000000000e+02,
-       total_pixels: 1.7655000000000000e+03 }
-   - { good_pixels: 2.7050000000000000e+02,
-       total_pixels: 1.7115000000000000e+03 }
-   - { good_pixels: 273., total_pixels: 1652. }
-   - { good_pixels: 268., total_pixels: 1585. }
-   - { good_pixels: 225., total_pixels: 1521. }
-   - { good_pixels: 0., total_pixels: 1458. }
-   - { good_pixels: 2.1050000000000000e+02, total_pixels: 1396. }
-   - { good_pixels: 0., total_pixels: 1.3465000000000000e+03 }
-   - { good_pixels: 208., total_pixels: 1.2865000000000000e+03 }
-   - { good_pixels: 26., total_pixels: 1.2275000000000000e+03 }
-   - { good_pixels: 1.4550000000000000e+02, total_pixels: 1181. }
-   - { good_pixels: 26., total_pixels: 1.1235000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1.0665000000000000e+03 }
-   - { good_pixels: 0., total_pixels: 1011. }
-   - { good_pixels: 0., total_pixels: 9.5650000000000000e+02 }
-   - { good_pixels: 0., total_pixels: 936. }
-   - { good_pixels: 0., total_pixels: 936. }
-   - { good_pixels: 4.3500000000000000e+01,
-       total_pixels: 9.1550000000000000e+02 }
-   - { good_pixels: 0., total_pixels: 917. }
-   - { good_pixels: 0., total_pixels: 9.3850000000000000e+02 }
-   - { good_pixels: 26., total_pixels: 950. }
-   - { good_pixels: 0., total_pixels: 9.5050000000000000e+02 }
-   - { good_pixels: 0., total_pixels: 961. }
-   - { good_pixels: 26., total_pixels: 967. }
-   - { good_pixels: 0., total_pixels: 9.7750000000000000e+02 }
-   - { good_pixels: 26., total_pixels: 967. }
-   - { good_pixels: 0., total_pixels: 977. }
-collision_pointsframe_skip1_dataprocessing_0results_FB_none_: 
-   - { x: -65535., y: -65535. }
-   - { x: -4.9919708251953125e+02, y: -3.4235565185546875e+02 }
-   - { x: 3.4790112304687500e+02, y: -3.4465582275390625e+02 }
-   - { x: 2.9874182128906250e+02, y: -3.4456097412109375e+02 }
-   - { x: 4.7590734863281250e+02, y: -4.0080541992187500e+02 }
-   - { x: 3.5529553222656250e+02, y: -3.4937051391601562e+02 }
-   - { x: 3.5406524658203125e+02, y: -3.4937774658203125e+02 }
-   - { x: 3.5543530273437500e+02, y: -3.4939642333984375e+02 }
-   - { x: 3.5708639526367188e+02, y: -3.4931640625000000e+02 }
-   - { x: 3.3298080444335938e+02, y: -3.4881604003906250e+02 }
-   - { x: 3.0426904296875000e+02, y: -3.4853253173828125e+02 }
-   - { x: 1.9659735107421875e+02, y: -3.4763861083984375e+02 }
-   - { x: -5.0679794921875000e+03, y: -3.1714965820312500e+02 }
-   - { x: 6.8424560546875000e+02, y: -3.4974081420898438e+02 }
-   - { x: -7.5312827148437500e+03, y: -3.6754327392578125e+02 }
-   - { x: 6.5259399414062500e+02, y: -3.4868484497070312e+02 }
-   - { x: 4.1048632812500000e+02, y: -3.4951913452148438e+02 }
-   - { x: 5.8115539550781250e+02, y: -3.4817498779296875e+02 }
-   - { x: 2.7325942382812500e+03, y: -3.3070407104492188e+02 }
-   - { x: 6.4286706542968750e+02, y: -3.4677386474609375e+02 }
-   - { x: -2.7249707031250000e+02, y: -3.5635250854492188e+02 }
-   - { x: 6.1017773437500000e+02, y: -3.4652850341796875e+02 }
-   - { x: -8.4529565429687500e+02, y: -3.6566137695312500e+02 }
-   - { x: 5.4724304199218750e+02, y: -3.4643276977539062e+02 }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: 3.7777526855468750e+02, y: -3.4686773681640625e+02 }
-   - { x: 3.4442016601562500e+02, y: -3.4933001708984375e+02 }
-   - { x: 3.4933599853515625e+02, y: -3.4891891479492188e+02 }
-   - { x: 3.5066635131835938e+02, y: -3.4927713012695312e+02 }
-   - { x: 2.6589062500000000e+02, y: -3.5739874267578125e+02 }
-   - { x: -3.9986608886718750e+02, y: -4.2275070190429688e+02 }
-   - { x: 4.3523443603515625e+02, y: -3.4089843750000000e+02 }
-   - { x: 4.4120541381835938e+02, y: -3.3966711425781250e+02 }
-   - { x: 4.2594836425781250e+02, y: -3.4138323974609375e+02 }
-   - { x: 4.3075714111328125e+02, y: -3.4055407714843750e+02 }
-   - { x: 4.1305450439453125e+02, y: -3.4225756835937500e+02 }
-   - { x: 4.3127526855468750e+02, y: -3.3902020263671875e+02 }
-   - { x: 4.2011437988281250e+02, y: -3.4081005859375000e+02 }
-   - { x: 4.1474481201171875e+02, y: -3.3957135009765625e+02 }
-   - { x: 4.3232272338867188e+02, y: -3.4147332763671875e+02 }
-   - { x: 4.1534323120117188e+02, y: -3.4023944091796875e+02 }
-   - { x: 4.3545605468750000e+02, y: -3.4185552978515625e+02 }
-   - { x: 4.0078033447265625e+02, y: -3.4305963134765625e+02 }
-   - { x: 4.2141241455078125e+02, y: -3.4179595947265625e+02 }
-   - { x: 4.3506927490234375e+02, y: -3.4235833740234375e+02 }
-   - { x: 4.0827893066406250e+02, y: -3.4242968750000000e+02 }
-   - { x: 4.2141705322265625e+02, y: -3.4317919921875000e+02 }
-   - { x: 4.0515771484375000e+02, y: -3.4025588989257812e+02 }
-   - { x: 4.1474478149414062e+02, y: -3.4500289916992188e+02 }
-   - { x: 3.9948846435546875e+02, y: -3.3957525634765625e+02 }
-   - { x: 4.4046572875976562e+02, y: -3.4740863037109375e+02 }
-   - { x: 4.0378869628906250e+02, y: -3.3856414794921875e+02 }
-   - { x: 4.2866488647460938e+02, y: -3.4311999511718750e+02 }
-   - { x: 4.1485064697265625e+02, y: -3.4041973876953125e+02 }
-line_anglesframe_skip1_dataprocessing_0results_FB_none_: 
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -2.2914314270019531e+01, obj2: 7.9421812295913696e-01 }
-   - { obj1: -1.1975687980651855e+01, obj2: -7.5506181716918945e+00 }
-   - { obj1: -4.9645614624023438e+00, obj2: -4.5061020851135254e+00 }
-   - { obj1: -1.6200550079345703e+01, obj2: -3.9574199676513672e+01 }
-   - { obj1: 5.1190738677978516e+01, obj2: -3.3947982788085938e+01 }
-   - { obj1: 5.2897544860839844e+01, obj2: -3.7510910034179688e+01 }
-   - { obj1: 5.1532630920410156e+01, obj2: -3.9934513092041016e+01 }
-   - { obj1: 5.7295780181884766e+01, obj2: -2.6659856796264648e+01 }
-   - { obj1: -1.5982712745666504e+01, obj2: -1.5353857040405273e+01 }
-   - { obj1: -8.4120397567749023e+00, obj2: -1.1976091384887695e+01 }
-   - { obj1: -3.4146904945373535e+00, obj2: -7.9411239624023438e+00 }
-   - { obj1: -4.6901297569274902e-01, obj2: 3.8308069705963135e+00 }
-   - { obj1: 2.8208751678466797e+00, obj2: -3.6562349796295166e+00 }
-   - { obj1: 3.3675813674926758e+00, obj2: 1.9168351590633392e-01 }
-   - { obj1: 4.1973900794982910e+00, obj2: -2.6804647445678711e+00 }
-   - { obj1: 4.6733179092407227e+00, obj2: 8.3483667373657227e+00 }
-   - { obj1: 5.5063729286193848e+00, obj2: -3.5755672454833984e+00 }
-   - { obj1: 5.5005402565002441e+00, obj2: 2.3870080709457397e-01 }
-   - { obj1: 6.0171284675598145e+00, obj2: -1.9187355041503906e+00 }
-   - { obj1: 6.1639318466186523e+00, obj2: 1.3098090887069702e+00 }
-   - { obj1: 6.6136684417724609e+00, obj2: -2.1395878791809082e+00 }
-   - { obj1: 7.2693891525268555e+00, obj2: 1.1298992633819580e+00 }
-   - { obj1: 7.7039384841918945e+00, obj2: -2.9979550838470459e+00 }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: 1.5414694786071777e+01, obj2: 5.7182960510253906e+01 }
-   - { obj1: 1.7503993988037109e+01, obj2: 1.5880926132202148e+01 }
-   - { obj1: 1.8419414520263672e+01, obj2: 2.0912891387939453e+01 }
-   - { obj1: 2.1571538925170898e+01, obj2: 2.0942783355712891e+01 }
-   - { obj1: 2.2245288848876953e+01, obj2: 8.9230098724365234e+00 }
-   - { obj1: 2.6389032363891602e+01, obj2: 6.1223750114440918e+00 }
-   - { obj1: 2.6939903259277344e+01, obj2: -6.9887733459472656e-01 }
-   - { obj1: 3.2235492706298828e+01, obj2: 2.9629978537559509e-01 }
-   - { obj1: 3.3937812805175781e+01, obj2: -1.1896147727966309e+00 }
-   - { obj1: 4.0624706268310547e+01, obj2: -3.8775119185447693e-01 }
-   - { obj1: 5.6189105987548828e+01, obj2: -2.2712562084197998e+00 }
-   - { obj1: 5.0836616516113281e+01, obj2: 8.5051792860031128e-01 }
-   - { obj1: 5.3030376434326172e+01, obj2: -6.0866820812225342e-01 }
-   - { obj1: -3.8931030273437500e+01, obj2: 4.0980273485183716e-01 }
-   - { obj1: 1.6698862075805664e+01, obj2: -1.1075603961944580e+00 }
-   - { obj1: -4.5803771972656250e+01, obj2: -8.6269043385982513e-02 }
-   - { obj1: 2.3265773773193359e+01, obj2: -1.3829592466354370e+00 }
-   - { obj1: -3.3383586883544922e+01, obj2: -2.5489249229431152e+00 }
-   - { obj1: 5.7295780181884766e+01, obj2: -1.2711122035980225e+00 }
-   - { obj1: 4.2549869537353516e+01, obj2: -1.4232257604598999e+00 }
-   - { obj1: -1.9285221099853516e+01, obj2: -1.6736123561859131e+00 }
-   - { obj1: 5.7295391082763672e+01, obj2: -2.0583422183990479e+00 }
-   - { obj1: -2.4778165817260742e+01, obj2: -7.1666464209556580e-02 }
-   - { obj1: -1.9945188522338867e+01, obj2: -2.9642872810363770e+00 }
-   - { obj1: -3.0028949737548828e+01, obj2: 4.2769655585289001e-01 }
-   - { obj1: -3.1570529937744141e+01, obj2: -3.6652212142944336e+00 }
-   - { obj1: -2.3341911315917969e+01, obj2: 1.2496439218521118e+00 }
-   - { obj1: -3.2109783172607422e+01, obj2: -1.6277323961257935e+00 }
-   - { obj1: -2.7412918090820312e+01, obj2: -9.7749359905719757e-02 }
-collision_pointsframe_skip1_dataprocessing_1results_FB_none_: 
-   - { x: -65535., y: -65535. }
-   - { x: 3.9943793945312500e+03, y: -3.5502923583984375e+02 }
-   - { x: 5.0292340087890625e+02, y: -3.4512326049804688e+02 }
-   - { x: 3.8129681396484375e+02, y: -3.4499005126953125e+02 }
-   - { x: 4.7437863159179688e+02, y: -4.1522552490234375e+02 }
-   - { x: 4.0278509521484375e+02, y: -3.4953176879882812e+02 }
-   - { x: 3.4312542724609375e+02, y: -3.4922451782226562e+02 }
-   - { x: 3.3024060058593750e+02, y: -3.4918646240234375e+02 }
-   - { x: 3.4194198608398438e+02, y: -3.4916824340820312e+02 }
-   - { x: 3.2839871215820312e+02, y: -3.4882617187500000e+02 }
-   - { x: 3.8605975341796875e+02, y: -3.4909002685546875e+02 }
-   - { x: 3.2908468627929688e+02, y: -3.4864239501953125e+02 }
-   - { x: 3.8735491943359375e+02, y: -3.4890737915039062e+02 }
-   - { x: 3.9170016479492188e+02, y: -3.4879418945312500e+02 }
-   - { x: 4.1567041015625000e+02, y: -3.4864678955078125e+02 }
-   - { x: 4.3206524658203125e+02, y: -3.4835864257812500e+02 }
-   - { x: 3.4079620361328125e+02, y: -3.4801351928710938e+02 }
-   - { x: 4.2008767700195312e+02, y: -3.4819293212890625e+02 }
-   - { x: 2.7288665771484375e+00, y: -3.5103540039062500e+02 }
-   - { x: 4.1780294799804688e+02, y: -3.4775842285156250e+02 }
-   - { x: 3.7152682495117188e+02, y: -3.4736590576171875e+02 }
-   - { x: 4.8825152587890625e+02, y: -3.4670431518554688e+02 }
-   - { x: 3.3780535888671875e+02, y: -3.4868209838867188e+02 }
-   - { x: 5.0019555664062500e+02, y: -3.4612640380859375e+02 }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -6.8225128173828125e+01, y: -3.7640496826171875e+02 }
-   - { x: 6.4082678222656250e+02, y: -3.2507534790039062e+02 }
-   - { x: 5.2368786621093750e+02, y: -3.3565618896484375e+02 }
-   - { x: 8.5470288085937500e+02, y: -3.5902813720703125e+02 }
-   - { x: 3.5937268066406250e+02, y: -3.4012515258789062e+02 }
-   - { x: 4.7557168579101562e+02, y: -3.3810116577148438e+02 }
-   - { x: 5.4524938964843750e+02, y: -3.3168823242187500e+02 }
-   - { x: 8.4122045898437500e+02, y: -2.9215155029296875e+02 }
-   - { x: 5.5281970214843750e+02, y: -3.2192694091796875e+02 }
-   - { x: 1.4619738769531250e+03, y: -3.3738742065429688e+02 }
-   - { x: 3.6762121582031250e+02, y: -3.3362686157226562e+02 }
-   - { x: 4.3230731201171875e+02, y: -3.3961178588867188e+02 }
-   - { x: 4.7382934570312500e+02, y: -3.2965240478515625e+02 }
-   - { x: 4.5743914794921875e+02, y: -3.3164083862304688e+02 }
-   - { x: 4.5396063232421875e+02, y: -3.3155709838867188e+02 }
-   - { x: 4.6618322753906250e+02, y: -3.2607226562500000e+02 }
-   - { x: 4.2317181396484375e+02, y: -3.2950491333007812e+02 }
-   - { x: 4.1591595458984375e+02, y: -3.3121762084960938e+02 }
-   - { x: 4.0581414794921875e+02, y: -3.3200735473632812e+02 }
-   - { x: 4.0862060546875000e+02, y: -3.2981219482421875e+02 }
-   - { x: 4.0442980957031250e+02, y: -3.3118945312500000e+02 }
-   - { x: 3.7736810302734375e+02, y: -3.3422167968750000e+02 }
-   - { x: 3.9741119384765625e+02, y: -3.3659313964843750e+02 }
-   - { x: 3.7339816284179688e+02, y: -3.3541790771484375e+02 }
-   - { x: 3.0427600097656250e+02, y: -3.3440652465820312e+02 }
-   - { x: 3.3704583740234375e+02, y: -3.3398880004882812e+02 }
-   - { x: 4.3619869995117188e+02, y: -3.3627612304687500e+02 }
-   - { x: 3.6876095581054688e+02, y: -3.3574655151367188e+02 }
-   - { x: 3.9070086669921875e+02, y: -3.3672741699218750e+02 }
-line_anglesframe_skip1_dataprocessing_1results_FB_none_: 
-   - { obj1: -1., obj2: -1. }
-   - { obj1: 1.3251146316528320e+01, obj2: -3.6809396743774414e-01 }
-   - { obj1: -1.4308756828308105e+01, obj2: -3.1601579189300537e+00 }
-   - { obj1: -1.1185942649841309e+01, obj2: -5.5955734252929688e+00 }
-   - { obj1: -2.2538293838500977e+01, obj2: -3.1946195602416992e+01 }
-   - { obj1: 3.6253990173339844e+01, obj2: -1.0721001625061035e+01 }
-   - { obj1: -2.2116878509521484e+01, obj2: -1.4415113449096680e+01 }
-   - { obj1: -2.0576539993286133e+01, obj2: -1.9151151657104492e+01 }
-   - { obj1: -2.3908857345581055e+01, obj2: -1.5774996757507324e+01 }
-   - { obj1: -1.7946083068847656e+01, obj2: -2.0160995483398438e+01 }
-   - { obj1: 3.3459110260009766e+01, obj2: -1.7491020202636719e+01 }
-   - { obj1: -1.6177526473999023e+01, obj2: -1.8248264312744141e+01 }
-   - { obj1: 3.4323932647705078e+01, obj2: -1.7899681091308594e+01 }
-   - { obj1: 3.0264783859252930e+01, obj2: -1.6750955581665039e+01 }
-   - { obj1: 2.7151634216308594e+01, obj2: -9.7917356491088867e+00 }
-   - { obj1: 3.4173896789550781e+01, obj2: -6.7570405006408691e+00 }
-   - { obj1: -1.4304226875305176e+01, obj2: -1.3103083610534668e+01 }
-   - { obj1: 2.5235759735107422e+01, obj2: -9.8149681091308594e+00 }
-   - { obj1: 3.4507724761962891e+01, obj2: 1.7930228710174561e+00 }
-   - { obj1: 2.6085594177246094e+01, obj2: -1.0202260017395020e+01 }
-   - { obj1: -2.0161310195922852e+01, obj2: -1.0039087295532227e+01 }
-   - { obj1: 3.3478015899658203e+01, obj2: -3.3706822395324707e+00 }
-   - { obj1: 1.7535541534423828e+01, obj2: 9.1449584960937500e+00 }
-   - { obj1: 2.3397869110107422e+01, obj2: -2.9617464542388916e+00 }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: 3.2601943969726562e+01, obj2: 4.7314558029174805e+00 }
-   - { obj1: -1.5458093643188477e+01, obj2: 2.8659224510192871e+00 }
-   - { obj1: 1.4660225868225098e+01, obj2: 1.7900331020355225e+00 }
-   - { obj1: 1.8379051983356476e-01, obj2: 8.8021955490112305e+00 }
-   - { obj1: -4.6545681953430176e+00, obj2: -2.6900717616081238e-01 }
-   - { obj1: 1.8131391525268555e+01, obj2: 1.1608532667160034e+00 }
-   - { obj1: 7.8741092681884766e+00, obj2: 3.1200027465820312e+00 }
-   - { obj1: -4.9249492645263672e+01, obj2: 5.6196136474609375e+00 }
-   - { obj1: -1.6858188629150391e+01, obj2: 4.8377537727355957e+00 }
-   - { obj1: 2.5625409558415413e-02, obj2: 3.7790434360504150e+00 }
-   - { obj1: -3.9813299179077148e+00, obj2: 3.2125897407531738e+00 }
-   - { obj1: 3.4672855377197266e+01, obj2: 4.2676597833633423e-01 }
-   - { obj1: 4.8525432586669922e+01, obj2: 5.0797872543334961e+00 }
-   - { obj1: 5.1699848175048828e+01, obj2: 4.7633643150329590e+00 }
-   - { obj1: 2.9794807434082031e+01, obj2: 5.1330633163452148e+00 }
-   - { obj1: 3.4859573364257812e+01, obj2: 7.8225245475769043e+00 }
-   - { obj1: -2.7660308837890625e+01, obj2: 7.0017018318176270e+00 }
-   - { obj1: -4.0089504241943359e+01, obj2: 6.5256714820861816e+00 }
-   - { obj1: -3.4187175750732422e+01, obj2: 6.2828845977783203e+00 }
-   - { obj1: -5.4223888397216797e+01, obj2: 8.8238544464111328e+00 }
-   - { obj1: -4.8983383178710938e+01, obj2: 7.9931063652038574e+00 }
-   - { obj1: -1.7879095077514648e+01, obj2: 5.1189384460449219e+00 }
-   - { obj1: -3.0259998321533203e+01, obj2: 2.9780192375183105e+00 }
-   - { obj1: -1.2041651725769043e+01, obj2: 4.1477932929992676e+00 }
-   - { obj1: -4.0789585113525391e+00, obj2: 4.9504542350769043e+00 }
-   - { obj1: -3.3957316875457764e+00, obj2: 5.8475356101989746e+00 }
-   - { obj1: 3.7000439167022705e+00, obj2: 3.7248632907867432e+00 }
-   - { obj1: -4.4723296165466309e+00, obj2: 3.7893230915069580e+00 }
-   - { obj1: -1.3067418098449707e+01, obj2: 2.8915269374847412e+00 }
-collision_pointsframe_skip1_dataprocessing_2results_FB_none_: 
-   - { x: -65535., y: -65535. }
-   - { x: -1.4295728515625000e+04, y: -2.8067889404296875e+02 }
-   - { x: -5.7923745117187500e+03, y: -3.1681176757812500e+02 }
-   - { x: 3.2874660644531250e+03, y: -3.5816159057617188e+02 }
-   - { x: 4.9279104614257812e+02, y: -3.6161114501953125e+02 }
-   - { x: -1.4213904296875000e+04, y: -2.6478778076171875e+02 }
-   - { x: 4.6814394531250000e+03, y: -3.7395880126953125e+02 }
-   - { x: -1.9724361328125000e+04, y: -2.3499534606933594e+02 }
-   - { x: 1.8631801757812500e+03, y: -3.5712579345703125e+02 }
-   - { x: 2.5831660156250000e+03, y: -3.5908172607421875e+02 }
-   - { x: 1.6873105468750000e+03, y: -3.5691555786132812e+02 }
-   - { x: 1.6020712890625000e+03, y: -3.5591744995117188e+02 }
-   - { x: 1.8431507568359375e+03, y: -3.5839465332031250e+02 }
-   - { x: 1.4334550781250000e+03, y: -3.5416259765625000e+02 }
-   - { x: 2.3817724609375000e+02, y: -3.5316409301757812e+02 }
-   - { x: 8.8287634277343750e+02, y: -3.5107409667968750e+02 }
-   - { x: 1.0246029052734375e+03, y: -3.5127862548828125e+02 }
-   - { x: 8.8820080566406250e+02, y: -3.5074963378906250e+02 }
-   - { x: 1.0745893554687500e+03, y: -3.4608334350585938e+02 }
-   - { x: -1.2572163085937500e+03, y: -3.6670947265625000e+02 }
-   - { x: 8.5877392578125000e+02, y: -3.4680426025390625e+02 }
-   - { x: 1.7413537597656250e+03, y: -3.3461553955078125e+02 }
-   - { x: 8.7702197265625000e+02, y: -3.4692388916015625e+02 }
-   - { x: 1.0783251953125000e+02, y: -3.6005706787109375e+02 }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: 4.9691052246093750e+02, y: -3.4009204101562500e+02 }
-   - { x: 8.7810131835937500e+02, y: -3.4372097778320312e+02 }
-   - { x: 4.5454174804687500e+02, y: -3.4173272705078125e+02 }
-   - { x: 5.1076983642578125e+02, y: -3.3736352539062500e+02 }
-   - { x: 3.5904412841796875e+02, y: -3.5080694580078125e+02 }
-   - { x: 4.6594464111328125e+02, y: -3.4061068725585938e+02 }
-   - { x: 4.5624560546875000e+02, y: -3.4079022216796875e+02 }
-   - { x: 3.2997955322265625e+02, y: -3.5448406982421875e+02 }
-   - { x: 3.3128179931640625e+02, y: -3.5589801025390625e+02 }
-   - { x: 4.7066021728515625e+02, y: -3.3862908935546875e+02 }
-   - { x: 2.9961254882812500e+02, y: -3.6431347656250000e+02 }
-   - { x: 4.3973291015625000e+02, y: -3.4220437622070312e+02 }
-   - { x: 4.3928070068359375e+02, y: -3.4060708618164062e+02 }
-   - { x: 9.3889837646484375e+02, y: -2.1381651306152344e+02 }
-   - { x: 4.3171081542968750e+02, y: -3.4000256347656250e+02 }
-   - { x: 4.5470248413085938e+02, y: -3.3221847534179688e+02 }
-   - { x: 5.2106970214843750e+02, y: -2.9531915283203125e+02 }
-   - { x: 4.9126803588867188e+02, y: -3.1414031982421875e+02 }
-   - { x: 4.8825408935546875e+02, y: -3.1770211791992188e+02 }
-   - { x: 4.0797766113281250e+02, y: -3.2098110961914062e+02 }
-   - { x: 3.9035015869140625e+02, y: -3.2428997802734375e+02 }
-   - { x: 3.9192980957031250e+02, y: -3.3652188110351562e+02 }
-   - { x: 3.7418481445312500e+02, y: -3.2804080200195312e+02 }
-   - { x: 4.1181091308593750e+02, y: -3.4298785400390625e+02 }
-   - { x: 3.9600473022460938e+02, y: -3.3919168090820312e+02 }
-   - { x: 3.3709017944335938e+02, y: -3.2888977050781250e+02 }
-   - { x: 4.0818408203125000e+02, y: -3.3951040649414062e+02 }
-   - { x: 4.2614730834960938e+02, y: -3.4261038208007812e+02 }
-   - { x: 3.4125393676757812e+02, y: -3.3076580810546875e+02 }
-line_anglesframe_skip1_dataprocessing_2results_FB_none_: 
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -3.1654244661331177e-01, obj2: 2.1437599658966064e+00 }
-   - { obj1: -4.0234884619712830e-01, obj2: -4.1665005683898926e+00 }
-   - { obj1: 7.9579077661037445e-02, obj2: -9.2979774475097656e+00 }
-   - { obj1: 7.8703790903091431e-02, obj2: -3.6834930419921875e+01 }
-   - { obj1: -3.9623129367828369e-01, obj2: 4.6580904722213745e-01 }
-   - { obj1: -1.5805797278881073e-01, obj2: -2.0342390537261963e+00 }
-   - { obj1: -3.8505095243453979e-01, obj2: 1.5197785198688507e-01 }
-   - { obj1: 2.9880395531654358e-01, obj2: -1.7121374607086182e+00 }
-   - { obj1: 1.4786092936992645e-01, obj2: -7.9793941974639893e-01 }
-   - { obj1: 1.4710271358489990e-01, obj2: -1.8146865844726562e+01 }
-   - { obj1: 2.1405348181724548e-01, obj2: -5.4624600410461426e+00 }
-   - { obj1: 6.8618886172771454e-02, obj2: 5.6482119560241699e+00 }
-   - { obj1: 3.3195820450782776e-01, obj2: -3.6254613399505615e+00 }
-   - { obj1: 8.6004275083541870e-01, obj2: 9.5219665765762329e-01 }
-   - { obj1: 9.4585227966308594e-01, obj2: -6.8489847183227539e+00 }
-   - { obj1: 7.6816630363464355e-01, obj2: -4.1291537284851074e+00 }
-   - { obj1: 9.6341449022293091e-01, obj2: -6.8569722175598145e+00 }
-   - { obj1: 1.8923485279083252e+00, obj2: -6.1276543140411377e-01 }
-   - { obj1: 2.2185888290405273e+00, obj2: 7.9794043302536011e-01 }
-   - { obj1: 2.0760705471038818e+00, obj2: -1.3567510843276978e+00 }
-   - { obj1: 2.8333835601806641e+00, obj2: 3.0803877115249634e-01 }
-   - { obj1: 1.5693385601043701e+00, obj2: -1.4604829549789429e+00 }
-   - { obj1: 1.0838483572006226e+00, obj2: 1.5523500442504883e+00 }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: 7.8288741111755371e+00, obj2: 1.6185209155082703e-01 }
-   - { obj1: 3.2370740175247192e-01, obj2: -6.5665644407272339e-01 }
-   - { obj1: 9.8723154067993164e+00, obj2: -1.1328194141387939e+00 }
-   - { obj1: 1.0041440963745117e+01, obj2: 1.4400926828384399e+00 }
-   - { obj1: 9.8186635971069336e+00, obj2: 1.6806135177612305e+01 }
-   - { obj1: 9.7518558502197266e+00, obj2: -3.2370164990425110e-01 }
-   - { obj1: 8.7619781494140625e+00, obj2: -4.9677157402038574e-01 }
-   - { obj1: 9.9631567001342773e+00, obj2: 1.6003200531005859e+01 }
-   - { obj1: 1.0874135017395020e+01, obj2: 1.7307430267333984e+01 }
-   - { obj1: 1.0678117752075195e+01, obj2: 1.1590042114257812e+00 }
-   - { obj1: 1.2393462181091309e+01, obj2: 1.6240451812744141e+01 }
-   - { obj1: 1.0993785858154297e+01, obj2: -1.9580676555633545e+00 }
-   - { obj1: 1.4876961708068848e+01, obj2: -3.2928240299224854e-01 }
-   - { obj1: 1.6560876846313477e+01, obj2: 1.2544374465942383e+01 }
-   - { obj1: 2.1861070632934570e+01, obj2: 1.6323542594909668e-01 }
-   - { obj1: 2.7352853775024414e+01, obj2: 5.2091307640075684e+00 }
-   - { obj1: 1.8895547866821289e+01, obj2: 1.7116741180419922e+01 }
-   - { obj1: 1.3677900314331055e+01, obj2: 1.5623681068420410e+01 }
-   - { obj1: 9.7574024200439453e+00, obj2: 1.6644840240478516e+01 }
-   - { obj1: -5.7294620513916016e+01, obj2: 1.7177774429321289e+01 }
-   - { obj1: -2.9757482528686523e+01, obj2: 1.6074823379516602e+01 }
-   - { obj1: -2.8013628005981445e+01, obj2: 2.9524655342102051e+00 }
-   - { obj1: -2.9699018478393555e+01, obj2: 1.4850709915161133e+01 }
-   - { obj1: -2.4922370910644531e+01, obj2: -1.8530409336090088e+00 }
-   - { obj1: -2.5603162765502930e+01, obj2: 7.1171194314956665e-01 }
-   - { obj1: -5.4402818679809570e+00, obj2: 1.7069211959838867e+01 }
-   - { obj1: -2.3527086257934570e+01, obj2: 5.1308304071426392e-01 }
-   - { obj1: -3.1730772018432617e+01, obj2: -1.3720928430557251e+00 }
-   - { obj1: -4.5139489173889160e+00, obj2: 1.3480262756347656e+01 }
-collision_pointsframe_skip1_dataprocessing_3results_FB_none_: 
-   - { x: -65535., y: -65535. }
-   - { x: 2.2146591796875000e+03, y: -3.5244934082031250e+02 }
-   - { x: 1.2384714355468750e+03, y: -3.4870397949218750e+02 }
-   - { x: 1.1709238281250000e+03, y: -3.4863629150390625e+02 }
-   - { x: 5.0210864257812500e+02, y: -3.5897561645507812e+02 }
-   - { x: 8.0249792480468750e+02, y: -3.5200640869140625e+02 }
-   - { x: 7.8058703613281250e+02, y: -3.5187185668945312e+02 }
-   - { x: 6.8722448730468750e+02, y: -3.5134512329101562e+02 }
-   - { x: 6.9781701660156250e+02, y: -3.5133135986328125e+02 }
-   - { x: 6.5361730957031250e+02, y: -3.5078289794921875e+02 }
-   - { x: 6.6492382812500000e+02, y: -3.5078720092773438e+02 }
-   - { x: 5.3101123046875000e+02, y: -3.4989105224609375e+02 }
-   - { x: 6.2093328857421875e+02, y: -3.5035223388671875e+02 }
-   - { x: 6.4247662353515625e+02, y: -3.5033837890625000e+02 }
-   - { x: 6.2713073730468750e+02, y: -3.5011676025390625e+02 }
-   - { x: 5.7518078613281250e+02, y: -3.4957482910156250e+02 }
-   - { x: 5.2806536865234375e+02, y: -3.4918109130859375e+02 }
-   - { x: 5.3435052490234375e+02, y: -3.4908691406250000e+02 }
-   - { x: 5.4843139648437500e+02, y: -3.4877600097656250e+02 }
-   - { x: 5.1943237304687500e+02, y: -3.4861114501953125e+02 }
-   - { x: 5.1054766845703125e+02, y: -3.4850250244140625e+02 }
-   - { x: 4.9451000976562500e+02, y: -3.4827191162109375e+02 }
-   - { x: 5.3726635742187500e+02, y: -3.4749667358398438e+02 }
-   - { x: 5.5760754394531250e+02, y: -3.4753973388671875e+02 }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: -65535., y: -65535. }
-   - { x: 4.2943878173828125e+02, y: -3.4955291748046875e+02 }
-   - { x: 7.0971716308593750e+02, y: -3.2407312011718750e+02 }
-   - { x: -4.6754321289062500e+02, y: -4.1617834472656250e+02 }
-   - { x: 2.7208337402343750e+02, y: -3.5781149291992188e+02 }
-   - { x: 6.2425000000000000e+02, y: -3.2995034790039062e+02 }
-   - { x: 6.5018890380859375e+02, y: -3.2247952270507812e+02 }
-   - { x: 8.7568798828125000e+02, y: -2.9899371337890625e+02 }
-   - { x: 8.3450402832031250e+02, y: -2.9548690795898438e+02 }
-   - { x: 2.8344228515625000e+03, y: -3.7901641845703125e+01 }
-   - { x: 6.1841180419921875e+02, y: -3.1614843750000000e+02 }
-   - { x: 5.0465490722656250e+02, y: -3.3462542724609375e+02 }
-   - { x: 4.7186267089843750e+02, y: -3.3435833740234375e+02 }
-   - { x: 5.7884521484375000e+02, y: -3.1506204223632812e+02 }
-   - { x: 4.5024810791015625e+02, y: -3.3461935424804688e+02 }
-   - { x: 4.9655072021484375e+02, y: -3.2715899658203125e+02 }
-   - { x: 4.5772143554687500e+02, y: -3.2620623779296875e+02 }
-   - { x: 5.1380969238281250e+02, y: -3.3179736328125000e+02 }
-   - { x: 4.2248162841796875e+02, y: -3.3252679443359375e+02 }
-   - { x: 5.2063262939453125e+02, y: -3.3313058471679688e+02 }
-   - { x: 4.1841680908203125e+02, y: -3.4588192749023438e+02 }
-   - { x: 4.5924047851562500e+02, y: -3.3242422485351562e+02 }
-   - { x: 3.9109524536132812e+02, y: -3.3427532958984375e+02 }
-   - { x: 4.7559628295898438e+02, y: -3.3643011474609375e+02 }
-   - { x: 4.2174761962890625e+02, y: -3.3314874267578125e+02 }
-   - { x: 4.2284146118164062e+02, y: -3.3340634155273438e+02 }
-   - { x: 4.2354025268554688e+02, y: -3.3927001953125000e+02 }
-   - { x: 4.0161172485351562e+02, y: -3.3444400024414062e+02 }
-   - { x: 4.0195562744140625e+02, y: -3.3553726196289062e+02 }
-   - { x: 3.9414431762695312e+02, y: -3.3445703125000000e+02 }
-line_anglesframe_skip1_dataprocessing_3results_FB_none_: 
-   - { obj1: -1., obj2: -1. }
-   - { obj1: 3.4512418508529663e-01, obj2: -2.1933434009552002e+00 }
-   - { obj1: 8.2948380708694458e-01, obj2: -9.2115192413330078e+00 }
-   - { obj1: 1.0204014778137207e+00, obj2: -9.2661838531494141e+00 }
-   - { obj1: 1.0885704755783081e+00, obj2: -2.5159473419189453e+01 }
-   - { obj1: 1.2674808502197266e+00, obj2: -1.8213481903076172e+01 }
-   - { obj1: 1.3626061677932739e+00, obj2: -2.6245792388916016e+01 }
-   - { obj1: 1.9274090528488159e+00, obj2: -2.2228981018066406e+01 }
-   - { obj1: 1.9043848514556885e+00, obj2: -1.9006881713867188e+01 }
-   - { obj1: 2.0089073181152344e+00, obj2: -2.0481515884399414e+01 }
-   - { obj1: 1.8132683038711548e+00, obj2: -2.0490402221679688e+01 }
-   - { obj1: 3.5018103122711182e+00, obj2: -2.3238388061523438e+01 }
-   - { obj1: 2.2166447639465332e+00, obj2: -2.2993541717529297e+01 }
-   - { obj1: 1.9503952264785767e+00, obj2: -2.2833845138549805e+01 }
-   - { obj1: 2.1027748584747314e+00, obj2: -1.8040697097778320e+01 }
-   - { obj1: 2.7387917041778564e+00, obj2: -1.3747683525085449e+01 }
-   - { obj1: 3.9059805870056152e+00, obj2: -1.4585592269897461e+01 }
-   - { obj1: 3.6626615524291992e+00, obj2: -1.4797636032104492e+01 }
-   - { obj1: 3.3386182785034180e+00, obj2: -1.2932430267333984e+01 }
-   - { obj1: 3.9864423274993896e+00, obj2: -1.5845077514648438e+01 }
-   - { obj1: 4.3825488090515137e+00, obj2: -1.7008062362670898e+01 }
-   - { obj1: 5.4392390251159668e+00, obj2: -1.4158449172973633e+01 }
-   - { obj1: 5.1245794296264648e+00, obj2: -5.8182277679443359e+00 }
-   - { obj1: 4.0403404235839844e+00, obj2: -5.8389587402343750e+00 }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: -1., obj2: -1. }
-   - { obj1: 2.5837066173553467e+00, obj2: 1.4442731857299805e+01 }
-   - { obj1: 8.7134008407592773e+00, obj2: 2.9391169548034668e+00 }
-   - { obj1: 4.1903710365295410e+00, obj2: 4.8928236961364746e+00 }
-   - { obj1: 8.3860282897949219e+00, obj2: 7.9775958061218262e+00 }
-   - { obj1: 4.8828158378601074e+00, obj2: 3.0631992816925049e+00 }
-   - { obj1: 1.0336803436279297e+01, obj2: 3.8955974578857422e+00 }
-   - { obj1: 4.5420331954956055e+00, obj2: 5.0726232528686523e+00 }
-   - { obj1: 1.2254584312438965e+01, obj2: 5.5594706535339355e+00 }
-   - { obj1: 6.0365757942199707e+00, obj2: 7.0839843750000000e+00 }
-   - { obj1: 1.5493514060974121e+01, obj2: 5.7589740753173828e+00 }
-   - { obj1: 7.2044916152954102e+00, obj2: 3.1525974273681641e+00 }
-   - { obj1: 1.7126115798950195e+01, obj2: 3.3568661212921143e+00 }
-   - { obj1: 7.9072175025939941e+00, obj2: 7.6729216575622559e+00 }
-   - { obj1: 3.4338729858398438e+01, obj2: 3.5146276950836182e+00 }
-   - { obj1: 9.0063467025756836e+00, obj2: 6.7999181747436523e+00 }
-   - { obj1: 5.7262058258056641e+01, obj2: 7.7561526298522949e+00 }
-   - { obj1: 5.4414453506469727e+00, obj2: 6.0766358375549316e+00 }
-   - { obj1: -5.5521869659423828e+01, obj2: 5.6920938491821289e+00 }
-   - { obj1: 6.1599254608154297e+00, obj2: 5.9569787979125977e+00 }
-   - { obj1: -5.4678939819335938e+01, obj2: -4.0649523735046387e+00 }
-   - { obj1: 5.6757893562316895e+00, obj2: 7.0551848411560059e+00 }
-   - { obj1: -3.4934379577636719e+01, obj2: 5.1490387916564941e+00 }
-   - { obj1: 3.3097600936889648e+00, obj2: 3.6033146381378174e+00 }
-   - { obj1: 1.0342782020568848e+01, obj2: 7.4043874740600586e+00 }
-   - { obj1: 8.4926319122314453e+00, obj2: 7.3433780670166016e+00 }
-   - { obj1: 1.2637373924255371e+01, obj2: 7.7216184139251709e-01 }
-   - { obj1: 1.3433024406433105e+01, obj2: 5.8815255165100098e+00 }
-   - { obj1: 1.5727336883544922e+01, obj2: 4.2819905281066895e+00 }
-   - { obj1: 1.6538444519042969e+01, obj2: 5.8671751022338867e+00 }
+shape_pointsframe_skip1_dataprocessing_0_generated:
+   - { good_pixels:3180., total_pixels:3180. }
+   - { good_pixels:3165., total_pixels:3165. }
+   - { good_pixels:3.1495000000000000e+03,
+       total_pixels:3.1495000000000000e+03 }
+   - { good_pixels:3.1745000000000000e+03,
+       total_pixels:3.1745000000000000e+03 }
+   - { good_pixels:3.1595000000000000e+03,
+       total_pixels:3.1595000000000000e+03 }
+scenario_displacement_occurenceframe_skip1_dataprocessing_0_generated:
+   - { x:-3.7000000476837158e+00, y:0., occurence:169 }
+   - { x:-3.7000000476837158e+00, y:9.1999998092651367e+00, occurence:169 }
+   - { x:-3., y:0., occurence:169 }
+   - { x:-1.7999999523162842e+00, y:0., occurence:169 }
+   - { x:0., y:0., occurence:6360 }
+   - { x:5.9000000953674316e+00, y:0., occurence:6130 }
+   - { x:6., y:0., occurence:18491 }
+   - { x:65535., y:65535., occurence:10 }
+collision_pointsframe_skip1_dataprocessing_0_generated:
+   - { x:-65535., y:-65535. }
+   - { x:1.7590437500000000e+04, y:-4.0698968505859375e+02 }
+   - { x:1.7572546875000000e+04, y:-4.0858154296875000e+02 }
+   - { x:1.7965562500000000e+04, y:-4.1015222167968750e+02 }
+   - { x:4.7634323120117188e+02, y:-3.5982138061523438e+02 }
+line_anglesframe_skip1_dataprocessing_0_generated:
+   - { obj1:-1., obj2:-1. }
+   - { obj1:-1.5943183004856110e-01, obj2:-2.5300410389900208e-01 }
+   - { obj1:-1.6488710045814514e-01, obj2:-2.5856429338455200e-01 }
+   - { obj1:-1.6474807262420654e-01, obj2:-2.5783956050872803e-01 }
+   - { obj1:-1.5962028503417969e-01, obj2:5.6563728332519531e+01 }
+shape_pointsframe_skip1_dataprocessing_0results_FB_none_:
+   - { good_pixels:0., total_pixels:3180. }
+   - { good_pixels:493., total_pixels:3165. }
+   - { good_pixels:4.8950000000000000e+02,
+       total_pixels:3.1495000000000000e+03 }
+   - { good_pixels:5.0050000000000000e+02,
+       total_pixels:3.1745000000000000e+03 }
+   - { good_pixels:501., total_pixels:3.1595000000000000e+03 }
+scenario_displacement_occurenceframe_skip1_dataprocessing_0results_FB_none_:
+   - { x:-9.5000000000000000e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:-7.8000001907348633e+00, y:-2.7999999523162842e+00, occurence:1 }
+   - { x:-6.3000001907348633e+00, y:-2., occurence:1 }
+   - { x:-5.6999998092651367e+00, y:-2., occurence:1 }
+   - { x:-5.6999998092651367e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:-5.4000000953674316e+00, y:-3., occurence:1 }
+   - { x:-5.4000000953674316e+00, y:-2., occurence:1 }
+   - { x:-5.4000000953674316e+00, y:2.5000000000000000e+00, occurence:1 }
+   - { x:-5.3000001907348633e+00, y:6.6999998092651367e+00, occurence:1 }
+   - { x:-5.1999998092651367e+00, y:-3.7999999523162842e+00, occurence:1 }
+   - { x:-5.1999998092651367e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:-5.1999998092651367e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:-5., y:1.7999999523162842e+00, occurence:1 }
+   - { x:-4.9000000953674316e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:-4.6999998092651367e+00, y:3.0999999046325684e+00, occurence:1 }
+   - { x:-4.5000000000000000e+00, y:3.5999999046325684e+00, occurence:1 }
+   - { x:-4.1999998092651367e+00, y:-2.5999999046325684e+00, occurence:1 }
+   - { x:-4.1999998092651367e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:-4.0999999046325684e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:-4., y:-1.6000000238418579e+00, occurence:1 }
+   - { x:-4., y:-1.3999999761581421e+00, occurence:1 }
+   - { x:-4., y:-6.0000002384185791e-01, occurence:1 }
+   - { x:-4., y:-2.0000000298023224e-01, occurence:2 }
+   - { x:-3.9000000953674316e+00, y:-3., occurence:1 }
+   - { x:-3.9000000953674316e+00, y:-1.7000000476837158e+00, occurence:2 }
+   - { x:-3.9000000953674316e+00, y:-1.2000000476837158e+00, occurence:1 }
+   - { x:-3.9000000953674316e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:-3.9000000953674316e+00, y:-5.0000000000000000e-01, occurence:2 }
+   - { x:-3.9000000953674316e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:-3.9000000953674316e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:-3.9000000953674316e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:-3.7999999523162842e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:-3.7999999523162842e+00, y:-6.0000002384185791e-01, occurence:2 }
+   - { x:-3.7999999523162842e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:-3.7999999523162842e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:-3.7999999523162842e+00, y:0., occurence:1 }
+   - { x:-3.7999999523162842e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:-3.7000000476837158e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:-3.7000000476837158e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:-3.5999999046325684e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:-3.5999999046325684e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:-3.5999999046325684e+00, y:1.0100000381469727e+01, occurence:1 }
+   - { x:-3.5999999046325684e+00, y:1.1500000000000000e+01, occurence:1 }
+   - { x:-3.5999999046325684e+00, y:1.1600000381469727e+01, occurence:2 }
+   - { x:-3.5000000000000000e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:-3.5000000000000000e+00, y:11., occurence:1 }
+   - { x:-3.2999999523162842e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:-3.2000000476837158e+00, y:-2.7999999523162842e+00, occurence:1 }
+   - { x:-3.2000000476837158e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:-3.2000000476837158e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:-3.2000000476837158e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:-3.0999999046325684e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:-3.0999999046325684e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:-3.0999999046325684e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:-3.0999999046325684e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:-3.0999999046325684e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:-3.0999999046325684e+00, y:0., occurence:2 }
+   - { x:-3.0999999046325684e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:-3.0999999046325684e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:-3., y:-2.7999999523162842e+00, occurence:1 }
+   - { x:-3., y:-1.2999999523162842e+00, occurence:1 }
+   - { x:-3., y:-8.9999997615814209e-01, occurence:1 }
+   - { x:-3., y:-6.9999998807907104e-01, occurence:1 }
+   - { x:-3., y:-3.0000001192092896e-01, occurence:1 }
+   - { x:-3., y:-2.0000000298023224e-01, occurence:1 }
+   - { x:-3., y:0., occurence:3 }
+   - { x:-3., y:1.0000000149011612e-01, occurence:1 }
+   - { x:-2.9000000953674316e+00, y:-1., occurence:1 }
+   - { x:-2.9000000953674316e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:-2.9000000953674316e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:-2.9000000953674316e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:-2.9000000953674316e+00, y:1.0199999809265137e+01, occurence:1 }
+   - { x:-2.7999999523162842e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:-2.7000000476837158e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:-2.5999999046325684e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:-2.5999999046325684e+00, y:3.5999999046325684e+00, occurence:1 }
+   - { x:-2.5000000000000000e+00, y:-2.0999999046325684e+00, occurence:1 }
+   - { x:-2.5000000000000000e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:-2.5000000000000000e+00, y:2.2999999523162842e+00, occurence:1 }
+   - { x:-2.4000000953674316e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:-2.2000000476837158e+00, y:-1.7999999523162842e+00, occurence:1 }
+   - { x:-2.2000000476837158e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:-2.2000000476837158e+00, y:-1., occurence:1 }
+   - { x:-2.2000000476837158e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:-2.2000000476837158e+00, y:6.4000000953674316e+00, occurence:1 }
+   - { x:-2.0999999046325684e+00, y:-6.0000002384185791e-01, occurence:2 }
+   - { x:-2.0999999046325684e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:-2.0999999046325684e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:-2.0999999046325684e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:-2., y:-8.9999997615814209e-01, occurence:1 }
+   - { x:-2., y:-6.9999998807907104e-01, occurence:1 }
+   - { x:-2., y:-1.0000000149011612e-01, occurence:1 }
+   - { x:-2., y:0., occurence:2 }
+   - { x:-2., y:1.0000000149011612e-01, occurence:1 }
+   - { x:-1.8999999761581421e+00, y:-2.0000000298023224e-01, occurence:4 }
+   - { x:-1.8999999761581421e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:-1.8999999761581421e+00, y:0., occurence:11 }
+   - { x:-1.8999999761581421e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:-1.8999999761581421e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:-1.7999999523162842e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:-1.7999999523162842e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:-1.7999999523162842e+00, y:1.0000000149011612e-01, occurence:3 }
+   - { x:-1.7000000476837158e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:-1.7000000476837158e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:-1.7000000476837158e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:-1.7000000476837158e+00, y:0., occurence:2 }
+   - { x:-1.7000000476837158e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:-1.6000000238418579e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:-1.5000000000000000e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:-1.3999999761581421e+00, y:-1.2000000476837158e+00, occurence:1 }
+   - { x:-1.2000000476837158e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:-1.1000000238418579e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:-1.1000000238418579e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:-1., y:2.0000000298023224e-01, occurence:1 }
+   - { x:-6.0000002384185791e-01, y:-3.0999999046325684e+00, occurence:1 }
+   - { x:-4.0000000596046448e-01, y:-1.6000000238418579e+00, occurence:1 }
+   - { x:-3.0000001192092896e-01, y:-6., occurence:1 }
+   - { x:-3.0000001192092896e-01, y:-5., occurence:1 }
+   - { x:-3.0000001192092896e-01, y:-3.9000000953674316e+00, occurence:1 }
+   - { x:-2.0000000298023224e-01, y:-5.0999999046325684e+00, occurence:1 }
+   - { x:-1.0000000149011612e-01, y:-2.7000000476837158e+00, occurence:1 }
+   - { x:-1.0000000149011612e-01, y:-1.6000000238418579e+00, occurence:1 }
+   - { x:0., y:-6.4000000953674316e+00, occurence:1 }
+   - { x:0., y:-4.1999998092651367e+00, occurence:3 }
+   - { x:0., y:-1.8999999761581421e+00, occurence:1 }
+   - { x:0., y:-1.3999999761581421e+00, occurence:1 }
+   - { x:0., y:-1.2999999523162842e+00, occurence:2 }
+   - { x:0., y:-1., occurence:1 }
+   - { x:1.0000000149011612e-01, y:-4.5000000000000000e+00, occurence:1 }
+   - { x:1.0000000149011612e-01, y:-4.4000000953674316e+00, occurence:1 }
+   - { x:1.0000000149011612e-01, y:-4.3000001907348633e+00, occurence:1 }
+   - { x:1.0000000149011612e-01, y:-4.0999999046325684e+00, occurence:1 }
+   - { x:1.0000000149011612e-01, y:-3.0999999046325684e+00, occurence:1 }
+   - { x:2.0000000298023224e-01, y:-2.7999999523162842e+00, occurence:1 }
+   - { x:2.0000000298023224e-01, y:-1.6000000238418579e+00, occurence:1 }
+   - { x:2.0000000298023224e-01, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:3.0000001192092896e-01, y:-4.1999998092651367e+00, occurence:1 }
+   - { x:3.0000001192092896e-01, y:-3.7000000476837158e+00, occurence:1 }
+   - { x:3.0000001192092896e-01, y:-2.9000000953674316e+00, occurence:1 }
+   - { x:3.0000001192092896e-01, y:-2.2999999523162842e+00, occurence:1 }
+   - { x:3.0000001192092896e-01, y:-2., occurence:1 }
+   - { x:3.0000001192092896e-01, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:4.0000000596046448e-01, y:-5.1999998092651367e+00, occurence:1 }
+   - { x:4.0000000596046448e-01, y:-5., occurence:1 }
+   - { x:4.0000000596046448e-01, y:-1.7000000476837158e+00, occurence:1 }
+   - { x:4.0000000596046448e-01, y:-1., occurence:1 }
+   - { x:5.0000000000000000e-01, y:-3.7000000476837158e+00, occurence:1 }
+   - { x:5.0000000000000000e-01, y:-2.9000000953674316e+00, occurence:1 }
+   - { x:6.0000002384185791e-01, y:-4.1999998092651367e+00, occurence:1 }
+   - { x:6.9999998807907104e-01, y:-6.5999999046325684e+00, occurence:1 }
+   - { x:6.9999998807907104e-01, y:-3.2999999523162842e+00, occurence:1 }
+   - { x:6.9999998807907104e-01, y:-2.5999999046325684e+00, occurence:1 }
+   - { x:6.9999998807907104e-01, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:8.0000001192092896e-01, y:-7.9000000953674316e+00, occurence:1 }
+   - { x:8.0000001192092896e-01, y:-5.5000000000000000e+00, occurence:1 }
+   - { x:8.9999997615814209e-01, y:-3.5000000000000000e+00, occurence:1 }
+   - { x:8.9999997615814209e-01, y:-2., occurence:1 }
+   - { x:1., y:-8.8999996185302734e+00, occurence:1 }
+   - { x:1., y:-2.2000000476837158e+00, occurence:1 }
+   - { x:1., y:-6.0000002384185791e-01, occurence:1 }
+   - { x:1., y:-3.0000001192092896e-01, occurence:2 }
+   - { x:1., y:-1.0000000149011612e-01, occurence:1 }
+   - { x:1., y:0., occurence:5 }
+   - { x:1., y:3.0000001192092896e-01, occurence:2 }
+   - { x:1., y:1.2999999523162842e+00, occurence:1 }
+   - { x:1.1000000238418579e+00, y:-1.7000000476837158e+00, occurence:1 }
+   - { x:1.1000000238418579e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:1.1000000238418579e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:1.1000000238418579e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:1.1000000238418579e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:1.1000000238418579e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:1.1000000238418579e+00, y:-1.0000000149011612e-01, occurence:4 }
+   - { x:1.1000000238418579e+00, y:0., occurence:14 }
+   - { x:1.1000000238418579e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:1.1000000238418579e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:1.2000000476837158e+00, y:-5.1999998092651367e+00, occurence:1 }
+   - { x:1.2000000476837158e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:1.2000000476837158e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:1.2000000476837158e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:1.2000000476837158e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:1.2000000476837158e+00, y:-1.0000000149011612e-01, occurence:4 }
+   - { x:1.2000000476837158e+00, y:0., occurence:7 }
+   - { x:1.2000000476837158e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:1.2000000476837158e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:1.2999999523162842e+00, y:-9.1999998092651367e+00, occurence:1 }
+   - { x:1.2999999523162842e+00, y:-3.0999999046325684e+00, occurence:1 }
+   - { x:1.2999999523162842e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:1.2999999523162842e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:1.2999999523162842e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:1.2999999523162842e+00, y:-1.0000000149011612e-01, occurence:8 }
+   - { x:1.2999999523162842e+00, y:0., occurence:2 }
+   - { x:1.2999999523162842e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:1.2999999523162842e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:1.2999999523162842e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:1.3999999761581421e+00, y:-1.7000000476837158e+00, occurence:1 }
+   - { x:1.3999999761581421e+00, y:-1.6000000238418579e+00, occurence:1 }
+   - { x:1.3999999761581421e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:1.3999999761581421e+00, y:-1., occurence:1 }
+   - { x:1.3999999761581421e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:1.3999999761581421e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:1.3999999761581421e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:1.3999999761581421e+00, y:0., occurence:4 }
+   - { x:1.3999999761581421e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:1.5000000000000000e+00, y:-1.7999999523162842e+00, occurence:1 }
+   - { x:1.5000000000000000e+00, y:-1., occurence:1 }
+   - { x:1.5000000000000000e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:1.5000000000000000e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:1.5000000000000000e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:1.5000000000000000e+00, y:0., occurence:11 }
+   - { x:1.5000000000000000e+00, y:3.0000001192092896e-01, occurence:2 }
+   - { x:1.5000000000000000e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:1.6000000238418579e+00, y:-2.7000000476837158e+00, occurence:1 }
+   - { x:1.6000000238418579e+00, y:-2.5000000000000000e+00, occurence:1 }
+   - { x:1.6000000238418579e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:1.6000000238418579e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:1.6000000238418579e+00, y:-1.0000000149011612e-01, occurence:4 }
+   - { x:1.6000000238418579e+00, y:0., occurence:5 }
+   - { x:1.6000000238418579e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:1.6000000238418579e+00, y:2.5000000000000000e+00, occurence:1 }
+   - { x:1.7000000476837158e+00, y:-8.8999996185302734e+00, occurence:1 }
+   - { x:1.7000000476837158e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:1.7000000476837158e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:1.7000000476837158e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:1.7000000476837158e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:1.7000000476837158e+00, y:0., occurence:6 }
+   - { x:1.7000000476837158e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:1.7000000476837158e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:1.7999999523162842e+00, y:-1.7000000476837158e+00, occurence:1 }
+   - { x:1.7999999523162842e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:1.7999999523162842e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:1.7999999523162842e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:1.7999999523162842e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:1.7999999523162842e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:1.7999999523162842e+00, y:0., occurence:3 }
+   - { x:1.7999999523162842e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:1.8999999761581421e+00, y:-1.6000000238418579e+00, occurence:1 }
+   - { x:1.8999999761581421e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:1.8999999761581421e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:1.8999999761581421e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:1.8999999761581421e+00, y:-1.0000000149011612e-01, occurence:3 }
+   - { x:1.8999999761581421e+00, y:0., occurence:4 }
+   - { x:1.8999999761581421e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:1.8999999761581421e+00, y:1.1000000238418579e+00, occurence:1 }
+   - { x:2., y:-4.1999998092651367e+00, occurence:1 }
+   - { x:2., y:-6.0000002384185791e-01, occurence:1 }
+   - { x:2., y:-4.0000000596046448e-01, occurence:1 }
+   - { x:2., y:-2.0000000298023224e-01, occurence:2 }
+   - { x:2., y:-1.0000000149011612e-01, occurence:2 }
+   - { x:2., y:0., occurence:1 }
+   - { x:2., y:1.0000000149011612e-01, occurence:2 }
+   - { x:2., y:3.0000001192092896e-01, occurence:2 }
+   - { x:2., y:6.9999998807907104e-01, occurence:1 }
+   - { x:2.0999999046325684e+00, y:-2.4000000953674316e+00, occurence:1 }
+   - { x:2.0999999046325684e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:2.0999999046325684e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:2.0999999046325684e+00, y:0., occurence:2 }
+   - { x:2.0999999046325684e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:2.0999999046325684e+00, y:2.0999999046325684e+00, occurence:1 }
+   - { x:2.2000000476837158e+00, y:-1.8999999761581421e+00, occurence:1 }
+   - { x:2.2000000476837158e+00, y:-1.2000000476837158e+00, occurence:1 }
+   - { x:2.2000000476837158e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:2.2000000476837158e+00, y:0., occurence:3 }
+   - { x:2.2000000476837158e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:2.2999999523162842e+00, y:-5.1999998092651367e+00, occurence:1 }
+   - { x:2.2999999523162842e+00, y:-3., occurence:1 }
+   - { x:2.2999999523162842e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:2.2999999523162842e+00, y:-1., occurence:1 }
+   - { x:2.2999999523162842e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:2.2999999523162842e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:2.2999999523162842e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:2.2999999523162842e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:2.2999999523162842e+00, y:-1.0000000149011612e-01, occurence:4 }
+   - { x:2.2999999523162842e+00, y:0., occurence:4 }
+   - { x:2.2999999523162842e+00, y:3.0000001192092896e-01, occurence:2 }
+   - { x:2.4000000953674316e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:2.4000000953674316e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:2.4000000953674316e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:2.4000000953674316e+00, y:0., occurence:8 }
+   - { x:2.4000000953674316e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:2.4000000953674316e+00, y:1.2999999523162842e+00, occurence:1 }
+   - { x:2.5000000000000000e+00, y:-2.0999999046325684e+00, occurence:1 }
+   - { x:2.5000000000000000e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:2.5000000000000000e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:2.5000000000000000e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:2.5000000000000000e+00, y:0., occurence:8 }
+   - { x:2.5000000000000000e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:2.5000000000000000e+00, y:6.0000002384185791e-01, occurence:1 }
+   - { x:2.5999999046325684e+00, y:-4.5999999046325684e+00, occurence:1 }
+   - { x:2.5999999046325684e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:2.5999999046325684e+00, y:0., occurence:4 }
+   - { x:2.5999999046325684e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:2.7000000476837158e+00, y:-1.7999999523162842e+00, occurence:1 }
+   - { x:2.7000000476837158e+00, y:-1.6000000238418579e+00, occurence:1 }
+   - { x:2.7000000476837158e+00, y:-1., occurence:1 }
+   - { x:2.7000000476837158e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:2.7000000476837158e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:2.7000000476837158e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:2.7000000476837158e+00, y:0., occurence:2 }
+   - { x:2.7000000476837158e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:2.7000000476837158e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:2.7000000476837158e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:2.7000000476837158e+00, y:8.0000001192092896e-01, occurence:1 }
+   - { x:2.7999999523162842e+00, y:-1., occurence:1 }
+   - { x:2.7999999523162842e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:2.7999999523162842e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:2.7999999523162842e+00, y:-1.0000000149011612e-01, occurence:3 }
+   - { x:2.7999999523162842e+00, y:0., occurence:4 }
+   - { x:2.7999999523162842e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:2.7999999523162842e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:2.9000000953674316e+00, y:-1.7999999523162842e+00, occurence:1 }
+   - { x:2.9000000953674316e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:2.9000000953674316e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:2.9000000953674316e+00, y:0., occurence:3 }
+   - { x:2.9000000953674316e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:2.9000000953674316e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:2.9000000953674316e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:2.9000000953674316e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:2.9000000953674316e+00, y:2., occurence:1 }
+   - { x:3., y:-1.2999999523162842e+00, occurence:1 }
+   - { x:3., y:-8.9999997615814209e-01, occurence:1 }
+   - { x:3., y:-1.0000000149011612e-01, occurence:1 }
+   - { x:3., y:0., occurence:4 }
+   - { x:3., y:2.2999999523162842e+00, occurence:1 }
+   - { x:3.0999999046325684e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:3.0999999046325684e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:3.0999999046325684e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:3.0999999046325684e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:3.0999999046325684e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:3.2000000476837158e+00, y:-1.7000000476837158e+00, occurence:1 }
+   - { x:3.2000000476837158e+00, y:0., occurence:1 }
+   - { x:3.2000000476837158e+00, y:1.0000000149011612e-01, occurence:4 }
+   - { x:3.2000000476837158e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:3.2000000476837158e+00, y:6.0000002384185791e-01, occurence:1 }
+   - { x:3.2999999523162842e+00, y:-1.7999999523162842e+00, occurence:1 }
+   - { x:3.2999999523162842e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:3.2999999523162842e+00, y:-1., occurence:1 }
+   - { x:3.2999999523162842e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:3.2999999523162842e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:3.2999999523162842e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:3.2999999523162842e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:3.2999999523162842e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:3.2999999523162842e+00, y:0., occurence:2 }
+   - { x:3.2999999523162842e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:3.2999999523162842e+00, y:2.0000000298023224e-01, occurence:3 }
+   - { x:3.4000000953674316e+00, y:-1., occurence:1 }
+   - { x:3.4000000953674316e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:3.4000000953674316e+00, y:0., occurence:2 }
+   - { x:3.4000000953674316e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:3.4000000953674316e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:3.4000000953674316e+00, y:6.9999998807907104e-01, occurence:1 }
+   - { x:3.5000000000000000e+00, y:-1., occurence:2 }
+   - { x:3.5000000000000000e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:3.5000000000000000e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:3.5000000000000000e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:3.5000000000000000e+00, y:0., occurence:5 }
+   - { x:3.5000000000000000e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:3.5000000000000000e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:3.5000000000000000e+00, y:1.6000000238418579e+00, occurence:1 }
+   - { x:3.5999999046325684e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:3.5999999046325684e+00, y:0., occurence:3 }
+   - { x:3.5999999046325684e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:3.5999999046325684e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:3.5999999046325684e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:3.5999999046325684e+00, y:1.6000000238418579e+00, occurence:1 }
+   - { x:3.7000000476837158e+00, y:-1., occurence:1 }
+   - { x:3.7000000476837158e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:3.7000000476837158e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:3.7000000476837158e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:3.7000000476837158e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:3.7000000476837158e+00, y:0., occurence:2 }
+   - { x:3.7000000476837158e+00, y:1.0000000149011612e-01, occurence:3 }
+   - { x:3.7000000476837158e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:3.7999999523162842e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:3.7999999523162842e+00, y:-1., occurence:1 }
+   - { x:3.7999999523162842e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:3.7999999523162842e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:3.7999999523162842e+00, y:-1.0000000149011612e-01, occurence:3 }
+   - { x:3.7999999523162842e+00, y:0., occurence:3 }
+   - { x:3.7999999523162842e+00, y:1.6000000238418579e+00, occurence:1 }
+   - { x:3.9000000953674316e+00, y:-2., occurence:1 }
+   - { x:3.9000000953674316e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:3.9000000953674316e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:3.9000000953674316e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:3.9000000953674316e+00, y:-1., occurence:1 }
+   - { x:3.9000000953674316e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:3.9000000953674316e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:3.9000000953674316e+00, y:0., occurence:4 }
+   - { x:3.9000000953674316e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:4., y:-1.1000000238418579e+00, occurence:1 }
+   - { x:4., y:-1., occurence:1 }
+   - { x:4., y:-8.0000001192092896e-01, occurence:1 }
+   - { x:4., y:-4.0000000596046448e-01, occurence:2 }
+   - { x:4., y:-3.0000001192092896e-01, occurence:2 }
+   - { x:4., y:-2.0000000298023224e-01, occurence:2 }
+   - { x:4., y:-1.0000000149011612e-01, occurence:2 }
+   - { x:4., y:0., occurence:5 }
+   - { x:4., y:1.0000000149011612e-01, occurence:1 }
+   - { x:4.0999999046325684e+00, y:-1.2000000476837158e+00, occurence:2 }
+   - { x:4.0999999046325684e+00, y:-1., occurence:1 }
+   - { x:4.0999999046325684e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:4.0999999046325684e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:4.0999999046325684e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:4.0999999046325684e+00, y:-1.0000000149011612e-01, occurence:3 }
+   - { x:4.0999999046325684e+00, y:0., occurence:5 }
+   - { x:4.0999999046325684e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:4.1999998092651367e+00, y:-2.7000000476837158e+00, occurence:1 }
+   - { x:4.1999998092651367e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:4.1999998092651367e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:4.1999998092651367e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:4.1999998092651367e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:4.1999998092651367e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:4.1999998092651367e+00, y:0., occurence:5 }
+   - { x:4.1999998092651367e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:4.3000001907348633e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:4.3000001907348633e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:4.3000001907348633e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:4.3000001907348633e+00, y:-1.0000000149011612e-01, occurence:3 }
+   - { x:4.3000001907348633e+00, y:0., occurence:2 }
+   - { x:4.3000001907348633e+00, y:1.0000000149011612e-01, occurence:3 }
+   - { x:4.4000000953674316e+00, y:-3.2000000476837158e+00, occurence:1 }
+   - { x:4.4000000953674316e+00, y:-1.6000000238418579e+00, occurence:1 }
+   - { x:4.4000000953674316e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:4.4000000953674316e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:4.4000000953674316e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:4.4000000953674316e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:4.4000000953674316e+00, y:0., occurence:1 }
+   - { x:4.4000000953674316e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:4.5000000000000000e+00, y:-2.5000000000000000e+00, occurence:1 }
+   - { x:4.5000000000000000e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:4.5000000000000000e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:4.5000000000000000e+00, y:-1., occurence:2 }
+   - { x:4.5000000000000000e+00, y:-5.0000000000000000e-01, occurence:2 }
+   - { x:4.5000000000000000e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:4.5000000000000000e+00, y:-1.0000000149011612e-01, occurence:4 }
+   - { x:4.5000000000000000e+00, y:0., occurence:9 }
+   - { x:4.5000000000000000e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:4.5000000000000000e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:4.5999999046325684e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:4.5999999046325684e+00, y:-1.2000000476837158e+00, occurence:1 }
+   - { x:4.5999999046325684e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:4.5999999046325684e+00, y:-1.0000000149011612e-01, occurence:4 }
+   - { x:4.5999999046325684e+00, y:0., occurence:5 }
+   - { x:4.5999999046325684e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:4.5999999046325684e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:4.5999999046325684e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:4.5999999046325684e+00, y:6.9999998807907104e-01, occurence:1 }
+   - { x:4.5999999046325684e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:4.6999998092651367e+00, y:-1.2000000476837158e+00, occurence:1 }
+   - { x:4.6999998092651367e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:4.6999998092651367e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:4.6999998092651367e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:4.6999998092651367e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:4.6999998092651367e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:4.6999998092651367e+00, y:0., occurence:7 }
+   - { x:4.6999998092651367e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:4.6999998092651367e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:4.6999998092651367e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:4.6999998092651367e+00, y:1.2000000476837158e+00, occurence:1 }
+   - { x:4.8000001907348633e+00, y:-2.4000000953674316e+00, occurence:1 }
+   - { x:4.8000001907348633e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:4.8000001907348633e+00, y:-1.3999999761581421e+00, occurence:3 }
+   - { x:4.8000001907348633e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:4.8000001907348633e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:4.8000001907348633e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:4.8000001907348633e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:4.8000001907348633e+00, y:0., occurence:4 }
+   - { x:4.8000001907348633e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:4.8000001907348633e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:4.8000001907348633e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:4.8000001907348633e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:4.8000001907348633e+00, y:6.0000002384185791e-01, occurence:1 }
+   - { x:4.8000001907348633e+00, y:8.0000001192092896e-01, occurence:1 }
+   - { x:4.9000000953674316e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:4.9000000953674316e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:4.9000000953674316e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:4.9000000953674316e+00, y:0., occurence:8 }
+   - { x:4.9000000953674316e+00, y:1.0000000149011612e-01, occurence:5 }
+   - { x:4.9000000953674316e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:4.9000000953674316e+00, y:1., occurence:1 }
+   - { x:5., y:-1.1000000238418579e+00, occurence:1 }
+   - { x:5., y:-6.0000002384185791e-01, occurence:1 }
+   - { x:5., y:-2.0000000298023224e-01, occurence:1 }
+   - { x:5., y:-1.0000000149011612e-01, occurence:3 }
+   - { x:5., y:0., occurence:2 }
+   - { x:5., y:1.0000000149011612e-01, occurence:2 }
+   - { x:5., y:2.0000000298023224e-01, occurence:3 }
+   - { x:5., y:3.0000001192092896e-01, occurence:1 }
+   - { x:5., y:4.0000000596046448e-01, occurence:1 }
+   - { x:5., y:5.0000000000000000e-01, occurence:3 }
+   - { x:5.0999999046325684e+00, y:-1.7999999523162842e+00, occurence:1 }
+   - { x:5.0999999046325684e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:5.0999999046325684e+00, y:-1., occurence:1 }
+   - { x:5.0999999046325684e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:5.0999999046325684e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:5.0999999046325684e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:5.0999999046325684e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:5.0999999046325684e+00, y:0., occurence:7 }
+   - { x:5.0999999046325684e+00, y:1.0000000149011612e-01, occurence:6 }
+   - { x:5.0999999046325684e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:5.1999998092651367e+00, y:-1., occurence:1 }
+   - { x:5.1999998092651367e+00, y:-5.0000000000000000e-01, occurence:2 }
+   - { x:5.1999998092651367e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:5.1999998092651367e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:5.1999998092651367e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:5.1999998092651367e+00, y:0., occurence:8 }
+   - { x:5.1999998092651367e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:5.1999998092651367e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:5.1999998092651367e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:5.1999998092651367e+00, y:6.0000002384185791e-01, occurence:1 }
+   - { x:5.1999998092651367e+00, y:8.0000001192092896e-01, occurence:1 }
+   - { x:5.3000001907348633e+00, y:-1.6000000238418579e+00, occurence:2 }
+   - { x:5.3000001907348633e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:5.3000001907348633e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:5.3000001907348633e+00, y:-1., occurence:1 }
+   - { x:5.3000001907348633e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:5.3000001907348633e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:5.3000001907348633e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:5.3000001907348633e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:5.3000001907348633e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:5.3000001907348633e+00, y:-1.0000000149011612e-01, occurence:1 }
+   - { x:5.3000001907348633e+00, y:0., occurence:10 }
+   - { x:5.3000001907348633e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:5.3000001907348633e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:5.3000001907348633e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:5.4000000953674316e+00, y:-1.6000000238418579e+00, occurence:4 }
+   - { x:5.4000000953674316e+00, y:-1., occurence:1 }
+   - { x:5.4000000953674316e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:5.4000000953674316e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:5.4000000953674316e+00, y:-3.0000001192092896e-01, occurence:4 }
+   - { x:5.4000000953674316e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:5.4000000953674316e+00, y:-1.0000000149011612e-01, occurence:2 }
+   - { x:5.4000000953674316e+00, y:0., occurence:8 }
+   - { x:5.4000000953674316e+00, y:1.0000000149011612e-01, occurence:3 }
+   - { x:5.4000000953674316e+00, y:2.0000000298023224e-01, occurence:3 }
+   - { x:5.4000000953674316e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:5.4000000953674316e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:5.5000000000000000e+00, y:-1.7999999523162842e+00, occurence:2 }
+   - { x:5.5000000000000000e+00, y:-1.7000000476837158e+00, occurence:3 }
+   - { x:5.5000000000000000e+00, y:-1.6000000238418579e+00, occurence:3 }
+   - { x:5.5000000000000000e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:5.5000000000000000e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:5.5000000000000000e+00, y:-8.9999997615814209e-01, occurence:2 }
+   - { x:5.5000000000000000e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:5.5000000000000000e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:5.5000000000000000e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:5.5000000000000000e+00, y:-1.0000000149011612e-01, occurence:4 }
+   - { x:5.5000000000000000e+00, y:0., occurence:4 }
+   - { x:5.5000000000000000e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:5.5000000000000000e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:5.5000000000000000e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:5.5000000000000000e+00, y:6.0000002384185791e-01, occurence:2 }
+   - { x:5.5000000000000000e+00, y:6.9999998807907104e-01, occurence:1 }
+   - { x:5.5000000000000000e+00, y:1.1000000238418579e+00, occurence:1 }
+   - { x:5.5999999046325684e+00, y:-1.7999999523162842e+00, occurence:1 }
+   - { x:5.5999999046325684e+00, y:-1.7000000476837158e+00, occurence:2 }
+   - { x:5.5999999046325684e+00, y:-1.6000000238418579e+00, occurence:6 }
+   - { x:5.5999999046325684e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:5.5999999046325684e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:5.5999999046325684e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:5.5999999046325684e+00, y:-6.9999998807907104e-01, occurence:2 }
+   - { x:5.5999999046325684e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:5.5999999046325684e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:5.5999999046325684e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:5.5999999046325684e+00, y:-1.0000000149011612e-01, occurence:3 }
+   - { x:5.5999999046325684e+00, y:0., occurence:9 }
+   - { x:5.5999999046325684e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:5.5999999046325684e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:5.5999999046325684e+00, y:6.9999998807907104e-01, occurence:2 }
+   - { x:5.6999998092651367e+00, y:-1.7999999523162842e+00, occurence:2 }
+   - { x:5.6999998092651367e+00, y:-1.7000000476837158e+00, occurence:7 }
+   - { x:5.6999998092651367e+00, y:-1.6000000238418579e+00, occurence:3 }
+   - { x:5.6999998092651367e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:5.6999998092651367e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:5.6999998092651367e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:5.6999998092651367e+00, y:-8.0000001192092896e-01, occurence:2 }
+   - { x:5.6999998092651367e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:5.6999998092651367e+00, y:-6.0000002384185791e-01, occurence:1 }
+   - { x:5.6999998092651367e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:5.6999998092651367e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:5.6999998092651367e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:5.6999998092651367e+00, y:-1.0000000149011612e-01, occurence:9 }
+   - { x:5.6999998092651367e+00, y:0., occurence:9 }
+   - { x:5.6999998092651367e+00, y:1.0000000149011612e-01, occurence:7 }
+   - { x:5.6999998092651367e+00, y:5.0000000000000000e-01, occurence:2 }
+   - { x:5.6999998092651367e+00, y:6.0000002384185791e-01, occurence:1 }
+   - { x:5.6999998092651367e+00, y:1., occurence:1 }
+   - { x:5.8000001907348633e+00, y:-1.7999999523162842e+00, occurence:3 }
+   - { x:5.8000001907348633e+00, y:-1.7000000476837158e+00, occurence:5 }
+   - { x:5.8000001907348633e+00, y:-1.6000000238418579e+00, occurence:1 }
+   - { x:5.8000001907348633e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:5.8000001907348633e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:5.8000001907348633e+00, y:-8.9999997615814209e-01, occurence:2 }
+   - { x:5.8000001907348633e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:5.8000001907348633e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:5.8000001907348633e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:5.8000001907348633e+00, y:-1.0000000149011612e-01, occurence:8 }
+   - { x:5.8000001907348633e+00, y:0., occurence:11 }
+   - { x:5.8000001907348633e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:5.8000001907348633e+00, y:2.0000000298023224e-01, occurence:3 }
+   - { x:5.8000001907348633e+00, y:3.0000001192092896e-01, occurence:3 }
+   - { x:5.8000001907348633e+00, y:4.0000000596046448e-01, occurence:2 }
+   - { x:5.8000001907348633e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:5.9000000953674316e+00, y:-1.8999999761581421e+00, occurence:1 }
+   - { x:5.9000000953674316e+00, y:-1.6000000238418579e+00, occurence:3 }
+   - { x:5.9000000953674316e+00, y:-1.5000000000000000e+00, occurence:2 }
+   - { x:5.9000000953674316e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:5.9000000953674316e+00, y:-1.1000000238418579e+00, occurence:2 }
+   - { x:5.9000000953674316e+00, y:-1., occurence:1 }
+   - { x:5.9000000953674316e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:5.9000000953674316e+00, y:-8.0000001192092896e-01, occurence:2 }
+   - { x:5.9000000953674316e+00, y:-6.9999998807907104e-01, occurence:2 }
+   - { x:5.9000000953674316e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:5.9000000953674316e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:5.9000000953674316e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:5.9000000953674316e+00, y:-1.0000000149011612e-01, occurence:5 }
+   - { x:5.9000000953674316e+00, y:0., occurence:8 }
+   - { x:5.9000000953674316e+00, y:1.0000000149011612e-01, occurence:4 }
+   - { x:5.9000000953674316e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:5.9000000953674316e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:5.9000000953674316e+00, y:6.0000002384185791e-01, occurence:1 }
+   - { x:6., y:-1.8999999761581421e+00, occurence:1 }
+   - { x:6., y:-1.7999999523162842e+00, occurence:1 }
+   - { x:6., y:-1.7000000476837158e+00, occurence:1 }
+   - { x:6., y:-1.3999999761581421e+00, occurence:1 }
+   - { x:6., y:-1.2000000476837158e+00, occurence:1 }
+   - { x:6., y:-1., occurence:1 }
+   - { x:6., y:-8.0000001192092896e-01, occurence:1 }
+   - { x:6., y:-6.9999998807907104e-01, occurence:4 }
+   - { x:6., y:-2.0000000298023224e-01, occurence:1 }
+   - { x:6., y:-1.0000000149011612e-01, occurence:4 }
+   - { x:6., y:0., occurence:16 }
+   - { x:6., y:1.0000000149011612e-01, occurence:6 }
+   - { x:6., y:2.0000000298023224e-01, occurence:1 }
+   - { x:6., y:3.0000001192092896e-01, occurence:2 }
+   - { x:6., y:4.0000000596046448e-01, occurence:1 }
+   - { x:6., y:5.0000000000000000e-01, occurence:1 }
+   - { x:6., y:6.0000002384185791e-01, occurence:1 }
+   - { x:6., y:6.9999998807907104e-01, occurence:2 }
+   - { x:6.0999999046325684e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:6.0999999046325684e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:6.0999999046325684e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:6.0999999046325684e+00, y:-8.0000001192092896e-01, occurence:2 }
+   - { x:6.0999999046325684e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:6.0999999046325684e+00, y:-6.0000002384185791e-01, occurence:4 }
+   - { x:6.0999999046325684e+00, y:-5.0000000000000000e-01, occurence:6 }
+   - { x:6.0999999046325684e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:6.0999999046325684e+00, y:-1.0000000149011612e-01, occurence:9 }
+   - { x:6.0999999046325684e+00, y:0., occurence:15 }
+   - { x:6.0999999046325684e+00, y:1.0000000149011612e-01, occurence:4 }
+   - { x:6.1999998092651367e+00, y:-1.5000000000000000e+00, occurence:1 }
+   - { x:6.1999998092651367e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:6.1999998092651367e+00, y:-1.2000000476837158e+00, occurence:1 }
+   - { x:6.1999998092651367e+00, y:-1., occurence:1 }
+   - { x:6.1999998092651367e+00, y:-8.9999997615814209e-01, occurence:2 }
+   - { x:6.1999998092651367e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:6.1999998092651367e+00, y:-6.9999998807907104e-01, occurence:2 }
+   - { x:6.1999998092651367e+00, y:-5.0000000000000000e-01, occurence:3 }
+   - { x:6.1999998092651367e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:6.1999998092651367e+00, y:-3.0000001192092896e-01, occurence:5 }
+   - { x:6.1999998092651367e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:6.1999998092651367e+00, y:-1.0000000149011612e-01, occurence:8 }
+   - { x:6.1999998092651367e+00, y:0., occurence:12 }
+   - { x:6.1999998092651367e+00, y:1.0000000149011612e-01, occurence:5 }
+   - { x:6.1999998092651367e+00, y:2.0000000298023224e-01, occurence:2 }
+   - { x:6.1999998092651367e+00, y:3.0000001192092896e-01, occurence:2 }
+   - { x:6.1999998092651367e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:6.1999998092651367e+00, y:5.0000000000000000e-01, occurence:2 }
+   - { x:6.3000001907348633e+00, y:-2., occurence:1 }
+   - { x:6.3000001907348633e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:6.3000001907348633e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:6.3000001907348633e+00, y:-1., occurence:1 }
+   - { x:6.3000001907348633e+00, y:-8.9999997615814209e-01, occurence:2 }
+   - { x:6.3000001907348633e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:6.3000001907348633e+00, y:-6.9999998807907104e-01, occurence:6 }
+   - { x:6.3000001907348633e+00, y:-6.0000002384185791e-01, occurence:7 }
+   - { x:6.3000001907348633e+00, y:-5.0000000000000000e-01, occurence:5 }
+   - { x:6.3000001907348633e+00, y:-4.0000000596046448e-01, occurence:5 }
+   - { x:6.3000001907348633e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:6.3000001907348633e+00, y:-2.0000000298023224e-01, occurence:2 }
+   - { x:6.3000001907348633e+00, y:-1.0000000149011612e-01, occurence:11 }
+   - { x:6.3000001907348633e+00, y:0., occurence:12 }
+   - { x:6.3000001907348633e+00, y:1.0000000149011612e-01, occurence:7 }
+   - { x:6.3000001907348633e+00, y:2.0000000298023224e-01, occurence:3 }
+   - { x:6.3000001907348633e+00, y:3.0000001192092896e-01, occurence:7 }
+   - { x:6.3000001907348633e+00, y:4.0000000596046448e-01, occurence:2 }
+   - { x:6.3000001907348633e+00, y:6.9999998807907104e-01, occurence:1 }
+   - { x:6.3000001907348633e+00, y:1.1000000238418579e+00, occurence:1 }
+   - { x:6.4000000953674316e+00, y:-1., occurence:1 }
+   - { x:6.4000000953674316e+00, y:-6.9999998807907104e-01, occurence:4 }
+   - { x:6.4000000953674316e+00, y:-6.0000002384185791e-01, occurence:4 }
+   - { x:6.4000000953674316e+00, y:-5.0000000000000000e-01, occurence:8 }
+   - { x:6.4000000953674316e+00, y:-4.0000000596046448e-01, occurence:4 }
+   - { x:6.4000000953674316e+00, y:-3.0000001192092896e-01, occurence:7 }
+   - { x:6.4000000953674316e+00, y:-2.0000000298023224e-01, occurence:7 }
+   - { x:6.4000000953674316e+00, y:-1.0000000149011612e-01, occurence:9 }
+   - { x:6.4000000953674316e+00, y:0., occurence:33 }
+   - { x:6.4000000953674316e+00, y:1.0000000149011612e-01, occurence:12 }
+   - { x:6.4000000953674316e+00, y:2.0000000298023224e-01, occurence:12 }
+   - { x:6.4000000953674316e+00, y:3.0000001192092896e-01, occurence:12 }
+   - { x:6.4000000953674316e+00, y:4.0000000596046448e-01, occurence:4 }
+   - { x:6.4000000953674316e+00, y:5.0000000000000000e-01, occurence:2 }
+   - { x:6.4000000953674316e+00, y:6.0000002384185791e-01, occurence:2 }
+   - { x:6.4000000953674316e+00, y:8.0000001192092896e-01, occurence:1 }
+   - { x:6.4000000953674316e+00, y:8.9999997615814209e-01, occurence:2 }
+   - { x:6.5000000000000000e+00, y:-1., occurence:1 }
+   - { x:6.5000000000000000e+00, y:-6.9999998807907104e-01, occurence:2 }
+   - { x:6.5000000000000000e+00, y:-6.0000002384185791e-01, occurence:6 }
+   - { x:6.5000000000000000e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:6.5000000000000000e+00, y:-4.0000000596046448e-01, occurence:6 }
+   - { x:6.5000000000000000e+00, y:-3.0000001192092896e-01, occurence:3 }
+   - { x:6.5000000000000000e+00, y:-2.0000000298023224e-01, occurence:7 }
+   - { x:6.5000000000000000e+00, y:-1.0000000149011612e-01, occurence:13 }
+   - { x:6.5000000000000000e+00, y:0., occurence:44 }
+   - { x:6.5000000000000000e+00, y:1.0000000149011612e-01, occurence:65 }
+   - { x:6.5000000000000000e+00, y:2.0000000298023224e-01, occurence:31 }
+   - { x:6.5000000000000000e+00, y:3.0000001192092896e-01, occurence:7 }
+   - { x:6.5000000000000000e+00, y:4.0000000596046448e-01, occurence:3 }
+   - { x:6.5000000000000000e+00, y:5.0000000000000000e-01, occurence:2 }
+   - { x:6.5000000000000000e+00, y:6.0000002384185791e-01, occurence:2 }
+   - { x:6.5000000000000000e+00, y:8.0000001192092896e-01, occurence:1 }
+   - { x:6.5999999046325684e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:6.5999999046325684e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:6.5999999046325684e+00, y:-6.0000002384185791e-01, occurence:2 }
+   - { x:6.5999999046325684e+00, y:-5.0000000000000000e-01, occurence:5 }
+   - { x:6.5999999046325684e+00, y:-4.0000000596046448e-01, occurence:6 }
+   - { x:6.5999999046325684e+00, y:-3.0000001192092896e-01, occurence:6 }
+   - { x:6.5999999046325684e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:6.5999999046325684e+00, y:-1.0000000149011612e-01, occurence:20 }
+   - { x:6.5999999046325684e+00, y:0., occurence:40 }
+   - { x:6.5999999046325684e+00, y:1.0000000149011612e-01, occurence:51 }
+   - { x:6.5999999046325684e+00, y:2.0000000298023224e-01, occurence:27 }
+   - { x:6.5999999046325684e+00, y:3.0000001192092896e-01, occurence:8 }
+   - { x:6.5999999046325684e+00, y:6.0000002384185791e-01, occurence:1 }
+   - { x:6.6999998092651367e+00, y:-2.5000000000000000e+00, occurence:1 }
+   - { x:6.6999998092651367e+00, y:-2., occurence:2 }
+   - { x:6.6999998092651367e+00, y:-5.0000000000000000e-01, occurence:1 }
+   - { x:6.6999998092651367e+00, y:-4.0000000596046448e-01, occurence:4 }
+   - { x:6.6999998092651367e+00, y:-3.0000001192092896e-01, occurence:7 }
+   - { x:6.6999998092651367e+00, y:-2.0000000298023224e-01, occurence:5 }
+   - { x:6.6999998092651367e+00, y:-1.0000000149011612e-01, occurence:17 }
+   - { x:6.6999998092651367e+00, y:0., occurence:29 }
+   - { x:6.6999998092651367e+00, y:1.0000000149011612e-01, occurence:40 }
+   - { x:6.6999998092651367e+00, y:2.0000000298023224e-01, occurence:22 }
+   - { x:6.6999998092651367e+00, y:3.0000001192092896e-01, occurence:11 }
+   - { x:6.6999998092651367e+00, y:4.0000000596046448e-01, occurence:4 }
+   - { x:6.6999998092651367e+00, y:5.0000000000000000e-01, occurence:4 }
+   - { x:6.8000001907348633e+00, y:-6.0000002384185791e-01, occurence:2 }
+   - { x:6.8000001907348633e+00, y:-5.0000000000000000e-01, occurence:4 }
+   - { x:6.8000001907348633e+00, y:-4.0000000596046448e-01, occurence:2 }
+   - { x:6.8000001907348633e+00, y:-3.0000001192092896e-01, occurence:4 }
+   - { x:6.8000001907348633e+00, y:-2.0000000298023224e-01, occurence:8 }
+   - { x:6.8000001907348633e+00, y:-1.0000000149011612e-01, occurence:13 }
+   - { x:6.8000001907348633e+00, y:0., occurence:31 }
+   - { x:6.8000001907348633e+00, y:1.0000000149011612e-01, occurence:24 }
+   - { x:6.8000001907348633e+00, y:2.0000000298023224e-01, occurence:7 }
+   - { x:6.8000001907348633e+00, y:3.0000001192092896e-01, occurence:4 }
+   - { x:6.8000001907348633e+00, y:4.0000000596046448e-01, occurence:3 }
+   - { x:6.8000001907348633e+00, y:5.0000000000000000e-01, occurence:4 }
+   - { x:6.9000000953674316e+00, y:-1., occurence:1 }
+   - { x:6.9000000953674316e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:6.9000000953674316e+00, y:-4.0000000596046448e-01, occurence:5 }
+   - { x:6.9000000953674316e+00, y:-3.0000001192092896e-01, occurence:5 }
+   - { x:6.9000000953674316e+00, y:-2.0000000298023224e-01, occurence:11 }
+   - { x:6.9000000953674316e+00, y:-1.0000000149011612e-01, occurence:18 }
+   - { x:6.9000000953674316e+00, y:0., occurence:42 }
+   - { x:6.9000000953674316e+00, y:1.0000000149011612e-01, occurence:30 }
+   - { x:6.9000000953674316e+00, y:2.0000000298023224e-01, occurence:13 }
+   - { x:6.9000000953674316e+00, y:3.0000001192092896e-01, occurence:10 }
+   - { x:6.9000000953674316e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:7., y:-2.0999999046325684e+00, occurence:1 }
+   - { x:7., y:-1.7000000476837158e+00, occurence:1 }
+   - { x:7., y:-1., occurence:2 }
+   - { x:7., y:-6.9999998807907104e-01, occurence:1 }
+   - { x:7., y:-6.0000002384185791e-01, occurence:1 }
+   - { x:7., y:-5.0000000000000000e-01, occurence:5 }
+   - { x:7., y:-4.0000000596046448e-01, occurence:4 }
+   - { x:7., y:-3.0000001192092896e-01, occurence:10 }
+   - { x:7., y:-2.0000000298023224e-01, occurence:16 }
+   - { x:7., y:-1.0000000149011612e-01, occurence:34 }
+   - { x:7., y:0., occurence:98 }
+   - { x:7., y:1.0000000149011612e-01, occurence:54 }
+   - { x:7., y:2.0000000298023224e-01, occurence:16 }
+   - { x:7., y:3.0000001192092896e-01, occurence:11 }
+   - { x:7., y:4.0000000596046448e-01, occurence:1 }
+   - { x:7.0999999046325684e+00, y:-2.4000000953674316e+00, occurence:1 }
+   - { x:7.0999999046325684e+00, y:-1.7999999523162842e+00, occurence:1 }
+   - { x:7.0999999046325684e+00, y:-1.3999999761581421e+00, occurence:1 }
+   - { x:7.0999999046325684e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:7.0999999046325684e+00, y:-1., occurence:4 }
+   - { x:7.0999999046325684e+00, y:-8.9999997615814209e-01, occurence:8 }
+   - { x:7.0999999046325684e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:7.0999999046325684e+00, y:-6.9999998807907104e-01, occurence:5 }
+   - { x:7.0999999046325684e+00, y:-6.0000002384185791e-01, occurence:3 }
+   - { x:7.0999999046325684e+00, y:-5.0000000000000000e-01, occurence:8 }
+   - { x:7.0999999046325684e+00, y:-4.0000000596046448e-01, occurence:6 }
+   - { x:7.0999999046325684e+00, y:-3.0000001192092896e-01, occurence:4 }
+   - { x:7.0999999046325684e+00, y:-2.0000000298023224e-01, occurence:21 }
+   - { x:7.0999999046325684e+00, y:-1.0000000149011612e-01, occurence:64 }
+   - { x:7.0999999046325684e+00, y:0., occurence:210 }
+   - { x:7.0999999046325684e+00, y:1.0000000149011612e-01, occurence:101 }
+   - { x:7.0999999046325684e+00, y:2.0000000298023224e-01, occurence:26 }
+   - { x:7.0999999046325684e+00, y:3.0000001192092896e-01, occurence:8 }
+   - { x:7.0999999046325684e+00, y:4.0000000596046448e-01, occurence:2 }
+   - { x:7.0999999046325684e+00, y:6.9999998807907104e-01, occurence:1 }
+   - { x:7.0999999046325684e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:7.1999998092651367e+00, y:-2.4000000953674316e+00, occurence:1 }
+   - { x:7.1999998092651367e+00, y:-1.2999999523162842e+00, occurence:1 }
+   - { x:7.1999998092651367e+00, y:-1., occurence:14 }
+   - { x:7.1999998092651367e+00, y:-8.9999997615814209e-01, occurence:6 }
+   - { x:7.1999998092651367e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:7.1999998092651367e+00, y:-6.0000002384185791e-01, occurence:2 }
+   - { x:7.1999998092651367e+00, y:-5.0000000000000000e-01, occurence:4 }
+   - { x:7.1999998092651367e+00, y:-4.0000000596046448e-01, occurence:4 }
+   - { x:7.1999998092651367e+00, y:-3.0000001192092896e-01, occurence:11 }
+   - { x:7.1999998092651367e+00, y:-2.0000000298023224e-01, occurence:23 }
+   - { x:7.1999998092651367e+00, y:-1.0000000149011612e-01, occurence:57 }
+   - { x:7.1999998092651367e+00, y:0., occurence:315 }
+   - { x:7.1999998092651367e+00, y:1.0000000149011612e-01, occurence:160 }
+   - { x:7.1999998092651367e+00, y:2.0000000298023224e-01, occurence:33 }
+   - { x:7.1999998092651367e+00, y:3.0000001192092896e-01, occurence:11 }
+   - { x:7.1999998092651367e+00, y:4.0000000596046448e-01, occurence:4 }
+   - { x:7.1999998092651367e+00, y:5.0000000000000000e-01, occurence:5 }
+   - { x:7.1999998092651367e+00, y:6.0000002384185791e-01, occurence:4 }
+   - { x:7.3000001907348633e+00, y:-2.7999999523162842e+00, occurence:1 }
+   - { x:7.3000001907348633e+00, y:-2.5000000000000000e+00, occurence:1 }
+   - { x:7.3000001907348633e+00, y:-1., occurence:11 }
+   - { x:7.3000001907348633e+00, y:-8.9999997615814209e-01, occurence:1 }
+   - { x:7.3000001907348633e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:7.3000001907348633e+00, y:-5.0000000000000000e-01, occurence:4 }
+   - { x:7.3000001907348633e+00, y:-4.0000000596046448e-01, occurence:6 }
+   - { x:7.3000001907348633e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:7.3000001907348633e+00, y:-2.0000000298023224e-01, occurence:11 }
+   - { x:7.3000001907348633e+00, y:-1.0000000149011612e-01, occurence:37 }
+   - { x:7.3000001907348633e+00, y:0., occurence:173 }
+   - { x:7.3000001907348633e+00, y:1.0000000149011612e-01, occurence:197 }
+   - { x:7.3000001907348633e+00, y:2.0000000298023224e-01, occurence:59 }
+   - { x:7.3000001907348633e+00, y:3.0000001192092896e-01, occurence:19 }
+   - { x:7.3000001907348633e+00, y:4.0000000596046448e-01, occurence:11 }
+   - { x:7.3000001907348633e+00, y:5.0000000000000000e-01, occurence:7 }
+   - { x:7.3000001907348633e+00, y:6.0000002384185791e-01, occurence:4 }
+   - { x:7.4000000953674316e+00, y:-2.4000000953674316e+00, occurence:1 }
+   - { x:7.4000000953674316e+00, y:-1.2000000476837158e+00, occurence:1 }
+   - { x:7.4000000953674316e+00, y:-1., occurence:4 }
+   - { x:7.4000000953674316e+00, y:-8.9999997615814209e-01, occurence:2 }
+   - { x:7.4000000953674316e+00, y:-8.0000001192092896e-01, occurence:1 }
+   - { x:7.4000000953674316e+00, y:-6.9999998807907104e-01, occurence:1 }
+   - { x:7.4000000953674316e+00, y:-5.0000000000000000e-01, occurence:8 }
+   - { x:7.4000000953674316e+00, y:-4.0000000596046448e-01, occurence:3 }
+   - { x:7.4000000953674316e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:7.4000000953674316e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:7.4000000953674316e+00, y:-1.0000000149011612e-01, occurence:27 }
+   - { x:7.4000000953674316e+00, y:0., occurence:83 }
+   - { x:7.4000000953674316e+00, y:1.0000000149011612e-01, occurence:90 }
+   - { x:7.4000000953674316e+00, y:2.0000000298023224e-01, occurence:25 }
+   - { x:7.4000000953674316e+00, y:3.0000001192092896e-01, occurence:15 }
+   - { x:7.4000000953674316e+00, y:4.0000000596046448e-01, occurence:4 }
+   - { x:7.4000000953674316e+00, y:5.0000000000000000e-01, occurence:4 }
+   - { x:7.4000000953674316e+00, y:6.0000002384185791e-01, occurence:3 }
+   - { x:7.4000000953674316e+00, y:6.9999998807907104e-01, occurence:1 }
+   - { x:7.5000000000000000e+00, y:-1.1000000238418579e+00, occurence:1 }
+   - { x:7.5000000000000000e+00, y:-1., occurence:2 }
+   - { x:7.5000000000000000e+00, y:-5.0000000000000000e-01, occurence:3 }
+   - { x:7.5000000000000000e+00, y:-3.0000001192092896e-01, occurence:3 }
+   - { x:7.5000000000000000e+00, y:-2.0000000298023224e-01, occurence:5 }
+   - { x:7.5000000000000000e+00, y:-1.0000000149011612e-01, occurence:19 }
+   - { x:7.5000000000000000e+00, y:0., occurence:25 }
+   - { x:7.5000000000000000e+00, y:1.0000000149011612e-01, occurence:24 }
+   - { x:7.5000000000000000e+00, y:2.0000000298023224e-01, occurence:13 }
+   - { x:7.5000000000000000e+00, y:3.0000001192092896e-01, occurence:6 }
+   - { x:7.5000000000000000e+00, y:4.0000000596046448e-01, occurence:5 }
+   - { x:7.5000000000000000e+00, y:5.0000000000000000e-01, occurence:11 }
+   - { x:7.5000000000000000e+00, y:6.0000002384185791e-01, occurence:4 }
+   - { x:7.5999999046325684e+00, y:-1., occurence:1 }
+   - { x:7.5999999046325684e+00, y:-3.0000001192092896e-01, occurence:1 }
+   - { x:7.5999999046325684e+00, y:-2.0000000298023224e-01, occurence:4 }
+   - { x:7.5999999046325684e+00, y:-1.0000000149011612e-01, occurence:4 }
+   - { x:7.5999999046325684e+00, y:0., occurence:8 }
+   - { x:7.5999999046325684e+00, y:1.0000000149011612e-01, occurence:3 }
+   - { x:7.5999999046325684e+00, y:2.0000000298023224e-01, occurence:5 }
+   - { x:7.5999999046325684e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:7.5999999046325684e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:7.5999999046325684e+00, y:5.0000000000000000e-01, occurence:5 }
+   - { x:7.5999999046325684e+00, y:6.0000002384185791e-01, occurence:3 }
+   - { x:7.5999999046325684e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:7.6999998092651367e+00, y:-5.0000000000000000e-01, occurence:2 }
+   - { x:7.6999998092651367e+00, y:-4.0000000596046448e-01, occurence:1 }
+   - { x:7.6999998092651367e+00, y:-3.0000001192092896e-01, occurence:3 }
+   - { x:7.6999998092651367e+00, y:-2.0000000298023224e-01, occurence:3 }
+   - { x:7.6999998092651367e+00, y:0., occurence:1 }
+   - { x:7.6999998092651367e+00, y:1.0000000149011612e-01, occurence:5 }
+   - { x:7.6999998092651367e+00, y:2.0000000298023224e-01, occurence:3 }
+   - { x:7.6999998092651367e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:7.6999998092651367e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:7.6999998092651367e+00, y:6.0000002384185791e-01, occurence:1 }
+   - { x:7.8000001907348633e+00, y:-3.0000001192092896e-01, occurence:2 }
+   - { x:7.8000001907348633e+00, y:-2.0000000298023224e-01, occurence:1 }
+   - { x:7.8000001907348633e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:7.8000001907348633e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:7.8000001907348633e+00, y:6.9999998807907104e-01, occurence:1 }
+   - { x:7.9000000953674316e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:7.9000000953674316e+00, y:4.0000000596046448e-01, occurence:2 }
+   - { x:7.9000000953674316e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:8., y:-6.0000002384185791e-01, occurence:1 }
+   - { x:8., y:0., occurence:1 }
+   - { x:8., y:2.0000000298023224e-01, occurence:1 }
+   - { x:8., y:4.0000000596046448e-01, occurence:1 }
+   - { x:8., y:8.0000001192092896e-01, occurence:1 }
+   - { x:8., y:8.9999997615814209e-01, occurence:1 }
+   - { x:8., y:1.2000000476837158e+00, occurence:1 }
+   - { x:8.1000003814697266e+00, y:0., occurence:1 }
+   - { x:8.1000003814697266e+00, y:5.0000000000000000e-01, occurence:1 }
+   - { x:8.1000003814697266e+00, y:8.9999997615814209e-01, occurence:2 }
+   - { x:8.1000003814697266e+00, y:1.2999999523162842e+00, occurence:1 }
+   - { x:8.1999998092651367e+00, y:0., occurence:1 }
+   - { x:8.1999998092651367e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:8.1999998092651367e+00, y:8.0000001192092896e-01, occurence:1 }
+   - { x:8.1999998092651367e+00, y:2., occurence:1 }
+   - { x:8.3000001907348633e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:8.3000001907348633e+00, y:8.0000001192092896e-01, occurence:1 }
+   - { x:8.3000001907348633e+00, y:1., occurence:1 }
+   - { x:8.3000001907348633e+00, y:1.3999999761581421e+00, occurence:1 }
+   - { x:8.3000001907348633e+00, y:2.0999999046325684e+00, occurence:1 }
+   - { x:8.3999996185302734e+00, y:1.0000000149011612e-01, occurence:2 }
+   - { x:8.3999996185302734e+00, y:2.0000000298023224e-01, occurence:1 }
+   - { x:8.3999996185302734e+00, y:4.0000000596046448e-01, occurence:1 }
+   - { x:8.3999996185302734e+00, y:1., occurence:1 }
+   - { x:8.6000003814697266e+00, y:3.0000001192092896e-01, occurence:1 }
+   - { x:8.8000001907348633e+00, y:1.2999999523162842e+00, occurence:1 }
+   - { x:9., y:1.1000000238418579e+00, occurence:1 }
+   - { x:9.1000003814697266e+00, y:2., occurence:1 }
+   - { x:9.3000001907348633e+00, y:3.2999999523162842e+00, occurence:1 }
+   - { x:9.3999996185302734e+00, y:8.9999997615814209e-01, occurence:1 }
+   - { x:9.3999996185302734e+00, y:2.4000000953674316e+00, occurence:1 }
+   - { x:9.3999996185302734e+00, y:2.7000000476837158e+00, occurence:1 }
+   - { x:9.5000000000000000e+00, y:1.0000000149011612e-01, occurence:1 }
+   - { x:9.5000000000000000e+00, y:3.0999999046325684e+00, occurence:1 }
+   - { x:9.6000003814697266e+00, y:2.5000000000000000e+00, occurence:1 }
+   - { x:9.6999998092651367e+00, y:1.5000000000000000e+00, occurence:1 }
+   - { x:9.6999998092651367e+00, y:3.2999999523162842e+00, occurence:1 }
+   - { x:1.0300000190734863e+01, y:2.7999999523162842e+00, occurence:1 }
+   - { x:1.0399999618530273e+01, y:3.2999999523162842e+00, occurence:1 }
+   - { x:1.0800000190734863e+01, y:2.5999999046325684e+00, occurence:1 }
+   - { x:1.0800000190734863e+01, y:2.7999999523162842e+00, occurence:1 }
+   - { x:1.1199999809265137e+01, y:3.2000000476837158e+00, occurence:1 }
+   - { x:65535., y:65535., occurence:4639 }
+shape_pointsframe_skip1_dataprocessing_1results_FB_none_:
+   - { good_pixels:0., total_pixels:3180. }
+   - { good_pixels:5.0850000000000000e+02, total_pixels:3165. }
+   - { good_pixels:498., total_pixels:3.1495000000000000e+03 }
+   - { good_pixels:508., total_pixels:3.1745000000000000e+03 }
+   - { good_pixels:503., total_pixels:3.1595000000000000e+03 }
+shape_pointsframe_skip1_dataprocessing_2results_FB_none_:
+   - { good_pixels:0., total_pixels:3180. }
+   - { good_pixels:579., total_pixels:3165. }
+   - { good_pixels:568., total_pixels:3.1495000000000000e+03 }
+   - { good_pixels:5.7050000000000000e+02,
+       total_pixels:3.1745000000000000e+03 }
+   - { good_pixels:5.6450000000000000e+02,
+       total_pixels:3.1595000000000000e+03 }
+shape_pointsframe_skip1_dataprocessing_3results_FB_none_:
+   - { good_pixels:0., total_pixels:3180. }
+   - { good_pixels:579., total_pixels:3165. }
+   - { good_pixels:5.5050000000000000e+02,
+       total_pixels:3.1495000000000000e+03 }
+   - { good_pixels:5.7050000000000000e+02,
+       total_pixels:3.1745000000000000e+03 }
+   - { good_pixels:5.6450000000000000e+02,
+       total_pixels:3.1595000000000000e+03 }
+collision_pointsframe_skip1_dataprocessing_0results_FB_none_:
+   - { x:-65535., y:-65535. }
+   - { x:-4.9919708251953125e+02, y:-3.4235565185546875e+02 }
+   - { x:3.4790112304687500e+02, y:-3.4465582275390625e+02 }
+   - { x:2.9874182128906250e+02, y:-3.4456097412109375e+02 }
+   - { x:4.7590734863281250e+02, y:-4.0080541992187500e+02 }
+line_anglesframe_skip1_dataprocessing_0results_FB_none_:
+   - { obj1:-1., obj2:-1. }
+   - { obj1:-2.2914314270019531e+01, obj2:7.9421812295913696e-01 }
+   - { obj1:-1.1975687980651855e+01, obj2:-7.5506181716918945e+00 }
+   - { obj1:-4.9645614624023438e+00, obj2:-4.5061020851135254e+00 }
+   - { obj1:-1.6200550079345703e+01, obj2:-3.9574199676513672e+01 }
+collision_pointsframe_skip1_dataprocessing_1results_FB_none_:
+   - { x:-65535., y:-65535. }
+   - { x:3.9943793945312500e+03, y:-3.5502923583984375e+02 }
+   - { x:5.0292340087890625e+02, y:-3.4512326049804688e+02 }
+   - { x:3.8129681396484375e+02, y:-3.4499005126953125e+02 }
+   - { x:4.7437863159179688e+02, y:-4.1522552490234375e+02 }
+line_anglesframe_skip1_dataprocessing_1results_FB_none_:
+   - { obj1:-1., obj2:-1. }
+   - { obj1:1.3251146316528320e+01, obj2:-3.6809396743774414e-01 }
+   - { obj1:-1.4308756828308105e+01, obj2:-3.1601579189300537e+00 }
+   - { obj1:-1.1185942649841309e+01, obj2:-5.5955734252929688e+00 }
+   - { obj1:-2.2538293838500977e+01, obj2:-3.1946195602416992e+01 }
+collision_pointsframe_skip1_dataprocessing_2results_FB_none_:
+   - { x:-65535., y:-65535. }
+   - { x:-1.4295728515625000e+04, y:-2.8067889404296875e+02 }
+   - { x:-5.7923745117187500e+03, y:-3.1681176757812500e+02 }
+   - { x:3.2874660644531250e+03, y:-3.5816159057617188e+02 }
+   - { x:4.9279104614257812e+02, y:-3.6161114501953125e+02 }
+line_anglesframe_skip1_dataprocessing_2results_FB_none_:
+   - { obj1:-1., obj2:-1. }
+   - { obj1:-3.1654244661331177e-01, obj2:2.1437599658966064e+00 }
+   - { obj1:-4.0234884619712830e-01, obj2:-4.1665005683898926e+00 }
+   - { obj1:7.9579077661037445e-02, obj2:-9.2979774475097656e+00 }
+   - { obj1:7.8703790903091431e-02, obj2:-3.6834930419921875e+01 }
+collision_pointsframe_skip1_dataprocessing_3results_FB_none_:
+   - { x:-65535., y:-65535. }
+   - { x:2.2146591796875000e+03, y:-3.5244934082031250e+02 }
+   - { x:1.2384714355468750e+03, y:-3.4870397949218750e+02 }
+   - { x:1.1709238281250000e+03, y:-3.4863629150390625e+02 }
+   - { x:5.0210864257812500e+02, y:-3.5897561645507812e+02 }
+line_anglesframe_skip1_dataprocessing_3results_FB_none_:
+   - { obj1:-1., obj2:-1. }
+   - { obj1:3.4512418508529663e-01, obj2:-2.1933434009552002e+00 }
+   - { obj1:8.2948380708694458e-01, obj2:-9.2115192413330078e+00 }
+   - { obj1:1.0204014778137207e+00, obj2:-9.2661838531494141e+00 }
+   - { obj1:1.0885704755783081e+00, obj2:-2.5159473419189453e+01 }

@@ -4,6 +4,7 @@
 
 #include <opencv/cv.hpp>
 #include <iostream>
+#include <map>
 #include "RobustnessIndex.h"
 #include "Dataset.h"
 #include "datasets.h"
@@ -118,9 +119,28 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                 m_fs << "{:" << "good_pixels" << samples_xy_shape[0][i] << "total_pixels" << samples_xy_shape[1][i] << "}";
             }
             m_fs << "]";
+
+
+            if ( data_processing_index == 0 ) {
+
+                std::map<std::pair<float, float>, int> scenario_displacement_occurence;
+
+                scenario_displacement_occurence = opticalFlow.getScenarioDisplacementOccurence().at(frame_skip - 1);
+
+                m_fs << (std::string("scenario_displacement_occurence") + std::string("frame_skip") + std::to_string(frame_skip) +
+                         std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix) << "[";
+
+                for ( auto it=scenario_displacement_occurence.begin(); it != scenario_displacement_occurence.end(); it++) {
+                    std::cout << cv::Point2f(it->first.first, it->first.second) << " " << it->second << std::endl;
+                    //xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
+                    m_fs << "{:" << "x" << it->first.first << "y" << it->first.second << "occurence" << it->second << "}";
+                }
+
+                m_fs << "]";
+
+            }
         }
     }
-
 }
 
 
