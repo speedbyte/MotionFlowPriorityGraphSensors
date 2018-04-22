@@ -206,7 +206,6 @@ def motionflow_pixelgraphs_noise():
         for x in range(4):
 
             shape_points = yaml_load[list_of_shape_metrics_noise[offset_index+x]]
-            frame_count = np.arange(0.0, len(shape_points)-1, 1)
             shape = list()
             for count in range(len(shape_points)-offset):
                 xy = list()
@@ -228,11 +227,12 @@ def motionflow_pixelgraphs_noise():
                 y3 = x3/y3
 
         offset_index=offset_index+4
+        frame_count = np.arange(0.0, len(x0), 1)
 
         plot1 = ('frame_count',
                  'noise_good_pixels/no_noise_total_pixels',
                  [frame_count],
-                 y0,
+                 [y0],
                  color_of_shape_metrics_noise,
                  list_of_shape_metrics_noise,
                  "shape_pointsframe_skip1_dataprocessing_0"
@@ -240,7 +240,7 @@ def motionflow_pixelgraphs_noise():
         plot2 = ('frame_count',
                  'noise_good_pixels/no_noise_total_pixels',
                  [frame_count],
-                 y1,
+                 [y1],
                  color_of_shape_metrics_noise,
                  list_of_shape_metrics_noise,
                  "shape_pointsframe_skip1_dataprocessing_1"
@@ -248,7 +248,7 @@ def motionflow_pixelgraphs_noise():
         plot3 = ('frame_count',
                  'noise_good_pixels/no_noise_total_pixels',
                  [frame_count],
-                 y2,
+                 [y2],
                  color_of_shape_metrics_noise,
                  list_of_shape_metrics_noise,
                  "shape_pointsframe_skip1_dataprocessing_2"
@@ -256,7 +256,7 @@ def motionflow_pixelgraphs_noise():
         plot4 = ('frame_count',
                  'noise_good_pixels/no_noise_total_pixels',
                  [frame_count],
-                 y3,
+                 [y3],
                  color_of_shape_metrics_noise,
                  list_of_shape_metrics_noise,
                  "shape_pointsframe_skip1_dataprocessing_3"
@@ -292,8 +292,6 @@ def motionflow_pixelgraphs_noise():
     print y1_mean_list[no_of_metrics]
     print y2_mean_list[no_of_metrics]
     print y3_mean_list[no_of_metrics]
-
-
 
 
 
@@ -431,14 +429,14 @@ def motionflow_vectorgraphs_no_noise():
     print dev2_mean_list[0]/SCALE
     print dev3_mean_list[0]/SCALE
 
-    frame_number = np.arange(0.0, len(x0_gt), 1)
+    frame_count = np.arange(0.0, len(x0_gt), 1)
 
 
     graph = Graph(2)
 
     plot1 = ('frame_count',
              'deviation [no_noise_points-groundtruth_points]',
-             [frame_number, frame_number, frame_number, frame_number, frame_number],
+             [frame_count, frame_count, frame_count, frame_count, frame_count],
              [dev0_gt, dev0, dev1, dev2, dev3],
              color_of_collision_metrics_no_noise,
              list_of_collision_metrics_no_noise,
@@ -490,8 +488,6 @@ def motionflow_vectorgraphs_noise():
             if ( x == 3):
                 x3_base, y3_base = data.T
 
-            x0 = np.arange(0.0, 5.0, 1)
-
     dev0_mean_list = list()
     dev1_mean_list = list()
     dev2_mean_list = list()
@@ -534,9 +530,11 @@ def motionflow_vectorgraphs_noise():
                 dev3 = numpy.sqrt((x3_base - x3) ** 2 + (y3_base - y3) ** 2)
 
 
+        frame_count = np.arange(0.0, len(x0), 1)
+
         plot1 = ('frame_count',
                  'deviation [noise_points-nonoise_points]',
-                 [x0],
+                 [frame_count],
                  [dev0],
                  color_of_collision_metrics_noise,
                  list_of_collision_metrics_noise,
@@ -544,7 +542,7 @@ def motionflow_vectorgraphs_noise():
                  )
         plot2 = ('frame_count',
                  'deviation [noise_points-nonoise_points]',
-                 [x0],
+                 [frame_count],
                  [dev1],
                  color_of_collision_metrics_noise,
                  list_of_collision_metrics_noise,
@@ -552,7 +550,7 @@ def motionflow_vectorgraphs_noise():
                  )
         plot3 = ('frame_count',
                  'deviation [noise_points-nonoise_points]',
-                 [x0],
+                 [frame_count],
                  [dev2],
                  color_of_collision_metrics_noise,
                  list_of_collision_metrics_noise,
@@ -560,7 +558,7 @@ def motionflow_vectorgraphs_noise():
                  )
         plot4 = ('frame_count',
                  'deviation [noise_points-nonoise_points]',
-                 [x0],
+                 [frame_count],
                  [dev3],
                  color_of_collision_metrics_noise,
                  list_of_collision_metrics_noise,
@@ -807,7 +805,7 @@ def scenario_displacement_occurence():
                 y0 = np.setdiff1d(y0, delete_point_array)
                 dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
 
-            frame_number = np.arange(0.0, len(x0_gt), 1)
+            frame_count = np.arange(0.0, len(x0_gt), 1)
 
         for n,i in enumerate(dev0):
             if ( abs(i) > OUTLIER):
@@ -817,7 +815,7 @@ def scenario_displacement_occurence():
             dev0_mean=(dev0_mean+dev0[n])
 
 
-    displacement_occurenceplot0.plot(frame_number, y0_gt/SCALE, 'ko-', lw=1, color=color_of_displacement_occurence_metrics[0+no_of_metrics], label=list_of_displacement_occurence_metrics[0+no_of_metrics])
+    displacement_occurenceplot0.plot(frame_count, y0_gt/SCALE, 'ko-', lw=1, color=color_of_displacement_occurence_metrics[0+no_of_metrics], label=list_of_displacement_occurence_metrics[0+no_of_metrics])
     #displacement_occurenceplot1.legend()
     displacement_occurenceplot0.xaxis.set_major_locator(plt.MaxNLocator(integer = True))
 
