@@ -665,6 +665,8 @@ def scenario_displacement_occurence():
 
 
 
+    
+
 
     ax1.set_xlabel('X Label')
     ax1.set_ylabel('Y Label')
@@ -682,7 +684,7 @@ def scenario_displacement_occurence():
 
     #ax1.set_ylim([-10,10])
 
-    ax1.bar3d(x_gt, y_gt, occurence_gt, np.ones(np.size(x_gt)), np.ones(np.size(x_gt)), np.ones(np.size(x_gt)), "red" )
+    ax1.bar3d(x_gt, y_gt, occurence_gt, np.ones(np.size(x_gt)), np.ones(np.size(x_gt)), occurence_gt, "red" )
     #ax2.bar3d(x, y, occurence, np.ones(np.size(x)), np.ones(np.size(x)), np.ones(np.size(x)), "red" )
     ax2.plot_wireframe(x, y, occurence)
 
