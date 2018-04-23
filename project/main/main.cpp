@@ -212,8 +212,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
-    std::vector<std::string> environment_list = {"none"};
+    const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
+    //const std::vector<std::string> environment_list = {"none"};
 
     for (ushort frame_skip = 0;  frame_skip < MAX_SKIPS_REAL; frame_skip++) {
 
@@ -235,7 +235,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 std::vector<Objects *> ptr_list_of_gt_objects;
                 GroundTruthObjects::objectCurrentCount = 0;
 
-                cv::Size_<unsigned> frame_size(800, 600);
+                cv::Size_<unsigned> frame_size(IMAGE_WIDTH, IMAGE_HEIGHT);
                 std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
                 std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
 

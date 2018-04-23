@@ -221,7 +221,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 int numLevels = 3;
                 int windowSize = 5;
                 int numIterations = 3;
-                int neighborhoodSize = 3; // polyN
+                int neighborhoodSize = 7; // polyN
                 float stdDeviation = 1.1; // polySigma
 
                 std::vector<float> err;

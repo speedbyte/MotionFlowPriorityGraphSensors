@@ -4,16 +4,13 @@
 import yaml
 import io
 import math
-
 import pandas as pd
 import cv2
 import numpy
 from matplotlib import pyplot as plt
-import numpy as np
 from mpl_toolkits.mplot3d import axes3d
 import scipy
 from scipy.interpolate import griddata
-import matplotlib as mp
 from math import pi
 
 import random
@@ -28,6 +25,8 @@ file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/d
 
 environment_list = ["none","light_snow_", "mild_snow_", "heavy_snow_"]#night
 environment_list = ["none",]
+
+data_processing_list = ["0", "1", "2", "3"]
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
@@ -59,14 +58,14 @@ def histogramm():
     plt.xlabel("Displacement")
     plt.ylabel("Counter", )
 
-    y = np.asarray(ybuf)
+    y = numpy.asarray(ybuf)
     bins = xbuf # use for small bars
     bins = range(-10,10)
     print bins
 
     x,y,_ = plt.hist(y.astype('float'),bins=bins, align='left', rwidth=0.5,)
 
-    maxIndex = np.argmax(x)
+    maxIndex = numpy.argmax(x)
     print maxIndex
 
     plt.bar(bins[0]+maxIndex,max(x),color='red',width=0.5)
@@ -78,7 +77,6 @@ def histogramm():
 
 def motionflow_pixelgraphs_no_noise(): ##done
 
-    offset=1
     offset_index=0
 
     yaml_file_handle = YAMLParser(file)
@@ -88,57 +86,58 @@ def motionflow_pixelgraphs_no_noise(): ##done
 
     x0_list = list()
     y0_list = list()
+    y0_mean = 0
 
-    for no_of_metrics in range(1): #generated
+    shape_points = yaml_load[list_of_shape_metrics_no_noise[offset_index]]
+    shape = list()
+    frame_count = numpy.arange(0.0, len(shape_points), 1)
 
-        for x in range(1):
+    print "OpticalFlowNoNoise " + environment_list[0]
 
-            shape_points = yaml_load[list_of_shape_metrics_no_noise[offset_index+x]]
-            shape = list()
-            frame_count = np.arange(0.0, len(shape_points)-1, 1)
-            for count in range(len(shape_points)-offset):
-                xy = list()
-                xy.append(shape_points[offset + count]["good_pixels"])
-                xy.append(shape_points[offset + count]["total_pixels"])
-                shape.append(xy)
-            data = np.array(shape)
-            x0_gt, y0_gt = data.T
-            y0_gt = x0_gt/y0_gt
+    for count in range(len(shape_points)):
+        xy = list()
+        xy.append(shape_points[count]["good_pixels"])
+        xy.append(shape_points[count]["total_pixels"])
+        shape.append(xy)
+    data = numpy.array(shape)
+    x0_gt, y0_gt = data.T
+    y0_gt = x0_gt/y0_gt
 
-            x0_list.append(frame_count)
-            y0_list.append(y0_gt)
+    x0_list.append(frame_count)
+    y0_list.append(y0_gt)
 
     y0_mean_list = list()
 
-    for no_of_metrics in range(1): # none
+    for n,i in enumerate(y0_gt):
+        y0_mean=y0_mean+i
+    y0_mean = y0_mean/(n+1)
+    y0_mean_list.append(y0_mean)
 
-        print "Table 1 " + environment_list[no_of_metrics]
+    print y0_mean_list[0]
 
+    for x in range(len(data_processing_list)):
+
+        shape_points = yaml_load[list_of_shape_metrics_no_noise[offset_index+1+x]]
+        shape = list()
         y0_mean = 0
-        for x in range(4):
+        for count in range(len(shape_points)):
+            xy = list()
+            xy.append(shape_points[count]["good_pixels"])
+            xy.append(shape_points[count]["total_pixels"])
+            shape.append(xy)
+        data = numpy.array(shape)
+        x0, y0 = data.T
+        y0 = x0/y0
+        for n,i in enumerate(y0):
+            y0_mean=y0_mean+i
+        y0_mean = y0_mean/(n+1)
+        y0_mean_list.append(y0_mean)
 
-            shape_points = yaml_load[list_of_shape_metrics_no_noise[offset_index+1+x]]
-            shape = list()
-            for count in range(len(shape_points)-offset):
-                xy = list()
-                xy.append(shape_points[offset + count]["good_pixels"])
-                xy.append(shape_points[offset + count]["total_pixels"])
-                shape.append(xy)
-            data = np.array(shape)
-            x0, y0 = data.T
-            y0 = x0/y0
-            for n,i in enumerate(y0):
-                y0_mean=y0_mean+i
-            y0_mean = y0_mean/(n+1)
-            y0_mean_list.append(y0_mean)
-            frame_count = np.arange(0.0, len(x0), 1)
+        x0_list.append(frame_count)
+        y0_list.append(y0)
+        print y0_mean_list[offset_index+1+x]
 
-            x0_list.append(frame_count)
-            y0_list.append(y0)
-
-            print y0_mean_list[x]
-
-        offset_index=offset_index+4
+    offset_index=offset_index+4
 
 
     plot1 = ('frame_count',
@@ -176,23 +175,23 @@ def motionflow_pixelgraphs_noise():
 
         list_of_plots = list()
 
-        for x in range(4):
+        for x in range(len(data_processing_list)):
 
             shape_points = yaml_load[list_of_shape_metrics_noise[offset_index+x]]
             shape = list()
-            for count in range(len(shape_points)-offset):
+            for count in range(len(shape_points)):
                 xy = list()
-                xy.append(shape_points[offset + count]["good_pixels"])
-                xy.append(shape_points[offset + count]["total_pixels"])
+                xy.append(shape_points[count]["good_pixels"])
+                xy.append(shape_points[count]["total_pixels"])
                 shape.append(xy)
-            data = np.array(shape)
+            data = numpy.array(shape)
             x0, y0 = data.T
             y0 = x0/y0
             for n,i in enumerate(y0):
                 y0_mean=y0_mean+i
             y0_mean = y0_mean/(n+1)
             y0_mean_list.append(y0_mean)
-            frame_count = np.arange(0.0, len(x0), 1)
+            frame_count = numpy.arange(0.0, len(x0), 1)
             plot1 = ('frame_count',
                      'noise_good_pixels/no_noise_total_pixels',
                      [frame_count],
@@ -224,7 +223,7 @@ def motionflow_vectorgraphs_no_noise():
     yaml_file_handle = YAMLParser(file)
     yaml_load = yaml_file_handle.load()
 
-    delete_point_array = np.array([-65535])
+    delete_point_array = numpy.array([-65535])
 
     dev0_gt_mean = 0
     dev0_mean = 0
@@ -238,16 +237,16 @@ def motionflow_vectorgraphs_no_noise():
 
     collision_points = yaml_load[list_of_collision_metrics_no_noise[offset_index]]
     collision = list()
-    for count in range(len(collision_points)-offset):
+    for count in range(len(collision_points)):
         xy = list()
-        xy.append(collision_points[offset + count]["x"])
-        xy.append(collision_points[offset + count]["y"])
+        xy.append(collision_points[count]["x"])
+        xy.append(collision_points[count]["y"])
         collision.append(xy)
 
-    data = np.array(collision)
+    data = numpy.array(collision)
     x0_gt, y0_gt = data.T
-    x0_gt = np.setdiff1d(x0_gt, delete_point_array)
-    y0_gt = np.setdiff1d(y0_gt, delete_point_array)
+    x0_gt = numpy.setdiff1d(x0_gt, delete_point_array)
+    y0_gt = numpy.setdiff1d(y0_gt, delete_point_array)
     dev0_gt = numpy.sqrt((x0_gt - x0_gt) ** 2 + (y0_gt - y0_gt) ** 2)
     for n,i in enumerate(dev0_gt):
         dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
@@ -255,7 +254,7 @@ def motionflow_vectorgraphs_no_noise():
     dev0_gt_mean = dev0_gt_mean/(n+1)
     dev0_gt_mean_list.append(dev0_gt_mean)
 
-    frame_count = np.arange(0.0, len(x0_gt), 1)
+    frame_count = numpy.arange(0.0, len(x0_gt), 1)
 
     x0_list.append(frame_count)
     y0_list.append(dev0_gt)
@@ -266,19 +265,19 @@ def motionflow_vectorgraphs_no_noise():
 
     offset_index=0
 
-    for x in range(4):
+    for x in range(len(data_processing_list)):
 
         collision_points = yaml_load[list_of_collision_metrics_no_noise[offset_index+1+x]]
         collision = list()
-        for count in range(len(collision_points)-offset):
+        for count in range(len(collision_points)):
             xy = list()
-            xy.append(collision_points[offset + count]["x"])
-            xy.append(collision_points[offset + count]["y"])
+            xy.append(collision_points[count]["x"])
+            xy.append(collision_points[count]["y"])
             collision.append(xy)
-        data = np.array(collision)
+        data = numpy.array(collision)
         x0, y0 = data.T
-        x0 = np.setdiff1d(x0, delete_point_array)
-        y0 = np.setdiff1d(y0, delete_point_array)
+        x0 = numpy.setdiff1d(x0, delete_point_array)
+        y0 = numpy.setdiff1d(y0, delete_point_array)
         dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
         for n,i in enumerate(dev0):
             if ( abs(i) > OUTLIER):
@@ -318,7 +317,7 @@ def motionflow_vectorgraphs_no_noise():
              "collision_pointsframe_skip1_dataprocessing_0"
              )
 
-    index_x0_gt_sorted = np.argsort(x0_gt)
+    index_x0_gt_sorted = numpy.argsort(x0_gt)
 
     print "Table 3 " + environment_list[0]
     print dev0_gt_mean_list[0]/SCALE
@@ -346,16 +345,16 @@ def motionflow_vectorgraphs_noise():
 
     for no_of_metrics in range(1): # generated
 
-        for x in range(4):
+        for x in range(len(data_processing_list)):
 
             collision_points = yaml_load[list_of_collision_metrics_noise[offset_index+x]]
             collision = list()
-            for count in range(len(collision_points)-offset):
+            for count in range(len(collision_points)):
                 xy = list()
-                xy.append(collision_points[offset + count]["x"])
-                xy.append(collision_points[offset + count]["y"])
+                xy.append(collision_points[count]["x"])
+                xy.append(collision_points[count]["y"])
                 collision.append(xy)
-            data = np.array(collision)
+            data = numpy.array(collision)
             if ( x == 0):
                 x0_base, y0_base = data.T
             if ( x == 1):
@@ -379,17 +378,17 @@ def motionflow_vectorgraphs_noise():
         dev2_mean = 0
         dev3_mean = 0
 
-        for x in range(4):
+        for x in range(len(data_processing_list)):
 
             collision_points = yaml_load[list_of_collision_metrics_noise[offset_index+x]]
             collision = list()
-            x0 = np.arange(0.0, len(collision_points)-1, 1)
-            for count in range(len(collision_points)-offset):
+            x0 = numpy.arange(0.0, len(collision_points)-1, 1)
+            for count in range(len(collision_points)):
                 xy = list()
-                xy.append(collision_points[offset + count]["x"])
-                xy.append(collision_points[offset + count]["y"])
+                xy.append(collision_points[count]["x"])
+                xy.append(collision_points[count]["y"])
                 collision.append(xy)
-            data = np.array(collision)
+            data = numpy.array(collision)
             if ( x == 0):
                 x0, y0 = data.T
                 dev0 = numpy.sqrt((x0_base - x0) ** 2 + (y0_base - y0) ** 2)
@@ -407,7 +406,7 @@ def motionflow_vectorgraphs_noise():
                 dev3 = numpy.sqrt((x3_base - x3) ** 2 + (y3_base - y3) ** 2)
 
 
-        frame_count = np.arange(0.0, len(x0), 1)
+        frame_count = numpy.arange(0.0, len(x0), 1)
 
         plot1 = ('frame_count',
                  'deviation [noise_points-nonoise_points]',
@@ -655,7 +654,7 @@ def scenario_displacement_occurence():
             xyz.append(scenario_displacement_occurence[count]["occurence"])
             occurences.append(xyz)
 
-        data = np.array(occurences)
+        data = numpy.array(occurences)
 
         if ( x == 0 ):
             x_gt, y_gt, occurence_gt = data.T
@@ -668,30 +667,29 @@ def scenario_displacement_occurence():
 
 
 
-    dx = np.empty(np.size(x_gt))
+    dx = numpy.empty(numpy.size(x_gt))
     dx.fill(0.1)
-    dy = np.empty(np.size(x_gt))
+    dy = numpy.empty(numpy.size(x_gt))
     dy.fill(0.1)
 
-    ax1.set_xlim([-6,6])
-    ax1.set_ylim([-2,2])
-    #ax1.set_xlim([min(numpy.amin(x_gt), numpy.amin(x)),  max(numpy.amax(x_gt), numpy.amax(x))])
-    #ax1.set_ylim([min(numpy.amin(y_gt), numpy.amin(y)),  max(numpy.amax(y_gt), numpy.amax(y))])
+    #ax1.set_xlim([-6,6])
+    #ax1.set_ylim([-2,2])
+    ax1.set_xlim([min(numpy.amin(x_gt), numpy.amin(x)),  max(numpy.amax(x_gt), numpy.amax(x))])
+    ax1.set_ylim([min(numpy.amin(y_gt), numpy.amin(y)),  max(numpy.amax(y_gt), numpy.amax(y))])
     ax1.set_zlim([0, numpy.amax(occurence_gt)])
-    ax1.set_zlim([0,np.amax(occurence_gt)])
 
     ax1.set_xlabel('X Label')
     ax1.set_ylabel('Y Label')
     ax1.set_zlabel('Z Label')
 
-    z = np.zeros(np.size(x_gt))
+    z = numpy.zeros(numpy.size(x_gt))
 
     ax1.bar3d(x_gt, y_gt, z, dx, dy, occurence_gt, "red" )
     #ax1.bar(x_gt, y_gt, occurence_gt, zdir='z', color='red', alpha=0.8 )
 
-    dx = np.empty(np.size(x))
+    dx = numpy.empty(numpy.size(x))
     dx.fill(0.5)
-    dy = np.empty(np.size(x))
+    dy = numpy.empty(numpy.size(x))
     dy.fill(0.5)
 
     ax2.set_xlabel('X Label')
@@ -700,15 +698,14 @@ def scenario_displacement_occurence():
 
     ax2.set_xlim([min(numpy.amin(x_gt), numpy.amin(x)),  max(numpy.amax(x_gt), numpy.amax(x))])
     ax2.set_ylim([min(numpy.amin(y_gt), numpy.amin(y)),  max(numpy.amax(y_gt), numpy.amax(y))])
-    ax2.set_zlim([0, numpy.amax(occurence_gt)])
-    ax2.set_zlim([0,np.amax(occurence)])
+    ax2.set_zlim([0,numpy.amax(occurence)])
 
     ax2.bar3d(x, y, occurence, dx, dy, -occurence, "red" )
 
     #ax2.set_xlim([-10,10])
     #ax2.set_ylim([-10,10])
 
-    #ax2.bar3d(x, y, occurence, np.ones(np.size(x)), np.ones(np.size(x)), np.ones(np.size(x)), "red" )
+    #ax2.bar3d(x, y, occurence, numpy.ones(numpy.size(x)), numpy.ones(numpy.size(x)), numpy.ones(numpy.size(x)), "red" )
     #ax2.plot_wireframe(x, y, occurence)
 
 
@@ -726,8 +723,8 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    scenario_displacement_occurence()
-    #motionflow_pixelgraphs_no_noise()
+    #scenario_displacement_occurence()
+    motionflow_pixelgraphs_no_noise()
     #motionflow_pixelgraphs_noise()
     #motionflow_vectorgraphs_no_noise()
     #motionflow_vectorgraphs_noise()

@@ -457,6 +457,8 @@ void OpticalFlow::generate_shape_points() {
                 outer_frame_shape_points.push_back(frame_shape_points_average);
             }
             outer_frame_skip_shape_points.push_back(outer_frame_shape_points);
+
+
             outer_frame_skip_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
 
         }

@@ -131,9 +131,11 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                          std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix) << "[";
 
                 for ( auto it=scenario_displacement_occurence.begin(); it != scenario_displacement_occurence.end(); it++) {
-                    std::cout << cv::Point2f(it->first.first, it->first.second) << " " << it->second << std::endl;
-                    //xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
-                    m_fs << "{:" << "x" << it->first.first << "y" << it->first.second << "occurence" << it->second << "}";
+
+                    if ( it->second > 200 ) {
+                        std::cout << cv::Point2f(it->first.first, it->first.second) << " " << it->second << std::endl;
+                        m_fs << "{:" << "x" << it->first.first << "y" << it->first.second << "occurence" << it->second << "}";
+                    }
                 }
 
                 m_fs << "]";
