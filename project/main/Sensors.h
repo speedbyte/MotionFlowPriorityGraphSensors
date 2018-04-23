@@ -45,7 +45,7 @@ public:
     void beginGroundTruthGeneration(SensorMetaData &gt_data) {
         generate_sen_base_pixel_position_pixel_displacement(gt_data);
 
-        generate_sen_extrapolated_pixel_position_pixel_displacement(MAX_SKIPS);
+        generate_sen_extrapolated_pixel_position_pixel_displacement();
     }
 
     const std::string &getSensorName() const {
@@ -78,7 +78,7 @@ public:
 
     void generate_sen_base_pixel_position_pixel_displacement(SensorMetaData gt_data);
 
-    void generate_sen_extrapolated_pixel_position_pixel_displacement(const unsigned &max_skips);
+    void generate_sen_extrapolated_pixel_position_pixel_displacement();
 
     const std::vector<bool>  &get_sen_base_visibility()    const {
         return m_sen_base_visibility;

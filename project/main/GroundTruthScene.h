@@ -254,8 +254,6 @@ $
     unsigned int mFirstIgnoredFrame = 65535;
     int          mLastNetworkFrame = -1;
 
-    double       mDeltaTime;                              // simulation step width
-
     int          mHaveImage ;                                 // is an image available?
 
     // some stuff for performance measurement
@@ -476,8 +474,6 @@ public:
                 m_environment_scp_message.replace(position, to_replace.length(), "79200");
             }
         }
-
-        mDeltaTime    = 0.01;                              // simulation step width
 
         mHaveImage    = 0;                                 // is an image available?
 

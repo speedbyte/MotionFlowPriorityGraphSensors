@@ -90,12 +90,12 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
     }
 }
 
-void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displacement(const unsigned &max_skips) {
+void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displacement() {
 
     float temp_flow_x(0);
     float temp_flow_y(0);
 
-    for ( unsigned frame_skip = 1; frame_skip < max_skips ; frame_skip++ ) {
+    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool>  multiframe_visibility;
@@ -145,11 +145,11 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
     }
 }
 
-void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips ) {
+void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility( ) {
 
 // object image_data_and_shape
 
-    for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
         std::vector<std::vector<bool>  > outer_base_visiblity;

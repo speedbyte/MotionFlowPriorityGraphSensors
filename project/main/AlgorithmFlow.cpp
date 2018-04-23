@@ -219,10 +219,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 // Initialize parameters for the optical generate_flow_frame algorithm
                 float pyrScale = 0.5;
                 int numLevels = 3;
-                int windowSize = 10;
-                int numIterations = 5;
-                int neighborhoodSize = 5;
-                float stdDeviation = 1.5;
+                int windowSize = 5;
+                int numIterations = 3;
+                int neighborhoodSize = 3; // polyN
+                float stdDeviation = 1.1; // polySigma
 
                 std::vector<float> err;
 
@@ -236,7 +236,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 else if ( fb == algo ) {
                     cv::calcOpticalFlowFarneback(prevGray, curGray, flowFrame, pyrScale, numLevels, windowSize,
                                                  numIterations, neighborhoodSize, stdDeviation,
-                                                 cv::OPTFLOW_USE_INITIAL_FLOW);
+                                                 cv::OPTFLOW_FARNEBACK_GAUSSIAN);
                     // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
                 }
 
@@ -499,7 +499,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                         auto new_stencil_size = stencil_movement.at(obj_index).size();
                         std::cout << new_stencil_size << " " << next_pts_array.size() << std::endl;
-                        assert(new_stencil_size != 0);
+                        //assert(new_stencil_size != 0);
 
                         if ( new_stencil_size == 0 ) {
                             for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
@@ -603,7 +603,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
             //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
             //cv::imwrite(temp_result_position_path, image_02_frame);
-            //cv::waitKey(100);
+            //cv::waitKey(0);
             cv::destroyAllWindows();
             prevGray = curGray.clone();
 

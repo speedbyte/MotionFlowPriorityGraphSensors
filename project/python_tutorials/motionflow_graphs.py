@@ -608,7 +608,7 @@ class YAMLParser(object):
         print "yaml check" , check
         if ("YAML:1.0" in check ):
             read_yaml_file = self.yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
-            read_yaml_file = self.read_yaml_file.replace(':', ': ')
+            read_yaml_file = read_yaml_file.replace(':', ': ')
             self.yaml_file.close()
             self.yaml_file = open(file, "w")
             self.yaml_file.write(read_yaml_file)
@@ -668,40 +668,45 @@ def scenario_displacement_occurence():
 
 
 
-    ax1.set_xlabel('X Label')
-    ax1.set_ylabel('Y Label')
-    ax1.set_zlabel('Z Label')
-
-    ax1.set_xlim([numpy.amin(x_gt), numpy.amax(x_gt)])
-    ax1.set_ylim([numpy.amin(y_gt), numpy.amax(y_gt)])
-    ax1.set_zlim([0, numpy.amax(occurence_gt)])
-
-    ax2.set_xlim([numpy.amin(x), numpy.amax(x)])
-    ax2.set_ylim([numpy.amin(y), numpy.amax(y)])
-
     dx = np.empty(np.size(x_gt))
     dx.fill(0.1)
     dy = np.empty(np.size(x_gt))
     dy.fill(0.1)
 
-    ax1.bar3d(x_gt, y_gt, occurence_gt, dx, dy, -occurence_gt, "red" )
+    ax1.set_xlim([-6,6])
+    ax1.set_ylim([-2,2])
+    #ax1.set_xlim([min(numpy.amin(x_gt), numpy.amin(x)),  max(numpy.amax(x_gt), numpy.amax(x))])
+    #ax1.set_ylim([min(numpy.amin(y_gt), numpy.amin(y)),  max(numpy.amax(y_gt), numpy.amax(y))])
+    ax1.set_zlim([0, numpy.amax(occurence_gt)])
+    ax1.set_zlim([0,np.amax(occurence_gt)])
+
+    ax1.set_xlabel('X Label')
+    ax1.set_ylabel('Y Label')
+    ax1.set_zlabel('Z Label')
+
+    z = np.zeros(np.size(x_gt))
+
+    ax1.bar3d(x_gt, y_gt, z, dx, dy, occurence_gt, "red" )
+    #ax1.bar(x_gt, y_gt, occurence_gt, zdir='z', color='red', alpha=0.8 )
 
     dx = np.empty(np.size(x))
-    dx.fill(0.1)
+    dx.fill(0.5)
     dy = np.empty(np.size(x))
-    dy.fill(0.1)
+    dy.fill(0.5)
+
+    ax2.set_xlabel('X Label')
+    ax2.set_ylabel('Y Label')
+    ax2.set_zlabel('Z Label')
+
+    ax2.set_xlim([min(numpy.amin(x_gt), numpy.amin(x)),  max(numpy.amax(x_gt), numpy.amax(x))])
+    ax2.set_ylim([min(numpy.amin(y_gt), numpy.amin(y)),  max(numpy.amax(y_gt), numpy.amax(y))])
+    ax2.set_zlim([0, numpy.amax(occurence_gt)])
+    ax2.set_zlim([0,np.amax(occurence)])
 
     ax2.bar3d(x, y, occurence, dx, dy, -occurence, "red" )
 
-    print numpy.amin(x_gt)
-    print numpy.amax(x_gt)
-
-    ax1.set_xlim([-10,10])
-    ax1.set_ylim([-10,10])
-    ax2.set_xlim([-10,10])
-    ax2.set_ylim([-10,10])
-    ax1.set_zlim([0,np.amax(occurence)])
-    ax2.set_zlim([0,np.amax(occurence)])
+    #ax2.set_xlim([-10,10])
+    #ax2.set_ylim([-10,10])
 
     #ax2.bar3d(x, y, occurence, np.ones(np.size(x)), np.ones(np.size(x)), np.ones(np.size(x)), "red" )
     #ax2.plot_wireframe(x, y, occurence)

@@ -9,8 +9,7 @@
 
 using namespace std::chrono;
 
-void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( const unsigned &max_skips,
-                                                                                         const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_blob_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_edge_pixel_point_pixel_displacement, std::string post_processing_algorithm) {
+void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_blob_pixel_point_pixel_displacement, const std::vector<std::vector<std::vector<bool> > > &obj_extrapolated_blob_visibility, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &obj_extrapolated_edge_pixel_point_pixel_displacement, std::string post_processing_algorithm) {
 
     // A blob can be either a stencil or a shape
 
@@ -37,7 +36,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
             outer_multiframe_shape_parameters_ranked_mean;
 
     
-    for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
+    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> >
                 multiframe_flowvector_simple_avg_mean,
@@ -558,7 +557,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( 
 }
 
 
-void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::string post_processing_algorithm) {
+void Objects::generate_obj_line_parameters( std::string post_processing_algorithm) {
 
 
     /// BEWARE !! I am in Cartesian co-ordinate system here.
@@ -579,7 +578,7 @@ void Objects::generate_obj_line_parameters( const unsigned &max_skips, std::stri
 
         std::vector<std::vector<cv::Point2f > > outer_line_parameters;
 
-        for (unsigned frame_skip = 1; frame_skip < max_skips; frame_skip++) {
+        for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
             std::cout << "generate_obj_line_parameters for frame_skip " << frame_skip << " for data_processing_indeX " << data_processing_index << " for object name " << m_objectName << " " << std::endl;
 

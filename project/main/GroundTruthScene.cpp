@@ -889,7 +889,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                                                       "trafficDemoClosePath.xml", "trafficDemoPath.xml",
                                                       "trafficDemoPed.xml", "traffic_demoReverse.xml",
                                                       "trafficDemoTrailer.xml", "trafficDemoUK.xml", "traffic_demo.xml"
-                                                              "car.xml", "moving_car_near.xml", "moving_car.xml",
+                                                        "car.xml", "moving_car_near.xml", "moving_car.xml",
                                                       "moving_truck.xml", "moving.xml", "one.xml",
                                                       "truck.xml", "two.xml"};
 
@@ -1054,18 +1054,21 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     fprintf(stderr,
                             "------------------------------------------------------------------------------------\n");
+                    float deltaTime;
                     if (m_dumpInitialFrames) {
 
+                        deltaTime = 0.001;
                         mCheckForImage = false;
                         fprintf(stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = false\n",
-                                mDeltaTime);
-                        sendRDBTrigger(m_triggerSocket, 0, 0, false, 0.01); // Extend the simulation by 10 ms
+                                deltaTime);
+                        sendRDBTrigger(m_triggerSocket, 0, 0, false, deltaTime); // Extend the simulation by 10 ms
 
                     } else {
+                        deltaTime = 0.1;
                         mCheckForImage = true;
                         fprintf(stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = true \n",
-                                mDeltaTime);
-                        sendRDBTrigger(m_triggerSocket, 0, 0, true, 0.1); // Extend the simulation by 100 ms
+                                deltaTime);
+                        sendRDBTrigger(m_triggerSocket, 0, 0, true, deltaTime); // Extend the simulation by 100 ms
                     }
 
                     while (mCheckForImage) {

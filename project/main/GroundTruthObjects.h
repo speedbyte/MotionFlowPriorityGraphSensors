@@ -27,9 +27,9 @@ private:
 
     ObjectImageShapeData m_image_data_and_shape;
 
-    void generate_obj_extrapolated_pixel_position_pixel_displacement(const unsigned &max_skips);
+    void generate_obj_extrapolated_pixel_position_pixel_displacement();
 
-    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(const unsigned &max_skips);
+    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
 
     void generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_stencil_movement  ) override;
 
@@ -54,9 +54,9 @@ public:
 
             generate_obj_base_pixel_position_pixel_displacement(gt_data);
 
-            generate_obj_extrapolated_pixel_position_pixel_displacement(MAX_SKIPS);
+            generate_obj_extrapolated_pixel_position_pixel_displacement();
 
-            generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(MAX_SKIPS);
+            generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
         }
     }
 

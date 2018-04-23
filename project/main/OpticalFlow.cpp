@@ -336,23 +336,25 @@ void OpticalFlow::generate_shape_points() {
 
                         if (m_resultordner == "/generated") {
 
-                            vollTreffer = CLUSTER_COUNT_GT;
-                            baseTreffer = CLUSTER_COUNT_GT;
+                            vollTreffer = CLUSTER_COUNT_GT/STEP_SIZE;
+                            baseTreffer = CLUSTER_COUNT_GT/STEP_SIZE;
 
                             if ( data_processing_index == 0 ) {
-                                if ( scenario_displacement_occurence.count(std::make_pair(std::round(gt_displacement.x*10)/10,std::round(gt_displacement.y*10)/10)) ) {
-                                    scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*10)/10,std::round(gt_displacement.y*10)/10)] = scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*10)/10,std::round(gt_displacement.y*10)/10)] + CLUSTER_COUNT_GT;
+
+                                if ( scenario_displacement_occurence.count(std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)) ) {
+                                    scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] = scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] + CLUSTER_COUNT_GT;
                                 }
                                 else {
-                                    scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*10)/10,std::round(gt_displacement.y*10)/10)] = CLUSTER_COUNT_GT;
+                                    scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] = CLUSTER_COUNT_GT;
                                 }
 
+                                /*
                                 if ( scenario_displacement_occurence.count(std::make_pair(65535,65535)) ) {
                                     scenario_displacement_occurence[std::make_pair(65535,65535)] = scenario_displacement_occurence[std::make_pair(65535,65535)] + 1;
                                 }
                                 else {
                                     scenario_displacement_occurence[std::make_pair(65535,65535)] = 1;
-                                }
+                                }*/
                             }
                         }
                         else {
@@ -370,12 +372,13 @@ void OpticalFlow::generate_shape_points() {
                                         scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] = 1;
                                     }
 
+                                    /*
                                     if ( scenario_displacement_occurence.count(std::make_pair(65535,65535)) ) {
                                         scenario_displacement_occurence[std::make_pair(65535,65535)] = scenario_displacement_occurence[std::make_pair(65535,65535)] + 1;
                                     }
                                     else {
                                         scenario_displacement_occurence[std::make_pair(65535,65535)] = 1;
-                                    }
+                                    }*/
 
                                 }
 

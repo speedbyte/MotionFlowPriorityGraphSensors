@@ -93,13 +93,13 @@ int main ( int argc, char *argv[]) {
     //bool kitti_raw_dataset.execute, cpp_dataset.execute, matlab_dataset.execute, kitti_flow_dataset.execute, vires_dataset.execute;
 
 
-/*    for (auto& section : pt)
-    {
-        std::cout << "[" << section.first << "]\n";
-        for (auto& key : section.second)
-            std::cout << key.first << "=" << key.second.get_value<std::string>() << "\n";
-    }
-*/
+    /*    for (auto& section : pt)
+        {
+            std::cout << "[" << section.first << "]\n";
+            for (auto& key : section.second)
+                std::cout << key.first << "=" << key.second.get_value<std::string>() << "\n";
+        }
+    */
     typedef struct {
         std::string path;
         bool execute;
@@ -117,42 +117,40 @@ int main ( int argc, char *argv[]) {
             kitti_raw_dataset,
             vkitti_raw_dataset,
             vires_dataset,
-            radar_dataset
-    ;
+            radar_dataset;
 
     cv::FileStorage fs_configfile;
     fs_configfile.open("../input.yml", cv::FileStorage::READ);
-    if (!fs_configfile.isOpened())
-    {
+    if (!fs_configfile.isOpened()) {
         cerr << "Failed to open " << endl;
         return 1;
     }
 
-    std::map<std::string, CONFIG_FILE_DATA*> map_object;
+    std::map<std::string, CONFIG_FILE_DATA *> map_object;
 
-    map_object["CPP_DATASET"] =  &cpp_dataset;
-    map_object["MATLAB_DATASET"] =  &matlab_dataset;
-    map_object["KITTI_FLOW_DATASET"] =  &kitti_flow_dataset;
-    map_object["KITTI_RAW_DATASET"] =  &kitti_raw_dataset;
+    map_object["CPP_DATASET"] = &cpp_dataset;
+    map_object["MATLAB_DATASET"] = &matlab_dataset;
+    map_object["KITTI_FLOW_DATASET"] = &kitti_flow_dataset;
+    map_object["KITTI_RAW_DATASET"] = &kitti_raw_dataset;
     map_object["VKITTI_FLOW_DATASET"] = &vkitti_flow_dataset;
     map_object["VKITTI_RAW_DATASET"] = &vkitti_raw_dataset;
     map_object["RADAR_DATASET"] = &radar_dataset;
     map_object["VIRES_DATASET"] = &vires_dataset;
 
     cv::FileNode node;
-    for (std::map<std::string ,CONFIG_FILE_DATA*>::iterator it=map_object.begin(); it!=map_object.end(); ++it)  {
+    for (std::map<std::string, CONFIG_FILE_DATA *>::iterator it = map_object.begin(); it != map_object.end(); ++it) {
 
         std::cout << it->first << '\n';
         node = fs_configfile[(*it).first];
-        if ( node.isNone() || node.empty() ) {
+        if (node.isNone() || node.empty()) {
             std::cout << (*it).first << " cannot be found" << std::endl;
         }
         it->second->path = node["PATH"].string();
-        it->second->execute = (bool)(int)node["EXECUTE"];
-        it->second->gt = (bool)(int)(node["GT"]);
-        it->second->lk = (bool)(int)(node["LK"]);
-        it->second->fb = (bool)(int)(node["FB"]);
-        it->second->plot = (bool)(int)(node["PLOT"]);
+        it->second->execute = (bool) (int) node["EXECUTE"];
+        it->second->gt = (bool) (int) (node["GT"]);
+        it->second->lk = (bool) (int) (node["LK"]);
+        it->second->fb = (bool) (int) (node["FB"]);
+        it->second->plot = (bool) (int) (node["PLOT"]);
         //map_input_txt_to_main.push_back(map_object);
         std::cout << it->second->path << " " << it->second->execute << " " << it->second->gt << std::endl;
 
@@ -163,25 +161,25 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
      * videos ( 21260 frames ) for five different virtual worlds in urban settings under different imaging and weather c
      * conditions.
      */
-    if ( vkitti_raw_dataset.execute ) {
+    if (vkitti_raw_dataset.execute) {
 
     }
 
-    if ( radar_dataset.execute ) {
+    if (radar_dataset.execute) {
 
     }
 
-    if ( kitti_raw_dataset.execute ) {
+    if (kitti_raw_dataset.execute) {
         boost::filesystem::path calib_path = get_file(KITTI_RAW_CALIBRATION_PATH,
-                                                      "./", "calib_cam_to_cam.txt");
+                "./", "calib_cam_to_cam.txt");
         read_kitti_calibration(calib_path);
 
         boost::filesystem::path kitti_full_image_path1 = get_file(KITTI_RAW_DATASET_PATH,
-                                                                  "data/2011_09_28_drive_0016_sync/image_02/data/",
-                                                                  "0000000169.png");
+                "data/2011_09_28_drive_0016_sync/image_02/data/",
+                "0000000169.png");
         boost::filesystem::path kitti_full_image_path2 = get_file(KITTI_RAW_DATASET_PATH,
-                                                                  "data/2011_09_28_drive_0016_sync/image_02/data/",
-                                                                  "0000000170.png");
+                "data/2011_09_28_drive_0016_sync/image_02/data/",
+                "0000000170.png");
 
         std::cout << kitti_full_image_path1 << std::endl << kitti_full_image_path2 << std::endl;
 
@@ -203,7 +201,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         //test_kitti_original();
     }
 
-/* CPP_DATASET ------------- */
+    /* CPP_DATASET ------------- */
 
     ushort depth = CV_8U;
     ushort cn = 3;
@@ -211,185 +209,206 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_IMAGES);
     assert(MAX_ITERATION_GT_SCENE_GENERATION_IMAGES <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
 
-    const std::vector < std::string> scenarios_list = {"two"};
+    const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
-    std::vector <std::string> environment_list = {"none"};
+    std::vector<std::string> environment_list = {"none"};
 
-    cv::FileStorage fs;
+    for (ushort frame_skip = 0;  frame_skip < MAX_SKIPS_REAL; frame_skip++) {
 
-    std::vector<GroundTruthObjects> list_of_gt_objects_base;
-    std::vector<Sensors> list_of_gt_sensors_base;
+        cv::FileStorage fs;
 
-    std::vector<SimulatedObjects> list_of_simulated_objects_base;
-    std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
+        std::vector<GroundTruthObjects> list_of_gt_objects_base;
+        std::vector<Sensors> list_of_gt_sensors_base;
 
-    GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_gt_objects_base);
+        std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
 
-    for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
+        GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                ptr_list_of_gt_objects_base);
 
-        if ( cpp_dataset.execute || vires_dataset.execute ) {
+        for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-            std::vector<GroundTruthObjects> list_of_gt_objects;
-            std::vector<Objects *> ptr_list_of_gt_objects;
-            GroundTruthObjects::objectCurrentCount = 0;
+            if (cpp_dataset.execute || vires_dataset.execute) {
 
-            cv::Size_<unsigned> frame_size(800, 600);
-            std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
-            std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
+                std::vector<GroundTruthObjects> list_of_gt_objects;
+                std::vector<Objects *> ptr_list_of_gt_objects;
+                GroundTruthObjects::objectCurrentCount = 0;
 
-            GroundTruthScene *base_ptr_gt_scene;
+                cv::Size_<unsigned> frame_size(800, 600);
+                std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
+                std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
 
-            if ( vires_dataset.execute ) {
+                GroundTruthScene *base_ptr_gt_scene;
 
-                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
-                // The first iteration "none" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
-                // through out the life cycle of the program.
-                GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, list_of_gt_sensors_base, vires_dataset.gt);
-                base_ptr_gt_scene = &gt_scene;
-                base_ptr_gt_scene->prepare_directories();
-                base_ptr_gt_scene->generate_gt_scene();
-                base_ptr_gt_scene->generate_bird_view();
+                if (vires_dataset.execute) {
 
-                if ( (env_index == environment_list.size()-1 ) && vires_dataset.gt) {
-                    base_ptr_gt_scene->stopSimulation();
-                    exit(0);
-                }
+                    Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
+                    // The first iteration "none" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
+                    // through out the life cycle of the program.
+                    GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index],
+                            list_of_gt_objects_base, list_of_gt_sensors_base, vires_dataset.gt);
+                    base_ptr_gt_scene = &gt_scene;
+                    base_ptr_gt_scene->prepare_directories();
+                    base_ptr_gt_scene->generate_gt_scene();
+                    base_ptr_gt_scene->generate_bird_view();
 
-            }
-
-            else if ( cpp_dataset.execute  ) {
-
-                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
-                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index], list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
-                base_ptr_gt_scene = &gt_scene;
-                base_ptr_gt_scene->prepare_directories();
-                base_ptr_gt_scene->generate_gt_scene();
-                base_ptr_gt_scene->generate_bird_view();
-
-            }
-
-            if ( environment_list[env_index] == "none") {
-                for ( auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
-                    ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_count)));
-                }
-            }
-            for ( auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
-                list_of_gt_objects.push_back(list_of_gt_objects_base.at(obj_count)) ;
-            }
-            ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
-
-
-            // Generate Groundtruth data flow --------------------------------------
-            if ( environment_list[env_index] == "none") {
-
-                fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
-
-
-                gt_flow.generate_flow_frame();
-
-                for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
-                    ptr_list_of_gt_objects.at(obj_count)->generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( MAX_SKIPS , ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement(), ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_visibility(), ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "ground_truth");
-                    ptr_list_of_gt_objects.at(obj_count)->generate_obj_line_parameters(MAX_SKIPS, "ground_truth");
-                }
-
-                gt_flow.generate_edge_contour();
-                //gt_flow.visualiseStencil();
-
-
-                gt_flow.generate_collision_points();
-                gt_flow.generate_shape_points(); // this is to just create Jaccard Index  =  1
-
-            }
-        }
-    }
-
-    /*
-     To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
-     */
-    std::vector<Objects *> ptr_list_of_simulated_objects;
-    std::vector<AlgorithmFlow> list_of_algorithm_flow;
-    for ( ushort obj_count = 0; obj_count < environment_list.size(); obj_count++ ) {
-        AlgorithmFlow fback(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                            ptr_list_of_simulated_objects);
-        list_of_algorithm_flow.push_back(fback);
-    }
-
-    // Generate Algorithm data flow --------------------------------------
-    for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
-
-        if ( cpp_dataset.execute || vires_dataset.execute ) {
-
-            std::vector<SimulatedObjects> list_of_simulated_objects;
-            ptr_list_of_simulated_objects.clear();
-            SimulatedObjects::SimulatedobjectCurrentCount = 0;
-
-            list_of_simulated_objects.clear();
-            for ( ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++ ) {
-                //two objects
-                int width = list_of_gt_objects_base.at(obj_count).getInertialWidth();
-                int height = list_of_gt_objects_base.at(obj_count).getInertialHeight();
-                std::vector<std::vector<bool> >  extrapolated_visibility = list_of_gt_objects_base.at(obj_count).get_obj_extrapolated_visibility();
-
-                SimulatedObjects objects( ("simulated_" + list_of_gt_objects_base.at(obj_count).getObjectName()), width, height, extrapolated_visibility);
-                list_of_simulated_objects.push_back(objects);
-            }
-
-            for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
-                ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_count));
-            }
-
-            if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
-
-                list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index]);
-                list_of_algorithm_flow[env_index].generate_edge_contour();
-
-                if ( environment_list[env_index] == "none" ) { // store the stimulated objects from the ground run.
-
-                    for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
-                        list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_count));
+                    if ((env_index == environment_list.size() - 1) && vires_dataset.gt) {
+                        base_ptr_gt_scene->stopSimulation();
+                        exit(0);
                     }
-                    for ( auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++ ) {
-                        ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_count));
+
+                } else if (cpp_dataset.execute) {
+
+                    Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
+                    GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index],
+                            list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
+                    base_ptr_gt_scene = &gt_scene;
+                    base_ptr_gt_scene->prepare_directories();
+                    base_ptr_gt_scene->generate_gt_scene();
+                    base_ptr_gt_scene->generate_bird_view();
+
+                }
+
+                if (environment_list[env_index] == "none") {
+                    for (auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
+                        ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_count)));
                     }
                 }
-
-                for ( ushort i = 0; i < list_of_simulated_objects.size(); i++) {
-                    list_of_simulated_objects.at(i)
-                            .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(MAX_SKIPS, list_of_simulated_objects.at(i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(), list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(), list_of_simulated_objects.at(i).get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "algorithm");
-                    list_of_simulated_objects.at(i).generate_obj_line_parameters(MAX_SKIPS, "algorithm");
+                for (auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
+                    list_of_gt_objects.push_back(list_of_gt_objects_base.at(obj_count));
                 }
+                ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
 
-                list_of_algorithm_flow[env_index].generate_collision_points();
-                list_of_algorithm_flow[env_index].generate_shape_points();
-                if ( env_index == environment_list.size()-1 ) {
-                    //list_of_algorithm_flow[env_index].visualiseStencil();
+
+                // Generate Groundtruth data flow --------------------------------------
+                if (environment_list[env_index] == "none") {
+
+                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
+
+
+                    gt_flow.generate_flow_frame();
+
+                    for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
+                        ptr_list_of_gt_objects.at(
+                                obj_count)->generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(
+                                ptr_list_of_gt_objects.at(
+                                        obj_count)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement(),
+                                ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_visibility(),
+                                ptr_list_of_gt_objects.at(
+                                        obj_count)->get_obj_extrapolated_edge_pixel_point_pixel_displacement(),
+                                "ground_truth");
+                        ptr_list_of_gt_objects.at(obj_count)->generate_obj_line_parameters("ground_truth");
+                    }
+
+                    gt_flow.generate_edge_contour();
+                    //gt_flow.visualiseStencil();
+
+
+                    gt_flow.generate_collision_points();
+                    gt_flow.generate_shape_points(); // this is to just create Jaccard Index  =  1
+
                 }
             }
         }
-    }
 
-    PixelRobustness pixelRobustness(fs);
-    VectorRobustness vectorRobustness(fs);
+        /*
+         To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
+         */
+        std::vector<SimulatedObjects> list_of_simulated_objects_base;
 
-    if ( (cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute) ) {
+        std::vector<Objects *> ptr_list_of_simulated_objects;
+        std::vector<AlgorithmFlow> list_of_algorithm_flow;
 
-        pixelRobustness.generatePixelRobustness(gt_flow, list_of_algorithm_flow[0]);
-        vectorRobustness.generateVectorRobustness(gt_flow, list_of_algorithm_flow[0]);
-        vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
+        for (ushort obj_count = 0; obj_count < environment_list.size(); obj_count++) {
+            AlgorithmFlow fback(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                    ptr_list_of_simulated_objects);
+            list_of_algorithm_flow.push_back(fback);
+        }
 
+        // Generate Algorithm data flow --------------------------------------
+        for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-        if ( (cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute )) {
-            for ( ushort env_index = 0; env_index< environment_list.size(); env_index++) {
-                pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0] );
-                vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
+            if (cpp_dataset.execute || vires_dataset.execute) {
+
+                std::vector<SimulatedObjects> list_of_simulated_objects;
+                ptr_list_of_simulated_objects.clear();
+                SimulatedObjects::SimulatedobjectCurrentCount = 0;
+
+                list_of_simulated_objects.clear();
+                for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
+                    //two objects
+                    int width = list_of_gt_objects_base.at(obj_count).getInertialWidth();
+                    int height = list_of_gt_objects_base.at(obj_count).getInertialHeight();
+                    std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
+                            obj_count).get_obj_extrapolated_visibility();
+
+                    SimulatedObjects objects(("simulated_" + list_of_gt_objects_base.at(obj_count).getObjectName()), width,
+                            height, extrapolated_visibility);
+                    list_of_simulated_objects.push_back(objects);
+                }
+
+                for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
+                    ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_count));
+                }
+
+                if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
+
+                    list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index]);
+                    list_of_algorithm_flow[env_index].generate_edge_contour();
+
+                    if (environment_list[env_index] == "none") { // store the stimulated objects from the ground run.
+
+                        for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
+                            list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_count));
+                        }
+                        for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
+                            ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_count));
+                        }
+                    }
+
+                    for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
+                        list_of_simulated_objects.at(i)
+                                .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(
+                                        list_of_simulated_objects.at(
+                                                i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(),
+                                        list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(),
+                                        list_of_simulated_objects.at(
+                                                i).get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "algorithm");
+                        list_of_simulated_objects.at(i).generate_obj_line_parameters("algorithm");
+                    }
+
+                    list_of_algorithm_flow[env_index].generate_collision_points();
+                    list_of_algorithm_flow[env_index].generate_shape_points();
+                    if (env_index == environment_list.size() - 1) {
+                        //list_of_algorithm_flow[env_index].visualiseStencil();
+                    }
+                }
             }
         }
 
+        PixelRobustness pixelRobustness(fs);
+        VectorRobustness vectorRobustness(fs);
+
+        if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
+
+            pixelRobustness.generatePixelRobustness(gt_flow, list_of_algorithm_flow[0]);
+            vectorRobustness.generateVectorRobustness(gt_flow, list_of_algorithm_flow[0]);
+            vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
+
+
+            if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
+                for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+                    pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
+                }
+            }
+
+        }
+        fs.release();
+
     }
-    fs.release();
 
 
 /* MATLAB_DATASET ------------- */

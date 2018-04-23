@@ -43,10 +43,10 @@ void Sensors::generate_sen_base_pixel_position_pixel_displacement(SensorMetaData
     }
 }
 
-void Sensors::generate_sen_extrapolated_pixel_position_pixel_displacement(const unsigned &max_skips) {
+void Sensors::generate_sen_extrapolated_pixel_position_pixel_displacement() {
 
 
-    for ( unsigned frame_skip = 1; frame_skip < max_skips ; frame_skip++ ) {
+    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
 
         std::vector<bool>  multiframe_visibility;
         std::vector<STRUCT_GT_SENSORS_ALL> multiframe_all;
