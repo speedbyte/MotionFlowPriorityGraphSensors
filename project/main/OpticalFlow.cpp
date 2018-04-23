@@ -319,7 +319,7 @@ void OpticalFlow::generate_shape_points() {
                     auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
                             obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
 
-                    if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) == true) {
+                    if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) ) {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
@@ -727,13 +727,12 @@ void OpticalFlow::visualiseStencil(void) {
 
     cv::Mat image_data_and_shape;
 
-    const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
     FlowImageExtended F_png_write;
 
     for ( unsigned data_processing_index = 0; data_processing_index < 4; data_processing_index++ ) {
 
-        for (int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++) {
+        for (int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
             for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
 

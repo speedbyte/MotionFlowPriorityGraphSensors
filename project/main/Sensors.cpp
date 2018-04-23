@@ -20,11 +20,12 @@ void Sensors::generate_sen_base_pixel_position_pixel_displacement(SensorMetaData
     for (ushort frame_count=0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; frame_count++) {
         // The first frame is the reference frame, hence it is skipped
 
+        /*
         printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", (gt_data.getAll().at(current_index).visMask?"true":"false"),
                 frame_count,
                 current_index, gt_data.getAll().at(current_index).m_sensor_location_px.location_x_m, gt_data.getAll().at(current_index).m_sensor_location_px.location_y_m,
                 (float)0, (float)0, gt_data.getAll().at(current_index).m_sensor_location_carrier_m.location_x_m, gt_data.getAll().at(current_index).m_sensor_location_carrier_m.location_y_m
-        );
+        );*/
 
 
         //If we are at the end of the path vector, we need to reset our iterators
