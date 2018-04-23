@@ -700,8 +700,8 @@ def scenario_displacement_occurence():
     ax1.set_ylim([-10,10])
     ax2.set_xlim([-10,10])
     ax2.set_ylim([-10,10])
-    ax1.set_zlim([0,np.amax(occurence_gt)])
-    ax2.set_zlim([0,np.amax(occurence_gt)])
+    ax1.set_zlim([0,np.amax(occurence)])
+    ax2.set_zlim([0,np.amax(occurence)])
 
     #ax2.bar3d(x, y, occurence, np.ones(np.size(x)), np.ones(np.size(x)), np.ones(np.size(x)), "red" )
     #ax2.plot_wireframe(x, y, occurence)
