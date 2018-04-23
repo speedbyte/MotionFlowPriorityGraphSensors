@@ -665,7 +665,7 @@ def scenario_displacement_occurence():
 
 
 
-    
+
 
 
     ax1.set_xlabel('X Label')
@@ -679,14 +679,32 @@ def scenario_displacement_occurence():
     ax2.set_xlim([numpy.amin(x), numpy.amax(x)])
     ax2.set_ylim([numpy.amin(y), numpy.amax(y)])
 
+    dx = np.empty(np.size(x_gt))
+    dx.fill(0.1)
+    dy = np.empty(np.size(x_gt))
+    dy.fill(0.1)
+
+    ax1.bar3d(x_gt, y_gt, occurence_gt, dx, dy, -occurence_gt, "red" )
+
+    dx = np.empty(np.size(x))
+    dx.fill(0.1)
+    dy = np.empty(np.size(x))
+    dy.fill(0.1)
+
+    ax2.bar3d(x, y, occurence, dx, dy, -occurence, "red" )
+
     print numpy.amin(x_gt)
     print numpy.amax(x_gt)
 
-    #ax1.set_ylim([-10,10])
+    ax1.set_xlim([-10,10])
+    ax1.set_ylim([-10,10])
+    ax2.set_xlim([-10,10])
+    ax2.set_ylim([-10,10])
+    ax1.set_zlim([0,np.amax(occurence_gt)])
+    ax2.set_zlim([0,np.amax(occurence_gt)])
 
-    ax1.bar3d(x_gt, y_gt, occurence_gt, np.ones(np.size(x_gt)), np.ones(np.size(x_gt)), occurence_gt, "red" )
     #ax2.bar3d(x, y, occurence, np.ones(np.size(x)), np.ones(np.size(x)), np.ones(np.size(x)), "red" )
-    ax2.plot_wireframe(x, y, occurence)
+    #ax2.plot_wireframe(x, y, occurence)
 
 
     graph = Graph(1)
