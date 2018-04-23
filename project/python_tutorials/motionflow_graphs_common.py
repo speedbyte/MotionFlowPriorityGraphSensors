@@ -95,10 +95,15 @@ class Figures(object):
 
 
 
-    def plot_show_vector_no_noise(self):
+    def plot_show_vector_dev_no_noise(self):
 
         self.fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
-        self.fig2.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
+
+
+    def plot_show_vector_coll_no_noise(self):
+
+        self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
+
 
     def plot_show_shape_no_noise(self):
 
