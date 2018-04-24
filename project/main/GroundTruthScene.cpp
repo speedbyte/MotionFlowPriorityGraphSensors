@@ -592,8 +592,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     const ushort frame_skip = 1; // image is generated only once irrespective of skips.
 
-    auto tic_all = steady_clock::now();
-
     // apply black noise in case of night
     if (m_environment == "night") {
         BlackNoise noise;
@@ -605,8 +603,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     }
 
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
-
-        auto tic = steady_clock::now();
 
         sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
         std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
@@ -651,14 +647,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         }
 
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
-        auto toc = steady_clock::now();
-        time_map["generate_single_scene_image"] = duration_cast<milliseconds>(toc - tic).count();
 
     }
-
-    auto toc_all = steady_clock::now();
-    time_map["generate_all_scene_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << "ground truth scene generation time - " << time_map["generate_all_scene_image"] << "ms" << std::endl;
 
 }
 
@@ -1057,14 +1047,14 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     float deltaTime;
                     if (m_dumpInitialFrames) {
 
-                        deltaTime = 0.001;
+                        deltaTime = 0.03;
                         mCheckForImage = false;
                         fprintf(stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = false\n",
                                 deltaTime);
                         sendRDBTrigger(m_triggerSocket, 0, 0, false, deltaTime); // Extend the simulation by 10 ms
 
                     } else {
-                        deltaTime = 0.1;
+                        deltaTime = 0.03;
                         mCheckForImage = true;
                         fprintf(stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = true \n",
                                 deltaTime);

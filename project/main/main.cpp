@@ -10,6 +10,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+#include <chrono>
 
 #include "GridLayout.h"
 #include "datasets.h"
@@ -21,6 +22,8 @@
 
 #include "Sensors.h"
 
+
+using namespace std::chrono;
 
 //extern bool eval(std::string result_sha, Mail *mail);
 //extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
@@ -203,6 +206,37 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     /* CPP_DATASET ------------- */
 
+    std::map<std::string, double> time_map = {{"generate",0},
+            {"ground truth", 0},
+            {"FB", 0},
+            {"LK", 0},
+            {"movement", 0},
+            {"collision", 0},
+    };
+
+    std::map<ALGO_TYPES, std::string> algo_map = {{fb, "FB"},
+            {lk, "LK"},
+    };
+
+
+    std::vector<unsigned> x_pts;
+    std::vector<double> y_pts;
+    std::vector<unsigned> z_pts;
+    std::vector<float> time;
+    double sum_time = 0;
+    std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
+
+    auto tic = steady_clock::now();
+    auto toc = steady_clock::now();
+    tic = steady_clock::now();
+
+    ALGO_TYPES algo;
+
+    toc = steady_clock::now();
+    time_map[algo_map[algo]] = duration_cast<milliseconds>(toc - tic).count();
+    y_pts.push_back(time_map[algo_map[algo]]);
+    time.push_back(duration_cast<milliseconds>(toc - tic).count());
+
     ushort depth = CV_8U;
     ushort cn = 3;
     assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
@@ -212,8 +246,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"none"};
+    const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
+    //const std::vector<std::string> environment_list = {"none"};
 
     for (ushort frame_skip = 0;  frame_skip < MAX_SKIPS_REAL; frame_skip++) {
 
@@ -410,8 +444,40 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     }
 
+    for(auto &n : time)
+        sum_time +=n;
 
-/* MATLAB_DATASET ------------- */
+    std::cout << "Noise " << noise  << ", Zeit " << sum_time << std::endl;
+    std::cout << "time_map LK " << time_map["LK"] << std::endl;
+
+    auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
+
+    pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
+    // gnuplot_2d
+    Gnuplot gp2d;
+    gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";
+    gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
+    std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGroundTruthPath().string() +
+            std::string(" y axis - ms, x axis - image_02_frame\n'");
+    //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
+
+    toc_all = steady_clock::now();
+    time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
+    std::cout << m_resultordner + " shape generation time - " << time_map["generate_flow"] << "ms" << std::endl;
+
+    auto toc = steady_clock::now();
+    time_map["generate_single_scene_image"] = duration_cast<milliseconds>(toc - tic).count();
+
+    auto toc_all = steady_clock::now();
+    time_map["generate_all_scene_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
+
+    std::cout << "ground truth scene generation complete- " << time_map["generate_all_scene_image"] << "ms" << std::endl;
+
+
+
+
+
+    /* MATLAB_DATASET ------------- */
 
     {
         if ( matlab_dataset.execute ) {

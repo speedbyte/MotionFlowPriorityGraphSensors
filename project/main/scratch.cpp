@@ -16,7 +16,7 @@ errorMean(x) = errSum / x;
 plotter(frame, flow_frame, collisionVector, estimatedCollisionVector, actualX, actualY, secondActualX,
         secondActualY, estMovement, x, timeToGenerateObject, flowstop, plotTime, collisionTime, timeMovement,
         error, f_err, errorMean, F_est, F_gt, F_err);
-plotTime(x) = toc = steady_clock::now();
+
 end
 
 
@@ -85,7 +85,6 @@ int main() {
 
 //absolute Flow - get absolute estimated flow.
 
-    tic = steady_clock::now();
 
     bool estimatedCollision;
     std::vector<float> estMovement(4); // xMean,yMean,secondObjectXMean,secondObjectYMean
@@ -238,12 +237,6 @@ int main() {
     estMovement.at(1) = yMean[0];
     estMovement.at(2) = secondObjectXMean[0];
     estMovement.at(3) = secondObjectYMean[0];
-
-    toc = steady_clock::now();
-
-    time_map["movement"] = duration_cast<milliseconds>(toc - tic).count();
-    time_map["collision"] =  duration_cast<milliseconds>(toc - tic).count();
-
 
 
     for ( int k = 0; k < YSpec.size(); k++ )  {

@@ -151,9 +151,6 @@ void OpticalFlow::generate_edge_contour() {
 
         const int MAX_COUNT = 5000;
 
-        auto tic = steady_clock::now();
-        auto toc = steady_clock::now();
-
         std::string temp_result_flow_path;
 
         std::cout << "creating edge files for frame_skip " << frame_skip << std::endl;
@@ -273,11 +270,6 @@ void OpticalFlow::generate_shape_points() {
 
     std::map<std::string, double> time_map = {{"generate",     0},
             {"generate_flow", 0}};
-
-    auto tic = steady_clock::now();
-    auto toc = steady_clock::now();
-    auto tic_all = steady_clock::now();
-    auto toc_all = steady_clock::now();
 
     char frame_skip_folder_suffix[50];
 
@@ -468,9 +460,6 @@ void OpticalFlow::generate_shape_points() {
     m_frame_skip_scenario_displacement_occurence = outer_frame_skip_scenario_displacement_occurence;
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
-    toc_all = steady_clock::now();
-    time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << m_resultordner + " shape generation time - " << time_map["generate_flow"] << "ms" << std::endl;
 }
 
 
@@ -486,10 +475,6 @@ void OpticalFlow::generate_collision_points() {
     std::map<std::string, double> time_map = {{"generate",     0},
             {"generate_flow", 0}};
 
-    auto tic = steady_clock::now();
-    auto toc = steady_clock::now();
-    auto tic_all = steady_clock::now();
-    auto toc_all = steady_clock::now();
 
     char frame_skip_folder_suffix[50];
 
@@ -913,10 +898,6 @@ void OpticalFlow::visualiseStencil(void) {
             sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count * frame_skip);
             output_image_file_with_path =
                     m_generatepath.string() + "/stencil/" + file_name_image_output;
-
-            auto tic = steady_clock::now();
-            auto toc = tic;
-            float time_elapsed;
 
             for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
 

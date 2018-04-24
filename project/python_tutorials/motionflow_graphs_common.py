@@ -78,8 +78,6 @@ class Figures(object):
 
             for x in range(len(plot_configuration)):
 
-                print 4*no_of_metrics+figure_index+x
-                print "----"
                 self.list_of_figures[figure_index].plot(number_of_plots[figure_index][2][x],
                                                          number_of_plots[figure_index][3][x]/SCALE, 'ko-', lw=1,
                                                          color=number_of_plots[figure_index][4][x+no_of_metrics],

@@ -8,8 +8,8 @@ find_package(Boost REQUIRED system filesystem)
 include_directories(${Boost_INCLUDE_DIRS})
 
 set(SOURCE_FILES main.cpp Overload.cpp Template.cpp Larger.cpp)
-add_executable(overloading ${SOURCE_FILES})
-target_link_libraries(overloading ${Boost_LIBRARIES})
+add_executable(main ${SOURCE_FILES})
+target_link_libraries(main ${Boost_LIBRARIES})
 
 add_executable(stackoverflow stackoverflow.cpp)
 target_link_libraries(stackoverflow ${Boost_LIBRARIES})

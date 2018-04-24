@@ -85,8 +85,6 @@ void GroundTruthFlow::generate_flow_frame() {
             
             char file_name_input_image[50], file_name_image_edge[50];
 
-            auto tic = steady_clock::now();
-
             std::cout << "frame_count " << frame_count << std::endl;
 
             sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
@@ -162,9 +160,6 @@ void GroundTruthFlow::generate_flow_frame() {
 
             F_png_write.writeExtended(temp_gt_flow_image_path);
             CannyEdgeDetection(temp_gt_image_path, temp_result_edge_path);
-
-            auto toc = steady_clock::now();
-            time_map["generate_single_flow_image"] = duration_cast<milliseconds>(toc - tic).count();
 
 
         }

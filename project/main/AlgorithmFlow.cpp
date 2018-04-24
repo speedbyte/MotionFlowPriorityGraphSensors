@@ -79,14 +79,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         char frame_skip_folder_suffix[50];
         char file_name_input_image[50], file_name_input_image_edge[50];
 
-        std::vector<unsigned> x_pts;
-        std::vector<double> y_pts;
-        std::vector<unsigned> z_pts;
-        std::vector<float> time;
-        double sum_time = 0;
-
-        std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
-
         bool needToInit = true;
 
         std::cout << "results will be stored in " << m_resultordner << std::endl;
@@ -122,23 +114,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         const int MAX_COUNT = 5000;
 
-        auto tic = steady_clock::now();
-        auto toc = steady_clock::now();
-
         ushort collision = 0, iterator = 0, sIterator = 0;
         std::vector<ushort> xPos, yPos;
-
-        std::map<std::string, double> time_map = {{"generate",0},
-                                                  {"ground truth", 0},
-                                                  {"FB", 0},
-                                                  {"LK", 0},
-                                                  {"movement", 0},
-                                                  {"collision", 0},
-        };
-
-        std::map<ALGO_TYPES, std::string> algo_map = {{fb, "FB"},
-                                                      {lk, "LK"},
-        };
 
         bool plotTime = 1;
         std::vector<bool> error(2);
@@ -204,7 +181,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             flowFrame = cv::Scalar_<float>(0,0);
 
             std::vector<cv::Point2f> next_pts_array, displacement_array;
-            tic = steady_clock::now();
 
             //Create png Matrix with 3 channels: x displacement. y displacment and Validation bit
             //kitti uses col, row specification
@@ -586,13 +562,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             next_pts_healthy = prev_pts_array;
             next_pts_array.clear();
 
-            toc = steady_clock::now();
-            time_map[algo_map[algo]] = duration_cast<milliseconds>(toc - tic).count();
-            y_pts.push_back(time_map[algo_map[algo]]);
-            time.push_back(duration_cast<milliseconds>(toc - tic).count());
-
-            x_pts.push_back(frame_count);
-
             if ( frame_types == video_frames) {
                 video_out.write(image_02_frame);
             }
@@ -612,27 +581,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             m_list_simulated_objects.at(obj_index)->generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(outer_stencil_movement.at(obj_index));
         }
 
-        for(auto &n : time)
-            sum_time +=n;
-
-        std::cout << "Noise " << noise  << ", Zeit " << sum_time << std::endl;
-        std::cout << "time_map LK " << time_map["LK"] << std::endl;
-
-        auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
-
-        pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
         if ( frame_types == video_frames) {
             video_out.release();
         }
         cv::destroyAllWindows();
-
-        // gnuplot_2d
-        Gnuplot gp2d;
-        gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";
-        gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-        std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGroundTruthPath().string() +
-                std::string(" y axis - ms, x axis - image_02_frame\n'");
-        //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
     }
 }
 

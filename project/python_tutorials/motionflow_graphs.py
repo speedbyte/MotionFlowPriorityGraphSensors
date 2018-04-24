@@ -94,7 +94,7 @@ def motionflow_pixelgraphs_no_noise(): ##done
     shape = list()
     frame_count = numpy.arange(0.0, len(shape_points), 1)
 
-    print "Table 1 OpticalFlowNoNoise " + environment_list[0]
+    print "Table 1 Pixel Robustness with " + environment_list[0] + " noise "
 
     for count in range(len(shape_points)):
         xy = list()
@@ -129,7 +129,8 @@ def motionflow_pixelgraphs_no_noise(): ##done
         x0, y0 = data.T
         y0 = x0/y0
         for n,i in enumerate(y0):
-            y0_mean=y0_mean+i
+            if ( i != numpy.nan ):
+                y0_mean=y0_mean+i
         y0_mean = y0_mean/(n+1)
         y0_mean_list.append(y0_mean)
 
@@ -161,13 +162,11 @@ def motionflow_pixelgraphs_noise():
     yaml_file_handle = YAMLParser(file)
     yaml_load = yaml_file_handle.load()
 
-    print "Start Noise "
-
     figures = Figures(4)
 
     for env_index in range(len(environment_list)):
 
-        print "Table 2 " + environment_list[env_index]
+        print "Table 1 Pixel Robustness with " + environment_list[env_index] + " noise "
         y0_mean_list = list()
         list_of_plots = list()
 
@@ -210,8 +209,6 @@ def motionflow_pixelgraphs_noise():
 
 
 
-
-
 def motionflow_vectorgraphs_no_noise():
 
 
@@ -246,14 +243,16 @@ def motionflow_vectorgraphs_no_noise():
     data = numpy.array(collision)
     x0_gt, y0_gt = data.T
 
+    print "Table 3 Vector Robustness with " + environment_list[0] + " noise "
+
     #x0_gt = numpy.setdiff1d(x0_gt, delete_point_array)
     #y0_gt = numpy.setdiff1d(y0_gt, delete_point_array)
-
 
     dev0_gt = numpy.sqrt((x0_gt - x0_gt) ** 2 + (y0_gt - y0_gt) ** 2)
 
     for n,i in enumerate(dev0_gt):
-        dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
+        if ( i == i ):
+            dev0_gt_mean=(dev0_gt_mean+dev0_gt[n])
 
     dev0_gt_mean = dev0_gt_mean/(n+1)
     dev0_gt_mean_list.append(dev0_gt_mean)
@@ -286,9 +285,10 @@ def motionflow_vectorgraphs_no_noise():
                 dev0[n] = dev0[n-1]
                 if ( n == 0 ):
                     dev0[n] = 0
-            dev0_mean=(dev0_mean+dev0[n])
-            #dev0_mean=(dev0_mean+dev0[n])/2
-            #dev0[n] = dev0_mean
+            if ( i == i ):
+                dev0_mean=(dev0_mean+dev0[n])
+                #dev0_mean=(dev0_mean+dev0[n])/2
+                #dev0[n] = dev0_mean
 
         dev0_mean = dev0_mean/(n+1)
         dev0_mean_list.append(dev0_mean)
@@ -299,12 +299,11 @@ def motionflow_vectorgraphs_no_noise():
         x0_coll_list.append(x0)
         y0_coll_list.append(y0)
 
-        max_coll = max(numpy.amax(dev0), max_coll)
-        min_coll = min(numpy.amin(dev0), min_coll)
+        min_dev = min(numpy.nanmin(dev0), min_dev)
+        max_dev = max(numpy.nanmax(dev0), max_dev)
 
-        max_dev = max(numpy.amax(dev0), max_dev)
-        min_dev = min(numpy.amin(dev0), min_dev)
-
+        min_coll = min(numpy.nanmin(dev0), min_coll)
+        max_coll = max(numpy.nanmax(dev0), max_coll)
 
 
 
@@ -331,7 +330,6 @@ def motionflow_vectorgraphs_no_noise():
 
     index_x0_gt_sorted = numpy.argsort(x0_gt)
 
-    print "Table 3 " + environment_list[0]
     print dev0_gt_mean_list
     print dev0_mean_list
 
@@ -355,7 +353,6 @@ def motionflow_vectorgraphs_noise():
     yaml_load = yaml_file_handle.load()
 
     min_dev = 0; max_dev = 0;
-
 
     x0_base_list = list(); y0_base_list = list();
 
@@ -390,7 +387,7 @@ def motionflow_vectorgraphs_noise():
 
     for env_index in range(len(environment_list)):
 
-        print "Table 4 " + environment_list[env_index]
+        print "Table 4 Vector Robustness with " + environment_list[env_index] + " noise "
         dev0_mean_list = list()
         list_of_plots = list()
 
@@ -414,13 +411,14 @@ def motionflow_vectorgraphs_noise():
                     dev0[n] = dev0[n-1]
                     if ( n == 0 ):
                         dev0[n] = 0
-                dev0_mean=(dev0_mean+i)
+                if ( i == i ):
+                    dev0_mean=(dev0_mean+i)
 
             dev0_mean = dev0_mean/(n+1)
             dev0_mean_list.append(dev0_mean)
 
-            max_dev = max(numpy.amax(dev0), max_dev)
-            min_dev = min(numpy.amin(dev0), min_dev)
+            min_dev = min(numpy.nanmin(dev0), min_dev)
+            max_dev = max(numpy.nanmax(dev0), max_dev)
 
             plot1 = ('frame_count',
                      'deviation [noise_points-nonoise_points]',
@@ -445,7 +443,6 @@ def motionflow_vectorgraphs_noise():
 
 
 def scenario_displacement_occurence():
-
 
     offset=1
     yaml_list_index_offset=0
@@ -478,7 +475,6 @@ def scenario_displacement_occurence():
         data = numpy.array(occurences)
 
         x_gt, y_gt, occurence_gt = data.T
-        print data
 
         scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[env_index+1]]
         occurences = list()
@@ -554,10 +550,10 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    #motionflow_pixelgraphs_no_noise()
-    #motionflow_pixelgraphs_noise()
-    #motionflow_vectorgraphs_no_noise()
-    #motionflow_vectorgraphs_noise()
+    motionflow_pixelgraphs_no_noise()
+    motionflow_pixelgraphs_noise()
+    motionflow_vectorgraphs_no_noise()
+    motionflow_vectorgraphs_noise()
     scenario_displacement_occurence()
     #histogramm()
 

@@ -86,6 +86,15 @@ protected:
 
 int main ( int argc, char *argv[]) {
 
+
+    auto dist_a = 0.033503235849331521;
+    auto dist_b = 0.033333729126862222;
+
+    assert(std::floor(dist_a*1000)/1000 == std::floor(dist_b*1000)/1000);
+    std::cout << std::floor(dist_a*1000)/1000 << " " << std::floor(dist_b*1000)/1000 << std::endl;
+    std::cout << std::round(dist_a*1000)/1000 << " " << std::round(dist_b*1000)/1000 << std::endl;
+
+
     int a = 200;
     int& b = a;
     int& c = b;

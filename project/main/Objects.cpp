@@ -19,7 +19,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >
             list_obj_extrapolated_shape_parameters;
 
-    auto tic = steady_clock::now();
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             outer_multiframe_flowvector_simple_avg_mean,
@@ -550,9 +549,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
     m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement = list_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
     m_list_obj_extrapolated_shape_parameters = list_obj_extrapolated_shape_parameters;
-
-    auto time_elapsed = duration_cast<milliseconds>(steady_clock::now()- tic).count();
-    std::cout << time_elapsed << std::endl;
 
 }
 
