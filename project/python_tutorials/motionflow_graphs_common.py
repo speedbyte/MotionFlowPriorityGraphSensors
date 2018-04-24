@@ -140,6 +140,7 @@ class YAMLParser(object):
         if ("YAML:1.0" in check ):
             read_yaml_file = self.yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
             read_yaml_file = read_yaml_file.replace(':', ': ')
+            read_yaml_file = read_yaml_file.replace('.Inf', '.nan')
             self.yaml_file.close()
             self.yaml_file = open(self.file, "w")
             self.yaml_file.write(read_yaml_file)
