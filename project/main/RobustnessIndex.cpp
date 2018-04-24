@@ -208,11 +208,11 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
 
                 if (m_valid_collision_points == 0 ) {
 
-                    xsamples.push_back(-65535);
-                    ysamples.push_back(-65535);
+                    xsamples.push_back(std::numeric_limits<float>::infinity());
+                    ysamples.push_back(std::numeric_limits<float>::infinity());
 
-                    xsamples_line.push_back(std::tanh(-65535));
-                    ysamples_line.push_back(std::tanh(-65535));
+                    xsamples_line.push_back(std::numeric_limits<float>::infinity());
+                    ysamples_line.push_back(std::numeric_limits<float>::infinity());
 
                     std::cout << "number of invalid collision points in frame " << frame_count << " are " <<
                               m_invalid_collision_points << std::endl;

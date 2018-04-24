@@ -29,7 +29,7 @@ file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/d
 #file = "/home/veikas/seafile_base/seafile_sync_work/tuebingen_phd/presentations/eaes/pics_20_02/values_all.yml"
 
 environment_list = ["none","light_snow_", "mild_snow_", "heavy_snow_"]#night
-#environment_list = ["none",]
+environment_list = ["none",]
 
 data_processing_list = ["0", "1", "2", "3"]
 
@@ -276,10 +276,8 @@ def motionflow_vectorgraphs_no_noise():
             xy.append(collision_points[count]["x"])
             xy.append(collision_points[count]["y"])
             collision.append(xy)
-        print collision
         data = numpy.array(collision)
         x0, y0 = data.T
-        print data
         #x0 = numpy.setdiff1d(x0, delete_point_array)
         #y0 = numpy.setdiff1d(y0, delete_point_array)
         dev0 = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
@@ -291,6 +289,7 @@ def motionflow_vectorgraphs_no_noise():
             dev0_mean=(dev0_mean+dev0[n])
             #dev0_mean=(dev0_mean+dev0[n])/2
             #dev0[n] = dev0_mean
+
         dev0_mean = dev0_mean/(n+1)
         dev0_mean_list.append(dev0_mean)
 
@@ -333,11 +332,8 @@ def motionflow_vectorgraphs_no_noise():
     index_x0_gt_sorted = numpy.argsort(x0_gt)
 
     print "Table 3 " + environment_list[0]
-    print dev0_gt_mean_list[0]/SCALE
-    print dev0_mean_list[0]/SCALE
-    print dev0_mean_list[1]/SCALE
-    print dev0_mean_list[2]/SCALE
-    print dev0_mean_list[3]/SCALE
+    print dev0_gt_mean_list
+    print dev0_mean_list
 
     figures = Figures(1)
     figures.plot_all([plot1], 0)
@@ -419,8 +415,9 @@ def motionflow_vectorgraphs_noise():
                     if ( n == 0 ):
                         dev0[n] = 0
                 dev0_mean=(dev0_mean+i)
-                dev0_mean = dev0_mean/(n+1)
-                dev0_mean_list.append(dev0_mean)
+
+            dev0_mean = dev0_mean/(n+1)
+            dev0_mean_list.append(dev0_mean)
 
             max_dev = max(numpy.amax(dev0), max_dev)
             min_dev = min(numpy.amin(dev0), min_dev)
@@ -545,10 +542,10 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    #motionflow_pixelgraphs_no_noise()
-    #motionflow_pixelgraphs_noise()
+    motionflow_pixelgraphs_no_noise()
+    motionflow_pixelgraphs_noise()
     motionflow_vectorgraphs_no_noise()
-    #motionflow_vectorgraphs_noise()
+    motionflow_vectorgraphs_noise()
     #scenario_displacement_occurence()
     #histogramm()
 

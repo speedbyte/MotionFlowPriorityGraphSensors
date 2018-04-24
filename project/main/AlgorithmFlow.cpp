@@ -241,15 +241,13 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 }
 
                 // Draw the optical generate_flow_frame map
-                int stepSize = STEP_SIZE;
-
                 if ( fb == algo ) {
                     // Circles to indicate the uniform grid of points
                     //cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
                     prev_pts_array.clear();
                     next_pts_array.clear();
-                    for (int32_t row = 0; row < Dataset::getFrameSize().height; row += stepSize) { // rows
-                        for (int32_t col = 0; col < Dataset::getFrameSize().width; col += stepSize) {  // cols
+                    for (int32_t row = 0; row < Dataset::getFrameSize().height; row += STEP_SIZE) { // rows
+                        for (int32_t col = 0; col < Dataset::getFrameSize().width; col += STEP_SIZE) {  // cols
 
                             cv::Point2f algorithmMovement ( flowFrame.at<cv::Point2f>(row, col).x, flowFrame
                                     .at<cv::Point2f>(row, col).y );

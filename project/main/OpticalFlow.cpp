@@ -314,7 +314,7 @@ void OpticalFlow::generate_shape_points() {
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                     auto CLUSTER_COUNT_GT = m_list_gt_objects.at(
-                            obj_index)->get_shape_parameters().at(0).at(frame_skip - 1).at(frame_count).size()/STEP_SIZE;
+                            obj_index)->get_shape_parameters().at(0).at(frame_skip - 1).at(frame_count).size();
 
                     auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
                             obj_index)->get_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
@@ -336,8 +336,8 @@ void OpticalFlow::generate_shape_points() {
 
                         if (m_resultordner == "/generated") {
 
-                            vollTreffer = CLUSTER_COUNT_GT/STEP_SIZE;
-                            baseTreffer = CLUSTER_COUNT_GT/STEP_SIZE;
+                            vollTreffer = CLUSTER_COUNT_GT;
+                            baseTreffer = CLUSTER_COUNT_GT;
 
                             if ( data_processing_index == 0 ) {
 
@@ -893,7 +893,7 @@ void OpticalFlow::visualiseStencil(void) {
 
     char file_name_input_image[50];
 
-    for ( int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++ ) {
+    for ( int frame_skip = 1; frame_skip <= MAX_SKIPS; frame_skip++ ) {
 
         for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++)
         {

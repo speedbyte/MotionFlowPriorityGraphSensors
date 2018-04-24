@@ -212,8 +212,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"none"};
+    //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
+    const std::vector<std::string> environment_list = {"none"};
 
     for (ushort frame_skip = 0;  frame_skip < MAX_SKIPS_REAL; frame_skip++) {
 
