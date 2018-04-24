@@ -302,8 +302,8 @@ def motionflow_vectorgraphs_no_noise():
         min_dev = min(numpy.nanmin(dev0), min_dev)
         max_dev = max(numpy.nanmax(dev0), max_dev)
 
-        min_coll = min(numpy.nanmin(dev0), min_coll)
-        max_coll = max(numpy.nanmax(dev0), max_coll)
+        min_coll = min(numpy.nanmin(y0), min_coll)
+        max_coll = max(numpy.nanmax(y0), max_coll)
 
 
 

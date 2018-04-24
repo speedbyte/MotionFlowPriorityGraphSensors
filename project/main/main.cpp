@@ -214,8 +214,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             {"collision", 0},
     };
 
-    std::map<ALGO_TYPES, std::string> algo_map = {{fb, "FB"},
-            {lk, "LK"},
+    std::map<ALGO_TYPES, std::string> algo_map = {{fb, "FB"}, {lk, "LK"},
     };
 
 
@@ -444,6 +443,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     }
 
+/*
     for(auto &n : time)
         sum_time +=n;
 
@@ -472,6 +472,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     time_map["generate_all_scene_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
 
     std::cout << "ground truth scene generation complete- " << time_map["generate_all_scene_image"] << "ms" << std::endl;
+
+    toc_all = steady_clock::now();
+    time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
+
+    */
+
 
 
 

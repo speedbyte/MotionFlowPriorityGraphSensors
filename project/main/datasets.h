@@ -17,7 +17,7 @@
 
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
-#define STEP_SIZE 5
+#define STEP_SIZE 1
 #define DISPLACEMENT_ROUND_OFF 100
 
 #define MAX_ITERATION_RESULTS 180 // 60 generate result. this cannot be more than vector
@@ -41,15 +41,7 @@
 
 #define MAX_ALLOWED_OBJECTS 10
 
-#define MAX_ALLOWED_SENSORS 10
-
 #define MAX_DUMPS 10
-
-//#define STRETCH_HEIGHT 50
-//#define STRETCH_WIDTH 50
-
-#define STRETCH_HEIGHT_EVAL 5
-#define STRETCH_WIDTH_EVAL 5
 
 #define STENCIL_GRID_COMPRESSOR 1  // every x pixels
 #define STENCIL_GRID_EXTENDER 10 // 10 % more than the original size

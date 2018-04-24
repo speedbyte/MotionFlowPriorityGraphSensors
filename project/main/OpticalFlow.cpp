@@ -671,8 +671,6 @@ void OpticalFlow::generate_collision_points() {
     }
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
-    toc_all = steady_clock::now();
-    time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
     std::cout << m_resultordner + " collision generation time - " << time_map["generate_flow"] << "ms" << std::endl;
 }
 
