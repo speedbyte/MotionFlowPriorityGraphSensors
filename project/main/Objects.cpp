@@ -159,7 +159,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                 cv::Point2f max_voted = {};
 
                 for (const auto &x : histogram_x) {
-                    if (max_voted.x <= x.second) {
+                    if (max_voted.x <= x.second && x.first != 0) {
                         max_voted.x = x.second;
                         gt_displacement_compare.x = x.first;
                         //std::cout << x.first << " histogram " << x.second << "endx\n";
@@ -167,7 +167,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                 }
                 std::cout << gt_displacement_compare.x << " histogram " << max_voted.x << "endx\n";
                 for (const auto &y : histogram_y) {
-                    if (max_voted.y <= y.second) {
+                    if (max_voted.y <= y.second && y.first != 0) {
                         max_voted.y = y.second;
                         gt_displacement_compare.y = y.first;
                         //std::cout << y.first << " histogram " << y.second << "endy\n";

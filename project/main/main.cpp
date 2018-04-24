@@ -317,7 +317,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 // Generate Groundtruth data flow --------------------------------------
                 if (environment_list[env_index] == "none") {
 
-                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
+//                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
+                    fs.open(("../values.yml"), cv::FileStorage::WRITE);
 
 
                     gt_flow.generate_flow_frame();
