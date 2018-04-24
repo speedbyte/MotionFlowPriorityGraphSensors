@@ -165,9 +165,9 @@ def motionflow_pixelgraphs_noise():
 
     figures = Figures(4)
 
-    for no_of_metrics in range(len(environment_list)):
+    for env_index in range(len(environment_list)):
 
-        print "Table 2 " + environment_list[no_of_metrics]
+        print "Table 2 " + environment_list[env_index]
         y0_mean_list = list()
         list_of_plots = list()
 
@@ -204,7 +204,7 @@ def motionflow_pixelgraphs_noise():
         print y0_mean_list
 
         yaml_list_index_offset=yaml_list_index_offset+4
-        figures.plot_all(list_of_plots, no_of_metrics)
+        figures.plot_all(list_of_plots, env_index)
 
     figures.plot_show_shape_noise()
 
@@ -388,9 +388,9 @@ def motionflow_vectorgraphs_noise():
 
     figures = Figures( 4 )
 
-    for no_of_metrics in range(len(environment_list)):
+    for env_index in range(len(environment_list)):
 
-        print "Table 4 " + environment_list[no_of_metrics]
+        print "Table 4 " + environment_list[env_index]
         dev0_mean_list = list()
         list_of_plots = list()
 
@@ -428,7 +428,7 @@ def motionflow_vectorgraphs_noise():
                      [dev0],
                      color_of_collision_metrics_noise,
                      list_of_collision_metrics_noise,
-                     "vector_robustness_data_processing_algorithm_0" + str(x),
+                     "deviation_pointsframe_skip1_dataprocessing_" + str(x),
                      min_dev,
                      max_dev,
                      )
@@ -436,7 +436,7 @@ def motionflow_vectorgraphs_noise():
 
 
         yaml_list_index_offset=yaml_list_index_offset+4
-        figures.plot_all(list_of_plots, no_of_metrics)
+        figures.plot_all(list_of_plots, env_index)
 
         print dev0_mean_list
 
@@ -464,9 +464,9 @@ def scenario_displacement_occurence():
     #ax.plot_wireframe(X, Y, Z, rstride=5, cstride=5)
 
 
-    for x in range(2): # generated
+    for env_index in range(1): # generated
 
-        scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[x]]
+        scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[env_index]]
         occurences = list()
         for count in range(len(scenario_displacement_occurence)):
             xyz = list()
@@ -477,13 +477,23 @@ def scenario_displacement_occurence():
 
         data = numpy.array(occurences)
 
-        if ( x == 0 ):
-            x_gt, y_gt, occurence_gt = data.T
-            print x_gt
-        if ( x == 1 ):
-            x, y, occurence = data.T
+        x_gt, y_gt, occurence_gt = data.T
+        print data
 
+        scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[env_index+1]]
+        occurences = list()
+        for count in range(len(scenario_displacement_occurence)):
+            xyz = list()
+            xyz.append(scenario_displacement_occurence[count]["x"])
+            xyz.append(scenario_displacement_occurence[count]["y"])
+            xyz.append(scenario_displacement_occurence[count]["occurence"])
+            occurences.append(xyz)
 
+        data = numpy.array(occurences)
+
+        for x in range(1): # generated
+            if ( x == 0 ):
+                x, y, occurence = data.T
 
 
     dx = numpy.empty(numpy.size(x_gt))
@@ -501,15 +511,17 @@ def scenario_displacement_occurence():
     ax1.set_ylabel('Y Label')
     ax1.set_zlabel('Z Label')
 
-    z = numpy.zeros(numpy.size(x_gt))
+    z_gt = numpy.zeros(numpy.size(x_gt))
 
-    ax1.bar3d(x_gt, y_gt, z, dx, dy, occurence_gt, "red" )
+    ax1.bar3d(x_gt, y_gt, z_gt, dx, dy, occurence_gt, "red" )
     #ax1.bar(x_gt, y_gt, occurence_gt, zdir='z', color='red', alpha=0.8 )
 
     dx = numpy.empty(numpy.size(x))
     dx.fill(0.5)
     dy = numpy.empty(numpy.size(x))
     dy.fill(0.5)
+
+    z = numpy.zeros(numpy.size(x))
 
     ax2.set_xlabel('X Label')
     ax2.set_ylabel('Y Label')
@@ -519,7 +531,7 @@ def scenario_displacement_occurence():
     ax2.set_ylim([min(numpy.amin(y_gt), numpy.amin(y)),  max(numpy.amax(y_gt), numpy.amax(y))])
     ax2.set_zlim([0,numpy.amax(occurence)])
 
-    ax2.bar3d(x, y, occurence, dx, dy, -occurence, "red" )
+    ax2.bar3d(x, y, z, dx, dy, occurence, "red" )
 
     #ax2.set_xlim([-10,10])
     #ax2.set_ylim([-10,10])
@@ -542,10 +554,10 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    motionflow_pixelgraphs_no_noise()
-    motionflow_pixelgraphs_noise()
-    motionflow_vectorgraphs_no_noise()
-    motionflow_vectorgraphs_noise()
-    #scenario_displacement_occurence()
+    #motionflow_pixelgraphs_no_noise()
+    #motionflow_pixelgraphs_noise()
+    #motionflow_vectorgraphs_no_noise()
+    #motionflow_vectorgraphs_noise()
+    scenario_displacement_occurence()
     #histogramm()
 

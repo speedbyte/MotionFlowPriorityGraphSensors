@@ -132,7 +132,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
 
                 for ( auto it=scenario_displacement_occurence.begin(); it != scenario_displacement_occurence.end(); it++) {
 
-                    if ( it->second > 200 ) {
+                    if ( it->second > 1 ) {
                         std::cout << cv::Point2f(it->first.first, it->first.second) << " " << it->second << std::endl;
                         m_fs << "{:" << "x" << it->first.first << "y" << it->first.second << "occurence" << it->second << "}";
                     }
