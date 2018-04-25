@@ -30,7 +30,7 @@ public:
     }
 };
 
-class GobalScaleChange: public Noise {
+class GlobalScaleChange: public Noise {
 
 };
 

@@ -97,3 +97,8 @@ target_link_libraries(camera_calibration ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} 
 add_executable(transform facePoseEstimation.cpp)
 target_link_libraries(transform ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
+add_executable(histogram ${SAMPLE_DIR}/demhist.cpp)
+target_link_libraries(histogram ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+
+add_executable(histogram_calc calcHist_Demo.cpp)
+target_link_libraries(histogram_calc ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )

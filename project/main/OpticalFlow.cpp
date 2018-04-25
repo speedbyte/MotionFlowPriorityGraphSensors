@@ -321,6 +321,11 @@ void OpticalFlow::generate_shape_points() {
 
                         cv::Point2f gt_displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                                 (frame_skip-1).at(frame_count).second;
+
+                        float threshold_x = gt_displacement.x + gt_displacement.x*0.1;
+
+                        float threshold_y = gt_displacement.y + gt_displacement.y*0.1;
+
                         auto dist_gt = cv::norm(gt_displacement);
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
@@ -331,7 +336,7 @@ void OpticalFlow::generate_shape_points() {
                             vollTreffer = CLUSTER_COUNT_GT;
                             baseTreffer = CLUSTER_COUNT_GT;
 
-                            if ( data_processing_index == 0 ) {
+                            if ( data_processing_index < 0 ) {
 
                                 if ( scenario_displacement_occurence.count(std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)) ) {
                                     scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] = scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] + CLUSTER_COUNT_GT;
@@ -385,14 +390,19 @@ void OpticalFlow::generate_shape_points() {
 
                                 //assert(angle_err_dot==angle_err);
 
-                                /*
-                                if (dist_err < DISTANCE_ERROR_TOLERANCE) {
+
+                                /*if (dist_err < DISTANCE_ERROR_TOLERANCE) {
                                     vollTreffer++;
                                 }*/
 
                                 if (((std::abs(angle_err*180/CV_PI)) < ANGLE_ERROR_TOLERANCE)) {
                                     vollTreffer++;
                                 }
+
+                                /*if ( (std::abs(algo_displacement.x) < threshold_x ) &&  (std::abs(algo_displacement.y) < threshold_y)) {
+                                    vollTreffer++;
+                                }*/
+
 
                             }
                             /*

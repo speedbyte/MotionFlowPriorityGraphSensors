@@ -92,6 +92,8 @@ public:
 
     void generate_pdf_correct_displacement_x();
 
+    void visualiseBB(int obj_index, int frame_skip, int frame_count);
+
 
 private:
 

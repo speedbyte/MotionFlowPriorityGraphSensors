@@ -70,7 +70,8 @@ int main( int argc, const char** argv )
     help();
 
     CommandLineParser parser(argc, argv, keys);
-    string inputImage = parser.get<string>("1");
+    //string inputImage = parser.get<string>("1");
+    string inputImage = "../pics_dataset/lena.png";
 
     // Load the source image. HighGUI use.
     image = imread( inputImage, 0 );

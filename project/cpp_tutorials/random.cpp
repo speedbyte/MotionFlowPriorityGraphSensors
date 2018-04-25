@@ -10,16 +10,17 @@
 
 int main (int argc, char *argv[]) {
 
-    std::cout << FLT_MAX << " " << INT32_MIN << " " << INT32_MAX;
+    std::cout << FLT_MAX << " " << INT32_MIN << " " << INT32_MAX << " " << std::numeric_limits<float>::infinity() << std::endl;
 
     time_t rawtime; time(&rawtime);
     std::cout << asctime(localtime(&rawtime));
 
     // Seed with a real random value, if available
     std::random_device r;
+    std::cout << r() << std::endl;
 
     // Choose a random mean between 1 and 6
-    std::default_random_engine e1(r());
+    std::default_random_engine e1(6);
     std::uniform_int_distribution<int> uniform_dist(1, 6);
     int mean = uniform_dist(e1);
     std::cout << "Randomly-chosen mean: " << mean << '\n';
@@ -46,6 +47,11 @@ int main (int argc, char *argv[]) {
 
     // using built-in random generator:
     std::random_shuffle ( myvector.begin(), myvector.end() );
+
+    // print out content:
+    std::cout << "myvector contains:";
+    for (std::vector<int>::iterator it=myvector.begin(); it!=myvector.end(); ++it)
+        std::cout << ' ' << *it;
 
     // using myrandom:
     //std::random_shuffle ( myvector.begin(), myvector.end(), (std::rand()));

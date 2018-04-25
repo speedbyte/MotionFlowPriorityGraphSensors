@@ -121,7 +121,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             m_fs << "]";
 
 
-            if ( data_processing_index == 0 ) {
+            if ( data_processing_index < 0 ) {
 
                 std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 

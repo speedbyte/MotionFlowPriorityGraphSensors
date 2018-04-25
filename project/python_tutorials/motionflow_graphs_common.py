@@ -84,7 +84,7 @@ class Figures(object):
                                                          label=number_of_plots[figure_index][5][4*no_of_metrics+figure_index+x])
 
 
-                self.list_of_figures[figure_index].legend()
+                #self.list_of_figures[figure_index].legend()
                 self.list_of_figures[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
                 self.list_of_figures[figure_index].set_title(number_of_plots[figure_index][6])
 
