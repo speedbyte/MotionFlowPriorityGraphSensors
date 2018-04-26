@@ -488,11 +488,11 @@ void OpticalFlow::generate_mean_displacement_points() {
 
     for (unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++) {
 
-        std::vector<std::vector<std::vector<std::pair<std::string, cv::Point2f>> > > outer_frame_skip_mean_displacement_points;
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>> > > outer_frame_skip_mean_displacement_points;
 
         for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-            std::vector<std::vector<std::pair<std::string, cv::Point2f>> > outer_frame_mean_displacement_points;
+            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>> > outer_frame_mean_displacement_points;
 
             sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
@@ -508,9 +508,14 @@ void OpticalFlow::generate_mean_displacement_points() {
 
                 std::cout << "frame_count " << frame_count << " for data_processing_index " << data_processing_index<< std::endl;
 
-                std::vector<std::pair<std::string, cv::Point2f> > frame_mean_displacement_points;
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_mean_displacement_points;
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+
+                    cv::Point2i dimension = {
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)
+                    };
 
                     if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) ) {
 
@@ -519,7 +524,7 @@ void OpticalFlow::generate_mean_displacement_points() {
                         ).at(frame_skip - 1).at(frame_count).second;
 
 
-                        frame_mean_displacement_points.push_back(std::make_pair("obj"+std::to_string(obj_index), displacement));
+                        frame_mean_displacement_points.push_back(std::make_pair(dimension, displacement));
 
                         std::cout << "mean displacement for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
                                   << displacement << std::endl;
@@ -531,7 +536,7 @@ void OpticalFlow::generate_mean_displacement_points() {
                                           .at(frame_count)
                                   << " and hence not generating any displacement points for this object " << std::endl;
 
-                        frame_mean_displacement_points.push_back(std::make_pair("obj"+std::to_string(obj_index), cv::Point2f(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity())));
+                        frame_mean_displacement_points.push_back(std::make_pair(dimension, cv::Point2f(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity())));
 
                     }
                 }

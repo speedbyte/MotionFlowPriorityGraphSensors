@@ -149,15 +149,18 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                 gt_displacement_threshold_max.x = *std::max_element(data_x.begin(), data_x.end());
                 gt_displacement_threshold_max.y = *std::max_element(data_y.begin(), data_y.end());
 
+                std::vector<cv::Mat> histogram_x, histogram_y;
                 if ( frame_count >  0 ) {
                     //Utils::drawHistogramLegacy(data_x, max_voted_x);
-                    Utils::drawHistogram(data_x, max_voted_x, *std::min_element(data_x.begin(), data_x.end()), *std::max_element(data_x.begin(), data_x.end()));
-                    Utils::drawHistogram(data_y, max_voted_y, *std::min_element(data_y.begin(), data_y.end()), *std::max_element(data_y.begin(), data_y.end()));
-
+                    Utils::drawHistogram(data_x, histogram_x );
+                    max_voted_x = Utils::getHistogramPeak(histogram_x);
+                    Utils::drawHistogram(data_y, histogram_y );
+                    max_voted_y = Utils::getHistogramPeak(histogram_y);
                 }
                 else {
                     max_voted_x = 0; max_voted_y = 0;
                 }
+
 
                 std::cout << "max_voted_x " << max_voted_x << " max_voted_y " << max_voted_y <<std::endl;
 
@@ -264,7 +267,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                     const unsigned CLUSTER_EDGE_SIZE = (unsigned) obj_extrapolated_edge_pixel_point_pixel_displacement.at
                             (frame_skip - 1).at(frame_count).size();
 
-                    ushort WEIGHT = 10;
+                    ushort WEIGHT = 100;
 
                     for (unsigned cluster_edge_index = 0; cluster_edge_index < CLUSTER_EDGE_SIZE; cluster_edge_index++) {
 

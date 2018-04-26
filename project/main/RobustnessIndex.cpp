@@ -88,6 +88,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 unsigned long POINTS = opticalFlow.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
+                assert(POINTS==1);
                 for (unsigned points = 0; points < POINTS; points++) {
 
                     cv::Point2f shapepoints = opticalFlow.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).at
@@ -99,27 +100,14 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                 }
             }
 
-            std::string plot_least_square_line_list;
-            std::vector<std::pair<double, double>> xypoints_shape;
-
-            cv::Mat_<float> samples_xy_shape(2, xsamples.size());
-
-
-            // Calculate Jaccard Index
-            for (auto i = 0; i < xsamples.size(); i++) {
-                samples_xy_shape(0, i) = xsamples.at(i); //xsamples.at(i);
-                samples_xy_shape(1, i) = ysamples.at(i);
-            }
-
+            // Send to plotter
             m_fs << (std::string("shape_points") + std::string("frame_skip") + std::to_string(frame_skip) +
                      std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix) << "[";
 
-            for (unsigned i = 0; i < samples_xy_shape.cols; i++) {
-                xypoints_shape.push_back(std::make_pair(samples_xy_shape[0][i], samples_xy_shape[1][i]));
-                m_fs << "{:" << "good_pixels" << samples_xy_shape[0][i] << "total_pixels" << samples_xy_shape[1][i] << "}";
+            for (unsigned i = 0; i < xsamples.size(); i++) {
+                m_fs << "{:" << "good_pixels" << xsamples[i] << "total_pixels" << ysamples[i] << "}";
             }
             m_fs << "]";
-
 
             if ( data_processing_index < 0 ) {
 

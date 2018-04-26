@@ -165,10 +165,13 @@ public:
         
     }
 
-    static void drawHistogram( std::vector<float> &raw_data, float &max_voted, float min, float max )
+    static void drawHistogram( std::vector<float> &raw_data, std::vector<cv::Mat> &histogram)
     {
 
         //random_data_generator("vector", raw_data);
+
+        float min = *std::min_element(raw_data.begin(), raw_data.end());
+        float max = *std::max_element(raw_data.begin(), raw_data.end());
 
         /// Establish the number of bins
         int histSize = 200;
@@ -180,6 +183,11 @@ public:
         assert(range[0]<range[1]);
 
         const float* histRange = { range };
+
+        cv::Mat rangeVector;
+        for ( float x = 0; x < histSize; x++) {
+            rangeVector.push_back((range[0] + x*(range[1]-range[0])/histSize));
+        }
 
         bool uniform = true; bool accumulate = false;
 
@@ -202,20 +210,18 @@ public:
         cv::Mat histImage( hist_h, hist_w, CV_8UC3, cv::Scalar( 0,0,0) );
 
         /// Normalize the result to [ 0, histImage.rows ]
-        normalize(b_hist, b_hist, 0, histImage.rows, cv::NORM_MINMAX, -1, cv::Mat() );
+        cv::normalize(b_hist, b_hist, 0, histImage.rows, cv::NORM_MINMAX, -1, cv::Mat() );
 
-        double    max_val;
-        cv::Point max_pt;
 
-        cv::minMaxLoc(
-                b_hist,    // input histogram
-                NULL,       // don't care about the min value
-                &max_val,   // place to put the maximum value
-                NULL,       // don't care about the location of the min value
-                &max_pt     // place to put the maximum value location (a cv::Point)
+        cv::threshold(
+                b_hist,
+                b_hist,
+                100,
+                0,
+                cv::THRESH_TOZERO
         );
 
-        max_voted = (range[0] + max_pt.y*(range[1]-range[0])/histSize);
+        //std::cout << b_hist << std::endl;
 
         /// Draw for each channel
         for( int i = 1; i < histSize; i++ )
@@ -234,12 +240,36 @@ public:
 
         }
 
+        histogram.push_back(rangeVector);
+        histogram.push_back(b_hist);
+
         /// Display
         cv::namedWindow("calcHist Demo", CV_WINDOW_AUTOSIZE );
         cv::imshow("calcHist Demo", histImage );
 
         cv::waitKey(100);
         cv::destroyAllWindows();
+
+    }
+
+    static float getHistogramPeak(const std::vector<cv::Mat> &histogram) {
+
+        float max_voted;
+        double    max_val;
+        cv::Point max_pt;
+
+        cv::minMaxLoc(
+                histogram.at(1),    // input histogram
+                NULL,       // don't care about the min value
+                &max_val,   // place to put the maximum value
+                NULL,       // don't care about the location of the min value
+                &max_pt     // place to put the maximum value location (a cv::Point)
+        );
+
+        //std::cout << histogram.at(1);
+
+        max_voted = histogram.at(0).at<float>(max_pt);
+        return max_voted;
 
     }
 
