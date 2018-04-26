@@ -104,23 +104,16 @@ class Figures(object):
 
         self.fig1.savefig(output_folder + 'pixel_robustness_optical_flow.png', bbox_inches='tight',dpi=200)
 
-    def plot_show_vector_noise(self):
+    def plot_show_vector_noise(self, metrics):
 
-        self.fig1.savefig(output_folder + 'vector_robustness_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
-        self.fig2.savefig(output_folder + 'vector_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
-        self.fig3.savefig(output_folder + 'vector_robustness_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
-        self.fig4.savefig(output_folder + 'vector_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
-
-
-    def plot_show_shape_noise(self):
         if ( self.figure_index >= 1 ):
-            self.fig1.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_0', bbox_inches='tight', dpi=200)
+            self.fig1.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 2 ):
-            self.fig2.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
+            self.fig2.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 3 ):
-            self.fig3.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
+            self.fig3.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 4 ):
-            self.fig4.savefig(output_folder + 'pixel_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
+            self.fig4.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
 
 
     def plot_close_all(self):

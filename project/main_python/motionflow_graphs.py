@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import axes3d
 from motionflow_graphs_common import Figures, YAMLParser
 from motionflow_graphs_data import *
 
-import pixel_robustness, vector_robustness
+import  vector_robustness
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
@@ -175,11 +175,11 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    pixel_robustness.pixelgraphs_no_noise(file)
-    pixel_robustness.pixelgraphs_noise(file)
+    vector_robustness.pixelgraphs_no_noise(file)
+    vector_robustness.pixelgraphs_noise(file, "pixel")
     vector_robustness.collisiongraphs_no_noise(file)
     vector_robustness.deviationgraphs_no_noise(file)
-    #vector_robustness.vectorgraphs_noise(file)
+    vector_robustness.pixelgraphs_noise(file, "deviation")
     #scenario_displacement_occurence()
     #histogramm()
 
