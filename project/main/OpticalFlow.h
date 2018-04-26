@@ -35,13 +35,13 @@ protected:
 
     std::vector<Objects *> &m_list_simulated_objects;
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>> > > > m_frame_skip_mean_displacement_points;
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_frame_skip_mean_displacement_points;
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_collision_points;
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_line_angles;
 
-    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > m_frame_skip_shape_points;
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_frame_skip_shape_points;
 
     std::vector<std::map<std::pair<float, float>, int> >  m_frame_skip_scenario_displacement_occurence;
 
@@ -63,11 +63,11 @@ public:
         return m_list_frame_skip_line_angles;
     }
 
-    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getShapePoints () const {
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > getShapePoints () const {
         return m_frame_skip_shape_points;
     }
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > getMeanDisplacementPoints () const {
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > getMeanDisplacementPoints () const {
         return m_frame_skip_mean_displacement_points;
     }
 

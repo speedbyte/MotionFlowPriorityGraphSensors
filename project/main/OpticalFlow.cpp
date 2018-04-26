@@ -274,11 +274,11 @@ void OpticalFlow::generate_shape_points() {
 
     for (unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++) {
 
-        std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_shape_points;
+        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_frame_skip_shape_points;
 
         for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-            std::vector<std::vector<cv::Point2f> > outer_frame_shape_points;
+            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > outer_frame_shape_points;
             std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
             sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
@@ -297,8 +297,7 @@ void OpticalFlow::generate_shape_points() {
 
 
                 cv::Point2f shape_average = {0, 0};
-                std::vector<cv::Point2f> frame_shape_points;
-                std::vector<cv::Point2f> frame_shape_points_average;
+                std::vector<std::pair<cv::Point2i, cv::Point2f>> frame_shape_points;
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
@@ -421,7 +420,7 @@ void OpticalFlow::generate_shape_points() {
 
                             baseTreffer = ((float) CLUSTER_COUNT_GT);
                         }
-                        frame_shape_points.push_back(cv::Point2f(vollTreffer, baseTreffer));
+                        frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count, 0), cv::Point2f(vollTreffer, baseTreffer)));
 
                         std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
                                 << vollTreffer << std::endl;
@@ -435,25 +434,12 @@ void OpticalFlow::generate_shape_points() {
                                         .at(frame_count)
                                 << " and hence not generating any shape points for this object " << std::endl;
 
-                        frame_shape_points.push_back(cv::Point2f(0, CLUSTER_COUNT_GT));
+                        frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count,0), cv::Point2f(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity())));
 
                     }
                 }
 
-                for (auto i = 0; i < frame_shape_points.size(); i++) {
-
-                    shape_average.x += frame_shape_points.at(i).x;
-                    shape_average.y += frame_shape_points.at(i).y;
-
-                }
-
-                shape_average.x = shape_average.x / frame_shape_points.size();
-                shape_average.y = shape_average.y / frame_shape_points.size();
-
-                frame_shape_points_average.push_back(
-                        cv::Point2f( shape_average.x, shape_average.y));
-
-                outer_frame_shape_points.push_back(frame_shape_points_average);
+                outer_frame_shape_points.push_back(frame_shape_points);
             }
             outer_frame_skip_shape_points.push_back(outer_frame_shape_points);
 
@@ -488,11 +474,11 @@ void OpticalFlow::generate_mean_displacement_points() {
 
     for (unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++) {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>> > > outer_frame_skip_mean_displacement_points;
+        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_frame_skip_mean_displacement_points;
 
         for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>> > outer_frame_mean_displacement_points;
+            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > outer_frame_mean_displacement_points;
 
             sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
@@ -508,7 +494,7 @@ void OpticalFlow::generate_mean_displacement_points() {
 
                 std::cout << "frame_count " << frame_count << " for data_processing_index " << data_processing_index<< std::endl;
 
-                std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_mean_displacement_points;
+                std::vector<std::pair<cv::Point2i, cv::Point2f> > frame_mean_displacement_points;
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
@@ -517,7 +503,7 @@ void OpticalFlow::generate_mean_displacement_points() {
                             cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m)
                     };
 
-                    if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) ) {
+                    if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) && frame_count != 0 ) {
 
                         cv::Point2f displacement = list_of_current_objects.at(obj_index)->
                                 get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(data_processing_index
@@ -526,7 +512,7 @@ void OpticalFlow::generate_mean_displacement_points() {
 
                         frame_mean_displacement_points.push_back(std::make_pair(dimension, displacement));
 
-                        std::cout << "mean displacement for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                        std::cout << "mean displacement for object with dimension" << dimension << " = "
                                   << displacement << std::endl;
 
                     } else {
@@ -543,6 +529,7 @@ void OpticalFlow::generate_mean_displacement_points() {
 
                 outer_frame_mean_displacement_points.push_back(frame_mean_displacement_points);
             }
+
             outer_frame_skip_mean_displacement_points.push_back(outer_frame_mean_displacement_points);
 
         }

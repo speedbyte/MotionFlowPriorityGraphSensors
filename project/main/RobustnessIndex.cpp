@@ -81,22 +81,33 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             std::cout << "generating pixel robustness in RobustnessIndex.cpp for " << suffix << " " << frame_skip
                     << " for dataprocessing " << data_processing_index << std::endl;
 
-            std::vector<float> xsamples, ysamples;
+            std::vector<cv::Point2f>  xsamples, ysamples;
+            std::vector<cv::Point2f>  xsamples_dimension, ysamples_displacement;
 
             unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(data_processing_index).at(frame_skip - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 unsigned long POINTS = opticalFlow.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
-                assert(POINTS==1);
                 for (unsigned points = 0; points < POINTS; points++) {
 
-                    cv::Point2f shapepoints = opticalFlow.getShapePoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).at
+                    std::pair<cv::Point2i, cv::Point2f> shapepoints = opticalFlow.getShapePoints().at(data_processing_index).at(
+                            frame_skip - 1).at(frame_count).at
                             (points);
 
-                    xsamples.push_back(shapepoints.x);
-                    ysamples.push_back(shapepoints.y);
+                    xsamples.push_back(shapepoints.first);
+                    ysamples.push_back(shapepoints.second);
 
+                }
+
+                unsigned long POINTS_DIM = opticalFlow.getMeanDisplacementPoints().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
+                    for (unsigned points = 0; points < POINTS_DIM; points++) {
+
+                    std::pair<cv::Point2i, cv::Point2f> displacementPoints = opticalFlow.getMeanDisplacementPoints().at(
+                            data_processing_index).at(frame_skip - 1).at(frame_count).at(points);
+
+                    xsamples_dimension.push_back(displacementPoints.first);
+                    ysamples_displacement.push_back(displacementPoints.second);
                 }
             }
 
@@ -108,6 +119,17 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                 m_fs << "{:" << "good_pixels" << xsamples[i] << "total_pixels" << ysamples[i] << "}";
             }
             m_fs << "]";
+
+            // Send to plotter
+            m_fs << (std::string("displacement_points") + std::string("frame_skip") + std::to_string(frame_skip) +
+                     std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix) << "[";
+
+            for (unsigned i = 0; i < xsamples_dimension.size(); i++) {
+                m_fs << "{:" << "objDim" << xsamples_dimension[i] << "objDisp" << ysamples_displacement[i] << "}";
+            }
+            m_fs << "]";
+
+
 
             if ( data_processing_index < 0 ) {
 

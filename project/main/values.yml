@@ -1,64 +1,132 @@
+%YAML:1.0
 ---
-shape_pointsframe_skip1_dataprocessing_0_generated: 
-   - { good_pixels: 12599., total_pixels: 12599. }
-   - { good_pixels: 12599., total_pixels: 12599. }
-   - { good_pixels: 1.2699500000000000e+04,
-       total_pixels: 1.2699500000000000e+04 }
-collision_pointsframe_skip1_dataprocessing_0_generated: 
-   - { x: .nan, y: .nan }
-   - { x: 1.7638875000000000e+04, y: -4.1085754394531250e+02 }
-   - { x: 1.7349093750000000e+04, y: -4.0547644042968750e+02 }
-line_anglesframe_skip1_dataprocessing_0_generated: 
-   - { obj1: .nan, obj2: .nan }
-   - { obj1: -1.7175529897212982e-01, obj2: -2.6513803005218506e-01 }
-   - { obj1: -1.5505337715148926e-01, obj2: -2.5139337778091431e-01 }
-shape_pointsframe_skip1_dataprocessing_0results_FB_none_: 
-   - { good_pixels: 0., total_pixels: 12599. }
-   - { good_pixels: 4190., total_pixels: 12599. }
-   - { good_pixels: 4.0935000000000000e+03,
-       total_pixels: 1.2699500000000000e+04 }
-shape_pointsframe_skip1_dataprocessing_1results_FB_none_: 
-   - { good_pixels: 0., total_pixels: 12599. }
-   - { good_pixels: 0., total_pixels: 12599. }
-   - { good_pixels: 0., total_pixels: 1.2699500000000000e+04 }
-shape_pointsframe_skip1_dataprocessing_2results_FB_none_: 
-   - { good_pixels: 0., total_pixels: 12599. }
-   - { good_pixels: 6915., total_pixels: 12599. }
-   - { good_pixels: 6745., total_pixels: 1.2699500000000000e+04 }
-shape_pointsframe_skip1_dataprocessing_3results_FB_none_: 
-   - { good_pixels: 0., total_pixels: 12599. }
-   - { good_pixels: 6715., total_pixels: 12599. }
-   - { good_pixels: 6.9175000000000000e+03,
-       total_pixels: 1.2699500000000000e+04 }
-collision_pointsframe_skip1_dataprocessing_0results_FB_none_: 
-   - { x: .nan, y: .nan }
-   - { x: 2.0747524414062500e+03, y: -3.5260546875000000e+02 }
-   - { x: 7.3140209960937500e+02, y: -3.4715655517578125e+02 }
-line_anglesframe_skip1_dataprocessing_0results_FB_none_: 
-   - { obj1: .nan, obj2: .nan }
-   - { obj1: 3.2656762003898621e-01, obj2: -6.7003450393676758e+00 }
-   - { obj1: 1.2462302446365356e+00, obj2: 3.2092339992523193e+00 }
-collision_pointsframe_skip1_dataprocessing_1results_FB_none_: 
-   - { x: .nan, y: .nan }
-   - { x: 1.2522439575195312e+02, y: -3.4411898803710938e+02 }
-   - { x: 4.0640838623046875e+02, y: -3.4516973876953125e+02 }
-line_anglesframe_skip1_dataprocessing_1results_FB_none_: 
-   - { obj1: .nan, obj2: .nan }
-   - { obj1: -5.7295768737792969e+01, obj2: 3.7949969768524170e+00 }
-   - { obj1: -5.3784446716308594e+01, obj2: -1.0001450538635254e+01 }
-collision_pointsframe_skip1_dataprocessing_2results_FB_none_: 
-   - { x: .nan, y: .nan }
-   - { x: -1.4825781250000000e+02, y: -3.4622369384765625e+02 }
-   - { x: 3.9027011718750000e+03, y: -3.6049911499023438e+02 }
-line_anglesframe_skip1_dataprocessing_2results_FB_none_: 
-   - { obj1: .nan, obj2: .nan }
-   - { obj1: 2.6941487193107605e-01, obj2: 1.8569974601268768e-01 }
-   - { obj1: 2.7834692969918251e-02, obj2: -9.2949924468994141e+00 }
-collision_pointsframe_skip1_dataprocessing_3results_FB_none_: 
-   - { x: .nan, y: .nan }
-   - { x: 1.4867589111328125e+03, y: -3.4985659790039062e+02 }
-   - { x: 1.7204619140625000e+03, y: -3.4950512695312500e+02 }
-line_anglesframe_skip1_dataprocessing_3results_FB_none_: 
-   - { obj1: .nan, obj2: .nan }
-   - { obj1: 6.7961901426315308e-01, obj2: -5.9137830734252930e+00 }
-   - { obj1: 1.8899502754211426e+00, obj2: -1.0526107549667358e+00 }
+shape_pointsframe_skip1_dataprocessing_0_generated:
+   - { good_pixels:[ 0., 0. ], total_pixels:[ 24522., 24522. ] }
+   - { good_pixels:[ 0., 0. ], total_pixels:[ 676., 676. ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 24522., 24522. ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 676., 676. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 24723., 24723. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 676., 676. ] }
+displacement_pointsframe_skip1_dataprocessing_0_generated:
+   - { objDim:[ 201., 122. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 13., 52. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 201., 122. ], objDisp:[ 1.7815551757812500e+00,
+       5.3405761718750000e-03 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.0947265625000000e+00,
+       -5.0659179687500000e-03 ] }
+   - { objDim:[ 201., 123. ], objDisp:[ 1.7930297851562500e+00,
+       4.8522949218750000e-03 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.0989379882812500e+00,
+       -4.8217773437500000e-03 ] }
+collision_pointsframe_skip1_dataprocessing_0_generated:
+   - { x:.Inf, y:.Inf }
+   - { x:1.7638875000000000e+04, y:-4.1085754394531250e+02 }
+   - { x:1.7349093750000000e+04, y:-4.0547644042968750e+02 }
+line_anglesframe_skip1_dataprocessing_0_generated:
+   - { obj1:.Inf, obj2:.Inf }
+   - { obj1:-1.7175529897212982e-01, obj2:-2.6513803005218506e-01 }
+   - { obj1:-1.5505337715148926e-01, obj2:-2.5139337778091431e-01 }
+shape_pointsframe_skip1_dataprocessing_0results_FB_none_:
+   - { good_pixels:[ 0., 0. ], total_pixels:[ .Inf, .Inf ] }
+   - { good_pixels:[ 0., 0. ], total_pixels:[ .Inf, .Inf ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 8250., 24522. ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 130., 676. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 8107., 24723. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 80., 676. ] }
+displacement_pointsframe_skip1_dataprocessing_0results_FB_none_:
+   - { objDim:[ 201., 122. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 13., 52. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 201., 122. ], objDisp:[ 1.9928427934646606e+00,
+       -1.1358689516782761e-02 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.1978303194046021e+00,
+       -1.4072181284427643e-01 ] }
+   - { objDim:[ 201., 123. ], objDisp:[ 2.0057322978973389e+00,
+       -4.3633203953504562e-02 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.1386586427688599e+00,
+       6.3845030963420868e-02 ] }
+shape_pointsframe_skip1_dataprocessing_1results_FB_none_:
+   - { good_pixels:[ 0., 0. ], total_pixels:[ .Inf, .Inf ] }
+   - { good_pixels:[ 0., 0. ], total_pixels:[ .Inf, .Inf ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 0., 24522. ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 0., 676. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 0., 24723. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 0., 676. ] }
+displacement_pointsframe_skip1_dataprocessing_1results_FB_none_:
+   - { objDim:[ 201., 122. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 13., 52. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 201., 122. ], objDisp:[ 1.2503731250762939e-01,
+       1.0175428390502930e+00 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.8420410156250000e+00,
+       1.2218683958053589e-01 ] }
+   - { objDim:[ 201., 123. ], objDisp:[ 5.0617378950119019e-01,
+       8.7422716617584229e-01 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.1700720787048340e+00,
+       -2.0635899901390076e-01 ] }
+shape_pointsframe_skip1_dataprocessing_2results_FB_none_:
+   - { good_pixels:[ 0., 0. ], total_pixels:[ .Inf, .Inf ] }
+   - { good_pixels:[ 0., 0. ], total_pixels:[ .Inf, .Inf ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 13430., 24522. ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 400., 676. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 13490., 24723. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 0., 676. ] }
+displacement_pointsframe_skip1_dataprocessing_2results_FB_none_:
+   - { objDim:[ 201., 122. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 13., 52. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 201., 122. ], objDisp:[ 2.1157622337341309e+00,
+       -9.9487602710723877e-03 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.0860601663589478e+00,
+       3.5200119018554688e-03 ] }
+   - { objDim:[ 201., 123. ], objDisp:[ 2.0370802879333496e+00,
+       -9.8962802439928055e-04 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.0201997756958008e+00,
+       -1.6698049008846283e-01 ] }
+shape_pointsframe_skip1_dataprocessing_3results_FB_none_:
+   - { good_pixels:[ 0., 0. ], total_pixels:[ .Inf, .Inf ] }
+   - { good_pixels:[ 0., 0. ], total_pixels:[ .Inf, .Inf ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 13430., 24522. ] }
+   - { good_pixels:[ 1., 0. ], total_pixels:[ 0., 676. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 13490., 24723. ] }
+   - { good_pixels:[ 2., 0. ], total_pixels:[ 345., 676. ] }
+displacement_pointsframe_skip1_dataprocessing_3results_FB_none_:
+   - { objDim:[ 201., 122. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 13., 52. ], objDisp:[ .Inf, .Inf ] }
+   - { objDim:[ 201., 122. ], objDisp:[ 2.0879781246185303e+00,
+       -2.4767898023128510e-02 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.2285448312759399e+00,
+       -1.2725743651390076e-01 ] }
+   - { objDim:[ 201., 123. ], objDisp:[ 2.0945231914520264e+00,
+       -6.9114714860916138e-02 ] }
+   - { objDim:[ 13., 52. ], objDisp:[ -1.1569029092788696e+00,
+       -2.1256459876894951e-02 ] }
+collision_pointsframe_skip1_dataprocessing_0results_FB_none_:
+   - { x:.Inf, y:.Inf }
+   - { x:2.0747524414062500e+03, y:-3.5260546875000000e+02 }
+   - { x:7.3140209960937500e+02, y:-3.4715655517578125e+02 }
+line_anglesframe_skip1_dataprocessing_0results_FB_none_:
+   - { obj1:.Inf, obj2:.Inf }
+   - { obj1:3.2656762003898621e-01, obj2:-6.7003450393676758e+00 }
+   - { obj1:1.2462302446365356e+00, obj2:3.2092339992523193e+00 }
+collision_pointsframe_skip1_dataprocessing_1results_FB_none_:
+   - { x:.Inf, y:.Inf }
+   - { x:1.2522439575195312e+02, y:-3.4411898803710938e+02 }
+   - { x:4.0640838623046875e+02, y:-3.4516973876953125e+02 }
+line_anglesframe_skip1_dataprocessing_1results_FB_none_:
+   - { obj1:.Inf, obj2:.Inf }
+   - { obj1:-5.7295768737792969e+01, obj2:3.7949969768524170e+00 }
+   - { obj1:-5.3784446716308594e+01, obj2:-1.0001450538635254e+01 }
+collision_pointsframe_skip1_dataprocessing_2results_FB_none_:
+   - { x:.Inf, y:.Inf }
+   - { x:-1.4825781250000000e+02, y:-3.4622369384765625e+02 }
+   - { x:3.9027011718750000e+03, y:-3.6049911499023438e+02 }
+line_anglesframe_skip1_dataprocessing_2results_FB_none_:
+   - { obj1:.Inf, obj2:.Inf }
+   - { obj1:2.6941487193107605e-01, obj2:1.8569974601268768e-01 }
+   - { obj1:2.7834692969918251e-02, obj2:-9.2949924468994141e+00 }
+collision_pointsframe_skip1_dataprocessing_3results_FB_none_:
+   - { x:.Inf, y:.Inf }
+   - { x:1.4867589111328125e+03, y:-3.4985659790039062e+02 }
+   - { x:1.7204619140625000e+03, y:-3.4950512695312500e+02 }
+line_anglesframe_skip1_dataprocessing_3results_FB_none_:
+   - { obj1:.Inf, obj2:.Inf }
+   - { obj1:6.7961901426315308e-01, obj2:-5.9137830734252930e+00 }
+   - { obj1:1.8899502754211426e+00, obj2:-1.0526107549667358e+00 }
