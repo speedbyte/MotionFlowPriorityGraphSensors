@@ -2,6 +2,12 @@
 # _*_ encoding:utf-8 _*_
 
 
+#environment_list = ["none","light_snow_", "mild_snow_", "heavy_snow_"]#night
+environment_list = ["none",]
+
+data_processing_list = ["0", "1", "2"]
+
+
 list_of_shape_metrics_no_noise = [
     "shape_pointsframe_skip1_dataprocessing_0_generated",
     "shape_pointsframe_skip1_dataprocessing_0results_FB_none_",
@@ -37,9 +43,6 @@ list_of_shape_metrics_noise = [
 ]
 color_of_shape_metrics_noise = ["red", "green", "yellow", "black"]
 assert(len(list_of_shape_metrics_noise)/4 == len(color_of_shape_metrics_noise))
-
-
-
 
 
 list_of_collision_metrics_no_noise = [
