@@ -264,7 +264,7 @@ void OpticalFlow::generate_shape_points() {
         list_of_current_objects = m_list_gt_objects;
     }
     else {
-        COUNT = 4;
+        COUNT = DATA_PROCESSING_COUNT;
         list_of_current_objects = m_list_simulated_objects;
     }
 
@@ -317,10 +317,6 @@ void OpticalFlow::generate_shape_points() {
 
                         cv::Point2f gt_displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                                 (frame_skip-1).at(frame_count).second;
-
-                        float threshold_x = gt_displacement.x + gt_displacement.x*0.1;
-
-                        float threshold_y = gt_displacement.y + gt_displacement.y*0.1;
 
                         auto dist_gt = cv::norm(gt_displacement);
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
@@ -395,11 +391,6 @@ void OpticalFlow::generate_shape_points() {
                                     vollTreffer++;
                                 }
 
-                                /*if ( (std::abs(algo_displacement.x) < threshold_x ) &&  (std::abs(algo_displacement.y) < threshold_y)) {
-                                    vollTreffer++;
-                                }*/
-
-
                             }
                             /*
                             auto x_coordinates = list_of_current_objects.at(
@@ -465,7 +456,7 @@ void OpticalFlow::generate_mean_displacement_points() {
         list_of_current_objects = m_list_gt_objects;
     }
     else {
-        COUNT = 4;
+        COUNT = DATA_PROCESSING_COUNT;
         list_of_current_objects = m_list_simulated_objects;
     }
 
@@ -562,7 +553,7 @@ void OpticalFlow::generate_collision_points() {
         list_of_current_objects_combination = list_of_gt_objects_combination;
     }
     else {
-        COUNT = 4;
+        COUNT = DATA_PROCESSING_COUNT;
         list_of_current_objects = m_list_simulated_objects;
         list_of_current_objects_combination = list_of_simulated_objects_combination;
     }

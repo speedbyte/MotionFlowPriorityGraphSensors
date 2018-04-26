@@ -70,7 +70,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
         COUNT = 1;
     }
     else {
-        COUNT = 4;
+        COUNT = DATA_PROCESSING_COUNT;
     }
 
     // shape of algorithhm, with shape of ground truth
@@ -165,7 +165,7 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
         COUNT = 1;
     }
     else {
-        COUNT = 4;
+        COUNT = DATA_PROCESSING_COUNT;
     }
 
     for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {

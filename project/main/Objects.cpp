@@ -162,6 +162,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                 }
 
 
+
                 std::cout << "max_voted_x " << max_voted_x << " max_voted_y " << max_voted_y <<std::endl;
 
                 unsigned
@@ -484,13 +485,11 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
     }
     else {
 
-        list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_flowvector_simple_avg_mean);
         list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_flowvector_moving_avg_mean);
         list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_flowvector_voted_mean);
         list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(outer_multiframe_flowvector_ranked_mean);
 
-        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_simple_avg_mean);
-        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_threshold_mean);
+        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_moving_avg_mean);
         list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_voted_mean);
         list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_ranked_mean);
 
@@ -513,7 +512,7 @@ void Objects::generate_obj_line_parameters( std::string post_processing_algorith
         COUNT = 1;
     }
     else {
-        COUNT = 4;
+        COUNT = DATA_PROCESSING_COUNT;
     }
 
     std::vector<std::vector<std::vector<cv::Point2f > > > list_obj_line_parameters;

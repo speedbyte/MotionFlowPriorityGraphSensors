@@ -33,7 +33,7 @@ file = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
 environment_list = ["none","light_snow_", "mild_snow_", "heavy_snow_"]#night
 environment_list = ["none",]
 
-data_processing_list = ["0", "1", "2", "3"]
+data_processing_list = ["0", "1", "2"]
 
 OUTLIER = 10000
 SCALE = 1
