@@ -835,7 +835,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 }
             }
 
-            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
             cv::imshow("BB", tempGroundTruthImage);
             cv::waitKey(1000);
             cv::destroyAllWindows();

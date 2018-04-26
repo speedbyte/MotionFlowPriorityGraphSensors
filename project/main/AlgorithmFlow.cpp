@@ -196,7 +196,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 float pyrScale = 0.5;
                 int numLevels = 1;
                 int windowSize = 5;
-                int numIterations = 3;
+                int numIterations = 1;
                 int neighborhoodSize = 3; // polyN
                 float stdDeviation = 1.1; // polySigma
 

@@ -35,6 +35,8 @@ protected:
 
     std::vector<Objects *> &m_list_simulated_objects;
 
+    std::vector<std::vector<std::vector<std::vector<std::pair<std::string, cv::Point2f>> > > > m_frame_skip_mean_displacement_points;
+
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_collision_points;
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_line_angles;
@@ -79,6 +81,8 @@ public:
     void visualiseStencil(void);
 
     void generate_shape_points();
+
+    void generate_mean_displacement_points();
 
     std::string getGeneratePath() const {
         return m_generatepath.string();

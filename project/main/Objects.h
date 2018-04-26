@@ -91,7 +91,7 @@ public:
         return m_list_obj_line_parameters;
     }
 
-    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &get_shape_parameters() const {
+    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &get_list_obj_shape_parameters() const {
         return m_list_obj_extrapolated_shape_parameters;
     }
 
