@@ -35,7 +35,7 @@ void GroundTruthFlow::prepare_directories() {
 
     mImageabholOrt = Dataset::getGroundTruthPath().string() + "/none/";
 
-    m_resultordner="/generated";
+    m_resultordner="/ground_truth";
 
     m_generatepath = Dataset::getGroundTruthPath().string() + m_resultordner;
 

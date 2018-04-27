@@ -66,7 +66,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
     unsigned COUNT;
-    if ( suffix == "_generated") {
+    if ( suffix == "_ground_truth") {
         COUNT = 1;
     }
     else {
@@ -112,8 +112,14 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             }
 
             // Send to plotter
-            m_fs << (std::string("shape_points") + std::string("frame_skip") + std::to_string(frame_skip) +
-                     std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix) << "[";
+
+            if ( suffix == "_ground_truth") {
+                m_fs << (std::string("pixel_density") + suffix) << "[";
+            }
+            else {
+                m_fs << (std::string("pixel_density") + std::string("frame_skip") + std::to_string(frame_skip) +
+                         std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix) << "[";
+            }
 
             for (unsigned i = 0; i < xsamples.size(); i++) {
                 m_fs << "{:" << "good_pixels" << xsamples[i] << "total_pixels" << ysamples[i] << "}";
@@ -161,7 +167,7 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
     unsigned COUNT;
-    if ( suffix == "_generated") {
+    if ( suffix == "_ground_truth") {
         COUNT = 1;
     }
     else {
@@ -244,7 +250,13 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
                 samples_xy_collision(1,i) = ysamples.at(i);
             }
 
-            m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix ) << "[";
+            if ( suffix == "_ground_truth") {
+                m_fs << (std::string("collision_points") + suffix ) << "[";
+
+            } else {
+                m_fs << (std::string("collision_points") + std::string("frame_skip") + std::to_string(frame_skip) + std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix ) << "[";
+
+            }
 
             for (unsigned i = 0; i < samples_xy_collision.cols; i++) {
                 xypoints_collision.push_back(std::make_pair(samples_xy_collision[0][i], samples_xy_collision[1][i]));

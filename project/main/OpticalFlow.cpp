@@ -120,7 +120,7 @@ void OpticalFlow::generate_edge_contour() {
 
     std::vector<Objects*> list_of_current_objects;
 
-    if ( m_resultordner == "/generated") {
+    if ( m_resultordner == "/ground_truth") {
         list_of_current_objects = m_list_gt_objects;
     }
     else {
@@ -259,7 +259,7 @@ void OpticalFlow::generate_shape_points() {
     std::vector<Objects*> list_of_current_objects;
 
     unsigned COUNT;
-    if ( m_resultordner == "/generated") {
+    if ( m_resultordner == "/ground_truth") {
         COUNT = 1;
         list_of_current_objects = m_list_gt_objects;
     }
@@ -323,7 +323,7 @@ void OpticalFlow::generate_shape_points() {
 
 
 
-                        if (m_resultordner == "/generated") {
+                        if (m_resultordner == "/ground_truth") {
 
                             vollTreffer = CLUSTER_COUNT_GT;
                             baseTreffer = CLUSTER_COUNT_GT;
@@ -451,7 +451,7 @@ void OpticalFlow::generate_mean_displacement_points() {
     std::vector<Objects*> list_of_current_objects;
 
     unsigned COUNT;
-    if ( m_resultordner == "/generated") {
+    if ( m_resultordner == "/ground_truth") {
         COUNT = 1;
         list_of_current_objects = m_list_gt_objects;
     }
@@ -547,7 +547,7 @@ void OpticalFlow::generate_collision_points() {
 
 
     unsigned COUNT;
-    if ( m_resultordner == "/generated") {
+    if ( m_resultordner == "/ground_truth") {
         COUNT = 1;
         list_of_current_objects = m_list_gt_objects;
         list_of_current_objects_combination = list_of_gt_objects_combination;

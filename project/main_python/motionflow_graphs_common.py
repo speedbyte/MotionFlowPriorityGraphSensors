@@ -33,25 +33,21 @@ class Figures(object):
         if ( self.figure_index >= 1 ):
             self.fig1 = plt.figure(figsize=plt.figaspect(aspect_ratio))
             self.plot1 = self.fig1.add_subplot(111)
-            self.plot1.legend(loc='upper right', shadow=True, fontsize='x-small')
             self.list_of_figures.append(self.plot1)
 
         if ( self.figure_index >= 2 ):
             self.fig2 = plt.figure(figsize=plt.figaspect(aspect_ratio))
             self.plot2 = self.fig2.add_subplot(111)
-            self.plot2.legend(loc='upper right', shadow=True, fontsize='x-small')
             self.list_of_figures.append(self.plot2)
 
         if ( self.figure_index >= 3 ):
             self.fig3 = plt.figure(figsize=plt.figaspect(aspect_ratio))
             self.plot3 = self.fig3.add_subplot(111)
-            self.plot3.legend(loc='upper right', shadow=True, fontsize='x-small')
             self.list_of_figures.append(self.plot3)
 
         if ( self.figure_index >= 4 ):
             self.fig4 = plt.figure(figsize=plt.figaspect(aspect_ratio))
             self.plot4 = self.fig4.add_subplot(111)
-            self.plot4.legend(loc='upper right', shadow=True, fontsize='x-small')
             self.list_of_figures.append(self.plot4)
 
         #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
@@ -82,7 +78,9 @@ class Figures(object):
                                                          label=plot_number[figure_index][5][4*no_of_metrics+figure_index+x])
 
 
-                #self.list_of_figures[figure_index].legend()
+                self.list_of_figures[figure_index].legend(loc='upper right', shadow=True, fontsize='x-small')
+
+                self.list_of_figures[figure_index].legend()
                 self.list_of_figures[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
                 self.list_of_figures[figure_index].set_title(plot_number[figure_index][6])
 

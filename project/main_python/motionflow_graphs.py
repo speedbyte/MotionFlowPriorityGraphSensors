@@ -85,7 +85,7 @@ def scenario_displacement_occurence():
     #ax.plot_wireframe(X, Y, Z, rstride=5, cstride=5)
 
 
-    for env_index in range(1): # generated
+    for env_index in range(1): # ground_truth
 
         scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[env_index]]
         occurences = list()
@@ -112,7 +112,7 @@ def scenario_displacement_occurence():
 
         data = numpy.array(occurences)
 
-        for x in range(1): # generated
+        for x in range(1): # ground_truth
             if ( x == 0 ):
                 x, y, occurence = data.T
 
@@ -175,18 +175,25 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    data_list_deviation = list_of_collision_metrics_no_noise
-    data_list_pixel = list_of_shape_metrics_no_noise
-    data_list_deviation = list_of_collision_metrics_noise
-    data_list_pixel = list_of_shape_metrics_noise
+    custom_data_list_pixel = list()
+    custom_data_list_pixel.append(list_of_shape_metrics_no_noise[0])
+    for x in range(len(data_processing_list)):
+        custom_data_list_pixel.append(list_of_shape_metrics_noise[x])
 
-    robustness.robustness_(file, "pixel", "no_noise", list_of_shape_metrics_noise, color_of_shape_metrics_no_noise, "jaccard index no noise all algorithm")
-    robustness.robustness_(file, "deviation", "no_noise", list_of_collision_metrics_noise, color_of_collision_metrics_no_noise, "deviation no noise all algorithm ")
 
-    robustness.robustness_(file, "pixel", "noise", list_of_shape_metrics_noise, color_of_shape_metrics_noise, "jaccard index environment algorithm ")
-    robustness.robustness_(file, "deviation", "noise" , list_of_collision_metrics_noise, color_of_collision_metrics_noise, "deviation environment algorithm ")
+    custom_data_list_deviation = list()
+    custom_data_list_deviation.append(list_of_collision_metrics_no_noise[0])
+    for x in range(len(data_processing_list)):
+        custom_data_list_deviation.append(list_of_collision_metrics_noise[x])
 
-    robustness.robustness_(file, "collision", "no_noise", list_of_collision_metrics_noise, color_of_collision_metrics_no_noise, "collision points no noise all algorithm")
+
+    robustness.robustness_(file, "pixel", "no_noise", custom_data_list_pixel, color_list, "jaccard index no noise all algorithm")
+    robustness.robustness_(file, "pixel", "noise", list_of_shape_metrics_noise, color_list, "jaccard index environment algorithm ")
+
+    robustness.robustness_(file, "deviation", "no_noise", custom_data_list_deviation, color_list, "deviation no noise all algorithm ")
+    robustness.robustness_(file, "deviation", "noise" , list_of_collision_metrics_noise, color_list, "deviation environment algorithm ")
+
+    robustness.robustness_(file, "collision", "no_noise", custom_data_list_deviation, color_list, "collision points no noise all algorithm")
 
     #scenario_displacement_occurence()
     #histogramm()
