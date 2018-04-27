@@ -110,12 +110,15 @@ class Figures(object):
         plt.close("all")
 
 
-    def evaluate(self, summary):
+    def evaluate_pixel(self, summary):
 
         #summary = {'deviation_noise_2': [0.0, 12186.649014375638, 12400.45349710727, 11336.717955431581], 'deviation_noise_3': [0.0, 11675.105571047528, 10504.442959612268, 11814.247913929519], 'deviation_noise_0': [0.0, 11761.787445657797, 10869.799473418223, 10103.218910032963], 'deviation_noise_1': [0.0, 12485.409855364309, 11484.989821789779, 11882.581836781412], 'pixel_noise_3': [1.0, 0.26837581140774386, 0.49992686824824784, 0.49776771310464668], 'pixel_noise_2': [1.0, 0.30265300493213265, 0.52214494863334915, 0.51604211466522909], 'pixel_noise_1': [1.0, 0.20345263917843007, 0.61837821371469648, 0.54228955482389296], 'deviation_no_noise_0': [0.0, 11761.787445657797, 10869.799473418223, 10103.218910032963], 'collision_no_noise_0': [-393.26976860894098, -360.81188625759546, -356.79136827256946, -356.61876424153644], 'pixel_noise_0': [1.0, 0.34088405155935164, 0.54669885621726733, 0.54259211933645524], 'pixel_no_noise_0': [1.0, 0.34088405155935164, 0.54669885621726733, 0.54259211933645524]}
 
         print summary
         n_groups = 4
+        bar_width = 0.15
+        opacity = 0.4
+        index = numpy.arange(n_groups)
 
         ground_truth = list()
         moving_avg = list()
@@ -134,19 +137,18 @@ class Figures(object):
         for x in range(4):
             ranked_mean.append((summary['pixel_3'][x]))
 
+        rects1 = self.list_of_figures[0].bar(index, ground_truth, bar_width, color='#f2f2f2')
+        rects2 = self.list_of_figures[0].bar(index+bar_width, moving_avg, bar_width, color='#cccccc')
+        rects3 = self.list_of_figures[0].bar(index+2*bar_width, voted_mean, bar_width, color='#808080')
+        rects4 = self.list_of_figures[0].bar(index+3*bar_width, ranked_mean, bar_width, color='#000000')
 
+        plt.xlabel('Data Processing Algorithm')
+        plt.ylabel('Good Pixel Density')
+        plt.title('Pixel Density of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
+        plt.xticks(index + 2*bar_width, ('GroundTruth', 'Moving Average', 'Voting', 'Ranked on Edges'))
+        plt.legend()
 
-
-
-        index = numpy.arange(n_groups)
-        bar_width = 0.15
-
-        opacity = 0.4
-
-        rects1 = self.list_of_figures[0].bar(index, ground_truth, bar_width, color='r')
-        rects2 = self.list_of_figures[0].bar(index+bar_width, moving_avg, bar_width, color='b')
-        rects3 = self.list_of_figures[0].bar(index+2*bar_width, voted_mean, bar_width, color='g')
-        rects4 = self.list_of_figures[0].bar(index+3*bar_width, ranked_mean, bar_width, color='y')
+        plt.tight_layout()
 
         #rects1 = plt.bar(index, means_men, bar_width,
         #                 alpha=opacity,
@@ -156,14 +158,44 @@ class Figures(object):
         #                 label='Men')
 
 
-        plt.xlabel('Group')
-        plt.ylabel('Scores')
-        plt.title('Scores by group and gender')
+
+    def evaluate_deviation(self, summary):
+
+
+        n_groups = 4
+        bar_width = 0.15
+        opacity = 0.4
+        index = numpy.arange(n_groups)
+
+        ground_truth = list()
+        moving_avg = list()
+        voted_mean = list()
+        ranked_mean = list()
+
+        for x in range(4):
+            ground_truth.append((summary['deviation_0'][x]))
+
+        for x in range(4):
+            moving_avg.append((summary['deviation_1'][x]))
+
+        for x in range(4):
+            voted_mean.append((summary['deviation_2'][x]))
+
+        for x in range(4):
+            ranked_mean.append((summary['deviation_3'][x]))
+
+        rects1 = self.list_of_figures[0].bar(index, ground_truth, bar_width, color='#f2f2f2')
+        rects2 = self.list_of_figures[0].bar(index+bar_width, moving_avg, bar_width, color='#cccccc')
+        rects3 = self.list_of_figures[0].bar(index+2*bar_width, voted_mean, bar_width, color='#808080')
+        rects4 = self.list_of_figures[0].bar(index+3*bar_width, ranked_mean, bar_width, color='#000000')
+
+        plt.xlabel('Data Processing Algorithm')
+        plt.ylabel('Deviation')
+        plt.title('Deviation of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
         plt.xticks(index + 2*bar_width, ('GroundTruth', 'Moving Average', 'Voting', 'Ranked on Edges'))
         plt.legend()
 
         plt.tight_layout()
-        plt.show()
 
 
 

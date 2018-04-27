@@ -9,6 +9,9 @@ data_processing_list = ["0", "1", "2"]
 
 color_list = ["blue", "red", "green", "yellow", "black"]
 
+color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
+
+
 list_of_shape_no_noise = [
     "pixel_density_ground_truth",
 ]

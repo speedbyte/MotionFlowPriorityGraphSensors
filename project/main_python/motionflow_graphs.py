@@ -193,14 +193,19 @@ if __name__ == '__main__':
         robustness.robustness_(file, "pixel", "noise", list_of_shape_noise, color_list, "jaccard index environment algorithm ")
 
         #robustness.robustness_(file, "deviation", "no_noise", custom_data_list_deviation, color_list, "deviation no noise all algorithm ")
-        #robustness.robustness_(file, "deviation", "noise" , list_of_collision_noise, color_list, "deviation environment algorithm ")
+        robustness.robustness_(file, "deviation", "noise" , list_of_collision_noise, color_list, "deviation environment algorithm ")
 
         #robustness.robustness_(file, "collision", "no_noise", custom_data_list_deviation, color_list, "collision points no noise all algorithm")
 
     summary = robustness.get_summary()
 
     figures = Figures(1)
-    figures.evaluate(summary)
+    figures.evaluate_pixel(summary)
+    figures.save_figure("pixel", "summary")
+
+    figures = Figures(1)
+    figures.evaluate_deviation(summary)
+    figures.save_figure("deviation", "summary")
 
 
     #scenario_displacement_occurence()
