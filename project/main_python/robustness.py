@@ -5,6 +5,7 @@ from motionflow_graphs_common import Figures, YAMLParser
 from motionflow_graphs_data import *
 
 OUTLIER = 100000
+summary_mean = dict()
 
 def getDeviationPoints(data_points_gt, data_points ):
 
@@ -195,7 +196,7 @@ def getNewShape(data_points_gt, data_points):
 
 
 
-def robustness_(file, metrics, noise, data_list, color_list, label):
+def robustness_(file, measuring_parameter, noise, data_list, color_list, label):
 
     yaml_list_index_offset=0
 
@@ -207,19 +208,19 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
 
 
     # Ground Truth
-    if ( metrics == "deviation"):
-        data_points_gt = yaml_load[list_of_collision_metrics_no_noise[0]]
-        print "getting " , list_of_collision_metrics_no_noise[0]
+    if ( measuring_parameter == "deviation"):
+        data_points_gt = yaml_load[list_of_collision_no_noise[0]]
+        print "getting " , list_of_collision_no_noise[0]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = getDeviationPoints(data_points_gt, data_points_gt)
 
-    elif ( metrics == "pixel"):
-        data_points_gt = yaml_load[list_of_shape_metrics_no_noise[0]]
-        print "getting " , list_of_shape_metrics_no_noise[yaml_list_index_offset]
+    elif ( measuring_parameter == "pixel"):
+        data_points_gt = yaml_load[list_of_shape_no_noise[0]]
+        print "getting " , list_of_shape_no_noise[yaml_list_index_offset]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = getNewShape(data_points_gt, data_points_gt)
 
     else:
-        data_points_gt = yaml_load[list_of_collision_metrics_no_noise[0]]
-        print "getting " , list_of_collision_metrics_no_noise[0]
+        data_points_gt = yaml_load[list_of_collision_no_noise[0]]
+        print "getting " , list_of_collision_no_noise[0]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = getCollisionPoints(data_points_gt, data_points_gt)
 
     if ( noise == "no_noise" ):
@@ -229,7 +230,7 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
 
     for env_index in range(len(environment_list)):
 
-        print "Table " + metrics + " robustness with " + environment_list[env_index] + " " + noise
+        print "Table " + measuring_parameter + " robustness with " + environment_list[env_index] + " " + noise
 
         mean_list = list()
         mean_list.append(y_axis_gt_mean)
@@ -246,9 +247,9 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
             if ( noise == "no_noise"):
                 data_points = yaml_load[data_list[yaml_list_index_offset+1+x]]
                 print "getting ", data_list[yaml_list_index_offset+1+x]
-                if ( metrics == "deviation"):
+                if ( measuring_parameter == "deviation"):
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
-                elif ( metrics == "pixel"):
+                elif ( measuring_parameter == "pixel"):
                     x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
                 else:
                     x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points_gt, data_points)
@@ -260,9 +261,9 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
 
                 data_points = yaml_load[data_list[yaml_list_index_offset+x]]
                 print "getting " , data_list[yaml_list_index_offset+x]
-                if ( metrics == "deviation"):
+                if ( measuring_parameter == "deviation"):
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
-                elif ( metrics == "pixel"):
+                elif ( measuring_parameter == "pixel"):
                     x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
                 else:
                     x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points_gt, data_points)
@@ -304,14 +305,14 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
 
             list_of_plots.append(plot1)
 
-        if metrics == "pixel":
+        if measuring_parameter == "pixel":
             lower=0; upper=1;
 
         for x in range(len(list_of_plots)):
             list_of_plots[x][7] = lower
             list_of_plots[x][8] = upper
 
-        print mean_list
+        summary_mean[measuring_parameter + '_' + str(env_index)] = mean_list
 
         yaml_list_index_offset=yaml_list_index_offset+4
 
@@ -320,8 +321,11 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
         if (noise == "no_noise" ):
             break
 
-    figures.save_figure(metrics, noise)
+    figures.save_figure(measuring_parameter, noise)
 
+
+def get_summary():
+    return summary_mean
 
 
 

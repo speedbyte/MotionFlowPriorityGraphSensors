@@ -59,7 +59,7 @@ class Figures(object):
         self.ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
 
 
-    def plot_all(self, plot_number, no_of_metrics):
+    def plot_all(self, plot_number, measuring_parameter):
 
         assert(self.figure_index == len(plot_number))
 
@@ -74,8 +74,8 @@ class Figures(object):
 
                 self.list_of_figures[figure_index].plot(plot_number[figure_index][2][x],
                                                          plot_number[figure_index][3][x]/SCALE, 'ko-', lw=1,
-                                                         color=plot_number[figure_index][4][x+no_of_metrics],
-                                                         label=plot_number[figure_index][5][4*no_of_metrics+figure_index+x])
+                                                         color=plot_number[figure_index][4][x+measuring_parameter],
+                                                         label=plot_number[figure_index][5][4*measuring_parameter+figure_index+x])
 
 
                 self.list_of_figures[figure_index].legend(loc='upper right', shadow=True, fontsize='x-small')
@@ -93,21 +93,77 @@ class Figures(object):
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
-    def save_figure(self, metrics, noise):
+    def save_figure(self, measuring_parameter, noise):
 
         if ( self.figure_index >= 1 ):
-            self.fig1.savefig(output_folder + metrics + '_' + noise + '_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
+            self.fig1.savefig(output_folder + measuring_parameter + '_' + noise + '_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 2 ):
-            self.fig2.savefig(output_folder + metrics + '_' + noise + '_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
+            self.fig2.savefig(output_folder + measuring_parameter + '_' + noise + '_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 3 ):
-            self.fig3.savefig(output_folder + metrics + '_' + noise + '_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
+            self.fig3.savefig(output_folder + measuring_parameter + '_' + noise + '_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 4 ):
-            self.fig4.savefig(output_folder + metrics + '_' + noise + '_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
+            self.fig4.savefig(output_folder + measuring_parameter + '_' + noise + '_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
 
 
     def plot_close_all(self):
         #self.list_of_figures[0].set_ylim([0, self.boundary[0][1]])
         plt.close("all")
+
+
+    def evaluate(self, summary):
+
+        #summary = {'deviation_noise_2': [0.0, 12186.649014375638, 12400.45349710727, 11336.717955431581], 'deviation_noise_3': [0.0, 11675.105571047528, 10504.442959612268, 11814.247913929519], 'deviation_noise_0': [0.0, 11761.787445657797, 10869.799473418223, 10103.218910032963], 'deviation_noise_1': [0.0, 12485.409855364309, 11484.989821789779, 11882.581836781412], 'pixel_noise_3': [1.0, 0.26837581140774386, 0.49992686824824784, 0.49776771310464668], 'pixel_noise_2': [1.0, 0.30265300493213265, 0.52214494863334915, 0.51604211466522909], 'pixel_noise_1': [1.0, 0.20345263917843007, 0.61837821371469648, 0.54228955482389296], 'deviation_no_noise_0': [0.0, 11761.787445657797, 10869.799473418223, 10103.218910032963], 'collision_no_noise_0': [-393.26976860894098, -360.81188625759546, -356.79136827256946, -356.61876424153644], 'pixel_noise_0': [1.0, 0.34088405155935164, 0.54669885621726733, 0.54259211933645524], 'pixel_no_noise_0': [1.0, 0.34088405155935164, 0.54669885621726733, 0.54259211933645524]}
+
+        print summary
+        n_groups = 4
+
+        ground_truth = list()
+        moving_avg = list()
+        voted_mean = list()
+        ranked_mean = list()
+
+        for x in range(4):
+            ground_truth.append((summary['pixel_0'][x]))
+
+        for x in range(4):
+            moving_avg.append((summary['pixel_1'][x]))
+
+        for x in range(4):
+            voted_mean.append((summary['pixel_2'][x]))
+
+        for x in range(4):
+            ranked_mean.append((summary['pixel_3'][x]))
+
+
+
+
+
+        index = numpy.arange(n_groups)
+        bar_width = 0.15
+
+        opacity = 0.4
+
+        rects1 = self.list_of_figures[0].bar(index, ground_truth, bar_width, color='r')
+        rects2 = self.list_of_figures[0].bar(index+bar_width, moving_avg, bar_width, color='b')
+        rects3 = self.list_of_figures[0].bar(index+2*bar_width, voted_mean, bar_width, color='g')
+        rects4 = self.list_of_figures[0].bar(index+3*bar_width, ranked_mean, bar_width, color='y')
+
+        #rects1 = plt.bar(index, means_men, bar_width,
+        #                 alpha=opacity,
+        #                 color='b',
+        #                 yerr=std_men,
+        #                 error_kw=error_config,
+        #                 label='Men')
+
+
+        plt.xlabel('Group')
+        plt.ylabel('Scores')
+        plt.title('Scores by group and gender')
+        plt.xticks(index + 2*bar_width, ('GroundTruth', 'Moving Average', 'Voting', 'Ranked on Edges'))
+        plt.legend()
+
+        plt.tight_layout()
+        plt.show()
 
 
 
