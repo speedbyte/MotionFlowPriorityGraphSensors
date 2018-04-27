@@ -4,7 +4,7 @@ import numpy
 from motionflow_graphs_common import Figures, YAMLParser
 from motionflow_graphs_data import *
 
-OUTLIER = 10000
+OUTLIER = 10000000000
 
 
 def getDeviationPoints(data_points_gt, data_points ):
@@ -61,7 +61,6 @@ def getCollisionPoints(data_points):
 
     data = list()
 
-    frame_count = numpy.arange(0.0, len(data_points), 1)
     for count in range(len(data_points)):
         xy = list()
         xy.append(data_points[count]["x"])
@@ -96,7 +95,52 @@ def getCollisionPoints(data_points):
 
 
 
-def getNewShape(data_points):
+def getNewShape(data_points_gt, data_points):
+
+    data = list()
+
+    for count in range(len(data_points_gt)):
+        xy = list()
+        xy.append(data_points[count]["good_pixels"][0])
+        xy.append(data_points[count]["total_pixels"][0])
+        xy.append(data_points[count]["total_pixels"][1])
+        data.append(xy)
+
+    newshape = list()
+    previous_x_axis = 0
+    frame_good_pixels = 0
+    frame_total_pixels = 0
+    total_count = 0
+    for count in range(len(data)):
+
+        if ( data[count][0] != previous_x_axis ):
+
+            previous_x_axis = data[count][0]
+            xy = list()
+            xy.append(frame_good_pixels/total_count)
+            xy.append(frame_total_pixels/total_count)
+            newshape.append(xy)
+            total_count = 0
+            frame_good_pixels = 0
+            frame_total_pixels = 0
+
+        if ( data[count][0] == previous_x_axis ):
+            total_count = total_count+1
+            frame_good_pixels = frame_good_pixels + data[count][1]
+            frame_total_pixels = frame_total_pixels + data[count][2]
+
+        if ( count == len(data)-1 ):
+
+            xy = list()
+            xy.append(frame_good_pixels/total_count)
+            xy.append(frame_total_pixels/total_count)
+            newshape.append(xy)
+
+    y_axis_mean = 0
+    data = numpy.array(newshape)
+    x0_gt, y0_gt = data.T
+
+
 
     data = list()
 
@@ -140,7 +184,7 @@ def getNewShape(data_points):
     y_axis_mean = 0
     data = numpy.array(newshape)
     x0, y0 = data.T
-    y_axis = x0/y0
+    y_axis = x0/y0_gt
 
     count = 0
     for n,i in enumerate(y_axis):
@@ -153,140 +197,105 @@ def getNewShape(data_points):
     return x_axis, y_axis, y_axis_mean
 
 
-def robustness_no_noise(file, metrics):
+
+
+def robustness_(file, metrics, noise, data_list, color_list, label):
 
     yaml_list_index_offset=0
 
     yaml_file_handle = YAMLParser(file)
     yaml_load = yaml_file_handle.load()
-
-    #plotters
-    x_axis_list = list()
-    y_axis_list = list()
-
-    #means
-    mean_list = list()
 
     #axes limits
     lower = 0; upper = 0;
 
+
     if ( metrics == "deviation"):
-        print "Table 3 Vector Robustness with " + environment_list[0] + " noise "
         data_points_gt = yaml_load[list_of_collision_metrics_no_noise[yaml_list_index_offset]]
+        print "getting " , list_of_collision_metrics_no_noise[yaml_list_index_offset]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = getDeviationPoints(data_points_gt, data_points_gt)
-
     else:
-        print "Table 1 Pixel Robustness with " + environment_list[0] + " noise "
         data_points_gt = yaml_load[list_of_shape_metrics_no_noise[yaml_list_index_offset]]
-        x_axis_gt, y_axis_gt, y_axis_gt_mean = getNewShape(data_points_gt)
-
-    x_axis_list.append(x_axis_gt)
-    y_axis_list.append(y_axis_gt)
-
-    mean_list.append(y_axis_gt_mean)
-
-    for x in range(len(data_processing_list)):
-
-        if ( metrics == "deviation"):
-            data_points = yaml_load[list_of_collision_metrics_no_noise[yaml_list_index_offset+1+x]]
-            x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
-        else:
-            data_points = yaml_load[list_of_shape_metrics_no_noise[yaml_list_index_offset+1+x]]
-            x_axis, y_axis, y_axis_mean = getNewShape(data_points)
+        print "getting " , list_of_collision_metrics_no_noise[yaml_list_index_offset]
+        x_axis_gt, y_axis_gt, y_axis_gt_mean = getNewShape(data_points_gt, data_points_gt)
 
 
-        mean_list.append(y_axis_mean)
-
-        x_axis_list.append(x_axis)
-        y_axis_list.append(y_axis)
-
-        lower = min(numpy.nanmin(y_axis), lower)
-        upper = max(numpy.nanmax(y_axis), upper)
-
-
-    print mean_list
-
-    if ( metrics == "deviation"):
-        plot1 = ('x_axis',
-                 'deviation [no_noise_points-groundtruth_points]',
-                 x_axis_list,
-                 y_axis_list,
-                 color_of_collision_metrics_no_noise,
-                 list_of_collision_metrics_no_noise,
-                 "deviation_pointsframe_skip1_dataprocessing_0",
-                 lower,
-                 upper,
-                 )
+    if ( noise == "no_noise"):
+        figures = Figures(1)
     else:
-        plot1 = ('x_axis',
-                 'no_noise_good_pixels/no_noise_total_pixels',
-                 x_axis_list,
-                 y_axis_list,
-                 color_of_shape_metrics_no_noise,
-                 list_of_shape_metrics_no_noise,
-                 "optical flow pixel robustness",
-                 lower,
-                 upper,
-                 )
-
-    figures = Figures(1)
-    figures.plot_all([plot1], 0)
-    figures.plot_robustness(metrics)
-
-
-def robustness_noise(file, metrics):
-
-    yaml_list_index_offset=0
-
-    yaml_file_handle = YAMLParser(file)
-    yaml_load = yaml_file_handle.load()
-
-    if ( metrics == "deviation"):
-        data_points_gt = yaml_load[list_of_collision_metrics_no_noise[yaml_list_index_offset]]
-
-    figures = Figures(len(data_processing_list))
-    lower = 0; upper = 0;
+        figures = Figures(len(data_processing_list))
 
     for env_index in range(len(environment_list)):
 
         print "Table " + metrics + " robustness with " + environment_list[env_index] + " noise "
 
         mean_list = list()
+        mean_list.append(y_axis_gt_mean)
 
         list_of_plots = list()
 
+        x_axis_list = list()
+        y_axis_list = list()
+        x_axis_list.append(x_axis_gt)
+        y_axis_list.append(y_axis_gt)
+
         for x in range(len(data_processing_list)):
 
-            if ( metrics == "deviation"):
-                data_points = yaml_load[list_of_collision_metrics_noise[yaml_list_index_offset+x]]
-                x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
+            if ( noise == "no_noise"):
+                data_points = yaml_load[data_list[yaml_list_index_offset+1+x]]
+                print "getting " , data_list[yaml_list_index_offset+1+x]
+                if ( metrics == "deviation"):
+                    x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
+                else:
+                    x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
+
+                x_axis_list.append(x_axis)
+                y_axis_list.append(y_axis)
+
+            else:
+
+                data_points = yaml_load[data_list[yaml_list_index_offset+x]]
+                print "getting " , data_list[yaml_list_index_offset+x]
+                if ( metrics == "deviation"):
+                    x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
+                else:
+                    x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
+
+                x_axis_list = [x_axis]
+                y_axis_list = [y_axis]
+
                 plot1 = ['x_axis',
-                         'deviation [noise_points-nonoise_points]',
-                         [x_axis],
-                         [y_axis],
-                         color_of_collision_metrics_noise,
-                         list_of_collision_metrics_noise,
-                         "deviation_pointsframe_skip1_dataprocessing_" + str(x),
+                         'y_axis',
+                         x_axis_list,
+                         y_axis_list,
+                         color_list,
+                         data_list,
+                         label + str(x),
                          lower,
                          upper,
                          ]
-            else:
-                data_points = yaml_load[list_of_shape_metrics_noise[yaml_list_index_offset+x]]
-                x_axis, y_axis, y_axis_mean = getNewShape(data_points)
-                plot1 = ['x_axis',
-                         'noise_good_pixels/no_noise_total_pixels',
-                         [x_axis],
-                         [y_axis],
-                         color_of_shape_metrics_noise,
-                         list_of_shape_metrics_noise,
-                         "shape_pointsframe_skip1_dataprocessing_" + str(x),
-                         0,
-                         1,
-                         ]
+
+            if ( noise == "noise"):
+                list_of_plots.append(plot1)
+
             mean_list.append(y_axis_mean)
+
 
             lower = min(numpy.nanmin(y_axis), lower)
             upper = max(numpy.nanmax(y_axis), upper)
+
+        if ( noise == "no_noise"):
+            plot1 = ['x_axis',
+                     'y_axis',
+                     x_axis_list,
+                     y_axis_list,
+                     color_list,
+                     data_list,
+                     label,
+                     lower,
+                     upper,
+                     ]
+
             list_of_plots.append(plot1)
 
         if metrics == "pixel":
@@ -299,9 +308,13 @@ def robustness_noise(file, metrics):
         print mean_list
 
         yaml_list_index_offset=yaml_list_index_offset+4
-        figures.plot_all(list_of_plots, env_index)
 
-    figures.plot_robustness(metrics)
+        print "env " , env_index
+        figures.plot_all(list_of_plots, env_index)
+        if (noise == "no_noise" ):
+            break
+
+    figures.save_figure(metrics, noise)
 
 
 def collisiongraphs_no_noise(file):
@@ -350,7 +363,7 @@ def collisiongraphs_no_noise(file):
              y_axis_list,
              color_of_collision_metrics_no_noise,
              list_of_collision_metrics_no_noise,
-             "collision_pointsframe_skip1_dataprocessing_0",
+             "collision points dataprocessing 0",
              lower,
              upper,
              )

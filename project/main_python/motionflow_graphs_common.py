@@ -58,36 +58,39 @@ class Figures(object):
         #self.fig1.set_size_inches(18.5, 10.5)
 
 
-    def plot_3d(self, number_of_plots):
+    def plot_3d(self, plot_number):
 
         self.ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
 
 
-    def plot_all(self, number_of_plots, no_of_metrics):
+    def plot_all(self, plot_number, no_of_metrics):
 
-        assert(self.figure_index == len(number_of_plots))
+        assert(self.figure_index == len(plot_number))
 
-        for figure_index in range(self.figure_index):
+        for figure_index in range(len(plot_number)):
 
-            self.list_of_figures[figure_index].set_xlabel(number_of_plots[figure_index][0])
-            self.list_of_figures[figure_index].set_ylabel(number_of_plots[figure_index][1])
+            self.list_of_figures[figure_index].set_xlabel(plot_number[figure_index][0])
+            self.list_of_figures[figure_index].set_ylabel(plot_number[figure_index][1])
 
-            plot_configuration = number_of_plots[figure_index][3]
+            plot_configuration = plot_number[figure_index][2]
 
             for x in range(len(plot_configuration)):
 
-                self.list_of_figures[figure_index].plot(number_of_plots[figure_index][2][x],
-                                                         number_of_plots[figure_index][3][x]/SCALE, 'ko-', lw=1,
-                                                         color=number_of_plots[figure_index][4][x+no_of_metrics],
-                                                         label=number_of_plots[figure_index][5][4*no_of_metrics+figure_index+x])
+                print plot_number[figure_index][2][x]
+                print plot_number[figure_index][3][x]
+
+                self.list_of_figures[figure_index].plot(plot_number[figure_index][2][x],
+                                                         plot_number[figure_index][3][x]/SCALE, 'ko-', lw=1,
+                                                         color=plot_number[figure_index][4][x+no_of_metrics],
+                                                         label=plot_number[figure_index][5][4*no_of_metrics+figure_index+x])
 
 
                 #self.list_of_figures[figure_index].legend()
                 self.list_of_figures[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-                self.list_of_figures[figure_index].set_title(number_of_plots[figure_index][6])
+                self.list_of_figures[figure_index].set_title(plot_number[figure_index][6])
 
-                self.list_of_figures[figure_index].set_ylim([number_of_plots[figure_index][7],
-                                                              number_of_plots[figure_index][8]])
+                self.list_of_figures[figure_index].set_ylim([plot_number[figure_index][7],
+                                                              plot_number[figure_index][8]])
 
 
     def plot_show_vector_coll_no_noise(self):
@@ -95,16 +98,16 @@ class Figures(object):
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
-    def plot_robustness(self, metrics):
+    def save_figure(self, metrics, noise):
 
         if ( self.figure_index >= 1 ):
-            self.fig1.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
+            self.fig1.savefig(output_folder + metrics + '_' + noise + '_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 2 ):
-            self.fig2.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
+            self.fig2.savefig(output_folder + metrics + '_' + noise + '_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 3 ):
-            self.fig3.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
+            self.fig3.savefig(output_folder + metrics + '_' + noise + '_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 4 ):
-            self.fig4.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
+            self.fig4.savefig(output_folder + metrics + '_' + noise + '_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
 
 
     def plot_close_all(self):

@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import axes3d
 from motionflow_graphs_common import Figures, YAMLParser
 from motionflow_graphs_data import *
 
-import  vector_robustness
+import  robustness
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
@@ -175,11 +175,18 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    vector_robustness.robustness_no_noise(file, "pixel")
-    vector_robustness.robustness_noise(file, "pixel")
-    vector_robustness.collisiongraphs_no_noise(file)
-    vector_robustness.robustness_no_noise(file, "deviation")
-    vector_robustness.robustness_noise(file, "deviation")
+    data_list_deviation = list_of_collision_metrics_no_noise
+    data_list_pixel = list_of_shape_metrics_no_noise
+    data_list_deviation = list_of_collision_metrics_noise
+    data_list_pixel = list_of_shape_metrics_noise
+
+    robustness.robustness_(file, "pixel", "no_noise", list_of_shape_metrics_no_noise, color_of_shape_metrics_no_noise, "jaccard index no noise all algorithm")
+    robustness.robustness_(file, "pixel", "noise", list_of_shape_metrics_noise, color_of_shape_metrics_noise, "jaccard index environment algorithm ")
+
+    robustness.robustness_(file, "deviation", "no_noise", list_of_collision_metrics_no_noise, color_of_collision_metrics_no_noise, "deviation no noise all algorithm ")
+    robustness.robustness_(file, "deviation", "noise" , list_of_collision_metrics_noise, color_of_collision_metrics_noise, "deviation environment algorithm ")
+
+    #robustness.collisiongraphs_no_noise(file)
     #scenario_displacement_occurence()
     #histogramm()
 

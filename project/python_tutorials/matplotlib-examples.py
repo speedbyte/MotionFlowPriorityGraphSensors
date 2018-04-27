@@ -297,6 +297,7 @@ def readradardata():
     radardata = pd.read_csv("<filename>", sep=" ", index_col=False)
 
 def vkitti():
+
     filename = "/local/git/MotionFlowPriorityGraphSensors/project/main/non_code/0001_fog.txt"
     mot_data = pd.read_csv(filename, sep=" ", index_col=False)
     print mot_data
@@ -304,6 +305,7 @@ def vkitti():
 
 if __name__ == '__main__':
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+
     objp = np.zeros((6*7,3), np.float32)
     objp[:,:2] = np.mgrid[0:7,0:6].T.reshape(-1,2)
     print objp
@@ -311,11 +313,11 @@ if __name__ == '__main__':
     #histogram()
     #cam()
     #histogram_image()
-    threedplot()
+    #threedplot()
     #boundingbox()
     #sphere()
     #criticalpoint()
-    #lemniscate()
+    lemniscate()
     #simple()
 
     #motionflow_vectorgraphs()

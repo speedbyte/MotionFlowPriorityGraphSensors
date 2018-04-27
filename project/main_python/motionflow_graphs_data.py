@@ -2,8 +2,8 @@
 # _*_ encoding:utf-8 _*_
 
 
-#environment_list = ["none","light_snow_", "mild_snow_", "heavy_snow_"]#night
-environment_list = ["none",]
+environment_list = ["none","light_snow_", "mild_snow_", "heavy_snow_"]#night
+#environment_list = ["none",]
 
 data_processing_list = ["0", "1", "2"]
 
