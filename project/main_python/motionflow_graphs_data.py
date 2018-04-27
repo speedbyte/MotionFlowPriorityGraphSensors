@@ -10,13 +10,8 @@ data_processing_list = ["0", "1", "2"]
 
 list_of_shape_metrics_no_noise = [
     "shape_pointsframe_skip1_dataprocessing_0_generated",
-    "shape_pointsframe_skip1_dataprocessing_0results_FB_none_",
-    "shape_pointsframe_skip1_dataprocessing_1results_FB_none_",
-    "shape_pointsframe_skip1_dataprocessing_2results_FB_none_",
-    "shape_pointsframe_skip1_dataprocessing_3results_FB_none_",
 ]
 color_of_shape_metrics_no_noise = ["blue", "red", "green", "yellow", "black"]
-assert(len(list_of_shape_metrics_no_noise) == len(color_of_shape_metrics_no_noise))
 
 
 list_of_shape_metrics_noise = [
@@ -47,14 +42,8 @@ assert(len(list_of_shape_metrics_noise)/4 == len(color_of_shape_metrics_noise))
 
 list_of_collision_metrics_no_noise = [
     "collision_pointsframe_skip1_dataprocessing_0_generated",
-    "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
-    "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
-    "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
-    "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
 ]
 color_of_collision_metrics_no_noise = ["blue", "red", "green", "yellow", "black"]
-assert(len(list_of_collision_metrics_no_noise) == len(color_of_collision_metrics_no_noise))
-
 
 
 list_of_collision_metrics_noise = [

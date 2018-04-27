@@ -57,7 +57,7 @@ def getDeviationPoints(data_points_gt, data_points ):
     return x_axis, y_axis, y_axis_mean
 
 
-def getCollisionPoints(data_points):
+def getCollisionPoints(data_points_gt, data_points):
 
     data = list()
 
@@ -140,8 +140,6 @@ def getNewShape(data_points_gt, data_points):
     data = numpy.array(newshape)
     x0_gt, y0_gt = data.T
 
-
-
     data = list()
 
     for count in range(len(data_points)):
@@ -210,17 +208,22 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
     lower = 0; upper = 0;
 
 
+    # Ground Truth
     if ( metrics == "deviation"):
-        data_points_gt = yaml_load[list_of_collision_metrics_no_noise[yaml_list_index_offset]]
-        print "getting " , list_of_collision_metrics_no_noise[yaml_list_index_offset]
+        data_points_gt = yaml_load[list_of_collision_metrics_no_noise[0]]
+        print "getting " , list_of_collision_metrics_no_noise[0]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = getDeviationPoints(data_points_gt, data_points_gt)
-    else:
-        data_points_gt = yaml_load[list_of_shape_metrics_no_noise[yaml_list_index_offset]]
+    elif ( metrics == "pixel"):
+        data_points_gt = yaml_load[list_of_shape_metrics_no_noise[0]]
         print "getting " , list_of_collision_metrics_no_noise[yaml_list_index_offset]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = getNewShape(data_points_gt, data_points_gt)
+    else:
+        data_points_gt = yaml_load[list_of_collision_metrics_no_noise[0]]
+        print "getting " , list_of_collision_metrics_no_noise[0]
+        x_axis_gt, y_axis_gt, y_axis_gt_mean = getCollisionPoints(data_points_gt, data_points_gt)
 
 
-    if ( noise == "no_noise"):
+    if ( noise == "no_noise" ):
         figures = Figures(1)
     else:
         figures = Figures(len(data_processing_list))
@@ -242,12 +245,14 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
         for x in range(len(data_processing_list)):
 
             if ( noise == "no_noise"):
-                data_points = yaml_load[data_list[yaml_list_index_offset+1+x]]
-                print "getting " , data_list[yaml_list_index_offset+1+x]
+                data_points = yaml_load[data_list[yaml_list_index_offset+x]]
+                print "getting " , data_list[yaml_list_index_offset+x]
                 if ( metrics == "deviation"):
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
-                else:
+                elif ( metrics == "pixel"):
                     x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
+                else:
+                    x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points_gt, data_points)
 
                 x_axis_list.append(x_axis)
                 y_axis_list.append(y_axis)
@@ -258,8 +263,10 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
                 print "getting " , data_list[yaml_list_index_offset+x]
                 if ( metrics == "deviation"):
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
-                else:
+                elif ( metrics == "pixel"):
                     x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
+                else:
+                    x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points_gt, data_points)
 
                 x_axis_list = [x_axis]
                 y_axis_list = [y_axis]
@@ -317,62 +324,6 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
     figures.save_figure(metrics, noise)
 
 
-def collisiongraphs_no_noise(file, metrics, noise, data_list, color_list, label):
-
-
-    yaml_list_index_offset=0
-
-    yaml_file_handle = YAMLParser(file)
-    yaml_load = yaml_file_handle.load()
-
-    #plotters
-    x_axis_list = list()
-    y_axis_list = list()
-
-    #means
-    mean_list = list()
-
-    lower = 0; upper = 0;
-
-    print "Table 3 Collision with " + environment_list[0] + " noise "
-    data_points = yaml_load[list_of_collision_metrics_no_noise[yaml_list_index_offset]]
-    x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points)
-
-    mean_list.append(y_axis_mean)
-
-    x_axis_list.append(x_axis)
-    y_axis_list.append(y_axis)
-
-    yaml_list_index_offset=0
-
-    for x in range(len(data_processing_list)):
-
-        data_points = yaml_load[list_of_collision_metrics_no_noise[yaml_list_index_offset+1+x]]
-        x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points)
-
-        mean_list.append(y_axis_mean)
-
-        x_axis_list.append(x_axis)
-        y_axis_list.append(y_axis)
-
-        lower = min(numpy.nanmin(y_axis), lower)
-        upper = max(numpy.nanmax(y_axis), upper)
-
-    plot2 = ('X', 'Y',
-             x_axis_list,
-             y_axis_list,
-             color_list,
-             data_list,
-             label,
-             lower,
-             upper,
-             )
-
-    print mean_list
-
-    figures = Figures(1)
-    figures.plot_all([plot2], 0)
-    figures.plot_show_vector_coll_no_noise()
 
 
 
