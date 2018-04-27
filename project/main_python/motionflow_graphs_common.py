@@ -76,9 +76,6 @@ class Figures(object):
 
             for x in range(len(plot_configuration)):
 
-                print plot_number[figure_index][2][x]
-                print plot_number[figure_index][3][x]
-
                 self.list_of_figures[figure_index].plot(plot_number[figure_index][2][x],
                                                          plot_number[figure_index][3][x]/SCALE, 'ko-', lw=1,
                                                          color=plot_number[figure_index][4][x+no_of_metrics],

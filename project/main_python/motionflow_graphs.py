@@ -181,12 +181,12 @@ if __name__ == '__main__':
     data_list_pixel = list_of_shape_metrics_noise
 
     robustness.robustness_(file, "pixel", "no_noise", list_of_shape_metrics_no_noise, color_of_shape_metrics_no_noise, "jaccard index no noise all algorithm")
-    robustness.robustness_(file, "pixel", "noise", list_of_shape_metrics_noise, color_of_shape_metrics_noise, "jaccard index environment algorithm ")
-
     robustness.robustness_(file, "deviation", "no_noise", list_of_collision_metrics_no_noise, color_of_collision_metrics_no_noise, "deviation no noise all algorithm ")
+
+    robustness.robustness_(file, "pixel", "noise", list_of_shape_metrics_noise, color_of_shape_metrics_noise, "jaccard index environment algorithm ")
     robustness.robustness_(file, "deviation", "noise" , list_of_collision_metrics_noise, color_of_collision_metrics_noise, "deviation environment algorithm ")
 
-    #robustness.collisiongraphs_no_noise(file)
+    robustness.collisiongraphs_no_noise(file, "collision", "no_noise", list_of_collision_metrics_no_noise, color_of_collision_metrics_no_noise, "collision points no noise all algorithm")
     #scenario_displacement_occurence()
     #histogramm()
 

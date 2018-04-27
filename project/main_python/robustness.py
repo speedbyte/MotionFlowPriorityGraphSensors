@@ -227,7 +227,7 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
 
     for env_index in range(len(environment_list)):
 
-        print "Table " + metrics + " robustness with " + environment_list[env_index] + " noise "
+        print "Table " + metrics + " robustness with " + environment_list[env_index] + " " + noise
 
         mean_list = list()
         mean_list.append(y_axis_gt_mean)
@@ -317,7 +317,7 @@ def robustness_(file, metrics, noise, data_list, color_list, label):
     figures.save_figure(metrics, noise)
 
 
-def collisiongraphs_no_noise(file):
+def collisiongraphs_no_noise(file, metrics, noise, data_list, color_list, label):
 
 
     yaml_list_index_offset=0
@@ -361,9 +361,9 @@ def collisiongraphs_no_noise(file):
     plot2 = ('X', 'Y',
              x_axis_list,
              y_axis_list,
-             color_of_collision_metrics_no_noise,
-             list_of_collision_metrics_no_noise,
-             "collision points dataprocessing 0",
+             color_list,
+             data_list,
+             label,
              lower,
              upper,
              )
