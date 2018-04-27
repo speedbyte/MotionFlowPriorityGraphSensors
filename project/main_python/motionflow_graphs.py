@@ -175,11 +175,11 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    vector_robustness.pixelgraphs_no_noise(file)
-    vector_robustness.pixelgraphs_noise(file, "pixel")
+    vector_robustness.robustness_no_noise(file, "pixel")
+    vector_robustness.robustness_noise(file, "pixel")
     vector_robustness.collisiongraphs_no_noise(file)
-    vector_robustness.deviationgraphs_no_noise(file)
-    vector_robustness.pixelgraphs_noise(file, "deviation")
+    vector_robustness.robustness_no_noise(file, "deviation")
+    vector_robustness.robustness_noise(file, "deviation")
     #scenario_displacement_occurence()
     #histogramm()
 

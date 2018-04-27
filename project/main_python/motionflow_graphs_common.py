@@ -57,13 +57,13 @@ class Figures(object):
         #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
         #self.fig1.set_size_inches(18.5, 10.5)
 
+
     def plot_3d(self, number_of_plots):
 
         self.ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
 
 
     def plot_all(self, number_of_plots, no_of_metrics):
-
 
         assert(self.figure_index == len(number_of_plots))
 
@@ -90,21 +90,12 @@ class Figures(object):
                                                               number_of_plots[figure_index][8]])
 
 
-    def plot_show_vector_dev_no_noise(self):
-
-        self.fig1.savefig(output_folder + 'deviation_plot', bbox_inches='tight',dpi=200)
-
-
     def plot_show_vector_coll_no_noise(self):
 
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
-    def plot_show_shape_no_noise(self):
-
-        self.fig1.savefig(output_folder + 'pixel_robustness_optical_flow.png', bbox_inches='tight',dpi=200)
-
-    def plot_show_vector_noise(self, metrics):
+    def plot_robustness(self, metrics):
 
         if ( self.figure_index >= 1 ):
             self.fig1.savefig(output_folder + metrics + '_robustness_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
