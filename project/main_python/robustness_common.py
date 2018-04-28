@@ -230,7 +230,9 @@ def getObjectDisplacement(data_points_gt, data_points):
     count = 0
     for n,i in enumerate(y_axis):
         if ( i == i ):
+            print i
             count = count+1
             y_axis_mean=y_axis_mean+i
 
+    y_axis_mean = y_axis_mean/(count)
     return x_axis, y_axis, y_axis_mean

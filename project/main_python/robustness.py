@@ -109,7 +109,6 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
 
             mean_list.append(y_axis_mean)
 
-
             lower = min(numpy.nanmin(y_axis), lower)
             upper = max(numpy.nanmax(y_axis), upper)
 
