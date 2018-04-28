@@ -2,8 +2,8 @@
 # _*_ encoding:utf-8 _*_
 
 
-environment_list = ["none", "light_snow_", "mild_snow_", "heavy_snow_"]#night
-environment_list = ["none",]
+environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"]#night
+#environment_list = ["none",]
 
 step_list = ["1", "2", "3", "4"]#night
 step_list = ["1",]

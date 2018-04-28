@@ -176,16 +176,21 @@ if __name__ == '__main__':
 
     step_size = 1
     fps = 30
-    
+
+    list_of_pixel_density_noise = list()
+    list_of_collision_noise = list()
+
     if ( evaluation == "environment"):
         current_list = environment_list
 
         for n, i in enumerate(current_list):
-            list_of_pixel_density_noise = map(lambda x : (x + i + "_" + fps_list[0] + '_' + step_list[0] + '_'), template_of_pixel_density[n:n*4+4])
+            temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + step_list[0] + '_'), template_of_pixel_density[n*4:n*4+4])
+            list_of_pixel_density_noise += temp_list
         print list_of_pixel_density_noise
 
         for n, i in enumerate(current_list):
-            list_of_collision_noise = map(lambda x : (x + i + "_" + fps_list[0] + '_' + step_list[0] + '_'), template_of_collision[n:n*4+4])
+            temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + step_list[0] + '_'), template_of_collision[n*4:n*4+4])
+            list_of_collision_noise += temp_list
         print list_of_collision_noise
 
 

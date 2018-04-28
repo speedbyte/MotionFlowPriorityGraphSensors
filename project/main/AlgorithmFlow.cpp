@@ -371,7 +371,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
                             auto COUNT = m_list_simulated_objects_base.size();
-                            assert(COUNT==0);
+                            //assert(COUNT==0);
                             //std::cout << next_pts_array << std::endl;
                             for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                                 for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
@@ -404,7 +404,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         }
                         else {
 
-                            assert(m_list_simulated_objects.size() == m_list_simulated_objects_base.size());
+                            //assert(m_list_simulated_objects.size() == m_list_simulated_objects_base.size());
                             std::cout << "making a stencil on the basis of base algorithm object " << m_list_simulated_objects_base.at(obj_index)->getObjectId() << std::endl;
 
 
@@ -426,16 +426,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                                         std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
                                                                        algo_displacement));
 
-                                                auto dist_gt = cv::norm(gt_displacement);
-                                                auto dist_err = std::abs(dist_gt - dist_algo);
-                                                if (dist_err < DISTANCE_ERROR_TOLERANCE) {
-                                                    auto angle_err = std::cosh(
-                                                            algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
-                                                    if (((std::abs(angle_err)) < ANGLE_ERROR_TOLERANCE)) {
-                                                        // stencil_movement.at(obj_index).push_back(std::make_pair(cv::Point2f(roi_offset.x + x,roi_offset.y + y), algo_displacement));
-                                                    }
-                                                }
-                                                base_movement.at(obj_index).push_back(
+                                               base_movement.at(obj_index).push_back(
                                                         std::make_pair(cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
                                                                        algo_displacement));
                                                 base_visibility.at(obj_index).push_back(visibility);

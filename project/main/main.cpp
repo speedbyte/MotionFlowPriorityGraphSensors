@@ -245,8 +245,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"none"};
+    const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
+    //const std::vector<std::string> environment_list = {"none"};
 
     for (ushort frame_skip = 0;  frame_skip < MAX_SKIPS_REAL; frame_skip++) {
 
@@ -347,105 +347,112 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             }
         }
 
-        /*
-         To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
-         */
-        std::vector<SimulatedObjects> list_of_simulated_objects_base;
-
-        std::vector<Objects *> ptr_list_of_simulated_objects;
-        std::vector<AlgorithmFlow> list_of_algorithm_flow;
-
-        for (ushort obj_count = 0; obj_count < environment_list.size(); obj_count++) {
-            AlgorithmFlow fback(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                    ptr_list_of_simulated_objects);
-            list_of_algorithm_flow.push_back(fback);
-        }
-
-        // Generate Algorithm data flow --------------------------------------
-        for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
-
-            if (cpp_dataset.execute || vires_dataset.execute) {
-
-                std::vector<SimulatedObjects> list_of_simulated_objects;
-                ptr_list_of_simulated_objects.clear();
-                SimulatedObjects::SimulatedobjectCurrentCount = 0;
-
-                list_of_simulated_objects.clear();
-                for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
-                    //two objects
-                    int width = list_of_gt_objects_base.at(obj_count).getInertialWidth();
-                    int height = list_of_gt_objects_base.at(obj_count).getInertialHeight();
-                    std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
-                            obj_count).get_obj_extrapolated_visibility();
-
-                    SimulatedObjects objects(("simulated_" + list_of_gt_objects_base.at(obj_count).getObjectName()), width,
-                            height, extrapolated_visibility);
-                    list_of_simulated_objects.push_back(objects);
-                }
-
-                for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
-                    ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_count));
-                }
-
-                ushort fps = 30;
-                ushort stepSize = 1;
-
-                if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
-
-                    list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index], fps, stepSize);
-                    list_of_algorithm_flow[env_index].generate_edge_contour();
-
-                    if (environment_list[env_index] == "none") { // store the stimulated objects from the ground run.
-
-                        for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
-                            list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_count));
-                        }
-                        for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
-                            ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_count));
-                        }
-                    }
-
-                    for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
-                        list_of_simulated_objects.at(i)
-                                .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(
-                                        list_of_simulated_objects.at(
-                                                i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(),
-                                        list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(),
-                                        list_of_simulated_objects.at(
-                                                i).get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "algorithm");
-                        list_of_simulated_objects.at(i).generate_obj_line_parameters("algorithm");
-                    }
-
-                    list_of_algorithm_flow[env_index].generate_collision_points();
-                    list_of_algorithm_flow[env_index].generate_shape_points();
-                    list_of_algorithm_flow[env_index].generate_mean_displacement_points();
-                    if (env_index == environment_list.size() - 1) {
-                        //list_of_algorithm_flow[env_index].visualiseStencil();
-                    }
-                }
-            }
-        }
+        std::vector<AlgorithmFlow> dummy;
 
         PixelRobustness pixelRobustness(fs);
         VectorRobustness vectorRobustness(fs);
 
         if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
 
-            pixelRobustness.generatePixelRobustness(gt_flow, list_of_algorithm_flow[0]);
-            vectorRobustness.generateVectorRobustness(gt_flow, list_of_algorithm_flow[0]);
+            pixelRobustness.generatePixelRobustness(gt_flow, dummy[0]);
+            vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
             vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
+
+        }
+
+
+        ushort fps = 30;
+        /*
+         To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
+         */
+
+        for ( ushort stepSize = 1; stepSize <= 2; stepSize++) {
+
+            std::vector<SimulatedObjects> list_of_simulated_objects_base;
+
+            std::vector<Objects *> ptr_list_of_simulated_objects;
+            std::vector<AlgorithmFlow> list_of_algorithm_flow;
+
+            for (ushort obj_count = 0; obj_count < environment_list.size(); obj_count++) {
+                AlgorithmFlow fback(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                                    ptr_list_of_simulated_objects);
+                list_of_algorithm_flow.push_back(fback);
+            }
+
+            // Generate Algorithm data flow --------------------------------------
+            for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+
+                if (cpp_dataset.execute || vires_dataset.execute) {
+
+                    std::vector<SimulatedObjects> list_of_simulated_objects;
+                    ptr_list_of_simulated_objects.clear();
+                    SimulatedObjects::SimulatedobjectCurrentCount = 0;
+
+                    list_of_simulated_objects.clear();
+                    for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
+                        //two objects
+                        int width = list_of_gt_objects_base.at(obj_count).getInertialWidth();
+                        int height = list_of_gt_objects_base.at(obj_count).getInertialHeight();
+                        std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
+                                obj_count).get_obj_extrapolated_visibility();
+
+                        SimulatedObjects objects(("simulated_" + list_of_gt_objects_base.at(obj_count).getObjectName()), width,
+                                                 height, extrapolated_visibility);
+                        list_of_simulated_objects.push_back(objects);
+                    }
+
+                    for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
+                        ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_count));
+                    }
+
+
+                    if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
+
+                        list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index], fps, stepSize);
+                        list_of_algorithm_flow[env_index].generate_edge_contour();
+
+                        if (environment_list[env_index] == "none") { // store the stimulated objects from the ground run.
+
+                            for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
+                                list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_count));
+                            }
+                            for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
+                                ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_count));
+                            }
+                        }
+
+                        for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
+                            list_of_simulated_objects.at(i)
+                                    .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(
+                                            list_of_simulated_objects.at(
+                                                    i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(),
+                                            list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(),
+                                            list_of_simulated_objects.at(
+                                                    i).get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "algorithm");
+                            list_of_simulated_objects.at(i).generate_obj_line_parameters("algorithm");
+                        }
+
+                        list_of_algorithm_flow[env_index].generate_collision_points();
+                        list_of_algorithm_flow[env_index].generate_shape_points();
+                        list_of_algorithm_flow[env_index].generate_mean_displacement_points();
+                        if (env_index == environment_list.size() - 1) {
+                            //list_of_algorithm_flow[env_index].visualiseStencil();
+                        }
+                    }
+                }
+            }
 
 
             if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
                     pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                     vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
+                    //vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
                 }
             }
+            fs.release();
 
         }
-        fs.release();
 
     }
 
