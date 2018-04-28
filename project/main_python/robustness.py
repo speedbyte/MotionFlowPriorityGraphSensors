@@ -6,11 +6,13 @@ from motionflow_graphs_data import *
 
 from robustness_common import *
 
+
 summary_mean = dict()
 
-
-
 def robustness_(file, measuring_parameter, noise, data_list, color_list, label, stepSize):
+
+
+    summary_mean.clear()
 
     yaml_list_index_offset=0
 
@@ -44,7 +46,7 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
     if ( noise == "no_noise" ):
         figures = Figures(1)
     else:
-        figures = Figures(len(data_processing_list))
+        figures = Figures(len(datafilter_list))
 
     for env_index in range(len(environment_list)):
 
@@ -60,7 +62,7 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
         x_axis_list.append(x_axis_gt)
         y_axis_list.append(y_axis_gt)
 
-        for x in range(len(data_processing_list)):
+        for x in range(len(datafilter_list)):
 
             if ( noise == "no_noise"):
                 data_points = yaml_load[data_list[yaml_list_index_offset+1+x]]

@@ -174,39 +174,27 @@ if __name__ == '__main__':
     command = "rm " + output_folder + "*.png"
     try:
         subprocess.check_output([command], shell='/usr/bin/bash')
-    except OSError as e:
-        print command
-        print e
-        exit(0)
+    except subprocess.CalledProcessError as e:
+        print e.returncode
+        if e.returncode != 1:
+            exit(0)
 
     for step_size in step_list:
 
         if ( evaluation == "environment"):
             current_list = environment_list
 
+        # ---------------------------------
+        if (0):
             list_of_pixel_density_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_pixel_density[n*4:n*4+4])
                 list_of_pixel_density_noise += temp_list
             print list_of_pixel_density_noise
 
-            list_of_collision_noise = list()
-            for n, i in enumerate(current_list):
-                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
-                list_of_collision_noise += temp_list
-            print list_of_collision_noise
-
-            list_of_obj_displacement_noise = list()
-            for n, i in enumerate(current_list):
-                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_obj_displacement[n*4:n*4+4])
-                list_of_obj_displacement_noise += temp_list
-            print list_of_obj_displacement_noise
-
-        # ---------------------------------
-        if (0):
             custom_data_list_pixel = list()
             custom_data_list_pixel.append(list_of_pixel_density_ground_truth[0])
-            for x in range(len(data_processing_list)):
+            for x in range(len(datafilter_list)):
                 custom_data_list_pixel.append(list_of_pixel_density_noise[x])
 
             robustness.robustness_(file, "pixel", "no_noise", custom_data_list_pixel, color_list, "jaccard index no noise all algorithm", str(step_size))
@@ -219,9 +207,15 @@ if __name__ == '__main__':
 
         # ---------------------------------
         if (0):
+            list_of_collision_noise = list()
+            for n, i in enumerate(current_list):
+                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
+                list_of_collision_noise += temp_list
+            print list_of_collision_noise
+
             custom_data_list_deviation = list()
             custom_data_list_deviation.append(list_of_collision_ground_truth[0])
-            for x in range(len(data_processing_list)):
+            for x in range(len(datafilter_list)):
                 custom_data_list_deviation.append(list_of_collision_noise[x])
 
             robustness.robustness_(file, "deviation", "no_noise", custom_data_list_deviation, color_list, "deviation no noise all algorithm ", str(step_size))
@@ -235,9 +229,15 @@ if __name__ == '__main__':
 
         # ---------------------------------
         if (1):
+            list_of_obj_displacement_noise = list()
+            for n, i in enumerate(current_list):
+                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_obj_displacement[n*4:n*4+4])
+                list_of_obj_displacement_noise += temp_list
+            print list_of_obj_displacement_noise
+
             custom_data_list_obj_displacement = list()
             custom_data_list_obj_displacement.append(list_of_obj_displacement_ground_truth[0])
-            for x in range(len(data_processing_list)):
+            for x in range(len(datafilter_list)):
                 custom_data_list_obj_displacement.append(list_of_obj_displacement_noise[x])
 
             robustness.robustness_(file, "obj_displacement", "no_noise", custom_data_list_obj_displacement, color_list, "obj_displacement no noise all algorithm ", str(step_size))
@@ -245,7 +245,7 @@ if __name__ == '__main__':
 
             summary = robustness.get_summary()
             figures = Figures(1)
-            #figures.evaluate_obj_displacement(summary)
+            figures.evaluate_obj_displacement(summary)
             figures.save_figure("obj_displacement", "summary", str(step_size))
 
         #scenario_displacement_occurence()

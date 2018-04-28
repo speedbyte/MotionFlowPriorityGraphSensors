@@ -74,10 +74,16 @@ class Figures(object):
 
             for x in range(len(plot_configuration)):
 
-                self.list_of_figures[figure_index].plot(plot_number[figure_index][2][x],
-                                                         plot_number[figure_index][3][x]/SCALE, 'ko-', lw=1,
-                                                         color=plot_number[figure_index][4][x+measuring_parameter],
-                                                         label=plot_number[figure_index][5][4*measuring_parameter+figure_index+x])
+                if ( measuring_parameter == "obj_displacement"):
+                    self.list_of_figures[figure_index].scatter(plot_number[figure_index][2][x],
+                                                            plot_number[figure_index][3][x]/SCALE, 'ko-', lw=1,
+                                                            color=plot_number[figure_index][4][x+measuring_parameter],
+                                                            label=plot_number[figure_index][5][4*measuring_parameter+figure_index+x])
+                else:
+                    self.list_of_figures[figure_index].plot(plot_number[figure_index][2][x],
+                                                             plot_number[figure_index][3][x]/SCALE, 'ko-', lw=1,
+                                                             color=plot_number[figure_index][4][x+measuring_parameter],
+                                                             label=plot_number[figure_index][5][4*measuring_parameter+figure_index+x])
 
 
                 #self.list_of_figures[figure_index].legend(loc='upper right', shadow=True, fontsize='x-small')
@@ -199,6 +205,44 @@ class Figures(object):
 
         plt.tight_layout()
 
+
+    def evaluate_obj_displacement(self, summary):
+
+
+        n_groups = 4
+        bar_width = 0.15
+        opacity = 0.4
+        index = numpy.arange(len(environment_list))
+
+        ground_truth = list()
+        moving_avg = list()
+        voted_mean = list()
+        ranked_mean = list()
+
+        for x in range(len(environment_list)):
+            ground_truth.append((summary['obj_displacement_'+str(x)][0]))
+        rects1 = self.list_of_figures[0].bar(index, ground_truth, bar_width, color='#f2f2f2')
+
+        for x in range(len(environment_list)):
+            moving_avg.append((summary['obj_displacement_'+str(x)][1]))
+        rects2 = self.list_of_figures[0].bar(index+bar_width, moving_avg, bar_width, color='#cccccc')
+
+        for x in range(len(environment_list)):
+            voted_mean.append((summary['obj_displacement_'+str(x)][2]))
+        rects3 = self.list_of_figures[0].bar(index+2*bar_width, voted_mean, bar_width, color='#808080')
+
+        for x in range(len(environment_list)):
+            ranked_mean.append((summary['obj_displacement_'+str(x)][3]))
+        rects4 = self.list_of_figures[0].bar(index+3*bar_width, ranked_mean, bar_width, color='#000000')
+
+
+        plt.xlabel('Data Processing Algorithm')
+        plt.ylabel('Obj_displacement')
+        plt.title('Obj_displacement of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
+        plt.xticks(index + 2*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
+        plt.legend()
+
+        plt.tight_layout()
 
 
 class YAMLParser(object):

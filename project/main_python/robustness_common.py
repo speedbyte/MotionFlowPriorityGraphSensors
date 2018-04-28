@@ -101,9 +101,9 @@ def getNewShape(data_points_gt, data_points):
 
     for count in range(len(data_points_gt)):
         xy = list()
-        xy.append(data_points[count]["frame_count"][0])
-        xy.append(data_points[count]["pixel_density"][0])
-        xy.append(data_points[count]["pixel_density"][1])
+        xy.append(data_points_gt[count]["frame_count"][0])
+        xy.append(data_points_gt[count]["pixel_density"][0])
+        xy.append(data_points_gt[count]["pixel_density"][1])
         data.append(xy)
 
     newshape = list()
@@ -202,10 +202,10 @@ def getObjectDisplacement(data_points_gt, data_points):
 
     for count in range(len(data_points_gt)):
         xy = list()
-        xy.append(data_points[count]["objDim"][0])
-        xy.append(data_points[count]["objDim"][1])
-        xy.append(data_points[count]["objDisp"][0])
-        xy.append(data_points[count]["objDisp"][1])
+        xy.append(data_points_gt[count]["objDim"][0])
+        xy.append(data_points_gt[count]["objDim"][1])
+        xy.append(data_points_gt[count]["objDisp"][0])
+        xy.append(data_points_gt[count]["objDisp"][1])
         data.append(xy)
 
     data = numpy.array(data)
@@ -230,7 +230,6 @@ def getObjectDisplacement(data_points_gt, data_points):
     count = 0
     for n,i in enumerate(y_axis):
         if ( i == i ):
-            print i
             count = count+1
             y_axis_mean=y_axis_mean+i
 

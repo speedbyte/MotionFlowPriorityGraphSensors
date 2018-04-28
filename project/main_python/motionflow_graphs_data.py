@@ -19,9 +19,7 @@ fps_list = ["30",]
 
 evaluation = "environment"
 
-
-
-data_processing_list = ["0", "1", "2"]
+datafilter_list = ["0", "1", "2"]
 
 color_list = ["blue", "red", "green", "yellow", "black"]
 
