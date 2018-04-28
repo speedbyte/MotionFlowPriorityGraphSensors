@@ -170,11 +170,17 @@ def scenario_displacement_occurence():
 
 #    plt.close("all")
 
-
+import subprocess
 
 if __name__ == '__main__':
 
-
+    command = "rm " + output_folder + "*.png"
+    try:
+        subprocess.check_output([command], shell='/usr/bin/bash')
+    except OSError as e:
+        print command
+        print e
+        exit(0)
 
     for step_size in step_list:
         
@@ -215,7 +221,7 @@ if __name__ == '__main__':
         robustness.robustness_(file, "deviation", "no_noise", custom_data_list_deviation, color_list, "deviation no noise all algorithm ", str(step_size))
         robustness.robustness_(file, "deviation", "noise" , list_of_collision_noise, color_list, "deviation environment algorithm ", str(step_size))
 
-        #robustness.robustness_(file, "collision", "no_noise", custom_data_list_deviation, color_list, "collision points no noise all algorithm")
+        robustness.robustness_(file, "collision", "no_noise", custom_data_list_deviation, color_list, "collision points no noise all algorithm", str(step_size))
         #scenario_displacement_occurence()
         #histogramm()
 

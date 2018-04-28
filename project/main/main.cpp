@@ -346,12 +346,15 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         }
 
+        time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
+        tic = steady_clock::now();
+
         ushort fps = 30;
         /*
          To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
          */
 
-        for ( ushort stepSize = 1; stepSize <= 2; stepSize++) {
+        for ( ushort stepSize = 1; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=3) {
 
             std::vector<SimulatedObjects> list_of_simulated_objects_base;
 
@@ -360,7 +363,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             for (ushort obj_count = 0; obj_count < environment_list.size(); obj_count++) {
                 AlgorithmFlow fback(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                                    ptr_list_of_simulated_objects);
+                                    ptr_list_of_simulated_objects, stepSize);
                 list_of_algorithm_flow.push_back(fback);
             }
 
@@ -393,7 +396,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
-                        list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index], fps, stepSize);
+                        list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index], fps);
                         list_of_algorithm_flow[env_index].generate_edge_contour();
 
                         if (environment_list[env_index] == "none") { // store the stimulated objects from the ground run.
@@ -427,7 +430,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
             }
 
-            time_map["algorithm_flow"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count())/environment_list.size();
+            time_map["algorithm_flow"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
             tic = steady_clock::now();
 
             if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
@@ -438,7 +441,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
             }
 
-            time_map["robustness"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count())/environment_list.size();
+            time_map["robustness"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
             tic = steady_clock::now();
 
         }
@@ -450,10 +453,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
 
+    int total = 0;
     for ( auto &n : time_map )
     {
         std::cout << n.first << " " << n.second << std::endl;
+        total += n.second;
+
     }
+    std::cout << "unaccounted time = " << time_map["total"] - total << std::endl
 
 
 

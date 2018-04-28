@@ -409,7 +409,7 @@ void OpticalFlow::generate_shape_points() {
                             }
                         }*/
 
-                            baseTreffer = ((float) CLUSTER_COUNT_GT);
+                            baseTreffer = ((float) CLUSTER_COUNT_GT/mStepSize);
                         }
                         frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count, 0), cv::Point2f(vollTreffer, baseTreffer)));
 

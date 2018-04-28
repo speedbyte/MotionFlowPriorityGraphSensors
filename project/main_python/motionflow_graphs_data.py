@@ -12,8 +12,7 @@ dict_datafilters = {
 environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"]#night
 #environment_list = ["none",]
 
-step_list = [1, 2, 3, 4]
-step_list = [1, 2]
+step_list = [1, 4, 7]
 
 fps_list = ["30", "15", "10", "7.5"]#night
 fps_list = ["30",]

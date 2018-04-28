@@ -182,7 +182,7 @@ def getNewShape(data_points_gt, data_points):
     y_axis_mean = 0
     data = numpy.array(newshape)
     x0, y0 = data.T
-    y_axis = x0/y0_gt
+    y_axis = x0/y0   # dividing by total pixels gt considering step size
 
     count = 0
     for n,i in enumerate(y_axis):

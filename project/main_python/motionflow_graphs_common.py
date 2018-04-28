@@ -80,9 +80,9 @@ class Figures(object):
                                                          label=plot_number[figure_index][5][4*measuring_parameter+figure_index+x])
 
 
-                self.list_of_figures[figure_index].legend(loc='upper right', shadow=True, fontsize='x-small')
+                #self.list_of_figures[figure_index].legend(loc='upper right', shadow=True, fontsize='x-small')
 
-                self.list_of_figures[figure_index].legend()
+                #self.list_of_figures[figure_index].legend()
                 self.list_of_figures[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
                 self.list_of_figures[figure_index].set_title(plot_number[figure_index][6])
 

@@ -66,9 +66,9 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
     }
 }
 
-void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps, ushort stepSize ) {
+void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps ) {
 
-    prepare_directories(algo, frame_types, noise, fps, stepSize);
+    prepare_directories(algo, frame_types, noise, fps, mStepSize);
 
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
 
@@ -222,8 +222,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     //cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
                     prev_pts_array.clear();
                     next_pts_array.clear();
-                    for (int32_t row = 0; row < Dataset::getFrameSize().height; row += stepSize) { // rows
-                        for (int32_t col = 0; col < Dataset::getFrameSize().width; col += stepSize) {  // cols
+                    for (int32_t row = 0; row < Dataset::getFrameSize().height; row += mStepSize) { // rows
+                        for (int32_t col = 0; col < Dataset::getFrameSize().width; col += 1) {  // cols
 
                             cv::Point2f algorithmMovement ( flowFrame.at<cv::Point2f>(row, col).x, flowFrame
                                     .at<cv::Point2f>(row, col).y );

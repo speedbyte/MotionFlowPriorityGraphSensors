@@ -35,6 +35,8 @@ protected:
 
     std::vector<Objects *> &m_list_simulated_objects;
 
+    ushort mStepSize;
+
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_frame_skip_mean_displacement_points;
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_collision_points;
@@ -52,8 +54,8 @@ protected:
 
 public:
 
-    OpticalFlow( std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects_base, std::vector<Objects *> &list_simulated_objects ) :
-    m_list_gt_objects(list_gt_objects), m_list_simulated_objects_base(list_simulated_objects_base), m_list_simulated_objects(list_simulated_objects)  { };
+    OpticalFlow( std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects_base, std::vector<Objects *> &list_simulated_objects, ushort stepSize ) :
+    m_list_gt_objects(list_gt_objects), m_list_simulated_objects_base(list_simulated_objects_base), m_list_simulated_objects(list_simulated_objects), mStepSize(stepSize)  { };
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getCollisionPoints () const {
         return m_list_frame_skip_collision_points;
