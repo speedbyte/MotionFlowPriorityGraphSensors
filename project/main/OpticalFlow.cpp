@@ -264,7 +264,7 @@ void OpticalFlow::generate_shape_points() {
         list_of_current_objects = m_list_gt_objects;
     }
     else {
-        COUNT = DATA_PROCESSING_COUNT;
+        COUNT = DATAFILTER_COUNT;
         list_of_current_objects = m_list_simulated_objects;
     }
 
@@ -272,7 +272,7 @@ void OpticalFlow::generate_shape_points() {
 
     std::vector<std::map<std::pair<float, float>, int> > outer_frame_skip_scenario_displacement_occurence;
 
-    for (unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++) {
+    for (unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++) {
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_frame_skip_shape_points;
 
@@ -284,16 +284,16 @@ void OpticalFlow::generate_shape_points() {
             sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
             std::cout << "generating shape points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
-                    << " for dataprocessing " << data_processing_index << std::endl;
+                    << " for datafilter " << datafilter_index << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
-                    ->get_list_obj_shape_parameters().at(data_processing_index).at(frame_skip - 1).size();
+                    ->get_list_obj_shape_parameters().at(datafilter_index).at(frame_skip - 1).size();
 
             assert(FRAME_COUNT > 0);
 
             for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                std::cout << "frame_count " << frame_count << " for data_processing_index " << data_processing_index<< std::endl;
+                std::cout << "frame_count " << frame_count << " for datafilter_index " << datafilter_index<< std::endl;
 
 
                 cv::Point2f shape_average = {0, 0};
@@ -305,7 +305,7 @@ void OpticalFlow::generate_shape_points() {
                             obj_index)->get_list_obj_shape_parameters().at(0).at(frame_skip - 1).at(frame_count).size();
 
                     auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
-                            obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(frame_count).size();
+                            obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(frame_skip - 1).at(frame_count).size();
 
                     if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) ) {
 
@@ -328,7 +328,7 @@ void OpticalFlow::generate_shape_points() {
                             vollTreffer = CLUSTER_COUNT_GT;
                             baseTreffer = CLUSTER_COUNT_GT;
 
-                            if ( data_processing_index < 0 ) {
+                            if ( datafilter_index < 0 ) {
 
                                 if ( scenario_displacement_occurence.count(std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)) ) {
                                     scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] = scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] + CLUSTER_COUNT_GT;
@@ -350,10 +350,10 @@ void OpticalFlow::generate_shape_points() {
                             for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
                                 
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
-                                                get_list_obj_shape_parameters().at(data_processing_index
+                                                get_list_obj_shape_parameters().at(datafilter_index
                                                 ).at(frame_skip - 1).at(frame_count).at(cluster_count).second;
 
-                                if ( data_processing_index == 0 ) {
+                                if ( datafilter_index == 0 ) {
                                     if ( scenario_displacement_occurence.count(std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)) ) {
                                         scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] = scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] + 1;
                                     }
@@ -395,10 +395,10 @@ void OpticalFlow::generate_shape_points() {
                             /*
                             auto x_coordinates = list_of_current_objects.at(
                                     obj_index)->get_list_obj_shape_parameters().at
-                                    (frame_skip - 1).at(data_processing_index).at(frame_count).at(j).first.x;
+                                    (frame_skip - 1).at(datafilter_index).at(frame_count).at(j).first.x;
                             auto y_coordinates = list_of_current_objects.at(
                                     obj_index)->get_list_obj_shape_parameters().at
-                                    (frame_skip - 1).at(data_processing_index).at(frame_count).at(j).first.y;
+                                    (frame_skip - 1).at(datafilter_index).at(frame_count).at(j).first.y;
 
                             if ((x_coordinates > (columnBegin - width / STENCIL_GRID_EXTENDER)) &&
                                 (x_coordinates < (columnBegin + width + width / STENCIL_GRID_EXTENDER)) &&
@@ -456,14 +456,14 @@ void OpticalFlow::generate_mean_displacement_points() {
         list_of_current_objects = m_list_gt_objects;
     }
     else {
-        COUNT = DATA_PROCESSING_COUNT;
+        COUNT = DATAFILTER_COUNT;
         list_of_current_objects = m_list_simulated_objects;
     }
 
     char frame_skip_folder_suffix[50];
 
 
-    for (unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++) {
+    for (unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++) {
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_frame_skip_mean_displacement_points;
 
@@ -474,16 +474,16 @@ void OpticalFlow::generate_mean_displacement_points() {
             sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
             std::cout << "generating displacement points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
-                      << " for dataprocessing " << data_processing_index << std::endl;
+                      << " for datafilter " << datafilter_index << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
-                    ->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(data_processing_index).at(frame_skip - 1).size();
+                    ->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(datafilter_index).at(frame_skip - 1).size();
 
             assert(FRAME_COUNT > 0);
 
             for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                std::cout << "frame_count " << frame_count << " for data_processing_index " << data_processing_index<< std::endl;
+                std::cout << "frame_count " << frame_count << " for datafilter_index " << datafilter_index<< std::endl;
 
                 std::vector<std::pair<cv::Point2i, cv::Point2f> > frame_mean_displacement_points;
 
@@ -497,7 +497,7 @@ void OpticalFlow::generate_mean_displacement_points() {
                     if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(frame_skip - 1).at(frame_count) && frame_count != 0 ) {
 
                         cv::Point2f displacement = list_of_current_objects.at(obj_index)->
-                                get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(data_processing_index
+                                get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(datafilter_index
                         ).at(frame_skip - 1).at(frame_count).second;
 
 
@@ -553,7 +553,7 @@ void OpticalFlow::generate_collision_points() {
         list_of_current_objects_combination = list_of_gt_objects_combination;
     }
     else {
-        COUNT = DATA_PROCESSING_COUNT;
+        COUNT = DATAFILTER_COUNT;
         list_of_current_objects = m_list_simulated_objects;
         list_of_current_objects_combination = list_of_simulated_objects_combination;
     }
@@ -565,7 +565,7 @@ void OpticalFlow::generate_collision_points() {
     }
 
 
-    for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {
+    for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
         std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_collision_points;
         std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_line_angles;
@@ -578,7 +578,7 @@ void OpticalFlow::generate_collision_points() {
             sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
 
             std::cout << "generating collision points in OpticalFlow.cpp for " << m_resultordner << " " << frame_skip
-                    << " for dataprocessing " << data_processing_index << std::endl;
+                    << " for datafilter " << datafilter_index << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
                     ->get_line_parameters().at(0).at(frame_skip - 1).size();
@@ -587,7 +587,7 @@ void OpticalFlow::generate_collision_points() {
 
             for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                std::cout << "frame_count " << frame_count << " for data_processing_index " << data_processing_index<< std::endl;
+                std::cout << "frame_count " << frame_count << " for datafilter_index " << datafilter_index<< std::endl;
 
 
                 std::vector<cv::Point2f> frame_collision_points;
@@ -625,7 +625,7 @@ void OpticalFlow::generate_collision_points() {
                         // Then push_back the two points in the vector
 
                         cv::Point2f lineparameters1 = list_of_current_objects_combination.at(
-                                        obj_index).first->get_line_parameters().at(data_processing_index).at
+                                        obj_index).first->get_line_parameters().at(datafilter_index).at
                                         (frame_skip - 1)
                                 .at(frame_count);
 
@@ -646,7 +646,7 @@ void OpticalFlow::generate_collision_points() {
                                 frame_collision_points);
 
                         lineparameters1 = list_of_current_objects_combination.at(
-                                        obj_index).second->get_line_parameters().at(data_processing_index).at
+                                        obj_index).second->get_line_parameters().at(datafilter_index).at
                                         (frame_skip - 1)
                                 .at(frame_count);
 
@@ -777,7 +777,7 @@ void OpticalFlow::visualiseStencil(void) {
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
     FlowImageExtended F_png_write;
 
-    for ( unsigned data_processing_index = 0; data_processing_index < 4; data_processing_index++ ) {
+    for ( unsigned datafilter_index = 0; datafilter_index < 4; datafilter_index++ ) {
 
         for (int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
@@ -819,7 +819,7 @@ void OpticalFlow::visualiseStencil(void) {
                 tempGroundTruthImage = cv::Scalar::all(255);
 
                 sprintf(file_name_image_output, "000%03d_10_pixel_algo_%d.png", frame_count * frame_skip,
-                        data_processing_index);
+                        datafilter_index);
                 output_image_file_with_path =
                         m_generatepath.string() + "stencil/" + file_name_image_output;
 
@@ -830,13 +830,13 @@ void OpticalFlow::visualiseStencil(void) {
                     )) {
 
                         const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
-                                obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
+                                obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(frame_skip - 1).at(
                                 frame_count).size();
 
                         for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(
+                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
                                     frame_skip - 1).at(frame_count).at(cluster_index).first;
                             cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 0, 255), 1, 8);
 
@@ -850,7 +850,7 @@ void OpticalFlow::visualiseStencil(void) {
                 F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
                 sprintf(file_name_image_output, "000%03d_10_flow_base_%d.png", frame_count * frame_skip,
-                        data_processing_index);
+                        datafilter_index);
                 output_image_file_with_path =
                         m_generatepath.string() + "stencil/" + file_name_image_output;
 
@@ -862,17 +862,17 @@ void OpticalFlow::visualiseStencil(void) {
                     )) {
 
                         const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
-                                obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
+                                obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(frame_skip - 1).at(
                                 frame_count).size();
 
                         for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(
+                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
                                     frame_skip - 1).at(frame_count).at(cluster_index).first;
 
                             cv::Point2f displacement = m_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(
+                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
                                     frame_skip - 1).at(frame_count).at(cluster_index).second;
 
                             cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
@@ -893,7 +893,7 @@ void OpticalFlow::visualiseStencil(void) {
                 F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
                 sprintf(file_name_image_output, "000%03d_10_flow_algo_%d.png", frame_count * frame_skip,
-                        data_processing_index);
+                        datafilter_index);
                 output_image_file_with_path =
                         m_generatepath.string() + "stencil/" + file_name_image_output;
 
@@ -905,17 +905,17 @@ void OpticalFlow::visualiseStencil(void) {
                     )) {
 
                         const unsigned CLUSTER_SIZE = (unsigned) m_list_simulated_objects.at(
-                                obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(frame_skip - 1).at(
+                                obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(frame_skip - 1).at(
                                 frame_count).size();
 
                         for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(
+                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
                                     frame_skip - 1).at(frame_count).at(cluster_index).first;
 
                             cv::Point2f displacement = m_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(data_processing_index).at(
+                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
                                     frame_skip - 1).at(frame_count).at(cluster_index).second;
 
                             cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);

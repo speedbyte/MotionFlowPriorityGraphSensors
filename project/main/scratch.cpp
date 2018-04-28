@@ -440,3 +440,20 @@ void calcBBFrom3DPosition(int screen_width, int screen_height, QVector3D cam_pos
     m_bb.setTopLeft(min);
     m_bb.setBottomRight(max);
 }
+
+
+
+auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
+
+pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
+// gnuplot_2d
+Gnuplot gp2d;
+gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";
+gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
+std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGroundTruthPath().string() +
+                  std::string(" y axis - ms, x axis - image_02_frame\n'");
+//gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
+
+for(auto &n : time)
+sum_time +=n;
+

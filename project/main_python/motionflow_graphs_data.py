@@ -2,6 +2,13 @@
 # _*_ encoding:utf-8 _*_
 
 
+dict_datafilters = {
+    "datafilter_0" : "moving_average",
+    "datafilter_1" : "voted_mean",
+    "datafilter_2" : "ranked_mean",
+    "datafilter_3" : "something",
+}
+
 environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"]#night
 #environment_list = ["none",]
 

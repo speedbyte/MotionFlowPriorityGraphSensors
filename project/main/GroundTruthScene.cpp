@@ -326,7 +326,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
     for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-        //std::string temp_str = "frame_skip" + frame_skip;
+        //std::string temp_str = "_frame_skip_" + frame_skip;
         char temp_str_fs[20];
         sprintf(temp_str_fs, "frame_skip_%03d", frame_skip);
         std::cout << "read yaml file for frame_skip " << (frame_skip - 1) << std::endl;

@@ -512,24 +512,24 @@ void Objects::generate_obj_line_parameters( std::string post_processing_algorith
         COUNT = 1;
     }
     else {
-        COUNT = DATA_PROCESSING_COUNT;
+        COUNT = DATAFILTER_COUNT;
     }
 
     std::vector<std::vector<std::vector<cv::Point2f > > > list_obj_line_parameters;
 
 
-    for ( unsigned data_processing_index = 0; data_processing_index < COUNT; data_processing_index++ ) {
+    for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
         std::vector<std::vector<cv::Point2f > > outer_line_parameters;
 
         for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
 
-            std::cout << "generate_obj_line_parameters for frame_skip " << frame_skip << " for data_processing_indeX " << data_processing_index << " for object name " << m_objectName << " " << std::endl;
+            std::cout << "generate_obj_line_parameters for frame_skip " << frame_skip << " for datafilter_index " << datafilter_index << " for object name " << m_objectName << " " << std::endl;
 
             std::vector<cv::Point2f > frame_line_parameters;
 
             const unsigned long FRAME_COUNT =
-                    m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(data_processing_index).at
+                    m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
                             (frame_skip - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -538,10 +538,10 @@ void Objects::generate_obj_line_parameters( std::string post_processing_algorith
                 if (m_obj_extrapolated_mean_visibility.at(frame_skip - 1).at(frame_count) == true) {
 
                     if ( frame_count > 0 ) {
-                        cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(data_processing_index).at
+                        cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
                                 (frame_skip-1).at(frame_count).first;
                         cv::Point2f mean_displacement_vector =
-                                m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(data_processing_index).at
+                                m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
                                         (frame_skip-1).at(frame_count).second;
 
                         float m, c;

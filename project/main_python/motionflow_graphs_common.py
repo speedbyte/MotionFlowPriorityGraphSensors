@@ -15,7 +15,7 @@ import scipy
 from scipy.interpolate import griddata
 from math import pi
 
-from motionflow_graphs_data import environment_list
+from motionflow_graphs_data import environment_list, dict_datafilters
 
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
@@ -95,16 +95,16 @@ class Figures(object):
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
-    def save_figure(self, measuring_parameter, noise):
+    def save_figure(self, measuring_parameter, noise, stepSize):
 
         if ( self.figure_index >= 1 ):
-            self.fig1.savefig(output_folder + measuring_parameter + '_' + noise + '_data_processing_algorithm_0', bbox_inches='tight',dpi=200)
+            self.fig1.savefig(output_folder + measuring_parameter + '_' + noise + dict_datafilters["datafilter_0"] + "stepSize_" + str(stepSize), bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 2 ):
-            self.fig2.savefig(output_folder + measuring_parameter + '_' + noise + '_data_processing_algorithm_1', bbox_inches='tight',dpi=200)
+            self.fig2.savefig(output_folder + measuring_parameter + '_' + noise + dict_datafilters["datafilter_1"] + "stepSize_" + str(stepSize), bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 3 ):
-            self.fig3.savefig(output_folder + measuring_parameter + '_' + noise + '_data_processing_algorithm_2', bbox_inches='tight',dpi=200)
+            self.fig3.savefig(output_folder + measuring_parameter + '_' + noise + dict_datafilters["datafilter_2"] + "stepSize_" + str(stepSize), bbox_inches='tight',dpi=200)
         if ( self.figure_index >= 4 ):
-            self.fig4.savefig(output_folder + measuring_parameter + '_' + noise + '_data_processing_algorithm_3', bbox_inches='tight',dpi=200)
+            self.fig4.savefig(output_folder + measuring_parameter + '_' + noise + dict_datafilters["datafilter_3"] + "stepSize_" + str(stepSize), bbox_inches='tight',dpi=200)
 
 
     def plot_close_all(self):

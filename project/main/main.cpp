@@ -206,17 +206,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     /* CPP_DATASET ------------- */
 
-    std::map<std::string, double> time_map = {{"generate",0},
-            {"ground truth", 0},
-            {"FB", 0},
-            {"LK", 0},
-            {"movement", 0},
-            {"collision", 0},
-    };
-
-    std::map<ALGO_TYPES, std::string> algo_map = {{fb, "FB"}, {lk, "LK"},
-    };
-
+    std::map<std::string, double> time_map;
 
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
@@ -224,17 +214,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::vector<float> time;
     double sum_time = 0;
     std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
-
-    auto tic = steady_clock::now();
-    auto toc = steady_clock::now();
-    tic = steady_clock::now();
-
-    ALGO_TYPES algo;
-
-    toc = steady_clock::now();
-    time_map[algo_map[algo]] = duration_cast<milliseconds>(toc - tic).count();
-    y_pts.push_back(time_map[algo_map[algo]]);
-    time.push_back(duration_cast<milliseconds>(toc - tic).count());
 
     ushort depth = CV_8U;
     ushort cn = 3;
@@ -247,6 +226,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //std::vector < std::string> environment_list = {"none", "night"};
     const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
     //const std::vector<std::string> environment_list = {"none"};
+
+    auto tic_all = steady_clock::now();
+    auto tic = steady_clock::now();
 
     for (ushort frame_skip = 0;  frame_skip < MAX_SKIPS_REAL; frame_skip++) {
 
@@ -347,6 +329,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             }
         }
 
+        time_map["groundtruth_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
+        tic = steady_clock::now();
+
+
         std::vector<AlgorithmFlow> dummy;
 
         PixelRobustness pixelRobustness(fs);
@@ -359,7 +345,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
 
         }
-
 
         ushort fps = 30;
         /*
@@ -442,6 +427,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
             }
 
+            time_map["algorithm_flow"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count())/environment_list.size();
+            tic = steady_clock::now();
 
             if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
@@ -450,47 +437,23 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     //vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
                 }
             }
-            fs.release();
+
+            time_map["robustness"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count())/environment_list.size();
+            tic = steady_clock::now();
 
         }
 
+        fs.release();
+
+
     }
 
-/*
-    for(auto &n : time)
-        sum_time +=n;
+    time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
 
-    std::cout << "Noise " << noise  << ", Zeit " << sum_time << std::endl;
-    std::cout << "time_map LK " << time_map["LK"] << std::endl;
-
-    auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
-
-    pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
-    // gnuplot_2d
-    Gnuplot gp2d;
-    gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";
-    gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-    std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGroundTruthPath().string() +
-            std::string(" y axis - ms, x axis - image_02_frame\n'");
-    //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
-
-    toc_all = steady_clock::now();
-    time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << m_resultordner + " shape generation time - " << time_map["generate_flow"] << "ms" << std::endl;
-
-    auto toc = steady_clock::now();
-    time_map["generate_single_scene_image"] = duration_cast<milliseconds>(toc - tic).count();
-
-    auto toc_all = steady_clock::now();
-    time_map["generate_all_scene_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-
-    std::cout << "ground truth scene generation complete- " << time_map["generate_all_scene_image"] << "ms" << std::endl;
-
-    toc_all = steady_clock::now();
-    time_map["generate_flow"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-
-    */
-
+    for ( auto &n : time_map )
+    {
+        std::cout << n.first << " " << n.second;
+    }
 
 
 

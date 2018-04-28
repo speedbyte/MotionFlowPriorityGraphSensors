@@ -10,7 +10,7 @@ summary_mean = dict()
 
 
 
-def robustness_(file, measuring_parameter, noise, data_list, color_list, label):
+def robustness_(file, measuring_parameter, noise, data_list, color_list, label, stepSize):
 
     yaml_list_index_offset=0
 
@@ -139,7 +139,7 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label):
         if (noise == "no_noise" ):
             break
 
-    figures.save_figure(measuring_parameter, noise)
+    figures.save_figure(measuring_parameter, noise, stepSize)
 
 
 def get_summary():
