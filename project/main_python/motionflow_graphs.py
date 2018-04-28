@@ -175,55 +175,58 @@ def scenario_displacement_occurence():
 if __name__ == '__main__':
 
 
-    list_of_pixel_density_noise = list()
-    list_of_collision_noise = list()
 
-    if ( evaluation == "environment"):
-        current_list = environment_list
+    for step_size in step_list:
+        
 
-        for n, i in enumerate(current_list):
-            temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + step_list[0] + '_'), template_of_pixel_density[n*4:n*4+4])
-            list_of_pixel_density_noise += temp_list
-        print list_of_pixel_density_noise
+        list_of_pixel_density_noise = list()
+        list_of_collision_noise = list()
 
-        for n, i in enumerate(current_list):
-            temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + step_list[0] + '_'), template_of_collision[n*4:n*4+4])
-            list_of_collision_noise += temp_list
-        print list_of_collision_noise
+        if ( evaluation == "environment"):
+            current_list = environment_list
 
+            for n, i in enumerate(current_list):
+                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_pixel_density[n*4:n*4+4])
+                list_of_pixel_density_noise += temp_list
+            print list_of_pixel_density_noise
 
-
-    custom_data_list_pixel = list()
-
-    custom_data_list_pixel.append(list_of_pixel_density_ground_truth[0])
-    for x in range(len(data_processing_list)):
-        custom_data_list_pixel.append(list_of_pixel_density_noise[x])
-
-    custom_data_list_deviation = list()
-    custom_data_list_deviation.append(list_of_collision_ground_truth[0])
-    for x in range(len(data_processing_list)):
-        custom_data_list_deviation.append(list_of_collision_noise[x])
+            for n, i in enumerate(current_list):
+                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
+                list_of_collision_noise += temp_list
+            print list_of_collision_noise
 
 
-    robustness.robustness_(file, "pixel", "no_noise", custom_data_list_pixel, color_list, "jaccard index no noise all algorithm", step_list[0])
-    robustness.robustness_(file, "pixel", "noise", list_of_pixel_density_noise, color_list, "jaccard index environment algorithm ", step_list[0])
 
-    robustness.robustness_(file, "deviation", "no_noise", custom_data_list_deviation, color_list, "deviation no noise all algorithm ", step_list[0])
-    robustness.robustness_(file, "deviation", "noise" , list_of_collision_noise, color_list, "deviation environment algorithm ", step_list[0])
+        custom_data_list_pixel = list()
 
-    #robustness.robustness_(file, "collision", "no_noise", custom_data_list_deviation, color_list, "collision points no noise all algorithm")
+        custom_data_list_pixel.append(list_of_pixel_density_ground_truth[0])
+        for x in range(len(data_processing_list)):
+            custom_data_list_pixel.append(list_of_pixel_density_noise[x])
 
-    summary = robustness.get_summary()
-
-    figures = Figures(1)
-    figures.evaluate_pixel(summary)
-    figures.save_figure("pixel", "summary", step_list[0])
-
-    figures = Figures(1)
-    figures.evaluate_deviation(summary)
-    figures.save_figure("deviation", "summary", step_list[0])
+        custom_data_list_deviation = list()
+        custom_data_list_deviation.append(list_of_collision_ground_truth[0])
+        for x in range(len(data_processing_list)):
+            custom_data_list_deviation.append(list_of_collision_noise[x])
 
 
-    #scenario_displacement_occurence()
-    #histogramm()
+        robustness.robustness_(file, "pixel", "no_noise", custom_data_list_pixel, color_list, "jaccard index no noise all algorithm", str(step_size))
+        robustness.robustness_(file, "pixel", "noise", list_of_pixel_density_noise, color_list, "jaccard index environment algorithm ", str(step_size))
+
+        robustness.robustness_(file, "deviation", "no_noise", custom_data_list_deviation, color_list, "deviation no noise all algorithm ", str(step_size))
+        robustness.robustness_(file, "deviation", "noise" , list_of_collision_noise, color_list, "deviation environment algorithm ", str(step_size))
+
+        #robustness.robustness_(file, "collision", "no_noise", custom_data_list_deviation, color_list, "collision points no noise all algorithm")
+        #scenario_displacement_occurence()
+        #histogramm()
+
+        summary = robustness.get_summary()
+
+        figures = Figures(1)
+        figures.evaluate_pixel(summary)
+        figures.save_figure("pixel", "summary", str(step_size))
+
+        figures = Figures(1)
+        figures.evaluate_deviation(summary)
+        figures.save_figure("deviation", "summary", str(step_size))
+
 

@@ -452,7 +452,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     for ( auto &n : time_map )
     {
-        std::cout << n.first << " " << n.second;
+        std::cout << n.first << " " << n.second << std::endl;
     }
 
 
