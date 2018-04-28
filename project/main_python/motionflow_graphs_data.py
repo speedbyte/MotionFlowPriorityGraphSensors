@@ -3,7 +3,17 @@
 
 
 environment_list = ["none", "light_snow_", "mild_snow_", "heavy_snow_"]#night
-#environment_list = ["none",]
+environment_list = ["none",]
+
+step_list = ["1", "2", "3", "4"]#night
+step_list = ["1",]
+
+fps_list = ["30", "15", "10", "7.5"]#night
+fps_list = ["30",]
+
+evaluation = "environment"
+
+
 
 data_processing_list = ["0", "1", "2"]
 
@@ -12,66 +22,96 @@ color_list = ["blue", "red", "green", "yellow", "black"]
 color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 
 
-list_of_shape_no_noise = [
+list_of_pixel_density_ground_truth = [
     "pixel_density_ground_truth",
 ]
 
-list_of_collision_no_noise = [
+list_of_collision_ground_truth = [
     "collision_points_ground_truth",
 ]
 
-list_of_shape_noise = [
-    "pixel_densityframe_skip1_dataprocessing_0results_FB_none_",
-    "pixel_densityframe_skip1_dataprocessing_1results_FB_none_",
-    "pixel_densityframe_skip1_dataprocessing_2results_FB_none_",
-    "pixel_densityframe_skip1_dataprocessing_3results_FB_none_",
-
-    "pixel_densityframe_skip1_dataprocessing_0results_FB_light_snow_",
-    "pixel_densityframe_skip1_dataprocessing_1results_FB_light_snow_",
-    "pixel_densityframe_skip1_dataprocessing_2results_FB_light_snow_",
-    "pixel_densityframe_skip1_dataprocessing_3results_FB_light_snow_",
-
-    "pixel_densityframe_skip1_dataprocessing_0results_FB_mild_snow_",
-    "pixel_densityframe_skip1_dataprocessing_1results_FB_mild_snow_",
-    "pixel_densityframe_skip1_dataprocessing_2results_FB_mild_snow_",
-    "pixel_densityframe_skip1_dataprocessing_3results_FB_mild_snow_",
-
-    "pixel_densityframe_skip1_dataprocessing_0results_FB_heavy_snow_",
-    "pixel_densityframe_skip1_dataprocessing_1results_FB_heavy_snow_",
-    "pixel_densityframe_skip1_dataprocessing_2results_FB_heavy_snow_",
-    "pixel_densityframe_skip1_dataprocessing_3results_FB_heavy_snow_",
-
+list_of_obj_displacement_ground_truth = [
+    "collision_points_ground_truth",
 ]
 
-list_of_collision_noise = [
 
-    "collision_pointsframe_skip1_dataprocessing_0results_FB_none_",
-    "collision_pointsframe_skip1_dataprocessing_1results_FB_none_",
-    "collision_pointsframe_skip1_dataprocessing_2results_FB_none_",
-    "collision_pointsframe_skip1_dataprocessing_3results_FB_none_",
+template_of_pixel_density = [
+    "pixel_densityframe_skip1_dataprocessing_0results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_1results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_2results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_3results_FB_",
 
-    "collision_pointsframe_skip1_dataprocessing_0results_FB_light_snow_",
-    "collision_pointsframe_skip1_dataprocessing_1results_FB_light_snow_",
-    "collision_pointsframe_skip1_dataprocessing_2results_FB_light_snow_",
-    "collision_pointsframe_skip1_dataprocessing_3results_FB_light_snow_",
+    "pixel_densityframe_skip1_dataprocessing_0results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_1results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_2results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_3results_FB_",
 
-    "collision_pointsframe_skip1_dataprocessing_0results_FB_mild_snow_",
-    "collision_pointsframe_skip1_dataprocessing_1results_FB_mild_snow_",
-    "collision_pointsframe_skip1_dataprocessing_2results_FB_mild_snow_",
-    "collision_pointsframe_skip1_dataprocessing_3results_FB_mild_snow_",
+    "pixel_densityframe_skip1_dataprocessing_0results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_1results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_2results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_3results_FB_",
 
-    "collision_pointsframe_skip1_dataprocessing_0results_FB_heavy_snow_",
-    "collision_pointsframe_skip1_dataprocessing_1results_FB_heavy_snow_",
-    "collision_pointsframe_skip1_dataprocessing_2results_FB_heavy_snow_",
-    "collision_pointsframe_skip1_dataprocessing_3results_FB_heavy_snow_",
+    "pixel_densityframe_skip1_dataprocessing_0results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_1results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_2results_FB_",
+    "pixel_densityframe_skip1_dataprocessing_3results_FB_",
 
 ]
 
 
-list_of_displacement_occurence = [
+template_of_obj_displacement = [
+    "obj_displacementframe_skip1_dataprocessing_0results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_1results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_2results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_3results_FB_",
+
+    "obj_displacementframe_skip1_dataprocessing_0results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_1results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_2results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_3results_FB_",
+
+    "obj_displacementframe_skip1_dataprocessing_0results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_1results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_2results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_3results_FB_",
+
+    "obj_displacementframe_skip1_dataprocessing_0results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_1results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_2results_FB_",
+    "obj_displacementframe_skip1_dataprocessing_3results_FB_",
+
+]
+
+
+template_of_collision = [
+
+    "collision_pointsframe_skip1_dataprocessing_0results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_1results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_2results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_3results_FB_",
+
+    "collision_pointsframe_skip1_dataprocessing_0results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_1results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_2results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_3results_FB_",
+
+    "collision_pointsframe_skip1_dataprocessing_0results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_1results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_2results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_3results_FB_",
+
+    "collision_pointsframe_skip1_dataprocessing_0results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_1results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_2results_FB_",
+    "collision_pointsframe_skip1_dataprocessing_3results_FB_",
+
+]
+
+
+template_of_displacement_occurence = [
     "scenario_displacement_occurenceframe_skip1_dataprocessing_0_ground_truth",
     "scenario_displacement_occurenceframe_skip1_dataprocessing_0results_FB_none_",
 ]
 
 color_of_displacement_occurence = ["blue", "red"]
-assert(len(list_of_displacement_occurence) == len(color_of_displacement_occurence))
+assert(len(template_of_displacement_occurence) == len(color_of_displacement_occurence))

@@ -33,7 +33,7 @@ using namespace std::chrono;
  */
 
 
-void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise) {
+void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps, ushort stepSize) {
 
     mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + noise + "/";
     m_resultordner = "results_";
@@ -52,7 +52,7 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
         }
     }
 
-    m_resultordner += noise + "/";
+    m_resultordner += noise + "_" + std::to_string(fps) + "_" + std::to_string(stepSize) + "/";
 
     m_generatepath = Dataset::getResultPath().string() + "/" +  m_resultordner;
 
@@ -66,9 +66,9 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
     }
 }
 
-void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise ) {
+void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps, ushort stepSize ) {
 
-    prepare_directories(algo, frame_types, noise);
+    prepare_directories(algo, frame_types, noise, fps, stepSize);
 
     for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
 
@@ -222,8 +222,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     //cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
                     prev_pts_array.clear();
                     next_pts_array.clear();
-                    for (int32_t row = 0; row < Dataset::getFrameSize().height; row += STEP_SIZE) { // rows
-                        for (int32_t col = 0; col < Dataset::getFrameSize().width; col += STEP_SIZE) {  // cols
+                    for (int32_t row = 0; row < Dataset::getFrameSize().height; row += stepSize) { // rows
+                        for (int32_t col = 0; col < Dataset::getFrameSize().width; col += stepSize) {  // cols
 
                             cv::Point2f algorithmMovement ( flowFrame.at<cv::Point2f>(row, col).x, flowFrame
                                     .at<cv::Point2f>(row, col).y );
@@ -331,10 +331,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     float rowBegin = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
                             (frame_skip-1).at(frame_count).m_region_of_interest_px.y;
                     /*
-                    if ( cvRound(rowBegin)%2 != 0 && STEP_SIZE %2 != 0 )   {
+                    if ( cvRound(rowBegin)%2 != 0 && stepSize %2 != 0 )   {
                         rowBegin+=1;
                     }
-                    if ( cvRound(columnBegin)%2 != 0 && STEP_SIZE%2 != 0 ) {
+                    if ( cvRound(columnBegin)%2 != 0 && stepSize%2 != 0 ) {
                         columnBegin+=1;
                     }
                      */

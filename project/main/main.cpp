@@ -245,8 +245,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"none"};
+    //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
+    const std::vector<std::string> environment_list = {"none"};
 
     for (ushort frame_skip = 0;  frame_skip < MAX_SKIPS_REAL; frame_skip++) {
 
@@ -387,9 +387,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_count));
                 }
 
+                ushort fps = 30;
+                ushort stepSize = 1;
+
                 if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
-                    list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index]);
+                    list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index], fps, stepSize);
                     list_of_algorithm_flow[env_index].generate_edge_contour();
 
                     if (environment_list[env_index] == "none") { // store the stimulated objects from the ground run.

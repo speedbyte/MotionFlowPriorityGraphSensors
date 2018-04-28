@@ -127,7 +127,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             m_fs << "]";
 
             // Send to plotter
-            m_fs << (std::string("displacement_points") + std::string("frame_skip") + std::to_string(frame_skip) +
+            m_fs << (std::string("obj_displacement") + std::string("frame_skip") + std::to_string(frame_skip) +
                      std::string("_dataprocessing_") + std::to_string(data_processing_index) + suffix) << "[";
 
             for (unsigned i = 0; i < xsamples_dimension.size(); i++) {
