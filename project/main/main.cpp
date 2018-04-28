@@ -460,7 +460,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         total += n.second;
 
     }
-    std::cout << "unaccounted time = " << time_map["total"] - total << std::endl
+    std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;
 
 
 
