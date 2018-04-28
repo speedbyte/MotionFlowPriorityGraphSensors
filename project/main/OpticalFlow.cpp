@@ -331,10 +331,10 @@ void OpticalFlow::generate_shape_points() {
                             if ( datafilter_index < 0 ) {
 
                                 if ( scenario_displacement_occurence.count(std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)) ) {
-                                    scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] = scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] + CLUSTER_COUNT_GT;
+
                                 }
                                 else {
-                                    scenario_displacement_occurence[std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)] = CLUSTER_COUNT_GT;
+
                                 }
 
                                 /*
@@ -382,32 +382,15 @@ void OpticalFlow::generate_shape_points() {
 
                                 //assert(angle_err_dot==angle_err);
 
+                                if (((
+                                             std::abs(dist_err) < DISTANCE_ERROR_TOLERANCE &&
+                                             std::abs(angle_err*180/CV_PI)) < ANGLE_ERROR_TOLERANCE
 
-                                /*if (dist_err < DISTANCE_ERROR_TOLERANCE) {
-                                    vollTreffer++;
-                                }*/
-
-                                if (((std::abs(angle_err*180/CV_PI)) < ANGLE_ERROR_TOLERANCE)) {
+                                )) {
                                     vollTreffer++;
                                 }
 
                             }
-                            /*
-                            auto x_coordinates = list_of_current_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at
-                                    (frame_skip - 1).at(datafilter_index).at(frame_count).at(j).first.x;
-                            auto y_coordinates = list_of_current_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at
-                                    (frame_skip - 1).at(datafilter_index).at(frame_count).at(j).first.y;
-
-                            if ((x_coordinates > (columnBegin - width / STENCIL_GRID_EXTENDER)) &&
-                                (x_coordinates < (columnBegin + width + width / STENCIL_GRID_EXTENDER)) &&
-                                (y_coordinates > (rowBegin - height / STENCIL_GRID_EXTENDER)) &&
-                                (y_coordinates < (rowBegin + height + height / STENCIL_GRID_EXTENDER))
-                                    ) {
-                                vollTreffer++;
-                            }
-                        }*/
 
                             baseTreffer = ((float) CLUSTER_COUNT_GT/mStepSize);
                         }

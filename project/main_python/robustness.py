@@ -9,10 +9,9 @@ from robustness_common import *
 
 summary_mean = dict()
 
-def robustness_(file, measuring_parameter, noise, data_list, color_list, label, stepSize):
+def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_list, label=""):
 
-
-    summary_mean.clear()
+    #summary_mean.clear()
 
     yaml_list_index_offset=0
 
@@ -48,9 +47,9 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
     else:
         figures = Figures(len(datafilter_list))
 
-    for env_index in range(len(environment_list)):
+    for env_name in environment_list:
 
-        print "Table " + measuring_parameter + " robustness with " + environment_list[env_index] + " " + noise
+        print "Table " + measuring_parameter + " robustness with " + env_name + " " + noise
 
         mean_list = list()
         mean_list.append(y_axis_gt_mean)
@@ -62,11 +61,11 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
         x_axis_list.append(x_axis_gt)
         y_axis_list.append(y_axis_gt)
 
-        for x in range(len(datafilter_list)):
+        for datafilter_index in range(len(datafilter_list)):
 
             if ( noise == "no_noise"):
-                data_points = yaml_load[data_list[yaml_list_index_offset+1+x]]
-                print "getting ", data_list[yaml_list_index_offset+1+x]
+                data_points = yaml_load[data_list[yaml_list_index_offset+1+datafilter_index]]
+                print "getting ", data_list[yaml_list_index_offset+1+datafilter_index]
                 if ( measuring_parameter == "deviation"):
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
                 elif ( measuring_parameter == "pixel"):
@@ -81,8 +80,8 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
 
             else:
 
-                data_points = yaml_load[data_list[yaml_list_index_offset+x]]
-                print "getting " , data_list[yaml_list_index_offset+x]
+                data_points = yaml_load[data_list[yaml_list_index_offset+datafilter_index]]
+                print "getting " , data_list[yaml_list_index_offset+datafilter_index]
                 if ( measuring_parameter == "deviation"):
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
                 elif ( measuring_parameter == "pixel"):
@@ -94,14 +93,13 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
 
                 x_axis_list = [x_axis]
                 y_axis_list = [y_axis]
-
                 plot1 = ['x_axis',
                          'y_axis',
                          x_axis_list,
                          y_axis_list,
                          color_list,
                          data_list,
-                         label + str(x),
+                         measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize),
                          lower,
                          upper,
                          ]
@@ -121,7 +119,7 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
                      y_axis_list,
                      color_list,
                      data_list,
-                     label,
+                     measuring_parameter + " all datafilters " + " step size" + " " + str(stepSize),
                      lower,
                      upper,
                      ]
@@ -131,16 +129,17 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
         if measuring_parameter == "pixel":
             lower=0; upper=1;
 
-        for x in range(len(list_of_plots)):
-            list_of_plots[x][7] = lower
-            list_of_plots[x][8] = upper
+        for datafilter_index in range(len(list_of_plots)):
+            list_of_plots[datafilter_index][7] = lower
+            list_of_plots[datafilter_index][8] = upper
 
-        summary_mean[measuring_parameter + '_' + str(env_index)] = mean_list
+        if noise == "noise":
+            # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
+            summary_mean[measuring_parameter + '_' + env_name + '_' + str(stepSize) ] = mean_list
 
-        yaml_list_index_offset=yaml_list_index_offset+4
+        yaml_list_index_offset = yaml_list_index_offset + 4
 
-        print "env ", env_index
-        figures.plot_all(list_of_plots, env_index)
+        figures.plot_all(list_of_plots, dict_environment[env_name], measuring_parameter)
         if (noise == "no_noise" ):
             break
 

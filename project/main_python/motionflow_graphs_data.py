@@ -8,6 +8,12 @@ dict_datafilters = {
     "datafilter_2" : "ranked_mean",
     "datafilter_3" : "something",
 }
+dict_environment = {
+    "none" : 0,
+    "light_snow"   : 1,
+    "mild_snow"    : 2,
+    "heavy_snow"   : 3,
+}
 
 environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"]#night
 #environment_list = ["none",]
