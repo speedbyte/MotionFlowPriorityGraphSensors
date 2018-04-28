@@ -101,9 +101,9 @@ def getNewShape(data_points_gt, data_points):
 
     for count in range(len(data_points_gt)):
         xy = list()
-        xy.append(data_points[count]["good_pixels"][0])
-        xy.append(data_points[count]["total_pixels"][0])
-        xy.append(data_points[count]["total_pixels"][1])
+        xy.append(data_points[count]["frame_count"][0])
+        xy.append(data_points[count]["pixel_density"][0])
+        xy.append(data_points[count]["pixel_density"][1])
         data.append(xy)
 
     newshape = list()
@@ -144,9 +144,9 @@ def getNewShape(data_points_gt, data_points):
 
     for count in range(len(data_points)):
         xy = list()
-        xy.append(data_points[count]["good_pixels"][0])
-        xy.append(data_points[count]["total_pixels"][0])
-        xy.append(data_points[count]["total_pixels"][1])
+        xy.append(data_points[count]["frame_count"][0])
+        xy.append(data_points[count]["pixel_density"][0])
+        xy.append(data_points[count]["pixel_density"][1])
         data.append(xy)
 
     newshape = list()
@@ -202,88 +202,30 @@ def getObjectDisplacement(data_points_gt, data_points):
 
     for count in range(len(data_points_gt)):
         xy = list()
-        xy.append(data_points[count]["good_pixels"][0])
-        xy.append(data_points[count]["total_pixels"][0])
-        xy.append(data_points[count]["total_pixels"][1])
+        xy.append(data_points[count]["objDim"][0])
+        xy.append(data_points[count]["objDim"][1])
+        xy.append(data_points[count]["objDisp"][0])
+        xy.append(data_points[count]["objDisp"][1])
         data.append(xy)
 
-    newshape = list()
-    previous_x_axis = 0
-    frame_good_pixels = 0
-    frame_total_pixels = 0
-    total_count = 0
-    for count in range(len(data)):
-
-        if ( data[count][0] != previous_x_axis ):
-
-            previous_x_axis = data[count][0]
-            xy = list()
-            xy.append(frame_good_pixels/total_count)
-            xy.append(frame_total_pixels/total_count)
-            newshape.append(xy)
-            total_count = 0
-            frame_good_pixels = 0
-            frame_total_pixels = 0
-
-        if ( data[count][0] == previous_x_axis ):
-            total_count = total_count+1
-            frame_good_pixels = frame_good_pixels + data[count][1]
-            frame_total_pixels = frame_total_pixels + data[count][2]
-
-        if ( count == len(data)-1 ):
-
-            xy = list()
-            xy.append(frame_good_pixels/total_count)
-            xy.append(frame_total_pixels/total_count)
-            newshape.append(xy)
-
-    y_axis_mean = 0
-    data = numpy.array(newshape)
-    x0_gt, y0_gt = data.T
+    data = numpy.array(data)
+    dim_x_gt, dim_y_gt, disp_x_gt, disp_y_gt = data.T
 
     data = list()
 
     for count in range(len(data_points)):
         xy = list()
-        xy.append(data_points[count]["good_pixels"][0])
-        xy.append(data_points[count]["total_pixels"][0])
-        xy.append(data_points[count]["total_pixels"][1])
+        xy.append(data_points[count]["objDim"][0])
+        xy.append(data_points[count]["objDim"][1])
+        xy.append(data_points[count]["objDisp"][0])
+        xy.append(data_points[count]["objDisp"][1])
         data.append(xy)
 
-    newshape = list()
-    previous_x_axis = 0
-    frame_good_pixels = 0
-    frame_total_pixels = 0
-    total_count = 0
-    for count in range(len(data)):
-
-        if ( data[count][0] != previous_x_axis ):
-
-            previous_x_axis = data[count][0]
-            xy = list()
-            xy.append(frame_good_pixels/total_count)
-            xy.append(frame_total_pixels/total_count)
-            newshape.append(xy)
-            total_count = 0
-            frame_good_pixels = 0
-            frame_total_pixels = 0
-
-        if ( data[count][0] == previous_x_axis ):
-            total_count = total_count+1
-            frame_good_pixels = frame_good_pixels + data[count][1]
-            frame_total_pixels = frame_total_pixels + data[count][2]
-
-        if ( count == len(data)-1 ):
-
-            xy = list()
-            xy.append(frame_good_pixels/total_count)
-            xy.append(frame_total_pixels/total_count)
-            newshape.append(xy)
-
     y_axis_mean = 0
-    data = numpy.array(newshape)
-    x0, y0 = data.T
-    y_axis = x0/y0_gt
+    data = numpy.array(data)
+    dim_x, dim_y, disp_x, disp_y = data.T
+    y_axis = numpy.sqrt((disp_x_gt - disp_x) ** 2 + (disp_y_gt - disp_y) ** 2)
+    x_axis = dim_x*dim_y
 
     count = 0
     for n,i in enumerate(y_axis):
@@ -291,6 +233,4 @@ def getObjectDisplacement(data_points_gt, data_points):
             count = count+1
             y_axis_mean=y_axis_mean+i
 
-    y_axis_mean = y_axis_mean/(count)
-    x_axis = numpy.arange(0.0, len(newshape), 1)
     return x_axis, y_axis, y_axis_mean

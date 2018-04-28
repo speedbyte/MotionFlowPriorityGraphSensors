@@ -37,7 +37,7 @@ list_of_collision_ground_truth = [
 ]
 
 list_of_obj_displacement_ground_truth = [
-    "collision_points_ground_truth",
+    "obj_displacement_ground_truth",
 ]
 
 

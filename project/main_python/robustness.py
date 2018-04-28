@@ -69,8 +69,10 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
                 elif ( measuring_parameter == "pixel"):
                     x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
-                else:
+                elif ( measuring_parameter == "collision"):
                     x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points_gt, data_points)
+                elif ( measuring_parameter == "obj_displacement"):
+                    x_axis, y_axis, y_axis_mean = getObjectDisplacement(data_points_gt, data_points)
 
                 x_axis_list.append(x_axis)
                 y_axis_list.append(y_axis)
@@ -83,8 +85,10 @@ def robustness_(file, measuring_parameter, noise, data_list, color_list, label, 
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
                 elif ( measuring_parameter == "pixel"):
                     x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
-                else:
+                elif ( measuring_parameter == "collision"):
                     x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points_gt, data_points)
+                elif ( measuring_parameter == "obj_displacement"):
+                    x_axis, y_axis, y_axis_mean = getObjectDisplacement(data_points_gt, data_points)
 
                 x_axis_list = [x_axis]
                 y_axis_list = [y_axis]

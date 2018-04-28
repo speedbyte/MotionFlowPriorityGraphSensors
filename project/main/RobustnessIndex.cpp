@@ -121,7 +121,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             }
 
             for (unsigned i = 0; i < xsamples.size(); i++) {
-                m_fs << "{:" << "good_pixels" << xsamples[i] << "total_pixels" << ysamples[i] << "}";
+                m_fs << "{:" << "frame_count" << xsamples[i] << "pixel_density" << ysamples[i] << "}";
             }
             m_fs << "]";
 

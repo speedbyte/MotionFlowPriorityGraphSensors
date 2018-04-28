@@ -1,35 +1,35 @@
 ---
 pixel_density_ground_truth: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ 24522., 24522. ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 24522., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 24723., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 24723., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 24600., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 24600., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 24600., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 24600., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 24477., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 24477., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 24477., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 24477., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 24477., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 24354., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 676., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 24354., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 676., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ 24522., 24522. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 24522., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 24723., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 24723., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 24600., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 24600., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 24600., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 24600., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 24477., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 24477., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 24477., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 24477., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 24477., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 24354., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 676., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 24354., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 676., 676. ] }
 obj_displacement_ground_truth: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -122,36 +122,36 @@ line_angles_ground_truth:
    - { obj1: -1.5461260080337524e-01, obj2: -3.3381694555282593e-01 }
    - { obj1: -1.8898710608482361e-01, obj2: -3.5465380549430847e-01 }
 pixel_density_frame_skip_1_datafilter_0results_FB_none_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 8571., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 154., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 8411., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 84., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 8515., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 115., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 8568., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 110., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 8479., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 138., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 8589., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 163., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 8415., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 112., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 8465., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 90., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 8395., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 144., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 8300., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 109., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 8199., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 165., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 8259., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 124., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 8026., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 103., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 7767., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 169., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 8571., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 154., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 8411., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 84., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 8515., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 115., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 8568., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 110., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 8479., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 138., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 8589., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 163., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 8415., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 112., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 8465., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 90., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 8395., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 144., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 8300., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 109., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 8199., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 165., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 8259., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 124., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 8026., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 103., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 7767., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 169., 676. ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_none_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -212,36 +212,36 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_none_30_1_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.1400892734527588e+00,
        1.8052053451538086e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_none_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 13430., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 400., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 13490., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 13544., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 13601., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 410., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 13638., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 382., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 13540., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 13506., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 493., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 13472., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 410., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 13534., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 467., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 13447., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 392., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 13523., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 467., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 13490., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 484., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 13468., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 13320., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 514., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 13430., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 400., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 13490., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 13544., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 13601., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 410., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 13638., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 382., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 13540., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 13506., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 493., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 13472., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 410., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 13534., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 467., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 13447., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 392., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 13523., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 467., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 13490., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 484., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 13468., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 13320., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 514., 676. ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_none_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -302,36 +302,36 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_none_30_1_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.1782901287078857e+00,
        -8.7823309004306793e-02 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_none_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 13430., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 13490., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 345., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 13544., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 417., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 13601., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 13638., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 382., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 13540., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 13506., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 493., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 13472., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 13534., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 13447., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 13523., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 13490., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 13468., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 13320., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 13430., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 13490., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 345., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 13544., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 417., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 13601., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 13638., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 382., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 13540., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 13506., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 493., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 13472., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 13534., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 13447., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 13523., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 13490., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 13468., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 13320., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0., 676. ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_none_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -488,36 +488,36 @@ line_angles_frame_skip_1_datafilter_2results_FB_none_30_1_:
    - { obj1: 1.1427797079086304e+00, obj2: -2.2430110931396484e+01 }
    - { obj1: 7.7257299423217773e-01, obj2: -1.2664374351501465e+01 }
 pixel_density_frame_skip_1_datafilter_0results_FB_light_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 7667., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 118., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 7442., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 64., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 7646., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 61., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 7569., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 54., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 7517., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 92., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 7484., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 167., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 7637., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 114., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 7527., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 99., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 7487., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 79., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 7426., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 74., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 7579., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 120., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 7431., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 117., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 7180., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 83., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 7039., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 148., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 7667., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 118., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 7442., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 64., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 7646., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 61., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 7569., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 54., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 7517., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 92., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 7484., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 167., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 7637., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 114., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 7527., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 99., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 7487., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 79., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 7426., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 74., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 7579., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 120., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 7431., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 117., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 7180., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 83., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 7039., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 148., 676. ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_light_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -578,36 +578,36 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_light_snow_30_1_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.2038500308990479e+00,
        1.5932449698448181e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_light_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 13026., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 425., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 12963., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 404., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 13008., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 342., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 12923., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 359., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 13035., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 12951., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 12857., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 401., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 12655., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 326., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 12751., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 314., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 12691., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 12783., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 383., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 12657., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 402., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 12737., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 309., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 12599., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 431., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 13026., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 425., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 12963., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 404., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 13008., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 342., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 12923., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 359., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 13035., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 12951., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 12857., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 401., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 12655., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 326., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 12751., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 314., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 12691., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 12783., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 383., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 12657., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 402., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 12737., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 309., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 12599., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 431., 676. ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_light_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -668,36 +668,36 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_light_snow_30_1_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.1150816679000854e+00,
        -1.0058452188968658e-01 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_light_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 13026., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 12963., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 13008., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 12923., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 13035., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 467., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 12951., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 12857., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 401., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 12655., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 12751., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 314., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 12691., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 12783., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 383., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 12657., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 402., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 12737., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 12599., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 13026., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 12963., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 13008., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 12923., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 13035., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 467., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 12951., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 12857., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 401., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 12655., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 12751., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 314., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 12691., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 12783., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 383., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 12657., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 402., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 12737., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 12599., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0., 676. ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_light_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -854,36 +854,36 @@ line_angles_frame_skip_1_datafilter_2results_FB_light_snow_30_1_:
    - { obj1: 2.4361667633056641e+00, obj2: -8.9854688644409180e+00 }
    - { obj1: 1.2729603052139282e+00, obj2: -8.6999711990356445e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_mild_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 7667., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 118., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 7442., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 64., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 7646., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 61., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 7569., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 54., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 7517., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 92., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 7484., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 167., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 7637., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 114., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 7527., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 99., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 7487., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 79., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 7426., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 74., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 7579., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 120., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 7431., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 117., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 7180., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 83., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 7039., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 148., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 7667., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 118., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 7442., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 64., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 7646., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 61., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 7569., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 54., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 7517., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 92., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 7484., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 167., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 7637., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 114., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 7527., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 99., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 7487., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 79., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 7426., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 74., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 7579., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 120., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 7431., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 117., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 7180., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 83., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 7039., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 148., 676. ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_mild_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -944,36 +944,36 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_mild_snow_30_1_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.2038500308990479e+00,
        1.5932449698448181e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_mild_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 13026., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 425., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 12963., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 404., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 13008., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 342., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 12923., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 359., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 13035., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 12951., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 12857., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 401., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 12655., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 326., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 12751., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 314., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 12691., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 12783., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 383., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 12657., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 402., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 12737., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 309., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 12599., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 431., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 13026., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 425., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 12963., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 404., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 13008., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 342., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 12923., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 359., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 13035., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 12951., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 12857., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 401., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 12655., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 326., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 12751., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 314., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 12691., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 12783., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 383., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 12657., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 402., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 12737., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 309., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 12599., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 431., 676. ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_mild_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -1034,36 +1034,36 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_mild_snow_30_1_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.1150816679000854e+00,
        -1.0058452188968658e-01 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_mild_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 13026., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 12963., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 13008., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 12923., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 13035., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 467., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 12951., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 12857., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 401., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 12655., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 12751., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 314., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 12691., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 12783., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 383., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 12657., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 402., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 12737., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 12599., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 13026., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 12963., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 13008., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 12923., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 13035., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 467., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 12951., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 12857., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 401., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 12655., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 12751., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 314., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 12691., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 12783., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 383., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 12657., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 402., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 12737., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 12599., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0., 676. ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_mild_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -1220,36 +1220,36 @@ line_angles_frame_skip_1_datafilter_2results_FB_mild_snow_30_1_:
    - { obj1: 2.4361667633056641e+00, obj2: -8.9854688644409180e+00 }
    - { obj1: 1.2729603052139282e+00, obj2: -8.6999711990356445e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_heavy_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 6931., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 123., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 6619., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 57., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 6759., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 55., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 6702., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 57., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 6628., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 80., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 6523., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 146., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 6597., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 112., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 6753., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 96., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 6719., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 71., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 6593., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 61., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 6575., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 104., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 6514., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 136., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 6153., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 78., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 6111., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 134., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 6931., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 123., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 6619., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 57., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 6759., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 55., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 6702., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 57., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 6628., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 80., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 6523., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 146., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 6597., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 112., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 6753., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 96., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 6719., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 71., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 6593., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 61., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 6575., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 104., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 6514., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 136., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 6153., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 78., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 6111., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 134., 676. ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_heavy_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -1310,36 +1310,36 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_heavy_snow_30_1_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.1412566900253296e+00,
        1.7177668213844299e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_heavy_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 12717., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 408., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 12541., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 12470., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 327., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 12424., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 366., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 12446., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 12372., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 526., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 12255., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 12291., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 12255., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 288., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 12153., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 12237., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 337., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 11925., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 376., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 11963., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 11796., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 359., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 12717., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 408., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 12541., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 12470., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 327., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 12424., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 366., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 12446., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 12372., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 526., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 12255., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 12291., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 12255., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 288., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 12153., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 12237., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 337., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 11925., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 376., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 11963., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 11796., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 359., 676. ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_heavy_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -1400,36 +1400,36 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_heavy_snow_30_1_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.0871912240982056e+00,
        -7.1334987878799438e-02 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_heavy_snow_30_1_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 12717., 24522. ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 12541., 24723. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 12470., 24723. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 12424., 24600. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 12446., 24600. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 441., 676. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 12372., 24600. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 12255., 24600. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 385., 676. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 12291., 24477. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 308., 676. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 12255., 24477. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 288., 676. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 12153., 24477. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 676. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 12237., 24477. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 337., 676. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 11925., 24477. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 376., 676. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 11963., 24354. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 278., 676. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 11796., 24354. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 359., 676. ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 12717., 24522. ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 12541., 24723. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 12470., 24723. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 12424., 24600. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 12446., 24600. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 441., 676. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 12372., 24600. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 12255., 24600. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 385., 676. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 12291., 24477. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 308., 676. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 12255., 24477. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 288., 676. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 12153., 24477. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 676. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 12237., 24477. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 337., 676. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 11925., 24477. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 376., 676. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 11963., 24354. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 278., 676. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 11796., 24354. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 359., 676. ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_heavy_snow_30_1_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -1586,46 +1586,46 @@ line_angles_frame_skip_1_datafilter_2results_FB_heavy_snow_30_1_:
    - { obj1: 1.3129887580871582e+00, obj2: 6.4357966184616089e-02 }
    - { obj1: -1.9405918121337891e+00, obj2: -3.0426349639892578e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_none_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 2102.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 2102.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 39., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 2109.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 39., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 2109.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 20., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 2146.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 20., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 2146.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 23., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 2164., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 24., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 2160., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 32., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 2214., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 35., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 2124., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 23., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 2127.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 23., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 2164., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 24., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 2160., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 32., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 2214., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 35., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 2124., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 23., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 2127.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 23., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 2126.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 23., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 2126.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 33., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 2071.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 33., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 2071.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 22., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 2097.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 22., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 2097.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 34., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 2106.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 34., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 2106.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 31., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 2021.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 31., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 2021.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 30., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1944.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 30., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1944.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 42., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 42., 169. ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_none_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -1686,46 +1686,46 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_none_30_4_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.3176400661468506e+00,
        -8.4838527441024780e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_none_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 3342.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 3342.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 3398.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 3398.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 3411.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 3411.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 3426., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 3442., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 91., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 3419., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 3394., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 3389.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 3426., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 3442., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 91., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 3419., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 3394., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 3389.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 3401.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 3401.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 114., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 3387.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 114., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 3387.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 3413.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 3413.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 116., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 3408.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 116., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 3408.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 3394.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 3394.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 3368.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 3368.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 133., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 133., 169. ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_none_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -1786,46 +1786,46 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_none_30_4_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.1710983514785767e+00,
        -1.0267932713031769e-01 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_none_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 3342.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 3342.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 3398.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 3398.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 90., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 3411.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 90., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 3411.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 108., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 3426., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 3442., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 91., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 3419., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 3394., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 126., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 3389.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 108., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 3426., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 3442., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 91., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 3419., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 3394., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 126., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 3389.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 3401.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 3401.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 114., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 3387.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 114., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 3387.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 3413.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 3413.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 3408.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 3408.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 3394.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 3394.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 3368.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 3368.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0., 169. ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_none_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -1982,46 +1982,46 @@ line_angles_frame_skip_1_datafilter_2results_FB_none_30_4_:
    - { obj1: 6.7637747526168823e-01, obj2: -2.3053836822509766e+01 }
    - { obj1: 7.1928352117538452e-01, obj2: -1.9259143829345703e+01 }
 pixel_density_frame_skip_1_datafilter_0results_FB_light_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1877.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1877.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 25., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1866.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 25., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1866.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 16., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1920.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 16., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1920.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 16., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1920., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 9., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1891., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 24., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1935., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 41., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1905., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 33., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1906.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 16., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1920., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 9., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1891., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 24., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1935., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 41., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1905., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 33., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1906.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 21., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1901.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 21., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1901.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 15., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1882.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 15., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1882.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 21., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1926.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 21., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1926.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 37., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1877.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 37., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1877.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 28., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1800.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 28., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1800.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 22., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1751.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 22., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1751.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 38., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 38., 169. ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_light_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -2082,46 +2082,46 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_light_snow_30_4_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.0737011432647705e+00,
        2.1718120574951172e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_light_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 3219.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 3219.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 3259.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 3259.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 104., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 3279.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 104., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 3279.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 3279., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 3287., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 3249., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 3242., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 3183.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 3279., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 3287., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 3249., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 3242., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 3183.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 83., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 3211.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 83., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 3211.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 74., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 3184.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 74., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 3184.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 67., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 3224.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 67., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 3224.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 92., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 3192.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 92., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 3192.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 3220.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 3220.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 74., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 3187.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 74., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 3187.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0., 169. ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_light_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -2182,46 +2182,46 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_light_snow_30_4_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.1364213228225708e+00,
        -1.1039575934410095e-01 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_light_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 3219.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 3219.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 3259.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 3259.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 3279.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 3279.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 3279., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 3287., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 3249., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 3242., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 3183.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 3279., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 3287., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 3249., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 3242., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 3183.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 3211.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 3211.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 74., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 3184.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 74., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 3184.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 3224.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 3224.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 92., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 3192.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 92., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 3192.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 3220.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 3220.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 3187.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 3187.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0., 169. ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_light_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -2378,46 +2378,46 @@ line_angles_frame_skip_1_datafilter_2results_FB_light_snow_30_4_:
    - { obj1: 2.6956934928894043e+00, obj2: -6.5853381156921387e+00 }
    - { obj1: 2.1816427707672119e+00, obj2: -8.7124109268188477e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_mild_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1877.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1877.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 25., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1866.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 25., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1866.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 16., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1920.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 16., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1920.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 16., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1920., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 9., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1891., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 24., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1935., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 41., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1905., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 33., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1906.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 16., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1920., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 9., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1891., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 24., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1935., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 41., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1905., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 33., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1906.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 21., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1901.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 21., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1901.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 15., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1882.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 15., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1882.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 21., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1926.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 21., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1926.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 37., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1877.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 37., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1877.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 28., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1800.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 28., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1800.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 22., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1751.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 22., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1751.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 38., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 38., 169. ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_mild_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -2478,46 +2478,46 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_mild_snow_30_4_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.0737011432647705e+00,
        2.1718120574951172e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_mild_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 3219.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 3219.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 3259.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 3259.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 104., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 3279.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 104., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 3279.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 3279., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 3287., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 3249., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 3242., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 3183.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 3279., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 3287., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 3249., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 3242., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 3183.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 83., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 3211.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 83., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 3211.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 74., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 3184.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 74., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 3184.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 67., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 3224.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 67., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 3224.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 92., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 3192.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 92., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 3192.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 3220.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 3220.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 74., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 3187.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 74., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 3187.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0., 169. ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_mild_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -2578,46 +2578,46 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_mild_snow_30_4_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.1364213228225708e+00,
        -1.1039575934410095e-01 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_mild_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 3219.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 3219.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 3259.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 3259.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 3279.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 3279.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 3279., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 3287., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 3249., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 3242., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 3183.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 3279., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 3287., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 3249., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 3242., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 3183.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 3211.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 3211.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 74., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 3184.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 74., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 3184.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 3224.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 3224.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 92., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 3192.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 92., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 3192.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 102., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 3220.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 102., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 3220.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 3187.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 3187.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0., 169. ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_mild_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -2774,46 +2774,46 @@ line_angles_frame_skip_1_datafilter_2results_FB_mild_snow_30_4_:
    - { obj1: 2.6956934928894043e+00, obj2: -6.5853381156921387e+00 }
    - { obj1: 2.1816427707672119e+00, obj2: -8.7124109268188477e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_heavy_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1751.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1751.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 26., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1659.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 26., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1659.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 21., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1682.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 21., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1682.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 16., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1691., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 11., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1668., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 22., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1685., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 36., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1685., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 33., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1727.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 16., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1691., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 11., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1668., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 22., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1685., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 36., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1685., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 33., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1727.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 24., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1724.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 24., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1724.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 19., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1647.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 19., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1647.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 21., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1661.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 21., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1661.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 31., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1639.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 31., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1639.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 37., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1553.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 37., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1553.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 19., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1512.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 19., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1512.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 40., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 40., 169. ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_heavy_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -2874,46 +2874,46 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_heavy_snow_30_4_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.2410662174224854e+00,
        1.4751225709915161e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_heavy_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 3150.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 3150.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 3147.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 3147.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 92., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 3133.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 92., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 3133.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 86., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 3145., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 3127., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 3119., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 132., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 3089., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 99., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 3113.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 86., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 3145., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 3127., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 3119., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 132., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 3089., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 99., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 3113.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 3087.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 3087.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 3042.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 3042.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 58., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 3062.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 58., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 3062.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 86., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 3001.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 86., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 3001.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 94., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 3024.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 94., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 3024.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 2973.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 2973.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 90., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 90., 169. ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_heavy_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -2974,46 +2974,46 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_heavy_snow_30_4_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.2262800931930542e+00,
        -8.8550090789794922e-02 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_heavy_snow_30_4_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 3150.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 3150.,
        6.1305000000000000e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 3147.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 3147.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 3133.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 3133.,
        6.1807500000000000e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 3145., 6150. ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 3127., 6150. ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 113., 169. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 3119., 6150. ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 3089., 6150. ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 3113.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 3145., 6150. ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 3127., 6150. ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 113., 169. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 3119., 6150. ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 3089., 6150. ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 3113.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 3087.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 3087.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 69., 169. ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 3042.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 69., 169. ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 3042.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 3062.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 11., 0. ], pixel_density: [ 3062.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 86., 169. ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 3001.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 86., 169. ] }
+   - { frame_count: [ 12., 0. ], pixel_density: [ 3001.,
        6.1192500000000000e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 0., 169. ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 3024.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 0., 169. ] }
+   - { frame_count: [ 13., 0. ], pixel_density: [ 3024.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 70., 169. ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 2973.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 70., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 2973.,
        6.0885000000000000e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 90., 169. ] }
+   - { frame_count: [ 14., 0. ], pixel_density: [ 90., 169. ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_heavy_snow_30_4_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
    - { objDim: [ 13., 52. ], objDisp: [ .nan, .nan ] }
@@ -3170,62 +3170,62 @@ line_angles_frame_skip_1_datafilter_2results_FB_heavy_snow_30_4_:
    - { obj1: 2.6576445102691650e+00, obj2: 2.6129949092864990e+00 }
    - { obj1: -1.7097404003143311e+00, obj2: -3.9953122138977051e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_none_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1215.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1215.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 20.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 20.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1308.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1308.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 7., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1305.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 7., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1305.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 13.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 13.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1241.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1241.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 17.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 17.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1252.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1252.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 17.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 17.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1315.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1315.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 19.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 19.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1262.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1262.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 24.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 24.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1242.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1242.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 12.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 12.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1248.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1248.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 23.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 23.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1252.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1252.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 18.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 18.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1223.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1223.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 30.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 30.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1258.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1258.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 21.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 21.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1193.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1193.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 16.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 16.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1159.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1159.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 34.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 34.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_none_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -3287,57 +3287,57 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_none_30_7_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.3166140317916870e+00,
        -8.4799569845199585e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_none_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1903.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1903.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 2015.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 2015.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1997.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1997.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 2011.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 2011.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 68.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 68.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 2029.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 2029.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 58.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 58.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 2009.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 2009.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 2008.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 2008.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1978.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1978.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 2004.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 2004.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 75.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 75.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 2004.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 2004.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 2009.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 2009.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 74.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 74.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1992.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1992.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1998.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1998.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 74.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 74.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1984.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1984.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 82.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 82.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_none_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -3399,59 +3399,59 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_none_30_7_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.2442188262939453e+00,
        -7.6812781393527985e-02 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_none_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1903.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1903.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 2015.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 2015.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 52.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 52.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1997.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1997.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 64.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 64.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 2011.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 2011.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 2029.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 2029.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 58.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 58.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 2009.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 2009.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 2008.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 2008.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 83.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 83.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1978.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1978.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 63.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 63.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 2004.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 2004.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 2004.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 2004.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 2009.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 2009.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1992.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1992.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1998.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1998.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1984.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1984.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_none_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -3609,62 +3609,62 @@ line_angles_frame_skip_1_datafilter_2results_FB_none_30_7_:
    - { obj1: 8.3459258079528809e-01, obj2: -1.8321008682250977e+01 }
    - { obj1: 1.1133483648300171e+00, obj2: -6.6506347656250000e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_light_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1099.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1099.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 14.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 14.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1137.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1137.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 10.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 10.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1141.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1141.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 16.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 16.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1107.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1107.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 11.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 11.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1110.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1110.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 11.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 11.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1141.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1141.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 17.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 17.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1145.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1145.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 15.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 15.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1147.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1147.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 16.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 16.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1106.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1106.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 4., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1104.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 4., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1104.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 14.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 14.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1092.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1092.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 14.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 14.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1110.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1110.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 19.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 19.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1041.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1041.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 13.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 13.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1061.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1061.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 33.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 33.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_light_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -3726,59 +3726,59 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_light_snow_30_7_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.0754253864288330e+00,
        2.1990785002708435e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_light_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1875.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1875.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1899.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1899.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 67.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 67.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1904.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1904.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 47.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 47.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1905.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1905.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1928.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1928.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1925.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1925.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1921.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1921.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 59.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 59.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1872.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1872.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 47.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 47.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1904.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1904.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 49.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 49.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1868.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1868.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1879.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1879.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 54.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 54.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1869.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1869.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 56.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 56.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1881.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1881.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1856.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1856.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 61.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 61.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_light_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -3840,56 +3840,56 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_light_snow_30_7_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.0539177656173706e+00,
        -3.5959005355834961e-02 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_light_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1875.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1875.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 68.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 68.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1899.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1899.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1904.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1904.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1905.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1905.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 61.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 61.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1928.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1928.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1925.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1925.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1921.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1921.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1872.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1872.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1904.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1904.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1868.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1868.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1879.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1879.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 54.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 54.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1869.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1869.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1881.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1881.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 46.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 46.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1856.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1856.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 61.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 61.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_light_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -4047,62 +4047,62 @@ line_angles_frame_skip_1_datafilter_2results_FB_light_snow_30_7_:
    - { obj1: 1.4332388639450073e+00, obj2: -3.7420911788940430e+00 }
    - { obj1: 1.9049948453903198e+00, obj2: -1.8370068073272705e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_mild_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1099.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1099.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 14.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 14.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1137.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1137.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 10.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 10.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1141.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1141.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 16.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 16.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1107.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1107.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 11.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 11.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1110.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1110.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 11.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 11.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1141.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1141.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 17.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 17.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1145.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1145.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 15.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 15.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1147.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1147.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 16.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 16.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1106.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1106.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 4., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1104.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 4., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1104.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 14.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 14.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1092.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1092.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 14.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 14.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1110.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1110.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 19.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 19.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1041.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1041.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 13.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 13.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1061.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1061.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 33.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 33.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_mild_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -4164,59 +4164,59 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_mild_snow_30_7_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.0754253864288330e+00,
        2.1990785002708435e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_mild_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1875.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1875.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1899.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1899.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 67.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 67.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1904.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1904.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 47.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 47.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1905.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1905.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1928.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1928.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1925.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1925.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1921.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1921.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 59.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 59.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1872.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1872.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 47.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 47.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1904.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1904.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 49.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 49.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1868.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1868.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1879.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1879.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 54.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 54.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1869.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1869.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 56.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 56.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1881.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1881.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1856.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1856.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 61.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 61.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_mild_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -4278,56 +4278,56 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_mild_snow_30_7_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.0539177656173706e+00,
        -3.5959005355834961e-02 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_mild_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1875.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1875.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 68.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 68.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1899.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1899.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1904.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1904.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1905.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1905.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 61.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 61.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1928.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1928.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1925.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1925.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1921.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1921.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1872.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1872.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1904.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1904.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1868.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1868.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1879.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1879.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 54.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 54.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1869.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1869.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1881.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1881.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 46.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 46.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1856.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1856.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 61.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 61.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_mild_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -4485,62 +4485,62 @@ line_angles_frame_skip_1_datafilter_2results_FB_mild_snow_30_7_:
    - { obj1: 1.4332388639450073e+00, obj2: -3.7420911788940430e+00 }
    - { obj1: 1.9049948453903198e+00, obj2: -1.8370068073272705e+00 }
 pixel_density_frame_skip_1_datafilter_0results_FB_heavy_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1009.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1009.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 16.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 16.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 996.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 996.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 10.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 10.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1007.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1007.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 19.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 19.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 979.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 979.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 13.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 13.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 985.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 985.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 11.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 11.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 984.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 984.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 13.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 13.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 973.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 973.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 11.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 11.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1005.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1005.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 17.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 17.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 980.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 980.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 6., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 980.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 6., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 980.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 10.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 10.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 963.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 963.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 11.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 11.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 989.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 989.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 19.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 19.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 908.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 908.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 11.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 11.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 906.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 906.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 25.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 25.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_0results_FB_heavy_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -4602,55 +4602,55 @@ obj_displacement_frame_skip_1_datafilter_0results_FB_heavy_snow_30_7_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.2394624948501587e+00,
        1.7909622192382812e-01 ] }
 pixel_density_frame_skip_1_datafilter_1results_FB_heavy_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1841.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1841.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1814.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1814.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 61.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 61.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1832.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1832.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1822.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1822.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1819.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1819.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1829.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1829.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1817.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1817.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1803.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1803.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1802.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1802.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1786.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1786.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1818.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1818.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 49.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 49.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1752.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1752.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 50.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 50.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1768.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1768.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1737.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1737.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 44.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 44.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_1results_FB_heavy_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
@@ -4712,57 +4712,57 @@ obj_displacement_frame_skip_1_datafilter_1results_FB_heavy_snow_30_7_:
    - { objDim: [ 13., 52. ], objDisp: [ -1.2270433902740479e+00,
        -9.1036058962345123e-02 ] }
 pixel_density_frame_skip_1_datafilter_2results_FB_heavy_snow_30_7_: 
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 0., 0. ], total_pixels: [ .nan, .nan ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 1841.,
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 0., 0. ], pixel_density: [ .nan, .nan ] }
+   - { frame_count: [ 1., 0. ], pixel_density: [ 1841.,
        3.5031428222656250e+03 ] }
-   - { good_pixels: [ 1., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 1814.,
+   - { frame_count: [ 1., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 2., 0. ], pixel_density: [ 1814.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 2., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 1832.,
+   - { frame_count: [ 2., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 3., 0. ], pixel_density: [ 1832.,
        3.5318571777343750e+03 ] }
-   - { good_pixels: [ 3., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 1822.,
+   - { frame_count: [ 3., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 4., 0. ], pixel_density: [ 1822.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 4., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 1819.,
+   - { frame_count: [ 4., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 5., 0. ], pixel_density: [ 1819.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 5., 0. ], total_pixels: [ 70.,
+   - { frame_count: [ 5., 0. ], pixel_density: [ 70.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 1829.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 1829.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 6., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 1817.,
+   - { frame_count: [ 6., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 7., 0. ], pixel_density: [ 1817.,
        3.5142856445312500e+03 ] }
-   - { good_pixels: [ 7., 0. ], total_pixels: [ 0., 9.6571426391601562e+01 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 1803.,
+   - { frame_count: [ 7., 0. ], pixel_density: [ 0., 9.6571426391601562e+01 ] }
+   - { frame_count: [ 8., 0. ], pixel_density: [ 1803.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 8., 0. ], total_pixels: [ 40.,
+   - { frame_count: [ 8., 0. ], pixel_density: [ 40.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 1802.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 1802.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 9., 0. ], total_pixels: [ 43.,
+   - { frame_count: [ 9., 0. ], pixel_density: [ 43.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 1786.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 1786.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 10., 0. ], total_pixels: [ 0.,
+   - { frame_count: [ 10., 0. ], pixel_density: [ 0.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 1818.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 1818.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 11., 0. ], total_pixels: [ 49.,
+   - { frame_count: [ 11., 0. ], pixel_density: [ 49.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 1752.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 1752.,
        3.4967143554687500e+03 ] }
-   - { good_pixels: [ 12., 0. ], total_pixels: [ 50.,
+   - { frame_count: [ 12., 0. ], pixel_density: [ 50.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 1768.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 1768.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 13., 0. ], total_pixels: [ 43.,
+   - { frame_count: [ 13., 0. ], pixel_density: [ 43.,
        9.6571426391601562e+01 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 1737.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 1737.,
        3.4791428222656250e+03 ] }
-   - { good_pixels: [ 14., 0. ], total_pixels: [ 44.,
+   - { frame_count: [ 14., 0. ], pixel_density: [ 44.,
        9.6571426391601562e+01 ] }
 obj_displacement_frame_skip_1_datafilter_2results_FB_heavy_snow_30_7_: 
    - { objDim: [ 201., 122. ], objDisp: [ .nan, .nan ] }
