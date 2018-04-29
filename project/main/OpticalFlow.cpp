@@ -223,9 +223,9 @@ void OpticalFlow::generate_edge_contour() {
                         //cv::waitKey(2000);
 
 
-                        auto new_edge_size = edge_movement.at(obj_index).size();
-                        std::cout << new_edge_size << std::endl;
-                        assert(new_edge_size != 0);
+                        auto edge_points = edge_movement.at(obj_index).size();
+                        std::cout << edge_points << std::endl;
+                        //assert(edge_points != 0);
 
                         outer_edge_movement.at(obj_index).push_back(edge_movement.at(obj_index));
 

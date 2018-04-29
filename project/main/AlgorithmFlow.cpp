@@ -218,8 +218,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 // Draw the optical generate_flow_frame map
                 if ( fb == algo ) {
-                    // Circles to indicate the uniform grid of points
-                    //cv::circle(image_02_frame, cv::Point(x, y), 1, cv::Scalar(0, 0, 0), -1, 8);
                     prev_pts_array.clear();
                     next_pts_array.clear();
                     for (int32_t row = 0; row < Dataset::getFrameSize().height; row += mStepSize) { // rows
@@ -227,6 +225,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                             cv::Point2f algorithmMovement ( flowFrame.at<cv::Point2f>(row, col).x, flowFrame
                                     .at<cv::Point2f>(row, col).y );
+                            // Circles to indicate the uniform grid of points
+                            cv::circle(image_02_frame, cv::Point(col, row), 1, cv::Scalar(0, 0, 0), -1, 8);
 
 
                             if (( cvFloor(std::abs(algorithmMovement.x)) == 0 && cvFloor(std::abs(algorithmMovement
@@ -292,7 +292,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 }
 
                 for (unsigned i = 0; i < next_pts_array.size(); i++) {
-                    cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
+                    //cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
                 }
 
                 std::vector<cv::Point2f>::iterator it, it2 ;
@@ -562,7 +562,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
             //cv::imwrite(temp_result_position_path, image_02_frame);
             //cv::waitKey(0);
-            cv::destroyAllWindows();
+            //cv::destroyAllWindows();
             prevGray = curGray.clone();
 
         }

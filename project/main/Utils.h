@@ -178,7 +178,7 @@ public:
 
         /// Set the ranges ( for B,G,R) )
 
-        float range[] = { (min-0.1f*std::abs(min)), (max+0.1f*std::abs(max)) } ;
+        float range[] = { (min-0.1f*std::abs(min)-1), (max+0.1f*std::abs(max)+1) } ;
 
         assert(range[0]<range[1]);
 
@@ -244,11 +244,10 @@ public:
         histogram.push_back(b_hist);
 
         /// Display
-        cv::namedWindow("calcHist Demo", CV_WINDOW_AUTOSIZE );
-        cv::imshow("calcHist Demo", histImage );
-
-        cv::waitKey(100);
-        cv::destroyAllWindows();
+        //cv::namedWindow("calcHist Demo", CV_WINDOW_AUTOSIZE );
+        //cv::imshow("calcHist Demo", histImage );
+        //cv::waitKey(100);
+        //cv::destroyAllWindows();
 
     }
 
