@@ -212,14 +212,14 @@ if __name__ == '__main__':
         if e.returncode != 1:
             exit(0)
 
-    plot_at_once_figures = list()
-    for step_size in step_list:
+    if ( 1 ):
+        plot_at_once_figures = list()
+        for step_size in step_list:
 
-        if ( evaluation == "environment"):
-            current_list = environment_list
+            if ( evaluation == "environment"):
+                current_list = environment_list
 
-        # ---------------------------------
-        if ( 1 ):
+            # ---------------------------------
             list_of_pixel_density_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_pixel_density[n*4:n*4+4])
@@ -234,17 +234,20 @@ if __name__ == '__main__':
             plot_at_once_figures.append(robustness.robustness_(file, "pixel", "no_noise", str(step_size), custom_data_list_pixel, color_list, "jaccard index no noise all algorithm" ))
             plot_at_once_figures.append(robustness.robustness_(file, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list))
 
-    plot_at_once(plot_at_once_figures)
+        plot_at_once(plot_at_once_figures)
 
+        summary = robustness.get_summary()
+        figures = Figures(1)
+        figures.evaluate_pixel(summary, step_list)
+        figures.save_figure("pixel", "summary")
 
-    plot_at_once_figures = list()
-    for step_size in step_list:
+    if ( 1 ):
+        plot_at_once_figures = list()
+        for step_size in step_list:
 
-        if ( evaluation == "environment"):
-            current_list = environment_list
+            if ( evaluation == "environment"):
+                current_list = environment_list
 
-        # ---------------------------------
-        if ( 1 ):
             list_of_collision_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
@@ -258,16 +261,21 @@ if __name__ == '__main__':
 
             plot_at_once_figures.append(robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list, "collision points no noise all algorithm"))
 
-    plot_at_once(plot_at_once_figures)
+        plot_at_once(plot_at_once_figures)
+        #summary = robustness.get_summary()
+        #figures = Figures(1)
+        #figures.evaluate_collision(summary, step_list)
+        #figures.save_figure("collision", "summary")
+
 
     # ---------------------------------
-    plot_at_once_figures = list()
-    for step_size in step_list:
+    if ( 1 ):
+        plot_at_once_figures = list()
+        for step_size in step_list:
 
-        if ( evaluation == "environment"):
-            current_list = environment_list
+            if ( evaluation == "environment"):
+                current_list = environment_list
 
-        if ( 1 ):
             list_of_collision_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
@@ -283,16 +291,20 @@ if __name__ == '__main__':
             plot_at_once_figures.append(robustness.robustness_(file, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list, "deviation environment algorithm "))
             #robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list, "collision points no noise all algorithm")
 
-    plot_at_once(plot_at_once_figures)
+        plot_at_once(plot_at_once_figures)
+        summary = robustness.get_summary()
+        figures = Figures(1)
+        figures.evaluate_deviation(summary, step_list)
+        figures.save_figure("deviation", "summary")
 
     # ---------------------------------
-    plot_at_once_figures = list()
-    for step_size in step_list:
+    if ( 1 ):
+        plot_at_once_figures = list()
+        for step_size in step_list:
 
-        if ( evaluation == "environment"):
-            current_list = environment_list
+            if ( evaluation == "environment"):
+                current_list = environment_list
 
-        if ( 1 ):
             list_of_obj_displacement_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_obj_displacement[n*4:n*4+4])
@@ -304,32 +316,18 @@ if __name__ == '__main__':
             for x in range(len(datafilter_list)):
                 custom_data_list_obj_displacement.append(list_of_obj_displacement_noise[x])
 
-            figures_plot_1 = robustness.robustness_(file, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list, "obj_displacement no noise all algorithm ")
-            figures_plot_2 = robustness.robustness_(file, "obj_displacement", "noise" , str(step_size), list_of_obj_displacement_noise, color_list, "obj_displacement environment algorithm ")
+            plot_at_once_figures.append(robustness.robustness_(file, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list, "obj_displacement no noise all algorithm "))
+            plot_at_once_figures.append(robustness.robustness_(file, "obj_displacement", "noise" , str(step_size), list_of_obj_displacement_noise, color_list, "obj_displacement environment algorithm "))
 
-    plot_at_once([figures_plot_1, figures_plot_2])
-
-        #scenario_displacement_occurence()
-        #histogramm()
-
-    if ( 1 ):
-        summary = robustness.get_summary()
-        figures = Figures(1)
-        figures.evaluate_pixel(summary, step_list)
-        figures.save_figure("pixel", "summary")
-
-        summary = robustness.get_summary()
-        figures = Figures(1)
-        figures.evaluate_deviation(summary, step_list)
-        figures.save_figure("deviation", "summary")
-
-        #summary = robustness.get_summary()
-        #figures = Figures(1)
-        #figures.evaluate_collision(summary, step_list)
-        #figures.save_figure("collision", "summary")
-
+        plot_at_once(plot_at_once_figures)
         summary = robustness.get_summary()
         figures = Figures(1)
         figures.evaluate_obj_displacement(summary, step_list)
         figures.save_figure("obj_displacement", "summary")
+
+        #scenario_displacement_occurence()
+        #histogramm()
+
+
+
 

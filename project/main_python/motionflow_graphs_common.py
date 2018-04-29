@@ -74,12 +74,12 @@ class Figures(object):
                                                             label=plot_number[figure_index][5][4*env_index+figure_index+x])
                 else:
                     line = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
-                                                             plot_number[figure_index][3][x]/SCALE, 'ko-', lw=1,
+                                                             plot_number[figure_index][3][x]/SCALE, 'ko', lw=1,
                                                              color=plot_number[figure_index][4][x+env_index],
                                                              label=plot_number[figure_index][5][4*env_index+figure_index+x])
 
 
-                self.list_of_plots[figure_index].legend(loc='upper right', fontsize='xx-small')
+                #IT self.list_of_plots[figure_index].legend(loc='upper right', fontsize='xx-small')
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
                 self.list_of_plots[figure_index].set_title(plot_number[figure_index][6])
 

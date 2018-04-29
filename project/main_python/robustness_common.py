@@ -94,17 +94,7 @@ def getCollisionPoints(data_points_gt, data_points):
     return x_axis, y_axis, y_axis_mean
 
 
-
-def getShape(data_points_gt, data_points):
-
-    data = list()
-
-    for count in range(len(data_points_gt)):
-        xy = list()
-        xy.append(data_points_gt[count]["frame_count"][0])
-        xy.append(data_points_gt[count]["pixel_density"][0])
-        xy.append(data_points_gt[count]["pixel_density"][1])
-        data.append(xy)
+def fuseDataFromSameFrames(data):
 
     newshape = list()
     previous_x_axis = 0
@@ -117,8 +107,13 @@ def getShape(data_points_gt, data_points):
 
             previous_x_axis = data[count][0]
             xy = list()
-            xy.append(frame_good_pixels/total_count)
-            xy.append(frame_total_pixels/total_count)
+            if ( total_count == 0 ):
+                xy.append(numpy.nan)
+                xy.append(numpy.nan)
+            else:
+                xy.append(frame_good_pixels)
+                xy.append(frame_total_pixels)
+
             newshape.append(xy)
             total_count = 0
             frame_good_pixels = 0
@@ -131,13 +126,38 @@ def getShape(data_points_gt, data_points):
                 frame_good_pixels = frame_good_pixels + data[count][1]
                 frame_total_pixels = frame_total_pixels + data[count][2]
 
+        # the last leg
         if ( count == len(data)-1 ):
 
             assert(total_count != 0)
             xy = list()
-            xy.append(frame_good_pixels/total_count)
-            xy.append(frame_total_pixels/total_count)
+            if ( total_count == 0 ):
+                xy.append(numpy.nan)
+                xy.append(numpy.nan)
+            else:
+                xy.append(frame_good_pixels)
+                xy.append(frame_total_pixels)
+
             newshape.append(xy)
+
+    return newshape
+
+
+
+def getShape(data_points_gt, data_points):
+
+    data = list()
+
+    for count in range(len(data_points_gt)):
+        xy = list()
+        xy.append(data_points_gt[count]["frame_count"][0])
+        xy.append(data_points_gt[count]["pixel_density"][0])
+        xy.append(data_points_gt[count]["pixel_density"][1])
+        data.append(xy)
+
+
+    newshape = fuseDataFromSameFrames(data)
+
 
     y_axis_mean = 0
     data = numpy.array(newshape)
@@ -152,35 +172,7 @@ def getShape(data_points_gt, data_points):
         xy.append(data_points[count]["pixel_density"][1])
         data.append(xy)
 
-    newshape = list()
-    previous_x_axis = 0
-    frame_good_pixels = 0
-    frame_total_pixels = 0
-    total_count = 0
-    for count in range(len(data)):
-
-        if ( data[count][0] != previous_x_axis ):
-
-            previous_x_axis = data[count][0]
-            xy = list()
-            xy.append(frame_good_pixels/total_count)
-            xy.append(frame_total_pixels/total_count)
-            newshape.append(xy)
-            total_count = 0
-            frame_good_pixels = 0
-            frame_total_pixels = 0
-
-        if ( data[count][0] == previous_x_axis ):
-            total_count = total_count+1
-            frame_good_pixels = frame_good_pixels + data[count][1]
-            frame_total_pixels = frame_total_pixels + data[count][2]
-
-        if ( count == len(data)-1 ):
-
-            xy = list()
-            xy.append(frame_good_pixels/total_count)
-            xy.append(frame_total_pixels/total_count)
-            newshape.append(xy)
+    newshape = fuseDataFromSameFrames(data)
 
     y_axis_mean = 0
     data = numpy.array(newshape)
