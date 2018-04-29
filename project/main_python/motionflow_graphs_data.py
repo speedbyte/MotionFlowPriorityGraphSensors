@@ -16,7 +16,7 @@ dict_environment = {
 }
 
 environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"]#night
-environment_list = ["none",]
+#environment_list = ["none",]
 
 step_list = [4, 7, 10]
 

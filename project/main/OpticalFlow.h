@@ -29,11 +29,11 @@ protected:
 
     boost::filesystem::path  m_plots_path;
 
-    std::vector<Objects *> &m_list_gt_objects;
+    std::vector<Objects *> &m_ptr_list_gt_objects;
 
-    std::vector<Objects *> &m_list_simulated_objects_base;
+    std::vector<Objects *> &m_ptr_list_simulated_objects_base;
 
-    std::vector<Objects *> &m_list_simulated_objects;
+    std::vector<Objects *> &m_ptr_list_simulated_objects;
 
     ushort mStepSize;
 
@@ -54,8 +54,8 @@ protected:
 
 public:
 
-    OpticalFlow( std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects_base, std::vector<Objects *> &list_simulated_objects, ushort stepSize ) :
-    m_list_gt_objects(list_gt_objects), m_list_simulated_objects_base(list_simulated_objects_base), m_list_simulated_objects(list_simulated_objects), mStepSize(stepSize)  { };
+    OpticalFlow( std::vector<Objects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects *> &ptr_list_simulated_objects, ushort stepSize ) :
+    m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getCollisionPoints () const {
         return m_list_frame_skip_collision_points;

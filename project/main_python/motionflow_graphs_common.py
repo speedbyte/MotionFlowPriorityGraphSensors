@@ -68,25 +68,26 @@ class Figures(object):
             for x in range(len(plot_configuration)):
 
                 if ( measuring_parameter == "obj_displacement" or measuring_parameter == "collision"):
-                    self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
+                    line1 = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
                                                             plot_number[figure_index][3][x]/SCALE, 'ko', lw=1,
                                                             color=plot_number[figure_index][4][x+env_index],
                                                             label=plot_number[figure_index][5][4*env_index+figure_index+x])
                 else:
-                    self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
+                    line = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
                                                              plot_number[figure_index][3][x]/SCALE, 'ko-', lw=1,
                                                              color=plot_number[figure_index][4][x+env_index],
                                                              label=plot_number[figure_index][5][4*env_index+figure_index+x])
 
 
-                #self.list_of_plots[figure_index].legend(loc='upper right', shadow=True, fontsize='x-small')
-
-                #self.list_of_plots[figure_index].legend()
+                self.list_of_plots[figure_index].legend(loc='upper right', fontsize='xx-small')
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
                 self.list_of_plots[figure_index].set_title(plot_number[figure_index][6])
 
-                self.list_of_plots[figure_index].set_ylim([plot_number[figure_index][7],
-                                                              plot_number[figure_index][8]])
+                self.list_of_plots[figure_index].set_xlim([plot_number[figure_index][7][0],
+                                                           plot_number[figure_index][7][1]])
+
+                self.list_of_plots[figure_index].set_ylim([plot_number[figure_index][8][0],
+                                                              plot_number[figure_index][8][1]])
 
 
     def plot_show_vector_coll_no_noise(self):
@@ -97,6 +98,8 @@ class Figures(object):
     def save_figure(self, measuring_parameter, noise, stepSize=65535):
 
         if ( self.figure_index >= 1 ):
+            #self.list_of_plots[0].legend(loc='upper right', fontsize='xx-small')
+            #self.list_of_plots[0].legend()
             step_suffix = dict_datafilters["datafilter_0"] + "stepSize_" + str(stepSize)
             if noise == "summary":
                 step_suffix = ''
@@ -137,7 +140,7 @@ class Figures(object):
 
         regroup = list()
 
-        regroup = [summary['pixel_none_1'][0], summary['pixel_light_snow_1'][0], summary['pixel_mild_snow_1'][0], summary['pixel_heavy_snow_1'][0]]
+        regroup = [summary['pixel_none_' + str(step_list[0])][0], summary['pixel_light_snow_' + str(step_list[0])][0], summary['pixel_mild_snow_' + str(step_list[0])][0], summary['pixel_heavy_snow_' + str(step_list[0])][0]]
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
         shift = 0

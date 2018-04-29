@@ -208,8 +208,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                         mean_displacement_vector_moving_avg_mean_y /= 2;
                         frame_shape_parameters_moving_avg_mean.push_back(
                                 std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                                        (0,
-                                         0)));
+                                        // I will anyways overwrite the whole thing later.. So this is not required, but still keeping for future references.
+                                        (mean_displacement_vector_moving_avg_mean_x,
+                                         mean_displacement_vector_moving_avg_mean_y)));
                     } else {
                         frame_shape_parameters_moving_avg_mean.push_back(
                                 std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f

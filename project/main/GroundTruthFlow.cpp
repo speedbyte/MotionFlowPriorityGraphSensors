@@ -78,7 +78,7 @@ void GroundTruthFlow::generate_flow_frame() {
         sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
         std::cout << "saving ground truth flow files for frame_skip " << frame_skip << std::endl;
 
-        unsigned FRAME_COUNT = (unsigned)m_list_gt_objects.at(0)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -108,25 +108,25 @@ void GroundTruthFlow::generate_flow_frame() {
             tempMatrix = cv::Scalar_<unsigned>(255,255,255);
             assert(tempMatrix.channels() == 3);
 
-            for (unsigned obj_index = 0; obj_index < m_list_gt_objects.size(); obj_index++) {
+            for (unsigned obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
                 // object image_data_and_shape
 
-                int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
-                int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+                int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                //if ( m_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
+                //if ( m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip - 1).at(frame_count) == true ) {
 
                 if ( width  != 0) {
 
-                    float columnBegin = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                    float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
                             (frame_skip-1).at(frame_count).m_region_of_interest_px.x;
-                    float rowBegin = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                    float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
                             (frame_skip-1).at(frame_count).m_region_of_interest_px.y;
 
 
                     // gt_displacement
-                    cv::Point2f displacement = m_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).second;
+                    cv::Point2f displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(frame_skip-1).at(frame_count).second;
 
                     cv::Mat roi;
                     roi = tempMatrix.
@@ -134,7 +134,7 @@ void GroundTruthFlow::generate_flow_frame() {
                             rowRange(cvRound(rowBegin), cvRound(rowBegin + height));
                     //bulk storage
                     //roi = cv::Scalar(displacement.x, displacement.y,
-                    //                 static_cast<float>(m_list_gt_objects.at(obj_index)->getObjectId()));
+                    //                 static_cast<float>(m_ptr_list_gt_objects.at(obj_index)->getObjectId()));
                     roi = cv::Scalar(displacement.x, displacement.y,
                                      static_cast<float>(1.0f));
 

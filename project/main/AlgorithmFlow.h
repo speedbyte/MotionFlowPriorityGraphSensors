@@ -26,8 +26,8 @@ private:
 
 public:
 
-    AlgorithmFlow( std::vector<Objects*> &list_gt_objects, std::vector<Objects*> &list_simulated_base_objects, std::vector<Objects*> &list_simulated_objects, ushort stepSize ) :
-    OpticalFlow(list_gt_objects, list_simulated_base_objects, list_simulated_objects, stepSize) {
+    AlgorithmFlow( std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) :
+    OpticalFlow(ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize) {
 
     }
 

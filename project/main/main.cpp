@@ -351,13 +351,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         for ( ushort stepSize = 4; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=3) {
 
-            std::vector<SimulatedObjects> list_of_simulated_objects_base;
-
             ptr_list_of_simulated_objects_base.clear();
 
+            std::vector<SimulatedObjects> list_of_simulated_objects_base; // this will always has 2 objects, because its only run once.
             std::vector<Objects *> ptr_list_of_simulated_objects;
-            std::vector<AlgorithmFlow> list_of_algorithm_flow;
 
+            std::vector<AlgorithmFlow> list_of_algorithm_flow;
             for (ushort obj_count = 0; obj_count < environment_list.size(); obj_count++) {
                 AlgorithmFlow fback(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
                                     ptr_list_of_simulated_objects, stepSize);
@@ -370,10 +369,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 if (cpp_dataset.execute || vires_dataset.execute) {
 
                     std::vector<SimulatedObjects> list_of_simulated_objects;
-                    ptr_list_of_simulated_objects.clear();
-                    SimulatedObjects::SimulatedobjectCurrentCount = 0;
+                    list_of_simulated_objects.clear(); // just to be sure, its empty, otherwise its not requied here.
 
-                    list_of_simulated_objects.clear();
+                    ptr_list_of_simulated_objects.clear();
+                    SimulatedObjects::SimulatedobjectCurrentCount = 0; // start from 0 for each list_of_algorithm
+
                     for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
                         //two objects
                         int width = list_of_gt_objects_base.at(obj_count).getInertialWidth();
@@ -383,9 +383,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         SimulatedObjects objects(("simulated_" + list_of_gt_objects_base.at(obj_count).getObjectName()), width,
                                                  height, extrapolated_visibility);
-                        list_of_simulated_objects.push_back(objects);
+                        list_of_simulated_objects.push_back(objects);  // mke two new objects
                     }
 
+                    // push the objects into the pointer. The pointer here will contain two elements.
                     for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
                         ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_count));
                     }

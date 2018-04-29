@@ -40,18 +40,18 @@ def getDeviationPoints(data_points_gt, data_points ):
 
     for n,i in enumerate(y_axis):
         if ( abs(i) > OUTLIER):
-            y0[n] = y0[n-1]
+            y_axis[n] = y_axis[n-1]
             if ( n == 0 ):
-                y0[n] = 0
+                y_axis[n] = 0
         if ( i == i ):
             count = count+1
             y_axis_mean=y_axis_mean+i
 
     for n,i in enumerate(x_axis):
         if ( abs(i) > OUTLIER):
-            x0[n] = x0[n-1]
+            x_axis[n] = x_axis[n-1]
             if ( n == 0 ):
-                x0[n] = 0
+                x_axis[n] = 0
 
     y_axis_mean = y_axis_mean/(count)
     return x_axis, y_axis, y_axis_mean
@@ -77,25 +77,25 @@ def getCollisionPoints(data_points_gt, data_points):
 
     for n,i in enumerate(y_axis):
         if ( abs(i) > OUTLIER):
-            y0[n] = y0[n-1]
+            y_axis[n] = y_axis[n-1]
             if ( n == 0 ):
-                y0[n] = 0
+                y_axis[n] = 0
         if ( i == i ):
             count = count+1
             y_axis_mean=y_axis_mean+i
 
     for n,i in enumerate(x_axis):
         if ( abs(i) > OUTLIER):
-            x0[n] = x0[n-1]
+            x_axis[n] = x_axis[n-1]
             if ( n == 0 ):
-                x0[n] = 0
+                x_axis[n] = 0
 
     y_axis_mean = y_axis_mean/(count)
     return x_axis, y_axis, y_axis_mean
 
 
 
-def getNewShape(data_points_gt, data_points):
+def getShape(data_points_gt, data_points):
 
     data = list()
 
@@ -124,13 +124,16 @@ def getNewShape(data_points_gt, data_points):
             frame_good_pixels = 0
             frame_total_pixels = 0
 
+        # ddata[coumt][0] has the frame_count
         if ( data[count][0] == previous_x_axis ):
-            total_count = total_count+1
-            frame_good_pixels = frame_good_pixels + data[count][1]
-            frame_total_pixels = frame_total_pixels + data[count][2]
+            if ( data[count][1] == data[count][1] ):
+                total_count = total_count+1
+                frame_good_pixels = frame_good_pixels + data[count][1]
+                frame_total_pixels = frame_total_pixels + data[count][2]
 
         if ( count == len(data)-1 ):
 
+            assert(total_count != 0)
             xy = list()
             xy.append(frame_good_pixels/total_count)
             xy.append(frame_total_pixels/total_count)

@@ -19,7 +19,8 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
     yaml_load = yaml_file_handle.load()
 
     #axes limits
-    lower = 0; upper = 0;
+    lower_x = 0; upper_x = 0;
+    lower_y = 0; upper_y = 0;
 
     # Ground Truth
     if ( measuring_parameter == "deviation"):
@@ -30,7 +31,7 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
     elif ( measuring_parameter == "pixel"):
         data_points_gt = yaml_load[list_of_pixel_density_ground_truth[0]]
         print "getting " , list_of_pixel_density_ground_truth[yaml_list_index_offset]
-        x_axis_gt, y_axis_gt, y_axis_gt_mean = getNewShape(data_points_gt, data_points_gt)
+        x_axis_gt, y_axis_gt, y_axis_gt_mean = getShape(data_points_gt, data_points_gt)
 
     elif ( measuring_parameter == "collision"):
         data_points_gt = yaml_load[list_of_collision_ground_truth[0]]
@@ -69,7 +70,7 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
                 if ( measuring_parameter == "deviation"):
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
                 elif ( measuring_parameter == "pixel"):
-                    x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
+                    x_axis, y_axis, y_axis_mean = getShape(data_points_gt, data_points)
                 elif ( measuring_parameter == "collision"):
                     x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points_gt, data_points)
                 elif ( measuring_parameter == "obj_displacement"):
@@ -85,7 +86,7 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
                 if ( measuring_parameter == "deviation"):
                     x_axis, y_axis, y_axis_mean = getDeviationPoints(data_points_gt, data_points)
                 elif ( measuring_parameter == "pixel"):
-                    x_axis, y_axis, y_axis_mean = getNewShape(data_points_gt, data_points)
+                    x_axis, y_axis, y_axis_mean = getShape(data_points_gt, data_points)
                 elif ( measuring_parameter == "collision"):
                     x_axis, y_axis, y_axis_mean = getCollisionPoints(data_points_gt, data_points)
                 elif ( measuring_parameter == "obj_displacement"):
@@ -100,8 +101,8 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
                          color_list,
                          data_list,
                          measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize),
-                         lower,
-                         upper,
+                         (lower_x, upper_x),
+                         (lower_y, upper_y),
                          ]
 
             if ( noise == "noise"):
@@ -109,8 +110,8 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
 
             mean_list.append(y_axis_mean)
 
-            lower = min(numpy.nanmin(y_axis), lower)
-            upper = max(numpy.nanmax(y_axis), upper)
+            lower_y = min(numpy.nanmin(y_axis), lower_y)
+            upper_y = max(numpy.nanmax(y_axis), upper_y)
 
         if ( noise == "no_noise"):
             plot1 = ['x_axis',
@@ -120,8 +121,8 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
                      color_list,
                      data_list,
                      measuring_parameter + " all datafilters " + " step size" + " " + str(stepSize),
-                     lower,
-                     upper,
+                     (lower_x, upper_x),
+                     (lower_y, upper_y),
                      ]
 
             list_of_plots.append(plot1)

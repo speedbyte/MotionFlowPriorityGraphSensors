@@ -185,7 +185,7 @@ if __name__ == '__main__':
             current_list = environment_list
 
         # ---------------------------------
-        if (1):
+        if ( 1 ):
             list_of_pixel_density_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_pixel_density[n*4:n*4+4])
@@ -201,7 +201,7 @@ if __name__ == '__main__':
             robustness.robustness_(file, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list)
 
         # ---------------------------------
-        if (0):
+        if ( 1 ):
             list_of_collision_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
@@ -216,7 +216,7 @@ if __name__ == '__main__':
             robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list, "collision points no noise all algorithm")
 
         # ---------------------------------
-        if (0):
+        if ( 1 ):
             list_of_collision_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
@@ -234,7 +234,7 @@ if __name__ == '__main__':
 
 
         # ---------------------------------
-        if (0):
+        if ( 1 ):
             list_of_obj_displacement_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_obj_displacement[n*4:n*4+4])
@@ -253,7 +253,7 @@ if __name__ == '__main__':
         #scenario_displacement_occurence()
         #histogramm()
 
-    if ( 0 ):
+    if ( 1 ):
         summary = robustness.get_summary()
         figures = Figures(1)
         figures.evaluate_pixel(summary, step_list)
