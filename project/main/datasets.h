@@ -46,7 +46,7 @@
 #define MAX_DUMPS 10
 
 #define STENCIL_GRID_COMPRESSOR 1  // every x pixels
-#define STENCIL_GRID_EXTENDER 10 // 10 % more than the original size
+#define STENCIL_GRID_EXTENDER 15 // 10 pixels more than roi on each side
 
 #define DO_STENCIL_GRID_EXTENSION 1
 
