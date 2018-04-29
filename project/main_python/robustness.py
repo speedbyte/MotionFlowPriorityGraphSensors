@@ -13,6 +13,8 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
 
     #summary_mean.clear()
 
+    figures_plot = list()
+
     yaml_list_index_offset=0
 
     yaml_file_handle = YAMLParser(file)
@@ -43,11 +45,6 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
         print "getting " , list_of_obj_displacement_ground_truth[0]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = getObjectDisplacement(data_points_gt, data_points_gt)
 
-    if ( noise == "no_noise" ):
-        figures = Figures(1)
-    else:
-        figures = Figures(len(datafilter_list))
-
     for env_name in environment_list:
 
         print "Table " + measuring_parameter + " robustness with " + env_name + " " + noise
@@ -61,6 +58,13 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
         y_axis_list = list()
         x_axis_list.append(x_axis_gt)
         y_axis_list.append(y_axis_gt)
+
+        lower_x = min(numpy.nanmin(x_axis_gt), lower_x)
+        upper_x = max(numpy.nanmax(x_axis_gt), upper_x)
+
+        lower_y = min(numpy.nanmin(y_axis_gt), lower_y)
+        upper_y = max(numpy.nanmax(y_axis_gt), upper_y)
+
 
         for datafilter_index in range(len(datafilter_list)):
 
@@ -101,14 +105,17 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
                          color_list,
                          data_list,
                          measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize),
-                         (lower_x, upper_x),
-                         (lower_y, upper_y),
+                         [lower_x, upper_x],
+                         [lower_y, upper_y],
                          ]
 
             if ( noise == "noise"):
                 list_of_plots.append(plot1)
 
             mean_list.append(y_axis_mean)
+
+            lower_x = min(numpy.nanmin(x_axis), lower_x)
+            upper_x = max(numpy.nanmax(x_axis), upper_x)
 
             lower_y = min(numpy.nanmin(y_axis), lower_y)
             upper_y = max(numpy.nanmax(y_axis), upper_y)
@@ -121,18 +128,12 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
                      color_list,
                      data_list,
                      measuring_parameter + " all datafilters " + " step size" + " " + str(stepSize),
-                     (lower_x, upper_x),
-                     (lower_y, upper_y),
+                     [lower_x, upper_x],
+                     [lower_y, upper_y],
                      ]
 
             list_of_plots.append(plot1)
 
-        if measuring_parameter == "pixel":
-            lower=0; upper=1;
-
-        for datafilter_index in range(len(list_of_plots)):
-            list_of_plots[datafilter_index][7] = lower
-            list_of_plots[datafilter_index][8] = upper
 
         if noise == "noise":
             # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
@@ -140,11 +141,11 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
 
         yaml_list_index_offset = yaml_list_index_offset + 4
 
-        figures.plot_all(list_of_plots, dict_environment[env_name], measuring_parameter)
+        figures_plot.append((list_of_plots, dict_environment[env_name], measuring_parameter, noise, stepSize, lower_x, upper_x, lower_y, upper_y))
         if (noise == "no_noise" ):
             break
 
-    figures.save_figure(measuring_parameter, noise, stepSize)
+    return figures_plot
 
 
 def get_summary():

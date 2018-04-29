@@ -98,8 +98,6 @@ class Figures(object):
     def save_figure(self, measuring_parameter, noise, stepSize=65535):
 
         if ( self.figure_index >= 1 ):
-            #self.list_of_plots[0].legend(loc='upper right', fontsize='xx-small')
-            #self.list_of_plots[0].legend()
             step_suffix = dict_datafilters["datafilter_0"] + "stepSize_" + str(stepSize)
             if noise == "summary":
                 step_suffix = ''
@@ -182,7 +180,7 @@ class Figures(object):
 
         regroup = list()
 
-        regroup = [summary['deviation_none_1'][0], summary['deviation_light_snow_1'][0], summary['deviation_mild_snow_1'][0], summary['deviation_heavy_snow_1'][0]]
+        regroup = [summary['deviation_none_' + str(step_list[0])][0], summary['deviation_light_snow_' + str(step_list[0])][0], summary['deviation_mild_snow_' + str(step_list[0])][0], summary['deviation_heavy_snow_' + str(step_list[0])][0]]
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
         shift = 0
@@ -216,7 +214,7 @@ class Figures(object):
 
         regroup = list()
 
-        regroup = [summary['obj_displacement_none_1'][0], summary['obj_displacement_light_snow_1'][0], summary['obj_displacement_mild_snow_1'][0], summary['obj_displacement_heavy_snow_1'][0]]
+        regroup = [summary['obj_displacement_none_' + str(step_list[0])][0], summary['obj_displacement_light_snow_' + str(step_list[0])][0], summary['obj_displacement_mild_snow_' + str(step_list[0])][0], summary['obj_displacement_heavy_snow_' + str(step_list[0])][0]]
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
         shift = 0

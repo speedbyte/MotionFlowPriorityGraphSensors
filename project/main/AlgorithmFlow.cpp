@@ -339,18 +339,20 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height), cv::Scalar(0,0,255), 4, 8, 0 );
 
                         cv::Mat roi = stencilFrame.
-                                rowRange(cvRound(rowBegin-height*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
-                                         (cvRound(rowBegin+height+height*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)))).
-                                colRange(cvRound(columnBegin-width*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
-                                         (cvRound(columnBegin+width+width*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER))));
+                                rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
+                                         (cvRound(rowBegin+height+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)))).
+                                colRange(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
+                                         (cvRound(columnBegin+width+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER))));
 
 
                         cv::Size roi_size;
                         cv::Point roi_offset;
                         roi.locateROI(roi_size, roi_offset);
 
-                        cv::rectangle(image_02_frame, cv::Rect(roi_offset.x, roi_offset.y, roi_size.width, roi_size.height), cv::Scalar(255,255,255), 6, 8, 0 );
-
+                        cv::rectangle(image_02_frame, cv::Rect(roi_offset.x, roi_offset.y,
+                                                               width + 2*(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER),
+                                                               height + 2*(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
+                                      cv::Scalar(255,255,255), 4, 8, 0 );
 
                         cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
                                 (frame_skip-1).at(frame_count).second;

@@ -21,6 +21,37 @@ file = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
 
 SCALE = 1
 
+
+def plot_at_once(figures_plot_array):
+
+    lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
+
+    for figures_plot in figures_plot_array:
+        for figures_plot_index in range(len(figures_plot)):
+            lower_x = min(figures_plot[figures_plot_index][5], lower_x)
+            upper_x = max(figures_plot[figures_plot_index][6], upper_x)
+            lower_y = min(figures_plot[figures_plot_index][7], lower_y)
+            upper_y = max(figures_plot[figures_plot_index][8], upper_y)
+
+    for figures_plot in figures_plot_array:
+
+        figures = Figures(len(figures_plot[0][0]))
+
+        for figures_plot_index in range(len(figures_plot)):
+
+            print figures_plot[figures_plot_index][0][0][8][1]
+
+            figures_plot[figures_plot_index][0][0][7][0] = lower_x
+            figures_plot[figures_plot_index][0][0][7][1] = upper_x
+            figures_plot[figures_plot_index][0][0][8][0] = lower_y
+            figures_plot[figures_plot_index][0][0][8][1] = upper_y
+
+            figures.plot_all(figures_plot[figures_plot_index][0], figures_plot[figures_plot_index][1], figures_plot[figures_plot_index][2])
+
+        figures.save_figure(figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], figures_plot[figures_plot_index][4])
+
+
+
 def histogramm():
 
     with open("hist") as test:
@@ -185,7 +216,7 @@ if __name__ == '__main__':
             current_list = environment_list
 
         # ---------------------------------
-        if ( 1 ):
+        if ( 0 ):
             list_of_pixel_density_noise = list()
             for n, i in enumerate(current_list):
                 temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_pixel_density[n*4:n*4+4])
@@ -197,8 +228,29 @@ if __name__ == '__main__':
             for x in range(len(datafilter_list)):
                 custom_data_list_pixel.append(list_of_pixel_density_noise[x])
 
-            robustness.robustness_(file, "pixel", "no_noise", str(step_size), custom_data_list_pixel, color_list, "jaccard index no noise all algorithm" )
-            robustness.robustness_(file, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list)
+            figures_plot_1 = robustness.robustness_(file, "pixel", "no_noise", str(step_size), custom_data_list_pixel, color_list, "jaccard index no noise all algorithm" )
+            figures_plot_2 = robustness.robustness_(file, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list)
+
+            plot_at_once([figures_plot_1, figures_plot_2])
+
+
+
+        # ---------------------------------
+        if ( 0 ):
+            list_of_collision_noise = list()
+            for n, i in enumerate(current_list):
+                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
+                list_of_collision_noise += temp_list
+            print list_of_collision_noise
+
+            custom_data_list_deviation = list()
+            custom_data_list_deviation.append(list_of_collision_ground_truth[0])
+            for x in range(len(datafilter_list)):
+                custom_data_list_deviation.append(list_of_collision_noise[x])
+
+            figures_plot_1 = robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list, "collision points no noise all algorithm")
+
+            plot_at_once([figures_plot_1])
 
         # ---------------------------------
         if ( 1 ):
@@ -213,25 +265,11 @@ if __name__ == '__main__':
             for x in range(len(datafilter_list)):
                 custom_data_list_deviation.append(list_of_collision_noise[x])
 
-            robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list, "collision points no noise all algorithm")
-
-        # ---------------------------------
-        if ( 1 ):
-            list_of_collision_noise = list()
-            for n, i in enumerate(current_list):
-                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
-                list_of_collision_noise += temp_list
-            print list_of_collision_noise
-
-            custom_data_list_deviation = list()
-            custom_data_list_deviation.append(list_of_collision_ground_truth[0])
-            for x in range(len(datafilter_list)):
-                custom_data_list_deviation.append(list_of_collision_noise[x])
-
-            robustness.robustness_(file, "deviation", "no_noise", str(step_size),  custom_data_list_deviation, color_list, "deviation no noise all algorithm ")
-            robustness.robustness_(file, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list, "deviation environment algorithm ")
+            figures_plot_1 = robustness.robustness_(file, "deviation", "no_noise", str(step_size),  custom_data_list_deviation, color_list, "deviation no noise all algorithm ")
+            figures_plot_2 = robustness.robustness_(file, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list, "deviation environment algorithm ")
             #robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list, "collision points no noise all algorithm")
 
+            plot_at_once([figures_plot_1, figures_plot_2])
 
         # ---------------------------------
         if ( 1 ):
@@ -246,9 +284,10 @@ if __name__ == '__main__':
             for x in range(len(datafilter_list)):
                 custom_data_list_obj_displacement.append(list_of_obj_displacement_noise[x])
 
-            robustness.robustness_(file, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list, "obj_displacement no noise all algorithm ")
-            robustness.robustness_(file, "obj_displacement", "noise" , str(step_size), list_of_obj_displacement_noise, color_list, "obj_displacement environment algorithm ")
+            figures_plot_1 = robustness.robustness_(file, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list, "obj_displacement no noise all algorithm ")
+            figures_plot_2 = robustness.robustness_(file, "obj_displacement", "noise" , str(step_size), list_of_obj_displacement_noise, color_list, "obj_displacement environment algorithm ")
 
+            plot_at_once([figures_plot_1, figures_plot_2])
 
         #scenario_displacement_occurence()
         #histogramm()
