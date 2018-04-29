@@ -208,9 +208,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     std::map<std::string, double> time_map;
 
-    std::vector<unsigned> x_pts;
-    std::vector<double> y_pts;
-    std::vector<unsigned> z_pts;
+
     std::vector<float> time;
     double sum_time = 0;
     std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
@@ -350,13 +348,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         tic = steady_clock::now();
 
         ushort fps = 30;
-        /*
-         To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
-         */
 
-        for ( ushort stepSize = 1; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=3) {
+        for ( ushort stepSize = 4; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=3) {
 
             std::vector<SimulatedObjects> list_of_simulated_objects_base;
+
+            ptr_list_of_simulated_objects_base.clear();
 
             std::vector<Objects *> ptr_list_of_simulated_objects;
             std::vector<AlgorithmFlow> list_of_algorithm_flow;
@@ -451,19 +448,17 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     }
 
-    time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
 
     int total = 0;
     for ( auto &n : time_map )
     {
         std::cout << n.first << " " << n.second << std::endl;
         total += n.second;
-
     }
+
+    time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
+
     std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;
-
-
-
 
 
     /* MATLAB_DATASET ------------- */

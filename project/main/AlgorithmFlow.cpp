@@ -225,9 +225,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                             cv::Point2f algorithmMovement ( flowFrame.at<cv::Point2f>(row, col).x, flowFrame
                                     .at<cv::Point2f>(row, col).y );
-                            // Circles to indicate the uniform grid of points
-                            cv::circle(image_02_frame, cv::Point(col, row), 1, cv::Scalar(0, 0, 0), -1, 8);
-
 
                             if (( cvFloor(std::abs(algorithmMovement.x)) == 0 && cvFloor(std::abs(algorithmMovement
                                                                                                           .y)) == 0 )) {
@@ -292,6 +289,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 }
 
                 for (unsigned i = 0; i < next_pts_array.size(); i++) {
+                    // Circles to indicate the uniform grid of points
+                    cv::circle(image_02_frame, next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
                     //cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
                 }
 
@@ -330,20 +329,14 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             (frame_skip-1).at(frame_count).m_region_of_interest_px.x;
                     float rowBegin = m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
                             (frame_skip-1).at(frame_count).m_region_of_interest_px.y;
-                    /*
-                    if ( cvRound(rowBegin)%2 != 0 && stepSize %2 != 0 )   {
-                        rowBegin+=1;
-                    }
-                    if ( cvRound(columnBegin)%2 != 0 && stepSize%2 != 0 ) {
-                        columnBegin+=1;
-                    }
-                     */
 
                     int width = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
                     int height = cvRound(m_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
                     bool visibility = m_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(frame_skip-1).at(frame_count);
                     if ( visibility ) {
+
+                        cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height), cv::Scalar(0,0,255), 4, 8, 0 );
 
                         cv::Mat roi = stencilFrame.
                                 rowRange(cvRound(rowBegin-height*(DO_STENCIL_GRID_EXTENSION/STENCIL_GRID_EXTENDER)),
@@ -371,7 +364,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             std::cout << "making a stencil on the basis of groundtruth object " << m_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
                             auto COUNT = m_list_simulated_objects_base.size();
-                            //assert(COUNT==0);
+                            assert(COUNT==0);
                             //std::cout << next_pts_array << std::endl;
                             for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                                 for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
@@ -404,7 +397,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         }
                         else {
 
-                            //assert(m_list_simulated_objects.size() == m_list_simulated_objects_base.size());
+                            assert(m_list_simulated_objects.size() == m_list_simulated_objects_base.size());
                             std::cout << "making a stencil on the basis of base algorithm object " << m_list_simulated_objects_base.at(obj_index)->getObjectId() << std::endl;
 
 
@@ -560,7 +553,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             // Display the output image
             //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
             //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
-            //cv::imwrite(temp_result_position_path, image_02_frame);
+            cv::imwrite(temp_result_position_path, image_02_frame);
             //cv::waitKey(0);
             //cv::destroyAllWindows();
             prevGray = curGray.clone();

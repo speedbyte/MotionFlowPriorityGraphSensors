@@ -21,7 +21,7 @@
 #define STEP_SIZE_ALGO_MAX 10
 #define DISPLACEMENT_ROUND_OFF 100
 
-#define MAX_ITERATION_RESULTS 5 // 60 generate result. this cannot be more than vector
+#define MAX_ITERATION_RESULTS 15 // 60 generate result. this cannot be more than vector
 
 #define MAX_ITERATION_GT_SCENE_GENERATION_VECTOR MAX_ITERATION_RESULTS   // generate_obj_base_pixel_position_pixel_displacement vector
 #define MAX_ITERATION_GT_SCENE_GENERATION_IMAGES MAX_ITERATION_RESULTS   // generate images. this cannot be more than vector
@@ -37,7 +37,7 @@
 #define IMAGE_WIDTH 800
 #define IMAGE_HEIGHT 600
 
-#define DISTANCE_ERROR_TOLERANCE 1
+#define DISTANCE_ERROR_TOLERANCE 0.5
 #define ANGLE_ERROR_TOLERANCE 5
 
 #define MAX_ALLOWED_OBJECTS 10

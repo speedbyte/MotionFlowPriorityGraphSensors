@@ -143,7 +143,7 @@ class Figures(object):
         shift = 0
         for val in range(len(step_list)):
             for step_size in step_list:
-                regroup = list()snl
+                regroup = list()
                 shift = shift+1
                 for env_name in environment_list:
                     #print 'pixel_' + env_name + '_' + str(step_size)

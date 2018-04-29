@@ -441,6 +441,14 @@ void calcBBFrom3DPosition(int screen_width, int screen_height, QVector3D cam_pos
     m_bb.setBottomRight(max);
 }
 
+std::vector<unsigned> x_pts;
+std::vector<double> y_pts;
+std::vector<unsigned> z_pts;
+
+/*
+ To summarize, we compare six costs: sampling-insensitive absolute differences (BT), three filter-based costs (LoG, Rank, and Mean), hierarchical mutual information (HMI), and normalized cross-correlation (NCC).*
+ */
+
 
 
 auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
@@ -456,4 +464,46 @@ std::string tmp = std::string(" with points title ") + std::string("'") + Datase
 
 for(auto &n : time)
 sum_time +=n;
+
+
+
+
+// in ground truth part
+if ( datafilter_index < 0 ) {
+
+if ( scenario_displacement_occurence.count(std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)) ) {
+
+}
+else {
+
+}
+
+/*
+if ( scenario_displacement_occurence.count(std::make_pair(65535,65535)) ) {
+    scenario_displacement_occurence[std::make_pair(65535,65535)] = scenario_displacement_occurence[std::make_pair(65535,65535)] + 1;
+}
+else {
+    scenario_displacement_occurence[std::make_pair(65535,65535)] = 1;
+}*/
+}
+
+
+// in else part
+if ( datafilter_index < 0 ) {
+if ( scenario_displacement_occurence.count(std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)) ) {
+scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] = scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] + 1;
+}
+else {
+scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] = 1;
+}
+
+/*
+if ( scenario_displacement_occurence.count(std::make_pair(65535,65535)) ) {
+    scenario_displacement_occurence[std::make_pair(65535,65535)] = scenario_displacement_occurence[std::make_pair(65535,65535)] + 1;
+}
+else {
+    scenario_displacement_occurence[std::make_pair(65535,65535)] = 1;
+}*/
+
+}
 

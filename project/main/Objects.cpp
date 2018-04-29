@@ -208,8 +208,8 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                         mean_displacement_vector_moving_avg_mean_y /= 2;
                         frame_shape_parameters_moving_avg_mean.push_back(
                                 std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                                        (mean_displacement_vector_moving_avg_mean_x,
-                                         mean_displacement_vector_moving_avg_mean_y)));
+                                        (0,
+                                         0)));
                     } else {
                         frame_shape_parameters_moving_avg_mean.push_back(
                                 std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
@@ -367,6 +367,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                             mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y);
                     frame_shape_parameters_ranked_mean.at(cluster_index).second = cv::Point2f(
                             mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y);
+                    frame_shape_parameters_moving_avg_mean.at(cluster_index).second = cv::Point2f(
+                            mean_displacement_vector_moving_avg_mean_x, mean_displacement_vector_moving_avg_mean_y);
+
 
                 }
 

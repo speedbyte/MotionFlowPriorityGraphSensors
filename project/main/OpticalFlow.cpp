@@ -321,30 +321,11 @@ void OpticalFlow::generate_shape_points() {
                         auto dist_gt = cv::norm(gt_displacement);
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
-
-
                         if (m_resultordner == "/ground_truth") {
 
                             vollTreffer = CLUSTER_COUNT_GT;
                             baseTreffer = CLUSTER_COUNT_GT;
 
-                            if ( datafilter_index < 0 ) {
-
-                                if ( scenario_displacement_occurence.count(std::make_pair(std::round(gt_displacement.x*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF,std::round(gt_displacement.y*DISPLACEMENT_ROUND_OFF)/DISPLACEMENT_ROUND_OFF)) ) {
-
-                                }
-                                else {
-
-                                }
-
-                                /*
-                                if ( scenario_displacement_occurence.count(std::make_pair(65535,65535)) ) {
-                                    scenario_displacement_occurence[std::make_pair(65535,65535)] = scenario_displacement_occurence[std::make_pair(65535,65535)] + 1;
-                                }
-                                else {
-                                    scenario_displacement_occurence[std::make_pair(65535,65535)] = 1;
-                                }*/
-                            }
                         }
                         else {
                             for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
@@ -353,40 +334,22 @@ void OpticalFlow::generate_shape_points() {
                                                 get_list_obj_shape_parameters().at(datafilter_index
                                                 ).at(frame_skip - 1).at(frame_count).at(cluster_count).second;
 
-                                if ( datafilter_index == 0 ) {
-                                    if ( scenario_displacement_occurence.count(std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)) ) {
-                                        scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] = scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] + 1;
-                                    }
-                                    else {
-                                        scenario_displacement_occurence[std::make_pair(std::round(algo_displacement.x*10)/10,std::round(algo_displacement.y*10)/10)] = 1;
-                                    }
-
-                                    /*
-                                    if ( scenario_displacement_occurence.count(std::make_pair(65535,65535)) ) {
-                                        scenario_displacement_occurence[std::make_pair(65535,65535)] = scenario_displacement_occurence[std::make_pair(65535,65535)] + 1;
-                                    }
-                                    else {
-                                        scenario_displacement_occurence[std::make_pair(65535,65535)] = 1;
-                                    }*/
-
-                                }
-
                                 auto dist_algo = cv::norm(algo_displacement);
                                 auto dist_err = std::abs(dist_gt - dist_algo);
 
                                 auto angle_algo = std::tanh(algo_displacement.y/algo_displacement.x);
 
-                                auto angle_err = angle_algo - angle_gt;
+                                auto angle_err = std::abs(angle_algo - angle_gt);
                                 auto angle_err_dot = std::cosh(
                                         algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
 
                                 //assert(angle_err_dot==angle_err);
 
-                                if (((
-                                             std::abs(dist_err) < DISTANCE_ERROR_TOLERANCE &&
-                                             std::abs(angle_err*180/CV_PI)) < ANGLE_ERROR_TOLERANCE
+                                if (
+                                        (dist_err) < DISTANCE_ERROR_TOLERANCE &&
+                                        (angle_err*180/CV_PI) < ANGLE_ERROR_TOLERANCE
 
-                                )) {
+                                ) {
                                     vollTreffer++;
                                 }
 

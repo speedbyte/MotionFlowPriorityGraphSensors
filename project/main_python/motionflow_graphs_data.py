@@ -16,9 +16,9 @@ dict_environment = {
 }
 
 environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"]#night
-#environment_list = ["none",]
+environment_list = ["none",]
 
-step_list = [1, 4, 7]
+step_list = [4, 7, 10]
 
 fps_list = ["30", "15", "10", "7.5"]#night
 fps_list = ["30",]
