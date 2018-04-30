@@ -201,9 +201,10 @@ def scenario_displacement_occurence():
 
 class thread1(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, yaml_load):
         threading.Thread.__init__(self)
         self.threadRun = False
+        self.yaml_load = yaml_load
 
     def stop(self):
         self.threadRun = False
@@ -231,8 +232,8 @@ class thread1(threading.Thread):
             for x in range(len(datafilter_list)):
                 custom_data_list_pixel.append(list_of_pixel_density_noise[x])
 
-            self.plot_at_once_figures.append(robustness.robustness_(file, "pixel", "no_noise", str(step_size), custom_data_list_pixel, color_list_algorithms, label_list_algorithm, "jaccard index no noise all algorithm" ))
-            self.plot_at_once_figures.append(robustness.robustness_(file, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list_environment, label_list_enironment))
+            self.plot_at_once_figures.append(robustness.robustness_(yaml_load, "pixel", "no_noise", str(step_size), custom_data_list_pixel, color_list_algorithms, label_list_algorithm, "jaccard index no noise all algorithm" ))
+            self.plot_at_once_figures.append(robustness.robustness_(yaml_load, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list_environment, label_list_enironment))
         self.threadRun = False
 
     def getThreadState(self):
@@ -245,9 +246,10 @@ class thread1(threading.Thread):
 
 class thread2(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, yaml_load):
         threading.Thread.__init__(self)
         self.threadRun = False
+        self.yaml_load = yaml_load
 
     def stop(self):
         self.threadRun = False
@@ -274,8 +276,8 @@ class thread2(threading.Thread):
             for x in range(len(datafilter_list)):
                 custom_data_list_deviation.append(list_of_collision_noise[x])
 
-            self.plot_at_once_figures.append(robustness.robustness_(file, "deviation", "no_noise", str(step_size),  custom_data_list_deviation, color_list_algorithms, label_list_algorithm,  "deviation no noise all algorithm "))
-            self.plot_at_once_figures.append(robustness.robustness_(file, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list_environment, label_list_enironment, "deviation environment algorithm "))
+            self.plot_at_once_figures.append(robustness.robustness_(yaml_load, "deviation", "no_noise", str(step_size),  custom_data_list_deviation, color_list_algorithms, label_list_algorithm,  "deviation no noise all algorithm "))
+            self.plot_at_once_figures.append(robustness.robustness_(yaml_load, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list_environment, label_list_enironment, "deviation environment algorithm "))
 
         self.threadRun = False
 
@@ -288,9 +290,10 @@ class thread2(threading.Thread):
 
 class thread3(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, yaml_load):
         threading.Thread.__init__(self)
         self.threadRun = False
+        self.yaml_load = yaml_load
 
     def stop(self):
         self.threadRun = False
@@ -317,7 +320,7 @@ class thread3(threading.Thread):
             for x in range(len(datafilter_list)):
                 custom_data_list_deviation.append(list_of_collision_noise[x])
 
-            plot_at_once_figures.append(robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list_algorithms, label_list_algorithm, "collision points no noise all algorithm"))
+            self.plot_at_once_figures.append(robustness.robustness_(yaml_load, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list_algorithms, label_list_algorithm, "collision points no noise all algorithm"))
         self.threadRun = False
 
     def getThreadState(self):
@@ -329,9 +332,10 @@ class thread3(threading.Thread):
 
 class thread4(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, yaml_load):
         threading.Thread.__init__(self)
         self.threadRun = False
+        self.yaml_load = yaml_load
 
     def stop(self):
         self.threadRun = False
@@ -358,8 +362,8 @@ class thread4(threading.Thread):
             for x in range(len(datafilter_list)):
                 custom_data_list_obj_displacement.append(list_of_obj_displacement_noise[x])
 
-            plot_at_once_figures.append(robustness.robustness_(file, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list_algorithms, label_list_algorithm, "obj_displacement no noise all algorithm "))
-            plot_at_once_figures.append(robustness.robustness_(file, "obj_displacement", "noise", str(step_size), list_of_obj_displacement_noise, color_list_environment, label_list_enironment, "obj_displacement environment algorithm "))
+            self.plot_at_once_figures.append(robustness.robustness_(yaml_load, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list_algorithms, label_list_algorithm, "obj_displacement no noise all algorithm "))
+            self.plot_at_once_figures.append(robustness.robustness_(yaml_load, "obj_displacement", "noise", str(step_size), list_of_obj_displacement_noise, color_list_environment, label_list_enironment, "obj_displacement environment algorithm "))
         self.threadRun = False
 
     def getThreadState(self):
@@ -374,6 +378,9 @@ class thread4(threading.Thread):
 import subprocess
 
 if __name__ == '__main__':
+
+    yaml_file_handle = YAMLParser(file)
+    yaml_load = yaml_file_handle.load()
 
     command = "rm " + output_folder + "*.png"
     try:
@@ -390,22 +397,22 @@ if __name__ == '__main__':
 
     if ( 1 ):
 
-        thread_pixel = thread1()
+        thread_pixel = thread1(yaml_load)
         thread_pixel.start()
 
     if ( 1 ):
 
-        thread_deviation = thread2()
+        thread_deviation = thread2(yaml_load)
         thread_deviation.start()
 
     if ( 1 ):
 
-        thread_collision = thread3()
+        thread_collision = thread3(yaml_load)
         thread_collision.start()
 
     if ( 1 ):
 
-        thread_obj_displacement = thread4()
+        thread_obj_displacement = thread4(yaml_load)
         thread_obj_displacement.start()
 
     if thread_pixel != None:

@@ -11,16 +11,13 @@ lock = threading.BoundedSemaphore()
 
 summary_mean = dict()
 
-def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_list, label_list, label=""):
+def robustness_(yaml_load, measuring_parameter, noise, stepSize, data_list, color_list, label_list, label=""):
 
     #summary_mean.clear()
 
     figures_plot = list()
 
     yaml_list_index_offset=0
-
-    yaml_file_handle = YAMLParser(file)
-    yaml_load = yaml_file_handle.load()
 
     #axes limits
     lower_x = 0; upper_x = 0;

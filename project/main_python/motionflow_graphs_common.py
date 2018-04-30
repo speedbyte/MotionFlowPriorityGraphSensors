@@ -151,7 +151,7 @@ class Figures(object):
                 for env_name in environment_list:
                     #print 'pixel_' + env_name + '_' + str(step_size)
                     regroup.append(summary['pixel_' + env_name + '_' + str(step_size)][val+1])
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1])
+                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
         plt.xlabel('Data Processing Algorithm')
         plt.ylabel('Good Pixel Density')
@@ -193,7 +193,7 @@ class Figures(object):
                 for env_name in environment_list:
                     print 'deviation_' + env_name + '_' + str(step_size)
                     regroup.append(summary['deviation_' + env_name + '_' + str(step_size)][val+1])
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1])
+                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
 
         plt.xlabel('Data Processing Algorithm')
