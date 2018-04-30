@@ -88,7 +88,12 @@ class Figures(object):
                 self.list_of_plots[figure_index].set_xlim([plot_number[figure_index][7][0],
                                                            plot_number[figure_index][7][1]])
 
-                self.list_of_plots[figure_index].set_ylim([plot_number[figure_index][8][0],
+                if ( measuring_parameter == "deviation"):
+                    self.list_of_plots[figure_index].set_ylim([0,
+                                                               10000])
+
+                else:
+                    self.list_of_plots[figure_index].set_ylim([plot_number[figure_index][8][0],
                                                               plot_number[figure_index][8][1]])
 
 
