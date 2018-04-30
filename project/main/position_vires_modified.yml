@@ -1,6 +1,6 @@
 %YAML:1.0
 ---
-frame_count_025:
+frame_count_000:
    - { name:SpyingCar, visMask:7, x_camera:2.1348689270019531e+02,
        y_camera:2.4043762207031250e+02, z_camera:1.1452423095703125e+01,
        x_inertial:-5.9433933258056641e+01,
@@ -65,7 +65,7 @@ frame_count_025:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_026:
+frame_count_001:
    - { name:SpyingCar, visMask:7, x_camera:2.1572688293457031e+02,
        y_camera:2.4047932434082031e+02, z_camera:1.1447314262390137e+01,
        x_inertial:-5.9406635284423828e+01,
@@ -130,7 +130,7 @@ frame_count_026:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_027:
+frame_count_002:
    - { name:SpyingCar, visMask:7, x_camera:2.1797003173828125e+02,
        y_camera:2.4052522277832031e+02, z_camera:1.1442677497863770e+01,
        x_inertial:-5.9379417419433594e+01,
@@ -195,7 +195,7 @@ frame_count_027:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_028:
+frame_count_003:
    - { name:SpyingCar, visMask:7, x_camera:2.2021609497070312e+02,
        y_camera:2.4057537841796875e+02, z_camera:1.1438523292541504e+01,
        x_inertial:-5.9352291107177734e+01,
@@ -260,7 +260,7 @@ frame_count_028:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_029:
+frame_count_004:
    - { name:SpyingCar, visMask:7, x_camera:2.2246487426757812e+02,
        y_camera:2.4062983703613281e+02, z_camera:1.1434864997863770e+01,
        x_inertial:-5.9325260162353516e+01,
@@ -325,7 +325,7 @@ frame_count_029:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_030:
+frame_count_005:
    - { name:SpyingCar, visMask:7, x_camera:2.2471606445312500e+02,
        y_camera:2.4068862915039062e+02, z_camera:1.1431711196899414e+01,
        x_inertial:-5.9298328399658203e+01,
@@ -390,7 +390,7 @@ frame_count_030:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_031:
+frame_count_006:
    - { name:SpyingCar, visMask:7, x_camera:2.2696939086914062e+02,
        y_camera:2.4074978637695312e+02, z_camera:1.1429074287414551e+01,
        x_inertial:-5.9271507263183594e+01,
@@ -455,7 +455,7 @@ frame_count_031:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_032:
+frame_count_007:
    - { name:SpyingCar, visMask:7, x_camera:2.2922450256347656e+02,
        y_camera:2.4073565673828125e+02, z_camera:1.1426964759826660e+01,
        x_inertial:-5.9244800567626953e+01,
@@ -520,7 +520,7 @@ frame_count_032:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_033:
+frame_count_008:
    - { name:SpyingCar, visMask:7, x_camera:2.3148109436035156e+02,
        y_camera:2.4072224426269531e+02, z_camera:1.1425394058227539e+01,
        x_inertial:-5.9218212127685547e+01,
@@ -585,7 +585,7 @@ frame_count_033:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_034:
+frame_count_009:
    - { name:SpyingCar, visMask:7, x_camera:2.3373876953125000e+02,
        y_camera:2.4070964050292969e+02, z_camera:1.1424372673034668e+01,
        x_inertial:-5.9191749572753906e+01,
@@ -650,7 +650,7 @@ frame_count_034:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_035:
+frame_count_010:
    - { name:SpyingCar, visMask:7, x_camera:2.3599713134765625e+02,
        y_camera:2.4069790649414062e+02, z_camera:1.1423911094665527e+01,
        x_inertial:-5.9165424346923828e+01,
@@ -715,7 +715,7 @@ frame_count_035:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_036:
+frame_count_011:
    - { name:SpyingCar, visMask:7, x_camera:2.3825576782226562e+02,
        y_camera:2.4068713378906250e+02, z_camera:1.1424020767211914e+01,
        x_inertial:-5.9139236450195312e+01,
@@ -780,7 +780,7 @@ frame_count_036:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_037:
+frame_count_012:
    - { name:SpyingCar, visMask:7, x_camera:2.4051422119140625e+02,
        y_camera:2.4067742919921875e+02, z_camera:1.1424711227416992e+01,
        x_inertial:-5.9113193511962891e+01,
@@ -845,7 +845,7 @@ frame_count_037:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_038:
+frame_count_013:
    - { name:SpyingCar, visMask:7, x_camera:2.4277200317382812e+02,
        y_camera:2.4066882324218750e+02, z_camera:1.1425993919372559e+01,
        x_inertial:-5.9087310791015625e+01,
@@ -910,7 +910,7 @@ frame_count_038:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_039:
+frame_count_014:
    - { name:SpyingCar, visMask:7, x_camera:2.4502864074707031e+02,
        y_camera:2.4066424560546875e+02, z_camera:1.1427876472473145e+01,
        x_inertial:-5.9061584472656250e+01,
@@ -975,7 +975,7 @@ frame_count_039:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_040:
+frame_count_015:
    - { name:SpyingCar, visMask:7, x_camera:2.4728355407714844e+02,
        y_camera:2.4066192626953125e+02, z_camera:1.1430371284484863e+01,
        x_inertial:-5.9036029815673828e+01,
@@ -1040,7 +1040,7 @@ frame_count_040:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_041:
+frame_count_016:
    - { name:SpyingCar, visMask:7, x_camera:2.4953619384765625e+02,
        y_camera:2.4066098022460938e+02, z_camera:1.1433485984802246e+01,
        x_inertial:-5.9010650634765625e+01,
@@ -1105,7 +1105,7 @@ frame_count_041:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_042:
+frame_count_017:
    - { name:SpyingCar, visMask:7, x_camera:2.5178601074218750e+02,
        y_camera:2.4066149902343750e+02, z_camera:1.1437229156494141e+01,
        x_inertial:-5.8985454559326172e+01,
@@ -1170,7 +1170,7 @@ frame_count_042:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_043:
+frame_count_018:
    - { name:SpyingCar, visMask:7, x_camera:2.5449678039550781e+02,
        y_camera:2.4066355895996094e+02, z_camera:1.1441611289978027e+01,
        x_inertial:-5.8960449218750000e+01,
@@ -1235,7 +1235,7 @@ frame_count_043:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_044:
+frame_count_019:
    - { name:SpyingCar, visMask:7, x_camera:2.5731405639648438e+02,
        y_camera:2.4066725158691406e+02, z_camera:1.1446629524230957e+01,
        x_inertial:-5.8935646057128906e+01,
@@ -1301,7 +1301,7 @@ frame_count_044:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_045:
+frame_count_020:
    - { name:SpyingCar, visMask:7, x_camera:2.6012570190429688e+02,
        y_camera:2.4067309570312500e+02, z_camera:1.1452103614807129e+01,
        x_inertial:-5.8911045074462891e+01,
@@ -1366,7 +1366,7 @@ frame_count_045:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_046:
+frame_count_021:
    - { name:SpyingCar, visMask:7, x_camera:2.6292822265625000e+02,
        y_camera:2.4068110656738281e+02, z_camera:1.1457980155944824e+01,
        x_inertial:-5.8886646270751953e+01,
@@ -1431,7 +1431,7 @@ frame_count_046:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_047:
+frame_count_022:
    - { name:SpyingCar, visMask:7, x_camera:2.6572094726562500e+02,
        y_camera:2.4069122314453125e+02, z_camera:1.1464258193969727e+01,
        x_inertial:-5.8862453460693359e+01,
@@ -1496,7 +1496,7 @@ frame_count_047:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_048:
+frame_count_023:
    - { name:SpyingCar, visMask:7, x_camera:2.6850338745117188e+02,
        y_camera:2.4070343017578125e+02, z_camera:1.1470936775207520e+01,
        x_inertial:-5.8838470458984375e+01,
@@ -1561,7 +1561,7 @@ frame_count_048:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_049:
+frame_count_024:
    - { name:SpyingCar, visMask:7, x_camera:2.7127511596679688e+02,
        y_camera:2.4071769714355469e+02, z_camera:1.1478013992309570e+01,
        x_inertial:-5.8814693450927734e+01,
@@ -1626,7 +1626,7 @@ frame_count_049:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_050:
+frame_count_025:
    - { name:SpyingCar, visMask:7, x_camera:2.7403576660156250e+02,
        y_camera:2.4073403930664062e+02, z_camera:1.1485488891601562e+01,
        x_inertial:-5.8791126251220703e+01,
@@ -1691,7 +1691,7 @@ frame_count_050:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_051:
+frame_count_026:
    - { name:SpyingCar, visMask:7, x_camera:2.7678494262695312e+02,
        y_camera:2.4075245666503906e+02, z_camera:1.1493360519409180e+01,
        x_inertial:-5.8767776489257812e+01,
@@ -1756,7 +1756,7 @@ frame_count_051:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_052:
+frame_count_027:
    - { name:SpyingCar, visMask:7, x_camera:2.7952221679687500e+02,
        y_camera:2.4077294921875000e+02, z_camera:1.1501626968383789e+01,
        x_inertial:-5.8744636535644531e+01,
@@ -1821,7 +1821,7 @@ frame_count_052:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_053:
+frame_count_028:
    - { name:SpyingCar, visMask:7, x_camera:2.8224719238281250e+02,
        y_camera:2.4079550170898438e+02, z_camera:1.1510286331176758e+01,
        x_inertial:-5.8721717834472656e+01,
@@ -1886,7 +1886,7 @@ frame_count_053:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_054:
+frame_count_029:
    - { name:SpyingCar, visMask:7, x_camera:2.8495950317382812e+02,
        y_camera:2.4082006835937500e+02, z_camera:1.1519337654113770e+01,
        x_inertial:-5.8699016571044922e+01,
@@ -1951,7 +1951,7 @@ frame_count_054:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_055:
+frame_count_030:
    - { name:SpyingCar, visMask:7, x_camera:2.8765875244140625e+02,
        y_camera:2.4084671020507812e+02, z_camera:1.1528779029846191e+01,
        x_inertial:-5.8676536560058594e+01,
@@ -2017,7 +2017,7 @@ frame_count_055:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_056:
+frame_count_031:
    - { name:SpyingCar, visMask:7, x_camera:2.9034457397460938e+02,
        y_camera:2.4087539672851562e+02, z_camera:1.1538609504699707e+01,
        x_inertial:-5.8654277801513672e+01,
@@ -2082,7 +2082,7 @@ frame_count_056:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_057:
+frame_count_032:
    - { name:SpyingCar, visMask:7, x_camera:2.9301654052734375e+02,
        y_camera:2.4090609741210938e+02, z_camera:1.1548825263977051e+01,
        x_inertial:-5.8632244110107422e+01,
@@ -2147,7 +2147,7 @@ frame_count_057:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_058:
+frame_count_033:
    - { name:SpyingCar, visMask:7, x_camera:2.9567437744140625e+02,
        y_camera:2.4093881225585938e+02, z_camera:1.1559427261352539e+01,
        x_inertial:-5.8610435485839844e+01,
@@ -2212,7 +2212,7 @@ frame_count_058:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_059:
+frame_count_034:
    - { name:SpyingCar, visMask:7, x_camera:2.9831765747070312e+02,
        y_camera:2.4097354125976562e+02, z_camera:1.1570410728454590e+01,
        x_inertial:-5.8588855743408203e+01,
@@ -2277,7 +2277,7 @@ frame_count_059:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_060:
+frame_count_035:
    - { name:SpyingCar, visMask:7, x_camera:3.0094601440429688e+02,
        y_camera:2.4101026916503906e+02, z_camera:1.1581775665283203e+01,
        x_inertial:-5.8567504882812500e+01,
@@ -2342,7 +2342,7 @@ frame_count_060:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_061:
+frame_count_036:
    - { name:SpyingCar, visMask:7, x_camera:3.0339248657226562e+02,
        y_camera:2.4104899597167969e+02, z_camera:1.1593519210815430e+01,
        x_inertial:-5.8546382904052734e+01,
@@ -2407,7 +2407,7 @@ frame_count_061:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_062:
+frame_count_037:
    - { name:SpyingCar, visMask:7, x_camera:3.0538586425781250e+02,
        y_camera:2.4108969116210938e+02, z_camera:1.1605639457702637e+01,
        x_inertial:-5.8525497436523438e+01,
@@ -2472,7 +2472,7 @@ frame_count_062:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_063:
+frame_count_038:
    - { name:SpyingCar, visMask:7, x_camera:3.0736480712890625e+02,
        y_camera:2.4113235473632812e+02, z_camera:1.1618134498596191e+01,
        x_inertial:-5.8504844665527344e+01,
@@ -2537,7 +2537,7 @@ frame_count_063:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_064:
+frame_count_039:
    - { name:SpyingCar, visMask:7, x_camera:3.0932910156250000e+02,
        y_camera:2.4117700195312500e+02, z_camera:1.1631002426147461e+01,
        x_inertial:-5.8484428405761719e+01,
@@ -2602,7 +2602,7 @@ frame_count_064:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_065:
+frame_count_040:
    - { name:SpyingCar, visMask:7, x_camera:3.1127856445312500e+02,
        y_camera:2.4122355651855469e+02, z_camera:1.1644239425659180e+01,
        x_inertial:-5.8464252471923828e+01,
@@ -2668,7 +2668,7 @@ frame_count_065:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_066:
+frame_count_041:
    - { name:SpyingCar, visMask:7, x_camera:3.1321304321289062e+02,
        y_camera:2.4127206420898438e+02, z_camera:1.1657844543457031e+01,
        x_inertial:-5.8444313049316406e+01,
@@ -2733,7 +2733,7 @@ frame_count_066:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_067:
+frame_count_042:
    - { name:SpyingCar, visMask:7, x_camera:3.1513235473632812e+02,
        y_camera:2.4132244873046875e+02, z_camera:1.1671814918518066e+01,
        x_inertial:-5.8424613952636719e+01,
@@ -2798,7 +2798,7 @@ frame_count_067:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_068:
+frame_count_043:
    - { name:SpyingCar, visMask:7, x_camera:3.1703631591796875e+02,
        y_camera:2.4137477111816406e+02, z_camera:1.1686148643493652e+01,
        x_inertial:-5.8405162811279297e+01,
@@ -2864,7 +2864,7 @@ frame_count_068:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_069:
+frame_count_044:
    - { name:SpyingCar, visMask:7, x_camera:3.1892474365234375e+02,
        y_camera:2.4142897033691406e+02, z_camera:1.1700841903686523e+01,
        x_inertial:-5.8385951995849609e+01,
@@ -2929,7 +2929,7 @@ frame_count_069:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_070:
+frame_count_045:
    - { name:SpyingCar, visMask:7, x_camera:3.2079754638671875e+02,
        y_camera:2.4148504638671875e+02, z_camera:1.1715893745422363e+01,
        x_inertial:-5.8366985321044922e+01,
@@ -2994,7 +2994,7 @@ frame_count_070:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_071:
+frame_count_046:
    - { name:SpyingCar, visMask:7, x_camera:3.2265454101562500e+02,
        y_camera:2.4154298400878906e+02, z_camera:1.1731301307678223e+01,
        x_inertial:-5.8348270416259766e+01,
@@ -3059,7 +3059,7 @@ frame_count_071:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_072:
+frame_count_047:
    - { name:SpyingCar, visMask:7, x_camera:3.2449560546875000e+02,
        y_camera:2.4160273742675781e+02, z_camera:1.1747060775756836e+01,
        x_inertial:-5.8329803466796875e+01,
@@ -3124,7 +3124,7 @@ frame_count_072:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_073:
+frame_count_048:
    - { name:SpyingCar, visMask:7, x_camera:3.2632049560546875e+02,
        y_camera:2.4166433715820312e+02, z_camera:1.1763170242309570e+01,
        x_inertial:-5.8311584472656250e+01,
@@ -3189,7 +3189,7 @@ frame_count_073:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_074:
+frame_count_049:
    - { name:SpyingCar, visMask:7, x_camera:3.2812918090820312e+02,
        y_camera:2.4172773742675781e+02, z_camera:1.1779626846313477e+01,
        x_inertial:-5.8293621063232422e+01,
@@ -3254,7 +3254,7 @@ frame_count_074:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_075:
+frame_count_050:
    - { name:SpyingCar, visMask:7, x_camera:3.2992144775390625e+02,
        y_camera:2.4179292297363281e+02, z_camera:1.1796427726745605e+01,
        x_inertial:-5.8275909423828125e+01,
@@ -3316,7 +3316,7 @@ frame_count_075:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_076:
+frame_count_051:
    - { name:SpyingCar, visMask:7, x_camera:3.3169726562500000e+02,
        y_camera:2.4185989379882812e+02, z_camera:1.1813570976257324e+01,
        x_inertial:-5.8258449554443359e+01,
@@ -3378,7 +3378,7 @@ frame_count_076:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_077:
+frame_count_052:
    - { name:SpyingCar, visMask:7, x_camera:3.3345642089843750e+02,
        y_camera:2.4192861938476562e+02, z_camera:1.1831052780151367e+01,
        x_inertial:-5.8241249084472656e+01,
@@ -3440,7 +3440,7 @@ frame_count_077:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_078:
+frame_count_053:
    - { name:SpyingCar, visMask:7, x_camera:3.3519882202148438e+02,
        y_camera:2.4199905395507812e+02, z_camera:1.1848869323730469e+01,
        x_inertial:-5.8224308013916016e+01,
@@ -3502,7 +3502,7 @@ frame_count_078:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_079:
+frame_count_054:
    - { name:SpyingCar, visMask:7, x_camera:3.3692434692382812e+02,
        y_camera:2.4207122802734375e+02, z_camera:1.1867019653320312e+01,
        x_inertial:-5.8207622528076172e+01,
@@ -3564,7 +3564,7 @@ frame_count_079:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_080:
+frame_count_055:
    - { name:SpyingCar, visMask:7, x_camera:3.3863287353515625e+02,
        y_camera:2.4214511108398438e+02, z_camera:1.1885499954223633e+01,
        x_inertial:-5.8191200256347656e+01,
@@ -3626,7 +3626,7 @@ frame_count_080:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_081:
+frame_count_056:
    - { name:SpyingCar, visMask:7, x_camera:3.4032434082031250e+02,
        y_camera:2.4222064208984375e+02, z_camera:1.1904307365417480e+01,
        x_inertial:-5.8175037384033203e+01,
@@ -3688,7 +3688,7 @@ frame_count_081:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_082:
+frame_count_057:
    - { name:SpyingCar, visMask:7, x_camera:3.4199859619140625e+02,
        y_camera:2.4229785156250000e+02, z_camera:1.1923438072204590e+01,
        x_inertial:-5.8159137725830078e+01,
@@ -3750,7 +3750,7 @@ frame_count_082:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_083:
+frame_count_058:
    - { name:SpyingCar, visMask:7, x_camera:3.4365554809570312e+02,
        y_camera:2.4237667846679688e+02, z_camera:1.1942889213562012e+01,
        x_inertial:-5.8143501281738281e+01,
@@ -3812,7 +3812,7 @@ frame_count_083:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_084:
+frame_count_059:
    - { name:SpyingCar, visMask:7, x_camera:3.4529513549804688e+02,
        y_camera:2.4245715332031250e+02, z_camera:1.1962657928466797e+01,
        x_inertial:-5.8128135681152344e+01,
@@ -3874,7 +3874,7 @@ frame_count_084:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_085:
+frame_count_060:
    - { name:SpyingCar, visMask:7, x_camera:3.4691723632812500e+02,
        y_camera:2.4253919982910156e+02, z_camera:1.1982741355895996e+01,
        x_inertial:-5.8113033294677734e+01,
@@ -3937,7 +3937,7 @@ frame_count_085:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_086:
+frame_count_061:
    - { name:SpyingCar, visMask:7, x_camera:3.4852175903320312e+02,
        y_camera:2.4262283325195312e+02, z_camera:1.2003135681152344e+01,
        x_inertial:-5.8098197937011719e+01,
@@ -3999,7 +3999,7 @@ frame_count_086:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_087:
+frame_count_062:
    - { name:SpyingCar, visMask:7, x_camera:3.5010864257812500e+02,
        y_camera:2.4270800781250000e+02, z_camera:1.2023838043212891e+01,
        x_inertial:-5.8083633422851562e+01,
@@ -4061,7 +4061,7 @@ frame_count_087:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_088:
+frame_count_063:
    - { name:SpyingCar, visMask:7, x_camera:3.5167779541015625e+02,
        y_camera:2.4279473876953125e+02, z_camera:1.2044845581054688e+01,
        x_inertial:-5.8069335937500000e+01,
@@ -4123,7 +4123,7 @@ frame_count_088:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_089:
+frame_count_064:
    - { name:SpyingCar, visMask:7, x_camera:3.5322918701171875e+02,
        y_camera:2.4288296508789062e+02, z_camera:1.2066153526306152e+01,
        x_inertial:-5.8055313110351562e+01,
@@ -4186,7 +4186,7 @@ frame_count_089:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_090:
+frame_count_065:
    - { name:SpyingCar, visMask:7, x_camera:3.5476266479492188e+02,
        y_camera:2.4297265625000000e+02, z_camera:1.2087759971618652e+01,
        x_inertial:-5.8041564941406250e+01,
@@ -4248,7 +4248,7 @@ frame_count_090:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_091:
+frame_count_066:
    - { name:SpyingCar, visMask:7, x_camera:3.5627822875976562e+02,
        y_camera:2.4306384277343750e+02, z_camera:1.2109662055969238e+01,
        x_inertial:-5.8028087615966797e+01,
@@ -4310,7 +4310,7 @@ frame_count_091:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_092:
+frame_count_067:
    - { name:SpyingCar, visMask:7, x_camera:3.5777578735351562e+02,
        y_camera:2.4315646362304688e+02, z_camera:1.2131854057312012e+01,
        x_inertial:-5.8014884948730469e+01,
@@ -4372,7 +4372,7 @@ frame_count_092:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_093:
+frame_count_068:
    - { name:SpyingCar, visMask:7, x_camera:3.5925531005859375e+02,
        y_camera:2.4325051879882812e+02, z_camera:1.2154335021972656e+01,
        x_inertial:-5.8001960754394531e+01,
@@ -4434,7 +4434,7 @@ frame_count_093:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_094:
+frame_count_069:
    - { name:SpyingCar, visMask:7, x_camera:3.6071670532226562e+02,
        y_camera:2.4334594726562500e+02, z_camera:1.2177100181579590e+01,
        x_inertial:-5.7989311218261719e+01,
@@ -4497,7 +4497,7 @@ frame_count_094:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_095:
+frame_count_070:
    - { name:SpyingCar, visMask:7, x_camera:3.6215994262695312e+02,
        y_camera:2.4344274902343750e+02, z_camera:1.2200146675109863e+01,
        x_inertial:-5.7976940155029297e+01,
@@ -4559,7 +4559,7 @@ frame_count_095:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_096:
+frame_count_071:
    - { name:SpyingCar, visMask:7, x_camera:3.6358496093750000e+02,
        y_camera:2.4354092407226562e+02, z_camera:1.2223470687866211e+01,
        x_inertial:-5.7964847564697266e+01,
@@ -4621,7 +4621,7 @@ frame_count_096:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_097:
+frame_count_072:
    - { name:SpyingCar, visMask:7, x_camera:3.6499176025390625e+02,
        y_camera:2.4364039611816406e+02, z_camera:1.2247069358825684e+01,
        x_inertial:-5.7953037261962891e+01,
@@ -4683,7 +4683,7 @@ frame_count_097:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_098:
+frame_count_073:
    - { name:SpyingCar, visMask:7, x_camera:3.6638021850585938e+02,
        y_camera:2.4374118041992188e+02, z_camera:1.2270937919616699e+01,
        x_inertial:-5.7941505432128906e+01,
@@ -4745,7 +4745,7 @@ frame_count_098:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_099:
+frame_count_074:
    - { name:SpyingCar, visMask:7, x_camera:3.6775036621093750e+02,
        y_camera:2.4384326171875000e+02, z_camera:1.2295074462890625e+01,
        x_inertial:-5.7930255889892578e+01,
@@ -4807,7 +4807,7 @@ frame_count_099:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_100:
+frame_count_075:
    - { name:SpyingCar, visMask:7, x_camera:3.6910214233398438e+02,
        y_camera:2.4394656372070312e+02, z_camera:1.2319474220275879e+01,
        x_inertial:-5.7919292449951172e+01,
@@ -4870,7 +4870,7 @@ frame_count_100:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_101:
+frame_count_076:
    - { name:SpyingCar, visMask:7, x_camera:3.7043554687500000e+02,
        y_camera:2.4405113220214844e+02, z_camera:1.2344134330749512e+01,
        x_inertial:-5.7908607482910156e+01,
@@ -4932,7 +4932,7 @@ frame_count_101:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_102:
+frame_count_077:
    - { name:SpyingCar, visMask:7, x_camera:3.7175051879882812e+02,
        y_camera:2.4415687561035156e+02, z_camera:1.2369050979614258e+01,
        x_inertial:-5.7898212432861328e+01,
@@ -4994,7 +4994,7 @@ frame_count_102:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_103:
+frame_count_078:
    - { name:SpyingCar, visMask:7, x_camera:3.7304705810546875e+02,
        y_camera:2.4426380920410156e+02, z_camera:1.2394221305847168e+01,
        x_inertial:-5.7888099670410156e+01,
@@ -5056,7 +5056,7 @@ frame_count_103:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_104:
+frame_count_079:
    - { name:SpyingCar, visMask:7, x_camera:3.7432510375976562e+02,
        y_camera:2.4437191772460938e+02, z_camera:1.2419640541076660e+01,
        x_inertial:-5.7878273010253906e+01,
@@ -5118,7 +5118,7 @@ frame_count_104:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_105:
+frame_count_080:
    - { name:SpyingCar, visMask:7, x_camera:3.7558468627929688e+02,
        y_camera:2.4448114013671875e+02, z_camera:1.2445305824279785e+01,
        x_inertial:-5.7868732452392578e+01,
@@ -5180,7 +5180,7 @@ frame_count_105:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_106:
+frame_count_081:
    - { name:SpyingCar, visMask:7, x_camera:3.7682577514648438e+02,
        y_camera:2.4459147644042969e+02, z_camera:1.2471213340759277e+01,
        x_inertial:-5.7859481811523438e+01,
@@ -5242,7 +5242,7 @@ frame_count_106:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_107:
+frame_count_082:
    - { name:SpyingCar, visMask:7, x_camera:3.7804833984375000e+02,
        y_camera:2.4470288085937500e+02, z_camera:1.2497360229492188e+01,
        x_inertial:-5.7850521087646484e+01,
@@ -5304,7 +5304,7 @@ frame_count_107:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_108:
+frame_count_083:
    - { name:SpyingCar, visMask:7, x_camera:3.7925241088867188e+02,
        y_camera:2.4481536865234375e+02, z_camera:1.2523740768432617e+01,
        x_inertial:-5.7841846466064453e+01,
@@ -5367,7 +5367,7 @@ frame_count_108:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_109:
+frame_count_084:
    - { name:SpyingCar, visMask:7, x_camera:3.8043792724609375e+02,
        y_camera:2.4492889404296875e+02, z_camera:1.2550354003906250e+01,
        x_inertial:-5.7833461761474609e+01,
@@ -5430,7 +5430,7 @@ frame_count_109:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_110:
+frame_count_085:
    - { name:SpyingCar, visMask:7, x_camera:3.8160498046875000e+02,
        y_camera:2.4504341125488281e+02, z_camera:1.2577195167541504e+01,
        x_inertial:-5.7825370788574219e+01,
@@ -5492,7 +5492,7 @@ frame_count_110:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_111:
+frame_count_086:
    - { name:SpyingCar, visMask:7, x_camera:3.8275347900390625e+02,
        y_camera:2.4515890502929688e+02, z_camera:1.2604260444641113e+01,
        x_inertial:-5.7817569732666016e+01,
@@ -5554,7 +5554,7 @@ frame_count_111:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_112:
+frame_count_087:
    - { name:SpyingCar, visMask:7, x_camera:3.8388348388671875e+02,
        y_camera:2.4527537536621094e+02, z_camera:1.2631546020507812e+01,
        x_inertial:-5.7810058593750000e+01,
@@ -5617,7 +5617,7 @@ frame_count_112:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_113:
+frame_count_088:
    - { name:SpyingCar, visMask:7, x_camera:3.8499493408203125e+02,
        y_camera:2.4539277648925781e+02, z_camera:1.2659049034118652e+01,
        x_inertial:-5.7802841186523438e+01,
@@ -5680,7 +5680,7 @@ frame_count_113:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_114:
+frame_count_089:
    - { name:SpyingCar, visMask:7, x_camera:3.8608786010742188e+02,
        y_camera:2.4551109313964844e+02, z_camera:1.2686764717102051e+01,
        x_inertial:-5.7795917510986328e+01,
@@ -5742,7 +5742,7 @@ frame_count_114:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_115:
+frame_count_090:
    - { name:SpyingCar, visMask:7, x_camera:3.8716235351562500e+02,
        y_camera:2.4563027954101562e+02, z_camera:1.2714691162109375e+01,
        x_inertial:-5.7789287567138672e+01,
@@ -5804,7 +5804,7 @@ frame_count_115:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_116:
+frame_count_091:
    - { name:SpyingCar, visMask:7, x_camera:3.8821832275390625e+02,
        y_camera:2.4575035095214844e+02, z_camera:1.2742822647094727e+01,
        x_inertial:-5.7782955169677734e+01,
@@ -5866,7 +5866,7 @@ frame_count_116:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_117:
+frame_count_092:
    - { name:SpyingCar, visMask:7, x_camera:3.8925585937500000e+02,
        y_camera:2.4587124633789062e+02, z_camera:1.2771157264709473e+01,
        x_inertial:-5.7776912689208984e+01,
@@ -5928,7 +5928,7 @@ frame_count_117:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_118:
+frame_count_093:
    - { name:SpyingCar, visMask:7, x_camera:3.9027493286132812e+02,
        y_camera:2.4599295043945312e+02, z_camera:1.2799691200256348e+01,
        x_inertial:-5.7771167755126953e+01,
@@ -5991,7 +5991,7 @@ frame_count_118:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_119:
+frame_count_094:
    - { name:SpyingCar, visMask:7, x_camera:3.9127557373046875e+02,
        y_camera:2.4611546325683594e+02, z_camera:1.2828419685363770e+01,
        x_inertial:-5.7765716552734375e+01,
@@ -6054,7 +6054,7 @@ frame_count_119:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_120:
+frame_count_095:
    - { name:SpyingCar, visMask:7, x_camera:3.9225781250000000e+02,
        y_camera:2.4623872375488281e+02, z_camera:1.2857339859008789e+01,
        x_inertial:-5.7760562896728516e+01,
@@ -6116,7 +6116,7 @@ frame_count_120:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_121:
+frame_count_096:
    - { name:SpyingCar, visMask:7, x_camera:3.9322171020507812e+02,
        y_camera:2.4636273193359375e+02, z_camera:1.2886447906494141e+01,
        x_inertial:-5.7755706787109375e+01,
@@ -6178,7 +6178,7 @@ frame_count_121:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_122:
+frame_count_097:
    - { name:SpyingCar, visMask:7, x_camera:3.9416723632812500e+02,
        y_camera:2.4648745727539062e+02, z_camera:1.2915740966796875e+01,
        x_inertial:-5.7751144409179688e+01,
@@ -6240,7 +6240,7 @@ frame_count_122:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_123:
+frame_count_098:
    - { name:SpyingCar, visMask:7, x_camera:3.9509448242187500e+02,
        y_camera:2.4661286926269531e+02, z_camera:1.2945214271545410e+01,
        x_inertial:-5.7746883392333984e+01,
@@ -6302,7 +6302,7 @@ frame_count_123:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_124:
+frame_count_099:
    - { name:SpyingCar, visMask:7, x_camera:3.9600335693359375e+02,
        y_camera:2.4673895263671875e+02, z_camera:1.2974864006042480e+01,
        x_inertial:-5.7742916107177734e+01,
@@ -6364,7 +6364,7 @@ frame_count_124:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_125:
+frame_count_100:
    - { name:SpyingCar, visMask:7, x_camera:3.9689404296875000e+02,
        y_camera:2.4686567687988281e+02, z_camera:1.3004688262939453e+01,
        x_inertial:-5.7739250183105469e+01,
@@ -6426,7 +6426,7 @@ frame_count_125:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_126:
+frame_count_101:
    - { name:SpyingCar, visMask:7, x_camera:3.9776654052734375e+02,
        y_camera:2.4699302673339844e+02, z_camera:1.3034682273864746e+01,
        x_inertial:-5.7735881805419922e+01,
@@ -6489,7 +6489,7 @@ frame_count_126:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_127:
+frame_count_102:
    - { name:SpyingCar, visMask:7, x_camera:3.9862078857421875e+02,
        y_camera:2.4712097167968750e+02, z_camera:1.3064842224121094e+01,
        x_inertial:-5.7732810974121094e+01,
@@ -6551,7 +6551,7 @@ frame_count_127:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_128:
+frame_count_103:
    - { name:SpyingCar, visMask:7, x_camera:3.9945697021484375e+02,
        y_camera:2.4724948120117188e+02, z_camera:1.3095165252685547e+01,
        x_inertial:-5.7730037689208984e+01,
@@ -6613,7 +6613,7 @@ frame_count_128:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_129:
+frame_count_104:
    - { name:SpyingCar, visMask:7, x_camera:4.0027502441406250e+02,
        y_camera:2.4737855529785156e+02, z_camera:1.3125647544860840e+01,
        x_inertial:-5.7727565765380859e+01,
@@ -6675,7 +6675,7 @@ frame_count_129:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_130:
+frame_count_105:
    - { name:SpyingCar, visMask:7, x_camera:4.0107504272460938e+02,
        y_camera:2.4750814819335938e+02, z_camera:1.3156285285949707e+01,
        x_inertial:-5.7725391387939453e+01,
@@ -6737,7 +6737,7 @@ frame_count_130:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_131:
+frame_count_106:
    - { name:SpyingCar, visMask:7, x_camera:4.0185705566406250e+02,
        y_camera:2.4763824462890625e+02, z_camera:1.3187074661254883e+01,
        x_inertial:-5.7723518371582031e+01,
@@ -6799,7 +6799,7 @@ frame_count_131:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_132:
+frame_count_107:
    - { name:SpyingCar, visMask:7, x_camera:4.0262109375000000e+02,
        y_camera:2.4776882934570312e+02, z_camera:1.3218012809753418e+01,
        x_inertial:-5.7721942901611328e+01,
@@ -6862,7 +6862,7 @@ frame_count_132:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_133:
+frame_count_108:
    - { name:SpyingCar, visMask:7, x_camera:4.0336724853515625e+02,
        y_camera:2.4789987182617188e+02, z_camera:1.3249095916748047e+01,
        x_inertial:-5.7720668792724609e+01,
@@ -6924,7 +6924,7 @@ frame_count_133:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_134:
+frame_count_109:
    - { name:SpyingCar, visMask:7, x_camera:4.0409555053710938e+02,
        y_camera:2.4803135681152344e+02, z_camera:1.3280321121215820e+01,
        x_inertial:-5.7719692230224609e+01,
@@ -6987,7 +6987,7 @@ frame_count_134:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_135:
+frame_count_110:
    - { name:SpyingCar, visMask:7, x_camera:4.0480603027343750e+02,
        y_camera:2.4816325378417969e+02, z_camera:1.3311683654785156e+01,
        x_inertial:-5.7719017028808594e+01,
@@ -7049,7 +7049,7 @@ frame_count_135:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_136:
+frame_count_111:
    - { name:SpyingCar, visMask:7, x_camera:4.0549880981445312e+02,
        y_camera:2.4829556274414062e+02, z_camera:1.3343180656433105e+01,
        x_inertial:-5.7718643188476562e+01,
@@ -7111,7 +7111,7 @@ frame_count_136:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_137:
+frame_count_112:
    - { name:SpyingCar, visMask:7, x_camera:4.0617385864257812e+02,
        y_camera:2.4842822265625000e+02, z_camera:1.3374808311462402e+01,
        x_inertial:-5.7718566894531250e+01,
@@ -7173,7 +7173,7 @@ frame_count_137:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_138:
+frame_count_113:
    - { name:SpyingCar, visMask:7, x_camera:4.0683129882812500e+02,
        y_camera:2.4856123352050781e+02, z_camera:1.3406563758850098e+01,
        x_inertial:-5.7718791961669922e+01,
@@ -7238,7 +7238,7 @@ frame_count_138:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_139:
+frame_count_114:
    - { name:SpyingCar, visMask:7, x_camera:4.0747113037109375e+02,
        y_camera:2.4869458007812500e+02, z_camera:1.3438443183898926e+01,
        x_inertial:-5.7719318389892578e+01,
@@ -7304,7 +7304,7 @@ frame_count_139:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_140:
+frame_count_115:
    - { name:SpyingCar, visMask:7, x_camera:4.0809347534179688e+02,
        y_camera:2.4882821655273438e+02, z_camera:1.3470443725585938e+01,
        x_inertial:-5.7720142364501953e+01,
@@ -7369,7 +7369,7 @@ frame_count_140:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_141:
+frame_count_116:
    - { name:SpyingCar, visMask:7, x_camera:4.0869836425781250e+02,
        y_camera:2.4896217346191406e+02, z_camera:1.3502560615539551e+01,
        x_inertial:-5.7721267700195312e+01,
@@ -7435,7 +7435,7 @@ frame_count_141:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_142:
+frame_count_117:
    - { name:SpyingCar, visMask:7, x_camera:4.0928585815429688e+02,
        y_camera:2.4909637451171875e+02, z_camera:1.3534790992736816e+01,
        x_inertial:-5.7722690582275391e+01,
@@ -7500,7 +7500,7 @@ frame_count_142:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_143:
+frame_count_118:
    - { name:SpyingCar, visMask:7, x_camera:4.0985601806640625e+02,
        y_camera:2.4923081970214844e+02, z_camera:1.3567131996154785e+01,
        x_inertial:-5.7724414825439453e+01,
@@ -7565,7 +7565,7 @@ frame_count_143:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_144:
+frame_count_119:
    - { name:SpyingCar, visMask:7, x_camera:4.1040896606445312e+02,
        y_camera:2.4936550903320312e+02, z_camera:1.3599579811096191e+01,
        x_inertial:-5.7726440429687500e+01,
@@ -7631,7 +7631,7 @@ frame_count_144:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_145:
+frame_count_120:
    - { name:SpyingCar, visMask:7, x_camera:4.1094467163085938e+02,
        y_camera:2.4950036621093750e+02, z_camera:1.3632131576538086e+01,
        x_inertial:-5.7728763580322266e+01,
@@ -7696,7 +7696,7 @@ frame_count_145:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_146:
+frame_count_121:
    - { name:SpyingCar, visMask:7, x_camera:4.1146328735351562e+02,
        y_camera:2.4963546752929688e+02, z_camera:1.3664782524108887e+01,
        x_inertial:-5.7731384277343750e+01,
@@ -7761,7 +7761,7 @@ frame_count_146:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_147:
+frame_count_122:
    - { name:SpyingCar, visMask:7, x_camera:4.1196484375000000e+02,
        y_camera:2.4977067565917969e+02, z_camera:1.3697530746459961e+01,
        x_inertial:-5.7734306335449219e+01,
@@ -7826,7 +7826,7 @@ frame_count_147:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_148:
+frame_count_123:
    - { name:SpyingCar, visMask:7, x_camera:4.1244940185546875e+02,
        y_camera:2.4990606689453125e+02, z_camera:1.3730372428894043e+01,
        x_inertial:-5.7737522125244141e+01,
@@ -7891,7 +7891,7 @@ frame_count_148:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_149:
+frame_count_124:
    - { name:SpyingCar, visMask:7, x_camera:4.1291705322265625e+02,
        y_camera:2.5004156494140625e+02, z_camera:1.3763304710388184e+01,
        x_inertial:-5.7741043090820312e+01,
@@ -7957,7 +7957,7 @@ frame_count_149:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_150:
+frame_count_125:
    - { name:SpyingCar, visMask:7, x_camera:4.1336785888671875e+02,
        y_camera:2.5017718505859375e+02, z_camera:1.3796322822570801e+01,
        x_inertial:-5.7744857788085938e+01,
@@ -8022,7 +8022,7 @@ frame_count_150:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_151:
+frame_count_126:
    - { name:SpyingCar, visMask:7, x_camera:4.1380191040039062e+02,
        y_camera:2.5031289672851562e+02, z_camera:1.3829424858093262e+01,
        x_inertial:-5.7748973846435547e+01,
@@ -8087,7 +8087,7 @@ frame_count_151:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_152:
+frame_count_127:
    - { name:SpyingCar, visMask:7, x_camera:4.1421929931640625e+02,
        y_camera:2.5044868469238281e+02, z_camera:1.3862607002258301e+01,
        x_inertial:-5.7753383636474609e+01,
@@ -8152,7 +8152,7 @@ frame_count_152:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_153:
+frame_count_128:
    - { name:SpyingCar, visMask:7, x_camera:4.1461999511718750e+02,
        y_camera:2.5058450317382812e+02, z_camera:1.3895866394042969e+01,
        x_inertial:-5.7758090972900391e+01,
@@ -8217,7 +8217,7 @@ frame_count_153:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_154:
+frame_count_129:
    - { name:SpyingCar, visMask:7, x_camera:4.1500421142578125e+02,
        y_camera:2.5072036743164062e+02, z_camera:1.3929199218750000e+01,
        x_inertial:-5.7763095855712891e+01,
@@ -8283,7 +8283,7 @@ frame_count_154:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_155:
+frame_count_130:
    - { name:SpyingCar, visMask:7, x_camera:4.1537197875976562e+02,
        y_camera:2.5085626220703125e+02, z_camera:1.3962603569030762e+01,
        x_inertial:-5.7768398284912109e+01,
@@ -8349,7 +8349,7 @@ frame_count_155:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_156:
+frame_count_131:
    - { name:SpyingCar, visMask:7, x_camera:4.1572332763671875e+02,
        y_camera:2.5099215698242188e+02, z_camera:1.3996074676513672e+01,
        x_inertial:-5.7773998260498047e+01,
@@ -8414,7 +8414,7 @@ frame_count_156:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_157:
+frame_count_132:
    - { name:SpyingCar, visMask:7, x_camera:4.1605841064453125e+02,
        y_camera:2.5112802124023438e+02, z_camera:1.4029609680175781e+01,
        x_inertial:-5.7779888153076172e+01,
@@ -8479,7 +8479,7 @@ frame_count_157:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_158:
+frame_count_133:
    - { name:SpyingCar, visMask:7, x_camera:4.1637725830078125e+02,
        y_camera:2.5126388549804688e+02, z_camera:1.4063205718994141e+01,
        x_inertial:-5.7786079406738281e+01,
@@ -8544,7 +8544,7 @@ frame_count_158:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_159:
+frame_count_134:
    - { name:SpyingCar, visMask:7, x_camera:4.1667993164062500e+02,
        y_camera:2.5139965820312500e+02, z_camera:1.4096859931945801e+01,
        x_inertial:-5.7792560577392578e+01,
@@ -8609,7 +8609,7 @@ frame_count_159:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_160:
+frame_count_135:
    - { name:SpyingCar, visMask:7, x_camera:4.1696655273437500e+02,
        y_camera:2.5153538513183594e+02, z_camera:1.4130568504333496e+01,
        x_inertial:-5.7799335479736328e+01,
@@ -8674,7 +8674,7 @@ frame_count_160:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_161:
+frame_count_136:
    - { name:SpyingCar, visMask:7, x_camera:4.1723721313476562e+02,
        y_camera:2.5167102050781250e+02, z_camera:1.4164328575134277e+01,
        x_inertial:-5.7806407928466797e+01,
@@ -8739,7 +8739,7 @@ frame_count_161:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_162:
+frame_count_137:
    - { name:SpyingCar, visMask:7, x_camera:4.1749200439453125e+02,
        y_camera:2.5180656433105469e+02, z_camera:1.4198137283325195e+01,
        x_inertial:-5.7813770294189453e+01,
@@ -8804,7 +8804,7 @@ frame_count_162:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_163:
+frame_count_138:
    - { name:SpyingCar, visMask:7, x_camera:4.1773089599609375e+02,
        y_camera:2.5194201660156250e+02, z_camera:1.4231991767883301e+01,
        x_inertial:-5.7821426391601562e+01,
@@ -8869,7 +8869,7 @@ frame_count_163:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_164:
+frame_count_139:
    - { name:SpyingCar, visMask:7, x_camera:4.1795413208007812e+02,
        y_camera:2.5207730102539062e+02, z_camera:1.4265888214111328e+01,
        x_inertial:-5.7829372406005859e+01,
@@ -8934,7 +8934,7 @@ frame_count_164:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_165:
+frame_count_140:
    - { name:SpyingCar, visMask:7, x_camera:4.1816168212890625e+02,
        y_camera:2.5221246337890625e+02, z_camera:1.4299824714660645e+01,
        x_inertial:-5.7837608337402344e+01,
@@ -8999,7 +8999,7 @@ frame_count_165:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_166:
+frame_count_141:
    - { name:SpyingCar, visMask:7, x_camera:4.1835369873046875e+02,
        y_camera:2.5234745788574219e+02, z_camera:1.4333796501159668e+01,
        x_inertial:-5.7846138000488281e+01,
@@ -9064,7 +9064,7 @@ frame_count_166:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_167:
+frame_count_142:
    - { name:SpyingCar, visMask:7, x_camera:4.1853024291992188e+02,
        y_camera:2.5248229980468750e+02, z_camera:1.4367802619934082e+01,
        x_inertial:-5.7854957580566406e+01,
@@ -9129,7 +9129,7 @@ frame_count_167:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_168:
+frame_count_143:
    - { name:SpyingCar, visMask:7, x_camera:4.1869140625000000e+02,
        y_camera:2.5261691284179688e+02, z_camera:1.4401838302612305e+01,
        x_inertial:-5.7864063262939453e+01,
@@ -9195,7 +9195,7 @@ frame_count_168:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_169:
+frame_count_144:
    - { name:SpyingCar, visMask:7, x_camera:4.1883724975585938e+02,
        y_camera:2.5275135803222656e+02, z_camera:1.4435901641845703e+01,
        x_inertial:-5.7873458862304688e+01,
@@ -9261,7 +9261,7 @@ frame_count_169:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_170:
+frame_count_145:
    - { name:SpyingCar, visMask:7, x_camera:4.1896786499023438e+02,
        y_camera:2.5288558959960938e+02, z_camera:1.4469989776611328e+01,
        x_inertial:-5.7883140563964844e+01,
@@ -9326,7 +9326,7 @@ frame_count_170:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_171:
+frame_count_146:
    - { name:SpyingCar, visMask:7, x_camera:4.1908337402343750e+02,
        y_camera:2.5301957702636719e+02, z_camera:1.4504098892211914e+01,
        x_inertial:-5.7893108367919922e+01,
@@ -9391,7 +9391,7 @@ frame_count_171:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_172:
+frame_count_147:
    - { name:SpyingCar, visMask:7, x_camera:4.1918383789062500e+02,
        y_camera:2.5315332031250000e+02, z_camera:1.4538227081298828e+01,
        x_inertial:-5.7903362274169922e+01,
@@ -9456,7 +9456,7 @@ frame_count_172:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_173:
+frame_count_148:
    - { name:SpyingCar, visMask:7, x_camera:4.1926934814453125e+02,
        y_camera:2.5328683471679688e+02, z_camera:1.4572371482849121e+01,
        x_inertial:-5.7913902282714844e+01,
@@ -9522,7 +9522,7 @@ frame_count_173:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_174:
+frame_count_149:
    - { name:SpyingCar, visMask:7, x_camera:4.1934002685546875e+02,
        y_camera:2.5342004394531250e+02, z_camera:1.4606527328491211e+01,
        x_inertial:-5.7924728393554688e+01,
@@ -9588,7 +9588,7 @@ frame_count_174:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_175:
+frame_count_150:
    - { name:SpyingCar, visMask:7, x_camera:4.1939590454101562e+02,
        y_camera:2.5355299377441406e+02, z_camera:1.4640694618225098e+01,
        x_inertial:-5.7935832977294922e+01,
@@ -9653,7 +9653,7 @@ frame_count_175:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_176:
+frame_count_151:
    - { name:SpyingCar, visMask:7, x_camera:4.1943707275390625e+02,
        y_camera:2.5368563842773438e+02, z_camera:1.4674868583679199e+01,
        x_inertial:-5.7947223663330078e+01,
@@ -9718,7 +9718,7 @@ frame_count_176:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_177:
+frame_count_152:
    - { name:SpyingCar, visMask:7, x_camera:4.1946368408203125e+02,
        y_camera:2.5381799316406250e+02, z_camera:1.4709046363830566e+01,
        x_inertial:-5.7958896636962891e+01,
@@ -9783,7 +9783,7 @@ frame_count_177:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_178:
+frame_count_153:
    - { name:SpyingCar, visMask:7, x_camera:4.1947576904296875e+02,
        y_camera:2.5395001220703125e+02, z_camera:1.4743226051330566e+01,
        x_inertial:-5.7970848083496094e+01,
@@ -9848,7 +9848,7 @@ frame_count_178:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_179:
+frame_count_154:
    - { name:SpyingCar, visMask:7, x_camera:4.1947344970703125e+02,
        y_camera:2.5408172607421875e+02, z_camera:1.4777404785156250e+01,
        x_inertial:-5.7983078002929688e+01,
@@ -9913,7 +9913,7 @@ frame_count_179:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_180:
+frame_count_155:
    - { name:SpyingCar, visMask:7, x_camera:4.1945684814453125e+02,
        y_camera:2.5421307373046875e+02, z_camera:1.4811579704284668e+01,
        x_inertial:-5.7995586395263672e+01,
@@ -9978,7 +9978,7 @@ frame_count_180:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_181:
+frame_count_156:
    - { name:SpyingCar, visMask:7, x_camera:4.1942596435546875e+02,
        y_camera:2.5434408569335938e+02, z_camera:1.4845747947692871e+01,
        x_inertial:-5.8008373260498047e+01,
@@ -10043,7 +10043,7 @@ frame_count_181:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_182:
+frame_count_157:
    - { name:SpyingCar, visMask:7, x_camera:4.1938092041015625e+02,
        y_camera:2.5447473144531250e+02, z_camera:1.4879906654357910e+01,
        x_inertial:-5.8021438598632812e+01,
@@ -10108,7 +10108,7 @@ frame_count_182:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_183:
+frame_count_158:
    - { name:SpyingCar, visMask:7, x_camera:4.1932186889648438e+02,
        y_camera:2.5460501098632812e+02, z_camera:1.4914053916931152e+01,
        x_inertial:-5.8034778594970703e+01,
@@ -10174,7 +10174,7 @@ frame_count_183:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_184:
+frame_count_159:
    - { name:SpyingCar, visMask:7, x_camera:4.1924884033203125e+02,
        y_camera:2.5473487854003906e+02, z_camera:1.4948185920715332e+01,
        x_inertial:-5.8048389434814453e+01,
@@ -10239,7 +10239,7 @@ frame_count_184:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_185:
+frame_count_160:
    - { name:SpyingCar, visMask:7, x_camera:4.1916192626953125e+02,
        y_camera:2.5486437988281250e+02, z_camera:1.4982300758361816e+01,
        x_inertial:-5.8062278747558594e+01,
@@ -10304,7 +10304,7 @@ frame_count_185:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_186:
+frame_count_161:
    - { name:SpyingCar, visMask:7, x_camera:4.1906124877929688e+02,
        y_camera:2.5499346923828125e+02, z_camera:1.5016394615173340e+01,
        x_inertial:-5.8076435089111328e+01,
@@ -10369,7 +10369,7 @@ frame_count_186:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_187:
+frame_count_162:
    - { name:SpyingCar, visMask:7, x_camera:4.1894689941406250e+02,
        y_camera:2.5512214660644531e+02, z_camera:1.5050467491149902e+01,
        x_inertial:-5.8090866088867188e+01,
@@ -10434,7 +10434,7 @@ frame_count_187:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_188:
+frame_count_163:
    - { name:SpyingCar, visMask:7, x_camera:4.1881890869140625e+02,
        y_camera:2.5525039672851562e+02, z_camera:1.5084513664245605e+01,
        x_inertial:-5.8105564117431641e+01,
@@ -10499,7 +10499,7 @@ frame_count_188:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_189:
+frame_count_164:
    - { name:SpyingCar, visMask:7, x_camera:4.1867742919921875e+02,
        y_camera:2.5537821960449219e+02, z_camera:1.5118533134460449e+01,
        x_inertial:-5.8120532989501953e+01,
@@ -10564,7 +10564,7 @@ frame_count_189:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_190:
+frame_count_165:
    - { name:SpyingCar, visMask:7, x_camera:4.1852252197265625e+02,
        y_camera:2.5550561523437500e+02, z_camera:1.5152521133422852e+01,
        x_inertial:-5.8135768890380859e+01,
@@ -10629,7 +10629,7 @@ frame_count_190:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_191:
+frame_count_166:
    - { name:SpyingCar, visMask:7, x_camera:4.1835433959960938e+02,
        y_camera:2.5563253784179688e+02, z_camera:1.5186476707458496e+01,
        x_inertial:-5.8151271820068359e+01,
@@ -10694,7 +10694,7 @@ frame_count_191:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_192:
+frame_count_167:
    - { name:SpyingCar, visMask:7, x_camera:4.1817288208007812e+02,
        y_camera:2.5575900268554688e+02, z_camera:1.5220396995544434e+01,
        x_inertial:-5.8167037963867188e+01,
@@ -10759,7 +10759,7 @@ frame_count_192:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_193:
+frame_count_168:
    - { name:SpyingCar, visMask:7, x_camera:4.1797830200195312e+02,
        y_camera:2.5588500976562500e+02, z_camera:1.5254280090332031e+01,
        x_inertial:-5.8183067321777344e+01,
@@ -10824,7 +10824,7 @@ frame_count_193:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_194:
+frame_count_169:
    - { name:SpyingCar, visMask:7, x_camera:4.1777066040039062e+02,
        y_camera:2.5601052856445312e+02, z_camera:1.5288122177124023e+01,
        x_inertial:-5.8199363708496094e+01,
@@ -10889,7 +10889,7 @@ frame_count_194:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_195:
+frame_count_170:
    - { name:SpyingCar, visMask:7, x_camera:4.1755004882812500e+02,
        y_camera:2.5613555908203125e+02, z_camera:1.5321921348571777e+01,
        x_inertial:-5.8215915679931641e+01,
@@ -10954,7 +10954,7 @@ frame_count_195:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_196:
+frame_count_171:
    - { name:SpyingCar, visMask:7, x_camera:4.1731658935546875e+02,
        y_camera:2.5626013183593750e+02, z_camera:1.5355674743652344e+01,
        x_inertial:-5.8232730865478516e+01,
@@ -11019,7 +11019,7 @@ frame_count_196:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_197:
+frame_count_172:
    - { name:SpyingCar, visMask:7, x_camera:4.1707037353515625e+02,
        y_camera:2.5638415527343750e+02, z_camera:1.5389380455017090e+01,
        x_inertial:-5.8249801635742188e+01,
@@ -11084,7 +11084,7 @@ frame_count_197:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_198:
+frame_count_173:
    - { name:SpyingCar, visMask:7, x_camera:4.1681143188476562e+02,
        y_camera:2.5650772094726562e+02, z_camera:1.5423036575317383e+01,
        x_inertial:-5.8267131805419922e+01,
@@ -11149,7 +11149,7 @@ frame_count_198:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_199:
+frame_count_174:
    - { name:SpyingCar, visMask:7, x_camera:4.1653991699218750e+02,
        y_camera:2.5663073730468750e+02, z_camera:1.5456640243530273e+01,
        x_inertial:-5.8284713745117188e+01,
@@ -11214,7 +11214,7 @@ frame_count_199:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_200:
+frame_count_175:
    - { name:SpyingCar, visMask:7, x_camera:4.1641247558593750e+02,
        y_camera:2.5675323486328125e+02, z_camera:1.5490188598632812e+01,
        x_inertial:-5.8302551269531250e+01,
@@ -11279,7 +11279,7 @@ frame_count_200:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_201:
+frame_count_176:
    - { name:SpyingCar, visMask:7, x_camera:4.1662518310546875e+02,
        y_camera:2.5687524414062500e+02, z_camera:1.5523679733276367e+01,
        x_inertial:-5.8320644378662109e+01,
@@ -11344,7 +11344,7 @@ frame_count_201:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_202:
+frame_count_177:
    - { name:SpyingCar, visMask:7, x_camera:4.1682156372070312e+02,
        y_camera:2.5699667358398438e+02, z_camera:1.5557110786437988e+01,
        x_inertial:-5.8338985443115234e+01,
@@ -11410,7 +11410,7 @@ frame_count_202:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_203:
+frame_count_178:
    - { name:SpyingCar, visMask:7, x_camera:4.1700170898437500e+02,
        y_camera:2.5711755371093750e+02, z_camera:1.5590480804443359e+01,
        x_inertial:-5.8357578277587891e+01,
@@ -11475,7 +11475,7 @@ frame_count_203:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_204:
+frame_count_179:
    - { name:SpyingCar, visMask:7, x_camera:4.1716571044921875e+02,
        y_camera:2.5723791503906250e+02, z_camera:1.5623785972595215e+01,
        x_inertial:-5.8376419067382812e+01,
@@ -11541,7 +11541,7 @@ frame_count_204:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_205:
+frame_count_180:
    - { name:SpyingCar, visMask:7, x_camera:4.1731365966796875e+02,
        y_camera:2.5735772705078125e+02, z_camera:1.5657025337219238e+01,
        x_inertial:-5.8395507812500000e+01,
@@ -11606,7 +11606,7 @@ frame_count_205:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_206:
+frame_count_181:
    - { name:SpyingCar, visMask:7, x_camera:4.1744567871093750e+02,
        y_camera:2.5747695922851562e+02, z_camera:1.5690196037292480e+01,
        x_inertial:-5.8414836883544922e+01,
@@ -11671,7 +11671,7 @@ frame_count_206:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_207:
+frame_count_182:
    - { name:SpyingCar, visMask:7, x_camera:4.1756192016601562e+02,
        y_camera:2.5759564208984375e+02, z_camera:1.5723295211791992e+01,
        x_inertial:-5.8434413909912109e+01,
@@ -11736,7 +11736,7 @@ frame_count_207:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_208:
+frame_count_183:
    - { name:SpyingCar, visMask:7, x_camera:4.1766241455078125e+02,
        y_camera:2.5771374511718750e+02, z_camera:1.5756320953369141e+01,
        x_inertial:-5.8454231262207031e+01,
@@ -11801,7 +11801,7 @@ frame_count_208:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_209:
+frame_count_184:
    - { name:SpyingCar, visMask:7, x_camera:4.1774731445312500e+02,
        y_camera:2.5783126831054688e+02, z_camera:1.5789271354675293e+01,
        x_inertial:-5.8474288940429688e+01,
@@ -11866,7 +11866,7 @@ frame_count_209:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_210:
+frame_count_185:
    - { name:SpyingCar, visMask:7, x_camera:4.1781536865234375e+02,
        y_camera:2.5794802856445312e+02, z_camera:1.5822147369384766e+01,
        x_inertial:-5.8494583129882812e+01,
@@ -11931,7 +11931,7 @@ frame_count_210:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_211:
+frame_count_186:
    - { name:SpyingCar, visMask:7, x_camera:4.1785360717773438e+02,
        y_camera:2.5803814697265625e+02, z_camera:1.5854956626892090e+01,
        x_inertial:-5.8515106201171875e+01,
@@ -11996,7 +11996,7 @@ frame_count_211:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_212:
+frame_count_187:
    - { name:SpyingCar, visMask:7, x_camera:4.1741845703125000e+02,
        y_camera:2.5811398315429688e+02, z_camera:1.5887702941894531e+01,
        x_inertial:-5.8535842895507812e+01,
@@ -12061,7 +12061,7 @@ frame_count_212:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_213:
+frame_count_188:
    - { name:SpyingCar, visMask:7, x_camera:4.1698196411132812e+02,
        y_camera:2.5819015502929688e+02, z_camera:1.5920391082763672e+01,
        x_inertial:-5.8556793212890625e+01,
@@ -12126,7 +12126,7 @@ frame_count_213:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_214:
+frame_count_189:
    - { name:SpyingCar, visMask:7, x_camera:4.1654449462890625e+02,
        y_camera:2.5826666259765625e+02, z_camera:1.5953022956848145e+01,
        x_inertial:-5.8577945709228516e+01,
@@ -12192,7 +12192,7 @@ frame_count_214:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_215:
+frame_count_190:
    - { name:SpyingCar, visMask:7, x_camera:4.1610626220703125e+02,
        y_camera:2.5834341430664062e+02, z_camera:1.5985603332519531e+01,
        x_inertial:-5.8599292755126953e+01,
@@ -12257,7 +12257,7 @@ frame_count_215:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_216:
+frame_count_191:
    - { name:SpyingCar, visMask:7, x_camera:4.1566754150390625e+02,
        y_camera:2.5842047119140625e+02, z_camera:1.6018135070800781e+01,
        x_inertial:-5.8620826721191406e+01,
@@ -12322,7 +12322,7 @@ frame_count_216:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_217:
+frame_count_192:
    - { name:SpyingCar, visMask:7, x_camera:4.1522851562500000e+02,
        y_camera:2.5849771118164062e+02, z_camera:1.6050622940063477e+01,
        x_inertial:-5.8642543792724609e+01,
@@ -12387,7 +12387,7 @@ frame_count_217:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_218:
+frame_count_193:
    - { name:SpyingCar, visMask:7, x_camera:4.1478942871093750e+02,
        y_camera:2.5857522583007812e+02, z_camera:1.6083068847656250e+01,
        x_inertial:-5.8664432525634766e+01,
@@ -12452,7 +12452,7 @@ frame_count_218:
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
-frame_count_219:
+frame_count_194:
    - { name:SpyingCar, visMask:0, x_camera:0., y_camera:0., z_camera:0.,
        x_inertial:0., y_inertial:0., z_inertial:0., x_usk:0., y_usk:0.,
        z_usk:0., dim_x_camera:0., dim_y_camera:0., dim_x_realworld:0.,

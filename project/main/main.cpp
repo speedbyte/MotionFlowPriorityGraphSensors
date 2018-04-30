@@ -268,6 +268,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     if ((env_index == environment_list.size() - 1) && vires_dataset.gt) {
                         base_ptr_gt_scene->stopSimulation();
+                        // Hack the images and the position_file
+                        system("python ../quicky_1.py");
                         exit(0);
                     }
 
@@ -295,7 +297,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
 
                 // Generate Groundtruth data flow --------------------------------------
-                if (environment_list[env_index] == "none") {
+                if (environment_list[env_index] == "none" && !vires_dataset.gt ) {
 
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
@@ -349,7 +351,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        for ( ushort stepSize = 4; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=3) {
+        for ( ushort stepSize = 2; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=4) {
 
             ptr_list_of_simulated_objects_base.clear();
 
@@ -444,22 +446,32 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         }
 
+        fs << "time_map" << "[";
+        int total = 0;
+        for ( auto &n : time_map )
+        {
+            fs << "{:" << n.first << n.second << "}";
+            std::cout << n.first << " " << n.second << std::endl;
+            total += n.second;
+        }
+
+        time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
+
+        fs << "{:" << "total" << time_map["total"] << "}";
+
+        fs << "]";
+
+        std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;
+
+
         fs.release();
 
+        system("python ../../main_python/motionflow_graphs.py");
+
 
     }
 
 
-    int total = 0;
-    for ( auto &n : time_map )
-    {
-        std::cout << n.first << " " << n.second << std::endl;
-        total += n.second;
-    }
-
-    time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
-
-    std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;
 
 
     /* MATLAB_DATASET ------------- */

@@ -5,11 +5,13 @@ from motionflow_graphs_common import Figures, YAMLParser
 from motionflow_graphs_data import *
 
 from robustness_common import *
+import threading
 
+lock = threading.BoundedSemaphore()
 
 summary_mean = dict()
 
-def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_list, label=""):
+def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_list, label_list, label=""):
 
     #summary_mean.clear()
 
@@ -103,7 +105,7 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
                          x_axis_list,
                          y_axis_list,
                          color_list,
-                         data_list,
+                         label_list,
                          measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize),
                          [lower_x, upper_x],
                          [lower_y, upper_y],
@@ -126,7 +128,7 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
                      x_axis_list,
                      y_axis_list,
                      color_list,
-                     data_list,
+                     label_list,
                      measuring_parameter + " all datafilters " + " step size" + " " + str(stepSize),
                      [lower_x, upper_x],
                      [lower_y, upper_y],
@@ -134,10 +136,11 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
 
             list_of_plots.append(plot1)
 
-
         if noise == "noise":
             # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
+            lock.acquire()
             summary_mean[measuring_parameter + '_' + env_name + '_' + str(stepSize) ] = mean_list
+            lock.release()
 
         yaml_list_index_offset = yaml_list_index_offset + 4
 
@@ -150,8 +153,4 @@ def robustness_(file, measuring_parameter, noise, stepSize, data_list, color_lis
 
 def get_summary():
     return summary_mean
-
-
-
-
 

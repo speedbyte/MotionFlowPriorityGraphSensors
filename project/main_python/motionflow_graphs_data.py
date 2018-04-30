@@ -3,11 +3,13 @@
 
 
 dict_datafilters = {
-    "datafilter_0" : "moving_average",
-    "datafilter_1" : "voted_mean",
-    "datafilter_2" : "ranked_mean",
-    "datafilter_3" : "something",
+    "ground_truth": "ground truth",
+    "datafilter_0": "moving average",
+    "datafilter_1": "voted mean",
+    "datafilter_2": "ranked mean",
+    "datafilter_3": "something",
 }
+
 dict_environment = {
     "none" : 0,
     "light_snow"   : 1,
@@ -15,10 +17,18 @@ dict_environment = {
     "heavy_snow"   : 3,
 }
 
-environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"]#night
+dict_environment_label = {
+    "none":  "blue_sky",
+    "env_0": "light snow",
+    "env_1": "mild snow",
+    "env_2": "heavy snow",
+}
+
+
+environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"] #night
 #environment_list = ["none",]
 
-step_list = [4, 7, 10]
+step_list = [2, 6, 10]
 
 fps_list = ["30", "15", "10", "7.5"]#night
 fps_list = ["30",]
@@ -27,7 +37,13 @@ evaluation = "environment"
 
 datafilter_list = ["0", "1", "2"]
 
-color_list = ["blue", "red", "green", "yellow", "black"]
+color_list_algorithms = ["blue", "red", "yellow", "green", "dummy"]
+
+color_list_environment = ["blue", "gray", "brown", "black", "dummy"]
+
+label_list_algorithm = [dict_datafilters["ground_truth"], dict_datafilters["datafilter_0"], dict_datafilters["datafilter_1"], dict_datafilters["datafilter_2"]]
+
+label_list_enironment = [dict_environment_label["none"], dict_environment_label["env_0"], dict_environment_label["env_1"], dict_environment_label["env_2"]]
 
 color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 

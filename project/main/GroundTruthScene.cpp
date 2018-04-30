@@ -129,7 +129,7 @@ void GroundTruthScene::prepare_directories() {
                 sprintf(char_dir_append, "%02d", i);
                 m_position_obj_path = m_generatepath.string() + "position_obj_";
                 path = m_position_obj_path.string() + char_dir_append;
-                boost::filesystem::create_directories(path);
+                //boost::filesystem::create_directories(path);
 
             }
         }
@@ -163,6 +163,9 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char temp_str_fc[20];
             sprintf(temp_str_fc, "frame_count_%03d", frame_count);
+            if ( frame_count < 25 ) {
+                continue;
+            }
             write_fs << temp_str_fc << "[";
             for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
                 write_fs
@@ -306,6 +309,7 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
     }
     //write_fs << "]";
     write_fs.release();
+
 }
 
 void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
@@ -490,29 +494,31 @@ void GroundTruthScene::startEvaluating(std::string dataset, Noise noise) {
         writePositionInYaml(dataset);
     }
 
-    calcBBFrom3DPosition();
-    //visualiseBoundingBox();
+    else {
+        calcBBFrom3DPosition();
+        //visualiseBoundingBox();
 
 
-    for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+        for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
-        GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape(),
-                                  m_ptr_customObjectMetaDataList.at(obj_index)->getObjectStartPoint(), noise,
-                                  m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName());
-        m_list_gt_objects.push_back(gt_obj);
-        m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
+            GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape(),
+                    m_ptr_customObjectMetaDataList.at(obj_index)->getObjectStartPoint(), noise,
+                    m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName());
+            m_list_gt_objects.push_back(gt_obj);
+            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
+
+        }
+
+        for (auto obj_index = 0; obj_index < m_ptr_customSensorMetaDataList.size(); obj_index++) {
+
+            Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(obj_index),
+                    m_ptr_customSensorMetaDataList.at(obj_index)->getSensorStartPoint(), &noise,
+                    m_ptr_customSensorMetaDataList.at(obj_index)->getSensorName());
+            m_list_gt_sensors.push_back(gt_sen);
+            m_list_gt_sensors.at(obj_index).beginGroundTruthGeneration(*m_ptr_customSensorMetaDataList.at(obj_index));
+        }
 
     }
-
-    for (auto obj_index = 0; obj_index < m_ptr_customSensorMetaDataList.size(); obj_index++) {
-
-        Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(obj_index),
-                       m_ptr_customSensorMetaDataList.at(obj_index)->getSensorStartPoint(), &noise,
-                       m_ptr_customSensorMetaDataList.at(obj_index)->getSensorName());
-        m_list_gt_sensors.push_back(gt_sen);
-        m_list_gt_sensors.at(obj_index).beginGroundTruthGeneration(*m_ptr_customSensorMetaDataList.at(obj_index));
-    }
-
 }
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
@@ -854,7 +860,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         if (!m_regenerate_yaml_file) { // dont generate, just read
 
-            readPositionFromFile("../position_vires.yml");
+            readPositionFromFile("../position_vires_modified.yml");
 
             ushort map_pair_count = 0;
             for (const auto &myPair : m_mapObjectNameToObjectMetaData) {

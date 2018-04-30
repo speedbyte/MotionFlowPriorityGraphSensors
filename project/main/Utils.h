@@ -246,7 +246,7 @@ public:
         /// Display
         //cv::namedWindow("calcHist Demo", CV_WINDOW_AUTOSIZE );
         //cv::imshow("calcHist Demo", histImage );
-        //cv::waitKey(100);
+        //cv::waitKey(0);
         //cv::destroyAllWindows();
 
     }

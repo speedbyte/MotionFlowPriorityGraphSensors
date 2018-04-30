@@ -9,6 +9,8 @@ from motionflow_graphs_common import Figures, YAMLParser
 from motionflow_graphs_data import *
 
 import  robustness
+import threading
+import time
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
@@ -197,23 +199,21 @@ def scenario_displacement_occurence():
 
 
 
+class thread1(threading.Thread):
 
-#    plt.close("all")
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.threadRun = False
 
-import subprocess
+    def stop(self):
+        self.threadRun = False
 
-if __name__ == '__main__':
+    def run(self):
+        self.threadRun = True
+        #while ( self.threadRun ):
+        print "i am in thread pixel "
 
-    command = "rm " + output_folder + "*.png"
-    try:
-        subprocess.check_output([command], shell='/usr/bin/bash')
-    except subprocess.CalledProcessError as e:
-        print e.returncode
-        if e.returncode != 1:
-            exit(0)
-
-    if ( 1 ):
-        plot_at_once_figures = list()
+        self.plot_at_once_figures = list()
         for step_size in step_list:
 
             if ( evaluation == "environment"):
@@ -231,18 +231,33 @@ if __name__ == '__main__':
             for x in range(len(datafilter_list)):
                 custom_data_list_pixel.append(list_of_pixel_density_noise[x])
 
-            plot_at_once_figures.append(robustness.robustness_(file, "pixel", "no_noise", str(step_size), custom_data_list_pixel, color_list, "jaccard index no noise all algorithm" ))
-            plot_at_once_figures.append(robustness.robustness_(file, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list))
+            self.plot_at_once_figures.append(robustness.robustness_(file, "pixel", "no_noise", str(step_size), custom_data_list_pixel, color_list_algorithms, label_list_algorithm, "jaccard index no noise all algorithm" ))
+            self.plot_at_once_figures.append(robustness.robustness_(file, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list_environment, label_list_enironment))
+        self.threadRun = False
 
-        plot_at_once(plot_at_once_figures)
+    def getThreadState(self):
+        return self.threadRun
 
-        summary = robustness.get_summary()
-        figures = Figures(1)
-        figures.evaluate_pixel(summary, step_list)
-        figures.save_figure("pixel", "summary")
+    def getPlotList(self):
+        return self.plot_at_once_figures
 
-    if ( 1 ):
-        plot_at_once_figures = list()
+
+
+class thread2(threading.Thread):
+
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.threadRun = False
+
+    def stop(self):
+        self.threadRun = False
+
+    def run(self):
+        self.threadRun = True
+        #while ( self.threadRun ):
+        print "i am in thread deviation "
+
+        self.plot_at_once_figures = list()
         for step_size in step_list:
 
             if ( evaluation == "environment"):
@@ -259,18 +274,33 @@ if __name__ == '__main__':
             for x in range(len(datafilter_list)):
                 custom_data_list_deviation.append(list_of_collision_noise[x])
 
-            plot_at_once_figures.append(robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list, "collision points no noise all algorithm"))
+            self.plot_at_once_figures.append(robustness.robustness_(file, "deviation", "no_noise", str(step_size),  custom_data_list_deviation, color_list_algorithms, label_list_algorithm,  "deviation no noise all algorithm "))
+            self.plot_at_once_figures.append(robustness.robustness_(file, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list_environment, label_list_enironment, "deviation environment algorithm "))
 
-        plot_at_once(plot_at_once_figures)
-        #summary = robustness.get_summary()
-        #figures = Figures(1)
-        #figures.evaluate_collision(summary, step_list)
-        #figures.save_figure("collision", "summary")
+        self.threadRun = False
+
+    def getThreadState(self):
+        return self.threadRun
+
+    def getPlotList(self):
+        return self.plot_at_once_figures
 
 
-    # ---------------------------------
-    if ( 1 ):
-        plot_at_once_figures = list()
+class thread3(threading.Thread):
+
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.threadRun = False
+
+    def stop(self):
+        self.threadRun = False
+
+    def run(self):
+        self.threadRun = True
+        #while ( self.threadRun ):
+        print "i am in thread collision "
+
+        self.plot_at_once_figures = list()
         for step_size in step_list:
 
             if ( evaluation == "environment"):
@@ -287,19 +317,31 @@ if __name__ == '__main__':
             for x in range(len(datafilter_list)):
                 custom_data_list_deviation.append(list_of_collision_noise[x])
 
-            plot_at_once_figures.append(robustness.robustness_(file, "deviation", "no_noise", str(step_size),  custom_data_list_deviation, color_list, "deviation no noise all algorithm "))
-            plot_at_once_figures.append(robustness.robustness_(file, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list, "deviation environment algorithm "))
-            #robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list, "collision points no noise all algorithm")
+            plot_at_once_figures.append(robustness.robustness_(file, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list_algorithms, label_list_algorithm, "collision points no noise all algorithm"))
+        self.threadRun = False
 
-        plot_at_once(plot_at_once_figures)
-        summary = robustness.get_summary()
-        figures = Figures(1)
-        figures.evaluate_deviation(summary, step_list)
-        figures.save_figure("deviation", "summary")
+    def getThreadState(self):
+        return self.threadRun
 
-    # ---------------------------------
-    if ( 1 ):
-        plot_at_once_figures = list()
+    def getPlotList(self):
+        return self.plot_at_once_figures
+
+
+class thread4(threading.Thread):
+
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.threadRun = False
+
+    def stop(self):
+        self.threadRun = False
+
+    def run(self):
+        self.threadRun = True
+        #while ( self.threadRun ):
+        print "i am in thread obj displacement"
+
+        self.plot_at_once_figures = list()
         for step_size in step_list:
 
             if ( evaluation == "environment"):
@@ -316,14 +358,127 @@ if __name__ == '__main__':
             for x in range(len(datafilter_list)):
                 custom_data_list_obj_displacement.append(list_of_obj_displacement_noise[x])
 
-            plot_at_once_figures.append(robustness.robustness_(file, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list, "obj_displacement no noise all algorithm "))
-            plot_at_once_figures.append(robustness.robustness_(file, "obj_displacement", "noise" , str(step_size), list_of_obj_displacement_noise, color_list, "obj_displacement environment algorithm "))
+            plot_at_once_figures.append(robustness.robustness_(file, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list_algorithms, label_list_algorithm, "obj_displacement no noise all algorithm "))
+            plot_at_once_figures.append(robustness.robustness_(file, "obj_displacement", "noise", str(step_size), list_of_obj_displacement_noise, color_list_environment, label_list_enironment, "obj_displacement environment algorithm "))
+        self.threadRun = False
 
-        plot_at_once(plot_at_once_figures)
-        summary = robustness.get_summary()
-        figures = Figures(1)
-        figures.evaluate_obj_displacement(summary, step_list)
-        figures.save_figure("obj_displacement", "summary")
+    def getThreadState(self):
+        return self.threadRun
+
+    def getPlotList(self):
+        return self.plot_at_once_figures
+
+
+#    plt.close("all")
+
+import subprocess
+
+if __name__ == '__main__':
+
+    command = "rm " + output_folder + "*.png"
+    try:
+        subprocess.check_output([command], shell='/usr/bin/bash')
+    except subprocess.CalledProcessError as e:
+        print e.returncode
+        if e.returncode != 1:
+            exit(0)
+
+    thread_pixel = None
+    thread_deviation = None
+    thread_collision = None
+    thread_obj_displacement = None
+
+    if ( 1 ):
+
+        thread_pixel = thread1()
+        thread_pixel.start()
+
+    if ( 1 ):
+
+        thread_deviation = thread2()
+        thread_deviation.start()
+
+    if ( 1 ):
+
+        thread_collision = thread3()
+        thread_collision.start()
+
+    if ( 1 ):
+
+        thread_obj_displacement = thread4()
+        thread_obj_displacement.start()
+
+    if thread_pixel != None:
+
+        while ( True ):
+            time.sleep(1)
+            if ( thread_pixel.getThreadState() == False ):
+
+                    plot_at_once_figures = thread_pixel.getPlotList()
+                    plot_at_once(plot_at_once_figures)
+
+                    # summary
+                    summary = robustness.get_summary()
+                    figures = Figures(1)
+                    figures.evaluate_pixel(summary, step_list)
+                    figures.save_figure("pixel", "summary")
+
+                    break
+
+
+    if ( thread_deviation != None ):
+
+        while ( True ):
+            time.sleep(1)
+            if ( thread_deviation.getThreadState() == False ):
+
+                plot_at_once_figures = thread_deviation.getPlotList()
+                plot_at_once(plot_at_once_figures)
+
+                # summary
+                summary = robustness.get_summary()
+                figures = Figures(1)
+                figures.evaluate_deviation(summary, step_list)
+                figures.save_figure("deviation", "summary")
+
+                break
+
+
+    if ( thread_collision != None ):
+
+        while ( True ):
+            time.sleep(1)
+            if ( thread_collision.getThreadState() == False ):
+
+                plot_at_once_figures = thread_collision.getPlotList()
+                plot_at_once(plot_at_once_figures)
+
+                # summary
+                #summary = robustness.get_summary()
+                #figures = Figures(1)
+                #figures.evaluate_collision(summary, step_list)
+                #figures.save_figure("collision", "summary")
+
+                break
+
+
+    # ---------------------------------
+    if ( thread_obj_displacement != None ):
+
+        while ( True ):
+            time.sleep(1)
+            if ( thread_obj_displacement.getThreadState() == False ):
+
+                plot_at_once_figures = thread_obj_displacement.getPlotList()
+                plot_at_once(plot_at_once_figures)
+
+                # summary
+                summary = robustness.get_summary()
+                figures = Figures(1)
+                figures.evaluate_obj_displacement(summary, step_list)
+                figures.save_figure("obj_displacement", "summary")
+
+                break
 
         #scenario_displacement_occurence()
         #histogramm()

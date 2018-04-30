@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 import numpy as np
 
-from motionflow_graphs_data import environment_list, dict_datafilters, color_list
+from motionflow_graphs_data import environment_list, dict_datafilters, color_list_algorithms
 
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
@@ -67,19 +67,21 @@ class Figures(object):
 
             for x in range(len(plot_configuration)):
 
+                #print 4*env_index+figure_index+x  # this was used for label until now.
+
                 if ( measuring_parameter == "obj_displacement" or measuring_parameter == "collision"):
                     line1 = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
                                                             plot_number[figure_index][3][x]/SCALE, 'ko', lw=1,
                                                             color=plot_number[figure_index][4][x+env_index],
-                                                            label=plot_number[figure_index][5][4*env_index+figure_index+x])
+                                                            label=plot_number[figure_index][5][x+env_index])
                 else:
                     line = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
                                                              plot_number[figure_index][3][x]/SCALE, 'ko', lw=1,
                                                              color=plot_number[figure_index][4][x+env_index],
-                                                             label=plot_number[figure_index][5][4*env_index+figure_index+x])
+                                                             label=plot_number[figure_index][5][x+env_index])
 
 
-                #IT self.list_of_plots[figure_index].legend(loc='upper right', fontsize='xx-small')
+                self.list_of_plots[figure_index].legend(loc='upper right', fontsize='xx-small')
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
                 self.list_of_plots[figure_index].set_title(plot_number[figure_index][6])
 
@@ -149,7 +151,7 @@ class Figures(object):
                 for env_name in environment_list:
                     #print 'pixel_' + env_name + '_' + str(step_size)
                     regroup.append(summary['pixel_' + env_name + '_' + str(step_size)][val+1])
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list[val+1])
+                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1])
 
         plt.xlabel('Data Processing Algorithm')
         plt.ylabel('Good Pixel Density')
@@ -191,7 +193,7 @@ class Figures(object):
                 for env_name in environment_list:
                     print 'deviation_' + env_name + '_' + str(step_size)
                     regroup.append(summary['deviation_' + env_name + '_' + str(step_size)][val+1])
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list[val+1])
+                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1])
 
 
         plt.xlabel('Data Processing Algorithm')
@@ -225,7 +227,7 @@ class Figures(object):
                 for env_name in environment_list:
                     print 'obj_displacement_' + env_name + '_' + str(step_size)
                     regroup.append(summary['obj_displacement_' + env_name + '_' + str(step_size)][val+1])
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list[val+1])
+                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
 
         plt.xlabel('Data Processing Algorithm')
