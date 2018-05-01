@@ -9,13 +9,12 @@ import math
 
 import pandas as pd
 import cv2
-import numpy
-from matplotlib import pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import scipy
 from scipy.interpolate import griddata
-import matplotlib as mp
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 from math import pi
 
 import random
@@ -27,12 +26,12 @@ environment_list = ["none", "night"]
 def histogram():
     # Build a vector of 10000 normal deviates with variance 0.5^2 and mean 2
     mu, sigma = 2, 0.5
-    v = numpy.random.normal(mu,sigma,10000)
+    v = np.random.normal(mu,sigma,10000)
     # Plot a normalized histogram with 50 bins
     plt.hist(v, bins=50, normed=1)       # matplotlib version (plot)
     plt.show()
     # Compute the histogram with numpy and then plot it
-    (n, bins) = numpy.histogram(v, bins=50, normed=True)  # NumPy version (no plot)
+    (n, bins) = np.histogram(v, bins=50, normed=True)  # NumPy version (no plot)
     plt.plot(.5*(bins[1:]+bins[:-1]), n)
     plt.show()
     
@@ -48,8 +47,8 @@ def cam():
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     
         # define range of blue color in HSV
-        lower_blue = numpy.array([110,50,50])
-        upper_blue = numpy.array([130,255,255])
+        lower_blue = np.array([110,50,50])
+        upper_blue = np.array([130,255,255])
         # Threshold the HSV image to get only blue colors
         mask = cv2.inRange(hsv, lower_blue, upper_blue)
     
@@ -166,7 +165,7 @@ def lemniscate():
     }
 
     for key in style:
-        mp.rcParams[key]=style[key]
+        mpl.rcParams[key]=style[key]
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -303,6 +302,38 @@ def vkitti():
     print mot_data
 
 
+def bar_chart_2d():
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    n_groups = 4
+    bar_width = 0.1
+    opacity = 0.4
+    index = np.arange(0, 2*n_groups, 2)
+
+    data = [1,2,3,4]
+    data2 = [5,6,7,8]
+
+    data2 = np.array(data2)
+    data2 = data2*4
+
+    chart = plt.bar(index, data, bar_width, color='blue', edgecolor='black')
+    chart = plt.bar(index+bar_width, data2, bar_width, color='red', edgecolor='black')
+    chart = plt.bar(index+2*bar_width, data, bar_width, color='green', edgecolor='black')
+
+
+    ax.set_xlabel('y_axis')
+    ax.set_ylabel('x_axis')
+    ax.set_title('Title')
+
+    plt.xticks(index+bar_width*0.5, ('A', 'B', 'C', 'D'))
+    plt.legend()
+    plt.tight_layout()
+
+    plt.show()
+
+
 if __name__ == '__main__':
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 
@@ -317,7 +348,8 @@ if __name__ == '__main__':
     #boundingbox()
     #sphere()
     #criticalpoint()
-    lemniscate()
+    #lemniscate()
+    bar_chart_2d()
     #simple()
 
     #motionflow_vectorgraphs()

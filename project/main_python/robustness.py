@@ -38,6 +38,7 @@ def robustness_(yaml_load, measuring_parameter, noise, stepSize, data_list, colo
         data_points_gt = yaml_load[list_of_collision_ground_truth[0]]
         print "getting " , list_of_collision_ground_truth[0]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = getCollisionPoints(data_points_gt, data_points_gt)
+        # collision sorted
 
     elif ( measuring_parameter == "obj_displacement"):
         data_points_gt = yaml_load[list_of_obj_displacement_ground_truth[0]]

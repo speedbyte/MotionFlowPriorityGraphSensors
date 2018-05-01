@@ -5,7 +5,10 @@
 
 import yaml
 from mpl_toolkits.mplot3d import axes3d
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+import plotly.tools as tls
+
 import numpy as np
 
 from motionflow_graphs_data import environment_list, dict_datafilters, color_list_algorithms
@@ -60,8 +63,23 @@ class Figures(object):
 
         for figure_index in range(len(plot_number)):
 
-            self.list_of_plots[figure_index].set_xlabel(plot_number[figure_index][0])
-            self.list_of_plots[figure_index].set_ylabel(plot_number[figure_index][1])
+            if ( measuring_parameter == "obj_displacement" or measuring_parameter == "collision"):
+
+                self.list_of_plots[figure_index].set_xlabel("object dimension")
+                self.list_of_plots[figure_index].set_ylabel("deviation of object displacements from ground truth ( px )")
+
+            elif ( measuring_parameter == "pixel"):
+
+                self.list_of_plots[figure_index].set_xlabel("frame_count")
+                self.list_of_plots[figure_index].set_ylabel("jaccard index ( overlap of good pixels / ground truth pixels )")
+
+            elif ( measuring_parameter == "deviation"):
+
+                self.list_of_plots[figure_index].set_xlabel("frame_count")
+                self.list_of_plots[figure_index].set_ylabel("deviation of collision points from ground truth ( px )")
+
+            #self.list_of_plots[figure_index].set_xlabel(plot_number[figure_index][0])
+            #self.list_of_plots[figure_index].set_ylabel(plot_number[figure_index][1])
 
             plot_configuration = plot_number[figure_index][2]
 
@@ -70,27 +88,43 @@ class Figures(object):
                 #print 4*env_index+figure_index+x  # this was used for label until now.
 
                 if ( measuring_parameter == "obj_displacement" or measuring_parameter == "collision"):
-                    line1 = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
+
+                    if ( measuring_parameter == "collision" ) :
+                        s = np.argsort(plot_number[figure_index][2][x])
+                        line1 = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x][s],
+                                                                  plot_number[figure_index][3][x][s]/SCALE, 'ko', lw=1,
+                                                                  color=plot_number[figure_index][4][x+env_index],
+                                                                  label=plot_number[figure_index][5][x+env_index])
+
+                    else:
+
+                        line1 = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
                                                             plot_number[figure_index][3][x]/SCALE, 'ko', lw=1,
                                                             color=plot_number[figure_index][4][x+env_index],
                                                             label=plot_number[figure_index][5][x+env_index])
-                else:
+                elif ( measuring_parameter == "pixel" ) :
                     line = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
                                                              plot_number[figure_index][3][x]/SCALE, 'ko', lw=1,
                                                              color=plot_number[figure_index][4][x+env_index],
                                                              label=plot_number[figure_index][5][x+env_index])
 
+                elif ( measuring_parameter == "deviation" ) :
+                    line = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
+                                                                 plot_number[figure_index][3][x]/10, 'ko', lw=1,
+                                                                 color=plot_number[figure_index][4][x+env_index],
+                                                                 label=plot_number[figure_index][5][x+env_index])
 
-                self.list_of_plots[figure_index].legend(loc='upper right', fontsize='xx-small')
+
+                self.list_of_plots[figure_index].legend(loc='upper right', fontsize='small')
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-                self.list_of_plots[figure_index].set_title(plot_number[figure_index][6])
+                #self.list_of_plots[figure_index].set_title(plot_number[figure_index][6])
 
                 self.list_of_plots[figure_index].set_xlim([plot_number[figure_index][7][0],
                                                            plot_number[figure_index][7][1]])
 
                 if ( measuring_parameter == "deviation"):
                     self.list_of_plots[figure_index].set_ylim([0,
-                                                               10000])
+                                                               1000])
 
                 else:
                     self.list_of_plots[figure_index].set_ylim([plot_number[figure_index][8][0],
@@ -108,25 +142,25 @@ class Figures(object):
             step_suffix = dict_datafilters["datafilter_0"] + "stepSize_" + str(stepSize)
             if noise == "summary":
                 step_suffix = ''
-            self.fig1.savefig(output_folder + measuring_parameter + '_' + noise + step_suffix, bbox_inches='tight',dpi=200)
+            self.fig1.savefig(output_folder + measuring_parameter + '_' + noise+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 2 ):
             step_suffix = dict_datafilters["datafilter_1"] + "stepSize_" + str(stepSize)
             if noise == "summary":
                 step_suffix = ''
-            self.fig2.savefig(output_folder + measuring_parameter + '_' + noise + step_suffix, bbox_inches='tight',dpi=200)
+            self.fig2.savefig(output_folder + measuring_parameter + '_' + noise+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 3 ):
             step_suffix = dict_datafilters["datafilter_2"] + "stepSize_" + str(stepSize)
             if noise == "summary":
                 step_suffix = ''
-            self.fig3.savefig(output_folder + measuring_parameter + '_' + noise + step_suffix, bbox_inches='tight',dpi=200)
+            self.fig3.savefig(output_folder + measuring_parameter + '_' + noise+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 4 ):
             step_suffix = dict_datafilters["datafilter_3"] + "stepSize_" + str(stepSize)
             if noise == "summary":
                 step_suffix = ''
-            self.fig4.savefig(output_folder + measuring_parameter + '_' + noise + step_suffix, bbox_inches='tight',dpi=200)
+            self.fig4.savefig(output_folder + measuring_parameter + '_' + noise+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
 
     def plot_close_all(self):
@@ -158,13 +192,14 @@ class Figures(object):
                     regroup.append(summary['pixel_' + env_name + '_' + str(step_size)][val+1])
                 rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
-        plt.xlabel('Data Processing Algorithm')
-        plt.ylabel('Good Pixel Density')
-        plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
-        plt.xticks(index + bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
-        plt.legend()
+        self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
+        self.list_of_plots[0].set_ylabel('Average Jaccard index of displacement vectors over all frames')
+        #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
+        plt.xticks(index + 5*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
+        #self.list_of_plots[0].legend()
 
-        plt.tight_layout()
+
+        #self.list_of_plots[0].tight_layout()
 
 
         #rects1 = plt.bar(index, means_men, bar_width,
@@ -201,7 +236,7 @@ class Figures(object):
                 rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
 
-        plt.xlabel('Data Processing Algorithm')
+        plt.xlabel('Result of data processing algorithms in various snow intensity and pixel density')
         plt.ylabel('Deviation')
         plt.title('Deviation of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
         plt.xticks(index + 2*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
@@ -222,6 +257,8 @@ class Figures(object):
         regroup = list()
 
         regroup = [summary['obj_displacement_none_' + str(step_list[0])][0], summary['obj_displacement_light_snow_' + str(step_list[0])][0], summary['obj_displacement_mild_snow_' + str(step_list[0])][0], summary['obj_displacement_heavy_snow_' + str(step_list[0])][0]]
+        regroup = np.array(regroup)
+        regroup = regroup*100
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
         shift = 0
@@ -231,17 +268,20 @@ class Figures(object):
                 shift = shift+1
                 for env_name in environment_list:
                     print 'obj_displacement_' + env_name + '_' + str(step_size)
-                    regroup.append(summary['obj_displacement_' + env_name + '_' + str(step_size)][val+1])
+                    y_data = [summary['obj_displacement_' + env_name + '_' + str(step_size)][val+1]]
+                    y_data = np.array(y_data)
+                    y_data = y_data*100
+                    regroup.append(y_data)
                 rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
 
-        plt.xlabel('Data Processing Algorithm')
-        plt.ylabel('Obj_displacement')
-        plt.title('Obj_displacement of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
-        plt.xticks(index + 2*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
-        plt.legend()
+        self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
+        self.list_of_plots[0].set_ylabel('Average deviation of collision points from ground truth over all frames ( px )')
+        #plt.title('Obj_displacement of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
+        plt.xticks(index + 5*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
+        #self.list_of_plots[0].legend()
 
-        plt.tight_layout()
+        #self.list_of_plots[0].tight_layout()
 
 
 class YAMLParser(object):

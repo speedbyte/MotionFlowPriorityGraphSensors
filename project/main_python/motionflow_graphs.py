@@ -2,6 +2,9 @@
 # _*_ encoding=utf-8 _*_
 
 import numpy
+import matplotlib
+matplotlib.use('Agg')
+
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
