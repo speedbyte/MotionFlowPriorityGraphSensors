@@ -17,7 +17,7 @@
 
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
-#define STEP_SIZE 1
+#define STEP_SIZE 10
 #define STEP_SIZE_ALGO_MAX 1
 #define DISPLACEMENT_ROUND_OFF 100
 
@@ -34,8 +34,8 @@
 
 #define MAX_SKIPS_REAL 1 // 1 means do not generate flow, 2 means generate base flow
 
-#define IMAGE_WIDTH 800
-#define IMAGE_HEIGHT 600
+#define IMAGE_WIDTH 1200
+#define IMAGE_HEIGHT 400
 
 #define DISTANCE_ERROR_TOLERANCE 1
 #define ANGLE_ERROR_TOLERANCE 5

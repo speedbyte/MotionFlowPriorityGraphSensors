@@ -747,11 +747,12 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 float offset_z = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         frame_count).m_object_offset_m.offset_z;
 
-/*
- * assuming vehicle co-ordinate system of the object.
- * create a box placed on z = 0 ( street level ). Find 8 points of the box.
- *
- */
+                /*
+                 * assuming vehicle co-ordinate system of the object.
+                 * create a box placed on z = 0 ( street level ). Find 8 points of the box.
+                 *
+                 */
+
                 bounding_points_3d.at(0) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m/ 2, 0);
                 bounding_points_3d.at(1) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
                 bounding_points_3d.at(2) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
@@ -787,16 +788,23 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(0,0,0), cv::Point3f(-sensor_rotation_carrier_rad.rotation_rz_yaw_rad, -sensor_rotation_carrier_rad.rotation_ry_pitch_rad, -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
 
                     // We are in the vehicle coordinate system now.
-                    // Translate to cam position in the car ... The offset_x should be negative - but it doesnt work !!!!!!
-                    final = Utils::translate_and_rotate_points(final, cv::Point3f(sensor_offset_m.offset_x, -sensor_offset_m.offset_y, -sensor_offset_m.offset_z), cv::Point3f(0,0,0));
+                    // Translate to cam position in the car.
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-sensor_offset_m.offset_x, -sensor_offset_m.offset_y, -sensor_offset_m.offset_z), cv::Point3f(0,0,0));
 
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
 
-                    cv::Point2f camPoint = Utils::worldToCamera(final, fov_rad.vertical, 980, 980);
+                    cv::Point2f camPoint = Utils::worldToCameraIntrinsc(final, fov_rad.vertical, 600, 600);
+                    //cv::Point2f camPoint_openglfrustum = Utils::worldToCamera(final, fov_rad.vertical, 600, 600);
                     bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
 
                 }
+
+                std::cout << "cam" << cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y) << std::endl;
+                std::cout << "usk" <<                         cv::Point2f(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        frame_count).m_object_location_m.location_x_m,
+                        m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                                frame_count).m_object_location_m.location_y_m) << std::endl;
 
                 auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x+sensor_offset_m.offset_x, bounding_points_3d.at(8).y+sensor_offset_m.offset_y));
                 auto dist_usk = cv::norm(
@@ -804,12 +812,12 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                                 frame_count).m_object_location_m.location_x_m,
                                     m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                             frame_count).m_object_location_m.location_y_m));
-                //assert(std::abs(dist - dist_usk) < 1);
+                assert(std::abs(dist - dist_usk) < 0.1);
                 std::cout << "distance is " << dist << " for " << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName() << std::endl;
 
                 m_ptr_customObjectMetaDataList.at(obj_index)->setBoundingBoxPoints(frame_count, bounding_points_2d);
 
-                cv::Point2f xx = Utils::worldToCamera(cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m, object_location_m.location_x_m), fov_rad.vertical, 980, 980);
+                cv::Point2f xx = Utils::worldToCameraIntrinsc(cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m, object_location_m.location_x_m), fov_rad.vertical, 980, 980);
 
                 if ((m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).occluded == false)
                         ) {
@@ -820,7 +828,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                             cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
                             cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m));
 
-                    cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
+                    //cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
 
                     std::vector<cv::Point2f> box = {
                             m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_bottom_px,
@@ -837,16 +845,18 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                         //std::cout << box.at(i) << std::endl;
                         cv::circle(tempGroundTruthImage, box.at(i), 2, cv::Scalar(0, 0, 255), 3);
                     }
+                    cv::circle(tempGroundTruthImage, cv::Point2i(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_location_px.cog_px.x,
+                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_location_px.cog_px.y), 2, cv::Scalar(0, 255, 0 ), 4);
                     cv::Rect box_points = cv::boundingRect(box);
-                    cv::rectangle(tempGroundTruthImage, cv::boundingRect(box), cv::Scalar(0, 0, 255), 1, 8, 0);
+                    cv::rectangle(tempGroundTruthImage, box_points, cv::Scalar(0, 0, 255), 1, 8, 0);
 
                 }
             }
 
-            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            //cv::imshow("BB", tempGroundTruthImage);
-            //cv::waitKey(1000);
-            //cv::destroyAllWindows();
+            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            cv::imshow("BB", tempGroundTruthImage);
+            cv::waitKey(0);
+            cv::destroyAllWindows();
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 
@@ -963,8 +973,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_openglfrustum.c_str());
-        //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams.c_str());
+        //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_openglfrustum.c_str());
+        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams.c_str());
         sleep(1);
 
         sendSCPMessage(m_scpSocket, display_parameters.c_str());

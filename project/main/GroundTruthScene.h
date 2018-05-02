@@ -167,14 +167,14 @@ private:
 
     std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/traffic_demo.xml\" /><Start mode=\"operation\" /></SimCtrl>";
 
-    std::string image_generator = "<ImageGenerator> <Window width=\"800\" height=\"600\" x=\"0\" y=\"0\" screen=\"0\" border=\"true\"/></ImageGenerator>";
+    std::string image_generator = "<ImageGenerator> <Window width=\"1200\" height=\"400\" x=\"0\" y=\"0\" screen=\"0\" border=\"true\"/></ImageGenerator>";
 
     std::string module_manager_libModuleSensor =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
-                    "   <Position dx=\"2.000000\" dy=\"0.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "
                     "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"false\" /> "
@@ -212,7 +212,7 @@ private:
     std::string view_parameters_eyepoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string view_parameters_sensorpoint_intrinsicparams = "<Camera name=\"VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"980\" focalY=\"980\" height=\"375\" near=\"0.100000\" principalX=\"621\" principalY=\"187\" width=\"1242\" /><PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
+    std::string view_parameters_sensorpoint_intrinsicparams = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
 
     std::string view_parameters_sensorpoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"true\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";

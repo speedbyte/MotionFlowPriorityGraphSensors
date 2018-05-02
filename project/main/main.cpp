@@ -219,7 +219,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_IMAGES);
     assert(MAX_ITERATION_GT_SCENE_GENERATION_IMAGES <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
 
-    const std::vector<std::string> scenarios_list = {"two"};
+    const std::vector<std::string> scenarios_list = {"three"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
@@ -352,7 +352,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        for ( ushort stepSize = 1; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=4) {
+        for ( ushort stepSize = 10; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=4) {
 
             ptr_list_of_simulated_objects_base.clear();
 
@@ -467,7 +467,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         fs.release();
 
-        system("python ../../main_python/motionflow_graphs.py");
+        //system("python ../../main_python/motionflow_graphs.py");
 
 
     }

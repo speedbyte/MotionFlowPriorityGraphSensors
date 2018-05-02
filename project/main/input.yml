@@ -42,6 +42,7 @@ VIRES_DATASET:
    PATH: "../../../datasets/vires_dataset/"
    EXECUTE: 1
    GT: 0
+
    LK: 0
    FB: 0
    PLOT: 0

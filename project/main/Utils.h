@@ -97,9 +97,6 @@ public:
         //transform to VTD coordinates, x = depth, y = width, z = height. Hence the camera co-ordinates needs to be changed similarly.
         cv::Point3f pos = cv::Point3f(-final.y, -final.z, final.x);
 
-        float fx_x =  pos.x * fx /pos.z;
-        float fy_y =  pos.y * fy /pos.z;
-
         float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad/ 2); // [px] from camera position.
         float pxSize = 2.2e-6; // [m/px]
 
@@ -113,7 +110,26 @@ public:
         return cv::Point2f(x_image, y_image);
 
     }
-    
+
+    static cv::Point2f worldToCameraIntrinsc(cv::Point3f final, float fov_rad, float fx, float fy) {
+
+        //transform to VTD coordinates, x = depth, y = width, z = height. Hence the camera co-ordinates needs to be changed similarly.
+        cv::Point3f pos = cv::Point3f(-final.y, -final.z, final.x);
+
+        // cx and cy are half the width and height.
+
+        float u =  pos.x * fx /pos.z ;
+        float v =  pos.y * fy /pos.z ;
+
+        // Change from optical axis to origin ( top, left )
+        float x_image =  Dataset::getFrameSize().width/2 + u;
+        float y_image =  Dataset::getFrameSize().height/2 + v;
+
+        return cv::Point2f(x_image, y_image);
+
+    }
+
+
     static void drawHistogramLegacy(std::vector<float> &raw_data, float &max_voted) {
         // create histogram of values for displacement.
 
