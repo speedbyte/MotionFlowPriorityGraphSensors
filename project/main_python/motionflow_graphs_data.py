@@ -6,7 +6,7 @@ dict_datafilters = {
     "ground_truth": "ground truth",
     "datafilter_0": "moving average",
     "datafilter_1": "voted mean",
-    "datafilter_2": "ranked mean",
+    "datafilter_2": "weighted mean",
     "datafilter_3": "something",
 }
 
@@ -45,7 +45,9 @@ label_list_algorithm = [dict_datafilters["ground_truth"], dict_datafilters["data
 
 label_list_enironment = [dict_environment_label["none"], dict_environment_label["env_0"], dict_environment_label["env_1"], dict_environment_label["env_2"]]
 
+#color_list_algorithms = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
+label_list_bar = ['ground truth', 'moving average', 'voted mean', 'ranked mean']
 
 
 list_of_pixel_density_ground_truth = [

@@ -11,7 +11,7 @@ import plotly.tools as tls
 
 import numpy as np
 
-from motionflow_graphs_data import environment_list, dict_datafilters, color_list_algorithms
+from motionflow_graphs_data import environment_list, dict_datafilters, color_list_algorithms, color_list_bar, label_list_bar
 
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
@@ -191,11 +191,12 @@ class Figures(object):
                     #print 'pixel_' + env_name + '_' + str(step_size)
                     regroup.append(summary['pixel_' + env_name + '_' + str(step_size)][val+1])
                 rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
+            rects1.set_label(label_list_bar[val+1])
 
         self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
         self.list_of_plots[0].set_ylabel('Average Jaccard index of displacement vectors over all frames')
         #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
-        plt.xticks(index + 5*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
+        plt.xticks(index + 4*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
         #self.list_of_plots[0].legend()
 
 
@@ -239,7 +240,7 @@ class Figures(object):
         plt.xlabel('Result of data processing algorithms in various snow intensity and pixel density')
         plt.ylabel('Deviation')
         plt.title('Deviation of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
-        plt.xticks(index + 2*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
+        plt.xticks(index + 4*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
         plt.legend()
 
         plt.tight_layout()
@@ -278,8 +279,8 @@ class Figures(object):
         self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
         self.list_of_plots[0].set_ylabel('Average deviation of collision points from ground truth over all frames ( px )')
         #plt.title('Obj_displacement of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
-        plt.xticks(index + 5*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
-        #self.list_of_plots[0].legend()
+        plt.xticks(index + 4*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
+        self.list_of_plots[0].legend()
 
         #self.list_of_plots[0].tight_layout()
 

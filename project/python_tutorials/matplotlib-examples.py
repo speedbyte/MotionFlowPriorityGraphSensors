@@ -318,7 +318,7 @@ def bar_chart_2d():
     data2 = np.array(data2)
     data2 = data2*4
 
-    chart = plt.bar(index, data, bar_width, color='blue', edgecolor='black')
+    chart = plt.bar(index, data, bar_width, color='blue', edgecolor='black', label='plot1')
     chart = plt.bar(index+bar_width, data2, bar_width, color='red', edgecolor='black')
     chart = plt.bar(index+2*bar_width, data, bar_width, color='green', edgecolor='black')
 
