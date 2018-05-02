@@ -222,8 +222,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"none", "night"};
-    const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"none"};
+    //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
+    const std::vector<std::string> environment_list = {"none"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -269,7 +269,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     if ((env_index == environment_list.size() - 1) && vires_dataset.gt) {
                         base_ptr_gt_scene->stopSimulation();
                         // Hack the images and the position_file
-                        system("python ../quicky_1.py");
+                        //system("python ../quicky_1.py");
                         exit(0);
                     }
 
@@ -320,6 +320,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     gt_flow.generate_edge_contour();
                     //gt_flow.visualiseStencil();
 
+                    gt_flow.validate_ground_truth_data();
 
                     gt_flow.generate_collision_points();
                     gt_flow.generate_shape_points(); // this is to just create Jaccard Index  =  1
@@ -351,7 +352,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        for ( ushort stepSize = 2; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=4) {
+        for ( ushort stepSize = 1; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=4) {
 
             ptr_list_of_simulated_objects_base.clear();
 

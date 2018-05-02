@@ -163,9 +163,11 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char temp_str_fc[20];
             sprintf(temp_str_fc, "frame_count_%03d", frame_count);
+            /*
             if ( frame_count < 25 ) {
                 continue;
             }
+            */
             write_fs << temp_str_fc << "[";
             for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
                 write_fs
@@ -860,7 +862,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         if (!m_regenerate_yaml_file) { // dont generate, just read
 
-            readPositionFromFile("../position_vires_modified.yml");
+            readPositionFromFile("../position_vires.yml");
 
             ushort map_pair_count = 0;
             for (const auto &myPair : m_mapObjectNameToObjectMetaData) {

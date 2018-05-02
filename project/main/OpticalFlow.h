@@ -104,6 +104,8 @@ public:
 
     void visualiseBB(int obj_index, int frame_skip, int frame_count);
 
+    void validate_ground_truth_data();
+
 
 private:
 

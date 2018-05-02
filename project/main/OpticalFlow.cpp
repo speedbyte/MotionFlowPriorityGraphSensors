@@ -1041,3 +1041,80 @@ void OpticalFlow::visualiseStencil(void) {
         }
     }
 }
+
+
+void OpticalFlow::validate_ground_truth_data( ) {
+
+
+    for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ) {
+
+        char frame_skip_folder_suffix[50];
+        char file_name_input_image[50], file_name_input_image_edge[50];
+
+        bool needToInit = true;
+
+        std::cout << "results will be stored in " << m_resultordner << std::endl;
+
+        cv::Mat curGray, prevGray;
+        sprintf(frame_skip_folder_suffix, "%02d", frame_skip);
+
+
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
+
+        std::string temp_result_flow_path, temp_result_position_path, temp_result_edge_path;
+
+
+        for (ushort frame_count = 0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
+            //draw new ground truth flow.
+
+            if (frame_count * frame_skip >= MAX_ITERATION_RESULTS) {
+                break;
+            }
+
+            /*
+            if ( frame_count%frame_skip != 0 ) {
+                continue;
+            }*/
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count * frame_skip);
+            // Break out of the loop if the user presses the Esc key
+            std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
+                    file_name_input_image;
+
+            image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
+
+            if (image_02_frame.data == NULL) {
+                std::cerr << input_image_file_with_path << " not found" << std::endl;
+                throw ("No image file found error");
+            }
+            std::cout << "frame_count " << frame_count << std::endl;
+
+            for (ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+
+                bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
+                        frame_skip - 1).at(frame_count);
+                if (visibility) {
+
+                    float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (frame_skip - 1).at(frame_count).m_region_of_interest_px.x;
+                    float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (frame_skip - 1).at(frame_count).m_region_of_interest_px.y;
+
+                    int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                            frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_width_m);
+                    int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                            frame_skip - 1).at(frame_count).m_object_dimensions_px.dim_height_m);
+
+                    cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height),
+                            cv::Scalar(0, 0, 255), 4, 8, 0);
+
+                }
+
+                //cv::destroyAllWindows();
+            }
+            cv::imshow("BB", image_02_frame);
+            cv::waitKey(0);
+            cv::destroyAllWindows();
+        }
+
+    }
+}
