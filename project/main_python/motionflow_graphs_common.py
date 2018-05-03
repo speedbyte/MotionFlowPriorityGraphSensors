@@ -11,7 +11,7 @@ import plotly.tools as tls
 
 import numpy as np
 
-from motionflow_graphs_data import environment_list, dict_datafilters, color_list_algorithms, color_list_bar, label_list_bar
+from motionflow_graphs_data import *
 
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
@@ -63,7 +63,7 @@ class Figures(object):
 
         for figure_index in range(len(plot_number)):
 
-            if ( measuring_parameter == "obj_displacement" or measuring_parameter == "collision"):
+            if ( measuring_parameter == "obj_displacement" ):
 
                 self.list_of_plots[figure_index].set_xlabel("object dimension")
                 self.list_of_plots[figure_index].set_ylabel("deviation of object displacements from ground truth ( px )")
@@ -77,6 +77,11 @@ class Figures(object):
 
                 self.list_of_plots[figure_index].set_xlabel("frame_count")
                 self.list_of_plots[figure_index].set_ylabel("deviation of collision points from ground truth ( px )")
+
+            elif ( measuring_parameter == "collision"):
+
+                self.list_of_plots[figure_index].set_xlabel("frame_count")
+                self.list_of_plots[figure_index].set_ylabel("collision points ( px )")
 
             #self.list_of_plots[figure_index].set_xlabel(plot_number[figure_index][0])
             #self.list_of_plots[figure_index].set_ylabel(plot_number[figure_index][1])
@@ -172,35 +177,38 @@ class Figures(object):
 
         print summary
 
-        n_groups = 4
+        n_groups = len(environment_list)
         bar_width = 0.1
         opacity = 0.4
         index = np.arange(0, 2*n_groups, 2)
 
         regroup = list()
 
-        regroup = [summary['pixel_none_' + str(step_list[0])][0], summary['pixel_light_snow_' + str(step_list[0])][0], summary['pixel_mild_snow_' + str(step_list[0])][0], summary['pixel_heavy_snow_' + str(step_list[0])][0]]
+        for env_name in environment_list:
+            regroup.append(summary['pixel_' + env_name + '_' + str(step_list[0])][0])
+
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
         shift = 0
-        for val in range(len(step_list)):
-            for step_size in step_list:
-                regroup = list()
-                shift = shift+1
-                for env_name in environment_list:
-                    #print 'pixel_' + env_name + '_' + str(step_size)
-                    regroup.append(summary['pixel_' + env_name + '_' + str(step_size)][val+1])
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
-            rects1.set_label(label_list_bar[val+1])
+        if ( just_ground_truth == False ):
+            for val in range(len(step_list)):
+                for step_size in step_list:
+                    regroup = list()
+                    shift = shift+1
+                    for env_name in environment_list:
+                        #print 'pixel_' + env_name + '_' + str(step_size)
+                        regroup.append(summary['pixel_' + env_name + '_' + str(step_size)][val+1])
+                    rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
+                rects1.set_label(label_list_bar[val+1])
 
-        self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
-        self.list_of_plots[0].set_ylabel('Average Jaccard index of displacement vectors over all frames')
-        #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
-        plt.xticks(index + 4*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
-        #self.list_of_plots[0].legend()
+            self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
+            self.list_of_plots[0].set_ylabel('Average Jaccard index of displacement vectors over all frames')
+            #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
+            plt.xticks(index + 4*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
+            #self.list_of_plots[0].legend()
 
 
-        #self.list_of_plots[0].tight_layout()
+            #self.list_of_plots[0].tight_layout()
 
 
         #rects1 = plt.bar(index, means_men, bar_width,
@@ -214,27 +222,28 @@ class Figures(object):
     def evaluate_deviation(self, summary, step_list):
 
 
-        print summary
-
-        n_groups = 4
+        n_groups = len(environment_list)
         bar_width = 0.1
         opacity = 0.4
         index = np.arange(0, 2*n_groups, 2)
 
         regroup = list()
 
-        regroup = [summary['deviation_none_' + str(step_list[0])][0], summary['deviation_light_snow_' + str(step_list[0])][0], summary['deviation_mild_snow_' + str(step_list[0])][0], summary['deviation_heavy_snow_' + str(step_list[0])][0]]
+        for env_name in environment_list:
+            regroup.append(summary['deviation_' + env_name + '_' + str(step_list[0])][0])
+
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
         shift = 0
-        for val in range(len(step_list)):
-            for step_size in step_list:
-                regroup = list()
-                shift = shift+1
-                for env_name in environment_list:
-                    print 'deviation_' + env_name + '_' + str(step_size)
-                    regroup.append(summary['deviation_' + env_name + '_' + str(step_size)][val+1])
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
+        if ( just_ground_truth == False ):
+            for val in range(len(step_list)):
+                for step_size in step_list:
+                    regroup = list()
+                    shift = shift+1
+                    for env_name in environment_list:
+                        print 'deviation_' + env_name + '_' + str(step_size)
+                        regroup.append(summary['deviation_' + env_name + '_' + str(step_size)][val+1])
+                    rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
 
         plt.xlabel('Result of data processing algorithms in various snow intensity and pixel density')
@@ -250,30 +259,31 @@ class Figures(object):
 
         print summary
 
-        n_groups = 4
+        n_groups = len(environment_list)
         bar_width = 0.1
         opacity = 0.4
         index = np.arange(0, 2*n_groups, 2)
 
         regroup = list()
 
-        regroup = [summary['obj_displacement_none_' + str(step_list[0])][0], summary['obj_displacement_light_snow_' + str(step_list[0])][0], summary['obj_displacement_mild_snow_' + str(step_list[0])][0], summary['obj_displacement_heavy_snow_' + str(step_list[0])][0]]
-        regroup = np.array(regroup)
-        regroup = regroup*100
+        for env_name in environment_list:
+            regroup.append(summary['obj_displacement_' + env_name + '_' + str(step_list[0])][0])
+
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
         shift = 0
-        for val in range(len(step_list)):
-            for step_size in step_list:
-                regroup = list()
-                shift = shift+1
-                for env_name in environment_list:
-                    print 'obj_displacement_' + env_name + '_' + str(step_size)
-                    y_data = [summary['obj_displacement_' + env_name + '_' + str(step_size)][val+1]]
-                    y_data = np.array(y_data)
-                    y_data = y_data*100
-                    regroup.append(y_data)
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
+        if ( just_ground_truth == False ):
+            for val in range(len(step_list)):
+                for step_size in step_list:
+                    regroup = list()
+                    shift = shift+1
+                    for env_name in environment_list:
+                        print 'obj_displacement_' + env_name + '_' + str(step_size)
+                        y_data = [summary['obj_displacement_' + env_name + '_' + str(step_size)][val+1]]
+                        y_data = np.array(y_data)
+                        y_data = y_data*100
+                        regroup.append(y_data)
+                    rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
 
         self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')

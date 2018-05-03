@@ -318,7 +318,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
     cv::FileStorage fs(positionFileName, cv::FileStorage::READ);
 
-    assert(fs.isOpened() == true );
+    assert(fs.isOpened());
 
     cv::Point2f speed_usk, speed_inertial;
     cv::Point2f dimension_pixel, sensor_fov;
@@ -503,17 +503,23 @@ void GroundTruthScene::startEvaluating(std::string dataset, Noise noise) {
         //visualiseBoundingBox();
 
 
-        for (auto obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+        for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
             GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape(),
                     m_ptr_customObjectMetaDataList.at(obj_index)->getObjectStartPoint(), noise,
                     m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName());
             m_list_gt_objects.push_back(gt_obj);
-            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
+            for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size()/3; sensor_index++) {
+                m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
+                m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
+            }
+
+            m_list_gt_objects.at(obj_index).generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
+
 
         }
 
-        for (auto obj_index = 0; obj_index < m_ptr_customSensorMetaDataList.size(); obj_index++) {
+        for (ushort obj_index = 0; obj_index < m_ptr_customSensorMetaDataList.size(); obj_index++) {
 
             Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(obj_index),
                     m_ptr_customSensorMetaDataList.at(obj_index)->getSensorStartPoint(), &noise,
@@ -855,10 +861,10 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 }
             }
 
-            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            cv::imshow("BB", tempGroundTruthImage);
-            cv::waitKey(0);
-            cv::destroyAllWindows();
+            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("BB", tempGroundTruthImage);
+            //cv::waitKey(0);
+            //cv::destroyAllWindows();
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 

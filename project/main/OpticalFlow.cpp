@@ -159,15 +159,12 @@ void OpticalFlow::generate_edge_contour() {
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
 
-            if ( frame_count*frame_skip >= MAX_ITERATION_RESULTS) {
-                break;
-            }
 
             cv::Mat objectEdgeFrame( Dataset::getFrameSize(), CV_8UC1 );
             objectEdgeFrame = cv::Scalar_<char>(0);
 
 
-            sprintf(file_name_input_image, "000%03d_10_edge.png", frame_count*frame_skip);
+            sprintf(file_name_input_image, "000%03d_10_edge.png", frame_count);
 
             temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
 
@@ -542,7 +539,7 @@ void OpticalFlow::generate_collision_points() {
 
                 char file_name_image[50];
 
-                sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
+                sprintf(file_name_image, "000%03d_10.png", frame_count);
                 std::string temp_collision_image_path =
                         m_collision_obj_path.string() + frame_skip_folder_suffix + "/" + file_name_image;
 
@@ -735,7 +732,7 @@ void OpticalFlow::visualiseStencil(void) {
                 /*---------------------------------------------------------------------------------*/
                 tempGroundTruthImage = cv::Scalar::all(0);
 
-                sprintf(file_name_image_output, "000%03d_10_stencil_base_algo.png", frame_count * frame_skip);
+                sprintf(file_name_image_output, "000%03d_10_stencil_base_algo.png", frame_count);
                 output_image_file_with_path =
                         m_generatepath.string() + "stencil/" + file_name_image_output;
 
@@ -764,7 +761,7 @@ void OpticalFlow::visualiseStencil(void) {
                 /*---------------------------------------------------------------------------------*/
                 tempGroundTruthImage = cv::Scalar::all(255);
 
-                sprintf(file_name_image_output, "000%03d_10_pixel_algo_%d.png", frame_count * frame_skip,
+                sprintf(file_name_image_output, "000%03d_10_pixel_algo_%d.png", frame_count,
                         datafilter_index);
                 output_image_file_with_path =
                         m_generatepath.string() + "stencil/" + file_name_image_output;
@@ -795,7 +792,7 @@ void OpticalFlow::visualiseStencil(void) {
                 tempGroundTruthImage = cv::Scalar::all(255);
                 F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-                sprintf(file_name_image_output, "000%03d_10_flow_base_%d.png", frame_count * frame_skip,
+                sprintf(file_name_image_output, "000%03d_10_flow_base_%d.png", frame_count,
                         datafilter_index);
                 output_image_file_with_path =
                         m_generatepath.string() + "stencil/" + file_name_image_output;
@@ -838,7 +835,7 @@ void OpticalFlow::visualiseStencil(void) {
                 tempGroundTruthImage = cv::Scalar::all(255);
                 F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-                sprintf(file_name_image_output, "000%03d_10_flow_algo_%d.png", frame_count * frame_skip,
+                sprintf(file_name_image_output, "000%03d_10_flow_algo_%d.png", frame_count,
                         datafilter_index);
                 output_image_file_with_path =
                         m_generatepath.string() + "stencil/" + file_name_image_output;
@@ -896,14 +893,14 @@ void OpticalFlow::visualiseStencil(void) {
 
             /*---------------------------------------------------------------------------------*/
             tempGroundTruthImage = cv::Scalar::all(0);
-            sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count);
 
             std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
                     file_name_input_image;
 
             tempGroundTruthImage = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
 
-            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count * frame_skip);
+            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count);
             output_image_file_with_path =
                     m_generatepath.string() + "/stencil/" + file_name_image_output;
 
@@ -961,7 +958,7 @@ void OpticalFlow::visualiseStencil(void) {
             /*---------------------------------------------------------------------------------*/
             tempGroundTruthImage = cv::Scalar::all(255);
 
-            sprintf(file_name_image_output, "000%03d_10_pixel_gt.png", frame_count * frame_skip);
+            sprintf(file_name_image_output, "000%03d_10_pixel_gt.png", frame_count);
             output_image_file_with_path =
                     m_generatepath.string() + "/stencil/" + file_name_image_output;
 
@@ -992,7 +989,7 @@ void OpticalFlow::visualiseStencil(void) {
             tempGroundTruthImage = cv::Scalar::all(255);
             F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-            sprintf(file_name_image_output, "000%03d_10_flow_gt.png", frame_count * frame_skip);
+            sprintf(file_name_image_output, "000%03d_10_flow_gt.png", frame_count);
             output_image_file_with_path =
                     m_generatepath.string() + "/stencil/" + file_name_image_output;
 
@@ -1067,7 +1064,7 @@ void OpticalFlow::validate_ground_truth_data( ) {
         for (ushort frame_count = 0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
 
-            if (frame_count * frame_skip >= MAX_ITERATION_RESULTS) {
+            if (frame_count >= MAX_ITERATION_RESULTS) {
                 break;
             }
 
@@ -1075,7 +1072,7 @@ void OpticalFlow::validate_ground_truth_data( ) {
             if ( frame_count%frame_skip != 0 ) {
                 continue;
             }*/
-            sprintf(file_name_input_image, "000%03d_10.png", frame_count * frame_skip);
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count );
             // Break out of the loop if the user presses the Esc key
             std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
                     file_name_input_image;

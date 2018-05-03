@@ -320,7 +320,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     gt_flow.generate_edge_contour();
                     //gt_flow.visualiseStencil();
 
-                    gt_flow.validate_ground_truth_data();
+                    //gt_flow.validate_ground_truth_data();
 
                     gt_flow.generate_collision_points();
                     gt_flow.generate_shape_points(); // this is to just create Jaccard Index  =  1
@@ -352,7 +352,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        for ( ushort stepSize = 10; stepSize <= STEP_SIZE_ALGO_MAX; stepSize+=4) {
+        for ( ushort stepSize = 5; stepSize <= 5; stepSize+=4) {
 
             ptr_list_of_simulated_objects_base.clear();
 

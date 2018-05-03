@@ -69,7 +69,7 @@ void GroundTruthFlow::generate_flow_frame() {
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
     char frame_skip_folder_suffix[50];
-    cv::FileStorage fs;
+    //cv::FileStorage fs;
     //fs.open(m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + "gt_flow.yaml", cv::FileStorage::WRITE);
 
 
@@ -87,8 +87,8 @@ void GroundTruthFlow::generate_flow_frame() {
 
             std::cout << "frame_count " << frame_count << std::endl;
 
-            sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
-            sprintf(file_name_image_edge, "000%03d_10_edge.png", frame_count*frame_skip);
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count);
+            sprintf(file_name_image_edge, "000%03d_10_edge.png", frame_count);
 
             std::string temp_gt_flow_image_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                     file_name_input_image;
@@ -99,7 +99,7 @@ void GroundTruthFlow::generate_flow_frame() {
             std::string temp_result_edge_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                                                   file_name_image_edge;
 
-            fs << "frame_count" << frame_count;
+            //fs << "frame_count" << frame_count;
 
             FlowImageExtended F_png_write( Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
@@ -163,15 +163,12 @@ void GroundTruthFlow::generate_flow_frame() {
 
 
         }
-        fs.release();
+        //fs.release();
     }
 
     std::cout << "end of saving ground truth flow files " << std::endl;
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
-    auto toc_all = steady_clock::now();
-    time_map["generate_all_flow_image"] = duration_cast<milliseconds>(toc_all - tic_all).count();
-    std::cout << "ground truth flow generation time - " << time_map["generate_all_flow_image"] << "ms" << std::endl;
 
 }
 

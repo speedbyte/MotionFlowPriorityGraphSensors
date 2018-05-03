@@ -131,16 +131,12 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
 
-            if ( frame_count*frame_skip >= MAX_ITERATION_RESULTS) {
-                break;
-            }
-
             /*
             if ( frame_count%frame_skip != 0 ) {
                 continue;
             }*/
-            sprintf(file_name_input_image, "000%03d_10.png", frame_count*frame_skip);
-            sprintf(file_name_input_image_edge, "000%03d_10_edge.png", frame_count*frame_skip);
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count);
+            sprintf(file_name_input_image_edge, "000%03d_10_edge.png", frame_count);
             // Break out of the loop if the user presses the Esc key
             char c = (char) cv::waitKey(10);
             switch (c) {
@@ -559,14 +555,15 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             // Display the output image
             //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
             //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
-            cv::imwrite(temp_result_position_path, image_02_frame);
             //cv::waitKey(0);
             //cv::destroyAllWindows();
+            cv::imwrite(temp_result_position_path, image_02_frame);
             prevGray = curGray.clone();
 
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+            cv::imwrite(temp_result_position_path, image_02_frame);
             m_ptr_list_simulated_objects.at(obj_index)->generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility(outer_base_movement.at(obj_index), outer_base_visiblity.at(obj_index));
             m_ptr_list_simulated_objects.at(obj_index)->generate_obj_extrapolated_stencil_pixel_point_pixel_displacement(outer_stencil_movement.at(obj_index));
         }

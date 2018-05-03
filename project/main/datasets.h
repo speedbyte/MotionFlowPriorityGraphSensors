@@ -18,7 +18,7 @@
 #define VIRES_DATASET_PATH "../../../datasets/vires_dataset/"
 
 #define STEP_SIZE 10
-#define STEP_SIZE_ALGO_MAX 1
+#define STEP_SIZE_ALGO_MAX 10
 #define DISPLACEMENT_ROUND_OFF 100
 
 #define MAX_ITERATION_RESULTS 15 // 60 generate result. this cannot be more than vector
@@ -30,7 +30,7 @@
 #define IMAGE_SKIP_FACTOR_DYNAMIC 1  // 10
 
 #define MAX_ITERATION_THETA 360
-#define MAX_SKIPS 2 // 1 means do not generate flow, 2 means generate base flow
+#define MAX_SKIPS 3 // 1 means do not generate flow, 2 means generate base flow
 
 #define MAX_SKIPS_REAL 1 // 1 means do not generate flow, 2 means generate base flow
 
@@ -61,7 +61,7 @@ typedef enum {
     fb
 } ALGO_TYPES;
 
-#define DATAFILTER_COUNT 3
+#define DATAFILTER_COUNT 2
 
 
 
