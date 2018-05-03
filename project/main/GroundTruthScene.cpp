@@ -318,6 +318,8 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
     cv::FileStorage fs(positionFileName, cv::FileStorage::READ);
 
+    assert(fs.isOpened() == true );
+
     cv::Point2f speed_usk, speed_inertial;
     cv::Point2f dimension_pixel, sensor_fov;
     cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
@@ -866,21 +868,6 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
 void GroundTruthSceneExternal::generate_gt_scene() {
 
-    Noise noNoise;
-
-    if (m_environment == "none") {
-
-        if (!m_regenerate_yaml_file) { // dont generate, just read
-
-            readPositionFromFile("../position_vires.yml");
-
-            ushort map_pair_count = 0;
-            for (const auto &myPair : m_mapObjectNameToObjectMetaData) {
-                std::cout << myPair.first << "\n";
-                map_pair_count++;
-            }
-        }
-    }
 
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
 
@@ -1112,7 +1099,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     //std::cout << "getting data from VIRES\n";
                 }
             }
-            catch (std::bad_alloc e) {
+            catch (...) {
                 std::cerr << "Error in generation" << std::endl;
                 stopSimulation();
                 return;
@@ -1121,16 +1108,33 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             configVires();
         }
     }
-    try {
-        if (m_environment == "none") {
+
+    Noise noNoise;
+
+    if (m_environment == "none") {
+
+        if (m_regenerate_yaml_file) {
+
+            try {
+                writePositionInYaml("vires");
+            }
+            catch (...) {
+                std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
+                stopSimulation();
+            }
+
+        } else { // dont generate, just read
+
+            readPositionFromFile("../position_vires_1.yml");
+
+            ushort map_pair_count = 0;
+            for (const auto &myPair : m_mapObjectNameToObjectMetaData) {
+                std::cout << myPair.first << "\n";
+                map_pair_count++;
+            }
 
             startEvaluating("vires", noNoise);
-
         }
-    }
-    catch (...) {
-        std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
-        stopSimulation();
     }
 }
 
@@ -1196,8 +1200,8 @@ typedef struct {
     char name[RDB_SIZE_OBJECT_NAME];  /**< name of the sensor                                    @unit _                                      */
     float fovHV[2];                    /**< field-of-view (horizontal/vertical)                   @unit rad,rad                                */
     float clipNF[2];                   /**< clipping ranges (near/far)                            @unit m,m                                    */
-    RDB_COORD_t pos;                         /**< position and orientation of sensor's reference point  @unit m,m,m,rad,rad,rad                      */
-    RDB_COORD_t originCoordSys;              /**< position and orientation of sensor's coord origin     @unit m,m,m,rad,rad,rad                      */
+    RDB_COORD_t pos;                         /**< position and orientation of sensor's reference point  ( this is the sensor position with respect to the carrier )@unit m,m,m,rad,rad,rad                      */
+    RDB_COORD_t originCoordSys;              /**< position and orientation of sensor's coord origin     ( this is the carrier with respect to inertial ) @unit m,m,m,rad,rad,rad                      */
     float fovOffHV[2];                 /**< field-of-view offset (horizontal/vertical)            @unit rad, rad                              B */
     int32_t spare[2];                    /**< for future use                                        @unit _                                      */
 } RDB_SENSOR_STATE_DUMMY_t;
@@ -1215,6 +1219,21 @@ typedef struct {
     uint8_t spare0[3];   /**< for future use                                                                 @unit _                                       */
     uint32_t spare[3];    /**< for future use                                                                 @unit _                                       */
 } RDB_SENSOR_OBJECT_DUMMY_t;
+
+/** ------ configuration of an object (sent at start of sim and when triggered via SCP) ------ */
+typedef struct
+{
+    uint32_t id;                                    /**< unique object ID                                              @unit _                                  @version 0x0100 */
+    uint8_t  category;                              /**< object category                                               @unit @link RDB_OBJECT_CATEGORY @endlink @version 0x0100 */
+    uint8_t  type;                                  /**< object type                                                   @unit @link RDB_OBJECT_TYPE     @endlink @version 0x0100 */
+    int16_t  modelId;                               /**< visual model ID                                               @unit _                                  @version 0x0100 */
+    char     name[RDB_SIZE_OBJECT_NAME];            /**< symbolic name                                                 @unit _                                  @version 0x0100 */
+    char     modelName[RDB_SIZE_OBJECT_NAME];       /**< model name associated to an object                            @unit _                                  @version 0x0100 */
+    char     fileName[RDB_SIZE_FILENAME];           /**< filename associated to an object                              @unit _                                  @version 0x0100 */
+    uint16_t flags;                                 /**< object configuration flags                                    @unit @link RDB_OBJECT_CFG_FLAG @endlink @version 0x0100 */
+    uint16_t spare0;                                /**< reserved for future use                                       @unit _                                  @version 0x0100 */
+    uint32_t spare1;                                /**< reserved for future use                                       @unit _                                  @version 0x0100 */
+} RDB_OBJECT_CFG_DUMMY_t;
 
 void GroundTruthSceneExternal::parseEntry(RDB_OBJECT_CFG_t *data, const double &simTime, const unsigned int &
 simFrame, const

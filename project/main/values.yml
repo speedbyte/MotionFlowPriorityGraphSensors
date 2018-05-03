@@ -1,0 +1,6 @@
+%YAML:1.0
+---
+time_map:
+   - { groundtruth_flow:85107. }
+   - { robustness_gt_flow:0. }
+   - { total:85107. }

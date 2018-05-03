@@ -289,6 +289,78 @@ $
     int m_moduleManagerSocket_PerfectInertial;
 
 
+    void configureSensor() {
+
+        std::string to_replace;
+
+        std::string::size_type position;
+
+        ///Start sensor
+        module_manager_libModuleCameraSensor = module_manager_libModuleSensor;
+
+        to_replace = std::to_string(65535);
+        position = module_manager_libModuleCameraSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT));
+        }
+
+        module_manager_libModulePerfectSensor = module_manager_libModuleSensor;
+        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor;
+
+        //port number
+        to_replace = std::to_string(65535);
+        position = module_manager_libModulePerfectSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT));
+        }
+
+        //sensorlibrary
+        to_replace = "libModuleCameraSensor";
+        position = module_manager_libModulePerfectSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "libModulePerfectSensor");
+        }
+
+        //sensor name
+        to_replace = "Sensor_MM";
+        position = module_manager_libModulePerfectSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
+        }
+
+        ///--------------------------
+
+        //port number
+        to_replace = std::to_string(65535);
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT_INERTIAL));
+        }
+
+        //sensorlibrary
+        to_replace = "libModuleCameraSensor";
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "libModulePerfectSensor");
+        }
+
+        //sensor name
+        to_replace = "Sensor_MM";
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "Sensor_MM_Perfect_Inertial");
+        }
+
+        //sensor coordinate
+        to_replace = "usk";
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
+        }
+
+        ///End sensor
+
+    }
 
 
 public:
@@ -322,8 +394,8 @@ public:
 
 
         std::string to_replace = "traffic_demo";
-
         std::string::size_type position = scenario_name.find(to_replace);
+
         if ( position != std::string::npos ) {
             scenario_name.replace(position, to_replace.length(), std::string(m_scenario));
         }
@@ -333,59 +405,7 @@ public:
             stop.replace(position2, to_replace.length(), std::string(m_scenario));
         }
 
-        module_manager_libModuleCameraSensor = module_manager_libModuleSensor;
-
-        to_replace = std::to_string(65535);
-        position = module_manager_libModuleCameraSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT));
-        }
-
-        module_manager_libModulePerfectSensor = module_manager_libModuleSensor;
-        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor;
-
-        to_replace = std::to_string(65535);
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT));
-        }
-
-        to_replace = "libModuleCameraSensor";
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "libModulePerfectSensor");
-        }
-
-        to_replace = "Sensor_MM";
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
-        }
-
-        to_replace = std::to_string(65535);
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT_INERTIAL));
-        }
-
-        to_replace = "libModuleCameraSensor";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "libModulePerfectSensor");
-        }
-
-        to_replace = "Sensor_MM";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "Sensor_MM_Perfect_Inertial");
-        }
-
-        to_replace = "usk";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
-        }
-
+        configureSensor();
 
         if ( environment == "none") {
             m_environment_scp_message = environment_parameters_dry;
