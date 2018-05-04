@@ -33,7 +33,7 @@ using namespace std::chrono;
 
 void GroundTruthFlow::prepare_directories() {
 
-    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/none/";
+    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/none";
 
     m_resultordner="/ground_truth";
 
@@ -93,8 +93,8 @@ void GroundTruthFlow::generate_flow_frame() {
             std::string temp_gt_flow_image_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                     file_name_input_image;
 
-            std::string temp_gt_image_path = mImageabholOrt.string() + "/" +
-                    file_name_input_image;
+            std::string temp_gt_image_path = mImageabholOrt.string() + "_" + std::to_string(frame_skip-1) + "/" +
+                                             file_name_input_image;
 
             std::string temp_result_edge_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
                                                   file_name_image_edge;

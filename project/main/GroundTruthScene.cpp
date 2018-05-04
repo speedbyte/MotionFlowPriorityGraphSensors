@@ -23,6 +23,7 @@
 
 using namespace std::chrono;
 
+/*
 void GroundTruthScene::visualiseBoundingBox(void) {
 
     std::cout << "visualise boudning box at " << m_generatepath.string() + "stencil/" << std::endl;
@@ -42,7 +43,7 @@ void GroundTruthScene::visualiseBoundingBox(void) {
             std::cout << "frame_count " << frame_count << std::endl;
 
             std::string output_image_file_with_path;
-            /*---------------------------------------------------------------------------------*/
+            //--------------------------------------------------------------------------------
             tempGroundTruthImage = cv::Scalar::all(255);
 
             sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
@@ -99,17 +100,18 @@ void GroundTruthScene::visualiseBoundingBox(void) {
             cv::imshow("BB", tempGroundTruthImage);
             cv::waitKey(0);
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
-            /*---------------------------------------------------------------------------------*/
+            //---------------------------------------------------------------------------------
         }
     }
     cv::destroyAllWindows();
 }
+*/
 
 void GroundTruthScene::prepare_directories() {
 
     m_groundtruthpath = Dataset::getGroundTruthPath(); // data/stereo_flow
 
-    m_generatepath = m_groundtruthpath.string() + "/" + m_environment + "/";
+    m_generatepath = m_groundtruthpath.string() + "/" + m_environment;
 
     if (m_regenerate_yaml_file) {
         if (!m_datasetpath.string().compare(CPP_DATASET_PATH) || !m_datasetpath.string().compare(VIRES_DATASET_PATH)) {
@@ -169,87 +171,87 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
             }
             */
             write_fs << temp_str_fc << "[";
-            for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+            for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
                 write_fs
 
-                        << "{:" << "name" << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName()
+                        << "{:" << "name" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getObjectName()
 
-                        << "visMask" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "visMask" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).visMask
-                        << "x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "x_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_px.location_x_m
-                        << "y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "y_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_px.location_y_m
-                        << "z_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "z_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_px.location_z_m
 
-                        << "x_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "x_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m.location_x_m
-                        << "y_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "y_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m.location_y_m
-                        << "z_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "z_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m.location_z_m
 
-                        << "x_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "x_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_m.location_x_m
-                        << "y_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "y_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_m.location_y_m
-                        << "z_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "z_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_location_m.location_z_m
 
-                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_dimensions_px.dim_width_m
-                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_dimensions_px.dim_height_m
 
-                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m.dim_length_m
-                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m.dim_width_m
-                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m.dim_height_m
 
                         << "speed_x_inertial"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.x
+                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.x
                         << "speed_y_inertial"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.y
+                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.y
                         << "speed_z_inertial"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.z
+                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(frame_count).m_object_speed_inertial.z
 
-                        << "speed_x" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed.x
-                        << "speed_y" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_speed.y
+                        << "speed_x" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(frame_count).m_object_speed.x
+                        << "speed_y" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(frame_count).m_object_speed.y
 
                         << "off_x"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_x
+                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_x
                         << "off_y"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_y
+                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_y
                         << "off_z"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_z
+                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(frame_count).m_object_offset_m.offset_z
 
-                        << "h_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "h_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad.rotation_rz_yaw_rad
-                        << "p_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "p_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad.rotation_ry_pitch_rad
-                        << "r_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "r_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad.rotation_rx_roll_rad
 
-                        << "h_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "h_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_rad.rotation_rz_yaw_rad
-                        << "p_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "p_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_rad.rotation_ry_pitch_rad
-                        << "r_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "r_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_rad.rotation_rx_roll_rad
 
-                        << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_distances.sensor_to_obj
-                        << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_distances.total_distance_covered
 
-                        << "occ_px" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "occ_px" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_occlusion.occlusion_px
-                        << "occ_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "occ_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_occlusion.occlusion_usk
-                        << "occ_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        << "occ_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_occlusion.occlusion_inertial
 
 
@@ -316,9 +318,6 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
 
 void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
-    cv::FileStorage fs(positionFileName, cv::FileStorage::READ);
-
-    assert(fs.isOpened());
 
     cv::Point2f speed_usk, speed_inertial;
     cv::Point2f dimension_pixel, sensor_fov;
@@ -332,13 +331,24 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
 
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+    for (unsigned sensor_index = 0; sensor_index< MAX_SKIPS-1; sensor_index++) {
+
+        ushort  objectCount = 0;
+        cv::FileStorage fs;
+        if ( sensor_index == 0 ) {
+            fs.open("../position_vires_1.yml", cv::FileStorage::READ);
+        }
+        else {
+            fs.open("../position_vires_2.yml", cv::FileStorage::READ);
+        }
+
+        assert(fs.isOpened());
 
         //std::string temp_str = "_frame_skip_" + frame_skip;
         char temp_str_fs[20];
-        sprintf(temp_str_fs, "frame_skip_%03d", frame_skip);
-        std::cout << "read yaml file for frame_skip " << (frame_skip - 1) << std::endl;
-        //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(frame_skip-1).size();
+        sprintf(temp_str_fs, "frame_skip_%03d", sensor_index);
+        std::cout << "read yaml file for sensor_index " << (sensor_index) << std::endl;
+        //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(sensor_index-1).size();
         unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;
         assert(FRAME_COUNT > 0);
 
@@ -361,17 +371,18 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
                     if (((*file_node_iterator)["name"].string()).find("Sensor") == std::string::npos) {
 
-                        if (m_mapObjectNameToObjectMetaData.count((*file_node_iterator)["name"].string()) == 0) {
-                            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
-                            m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(
-                                    m_objectCount);
-                            m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(
+                        if (m_mapObjectNameToObjectMetaData[sensor_index].count((*file_node_iterator)["name"].string()) == 0
+                                ) {
+                            m_ptr_customObjectMetaDataList.at(sensor_index).push_back(&objectMetaDataList.at(objectCount));
+                            m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(sensor_index).at(
+                                    objectCount);
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setObjectName(
                                     (*file_node_iterator)["name"].string());
                             Rectangle rectangle(Dataset::getFrameSize().width,
                                                 Dataset::getFrameSize().height); // width, height
-                            m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
-                            m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
-                            m_objectCount += 1;
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setObjectShape(rectangle);
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setStartPoint(0);
+                            objectCount += 1;
                         }
 
                         std::cout << (*file_node_iterator)["name"].string() << " "
@@ -417,25 +428,25 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
                         totalDistanceTravelled = (float) (*file_node_iterator)["total_distance_covered"];
 
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(
+                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(
                                 frame_count, position_pixel, offset, dimension_pixel, totalDistanceTravelled);
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(
+                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(
                                 frame_count, position_usk, orientation_usk, dimension_realworld, speed_usk,
                                 totalDistanceTravelled);
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(
+                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(
                                 frame_count, position_inertial, orientation_inertial, dimension_realworld,
                                 speed_inertial, totalDistanceTravelled);
 
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
+                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
                                 frame_count, (int) (*file_node_iterator)["visMask"]);
 
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionWindow(
+                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionWindow(
                                 frame_count, (int) (*file_node_iterator)["occ_px"]);
 
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionUsk(
+                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionUsk(
                                 frame_count, (int) (*file_node_iterator)["occ_usk"]);
 
-                        (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionInertial(
+                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionInertial(
                                 frame_count, (int) (*file_node_iterator)["occ_inertial"]);
 
                         position_inertial_pre = position_inertial;
@@ -486,48 +497,41 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                 }
             }
         }
+        fs.release();
     }
-    fs.release();
 }
 
 
-void GroundTruthScene::startEvaluating(std::string dataset, Noise noise) {
+void GroundTruthScene::startEvaluating(Noise noise) {
 
 
-    if (m_regenerate_yaml_file) {
-        writePositionInYaml(dataset);
+    calcBBFrom3DPosition();
+    //visualiseBoundingBox();
+
+    // every object is monitored by n sensors.
+    for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
+
+        GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getObjectShape(),
+                m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getObjectStartPoint(), noise,
+                m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getObjectName());
+        m_list_gt_objects.push_back(gt_obj);
+
+        for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size()/3; sensor_index++) {
+
+            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index));
+            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index));
+        }
+
+        m_list_gt_objects.at(obj_index).generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
     }
 
-    else {
-        calcBBFrom3DPosition();
-        //visualiseBoundingBox();
+    for (ushort obj_index = 0; obj_index < m_ptr_customSensorMetaDataList.size(); obj_index++) {
 
-
-        for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
-
-            GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape(),
-                    m_ptr_customObjectMetaDataList.at(obj_index)->getObjectStartPoint(), noise,
-                    m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName());
-            m_list_gt_objects.push_back(gt_obj);
-            for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size()/3; sensor_index++) {
-                m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
-                m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(obj_index));
-            }
-
-            m_list_gt_objects.at(obj_index).generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
-
-
-        }
-
-        for (ushort obj_index = 0; obj_index < m_ptr_customSensorMetaDataList.size(); obj_index++) {
-
-            Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(obj_index),
-                    m_ptr_customSensorMetaDataList.at(obj_index)->getSensorStartPoint(), &noise,
-                    m_ptr_customSensorMetaDataList.at(obj_index)->getSensorName());
-            m_list_gt_sensors.push_back(gt_sen);
-            m_list_gt_sensors.at(obj_index).beginGroundTruthGeneration(*m_ptr_customSensorMetaDataList.at(obj_index));
-        }
-
+        Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(obj_index),
+                m_ptr_customSensorMetaDataList.at(obj_index)->getSensorStartPoint(), &noise,
+                m_ptr_customSensorMetaDataList.at(obj_index)->getSensorName());
+        m_list_gt_sensors.push_back(gt_sen);
+        m_list_gt_sensors.at(obj_index).beginGroundTruthGeneration(*m_ptr_customSensorMetaDataList.at(obj_index));
     }
 }
 
@@ -554,7 +558,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             readPositionFromFile("../position_cpp.yml");
 
             ushort map_pair_count = 0;
-            for (const auto &myPair : m_mapObjectNameToObjectMetaData) {
+            for (const auto &myPair : m_mapObjectNameToObjectMetaData[0]) {
                 std::cout << myPair.first << "\n";
                 map_pair_count++;
             }
@@ -568,16 +572,16 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             achterbahn = Achterbahn(rectangle, "rectangle_long", 60);
             achterbahn.process(Dataset::getFrameSize());
             objectMetaDataList.at(0) = achterbahn;
-            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
+            m_ptr_customObjectMetaDataList.at(0).push_back(&objectMetaDataList.at(0));
 
             achterbahn = Achterbahn(rectangle, "random_object", 120);
             achterbahn.process(Dataset::getFrameSize());
             objectMetaDataList.at(1) = achterbahn;
-            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
+            m_ptr_customObjectMetaDataList.at(0).push_back(&objectMetaDataList.at(1));
 
         }
 
-        startEvaluating("cpp", colorfulNoise);
+        startEvaluating(colorfulNoise);
 
     }
 
@@ -629,7 +633,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         char frame_skip_folder_suffix[50];
 
-        for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+        for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
 
             sprintf(frame_skip_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
             std::string position_image_file_with_path = m_position_obj_path.string() +
@@ -648,7 +652,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                     frame_count).m_object_dimensions_px.dim_width_m));
 
-            if ((m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).occluded == false)
+            if ((m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).occluded == false)
                     ) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
@@ -656,8 +660,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                                 frame_count).first.x),
                                  cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(
                                          frame_count).first.y),
-                                 cvRound(m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
-                                 cvRound(m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m))));
+                                 cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
+                                 cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m))));
 
             }
         }
@@ -675,7 +679,7 @@ void GroundTruthScene::generate_bird_view() {
         for ( auto position_index = 0;  position_index <  MAX_ITERATION_RESULTS; position_index++ ) {
 
             cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
-            for ( auto object_index= 0; object_index < m_ptr_customObjectMetaDataList.size(); object_index++ ) {
+            for ( auto object_index= 0; object_index < m_ptr_customObjectMetaDataList.at(0).size(); object_index++ ) {
                 birdview_frame.at(m_list_gt_objects.at(object_index).get_obj_base_pixel_position_pixel_displacement().at(position_index).first.x, m_list_gt_objects.at(object_index).get_obj_range().at(position_index)) = 100;
                 cv::Mat roi_objects;
                 roi_objects = birdview_frame.rowRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).z_offset )
@@ -700,10 +704,10 @@ void GroundTruthScene::calcBBFrom3DPosition() {
     const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
 
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+    for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size()/3; sensor_index++) {
 
         char temp_str_fs[20];
-        sprintf(temp_str_fs, "frame_skip_%03d", frame_skip);
+        sprintf(temp_str_fs, "frame_skip_%03d", sensor_index);
         //write_fs << temp_str_fs << "[";
 
         unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;
@@ -713,46 +717,57 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
             tempGroundTruthImage = cv::Scalar::all(255);
 
-            sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
-            std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
+            sprintf(file_name_image, "000%03d_10.png", frame_count );
+            std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(sensor_index) + "/" + file_name_image;
 
-            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count * frame_skip);
+            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count );
             //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
 
             cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+            if ( tempGroundTruthImageBase.data == NULL ) {
+                std::cerr << input_image_file_with_path << " not found" << std::endl;
+                throw ("No image file found error");
+            }
             tempGroundTruthImage = cv::Scalar::all(255);
             tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
-            for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+            for (int obj_index = 0;
+                 obj_index < m_ptr_customObjectMetaDataList.at(sensor_index).size(); obj_index++) {
 
                 std::vector<cv::Point3f> bounding_points_3d(9);
                 std::vector<cv::Point2f> bounding_points_2d(9);
 
-                object_realworld_dim_m_str object_realworld_dim_m = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                object_realworld_dim_m_str object_realworld_dim_m = m_ptr_customObjectMetaDataList.at(
+                        sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m;
 
-                object_location_inertial_m_str pos_obj_inertial = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                object_location_inertial_m_str pos_obj_inertial = m_ptr_customObjectMetaDataList.at(
+                        sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m;
 
-                object_location_m_str object_location_m = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                object_location_m_str object_location_m = m_ptr_customObjectMetaDataList.at(sensor_index).at(
+                        obj_index)->getAll().at(
                         frame_count).m_object_location_m;
 
-                object_rotation_inertial_rad_str orientation_obj_inertial = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                object_rotation_inertial_rad_str orientation_obj_inertial = m_ptr_customObjectMetaDataList.at(
+                        sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad;
 
-                sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_ptr_customSensorMetaDataList.at(0)->getAll().at(frame_count).m_sensor_location_carrier_m;
+                sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_ptr_customSensorMetaDataList.at(
+                        0)->getAll().at(frame_count).m_sensor_location_carrier_m;
 
-                sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(
+                sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_ptr_customSensorMetaDataList.at(
+                        0)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad;
 
                 sensor_offset_m_str sensor_offset_m = m_ptr_customSensorMetaDataList.at(0)->getAll().at(
                         frame_count).m_sensor_offset_m;
 
-                float offset_x = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                float offset_x = m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_offset_m.offset_x;
-                float offset_y = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                float offset_y = m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_offset_m.offset_y;
-                float offset_z = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                float offset_z = m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_offset_m.offset_z;
 
                 /*
@@ -761,43 +776,72 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                  *
                  */
 
-                bounding_points_3d.at(0) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m/ 2, 0);
-                bounding_points_3d.at(1) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(2) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(3) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, 0);
-                bounding_points_3d.at(4) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(5) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(6) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(7) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2, -object_realworld_dim_m.dim_width_m / 2, object_realworld_dim_m.dim_height_m);
-                bounding_points_3d.at(8) = cv::Point3f(0,0,object_realworld_dim_m.dim_height_m/2); // This is the center of gravity
+                bounding_points_3d.at(0) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2,
+                                                       object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(1) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2,
+                                                       object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(2) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2,
+                                                       -object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(3) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2,
+                                                       -object_realworld_dim_m.dim_width_m / 2, 0);
+                bounding_points_3d.at(4) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2,
+                                                       object_realworld_dim_m.dim_width_m / 2,
+                                                       object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(5) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2,
+                                                       object_realworld_dim_m.dim_width_m / 2,
+                                                       object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(6) = cv::Point3f(object_realworld_dim_m.dim_length_m / 2,
+                                                       -object_realworld_dim_m.dim_width_m / 2,
+                                                       object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(7) = cv::Point3f(-object_realworld_dim_m.dim_length_m / 2,
+                                                       -object_realworld_dim_m.dim_width_m / 2,
+                                                       object_realworld_dim_m.dim_height_m);
+                bounding_points_3d.at(8) = cv::Point3f(0, 0, object_realworld_dim_m.dim_height_m /
+                                                             2); // This is the center of gravity
 
                 cv::Point3f final;
 
                 sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(0).m_sensor_fov_rad;
 
 
-                for ( auto i = 0; i < 9; i++ ) {
+                for (auto i = 0; i < 9; i++) {
 
                     //Add the offset for each point. These points are in the vehicle coordinate system.
-                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(offset_x, offset_y, offset_z),cv::Point3f(0,0,0));
+                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i),
+                                                               cv::Point3f(offset_x, offset_y, offset_z),
+                                                               cv::Point3f(0, 0, 0));
 
                     //Then rotate the box to inertial coordinate system. hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
-                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(0,0,0),cv::Point3f(orientation_obj_inertial.rotation_rz_yaw_rad,orientation_obj_inertial.rotation_ry_pitch_rad, orientation_obj_inertial.rotation_rx_roll_rad));
+                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(0, 0, 0),
+                                                               cv::Point3f(
+                                                                       orientation_obj_inertial.rotation_rz_yaw_rad,
+                                                                       orientation_obj_inertial.rotation_ry_pitch_rad,
+                                                                       orientation_obj_inertial.rotation_rx_roll_rad));
 
                     //Translate the axis to the master origin. add the BB vector to the object position.
                     //Now we are in the master co-ordinate system.
-                    final = Utils::translate_and_rotate_points(final, cv::Point3f(pos_obj_inertial.location_x_m, pos_obj_inertial.location_y_m,
-                                                                                  pos_obj_inertial.location_z_m), cv::Point3f(0,0,0));
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(pos_obj_inertial.location_x_m,
+                                                                                  pos_obj_inertial.location_y_m,
+                                                                                  pos_obj_inertial.location_z_m),
+                                                               cv::Point3f(0, 0, 0));
 
                     // Change to sensor object by changing the axis to the sensor object.
-                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m, -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(0,0,0));
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(
+                            -pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m,
+                            -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(0, 0, 0));
 
                     // now rotate the axis to align to the car
-                    final = Utils::translate_and_rotate_points(final, cv::Point3f(0,0,0), cv::Point3f(-sensor_rotation_carrier_rad.rotation_rz_yaw_rad, -sensor_rotation_carrier_rad.rotation_ry_pitch_rad, -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(0, 0, 0), cv::Point3f(
+                            -sensor_rotation_carrier_rad.rotation_rz_yaw_rad,
+                            -sensor_rotation_carrier_rad.rotation_ry_pitch_rad,
+                            -sensor_rotation_carrier_rad.rotation_rx_roll_rad));
 
                     // We are in the vehicle coordinate system now.
                     // Translate to cam position in the car.
-                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-sensor_offset_m.offset_x, -sensor_offset_m.offset_y, -sensor_offset_m.offset_z), cv::Point3f(0,0,0));
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(-sensor_offset_m.offset_x,
+                                                                                  -sensor_offset_m.offset_y,
+                                                                                  -sensor_offset_m.offset_z),
+                                                               cv::Point3f(0, 0, 0));
 
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
@@ -808,56 +852,79 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                 }
 
-                std::cout << "cam" << cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y) << std::endl;
-                std::cout << "usk" <<                         cv::Point2f(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        frame_count).m_object_location_m.location_x_m,
-                        m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                                frame_count).m_object_location_m.location_y_m) << std::endl;
+                std::cout << "cam" << cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y)
+                          << std::endl;
+                std::cout << "usk"
+                          << cv::Point2f(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                  frame_count).m_object_location_m.location_x_m,
+                                         m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                                 frame_count).m_object_location_m.location_y_m) << std::endl;
 
-                auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x+sensor_offset_m.offset_x, bounding_points_3d.at(8).y+sensor_offset_m.offset_y));
+                auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x + sensor_offset_m.offset_x,
+                                                 bounding_points_3d.at(8).y + sensor_offset_m.offset_y));
                 auto dist_usk = cv::norm(
-                        cv::Point2f(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        cv::Point2f(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
                                 frame_count).m_object_location_m.location_x_m,
-                                    m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                                    m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
                                             frame_count).m_object_location_m.location_y_m));
                 assert(std::abs(dist - dist_usk) < 0.1);
-                std::cout << "distance is " << dist << " for " << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName() << std::endl;
+                std::cout << "distance is " << dist << " for "
+                          << m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getObjectName()
+                          << std::endl;
 
-                m_ptr_customObjectMetaDataList.at(obj_index)->setBoundingBoxPoints(frame_count, bounding_points_2d);
+                m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->setBoundingBoxPoints(frame_count,
+                                                                                                    bounding_points_2d);
 
-                cv::Point2f xx = Utils::worldToCameraIntrinsc(cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m, object_location_m.location_x_m), fov_rad.vertical, 980, 980);
+                cv::Point2f xx = Utils::worldToCameraIntrinsc(
+                        cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m,
+                                    object_location_m.location_x_m), fov_rad.vertical, 980, 980);
 
-                if ((m_ptr_customObjectMetaDataList.at(0)->getAll().at(frame_count).occluded == false)
-                        ) {
+                if (( !m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(frame_count).occluded )) {
 
                     cv::Rect boundingbox = cv::Rect(
                             cvRound(xx.x),
                             cvRound(xx.y),
-                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
-                            cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m));
+                            cvRound(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_object_dimensions_px.dim_height_m));
 
                     //cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
 
                     std::vector<cv::Point2f> box = {
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_bottom_px,
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_left_px,
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_top_px,
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_lower_right_px,
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_bottom_px,
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_left_px,
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_top_px,
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_bounding_box.bb_higher_right_px
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_bounding_box.bb_lower_bottom_px,
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_bounding_box.bb_lower_left_px,
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_bounding_box.bb_lower_top_px,
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_bounding_box.bb_lower_right_px,
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_bounding_box.bb_higher_bottom_px,
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_bounding_box.bb_higher_left_px,
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_bounding_box.bb_higher_top_px,
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_bounding_box.bb_higher_right_px
                     };
 
-                    for ( auto i = 0; i < 8; i++ ) {
+                    for (auto i = 0; i < 8; i++) {
                         //std::cout << box.at(i) << std::endl;
                         cv::circle(tempGroundTruthImage, box.at(i), 2, cv::Scalar(0, 0, 255), 3);
                     }
-                    cv::circle(tempGroundTruthImage, cv::Point2i(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_location_px.cog_px.x,
-                            m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(frame_count).m_object_location_px.cog_px.y), 2, cv::Scalar(0, 255, 0 ), 4);
+                    cv::circle(tempGroundTruthImage, cv::Point2i(
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_object_location_px.cog_px.x,
+                            m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
+                                    frame_count).m_object_location_px.cog_px.y), 2, cv::Scalar(0, 255, 0), 4);
                     cv::Rect box_points = cv::boundingRect(box);
                     cv::rectangle(tempGroundTruthImage, box_points, cv::Scalar(0, 0, 255), 1, 8, 0);
 
+                }
+                else {
+                    std::cout << "its occlued" << std::endl;
                 }
             }
 
@@ -1122,7 +1189,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (m_regenerate_yaml_file) {
 
             try {
-                writePositionInYaml("vires");
+                writePositionInYaml("vires_1");
             }
             catch (...) {
                 std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
@@ -1131,15 +1198,16 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         } else { // dont generate, just read
 
-            readPositionFromFile("../position_vires_1.yml");
+            readPositionFromFile("../position_vires.yml");
+            //readPositionFromFile("../position_vires_2.yml", 1);
 
             ushort map_pair_count = 0;
-            for (const auto &myPair : m_mapObjectNameToObjectMetaData) {
+            for (const auto &myPair : m_mapObjectNameToObjectMetaData[0]) {
                 std::cout << myPair.first << "\n";
                 map_pair_count++;
             }
 
-            startEvaluating("vires", noNoise);
+            startEvaluating(noNoise);
         }
     }
 }
@@ -1324,15 +1392,15 @@ simFrame, const
                 fprintf(stderr, "saving ground truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
                         data->base.name);
 
-                if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
+                if (m_mapObjectNameToObjectMetaData[0].count(data->base.name) == 0) {
 
                     m_mapObjectIdToObjectName[data->base.id] = data->base.name;
-                    m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
+                    m_ptr_customObjectMetaDataList.at(0).push_back(&objectMetaDataList.at(m_objectCount));
                     Rectangle rectangle((int) (data->base.geo.dimX), (int) (data->base.geo.dimY)); // width, height
-                    m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
-                    m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
-                    m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
-                    m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
+                    m_mapObjectNameToObjectMetaData[0][data->base.name] = m_ptr_customObjectMetaDataList.at(0).at(m_objectCount);
+                    m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setObjectShape(rectangle);
+                    m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setObjectName(data->base.name);
+                    m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setStartPoint(0);
                     m_objectCount += 1;
                 }
                 if (data->base.pos.type == RDB_COORD_TYPE_WINDOW) {
@@ -1343,10 +1411,10 @@ simFrame, const
                     offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY,
                                          (float) data->base.geo.offZ);
                     total_distance_travelled = data->ext.traveledDist;
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor(
+                    m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberCameraSensor(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset,
                             dimension_pixel, total_distance_travelled);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                    m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberVisibility(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
 
                 } else if (data->base.pos.type == RDB_COORD_TYPE_USK) {
@@ -1359,10 +1427,10 @@ simFrame, const
                                                       (float) data->base.geo.dimZ);
                     speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     total_distance_travelled = data->ext.traveledDist;
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor(
+                    m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberPerfectSensor(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_usk,
                             orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                    m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberVisibility(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
 
                 } else if (data->base.pos.type == RDB_COORD_TYPE_INERTIAL) {
@@ -1375,10 +1443,10 @@ simFrame, const
                                                       (float) data->base.geo.dimZ);
                     speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                     total_distance_travelled = data->ext.traveledDist;
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial(
+                    m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberPerfectSensorInertial(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial,
                             orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
-                    m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                    m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberVisibility(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
                 }
             } else {
@@ -1412,27 +1480,27 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
                 fprintf(stderr, "saving ground truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
                         m_mapObjectIdToObjectName[data->id]);
 
-                if (m_mapObjectNameToObjectMetaData.count(m_mapObjectIdToObjectName[data->id]) == 0) {
+                if (m_mapObjectNameToObjectMetaData[0].count(m_mapObjectIdToObjectName[data->id]) == 0) {
 
-                    m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
+                    m_ptr_customObjectMetaDataList.at(0).push_back(&objectMetaDataList.at(m_objectCount));
                     //Rectangle rectangle((int) (data->geo.dimX), (int) (data->geo.dimY)); // width, height
-                    m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]] = m_ptr_customObjectMetaDataList.at(m_objectCount);
-                    //m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
-                    m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(m_mapObjectIdToObjectName[data->id]);
-                    m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
+                    m_mapObjectNameToObjectMetaData[0][m_mapObjectIdToObjectName[data->id]] = m_ptr_customObjectMetaDataList.at(0).at(m_objectCount);
+                    //m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setObjectShape(rectangle);
+                    m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setObjectName(m_mapObjectIdToObjectName[data->id]);
+                    m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setStartPoint(0);
                     m_objectCount += 1;
                 }
                 if (data->sensorPos.type == RDB_COORD_TYPE_WINDOW) {
 
-                    m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
+                    m_mapObjectNameToObjectMetaData[0][m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
                 } else if (data->sensorPos.type == RDB_COORD_TYPE_USK) {
 
-                    m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionUsk(
+                    m_mapObjectNameToObjectMetaData[0][m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionUsk(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
                 } else if (data->sensorPos.type== RDB_COORD_TYPE_INERTIAL) {
 
-                    m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionInertial(
+                    m_mapObjectNameToObjectMetaData[0][m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionInertial(
                             (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
                 }
             } else {

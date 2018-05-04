@@ -35,7 +35,7 @@ using namespace std::chrono;
 
 void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps, ushort stepSize) {
 
-    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + noise + "/";
+    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + noise;
     m_resultordner = "results_";
 
     switch ( algo ) {
@@ -156,10 +156,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //if (image_02_frame.empty())
             //    break;
 
-            std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
+            std::string input_image_file_with_path = mImageabholOrt.string() + "_" + std::to_string(frame_skip-1) + "/" +
                     file_name_input_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
+
 
             if ( image_02_frame.data == NULL ) {
                 std::cerr << input_image_file_with_path << " not found" << std::endl;
