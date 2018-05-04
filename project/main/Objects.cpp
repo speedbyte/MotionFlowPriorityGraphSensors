@@ -152,9 +152,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                 std::vector<cv::Mat> histogram_x, histogram_y;
                 if ( frame_count >  0 ) {
                     //Utils::drawHistogramLegacy(data_x, max_voted_x);
-                    Utils::drawHistogram(data_x, histogram_x );
+                    Utils::drawHistogram(data_x, histogram_x, false );
                     max_voted_x = Utils::getHistogramPeak(histogram_x);
-                    Utils::drawHistogram(data_y, histogram_y );
+                    Utils::drawHistogram(data_y, histogram_y, false );
                     max_voted_y = Utils::getHistogramPeak(histogram_y);
                 }
                 else {

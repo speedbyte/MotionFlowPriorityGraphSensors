@@ -37,8 +37,6 @@ public:
     PixelRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
     void generatePixelRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
 
-private:
-    void generateFrameJaccardIndex(const OpticalFlow &opticalFlow);
 
 };
 
@@ -49,13 +47,22 @@ public:
     VectorRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
     void generateVectorRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
 
-
 private:
 
-    void generateFrameVectorSignature(const OpticalFlow &opticalFlow);
     void fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::string &list_gp_lines );
+
+};
+
+
+class SensorFusion : public RobustnessIndex {
+
+public:
+
+    SensorFusion(cv::FileStorage &fs) : RobustnessIndex(fs) {};
+    void compareHistograms(const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo);
 
 
 };
+
 
 #endif //MAIN_ROBUSTNESSINDEX_H

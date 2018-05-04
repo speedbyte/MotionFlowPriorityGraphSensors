@@ -339,9 +339,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         PixelRobustness pixelRobustness(fs);
         VectorRobustness vectorRobustness(fs);
+        SensorFusion sensorFusion(fs);
+
 
         if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
 
+            sensorFusion.compareHistograms(gt_flow, dummy[0]);
             pixelRobustness.generatePixelRobustness(gt_flow, dummy[0]);
             vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
             vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
@@ -437,6 +440,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+
+                    sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                     pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                     vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                     //vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());

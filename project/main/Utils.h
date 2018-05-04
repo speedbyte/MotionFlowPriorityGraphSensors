@@ -181,7 +181,7 @@ public:
         
     }
 
-    static void drawHistogram( std::vector<float> &raw_data, std::vector<cv::Mat> &histogram)
+    static void drawHistogram( std::vector<float> &raw_data, std::vector<cv::Mat> &histogram, bool draw)
     {
 
         //random_data_generator("vector", raw_data);
@@ -260,10 +260,12 @@ public:
         histogram.push_back(b_hist);
 
         /// Display
-        //cv::namedWindow("calcHist Demo", CV_WINDOW_AUTOSIZE );
-        //cv::imshow("calcHist Demo", histImage );
-        //cv::waitKey(0);
-        //cv::destroyAllWindows();
+        if ( draw ) {
+            cv::namedWindow("calcHist Demo", CV_WINDOW_AUTOSIZE );
+            cv::imshow("calcHist Demo", histImage );
+            cv::waitKey(0);
+            cv::destroyAllWindows();
+        }
 
     }
 
