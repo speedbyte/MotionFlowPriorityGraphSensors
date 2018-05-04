@@ -48,9 +48,9 @@ protected:
 
     std::vector<SensorMetaData> sensorMetaDataList;
 
-    std::vector<SensorMetaData *> m_ptr_customSensorMetaDataList;
+    std::vector<std::vector<SensorMetaData *> > m_ptr_customSensorMetaDataList;
 
-    std::map<std::string, SensorMetaData*> m_mapSensorNameToSensorMetaData;
+    std::vector<std::map<std::string, SensorMetaData*> > m_mapSensorNameToSensorMetaData;
 
     std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
 
@@ -63,8 +63,8 @@ protected:
 public:
 
 
-    GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
-    m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file), m_ptr_customObjectMetaDataList(2), m_mapObjectNameToObjectMetaData(2)
+    GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
+    m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file), m_ptr_customObjectMetaDataList(MAX_ALLOWED_SENSOR_GROUPS), m_mapObjectNameToObjectMetaData(MAX_ALLOWED_SENSOR_GROUPS), m_ptr_customSensorMetaDataList(MAX_ALLOWED_SENSOR_GROUPS), m_mapSensorNameToSensorMetaData(MAX_ALLOWED_SENSOR_GROUPS)
     {
 
         //m_ptr_customObjectMetaDataList = {};
@@ -390,7 +390,7 @@ public:
 
     double getTime();
 
-    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
+    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
     GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
 
 

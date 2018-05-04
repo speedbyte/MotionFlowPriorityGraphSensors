@@ -260,49 +260,49 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
             for (int sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.size(); sen_index++) {
                 write_fs
 
-                        << "{:" << "name" << m_ptr_customSensorMetaDataList.at(sen_index)->getSensorName()
+                        << "{:" << "name" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getSensorName()
 
-                        << "visible" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).visMask
+                        << "visible" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).visMask
 
-                        << "x_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "x_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_location_carrier_m.location_x_m
-                        << "y_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "y_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_location_carrier_m.location_y_m
-                        << "z_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "z_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_location_carrier_m.location_z_m
 
-                        //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_x_m
-                        //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_y_m
-                        //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_z_m
+                        //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_x_m
+                        //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_y_m
+                        //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).m_sensor_location_m.location_z_m
 
-                        << "h_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "h_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad
-                        << "p_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "p_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad
-                        << "r_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "r_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad
 
-                        << "h_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "h_sensor" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_rad.rotation_rz_yaw_rad
-                        << "p_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "p_sensor" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_rad.rotation_ry_pitch_rad
-                        << "r_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "r_sensor" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_rotation_rad.rotation_rx_roll_rad
 
                         << "off_x_sensor"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_x
+                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_x
                         << "off_y_sensor"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_y
+                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_y
                         << "off_z_sensor"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_z
+                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).m_sensor_offset_m.offset_z
 
                         << "fov_horizontal"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_fov_rad.horizontal
+                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).m_sensor_fov_rad.horizontal
                         << "fov_vertical"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(frame_count).m_sensor_fov_rad.vertical
-                        << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(frame_count).m_sensor_fov_rad.vertical
+                        << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_fov_rad.horizontal_offset
-                        << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                        << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
                         frame_count).m_sensor_fov_rad.vertical_offset
 
                         << "}";
@@ -334,6 +334,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     for (unsigned sensor_index = 0; sensor_index< MAX_SKIPS-1; sensor_index++) {
 
         ushort  objectCount = 0;
+        ushort  sensorCount = 0;
         cv::FileStorage fs;
         if ( sensor_index == 0 ) {
             fs.open("../position_vires_1.yml", cv::FileStorage::READ);
@@ -373,7 +374,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
                         if (m_mapObjectNameToObjectMetaData[sensor_index].count((*file_node_iterator)["name"].string()) == 0
                                 ) {
-                            m_ptr_customObjectMetaDataList.at(sensor_index).push_back(&objectMetaDataList.at(objectCount));
+                            m_ptr_customObjectMetaDataList.at(sensor_index).push_back(&objectMetaDataList.at(m_objectCount));
                             m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(sensor_index).at(
                                     objectCount);
                             m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setObjectName(
@@ -382,6 +383,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                                                 Dataset::getFrameSize().height); // width, height
                             m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setObjectShape(rectangle);
                             m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setStartPoint(0);
+                            m_objectCount += 1;
                             objectCount += 1;
                         }
 
@@ -453,15 +455,17 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                         position_pixel_pre = position_pixel;
                         position_usk_pre = position_usk;
 
-                    } else {
-                        if (m_mapSensorNameToSensorMetaData.count((*file_node_iterator)["name"].string()) == 0) {
-                            m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
-                            m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customSensorMetaDataList.at(
-                                    m_sensorCount);
-                            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(
+                    }
+                    else
+                    {
+                        if (m_mapSensorNameToSensorMetaData[sensor_index].count((*file_node_iterator)["name"].string()) == 0) {
+                            m_ptr_customSensorMetaDataList[sensor_index].push_back(&sensorMetaDataList.at(m_sensorCount));
+                            m_mapSensorNameToSensorMetaData[sensor_index][(*file_node_iterator)["name"].string()] = m_ptr_customSensorMetaDataList.at(sensor_index).at(sensorCount);
+                            m_ptr_customSensorMetaDataList.at(sensor_index).at(sensorCount)->setSensorName(
                                     (*file_node_iterator)["name"].string());
-                            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
+                            m_ptr_customSensorMetaDataList.at(sensor_index).at(sensorCount)->setStartPoint(0);
                             m_sensorCount += 1;
+                            sensorCount += 1;
                         }
 
                         std::cout << (*file_node_iterator)["name"].string() << " "
@@ -487,11 +491,11 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
                         sensor_fov = cv::Point2f((double) (*file_node_iterator)["fov_horizontal"],
                                                  (double) (*file_node_iterator)["fov_vertical"]);
 
-                        (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberSensorState(
+                        (m_mapSensorNameToSensorMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberSensorState(
                                 frame_count, position_inertial, orientation_inertial, orientation_usk, offset,
                                 sensor_fov);
 
-                        (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
+                        (m_mapSensorNameToSensorMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
                                 frame_count, (int) (*file_node_iterator)["visible"]);
                     }
                 }
@@ -508,31 +512,52 @@ void GroundTruthScene::startEvaluating(Noise noise) {
     calcBBFrom3DPosition();
     //visualiseBoundingBox();
 
-    // every object is monitored by n sensors.
+
     for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
 
-        GroundTruthObjects gt_obj(m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getObjectShape(),
-                m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getObjectStartPoint(), noise,
-                m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getObjectName());
-        m_list_gt_objects.push_back(gt_obj);
+        GroundTruthObjects gt_obj;
 
-        for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size()/3; sensor_index++) {
+        // how many objects were found. The assumption is that in each frame, the number of objects would be constant.
 
-            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index));
-            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index));
+        for ( ushort sensor_index_group = 0; sensor_index_group < m_ptr_customSensorMetaDataList.size(); sensor_index_group++) {
+
+            std::cout << "send object name " << m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index)->getObjectName() << std::endl;
+
+            if ( sensor_index_group == 0 ) {
+                gt_obj = GroundTruthObjects(m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index)->getObjectShape(),
+                                          m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index)->getObjectStartPoint(), noise,
+                                          m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index)->getObjectName());
+                m_list_gt_objects.push_back(gt_obj);
+            }
+            // each object is monitored by n sensor group.
+            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index));
+
         }
 
+        // extrapolated consists of objects -> sensor mapping
         m_list_gt_objects.at(obj_index).generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
     }
 
-    for (ushort obj_index = 0; obj_index < m_ptr_customSensorMetaDataList.size(); obj_index++) {
+    for (ushort sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.at(0).size(); sen_index++) {
 
-        Sensors gt_sen(*m_ptr_customSensorMetaDataList.at(obj_index),
-                m_ptr_customSensorMetaDataList.at(obj_index)->getSensorStartPoint(), &noise,
-                m_ptr_customSensorMetaDataList.at(obj_index)->getSensorName());
-        m_list_gt_sensors.push_back(gt_sen);
-        m_list_gt_sensors.at(obj_index).beginGroundTruthGeneration(*m_ptr_customSensorMetaDataList.at(obj_index));
+        // how many sensors were found. The assumption is that in each frame, the number of sensors would be constant.
+
+
+        for ( ushort sensor_index_group = 0; sensor_index_group < m_ptr_customSensorMetaDataList.size(); sensor_index_group++) {
+
+            Sensors gt_sen(m_ptr_customSensorMetaDataList.at(0).at(sensor_index_group)->getSensorStartPoint(), &noise,
+                           m_ptr_customSensorMetaDataList.at(0).at(sensor_index_group)->getSensorName());
+            m_list_gt_sensors.push_back(gt_sen);
+            // each sensor is monitored by n sensor group.
+
+            m_list_gt_sensors.at(sen_index).beginGroundTruthGeneration(*m_ptr_customSensorMetaDataList.at(sensor_index_group).at(sen_index));
+
+        }
+
+        // extrapolated consists of sensors -> sensor mapping
+        //m_list_gt_sensors.at(sen_index)generate_sen_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
     }
+
 }
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
@@ -704,7 +729,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
     const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
 
-    for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size()/3; sensor_index++) {
+    for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size(); sensor_index++) {
 
         char temp_str_fs[20];
         sprintf(temp_str_fs, "frame_skip_%03d", sensor_index);
@@ -731,7 +756,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
             tempGroundTruthImage = cv::Scalar::all(255);
             tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
-            for (int obj_index = 0;
+            for (ushort obj_index = 0;
                  obj_index < m_ptr_customObjectMetaDataList.at(sensor_index).size(); obj_index++) {
 
                 std::vector<cv::Point3f> bounding_points_3d(9);
@@ -754,13 +779,13 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                         frame_count).m_object_rotation_inertial_rad;
 
                 sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_ptr_customSensorMetaDataList.at(
-                        0)->getAll().at(frame_count).m_sensor_location_carrier_m;
+                        sensor_index).at(0)->getAll().at(frame_count).m_sensor_location_carrier_m;
 
                 sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_ptr_customSensorMetaDataList.at(
-                        0)->getAll().at(
+                        sensor_index).at(0)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad;
 
-                sensor_offset_m_str sensor_offset_m = m_ptr_customSensorMetaDataList.at(0)->getAll().at(
+                sensor_offset_m_str sensor_offset_m = m_ptr_customSensorMetaDataList.at(sensor_index).at(0)->getAll().at(
                         frame_count).m_sensor_offset_m;
 
                 float offset_x = m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
@@ -801,7 +826,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                 cv::Point3f final;
 
-                sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(0).m_sensor_fov_rad;
+                sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(sensor_index).at(0)->getAll().at(frame_count).m_sensor_fov_rad;
 
 
                 for (auto i = 0; i < 9; i++) {
@@ -1336,13 +1361,13 @@ void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_STATE_t *data, const double
                 fprintf(stderr, "saving sensor truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
                         data->name);
 
-                if (m_mapSensorNameToSensorMetaData.count(data->name) == 0) {
+                if (m_mapSensorNameToSensorMetaData[0].count(data->name) == 0) {
 
                     m_mapSensorIdToSensorName[data->id] = data->name;
-                    m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
-                    m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
-                    m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
-                    m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
+                    m_ptr_customSensorMetaDataList[0].push_back(&sensorMetaDataList.at(m_sensorCount));
+                    m_mapSensorNameToSensorMetaData[0][data->name] = m_ptr_customSensorMetaDataList.at(0).at(m_sensorCount);
+                    m_ptr_customSensorMetaDataList.at(0).at(m_sensorCount)->setSensorName(data->name);
+                    m_ptr_customSensorMetaDataList.at(0).at(m_sensorCount)->setStartPoint(0);
                     m_sensorCount += 1;
                 }
 
@@ -1358,7 +1383,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_STATE_t *data, const double
 
                 fov = cv::Point2f(data->fovHV[0], data->fovHV[1]);
 
-                m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
+                m_mapSensorNameToSensorMetaData[0][data->name]->atFrameNumberSensorState(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_sensor_carrier,
                         orientation_sensor_carrier, orientation_sensor, offset_sensor, fov);
             }

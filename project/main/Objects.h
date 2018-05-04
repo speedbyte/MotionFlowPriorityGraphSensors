@@ -56,11 +56,13 @@ protected:
 
     unsigned m_objectId;
 
-    const std::string m_objectName;
+    std::string m_objectName;
 
 
 
 public:
+
+    Objects() {}
 
     Objects( std::string objectName) : m_objectName(objectName) {}
 
@@ -71,7 +73,7 @@ public:
 
     void generate_obj_line_parameters( std::string post_processing_algorithm);
 
-    const std::string &getObjectName() const {
+    const std::string getObjectName() const {
         return m_objectName;
     }
 

@@ -13,6 +13,8 @@ void Sensors::generate_sen_base_pixel_position_pixel_displacement(SensorMetaData
 
     //Initialization
 
+    m_sen_base_all.clear();
+    m_sen_base_visibility.clear();
     ushort current_index = m_startPoint;
 
     std::cout << "generate_sen_base_pixel_position_pixel_displacement with start_point " << m_startPoint << std::endl;
@@ -42,45 +44,9 @@ void Sensors::generate_sen_base_pixel_position_pixel_displacement(SensorMetaData
         m_sen_base_all.push_back(gt_data.getAll().at(current_index));
         current_index++;
     }
-}
 
-void Sensors::generate_sen_extrapolated_pixel_position_pixel_displacement() {
+    m_sen_extrapolated_all.push_back(m_sen_base_all);
+    m_sen_extrapolated_visibility.push_back(m_sen_base_visibility);
 
-
-    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
-
-        std::vector<bool>  multiframe_visibility;
-        std::vector<STRUCT_GT_SENSORS_ALL> multiframe_all;
-
-
-        std::cout << "generate_sen_extrapolated_pixel_position_pixel_displacement for frame_skip " << frame_skip << std::endl;
-        unsigned long FRAME_COUNT = m_sen_base_all.size();
-        assert(FRAME_COUNT>0);
-
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-
-            // The first frame is the reference frame. frame skip 1 means no skips
-            // The below code has to go through consecutive frames
-            if ((frame_count % frame_skip != 0)) {
-
-            }
-            else {
-
-                if ( m_sen_base_visibility.at(frame_count) == false) {
-                    // Make all 0
-
-                    multiframe_visibility.push_back(false);
-                    multiframe_all.push_back(m_sen_base_all.at(frame_count));
-
-                } else {
-
-                    multiframe_all.push_back(m_sen_base_all.at(frame_count));
-                }
-            }
-        }
-        m_sen_extrapolated_visibility.push_back(multiframe_visibility);
-        m_sen_extrapolated_all.push_back(multiframe_all);
-
-    }
 }
 

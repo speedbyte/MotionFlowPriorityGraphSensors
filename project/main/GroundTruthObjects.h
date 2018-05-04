@@ -23,7 +23,7 @@ public:
 
 private:
 
-    const ushort m_startPoint;
+    ushort m_startPoint;
 
     ObjectImageShapeData m_image_data_and_shape;
 
@@ -34,6 +34,7 @@ private:
 
 public:
 
+    GroundTruthObjects() {}
     GroundTruthObjects( ObjectImageShapeData image_data_and_shape, ushort startPoint, Noise noise, std::string objectName) : m_image_data_and_shape(image_data_and_shape), m_startPoint(startPoint), Objects(objectName)
 
     {

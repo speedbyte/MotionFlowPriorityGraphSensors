@@ -290,9 +290,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_count)));
                     }
                 }
-                for (auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
-                    list_of_gt_objects.push_back(list_of_gt_objects_base.at(obj_count));
-                }
+
+
+                list_of_gt_objects = list_of_gt_objects_base;
+
                 ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
 
 

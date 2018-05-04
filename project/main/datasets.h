@@ -43,6 +43,8 @@
 #define MAX_ALLOWED_OBJECTS 10
 #define MAX_ALLOWED_SENSORS 10
 
+#define MAX_ALLOWED_SENSOR_GROUPS 2
+
 #define MAX_DUMPS 10
 
 #define STENCIL_GRID_COMPRESSOR 1  // every x pixels
