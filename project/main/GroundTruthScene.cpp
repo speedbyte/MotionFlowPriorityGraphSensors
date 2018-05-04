@@ -677,8 +677,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
                     frame_count).m_object_dimensions_px.dim_width_m));
 
-            if ((m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).occluded == false)
-                    ) {
+            if ((!m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).occluded )) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(

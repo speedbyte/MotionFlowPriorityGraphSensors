@@ -36,7 +36,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
 
         if ( frame_count == 0 ) {
 
-            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_usk?"false":"true"),
+            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial?"false":"true"),
                    frame_count,
                    current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
             );
@@ -76,7 +76,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             auto dist_usk = cv::norm(gt_displacement_usk);
             assert(std::round(dist_inertial+0.5)/1000 == std::round(dist_usk+0.5)/1000);
 
-            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_usk?"false":"true"),
+            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial?"false":"true"),
                    frame_count,
                    current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y,
                    gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y);
@@ -85,7 +85,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_data.getAll().at(current_index).m_object_location_px.cog_px, gt_displacement));
 
         }
-        if ( (bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_usk ) {
+        if ( (bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial ) {
             m_obj_base_visibility.push_back((false));
         }
         else{
