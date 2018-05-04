@@ -79,8 +79,8 @@ target_link_libraries(data_persistence ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 add_executable(video_operations video_operations.cpp)
 target_link_libraries(video_operations ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
-add_executable(kalman ${SAMPLE_DIR}/kalman.cpp)
-target_link_libraries(kalman ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+add_executable(kalman_base ${SAMPLE_DIR}/kalman.cpp)
+target_link_libraries(kalman_base ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
 add_executable(simpleflow ${SAMPLE_DIR}/simpleflow_demo.cpp)
 target_link_libraries(simpleflow ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
@@ -102,3 +102,6 @@ target_link_libraries(histogram ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
 add_executable(histogram_calc calcHist_Demo.cpp)
 target_link_libraries(histogram_calc ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
+
+add_executable(kalman kalman.cpp)
+target_link_libraries(kalman ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} X11)

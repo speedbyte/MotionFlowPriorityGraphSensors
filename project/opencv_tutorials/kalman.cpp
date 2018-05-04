@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+#include<ncurses.h>
 using namespace cv;
 
 static inline Point calcPoint(Point2f center, double R, double angle)
@@ -27,7 +28,13 @@ static void help()
             );
 }
 
-int main(int, char**)
+
+#define drawCross( center, color, d )                                 \
+line( img, Point( center.x - d, center.y - d ), Point( center.x + d, center.y + d ), color, 2, CV_AA, 0); \
+line( img, Point( center.x + d, center.y - d ), Point( center.x - d, center.y + d ), color, 2, CV_AA, 0 )
+
+
+int main2(int, char**)
 {
     help();
     Mat img(500, 500, CV_8UC3);
@@ -70,12 +77,6 @@ int main(int, char**)
             double measAngle = measurement.at<float>(0);
             Point measPt = calcPoint(center, R, measAngle);
 
-            // plot points
-            #define drawCross( center, color, d )                                 \
-                line( img, Point( center.x - d, center.y - d ),                \
-                             Point( center.x + d, center.y + d ), color, 1, CV_AA, 0); \
-                line( img, Point( center.x + d, center.y - d ),                \
-                             Point( center.x - d, center.y + d ), color, 1, CV_AA, 0 )
 
             img = Scalar::all(0);
             drawCross( statePt, Scalar(255,255,255), 3 );
@@ -98,6 +99,149 @@ int main(int, char**)
         }
         if( code == 27 || code == 'q' || code == 'Q' )
             break;
+    }
+
+    return 0;
+}
+
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/video/tracking.hpp"
+
+
+/*
+ * Tell us where the pointer is.
+ *
+ * Modified from http://www.gusnet.cx/proj/miscunix/code/xquerypointer.c
+ *
+ * Compile with:
+ *   cc -Wall -I/usr/X11R6/include -L/usr/X11R6/lib -lXm -o xquerypointer xquerypointer.c
+ * or on solaris:
+ *   cc -I/usr/openwin/include xquerypointer.c -L/usr/openwin/lib -lX11
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <X11/Xlib.h>
+
+int GetCursorPos(cv::Point *mousePos)
+{
+    // Gave a warning.
+    // unsigned int snooze_time = 100000;
+    Display *dpy;
+    Window root;
+    Window ret_root;
+    Window ret_child;
+    int root_x;
+    int root_y;
+    int win_x;
+    int win_y;
+    unsigned int mask;
+
+    dpy = XOpenDisplay(NULL);
+    root = XDefaultRootWindow(dpy);
+
+    if(XQueryPointer(dpy, root, &ret_root, &ret_child, &root_x, &root_y,
+                     &win_x, &win_y, &mask))
+    {
+        // original version
+        //    printf("root loc: %4d,%4d win loc: %3d,%3d mask: 0x%08X\n",
+        //           root_x, root_y, win_x, win_y, mask);
+
+        // This returns in -geometry format
+        // I added \n so it actually shows something so people who test it know it works.
+        printf("+%d+%d\n", root_x, root_y);
+    }
+    else
+    {
+        // your script will break with this output, send it to stderr and let the script
+        // return something sensible like +10+10
+        printf("hmmmm, where is that sneaky pointer?\n");
+    }
+
+    *mousePos = cv::Point(root_x, root_y);
+    return 0;
+}
+
+
+using namespace cv;
+using namespace std;
+
+cv::Point mousePos;
+
+static void onMouse(int event,int x,int y,int,void*)
+{
+    //this function will be called every time you move your mouse over the image
+    // the coordinates will be in x and y variables
+    //Mat img2;img.copyTo(img2);
+    //line(img2,Point(x,0),Point(x,img2.cols),Scalar(0,0,255),2);
+    //line(img2,Point(0,y),Point(img2.rows,y),Scalar(0,0,255),2);
+    //imshow("Image",img2);
+    mousePos = {x,y};
+}
+
+int main( )
+{
+
+    KalmanFilter KF(4, 2, 0);
+    cv::namedWindow("mouse kalman", CV_WINDOW_AUTOSIZE);
+    setMouseCallback("mouse kalman", onMouse);
+    //getyx(WINDOW *win,int y,int x);
+    //GetCursorPos(&mousePos);
+
+// intialization of KF...
+    cv::Mat_<float>  val(4,4);
+    val  << 1,0,1,0,  0,1,0,1, 0,0,1,0,   0,0,0,1;
+
+    KF.transitionMatrix = val;
+    Mat_<float> measurement(2,1); measurement.setTo(Scalar(0));
+
+    KF.statePre.at<float>(0) = mousePos.x;
+    KF.statePre.at<float>(1) = mousePos.y;
+    KF.statePre.at<float>(2) = 0;
+    KF.statePre.at<float>(3) = 0;
+    setIdentity(KF.measurementMatrix);
+    setIdentity(KF.processNoiseCov, Scalar::all(1e-4));
+    setIdentity(KF.measurementNoiseCov, Scalar::all(10));
+    setIdentity(KF.errorCovPost, Scalar::all(.1));
+// Image to show mouse tracking
+    Mat img(600, 800, CV_8UC3);
+    vector<Point> mousev,kalmanv;
+    mousev.clear();
+    kalmanv.clear();
+
+    while(1)
+    {
+        // First predict, to update the internal statePre variable
+        Mat prediction = KF.predict();
+        Point predictPt(prediction.at<float>(0),prediction.at<float>(1));
+
+        // Get mouse point
+        //GetCursorPos(&mousePos);
+        measurement(0) = mousePos.x;
+        measurement(1) = mousePos.y;
+
+        // The update phase
+        Mat estimated = KF.correct(measurement);
+
+        Point statePt(estimated.at<float>(0),estimated.at<float>(1));
+        Point measPt(measurement(0),measurement(1));
+        // plot points
+        imshow("mouse kalman", img);
+        img = Scalar::all(0);
+
+        mousev.push_back(measPt);
+        kalmanv.push_back(statePt);
+        drawCross( statePt, Scalar(255,255,255), 5 );
+        drawCross( measPt, Scalar(0,0,255), 5 );
+
+        for (int i = 0; i < mousev.size()-1; i++)
+            line(img, mousev[i], mousev[i+1], Scalar(255,255,0), 1);
+
+        for (int i = 0; i < kalmanv.size()-1; i++)
+            line(img, kalmanv[i], kalmanv[i+1], Scalar(0,155,255), 1);
+
+        waitKey(10);
+
     }
 
     return 0;

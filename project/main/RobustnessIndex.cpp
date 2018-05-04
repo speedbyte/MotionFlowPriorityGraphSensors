@@ -22,7 +22,7 @@ void SensorFusion::compareHistograms(const OpticalFlow &opticalFlow, const Optic
         COUNT = 1;
     }
     else {
-        COUNT = DATAFILTER_COUNT;
+        COUNT = 1; //
     }
 
     // shape of algorithhm, with shape of ground truth
