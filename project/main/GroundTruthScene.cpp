@@ -742,7 +742,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
             tempGroundTruthImage = cv::Scalar::all(255);
 
             sprintf(file_name_image, "000%03d_10.png", frame_count );
-            std::string input_image_file_with_path = m_generatepath.string() /*+ "_" + std::to_string(sensor_index)*/ + "/" + file_name_image;
+            std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(sensor_index) + "/" + file_name_image;
 
             sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count );
             //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
@@ -892,7 +892,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                                 frame_count).m_object_location_m.location_x_m,
                                     m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
                                             frame_count).m_object_location_m.location_y_m));
-                //assert(std::abs(dist - dist_usk) < 0.1);
+                assert(std::abs(dist - dist_usk) < 1.5);
                 std::cout << "distance is " << dist << " for "
                           << m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getObjectName()
                           << std::endl;
@@ -953,10 +953,10 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 }
             }
 
-            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            cv::imshow("BB", tempGroundTruthImage);
-            cv::waitKey(0);
-            cv::destroyAllWindows();
+            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("BB", tempGroundTruthImage);
+            //cv::waitKey(0);
+            //cv::destroyAllWindows();
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 
