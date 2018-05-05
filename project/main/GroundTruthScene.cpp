@@ -257,7 +257,7 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
 
                         << "}";  //dont close the brace yet
             }
-            for (int sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.size(); sen_index++) {
+            for (int sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.at(0).size(); sen_index++) {
                 write_fs
 
                         << "{:" << "name" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getSensorName()
@@ -337,10 +337,10 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
         ushort  sensorCount = 0;
         cv::FileStorage fs;
         if ( sensor_index == 0 ) {
-            fs.open("../position_vires_1.yml", cv::FileStorage::READ);
+            fs.open("../position_vires_0.yml", cv::FileStorage::READ);
         }
         else {
-            fs.open("../position_vires_2.yml", cv::FileStorage::READ);
+            fs.open("../position_vires_1.yml", cv::FileStorage::READ);
         }
 
         assert(fs.isOpened());
@@ -742,7 +742,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
             tempGroundTruthImage = cv::Scalar::all(255);
 
             sprintf(file_name_image, "000%03d_10.png", frame_count );
-            std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(sensor_index) + "/" + file_name_image;
+            std::string input_image_file_with_path = m_generatepath.string() /*+ "_" + std::to_string(sensor_index)*/ + "/" + file_name_image;
 
             sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count );
             //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
@@ -784,7 +784,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                         sensor_index).at(0)->getAll().at(
                         frame_count).m_sensor_rotation_carrier_rad;
 
-                sensor_offset_m_str sensor_offset_m = m_ptr_customSensorMetaDataList.at(sensor_index).at(0)->getAll().at(
+                sensor_offset_m_str sensor_offset_m = m_ptr_customSensorMetaDataList.at(sensor_index).at(2)->getAll().at(
                         frame_count).m_sensor_offset_m;
 
                 float offset_x = m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
@@ -836,14 +836,14 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                                                                cv::Point3f(0, 0, 0));
 
                     //Then rotate the box to inertial coordinate system. hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
-                    final = Utils::translate_and_rotate_points(bounding_points_3d.at(i), cv::Point3f(0, 0, 0),
+                    final = Utils::translate_and_rotate_points(final, cv::Point3f(0, 0, 0),
                                                                cv::Point3f(
                                                                        orientation_obj_inertial.rotation_rz_yaw_rad,
                                                                        orientation_obj_inertial.rotation_ry_pitch_rad,
                                                                        orientation_obj_inertial.rotation_rx_roll_rad));
 
-                    //Translate the axis to the master origin. add the BB vector to the object position.
-                    //Now we are in the master co-ordinate system.
+                    //Translate the axis to the inertial origin. add the BB vector to the object position.
+                    //Now we are in the inertial co-ordinate system.
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(pos_obj_inertial.location_x_m,
                                                                                   pos_obj_inertial.location_y_m,
                                                                                   pos_obj_inertial.location_z_m),
@@ -854,6 +854,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                             -pos_sensor_carrier_inertial.location_x_m, -pos_sensor_carrier_inertial.location_y_m,
                             -pos_sensor_carrier_inertial.location_z_m), cv::Point3f(0, 0, 0));
 
+
                     // now rotate the axis to align to the car
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(0, 0, 0), cv::Point3f(
                             -sensor_rotation_carrier_rad.rotation_rz_yaw_rad,
@@ -863,9 +864,9 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     // We are in the vehicle coordinate system now.
                     // Translate to cam position in the car.
                     final = Utils::translate_and_rotate_points(final, cv::Point3f(-sensor_offset_m.offset_x,
-                                                                                  -sensor_offset_m.offset_y,
-                                                                                  -sensor_offset_m.offset_z),
-                                                               cv::Point3f(0, 0, 0));
+                            -sensor_offset_m.offset_y,
+                            -sensor_offset_m.offset_z),
+                            cv::Point3f(0, 0, 0));
 
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
@@ -891,7 +892,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                                 frame_count).m_object_location_m.location_x_m,
                                     m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
                                             frame_count).m_object_location_m.location_y_m));
-                assert(std::abs(dist - dist_usk) < 0.1);
+                //assert(std::abs(dist - dist_usk) < 0.1);
                 std::cout << "distance is " << dist << " for "
                           << m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getObjectName()
                           << std::endl;
@@ -952,10 +953,10 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 }
             }
 
-            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            //cv::imshow("BB", tempGroundTruthImage);
-            //cv::waitKey(0);
-            //cv::destroyAllWindows();
+            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            cv::imshow("BB", tempGroundTruthImage);
+            cv::waitKey(0);
+            cv::destroyAllWindows();
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 
@@ -1213,7 +1214,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (m_regenerate_yaml_file) {
 
             try {
-                writePositionInYaml("vires_1");
+                writePositionInYaml("vires");
             }
             catch (...) {
                 std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
@@ -1222,8 +1223,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         } else { // dont generate, just read
 
-            readPositionFromFile("../position_vires.yml");
-            //readPositionFromFile("../position_vires_2.yml", 1);
+            readPositionFromFile("dummy");
 
             ushort map_pair_count = 0;
             for (const auto &myPair : m_mapObjectNameToObjectMetaData[0]) {
@@ -1594,7 +1594,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
             if (!m_dumpInitialFrames) {
                 sprintf(file_name_image, "000%03d_10.png", mImageCount);
-                std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
+                std::string input_image_file_with_path = m_generatepath.string() + "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS+1) ) {
                     fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
