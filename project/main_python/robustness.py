@@ -21,6 +21,36 @@ class SensorDataPlot(object):
         self.sensor_number = sensor_number
 
 
+    def templateToYamlMapping(self, meausuring_parameter, yaml_load, weather, step_size):
+
+        if ( meausuring_parameter == "pixel"):
+            template = template_of_pixel_density
+            template_gt = template_of_pixel_density_gt
+        elif ( meausuring_parameter == "deviation"):
+            template = template_of_collision
+            template_gt = template_of_collision_points_gt
+        elif ( meausuring_parameter == "collision"):
+            template = template_of_collision
+            template_gt = template_of_collision_points_gt
+        elif ( meausuring_parameter == "obj_displacement"):
+            template = template_of_obj_displacement
+            template_gt = template_of_obj_displacement_gt
+
+        list_of_pixel_density = list()
+        temp_list = map(lambda x : (x + weather + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.getSensorIndex())), template)
+        list_of_pixel_density += temp_list
+
+        custom_data_list = list()
+        custom_data_list.append(template_gt[0] + "sensor_index_" + str(self.getSensorIndex()))
+        for x in range(len(datafilter_list)):
+            custom_data_list.append(list_of_pixel_density[x])
+
+        print custom_data_list
+
+        return (self.robustness_(yaml_load, meausuring_parameter, weather, str(step_size), custom_data_list, color_list_algorithms, label_list_algorithm, "jaccard index " + weather ))
+
+
+
     def robustness_(self, yaml_load, measuring_parameter, noise, stepSize, data_list, color_list, label_list, label=""):
 
 
@@ -34,8 +64,8 @@ class SensorDataPlot(object):
 
         # Ground Truth
         if ( measuring_parameter == "deviation"):
-            data_points_gt = yaml_load[list_of_collision_ground_truth[0]]
-            print "getting " , list_of_collision_ground_truth[0]
+            data_points_gt = yaml_load[data_list[0]]
+            print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getDeviationPoints(data_points_gt, data_points_gt)
 
         elif ( measuring_parameter == "pixel"):
@@ -44,14 +74,14 @@ class SensorDataPlot(object):
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getShape(data_points_gt, data_points_gt)
 
         elif ( measuring_parameter == "collision"):
-            data_points_gt = yaml_load[list_of_collision_ground_truth[0]]
-            print "getting " , list_of_collision_ground_truth[0]
+            data_points_gt = yaml_load[data_list[0]]
+            print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
             # collision sorted
 
         elif ( measuring_parameter == "obj_displacement"):
-            data_points_gt = yaml_load[list_of_obj_displacement_ground_truth[0]]
-            print "getting " , list_of_obj_displacement_ground_truth[0]
+            data_points_gt = yaml_load[data_list[0]]
+            print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getObjectDisplacement(data_points_gt, data_points_gt)
 
         for env_name in environment_list:

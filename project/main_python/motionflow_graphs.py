@@ -228,35 +228,11 @@ class thread1(threading.Thread):
                 current_list = environment_list
 
             # ---------------------------------
-            list_of_pixel_density = list()
-            temp_list = map(lambda x : (x + "blue_sky" + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.sensor_plot.getSensorIndex())), template_of_pixel_density)
-            list_of_pixel_density += temp_list
-
-            custom_data_list_pixel_blue_sky = list()
-            custom_data_list_pixel_blue_sky.append(template_of_pixel_density_gt[0] + "sensor_index_" + str(self.sensor_plot.getSensorIndex()))
-            for x in range(len(datafilter_list)):
-                custom_data_list_pixel_blue_sky.append(list_of_pixel_density[x])
-
-            print custom_data_list_pixel_blue_sky
-
-            list_of_pixel_density = list()
-            temp_list = map(lambda x : (x + "heavy_snow" + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.sensor_plot.getSensorIndex())), template_of_pixel_density)
-            list_of_pixel_density += temp_list
-
-            custom_data_list_pixel_heavy_snow = list()
-            custom_data_list_pixel_heavy_snow.append(template_of_pixel_density_gt[0] + "sensor_index_" + str(self.sensor_plot.getSensorIndex()))
-            for x in range(len(datafilter_list)):
-                custom_data_list_pixel_heavy_snow.append(list_of_pixel_density[x])
-
-            print custom_data_list_pixel_heavy_snow
-
-            self.plot_at_once_figures.append(self.sensor_plot.robustness_(yaml_load, "pixel", "blue_sky", str(step_size), custom_data_list_pixel_blue_sky, color_list_algorithms, label_list_algorithm, "jaccard index no noise all algorithm" ))
-            if ( just_ground_truth == False ):
-                self.plot_at_once_figures.append(self.sensor_plot.robustness_(yaml_load, "pixel", "heavy_snow", str(step_size), custom_data_list_pixel_heavy_snow, color_list_algorithms, label_list_algorithm))
-
-
+            for weather in environment_list:
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("pixel", yaml_load, weather, step_size))
 
         self.threadRun = False
+
 
     def getThreadState(self):
         return self.threadRun
@@ -268,11 +244,11 @@ class thread1(threading.Thread):
 
 class thread2(threading.Thread):
 
-    def __init__(self, yaml_load, sensor_1_plot):
+    def __init__(self, yaml_load, sensor_plot):
         threading.Thread.__init__(self)
         self.threadRun = False
         self.yaml_load = yaml_load
-        self.sensor_1_plot = sensor_1_plot
+        self.sensor_plot = sensor_plot
 
 
     def stop(self):
@@ -289,20 +265,8 @@ class thread2(threading.Thread):
             if ( evaluation == "environment"):
                 current_list = environment_list
 
-            list_of_collision_noise = list()
-            for n, i in enumerate(current_list):
-                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
-                list_of_collision_noise += temp_list
-            print list_of_collision_noise
-
-            custom_data_list_deviation = list()
-            custom_data_list_deviation.append(list_of_collision_ground_truth[0])
-            for x in range(len(datafilter_list)):
-                custom_data_list_deviation.append(list_of_collision_noise[x])
-
-            self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "deviation", "blue_sky", str(step_size),  custom_data_list_deviation, color_list_algorithms, label_list_algorithm,  "deviation no noise all algorithm "))
-            if ( just_ground_truth == False ):
-                self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list_environment, label_list_enironment, "deviation environment algorithm "))
+            for weather in environment_list:
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("deviation", yaml_load, weather, step_size))
 
         self.threadRun = False
 
@@ -433,7 +397,7 @@ if __name__ == '__main__':
         thread_pixel = thread1(yaml_load, sensor_1_plot)
         thread_pixel.start()
 
-    if ( 0 ):
+    if ( 1 ):
 
         thread_deviation = thread2(yaml_load, sensor_1_plot)
         thread_deviation.start()
@@ -473,7 +437,7 @@ if __name__ == '__main__':
             if ( thread_deviation.getThreadState() == False ):
 
                 plot_at_once_figures = thread_deviation.getPlotList()
-                plot_at_once(plot_at_once_figures)
+                plot_at_once(plot_at_once_figures, sensor_1_plot.getSensorIndex())
 
                 # summary
                 summary = sensor_1_plot.get_summary()
@@ -525,8 +489,9 @@ if __name__ == '__main__':
 
 
 
+    thread_pixel = None
 
-    if ( 1 ):
+    if ( 0 ):
 
         thread_pixel = thread1(yaml_load, sensor_2_plot)
         thread_pixel.start()

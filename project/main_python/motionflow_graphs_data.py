@@ -61,16 +61,6 @@ color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 label_list_bar = ['ground truth', 'moving average', 'voted mean', 'ranked mean']
 
 
-
-list_of_collision_ground_truth = [
-    "collision_points_sensor_index_1_ground_truth",
-]
-
-list_of_obj_displacement_ground_truth = [
-    "obj_displacement_sensor_index_1_ground_truth",
-]
-
-
 template_of_pixel_density_gt = [
     "pixel_density_ground_truth_",
 ]
@@ -81,53 +71,28 @@ template_of_pixel_density = [
     "pixel_density_datafilter_3results_FB_",
 ]
 
-
+template_of_collision_points_gt = [
+    "collision_points_ground_truth_",
+]
 
 template_of_obj_displacement = [
-    "obj_displacement_sensor_index_1_datafilter_0results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_1results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_2results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_3results_FB_",
-
-    "obj_displacement_sensor_index_1_datafilter_0results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_1results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_2results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_3results_FB_",
-
-    "obj_displacement_sensor_index_1_datafilter_0results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_1results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_2results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_3results_FB_",
-
-    "obj_displacement_sensor_index_1_datafilter_0results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_1results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_2results_FB_",
-    "obj_displacement_sensor_index_1_datafilter_3results_FB_",
+    "obj_displacement_datafilter_0results_FB_",
+    "obj_displacement_datafilter_1results_FB_",
+    "obj_displacement_datafilter_2results_FB_",
+    "obj_displacement_datafilter_3results_FB_",
 
 ]
 
+template_of_obj_displacement_gt = [
+    "obj_displacement_ground_truth_",
+]
 
 template_of_collision = [
 
-    "collision_points_sensor_index_1_datafilter_0results_FB_",
-    "collision_points_sensor_index_1_datafilter_1results_FB_",
-    "collision_points_sensor_index_1_datafilter_2results_FB_",
-    "collision_points_sensor_index_1_datafilter_3results_FB_",
-
-    "collision_points_sensor_index_1_datafilter_0results_FB_",
-    "collision_points_sensor_index_1_datafilter_1results_FB_",
-    "collision_points_sensor_index_1_datafilter_2results_FB_",
-    "collision_points_sensor_index_1_datafilter_3results_FB_",
-
-    "collision_points_sensor_index_1_datafilter_0results_FB_",
-    "collision_points_sensor_index_1_datafilter_1results_FB_",
-    "collision_points_sensor_index_1_datafilter_2results_FB_",
-    "collision_points_sensor_index_1_datafilter_3results_FB_",
-
-    "collision_points_sensor_index_1_datafilter_0results_FB_",
-    "collision_points_sensor_index_1_datafilter_1results_FB_",
-    "collision_points_sensor_index_1_datafilter_2results_FB_",
-    "collision_points_sensor_index_1_datafilter_3results_FB_",
+    "collision_points_datafilter_0results_FB_",
+    "collision_points_datafilter_1results_FB_",
+    "collision_points_datafilter_2results_FB_",
+    "collision_points_datafilter_3results_FB_",
 
 ]
 
