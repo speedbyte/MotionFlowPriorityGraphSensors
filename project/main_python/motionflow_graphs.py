@@ -279,11 +279,11 @@ class thread2(threading.Thread):
 
 class thread3(threading.Thread):
 
-    def __init__(self, yaml_load, sensor_1_plot):
+    def __init__(self, yaml_load, sensor_plot):
         threading.Thread.__init__(self)
         self.threadRun = False
         self.yaml_load = yaml_load
-        self.sensor_1_plot = sensor_1_plot
+        self.sensor_plot = sensor_plot
 
 
     def stop(self):
@@ -300,18 +300,9 @@ class thread3(threading.Thread):
             if ( evaluation == "environment"):
                 current_list = environment_list
 
-            list_of_collision_noise = list()
-            for n, i in enumerate(current_list):
-                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_collision[n*4:n*4+4])
-                list_of_collision_noise += temp_list
-            print list_of_collision_noise
+            for weather in environment_list:
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("collision", yaml_load, weather, step_size))
 
-            custom_data_list_deviation = list()
-            custom_data_list_deviation.append(list_of_collision_ground_truth[0])
-            for x in range(len(datafilter_list)):
-                custom_data_list_deviation.append(list_of_collision_noise[x])
-
-            self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "collision", "blue_sky", str(step_size), custom_data_list_deviation, color_list_algorithms, label_list_algorithm, "collision points no noise all algorithm"))
         self.threadRun = False
 
     def getThreadState(self):
@@ -323,11 +314,11 @@ class thread3(threading.Thread):
 
 class thread4(threading.Thread):
 
-    def __init__(self, yaml_load, sensor_1_plot):
+    def __init__(self, yaml_load, sensor_plot):
         threading.Thread.__init__(self)
         self.threadRun = False
         self.yaml_load = yaml_load
-        self.sensor_1_plot = sensor_1_plot
+        self.sensor_plot = sensor_plot
 
 
     def stop(self):
@@ -344,20 +335,8 @@ class thread4(threading.Thread):
             if ( evaluation == "environment"):
                 current_list = environment_list
 
-            list_of_obj_displacement_noise = list()
-            for n, i in enumerate(current_list):
-                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_obj_displacement[n*4:n*4+4])
-                list_of_obj_displacement_noise += temp_list
-            print list_of_obj_displacement_noise
-
-            custom_data_list_obj_displacement = list()
-            custom_data_list_obj_displacement.append(list_of_obj_displacement_ground_truth[0])
-            for x in range(len(datafilter_list)):
-                custom_data_list_obj_displacement.append(list_of_obj_displacement_noise[x])
-
-            self.plot_at_once_figures.append(sensor_1_plot.robustness_(yaml_load, "obj_displacement", "blue_sky", str(step_size), custom_data_list_obj_displacement, color_list_algorithms, label_list_algorithm, "obj_displacement no noise all algorithm "))
-            if ( just_ground_truth == False ):
-                self.plot_at_once_figures.append(sensor_1_plot.robustness_(yaml_load, "obj_displacement", "noise", str(step_size), list_of_obj_displacement_noise, color_list_environment, label_list_enironment, "obj_displacement environment algorithm "))
+            for weather in environment_list:
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("obj_displacement", yaml_load, weather, step_size))
         self.threadRun = False
 
     def getThreadState(self):
@@ -384,131 +363,109 @@ if __name__ == '__main__':
         if e.returncode != 1:
             exit(0)
 
-    thread_pixel = None
-    thread_deviation = None
-    thread_collision = None
-    thread_obj_displacement = None
 
-    sensor_1_plot = SensorDataPlot(1)
-    sensor_2_plot = SensorDataPlot(2)
+    for x in [1,2]:
 
-    if ( 1 ):
+        thread_pixel = None
+        thread_deviation = None
+        thread_collision = None
+        thread_obj_displacement = None
 
-        thread_pixel = thread1(yaml_load, sensor_1_plot)
-        thread_pixel.start()
+        sensor_plot = SensorDataPlot(x)
 
-    if ( 1 ):
+        if ( 1 ):
 
-        thread_deviation = thread2(yaml_load, sensor_1_plot)
-        thread_deviation.start()
+            thread_pixel = thread1(yaml_load, sensor_plot)
+            thread_pixel.start()
 
-    if ( 0 ):
+        if ( 1 ):
 
-        thread_collision = thread3(yaml_load, sensor_1_plot)
-        thread_collision.start()
+            thread_deviation = thread2(yaml_load, sensor_plot)
+            thread_deviation.start()
 
-    if ( 0 ):
+        if ( 1 ):
 
-        thread_obj_displacement = thread4(yaml_load, sensor_1_plot)
-        thread_obj_displacement.start()
+            thread_collision = thread3(yaml_load, sensor_plot)
+            thread_collision.start()
 
-    if thread_pixel != None:
+        if ( 1 ):
 
-        while ( True ):
-            time.sleep(1)
-            if ( thread_pixel.getThreadState() == False ):
+            thread_obj_displacement = thread4(yaml_load, sensor_plot)
+            thread_obj_displacement.start()
 
-                    plot_at_once_figures = thread_pixel.getPlotList()
-                    plot_at_once(plot_at_once_figures, sensor_1_plot.getSensorIndex())
+        if thread_pixel != None:
+
+            while ( True ):
+                time.sleep(1)
+                if ( thread_pixel.getThreadState() == False ):
+
+                        plot_at_once_figures = thread_pixel.getPlotList()
+                        plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+
+                        # summary
+                        summary = sensor_plot.get_summary()
+                        figures = Figures(1)
+                        figures.evaluate_pixel(summary, step_list)
+                        figures.save_figure("pixel", "summary")
+
+                        break
+
+
+        if ( thread_deviation != None ):
+
+            while ( True ):
+                time.sleep(1)
+                if ( thread_deviation.getThreadState() == False ):
+
+                    plot_at_once_figures = thread_deviation.getPlotList()
+                    plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
                     # summary
-                    summary = sensor_1_plot.get_summary()
+                    summary = sensor_plot.get_summary()
                     figures = Figures(1)
-                    figures.evaluate_pixel(summary, step_list)
-                    figures.save_figure("pixel", "summary")
+                    figures.evaluate_deviation(summary, step_list)
+                    figures.save_figure("deviation", "summary")
 
                     break
 
 
-    if ( thread_deviation != None ):
+        if ( thread_collision != None ):
 
-        while ( True ):
-            time.sleep(1)
-            if ( thread_deviation.getThreadState() == False ):
+            while ( True ):
+                time.sleep(1)
+                if ( thread_collision.getThreadState() == False ):
 
-                plot_at_once_figures = thread_deviation.getPlotList()
-                plot_at_once(plot_at_once_figures, sensor_1_plot.getSensorIndex())
+                    plot_at_once_figures = thread_collision.getPlotList()
+                    plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
-                # summary
-                summary = sensor_1_plot.get_summary()
-                figures = Figures(1)
-                figures.evaluate_deviation(summary, step_list)
-                figures.save_figure("deviation", "summary")
+                    # summary
+                    #summary = sensor_plot.get_summary()
+                    #figures = Figures(1)
+                    #figures.evaluate_collision(summary, step_list)
+                    #figures.save_figure("collision", "summary")
 
-                break
-
-
-    if ( thread_collision != None ):
-
-        while ( True ):
-            time.sleep(1)
-            if ( thread_collision.getThreadState() == False ):
-
-                plot_at_once_figures = thread_collision.getPlotList()
-                plot_at_once(plot_at_once_figures)
-
-                # summary
-                #summary = sensor_1_plot.get_summary()
-                #figures = Figures(1)
-                #figures.evaluate_collision(summary, step_list)
-                #figures.save_figure("collision", "summary")
-
-                break
+                    break
 
 
-    # ---------------------------------
-    if ( thread_obj_displacement != None ):
+        # ---------------------------------
+        if ( thread_obj_displacement != None ):
 
-        while ( True ):
-            time.sleep(1)
-            if ( thread_obj_displacement.getThreadState() == False ):
+            while ( True ):
+                time.sleep(1)
+                if ( thread_obj_displacement.getThreadState() == False ):
 
-                plot_at_once_figures = thread_obj_displacement.getPlotList()
-                plot_at_once(plot_at_once_figures)
+                    plot_at_once_figures = thread_obj_displacement.getPlotList()
+                    plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
-                # summary
-                summary = sensor_1_plot.get_summary()
-                figures = Figures(1)
-                figures.evaluate_obj_displacement(summary, step_list)
-                figures.save_figure("obj_displacement", "summary")
+                    # summary
+                    summary = sensor_plot.get_summary()
+                    figures = Figures(1)
+                    figures.evaluate_obj_displacement(summary, step_list)
+                    figures.save_figure("obj_displacement", "summary")
 
-                break
+                    break
 
-        #scenario_displacement_occurence()
-        #histogramm()
+            #scenario_displacement_occurence()
+            #histogramm()
 
 
-
-    thread_pixel = None
-
-    if ( 0 ):
-
-        thread_pixel = thread1(yaml_load, sensor_2_plot)
-        thread_pixel.start()
-
-    if thread_pixel != None:
-
-        while ( True ):
-            time.sleep(1)
-            if ( thread_pixel.getThreadState() == False ):
-
-                plot_at_once_figures = thread_pixel.getPlotList()
-                plot_at_once(plot_at_once_figures, sensor_2_plot.getSensorIndex())
-
-                # summary
-                summary = sensor_1_plot.get_summary()
-                figures = Figures(1)
-                figures.evaluate_pixel(summary, step_list)
-                figures.save_figure("pixel", "summary")
-
-                break
