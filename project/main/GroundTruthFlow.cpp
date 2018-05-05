@@ -33,7 +33,7 @@ using namespace std::chrono;
 
 void GroundTruthFlow::prepare_directories() {
 
-    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/none";
+    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/blue_sky";
 
     m_resultordner="/ground_truth";
 

@@ -29,7 +29,7 @@ file = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
 SCALE = 1
 
 
-def plot_at_once(figures_plot_array):
+def plot_at_once(figures_plot_array, sensor_index):
 
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
 
@@ -57,7 +57,7 @@ def plot_at_once(figures_plot_array):
 
             figures.plot_all(figures_plot[figures_plot_index][0], figures_plot[figures_plot_index][1], figures_plot[figures_plot_index][2])
 
-        figures.save_figure(figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], figures_plot[figures_plot_index][4])
+        figures.save_figure(figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], figures_plot[figures_plot_index][4], sensor_index)
 
 
 
@@ -206,11 +206,12 @@ def scenario_displacement_occurence():
 
 class thread1(threading.Thread):
 
-    def __init__(self, yaml_load, sensor_1_plot):
+    def __init__(self, yaml_load, sensor_plot):
         threading.Thread.__init__(self)
         self.threadRun = False
         self.yaml_load = yaml_load
-        self.sensor_1_plot = sensor_1_plot
+        self.sensor_plot = sensor_plot
+
 
     def stop(self):
         self.threadRun = False
@@ -227,20 +228,25 @@ class thread1(threading.Thread):
                 current_list = environment_list
 
             # ---------------------------------
-            list_of_pixel_density_noise = list()
+            list_of_pixel_density = list()
             for n, i in enumerate(current_list):
-                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_'), template_of_pixel_density[n*4:n*4+4])
-                list_of_pixel_density_noise += temp_list
-            print list_of_pixel_density_noise
+                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.sensor_plot.getSensorIndex())), template_of_pixel_density[n*4:n*4+4])
+                list_of_pixel_density += temp_list
 
             custom_data_list_pixel = list()
-            custom_data_list_pixel.append(list_of_pixel_density_ground_truth[0])
+            custom_data_list_pixel.append(template_of_pixel_density_gt[0] + "sensor_index_" + str(self.sensor_plot.getSensorIndex()))
             for x in range(len(datafilter_list)):
-                custom_data_list_pixel.append(list_of_pixel_density_noise[x])
+                custom_data_list_pixel.append(list_of_pixel_density[x])
 
-            self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "pixel", "no_noise", str(step_size), custom_data_list_pixel, color_list_algorithms, label_list_algorithm, "jaccard index no noise all algorithm" ))
+            print custom_data_list_pixel
+
+            self.plot_at_once_figures.append(self.sensor_plot.robustness_(yaml_load, "pixel", "blue_sky", str(step_size), custom_data_list_pixel, color_list_algorithms, label_list_algorithm, "jaccard index no noise all algorithm" ))
             if ( just_ground_truth == False ):
-                self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "pixel", "noise", str(step_size), list_of_pixel_density_noise, color_list_environment, label_list_enironment))
+                pass
+                #self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "pixel", "heavy_snow", str(step_size), custom_data_list_pixel, color_list_environment, label_list_enironment))
+
+
+
         self.threadRun = False
 
     def getThreadState(self):
@@ -285,7 +291,7 @@ class thread2(threading.Thread):
             for x in range(len(datafilter_list)):
                 custom_data_list_deviation.append(list_of_collision_noise[x])
 
-            self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "deviation", "no_noise", str(step_size),  custom_data_list_deviation, color_list_algorithms, label_list_algorithm,  "deviation no noise all algorithm "))
+            self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "deviation", "blue_sky", str(step_size),  custom_data_list_deviation, color_list_algorithms, label_list_algorithm,  "deviation no noise all algorithm "))
             if ( just_ground_truth == False ):
                 self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "deviation", "noise" , str(step_size), list_of_collision_noise, color_list_environment, label_list_enironment, "deviation environment algorithm "))
 
@@ -332,7 +338,7 @@ class thread3(threading.Thread):
             for x in range(len(datafilter_list)):
                 custom_data_list_deviation.append(list_of_collision_noise[x])
 
-            self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "collision", "no_noise", str(step_size), custom_data_list_deviation, color_list_algorithms, label_list_algorithm, "collision points no noise all algorithm"))
+            self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "collision", "blue_sky", str(step_size), custom_data_list_deviation, color_list_algorithms, label_list_algorithm, "collision points no noise all algorithm"))
         self.threadRun = False
 
     def getThreadState(self):
@@ -376,7 +382,7 @@ class thread4(threading.Thread):
             for x in range(len(datafilter_list)):
                 custom_data_list_obj_displacement.append(list_of_obj_displacement_noise[x])
 
-            self.plot_at_once_figures.append(sensor_1_plot.robustness_(yaml_load, "obj_displacement", "no_noise", str(step_size), custom_data_list_obj_displacement, color_list_algorithms, label_list_algorithm, "obj_displacement no noise all algorithm "))
+            self.plot_at_once_figures.append(sensor_1_plot.robustness_(yaml_load, "obj_displacement", "blue_sky", str(step_size), custom_data_list_obj_displacement, color_list_algorithms, label_list_algorithm, "obj_displacement no noise all algorithm "))
             if ( just_ground_truth == False ):
                 self.plot_at_once_figures.append(sensor_1_plot.robustness_(yaml_load, "obj_displacement", "noise", str(step_size), list_of_obj_displacement_noise, color_list_environment, label_list_enironment, "obj_displacement environment algorithm "))
         self.threadRun = False
@@ -410,24 +416,25 @@ if __name__ == '__main__':
     thread_collision = None
     thread_obj_displacement = None
 
-    sensor_1_plot = SensorDataPlot()
+    sensor_1_plot = SensorDataPlot(1)
+    sensor_2_plot = SensorDataPlot(2)
 
     if ( 1 ):
 
         thread_pixel = thread1(yaml_load, sensor_1_plot)
         thread_pixel.start()
 
-    if ( 1 ):
+    if ( 0 ):
 
         thread_deviation = thread2(yaml_load, sensor_1_plot)
         thread_deviation.start()
 
-    if ( 1 ):
+    if ( 0 ):
 
         thread_collision = thread3(yaml_load, sensor_1_plot)
         thread_collision.start()
 
-    if ( 1 ):
+    if ( 0 ):
 
         thread_obj_displacement = thread4(yaml_load, sensor_1_plot)
         thread_obj_displacement.start()
@@ -439,7 +446,7 @@ if __name__ == '__main__':
             if ( thread_pixel.getThreadState() == False ):
 
                     plot_at_once_figures = thread_pixel.getPlotList()
-                    plot_at_once(plot_at_once_figures)
+                    plot_at_once(plot_at_once_figures, sensor_1_plot.getSensorIndex())
 
                     # summary
                     summary = sensor_1_plot.get_summary()
@@ -510,3 +517,24 @@ if __name__ == '__main__':
 
 
 
+    if ( 1 ):
+
+        thread_pixel = thread1(yaml_load, sensor_2_plot)
+        thread_pixel.start()
+
+    if thread_pixel != None:
+
+        while ( True ):
+            time.sleep(1)
+            if ( thread_pixel.getThreadState() == False ):
+
+                plot_at_once_figures = thread_pixel.getPlotList()
+                plot_at_once(plot_at_once_figures, sensor_2_plot.getSensorIndex())
+
+                # summary
+                summary = sensor_1_plot.get_summary()
+                figures = Figures(1)
+                figures.evaluate_pixel(summary, step_list)
+                figures.save_figure("pixel", "summary")
+
+                break

@@ -575,7 +575,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     ColorfulNoise colorfulNoise;
 
-    if (m_environment == "none") {
+    if (m_environment == "blue_sky") {
 
 
         if (!m_regenerate_yaml_file) { // dont generate, just read
@@ -988,7 +988,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(5); // Wait before starting vtd again.
 
-        if (m_environment == "none") {
+        if (m_environment == "blue_sky") {
             sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
                     project.c_str());
             std::cout << command << std::endl;
@@ -1015,7 +1015,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         bool connected_module_manager_port = false;
         bool connected_scp_port = false;
 
-        //if ( m_environment == "none" ) {
+        //if ( m_environment == "blue_sky" ) {
         m_scpSocket = openNetwork(SCP_DEFAULT_PORT);
         //}
         std::cout << "scp socket - " << m_scpSocket << std::endl;
@@ -1105,7 +1105,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         // open the network connection to the taskControl (so triggers may be sent)
         fprintf(stderr, "creating network connection....\n");
-        //if ( m_environment == "none") {
+        //if ( m_environment == "blue_sky") {
         m_triggerSocket = openNetwork(DEFAULT_PORT);
         //}
         std::cout << "trigger socket - " << m_triggerSocket << std::endl;
@@ -1113,7 +1113,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             connected_trigger_port = true;
         }
 
-        //if ( m_environment == "none") {
+        //if ( m_environment == "blue_sky") {
         m_moduleManagerSocket_Camera = openNetwork(DEFAULT_RX_PORT);
         m_moduleManagerSocket_Perfect = openNetwork(DEFAULT_RX_PORT_PERFECT);
         m_moduleManagerSocket_PerfectInertial = openNetwork(DEFAULT_RX_PORT_PERFECT_INERTIAL);
@@ -1208,7 +1208,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     Noise noNoise;
 
-    if (m_environment == "none") {
+    if (m_environment == "blue_sky") {
 
         if (m_regenerate_yaml_file) {
 
@@ -1351,7 +1351,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_STATE_t *data, const double
     cv::Point3f position_sensor_carrier, orientation_sensor_carrier, position_sensor, orientation_sensor, offset_sensor;
     cv::Point2f fov;
 
-    if (m_environment == "none") {
+    if (m_environment == "blue_sky") {
 
         if (data->type == RDB_SENSOR_TYPE_VIDEO || data->type == RDB_SENSOR_TYPE_RADAR) {
 
@@ -1403,7 +1403,7 @@ simFrame, const
     float dist_cam_to_obj;
     float total_distance_travelled;
 
-    if (m_environment == "none") {
+    if (m_environment == "blue_sky") {
 
         if (data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR) {
             if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
@@ -1492,7 +1492,7 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
     float dist_cam_to_obj;
     float total_distance_travelled;
 
-    if (m_environment == "none") {
+    if (m_environment == "blue_sky") {
 
         if (data->type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->type == RDB_OBJECT_TYPE_PLAYER_CAR) {
             if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {

@@ -16,8 +16,9 @@ OUTLIER = 100000
 
 class SensorDataPlot(object):
 
-    def __init__(self):
+    def __init__(self, sensor_number):
         self.summary_mean = dict()
+        self.sensor_number = sensor_number
 
 
     def robustness_(self, yaml_load, measuring_parameter, noise, stepSize, data_list, color_list, label_list, label=""):
@@ -38,8 +39,8 @@ class SensorDataPlot(object):
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getDeviationPoints(data_points_gt, data_points_gt)
 
         elif ( measuring_parameter == "pixel"):
-            data_points_gt = yaml_load[list_of_pixel_density_ground_truth[0]]
-            print "getting " , list_of_pixel_density_ground_truth[yaml_list_index_offset]
+            data_points_gt = yaml_load[data_list[0]]
+            print "getting " , data_list[yaml_list_index_offset+1]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getShape(data_points_gt, data_points_gt)
 
         elif ( measuring_parameter == "collision"):
@@ -76,10 +77,11 @@ class SensorDataPlot(object):
 
             for datafilter_index in range(len(datafilter_list)):
 
-                if ( noise == "no_noise"):
+                if ( noise == "blue_sky" or noise == "heavy_snow" ):
 
                     if ( just_ground_truth == False ):
 
+                        print "data ......", yaml_list_index_offset+1+datafilter_index
                         data_points = yaml_load[data_list[yaml_list_index_offset+1+datafilter_index]]
                         print "getting ", data_list[yaml_list_index_offset+1+datafilter_index]
                         if ( measuring_parameter == "deviation"):
@@ -132,7 +134,7 @@ class SensorDataPlot(object):
                     lower_y = min(numpy.nanmin(y_axis), lower_y)
                     upper_y = max(numpy.nanmax(y_axis), upper_y)
 
-            if ( noise == "no_noise"):
+            if ( noise == "blue_sky"):
                 plot1 = ['x_axis',
                          'y_axis',
                          x_axis_list,
@@ -151,13 +153,16 @@ class SensorDataPlot(object):
             self.summary_mean[measuring_parameter + '_' + env_name + '_' + str(stepSize) ] = mean_list
             lock.release()
 
-            yaml_list_index_offset = yaml_list_index_offset + 4
+            yaml_list_index_offset = yaml_list_index_offset + 0
 
             figures_plot.append((list_of_plots, dict_environment[env_name], measuring_parameter, noise, stepSize, lower_x, upper_x, lower_y, upper_y))
-            if (noise == "no_noise" ):
+            if (noise == "blue_sky" ):
                 break
 
         return figures_plot
+
+    def getSensorIndex(self):
+        return self.sensor_number
 
     def getDeviationPoints(self, data_points_gt, data_points ):
 

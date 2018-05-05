@@ -292,8 +292,6 @@ void OpticalFlow::generate_shape_points() {
 
                 std::cout << "frame_count " << frame_count << " for datafilter_index " << datafilter_index<< std::endl;
 
-
-                cv::Point2f shape_average = {0, 0};
                 std::vector<std::pair<cv::Point2i, cv::Point2f>> frame_shape_points;
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
@@ -309,7 +307,6 @@ void OpticalFlow::generate_shape_points() {
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
                         float vollTreffer = 0;
-
                         float baseTreffer;
 
                         cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
@@ -352,7 +349,7 @@ void OpticalFlow::generate_shape_points() {
 
                             }
 
-                            baseTreffer = ((float) CLUSTER_COUNT_GT/mStepSize);
+                            baseTreffer = ((float) CLUSTER_COUNT_GT);
                         }
                         frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count, 0), cv::Point2f(vollTreffer, baseTreffer)));
 

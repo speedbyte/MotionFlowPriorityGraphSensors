@@ -15,21 +15,21 @@ dict_datafilters = {
 datafilter_list = [ "1", "2"]
 
 dict_environment = {
-    "none" : 0,
+    "blue_sky" : 0,
     "light_snow"   : 1,
     "mild_snow"    : 2,
     "heavy_snow"   : 3,
 }
 
 dict_environment_label = {
-    "none":  "blue_sky",
+    "blue_sky":  "blue_sky",
     "env_0": "light snow",
     "env_1": "mild snow",
     "env_2": "heavy snow",
 }
 
-environment_list = ["none", "light_snow", "mild_snow", "heavy_snow"] #night
-environment_list = ["none",]
+environment_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
+environment_list = ["blue_sky",]
 
 number_of_sensors = 1
 
@@ -46,51 +46,33 @@ color_list_environment = ["blue", "gray", "brown", "black", "dummy"]
 
 label_list_algorithm = [dict_datafilters["ground_truth"], dict_datafilters["datafilter_0"], dict_datafilters["datafilter_1"], dict_datafilters["datafilter_2"]]
 
-label_list_enironment = [dict_environment_label["none"], dict_environment_label["env_0"], dict_environment_label["env_1"], dict_environment_label["env_2"]]
+label_list_enironment = [dict_environment_label["blue_sky"], dict_environment_label["env_0"], dict_environment_label["env_1"], dict_environment_label["env_2"]]
 
 #color_list_algorithms = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 label_list_bar = ['ground truth', 'moving average', 'voted mean', 'ranked mean']
 
 
-list_of_pixel_density_ground_truth = [
-    "pixel_density_sensor_index_1_ground_truth",
-    "pixel_density_sensor_index_2_ground_truth",
-]
 
 list_of_collision_ground_truth = [
     "collision_points_sensor_index_1_ground_truth",
-    "collision_points_sensor_index_2_ground_truth",
 ]
 
 list_of_obj_displacement_ground_truth = [
     "obj_displacement_sensor_index_1_ground_truth",
-    "obj_displacement_sensor_index_2_ground_truth",
 ]
 
 
+template_of_pixel_density_gt = [
+    "pixel_density_ground_truth_",
+]
 template_of_pixel_density = [
-    "pixel_density_sensor_index_1_datafilter_0results_FB_",
-    "pixel_density_sensor_index_1_datafilter_1results_FB_",
-    "pixel_density_sensor_index_1_datafilter_2results_FB_",
-    "pixel_density_sensor_index_1_datafilter_3results_FB_",
-
-    "pixel_density_sensor_index_1_datafilter_0results_FB_",
-    "pixel_density_sensor_index_1_datafilter_1results_FB_",
-    "pixel_density_sensor_index_1_datafilter_2results_FB_",
-    "pixel_density_sensor_index_1_datafilter_3results_FB_",
-
-    "pixel_density_sensor_index_1_datafilter_0results_FB_",
-    "pixel_density_sensor_index_1_datafilter_1results_FB_",
-    "pixel_density_sensor_index_1_datafilter_2results_FB_",
-    "pixel_density_sensor_index_1_datafilter_3results_FB_",
-
-    "pixel_density_sensor_index_1_datafilter_0results_FB_",
-    "pixel_density_sensor_index_1_datafilter_1results_FB_",
-    "pixel_density_sensor_index_1_datafilter_2results_FB_",
-    "pixel_density_sensor_index_1_datafilter_3results_FB_",
-
+    "pixel_density_datafilter_0results_FB_",
+    "pixel_density_datafilter_1results_FB_",
+    "pixel_density_datafilter_2results_FB_",
+    "pixel_density_datafilter_3results_FB_",
 ]
+
 
 
 template_of_obj_displacement = [

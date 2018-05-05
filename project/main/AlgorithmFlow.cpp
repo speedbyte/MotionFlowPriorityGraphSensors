@@ -358,7 +358,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > base_movement(m_ptr_list_simulated_objects.size());
                         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > stencil_movement(m_ptr_list_simulated_objects.size());
 
-                        if ( noise == "none") {
+                        if ( noise == "blue_sky") {
 
                             assert(m_ptr_list_simulated_objects.size() == m_ptr_list_gt_objects.size());
 

@@ -408,7 +408,7 @@ public:
 
         configureSensor();
 
-        if ( environment == "none") {
+        if ( environment == "blue_sky") {
             m_environment_scp_message = environment_parameters_dry;
         }
 

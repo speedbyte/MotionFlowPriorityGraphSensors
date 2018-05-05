@@ -105,3 +105,6 @@ target_link_libraries(histogram_calc ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
 add_executable(kalman kalman.cpp)
 target_link_libraries(kalman ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} X11)
+
+add_executable(camshiftdemo camshiftdemo.cpp)
+target_link_libraries(camshiftdemo ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})

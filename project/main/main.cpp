@@ -220,10 +220,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     assert(MAX_ITERATION_GT_SCENE_GENERATION_IMAGES <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
 
     const std::vector<std::string> scenarios_list = {"three"};
-    //const std::vector < std::string> environment_list = {"none", "light_snow", "rain_low"};
-    //std::vector < std::string> environment_list = {"none", "night"};
-    //const std::vector < std::string> environment_list = {"none", "light_snow", "mild_snow", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"none"};
+    //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
+    //std::vector < std::string> environment_list = {"blue_sky", "night"};
+    //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
+    const std::vector<std::string> environment_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -257,7 +257,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 if (vires_dataset.execute) {
 
                     Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
-                    // The first iteration "none" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
+                    // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                     // through out the life cycle of the program.
                     GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index],
                             list_of_gt_objects_base, list_of_gt_sensors_base, vires_dataset.gt);
@@ -285,7 +285,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 }
 
-                if (environment_list[env_index] == "none") {
+                if (environment_list[env_index] == "blue_sky") {
                     for (auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
                         ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_count)));
                     }
@@ -298,7 +298,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
 
                 // Generate Groundtruth data flow --------------------------------------
-                if (environment_list[env_index] == "none" && !vires_dataset.gt ) {
+                if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt ) {
 
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
@@ -344,7 +344,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
 
-            sensorFusion.compareHistograms(gt_flow, dummy[0]);
+            //sensorFusion.compareHistograms(gt_flow, dummy[0]);
             pixelRobustness.generatePixelRobustness(gt_flow, dummy[0]);
             vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
             vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
@@ -404,7 +404,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index], fps);
                         list_of_algorithm_flow[env_index].generate_edge_contour();
 
-                        if (environment_list[env_index] == "none") { // store the stimulated objects from the ground run.
+                        if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
 
                             for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
                                 list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_count));
@@ -441,7 +441,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-                    sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    //sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                     pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                     vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                     //vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());

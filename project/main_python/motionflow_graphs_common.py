@@ -136,18 +136,18 @@ class Figures(object):
                                                               plot_number[figure_index][8][1]])
 
 
-    def plot_show_vector_coll_no_noise(self):
+    def plot_show_vector_coll_blue_sky(self):
 
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
-    def save_figure(self, measuring_parameter, noise, stepSize=65535):
+    def save_figure(self, measuring_parameter, noise, stepSize=65535, sensor_index=1 ):
 
         if ( self.figure_index >= 1 ):
-            step_suffix = dict_datafilters["datafilter_0"] + "stepSize_" + str(stepSize)
+            step_suffix = "stepSize_" + str(stepSize)
             if noise == "summary":
                 step_suffix = ''
-            self.fig1.savefig(output_folder + measuring_parameter + '_' + noise+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
+            self.fig1.savefig(output_folder + measuring_parameter + '_' + noise + '_' + step_suffix + '_' "sensor_" + str(sensor_index), bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 2 ):
             step_suffix = dict_datafilters["datafilter_1"] + "stepSize_" + str(stepSize)
