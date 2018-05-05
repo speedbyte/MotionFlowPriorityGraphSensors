@@ -16,10 +16,18 @@ datafilter_list = [ "1", "2"]
 
 dict_environment = {
     "blue_sky" : 0,
+    "light_snow"   : 0,
+    "mild_snow"    : 0,
+    "heavy_snow"   : 0,
+}
+
+dict_environment_sep_graphs_noise_keyword = {
+    "blue_sky" : 0,
     "light_snow"   : 1,
     "mild_snow"    : 2,
     "heavy_snow"   : 3,
 }
+
 
 dict_environment_label = {
     "blue_sky":  "blue_sky",
@@ -29,7 +37,7 @@ dict_environment_label = {
 }
 
 environment_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
-environment_list = ["blue_sky",]
+environment_list = ["blue_sky", "heavy_snow",]
 
 number_of_sensors = 1
 

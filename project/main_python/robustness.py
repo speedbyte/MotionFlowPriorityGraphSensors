@@ -134,7 +134,7 @@ class SensorDataPlot(object):
                     lower_y = min(numpy.nanmin(y_axis), lower_y)
                     upper_y = max(numpy.nanmax(y_axis), upper_y)
 
-            if ( noise == "blue_sky"):
+            if ( noise == "blue_sky" or noise == "heavy_snow"):
                 plot1 = ['x_axis',
                          'y_axis',
                          x_axis_list,

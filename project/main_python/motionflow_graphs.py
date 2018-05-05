@@ -55,7 +55,7 @@ def plot_at_once(figures_plot_array, sensor_index):
 
             print figures_plot[figures_plot_index][0][0][8][1]
 
-            figures.plot_all(figures_plot[figures_plot_index][0], figures_plot[figures_plot_index][1], figures_plot[figures_plot_index][2])
+            figures.plot_all(figures_plot[figures_plot_index][0], env_index=figures_plot[figures_plot_index][1], measuring_parameter=figures_plot[figures_plot_index][2])
 
         figures.save_figure(figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], figures_plot[figures_plot_index][4], sensor_index)
 
@@ -229,21 +229,30 @@ class thread1(threading.Thread):
 
             # ---------------------------------
             list_of_pixel_density = list()
-            for n, i in enumerate(current_list):
-                temp_list = map(lambda x : (x + i + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.sensor_plot.getSensorIndex())), template_of_pixel_density[n*4:n*4+4])
-                list_of_pixel_density += temp_list
+            temp_list = map(lambda x : (x + "blue_sky" + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.sensor_plot.getSensorIndex())), template_of_pixel_density)
+            list_of_pixel_density += temp_list
 
-            custom_data_list_pixel = list()
-            custom_data_list_pixel.append(template_of_pixel_density_gt[0] + "sensor_index_" + str(self.sensor_plot.getSensorIndex()))
+            custom_data_list_pixel_blue_sky = list()
+            custom_data_list_pixel_blue_sky.append(template_of_pixel_density_gt[0] + "sensor_index_" + str(self.sensor_plot.getSensorIndex()))
             for x in range(len(datafilter_list)):
-                custom_data_list_pixel.append(list_of_pixel_density[x])
+                custom_data_list_pixel_blue_sky.append(list_of_pixel_density[x])
 
-            print custom_data_list_pixel
+            print custom_data_list_pixel_blue_sky
 
-            self.plot_at_once_figures.append(self.sensor_plot.robustness_(yaml_load, "pixel", "blue_sky", str(step_size), custom_data_list_pixel, color_list_algorithms, label_list_algorithm, "jaccard index no noise all algorithm" ))
+            list_of_pixel_density = list()
+            temp_list = map(lambda x : (x + "heavy_snow" + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.sensor_plot.getSensorIndex())), template_of_pixel_density)
+            list_of_pixel_density += temp_list
+
+            custom_data_list_pixel_heavy_snow = list()
+            custom_data_list_pixel_heavy_snow.append(template_of_pixel_density_gt[0] + "sensor_index_" + str(self.sensor_plot.getSensorIndex()))
+            for x in range(len(datafilter_list)):
+                custom_data_list_pixel_heavy_snow.append(list_of_pixel_density[x])
+
+            print custom_data_list_pixel_heavy_snow
+
+            self.plot_at_once_figures.append(self.sensor_plot.robustness_(yaml_load, "pixel", "blue_sky", str(step_size), custom_data_list_pixel_blue_sky, color_list_algorithms, label_list_algorithm, "jaccard index no noise all algorithm" ))
             if ( just_ground_truth == False ):
-                pass
-                #self.plot_at_once_figures.append(self.sensor_1_plot.robustness_(yaml_load, "pixel", "heavy_snow", str(step_size), custom_data_list_pixel, color_list_environment, label_list_enironment))
+                self.plot_at_once_figures.append(self.sensor_plot.robustness_(yaml_load, "pixel", "heavy_snow", str(step_size), custom_data_list_pixel_heavy_snow, color_list_algorithms, label_list_algorithm))
 
 
 
