@@ -363,6 +363,7 @@ if __name__ == '__main__':
         if e.returncode != 1:
             exit(0)
 
+    collectPlots = list()
 
     for x in [1,2]:
 
@@ -400,6 +401,7 @@ if __name__ == '__main__':
                 if ( thread_pixel.getThreadState() == False ):
 
                         plot_at_once_figures = thread_pixel.getPlotList()
+                        collectPlots.append(plot_at_once_figures)
                         plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
                         # summary
@@ -418,6 +420,7 @@ if __name__ == '__main__':
                 if ( thread_deviation.getThreadState() == False ):
 
                     plot_at_once_figures = thread_deviation.getPlotList()
+                    collectPlots.append(plot_at_once_figures)
                     plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
                     # summary
@@ -468,4 +471,8 @@ if __name__ == '__main__':
             #scenario_displacement_occurence()
             #histogramm()
 
+
+
+    #for x in [1,2]:
+    #    plot_at_once(collectPlots[x-1], x)
 

@@ -106,14 +106,14 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
     float temp_flow_x(0);
     float temp_flow_y(0);
 
-    for ( unsigned frame_skip = 1; frame_skip < MAX_SKIPS ; frame_skip++ ) {
+    for ( unsigned sensor_index = 1; sensor_index < MAX_SKIPS ; sensor_index++ ) {
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool>  multiframe_visibility;
         std::vector<STRUCT_GT_OBJECTS_ALL> multiframe_all;
 
 
-        std::cout << "generate_obj_extrapolated_pixel_position_pixel_displacement for frame_skip " << frame_skip << std::endl;
+        std::cout << "generate_obj_extrapolated_pixel_position_pixel_displacement for sensor_index " << sensor_index << std::endl;
         unsigned long FRAME_COUNT = m_obj_base_pixel_position_pixel_displacement.size();
         assert(FRAME_COUNT>0);
 
@@ -121,7 +121,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
 
             // The first frame is the reference frame. frame skip 1 means no skips
             // The below code has to go through consecutive frames
-            if ((frame_count % frame_skip != 0)) {
+            if ((frame_count % sensor_index != 0)) {
                 temp_flow_x += m_obj_base_pixel_position_pixel_displacement.at(frame_count).second.x;
                 temp_flow_y += m_obj_base_pixel_position_pixel_displacement.at(frame_count).second.y;
             }
@@ -162,28 +162,28 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
 // object image_data_and_shape
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > dummy;
 
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+    for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
 
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
         std::vector<std::vector<bool>  > outer_base_visiblity;
 
-        std::cout << "generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility for frame_skip " << frame_skip << std::endl;
-        unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_position_pixel_displacement.at(frame_skip - 1).size();
+        std::cout << "generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility for sensor_index " << sensor_index << std::endl;
+        unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_position_pixel_displacement.at(sensor_index - 1).size();
         assert(FRAME_COUNT>0);
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 
-            cv::Point2f gt_roi_pts = cv::Point2f(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_region_of_interest_px.x, m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_region_of_interest_px.y);
+            cv::Point2f gt_roi_pts = cv::Point2f(m_obj_extrapolated_all.at(sensor_index-1).at(frame_count).m_region_of_interest_px.x, m_obj_extrapolated_all.at(sensor_index-1).at(frame_count).m_region_of_interest_px.y);
 
-            cv::Point2f gt_displacement = m_obj_extrapolated_pixel_position_pixel_displacement.at(frame_skip - 1).at(frame_count).second;
+            cv::Point2f gt_displacement = m_obj_extrapolated_pixel_position_pixel_displacement.at(sensor_index - 1).at(frame_count).second;
 
-            bool visibility = m_obj_extrapolated_visibility.at(frame_skip - 1).at(frame_count);
+            bool visibility = m_obj_extrapolated_visibility.at(sensor_index - 1).at(frame_count);
 
             std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
             std::vector<bool> base_visibility;
 
-            int ObjectWidth = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
-            int ObjectHeight = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+            int ObjectWidth = cvRound(m_obj_extrapolated_all.at(sensor_index-1).at(frame_count).m_object_dimensions_px.dim_width_m);
+            int ObjectHeight = cvRound(m_obj_extrapolated_all.at(sensor_index-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
             for (unsigned j = 0; j < ObjectWidth; j+=1) {
                 for (unsigned k = 0; k < ObjectHeight; k+=1) {
@@ -214,6 +214,6 @@ void GroundTruthObjects::generate_obj_extrapolated_stencil_pixel_point_pixel_dis
     //m_obj_extrapolated_stencil_pixel_point_pixel_displacement = m_obj_extrapolated_shape_pixel_point_pixel_displacement;
 
 
-        std::cout << "generate_obj_extrapolated_stencil_pixel_point_pixel_displacement for frame_skip "  << std::endl;
+        std::cout << "generate_obj_extrapolated_stencil_pixel_point_pixel_displacement for sensor_index "  << std::endl;
         m_obj_extrapolated_stencil_pixel_point_pixel_displacement = m_obj_extrapolated_shape_pixel_point_pixel_displacement; //.push_back(outer_stencil_movement);
 }

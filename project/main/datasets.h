@@ -19,7 +19,7 @@
 
 #define DISPLACEMENT_ROUND_OFF 100
 
-#define MAX_ITERATION_RESULTS 40 // 60 generate result. this cannot be more than vector
+#define MAX_ITERATION_RESULTS 4 // 60 generate result. this cannot be more than vector
 
 #define MAX_ITERATION_GT_SCENE_GENERATION_VECTOR MAX_ITERATION_RESULTS   // generate_obj_base_pixel_position_pixel_displacement vector
 #define MAX_ITERATION_GT_SCENE_GENERATION_IMAGES MAX_ITERATION_RESULTS   // generate images. this cannot be more than vector
@@ -48,7 +48,7 @@
 #define STENCIL_GRID_COMPRESSOR 1  // every x pixels
 #define STENCIL_GRID_EXTENDER 15 // 10 pixels more than roi on each side
 
-#define DO_STENCIL_GRID_EXTENSION 1
+#define DO_STENCIL_GRID_EXTENSION 0
 
 typedef enum {
     continous_frames = 0,

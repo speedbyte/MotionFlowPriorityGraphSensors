@@ -28,24 +28,24 @@ void SensorFusion::compareHistograms(const OpticalFlow &opticalFlow, const Optic
     // shape of algorithhm, with shape of ground truth
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+        for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
 
-            std::cout << "comparing histograms" << suffix << " " << frame_skip
+            std::cout << "comparing histograms" << suffix << " " << sensor_index
                       << " for datafilter " << datafilter_index << std::endl;
 
 
 
-            unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(datafilter_index).at(frame_skip - 1).size();
+            unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 std::vector<float> data_x, data_y;
                 std::vector<float> data_x_pts, data_y_pts;
 
-                //bool visibility = obj_extrapolated_blob_visibility.at(frame_skip - 1).at(frame_count).at(0);
+                //bool visibility = obj_extrapolated_blob_visibility.at(sensor_index - 1).at(frame_count).at(0);
                 bool visibility = true;
 
-                const unsigned CLUSTER_SIZE = (unsigned) opticalFlow.getShapePoints().at(datafilter_index).at(frame_skip - 1).at(frame_count).size();
+                const unsigned CLUSTER_SIZE = (unsigned) opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index - 1).at(frame_count).size();
 
                 if ( visibility ) {
 
@@ -58,9 +58,9 @@ void SensorFusion::compareHistograms(const OpticalFlow &opticalFlow, const Optic
 
                     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
-                        cv::Point2f pts = opticalFlow.getShapePoints().at(datafilter_index).at(frame_skip - 1)
+                        cv::Point2f pts = opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index - 1)
                                 .at(frame_count).at(cluster_index).first;
-                        cv::Point2f gt_displacement = opticalFlow.getShapePoints().at(datafilter_index).at(frame_skip - 1)
+                        cv::Point2f gt_displacement = opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index - 1)
                                 .at(frame_count).at(cluster_index).second;
 
                         data_x.push_back(std::round(gt_displacement.x * 1000) / 1000);
@@ -157,34 +157,34 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
     // shape of algorithhm, with shape of ground truth
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+        for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
 
-            std::cout << "generating pixel robustness in RobustnessIndex.cpp for " << suffix << " " << frame_skip
+            std::cout << "generating pixel robustness in RobustnessIndex.cpp for " << suffix << " " << sensor_index
                     << " for datafilter " << datafilter_index << std::endl;
 
             std::vector<cv::Point2f>  xsamples, ysamples;
             std::vector<cv::Point2f>  xsamples_dimension, ysamples_displacement;
 
-            unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(datafilter_index).at(frame_skip - 1).size();
+            unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                unsigned long POINTS = opticalFlow.getShapePoints().at(datafilter_index).at(frame_skip - 1).at(frame_count).size();
+                unsigned long POINTS = opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index - 1).at(frame_count).size();
                 for (unsigned points = 0; points < POINTS; points++) {
 
                     std::pair<cv::Point2i, cv::Point2f> shapepoints = opticalFlow.getShapePoints().at(datafilter_index).at(
-                            frame_skip - 1).at(frame_count).at(points);
+                            sensor_index - 1).at(frame_count).at(points);
 
                     xsamples.push_back(shapepoints.first);
                     ysamples.push_back(shapepoints.second);
 
                 }
 
-                unsigned long POINTS_DIM = opticalFlow.getMeanDisplacementPoints().at(datafilter_index).at(frame_skip - 1).at(frame_count).size();
+                unsigned long POINTS_DIM = opticalFlow.getMeanDisplacementPoints().at(datafilter_index).at(sensor_index - 1).at(frame_count).size();
                     for (unsigned points = 0; points < POINTS_DIM; points++) {
 
                     std::pair<cv::Point2i, cv::Point2f> displacementPoints = opticalFlow.getMeanDisplacementPoints().at(
-                            datafilter_index).at(frame_skip - 1).at(frame_count).at(points);
+                            datafilter_index).at(sensor_index - 1).at(frame_count).at(points);
 
                     xsamples_dimension.push_back(displacementPoints.first);
                     ysamples_displacement.push_back(displacementPoints.second);
@@ -194,11 +194,11 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             // Send to plotter
 
             if ( suffix == "_ground_truth") {
-                m_fs << (std::string("pixel_density")  + suffix + std::string("_sensor_index_") + std::to_string(frame_skip)) << "[";
+                m_fs << (std::string("pixel_density")  + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
             }
             else {
                 m_fs << (std::string("pixel_density") +
-                         std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(frame_skip)) << "[";
+                         std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
             }
 
             for (unsigned i = 0; i < xsamples.size(); i++) {
@@ -208,11 +208,11 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
 
             // Send to plotter
             if ( suffix == "_ground_truth") {
-                m_fs << (std::string("obj_displacement") + suffix) + std::string("_sensor_index_") + std::to_string(frame_skip)<< "[";
+                m_fs << (std::string("obj_displacement") + suffix) + std::string("_sensor_index_") + std::to_string(sensor_index)<< "[";
             }
             else {
                 m_fs << (std::string("obj_displacement") +
-                         std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(frame_skip)) << "[";
+                         std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
             }
 
             for (unsigned i = 0; i < xsamples_dimension.size(); i++) {
@@ -226,9 +226,9 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
 
                 std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
-                scenario_displacement_occurence = opticalFlow.getScenarioDisplacementOccurence().at(frame_skip - 1);
+                scenario_displacement_occurence = opticalFlow.getScenarioDisplacementOccurence().at(sensor_index - 1);
 
-                m_fs << (std::string("scenario_displacement_occurence") + std::string("sensor_index_") + std::to_string(frame_skip) +
+                m_fs << (std::string("scenario_displacement_occurence") + std::string("sensor_index_") + std::to_string(sensor_index) +
                          std::string("_datafilter_") + std::to_string(datafilter_index) + suffix) << "[";
 
                 for ( auto it=scenario_displacement_occurence.begin(); it != scenario_displacement_occurence.end(); it++) {
@@ -261,33 +261,33 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
 
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+        for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
 
-            std::cout << "generating vector robustness in RobustnessIndex.cpp for " << suffix << " " << frame_skip
+            std::cout << "generating vector robustness in RobustnessIndex.cpp for " << suffix << " " << sensor_index
                     << " for datafilter " << datafilter_index << std::endl;
 
             std::vector<float> xsamples,ysamples;
             std::vector<float> xsamples_line,ysamples_line;
 
-            unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(datafilter_index).at(frame_skip - 1).size();
+            unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index - 1).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 ushort m_valid_collision_points = 0;
                 ushort m_invalid_collision_points = 0;
 
-                unsigned long POINTS = opticalFlow.getCollisionPoints().at(datafilter_index).at(frame_skip-1).at(frame_count).size();
+                unsigned long POINTS = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index-1).at(frame_count).size();
 
                 for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
                     //    std::vector<std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > >
-                    cv::Point2f collisionpoints = opticalFlow.getCollisionPoints().at(datafilter_index).at(frame_skip-1).at(frame_count).at(points);
+                    cv::Point2f collisionpoints = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index-1).at(frame_count).at(points);
 
                     xsamples.push_back(collisionpoints.x);
                     ysamples.push_back(collisionpoints.y);
                     m_valid_collision_points++;
 
-                    cv::Point2f lineangles = opticalFlow.getLineAngles().at(datafilter_index).at(frame_skip-1).at(frame_count).at
+                    cv::Point2f lineangles = opticalFlow.getLineAngles().at(datafilter_index).at(sensor_index-1).at(frame_count).at
                             (points);
 
                     xsamples_line.push_back(std::tanh(lineangles.x)*180/CV_PI);
@@ -336,10 +336,10 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
             }
 
             if ( suffix == "_ground_truth") {
-                m_fs << (std::string("collision_points") + suffix + std::string("_sensor_index_") + std::to_string(frame_skip)) << "[";
+                m_fs << (std::string("collision_points") + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
 
             } else {
-                m_fs << (std::string("collision_points") +  std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(frame_skip)) << "[";
+                m_fs << (std::string("collision_points") +  std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
 
             }
 
@@ -351,10 +351,10 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
 
 
             if ( suffix == "_ground_truth") {
-                m_fs << (std::string("line_angles") + suffix + std::string("_sensor_index_") + std::to_string(frame_skip)) << "[";
+                m_fs << (std::string("line_angles") + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
 
             } else {
-                m_fs << (std::string("line_angles") +  std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(frame_skip)) << "[";
+                m_fs << (std::string("line_angles") +  std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
 
             }
 

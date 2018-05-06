@@ -102,7 +102,7 @@ public:
 
     void generate_pdf_correct_displacement_x();
 
-    void visualiseBB(int obj_index, int frame_skip, int frame_count);
+    void visualiseBB(int obj_index, int sensor_index, int frame_count);
 
     void validate_ground_truth_data();
 

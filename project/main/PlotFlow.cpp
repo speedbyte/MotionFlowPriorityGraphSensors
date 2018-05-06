@@ -16,17 +16,17 @@ void PlotFlow::plot(const std::string &resultsordner) {
     char file_name_image[50];
     cv::Mat showErrorImage;
 
-    for ( int frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++ ){
+    for ( int sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++ ){
 
-        sprintf(frame_skip_folder_suffix, "flow_occ_%02d", frame_skip);
-        sprintf(folder_name_plot, "plots_%02d", frame_skip);
+        sprintf(frame_skip_folder_suffix, "flow_occ_%02d", sensor_index);
+        sprintf(folder_name_plot, "plots_%02d", sensor_index);
         cv::namedWindow(frame_skip_folder_suffix, CV_WINDOW_AUTOSIZE);
 
         for (ushort frame_count=1; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
-            if ( frame_count%frame_skip != 0 ) {
+            if ( frame_count%sensor_index != 0 ) {
                 continue;
             }
-            sprintf(file_name_image, "000%03d_10.png", frame_count*frame_skip);
+            sprintf(file_name_image, "000%03d_10.png", frame_count*sensor_index);
             std::string temp_gt_flow_path = Dataset::getGroundTruthPath().string() + frame_skip_folder_suffix + "/"
                                             + file_name_image;
             std::string temp_result_flow_path = Dataset::getResultPath().string() + "/" + resultsordner + "/" +

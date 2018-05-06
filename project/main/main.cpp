@@ -228,7 +228,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
 
-    for (ushort frame_skip = 0;  frame_skip < MAX_SKIPS_REAL; frame_skip++) {
+    for (ushort sensor_index = 0;  sensor_index < MAX_SKIPS_REAL; sensor_index++) {
 
         cv::FileStorage fs;
 
