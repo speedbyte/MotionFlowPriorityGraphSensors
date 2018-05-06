@@ -12,6 +12,9 @@ int main (int argc, char *argv[]) {
 
     std::cout << FLT_MAX << " " << INT32_MIN << " " << INT32_MAX << " " << std::numeric_limits<float>::infinity() << std::endl;
 
+
+    float rand_range = rand()%100;
+
     time_t rawtime; time(&rawtime);
     std::cout << asctime(localtime(&rawtime));
 

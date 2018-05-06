@@ -73,6 +73,11 @@ public:
 
     void generate_obj_line_parameters( std::string post_processing_algorithm);
 
+    void generate_updated_mean_from_multiple_sensors( std::string post_processing_algorithm);
+
+    void generate_updated_shape_from_multiple_sensors( std::string post_processing_algorithm);
+
+
     const std::string getObjectName() const {
         return m_objectName;
     }

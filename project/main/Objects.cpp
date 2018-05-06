@@ -505,6 +505,244 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 }
 
 
+
+void Objects::generate_updated_mean_from_multiple_sensors( std::string post_processing_algorithm) {
+
+
+    /// BEWARE !! I am in Cartesian co-ordinate system here.
+
+
+    unsigned COUNT;
+    if ( post_processing_algorithm == "ground_truth") {
+        COUNT = 1;
+    }
+    else {
+        COUNT = DATAFILTER_COUNT;
+    }
+
+    std::vector<std::vector<std::vector<cv::Point2f > > > list_obj_line_parameters;
+
+
+    for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
+
+        std::vector<std::vector<cv::Point2f > > outer_line_parameters;
+
+        for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
+
+            std::cout << "generate_obj_line_parameters for sensor_index " << sensor_index << " for datafilter_index " << datafilter_index << " for object name " << m_objectName << " " << std::endl;
+
+            std::vector<cv::Point2f > frame_line_parameters;
+
+            const unsigned long FRAME_COUNT =
+                    m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
+                            (sensor_index - 1).size();
+
+            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+// gt_displacement
+
+                if (m_obj_extrapolated_mean_visibility.at(sensor_index - 1).at(frame_count) == true) {
+
+                    if ( frame_count > 0 ) {
+                        cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
+                                (sensor_index-1).at(frame_count).first;
+                        cv::Point2f mean_displacement_vector =
+                                m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
+                                        (sensor_index-1).at(frame_count).second;
+
+                        float m, c;
+                        //Invert Y co-ordinates to match Cartesian co-ordinate system. This is just for the line angle and
+                        //collision points. This is because, the camera origin are upper left and Cartesian is lower left
+                        mean_displacement_vector.y = -mean_displacement_vector.y;
+                        next_pts.y = -next_pts.y;
+                        m = mean_displacement_vector.y / mean_displacement_vector.x;
+                        c = next_pts.y - m * next_pts.x;  // c = y - mx
+
+                        assert(c!=0);
+
+                        if ((int) c == 0) {
+                            c += 0.001;
+                        }
+
+                        //float d = (float) sqrt((double) mean_displacement_vector.x * mean_displacement_vector.x +
+                        //                       (double) mean_displacement_vector.y * mean_displacement_vector.y);
+                        //mean_displacement_vector.x /= d; // normalized vector in x
+                        //mean_displacement_vector.y /= d; // normalized vector in y
+
+                        cv::Point2f pt2;
+
+                        assert(std::isinf(m) == 0);
+
+                        if (std::isinf(m)) {
+                            if (mean_displacement_vector.y > 0.0f) {  // going up
+                                pt2.x = next_pts.x;
+                                pt2.y = Dataset::getFrameSize().height;
+                            } else {  // going down
+                                pt2.x = next_pts.x;
+                                pt2.y = 0;
+                            }
+                        } else if (m == 0) {
+                            //std::cout << frame_count << " " << next_pts<<  " " << m << " " << mean_displacement_vector << std::endl;
+                            if (std::signbit(m)) { //  going left
+                                pt2.x = 0;
+                                pt2.y = next_pts.y;
+                            } else {  // going right
+                                pt2.x = Dataset::getFrameSize().width;
+                                pt2.y = next_pts.y;
+                            }
+                        }
+
+                        if (mean_displacement_vector.y > 0.0f) {
+                            pt2.x = (Dataset::getFrameSize().height - c) / m; //
+                            pt2.y = Dataset::getFrameSize().height;
+                        } else if (mean_displacement_vector.y < 0.0f) {
+                            pt2.x = (-c / m); //
+                            pt2.y = 0;
+                        }
+
+                        frame_line_parameters.push_back(cv::Point2f(m, c));
+
+                    } else {
+                        frame_line_parameters.push_back(cv::Point2f(0.0f, 0.0f));
+                    }
+
+                }
+                else {
+                    frame_line_parameters.push_back(cv::Point2f(0.0f, 0.0f));
+                }
+
+            }
+
+            //std::cout << frame_line_parameters << std::endl;
+
+            outer_line_parameters.push_back(frame_line_parameters);
+        }
+        list_obj_line_parameters.push_back(outer_line_parameters);
+    }
+    m_list_obj_line_parameters = list_obj_line_parameters;
+    assert(m_list_obj_line_parameters.at(0).at(0).size() == m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(0).size());
+    std::cout << "line done" << std::endl;
+}
+
+
+
+void Objects::generate_updated_shape_from_multiple_sensors( std::string post_processing_algorithm) {
+
+
+    /// BEWARE !! I am in Cartesian co-ordinate system here.
+
+
+    unsigned COUNT;
+    if ( post_processing_algorithm == "ground_truth") {
+        COUNT = 1;
+    }
+    else {
+        COUNT = DATAFILTER_COUNT;
+    }
+
+    std::vector<std::vector<std::vector<cv::Point2f > > > list_obj_line_parameters;
+
+
+    for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
+
+        std::vector<std::vector<cv::Point2f > > outer_line_parameters;
+
+        for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
+
+            std::cout << "generate_obj_line_parameters for sensor_index " << sensor_index << " for datafilter_index " << datafilter_index << " for object name " << m_objectName << " " << std::endl;
+
+            std::vector<cv::Point2f > frame_line_parameters;
+
+            const unsigned long FRAME_COUNT =
+                    m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
+                            (sensor_index - 1).size();
+
+            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+// gt_displacement
+
+                if (m_obj_extrapolated_mean_visibility.at(sensor_index - 1).at(frame_count) == true) {
+
+                    if ( frame_count > 0 ) {
+                        cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
+                                (sensor_index-1).at(frame_count).first;
+                        cv::Point2f mean_displacement_vector =
+                                m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
+                                        (sensor_index-1).at(frame_count).second;
+
+                        float m, c;
+                        //Invert Y co-ordinates to match Cartesian co-ordinate system. This is just for the line angle and
+                        //collision points. This is because, the camera origin are upper left and Cartesian is lower left
+                        mean_displacement_vector.y = -mean_displacement_vector.y;
+                        next_pts.y = -next_pts.y;
+                        m = mean_displacement_vector.y / mean_displacement_vector.x;
+                        c = next_pts.y - m * next_pts.x;  // c = y - mx
+
+                        assert(c!=0);
+
+                        if ((int) c == 0) {
+                            c += 0.001;
+                        }
+
+                        //float d = (float) sqrt((double) mean_displacement_vector.x * mean_displacement_vector.x +
+                        //                       (double) mean_displacement_vector.y * mean_displacement_vector.y);
+                        //mean_displacement_vector.x /= d; // normalized vector in x
+                        //mean_displacement_vector.y /= d; // normalized vector in y
+
+                        cv::Point2f pt2;
+
+                        assert(std::isinf(m) == 0);
+
+                        if (std::isinf(m)) {
+                            if (mean_displacement_vector.y > 0.0f) {  // going up
+                                pt2.x = next_pts.x;
+                                pt2.y = Dataset::getFrameSize().height;
+                            } else {  // going down
+                                pt2.x = next_pts.x;
+                                pt2.y = 0;
+                            }
+                        } else if (m == 0) {
+                            //std::cout << frame_count << " " << next_pts<<  " " << m << " " << mean_displacement_vector << std::endl;
+                            if (std::signbit(m)) { //  going left
+                                pt2.x = 0;
+                                pt2.y = next_pts.y;
+                            } else {  // going right
+                                pt2.x = Dataset::getFrameSize().width;
+                                pt2.y = next_pts.y;
+                            }
+                        }
+
+                        if (mean_displacement_vector.y > 0.0f) {
+                            pt2.x = (Dataset::getFrameSize().height - c) / m; //
+                            pt2.y = Dataset::getFrameSize().height;
+                        } else if (mean_displacement_vector.y < 0.0f) {
+                            pt2.x = (-c / m); //
+                            pt2.y = 0;
+                        }
+
+                        frame_line_parameters.push_back(cv::Point2f(m, c));
+
+                    } else {
+                        frame_line_parameters.push_back(cv::Point2f(0.0f, 0.0f));
+                    }
+
+                }
+                else {
+                    frame_line_parameters.push_back(cv::Point2f(0.0f, 0.0f));
+                }
+
+            }
+
+            //std::cout << frame_line_parameters << std::endl;
+
+            outer_line_parameters.push_back(frame_line_parameters);
+        }
+        list_obj_line_parameters.push_back(outer_line_parameters);
+    }
+    m_list_obj_line_parameters = list_obj_line_parameters;
+    assert(m_list_obj_line_parameters.at(0).at(0).size() == m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(0).size());
+    std::cout << "line done" << std::endl;
+}
+
+
 void Objects::generate_obj_line_parameters( std::string post_processing_algorithm) {
 
 

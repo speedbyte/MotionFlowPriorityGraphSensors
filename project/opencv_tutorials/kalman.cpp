@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+
 #include<ncurses.h>
 using namespace cv;
 
@@ -122,6 +123,7 @@ int main2(int, char**)
 #include <stdio.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
+#include <chrono>
 
 int GetCursorPos(cv::Point *mousePos)
 {
@@ -182,32 +184,40 @@ static void onMouse(int event,int x,int y,int,void*)
 int main( )
 {
 
-    KalmanFilter KF(4, 2, 0);
+    KalmanFilter KF(4, 2, 0);  // dimension of the state vector, dimension in the measurement, dimension of the control vector, precision ( by default 32F )
     cv::namedWindow("mouse kalman", CV_WINDOW_AUTOSIZE);
     setMouseCallback("mouse kalman", onMouse);
     //getyx(WINDOW *win,int y,int x);
     //GetCursorPos(&mousePos);
 
 // intialization of KF...
-    cv::Mat_<float>  val(4,4);
-    val  << 1,0,1,0,  0,1,0,1, 0,0,1,0,   0,0,0,1;
+    cv::Mat_<float>  transferMatrix(4,4); // define the transfer matrix. output = transfer*input
+    transferMatrix<< 1,0,1,0,  0,1,0,1, 0,0,1,0,   0,0,0,1;
 
-    KF.transitionMatrix = val;
-    Mat_<float> measurement(2,1); measurement.setTo(Scalar(0));
+    KF.transitionMatrix = transferMatrix;
+    Mat_<float> measurement(2,1);
 
+    measurement.setTo(Scalar(0)); // initial measurement is set to 0
+
+    // initial prediction is known, but initial velocity is not known
     KF.statePre.at<float>(0) = mousePos.x;
     KF.statePre.at<float>(1) = mousePos.y;
     KF.statePre.at<float>(2) = 0;
     KF.statePre.at<float>(3) = 0;
+
     setIdentity(KF.measurementMatrix);
     setIdentity(KF.processNoiseCov, Scalar::all(1e-4));
     setIdentity(KF.measurementNoiseCov, Scalar::all(10));
     setIdentity(KF.errorCovPost, Scalar::all(.1));
 // Image to show mouse tracking
+
     Mat img(600, 800, CV_8UC3);
-    vector<Point> mousev,kalmanv;
-    mousev.clear();
-    kalmanv.clear();
+    vector<Point> mouseVal, kalmanVal;
+
+    mouseVal.clear();
+    kalmanVal.clear();
+
+    std::srand(unsigned(std::time(0)));
 
     while(1)
     {
@@ -219,6 +229,9 @@ int main( )
         //GetCursorPos(&mousePos);
         measurement(0) = mousePos.x;
         measurement(1) = mousePos.y;
+        //setIdentity(KF.measurementNoiseCov, Scalar(100,200)); // equal uncertainity for both x and y position
+
+        setIdentity(KF.measurementNoiseCov, Scalar::all(std::rand()%10));  // how uncertain are the meausurements
 
         // The update phase
         Mat estimated = KF.correct(measurement);
@@ -229,16 +242,17 @@ int main( )
         imshow("mouse kalman", img);
         img = Scalar::all(0);
 
-        mousev.push_back(measPt);
-        kalmanv.push_back(statePt);
+        mouseVal.push_back(measPt);
+        kalmanVal.push_back(statePt);
+
         drawCross( statePt, Scalar(255,255,255), 5 );
         drawCross( measPt, Scalar(0,0,255), 5 );
 
-        for (int i = 0; i < mousev.size()-1; i++)
-            line(img, mousev[i], mousev[i+1], Scalar(255,255,0), 1);
+        for (int i = 0; i < mouseVal.size()-1; i++)
+            line(img, mouseVal[i], mouseVal[i+1], Scalar(255,255,0), 1);
 
-        for (int i = 0; i < kalmanv.size()-1; i++)
-            line(img, kalmanv[i], kalmanv[i+1], Scalar(0,155,255), 1);
+        for (int i = 0; i < kalmanVal.size()-1; i++)
+            line(img, kalmanVal[i], kalmanVal[i+1], Scalar(0,155,255), 1);
 
         waitKey(10);
 
