@@ -185,7 +185,7 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
             int ObjectWidth = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_width_m);
             int ObjectHeight = cvRound(m_obj_extrapolated_all.at(frame_skip-1).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-            for (unsigned j = 0; j < ObjectWidth; j+=STEP_SIZE) {
+            for (unsigned j = 0; j < ObjectWidth; j+=1) {
                 for (unsigned k = 0; k < ObjectHeight; k+=1) {
                     if ( j%STENCIL_GRID_COMPRESSOR == 0 && k%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of x pixels to reduce data
                         base_movement.push_back(std::make_pair(cv::Point2f(gt_roi_pts.x + j, gt_roi_pts.y +

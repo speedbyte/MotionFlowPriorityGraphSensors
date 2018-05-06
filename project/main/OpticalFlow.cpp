@@ -318,6 +318,7 @@ void OpticalFlow::generate_shape_points() {
                         if (m_resultordner == "/ground_truth") {
 
                             vollTreffer = CLUSTER_COUNT_GT;
+                            // this is the full resolution ! Because there is no stepSize in GroundTruth
                             baseTreffer = CLUSTER_COUNT_GT;
 
                         }
@@ -349,8 +350,9 @@ void OpticalFlow::generate_shape_points() {
 
                             }
 
-                            baseTreffer = ((float) CLUSTER_COUNT_GT);
+                            baseTreffer = ((float) CLUSTER_COUNT_GT) / mStepSize;
                         }
+                        assert(vollTreffer <= baseTreffer );
                         frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count, 0), cv::Point2f(vollTreffer, baseTreffer)));
 
                         std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
