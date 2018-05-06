@@ -476,18 +476,14 @@ void OpticalFlow::generate_mean_displacement_points() {
 
 void OpticalFlow::generate_collision_points() {
 
+    std::vector<Objects*> list_of_current_objects;
+    std::vector<std::pair<Objects*, Objects* > > list_of_current_objects_combination;
+
     std::vector<std::pair<Objects*, Objects*> > list_of_gt_objects_combination;
     std::vector<std::pair<Objects*, Objects* > > list_of_simulated_objects_combination;
 
     getCombination(m_ptr_list_gt_objects, list_of_gt_objects_combination);
     getCombination(m_ptr_list_simulated_objects, list_of_simulated_objects_combination);
-
-
-    char frame_skip_folder_suffix[50];
-
-    std::vector<Objects*> list_of_current_objects;
-    std::vector<std::pair<Objects*, Objects* > > list_of_current_objects_combination;
-
 
     unsigned COUNT;
     if ( m_resultordner == "/ground_truth") {
@@ -501,6 +497,8 @@ void OpticalFlow::generate_collision_points() {
         list_of_current_objects_combination = list_of_simulated_objects_combination;
     }
 
+    char frame_skip_folder_suffix[50];
+
     for ( ushort obj_index = 0; obj_index < list_of_current_objects_combination.size(); obj_index++ ) {
         std::cout << "collision between object name " << list_of_current_objects_combination.at(obj_index).first->getObjectName() <<
                 " and object name "
@@ -510,12 +508,12 @@ void OpticalFlow::generate_collision_points() {
 
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_collision_points;
+        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_frame_skip_collision_points;
         std::vector<std::vector<std::vector<cv::Point2f> > > outer_frame_skip_line_angles;
 
         for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
 
-            std::vector<std::vector<cv::Point2f> > outer_frame_collision_points;
+            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > outer_frame_collision_points;
             std::vector<std::vector<cv::Point2f> > outer_frame_line_angles;
 
             sprintf(frame_skip_folder_suffix, "%02d", sensor_index);
@@ -534,7 +532,7 @@ void OpticalFlow::generate_collision_points() {
 
 
                 std::vector<cv::Point2f> frame_collision_points;
-                std::vector<cv::Point2f> frame_collision_points_average;
+                std::vector<std::pair<cv::Point2i, cv::Point2f>> frame_collision_points_average;
                 std::vector<cv::Point2f> frame_line_angles;
 
                 char file_name_image[50];
@@ -640,15 +638,13 @@ void OpticalFlow::generate_collision_points() {
                 for (auto i = 0; i < frame_collision_points.size(); i = i + 2) {
                     if (frame_collision_points.at(i) != cv::Point2f(-1, -1) &&
                             frame_collision_points.at(i + 1) != cv::Point2f(-1, -1)) {
-                        frame_collision_points_average.push_back(
-                                cv::Point2f(
+                        frame_collision_points_average.push_back(std::make_pair(cv::Point2i(frame_count, 0 ),  cv::Point2f(
                                         ((frame_collision_points.at(i).x + frame_collision_points.at(i + 1).x) / 2),
                                         ((frame_collision_points.at(i).y + frame_collision_points.at(i + 1).y) /
-                                                2)));
+                                                2))));
                     }
                     else {
-                        /*frame_collision_points_average.push_back(
-                                cv::Point2f(-1,-1));*/
+                        frame_collision_points_average.push_back(std::make_pair(cv::Point2i(frame_count, 0 ), cv::Point2f(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity())));
                     }
                 }
 

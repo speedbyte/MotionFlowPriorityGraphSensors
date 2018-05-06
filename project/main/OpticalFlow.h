@@ -39,7 +39,7 @@ protected:
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_frame_skip_mean_displacement_points;
 
-    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_collision_points;
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > >m_list_frame_skip_collision_points;
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_frame_skip_line_angles;
 
@@ -57,23 +57,23 @@ public:
     OpticalFlow( std::vector<Objects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects *> &ptr_list_simulated_objects, ushort stepSize ) :
     m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 
-    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getCollisionPoints () const {
+    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > & getCollisionPoints () const {
         return m_list_frame_skip_collision_points;
     }
 
-    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > getLineAngles () const {
+    const std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > &getLineAngles () const  {
         return m_list_frame_skip_line_angles;
     }
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > getShapePoints () const {
+    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > &getShapePoints() const {
         return m_frame_skip_shape_points;
     }
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > getMeanDisplacementPoints () const {
+    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > &getMeanDisplacementPoints () const {
         return m_frame_skip_mean_displacement_points;
     }
 
-    std::vector<std::map<std::pair<float, float>, int> > getScenarioDisplacementOccurence() const {
+    const std::vector<std::map<std::pair<float, float>, int> > &getScenarioDisplacementOccurence() const {
         return m_frame_skip_scenario_displacement_occurence;
     };
 
