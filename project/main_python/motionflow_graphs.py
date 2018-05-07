@@ -379,17 +379,17 @@ if __name__ == '__main__':
             thread_pixel = thread1(yaml_load, sensor_plot)
             thread_pixel.start()
 
-        if ( 1 ):
+        if ( 0 ):
 
             thread_deviation = thread2(yaml_load, sensor_plot)
             thread_deviation.start()
 
-        if ( 1 ):
+        if ( 0 ):
 
             thread_collision = thread3(yaml_load, sensor_plot)
             thread_collision.start()
 
-        if ( 1 ):
+        if ( 0 ):
 
             thread_obj_displacement = thread4(yaml_load, sensor_plot)
             thread_obj_displacement.start()

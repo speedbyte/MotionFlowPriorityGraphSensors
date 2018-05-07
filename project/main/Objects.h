@@ -73,9 +73,12 @@ public:
 
     void generate_obj_line_parameters( std::string post_processing_algorithm);
 
-    void generate_updated_mean_from_multiple_sensors( std::string post_processing_algorithm);
-
-    void generate_updated_shape_from_multiple_sensors( std::string post_processing_algorithm);
+    void generate_updated_mean_from_multiple_sensors( std::string post_processing_algorithm,
+            const std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multi_sensor_input_flow_vector,
+            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &outer_multiframe_flowvector_sensor_fusion_mean,
+            const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multi_sensor_input_shape,
+            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &outer_multiframe_shape_parameters_sensor_fusion_mean
+    );
 
 
     const std::string getObjectName() const {
@@ -86,7 +89,7 @@ public:
         return m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement;
     }
 
-    const int &getInertialWidth() const {
+const int &getInertialWidth() const {
         return m_ObjectInertialWidth;
     }
 

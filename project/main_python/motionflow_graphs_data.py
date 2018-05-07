@@ -12,7 +12,7 @@ dict_datafilters = {
     "datafilter_3": "datafilter_3",
 }
 
-datafilter_list = [ "1", "2"]
+datafilter_list = [ "1", "2", "3"]
 
 dict_environment = {
     "blue_sky" : 0,
