@@ -24,14 +24,14 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             outer_multiframe_flowvector_simple_avg_mean,
             outer_multiframe_flowvector_moving_avg_mean,
-            outer_multiframe_flowvector_threshold_mean,
+            outer_multiframe_flowvector_sensor_fusion_mean,
             outer_multiframe_flowvector_voted_mean,
             outer_multiframe_flowvector_ranked_mean;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             outer_multiframe_shape_parameters_simple_avg_mean,
             outer_multiframe_shape_parameters_moving_avg_mean,
-            outer_multiframe_shape_parameters_threshold_mean,
+            outer_multiframe_shape_parameters_sensor_fusion_mean,
             outer_multiframe_shape_parameters_voted_mean,
             outer_multiframe_shape_parameters_ranked_mean;
 
@@ -477,13 +477,13 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
             generate_updated_mean_from_multiple_sensors(post_processing_algorithm,
                     outer_multiframe_flowvector_simple_avg_mean,
-                    outer_multiframe_flowvector_threshold_mean,
+                    outer_multiframe_flowvector_sensor_fusion_mean,
                     outer_multiframe_shape_parameters_simple_avg_mean,
-                    outer_multiframe_shape_parameters_threshold_mean);
+                    outer_multiframe_shape_parameters_sensor_fusion_mean);
 
             list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
-                    outer_multiframe_flowvector_threshold_mean);
-            list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_threshold_mean);
+                    outer_multiframe_flowvector_sensor_fusion_mean);
+            list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_sensor_fusion_mean);
 
     }
 
@@ -535,6 +535,7 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
                     cluster_size_sensor_fusion_mean_y = 0;
             
             cv::Point2f pts = multi_sensor_input_flow_vector.at(0).at(frame_count).first;
+            cv::Point2f pts_2 = multi_sensor_input_flow_vector.at(1).at(frame_count).first;
 
             cv::Mat_<float> covar_new, mean_new, corr;
             cv::Scalar mean;
@@ -573,19 +574,36 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
 
             for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE_1; cluster_index++) {
 
-                mean_pts_sensor_fusion_mean_x += pts.x;
-                cluster_size_sensor_fusion_mean_x++;
-                mean_pts_sensor_fusion_mean_y += pts.y;
-                cluster_size_sensor_fusion_mean_y++;
 
-                frame_shape_parameters_sensor_fusion_mean.push_back(
-                        std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
-                                (mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
+
+                if ( visibility_1 == 0 ) {
+                    mean_pts_sensor_fusion_mean_x += pts_2.x;
+                    cluster_size_sensor_fusion_mean_x++;
+                    mean_pts_sensor_fusion_mean_y += pts_2.y;
+                    cluster_size_sensor_fusion_mean_y++;
+
+                    frame_shape_parameters_sensor_fusion_mean.push_back(
+                            std::make_pair(cv::Point2f(pts_2.x, pts_2.y), cv::Point2f
+                                    (mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
+                }
+
+                else if ( visibility_2 == 0 ) {
+                    mean_pts_sensor_fusion_mean_x += pts.x;
+                    cluster_size_sensor_fusion_mean_x++;
+                    mean_pts_sensor_fusion_mean_y += pts.y;
+                    cluster_size_sensor_fusion_mean_y++;
+
+                    frame_shape_parameters_sensor_fusion_mean.push_back(
+                            std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
+                                    (mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
+                }
 
             }
 
             mean_pts_sensor_fusion_mean_x /= cluster_size_sensor_fusion_mean_x;
             mean_pts_sensor_fusion_mean_y /= cluster_size_sensor_fusion_mean_y;
+
+
 
             multiframe_flowvector_sensor_fusion_mean.push_back(std::make_pair(cv::Point2f(mean_pts_sensor_fusion_mean_x, mean_pts_sensor_fusion_mean_y)
                     , cv::Point2f(mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
@@ -596,7 +614,7 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
 
         else {
 
-            std::cout << "not visible" << std::endl;
+            std::cout << "not visible by both sensors" << std::endl;
 
             multiframe_flowvector_sensor_fusion_mean.push_back(std::make_pair(cv::Point2f(0, 0)
                         , cv::Point2f(mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
