@@ -142,7 +142,32 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                     data_y_pts.push_back(pts.y);
 
                     mean_visibility = visibility;
+
+
                 }
+
+                cv::Mat_<float> covar, mean, corr;
+                cv::Mat_<float> samples(1,5,CV_8UC4);
+
+                cv::Scalar mean_x, mean_y, stddev_x, stddev_y;
+
+                //samples = (cv::Mat)data_x;
+                samples.at<cv::Vec4f>(0,0) =  { 1,  2 , 3 , 4 } ;
+                samples.at<cv::Vec4f>(0,1) =  { 1,  2 , 3 , 4 } ;
+                samples.at<cv::Vec4f>(0,2) =  { 1,  2 , 3 , 4 } ;
+                samples.at<cv::Vec4f>(0,3) =  { 1,  2 , 3 , 4 } ;
+                samples.at<cv::Vec4f>(0,4) =  { 1,  2 , 3 , 4 } ;
+
+
+
+
+                cv::meanStdDev(samples, mean_x, stddev_x);
+
+                //cv::calcCovarMatrix(samples, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1 );
+
+                std::cout << "\nMean\n" << mean_x << "\nCovar\n" << covar <<
+                          "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
+                          "\ncorr\n" << corr << std::endl;
 
                 gt_displacement_threshold_min.x = *std::min_element(data_x.begin(), data_x.end());
                 gt_displacement_threshold_min.y = *std::min_element(data_y.begin(), data_y.end());
