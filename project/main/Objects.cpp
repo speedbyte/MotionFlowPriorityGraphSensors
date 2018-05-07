@@ -24,16 +24,19 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             outer_multiframe_flowvector_simple_avg_mean,
             outer_multiframe_flowvector_moving_avg_mean,
-            outer_multiframe_flowvector_sensor_fusion_mean,
             outer_multiframe_flowvector_voted_mean,
-            outer_multiframe_flowvector_ranked_mean;
+            outer_multiframe_flowvector_ranked_mean,
+
+            outer_multiframe_flowvector_sensor_fusion_mean;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             outer_multiframe_shape_parameters_simple_avg_mean,
             outer_multiframe_shape_parameters_moving_avg_mean,
-            outer_multiframe_shape_parameters_sensor_fusion_mean,
             outer_multiframe_shape_parameters_voted_mean,
-            outer_multiframe_shape_parameters_ranked_mean;
+            outer_multiframe_shape_parameters_ranked_mean,
+
+            outer_multiframe_shape_parameters_sensor_fusion_mean;
+
 
 
     for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
@@ -105,22 +108,18 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
                 assert(CLUSTER_SIZE > 0);
 
-
                 float max_voted_x;
                 float max_voted_y;
 
                 cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
 
                 for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
                     cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index - 1)
                             .at(frame_count).at(cluster_index).first;
                     cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(
                                     sensor_index - 1)
                             .at(frame_count).at(cluster_index).second;
-
-                    // 1. CENTROID MEAN - add all displacement and points and divide by total size.
-                    // 2. VOTED MEAN - create vote of the displacement and points and only accept values that have the highest number of occurence
-                    // 3. RANKED MEAN - create ranks of the displacment and points by accepting only those values that are on the boundary and edges and ignoring the rest.
 
                     // preprocessing 1st method
                     // Nothing to do
@@ -223,9 +222,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
                     // 2nd method
 
-                    cv::Point2f temp_pts, temp_displacement;
-
-
                     // 3rd method
                     mean_pts_voted_mean_x += pts.x;
                     mean_pts_voted_mean_y += pts.y;
@@ -237,7 +233,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                     cluster_size_voted_mean_y += 1;
 
                     // 4th method
-
 
                     mean_visibility = visibility;
                 }
@@ -270,8 +265,6 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                     }
                 }
 
-                //cluster_size_ranked_mean_x = 0;
-                //cluster_size_ranked_mean_y = 0;
 
                 for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
@@ -287,15 +280,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                     mean_displacement_vector_ranked_mean_y += gt_displacement.y;
                     cluster_size_ranked_mean_x++;
                     cluster_size_ranked_mean_y++;
+
                     frame_shape_parameters_ranked_mean.push_back(
                             std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f(0, 0)));
 
-                    //mean_pts_voted_mean_x +=  pts.x;
-                    //mean_pts_voted_mean_y +=  pts.y;
-                    //mean_displacement_vector_voted_mean_x += gt_displacement.x;
-                    //mean_displacement_vector_voted_mean_y += gt_displacement.y;
-                    //cluster_size_voted_mean_x++;
-                    //cluster_size_voted_mean_y++;
                     frame_shape_parameters_voted_mean.push_back(
                             std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f(0, 0)));
                 }
@@ -309,10 +297,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                     assert(cluster_size_ranked_mean_y > 0);
                 }
 
+                // moving average mean is done on the fly.
                 mean_pts_moving_avg_mean_x /= (float) cluster_size_moving_avg_mean_x;
                 mean_pts_moving_avg_mean_y /= (float) cluster_size_moving_avg_mean_y;
-                //mean_displacement_vector_moving_avg_mean_x /= (float) cluster_size_moving_avg_mean_x;
-                //mean_displacement_vector_moving_avg_mean_y /= (float) cluster_size_moving_avg_mean_y;
 
                 mean_pts_voted_mean_x /= (float) cluster_size_voted_mean_x;
                 mean_pts_voted_mean_y /= (float) cluster_size_voted_mean_y;
@@ -327,164 +314,157 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
                 for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
-                    /*
                     frame_shape_parameters_simple_avg_mean.at(cluster_index).second = cv::Point2f(
                             mean_displacement_vector_simple_avg_mean_x, mean_displacement_vector_simple_avg_mean_y);
+
                     frame_shape_parameters_moving_avg_mean.at(cluster_index).second = cv::Point2f(
-                            mean_displacement_vector_moving_avg_mean_x, mean_displacement_vector_moving_avg_mean_y); */
+                            mean_displacement_vector_moving_avg_mean_x, mean_displacement_vector_moving_avg_mean_y);
+
                     frame_shape_parameters_voted_mean.at(cluster_index).second = cv::Point2f(
                             mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y);
+
                     frame_shape_parameters_ranked_mean.at(cluster_index).second = cv::Point2f(
                             mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y);
 
 
                 }
 
-                /*std::cout << "mean_displacement_gt_value" << cv::Point2f(mean_displacement_vector_moving_avg_mean_x, mean_displacement_vector_moving_avg_mean_y) << std::endl; */
-                    std::cout << "mean_displacement_vector_simple_avg_mean "
-                            << cv::Point2f(mean_displacement_vector_simple_avg_mean_x,
-                                    mean_displacement_vector_simple_avg_mean_y) << std::endl;
-                    std::cout << "mean_displacement_vector_moving_avg_mean "
-                            << cv::Point2f(mean_displacement_vector_moving_avg_mean_x,
-                                    mean_displacement_vector_moving_avg_mean_y) << std::endl;
-                    std::cout << "mean_displacement_vector_voted_mean "
-                            << cv::Point2f(mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y)
-                            << std::endl;
-                    std::cout << "mean_displacement_vector_ranked_mean "
-                            << cv::Point2f(mean_displacement_vector_ranked_mean_x,
-                                    mean_displacement_vector_ranked_mean_y) << std::endl;
+                std::cout << "mean_displacement_vector_simple_avg_mean "
+                        << cv::Point2f(mean_displacement_vector_simple_avg_mean_x,
+                                mean_displacement_vector_simple_avg_mean_y) << std::endl;
+
+                std::cout << "mean_displacement_vector_moving_avg_mean "
+                        << cv::Point2f(mean_displacement_vector_moving_avg_mean_x,
+                                mean_displacement_vector_moving_avg_mean_y) << std::endl;
+
+                std::cout << "mean_displacement_vector_voted_mean "
+                        << cv::Point2f(mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y)
+                        << std::endl;
+
+                std::cout << "mean_displacement_vector_ranked_mean "
+                        << cv::Point2f(mean_displacement_vector_ranked_mean_x,
+                                mean_displacement_vector_ranked_mean_y) << std::endl;
 
 
-                    if (frame_count > 0) {
-                        assert(mean_displacement_vector_moving_avg_mean_x != 0);
-                        assert(mean_displacement_vector_simple_avg_mean_x != 0);
-                        assert(mean_displacement_vector_ranked_mean_x != 0);
-                        assert(mean_displacement_vector_voted_mean_x != 0);
-                    }
-
-                    /*
-                                    multiframe_flowvector_simple_avg_mean.push_back(std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y)
-                                    , cv::Point2f(mean_displacement_vector_simple_avg_mean_x, mean_displacement_vector_simple_avg_mean_y)));
-                                    multiframe_flowvector_moving_avg_mean.push_back(std::make_pair(cv::Point2f(mean_pts_moving_avg_mean_x, mean_pts_moving_avg_mean_y)
-                                            , cv::Point2f(mean_displacement_vector_moving_avg_mean_x, mean_displacement_vector_moving_avg_mean_y)));
-                                    multiframe_flowvector_voted_mean.push_back(std::make_pair(cv::Point2f(mean_pts_voted_mean_x, mean_pts_voted_mean_y)
-                                            , cv::Point2f(mean_displacement_vector_voted_mean_x, mean_displacement_vector_voted_mean_y)));
-                                    multiframe_flowvector_ranked_mean.push_back(std::make_pair(cv::Point2f(mean_pts_ranked_mean_x, mean_pts_ranked_mean_y)
-                                            , cv::Point2f(mean_displacement_vector_ranked_mean_x, mean_displacement_vector_ranked_mean_y)));
-                    */
-
-                    multiframe_flowvector_simple_avg_mean.push_back(
-                            std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
-                                    cv::Point2f(mean_displacement_vector_simple_avg_mean_x,
-                                            mean_displacement_vector_simple_avg_mean_y)));
-
-                    multiframe_flowvector_moving_avg_mean.push_back(
-                            std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
-                                    cv::Point2f(mean_displacement_vector_moving_avg_mean_x,
-                                            mean_displacement_vector_moving_avg_mean_y)));
-
-                    multiframe_flowvector_voted_mean.push_back(
-                            std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
-                                    cv::Point2f(mean_displacement_vector_voted_mean_x,
-                                            mean_displacement_vector_voted_mean_y)));
-
-                    multiframe_flowvector_ranked_mean.push_back(
-                            std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
-                                    cv::Point2f(mean_displacement_vector_ranked_mean_x,
-                                            mean_displacement_vector_ranked_mean_y)));
-
-                    multiframe_shape_parameters_simple_avg_mean.push_back(frame_shape_parameters_simple_avg_mean);
-                    multiframe_shape_parameters_moving_avg_mean.push_back(frame_shape_parameters_moving_avg_mean);
-                    multiframe_shape_parameters_voted_mean.push_back(frame_shape_parameters_voted_mean);
-                    multiframe_shape_parameters_ranked_mean.push_back(frame_shape_parameters_ranked_mean);
-
-                    multiframe_visibility.push_back(mean_visibility);
-
+                if (frame_count > 0) {
+                    assert(mean_displacement_vector_moving_avg_mean_x != 0);
+                    assert(mean_displacement_vector_simple_avg_mean_x != 0);
+                    assert(mean_displacement_vector_ranked_mean_x != 0);
+                    assert(mean_displacement_vector_voted_mean_x != 0);
                 }
 
-                else {
+                multiframe_flowvector_simple_avg_mean.push_back(
+                        std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
+                                cv::Point2f(mean_displacement_vector_simple_avg_mean_x,
+                                        mean_displacement_vector_simple_avg_mean_y)));
 
-                    std::cout << "not visible" << std::endl;
+                multiframe_flowvector_moving_avg_mean.push_back(
+                        std::make_pair(cv::Point2f(mean_pts_moving_avg_mean_x, mean_pts_moving_avg_mean_y),
+                                cv::Point2f(mean_displacement_vector_moving_avg_mean_x,
+                                        mean_displacement_vector_moving_avg_mean_y)));
 
-                    multiframe_flowvector_simple_avg_mean.push_back(
-                            std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
-                                    cv::Point2f(mean_displacement_vector_simple_avg_mean_x,
-                                            mean_displacement_vector_simple_avg_mean_y)));
+                multiframe_flowvector_voted_mean.push_back(
+                        std::make_pair(cv::Point2f(mean_pts_voted_mean_x, mean_pts_voted_mean_y),
+                                cv::Point2f(mean_displacement_vector_voted_mean_x,
+                                        mean_displacement_vector_voted_mean_y)));
 
-                    multiframe_flowvector_moving_avg_mean.push_back(
-                            std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
-                                    cv::Point2f(mean_displacement_vector_moving_avg_mean_x,
-                                            mean_displacement_vector_moving_avg_mean_y)));
+                multiframe_flowvector_ranked_mean.push_back(
+                        std::make_pair(cv::Point2f(mean_pts_ranked_mean_x, mean_pts_ranked_mean_y),
+                                cv::Point2f(mean_displacement_vector_ranked_mean_x,
+                                        mean_displacement_vector_ranked_mean_y)));
 
-                    multiframe_flowvector_voted_mean.push_back(
-                            std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
-                                    cv::Point2f(mean_displacement_vector_voted_mean_x,
-                                            mean_displacement_vector_voted_mean_y)));
+                multiframe_shape_parameters_simple_avg_mean.push_back(frame_shape_parameters_simple_avg_mean);
+                multiframe_shape_parameters_moving_avg_mean.push_back(frame_shape_parameters_moving_avg_mean);
+                multiframe_shape_parameters_voted_mean.push_back(frame_shape_parameters_voted_mean);
+                multiframe_shape_parameters_ranked_mean.push_back(frame_shape_parameters_ranked_mean);
 
-                    multiframe_flowvector_ranked_mean.push_back(
-                            std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
-                                    cv::Point2f(mean_displacement_vector_ranked_mean_x,
-                                            mean_displacement_vector_ranked_mean_y)));
+                multiframe_visibility.push_back(mean_visibility);
 
-
-                    multiframe_shape_parameters_simple_avg_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
-                            (0, 0))});
-                    multiframe_shape_parameters_moving_avg_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
-                            (0, 0))});
-                    multiframe_shape_parameters_voted_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
-                            (0, 0))});
-                    multiframe_shape_parameters_ranked_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
-                            (0, 0))});
-
-
-                    multiframe_visibility.push_back(mean_visibility);
-
-                }
             }
 
-            outer_multiframe_flowvector_simple_avg_mean.push_back(multiframe_flowvector_simple_avg_mean);
-            outer_multiframe_flowvector_moving_avg_mean.push_back(multiframe_flowvector_moving_avg_mean);
-            outer_multiframe_flowvector_voted_mean.push_back(multiframe_flowvector_voted_mean);
-            outer_multiframe_flowvector_ranked_mean.push_back(multiframe_flowvector_ranked_mean);
+            else {
 
-            outer_multiframe_shape_parameters_simple_avg_mean.push_back(multiframe_shape_parameters_simple_avg_mean);
-            outer_multiframe_shape_parameters_moving_avg_mean.push_back(multiframe_shape_parameters_moving_avg_mean);
-            outer_multiframe_shape_parameters_voted_mean.push_back(multiframe_shape_parameters_voted_mean);
-            outer_multiframe_shape_parameters_ranked_mean.push_back(multiframe_shape_parameters_ranked_mean);
+                std::cout << "not visible" << std::endl;
 
-            // This needs to be transferred to array too -- TODO
-            m_obj_extrapolated_mean_visibility.push_back(multiframe_visibility);
+                multiframe_flowvector_simple_avg_mean.push_back(
+                        std::make_pair(cv::Point2f(mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y),
+                                       cv::Point2f(mean_displacement_vector_simple_avg_mean_x,
+                                                   mean_displacement_vector_simple_avg_mean_y)));
+
+                multiframe_flowvector_moving_avg_mean.push_back(
+                        std::make_pair(cv::Point2f(mean_pts_moving_avg_mean_x, mean_pts_moving_avg_mean_y),
+                                       cv::Point2f(mean_displacement_vector_moving_avg_mean_x,
+                                                   mean_displacement_vector_moving_avg_mean_y)));
+
+                multiframe_flowvector_voted_mean.push_back(
+                        std::make_pair(cv::Point2f(mean_pts_voted_mean_x, mean_pts_voted_mean_y),
+                                       cv::Point2f(mean_displacement_vector_voted_mean_x,
+                                                   mean_displacement_vector_voted_mean_y)));
+
+                multiframe_flowvector_ranked_mean.push_back(
+                        std::make_pair(cv::Point2f(mean_pts_ranked_mean_x, mean_pts_ranked_mean_y),
+                                       cv::Point2f(mean_displacement_vector_ranked_mean_x,
+                                                   mean_displacement_vector_ranked_mean_y)));
+
+
+                multiframe_shape_parameters_simple_avg_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0, 0))});
+                multiframe_shape_parameters_moving_avg_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0, 0))});
+                multiframe_shape_parameters_voted_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0, 0))});
+                multiframe_shape_parameters_ranked_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+                        (0, 0))});
+
+
+                multiframe_visibility.push_back(mean_visibility);
+
+            }
         }
 
-        if (post_processing_algorithm == "ground_truth") {
+        outer_multiframe_flowvector_simple_avg_mean.push_back(multiframe_flowvector_simple_avg_mean);
+        outer_multiframe_flowvector_moving_avg_mean.push_back(multiframe_flowvector_moving_avg_mean);
+        outer_multiframe_flowvector_voted_mean.push_back(multiframe_flowvector_voted_mean);
+        outer_multiframe_flowvector_ranked_mean.push_back(multiframe_flowvector_ranked_mean);
 
-            list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
-                    outer_multiframe_flowvector_moving_avg_mean);
-            list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_moving_avg_mean);
+        outer_multiframe_shape_parameters_simple_avg_mean.push_back(multiframe_shape_parameters_simple_avg_mean);
+        outer_multiframe_shape_parameters_moving_avg_mean.push_back(multiframe_shape_parameters_moving_avg_mean);
+        outer_multiframe_shape_parameters_voted_mean.push_back(multiframe_shape_parameters_voted_mean);
+        outer_multiframe_shape_parameters_ranked_mean.push_back(multiframe_shape_parameters_ranked_mean);
+
+        // This needs to be transferred to array too -- TODO
+        m_obj_extrapolated_mean_visibility.push_back(multiframe_visibility);
+    }
+
+    if (post_processing_algorithm == "ground_truth") {
+
+        list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
+                outer_multiframe_flowvector_simple_avg_mean);
+        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_simple_avg_mean);
 
 
-        } else {
+    } else {
 
-            list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
-                    outer_multiframe_flowvector_simple_avg_mean);
-            list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
-                    outer_multiframe_flowvector_voted_mean);
-            list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
-                    outer_multiframe_flowvector_ranked_mean);
+        list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
+                outer_multiframe_flowvector_simple_avg_mean);
+        list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
+                outer_multiframe_flowvector_voted_mean);
+        list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
+                outer_multiframe_flowvector_ranked_mean);
 
-            list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_simple_avg_mean);
-            list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_voted_mean);
-            list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_ranked_mean);
+        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_simple_avg_mean);
+        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_voted_mean);
+        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_ranked_mean);
 
-            generate_updated_mean_from_multiple_sensors(post_processing_algorithm,
-                    outer_multiframe_flowvector_simple_avg_mean,
-                    outer_multiframe_flowvector_sensor_fusion_mean,
-                    outer_multiframe_shape_parameters_simple_avg_mean,
-                    outer_multiframe_shape_parameters_sensor_fusion_mean);
+        generate_updated_mean_from_multiple_sensors(post_processing_algorithm,
+                outer_multiframe_flowvector_simple_avg_mean,
+                outer_multiframe_flowvector_sensor_fusion_mean,
+                outer_multiframe_shape_parameters_simple_avg_mean,
+                outer_multiframe_shape_parameters_sensor_fusion_mean);
 
-            list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
-                    outer_multiframe_flowvector_sensor_fusion_mean);
-            list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_sensor_fusion_mean);
+        list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
+                outer_multiframe_flowvector_sensor_fusion_mean);
+        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_sensor_fusion_mean);
 
     }
 
@@ -514,11 +494,12 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
     unsigned long FRAME_COUNT = m_obj_extrapolated_stencil_pixel_point_pixel_displacement.at(0)
             .size();
 
-    std::vector<std::pair<cv::Point2f, cv::Point2f> >
-            frame_shape_parameters_sensor_fusion_mean;
 
     for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
         // gt_displacement
+
+        std::vector<std::pair<cv::Point2f, cv::Point2f> >
+                frame_shape_parameters_sensor_fusion_mean;
 
         std::cout << "frame_count " << frame_count << std::endl;
 
@@ -601,7 +582,6 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
 
             mean_pts_sensor_fusion_mean_x /= cluster_size_sensor_fusion_mean_x;
             mean_pts_sensor_fusion_mean_y /= cluster_size_sensor_fusion_mean_y;
-
 
 
             multiframe_flowvector_sensor_fusion_mean.push_back(std::make_pair(cv::Point2f(mean_pts_sensor_fusion_mean_x, mean_pts_sensor_fusion_mean_y)

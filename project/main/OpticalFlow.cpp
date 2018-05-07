@@ -302,6 +302,12 @@ void OpticalFlow::generate_shape_points() {
                     auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
                             obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(sensor_index - 1).at(frame_count).size();
 
+                    if ( m_resultordner != "/ground_truth" ) {
+
+                        assert( CLUSTER_COUNT_ALGO <= (CLUSTER_COUNT_GT / mStepSize) || CLUSTER_COUNT_ALGO == CLUSTER_COUNT_GT );
+
+                    }
+
                     if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(sensor_index - 1).at(frame_count) ) {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
@@ -359,7 +365,7 @@ void OpticalFlow::generate_shape_points() {
                         std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
                                 << baseTreffer << std::endl;
 
-                        //assert(vollTreffer <= baseTreffer );
+                        assert(vollTreffer <= baseTreffer );
 
                     } else {
                         std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<

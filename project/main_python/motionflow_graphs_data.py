@@ -2,6 +2,7 @@
 # _*_ encoding:utf-8 _*_
 
 
+
 just_ground_truth = False
 
 dict_datafilters = {
@@ -12,7 +13,7 @@ dict_datafilters = {
     "datafilter_3": "datafilter_3",
 }
 
-datafilter_list = [ "1", "2", "3", "4"]
+datafilter_list = [ "3" ]
 
 dict_environment = {
     "blue_sky" : 0,
@@ -51,7 +52,9 @@ evaluation = "environment"
 color_list_algorithms = ["blue", "red", "yellow", "green", "brown"]
 color_list_environment = ["blue", "gray", "brown", "black", "brown"]
 
-label_list_algorithm = [dict_datafilters["ground_truth"], dict_datafilters["datafilter_0"], dict_datafilters["datafilter_1"], dict_datafilters["datafilter_2"], dict_datafilters["datafilter_3"]]
+label_list_algorithm = [dict_datafilters["ground_truth"]]
+for x in range(len(datafilter_list)):
+    label_list_algorithm.append(dict_datafilters["datafilter_" + datafilter_list[x]])
 
 label_list_enironment = [dict_environment_label["blue_sky"], dict_environment_label["env_0"], dict_environment_label["env_1"], dict_environment_label["env_2"]]
 

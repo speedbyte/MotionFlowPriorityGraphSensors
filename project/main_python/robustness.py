@@ -42,8 +42,8 @@ class SensorDataPlot(object):
 
         custom_data_list = list()
         custom_data_list.append(template_gt[0] + "sensor_index_" + str(self.getSensorIndex()))
-        for x in range(len(datafilter_list)):
-            custom_data_list.append(list_of_pixel_density[x])
+        for x in datafilter_list:
+            custom_data_list.append(list_of_pixel_density[int(x,10)])
 
         print custom_data_list
 
@@ -84,52 +84,35 @@ class SensorDataPlot(object):
             print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getObjectDisplacement(data_points_gt, data_points_gt)
 
-        for env_name in environment_list:
 
-            print "Table " + measuring_parameter + " robustness with " + env_name + " " + noise
+        print "Table " + measuring_parameter + " robustness with " + noise
 
-            mean_list = list()
-            mean_list.append(y_axis_gt_mean)
+        mean_list = list()
+        mean_list.append(y_axis_gt_mean)
 
-            list_of_plots = list()
+        list_of_plots = list()
 
-            x_axis_list = list()
-            y_axis_list = list()
-            x_axis_list.append(x_axis_gt)
-            y_axis_list.append(y_axis_gt)
+        x_axis_list = list()
+        y_axis_list = list()
+        x_axis_list.append(x_axis_gt)
+        y_axis_list.append(y_axis_gt)
 
-            lower_x = min(numpy.nanmin(x_axis_gt), lower_x)
-            upper_x = max(numpy.nanmax(x_axis_gt), upper_x)
+        lower_x = min(numpy.nanmin(x_axis_gt), lower_x)
+        upper_x = max(numpy.nanmax(x_axis_gt), upper_x)
 
-            lower_y = min(numpy.nanmin(y_axis_gt), lower_y)
-            upper_y = max(numpy.nanmax(y_axis_gt), upper_y)
+        lower_y = min(numpy.nanmin(y_axis_gt), lower_y)
+        upper_y = max(numpy.nanmax(y_axis_gt), upper_y)
 
 
-            for datafilter_index in range(len(datafilter_list)):
+        for datafilter_index in range(len(datafilter_list)):
 
-                if ( noise == "blue_sky" or noise == "heavy_snow" ):
+            if ( noise == "blue_sky" or noise == "heavy_snow" ):
 
-                    if ( just_ground_truth == False ):
+                if ( just_ground_truth == False ):
 
-                        print "data ......", yaml_list_index_offset+1+datafilter_index
-                        data_points = yaml_load[data_list[yaml_list_index_offset+1+datafilter_index]]
-                        print "getting ", data_list[yaml_list_index_offset+1+datafilter_index]
-                        if ( measuring_parameter == "deviation"):
-                            x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points)
-                        elif ( measuring_parameter == "pixel"):
-                            x_axis, y_axis, y_axis_mean = self.getShape(data_points_gt, data_points)
-                        elif ( measuring_parameter == "collision"):
-                            x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
-                        elif ( measuring_parameter == "obj_displacement"):
-                            x_axis, y_axis, y_axis_mean = self.getObjectDisplacement(data_points_gt, data_points)
-
-                        x_axis_list.append(x_axis)
-                        y_axis_list.append(y_axis)
-
-                else:
-
-                    data_points = yaml_load[data_list[yaml_list_index_offset+datafilter_index]]
-                    print "getting " , data_list[yaml_list_index_offset+datafilter_index]
+                    print "data ......", yaml_list_index_offset+1+datafilter_index
+                    data_points = yaml_load[data_list[yaml_list_index_offset+1+datafilter_index]]
+                    print "getting ", data_list[yaml_list_index_offset+1+datafilter_index]
                     if ( measuring_parameter == "deviation"):
                         x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points)
                     elif ( measuring_parameter == "pixel"):
@@ -139,57 +122,72 @@ class SensorDataPlot(object):
                     elif ( measuring_parameter == "obj_displacement"):
                         x_axis, y_axis, y_axis_mean = self.getObjectDisplacement(data_points_gt, data_points)
 
-                    x_axis_list = [x_axis]
-                    y_axis_list = [y_axis]
-                    plot1 = ['x_axis',
-                             'y_axis',
-                             x_axis_list,
-                             y_axis_list,
-                             color_list,
-                             label_list,
-                             measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize),
-                             [lower_x, upper_x],
-                             [lower_y, upper_y],
-                             ]
+                    x_axis_list.append(x_axis)
+                    y_axis_list.append(y_axis)
 
-                if ( noise == "noise"):
-                    list_of_plots.append(plot1)
+            else:
 
-                if ( just_ground_truth == False ):
-                    mean_list.append(y_axis_mean)
+                data_points = yaml_load[data_list[yaml_list_index_offset+datafilter_index]]
+                print "getting " , data_list[yaml_list_index_offset+datafilter_index]
+                if ( measuring_parameter == "deviation"):
+                    x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points)
+                elif ( measuring_parameter == "pixel"):
+                    x_axis, y_axis, y_axis_mean = self.getShape(data_points_gt, data_points)
+                elif ( measuring_parameter == "collision"):
+                    x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
+                elif ( measuring_parameter == "obj_displacement"):
+                    x_axis, y_axis, y_axis_mean = self.getObjectDisplacement(data_points_gt, data_points)
 
-                    lower_x = min(numpy.nanmin(x_axis), lower_x)
-                    upper_x = max(numpy.nanmax(x_axis), upper_x)
-
-                    lower_y = min(numpy.nanmin(y_axis), lower_y)
-                    upper_y = max(numpy.nanmax(y_axis), upper_y)
-
-            if ( noise == "blue_sky" or noise == "heavy_snow"):
+                x_axis_list = [x_axis]
+                y_axis_list = [y_axis]
                 plot1 = ['x_axis',
                          'y_axis',
                          x_axis_list,
                          y_axis_list,
                          color_list,
                          label_list,
-                         measuring_parameter + " all datafilters " + " step size" + " " + str(stepSize),
+                         measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize),
                          [lower_x, upper_x],
                          [lower_y, upper_y],
                          ]
 
+            if ( noise == "noise"):
                 list_of_plots.append(plot1)
 
-            # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
-            lock.acquire()
-            self.summary_mean[measuring_parameter + '_' + env_name + '_' + str(stepSize) ] = mean_list
-            lock.release()
+            if ( just_ground_truth == False ):
+                mean_list.append(y_axis_mean)
 
-            yaml_list_index_offset = yaml_list_index_offset + 0
+                lower_x = min(numpy.nanmin(x_axis), lower_x)
+                upper_x = max(numpy.nanmax(x_axis), upper_x)
 
-            figures_plot.append((list_of_plots, dict_environment[env_name], measuring_parameter, noise, stepSize, lower_x, upper_x, lower_y, upper_y))
-            if (noise == "blue_sky" ):
-                break
+                lower_y = min(numpy.nanmin(y_axis), lower_y)
+                upper_y = max(numpy.nanmax(y_axis), upper_y)
+
+        if ( noise == "blue_sky" or noise == "heavy_snow"):
+            plot1 = ['x_axis',
+                     'y_axis',
+                     x_axis_list,
+                     y_axis_list,
+                     color_list,
+                     label_list,
+                     measuring_parameter + " all datafilters " + " step size" + " " + str(stepSize),
+                     [lower_x, upper_x],
+                     [lower_y, upper_y],
+                     ]
+
+            list_of_plots.append(plot1)
+
+        # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
+        lock.acquire()
+        self.summary_mean[measuring_parameter + '_' + noise + '_' + str(stepSize) ] = mean_list
+        lock.release()
+
+        yaml_list_index_offset = yaml_list_index_offset + 0
+
+        figures_plot.append((list_of_plots, dict_environment[noise], measuring_parameter, noise, stepSize, lower_x, upper_x, lower_y, upper_y))
 
         return figures_plot
+
 
     def getSensorIndex(self):
         return self.sensor_number
