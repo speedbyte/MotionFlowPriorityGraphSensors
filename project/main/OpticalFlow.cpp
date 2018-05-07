@@ -359,7 +359,7 @@ void OpticalFlow::generate_shape_points() {
                         std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
                                 << baseTreffer << std::endl;
 
-                        assert(vollTreffer <= baseTreffer );
+                        //assert(vollTreffer <= baseTreffer );
 
                     } else {
                         std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<

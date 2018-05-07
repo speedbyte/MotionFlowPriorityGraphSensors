@@ -85,7 +85,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_data.getAll().at(current_index).m_object_location_px.cog_px, gt_displacement));
 
         }
-        if ( (bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial ) {
+        if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial > 80) {
             m_obj_base_visibility.push_back((false));
         }
         else{

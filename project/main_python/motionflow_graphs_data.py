@@ -12,7 +12,7 @@ dict_datafilters = {
     "datafilter_3": "datafilter_3",
 }
 
-datafilter_list = [ "1", "2", "3"]
+datafilter_list = [ "1", "2", "3", "4"]
 
 dict_environment = {
     "blue_sky" : 0,
@@ -48,11 +48,10 @@ fps_list = ["30",]
 
 evaluation = "environment"
 
-color_list_algorithms = ["blue", "red", "yellow", "green", "dummy"]
+color_list_algorithms = ["blue", "red", "yellow", "green", "brown"]
+color_list_environment = ["blue", "gray", "brown", "black", "brown"]
 
-color_list_environment = ["blue", "gray", "brown", "black", "dummy"]
-
-label_list_algorithm = [dict_datafilters["ground_truth"], dict_datafilters["datafilter_0"], dict_datafilters["datafilter_1"], dict_datafilters["datafilter_2"]]
+label_list_algorithm = [dict_datafilters["ground_truth"], dict_datafilters["datafilter_0"], dict_datafilters["datafilter_1"], dict_datafilters["datafilter_2"], dict_datafilters["datafilter_3"]]
 
 label_list_enironment = [dict_environment_label["blue_sky"], dict_environment_label["env_0"], dict_environment_label["env_1"], dict_environment_label["env_2"]]
 
