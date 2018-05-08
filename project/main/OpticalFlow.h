@@ -88,6 +88,8 @@ public:
 
     void generate_shape_points();
 
+    void generate_shape_points_sensor_fusion();
+
     void generate_mean_displacement_points();
 
     std::string getGeneratePath() const {

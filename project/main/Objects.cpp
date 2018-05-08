@@ -457,9 +457,9 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
         list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_ranked_mean);
 
         generate_updated_mean_from_multiple_sensors(post_processing_algorithm,
-                outer_multiframe_flowvector_simple_avg_mean,
+                outer_multiframe_flowvector_voted_mean,
                 outer_multiframe_flowvector_sensor_fusion_mean,
-                outer_multiframe_shape_parameters_simple_avg_mean,
+                outer_multiframe_shape_parameters_voted_mean,
                 outer_multiframe_shape_parameters_sensor_fusion_mean);
 
         list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(

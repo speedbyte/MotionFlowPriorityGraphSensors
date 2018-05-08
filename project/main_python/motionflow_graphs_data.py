@@ -13,7 +13,7 @@ dict_datafilters = {
     "datafilter_3": "datafilter_3",
 }
 
-datafilter_list = [ "3" ]
+datafilter_list = [ "0", "3" ]
 
 dict_environment = {
     "blue_sky" : 0,
@@ -39,6 +39,7 @@ dict_environment_label = {
 
 environment_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 environment_list = ["blue_sky", "heavy_snow",]
+environment_list = ["blue_sky",]
 
 number_of_sensors = 1
 
