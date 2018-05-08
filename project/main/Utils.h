@@ -91,6 +91,57 @@ public:
         return cv::Point3f(final(0), final(1), final(2));
     }
 
+    static void make_video_from_regex(const std::string &videoOrdner ) {
+
+        cv::VideoWriter video_write;
+        cv::Mat temp_image;
+
+        boost::filesystem::directory_iterator end_iter;
+
+        boost::filesystem::path dir_path = videoOrdner;
+
+        std::cout << dir_path.string() << std::endl;
+        assert(boost::filesystem::exists(dir_path) != 0);
+
+        std::string file_name, path;
+        boost::filesystem::path temp;
+        bool video_writer_init = false;
+
+        for (boost::filesystem::directory_iterator dir_iter(dir_path); dir_iter != end_iter; ++dir_iter) {
+            if (boost::filesystem::is_regular_file(dir_iter->status())) {
+                std::string extension = boost::filesystem::extension(*dir_iter);
+                if (extension == ".png") {
+
+                    std::cout << *dir_iter << std::endl;
+                    temp = *dir_iter;
+                    temp_image = cv::imread(temp.string(), cv::IMREAD_COLOR);
+                    if (video_writer_init == false) {
+                        if (!video_write.open((dir_path.string() + "/movement_video.avi"), CV_FOURCC('D', 'I', 'V', 'X'),
+                                5.0,
+                                cv::Size(temp_image.cols, temp_image.rows), true)) {
+                            std::cerr << "failed to initialise the video write" << std::endl;
+                            throw;
+                        }
+                        if (!video_write.isOpened()) {
+                            std::cerr << "Could not open video" << std::endl;
+                        }
+
+                        video_writer_init = true;
+                    }
+                    /*cv::namedWindow("video", CV_WINDOW_AUTOSIZE);
+                    cv::imshow("video", temp_image);
+                    cv::waitKey(1000);*/
+                    video_write.write(temp_image);
+                } else {
+                    std::cout << "ignoring extension : " << extension << " path " << *dir_iter << std::endl;
+                }
+            }
+            cv::destroyAllWindows();
+        }
+
+        video_write.release();
+    }
+
 
     static cv::Point2f worldToCamera(cv::Point3f final, float fov_rad, float fx, float fy) {
 

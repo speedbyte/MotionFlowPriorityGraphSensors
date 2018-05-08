@@ -116,14 +116,12 @@ void GroundTruthFlow::generate_flow_frame() {
                 int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
 
                 //if ( m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(sensor_index).at(frame_count) == true ) {
+                float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                        (sensor_index).at(frame_count).m_region_of_interest_px.x;
+                float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                        (sensor_index).at(frame_count).m_region_of_interest_px.y;
 
-                if ( width  != 0) {
-
-                    float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                            (sensor_index).at(frame_count).m_region_of_interest_px.x;
-                    float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                            (sensor_index).at(frame_count).m_region_of_interest_px.y;
-
+                if ( columnBegin > 0 && width != 0) {
 
                     // gt_displacement
                     cv::Point2f displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(sensor_index).at(frame_count).second;

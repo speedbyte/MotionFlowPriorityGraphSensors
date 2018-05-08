@@ -21,6 +21,7 @@
 #include "RobustnessIndex.h"
 
 #include "Sensors.h"
+#include "Utils.h"
 
 
 using namespace std::chrono;
@@ -110,6 +111,7 @@ int main ( int argc, char *argv[]) {
         bool lk;
         bool fb;
         bool plot;
+        bool video;
     } CONFIG_FILE_DATA;
 
     CONFIG_FILE_DATA
@@ -154,6 +156,7 @@ int main ( int argc, char *argv[]) {
         it->second->lk = (bool) (int) (node["LK"]);
         it->second->fb = (bool) (int) (node["FB"]);
         it->second->plot = (bool) (int) (node["PLOT"]);
+        it->second->video = (bool) (int) (node["VIDEO"]);
         //map_input_txt_to_main.push_back(map_object);
         std::cout << it->second->path << " " << it->second->execute << " " << it->second->gt << std::endl;
 
@@ -223,8 +226,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"blue_sky"};
+    const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
+    //const std::vector<std::string> environment_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -324,9 +327,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     //gt_flow.validate_ground_truth_data();
 
-                    gt_flow.generate_collision_points();
+                    //gt_flow.generate_collision_points();
                     gt_flow.generate_shape_points(); // this is to just create Jaccard Index  =  1
-                    gt_flow.generate_mean_displacement_points();
+                    //gt_flow.generate_mean_displacement_points();
 
                 }
             }
@@ -339,7 +342,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         std::vector<AlgorithmFlow> dummy;
 
         PixelRobustness pixelRobustness(fs);
-        VectorRobustness vectorRobustness(fs);
+        //VectorRobustness vectorRobustness(fs);
         SensorFusion sensorFusion(fs);
 
 
@@ -347,9 +350,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             //sensorFusion.compareHistograms(gt_flow, dummy[0]);
             pixelRobustness.generatePixelRobustness(gt_flow, dummy[0]);
-            vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
-            vectorRobustness.make_video_from_png(gt_flow.getGeneratePath());
-
+            //vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
         }
 
         time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
@@ -426,9 +427,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                             list_of_simulated_objects.at(i).generate_obj_line_parameters("algorithm");
                         }
 
-                        list_of_algorithm_flow[env_index].generate_collision_points();
+                        //list_of_algorithm_flow[env_index].generate_collision_points();
                         list_of_algorithm_flow[env_index].generate_shape_points();
-                        list_of_algorithm_flow[env_index].generate_mean_displacement_points();
+                        //list_of_algorithm_flow[env_index].generate_mean_displacement_points();
                         if (env_index == environment_list.size() - 1) {
                             //list_of_algorithm_flow[env_index].visualiseStencil();
                         }
@@ -439,20 +440,39 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             time_map["algorithm_flow"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
             tic = steady_clock::now();
 
-            if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
+            if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
                     //sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    //vectorRobustness.make_video_from_png(list_of_algorithm_flow[env_index].getImageAbholOrt());
+                    //pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    //vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                 }
             }
 
             time_map["robustness"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
             tic = steady_clock::now();
 
+            if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
+                for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+                    //sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    //pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    //vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                }
+            }
+
+            if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
+                for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+                    for ( int sensors = 0;  sensors < SENSOR_COUNT ; sensors++) {
+                        Utils::make_video_from_regex(Dataset::getGroundTruthPath().string() + '/' + environment_list[env_index] + '_' + std::to_string(sensors));
+                        Utils::make_video_from_regex(Dataset::getResultPath().string()  + "/results_FB_" +  environment_list[env_index] + '_' +  std::to_string(fps) + "_" + std::to_string(stepSize) + "/position_occ_0" + std::to_string(sensors) + '/');
+                    }
+                }
+            }
+
+
         }
+
+
 
         fs << "time_map" << "[";
         int total = 0;
@@ -509,9 +529,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             //algo.generate_flow_frame(fb, continous_frames, no_noise);
 
-            //make_video_from_png((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
-            //make_video_from_png((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");
-            //make_video_from_png((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/");
+            //make_video_from_regex((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
+            //make_video_from_regex((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");
+            //make_video_from_regex((boost::filesystem::path)CPP_DATASET_PATH, "data/stereo_flow/image_02/");
         }
     }
 

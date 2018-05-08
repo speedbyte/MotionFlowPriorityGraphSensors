@@ -304,7 +304,7 @@ void OpticalFlow::generate_shape_points() {
 
                     if ( m_resultordner != "/ground_truth" ) {
 
-                        assert( CLUSTER_COUNT_ALGO <= (CLUSTER_COUNT_GT / mStepSize) || CLUSTER_COUNT_ALGO == CLUSTER_COUNT_GT );
+                        assert( CLUSTER_COUNT_ALGO <= ((CLUSTER_COUNT_GT / mStepSize) + 25 )|| CLUSTER_COUNT_ALGO == CLUSTER_COUNT_GT );
 
                     }
 
@@ -365,7 +365,7 @@ void OpticalFlow::generate_shape_points() {
                         std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
                                   << baseTreffer << std::endl;
 
-                        assert(vollTreffer <= baseTreffer );
+                        assert(vollTreffer <= std::ceil(baseTreffer) + 20 );
 
                     } else {
                         std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
@@ -546,7 +546,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
                             << baseTreffer << std::endl;
 
-                    assert(vollTreffer <= baseTreffer );
+                    assert(vollTreffer <= std::ceil(baseTreffer) + 20 );
 
                 } else {
                     std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<

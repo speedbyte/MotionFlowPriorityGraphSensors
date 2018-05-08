@@ -70,11 +70,15 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
                 gt_displacement_usk.x = gt_data.getAll().at(current_index).m_object_location_m.location_x_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_x_m;
                 gt_displacement_usk.y = gt_data.getAll().at(current_index).m_object_location_m.location_y_m - gt_data.getAll().at(current_index-(ushort)1).m_object_location_m.location_y_m;
 
+
             }
 
-            auto dist_inertial = cv::norm(gt_displacement_inertial);
-            auto dist_usk = cv::norm(gt_displacement_usk);
-            assert(std::round(dist_inertial+0.5)/1000 == std::round(dist_usk+0.5)/1000);
+            if ( gt_data.getAll().at(current_index-(ushort)1).m_object_location_inertial_m.location_x_m != 0 ) {
+                auto dist_inertial = cv::norm(gt_displacement_inertial);
+                auto dist_usk = cv::norm(gt_displacement_usk);
+                assert(std::round(dist_inertial+0.5)/1000 == std::round(dist_usk+0.5)/1000);
+            }
+
 
             printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial?"false":"true"),
                    frame_count,
@@ -85,7 +89,8 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_data.getAll().at(current_index).m_object_location_px.cog_px, gt_displacement));
 
         }
-        if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial > 20 ) {
+        if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial == 127 || gt_data.getAll().at(current_index).visMask == 0
+                || gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m == 0 || gt_data.getAll().at(current_index).m_region_of_interest_px.x <= 0) {
             m_obj_base_visibility.push_back((false));
         }
         else{

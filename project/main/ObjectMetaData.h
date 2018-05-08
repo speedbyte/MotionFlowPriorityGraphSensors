@@ -343,6 +343,10 @@ public:
         cv::Rect roi_2d = cv::boundingRect(bbox_points);
         std::cout << roi_2d << std::endl;
 
+        if ( frameNumber == 80 ) {
+            std::cout << "lets analyse";
+        }
+
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = roi_2d.x;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = roi_2d.y;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.width = roi_2d.width;
