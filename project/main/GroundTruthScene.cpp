@@ -32,10 +32,10 @@ void GroundTruthScene::visualiseBoundingBox(void) {
 
     cv::Mat image_data_and_shape;
 
-    const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
+    const ushort max_sensor_index = 1; // image is generated only once irrespective of skips.
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
 
-    for (int frame_skip = 1; frame_skip <= max_frame_skip; frame_skip++) {
+    for (int sensor_index = 0; sensor_index < max_sensor_index; sensor_index++) {
 
         for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
             //ushort frame_count = 3;
@@ -46,10 +46,10 @@ void GroundTruthScene::visualiseBoundingBox(void) {
             //--------------------------------------------------------------------------------
             tempGroundTruthImage = cv::Scalar::all(255);
 
-            sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
+            sprintf(file_name_image, "000%03d_10.png", frame_count);
             std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
 
-            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count * frame_skip);
+            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count);
             output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
 
             cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
@@ -151,12 +151,12 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
     cv::FileStorage write_fs;
     write_fs.open("../position_" + suffix + ".yml", cv::FileStorage::WRITE);
 
-    for (unsigned frame_skip = 1; frame_skip < MAX_SKIPS; frame_skip++) {
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-        std::cout << "write yaml file for frame_skip  " << (frame_skip - 1) << std::endl;
+        std::cout << "write yaml file for sensor_index  " << (sensor_index) << std::endl;
 
         char temp_str_fs[20];
-        sprintf(temp_str_fs, "frame_skip_%03d", frame_skip);
+        sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         //write_fs << temp_str_fs << "[";
 
         unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC;
@@ -165,11 +165,11 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             char temp_str_fc[20];
             sprintf(temp_str_fc, "frame_count_%03d", frame_count);
-            /*
+
             if ( frame_count < 25 ) {
                 continue;
             }
-            */
+
             write_fs << temp_str_fc << "[";
             for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
                 write_fs
@@ -331,7 +331,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
 
-    for (unsigned sensor_index = 0; sensor_index< MAX_SKIPS-1; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index< SENSOR_COUNT; sensor_index++) {
 
         ushort  objectCount = 0;
         ushort  sensorCount = 0;
@@ -345,11 +345,11 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
 
         assert(fs.isOpened());
 
-        //std::string temp_str = "_frame_skip_" + frame_skip;
+        //std::string temp_str = "_sensor_count_" + sensor_index;
         char temp_str_fs[20];
-        sprintf(temp_str_fs, "frame_skip_%03d", sensor_index);
+        sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         std::cout << "read yaml file for sensor_index " << (sensor_index) << std::endl;
-        //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(sensor_index-1).size();
+        //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(sensor_index).size();
         unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;
         assert(FRAME_COUNT > 0);
 
@@ -635,7 +635,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     cv::Mat image_data_and_shape;
     cv::Mat positionShape;
 
-    const ushort frame_skip = 1; // image is generated only once irrespective of skips.
+    const ushort sensor_index = 0; // image is generated only once irrespective of skips.
 
     // apply black noise in case of night
     if (m_environment == "night") {
@@ -649,32 +649,32 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
 
-        sprintf(file_name_image, "000%03d_10.png", frame_count * frame_skip);
+        sprintf(file_name_image, "000%03d_10.png", frame_count);
         std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
 
 
         //draw new ground truth image.
         tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
-        char frame_skip_folder_suffix[50];
+        char sensor_index_folder_suffix[50];
 
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
 
-            sprintf(frame_skip_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
+            sprintf(sensor_index_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
             std::string position_image_file_with_path = m_position_obj_path.string() +
-                                                        frame_skip_folder_suffix + "/" + file_name_image;
+                                                        sensor_index_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
             image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(
-                    obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
                     frame_count).m_object_dimensions_px.dim_height_m)).colRange(0, cvRound(m_list_gt_objects.at(
-                    obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
                     frame_count).m_object_dimensions_px.dim_width_m));
             positionShape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
             positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(
-                    obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
                     frame_count).m_object_dimensions_px.dim_height_m)).colRange(0, cvRound(m_list_gt_objects.at(
-                    obj_index).getExtrapolatedGroundTruthDetails().at(frame_skip - 1).at(
+                    obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
                     frame_count).m_object_dimensions_px.dim_width_m));
 
             if ((!m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).occluded )) {
@@ -725,13 +725,12 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
     cv::Mat image_data_and_shape;
 
-    const ushort max_frame_skip = 1; // image is generated only once irrespective of skips.
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
 
     for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size(); sensor_index++) {
 
         char temp_str_fs[20];
-        sprintf(temp_str_fs, "frame_skip_%03d", sensor_index);
+        sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         //write_fs << temp_str_fs << "[";
 
         unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;

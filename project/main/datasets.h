@@ -19,7 +19,7 @@
 
 #define DISPLACEMENT_ROUND_OFF 100
 
-#define MAX_ITERATION_RESULTS 40 // 60 generate result. this cannot be more than vector
+#define MAX_ITERATION_RESULTS 50 // 60 generate result. this cannot be more than vector
 
 #define MAX_ITERATION_GT_SCENE_GENERATION_VECTOR MAX_ITERATION_RESULTS   // generate_obj_base_pixel_position_pixel_displacement vector
 #define MAX_ITERATION_GT_SCENE_GENERATION_IMAGES MAX_ITERATION_RESULTS   // generate images. this cannot be more than vector
@@ -41,7 +41,7 @@
 #define MAX_ALLOWED_SENSORS 10
 
 #define MAX_ALLOWED_SENSOR_GROUPS 2
-#define MAX_SKIPS MAX_ALLOWED_SENSOR_GROUPS+1 // 1 means do not generate flow, 2 means generate base flow
+#define SENSOR_COUNT MAX_ALLOWED_SENSOR_GROUPS
 
 #define MAX_DUMPS 10
 
@@ -61,7 +61,7 @@ typedef enum {
     fb
 } ALGO_TYPES;
 
-#define DATAFILTER_COUNT 4
+#define DATAFILTER_COUNT 3
 
 
 

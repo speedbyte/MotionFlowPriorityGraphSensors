@@ -70,13 +70,13 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
     prepare_directories(algo, frame_types, noise, fps, mStepSize);
 
-    for ( int sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++ ) {
+    for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_base_movement(m_ptr_list_simulated_objects.size());
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_stencil_movement(m_ptr_list_simulated_objects.size());
         std::vector<std::vector<std::vector<bool> >  > outer_base_visiblity(m_ptr_list_simulated_objects.size());
 
-        char frame_skip_folder_suffix[50];
+        char sensor_index_folder_suffix[50];
         char file_name_input_image[50], file_name_input_image_edge[50];
 
         bool needToInit = true;
@@ -93,14 +93,14 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             }
         }*/
         cv::Mat curGray, prevGray;
-        sprintf(frame_skip_folder_suffix, "%02d", sensor_index);
+        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
         std::string results_flow_matrix_str = m_flow_occ_path.string() + "/" +
-                                              frame_skip_folder_suffix + "/" + "result_flow.yaml";
+                                              sensor_index_folder_suffix + "/" + "result_flow.yaml";
         cv::VideoWriter video_out;
 
         if ( frame_types == video_frames)
         {
-            boost::filesystem::path video_out_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + "movement.avi" ;
+            boost::filesystem::path video_out_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + "movement.avi" ;
             assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
             //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
             //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
@@ -156,7 +156,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //if (image_02_frame.empty())
             //    break;
 
-            std::string input_image_file_with_path = mImageabholOrt.string() + "_" + std::to_string(sensor_index-1) + "/" +
+            std::string input_image_file_with_path = mImageabholOrt.string() + "_" + std::to_string(sensor_index) + "/" +
                     file_name_input_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
@@ -167,9 +167,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 throw ("No image file found error");
             }
 
-            temp_result_flow_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
-            temp_result_edge_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image_edge;
-            temp_result_position_path = m_position_occ_path.string() + frame_skip_folder_suffix + "/" + file_name_input_image;
+            temp_result_flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            temp_result_edge_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_edge;
+            temp_result_position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
@@ -323,14 +323,14 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
 
                     float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                            (sensor_index-1).at(frame_count).m_region_of_interest_px.x;
+                            (sensor_index).at(frame_count).m_region_of_interest_px.x;
                     float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                            (sensor_index-1).at(frame_count).m_region_of_interest_px.y;
+                            (sensor_index).at(frame_count).m_region_of_interest_px.y;
 
-                    int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index-1).at(frame_count).m_object_dimensions_px.dim_width_m);
-                    int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+                    int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
+                    int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                    bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(sensor_index-1).at(frame_count);
+                    bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(sensor_index).at(frame_count);
                     if ( visibility ) {
 
                         cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height), cv::Scalar(0,0,255), 4, 8, 0 );
@@ -352,7 +352,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                       cv::Scalar(255,255,255), 4, 8, 0 );
 
                         cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
-                                (sensor_index-1).at(frame_count).second;
+                                (sensor_index).at(frame_count).second;
                         // This is for the base model
                         std::vector<std::vector<bool>  > base_visibility(m_ptr_list_simulated_objects.size());
                         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > base_movement(m_ptr_list_simulated_objects.size());
@@ -435,15 +435,15 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             /*
 
                             auto COUNT = m_ptr_list_simulated_objects_base.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                    (sensor_index-1).at(frame_count).size();
+                                    (sensor_index).at(frame_count).size();
                             for ( auto count = 0; count < COUNT; count++ ) {
 
                                 float x = m_ptr_list_simulated_objects_base.at(
                                         obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                        (sensor_index - 1).at(frame_count).at(count).first.x;
+                                        (sensor_index).at(frame_count).at(count).first.x;
                                 float y = m_ptr_list_simulated_objects_base.at(
                                         obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
-                                        (sensor_index - 1).at(frame_count).at(count).first.y;
+                                        (sensor_index).at(frame_count).at(count).first.y;
 
                                 for (auto next_pts_index = 0;
                                      next_pts_index < next_pts_array.size(); next_pts_index++) {
@@ -466,7 +466,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                             for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                                 for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
-                                    cv::Point2f algo_displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(sensor_index-1).at(frame_count).second;
+                                    cv::Point2f algo_displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(sensor_index).at(frame_count).second;
                                     //std::cout << roi_offset.x + col_index << std::endl;
                                     stencil_movement.at(obj_index).push_back(
                                             std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),

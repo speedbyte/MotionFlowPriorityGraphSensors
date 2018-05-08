@@ -10,14 +10,14 @@ import subprocess
 
 input_folders = list()
 
-input_folder = "/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/two/none/"
+input_folder = "/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/two/blue_sky/"
 input_folders.append(input_folder)
 
-input_folder = "/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/two/light_snow/"
-input_folders.append(input_folder)
+#input_folder = "/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/two/light_snow/"
+#input_folders.append(input_folder)
 
-input_folder = "/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/two/mild_snow/"
-input_folders.append(input_folder)
+#input_folder = "/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/two/mild_snow/"
+#input_folders.append(input_folder)
 
 input_folder = "/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/two/heavy_snow/"
 input_folders.append(input_folder)

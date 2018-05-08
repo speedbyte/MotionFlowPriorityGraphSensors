@@ -39,7 +39,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
 
 
-    for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> >
                 multiframe_flowvector_simple_avg_mean,
@@ -59,7 +59,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                 << sensor_index
                 << " for object name " << m_objectName << " " << std::endl;
 
-        unsigned long FRAME_COUNT = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index - 1)
+        unsigned long FRAME_COUNT = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index)
                 .size();
 
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -98,10 +98,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
             bool mean_visibility = false;
 
-            bool visibility = obj_extrapolated_blob_visibility.at(sensor_index - 1).at(frame_count).at(0);
+            bool visibility = obj_extrapolated_blob_visibility.at(sensor_index).at(frame_count).at(0);
 
             const unsigned CLUSTER_SIZE = (unsigned) obj_extrapolated_blob_pixel_point_pixel_displacement.at
-                    (sensor_index - 1).at(frame_count).size();
+                    (sensor_index).at(frame_count).size();
 
 
             if (visibility) {
@@ -115,10 +115,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
                 for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
-                    cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index - 1)
+                    cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index)
                             .at(frame_count).at(cluster_index).first;
                     cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(
-                                    sensor_index - 1)
+                                    sensor_index)
                             .at(frame_count).at(cluster_index).second;
 
                     // preprocessing 1st method
@@ -183,10 +183,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
 
                 for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
-                    cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index - 1)
+                    cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index)
                             .at(frame_count).at(cluster_index).first;
                     cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(
-                                    sensor_index - 1)
+                                    sensor_index)
                             .at(frame_count).at(cluster_index).second;
 
                     // 1. MEAN - add all displacement and points and divide by total size.
@@ -240,7 +240,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                 if (post_processing_algorithm != "ground_truth") {
 
                     const unsigned CLUSTER_EDGE_SIZE = (unsigned) obj_extrapolated_edge_pixel_point_pixel_displacement.at
-                            (sensor_index - 1).at(frame_count).size();
+                            (sensor_index).at(frame_count).size();
 
                     ushort WEIGHT = 100;
 
@@ -248,10 +248,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
                             cluster_edge_index < CLUSTER_EDGE_SIZE; cluster_edge_index++) {
 
                         cv::Point2f pts_edge = obj_extrapolated_edge_pixel_point_pixel_displacement.at(
-                                        sensor_index - 1)
+                                        sensor_index)
                                 .at(frame_count).at(cluster_edge_index).first;
                         cv::Point2f gt_displacement = obj_extrapolated_edge_pixel_point_pixel_displacement.at(
-                                        sensor_index - 1)
+                                        sensor_index)
                                 .at(frame_count).at(cluster_edge_index).second;
 
                         mean_pts_ranked_mean_x += WEIGHT * pts_edge.x;
@@ -268,10 +268,10 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
                 for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
-                    cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index - 1)
+                    cv::Point2f pts = obj_extrapolated_blob_pixel_point_pixel_displacement.at(sensor_index)
                             .at(frame_count).at(cluster_index).first;
                     cv::Point2f gt_displacement = obj_extrapolated_blob_pixel_point_pixel_displacement.at(
-                                    sensor_index - 1)
+                                    sensor_index)
                             .at(frame_count).at(cluster_index).second;
 
                     mean_pts_ranked_mean_x += pts.x;
@@ -456,6 +456,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
         list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_voted_mean);
         list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_ranked_mean);
 
+        /*
         generate_updated_mean_from_multiple_sensors(post_processing_algorithm,
                 outer_multiframe_flowvector_voted_mean,
                 outer_multiframe_flowvector_sensor_fusion_mean,
@@ -464,7 +465,7 @@ void Objects::generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(c
 
         list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.push_back(
                 outer_multiframe_flowvector_sensor_fusion_mean);
-        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_sensor_fusion_mean);
+        list_obj_extrapolated_shape_parameters.push_back(outer_multiframe_shape_parameters_sensor_fusion_mean); */
 
     }
 
@@ -636,27 +637,27 @@ void Objects::generate_obj_line_parameters( std::string post_processing_algorith
 
         std::vector<std::vector<cv::Point2f > > outer_line_parameters;
 
-        for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
+        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-            std::cout << "generate_obj_line_parameters for sensor_index " << sensor_index-1 << " for datafilter_index " << datafilter_index << " for object name " << m_objectName << " " << std::endl;
+            std::cout << "generate_obj_line_parameters for sensor_index " << sensor_index << " for datafilter_index " << datafilter_index << " for object name " << m_objectName << " " << std::endl;
 
             std::vector<cv::Point2f > frame_line_parameters;
 
             const unsigned long FRAME_COUNT =
                     m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
-                            (sensor_index - 1).size();
+                            (sensor_index).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 
-                if (m_obj_extrapolated_mean_visibility.at(sensor_index - 1).at(frame_count) == true) {
+                if (m_obj_extrapolated_mean_visibility.at(sensor_index).at(frame_count) == true) {
 
                     if ( frame_count > 0 ) {
                         cv::Point2f next_pts = m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
-                                (sensor_index-1).at(frame_count).first;
+                                (sensor_index).at(frame_count).first;
                         cv::Point2f mean_displacement_vector =
                                 m_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement.at(datafilter_index).at
-                                        (sensor_index-1).at(frame_count).second;
+                                        (sensor_index).at(frame_count).second;
 
                         float m, c;
                         //Invert Y co-ordinates to match Cartesian co-ordinate system. This is just for the line angle and

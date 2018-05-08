@@ -13,7 +13,7 @@ dict_datafilters = {
     "datafilter_3": "datafilter_3",
 }
 
-datafilter_list = [ "0", "3" ]
+datafilter_list = [ "0", "2" ]
 
 dict_environment = {
     "blue_sky" : 0,
@@ -43,7 +43,7 @@ environment_list = ["blue_sky",]
 
 number_of_sensors = 1
 
-step_list = [5]
+step_list = [2]
 
 fps_list = ["30", "15", "10", "7.5"]#night
 fps_list = ["30",]

@@ -32,7 +32,6 @@ SCALE = 1
 def plot_at_once(figures_plot_array, sensor_index):
 
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
-
     for figures_plot in figures_plot_array:
         for figures_plot_index in range(len(figures_plot)):
             lower_x = min(figures_plot[figures_plot_index][5], lower_x)
@@ -365,7 +364,7 @@ if __name__ == '__main__':
 
     collectPlots = list()
 
-    for x in [1,2]:
+    for x in [0,1,2]:
 
         thread_pixel = None
         thread_deviation = None

@@ -85,7 +85,7 @@ void GroundTruthObjects::generate_obj_base_pixel_position_pixel_displacement(Obj
             m_obj_base_pixel_position_pixel_displacement.push_back(std::make_pair(gt_data.getAll().at(current_index).m_object_location_px.cog_px, gt_displacement));
 
         }
-        if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial > 80) {
+        if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial > 20 ) {
             m_obj_base_visibility.push_back((false));
         }
         else{
@@ -106,7 +106,7 @@ void GroundTruthObjects::generate_obj_extrapolated_pixel_position_pixel_displace
     float temp_flow_x(0);
     float temp_flow_y(0);
 
-    for ( unsigned sensor_index = 1; sensor_index < MAX_SKIPS ; sensor_index++ ) {
+    for ( unsigned sensor_index = 0; sensor_index < SENSOR_COUNT ; sensor_index++ ) {
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_flowvector;
         std::vector<bool>  multiframe_visibility;
@@ -162,28 +162,28 @@ void GroundTruthObjects::generate_obj_extrapolated_shape_pixel_point_pixel_displ
 // object image_data_and_shape
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > dummy;
 
-    for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > outer_base_movement;
         std::vector<std::vector<bool>  > outer_base_visiblity;
 
         std::cout << "generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility for sensor_index " << sensor_index << std::endl;
-        unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_position_pixel_displacement.at(sensor_index - 1).size();
+        unsigned long FRAME_COUNT = m_obj_extrapolated_pixel_position_pixel_displacement.at(sensor_index).size();
         assert(FRAME_COUNT>0);
         for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 // gt_displacement
 
-            cv::Point2f gt_roi_pts = cv::Point2f(m_obj_extrapolated_all.at(sensor_index-1).at(frame_count).m_region_of_interest_px.x, m_obj_extrapolated_all.at(sensor_index-1).at(frame_count).m_region_of_interest_px.y);
+            cv::Point2f gt_roi_pts = cv::Point2f(m_obj_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.x, m_obj_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.y);
 
-            cv::Point2f gt_displacement = m_obj_extrapolated_pixel_position_pixel_displacement.at(sensor_index - 1).at(frame_count).second;
+            cv::Point2f gt_displacement = m_obj_extrapolated_pixel_position_pixel_displacement.at(sensor_index).at(frame_count).second;
 
-            bool visibility = m_obj_extrapolated_visibility.at(sensor_index - 1).at(frame_count);
+            bool visibility = m_obj_extrapolated_visibility.at(sensor_index).at(frame_count);
 
             std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
             std::vector<bool> base_visibility;
 
-            int ObjectWidth = cvRound(m_obj_extrapolated_all.at(sensor_index-1).at(frame_count).m_object_dimensions_px.dim_width_m);
-            int ObjectHeight = cvRound(m_obj_extrapolated_all.at(sensor_index-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+            int ObjectWidth = cvRound(m_obj_extrapolated_all.at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
+            int ObjectHeight = cvRound(m_obj_extrapolated_all.at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
 
             for (unsigned j = 0; j < ObjectWidth; j+=1) {
                 for (unsigned k = 0; k < ObjectHeight; k+=1) {

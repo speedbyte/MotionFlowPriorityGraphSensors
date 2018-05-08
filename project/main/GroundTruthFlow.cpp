@@ -68,17 +68,17 @@ void GroundTruthFlow::generate_flow_frame() {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
-    char frame_skip_folder_suffix[50];
+    char sensor_index_folder_suffix[50];
     //cv::FileStorage fs;
-    //fs.open(m_flow_occ_path.string() + frame_skip_folder_suffix + "/" + "gt_flow.yaml", cv::FileStorage::WRITE);
+    //fs.open(m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + "gt_flow.yaml", cv::FileStorage::WRITE);
 
 
-    for (unsigned sensor_index = 1; sensor_index < MAX_SKIPS; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-        sprintf(frame_skip_folder_suffix, "%02d", sensor_index);
+        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
         std::cout << "saving ground truth flow files for sensor_index " << sensor_index << std::endl;
 
-        unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(sensor_index-1).size();
+        unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -90,13 +90,13 @@ void GroundTruthFlow::generate_flow_frame() {
             sprintf(file_name_input_image, "000%03d_10.png", frame_count);
             sprintf(file_name_image_edge, "000%03d_10_edge.png", frame_count);
 
-            std::string temp_gt_flow_image_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
+            std::string temp_gt_flow_image_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" +
                     file_name_input_image;
 
-            std::string temp_gt_image_path = mImageabholOrt.string() + "_" + std::to_string(sensor_index-1) + "/" +
+            std::string temp_gt_image_path = mImageabholOrt.string() + "_" + std::to_string(sensor_index) + "/" +
                                              file_name_input_image;
 
-            std::string temp_result_edge_path = m_flow_occ_path.string() + frame_skip_folder_suffix + "/" +
+            std::string temp_result_edge_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" +
                                                   file_name_image_edge;
 
             //fs << "frame_count" << frame_count;
@@ -112,21 +112,21 @@ void GroundTruthFlow::generate_flow_frame() {
 
                 // object image_data_and_shape
 
-                int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index-1).at(frame_count).m_object_dimensions_px.dim_width_m);
-                int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index-1).at(frame_count).m_object_dimensions_px.dim_height_m);
+                int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
+                int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                //if ( m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(sensor_index - 1).at(frame_count) == true ) {
+                //if ( m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(sensor_index).at(frame_count) == true ) {
 
                 if ( width  != 0) {
 
                     float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                            (sensor_index-1).at(frame_count).m_region_of_interest_px.x;
+                            (sensor_index).at(frame_count).m_region_of_interest_px.x;
                     float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                            (sensor_index-1).at(frame_count).m_region_of_interest_px.y;
+                            (sensor_index).at(frame_count).m_region_of_interest_px.y;
 
 
                     // gt_displacement
-                    cv::Point2f displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(sensor_index-1).at(frame_count).second;
+                    cv::Point2f displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(sensor_index).at(frame_count).second;
 
                     cv::Mat roi;
                     roi = tempMatrix.
