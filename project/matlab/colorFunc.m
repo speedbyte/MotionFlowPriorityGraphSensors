@@ -19,6 +19,10 @@ imgs = strcat(input, '*_10.png')
         imwrite(colorFlow, outPutPath);
         x=x+1;
     end
+    
+    if x == 1
+        disp('Folder contains no matching Flow files');
+    end
 
 
 end
