@@ -307,7 +307,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
 
-
                     gt_flow.generate_flow_frame();
 
                     for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
@@ -444,7 +443,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
                     //sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    //pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                     //vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                 }
             }
@@ -452,13 +451,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             time_map["robustness"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
             tic = steady_clock::now();
 
-            if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
-                for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
-                    //sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    //pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    //vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                }
-            }
 
             if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
@@ -468,10 +460,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
                 }
             }
-
-
         }
-
 
 
         fs << "time_map" << "[";
@@ -498,9 +487,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
 
     }
-
-
-
 
     /* MATLAB_DATASET ------------- */
 
