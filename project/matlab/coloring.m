@@ -1,38 +1,21 @@
 % Optical Flow Color Coder using Kitti Devkit
 
-    addpath(genpath('matlab')); %path to Kitti Devkit
-    input = '/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_snow_high/'
-    output = '/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_snow_high/'
+addpath(genpath('matlab')); %path to Kitti Devkit
 
-    name = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_flow_gt.png');
-    temp = imread(name);
-    flow = flow_read(name);
-    res = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_gt.png');
-    t = flow_to_color(flow,20);
-    imwrite(t,res); 
 
-    name = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_flow_base_algo.png');
-    temp = imread(name);
-    flow = flow_read(name);
-    res = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_flow_color_base_algo.png');
-    t = flow_to_color(flow,20);
-    imwrite(t,res); 
+input = '/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/three/ground_truth/flow_occ_00/'
+output = '/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/data/stereo_flow/three/ground_truth/kitti_00/'
 
-    
-    END = 3
-    for x=0:END
-        
-    name = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_flow_algo_%01d.png',x);
-    temp = imread(name);
-    t1 = temp(:,:,1);
-    flow = flow_read(name);
-    f1 = flow(:,:,1);
-    f2 = flow(:,:,2);
-    f3 = flow(:,:,3);
-    res = sprintf('/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_flow_color_algo_%01d.png',x);
-    t = flow_to_color(flow,20);
-    
-    imwrite(t,res);
-    end
+%colorFunc(input,output)
 
+
+input = '/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/three/results_FB_blue_sky_30_2/flow_occ_00/'
+output = '/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/three/results_FB_blue_sky_30_2/kitti_00/'
+
+colorFunc(input,output)
+
+input = '/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/three/results_FB_heavy_snow_30_2/flow_occ_00/'
+output = '/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/three/results_FB_heavy_snow_30_2/kitti_00/'
+
+%colorFunc(input,output)
     
