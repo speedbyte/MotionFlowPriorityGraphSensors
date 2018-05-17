@@ -129,8 +129,8 @@ void GroundTruthScene::prepare_directories() {
             for (int i = 0; i < m_list_gt_objects.size(); i++) {
 
                 sprintf(char_dir_append, "%02d", i);
-                m_position_obj_path = m_generatepath.string() + "position_obj_";
-                path = m_position_obj_path.string() + char_dir_append;
+                m_position_object_path = m_generatepath.string() + "position_object_";
+                path = m_position_object_path.string() + char_dir_append;
                 //boost::filesystem::create_directories(path);
 
             }
@@ -349,7 +349,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
         char temp_str_fs[20];
         sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         std::cout << "read yaml file for sensor_index " << (sensor_index) << std::endl;
-        //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_obj_extrapolated_shape_pixel_point_pixel_displacement().at(sensor_index).size();
+        //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_object_shape_point_displacement().at(sensor_index).size();
         unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;
         assert(FRAME_COUNT > 0);
 
@@ -535,7 +535,10 @@ void GroundTruthScene::startEvaluating(Noise noise) {
         }
 
         // extrapolated consists of objects -> sensor mapping
-        m_list_gt_objects.at(obj_index).generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
+        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > dummy_movement;
+        std::vector<std::vector<bool> > dummy_visibility;
+
+        m_list_gt_objects.at(obj_index).generate_object_stencil_point_displacement_pixel_visibility("ground_truth", dummy_movement, dummy_visibility);
     }
 
     for (ushort sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.at(0).size(); sen_index++) {
@@ -555,7 +558,7 @@ void GroundTruthScene::startEvaluating(Noise noise) {
         }
 
         // extrapolated consists of sensors -> sensor mapping
-        //m_list_gt_sensors.at(sen_index)generate_sen_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
+        //m_list_gt_sensors.at(sen_index)generate_sen__shape_point_displacement_pixel_visibility();
     }
 
 }
@@ -661,7 +664,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
 
             sprintf(sensor_index_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
-            std::string position_image_file_with_path = m_position_obj_path.string() +
+            std::string position_image_file_with_path = m_position_object_path.string() +
                                                         sensor_index_folder_suffix + "/" + file_name_image;
 
             image_data_and_shape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
@@ -680,9 +683,9 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             if ((!m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).occluded )) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
-                        cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(
+                        cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
                                 frame_count).first.x),
-                                 cvRound(m_list_gt_objects.at(obj_index).get_obj_base_pixel_position_pixel_displacement().at(
+                                 cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
                                          frame_count).first.y),
                                  cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
                                  cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m))));
@@ -704,10 +707,10 @@ void GroundTruthScene::generate_bird_view() {
 
             cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
             for ( auto object_index= 0; object_index < m_ptr_customObjectMetaDataList.at(0).size(); object_index++ ) {
-                birdview_frame.at(m_list_gt_objects.at(object_index).get_obj_base_pixel_position_pixel_displacement().at(position_index).first.x, m_list_gt_objects.at(object_index).get_obj_range().at(position_index)) = 100;
+                birdview_frame.at(m_list_gt_objects.at(object_index).get_object_base_point_displacement().at(position_index).first.x, m_list_gt_objects.at(object_index).get_object_range().at(position_index)) = 100;
                 cv::Mat roi_objects;
-                roi_objects = birdview_frame.rowRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).z_offset )
-                        .colRange(m_list_gt_objects.at(object_index).get_obj_range().at(position_index), m_list_gt_objects.at(object_index).get_obj_dimension().at(position_index).x_offset);
+                roi_objects = birdview_frame.rowRange(m_list_gt_objects.at(object_index).get_object_range().at(position_index), m_list_gt_objects.at(object_index).get_object_dimension().at(position_index).z_offset )
+                        .colRange(m_list_gt_objects.at(object_index).get_object_range().at(position_index), m_list_gt_objects.at(object_index).get_object_dimension().at(position_index).x_offset);
 
             }
             cv::imwrite("filename", birdview_frame);
@@ -762,7 +765,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                         sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m;
 
-                object_location_inertial_m_str pos_obj_inertial = m_ptr_customObjectMetaDataList.at(
+                object_location_inertial_m_str pos_object_inertial = m_ptr_customObjectMetaDataList.at(
                         sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_location_inertial_m;
 
@@ -770,7 +773,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                         obj_index)->getAll().at(
                         frame_count).m_object_location_m;
 
-                object_rotation_inertial_rad_str orientation_obj_inertial = m_ptr_customObjectMetaDataList.at(
+                object_rotation_inertial_rad_str orientation_object_inertial = m_ptr_customObjectMetaDataList.at(
                         sensor_index).at(obj_index)->getAll().at(
                         frame_count).m_object_rotation_inertial_rad;
 
@@ -793,7 +796,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                         frame_count).m_object_offset_m.offset_z;
 
                 if (m_ptr_customObjectMetaDataList.at(
-                        sensor_index).at(obj_index)->getAll().at(frame_count).visMask && pos_obj_inertial.location_x_m != 0) {
+                        sensor_index).at(obj_index)->getAll().at(frame_count).visMask && pos_object_inertial.location_x_m != 0) {
 
                     std::vector<cv::Point3f> bounding_points_3d(9);
                     std::vector<cv::Point2f> bounding_points_2d(9);
@@ -844,15 +847,15 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                         //Then rotate the box to inertial coordinate system. hpr. Now the BB points are in the inertial co-ordinate system with the origin at the position.
                         final = Utils::translate_and_rotate_points(final, cv::Point3f(0, 0, 0),
                                 cv::Point3f(
-                                        orientation_obj_inertial.rotation_rz_yaw_rad,
-                                        orientation_obj_inertial.rotation_ry_pitch_rad,
-                                        orientation_obj_inertial.rotation_rx_roll_rad));
+                                        orientation_object_inertial.rotation_rz_yaw_rad,
+                                        orientation_object_inertial.rotation_ry_pitch_rad,
+                                        orientation_object_inertial.rotation_rx_roll_rad));
 
                         //Translate the axis to the inertial origin. add the BB vector to the object position.
                         //Now we are in the inertial co-ordinate system.
-                        final = Utils::translate_and_rotate_points(final, cv::Point3f(pos_obj_inertial.location_x_m,
-                                pos_obj_inertial.location_y_m,
-                                pos_obj_inertial.location_z_m),
+                        final = Utils::translate_and_rotate_points(final, cv::Point3f(pos_object_inertial.location_x_m,
+                                pos_object_inertial.location_y_m,
+                                pos_object_inertial.location_z_m),
                                 cv::Point3f(0, 0, 0));
 
                         // Change to sensor object by changing the axis to the sensor object.

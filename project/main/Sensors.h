@@ -17,7 +17,7 @@ protected:
 
     std::vector<STRUCT_GT_SENSORS_ALL> m_sen_base_all;
 
-    std::vector<std::vector<STRUCT_GT_SENSORS_ALL> > m_sen_extrapolated_all;
+    std::vector<std::vector<STRUCT_GT_SENSORS_ALL> > m_sen__all;
 
     int m_SensorInertialWidth;
 
@@ -31,7 +31,7 @@ protected:
 
     std::vector<bool> m_sen_base_visibility;
 
-    std::vector<std::vector<bool> >  m_sen_extrapolated_visibility;
+    std::vector<std::vector<bool> >  m_sen__visibility;
 
 
 public:
@@ -44,9 +44,9 @@ public:
 
     void beginGroundTruthGeneration(SensorMetaData &gt_data) {
 
-        generate_sen_base_pixel_position_pixel_displacement(gt_data);
+        generate_sen_base_point_displacement(gt_data);
 
-        //generate_sen_extrapolated_pixel_position_pixel_displacement();
+        //generate_sen__pixel_position_pixel_displacement();
     }
 
     const std::string &getSensorName() const {
@@ -66,7 +66,7 @@ public:
     }
 
     const std::vector<std::vector<STRUCT_GT_SENSORS_ALL> > &getExtrapolatedGroundTruthDetails() const {
-        return m_sen_extrapolated_all;
+        return m_sen__all;
     }
 
     ushort& getSensorStartPoint() {
@@ -77,9 +77,9 @@ public:
         m_sensorName = sensorName;
     }
 
-    void generate_sen_base_pixel_position_pixel_displacement(SensorMetaData gt_data);
+    void generate_sen_base_point_displacement(SensorMetaData gt_data);
 
-    void generate_sen_extrapolated_pixel_position_pixel_displacement();
+    void generate_sen__pixel_position_pixel_displacement();
 
     const std::vector<bool>  &get_sen_base_visibility()    const {
         return m_sen_base_visibility;

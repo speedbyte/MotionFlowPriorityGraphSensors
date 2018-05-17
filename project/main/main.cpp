@@ -312,22 +312,18 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
                         ptr_list_of_gt_objects.at(
-                                obj_count)->generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(
+                                obj_count)->generate_object_mean_centroid_displacement(
                                 ptr_list_of_gt_objects.at(
-                                        obj_count)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement(),
-                                ptr_list_of_gt_objects.at(obj_count)->get_obj_extrapolated_shape_visibility(),
+                                        obj_count)->get_object_stencil_point_displacement(),
+                                ptr_list_of_gt_objects.at(obj_count)->get_object_shape_visibility(),
                                 ptr_list_of_gt_objects.at(
-                                        obj_count)->get_obj_extrapolated_edge_pixel_point_pixel_displacement(),
+                                        obj_count)->get_object_edge_point_displacement(),
                                 "ground_truth");
-                        ptr_list_of_gt_objects.at(obj_count)->generate_obj_line_parameters("ground_truth");
                     }
 
-                    gt_flow.generate_edge_contour();
                     //gt_flow.visualiseStencil();
 
-                    //gt_flow.validate_ground_truth_data();
-
-                    //gt_flow.generate_collision_points();
+                    gt_flow.generate_collision_points();
                     gt_flow.generate_shape_points(); // this is to just create Jaccard Index  =  1
                     //gt_flow.generate_mean_displacement_points();
 
@@ -342,15 +338,15 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         std::vector<AlgorithmFlow> dummy;
 
         PixelRobustness pixelRobustness(fs);
-        //VectorRobustness vectorRobustness(fs);
+        VectorRobustness vectorRobustness(fs);
         SensorFusion sensorFusion(fs);
 
 
         if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
 
-            //sensorFusion.compareHistograms(gt_flow, dummy[0]);
+            sensorFusion.compareHistograms(gt_flow, dummy[0]);
             pixelRobustness.generatePixelRobustness(gt_flow, dummy[0]);
-            //vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
+            vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
         }
 
         time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
@@ -388,7 +384,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         int width = list_of_gt_objects_base.at(obj_count).getInertialWidth();
                         int height = list_of_gt_objects_base.at(obj_count).getInertialHeight();
                         std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
-                                obj_count).get_obj_extrapolated_visibility();
+                                obj_count).get_object_visibility();
 
                         SimulatedObjects objects(("simulated_" + list_of_gt_objects_base.at(obj_count).getObjectName()), width,
                                                  height, extrapolated_visibility);
@@ -404,7 +400,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
                         list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index], fps);
-                        list_of_algorithm_flow[env_index].generate_edge_contour();
 
                         if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
 
@@ -418,13 +413,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                             list_of_simulated_objects.at(i)
-                                    .generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement(
+                                    .generate_object_mean_centroid_displacement(
                                             list_of_simulated_objects.at(
-                                                    i).get_obj_extrapolated_stencil_pixel_point_pixel_displacement(),
-                                            list_of_simulated_objects.at(i).get_obj_extrapolated_shape_visibility(),
+                                                    i).get_object_stencil_point_displacement(),
+                                            list_of_simulated_objects.at(i).get_object_shape_visibility(),
                                             list_of_simulated_objects.at(
-                                                    i).get_obj_extrapolated_edge_pixel_point_pixel_displacement(), "algorithm");
-                            list_of_simulated_objects.at(i).generate_obj_line_parameters("algorithm");
+                                                    i).get_object_edge_point_displacement(), "algorithm");
                         }
 
                         //list_of_algorithm_flow[env_index].generate_collision_points();
@@ -443,9 +437,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-                    //sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    //pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    //vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                 }
             }
 
@@ -454,9 +448,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
-                    //sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    //pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    //vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    sensorFusion.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
+                    vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
                 }
             }
 

@@ -21,9 +21,11 @@ protected:
 
     boost::filesystem::path  m_generatepath;
 
-    boost::filesystem::path  m_collision_obj_path;
+    boost::filesystem::path  m_collision_object_path;
 
     boost::filesystem::path  m_flow_occ_path;
+
+    boost::filesystem::path  m_edge_path;
 
     boost::filesystem::path  m_position_occ_path;
 
@@ -82,9 +84,9 @@ public:
 
     void generate_collision_points();
 
-    void generate_edge_contour();
+    void visualiseStencil_shape(void);
 
-    void visualiseStencil(void);
+    void visualiseStencil_line(void);
 
     void generate_shape_points();
 
@@ -103,11 +105,6 @@ public:
     void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
 
     void generate_pdf_correct_displacement_x();
-
-    void visualiseBB(int obj_index, int sensor_index, int frame_count);
-
-    void validate_ground_truth_data();
-
 
 private:
 

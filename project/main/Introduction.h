@@ -248,13 +248,13 @@
 /**
  *
 
-    void generate_obj_base_pixel_position_pixel_displacement();
+    void generate_object_base_point_displacement();
 
-    void generate_obj_extrapolated_pixel_position_pixel_displacement();
+    void generate_object_pixel_position_pixel_displacement();
 
-    void generate_obj_extrapolated_shape_pixel_point_pixel_displacement_pixel_visibility();
+    void generate_object_stencil_point_displacement_pixel_visibility();
 
-    void generate_obj_extrapolated_mean_pixel_centroid_pixel_displacement( ) override;
+    void generate_object_mean_centroid_displacement( ) override;
 
 
  Project goals:

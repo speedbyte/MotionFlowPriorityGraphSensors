@@ -26,7 +26,7 @@ protected:
 
     boost::filesystem::path  m_generatepath;
 
-    boost::filesystem::path  m_position_obj_path;
+    boost::filesystem::path  m_position_object_path;
 
     std::string m_scenario;
 

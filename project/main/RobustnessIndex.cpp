@@ -42,7 +42,7 @@ void SensorFusion::compareHistograms(const OpticalFlow &opticalFlow, const Optic
                 std::vector<float> data_x, data_y;
                 std::vector<float> data_x_pts, data_y_pts;
 
-                //bool visibility = obj_extrapolated_blob_visibility.at(sensor_index).at(frame_count).at(0);
+                //bool visibility = obj__blob_visibility.at(sensor_index).at(frame_count).at(0);
                 bool visibility = true;
 
                 const unsigned CLUSTER_SIZE = (unsigned) opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index).at(frame_count).size();

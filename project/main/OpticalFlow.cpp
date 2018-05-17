@@ -76,12 +76,16 @@ void OpticalFlow::prepare_directories() {
 
         sprintf(char_dir_append, "%02d", i);
 
-        m_collision_obj_path = m_generatepath.string() + "/collision_obj_";
-        path =  m_collision_obj_path.string() + char_dir_append;
+        m_collision_object_path = m_generatepath.string() + "/collision_object_";
+        path =  m_collision_object_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
         m_flow_occ_path = m_generatepath.string() + "/flow_occ_";
         path =  m_flow_occ_path.string() + char_dir_append;
+        boost::filesystem::create_directories(path);
+
+        m_edge_path = m_generatepath.string() + "/edge_";
+        path =  m_edge_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
         m_position_occ_path = m_generatepath.string() + "/position_occ_";
@@ -111,141 +115,6 @@ void OpticalFlow::getCombination( const std::vector<Objects *> &m_list_objects, 
 
             list_of_objects_combination.push_back(std::make_pair(((*objectIterator)),
                     ((*objectIteratorNext))));
-        }
-    }
-}
-
-void OpticalFlow::generate_edge_contour() {
-
-
-    std::vector<Objects*> list_of_current_objects;
-
-    if ( m_resultordner == "/ground_truth") {
-        list_of_current_objects = m_ptr_list_gt_objects;
-    }
-    else {
-        list_of_current_objects = m_ptr_list_simulated_objects;
-    }
-
-    for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
-
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_edge_movement(list_of_current_objects.size());
-
-        char sensor_index_folder_suffix[50];
-        char file_name_input_image[50];
-
-        std::cout << "edge counter results will be stored in " << m_resultordner << std::endl;
-
-        /*
-        if ( frame_types == video_frames) {
-            cv::VideoCapture cap;
-            cap.open(Dataset::getGroundTruthPath().string() + "image_02/movement.avi");
-            if (!cap.isOpened()) {
-                std::cout << "Could not initialize capturing...\n";
-                return;
-            }
-        }*/
-        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        std::string results_flow_matrix_str = m_flow_occ_path.string() + "/" +
-                sensor_index_folder_suffix + "/" + "result_flow.yaml";
-
-        const int MAX_COUNT = 5000;
-
-        std::string temp_result_flow_path;
-
-        std::cout << "creating edge files for sensor_index " << sensor_index << std::endl;
-        std::vector<std::pair<cv::Point2f, cv::Point2f> > next_pts_array;
-
-        for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
-            //draw new ground truth flow.
-
-
-            cv::Mat objectEdgeFrame( Dataset::getFrameSize(), CV_8UC1 );
-            objectEdgeFrame = cv::Scalar_<char>(0);
-
-
-            sprintf(file_name_input_image, "000%03d_10_edge.png", frame_count);
-
-            temp_result_flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-
-            cv::Mat edge_02_frame = cv::imread(temp_result_flow_path, CV_LOAD_IMAGE_COLOR);
-            if ( edge_02_frame.data == NULL ) {
-                std::cerr << temp_result_flow_path << " not found" << std::endl;
-                throw ("No image file found error");
-            }
-
-            cv::Mat edge_02_frame_gray;
-            cv::cvtColor(edge_02_frame, edge_02_frame_gray, CV_RGB2GRAY);
-
-            // Calculate optical generate_flow_frame map using LK algorithm
-            std::cout << "frame_count " << frame_count << std::endl;
-
-            if ( frame_count > 0 ) {
-                for ( ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++ ) {
-
-                    objectEdgeFrame = cv::Scalar_<char>(0);
-                    bool visibility = list_of_current_objects.at(obj_index)->get_obj_extrapolated_visibility().at(sensor_index).at(frame_count);
-                    if ( visibility ) {
-
-                        // This is for the base model
-                        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > edge_movement(list_of_current_objects.size());
-
-                        assert(list_of_current_objects.size() == list_of_current_objects.size());
-
-                        next_pts_array = list_of_current_objects.at(obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(sensor_index).at(frame_count);
-
-                        //std::cout << roi_offset.x + col_index << std::endl;
-                        auto COUNT = next_pts_array.size();
-                        std::cout << "making a edge contour on the basis of " << m_resultordner << " " << list_of_current_objects.at(obj_index)->getObjectId() << std::endl;
-                        std::cout << "base count " << COUNT << std::endl;
-                        for ( ushort next_pts_index = 0; next_pts_index < COUNT; next_pts_index++ ) {
-
-                            //printf("gray %u\n", edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)));
-                            if ( edge_02_frame_gray.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)) != 0 ) {
-
-                                objectEdgeFrame.at<char>(cvRound(next_pts_array.at(next_pts_index).first.y), cvRound(next_pts_array.at(next_pts_index).first.x)) = 255;
-                                edge_movement.at(obj_index).push_back(
-                                        std::make_pair(next_pts_array.at(next_pts_index).first,
-                                                next_pts_array.at(next_pts_index).second));
-                                //std::cout << "jayy " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
-
-                            }
-                            else {
-                                //std::cout << "nopes " << next_pts_array.at(next_pts_index).first.x << " " << next_pts_array.at(next_pts_index).first.y << std::endl;
-                            }
-                        }
-
-                        //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
-                        //cv::imshow("edge", objectEdgeFrame);
-                        //cv::waitKey(2000);
-
-
-                        auto edge_points = edge_movement.at(obj_index).size();
-                        std::cout << edge_points << std::endl;
-                        //assert(edge_points != 0);
-
-                        outer_edge_movement.at(obj_index).push_back(edge_movement.at(obj_index));
-
-                    }
-                    else {
-
-                        for ( ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++ ) {
-                            outer_edge_movement.at(obj_index).push_back(
-                                    {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
-                        }
-                    }
-                }
-            }
-            else {
-                for ( ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++ ) {
-                    outer_edge_movement.at(obj_index).push_back(
-                            {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
-                }
-            }
-        }
-
-        for ( ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
-            list_of_current_objects.at(obj_index)->generate_obj_extrapolated_edge_pixel_point_pixel_displacement(outer_edge_movement.at(obj_index));
         }
     }
 }
@@ -284,7 +153,7 @@ void OpticalFlow::generate_shape_points() {
                       << " for datafilter " << datafilter_index << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
-                    ->get_list_obj_shape_parameters().at(datafilter_index).at(sensor_index).size();
+                    ->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).size();
 
             assert(FRAME_COUNT > 0);
 
@@ -297,10 +166,10 @@ void OpticalFlow::generate_shape_points() {
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
-                            obj_index)->get_list_obj_shape_parameters().at(0).at(sensor_index).at(frame_count).size();
+                            obj_index)->get_list_object_shapepoints_displacement().at(0).at(sensor_index).at(frame_count).size();
 
                     auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
-                            obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(sensor_index).at(frame_count).size();
+                            obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).at(frame_count).size();
 
                     if ( m_resultordner != "/ground_truth" ) {
 
@@ -308,14 +177,14 @@ void OpticalFlow::generate_shape_points() {
 
                     }
 
-                    if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(sensor_index).at(frame_count) ) {
+                    if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index).at(frame_count) ) {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
                         float vollTreffer = 0;
                         float baseTreffer;
 
-                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
                                 (sensor_index).at(frame_count).second;
 
                         auto dist_gt = cv::norm(gt_displacement);
@@ -332,7 +201,7 @@ void OpticalFlow::generate_shape_points() {
                             for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
 
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
-                                        get_list_obj_shape_parameters().at(datafilter_index
+                                        get_list_object_shapepoints_displacement().at(datafilter_index
                                 ).at(sensor_index).at(frame_count).at(cluster_count).second;
 
                                 auto dist_algo = cv::norm(algo_displacement);
@@ -369,7 +238,7 @@ void OpticalFlow::generate_shape_points() {
 
                     } else {
                         std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
-                                  list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(sensor_index)
+                                  list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index)
                                           .at(frame_count)
                                   << " and hence not generating any shape points for this object " << std::endl;
 
@@ -414,7 +283,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
     std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
     unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
-            ->get_list_obj_shape_parameters().at(datafilter_index).at(0).size();
+            ->get_list_object_shapepoints_displacement().at(datafilter_index).at(0).size();
 
     std::cout << "generating shape points in OpticalFlow.cpp for sensor fusion" << m_resultordner << " for datafilter " << datafilter_index << std::endl;
 
@@ -430,24 +299,24 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
             for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                 auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
-                        obj_index)->get_list_obj_shape_parameters().at(0).at(0).at(frame_count).size();
+                        obj_index)->get_list_object_shapepoints_displacement().at(0).at(0).at(frame_count).size();
 
                 auto CLUSTER_COUNT_GT_2 = m_ptr_list_gt_objects.at(
-                        obj_index)->get_list_obj_shape_parameters().at(0).at(1).at(frame_count).size();
+                        obj_index)->get_list_object_shapepoints_displacement().at(0).at(1).at(frame_count).size();
 
                 //CLUSTER_COUNT_GT =  ( CLUSTER_COUNT_GT + CLUSTER_COUNT_GT_2 ) /2;
-                if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(0).at(frame_count) ||
-                        list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(1).at(frame_count)) {
+                if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(0).at(frame_count) ||
+                        list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(1).at(frame_count)) {
 
                     // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
                     float vollTreffer = 0;
                     float baseTreffer;
 
-                    cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                    cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
                             (0).at(frame_count).second;
 
-                    cv::Point2f gt_displacement_2 = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at
+                    cv::Point2f gt_displacement_2 = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
                             (1).at(frame_count).second;
 
                     //gt_displacement = (gt_displacement + gt_displacement_2)/2;
@@ -468,15 +337,15 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     }
                     else {
 
-                        if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(0).at(frame_count)) {
+                        if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(0).at(frame_count)) {
 
                             auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(0).at(frame_count).size();
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(0).at(frame_count).size();
 
                             for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
 
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
-                                        get_list_obj_shape_parameters().at(datafilter_index
+                                        get_list_object_shapepoints_displacement().at(datafilter_index
                                 ).at(0).at(frame_count).at(cluster_count).second;
 
                                 auto dist_algo = cv::norm(algo_displacement);
@@ -503,15 +372,15 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                             baseTreffer = ((float) CLUSTER_COUNT_GT) / mStepSize;
                         }
 
-                        else if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(1).at(frame_count)) {
+                        else if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(1).at(frame_count)) {
 
                             auto CLUSTER_COUNT_ALGO_2 = list_of_current_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(1).at(frame_count).size();
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(1).at(frame_count).size();
 
                             for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO_2; cluster_count++) {
 
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
-                                        get_list_obj_shape_parameters().at(datafilter_index
+                                        get_list_object_shapepoints_displacement().at(datafilter_index
                                 ).at(1).at(frame_count).at(cluster_count).second;
 
                                 auto dist_algo = cv::norm(algo_displacement);
@@ -550,7 +419,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
 
                 } else {
                     std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
-                            list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(sensor_index)
+                            list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index)
                                     .at(frame_count)
                             << " and hence not generating any shape points for this object " << std::endl;
 
@@ -602,7 +471,7 @@ void OpticalFlow::generate_mean_displacement_points() {
                       << " for datafilter " << datafilter_index << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
-                    ->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(datafilter_index).at(sensor_index).size();
+                    ->get_list_object_mean_centroid_displacement().at(datafilter_index).at(sensor_index).size();
 
             assert(FRAME_COUNT > 0);
 
@@ -619,10 +488,10 @@ void OpticalFlow::generate_mean_displacement_points() {
                             cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m)
                     };
 
-                    if (list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(sensor_index).at(frame_count) && frame_count != 0 ) {
+                    if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index).at(frame_count) && frame_count != 0 ) {
 
                         cv::Point2f displacement = list_of_current_objects.at(obj_index)->
-                                get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(datafilter_index
+                                get_list_object_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(frame_count).second;
 
 
@@ -633,7 +502,7 @@ void OpticalFlow::generate_mean_displacement_points() {
 
                     } else {
                         std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
-                                  list_of_current_objects.at(obj_index)->get_obj_extrapolated_mean_visibility().at(sensor_index)
+                                  list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index)
                                           .at(frame_count)
                                   << " and hence not generating any displacement points for this object " << std::endl;
 
@@ -703,7 +572,7 @@ void OpticalFlow::generate_collision_points() {
                     << " for datafilter " << datafilter_index << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
-                    ->get_line_parameters().at(0).at(sensor_index).size();
+                    ->get_list_object_line_parameters().at(0).at(sensor_index).size();
             
             assert(FRAME_COUNT > 0);
 
@@ -720,7 +589,7 @@ void OpticalFlow::generate_collision_points() {
 
                 sprintf(file_name_image, "000%03d_10.png", frame_count);
                 std::string temp_collision_image_path =
-                        m_collision_obj_path.string() + sensor_index_folder_suffix + "/" + file_name_image;
+                        m_collision_object_path.string() + sensor_index_folder_suffix + "/" + file_name_image;
 
 
                 FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
@@ -734,10 +603,10 @@ void OpticalFlow::generate_collision_points() {
                         obj_index < list_of_current_objects_combination.size(); obj_index++) {
 
                     if ((list_of_current_objects_combination.at(
-                                    obj_index).first->get_obj_extrapolated_mean_visibility().at(
+                                    obj_index).first->get_object_mean_visibility().at(
                                     sensor_index)
                             .at(frame_count)) && (list_of_current_objects_combination.at(obj_index).second->
-                                    get_obj_extrapolated_mean_visibility()
+                                    get_object_mean_visibility()
                             .at(sensor_index)
                             .at(frame_count))) {
 
@@ -746,7 +615,7 @@ void OpticalFlow::generate_collision_points() {
                         // Then push_back the two points in the vector
 
                         cv::Point2f lineparameters1 = list_of_current_objects_combination.at(
-                                        obj_index).first->get_line_parameters().at(datafilter_index).at
+                                        obj_index).first->get_list_object_line_parameters().at(datafilter_index).at
                                         (sensor_index)
                                 .at(frame_count);
 
@@ -754,7 +623,7 @@ void OpticalFlow::generate_collision_points() {
 
 
                         cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(
-                                obj_index).second->get_line_parameters().at(0).at(sensor_index).at(frame_count);
+                                obj_index).second->get_list_object_line_parameters().at(0).at(sensor_index).at(frame_count);
 
                         std::cout << "object "
                                 << list_of_current_objects_combination.at(obj_index).first->getObjectId()
@@ -767,11 +636,11 @@ void OpticalFlow::generate_collision_points() {
                                 frame_collision_points);
 
                         lineparameters1 = list_of_current_objects_combination.at(
-                                        obj_index).second->get_line_parameters().at(datafilter_index).at
+                                        obj_index).second->get_list_object_line_parameters().at(datafilter_index).at
                                         (sensor_index)
                                 .at(frame_count);
 
-                        lineparameters2 = list_of_gt_objects_combination.at(obj_index).first->get_line_parameters
+                        lineparameters2 = list_of_gt_objects_combination.at(obj_index).first->get_list_object_line_parameters
                                         ().at(0).at(sensor_index)
                                 .at(frame_count);
 
@@ -799,13 +668,13 @@ void OpticalFlow::generate_collision_points() {
                                 << list_of_current_objects_combination.at(obj_index).first->getObjectId()
                                 << " visibility = " <<
                                 list_of_current_objects_combination.at(
-                                                obj_index).first->get_obj_extrapolated_mean_visibility().at(
+                                                obj_index).first->get_object_mean_visibility().at(
                                                 sensor_index)
                                         .at(frame_count) << " and object "
                                 << list_of_gt_objects_combination.at(obj_index)
                                         .second->getObjectId() << " visibility = "
                                 << list_of_current_objects_combination.at(
-                                                obj_index).second->get_obj_extrapolated_mean_visibility().at(
+                                                obj_index).second->get_object_mean_visibility().at(
                                                 sensor_index)
                                         .at(frame_count)
                                 << " and hence not generating any collision points for this object combination "
@@ -883,7 +752,7 @@ void OpticalFlow::find_collision_points_given_two_line_parameters(const cv::Poin
 };
 
 
-void OpticalFlow::visualiseStencil(void) {
+void OpticalFlow::visualiseStencil_shape(void) {
 
     std::cout << "visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
 
@@ -912,17 +781,17 @@ void OpticalFlow::visualiseStencil(void) {
 
                 for (unsigned obj_index = 0; obj_index < m_ptr_list_simulated_objects_base.size(); obj_index++) {
 
-                    if ((m_ptr_list_simulated_objects_base.at(obj_index)->get_obj_extrapolated_visibility().at(
+                    if ((m_ptr_list_simulated_objects_base.at(obj_index)->get_object_visibility().at(
                             sensor_index).at(frame_count)
                     )) {
 
                         const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_simulated_objects_base.at(
-                                obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                                obj_index)->get_object_stencil_point_displacement().at
                                 (sensor_index).at(frame_count).size();
                         for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_ptr_list_simulated_objects_base.at(
-                                            obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                            obj_index)->get_object_stencil_point_displacement().at(
                                             sensor_index)
                                     .at(frame_count).at(cluster_index).first;
 
@@ -942,18 +811,18 @@ void OpticalFlow::visualiseStencil(void) {
 
                 for (unsigned obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
 
-                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
+                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_object_visibility().at(
                             sensor_index).at(frame_count)
                     )) {
 
                         const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_simulated_objects.at(
-                                obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(sensor_index).at(
+                                obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).at(
                                 frame_count).size();
 
                         for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_ptr_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
                                     sensor_index).at(frame_count).at(cluster_index).first;
                             cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 0, 255), 1, 8);
 
@@ -973,23 +842,23 @@ void OpticalFlow::visualiseStencil(void) {
 
                 for (unsigned obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
 
-                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
+                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_object_visibility().at(
                             sensor_index).at(
                             frame_count)
                     )) {
 
                         const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_simulated_objects.at(
-                                obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(sensor_index).at(
+                                obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).at(
                                 frame_count).size();
 
                         for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_ptr_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
                                     sensor_index).at(frame_count).at(cluster_index).first;
 
                             cv::Point2f displacement = m_ptr_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
                                     sensor_index).at(frame_count).at(cluster_index).second;
 
                             cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
@@ -1016,23 +885,23 @@ void OpticalFlow::visualiseStencil(void) {
 
                 for (unsigned obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
 
-                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
+                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_object_visibility().at(
                             sensor_index).at(
                             frame_count)
                     )) {
 
                         const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_simulated_objects.at(
-                                obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(sensor_index).at(
+                                obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).at(
                                 frame_count).size();
 
                         for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                             cv::Point2f pts = m_ptr_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
                                     sensor_index).at(frame_count).at(cluster_index).first;
 
                             cv::Point2f displacement = m_ptr_list_simulated_objects.at(
-                                    obj_index)->get_list_obj_shape_parameters().at(datafilter_index).at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
                                     sensor_index).at(frame_count).at(cluster_index).second;
 
                             cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
@@ -1080,7 +949,7 @@ void OpticalFlow::visualiseStencil(void) {
 
             for (unsigned obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
-                if ((m_ptr_list_gt_objects.at(obj_index)->get_obj_base_visibility().at(frame_count))) {
+                if ((m_ptr_list_gt_objects.at(obj_index)->get_object_base_visibility().at(frame_count))) {
 
                     float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
                             (sensor_index).at(frame_count).m_region_of_interest_px.x;
@@ -1112,12 +981,12 @@ void OpticalFlow::visualiseStencil(void) {
                     cv::rectangle(tempGroundTruthImage, boundingbox3, cv::Scalar(0, 0, 255), 1, 8, 0);
                     //cv::rectangle(tempGroundTruthImage, boundingbox3, cv::Scalar(255, 0, 0), 1, 8, 0);
 
-                    cv::Point2f pts_mean = m_ptr_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(sensor_index).
+                    cv::Point2f pts_mean = m_ptr_list_gt_objects.at(obj_index)->get_list_object_mean_centroid_displacement().at(sensor_index).
                             at(0).at(frame_count).first;
-                    cv::Point2f pts_basic = m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_pixel_position_pixel_displacement().at(
+                    cv::Point2f pts_basic = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at(
                             sensor_index).at(frame_count).first;
 
-                    cv::Point2f displacement = m_ptr_list_gt_objects.at(obj_index)->get_list_obj_extrapolated_mean_pixel_centroid_pixel_displacement().at(sensor_index).at(
+                    cv::Point2f displacement = m_ptr_list_gt_objects.at(obj_index)->get_list_object_mean_centroid_displacement().at(sensor_index).at(
                             0).at(frame_count).second;
 
                     cv::Point2f next_pts = cv::Point2f(pts_basic.x + displacement.x*10, pts_basic.y + displacement.y*10);
@@ -1138,16 +1007,16 @@ void OpticalFlow::visualiseStencil(void) {
 
             for (unsigned obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
-                if ((m_ptr_list_gt_objects.at(obj_index)->get_obj_base_visibility().at(frame_count))
+                if ((m_ptr_list_gt_objects.at(obj_index)->get_object_base_visibility().at(frame_count))
                         ) {
 
                     const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_gt_objects.at(
-                            obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            obj_index)->get_object_stencil_point_displacement().at
                             (sensor_index).at(frame_count).size();
                     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
                         cv::Point2f pts = m_ptr_list_gt_objects.at(
-                                        obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        obj_index)->get_object_stencil_point_displacement().at(
                                         sensor_index)
                                 .at(frame_count).at(cluster_index).first;
 
@@ -1169,23 +1038,23 @@ void OpticalFlow::visualiseStencil(void) {
 
             for (unsigned obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
-                if ((m_ptr_list_gt_objects.at(obj_index)->get_obj_extrapolated_visibility().at(sensor_index).at(
+                if ((m_ptr_list_gt_objects.at(obj_index)->get_object_visibility().at(sensor_index).at(
                         frame_count)
                 )) {
 
                     unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_gt_objects.at(
-                            obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at
+                            obj_index)->get_object_stencil_point_displacement().at
                             (sensor_index).at(frame_count).size();
                     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
 
                         cv::Point2f pts = m_ptr_list_gt_objects.at(
-                                        obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        obj_index)->get_object_stencil_point_displacement().at(
                                         sensor_index)
                                 .at(frame_count).at(cluster_index).first;
 
                         cv::Point2f displacement = m_ptr_list_gt_objects.at(
-                                        obj_index)->get_obj_extrapolated_stencil_pixel_point_pixel_displacement().at(
+                                        obj_index)->get_object_stencil_point_displacement().at(
                                         sensor_index)
                                 .at(frame_count).at(cluster_index).second;
 
@@ -1214,78 +1083,334 @@ void OpticalFlow::visualiseStencil(void) {
 }
 
 
-void OpticalFlow::validate_ground_truth_data( ) {
 
+void OpticalFlow::visualiseStencil_line(void) {
 
-    for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
+    std::cout << "visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
 
-        char sensor_index_folder_suffix[50];
-        char file_name_input_image[50], file_name_input_image_edge[50];
+    char file_name_image[50], file_name_image_output[50];
 
-        bool needToInit = true;
+    cv::Mat image_data_and_shape;
 
-        std::cout << "results will be stored in " << m_resultordner << std::endl;
+    cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
+    FlowImageExtended F_png_write;
 
-        cv::Mat curGray, prevGray;
-        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
+    for ( unsigned datafilter_index = 0; datafilter_index < 4; datafilter_index++ ) {
 
+        for (int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
+            for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++) {
 
-        std::string temp_result_flow_path, temp_result_position_path, temp_result_edge_path;
+                std::cout << "frame_count " << frame_count << std::endl;
+                std::string output_image_file_with_path;
 
+                /*---------------------------------------------------------------------------------*/
+                tempGroundTruthImage = cv::Scalar::all(0);
 
-        for (ushort frame_count = 0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
-            //draw new ground truth flow.
+                sprintf(file_name_image_output, "000%03d_10_stencil_base_algo.png", frame_count);
+                output_image_file_with_path =
+                        m_generatepath.string() + "stencil/" + file_name_image_output;
 
-            if (frame_count >= MAX_ITERATION_RESULTS) {
-                break;
+                for (unsigned obj_index = 0; obj_index < m_ptr_list_simulated_objects_base.size(); obj_index++) {
+
+                    if ((m_ptr_list_simulated_objects_base.at(obj_index)->get_object_visibility().at(
+                            sensor_index).at(frame_count)
+                    )) {
+
+                        const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_simulated_objects_base.at(
+                                obj_index)->get_object_stencil_point_displacement().at
+                                (sensor_index).at(frame_count).size();
+                        for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
+                            cv::Point2f pts = m_ptr_list_simulated_objects_base.at(
+                                            obj_index)->get_object_stencil_point_displacement().at(
+                                            sensor_index)
+                                    .at(frame_count).at(cluster_index).first;
+
+                            cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(255, 255, 255), 1, 8);
+
+                        }
+                    }
+                }
+                cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+                /*---------------------------------------------------------------------------------*/
+                tempGroundTruthImage = cv::Scalar::all(255);
+
+                sprintf(file_name_image_output, "000%03d_10_pixel_algo_%d.png", frame_count,
+                        datafilter_index);
+                output_image_file_with_path =
+                        m_generatepath.string() + "stencil/" + file_name_image_output;
+
+                for (unsigned obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+
+                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_object_visibility().at(
+                            sensor_index).at(frame_count)
+                    )) {
+
+                        const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_simulated_objects.at(
+                                obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).at(
+                                frame_count).size();
+
+                        for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
+                            cv::Point2f pts = m_ptr_list_simulated_objects.at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
+                                    sensor_index).at(frame_count).at(cluster_index).first;
+                            cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 0, 255), 1, 8);
+
+                        }
+                    }
+                }
+                cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+                /*---------------------------------------------------------------------------------*/
+
+                tempGroundTruthImage = cv::Scalar::all(255);
+                F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+
+                sprintf(file_name_image_output, "000%03d_10_flow_base_%d.png", frame_count,
+                        datafilter_index);
+                output_image_file_with_path =
+                        m_generatepath.string() + "stencil/" + file_name_image_output;
+
+                for (unsigned obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+
+                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_object_visibility().at(
+                            sensor_index).at(
+                            frame_count)
+                    )) {
+
+                        const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_simulated_objects.at(
+                                obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).at(
+                                frame_count).size();
+
+                        for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
+                            cv::Point2f pts = m_ptr_list_simulated_objects.at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
+                                    sensor_index).at(frame_count).at(cluster_index).first;
+
+                            cv::Point2f displacement = m_ptr_list_simulated_objects.at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
+                                    sensor_index).at(frame_count).at(cluster_index).second;
+
+                            cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
+
+                            F_png_write.setFlowU(pts.x, pts.y, displacement.x);
+                            F_png_write.setFlowV(pts.x, pts.y, displacement.y);
+                            F_png_write.setValid(pts.x, pts.y, true);
+
+                            //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
+                        }
+                    }
+                }
+                //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+                F_png_write.writeExtended(output_image_file_with_path);
+                /*---------------------------------------------------------------------------------*/
+
+                tempGroundTruthImage = cv::Scalar::all(255);
+                F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+
+                sprintf(file_name_image_output, "000%03d_10_flow_algo_%d.png", frame_count,
+                        datafilter_index);
+                output_image_file_with_path =
+                        m_generatepath.string() + "stencil/" + file_name_image_output;
+
+                for (unsigned obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+
+                    if ((m_ptr_list_simulated_objects.at(obj_index)->get_object_visibility().at(
+                            sensor_index).at(
+                            frame_count)
+                    )) {
+
+                        const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_simulated_objects.at(
+                                obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).at(
+                                frame_count).size();
+
+                        for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
+                            cv::Point2f pts = m_ptr_list_simulated_objects.at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
+                                    sensor_index).at(frame_count).at(cluster_index).first;
+
+                            cv::Point2f displacement = m_ptr_list_simulated_objects.at(
+                                    obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(
+                                    sensor_index).at(frame_count).at(cluster_index).second;
+
+                            cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
+
+                            F_png_write.setFlowU(pts.x, pts.y, displacement.x);
+                            F_png_write.setFlowV(pts.x, pts.y, displacement.y);
+                            F_png_write.setValid(pts.x, pts.y, true);
+
+                            //cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 0, 255), 1, 8, 0, 0.25);
+                        }
+                    }
+                }
+                //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+                F_png_write.writeExtended(output_image_file_with_path);
             }
+        }
+    }
+    std::cout << "end visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
 
-            /*
-            if ( frame_count%sensor_index != 0 ) {
-                continue;
-            }*/
-            sprintf(file_name_input_image, "000%03d_10.png", frame_count );
-            // Break out of the loop if the user presses the Esc key
-            std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
-                    file_name_input_image;
 
-            image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
+    std::cout << "visualise stencil at " << m_generatepath.string() + "/stencil/" << std::endl;
 
-            if (image_02_frame.data == NULL) {
-                std::cerr << input_image_file_with_path << " not found" << std::endl;
-                throw ("No image file found error");
-            }
+    char file_name_input_image[50];
+
+    for ( int sensor_index = 0; sensor_index <= SENSOR_COUNT; sensor_index++ ) {
+
+        for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; frame_count++)
+        {
+
             std::cout << "frame_count " << frame_count << std::endl;
+            std::string output_image_file_with_path;
 
-            for (ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+            /*---------------------------------------------------------------------------------*/
+            tempGroundTruthImage = cv::Scalar::all(0);
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count);
 
-                bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_obj_extrapolated_visibility().at(
-                        sensor_index).at(frame_count);
-                if (visibility) {
+            std::string input_image_file_with_path = mImageabholOrt.string() + "/" +
+                                                     file_name_input_image;
+
+            tempGroundTruthImage = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
+
+            sprintf(file_name_image_output, "000%03d_10_bb.png", frame_count);
+            output_image_file_with_path =
+                    m_generatepath.string() + "/stencil/" + file_name_image_output;
+
+            for (unsigned obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
+
+                if ((m_ptr_list_gt_objects.at(obj_index)->get_object_base_visibility().at(frame_count))) {
 
                     float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
                             (sensor_index).at(frame_count).m_region_of_interest_px.x;
                     float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
                             (sensor_index).at(frame_count).m_region_of_interest_px.y;
 
-                    int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                            sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
-                    int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                            sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
+                    int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
+                    int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                    cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height),
-                            cv::Scalar(0, 0, 255), 4, 8, 0);
+                    int width_roi = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (sensor_index).at(frame_count).m_region_of_interest_px.width);
+                    int height_roi = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                            (sensor_index).at(frame_count).m_region_of_interest_px.height);
+
+                    cv::Rect boundingbox = cv::Rect(
+                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    sensor_index).at(frame_count).m_object_location_px.location_x_m),
+                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    sensor_index).at(frame_count).m_object_location_px.location_y_m),
+                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m),
+                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                    sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m));
+
+                    cv::Rect boundingbox2 = cv::Rect(columnBegin, rowBegin, width, height );
+                    cv::Rect boundingbox3 = cv::Rect(columnBegin, rowBegin, width_roi, height_roi);
+
+                    cv::rectangle(tempGroundTruthImage, boundingbox2, cv::Scalar(0, 255, 0), 1, 8, 0);
+                    cv::rectangle(tempGroundTruthImage, boundingbox3, cv::Scalar(0, 0, 255), 1, 8, 0);
+                    //cv::rectangle(tempGroundTruthImage, boundingbox3, cv::Scalar(255, 0, 0), 1, 8, 0);
+
+                    cv::Point2f pts_mean = m_ptr_list_gt_objects.at(obj_index)->get_list_object_mean_centroid_displacement().at(sensor_index).
+                            at(0).at(frame_count).first;
+                    cv::Point2f pts_basic = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at(
+                            sensor_index).at(frame_count).first;
+
+                    cv::Point2f displacement = m_ptr_list_gt_objects.at(obj_index)->get_list_object_mean_centroid_displacement().at(sensor_index).at(
+                            0).at(frame_count).second;
+
+                    cv::Point2f next_pts = cv::Point2f(pts_basic.x + displacement.x*10, pts_basic.y + displacement.y*10);
+
+                    cv::arrowedLine(tempGroundTruthImage, pts_basic, next_pts, cv::Scalar(0,0,255), 2);
+
 
                 }
-
-                //cv::destroyAllWindows();
             }
-            cv::imshow("BB", image_02_frame);
-            cv::waitKey(0);
-            cv::destroyAllWindows();
-        }
+            cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
 
+            /*---------------------------------------------------------------------------------*/
+            tempGroundTruthImage = cv::Scalar::all(255);
+
+            sprintf(file_name_image_output, "000%03d_10_pixel_gt.png", frame_count);
+            output_image_file_with_path =
+                    m_generatepath.string() + "/stencil/" + file_name_image_output;
+
+            for (unsigned obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
+
+                if ((m_ptr_list_gt_objects.at(obj_index)->get_object_base_visibility().at(frame_count))
+                        ) {
+
+                    const unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_gt_objects.at(
+                            obj_index)->get_object_stencil_point_displacement().at
+                            (sensor_index).at(frame_count).size();
+                    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
+                        cv::Point2f pts = m_ptr_list_gt_objects.at(
+                                        obj_index)->get_object_stencil_point_displacement().at(
+                                        sensor_index)
+                                .at(frame_count).at(cluster_index).first;
+
+
+                        cv::circle(tempGroundTruthImage, pts, 1.5, cv::Scalar(0, 255, 0), 1, 8);
+
+                    }
+                }
+            }
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+
+            /*---------------------------------------------------------------------------------*/
+            tempGroundTruthImage = cv::Scalar::all(255);
+            F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+
+            sprintf(file_name_image_output, "000%03d_10_flow_gt.png", frame_count);
+            output_image_file_with_path =
+                    m_generatepath.string() + "/stencil/" + file_name_image_output;
+
+            for (unsigned obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
+
+                if ((m_ptr_list_gt_objects.at(obj_index)->get_object_visibility().at(sensor_index).at(
+                        frame_count)
+                )) {
+
+                    unsigned CLUSTER_SIZE = (unsigned) m_ptr_list_gt_objects.at(
+                            obj_index)->get_object_stencil_point_displacement().at
+                            (sensor_index).at(frame_count).size();
+                    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
+
+                        cv::Point2f pts = m_ptr_list_gt_objects.at(
+                                        obj_index)->get_object_stencil_point_displacement().at(
+                                        sensor_index)
+                                .at(frame_count).at(cluster_index).first;
+
+                        cv::Point2f displacement = m_ptr_list_gt_objects.at(
+                                        obj_index)->get_object_stencil_point_displacement().at(
+                                        sensor_index)
+                                .at(frame_count).at(cluster_index).second;
+
+
+                        cv::Point2f next_pts = cv::Point2f(pts.x + displacement.x, pts.y + displacement.y);
+
+                        F_png_write.setFlowU(pts.x, pts.y, displacement.x);
+                        F_png_write.setFlowV(pts.x, pts.y, displacement.y);
+                        F_png_write.setValid(pts.x, pts.y, true);
+
+                        cv::arrowedLine(tempGroundTruthImage, pts, next_pts, cv::Scalar(0, 255, 0), 1, 8, 0, 0.25);
+
+                    }
+                }
+            }
+
+            //F_png_write.writeExtended(output_image_file_with_path);
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+
+            //cv::namedWindow("bb", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("bb", tempGroundTruthImageBase);
+            //cv::waitKey(0);
+
+        }
     }
 }
+
