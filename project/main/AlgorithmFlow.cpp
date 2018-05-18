@@ -520,8 +520,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 needToInit = true;
             }
 
-            CannyEdgeDetection(input_image_file_with_path, temp_result_edge_path);
-
             if ( needToInit && algo == lk) { //|| ( frame_count%4 == 0) ) {
                 //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.
                 // automatic initialization

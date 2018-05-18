@@ -48,6 +48,57 @@ void GroundTruthFlow::prepare_directories() {
     }
 }
 
+void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path) {
+
+    cv::Mat src, src_gray;
+    cv::Mat dst, detected_edges, blurred_image;
+
+    int edgeThresh = 1;
+    int lowThreshold=15;
+
+    int const max_lowThreshold = 100;
+    int ratio = 10;
+    int kernel_size = 3;
+    std::string window_name = "Edge Map";
+    std::string path;
+    src = cv::imread(temp_result_flow_path);
+
+    if( !src.data ) {
+        std::cout << "no image found";
+        exit(-1);
+    }
+
+    /// Create a matrix of the same type and size as src (for dst)
+    dst.create( src.size(), src.type() );
+
+    /// Convert the image to grayscale
+    cv::cvtColor( src, src_gray, CV_BGR2GRAY );
+
+    /// Create a window
+    //cv::namedWindow( window_name, CV_WINDOW_AUTOSIZE );
+
+    /// Create a Trackbar for user to enter threshold
+    //cv::createTrackbar( "Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold );
+
+    /// Reduce noise with a kernel 3x3
+    cv::blur( src_gray, blurred_image, cv::Size(3,3) );
+
+    /// Canny detector
+    cv::Canny( blurred_image, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+
+    /// Using Canny's output as a mask, we display our result
+    dst = cv::Scalar::all(0);
+
+    src.copyTo( dst, detected_edges);
+    cv::imwrite( temp_result_edge_path, dst );
+
+    //cv::imshow( window_name, dst);
+
+    /// Wait until user exit program by pressing a key
+    //cv::waitKey(0);
+}
+
+
 void GroundTruthFlow::generate_flow_frame() {
 
     // reads the flow vector array already created at the time of instantiation of the object.

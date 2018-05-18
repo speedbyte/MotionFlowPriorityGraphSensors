@@ -39,6 +39,9 @@ public:
         std::cout << "killing previous GroundTruthFlow object\n" ;
     }
 
+    void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
+
+
 private:
 
     void prepare_directories();

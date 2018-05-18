@@ -102,8 +102,6 @@ public:
         return m_resultordner;
     }
 
-    void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
-
     void generate_pdf_correct_displacement_x();
 
 private:
