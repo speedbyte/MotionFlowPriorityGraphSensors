@@ -150,15 +150,15 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
                             }
                         }
 
-                        cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
-                        cv::imshow("edge", objectEdgeFrame);
-                        cv::waitKey(0);
+                        //cv::namedWindow("edge", CV_WINDOW_AUTOSIZE);
+                        //cv::imshow("edge", objectEdgeFrame);
+                        //cv::waitKey(0);
                         cv::destroyAllWindows();
 
 
                         auto edge_points = edge_movement.size();
                         std::cout << edge_points << std::endl;
-                        assert(edge_points != 0);
+                        //assert(edge_points != 0);
 
                         outer_edge_movement.push_back(edge_movement);
 

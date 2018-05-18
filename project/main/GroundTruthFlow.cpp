@@ -48,7 +48,7 @@ void GroundTruthFlow::prepare_directories() {
     }
 }
 
-void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path) {
+void GroundTruthFlow::CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path) {
 
     cv::Mat src, src_gray;
     cv::Mat dst, detected_edges, blurred_image;

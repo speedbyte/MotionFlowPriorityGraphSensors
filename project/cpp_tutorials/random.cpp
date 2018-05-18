@@ -12,6 +12,10 @@ int main (int argc, char *argv[]) {
 
     std::cout << FLT_MAX << " " << INT32_MIN << " " << INT32_MAX << " " << std::numeric_limits<float>::infinity() << std::endl;
 
+    for ( int a = 0; a < 100; a++) {
+        std::cout << rand()%255 << std::endl;
+
+    }
 
     float rand_range = rand()%100;
 

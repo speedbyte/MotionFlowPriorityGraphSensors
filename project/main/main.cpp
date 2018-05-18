@@ -226,8 +226,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"blue_sky"};
+    //const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
+    const std::vector<std::string> environment_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -354,7 +354,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        for ( ushort stepSize = 2; stepSize <= 2; stepSize+=4) {
+        for ( ushort stepSize = 3; stepSize <= 3; stepSize+=4) {
 
             ptr_list_of_simulated_objects_base.clear();
 

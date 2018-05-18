@@ -84,9 +84,7 @@ public:
 
     void generate_collision_points();
 
-    void visualiseStencil_shape(void);
-
-    void visualiseStencil_line(void);
+    void visualiseStencilAlgorithms(void);
 
     void generate_shape_points();
 

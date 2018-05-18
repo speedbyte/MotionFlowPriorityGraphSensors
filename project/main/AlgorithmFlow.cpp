@@ -77,7 +77,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         std::vector<std::vector<std::vector<bool> >  > outer_base_visiblity(m_ptr_list_simulated_objects.size());
 
         char sensor_index_folder_suffix[50];
-        char file_name_input_image[50], file_name_input_image_edge[50];
+        char file_name_input_image[50];
 
         bool needToInit = true;
 
@@ -122,7 +122,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
         error.at(0) = 0;
         error.at(1) = 0;
 
-        std::string temp_result_flow_path, temp_result_position_path, temp_result_edge_path;
+        std::string temp_result_flow_path, temp_result_position_path;
         std::vector<cv::Point2f> next_pts_healthy;
 
         std::cout << "creating flow files for sensor_index " << sensor_index << std::endl;
@@ -139,7 +139,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 continue;
             }*/
             sprintf(file_name_input_image, "000%03d_10.png", frame_count);
-            sprintf(file_name_input_image_edge, "000%03d_10_edge.png", frame_count);
             // Break out of the loop if the user presses the Esc key
             char c = (char) cv::waitKey(10);
             switch (c) {
@@ -171,7 +170,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             }
 
             temp_result_flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-            temp_result_edge_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_edge;
             temp_result_position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             // Convert to grayscale
@@ -194,7 +192,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 int numLevels = 1;
                 int windowSize = 5;
                 int numIterations = 1;
-                int neighborhoodSize = 3; // polyN
+                int neighborhoodSize = 2; // polyN
                 float stdDeviation = 1.1; // polySigma
 
                 std::vector<float> err;
@@ -287,8 +285,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 for (unsigned i = 0; i < next_pts_array.size(); i++) {
                     // Circles to indicate the uniform grid of points
-                    cv::circle(image_02_frame, next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
-                    //cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0, 255, 0));
+                    //cv::circle(image_02_frame, next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
+                    int valb = rand()%255;
+                    int valg = rand()%255;
+                    int valr = rand()%255;
+                    cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(valb, valg, valr), 1, 8, 0, 0.5);
                 }
 
                 std::vector<cv::Point2f>::iterator it, it2 ;
@@ -333,7 +334,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_visibility().at(sensor_index).at(frame_count);
                     if ( visibility ) {
 
-                        cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height), cv::Scalar(0,0,255), 4, 8, 0 );
+                        //cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height), cv::Scalar(0,0,255), 4, 8, 0 );
 
                         cv::Mat roi = stencilFrame.
                                 rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
@@ -346,10 +347,10 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         cv::Point roi_offset;
                         roi.locateROI(roi_size, roi_offset);
 
-                        cv::rectangle(image_02_frame, cv::Rect(roi_offset.x, roi_offset.y,
+                        /*cv::rectangle(image_02_frame, cv::Rect(roi_offset.x, roi_offset.y,
                                                                width + 2*(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER),
                                                                height + 2*(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
-                                      cv::Scalar(255,255,255), 4, 8, 0 );
+                                      cv::Scalar(255,255,255), 4, 8, 0 ); */
 
                         cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
                                 (sensor_index).at(frame_count).second;
