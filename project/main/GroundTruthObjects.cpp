@@ -85,7 +85,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
                    current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y,
                    gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y);
 
-            // make m_flowvector_with_coordinate_gt with smallest resolution.
+            // make m_centroid_displacement_with_coordinate_gt with smallest resolution.
             m_object_base_point_displacement.push_back(std::make_pair(gt_data.getAll().at(current_index).m_object_location_px.cog_px, gt_displacement));
 
         }
@@ -99,8 +99,8 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         m_object_base_all.push_back(gt_data.getAll().at(current_index));
         current_index++;
     }
-    m_object_all.push_back(m_object_base_all);
-    m_object_pixel_position_pixel_displacement.push_back(m_object_base_point_displacement);
-    m_object_visibility.push_back(m_object_base_visibility);
+    m_object_extrapolated_all.push_back(m_object_base_all);
+    m_object_extrapolated_point_displacement.push_back(m_object_base_point_displacement);
+    m_object_extrapolated_visibility.push_back(m_object_base_visibility);
 
 }

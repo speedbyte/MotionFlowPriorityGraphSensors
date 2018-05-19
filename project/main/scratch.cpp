@@ -507,3 +507,8 @@ else {
 
 }
 
+
+
+std::cout << "\nMean\n" << mean << "\nCovar\n" << covar_new <<
+"\nstddev_x\n" << stddev <<
+"\ncorr\n" << corr << std::endl;

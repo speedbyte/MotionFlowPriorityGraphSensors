@@ -71,12 +71,13 @@ void OpticalFlow::getCombination( const std::vector<Objects *> &m_list_objects, 
 }
 
 
-void OpticalFlow::generate_shape_points() {
+
+void OpticalFlow::generate_metrics_data_processing_algorithm() {
 
     std::vector<Objects*> list_of_current_objects;
 
     unsigned COUNT;
-    if ( m_resultordner == "/ground_truth") {
+    if ( m_opticalFlowName == "ground_truth") {
         COUNT = 1;
         list_of_current_objects = m_ptr_list_gt_objects;
     }
@@ -87,15 +88,14 @@ void OpticalFlow::generate_shape_points() {
 
     char sensor_index_folder_suffix[50];
 
-
     for (unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++) {
 
-        std::vector<std::map<std::pair<float, float>, int> > outer_sensor_count_scenario_displacement_occurence;
-        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_sensor_count_shape_points;
+        std::vector<std::map<std::pair<float, float>, int> > sensor_sensor_count_scenario_displacement_occurence;
+        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > sensor_sensor_count_shape_points;
 
         for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > outer_frame_shape_points;
+            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > sensor_frame_shape_points;
             std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
@@ -104,7 +104,7 @@ void OpticalFlow::generate_shape_points() {
                       << " for datafilter " << datafilter_index << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
-                    ->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).size();
+                    ->get_list_object_mean_centroid_displacement().at(datafilter_index).at(sensor_index).size();
 
             assert(FRAME_COUNT > 0);
 
@@ -116,11 +116,13 @@ void OpticalFlow::generate_shape_points() {
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
+                    // displacements found by the ground truth for this object
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
-                            obj_index)->get_list_object_shapepoints_displacement().at(0).at(sensor_index).at(frame_count).size();
+                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
 
+                    // displacements found by the algorithm for this object
                     auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
-                            obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(sensor_index).at(frame_count).size();
+                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
 
                     if ( m_resultordner != "/ground_truth" ) {
 
@@ -128,7 +130,7 @@ void OpticalFlow::generate_shape_points() {
 
                     }
 
-                    if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index).at(frame_count) ) {
+                    if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count) ) {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
@@ -141,7 +143,7 @@ void OpticalFlow::generate_shape_points() {
                         auto dist_gt = cv::norm(gt_displacement);
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
-                        if (m_resultordner == "/ground_truth") {
+                        if (m_opticalFlowName == "ground_truth") {
 
                             vollTreffer = CLUSTER_COUNT_GT;
                             // this is the full resolution ! Because there is no stepSize in GroundTruth
@@ -189,7 +191,7 @@ void OpticalFlow::generate_shape_points() {
 
                     } else {
                         std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
-                                  list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index)
+                                  list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
                                           .at(frame_count)
                                   << " and hence not generating any shape points for this object " << std::endl;
 
@@ -198,39 +200,184 @@ void OpticalFlow::generate_shape_points() {
                     }
                 }
 
-                outer_frame_shape_points.push_back(frame_shape_points);
+                sensor_frame_shape_points.push_back(frame_shape_points);
             }
-            outer_sensor_count_shape_points.push_back(outer_frame_shape_points);
-            outer_sensor_count_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
+            sensor_sensor_count_shape_points.push_back(sensor_frame_shape_points);
+            sensor_sensor_count_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
 
             /* generate for every algorithm, an extra sensor */
             if ( sensor_index == (SENSOR_COUNT-1) ) {
-                generate_shape_points_sensor_fusion(datafilter_index, outer_sensor_count_shape_points );
+                generate_shape_points_sensor_fusion(datafilter_index, sensor_sensor_count_shape_points );
             }
 
         }
 
-        m_sensor_count_shape_points.push_back(outer_sensor_count_shape_points);
-        m_sensor_count_scenario_displacement_occurence = outer_sensor_count_scenario_displacement_occurence;
+        m_sensor_count_shape_points.push_back(sensor_sensor_count_shape_points);
+        m_sensor_count_scenario_displacement_occurence = sensor_sensor_count_scenario_displacement_occurence;
 
     }
+
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
 }
 
 
-void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &outer_sensor_count_shape_points) {
+void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
     std::vector<Objects*> list_of_current_objects;
 
-    if ( m_resultordner == "/ground_truth") {
+    unsigned COUNT;
+    if ( m_opticalFlowName == "ground_truth") {
+        COUNT = 1;
+        list_of_current_objects = m_ptr_list_gt_objects;
+    }
+    else {
+        COUNT = DATAFILTER_COUNT;
+        list_of_current_objects = m_ptr_list_simulated_objects;
+    }
+
+    char sensor_index_folder_suffix[50];
+
+    std::vector<std::map<std::pair<float, float>, int> > sensor_sensor_count_scenario_displacement_occurence;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > sensor_sensor_count_shape_points;
+
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+
+        std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > sensor_frame_shape_points;
+        std::map<std::pair<float, float>, int> scenario_displacement_occurence;
+
+        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
+
+        std::cout << "generating shape points in OpticalFlow.cpp for sensor index "  << sensor_index
+                  << " for opticalflow  " << m_opticalFlowName << std::endl;
+
+        unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
+                ->get_object_stencil_point_displacement().at(sensor_index).size();
+
+        assert(FRAME_COUNT > 0);
+
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+
+            std::cout << "frame_count " << frame_count << " for opticalflow_index " << m_opticalFlowName << std::endl;
+
+            std::vector<std::pair<cv::Point2i, cv::Point2f>> frame_shape_points;
+
+            for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+
+                // displacements found by the ground truth for this object
+                auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
+                        obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
+
+                // displacements found by the algorithm for this object
+                auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
+                        obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
+
+                if ( m_opticalFlowName != "ground_truth" ) {
+
+                    assert( CLUSTER_COUNT_ALGO <= ((CLUSTER_COUNT_GT / mStepSize) + 25 )|| CLUSTER_COUNT_ALGO == CLUSTER_COUNT_GT );
+
+                }
+
+                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count) ) {
+
+                    // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
+
+                    float vollTreffer = 0;
+                    float baseTreffer;
+
+                    cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
+                            (sensor_index).at(frame_count).second;
+
+                    auto dist_gt = cv::norm(gt_displacement);
+                    auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
+
+                    if (m_opticalFlowName == "ground_truth") {
+
+                        vollTreffer = CLUSTER_COUNT_GT;
+                        // this is the full resolution ! Because there is no stepSize in GroundTruth
+                        baseTreffer = CLUSTER_COUNT_GT;
+
+                    }
+                    else {
+                        for (auto cluster_count = 0; cluster_count < CLUSTER_COUNT_ALGO; cluster_count++) {
+
+                            cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
+                                    get_object_stencil_point_displacement().at(sensor_index).at(frame_count).at(cluster_count).second;
+
+                            auto dist_algo = cv::norm(algo_displacement);
+                            auto dist_err = std::abs(dist_gt - dist_algo);
+
+                            auto angle_algo = std::tanh(algo_displacement.y/algo_displacement.x);
+
+                            auto angle_err = std::abs(angle_algo - angle_gt);
+                            auto angle_err_dot = std::cosh(
+                                    algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
+
+                            //assert(angle_err_dot==angle_err);
+
+                            if (
+                                    (dist_err) < DISTANCE_ERROR_TOLERANCE &&
+                                    (angle_err*180/CV_PI) < ANGLE_ERROR_TOLERANCE
+
+                                    ) {
+                                vollTreffer++;
+                            }
+                        }
+
+                        baseTreffer = ((float) CLUSTER_COUNT_GT) / mStepSize;
+                    }
+                    frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count, 0), cv::Point2f(vollTreffer, baseTreffer)));
+
+                    std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                              << vollTreffer << std::endl;
+                    std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                              << baseTreffer << std::endl;
+
+                    assert(vollTreffer <= std::ceil(baseTreffer) + 20 );
+
+                } else {
+                    std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
+                              list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
+                                      .at(frame_count)
+                              << " and hence not generating any shape points for this object " << std::endl;
+
+                    frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count,0), cv::Point2f(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity())));
+
+                }
+            }
+
+            sensor_frame_shape_points.push_back(frame_shape_points);
+        }
+
+        sensor_sensor_count_shape_points.push_back(sensor_frame_shape_points);
+        sensor_sensor_count_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
+
+        /* generate for every algorithm, an extra sensor */
+        if ( sensor_index == (SENSOR_COUNT-1) ) {
+            //generate_shape_points_sensor_fusion(0, sensor_sensor_count_shape_points );
+        }
+
+    }
+
+    m_sensor_count_shape_points.push_back(sensor_sensor_count_shape_points);
+    m_sensor_count_scenario_displacement_occurence = sensor_sensor_count_scenario_displacement_occurence;
+
+    // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
+}
+
+
+void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_sensor_count_shape_points) {
+
+    std::vector<Objects*> list_of_current_objects;
+
+    if ( m_opticalFlowName == "ground_truth") {
         list_of_current_objects = m_ptr_list_gt_objects;
     }
     else {
         list_of_current_objects = m_ptr_list_simulated_objects;
     }
 
-    std::vector<std::map<std::pair<float, float>, int> > outer_sensor_count_scenario_displacement_occurence;
-    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > outer_frame_shape_points;
+    std::vector<std::map<std::pair<float, float>, int> > sensor_sensor_count_scenario_displacement_occurence;
+    std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > sensor_frame_shape_points;
     std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
     unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
@@ -256,8 +403,8 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                         obj_index)->get_list_object_shapepoints_displacement().at(0).at(1).at(frame_count).size();
 
                 //CLUSTER_COUNT_GT =  ( CLUSTER_COUNT_GT + CLUSTER_COUNT_GT_2 ) /2;
-                if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(0).at(frame_count) ||
-                        list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(1).at(frame_count)) {
+                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(frame_count) ||
+                        list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(frame_count)) {
 
                     // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
@@ -279,7 +426,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     auto angle_gt_2 = std::tanh(gt_displacement_2.y / gt_displacement_2.x);
 
 
-                    if (m_resultordner == "/ground_truth") {
+                    if (m_opticalFlowName == "ground_truth") {
 
                         vollTreffer = CLUSTER_COUNT_GT;
                         // this is the full resolution ! Because there is no stepSize in GroundTruth
@@ -288,7 +435,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     }
                     else {
 
-                        if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(0).at(frame_count)) {
+                        if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(frame_count)) {
 
                             auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
                                     obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(0).at(frame_count).size();
@@ -323,7 +470,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                             baseTreffer = ((float) CLUSTER_COUNT_GT) / mStepSize;
                         }
 
-                        else if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(1).at(frame_count)) {
+                        else if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(frame_count)) {
 
                             auto CLUSTER_COUNT_ALGO_2 = list_of_current_objects.at(
                                     obj_index)->get_list_object_shapepoints_displacement().at(datafilter_index).at(1).at(frame_count).size();
@@ -370,7 +517,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
 
                 } else {
                     std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
-                            list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index)
+                            list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
                                     .at(frame_count)
                             << " and hence not generating any shape points for this object " << std::endl;
 
@@ -379,11 +526,11 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                 }
             }
         }
-        outer_frame_shape_points.push_back(frame_shape_points);
+        sensor_frame_shape_points.push_back(frame_shape_points);
 
     }
-    outer_sensor_count_shape_points.push_back(outer_frame_shape_points);
-    outer_sensor_count_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
+    sensor_sensor_count_shape_points.push_back(sensor_frame_shape_points);
+    sensor_sensor_count_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
 
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
@@ -396,7 +543,7 @@ void OpticalFlow::generate_mean_displacement_points() {
     std::vector<Objects*> list_of_current_objects;
 
     unsigned COUNT;
-    if ( m_resultordner == "/ground_truth") {
+    if ( m_opticalFlowName == "ground_truth") {
         COUNT = 1;
         list_of_current_objects = m_ptr_list_gt_objects;
     }
@@ -410,11 +557,11 @@ void OpticalFlow::generate_mean_displacement_points() {
 
     for (unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++) {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_sensor_count_mean_displacement_points;
+        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > sensor_sensor_count_mean_displacement_points;
 
         for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > outer_frame_mean_displacement_points;
+            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > sensor_frame_mean_displacement_points;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
@@ -439,7 +586,7 @@ void OpticalFlow::generate_mean_displacement_points() {
                             cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m)
                     };
 
-                    if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index).at(frame_count) && frame_count != 0 ) {
+                    if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count) && frame_count != 0 ) {
 
                         cv::Point2f displacement = list_of_current_objects.at(obj_index)->
                                 get_list_object_mean_centroid_displacement().at(datafilter_index
@@ -453,7 +600,7 @@ void OpticalFlow::generate_mean_displacement_points() {
 
                     } else {
                         std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
-                                  list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index)
+                                  list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
                                           .at(frame_count)
                                   << " and hence not generating any displacement points for this object " << std::endl;
 
@@ -462,13 +609,13 @@ void OpticalFlow::generate_mean_displacement_points() {
                     }
                 }
 
-                outer_frame_mean_displacement_points.push_back(frame_mean_displacement_points);
+                sensor_frame_mean_displacement_points.push_back(frame_mean_displacement_points);
             }
 
-            outer_sensor_count_mean_displacement_points.push_back(outer_frame_mean_displacement_points);
+            sensor_sensor_count_mean_displacement_points.push_back(sensor_frame_mean_displacement_points);
 
         }
-        m_sensor_count_mean_displacement_points.push_back(outer_sensor_count_mean_displacement_points);
+        m_sensor_count_mean_displacement_points.push_back(sensor_sensor_count_mean_displacement_points);
     }
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
 }
@@ -487,7 +634,7 @@ void OpticalFlow::generate_collision_points() {
     getCombination(m_ptr_list_simulated_objects, list_of_simulated_objects_combination);
 
     unsigned COUNT;
-    if ( m_resultordner == "/ground_truth") {
+    if ( m_opticalFlowName == "ground_truth") {
         COUNT = 1;
         list_of_current_objects = m_ptr_list_gt_objects;
         list_of_current_objects_combination = list_of_gt_objects_combination;
@@ -509,13 +656,13 @@ void OpticalFlow::generate_collision_points() {
 
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_sensor_count_collision_points;
-        std::vector<std::vector<std::vector<cv::Point2f> > > outer_sensor_count_line_angles;
+        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > sensor_sensor_count_collision_points;
+        std::vector<std::vector<std::vector<cv::Point2f> > > sensor_sensor_count_line_angles;
 
         for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > outer_frame_collision_points;
-            std::vector<std::vector<cv::Point2f> > outer_frame_line_angles;
+            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > sensor_frame_collision_points;
+            std::vector<std::vector<cv::Point2f> > sensor_frame_line_angles;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
@@ -554,10 +701,10 @@ void OpticalFlow::generate_collision_points() {
                         obj_index < list_of_current_objects_combination.size(); obj_index++) {
 
                     if ((list_of_current_objects_combination.at(
-                                    obj_index).first->get_object_mean_visibility().at(
+                                    obj_index).first->get_object_extrapolated_visibility().at(
                                     sensor_index)
                             .at(frame_count)) && (list_of_current_objects_combination.at(obj_index).second->
-                                    get_object_mean_visibility()
+                                    get_object_extrapolated_visibility()
                             .at(sensor_index)
                             .at(frame_count))) {
 
@@ -619,13 +766,13 @@ void OpticalFlow::generate_collision_points() {
                                 << list_of_current_objects_combination.at(obj_index).first->getObjectId()
                                 << " visibility = " <<
                                 list_of_current_objects_combination.at(
-                                                obj_index).first->get_object_mean_visibility().at(
+                                                obj_index).first->get_object_extrapolated_visibility().at(
                                                 sensor_index)
                                         .at(frame_count) << " and object "
                                 << list_of_gt_objects_combination.at(obj_index)
                                         .second->getObjectId() << " visibility = "
                                 << list_of_current_objects_combination.at(
-                                                obj_index).second->get_object_mean_visibility().at(
+                                                obj_index).second->get_object_extrapolated_visibility().at(
                                                 sensor_index)
                                         .at(frame_count)
                                 << " and hence not generating any collision points for this object combination "
@@ -659,16 +806,16 @@ void OpticalFlow::generate_collision_points() {
 
                 F_png_write.writeExtended(temp_collision_image_path);
     
-                outer_frame_collision_points.push_back(frame_collision_points_average);
-                outer_frame_line_angles.push_back(frame_line_angles);
+                sensor_frame_collision_points.push_back(frame_collision_points_average);
+                sensor_frame_line_angles.push_back(frame_line_angles);
             }
 
-            outer_sensor_count_collision_points.push_back(outer_frame_collision_points);
-            outer_sensor_count_line_angles.push_back(outer_frame_line_angles);
+            sensor_sensor_count_collision_points.push_back(sensor_frame_collision_points);
+            sensor_sensor_count_line_angles.push_back(sensor_frame_line_angles);
 
         }
-        m_list_sensor_count_collision_points.push_back(outer_sensor_count_collision_points);
-        m_list_sensor_count_line_angles.push_back(outer_sensor_count_line_angles);
+        m_list_sensor_count_collision_points.push_back(sensor_sensor_count_collision_points);
+        m_list_sensor_count_line_angles.push_back(sensor_sensor_count_line_angles);
     }
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
@@ -709,7 +856,7 @@ void OpticalFlow::visualiseStencilAlgorithms() {
     std::vector<Objects*> list_of_current_objects;
 
     unsigned COUNT;
-    if ( m_resultordner == "/ground_truth") {
+    if ( m_opticalFlowName == "ground_truth") {
         COUNT = 1;
         list_of_current_objects = m_ptr_list_gt_objects;
     }
@@ -720,7 +867,7 @@ void OpticalFlow::visualiseStencilAlgorithms() {
 
     char sensor_index_folder_suffix[50];
 
-    std::cout << "visualise stencil at " << m_generatepath.string() + "stencil/" << std::endl;
+    std::cout << "visualise stencil algorithm at " << m_generatepath.string() + "stencil/" << std::endl;
 
     char file_name_image[50], file_name_image_output[50];
 
@@ -732,15 +879,15 @@ void OpticalFlow::visualiseStencilAlgorithms() {
     ushort datafilter_index = 2;
 
 
-    std::vector<std::map<std::pair<float, float>, int> > outer_sensor_count_scenario_displacement_occurence;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > outer_sensor_count_shape_points;
+    std::vector<std::map<std::pair<float, float>, int> > sensor_sensor_count_scenario_displacement_occurence;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > sensor_sensor_count_shape_points;
 
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
         tempGroundTruthImage = cv::Scalar::all(255);
         F_png_write = FlowImageExtended(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-        std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > outer_frame_shape_points;
+        std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > sensor_frame_shape_points;
         std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
@@ -790,7 +937,7 @@ void OpticalFlow::visualiseStencilAlgorithms() {
 
                 }
 
-                if (list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index).at(frame_count) ) {
+                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count) ) {
 
                     // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
@@ -817,7 +964,7 @@ void OpticalFlow::visualiseStencilAlgorithms() {
 
 
 
-                    if (m_resultordner == "/ground_truth") {
+                    if (m_opticalFlowName == "ground_truth") {
 
                         vollTreffer = CLUSTER_COUNT_GT;
                         // this is the full resolution ! Because there is no stepSize in GroundTruth
@@ -904,7 +1051,7 @@ void OpticalFlow::visualiseStencilAlgorithms() {
 
                 } else {
                     std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
-                              list_of_current_objects.at(obj_index)->get_object_mean_visibility().at(sensor_index)
+                              list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
                                       .at(frame_count)
                               << " and hence not generating any shape points for this object " << std::endl;
 
@@ -913,20 +1060,20 @@ void OpticalFlow::visualiseStencilAlgorithms() {
                 }
             }
 
-            outer_frame_shape_points.push_back(frame_shape_points);
+            sensor_frame_shape_points.push_back(frame_shape_points);
         }
-        outer_sensor_count_shape_points.push_back(outer_frame_shape_points);
-        outer_sensor_count_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
+        sensor_sensor_count_shape_points.push_back(sensor_frame_shape_points);
+        sensor_sensor_count_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
 
         /* generate for every algorithm, an extra sensor */
         if ( sensor_index == (SENSOR_COUNT-1) ) {
-            generate_shape_points_sensor_fusion(datafilter_index, outer_sensor_count_shape_points );
+            generate_shape_points_sensor_fusion(datafilter_index, sensor_sensor_count_shape_points );
         }
 
     }
 
-    m_sensor_count_shape_points.push_back(outer_sensor_count_shape_points);
-    m_sensor_count_scenario_displacement_occurence = outer_sensor_count_scenario_displacement_occurence;
+    m_sensor_count_shape_points.push_back(sensor_sensor_count_shape_points);
+    m_sensor_count_scenario_displacement_occurence = sensor_sensor_count_scenario_displacement_occurence;
 
     // plotVectorField (F_png_write,m__directory_path_image_out.parent_path().string(),file_name);
 }

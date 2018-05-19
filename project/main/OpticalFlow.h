@@ -17,6 +17,8 @@ protected:
 
     std::string m_resultordner;
 
+    std::string m_opticalFlowName;
+
     boost::filesystem::path mImageabholOrt;
 
     boost::filesystem::path  m_generatepath;
@@ -56,8 +58,8 @@ protected:
 
 public:
 
-    OpticalFlow( std::vector<Objects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects *> &ptr_list_simulated_objects, ushort stepSize ) :
-    m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
+    OpticalFlow( std::string opticalFlowName, std::vector<Objects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects *> &ptr_list_simulated_objects, ushort stepSize ) :
+    m_opticalFlowName(opticalFlowName), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 
     const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > & getCollisionPoints () const {
         return m_list_sensor_count_collision_points;
@@ -86,9 +88,11 @@ public:
 
     void visualiseStencilAlgorithms(void);
 
-    void generate_shape_points();
+    void generate_metrics_optical_flow_algorithm();
 
-    void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &outer_sensor_count_shape_points);
+    void generate_metrics_data_processing_algorithm();
+
+    void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_sensor_count_shape_points);
 
     void generate_mean_displacement_points();
 

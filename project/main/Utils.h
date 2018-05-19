@@ -8,6 +8,10 @@
 
 #include <iomanip>
 #include <opencv2/highgui.hpp>
+#include <map>
+#include <boost/filesystem.hpp>
+#include <opencv2/imgproc.hpp>
+#include "Dataset.h"
 
 class Utils {
 
@@ -266,7 +270,7 @@ public:
         }
 
         /// Compute the histograms:
-        calcHist (&raw_dataMat, 1, 0, cv::Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
+        cv::calcHist (&raw_dataMat, 1, 0, cv::Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
 
         //std::cout << b_hist;
 

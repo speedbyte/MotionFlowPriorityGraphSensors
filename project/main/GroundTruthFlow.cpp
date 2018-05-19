@@ -160,7 +160,7 @@ void GroundTruthFlow::generate_flow_frame() {
                 int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
                 int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                //if ( m_ptr_list_gt_objects.at(obj_index)->get_object_visibility().at(sensor_index).at(frame_count) == true ) {
+                //if ( m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count) == true ) {
                 float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
                         (sensor_index).at(frame_count).m_region_of_interest_px.x;
                 float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at

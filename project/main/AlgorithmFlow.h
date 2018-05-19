@@ -26,8 +26,8 @@ private:
 
 public:
 
-    AlgorithmFlow( std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) :
-    OpticalFlow(ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize) {
+    AlgorithmFlow( std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) :
+    OpticalFlow(opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize) {
 
     }
 
@@ -42,8 +42,6 @@ public:
     std::string getImageAbholOrt() const {
         return mImageabholOrt.string();
     }
-
-    void visualiseStencil(void);
 
 };
 

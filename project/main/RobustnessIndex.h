@@ -52,11 +52,11 @@ private:
 };
 
 
-class SensorFusion : public RobustnessIndex {
+class SensorFusionRobustness : public RobustnessIndex {
 
 public:
 
-    SensorFusion(cv::FileStorage &fs) : RobustnessIndex(fs) {};
+    SensorFusionRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
     void compareHistograms(const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo);
 
 

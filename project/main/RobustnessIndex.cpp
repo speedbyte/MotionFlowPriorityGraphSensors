@@ -11,7 +11,7 @@
 #include "OpticalFlow.h"
 #include "Utils.h"
 
-void SensorFusion::compareHistograms(const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo) {
+void SensorFusionRobustness::compareHistograms(const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo) {
 
 
     auto position = opticalFlow.getResultOrdner().find('/');

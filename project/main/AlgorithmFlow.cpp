@@ -72,9 +72,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
     for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_base_movement(m_ptr_list_simulated_objects.size());
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > outer_stencil_movement(m_ptr_list_simulated_objects.size());
-        std::vector<std::vector<std::vector<bool> >  > outer_base_visiblity(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > sensor_base_movement(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > sensor_stencil_movement(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<bool> >  > sensor_base_visiblity(m_ptr_list_simulated_objects.size());
 
         char sensor_index_folder_suffix[50];
         char file_name_input_image[50];
@@ -331,7 +331,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
                     int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
 
-                    bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_visibility().at(sensor_index).at(frame_count);
+                    bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count);
                     if ( visibility ) {
 
                         //cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height), cv::Scalar(0,0,255), 4, 8, 0 );
@@ -490,16 +490,16 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         assert(new_stencil_size != 0);
 
 
-                        outer_base_movement.at(obj_index).push_back(base_movement.at(obj_index));
-                        outer_base_visiblity.at(obj_index).push_back(base_visibility.at(obj_index));
-                        outer_stencil_movement.at(obj_index).push_back(stencil_movement.at(obj_index));
+                        sensor_base_movement.at(obj_index).push_back(base_movement.at(obj_index));
+                        sensor_base_visiblity.at(obj_index).push_back(base_visibility.at(obj_index));
+                        sensor_stencil_movement.at(obj_index).push_back(stencil_movement.at(obj_index));
 
                     }
                     else {
 
-                        outer_base_visiblity.at(obj_index).push_back({{false}});
-                        outer_base_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
-                        outer_stencil_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                        sensor_base_visiblity.at(obj_index).push_back({{false}});
+                        sensor_base_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                        sensor_stencil_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
 
                     }
                 }
@@ -513,9 +513,9 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 F_png_write.writeExtended(temp_result_flow_path);
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
-                    outer_base_visiblity.at(obj_index).push_back({{false}});
-                    outer_base_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
-                    outer_stencil_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                    sensor_base_visiblity.at(obj_index).push_back({{false}});
+                    sensor_base_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                    sensor_stencil_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
                 }
 
                 needToInit = true;
@@ -564,7 +564,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
             cv::imwrite(temp_result_position_path, image_02_frame);
-            m_ptr_list_simulated_objects.at(obj_index)->generate_object_stencil_point_displacement_pixel_visibility("alorithm", outer_base_movement.at(obj_index), outer_base_visiblity.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->generate_object_stencil_point_displacement_pixel_visibility("alorithm", sensor_base_movement.at(obj_index), sensor_base_visiblity.at(obj_index));
         }
 
         if ( frame_types == video_frames) {
