@@ -19,7 +19,7 @@ protected:
 
     std::string m_opticalFlowName;
 
-    boost::filesystem::path mImageabholOrt;
+    boost::filesystem::path m_GroundTruthImageLocation;
 
     boost::filesystem::path  m_generatepath;
 
@@ -41,15 +41,15 @@ protected:
 
     ushort mStepSize;
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_count_mean_displacement_points;
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_mean_displacement_points;
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > >m_list_sensor_count_collision_points;
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_list_sensor_collision_points;
 
-    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_sensor_count_line_angles;
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_sensor_line_angles;
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_count_shape_points;
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_shape_points;
 
-    std::vector<std::map<std::pair<float, float>, int> >  m_sensor_count_scenario_displacement_occurence;
+    std::vector<std::map<std::pair<float, float>, int> >  m_sensor_scenario_displacement_occurence;
 
     void getCombination( const std::vector<Objects *> &m_list_objects, std::vector<std::pair<Objects*, Objects*> > &list_of_objects_combination);
 
@@ -62,23 +62,23 @@ public:
     m_opticalFlowName(opticalFlowName), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 
     const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > & getCollisionPoints () const {
-        return m_list_sensor_count_collision_points;
+        return m_list_sensor_collision_points;
     }
 
     const std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > &getLineAngles () const  {
-        return m_list_sensor_count_line_angles;
+        return m_list_sensor_line_angles;
     }
 
     const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > &getShapePoints() const {
-        return m_sensor_count_shape_points;
+        return m_sensor_shape_points;
     }
 
     const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > &getMeanDisplacementPoints () const {
-        return m_sensor_count_mean_displacement_points;
+        return m_sensor_mean_displacement_points;
     }
 
     const std::vector<std::map<std::pair<float, float>, int> > &getScenarioDisplacementOccurence() const {
-        return m_sensor_count_scenario_displacement_occurence;
+        return m_sensor_scenario_displacement_occurence;
     };
 
 
@@ -92,7 +92,7 @@ public:
 
     void generate_metrics_data_processing_algorithm();
 
-    void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_sensor_count_shape_points);
+    void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_shape_points);
 
     void generate_mean_displacement_points();
 

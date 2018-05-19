@@ -33,7 +33,7 @@ using namespace std::chrono;
 
 void GroundTruthFlow::prepare_directories() {
 
-    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/blue_sky";
+    m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/blue_sky";
 
     m_resultordner="/ground_truth";
 
@@ -139,7 +139,7 @@ void GroundTruthFlow::generate_flow_frame() {
             std::string temp_gt_flow_image_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" +
                     file_name_input_image;
 
-            std::string temp_gt_image_path = mImageabholOrt.string() + "_" + std::to_string(sensor_index) + "/" +
+            std::string temp_gt_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" +
                                              file_name_input_image;
 
             std::string temp_result_edge_path = m_edge_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
@@ -196,7 +196,6 @@ void GroundTruthFlow::generate_flow_frame() {
                         F_png_write.setFlowV(col, row, tempMatrix.at<cv::Vec3f>(row, col)[1]);
                         //F_png_write.setObjectId(col, row, tempMatrix.at<cv::Vec3f>(row, col)[2]);
                         F_png_write.setValid(col, row, true);
-                        //position.store_in_yaml(fs, cv::Point2f(row, column), cv::Point2f(xValue, yValue) );
                     }
                 }
             }

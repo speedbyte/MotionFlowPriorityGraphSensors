@@ -140,6 +140,8 @@ const int &getInertialWidth() const {
 
     void generate_object_stencil_point_displacement_pixel_visibility(std::string post_processing_algorithm, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement,  std::vector<std::vector<bool> > sensor_base_visibility);
 
+    void set_object_stencil_point_displacement_pixel_visibility(std::string post_processing_algorithm, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement,  std::vector<std::vector<bool> > sensor_base_visibility);
+
     void generate_edge_contour(std::string post_processing_algorithm);
 
 };

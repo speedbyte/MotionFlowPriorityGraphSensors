@@ -354,7 +354,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             std::vector<AlgorithmFlow> list_of_algorithm_flow;
             for (ushort obj_count = 0; obj_count < environment_list.size(); obj_count++) {
-                AlgorithmFlow fback("fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                Farneback fback("fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
                                     ptr_list_of_simulated_objects, stepSize);
                 list_of_algorithm_flow.push_back(fback);
             }
@@ -365,9 +365,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 if (cpp_dataset.execute || vires_dataset.execute) {
 
                     std::vector<SimulatedObjects> list_of_simulated_objects;
-                    list_of_simulated_objects.clear(); // just to be sure, its empty, otherwise its not requied here.
-
+                    // just to be sure, all lists are empty
+                    list_of_simulated_objects.clear();
                     ptr_list_of_simulated_objects.clear();
+
                     SimulatedObjects::SimulatedobjectCurrentCount = 0; // start from 0 for each list_of_algorithm
 
                     for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
@@ -386,7 +387,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
                         ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_count));
                     }
-
 
                     if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
@@ -409,7 +409,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         list_of_algorithm_flow[env_index].generate_collision_points();
                         list_of_algorithm_flow[env_index].generate_metrics_optical_flow_algorithm();
                         list_of_algorithm_flow[env_index].generate_mean_displacement_points();
-                        //list_of_algorithm_flow[env_index].visualiseStencilAlgorithms();
+                        list_of_algorithm_flow[env_index].visualiseStencilAlgorithms();
                     }
                 }
             }
@@ -429,14 +429,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             time_map["robustness"+std::to_string(stepSize)] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
             tic = steady_clock::now();
 
-            if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
-                for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
-                    sensorFusionRobustness.compareHistograms(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                    vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index], list_of_algorithm_flow[0]);
-                }
-            }
-
             if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
                     for ( int sensors = 0;  sensors < SENSOR_COUNT ; sensors++) {
@@ -445,38 +437,26 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
                 }
             }
-
-
         }
-
-
 
         fs << "time_map" << "[";
         int total = 0;
-        for ( auto &n : time_map )
-        {
+        for ( auto &n : time_map ) {
             fs << "{:" << n.first << n.second << "}";
             std::cout << n.first << " " << n.second << std::endl;
             total += n.second;
         }
 
         time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
-
         fs << "{:" << "total" << time_map["total"] << "}";
-
         fs << "]";
-
         std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;
-
-
         fs.release();
 
         //system("python ../../main_python/motionflow_graphs.py");
 
 
     }
-
-
 
 
     /* MATLAB_DATASET ------------- */

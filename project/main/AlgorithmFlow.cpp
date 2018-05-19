@@ -20,22 +20,9 @@
 using namespace std::chrono;
 
 
-/**
- * This function means that the directories would be deleted and then created.
- * Hence only those datasets that has been synthetically produced on the test bench by us, should be deleted.
- * The results directory can be generally deleted, because they are all created by us.
- *
- * dataset/results/flow_occ_<algorithm>_<source>_<click_speed>_<noise_type>
- *
- * @param dataset_path
- * @param result_sha
- * @return
- */
+void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) {
 
-
-void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps, ushort stepSize) {
-
-    mImageabholOrt = Dataset::getGroundTruthPath().string() + "/" + noise;
+    m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/" + noise;
     m_resultordner = "results_";
 
     switch ( algo ) {
@@ -68,7 +55,7 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types
 
 void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps ) {
 
-    prepare_directories(algo, frame_types, noise, fps, mStepSize);
+    prepare_directories(algo, noise, fps, mStepSize);
 
     for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
 
@@ -83,30 +70,8 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         std::cout << "results will be stored in " << m_resultordner << std::endl;
 
-        /*
-        if ( frame_types == video_frames) {
-            cv::VideoCapture cap;
-            cap.open(Dataset::getGroundTruthPath().string() + "image_02/movement.avi");
-            if (!cap.isOpened()) {
-                std::cout << "Could not initialize capturing...\n";
-                return;
-            }
-        }*/
         cv::Mat curGray, prevGray;
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        std::string results_flow_matrix_str = m_flow_occ_path.string() + "/" +
-                                              sensor_index_folder_suffix + "/" + "result_flow.yaml";
-        cv::VideoWriter video_out;
-
-        if ( frame_types == video_frames)
-        {
-            boost::filesystem::path video_out_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + "movement.avi" ;
-            assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
-            //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
-            //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
-            video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, Dataset::getFrameSize());
-            printf("Writer eingerichtet\n");
-        }
 
         cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
 
@@ -158,7 +123,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             //if (image_02_frame.empty())
             //    break;
 
-            std::string input_image_file_with_path = mImageabholOrt.string() + "_" + std::to_string(sensor_index) + "/" +
+            std::string input_image_file_with_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" +
                     file_name_input_image;
 
             image_02_frame = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_COLOR);
@@ -548,10 +513,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             next_pts_healthy = prev_pts_array;
             next_pts_array.clear();
 
-            if ( frame_types == video_frames) {
-                video_out.write(image_02_frame);
-            }
-
             // Display the output image
             //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
             //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
@@ -564,28 +525,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
             cv::imwrite(temp_result_position_path, image_02_frame);
-            m_ptr_list_simulated_objects.at(obj_index)->generate_object_stencil_point_displacement_pixel_visibility("alorithm", sensor_base_movement.at(obj_index), sensor_base_visiblity.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility("alorithm", sensor_base_movement.at(obj_index), sensor_base_visiblity.at(obj_index));
         }
 
-        if ( frame_types == video_frames) {
-            video_out.release();
-        }
         cv::destroyAllWindows();
     }
-}
-
-
-
-void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
-&l_pixelmovement )  {
-
-    fs << "gt flow png file read" << "[";
-    fs << "{:" << "row" <<  l_pixelposition.y << "col" << l_pixelposition.x << "displacement" << "[:";
-    fs << l_pixelmovement.x;
-    fs << l_pixelmovement.y;
-    fs << 1;
-    fs << "]" << "}";
-    fs << "]";
 }
 
 

@@ -14,7 +14,6 @@
 #include "OpticalFlow.h"
 
 
-
 class AlgorithmFlow : public OpticalFlow {
 
     // Each point on GroundTruthFlow is a vector of points in AlgorithmFlow. Hence both the base and fast movement
@@ -31,16 +30,23 @@ public:
 
     }
 
-
-    void prepare_directories(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps, ushort stepSize);
+    void prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize);
 
     void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise, ushort fps);
 
-    void store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
-    &l_pixelmovement );
+    std::string getGroundTruthImageLocation() const {
+        return m_GroundTruthImageLocation.string();
+    }
 
-    std::string getImageAbholOrt() const {
-        return mImageabholOrt.string();
+};
+
+
+class Farneback: public AlgorithmFlow {
+
+public:
+
+    Farneback(std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
+
     }
 
 };

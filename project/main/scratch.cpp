@@ -512,3 +512,53 @@ else {
 std::cout << "\nMean\n" << mean << "\nCovar\n" << covar_new <<
 "\nstddev_x\n" << stddev <<
 "\ncorr\n" << corr << std::endl;
+
+
+void AlgorithmFlow::store_in_yaml(cv::FileStorage &fs, const cv::Point2f &l_pixelposition, const cv::Point2f
+&l_pixelmovement )  {
+
+    fs << "gt flow png file read" << "[";
+    fs << "{:" << "row" <<  l_pixelposition.y << "col" << l_pixelposition.x << "displacement" << "[:";
+    fs << l_pixelmovement.x;
+    fs << l_pixelmovement.y;
+    fs << 1;
+    fs << "]" << "}";
+    fs << "]";
+}
+
+
+
+void scratch() {
+
+
+    cv::VideoWriter video_out;
+
+    if ( frame_types == video_frames)
+    {
+        boost::filesystem::path video_out_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + "movement.avi" ;
+        assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
+//frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
+//frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
+        video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, Dataset::getFrameSize());
+        printf("Writer eingerichtet\n");
+    }
+
+
+    if ( frame_types == video_frames) {
+        cv::VideoCapture cap;
+        cap.open(Dataset::getGroundTruthPath().string() + "image_02/movement.avi");
+        if (!cap.isOpened()) {
+            std::cout << "Could not initialize capturing...\n";
+            return;
+        }
+    }
+
+    if ( frame_types == video_frames) {
+        video_out.write(image_02_frame);
+    }
+
+    if ( frame_types == video_frames) {
+        video_out.release();
+    }
+
+}
