@@ -180,17 +180,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                     }
 
                     evaluationData.frame_count = frame_count;
-
-                    evaluationData.realDimension_x = dimension.x;
-                    evaluationData.realDimension_y = dimension.y;
-
-                    evaluationData.visibleDimension_x = dimension.x;
-                    evaluationData.visibleDimension_y = dimension.y;
-
-                    evaluationData.algorithmDimension_x = dimension.x;
-                    evaluationData.algorithmDimension_y = dimension.y;
-
-                    evaluationData.totalPixels = baseTreffer;
+                    evaluationData.realClusterSize = CLUSTER_COUNT_GT;
+                    evaluationData.visibleClusterSize = baseTreffer;
+                    evaluationData.algorithmClusterSize= CLUSTER_COUNT_ALGO;
                     evaluationData.goodPixels = vollTreffer;
 
                     multiframe_evaluation_data.push_back(evaluationData);

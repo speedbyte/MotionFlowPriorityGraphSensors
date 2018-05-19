@@ -14,13 +14,9 @@
 typedef struct {
 
     unsigned frame_count;
-    float realDimension_x;
-    float realDimension_y;
-    float visibleDimension_x;
-    float visibleDimension_y;
-    float algorithmDimension_x;
-    float algorithmDimension_y;
-    unsigned totalPixels;
+    float realClusterSize;
+    float visibleClusterSize;
+    float algorithmClusterSize;
     unsigned goodPixels;
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
