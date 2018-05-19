@@ -9,6 +9,23 @@
 #include "GroundTruthObjects.h"
 #include "SimulatedObjects.h"
 
+
+
+typedef struct {
+
+    unsigned frame_count;
+    float realDimension_x;
+    float realDimension_y;
+    float visibleDimension_x;
+    float visibleDimension_y;
+    float algorithmDimension_x;
+    float algorithmDimension_y;
+    unsigned totalPixels;
+    unsigned goodPixels;
+
+} OPTICAL_FLOW_EVALUATION_METRICS;
+
+
 class OpticalFlow {
 
 private:
@@ -48,6 +65,8 @@ protected:
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_sensor_line_angles;
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_shape_points;
+
+    std::vector<std::vector< OPTICAL_FLOW_EVALUATION_METRICS > > m_sensor_multiframe_evaluation_data;
 
     std::vector<std::map<std::pair<float, float>, int> >  m_sensor_scenario_displacement_occurence;
 
@@ -93,8 +112,6 @@ public:
     void generate_metrics_data_processing_algorithm();
 
     void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_shape_points);
-
-    void generate_mean_displacement_points();
 
     std::string getGeneratePath() const {
         return m_generatepath.string();
