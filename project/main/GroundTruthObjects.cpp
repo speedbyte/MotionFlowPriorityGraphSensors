@@ -31,15 +31,21 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         cv::Point2f gt_displacement = {0,0}, gt_displacement_inertial = {0,0}, gt_displacement_usk = {0,0};
         cv::Point2f gt_dimensions = {0,0};
 
-        gt_dimensions.x = gt_data.getAll().at(current_index).m_object_dimensions_px.dim_width_m;
-        gt_dimensions.y = gt_data.getAll().at(current_index).m_object_dimensions_px.dim_height_m;
+        gt_dimensions.x = gt_data.getAll().at(current_index).m_region_of_interest_px.width_px;
+        gt_dimensions.y = gt_data.getAll().at(current_index).m_region_of_interest_px.height_px;
+
+        if (gt_data.getAll().at(current_index).visMask && gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m != 0 ) {
+
+            /*if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial == 127 || gt_data.getAll().at(current_index).visMask == 0
+                || gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m == 0 || gt_data.getAll().at(current_index).m_region_of_interest_px.x <= 0) { */
+            m_object_base_visibility.push_back((true));
+        }
+        else{
+            m_object_base_visibility.push_back((false));
+        }
+
 
         if ( frame_count == 0 ) {
-
-            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial?"false":"true"),
-                   frame_count,
-                   current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
-            );
 
             m_object_base_point_displacement.push_back(std::make_pair(cv::Point2f(gt_data.getAll().at(current_index).m_object_location_px.location_x_m, gt_data.getAll().at(current_index).m_object_location_px.location_y_m) , cv::Point2f(0,0)));
 
@@ -79,23 +85,14 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
                 assert(std::round(dist_inertial+0.5)/1000 == std::round(dist_usk+0.5)/1000);
             }
 
-
-            printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial?"false":"true"),
-                   frame_count,
-                   current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y,
-                   gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y);
-
             // make m_centroid_displacement_with_coordinate_gt with smallest resolution.
             m_object_base_point_displacement.push_back(std::make_pair(gt_data.getAll().at(current_index).m_object_location_px.cog_px, gt_displacement));
 
         }
-        if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial == 127 || gt_data.getAll().at(current_index).visMask == 0
-                || gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m == 0 || gt_data.getAll().at(current_index).m_region_of_interest_px.x <= 0) {
-            m_object_base_visibility.push_back((false));
-        }
-        else{
-            m_object_base_visibility.push_back((true));
-        }
+
+        printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)m_object_base_visibility.at(current_index)?"true":"false"), frame_count, current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
+        );
+
         m_object_base_all.push_back(gt_data.getAll().at(current_index));
         current_index++;
     }

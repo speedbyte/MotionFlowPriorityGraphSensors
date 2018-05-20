@@ -14,8 +14,8 @@
 typedef struct {
 
     unsigned frame_count;
-    float visiblePixels;
-    unsigned goodPixels;
+    unsigned visiblePixels;  // pixels that are visible according to the algorithm. In case of ground truth, all pixels are visible
+    unsigned goodPixels;  // subset of visible pixels, and are within a tolerance. In case of ground truth, this is equsl to visiblePixel
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
 

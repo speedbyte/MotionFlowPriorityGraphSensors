@@ -123,7 +123,7 @@ void GroundTruthFlow::generate_flow_frame() {
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        std::cout << "saving ground truth flow files and edges for sensor_index " << sensor_index << std::endl;
+        std::cout << "saving ground truth flow files in flow/ and CannyEdgeDetection in edges/ for sensor_index  " << sensor_index << std::endl;
 
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_stencil_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
@@ -157,8 +157,8 @@ void GroundTruthFlow::generate_flow_frame() {
 
                 // object image_data_and_shape
 
-                int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
-                int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
+                int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.width_px);
+                int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.height_px);
 
                 //if ( m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count) == true ) {
                 float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
@@ -178,8 +178,7 @@ void GroundTruthFlow::generate_flow_frame() {
                     //bulk storage
                     //roi = cv::Scalar(displacement.x, displacement.y,
                     //                 static_cast<float>(m_ptr_list_gt_objects.at(obj_index)->getObjectId()));
-                    roi = cv::Scalar(displacement.x, displacement.y,
-                                     static_cast<float>(1.0f));
+                    roi = cv::Scalar(displacement.x, displacement.y, static_cast<float>(1.0f));
 
                 }
             }
@@ -194,7 +193,6 @@ void GroundTruthFlow::generate_flow_frame() {
                         }*/
                         F_png_write.setFlowU(col, row, tempMatrix.at<cv::Vec3f>(row, col)[0]);
                         F_png_write.setFlowV(col, row, tempMatrix.at<cv::Vec3f>(row, col)[1]);
-                        //F_png_write.setObjectId(col, row, tempMatrix.at<cv::Vec3f>(row, col)[2]);
                         F_png_write.setValid(col, row, true);
                     }
                 }

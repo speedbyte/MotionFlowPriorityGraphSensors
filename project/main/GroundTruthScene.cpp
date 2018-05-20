@@ -200,9 +200,9 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
                         frame_count).m_object_location_m.location_z_m
 
                         << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
-                        frame_count).m_object_dimensions_px.dim_width_m
+                        frame_count).m_object_dimensions_px.width_px
                         << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
-                        frame_count).m_object_dimensions_px.dim_height_m
+                        frame_count).m_object_dimensions_px.height_px
 
                         << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
                         frame_count).m_object_realworld_dim_m.dim_length_m
@@ -538,7 +538,7 @@ void GroundTruthScene::startEvaluating(Noise noise) {
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > dummy_movement;
         std::vector<std::vector<bool> > dummy_visibility;
 
-        m_list_gt_objects.at(obj_index).generate_object_stencil_point_displacement_pixel_visibility("ground_truth", dummy_movement, dummy_visibility);
+        m_list_gt_objects.at(obj_index).generate_object_stencil_point_displacement_pixel_visibility("ground_truth");
     }
 
     for (ushort sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.at(0).size(); sen_index++) {
@@ -670,15 +670,15 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             image_data_and_shape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
             image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(
                     obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    frame_count).m_object_dimensions_px.dim_height_m)).colRange(0, cvRound(m_list_gt_objects.at(
+                    frame_count).m_region_of_interest_px.height_px)).colRange(0, cvRound(m_list_gt_objects.at(
                     obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    frame_count).m_object_dimensions_px.dim_width_m));
+                    frame_count).m_region_of_interest_px.width_px));
             positionShape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
             positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(
                     obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    frame_count).m_object_dimensions_px.dim_height_m)).colRange(0, cvRound(m_list_gt_objects.at(
+                    frame_count).m_region_of_interest_px.height_px)).colRange(0, cvRound(m_list_gt_objects.at(
                     obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    frame_count).m_object_dimensions_px.dim_width_m));
+                    frame_count).m_region_of_interest_px.width_px));
 
             if ((!m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).occluded )) {
 
@@ -687,8 +687,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                                 frame_count).first.x),
                                  cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
                                          frame_count).first.y),
-                                 cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_width_m),
-                                 cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).m_object_dimensions_px.dim_height_m))));
+                                 cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).m_region_of_interest_px.width_px),
+                                 cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(frame_count).m_region_of_interest_px.height_px))));
 
             }
         }
@@ -919,9 +919,9 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                             cvRound(xx.x),
                             cvRound(xx.y),
                             cvRound(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                    frame_count).m_object_dimensions_px.dim_width_m),
+                                    frame_count).m_object_dimensions_px.width_px),
                             cvRound(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                    frame_count).m_object_dimensions_px.dim_height_m));
+                                    frame_count).m_object_dimensions_px.height_px));
 
                     //cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
 
@@ -959,7 +959,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     //}
                 }
                 else {
-                    std::cout << "its occlued" << std::endl;
+                    std::cout << m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getObjectName() << " is occlued" << std::endl;
                 }
             }
 

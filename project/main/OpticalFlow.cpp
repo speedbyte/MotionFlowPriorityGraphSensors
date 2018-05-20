@@ -116,8 +116,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                 if ( list_of_current_objects.at(obj_index)->getObjectName() == "New Character" ||
                         list_of_current_objects.at(obj_index)->getObjectName() == "simulated_New Character") {
                     cv::Point2i dimension = {
-                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m),
-                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m)
+                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.width_px),
+                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.height_px)
                     };
 
                     // displacements found by the algorithm for this object
@@ -138,7 +138,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         if (m_opticalFlowName == "ground_truth") {
 
-                            evaluationData.visiblePixels = dimension.x * dimension.y;; // how many pixels are visible ( it could be that some pixels are occluded )
+                            evaluationData.visiblePixels = dimension.x * dimension.y; // how many pixels are visible ( it could be that some pixels are occluded )
                             evaluationData.goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
                         }
@@ -175,15 +175,15 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         multiframe_evaluation_data.push_back(evaluationData);
 
-                        std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                        std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.goodPixels<< std::endl;
-                        std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                        std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.visiblePixels << std::endl;
 
                         //assert(evaluationData.goodPixels <= std::ceil(evaluationData.algorithmPixels) + 20 );
 
                     } else {
-                        std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
+                        std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectName() << " = " <<
                                   list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
                                           .at(frame_count)
                                   << " and hence not generating any shape points for this object " << std::endl;

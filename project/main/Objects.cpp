@@ -12,7 +12,7 @@
 using namespace std::chrono;
 
 
-void Objects::generate_object_stencil_point_displacement_pixel_visibility( std::string post_processing_algorithm, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement_external,  std::vector<std::vector<bool> > sensor_base_visibility_external ) {
+void Objects::generate_object_stencil_point_displacement_pixel_visibility( std::string post_processing_algorithm ) {
 
 // object image_data_and_shape
     assert(post_processing_algorithm == "ground_truth");
@@ -42,9 +42,9 @@ void Objects::generate_object_stencil_point_displacement_pixel_visibility( std::
             std::vector<bool> base_visibility;
 
             int ObjectWidth = cvRound(
-                    m_object_extrapolated_all.at(sensor_index).at(frame_count).m_object_dimensions_px.dim_width_m);
+                    m_object_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.width_px);
             int ObjectHeight = cvRound(
-                    m_object_extrapolated_all.at(sensor_index).at(frame_count).m_object_dimensions_px.dim_height_m);
+                    m_object_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.height_px);
 
             for (unsigned j = 0; j < ObjectWidth; j += 1) {
                 for (unsigned k = 0; k < ObjectHeight; k += 1) {
@@ -91,14 +91,13 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
         char sensor_index_folder_suffix[50];
         char file_name_input_image[50];
 
-        std::cout << "edge counter results will be stored in " << post_processing_algorithm << std::endl;
-
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
         std::string temp_result_flow_path;
 
-        std::cout << "creating edge files for sensor_index " << sensor_index << std::endl;
         std::vector<std::pair<cv::Point2f, cv::Point2f> > next_pts_array;
+
+        std::cout << "making a edge contour on the basis of " << post_processing_algorithm << " for object " << m_objectName << " for sensor index " << sensor_index << std::endl;
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
             //draw new ground truth flow.
@@ -136,7 +135,6 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
 
                         //std::cout << roi_offset.x + col_index << std::endl;
                         auto COUNT = next_pts_array.size();
-                        std::cout << "making a edge contour on the basis of " << post_processing_algorithm << " " << m_objectId << std::endl;
                         std::cout << "base count " << COUNT << std::endl;
                         for ( ushort next_pts_index = 0; next_pts_index < COUNT; next_pts_index++ ) {
 
@@ -223,13 +221,19 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
     rankedMean.common(this);
     m_list_object_mean_centroid_displacement.push_back(rankedMean.getObjectMeanCentroidDisplacement());
 
-    //get_simple_avg_centroid_displacement_mean(obj__blob_point_displacement);
-
     if (post_processing_algorithm != "ground_truth") {
 
-        //get_voted_centroid_displacement_mean(obj__blob_point_displacement);
-        //get_moving_avg_centroid_displacement:mean(obj__blob_point_displacement);
-        //get_ranked_centroid_displacement_mean(obj__blob_point_displacement);
+        MovingAverage movingAverage;
+        movingAverage.common(this);
+        m_list_object_mean_centroid_displacement.push_back(movingAverage.getObjectMeanCentroidDisplacement());
+
+        VotedMean votedMean;
+        votedMean.common(this);
+        m_list_object_mean_centroid_displacement.push_back(votedMean.getObjectMeanCentroidDisplacement());
+
+        RankedMean rankedMean;
+        rankedMean.common(this);
+        m_list_object_mean_centroid_displacement.push_back(rankedMean.getObjectMeanCentroidDisplacement());
 
     }
 

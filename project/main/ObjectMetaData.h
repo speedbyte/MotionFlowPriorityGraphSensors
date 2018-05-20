@@ -40,7 +40,7 @@ MyData:
 typedef struct object_location_inertial_m { float location_x_m; float location_y_m; float location_z_m;} object_location_inertial_m_str;
 
 //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
-typedef struct object_dimensions_px { float dim_width_m; float dim_height_m; float dim_length_m; } object_dimensions_px_str;
+typedef struct object_dimensions_px { float width_px; float height_px; float dim_length_m; } object_dimensions_px_str;
 
 //w3d, h3d, l3d: KITTI-like 3D object 'dimensions', respectively width, height, length in meters
 typedef struct object_realworld_dim_m { float dim_width_m; float dim_height_m; float dim_length_m; } object_realworld_dim_m_str;
@@ -54,7 +54,7 @@ typedef struct object_offset_m { float offset_x; float offset_y; float offset_z;
 typedef struct object_location_m { float location_x_m; float location_y_m; float location_z_m;} object_location_m_str;
 
 //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
-typedef struct region_of_interest_px { float x; float y; float width; float height;} region_of_interest_px_str;
+typedef struct region_of_interest_px { float x; float y; float width_px; float height_px;} region_of_interest_px_str;
 
 //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
 typedef struct object_location_px { float location_x_m; float location_y_m; float location_z_m; cv::Point2f cog_px;} object_location_px_str;
@@ -282,8 +282,8 @@ public:
         m_object_gt_all.at(frameNumber).m_object_offset_m.offset_y = offset.y;
         m_object_gt_all.at(frameNumber).m_object_offset_m.offset_z = offset.z;
 
-        m_object_gt_all.at(frameNumber).m_object_dimensions_px.dim_width_m = dimensions.x;
-        m_object_gt_all.at(frameNumber).m_object_dimensions_px.dim_height_m = dimensions.y;
+        m_object_gt_all.at(frameNumber).m_object_dimensions_px.width_px = dimensions.x;
+        m_object_gt_all.at(frameNumber).m_object_dimensions_px.height_px = dimensions.y;
 
         m_object_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
 
@@ -349,8 +349,8 @@ public:
 
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = roi_2d.x;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = roi_2d.y;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width = roi_2d.width;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.height = roi_2d.height;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = roi_2d.width;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.height_px = roi_2d.height;
 
         m_object_gt_all.at(frameNumber).m_object_location_px.cog_px = bbox_points.at(8);
 
