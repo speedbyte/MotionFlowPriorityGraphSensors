@@ -59,7 +59,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
     for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > sensor_base_movement(m_ptr_list_simulated_objects.size());
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > sensor_stencil_movement(m_ptr_list_simulated_objects.size());
         std::vector<std::vector<std::vector<bool> >  > sensor_base_visiblity(m_ptr_list_simulated_objects.size());
 
@@ -262,29 +261,11 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                 for ( it = next_pts_array.begin(), it2 = displacement_array.begin(); it !=next_pts_array.end(); it++, it2++ )
                 {
 
-                    //F_png_write.setFlowU((*it).x,(*it).y,65535);
-                    //F_png_write.setFlowV((*it).x,(*it).y,65535);
-                    //F_png_write.setValid((*it).x,(*it).y,1.0f);
-
                     F_png_write.setFlowU((*it).x,(*it).y,(*it2).x);
                     F_png_write.setFlowV((*it).x,(*it).y,(*it2).y);
                     F_png_write.setValid((*it).x,(*it).y,true);
                     // TODO - store objectId instead of 1.0. The flow vectors are automatically converted to 2's complement in the writeFlowField
                 }
-
-                cv::Mat stencilFrame(Dataset::getFrameSize(), CV_32FC3, cv::Scalar(0,0,0));
-                stencilFrame = flowFrame.clone();
-
-                /*
-                cv::MatIterator_<cv::Vec3f> it_flowframe = stencilFrame.begin<cv::Vec3f>();
-                for (unsigned i = 0; it_flowframe != stencilFrame.end<cv::Vec3f>(); it_flowframe++ ) {
-                    for ( unsigned j = 0; j < 3; j++ ) {
-                        (*it_flowframe)[j]= *(F_png_write.data_ + i );
-                        // std::min(temp*64.0f+32768.0f,65535.0f),0.0f)
-                        i++;
-                    }
-                }*/
-
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
 
@@ -301,7 +282,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                         //cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height), cv::Scalar(0,0,255), 4, 8, 0 );
 
-                        cv::Mat roi = stencilFrame.
+                        cv::Mat roi = flowFrame.
                                 rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
                                          (cvRound(rowBegin+height+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)))).
                                 colRange(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
@@ -321,7 +302,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                 (sensor_index).at(frame_count).second;
                         // This is for the base model
                         std::vector<std::vector<bool>  > base_visibility(m_ptr_list_simulated_objects.size());
-                        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > base_movement(m_ptr_list_simulated_objects.size());
                         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > stencil_movement(m_ptr_list_simulated_objects.size());
 
                         if ( noise == "blue_sky") {
@@ -346,16 +326,13 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                             continue;
                                         }
 
-                                        //std::cout << roi_offset.x + col_index << std::endl;
                                         for ( auto next_pts_index = 0; next_pts_index < next_pts_array.size(); next_pts_index++ ) {
                                             if ( (( roi_offset.x + col_index ) == next_pts_array.at(next_pts_index).x) &&
                                                     (( roi_offset.y + row_index ) == next_pts_array.at(next_pts_index).y)) {
+
                                                 stencil_movement.at(obj_index).push_back(
                                                         std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
                                                                        algo_displacement));
-                                                base_movement.at(obj_index).push_back(std::make_pair(
-                                                        cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
-                                                        algo_displacement));
                                                 base_visibility.at(obj_index).push_back(visibility);
 
                                             }
@@ -386,10 +363,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                                  (( roi_offset.y + row_index ) == next_pts_array.at(next_pts_index).y)) {
                                                 stencil_movement.at(obj_index).push_back(
                                                         std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
-                                                                       algo_displacement));
-
-                                               base_movement.at(obj_index).push_back(
-                                                        std::make_pair(cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
                                                                        algo_displacement));
                                                 base_visibility.at(obj_index).push_back(visibility);
                                             }
@@ -437,9 +410,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                                     stencil_movement.at(obj_index).push_back(
                                             std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
                                                     algo_displacement));
-                                    base_movement.at(obj_index).push_back(std::make_pair(
-                                            cv::Point2f((roi_offset.x + col_index), (roi_offset.y + row_index)),
-                                            algo_displacement));
                                     base_visibility.at(obj_index).push_back(visibility);
                                     F_png_write.setFlowU(roi_offset.x + col_index,roi_offset.y + row_index, algo_displacement.x);
                                     F_png_write.setFlowV(roi_offset.x + col_index,roi_offset.y + row_index, algo_displacement.y);
@@ -454,8 +424,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                         new_stencil_size = stencil_movement.at(obj_index).size();
                         assert(new_stencil_size != 0);
 
-
-                        sensor_base_movement.at(obj_index).push_back(base_movement.at(obj_index));
                         sensor_base_visiblity.at(obj_index).push_back(base_visibility.at(obj_index));
                         sensor_stencil_movement.at(obj_index).push_back(stencil_movement.at(obj_index));
 
@@ -463,7 +431,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
                     else {
 
                         sensor_base_visiblity.at(obj_index).push_back({{false}});
-                        sensor_base_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
                         sensor_stencil_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
 
                     }
@@ -479,7 +446,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
                     sensor_base_visiblity.at(obj_index).push_back({{false}});
-                    sensor_base_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
                     sensor_stencil_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
                 }
 
@@ -525,7 +491,7 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
             cv::imwrite(temp_result_position_path, image_02_frame);
-            m_ptr_list_simulated_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility("alorithm", sensor_base_movement.at(obj_index), sensor_base_visiblity.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility("alorithm", sensor_stencil_movement.at(obj_index), sensor_base_visiblity.at(obj_index));
         }
 
         cv::destroyAllWindows();
