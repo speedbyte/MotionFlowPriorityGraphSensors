@@ -283,10 +283,10 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     float vollTreffer = 0;
                     float baseTreffer;
 
-                    cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
+                    cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at
                             (0).at(frame_count).second;
 
-                    cv::Point2f gt_displacement_2 = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
+                    cv::Point2f gt_displacement_2 = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at
                             (1).at(frame_count).second;
 
 //gt_displacement = (gt_displacement + gt_displacement_2)/2;
@@ -477,7 +477,7 @@ void OpticalFlow::generate_metrics_data_processing_algorithm() {
                         float vollTreffer = 0;
                         float baseTreffer;
 
-                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
+                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at
                                 (sensor_index).at(frame_count).second;
 
                         auto dist_gt = cv::norm(gt_displacement);

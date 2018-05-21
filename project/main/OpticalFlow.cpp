@@ -130,7 +130,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
-                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at
+                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at
                                 (sensor_index).at(frame_count).second;
 
                         auto dist_gt = cv::norm(gt_displacement);
@@ -280,7 +280,7 @@ void OpticalFlow::visualiseStencilAlgorithms() {
 
                     cv::Point2f pts_mean = m_ptr_list_gt_objects.at(obj_index)->get_list_object_mean_centroid_displacement().at(0).
                             at(sensor_index).at(frame_count).first;
-                    cv::Point2f pts_basic = m_ptr_list_gt_objects.at(obj_index)->get_object_pixel_position_pixel_displacement().at(
+                    cv::Point2f pts_basic = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(
                             sensor_index).at(frame_count).first;
 
                     cv::Point2f displacement = m_ptr_list_gt_objects.at(obj_index)->get_list_object_mean_centroid_displacement().at(sensor_index).at(
