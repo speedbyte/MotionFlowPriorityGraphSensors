@@ -68,8 +68,7 @@ public:
 
     Objects( std::string objectName) : m_objectName(objectName) {}
 
-    Objects( std::string objectName, int width, int height, std::vector<std::vector<bool> >  extrapolated_visibility) : m_objectName(objectName) , m_ObjectInertialWidth(width), m_ObjectInertialHeight
-            (height), m_object_extrapolated_visibility(extrapolated_visibility) {}
+    Objects( std::string objectName, std::vector<std::vector<bool> >  extrapolated_visibility) : m_objectName(objectName), m_object_extrapolated_visibility(extrapolated_visibility) {}
 
     void generate_object_mean_centroid_displacement(std::string post_processing_algorithm);
 
@@ -87,14 +86,6 @@ public:
 
     const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_list_object_mean_centroid_displacement() const {
         return m_list_object_mean_centroid_displacement;
-    }
-
-const int &getInertialWidth() const {
-        return m_ObjectInertialWidth;
-    }
-
-    const int &getInertialHeight() const {
-        return m_ObjectInertialHeight;
     }
 
     const std::vector<std::vector<std::vector<cv::Point2f > > > &get_list_object_line_parameters() const {

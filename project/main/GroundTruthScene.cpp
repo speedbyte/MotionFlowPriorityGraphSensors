@@ -534,11 +534,6 @@ void GroundTruthScene::startEvaluating(Noise noise) {
 
         }
 
-        // extrapolated consists of objects -> sensor mapping
-        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > dummy_movement;
-        std::vector<std::vector<bool> > dummy_visibility;
-
-        m_list_gt_objects.at(obj_index).generate_object_stencil_point_displacement_pixel_visibility("ground_truth");
     }
 
     for (ushort sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.at(0).size(); sen_index++) {
@@ -557,8 +552,6 @@ void GroundTruthScene::startEvaluating(Noise noise) {
 
         }
 
-        // extrapolated consists of sensors -> sensor mapping
-        //m_list_gt_sensors.at(sen_index)generate_sen__shape_point_displacement_pixel_visibility();
     }
 
 }

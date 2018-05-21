@@ -562,3 +562,79 @@ void scratch() {
     }
 
 }
+
+
+void generate_flow_frame() {
+
+    // TODO scratch : This is for the base model
+
+    if ( noise == "blue_sky") {
+
+        assert(m_ptr_list_simulated_objects.size() == m_ptr_list_gt_objects.size());
+
+        std::cout << "making a stencil on the basis of groundtruth object " << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
+
+        //auto COUNT = m_ptr_list_simulated_objects_base.size();
+        //assert(COUNT==0);
+        //std::cout << next_pts_array << std::endl;
+    }
+    else {
+
+        assert(m_ptr_list_simulated_objects.size() == m_ptr_list_simulated_objects_base.size());
+        std::cout << "making a stencil on the basis of base algorithm object " << m_ptr_list_simulated_objects_base.at(obj_index)->getObjectId() << std::endl;
+
+
+        /*
+
+        auto COUNT = m_ptr_list_simulated_objects_base.at(obj_index)->get_object_stencil_point_displacement().at
+                (sensor_index).at(frame_count).size();
+        for ( auto count = 0; count < COUNT; count++ ) {
+
+            float x = m_ptr_list_simulated_objects_base.at(
+                    obj_index)->get_object_stencil_point_displacement().at
+                    (sensor_index).at(frame_count).at(count).first.x;
+            float y = m_ptr_list_simulated_objects_base.at(
+                    obj_index)->get_object_stencil_point_displacement().at
+                    (sensor_index).at(frame_count).at(count).first.y;
+
+            for (auto next_pts_index = 0;
+                 next_pts_index < next_pts_array.size(); next_pts_index++) {
+                if (((x) == next_pts_array.at(next_pts_index).x) &&
+                    ((y) == next_pts_array.at(next_pts_index).y)) {
+                    cv::Point2f algo_displacement = flowFrame.at<cv::Vec2f>(y, x);
+                    stencil_movement.at(obj_index).push_back(
+                            std::make_pair(cv::Point2f(x, y), algo_displacement));
+                }
+            }
+        }
+        */
+    }
+
+    // TODO scratch : if stencil size does not work
+
+    if ( new_stencil_size == 0 ) {
+        for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
+            for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
+
+                cv::Point2f algo_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(frame_count).second;
+                //std::cout << roi_offset.x + col_index << std::endl;
+                stencil_movement.at(obj_index).push_back(
+                        std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
+                                       algo_displacement));
+                base_visibility.at(obj_index).push_back(visibility);
+                F_png_write.setFlowU(roi_offset.x + col_index,roi_offset.y + row_index, algo_displacement.x);
+                F_png_write.setFlowV(roi_offset.x + col_index,roi_offset.y + row_index, algo_displacement.y);
+                F_png_write.setValid(roi_offset.x + col_index,roi_offset.y + row_index, true);
+
+            }
+        }
+        std::cout << stencil_movement.at(obj_index).size() << "hacked" << next_pts_array.size() << std::endl;
+    }
+
+
+    new_stencil_size = stencil_movement.at(obj_index).size();
+    assert(new_stencil_size != 0);
+
+
+
+}

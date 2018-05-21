@@ -53,14 +53,6 @@ public:
         return m_sensorName;
     }
 
-    const int &getInertialWidth() const {
-        return m_SensorInertialWidth;
-    }
-
-    const int &getInertialHeight() const {
-        return m_SensorInertialHeight;
-    }
-
     unsigned getSensorId() const {
         return m_sensorId;
     }

@@ -19,8 +19,8 @@ private:
 
 public:
 
-    SimulatedObjects(std::string objectName, int width, int height, std::vector<std::vector<bool> >  extrapolated_visibility) :
-            Objects(objectName, width, height, extrapolated_visibility ) {
+    SimulatedObjects(std::string objectName, std::vector<std::vector<bool> >  extrapolated_visibility) :
+            Objects(objectName, extrapolated_visibility ) {
 
         m_objectId = SimulatedobjectCurrentCount ;
         SimulatedobjectCurrentCount += 1;

@@ -19,7 +19,7 @@ void Objects::generate_object_stencil_point_displacement_pixel_visibility( std::
 
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement;
+        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement;
         std::vector<std::vector<bool> > sensor_stencil_visibility;
 
         std::cout << "generate_object_stencil_point_displacement_pixel_visibility for sensor_index "
@@ -38,8 +38,8 @@ void Objects::generate_object_stencil_point_displacement_pixel_visibility( std::
 
             bool visibility = m_object_extrapolated_visibility.at(sensor_index).at(frame_count);
 
-            std::vector<std::pair<cv::Point2f, cv::Point2f> > base_movement;
-            std::vector<bool> base_visibility;
+            std::vector<std::pair<cv::Point2f, cv::Point2f> > stencil_movement;
+            std::vector<bool> stencil_visibility;
 
             int ObjectWidth = cvRound(
                     m_object_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.width_px);
@@ -50,31 +50,31 @@ void Objects::generate_object_stencil_point_displacement_pixel_visibility( std::
                 for (unsigned k = 0; k < ObjectHeight; k += 1) {
                     if (j % STENCIL_GRID_COMPRESSOR == 0 &&
                         k % STENCIL_GRID_COMPRESSOR == 0) { // only entertain multiple of x pixels to reduce data
-                        base_movement.push_back(std::make_pair(cv::Point2f(gt_roi_pts.x + j, gt_roi_pts.y +
+                        stencil_movement.push_back(std::make_pair(cv::Point2f(gt_roi_pts.x + j, gt_roi_pts.y +
                                                                                              k), gt_displacement));
-                        base_visibility.push_back(visibility);
+                        stencil_visibility.push_back(visibility);
                     }
                 }
             }
             if (!visibility) {
-                base_movement.push_back(std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0)));
-                base_visibility.push_back(visibility);
+                stencil_movement.push_back(std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0)));
+                stencil_visibility.push_back(visibility);
             }
-            sensor_base_movement.push_back(base_movement);
-            sensor_stencil_visibility.push_back(base_visibility);
+            sensor_stencil_movement.push_back(stencil_movement);
+            sensor_stencil_visibility.push_back(stencil_visibility);
         }
 
-        m_object_stencil_point_displacement.push_back(sensor_base_movement);
+        m_object_stencil_point_displacement.push_back(sensor_stencil_movement);
         m_object_stencil_visibility.push_back(sensor_stencil_visibility);
     }
 
 }
 
 
-void Objects::set_object_stencil_point_displacement_pixel_visibility( std::string post_processing_algorithm, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement,  std::vector<std::vector<bool> > sensor_base_visibility ) {
+void Objects::set_object_stencil_point_displacement_pixel_visibility( std::string post_processing_algorithm, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement,  std::vector<std::vector<bool> > sensor_stencil_visibility ) {
 
-    m_object_stencil_point_displacement.push_back(sensor_base_movement);
-    m_object_stencil_visibility.push_back(sensor_base_visibility);
+    m_object_stencil_point_displacement.push_back(sensor_stencil_movement);
+    m_object_stencil_visibility.push_back(sensor_stencil_visibility);
 
 }
 

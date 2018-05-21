@@ -290,28 +290,24 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
 
                 if (environment_list[env_index] == "blue_sky") {
-                    for (auto obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
-                        ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_count)));
+                    for (auto obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
+                        ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_index)));
                     }
                 }
 
-
                 list_of_gt_objects = list_of_gt_objects_base;
-
                 ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
-
 
                 // Generate Groundtruth data flow --------------------------------------
                 if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt ) {
 
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
-
-
                     gt_flow.generate_flow_frame();
 
-                    for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
-                        ptr_list_of_gt_objects.at(obj_count)->generate_object_mean_centroid_displacement("ground_truth");
+                    for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
+                        ptr_list_of_gt_objects.at(obj_index)->generate_object_stencil_point_displacement_pixel_visibility("ground_truth");
+                        ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement("ground_truth");
                     }
 
                     //gt_flow.generate_collision_points();
@@ -353,7 +349,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::vector<Objects *> ptr_list_of_simulated_objects;
 
             std::vector<AlgorithmFlow> list_of_algorithm_flow;
-            for (ushort obj_count = 0; obj_count < environment_list.size(); obj_count++) {
+            for (ushort obj_index = 0; obj_index < environment_list.size(); obj_index++) {
                 Farneback fback("fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
                                     ptr_list_of_simulated_objects, stepSize);
                 list_of_algorithm_flow.push_back(fback);
@@ -371,21 +367,18 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     SimulatedObjects::SimulatedobjectCurrentCount = 0; // start from 0 for each list_of_algorithm
 
-                    for (ushort obj_count = 0; obj_count < list_of_gt_objects_base.size(); obj_count++) {
+                    for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                         //two objects
-                        int width = list_of_gt_objects_base.at(obj_count).getInertialWidth();
-                        int height = list_of_gt_objects_base.at(obj_count).getInertialHeight();
                         std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
-                                obj_count).get_object_extrapolated_visibility();
+                                obj_index).get_object_extrapolated_visibility();
 
-                        SimulatedObjects objects(("simulated_" + list_of_gt_objects_base.at(obj_count).getObjectName()), width,
-                                                 height, extrapolated_visibility);
+                        SimulatedObjects objects("simulated_" + list_of_gt_objects_base.at(obj_index).getObjectName(), extrapolated_visibility);
                         list_of_simulated_objects.push_back(objects);  // mke two new objects
                     }
 
                     // push the objects into the pointer. The pointer here will contain two elements.
-                    for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
-                        ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_count));
+                    for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                        ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
                     }
 
                     if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
@@ -394,11 +387,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
 
-                            for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
-                                list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_count));
+                            for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                                list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
                             }
-                            for (auto obj_count = 0; obj_count < list_of_simulated_objects.size(); obj_count++) {
-                                ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_count));
+                            for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                                ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_index));
                             }
                         }
 

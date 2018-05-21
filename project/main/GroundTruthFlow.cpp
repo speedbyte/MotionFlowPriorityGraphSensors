@@ -167,8 +167,17 @@ void GroundTruthFlow::generate_flow_frame() {
                     max_magnitude = std::max((float)cv::norm(gt_displacement), max_magnitude);
 
                     cv::Mat roi = flowFrame.
-                            colRange(cvRound(columnBegin), cvRound(columnBegin + width)).
-                            rowRange(cvRound(rowBegin), cvRound(rowBegin + height));
+                            rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
+                                     (cvRound(rowBegin+height+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)))).
+                            colRange(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
+                                     (cvRound(columnBegin+width+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER))));
+
+                    cv::Size roi_size;
+                    cv::Point roi_offset;
+                    roi.locateROI(roi_size, roi_offset);
+
+                    // TODO scratch : This is for the base model
+
                     roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
 
                 }
@@ -195,7 +204,6 @@ void GroundTruthFlow::generate_flow_frame() {
     }
 
     std::cout << "end of saving ground truth flow files " << std::endl;
-
 
 }
 
