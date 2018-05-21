@@ -308,7 +308,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     gt_flow.generate_edge_images();
 
                     for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
-                        ptr_list_of_gt_objects.at(obj_index)->generate_object_stencil_point_displacement_pixel_visibility("ground_truth");
                         ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement("ground_truth");
                     }
 

@@ -22,6 +22,8 @@ using namespace std::chrono;
 
 void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) {
 
+    m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/" + noise;
+
     m_resultordner = "results_";
 
     switch ( algo ) {
@@ -38,25 +40,21 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, std::string noise, usho
         }
     }
 
-    m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/" + noise;
-
     m_resultordner += noise + "_" + std::to_string(fps) + "_" + std::to_string(stepSize) + "/";
 
     m_generatepath = Dataset::getResultPath().string() + "/" +  m_resultordner;
 
     if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
-        std::cout << "Creating Flow directories " << m_resultordner << std::endl;
-
         prepare_directories_common();
 
-        std::cout << "Ending Flow directories " << m_resultordner << std::endl;
     }
 }
 
 void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps ) {
 
     char sensor_index_folder_suffix[50];
+
     for ( ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
 
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
@@ -67,8 +65,8 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
 
 
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > object_stencil_movement(m_ptr_list_simulated_objects.size());
-        std::vector<std::vector<std::vector<bool> >  > object_extrapolated_visibility(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<bool> >  > multiframe_visibility(m_ptr_list_simulated_objects.size());
 
         bool needToInit = true;
 
@@ -130,7 +128,6 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
             float max_magnitude = 0;
 
             std::vector<cv::Point2f> next_pts_array, displacement_array;
-
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
@@ -244,7 +241,6 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                     cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }
 
-
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
 
                     float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
@@ -255,10 +251,14 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                     int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.height_px);
                     bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count);
                     if ( visibility ) {
+
+                        std::vector<std::pair<cv::Point2f, cv::Point2f> >  frame_stencil_displacement;
+                        std::vector<bool>  base_visibility;
+
                         // gt_displacement
                         cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(frame_count).second;
 
-                        //cv::rectangle(image_02_frame, cv::Rect(columnBegin, rowBegin, width, height), cv::Scalar(0,0,255), 4, 8, 0 );
+                        max_magnitude = std::max((float)cv::norm(gt_displacement), max_magnitude);
 
                         cv::Mat roi = flowFrame.
                                 rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
@@ -270,51 +270,56 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                         cv::Point roi_offset;
                         roi.locateROI(roi_size, roi_offset);
 
-                        // TODO scratch : This is for the base model
+                        /*
 
-                        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> >  > stencil_movement(m_ptr_list_simulated_objects.size());
-                        std::vector<std::vector<bool>  > base_visibility(m_ptr_list_simulated_objects.size());
+                        for (unsigned j = 0; j < width; j += 1) {
+                            for (unsigned k = 0; k < height; k += 1) {
+
+                                next_pts_array.push_back(cv::Point2f(columnBegin + j, rowBegin + k));
+                                displacement_array.push_back(gt_displacement);
+
+                            }
+                        }
+
+                         */
+
+                        // TODO scratch : This is for the base model
 
                         for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                             for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
-                                if ( col_index%STENCIL_GRID_COMPRESSOR == 0 && row_index%STENCIL_GRID_COMPRESSOR == 0 ) { // only entertain multiple of col_index pixels to reduce data
+                                cv::Point2f algo_displacement = roi.at<cv::Vec2f>(row_index, col_index);
+                                auto dist_algo = cv::norm(algo_displacement);
+                                if ( dist_algo < 0.1 ) {
+                                    continue;
+                                }
 
-                                    cv::Point2f algo_displacement = roi.at<cv::Vec2f>(row_index, col_index);
-                                    auto dist_algo = cv::norm(algo_displacement);
-                                    if ( dist_algo < 0.1 ) {
-                                        continue;
-                                    }
+                                for ( auto next_pts_index = 0; next_pts_index < next_pts_array.size(); next_pts_index++ ) {
+                                    if ( (( roi_offset.x + col_index ) == next_pts_array.at(next_pts_index).x) &&
+                                         (( roi_offset.y + row_index ) == next_pts_array.at(next_pts_index).y)) {
 
-                                    for ( auto next_pts_index = 0; next_pts_index < next_pts_array.size(); next_pts_index++ ) {
-                                        if ( (( roi_offset.x + col_index ) == next_pts_array.at(next_pts_index).x) &&
-                                             (( roi_offset.y + row_index ) == next_pts_array.at(next_pts_index).y)) {
+                                        frame_stencil_displacement.push_back(
+                                                std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index), algo_displacement));
+                                        base_visibility.push_back(visibility);
 
-                                            stencil_movement.at(obj_index).push_back(
-                                                    std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
-                                                                   algo_displacement));
-                                            base_visibility.at(obj_index).push_back(visibility);
-
-                                        }
                                     }
                                 }
                             }
                         }
 
-                        auto new_stencil_size = stencil_movement.at(obj_index).size();
-                        std::cout << new_stencil_size << " " << next_pts_array.size() << std::endl;
-                        assert(new_stencil_size != 0);
+                        std::cout << frame_stencil_displacement.size() << " " << next_pts_array.size() << std::endl;
+                        assert(frame_stencil_displacement.size() != 0);
 
                         // TODO scratch : if stencil size does not work
 
-                        object_stencil_movement.at(obj_index).push_back(stencil_movement.at(obj_index));
-                        object_extrapolated_visibility.at(obj_index).push_back(base_visibility.at(obj_index));
+                        multiframe_stencil_displacement.at(obj_index).push_back(frame_stencil_displacement);
+                        multiframe_visibility.at(obj_index).push_back(base_visibility);
 
                     }
                     else {
 
-                        object_stencil_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
-                        object_extrapolated_visibility.at(obj_index).push_back({{false}});
+                        multiframe_stencil_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                        multiframe_visibility.at(obj_index).push_back({{false}});
 
                     }
                 }
@@ -322,8 +327,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
 
                 std::vector<cv::Point2f>::iterator it, it2 ;
 
-                for ( it = next_pts_array.begin(), it2 = displacement_array.begin(); it !=next_pts_array.end(); it++, it2++ )
-                {
+                for ( it = next_pts_array.begin(), it2 = displacement_array.begin(); it !=next_pts_array.end(); it++, it2++ ) {
 
                     F_png_write.setFlowU((*it).x,(*it).y,(*it2).x);
                     F_png_write.setFlowV((*it).x,(*it).y,(*it2).y);
@@ -341,8 +345,8 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                 F_png_write.writeColor(kitti_path, 5);
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
-                    object_extrapolated_visibility.at(obj_index).push_back({{false}});
-                    object_stencil_movement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                    multiframe_stencil_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                    multiframe_visibility.at(obj_index).push_back({{false}});
                 }
 
                 needToInit = true;
@@ -386,7 +390,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
-            m_ptr_list_simulated_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility("alorithm", object_stencil_movement.at(obj_index), object_extrapolated_visibility.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility("alorithm", multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
         }
 
         cv::destroyAllWindows();

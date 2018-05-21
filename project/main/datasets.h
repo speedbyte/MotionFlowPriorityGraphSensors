@@ -49,7 +49,6 @@ typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Alg
 
 #define MAX_DUMPS 10
 
-#define STENCIL_GRID_COMPRESSOR 1  // every x pixels
 #define STENCIL_GRID_EXTENDER 15 // 10 pixels more than roi on each side
 
 #define DO_STENCIL_GRID_EXTENSION 0

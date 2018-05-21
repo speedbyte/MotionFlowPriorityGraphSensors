@@ -8,7 +8,7 @@
 #include <opencv2/core/types.hpp>
 #include "GroundTruthObjects.h"
 #include "SimulatedObjects.h"
-
+#include "FlowImageExtended.h"
 
 
 typedef struct {
@@ -102,6 +102,8 @@ public:
     void generate_collision_points();
 
     void save_flow_frame_from_displacement();
+
+    void common_flow_frame(ushort sensor_index, ushort frame_count, cv::Mat &flowFrame, FlowImageExtended &F_png_write,         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > multiframe_visibility);
 
     void visualiseStencilAlgorithms(void);
 

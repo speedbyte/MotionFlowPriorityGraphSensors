@@ -41,11 +41,7 @@ void GroundTruthFlow::prepare_directories(ALGO_TYPES algo, std::string noise, us
 
     if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
-        std::cout << "Creating Flow directories " << m_resultordner << std::endl;
-
         prepare_directories_common();
-
-        std::cout << "Ending Flow directories " << m_resultordner << std::endl;
 
     }
 }

@@ -12,65 +12,6 @@
 using namespace std::chrono;
 
 
-void Objects::generate_object_stencil_point_displacement_pixel_visibility( std::string post_processing_algorithm ) {
-
-// object image_data_and_shape
-    assert(post_processing_algorithm == "ground_truth");
-
-    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
-
-        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement;
-        std::vector<std::vector<bool> > sensor_stencil_visibility;
-
-        std::cout << "generate_object_stencil_point_displacement_pixel_visibility for sensor_index "
-                  << sensor_index << std::endl;
-        unsigned long FRAME_COUNT = m_object_extrapolated_point_displacement.at(sensor_index).size();
-        assert(FRAME_COUNT > 0);
-        for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-// gt_displacement
-
-            cv::Point2f gt_roi_pts = cv::Point2f(
-                    m_object_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.x,
-                    m_object_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.y);
-
-            cv::Point2f gt_displacement = m_object_extrapolated_point_displacement.at(sensor_index).at(
-                    frame_count).second;
-
-            bool visibility = m_object_extrapolated_visibility.at(sensor_index).at(frame_count);
-
-            std::vector<std::pair<cv::Point2f, cv::Point2f> > stencil_movement;
-            std::vector<bool> stencil_visibility;
-
-            int ObjectWidth = cvRound(
-                    m_object_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.width_px);
-            int ObjectHeight = cvRound(
-                    m_object_extrapolated_all.at(sensor_index).at(frame_count).m_region_of_interest_px.height_px);
-
-            for (unsigned j = 0; j < ObjectWidth; j += 1) {
-                for (unsigned k = 0; k < ObjectHeight; k += 1) {
-                    if (j % STENCIL_GRID_COMPRESSOR == 0 &&
-                        k % STENCIL_GRID_COMPRESSOR == 0) { // only entertain multiple of x pixels to reduce data
-                        stencil_movement.push_back(std::make_pair(cv::Point2f(gt_roi_pts.x + j, gt_roi_pts.y +
-                                                                                             k), gt_displacement));
-                        stencil_visibility.push_back(visibility);
-                    }
-                }
-            }
-            if (!visibility) {
-                stencil_movement.push_back(std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0)));
-                stencil_visibility.push_back(visibility);
-            }
-            sensor_stencil_movement.push_back(stencil_movement);
-            sensor_stencil_visibility.push_back(stencil_visibility);
-        }
-
-        m_object_stencil_point_displacement.push_back(sensor_stencil_movement);
-        m_object_stencil_visibility.push_back(sensor_stencil_visibility);
-    }
-
-}
-
-
 void Objects::set_object_stencil_point_displacement_pixel_visibility( std::string post_processing_algorithm, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement,  std::vector<std::vector<bool> > sensor_stencil_visibility ) {
 
     m_object_stencil_point_displacement.push_back(sensor_stencil_movement);
