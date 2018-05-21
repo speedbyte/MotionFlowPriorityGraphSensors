@@ -90,7 +90,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
 
         cv::Mat flowFrame( Dataset::getFrameSize(), CV_32FC2 );
         flowFrame = cv::Scalar_<float>(0,0); //  the flow frame consists of next iterations
-
+        assert(flowFrame.channels() == 3);
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
 
@@ -240,6 +240,8 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                     //cv::circle(image_02_frame, next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
                     cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }
+
+                //common_flow_frame(sensor_index, frame_count, flowFrame, F_png_write, multiframe_stencil_displacement, multiframe_visibility);
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
 

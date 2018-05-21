@@ -51,10 +51,6 @@ protected:
     std::vector<std::vector<std::vector<cv::Point2f > > >
             m_list_object_line_parameters;
 
-    int m_ObjectInertialWidth;
-
-    int m_ObjectInertialHeight;
-
     unsigned m_objectId;
 
     std::string m_objectName;
@@ -128,8 +124,6 @@ public:
     const std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  &get_object_extrapolated_point_displacement() const {
         return m_object_extrapolated_point_displacement;
     }
-
-    void generate_object_stencil_point_displacement_pixel_visibility(std::string post_processing_algorithm);
 
     void set_object_stencil_point_displacement_pixel_visibility(std::string post_processing_algorithm, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement,  std::vector<std::vector<bool> > sensor_base_visibility);
 
