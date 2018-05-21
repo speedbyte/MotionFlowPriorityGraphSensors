@@ -30,9 +30,9 @@ public:
 
     }
 
-    void prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize);
+    void prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) override ;
 
-    void generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise, ushort fps);
+    void run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise, ushort fps);
 
     std::string getGroundTruthImageLocation() const {
         return m_GroundTruthImageLocation.string();

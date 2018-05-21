@@ -564,7 +564,7 @@ void scratch() {
 }
 
 
-void generate_flow_frame() {
+void run_optical_flow_algorithm() {
 
     // TODO scratch : This is for the base model
 

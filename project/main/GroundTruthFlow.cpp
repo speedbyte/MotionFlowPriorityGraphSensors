@@ -31,7 +31,7 @@
 using namespace std::chrono;
 
 
-void GroundTruthFlow::prepare_directories() {
+void GroundTruthFlow::prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/blue_sky";
 
@@ -41,9 +41,11 @@ void GroundTruthFlow::prepare_directories() {
 
     if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
-        std::cout << "prepare gt_flow directories" << std::endl;
+        std::cout << "Creating Flow directories " << m_resultordner << std::endl;
 
-        OpticalFlow::prepare_directories();
+        prepare_directories_common();
+
+        std::cout << "Ending Flow directories " << m_resultordner << std::endl;
 
     }
 }
@@ -98,25 +100,14 @@ void GroundTruthFlow::CannyEdgeDetection(std::string flow_path, std::string edge
     //cv::waitKey(0);
 }
 
-void GroundTruthFlow::generate_flow_frame() {
+
+void GroundTruthFlow::generate_edge_images() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
     // Additionally stores the position in a png file
 
-    prepare_directories();
-
-    cv::Mat tempGroundTruthImage;
-    tempGroundTruthImage.create(Dataset::getFrameSize(), CV_8UC3);
-    assert(tempGroundTruthImage.channels() == 3);
-
-
-    std::map<std::string, double> time_map = {{"generate_single_flow_image", 0},
-                                              {"generate_all_flow_image", 0}};
-
     auto tic_all = steady_clock::now();
-
-    std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
     char sensor_index_folder_suffix[50];
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
@@ -126,10 +117,10 @@ void GroundTruthFlow::generate_flow_frame() {
         assert(FRAME_COUNT>0);
         cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
+        std::cout << "saving edge files in edge/ for sensor_index  " << sensor_index << std::endl;
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-            
+
             char file_name_input_image[50];
             std::cout << "frame_count " << frame_count << std::endl;
             sprintf(file_name_input_image, "000%03d_10.png", frame_count);
@@ -139,73 +130,17 @@ void GroundTruthFlow::generate_flow_frame() {
                 std::cerr << input_image_path << " not found" << std::endl;
                 throw ("No image file found error");
             }
-            std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-            std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-            std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+
             std::string edge_path = m_edge_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-            FlowImageExtended F_png_write( Dataset::getFrameSize().width, Dataset::getFrameSize().height);
-            float max_magnitude = 0;
-
-            cv::Mat flowFrame;
-            flowFrame.create(Dataset::getFrameSize(), CV_32FC3);
-            flowFrame = cv::Scalar_<unsigned>(0,0,0);
-            assert(flowFrame.channels() == 3);
-
-
-            for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
-
-                float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.x;
-                float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                        (sensor_index).at(frame_count).m_region_of_interest_px.y;
-                int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.width_px);
-                int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.height_px);
-                bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count);
-                if ( visibility ) {
-                    // gt_displacement
-                    cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(frame_count).second;
-
-                    max_magnitude = std::max((float)cv::norm(gt_displacement), max_magnitude);
-
-                    cv::Mat roi = flowFrame.
-                            rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
-                                     (cvRound(rowBegin+height+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)))).
-                            colRange(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
-                                     (cvRound(columnBegin+width+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER))));
-
-                    cv::Size roi_size;
-                    cv::Point roi_offset;
-                    roi.locateROI(roi_size, roi_offset);
-
-                    // TODO scratch : This is for the base model
-
-                    roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
-
-                }
-            }
-
-            //Create png Matrix with 3 channels: x gt_displacement. y displacment and ObjectId
-            // v corresponds to next row.
-            for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
-                for (int32_t col = 0; col < Dataset::getFrameSize().width; col++) {  // cols
-                    if (flowFrame.at<cv::Vec3f>(row, col)[2] > 0.5 ) {
-                        F_png_write.setFlowU(col, row, flowFrame.at<cv::Vec3f>(row, col)[0]);
-                        F_png_write.setFlowV(col, row, flowFrame.at<cv::Vec3f>(row, col)[1]);
-                        F_png_write.setValid(col, row, true);
-                    }
-                }
-            }
-
-            F_png_write.writeExtended(flow_path);
-            F_png_write.writeColor (kitti_path, max_magnitude);
-
             CannyEdgeDetection(input_image_path, edge_path);
-            
+
         }
     }
 
     std::cout << "end of saving ground truth flow files " << std::endl;
 
 }
+
 
 
 /*

@@ -303,7 +303,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
-                    gt_flow.generate_flow_frame();
+                    gt_flow.prepare_directories(gt, "", 0, 0);
+                    gt_flow.save_flow_frame_from_displacement();
+                    gt_flow.generate_edge_images();
 
                     for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                         ptr_list_of_gt_objects.at(obj_index)->generate_object_stencil_point_displacement_pixel_visibility("ground_truth");
@@ -383,7 +385,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
-                        list_of_algorithm_flow[env_index].generate_flow_frame(fb, video_frames, environment_list[env_index], fps);
+                        list_of_algorithm_flow[env_index].prepare_directories(fb, environment_list[env_index], fps, stepSize);
+                        // TODO - do something for stepSize.. its redundant here.
+                        list_of_algorithm_flow[env_index].run_optical_flow_algorithm(fb, video_frames, environment_list[env_index], fps);
 
                         if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
 
@@ -476,7 +480,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             // The ground truth generate_flow_frame and image is already available from the base dataset. Hence only results can be
             // calculated here.
 
-            //algo.generate_flow_frame(fb, continous_frames, no_noise);
+            //algo.run_optical_flow_algorithm(fb, continous_frames, no_noise);
 
             //make_video_from_regex((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
             //make_video_from_regex((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");

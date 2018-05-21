@@ -95,9 +95,13 @@ public:
     };
 
 
-    void prepare_directories();
+    void prepare_directories_common();
+
+    virtual void prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) {};
 
     void generate_collision_points();
+
+    void save_flow_frame_from_displacement();
 
     void visualiseStencilAlgorithms(void);
 

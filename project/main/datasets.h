@@ -61,6 +61,7 @@ typedef enum {
 } FRAME_TYPES;
 
 typedef enum {
+    gt,
     lk,
     fb
 } ALGO_TYPES;

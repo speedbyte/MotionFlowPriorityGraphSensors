@@ -22,7 +22,6 @@ using namespace std::chrono;
 
 void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) {
 
-    m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/" + noise;
     m_resultordner = "results_";
 
     switch ( algo ) {
@@ -39,23 +38,23 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, std::string noise, usho
         }
     }
 
+    m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/" + noise;
+
     m_resultordner += noise + "_" + std::to_string(fps) + "_" + std::to_string(stepSize) + "/";
 
     m_generatepath = Dataset::getResultPath().string() + "/" +  m_resultordner;
 
     if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
-        std::cout << "Creating Algorithm Flow directories" << std::endl;
+        std::cout << "Creating Flow directories " << m_resultordner << std::endl;
 
-        OpticalFlow::prepare_directories();
+        prepare_directories_common();
 
-        std::cout << "Ending Algorithm Flow directories" << std::endl;
+        std::cout << "Ending Flow directories " << m_resultordner << std::endl;
     }
 }
 
-void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps ) {
-
-    prepare_directories(algo, noise, fps, mStepSize);
+void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps ) {
 
     char sensor_index_folder_suffix[50];
     for ( ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
@@ -127,7 +126,6 @@ void AlgorithmFlow::generate_flow_frame(ALGO_TYPES algo, FRAME_TYPES frame_types
             std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" +
                                     file_name_input_image;
             std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-            std::string edge_path = m_edge_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
             float max_magnitude = 0;
 

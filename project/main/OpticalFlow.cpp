@@ -12,7 +12,7 @@
 using namespace std::chrono;
 
 
-void OpticalFlow::prepare_directories() {
+void OpticalFlow::prepare_directories_common() {
 
     char char_dir_append[20];
 
@@ -54,6 +54,106 @@ void OpticalFlow::prepare_directories() {
         }
         boost::filesystem::create_directories(bbox_dir);
     }
+}
+
+
+void OpticalFlow::save_flow_frame_from_displacement() {
+
+    // reads the flow vector array already created at the time of instantiation of the object.
+    // Additionally stores the frames in a png file
+    // Additionally stores the position in a png file
+
+    cv::Mat tempGroundTruthImage;
+    tempGroundTruthImage.create(Dataset::getFrameSize(), CV_8UC3);
+    assert(tempGroundTruthImage.channels() == 3);
+
+    std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
+
+    char sensor_index_folder_suffix[50];
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+
+
+        unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
+        assert(FRAME_COUNT>0);
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
+        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
+        std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
+
+        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+
+            char file_name_input_image[50];
+            std::cout << "frame_count " << frame_count << std::endl;
+            sprintf(file_name_input_image, "000%03d_10.png", frame_count);
+            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_input_image;
+            image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
+            if ( image_02_frame.data == NULL ) {
+                std::cerr << input_image_path << " not found" << std::endl;
+                throw ("No image file found error");
+            }
+            std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            FlowImageExtended F_png_write( Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+            float max_magnitude = 0;
+
+            cv::Mat flowFrame;
+            flowFrame.create(Dataset::getFrameSize(), CV_32FC3);
+            flowFrame = cv::Scalar_<unsigned>(0,0,0);
+            assert(flowFrame.channels() == 3);
+
+
+            for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
+
+                float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.x;
+                float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                        (sensor_index).at(frame_count).m_region_of_interest_px.y;
+                int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.width_px);
+                int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.height_px);
+                bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count);
+                if ( visibility ) {
+                    // gt_displacement
+                    cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(frame_count).second;
+
+                    max_magnitude = std::max((float)cv::norm(gt_displacement), max_magnitude);
+
+                    cv::Mat roi = flowFrame.
+                            rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
+                                     (cvRound(rowBegin+height+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)))).
+                            colRange(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
+                                     (cvRound(columnBegin+width+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER))));
+
+                    cv::Size roi_size;
+                    cv::Point roi_offset;
+                    roi.locateROI(roi_size, roi_offset);
+
+                    // TODO scratch : This is for the base model
+
+                    roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
+
+                }
+            }
+
+            //Create png Matrix with 3 channels: x gt_displacement. y displacment and ObjectId
+            // v corresponds to next row.
+            for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
+                for (int32_t col = 0; col < Dataset::getFrameSize().width; col++) {  // cols
+                    if (flowFrame.at<cv::Vec3f>(row, col)[2] > 0.5 ) {
+                        F_png_write.setFlowU(col, row, flowFrame.at<cv::Vec3f>(row, col)[0]);
+                        F_png_write.setFlowV(col, row, flowFrame.at<cv::Vec3f>(row, col)[1]);
+                        F_png_write.setValid(col, row, true);
+                    }
+                }
+            }
+
+            F_png_write.writeExtended(flow_path);
+            F_png_write.writeColor (kitti_path, max_magnitude);
+
+
+        }
+    }
+
+    std::cout << "end of saving ground truth flow files " << std::endl;
+
 }
 
 void OpticalFlow::getCombination( const std::vector<Objects *> &m_list_objects, std::vector<std::pair<Objects*, Objects* > > &list_of_objects_combination) {

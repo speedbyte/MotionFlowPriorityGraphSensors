@@ -32,8 +32,7 @@ public:
             OpticalFlow("ground_truth", list_gt_objects, list_simulated_objects, list_simulated_objects_base, 0) {
     }
 
-    void generate_flow_frame();
-
+    void generate_edge_images();
 
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
@@ -41,10 +40,7 @@ public:
 
     void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
 
-
-private:
-
-    void prepare_directories();
+    void prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) override;
 
 
 
