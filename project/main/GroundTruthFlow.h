@@ -40,7 +40,7 @@ public:
 
     void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
 
-    void prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) override;
+    void prepare_directories(std::string noise, ushort fps, ushort stepSize) override;
 
 
 

@@ -31,7 +31,7 @@
 using namespace std::chrono;
 
 
-void GroundTruthFlow::prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) {
+void GroundTruthFlow::prepare_directories(std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/blue_sky";
 

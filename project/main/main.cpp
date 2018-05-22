@@ -304,7 +304,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
-                    gt_flow.prepare_directories(gt, "", 0, 0);
+                    gt_flow.prepare_directories("", 0, 0);
                     gt_flow.save_flow_frame_from_displacement();
                     gt_flow.generate_edge_images();
 
@@ -358,15 +358,15 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 for (ushort obj_index = 0; obj_index < environment_list.size(); obj_index++) {
 
                     if (algorithmIndex == 0) {
-                        Farneback fback("fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                        Farneback fback(fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
                                         ptr_list_of_simulated_objects, stepSize);
 
                         list_of_algorithm_flow.push_back(fback);
                     } else if (algorithmIndex == 1) {
-                        LukasKanade lk("lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                        LukasKanade lkanade(lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
                                        ptr_list_of_simulated_objects, stepSize);
 
-                        list_of_algorithm_flow.push_back(lk);
+                        list_of_algorithm_flow.push_back(lkanade);
                     }
 
                 }
@@ -401,10 +401,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
-                            list_of_algorithm_flow[env_index].prepare_directories(fb, environment_list[env_index], fps,
+                            list_of_algorithm_flow[env_index].prepare_directories(environment_list[env_index], fps,
                                                                                   stepSize);
                             // TODO - do something for stepSize.. its redundant here.
-                            list_of_algorithm_flow[env_index].run_optical_flow_algorithm(fb, video_frames,
+                            list_of_algorithm_flow[env_index].run_optical_flow_algorithm(video_frames,
                                                                                          environment_list[env_index],
                                                                                          fps);
 

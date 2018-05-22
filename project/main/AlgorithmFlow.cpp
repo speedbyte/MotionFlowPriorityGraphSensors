@@ -20,13 +20,13 @@
 using namespace std::chrono;
 
 
-void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) {
+void AlgorithmFlow::prepare_directories(std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/" + noise;
 
     m_resultordner = "results_";
 
-    switch ( algo ) {
+    switch ( mAlgo ) {
         case lk: {
             m_resultordner += "LK_";
             break;
@@ -51,7 +51,7 @@ void AlgorithmFlow::prepare_directories(ALGO_TYPES algo, std::string noise, usho
     }
 }
 
-void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string noise, ushort fps ) {
+void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::string noise, ushort fps ) {
 
     char sensor_index_folder_suffix[50];
 
@@ -63,8 +63,6 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
         std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
-
-
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(m_ptr_list_simulated_objects.size());
         std::vector<std::vector<std::vector<bool> >  > multiframe_visibility(m_ptr_list_simulated_objects.size());
 
@@ -73,14 +71,6 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
         cv::Mat curGray, prevGray;
         cv::Size subPixWinSize(10, 10), winSize(21, 21);
         const int MAX_COUNT = 5000;
-
-        ushort collision = 0, iterator = 0, sIterator = 0;
-        std::vector<ushort> xPos, yPos;
-
-        bool plotTime = 1;
-        std::vector<bool> error(2);
-        error.at(0) = 0;
-        error.at(1) = 0;
 
         std::vector<cv::Point2f> next_pts_healthy;
 
@@ -147,11 +137,11 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                 // Calculate optical generate_flow_frame map using Farneback algorithm
                 // Farnback returns displacement frame and LK returns points.
                 cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
-                if ( lk == algo ) {
+                if ( lk == mAlgo) {
                     cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts_array, next_pts_array, status,
                                              err, winSize, 5, termcrit, 0, 0.001);
                 }
-                else if ( fb == algo ) {
+                else if ( fb == mAlgo) {
                     cv::calcOpticalFlowFarneback(prevGray, curGray, flowFrame, pyrScale, numLevels, windowSize,
                                                  numIterations, neighborhoodSize, stdDeviation,
                                                  cv::OPTFLOW_USE_INITIAL_FLOW);
@@ -159,7 +149,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                 }
 
                 // Draw the optical generate_flow_frame map
-                if ( fb == algo ) {
+                if ( fb == mAlgo ) {
                     prev_pts_array.clear();
                     next_pts_array.clear();
                     for (int32_t row = 0; row < Dataset::getFrameSize().height; row += mStepSize) { // rows
@@ -250,7 +240,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                 needToInit = true;
             }
 
-            if ( needToInit && algo == lk) { //|| ( frame_count%4 == 0) ) {
+            if ( needToInit && mAlgo == lk) { //|| ( frame_count%4 == 0) ) {
                 //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.
                 // automatic initialization
                 cv::goodFeaturesToTrack(curGray, next_pts_array, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);

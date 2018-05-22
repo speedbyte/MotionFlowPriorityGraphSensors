@@ -19,20 +19,21 @@ class AlgorithmFlow : public OpticalFlow {
     // Each point on GroundTruthFlow is a vector of points in AlgorithmFlow. Hence both the base and fast movement
     // consists of an additional vector wrappper.
 
+
+
 private:
-
-
+    ALGO_TYPES mAlgo;
 
 public:
 
-    AlgorithmFlow( std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) :
+    AlgorithmFlow( ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : mAlgo(algo),
     OpticalFlow(opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize) {
 
     }
 
-    void prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) override ;
+    void prepare_directories(std::string noise, ushort fps, ushort stepSize) override ;
 
-    void run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES frame_types, std::string  noise, ushort fps);
+    void run_optical_flow_algorithm(FRAME_TYPES frame_types, std::string  noise, ushort fps);
 
     std::string getGroundTruthImageLocation() const {
         return m_GroundTruthImageLocation.string();
@@ -43,18 +44,23 @@ public:
 
 class Farneback : public AlgorithmFlow {
 
+
 public:
 
-    Farneback(std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
+    Farneback(ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
 
     }
 
 };
 
 class LukasKanade : public AlgorithmFlow {
+
+private:
+    ALGO_TYPES mAlgo;
+
 public:
 
-    LukasKanade(std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
+    LukasKanade(ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
 
     }
 

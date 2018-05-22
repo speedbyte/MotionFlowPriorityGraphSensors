@@ -97,7 +97,7 @@ public:
 
     void prepare_directories_common();
 
-    virtual void prepare_directories(ALGO_TYPES algo, std::string noise, ushort fps, ushort stepSize) {};
+    virtual void prepare_directories(std::string noise, ushort fps, ushort stepSize) {};
 
     void generate_collision_points();
 
