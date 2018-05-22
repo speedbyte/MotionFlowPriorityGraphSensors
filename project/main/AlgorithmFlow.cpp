@@ -94,7 +94,6 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
             }
 
             char file_name_input_image[50];
-
             sprintf(file_name_input_image, "000%03d_10.png", frame_count);
             std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_input_image;
             image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
@@ -118,7 +117,6 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                 execute(prevGray, curGray, frame_prev_pts, frame_next_pts, needToInit);
 
                 unsigned count_good_points = 0;
-
                 for (unsigned i = 0; i < frame_next_pts.size(); i++) {
 
                     float minDist = 0.5;
@@ -175,17 +173,21 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                 }
 
                 needToInit = true;
+                execute(prevGray, curGray, frame_prev_pts, frame_next_pts, needToInit);
+
             }
+
+
 
             frame_prev_pts = frame_next_pts;
             next_pts_healthy = frame_prev_pts;
             frame_next_pts.clear();
 
             // Display the output image
-            //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
-            //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
-            //cv::waitKey(0);
-            //cv::destroyAllWindows();
+            cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
+            cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
+            cv::waitKey(0);
+            cv::destroyAllWindows();
             cv::imwrite(position_path, image_02_frame);
             prevGray = curGray.clone();
 

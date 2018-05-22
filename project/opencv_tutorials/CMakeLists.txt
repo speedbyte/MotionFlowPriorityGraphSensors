@@ -108,3 +108,6 @@ target_link_libraries(kalman ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} X11)
 
 add_executable(camshiftdemo camshiftdemo.cpp)
 target_link_libraries(camshiftdemo ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(cornerSubPix_Demo cornerSubPix_Demo.cpp)
+target_link_libraries(cornerSubPix_Demo ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})

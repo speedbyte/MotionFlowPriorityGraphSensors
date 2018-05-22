@@ -114,15 +114,9 @@ public:
 
         std::vector<uchar> status;
         // Initialize parameters for the optical generate_flow_frame algorithm
-        float pyrScale = 0.5;
         int numLevels = 1;
-        int windowSize = 5;
-        int numIterations = 1;
-        int neighborhoodSize = 2; // polyN
-        float stdDeviation = 1.1; // polySigma
 
         std::vector<float> err;
-
         const int MAX_COUNT = 5000;
         cv::Size winSize(5, 5);
         cv::Size subPixWinSize(3, 3);
@@ -131,7 +125,7 @@ public:
 
             cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, MAX_COUNT, 0.03);
             cv::calcOpticalFlowPyrLK(prevGray, curGray, frame_prev_pts, frame_next_pts, status,
-                                     err, winSize, 5, termcrit, 0, 0.001);
+                                     err, winSize, numLevels, termcrit, 0, 0.001);
         }
 
         else  {
@@ -139,22 +133,15 @@ public:
             cv::goodFeaturesToTrack(curGray, frame_next_pts, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
             // Refining the location of the feature points
             assert(frame_next_pts.size() <= MAX_COUNT );
-            std::cout << frame_next_pts.size() << std::endl;
-            std::vector<cv::Point2f> currentPoint;
-            std::swap(currentPoint, frame_next_pts);
-            frame_next_pts.clear();
-            for (unsigned i = 0; i < currentPoint.size(); i++) {
-                std::vector<cv::Point2f> tempPoints;
-                tempPoints.push_back(currentPoint[i]);
-                // Function to refine the location of the corners to subpixel accuracy.
-                // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
-                cv::TermCriteria termcrit_subpixel(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
-                cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit_subpixel);
-                frame_next_pts.push_back(tempPoints[0]);
-            }
-            printf("old frame_next_pts size is %ld and new frame_next_pts size is %ld\n", currentPoint.size(), frame_next_pts.size());
+            std::cout << "before subpixel size " << frame_next_pts.size() << std::endl;
+            cv::TermCriteria termcrit_subpixel(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, MAX_COUNT, 0.03);
+            cv::cornerSubPix(curGray, frame_next_pts, subPixWinSize, cv::Size(-1, -1), termcrit_subpixel);
+            std::cout << "after subpixel size " << frame_next_pts.size() << std::endl;
             needToInit = false;
         }
+
+        printf("old frame_next_pts size is %ld and new frame_next_pts size is %ld\n", frame_prev_pts.size(), frame_next_pts.size());
+
 
     }
 

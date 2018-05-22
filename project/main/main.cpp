@@ -364,10 +364,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 for (ushort obj_index = 0; obj_index < environment_list.size(); obj_index++) {
 
-                    if (algorithmIndex == 0) {
+                    if (algorithmIndex == 1) {
                         list_of_algorithm_flow.push_back(&fback);
 
-                    } else if (algorithmIndex == 1) {
+                    } else if (algorithmIndex == 0) {
 
                         list_of_algorithm_flow.push_back(&lkanade);
                     }
