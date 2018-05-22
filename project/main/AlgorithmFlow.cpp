@@ -100,7 +100,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
             }
 
             char file_name_input_image[50];
-            std::cout << "frame_count " << frame_count << std::endl;
+
             sprintf(file_name_input_image, "000%03d_10.png", frame_count);
             std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_input_image;
             image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
@@ -222,7 +222,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                     cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }
 
-                common_flow_frame(sensor_index_folder_suffix, file_name_input_image, sensor_index, frame_count, flowFrame, next_pts_array, displacement_array, F_png_write, multiframe_stencil_displacement, multiframe_visibility);
+                common_flow_frame(sensor_index_folder_suffix, sensor_index, frame_count, flowFrame, next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
 
             }
 

@@ -129,7 +129,6 @@ void GroundTruthFlow::generate_edge_images() {
 
             std::string edge_path = m_edge_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             CannyEdgeDetection(input_image_path, edge_path);
-
         }
     }
 

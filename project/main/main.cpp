@@ -306,6 +306,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
                     gt_flow.prepare_directories("", 0, 0);
                     gt_flow.save_flow_frame_from_displacement();
+                    gt_flow.generate_flow_frames();
                     gt_flow.generate_edge_images();
 
                     for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
@@ -344,7 +345,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        for (ushort algorithmIndex = 0; algorithmIndex < 2; algorithmIndex++) {
+        for (ushort algorithmIndex = 0; algorithmIndex < 1; algorithmIndex++) {
 
             for (ushort stepSize = 3; stepSize <= 3; stepSize += 4) {
 
@@ -407,16 +408,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                             list_of_algorithm_flow[env_index].run_optical_flow_algorithm(video_frames,
                                                                                          environment_list[env_index],
                                                                                          fps);
+                            list_of_algorithm_flow[env_index].generate_flow_frames();
 
                             if (environment_list[env_index] ==
                                 "blue_sky") { // store the stimulated objects from the ground run.
 
                                 for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
                                     list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
-                                }
-                                for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                                    ptr_list_of_simulated_objects_base.push_back(
-                                            &list_of_simulated_objects_base.at(obj_index));
+                                    ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_index));
                                 }
                             }
 
