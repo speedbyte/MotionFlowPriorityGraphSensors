@@ -62,7 +62,7 @@ void OpticalFlow::prepare_directories_common() {
 }
 
 
-void OpticalFlow::common_flow_frame(std::string sensor_index_folder_suffix, ushort sensor_index, ushort frame_count, cv::Mat &flowFrame, std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) {
+void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) {
 
 
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
@@ -83,8 +83,12 @@ void OpticalFlow::common_flow_frame(std::string sensor_index_folder_suffix, usho
         int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.height_px);
         bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count);
 
-        if ( visibility ) {
+        cv::Mat flowFrame;
+        flowFrame.create(Dataset::getFrameSize(), CV_32FC3);
+        flowFrame = cv::Scalar_<unsigned>(0,0,0);
+        assert(flowFrame.channels() == 3);
 
+        if ( visibility ) {
 
             // 1st method
             cv::Mat roi = flowFrame.
@@ -139,7 +143,7 @@ void OpticalFlow::common_flow_frame(std::string sensor_index_folder_suffix, usho
             }
 
             std::cout << "stencil size = " << frame_stencil_displacement.size() << " " << next_pts_array.size() << std::endl;
-            assert(frame_stencil_displacement.size() != 0);
+            //assert(frame_stencil_displacement.size() != 0);
 
             // TODO scratch : if frame_stencil_displacement does not work
 
@@ -162,7 +166,7 @@ void OpticalFlow::common_flow_frame(std::string sensor_index_folder_suffix, usho
 
 
 
-void OpticalFlow::save_flow_frame_from_displacement() {
+void OpticalFlow::generate_displacement_vector() {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
@@ -187,14 +191,10 @@ void OpticalFlow::save_flow_frame_from_displacement() {
 
             std::cout << "frame_count " << frame_count << std::endl;
 
-            cv::Mat flowFrame;
-            flowFrame.create(Dataset::getFrameSize(), CV_32FC3);
-            flowFrame = cv::Scalar_<unsigned>(0,0,0);
-            assert(flowFrame.channels() == 3);
 
             std::vector<cv::Point2f> next_pts_array, displacement_array;
 
-            common_flow_frame(sensor_index_folder_suffix, sensor_index, frame_count, flowFrame, next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
+            common_flow_frame(sensor_index, frame_count, next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
 
         }
 

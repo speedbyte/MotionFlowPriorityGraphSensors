@@ -69,18 +69,12 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
         bool needToInit = true;
 
         cv::Mat curGray, prevGray;
-        cv::Size subPixWinSize(10, 10), winSize(21, 21);
-        const int MAX_COUNT = 5000;
 
         std::vector<cv::Point2f> next_pts_healthy;
 
         std::cout << "results will be stored in " << m_resultordner << std::endl;
         std::cout << "creating flow files for sensor_index " << sensor_index << std::endl;
-        std::vector<cv::Point2f> prev_pts_array;
-
-        cv::Mat flowFrame( Dataset::getFrameSize(), CV_32FC2 );
-        flowFrame = cv::Scalar_<float>(0,0); //  the flow frame consists of next iterations
-        assert(flowFrame.channels() == 2);
+        std::vector<cv::Point2f> frame_prev_pts;
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
 
@@ -93,7 +87,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                     needToInit = true;
                     break;
                 case 'c':
-                    prev_pts_array.clear();
+                    frame_prev_pts.clear();
                     break;
                 default:
                     break;
@@ -110,10 +104,8 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
             }
 
             std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-            FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
-            float max_magnitude = 0;
 
-            std::vector<cv::Point2f> next_pts_array, displacement_array;
+            std::vector<cv::Point2f> frame_next_pts, displacement_array;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
@@ -123,73 +115,26 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
 
                 std::cout << "frame_count " << frame_count << std::endl;
 
-                std::vector<uchar> status;
-                // Initialize parameters for the optical generate_flow_frame algorithm
-                float pyrScale = 0.5;
-                int numLevels = 1;
-                int windowSize = 5;
-                int numIterations = 1;
-                int neighborhoodSize = 2; // polyN
-                float stdDeviation = 1.1; // polySigma
-
-                std::vector<float> err;
-
-                // Calculate optical generate_flow_frame map using Farneback algorithm
-                // Farnback returns displacement frame and LK returns points.
-                cv::TermCriteria termcrit(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
-                if ( lk == mAlgo) {
-                    cv::calcOpticalFlowPyrLK(prevGray, curGray, prev_pts_array, next_pts_array, status,
-                                             err, winSize, 5, termcrit, 0, 0.001);
-                }
-                else if ( fb == mAlgo) {
-                    cv::calcOpticalFlowFarneback(prevGray, curGray, flowFrame, pyrScale, numLevels, windowSize,
-                                                 numIterations, neighborhoodSize, stdDeviation,
-                                                 cv::OPTFLOW_USE_INITIAL_FLOW);
-                    // OPTFLOW_USE_INITIAL_FLOW didnt work and gave NaNs
-                }
-
-                // Draw the optical generate_flow_frame map
-                if ( fb == mAlgo ) {
-                    prev_pts_array.clear();
-                    next_pts_array.clear();
-                    for (int32_t row = 0; row < Dataset::getFrameSize().height; row += mStepSize) { // rows
-                        for (int32_t col = 0; col < Dataset::getFrameSize().width; col += 1) {  // cols
-
-                            cv::Point2f algorithmMovement ( flowFrame.at<cv::Point2f>(row, col).x, flowFrame
-                                    .at<cv::Point2f>(row, col).y );
-
-                            if (( cvFloor(std::abs(algorithmMovement.x)) == 0 && cvFloor(std::abs(algorithmMovement
-                                                                                                          .y)) == 0 )) {
-                                continue;
-                            }
-
-                            next_pts_array.push_back(cv::Point2f(col, row));
-                            prev_pts_array.push_back(cv::Point2f((col - algorithmMovement.x), (row - algorithmMovement.y)));
-
-                            status.push_back(1);
-                        }
-                    }
-                }
+                execute(prevGray, curGray, frame_prev_pts, frame_next_pts, needToInit);
 
                 unsigned count_good_points = 0;
 
-                for (unsigned i = 0; i < next_pts_array.size(); i++) {
+                for (unsigned i = 0; i < frame_next_pts.size(); i++) {
 
                     float minDist = 0.5;
-
                     // Check if the status vector is good
+                    /*
                     if (!status[i])
                         continue;
+                    */
+                    cv::Point2f displacement;
 
-                    cv::Point2f next_pts, displacement;
-
-                    displacement.x = next_pts_array[i].x - prev_pts_array[i].x;
-                    displacement.y = next_pts_array[i].y - prev_pts_array[i].y;
+                    displacement.x = frame_next_pts[i].x - frame_prev_pts[i].x;
+                    displacement.y = frame_next_pts[i].y - frame_prev_pts[i].y;
 
                     /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
                     auto dist = cv::norm(displacement);
                     if ( dist <= minDist ) {
-                        //printf("minimum distance for %i is %f\n", i, dist);
                         continue;
                     }
 
@@ -197,40 +142,32 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                         continue;
                     }
 
-                    // next_pts is the new pixel position !
-                    next_pts.x = next_pts_array[i].x;
-                    next_pts.y = next_pts_array[i].y;
-
-                    // std::cout << "next valid points " << next_pts << " displacement " << displacement << std::endl;
-                    next_pts_array[count_good_points++] = next_pts_array[i];
+                    frame_next_pts[count_good_points++] = frame_next_pts[i];
                     displacement_array.push_back(displacement);
                 }
 
                 // flow frame and displacement in the form of displacement_array is created here.
 
-                next_pts_array.resize(count_good_points); // this is required for LK. For FB, anyways the frame will
+                frame_next_pts.resize(count_good_points);
                 assert(displacement_array.size() == count_good_points);
-                // be completely calculated every time.
 
-                if ( next_pts_array.size() == 0 ) {
+                if ( frame_next_pts.size() == 0 ) {
                     // pick up the last healthy points
-                    next_pts_array = next_pts_healthy;
+                    frame_next_pts = next_pts_healthy;
                 }
 
-                for (unsigned i = 0; i < next_pts_array.size(); i++) {
-                    //cv::circle(image_02_frame, next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
-                    cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
+                for (unsigned i = 0; i < frame_next_pts.size(); i++) {
+                    //cv::circle(image_02_frame, frame_next_pts[i], 1, cv::Scalar(0, 255, 0), 1, 8);
+                    cv::arrowedLine(image_02_frame, frame_prev_pts[i], frame_next_pts[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }
 
-                common_flow_frame(sensor_index_folder_suffix, sensor_index, frame_count, flowFrame, next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
+                common_flow_frame(sensor_index, frame_count, frame_next_pts, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
 
             }
 
             else {
+                
                 std::cout << "skipping first frame frame count " << frame_count << std::endl;
-                // But still write the data for completion
-                //F_png_write.writeExtended(flow_path);
-                //F_png_write.writeColor(kitti_path, 5);
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
                     multiframe_stencil_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
@@ -240,32 +177,9 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                 needToInit = true;
             }
 
-            if ( needToInit && mAlgo == lk) { //|| ( frame_count%4 == 0) ) {
-                //|| next_pts_array.size() == 0) { // the init should be also when there is no next_pts_array.
-                // automatic initialization
-                cv::goodFeaturesToTrack(curGray, next_pts_array, MAX_COUNT, 0.01, 10, cv::Mat(), 3, false, 0.04);
-                // Refining the location of the feature points
-                assert(next_pts_array.size() <= MAX_COUNT );
-                std::cout << next_pts_array.size() << std::endl;
-                std::vector<cv::Point2f> currentPoint;
-                std::swap(currentPoint, next_pts_array);
-                next_pts_array.clear();
-                for (unsigned i = 0; i < currentPoint.size(); i++) {
-                    std::vector<cv::Point2f> tempPoints;
-                    tempPoints.push_back(currentPoint[i]);
-                    // Function to refine the location of the corners to subpixel accuracy.
-                    // Here, 'pixel' refers to the image patch of size 'windowSize' and not the actual image pixel
-                    cv::TermCriteria termcrit_subpixel(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 20, 0.03);
-                    cv::cornerSubPix(curGray, tempPoints, subPixWinSize, cv::Size(-1, -1), termcrit_subpixel);
-                    next_pts_array.push_back(tempPoints[0]);
-                }
-                printf("old next_pts_array size is %ld and new next_pts_array size is %ld\n", currentPoint.size(), next_pts_array.size());
-            }
-
-            needToInit = false;
-            prev_pts_array = next_pts_array;
-            next_pts_healthy = prev_pts_array;
-            next_pts_array.clear();
+            frame_prev_pts = frame_next_pts;
+            next_pts_healthy = frame_prev_pts;
+            frame_next_pts.clear();
 
             // Display the output image
             //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);

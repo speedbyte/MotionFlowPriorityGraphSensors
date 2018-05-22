@@ -33,7 +33,7 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
 
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
-        std::string temp_result_flow_path;
+        std::string temp_result_edge_path;
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > next_pts_array;
 
@@ -48,11 +48,11 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
 
             sprintf(file_name_input_image, "000%03d_10.png", frame_count);
 
-            temp_result_flow_path = Dataset::getGroundTruthPath().string() + "ground_truth/edge_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+            temp_result_edge_path = Dataset::getGroundTruthPath().string() + "ground_truth/edge_" + sensor_index_folder_suffix + "/" + file_name_input_image;
 
-            cv::Mat edge_02_frame = cv::imread(temp_result_flow_path, CV_LOAD_IMAGE_COLOR);
+            cv::Mat edge_02_frame = cv::imread(temp_result_edge_path, CV_LOAD_IMAGE_COLOR);
             if ( edge_02_frame.data == NULL ) {
-                std::cerr << temp_result_flow_path << " not found" << std::endl;
+                std::cerr << temp_result_edge_path << " not found" << std::endl;
                 throw ("No image file found error");
             }
 
@@ -126,7 +126,6 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
 
     // A blob can be either a stencil or a shape
 
-    generate_edge_contour(post_processing_algorithm);
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             multiframe_shapepoints_displacement_sensor_fusion_mean;
@@ -157,9 +156,12 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
     votedMean.common(this);
     m_list_object_mean_centroid_displacement.push_back(votedMean.getObjectMeanCentroidDisplacement());
 
-    RankedMean rankedMean;
-    rankedMean.common(this);
-    m_list_object_mean_centroid_displacement.push_back(rankedMean.getObjectMeanCentroidDisplacement());
+    if ( post_processing_algorithm != "ground_truth" ) {
+        generate_edge_contour(post_processing_algorithm);
+        RankedMean rankedMean;
+        rankedMean.common(this);
+        m_list_object_mean_centroid_displacement.push_back(rankedMean.getObjectMeanCentroidDisplacement());
+    }
 
     /*
     generate_updated_mean_from_multiple_sensors(post_processing_algorithm,

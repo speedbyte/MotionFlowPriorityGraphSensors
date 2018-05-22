@@ -305,8 +305,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
                     gt_flow.prepare_directories("", 0, 0);
-                    gt_flow.save_flow_frame_from_displacement();
-                    gt_flow.generate_flow_frames();
+                    gt_flow.generate_displacement_vector();
+                    //gt_flow.generate_flow_frames();
                     gt_flow.generate_edge_images();
 
                     for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
@@ -345,29 +345,31 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
+
+
         for (ushort algorithmIndex = 0; algorithmIndex < 1; algorithmIndex++) {
 
             for (ushort stepSize = 3; stepSize <= 3; stepSize += 4) {
 
                 ptr_list_of_simulated_objects_base.clear();
-
-                std::vector<SimulatedObjects> list_of_simulated_objects_base; // this will always has 2 objects, because its only run once.
+                std::vector<SimulatedObjects> list_of_simulated_objects_base;
                 std::vector<Objects *> ptr_list_of_simulated_objects;
+                std::vector<AlgorithmFlow *> list_of_algorithm_flow;
 
-                std::vector<AlgorithmFlow> list_of_algorithm_flow;
+                Farneback fback(fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                                ptr_list_of_simulated_objects, stepSize);
+
+                LukasKanade lkanade(lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                                    ptr_list_of_simulated_objects, stepSize);
 
                 for (ushort obj_index = 0; obj_index < environment_list.size(); obj_index++) {
 
                     if (algorithmIndex == 0) {
-                        Farneback fback(fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                                        ptr_list_of_simulated_objects, stepSize);
+                        list_of_algorithm_flow.push_back(&fback);
 
-                        list_of_algorithm_flow.push_back(fback);
                     } else if (algorithmIndex == 1) {
-                        LukasKanade lkanade(lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                                       ptr_list_of_simulated_objects, stepSize);
 
-                        list_of_algorithm_flow.push_back(lkanade);
+                        list_of_algorithm_flow.push_back(&lkanade);
                     }
 
                 }
@@ -390,8 +392,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                                     obj_index).get_object_extrapolated_visibility();
 
                             SimulatedObjects objects(
-                                    "simulated_" + list_of_gt_objects_base.at(obj_index).getObjectName(),
-                                    extrapolated_visibility);
+                                    "simulated_" + list_of_gt_objects_base.at(obj_index).getObjectName(), extrapolated_visibility);
                             list_of_simulated_objects.push_back(objects);  // mke two new objects
                         }
 
@@ -402,13 +403,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
-                            list_of_algorithm_flow[env_index].prepare_directories(environment_list[env_index], fps,
-                                                                                  stepSize);
+                            list_of_algorithm_flow[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
                             // TODO - do something for stepSize.. its redundant here.
-                            list_of_algorithm_flow[env_index].run_optical_flow_algorithm(video_frames,
-                                                                                         environment_list[env_index],
-                                                                                         fps);
-                            list_of_algorithm_flow[env_index].generate_flow_frames();
+                            list_of_algorithm_flow[env_index]->run_optical_flow_algorithm(video_frames, environment_list[env_index], fps);
+                            list_of_algorithm_flow[env_index]->generate_flow_frames();
 
                             if (environment_list[env_index] ==
                                 "blue_sky") { // store the stimulated objects from the ground run.
@@ -424,25 +422,21 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                             }
 
                             //list_of_algorithm_flow[env_index].generate_collision_points();
-                            list_of_algorithm_flow[env_index].generate_metrics_optical_flow_algorithm();
+                            list_of_algorithm_flow[env_index]->generate_metrics_optical_flow_algorithm();
                             //list_of_algorithm_flow[env_index].visualiseStencilAlgorithms();
                         }
                     }
                 }
 
-                time_map["algorithm_flow" + std::to_string(stepSize)] = (duration_cast<milliseconds>(
-                        steady_clock::now() - tic).count());
+                time_map["algorithm_flow" + std::to_string(stepSize)] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
                 tic = steady_clock::now();
 
                 if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
                     for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-                        sensorFusionRobustness.compareHistograms(list_of_algorithm_flow[env_index],
-                                                                 list_of_algorithm_flow[0]);
-                        pixelRobustness.generatePixelRobustness(list_of_algorithm_flow[env_index],
-                                                                list_of_algorithm_flow[0]);
-                        vectorRobustness.generateVectorRobustness(list_of_algorithm_flow[env_index],
-                                                                  list_of_algorithm_flow[0]);
+                        sensorFusionRobustness.compareHistograms(*list_of_algorithm_flow[env_index], *list_of_algorithm_flow[0]);
+                        pixelRobustness.generatePixelRobustness(*list_of_algorithm_flow[env_index], *list_of_algorithm_flow[0]);
+                        vectorRobustness.generateVectorRobustness(*list_of_algorithm_flow[env_index], *list_of_algorithm_flow[0]);
                     }
                 }
 

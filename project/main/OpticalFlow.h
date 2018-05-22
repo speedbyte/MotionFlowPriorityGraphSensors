@@ -101,11 +101,11 @@ public:
 
     void generate_collision_points();
 
-    void save_flow_frame_from_displacement();
+    void generate_displacement_vector();
 
 
 
-    void common_flow_frame(std::string sensor_index_folder_suffix, ushort sensor_index, ushort frame_count, cv::Mat &flowFrame, std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
+    void common_flow_frame(ushort sensor_index, ushort frame_count,  std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
 
     void visualiseStencilAlgorithms(void);
 
