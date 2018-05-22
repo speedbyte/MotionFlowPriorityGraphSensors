@@ -103,7 +103,9 @@ public:
 
     void save_flow_frame_from_displacement();
 
-    void common_flow_frame(ushort sensor_index, ushort frame_count, cv::Mat &flowFrame, FlowImageExtended &F_png_write,         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > multiframe_visibility);
+
+
+    void common_flow_frame(std::string sensor_index_folder_suffix, std::string file_name_input_image, ushort sensor_index, ushort frame_count, cv::Mat &flowFrame, std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,FlowImageExtended &F_png_write, std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
 
     void visualiseStencilAlgorithms(void);
 

@@ -637,4 +637,12 @@ void run_optical_flow_algorithm() {
 
 
 
+    // tested - norm is the same as displacement calculation using formula
+    auto dist_ = cv::norm(displacement);
+    double dist;
+    dist = pow(displacement.x,2)+pow(displacement.y,2); //calculating distance by euclidean formula
+    dist = sqrt(dist);
+    assert(dist==dist_);
+
+
 }

@@ -90,7 +90,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
 
         cv::Mat flowFrame( Dataset::getFrameSize(), CV_32FC2 );
         flowFrame = cv::Scalar_<float>(0,0); //  the flow frame consists of next iterations
-        assert(flowFrame.channels() == 3);
+        assert(flowFrame.channels() == 2);
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
 
@@ -119,10 +119,6 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                 throw ("No image file found error");
             }
 
-            std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" +
-                                    file_name_input_image;
-            std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" +
-                                    file_name_input_image;
             std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
             float max_magnitude = 0;
@@ -201,12 +197,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                     displacement.y = next_pts_array[i].y - prev_pts_array[i].y;
 
                     /* If the new point is within 'minDist' distance from an existing point, it will not be tracked */
-                    auto dist_ = cv::norm(displacement);
-                    double dist;
-                    dist = pow(displacement.x,2)+pow(displacement.y,2); //calculating distance by euclidean formula
-                    dist = sqrt(dist);
-                    assert(dist==dist_);
-
+                    auto dist = cv::norm(displacement);
                     if ( dist <= minDist ) {
                         //printf("minimum distance for %i is %f\n", i, dist);
                         continue;
@@ -241,110 +232,15 @@ void AlgorithmFlow::run_optical_flow_algorithm(ALGO_TYPES algo, FRAME_TYPES fram
                     cv::arrowedLine(image_02_frame, prev_pts_array[i], next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }
 
-                //common_flow_frame(sensor_index, frame_count, flowFrame, F_png_write, multiframe_stencil_displacement, multiframe_visibility);
+                common_flow_frame(sensor_index_folder_suffix, file_name_input_image, sensor_index, frame_count, flowFrame, next_pts_array, displacement_array, F_png_write, multiframe_stencil_displacement, multiframe_visibility);
 
-                for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
-
-                    float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                            (sensor_index).at(frame_count).m_region_of_interest_px.x;
-                    float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                            (sensor_index).at(frame_count).m_region_of_interest_px.y;
-                    int width = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.width_px);
-                    int height = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.height_px);
-                    bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count);
-                    if ( visibility ) {
-
-                        std::vector<std::pair<cv::Point2f, cv::Point2f> >  frame_stencil_displacement;
-                        std::vector<bool>  base_visibility;
-
-                        // gt_displacement
-                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(frame_count).second;
-
-                        max_magnitude = std::max((float)cv::norm(gt_displacement), max_magnitude);
-
-                        cv::Mat roi = flowFrame.
-                                rowRange(cvRound(rowBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
-                                         (cvRound(rowBegin+height+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)))).
-                                colRange(cvRound(columnBegin-(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER)),
-                                         (cvRound(columnBegin+width+(DO_STENCIL_GRID_EXTENSION*STENCIL_GRID_EXTENDER))));
-
-                        cv::Size roi_size;
-                        cv::Point roi_offset;
-                        roi.locateROI(roi_size, roi_offset);
-
-                        /*
-
-                        for (unsigned j = 0; j < width; j += 1) {
-                            for (unsigned k = 0; k < height; k += 1) {
-
-                                next_pts_array.push_back(cv::Point2f(columnBegin + j, rowBegin + k));
-                                displacement_array.push_back(gt_displacement);
-
-                            }
-                        }
-
-                         */
-
-                        // TODO scratch : This is for the base model
-
-                        for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
-                            for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
-
-                                cv::Point2f algo_displacement = roi.at<cv::Vec2f>(row_index, col_index);
-                                auto dist_algo = cv::norm(algo_displacement);
-                                if ( dist_algo < 0.1 ) {
-                                    continue;
-                                }
-
-                                for ( auto next_pts_index = 0; next_pts_index < next_pts_array.size(); next_pts_index++ ) {
-                                    if ( (( roi_offset.x + col_index ) == next_pts_array.at(next_pts_index).x) &&
-                                         (( roi_offset.y + row_index ) == next_pts_array.at(next_pts_index).y)) {
-
-                                        frame_stencil_displacement.push_back(
-                                                std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index), algo_displacement));
-                                        base_visibility.push_back(visibility);
-
-                                    }
-                                }
-                            }
-                        }
-
-                        std::cout << frame_stencil_displacement.size() << " " << next_pts_array.size() << std::endl;
-                        assert(frame_stencil_displacement.size() != 0);
-
-                        // TODO scratch : if stencil size does not work
-
-                        multiframe_stencil_displacement.at(obj_index).push_back(frame_stencil_displacement);
-                        multiframe_visibility.at(obj_index).push_back(base_visibility);
-
-                    }
-                    else {
-
-                        multiframe_stencil_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
-                        multiframe_visibility.at(obj_index).push_back({{false}});
-
-                    }
-                }
-
-
-                std::vector<cv::Point2f>::iterator it, it2 ;
-
-                for ( it = next_pts_array.begin(), it2 = displacement_array.begin(); it !=next_pts_array.end(); it++, it2++ ) {
-
-                    F_png_write.setFlowU((*it).x,(*it).y,(*it2).x);
-                    F_png_write.setFlowV((*it).x,(*it).y,(*it2).y);
-                    F_png_write.setValid((*it).x,(*it).y,true);
-                }
-
-                F_png_write.writeExtended(flow_path);
-                F_png_write.writeColor(kitti_path, 5);
             }
 
             else {
                 std::cout << "skipping first frame frame count " << frame_count << std::endl;
                 // But still write the data for completion
-                F_png_write.writeExtended(flow_path);
-                F_png_write.writeColor(kitti_path, 5);
+                //F_png_write.writeExtended(flow_path);
+                //F_png_write.writeColor(kitti_path, 5);
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
                     multiframe_stencil_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
