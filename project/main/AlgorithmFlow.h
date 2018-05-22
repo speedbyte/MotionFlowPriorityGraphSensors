@@ -41,13 +41,23 @@ public:
 };
 
 
-class Farneback: public AlgorithmFlow {
+class Farneback : public AlgorithmFlow {
 
 public:
 
     Farneback(std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
 
     }
+
+};
+
+class LukasKanade : public AlgorithmFlow {
+public:
+
+    LukasKanade(std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
+
+    }
+
 
 };
 

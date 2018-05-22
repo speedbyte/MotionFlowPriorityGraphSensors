@@ -195,9 +195,6 @@ void OpticalFlow::save_flow_frame_from_displacement() {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
-    //ptr_list_of_gt_objects.at(obj_index)->generate_object_stencil_point_displacement_pixel_visibility("ground_truth");
-
-
     char sensor_index_folder_suffix[50];
 
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
@@ -235,18 +232,18 @@ void OpticalFlow::save_flow_frame_from_displacement() {
 
             std::vector<cv::Point2f> next_pts_array, displacement_array;
 
-
             common_flow_frame(sensor_index_folder_suffix, file_name_input_image, sensor_index, frame_count, flowFrame, next_pts_array, displacement_array, F_png_write, multiframe_stencil_displacement, multiframe_visibility);
 
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
 
-            m_ptr_list_simulated_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility("ground_truth", multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
         }
 
         cv::destroyAllWindows();
     }
+
     std::cout << "end of saving ground truth flow files " << std::endl;
 
 }
