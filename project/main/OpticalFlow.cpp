@@ -338,7 +338,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
 
-
                 std::cout << "frame_count " << frame_count << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
 
@@ -417,7 +416,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             }
                         }
 
-                        multiframe_evaluation_data.push_back(evaluationData);
 
                         std::cout << "goodPixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
@@ -436,10 +434,13 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                           .at(frame_count)
                                   << " and hence not generating any shape points for this object " << std::endl;
 
-                        multiframe_evaluation_data.push_back(evaluationData);
+                        evaluationData.at(obj_index).goodPixels = 0;
+                        evaluationData.at(obj_index).visiblePixels = 0;
 
                     }
                 }
+
+                multiframe_evaluation_data.push_back(evaluationData);
             }
 
             sensor_multiframe_evaluation_data.push_back(multiframe_evaluation_data);
