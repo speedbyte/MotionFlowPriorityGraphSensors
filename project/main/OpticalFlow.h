@@ -16,6 +16,8 @@ typedef struct {
     unsigned frame_count;
     unsigned visiblePixels;  // pixels that are visible according to the algorithm. In case of ground truth, all pixels are visible
     unsigned goodPixels;  // subset of visible pixels, and are within a tolerance. In case of ground truth, this is equsl to visiblePixel
+    cv::Point2f object_dimension;
+    cv::Point2f object_displacement;
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
 

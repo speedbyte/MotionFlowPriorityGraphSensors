@@ -380,8 +380,14 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         auto dist_gt = cv::norm(gt_displacement);
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
+                        evaluationData.at(obj_index).object_dimension = dimension;
+                        evaluationData.at(obj_index).object_displacement = list_of_current_objects.at(obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(frame_count).second;
+
                         if (m_opticalFlowName == "ground_truth") {
 
+                            evaluationData.at(obj_index).object_displacement = gt_displacement;
                             evaluationData.at(obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
                             evaluationData.at(obj_index).goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 

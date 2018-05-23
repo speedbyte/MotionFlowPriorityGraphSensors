@@ -50,20 +50,14 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                                                    sensor_index).at(frame_count).at(points).goodPixels, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(
                                                    sensor_index).at(frame_count).at(points).visiblePixels));
 
+                    std::pair<cv::Point2f, cv::Point2f> displacementPoints = std::make_pair(
+                    opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_displacement);
+
                     xsamples.push_back(shapepoints.first);
                     ysamples.push_back(shapepoints.second);
+                    xsamples_dimension.push_back(displacementPoints.first);
+                    ysamples_displacement.push_back(displacementPoints.second);
 
-                }
-
-                if ( datafilter_index < 0 ) {
-                    unsigned long POINTS_DIM = opticalFlow.getMeanDisplacementPoints().at(datafilter_index).at(sensor_index).at(frame_count).size();
-                    for (unsigned points = 0; points < POINTS_DIM; points++) {
-
-                        std::pair<cv::Point2i, cv::Point2f> displacementPoints = opticalFlow.getMeanDisplacementPoints().at(datafilter_index).at(sensor_index).at(frame_count).at(points);
-
-                        xsamples_dimension.push_back(displacementPoints.first);
-                        ysamples_displacement.push_back(displacementPoints.second);
-                    }
                 }
 
             }
@@ -96,7 +90,6 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                 m_fs << "{:" << "objDim" << xsamples_dimension[i] << "objDisp" << ysamples_displacement[i] << "}";
             }
             m_fs << "]";
-
 
 
             if ( datafilter_index < 0 ) {

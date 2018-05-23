@@ -140,9 +140,9 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
 
 
             // Display the output image
-            cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
-            cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
-            cv::waitKey(0);
+            //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
+            //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
+            //cv::waitKey(0);
             cv::destroyAllWindows();
             cv::imwrite(position_path, image_02_frame);
             prevGray = curGray.clone();
