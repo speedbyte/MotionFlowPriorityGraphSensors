@@ -14,12 +14,11 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
     for (ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-        std::vector<std::pair<cv::Point2f, cv::Point2f> >
-                multiframe_centroid_displacement;
+        std::vector<std::pair<cv::Point2f, cv::Point2f> > multiframe_centroid_displacement;
+        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > multiframe_dataprocessing_displacement;
 
         std::cout << "generate_object_mean_centroid_displacement for sensor_index "
-                  << sensor_index
-                  << " for object name " << object->getObjectName() << " for algorithm " << m_algoName << std::endl;
+                  << sensor_index << " for object name " << object->getObjectName() << " for algorithm " << m_algoName << std::endl;
 
         unsigned long FRAME_COUNT = object->get_object_stencil_point_displacement().at(sensor_index)
                 .size();
@@ -39,47 +38,45 @@ void DataProcessingAlgorithm::common(Objects *object) {
                 const unsigned CLUSTER_SIZE = (unsigned) object->get_object_stencil_point_displacement().at
                         (sensor_index).at(frame_count).size();
 
-                
-
                 /*-----------------------------------------------------------------------------*/
 
-                mean = execute(object, sensor_index, frame_count, CLUSTER_SIZE);
+                execute(object, sensor_index, frame_count, CLUSTER_SIZE, multiframe_centroid_displacement, multiframe_dataprocessing_displacement);
 
                 /* ------------------------------------------------------------------------------ */
 
-                std::cout << "mean_displacement " + m_algoName
-                          << cv::Point2f(mean(2), mean(3)) << std::endl;
+                std::cout << "mean_displacement " + m_algoName << multiframe_centroid_displacement.at(frame_count).first <<
+ multiframe_centroid_displacement.at(frame_count).second << std::endl;
 
                 if (frame_count > 0) {
-                    assert(std::abs(mean(2))> 0);
-                    assert(std::abs(mean(3))> 0);
+                    assert(std::abs(multiframe_centroid_displacement.at(frame_count).second.x)> 0);
+                    assert(std::abs(multiframe_centroid_displacement.at(frame_count).second.y)> 0);
                 }
 
-                multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)),
-                                                                          cv::Point2f(mean(2), mean(3))
-                ));
             }
 
             else {
 
                 std::cout << "not visible" << std::endl;
-
-                multiframe_centroid_displacement.push_back(
-                        std::make_pair(cv::Point2f(0, 0),cv::Point2f(0,0)
-                        ));
+                multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0,0)));
+                multiframe_dataprocessing_displacement.push_back({std::make_pair(cv::Point2f(0, 0),cv::Point2f(0,0))});
             }
+
         }
 
         m_sensor_multiframe_centroid_displacement.push_back(multiframe_centroid_displacement);
+        m_sensor_multiframe_dataprocessing_displacement.push_back(multiframe_dataprocessing_displacement);
 
     }
 }
 
 
-cv::Scalar RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE) {
+void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) {
 
     cv::Scalar mean;
     cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+
+    std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
+
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
@@ -94,6 +91,8 @@ cv::Scalar RankedMean::execute(Objects *object, ushort sensor_index, ushort fram
         mean(2) += gt_displacement.x;
         mean(3) += gt_displacement.y;
 
+        frame_dataprocessing_displacement.push_back(std::make_pair(pts, gt_displacement));
+
     }
 
     const unsigned CLUSTER_EDGE_SIZE = (unsigned) object->get_object_edge_point_displacement().at
@@ -104,11 +103,9 @@ cv::Scalar RankedMean::execute(Objects *object, ushort sensor_index, ushort fram
     for (unsigned cluster_edge_index = 0; cluster_edge_index < CLUSTER_EDGE_SIZE; cluster_edge_index++) {
 
         cv::Point2f pts_edge = object->get_object_edge_point_displacement().at(
-                        sensor_index)
-                .at(frame_count).at(cluster_edge_index).first;
+                        sensor_index).at(frame_count).at(cluster_edge_index).first;
         cv::Point2f gt_displacement = object->get_object_edge_point_displacement().at(
-                        sensor_index)
-                .at(frame_count).at(cluster_edge_index).second;
+                        sensor_index).at(frame_count).at(cluster_edge_index).second;
 
         mean(0) += WEIGHT * pts_edge.x;
         mean(1) += WEIGHT * pts_edge.y;
@@ -117,21 +114,30 @@ cv::Scalar RankedMean::execute(Objects *object, ushort sensor_index, ushort fram
 
     }
 
-
     mean(0) /= CLUSTER_SIZE + WEIGHT*CLUSTER_EDGE_SIZE;
     mean(1) /= CLUSTER_SIZE + WEIGHT*CLUSTER_EDGE_SIZE;
     mean(2) /= CLUSTER_SIZE + WEIGHT*CLUSTER_EDGE_SIZE;
     mean(3) /= CLUSTER_SIZE + WEIGHT*CLUSTER_EDGE_SIZE;
 
-    return mean;
+    // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
+    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+        frame_dataprocessing_displacement.at(frame_count).second = cv::Point2f(mean(2), mean(3));
+    }
+
+    multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
+    multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
+
 
 }
 
 
-cv::Scalar MovingAverage::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE) {
+void MovingAverage::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+                                  std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) {
 
     cv::Scalar mean;
     cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+
+    std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
@@ -146,7 +152,7 @@ cv::Scalar MovingAverage::execute(Objects *object, ushort sensor_index, ushort f
             ( mean(0) += pts.x ) /= 2 ;
             ( mean(1) += pts.y )  /= 2;
             ( mean(2) += gt_displacement.x )  /= 2;
-            ( mean(3) += gt_displacement.x )  /= 2;
+            ( mean(3) += gt_displacement.y )  /= 2;
         } else {
             mean(0) = pts.x;
             mean(1) = pts.y;
@@ -154,16 +160,22 @@ cv::Scalar MovingAverage::execute(Objects *object, ushort sensor_index, ushort f
             mean(3) = gt_displacement.y;
         }
 
+        frame_dataprocessing_displacement.push_back(std::make_pair(pts,cv::Point2f(mean(2), mean(3))));
     }
 
-    return mean;
+    multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
+    multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
+
 
 }
 
-cv::Scalar VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE) {
+void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) {
+
 
     cv::Scalar mean, stddev;
     cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+
+    std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
 
     std::vector<float> data_x, data_y;
     std::vector<float> data_x_pts, data_y_pts;
@@ -184,6 +196,8 @@ cv::Scalar VotedMean::execute(Objects *object, ushort sensor_index, ushort frame
         data_x_pts.push_back(pts.x);
         data_y_pts.push_back(pts.y);
 
+        frame_dataprocessing_displacement.push_back(std::make_pair(pts,cv::Point2f(mean(2), mean(3))));
+
     }
 
     cv::meanStdDev(samples, mean, stddev);
@@ -200,36 +214,65 @@ cv::Scalar VotedMean::execute(Objects *object, ushort sensor_index, ushort frame
         mean(3) = 0;
     }
 
+    std::cout << "max_voted_x " << mean(2) << " max_voted_y " << mean(3) << std::endl;
+
     //std::cout << "max_voted_displacement_x " << max_voted_displacement_x << " max_voted_displacement_y " << max_voted_displacement_y << std::endl;
 
-    return mean;
+        // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
+    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+        frame_dataprocessing_displacement.at(frame_count).second = cv::Point2f(mean(2), mean(3));
+    }
+
+    multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
+    multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
+
 
 }
 
 
-cv::Scalar SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE) {
+void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+                                  std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) {
 
     cv::Scalar mean,stddev;
     cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+
+    std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
+
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
                 .at(frame_count).at(cluster_index).first;
         cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
                 sensor_index).at(frame_count).at(cluster_index).second;
 
         samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
+
+        frame_dataprocessing_displacement.push_back(std::make_pair(pts,cv::Point2f(mean(2), mean(3))));
     }
+
     cv::meanStdDev(samples, mean, stddev);
-    //cv::calcCovarMatrix(samples, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1 );
-    return mean;
+    //cv::calcCovarMatrix(samples, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
+
+    // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
+    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+        frame_dataprocessing_displacement.at(frame_count).second = cv::Point2f(mean(2), mean(3));
+    }
+
+    multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
+    multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
+
 
 }
 
 
-cv::Scalar SensorFusion::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE) {
+void SensorFusion::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+                                 std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) {
 
     cv::Scalar mean, stddev;
     cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+
+    std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
+
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
                 .at(frame_count).at(cluster_index).first;
@@ -237,9 +280,20 @@ cv::Scalar SensorFusion::execute(Objects *object, ushort sensor_index, ushort fr
                 sensor_index).at(frame_count).at(cluster_index).second;
 
         samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
+
+        frame_dataprocessing_displacement.push_back(std::make_pair(pts,cv::Point2f(mean(2), mean(3))));
     }
+
     cv::meanStdDev(samples, mean, stddev);
     //cv::calcCovarMatrix(samples, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1 );
-    return mean;
+
+    // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
+    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+        frame_dataprocessing_displacement.at(frame_count).second = cv::Point2f(mean(2), mean(3));
+    }
+
+    multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
+    multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
+
 
 }

@@ -505,13 +505,10 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     }
 }
 
-
 void GroundTruthScene::startEvaluating(Noise noise) {
-
 
     calcBBFrom3DPosition();
     //visualiseBoundingBox();
-
 
     for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
 
@@ -712,7 +709,6 @@ void GroundTruthScene::generate_bird_view() {
         }
         */
 }
-
 
 void GroundTruthScene::calcBBFrom3DPosition() {
 
@@ -1239,13 +1235,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     }
 }
 
-
 void GroundTruthSceneExternal::parseEntry(RDB_TRIGGER_t *data, const double &simTime, const unsigned int &
 simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsigned int &elemId,
                                           const unsigned int &totalElem) {
     fprintf(stderr, "RDBTrigger answer = %.3f, simFrame = %d\n", simTime, simFrame);
 }
-
 
 void GroundTruthSceneExternal::parseStartOfFrame(const double &simTime, const unsigned int &simFrame) {
     //fprintf(stderr, "I am in GroundTruthFlow %d\n,", RDB_PKG_ID_START_OF_FRAME);
@@ -1483,7 +1477,6 @@ simFrame, const
     }
 }
 
-
 void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_OBJECT_t *data, const double &simTime, const unsigned int &
 simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsigned int &elemId,
         const unsigned int &totalElem) {
@@ -1536,7 +1529,6 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
         }
     }
 }
-
 
 void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTime, const unsigned int &simFrame,
                                           const
@@ -1619,7 +1611,6 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
         mHaveImage = true;
     }
 }
-
 
 /**
 * handle driver control input and compute vehicle dynamics output
@@ -1775,7 +1766,6 @@ double GroundTruthSceneExternal::getTime() {
 
     return now;
 }
-
 
 void GroundTruthSceneExternal::calcStatistics() {
     double now = getTime();

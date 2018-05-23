@@ -92,7 +92,6 @@ public:
         return m_list_object_shapepoints_displacement;
     }
 
-
     unsigned getObjectId() const {
         return m_objectId;
     }

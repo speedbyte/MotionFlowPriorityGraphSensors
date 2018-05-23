@@ -19,10 +19,6 @@ protected:
 
     std::vector<std::vector<STRUCT_GT_SENSORS_ALL> > m_sen__all;
 
-    int m_SensorInertialWidth;
-
-    int m_SensorInertialHeight;
-
     unsigned m_sensorId;
 
     std::string m_sensorName;

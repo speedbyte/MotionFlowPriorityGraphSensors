@@ -124,18 +124,11 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
 
 void Objects::generate_object_mean_centroid_displacement(std::string post_processing_algorithm) {
 
-    // A blob can be either a stencil or a shape
-
-
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             multiframe_shapepoints_displacement_sensor_fusion_mean;
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> >
             frame_shapepoints_displacement_sensor_fusion_mean;
-
-
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >
-            list_object_shapepoints_displacement;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             sensor_multiframe_centroid_displacement_sensor_fusion_mean;
@@ -143,24 +136,28 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             sensor_multiframe_shapepoints_displacement_sensor_fusion_mean;
 
-
     SimpleAverage simpleAverage;
     simpleAverage.common(this);
     m_list_object_mean_centroid_displacement.push_back(simpleAverage.getObjectMeanCentroidDisplacement());
+    m_list_object_shapepoints_displacement.push_back(simpleAverage.getObjectDataprocessingDisplacement());
 
     MovingAverage movingAverage;
     movingAverage.common(this);
     m_list_object_mean_centroid_displacement.push_back(movingAverage.getObjectMeanCentroidDisplacement());
+    m_list_object_shapepoints_displacement.push_back(movingAverage.getObjectDataprocessingDisplacement());
 
     VotedMean votedMean;
     votedMean.common(this);
     m_list_object_mean_centroid_displacement.push_back(votedMean.getObjectMeanCentroidDisplacement());
+    m_list_object_shapepoints_displacement.push_back(votedMean.getObjectDataprocessingDisplacement());
 
     if ( post_processing_algorithm != "ground_truth" ) {
         generate_edge_contour(post_processing_algorithm);
         RankedMean rankedMean;
         rankedMean.common(this);
         m_list_object_mean_centroid_displacement.push_back(rankedMean.getObjectMeanCentroidDisplacement());
+        m_list_object_shapepoints_displacement.push_back(rankedMean.getObjectDataprocessingDisplacement());
+
     }
 
     /*

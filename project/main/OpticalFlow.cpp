@@ -315,116 +315,169 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
     }
 
     char sensor_index_folder_suffix[50];
+    for (unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++) {
 
-    std::vector<std::vector< OPTICAL_FLOW_EVALUATION_METRICS > > sensor_multiframe_evaluation_data;
-
-    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
-
-        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-
-        std::cout << "generating shape points in OpticalFlow.cpp for sensor index "  << sensor_index
-                  << " for opticalflow  " << m_opticalFlowName << std::endl;
-
-        unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
-                ->get_object_stencil_point_displacement().at(sensor_index).size();
-
-        assert(FRAME_COUNT > 0);
-
-        std::vector<OPTICAL_FLOW_EVALUATION_METRICS> multiframe_evaluation_data;
-
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-
-            OPTICAL_FLOW_EVALUATION_METRICS evaluationData;
-
-            std::cout << "frame_count " << frame_count << " for opticalflow_index " << m_opticalFlowName << std::endl;
+        std::vector<std::map<std::pair<float, float>, int> > sensor_scenario_displacement_occurence;
+        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>>> > sensor_shape_points;
 
 
-            for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+        std::vector<std::vector<OPTICAL_FLOW_EVALUATION_METRICS> > sensor_multiframe_evaluation_data;
 
-                if ( list_of_current_objects.at(obj_index)->getObjectName() == "New Character" ||
-                        list_of_current_objects.at(obj_index)->getObjectName() == "simulated_New Character") {
-                    cv::Point2i dimension = {
-                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.width_px),
-                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(frame_count).m_region_of_interest_px.height_px)
-                    };
+        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-                    // displacements found by the algorithm for this object
-                    unsigned CLUSTER_COUNT = (unsigned)list_of_current_objects.at(
+            sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
+
+            std::cout << "generating shape points in OpticalFlow.cpp for sensor index " << sensor_index
+                      << " for opticalflow  " << m_opticalFlowName << std::endl;
+
+            unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
+                    ->get_object_stencil_point_displacement().at(sensor_index).size();
+
+            assert(FRAME_COUNT > 0);
+
+            std::vector<OPTICAL_FLOW_EVALUATION_METRICS> multiframe_evaluation_data;
+
+            for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+
+                OPTICAL_FLOW_EVALUATION_METRICS evaluationData;
+
+                std::vector<std::pair<cv::Point2i, cv::Point2f>> frame_shape_points;
+
+                std::cout << "frame_count " << frame_count << " for opticalflow_index " << m_opticalFlowName
+                          << std::endl;
+
+                for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+
+                    // displacements found by the ground truth for this object
+                    auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
 
-                    evaluationData.frame_count = frame_count;
+                    // displacements found by the algorithm for this object
+                    auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
+                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
 
-                    if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count) ) {
+                    if (list_of_current_objects.at(obj_index)->getObjectName() == "New Character" ||
+                        list_of_current_objects.at(obj_index)->getObjectName() == "simulated_New Character") {
+                        cv::Point2i dimension = {
+                                cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                        sensor_index).at(frame_count).m_region_of_interest_px.width_px),
+                                cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
+                                        sensor_index).at(frame_count).m_region_of_interest_px.height_px)
+                        };
 
-                        // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
+                        // displacements found by the algorithm for this object
+                        unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
+                                obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
+                                frame_count).size();
 
-                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at
-                                (sensor_index).at(frame_count).second;
+                        evaluationData.frame_count = frame_count;
 
-                        auto dist_gt = cv::norm(gt_displacement);
-                        auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
+                        if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
+                                sensor_index).at(frame_count)) {
 
-                        if (m_opticalFlowName == "ground_truth") {
+                            // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
-                            evaluationData.visiblePixels = dimension.x * dimension.y; // how many pixels are visible ( it could be that some pixels are occluded )
-                            evaluationData.goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
+                            cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
+                                    obj_index)->get_object_extrapolated_point_displacement().at
+                                    (sensor_index).at(frame_count).second;
 
-                        }
-                        else {
+                            auto dist_gt = cv::norm(gt_displacement);
+                            auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
-                            evaluationData.visiblePixels = CLUSTER_COUNT / mStepSize;
-                            // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
-                            evaluationData.goodPixels = 0; // how many pixels in the found pixel are actually valid
+                            if (m_opticalFlowName == "ground_truth") {
 
-                            for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
+                                evaluationData.visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+                                evaluationData.goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
-                                cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
-                                        get_object_stencil_point_displacement().at(sensor_index).at(frame_count).at(cluster_index).second;
+                            } else {
 
-                                auto dist_algo = cv::norm(algo_displacement);
-                                auto dist_err = std::abs(dist_gt - dist_algo);
+                                evaluationData.visiblePixels = CLUSTER_COUNT;
+                                // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
+                                evaluationData.goodPixels = 0; // how many pixels in the found pixel are actually valid
 
-                                auto angle_algo = std::tanh(algo_displacement.y/algo_displacement.x);
+                                for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
-                                auto angle_err = std::abs(angle_algo - angle_gt);
-                                auto angle_err_dot = std::cosh(
-                                        algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
+                                    cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
+                                            get_list_object_shapepoints_displacement().at(datafilter_index
+                                    ).at(sensor_index).at(frame_count).at(cluster_index).second;
 
-                                //assert(angle_err_dot==angle_err);
-                                if (
-                                        (dist_err) < DISTANCE_ERROR_TOLERANCE &&
-                                        (angle_err*180/CV_PI) < ANGLE_ERROR_TOLERANCE
+                                    cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
+                                            get_object_stencil_point_displacement().at(sensor_index).at(frame_count).at(
+                                            cluster_index).second;
 
-                                        ) {
-                                    evaluationData.goodPixels++; // how many pixels in the found pixel are actually valid
+                                    auto dist_algo = cv::norm(algo_displacement);
+                                    auto dist_err = std::abs(dist_gt - dist_algo);
+
+                                    auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
+
+                                    auto angle_err = std::abs(angle_algo - angle_gt);
+                                    auto angle_err_dot = std::cosh(
+                                            algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
+
+                                    //assert(angle_err_dot==angle_err);
+                                    if (
+                                            (dist_err) < DISTANCE_ERROR_TOLERANCE &&
+                                            (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
+
+                                            ) {
+                                        evaluationData.goodPixels++; // how many pixels in the found pixel are actually valid
+                                    }
                                 }
                             }
+
+                            multiframe_evaluation_data.push_back(evaluationData);
+
+                            std::cout << "goodPixels for object "
+                                      << list_of_current_objects.at(obj_index)->getObjectName() << " = "
+                                      << evaluationData.goodPixels << std::endl;
+                            std::cout << "visiblePixels for object "
+                                      << list_of_current_objects.at(obj_index)->getObjectName() << " = "
+                                      << evaluationData.visiblePixels << std::endl;
+
+                            //assert(evaluationData.goodPixels <= std::ceil(evaluationData.algorithmPixels) + 20 );
+                            frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count, 0), cv::Point2f(vollTreffer, baseTreffer)));
+
+                            std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                                      << vollTreffer << std::endl;
+                            std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                                      << baseTreffer << std::endl;
+
+                            assert(vollTreffer <= std::ceil(baseTreffer) + 20 );
+
+                        } else {
+                            std::cout << "visibility of object "
+                                      << list_of_current_objects.at(obj_index)->getObjectName() << " = " <<
+                                      list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
+                                                      sensor_index)
+                                              .at(frame_count)
+                                      << " and hence not generating any shape points for this object " << std::endl;
+
+                            frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count,0), cv::Point2f(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity())));
+
+                            multiframe_evaluation_data.push_back(evaluationData);
+
                         }
-
-                        multiframe_evaluation_data.push_back(evaluationData);
-
-                        std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.goodPixels<< std::endl;
-                        std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.visiblePixels << std::endl;
-
-                        //assert(evaluationData.goodPixels <= std::ceil(evaluationData.algorithmPixels) + 20 );
-
-                    } else {
-                        std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectName() << " = " <<
-                                  list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
-                                          .at(frame_count)
-                                  << " and hence not generating any shape points for this object " << std::endl;
-
-                        multiframe_evaluation_data.push_back(evaluationData);
-
                     }
                 }
+                sensor_frame_shape_points.push_back(frame_shape_points);
+            }
+
+            sensor_multiframe_evaluation_data.push_back(multiframe_evaluation_data);
+            sensor_shape_points.push_back(sensor_frame_shape_points);
+            sensor_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
+
+            /* generate for every algorithm, an extra sensor */
+            if ( sensor_index == (SENSOR_COUNT-1) ) {
+                generate_shape_points_sensor_fusion(datafilter_index, sensor_shape_points );
             }
         }
-        sensor_multiframe_evaluation_data.push_back(multiframe_evaluation_data);
+
+        m_sensor_shape_points.push_back(sensor_shape_points);
+        m_sensor_scenario_displacement_occurence = sensor_scenario_displacement_occurence;
+        m_sensor_multiframe_evaluation_data = sensor_multiframe_evaluation_data;
+
     }
-    m_sensor_multiframe_evaluation_data = sensor_multiframe_evaluation_data;
+
 }
 
 
