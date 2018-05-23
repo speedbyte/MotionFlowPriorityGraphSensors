@@ -345,11 +345,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
+        for (ushort algorithmIndex = 0; algorithmIndex < 2; algorithmIndex++) {
 
-
-        for (ushort algorithmIndex = 0; algorithmIndex < 1; algorithmIndex++) {
-
-            for (ushort stepSize = 3; stepSize <= 3; stepSize += 4) {
+            for (ushort stepSize = 5; stepSize <= 5; stepSize += 4) {
 
                 ptr_list_of_simulated_objects_base.clear();
                 std::vector<SimulatedObjects> list_of_simulated_objects_base;
@@ -364,10 +362,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 for (ushort obj_index = 0; obj_index < environment_list.size(); obj_index++) {
 
-                    if (algorithmIndex == 1) {
+                    if (algorithmIndex == 0) {
                         list_of_algorithm_flow.push_back(&fback);
 
-                    } else if (algorithmIndex == 0) {
+                    } else if (algorithmIndex == 1) {
 
                         list_of_algorithm_flow.push_back(&lkanade);
                     }
@@ -495,16 +493,24 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 /* KITTI_FLOW_DATASET------------- */
 
     {
+        cv::Size_<unsigned> frame_size(IMAGE_WIDTH, IMAGE_HEIGHT);
+        std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
+        std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
+
         if ( kitti_flow_dataset.execute ) {
 
-            cv::Size_<unsigned> frame_size(1242, 375);
-            Dataset::fillDataset(frame_size, depth, cn, KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02",
-                                 "results");
-            //AlgorithmFlow algo;
+            Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
+
+            std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
+            std::vector<Objects *> ptr_list_of_simulated_objects;
+
+            Farneback fback(fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
+                            ptr_list_of_simulated_objects, 1);
+            AlgorithmFlow *algo = &fback;
             // The ground truth generate_flow_frame and image is already available from the base dataset. Hence only results can be
             // calculated here.
 
-            //algo.run_optical_flow_algorithm(fb, continous_frames, no_noise);
+            algo->run_optical_flow_algorithm(video_frames, "blue_sky", 30);
 
             //make_video_from_regex((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
             //make_video_from_regex((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");
