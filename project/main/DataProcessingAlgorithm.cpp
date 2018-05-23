@@ -63,8 +63,8 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
         }
 
-        m_sensor_multiframe_centroid_displacement.push_back(multiframe_centroid_displacement);
-        m_sensor_multiframe_dataprocessing_displacement.push_back(multiframe_dataprocessing_displacement);
+        m_sensor_multiframe_dataprocessing_centroid_displacement.push_back(multiframe_centroid_displacement);
+        m_sensor_multiframe_dataprocessing_stencil_point_displacement.push_back(multiframe_dataprocessing_displacement);
 
     }
 }
@@ -263,6 +263,37 @@ void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
 
 
 }
+
+void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+                            std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) {
+
+    cv::Scalar mean,stddev;
+    cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+
+    std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
+
+    for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
+
+        cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
+                .at(frame_count).at(cluster_index).first;
+        cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
+                sensor_index).at(frame_count).at(cluster_index).second;
+
+        samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
+
+        frame_dataprocessing_displacement.push_back(std::make_pair(pts,gt_displacement));
+    }
+
+    cv::meanStdDev(samples, mean, stddev);
+    //cv::calcCovarMatrix(samples, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
+
+    // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
+
+    multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
+    multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
+
+}
+
 
 
 void SensorFusion::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,

@@ -336,7 +336,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
 
             pixelRobustness.generatePixelRobustness(gt_flow, dummy[0]);
-            vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
+            //vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
         }
 
         time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
@@ -428,7 +428,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 time_map["algorithm_flow" + std::to_string(stepSize)] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
                 tic = steady_clock::now();
 
-                if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
+                if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
                     for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
                         pixelRobustness.generatePixelRobustness(*list_of_algorithm_flow[env_index], *list_of_algorithm_flow[0]);

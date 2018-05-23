@@ -12,8 +12,8 @@ class DataProcessingAlgorithm {
 protected:
 
     std::string m_algoName;
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_sensor_multiframe_centroid_displacement;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_sensor_multiframe_dataprocessing_displacement;
+    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_sensor_multiframe_dataprocessing_centroid_displacement;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_sensor_multiframe_dataprocessing_stencil_point_displacement;
 
 public:
 
@@ -27,12 +27,12 @@ public:
         throw;
     }
 
-    const std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &getObjectMeanCentroidDisplacement() const {
-        return m_sensor_multiframe_centroid_displacement;
+    const std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &get_object_dataprocessing_mean_centroid_displacement() const {
+        return m_sensor_multiframe_dataprocessing_centroid_displacement;
     }
 
-    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>> > > &getObjectDataprocessingDisplacement() const {
-        return m_sensor_multiframe_dataprocessing_displacement;
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>> > > &get_object_dataprocessing_stencil_point_displacement() const {
+        return m_sensor_multiframe_dataprocessing_stencil_point_displacement;
     }
 
 };
@@ -85,6 +85,16 @@ public:
                        std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
 };
 
+
+class NoAlgorithm: public DataProcessingAlgorithm {
+
+public:
+
+    NoAlgorithm() : DataProcessingAlgorithm("no algorithm") {}
+
+    void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+                 std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
+};
 
 class SensorFusion : public DataProcessingAlgorithm {
 

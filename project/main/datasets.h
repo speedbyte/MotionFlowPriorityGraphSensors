@@ -65,7 +65,7 @@ typedef enum {
     fb
 } ALGO_TYPES;
 
-#define DATAFILTER_COUNT 4
+#define DATAFILTER_COUNT 5
 
 
 

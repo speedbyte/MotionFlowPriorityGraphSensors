@@ -125,38 +125,43 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
 void Objects::generate_object_mean_centroid_displacement(std::string post_processing_algorithm) {
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            multiframe_shapepoints_displacement_sensor_fusion_mean;
+            multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> >
-            frame_shapepoints_displacement_sensor_fusion_mean;
+            frame_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             sensor_multiframe_centroid_displacement_sensor_fusion_mean;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
-            sensor_multiframe_shapepoints_displacement_sensor_fusion_mean;
+            sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
+
+    NoAlgorithm noAlgorithm;
+    noAlgorithm.common(this);
+    m_list_object_dataprocessing_mean_centroid_displacement.push_back(noAlgorithm.get_object_dataprocessing_mean_centroid_displacement());
+    m_list_object_dataprocessing_stencil_points_displacement.push_back(noAlgorithm.get_object_dataprocessing_stencil_point_displacement());
 
     SimpleAverage simpleAverage;
     simpleAverage.common(this);
-    m_list_object_mean_centroid_displacement.push_back(simpleAverage.getObjectMeanCentroidDisplacement());
-    m_list_object_shapepoints_displacement.push_back(simpleAverage.getObjectDataprocessingDisplacement());
+    m_list_object_dataprocessing_mean_centroid_displacement.push_back(simpleAverage.get_object_dataprocessing_mean_centroid_displacement());
+    m_list_object_dataprocessing_stencil_points_displacement.push_back(simpleAverage.get_object_dataprocessing_stencil_point_displacement());
 
     MovingAverage movingAverage;
     movingAverage.common(this);
-    m_list_object_mean_centroid_displacement.push_back(movingAverage.getObjectMeanCentroidDisplacement());
-    m_list_object_shapepoints_displacement.push_back(movingAverage.getObjectDataprocessingDisplacement());
+    m_list_object_dataprocessing_mean_centroid_displacement.push_back(movingAverage.get_object_dataprocessing_mean_centroid_displacement());
+    m_list_object_dataprocessing_stencil_points_displacement.push_back(movingAverage.get_object_dataprocessing_stencil_point_displacement());
 
     VotedMean votedMean;
     votedMean.common(this);
-    m_list_object_mean_centroid_displacement.push_back(votedMean.getObjectMeanCentroidDisplacement());
-    m_list_object_shapepoints_displacement.push_back(votedMean.getObjectDataprocessingDisplacement());
+    m_list_object_dataprocessing_mean_centroid_displacement.push_back(votedMean.get_object_dataprocessing_mean_centroid_displacement());
+    m_list_object_dataprocessing_stencil_points_displacement.push_back(votedMean.get_object_dataprocessing_stencil_point_displacement());
 
     if ( post_processing_algorithm != "ground_truth" ) {
         generate_edge_contour(post_processing_algorithm);
         RankedMean rankedMean;
         rankedMean.common(this);
-        m_list_object_mean_centroid_displacement.push_back(rankedMean.getObjectMeanCentroidDisplacement());
-        m_list_object_shapepoints_displacement.push_back(rankedMean.getObjectDataprocessingDisplacement());
+        m_list_object_dataprocessing_mean_centroid_displacement.push_back(rankedMean.get_object_dataprocessing_mean_centroid_displacement());
+        m_list_object_dataprocessing_stencil_points_displacement.push_back(rankedMean.get_object_dataprocessing_stencil_point_displacement());
 
     }
 
@@ -165,10 +170,10 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
                                                 sensor_multiframe_centroid_displacement_voted_mean,
                                                 sensor_multiframe_centroid_displacement_sensor_fusion_mean,
                                                 m_object_stencil_point_displacement,
-                                                sensor_multiframe_shapepoints_displacement_sensor_fusion_mean);
+                                                sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean);
 
-    list_object_shapepoints_displacement.push_back(sensor_multiframe_shapepoints_displacement_sensor_fusion_mean);
-    m_list_object_shapepoints_displacement = list_object_shapepoints_displacement;
+    list_object_dataprocessing_stencil_points_displacement.push_back(sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean);
+    m_list_object_dataprocessing_stencil_points_displacement = list_object_dataprocessing_stencil_points_displacement;
 
     */
 
@@ -182,14 +187,14 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
         const std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multi_sensor_input_flow_vector,
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &sensor_multiframe_centroid_displacement_sensor_fusion_mean,
         const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multi_sensor_input_shape,
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &sensor_multiframe_shapepoints_displacement_sensor_fusion_mean
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean
         ) {
 
     std::vector<std::pair<cv::Point2f, cv::Point2f> >
             multiframe_centroid_displacement_sensor_fusion_mean;
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
-            multiframe_shapepoints_displacement_sensor_fusion_mean;
+            multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
 
     std::cout << "generate_object_mean_centroid_displacement for sensor fusion "
             << " for object name " << m_objectName << " " << std::endl;
@@ -202,7 +207,7 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
         // gt_displacement
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> >
-                frame_shapepoints_displacement_sensor_fusion_mean;
+                frame_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
 
         std::cout << "frame_count " << frame_count << std::endl;
 
@@ -265,7 +270,7 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
                     mean_pts_sensor_fusion_mean_y += pts.y;
                     cluster_size_sensor_fusion_mean_y++;
 
-                    frame_shapepoints_displacement_sensor_fusion_mean.push_back(
+                    frame_dataprocessing_stencil_points_displacement_sensor_fusion_mean.push_back(
                             std::make_pair(cv::Point2f(pts.x, pts.y), cv::Point2f
                                     (mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
                 }
@@ -276,7 +281,7 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
                     mean_pts_sensor_fusion_mean_y += pts_2.y;
                     cluster_size_sensor_fusion_mean_y++;
 
-                    frame_shapepoints_displacement_sensor_fusion_mean.push_back(
+                    frame_dataprocessing_stencil_points_displacement_sensor_fusion_mean.push_back(
                             std::make_pair(cv::Point2f(pts_2.x, pts_2.y), cv::Point2f
                                     (mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
                 }
@@ -290,7 +295,7 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
             multiframe_centroid_displacement_sensor_fusion_mean.push_back(std::make_pair(cv::Point2f(mean_pts_sensor_fusion_mean_x, mean_pts_sensor_fusion_mean_y)
                     , cv::Point2f(mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
 
-            multiframe_shapepoints_displacement_sensor_fusion_mean.push_back(frame_shapepoints_displacement_sensor_fusion_mean);
+            multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean.push_back(frame_dataprocessing_stencil_points_displacement_sensor_fusion_mean);
 
         }
 
@@ -302,7 +307,7 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
                         , cv::Point2f(mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y)));
 
             //mean_pts_simple_avg_mean_x, mean_pts_simple_avg_mean_y
-            multiframe_shapepoints_displacement_sensor_fusion_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
+            multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f
                     (mean_displacement_vector_sensor_fusion_mean_x,mean_displacement_vector_sensor_fusion_mean_y))});
 
 
@@ -311,12 +316,12 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
 
     sensor_multiframe_centroid_displacement_sensor_fusion_mean.push_back(multiframe_centroid_displacement_sensor_fusion_mean);
     sensor_multiframe_centroid_displacement_sensor_fusion_mean.push_back(multiframe_centroid_displacement_sensor_fusion_mean);
-    sensor_multiframe_shapepoints_displacement_sensor_fusion_mean.push_back(multiframe_shapepoints_displacement_sensor_fusion_mean);
-    sensor_multiframe_shapepoints_displacement_sensor_fusion_mean.push_back(multiframe_shapepoints_displacement_sensor_fusion_mean);
+    sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean.push_back(multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean);
+    sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean.push_back(multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean);
 
-    //multiframe_shapepoints_displacement_sensor_fusion_mean.push_back(frame_shapepoints_displacement_sensor_fusion_mean);
+    //multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean.push_back(frame_dataprocessing_stencil_points_displacement_sensor_fusion_mean);
 
-    sensor_multiframe_shapepoints_displacement_sensor_fusion_mean.push_back(multiframe_shapepoints_displacement_sensor_fusion_mean);
+    sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean.push_back(multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean);
 
 
 }
@@ -350,7 +355,7 @@ void Objects::generate_object_mean_lineparameters( std::string post_processing_a
             std::vector<cv::Point2f > frame_line_parameters;
 
             const unsigned long FRAME_COUNT =
-                    m_list_object_mean_centroid_displacement.at(datafilter_index).at
+                    m_list_object_dataprocessing_mean_centroid_displacement.at(datafilter_index).at
                             (sensor_index).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
@@ -359,10 +364,10 @@ void Objects::generate_object_mean_lineparameters( std::string post_processing_a
                 if (m_object_extrapolated_visibility.at(sensor_index).at(frame_count) == true) {
 
                     if ( frame_count > 0 ) {
-                        cv::Point2f next_pts = m_list_object_mean_centroid_displacement.at(datafilter_index).at
+                        cv::Point2f next_pts = m_list_object_dataprocessing_mean_centroid_displacement.at(datafilter_index).at
                                 (sensor_index).at(frame_count).first;
                         cv::Point2f mean_displacement_vector =
-                                m_list_object_mean_centroid_displacement.at(datafilter_index).at
+                                m_list_object_dataprocessing_mean_centroid_displacement.at(datafilter_index).at
                                         (sensor_index).at(frame_count).second;
 
                         float m, c;

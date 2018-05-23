@@ -27,7 +27,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
     // shape of algorithhm, with shape of ground truth
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT+1; sensor_index++) {
+        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
             std::cout << "generating pixel robustness in RobustnessIndex.cpp for " << suffix << " " << sensor_index
                     << " for datafilter " << datafilter_index << std::endl;
@@ -35,16 +35,20 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             std::vector<cv::Point2f>  xsamples, ysamples;
             std::vector<cv::Point2f>  xsamples_dimension, ysamples_displacement;
 
-            unsigned long FRAME_COUNT = opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index).size();
+            unsigned long FRAME_COUNT = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).size();
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
-                unsigned long POINTS = opticalFlow.getShapePoints().at(datafilter_index).at(sensor_index).at(frame_count).size();
+                unsigned long POINTS = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).size();
 
                 for (unsigned points = 0; points < POINTS; points++) {
 
-                    std::pair<cv::Point2i, cv::Point2f> shapepoints = opticalFlow.getShapePoints().at(datafilter_index).at(
-                            sensor_index).at(frame_count).at(points);
+                    std::pair<cv::Point2i, cv::Point2i> shapepoints =
+                            std::make_pair(cv::Point2i(opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(
+                            sensor_index).at(frame_count).at(points).frame_count, 0),
+                                           cv::Point2i(opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(
+                                                   sensor_index).at(frame_count).at(points).goodPixels, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(
+                                                   sensor_index).at(frame_count).at(points).visiblePixels));
 
                     xsamples.push_back(shapepoints.first);
                     ysamples.push_back(shapepoints.second);

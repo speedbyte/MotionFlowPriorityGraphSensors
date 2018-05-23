@@ -34,10 +34,10 @@ protected:
             m_object_edge_point_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
-            m_list_object_mean_centroid_displacement;
+            m_list_object_dataprocessing_mean_centroid_displacement;
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >
-            m_list_object_shapepoints_displacement;
+            m_list_object_dataprocessing_stencil_points_displacement;
 
     std::vector<bool>
             m_object_base_visibility;
@@ -72,7 +72,7 @@ public:
             const std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multi_sensor_input_flow_vector,
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &sensor_multiframe_centroid_displacement_sensor_fusion_mean,
             const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multi_sensor_input_shape,
-            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &sensor_multiframe_shapepoints_displacement_sensor_fusion_mean
+            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean
     );
 
 
@@ -80,16 +80,16 @@ public:
         return m_objectName;
     }
 
-    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_list_object_mean_centroid_displacement() const {
-        return m_list_object_mean_centroid_displacement;
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_list_object_dataprocessing_mean_centroid_displacement() const {
+        return m_list_object_dataprocessing_mean_centroid_displacement;
     }
 
     const std::vector<std::vector<std::vector<cv::Point2f > > > &get_list_object_line_parameters() const {
         return m_list_object_line_parameters;
     }
 
-    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &get_list_object_shapepoints_displacement() const {
-        return m_list_object_shapepoints_displacement;
+    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &get_list_object_dataprocessing_stencil_points_displacement() const {
+        return m_list_object_dataprocessing_stencil_points_displacement;
     }
 
     unsigned getObjectId() const {

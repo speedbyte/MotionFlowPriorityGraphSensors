@@ -60,7 +60,7 @@ protected:
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_shape_points;
 
-    std::vector<std::vector< OPTICAL_FLOW_EVALUATION_METRICS > > m_sensor_multiframe_evaluation_data;
+    std::vector<std::vector<std::vector<std::vector< OPTICAL_FLOW_EVALUATION_METRICS > > > > m_sensor_multiframe_evaluation_data;
 
     std::vector<std::map<std::pair<float, float>, int> >  m_sensor_scenario_displacement_occurence;
 
@@ -82,8 +82,8 @@ public:
         return m_list_sensor_line_angles;
     }
 
-    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > &getShapePoints() const {
-        return m_sensor_shape_points;
+    const std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_EVALUATION_METRICS> > > > &get_sensor_multiframe_evaluation_data() const {
+        return m_sensor_multiframe_evaluation_data;
     }
 
     const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > &getMeanDisplacementPoints () const {
@@ -112,8 +112,6 @@ public:
     void generate_flow_frames();
 
     void generate_metrics_optical_flow_algorithm();
-
-    void generate_metrics_data_processing_algorithm();
 
     void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_shape_points);
 
