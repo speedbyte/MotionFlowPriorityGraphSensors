@@ -69,7 +69,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
 
         cv::Mat curGray, prevGray;
 
-        std::vector<cv::Point2f> frame_prev_pts;
+        std::vector<cv::Point2f> frame_prev_pts_array;
 
         std::cout << "results will be stored in " << m_resultordner << std::endl;
         std::cout << "creating flow files for sensor_index " << sensor_index << std::endl;
@@ -85,7 +85,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                     needToInit = true;
                     break;
                 case 'c':
-                    frame_prev_pts.clear();
+                    frame_prev_pts_array.clear();
                     break;
                 default:
                     break;
@@ -102,7 +102,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
 
             std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
-            std::vector<cv::Point2f> frame_next_pts, displacement_array;
+            std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
@@ -113,14 +113,14 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                 std::cout << "frame_count " << frame_count << std::endl;
 
                 needToInit = false;
-                execute(prevGray, curGray, frame_prev_pts, frame_next_pts, displacement_array, needToInit);
+                execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
 
-                for (unsigned i = 0; i < frame_next_pts.size(); i++) {
-                    //cv::circle(image_02_frame, frame_next_pts[i], 1, cv::Scalar(0, 255, 0), 1, 8);
-                    cv::arrowedLine(image_02_frame, frame_prev_pts[i], frame_next_pts[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
+                for (unsigned i = 0; i < frame_next_pts_array.size(); i++) {
+                    //cv::circle(image_02_frame, frame_next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
+                    cv::arrowedLine(image_02_frame, frame_prev_pts_array[i], frame_next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }
 
-                common_flow_frame(sensor_index, frame_count, frame_next_pts, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
+                common_flow_frame(sensor_index, frame_count, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
 
             }
 
@@ -134,7 +134,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::str
                 }
 
                 needToInit = true;
-                execute(prevGray, curGray, frame_prev_pts, frame_next_pts, displacement_array, needToInit);
+                execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
 
             }
 

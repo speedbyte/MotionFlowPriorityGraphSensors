@@ -72,7 +72,7 @@ public:
 
             std::vector<float> err;
 
-            const int MAX_COUNT = 5000;
+            const int MAX_COUNT = 10000;
 
             // Calculate optical generate_flow_frame map using Farneback algorithm
             // Farnback returns displacement frame and LK returns points.
@@ -147,7 +147,7 @@ public:
         int numLevels = 1;
 
         std::vector<float> err;
-        const int MAX_COUNT = 5000;
+        const int MAX_COUNT = 10000;
         cv::Size winSize(21, 21);
         cv::Size subPixWinSize(3, 3);
 
@@ -165,7 +165,7 @@ public:
                 if (!status[i])
                     continue;
 
-                float minDist = 0.5;
+                float minDist = 0.01;
 
                 cv::Point2f algo_displacement;
 
@@ -191,15 +191,6 @@ public:
             frame_next_pts.resize(count_good_points);
             assert(displacement_array.size() == count_good_points);
 
-            if ( frame_next_pts.size() == 0 ) {
-                // pick up the last healthy points
-                assert(frame_next_pts.size() != 0 );
-                frame_next_pts = next_pts_healthy;
-            }
-
-            next_pts_healthy = frame_next_pts;
-            frame_prev_pts = frame_next_pts;
-
         }
 
         else  {
@@ -215,7 +206,14 @@ public:
         }
 
         printf("old frame_next_pts size is %ld and new frame_next_pts size is %ld\n", frame_prev_pts.size(), frame_next_pts.size());
+        if ( frame_next_pts.size() == 0 ) {
+            // pick up the last healthy points
+            assert(frame_next_pts.size() != 0 );
+            frame_next_pts = next_pts_healthy;
+        }
 
+        next_pts_healthy = frame_next_pts;
+        frame_prev_pts = frame_next_pts;
 
     }
 

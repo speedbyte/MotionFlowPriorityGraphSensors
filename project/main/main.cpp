@@ -345,7 +345,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        for (ushort algorithmIndex = 0; algorithmIndex < 2; algorithmIndex++) {
+        for (ushort algorithmIndex = 0; algorithmIndex < 1; algorithmIndex++) {
 
             for (ushort stepSize = 5; stepSize <= 5; stepSize += 4) {
 
@@ -362,10 +362,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 for (ushort obj_index = 0; obj_index < environment_list.size(); obj_index++) {
 
-                    if (algorithmIndex == 0) {
+                    if (algorithmIndex == 1) {
                         list_of_algorithm_flow.push_back(&fback);
 
-                    } else if (algorithmIndex == 1) {
+                    } else if (algorithmIndex == 0) {
 
                         list_of_algorithm_flow.push_back(&lkanade);
                     }
