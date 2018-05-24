@@ -26,9 +26,10 @@ void DataProcessingAlgorithm::common(Objects *object) {
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
             // gt_displacement
 
-            std::cout << "frame_count " << frame_count << std::endl;
 
             bool visibility = object->get_object_extrapolated_visibility().at(sensor_index).at(frame_count);
+
+            std::cout << "frame_count " << frame_count << std::endl;
 
             if (visibility) {
 
@@ -121,7 +122,7 @@ void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_coun
 
     // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
-        frame_dataprocessing_displacement.at(frame_count).second = cv::Point2f(mean(2), mean(3));
+        frame_dataprocessing_displacement.at(cluster_index).second = cv::Point2f(mean(2), mean(3));
     }
 
     multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
@@ -220,7 +221,7 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
 
         // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
-        frame_dataprocessing_displacement.at(frame_count).second = cv::Point2f(mean(2), mean(3));
+        frame_dataprocessing_displacement.at(cluster_index).second = cv::Point2f(mean(2), mean(3));
     }
 
     multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
@@ -237,6 +238,10 @@ void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
     cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
 
     std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
+
+    if ( frame_count == 6) {
+        std::cout << "got it";
+    }
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
@@ -255,7 +260,7 @@ void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
 
     // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
-        frame_dataprocessing_displacement.at(frame_count).second = cv::Point2f(mean(2), mean(3));
+        frame_dataprocessing_displacement.at(cluster_index).second = cv::Point2f(mean(2), mean(3));
     }
 
     multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));
@@ -320,7 +325,7 @@ void SensorFusion::execute(Objects *object, ushort sensor_index, ushort frame_co
 
     // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
-        frame_dataprocessing_displacement.at(frame_count).second = cv::Point2f(mean(2), mean(3));
+        frame_dataprocessing_displacement.at(cluster_index).second = cv::Point2f(mean(2), mean(3));
     }
 
     multiframe_centroid_displacement.push_back(std::make_pair(cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3))));

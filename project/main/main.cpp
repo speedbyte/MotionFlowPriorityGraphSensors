@@ -226,8 +226,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"blue_sky"};
+    const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
+    //const std::vector<std::string> environment_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -344,34 +344,29 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        for (ushort algorithmIndex = 0; algorithmIndex < 2; algorithmIndex++) {
+        for (ushort algorithmIndex = 0; algorithmIndex < 1; algorithmIndex++) {
+
+            std::vector<AlgorithmFlow *> ptr_list_of_algorithm_flow;
 
             for (ushort stepSize = 5; stepSize <= 5; stepSize += 4) {
 
                 ptr_list_of_simulated_objects_base.clear();
                 std::vector<SimulatedObjects> list_of_simulated_objects_base;
                 std::vector<Objects *> ptr_list_of_simulated_objects;
-                std::vector<AlgorithmFlow *> list_of_algorithm_flow;
 
-                Farneback fback(fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                                ptr_list_of_simulated_objects, stepSize);
+                LukasKanade lkanade(lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
+                Farneback fback(fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
 
-                LukasKanade lkanade(lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                                    ptr_list_of_simulated_objects, stepSize);
-
-                for (ushort obj_index = 0; obj_index < environment_list.size(); obj_index++) {
-
-                    if (algorithmIndex == 0) {
-                        list_of_algorithm_flow.push_back(&lkanade);
-
-                    } else if (algorithmIndex == 1) {
-                        list_of_algorithm_flow.push_back(&fback);
-
-                    }
-                }
 
                 // Generate Algorithm data flow --------------------------------------
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+
+                    if ( algorithmIndex == 0 ) {
+                        ptr_list_of_algorithm_flow.push_back(&lkanade);
+                    }
+                    else if ( algorithmIndex == 1 ) {
+                        ptr_list_of_algorithm_flow.push_back(&fback);
+                    }
 
                     if (cpp_dataset.execute || vires_dataset.execute) {
 
@@ -399,10 +394,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
-                            list_of_algorithm_flow[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
+                            ptr_list_of_algorithm_flow[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
                             // TODO - do something for stepSize.. its redundant here.
-                            list_of_algorithm_flow[env_index]->run_optical_flow_algorithm(video_frames, environment_list[env_index], fps);
-                            list_of_algorithm_flow[env_index]->generate_flow_frames();
+                            ptr_list_of_algorithm_flow[env_index]->run_optical_flow_algorithm(video_frames, environment_list[env_index], fps);
+                            //ptr_list_of_algorithm_flow[env_index]->generate_flow_frames();
 
                             if (environment_list[env_index] ==
                                 "blue_sky") { // store the stimulated objects from the ground run.
@@ -417,9 +412,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                                 list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement("algorithm");
                             }
 
-                            //list_of_algorithm_flow[env_index].generate_collision_points();
-                            list_of_algorithm_flow[env_index]->generate_metrics_optical_flow_algorithm();
-                            //list_of_algorithm_flow[env_index].visualiseStencilAlgorithms();
+                            //ptr_list_of_algorithm_flow[env_index].generate_collision_points();
+                            ptr_list_of_algorithm_flow[env_index]->generate_metrics_optical_flow_algorithm();
+                            //ptr_list_of_algorithm_flow[env_index].visualiseStencilAlgorithms();
                         }
                     }
                 }
@@ -430,8 +425,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
                     for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-                        pixelRobustness.generatePixelRobustness(*list_of_algorithm_flow[env_index], *list_of_algorithm_flow[0]);
-                        //vectorRobustness.generateVectorRobustness(*list_of_algorithm_flow[env_index], *list_of_algorithm_flow[0]);
+                        pixelRobustness.generatePixelRobustness(*ptr_list_of_algorithm_flow[env_index], *ptr_list_of_algorithm_flow[0]);
+                        //vectorRobustness.generateVectorRobustness(*ptr_list_of_algorithm_flow[env_index], *ptr_list_of_algorithm_flow[0]);
                     }
                 }
 
