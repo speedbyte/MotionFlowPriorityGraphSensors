@@ -37,31 +37,6 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
 
             unsigned long FRAME_COUNT = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).size();
 
-            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
-
-                unsigned long POINTS = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).size();
-
-                for (unsigned points = 0; points < POINTS; points++) {
-
-                    std::pair<cv::Point2i, cv::Point2i> shapepoints =
-                            std::make_pair(cv::Point2i(opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(
-                            sensor_index).at(frame_count).at(points).frame_count, 0),
-                                           cv::Point2i(opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(
-                                                   sensor_index).at(frame_count).at(points).goodPixels, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(
-                                                   sensor_index).at(frame_count).at(points).visiblePixels));
-
-                    std::pair<cv::Point2f, cv::Point2f> displacementPoints = std::make_pair(
-                    opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_displacement);
-
-                    xsamples.push_back(shapepoints.first);
-                    ysamples.push_back(shapepoints.second);
-                    xsamples_dimension.push_back(displacementPoints.first);
-                    ysamples_displacement.push_back(displacementPoints.second);
-
-                }
-
-            }
-
             // Send to plotter
 
             if ( suffix == "_ground_truth") {
@@ -72,9 +47,38 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                          std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
             }
 
-            for (unsigned i = 0; i < xsamples.size(); i++) {
-                m_fs << "{:" << "frame_count" << xsamples[i] << "pixel_density" << ysamples[i] << "}";
+            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+
+                unsigned long POINTS = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).size();
+
+                for (unsigned points = 0; points < POINTS; points++) {
+
+                    std::pair<cv::Point2f, cv::Point2f> displacementPoints = std::make_pair(
+                    opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mean_object_displacement);
+
+                    m_fs << "{:" << "frame_count" <<
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).frame_count
+                            << "obj_index" <<
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).obj_index
+                            << "good_pixels" <<
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).goodPixels
+                            << "visible_pixels" <<
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).visiblePixels
+                            << "total_pixels" <<
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension.x * opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension.y
+                            << "stddev" <<
+                         (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).stddev_object_displacement)
+
+                         << "}";
+                    //xsamples.push_back(shapepoints.first);
+                    //ysamples.push_back(shapepoints.second);
+                    xsamples_dimension.push_back(displacementPoints.first);
+                    ysamples_displacement.push_back(displacementPoints.second);
+
+                }
+
             }
+
             m_fs << "]";
 
             // Send to plotter

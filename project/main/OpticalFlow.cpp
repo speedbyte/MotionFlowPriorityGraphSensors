@@ -368,6 +368,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             frame_count).size();
 
                     evaluationData.at(obj_index).frame_count = frame_count;
+                    evaluationData.at(obj_index).obj_index = obj_index;
 
                     if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
                             sensor_index).at(frame_count)) {
@@ -382,18 +383,20 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
                         evaluationData.at(obj_index).object_dimension = dimension;
-                        evaluationData.at(obj_index).object_displacement = list_of_current_objects.at(obj_index)->
+
+                        evaluationData.at(obj_index).mean_object_displacement = list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(frame_count).mean_displacement;
 
-                        if (m_opticalFlowName == "ground_truth") {
+                        evaluationData.at(obj_index).stddev_object_displacement = list_of_current_objects.at(obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(frame_count).stddev_displacement;
 
-                            evaluationData.at(obj_index).object_displacement = gt_displacement;
-                            evaluationData.at(obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
-                            evaluationData.at(obj_index).goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
-                        } else {
+                        evaluationData.at(obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+                        evaluationData.at(obj_index).goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
-                            evaluationData.at(obj_index).visiblePixels = CLUSTER_COUNT;
+                        if (m_opticalFlowName != "ground_truth") {
+
                             // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
                             evaluationData.at(obj_index).goodPixels = 0; // how many pixels in the found pixel are actually valid
 
