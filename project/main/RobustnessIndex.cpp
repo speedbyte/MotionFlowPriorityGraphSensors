@@ -78,34 +78,38 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
             m_fs << "]";
 
             // Send to plotter
-            if ( suffix == "_ground_truth") {
-                m_fs << (std::string("obj_displacement") + suffix) + std::string("_sensor_index_") + std::to_string(sensor_index)<< "[";
-            }
-            else {
-                m_fs << (std::string("obj_displacement") +
-                         std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
-            }
-
-            for (unsigned i = 0; i < xsamples_dimension.size(); i++) {
-                m_fs << "{:" << "objDim" << xsamples_dimension[i] << "objDisp" << ysamples_displacement[i] << "}";
-            }
-            m_fs << "]";
-
-
             if ( datafilter_index < 0 ) {
+
+                if (suffix == "_ground_truth") {
+                    m_fs << (std::string("obj_displacement") + suffix) + std::string("_sensor_index_") +
+                            std::to_string(sensor_index) << "[";
+                } else {
+                    m_fs << (std::string("obj_displacement") +
+                             std::string("_datafilter_") + std::to_string(datafilter_index) + suffix +
+                             std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
+                }
+
+                for (unsigned i = 0; i < xsamples_dimension.size(); i++) {
+                    m_fs << "{:" << "objDim" << xsamples_dimension[i] << "objDisp" << ysamples_displacement[i] << "}";
+                }
+                m_fs << "]";
+
 
                 std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
                 scenario_displacement_occurence = opticalFlow.getScenarioDisplacementOccurence().at(sensor_index);
 
-                m_fs << (std::string("scenario_displacement_occurence") + std::string("sensor_index_") + std::to_string(sensor_index) +
+                m_fs << (std::string("scenario_displacement_occurence") + std::string("sensor_index_") +
+                         std::to_string(sensor_index) +
                          std::string("_datafilter_") + std::to_string(datafilter_index) + suffix) << "[";
 
-                for ( auto it=scenario_displacement_occurence.begin(); it != scenario_displacement_occurence.end(); it++) {
+                for (auto it = scenario_displacement_occurence.begin();
+                     it != scenario_displacement_occurence.end(); it++) {
 
-                    if ( it->second > 1 ) {
+                    if (it->second > 1) {
                         std::cout << cv::Point2f(it->first.first, it->first.second) << " " << it->second << std::endl;
-                        m_fs << "{:" << "x" << it->first.first << "y" << it->first.second << "occurence" << it->second << "}";
+                        m_fs << "{:" << "x" << it->first.first << "y" << it->first.second << "occurence" << it->second
+                             << "}";
                     }
                 }
 

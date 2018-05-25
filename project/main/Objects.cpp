@@ -365,10 +365,10 @@ void Objects::generate_object_mean_lineparameters( std::string post_processing_a
 
                     if ( frame_count > 0 ) {
                         cv::Point2f next_pts = m_list_object_dataprocessing_mean_centroid_displacement.at(datafilter_index).at
-                                (sensor_index).at(frame_count).first;
+                                (sensor_index).at(frame_count).mean_pts;
                         cv::Point2f mean_displacement_vector =
                                 m_list_object_dataprocessing_mean_centroid_displacement.at(datafilter_index).at
-                                        (sensor_index).at(frame_count).second;
+                                        (sensor_index).at(frame_count).mean_displacement;
 
                         float m, c;
                         //Invert Y co-ordinates to match Cartesian co-ordinate system. This is just for the line angle and

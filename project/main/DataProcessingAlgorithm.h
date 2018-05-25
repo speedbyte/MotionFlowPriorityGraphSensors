@@ -12,7 +12,7 @@ class DataProcessingAlgorithm {
 protected:
 
     std::string m_algoName;
-    std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > m_sensor_multiframe_dataprocessing_centroid_displacement;
+    std::vector<std::vector<OBJECTS_MEAN_STDDEV > > m_sensor_multiframe_dataprocessing_centroid_displacement;
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_sensor_multiframe_dataprocessing_stencil_point_displacement;
 
 public:
@@ -22,12 +22,12 @@ public:
     }
     void common(Objects *objects);
 
-    virtual void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) {
+    virtual void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, std::vector<OBJECTS_MEAN_STDDEV> &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) {
         std::cout << "not implemented" << std::endl;
         throw;
     }
 
-    const std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &get_object_dataprocessing_mean_centroid_displacement() const {
+    const std::vector<std::vector<OBJECTS_MEAN_STDDEV > > &get_object_dataprocessing_mean_centroid_displacement() const {
         return m_sensor_multiframe_dataprocessing_centroid_displacement;
     }
 
@@ -47,7 +47,7 @@ public:
     RankedMean() : DataProcessingAlgorithm("ranked mean") {}
 
     void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                       std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
+                       std::vector<OBJECTS_MEAN_STDDEV> &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
 };
 
 
@@ -60,7 +60,7 @@ public:
     VotedMean() : DataProcessingAlgorithm("voted mean") {}
 
     void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                       std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
+                       std::vector<OBJECTS_MEAN_STDDEV> &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
 };
 
 
@@ -71,7 +71,7 @@ public:
     SimpleAverage() : DataProcessingAlgorithm("simple average") {}
 
     void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                       std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
+                       std::vector<OBJECTS_MEAN_STDDEV> &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
 };
 
 
@@ -82,7 +82,7 @@ public:
     MovingAverage() : DataProcessingAlgorithm("moving average") {}
 
     void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                       std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
+                       std::vector<OBJECTS_MEAN_STDDEV> &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
 };
 
 
@@ -93,7 +93,7 @@ public:
     NoAlgorithm() : DataProcessingAlgorithm("no algorithm") {}
 
     void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                 std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
+                 std::vector<OBJECTS_MEAN_STDDEV> &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
 };
 
 class SensorFusion : public DataProcessingAlgorithm {
@@ -103,7 +103,7 @@ public:
     SensorFusion() : DataProcessingAlgorithm("sensor fusion") {}
 
     void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                       std::vector<std::pair<cv::Point2f, cv::Point2f> > &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
+                       std::vector<OBJECTS_MEAN_STDDEV> &multiframe_centroid_displacement, std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multiframe_dataprocessing_displacement) override;
 };
 
 

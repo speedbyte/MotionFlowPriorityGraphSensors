@@ -181,8 +181,8 @@ void mahalanobis() {
 void meanStdDeviation() {
     std::vector<int> m0(4),m1(6);
 
-    cv::randu(m0, 0, 4);
-    cv::randu(m1, 0, 4);
+    cv::randu(m0, 1, 1);
+    cv::randn(m1, 0, 4);
 
     cv::Scalar mean, stddev;
     std::copy(m0.begin(), m0.end(), std::ostream_iterator<float>(std::cout, " "));
@@ -192,7 +192,7 @@ void meanStdDeviation() {
 
     cv::meanStdDev(m0,mean,stddev);  // Automatically gives 4 channels.
     std::cout << "Mean " << mean << " Std Dev " << stddev << std::endl;
-    cv::meanStdDev(m0,mean,stddev);  // Automatically gives 4 channels.
+    cv::meanStdDev(m1,mean,stddev);  // Automatically gives 4 channels.
     std::cout << "Mean " << mean << " Std Dev " << stddev << std::endl;
 }
 
@@ -493,11 +493,11 @@ int main ( int argc, char *argv[]) {
     std::cout << "\ncalcCovarMatrix----------------------------------------------" << std::endl;
     //calcCovarMatrix();
     std::cout << "\nsolveLinear----------------------------------------------" << std::endl;
-    solveLinear();
+    //solveLinear();
     std::cout << "\nsolvePoly----------------------------------------------" << std::endl;
     //solvePoly();
     std::cout << "\nmean and std dev----------------------------------------------" << std::endl;
-    //meanStdDeviation();
+    meanStdDeviation();
     std::cout << "\nlinearPolar----------------------------------------------" << std::endl;
     //linearPolar();
     std::cout << "\nmahalonobis----------------------------------------------" << std::endl;
@@ -507,7 +507,7 @@ int main ( int argc, char *argv[]) {
     std::cout << "\nlinear least square----------------------------------------------" << std::endl;
     //linearLeastSquare();
     std::cout << "\nangle----------------------------------------------" << std::endl;
-    angle_and_magnitude()
+    //angle_and_magnitude()
 
 
 

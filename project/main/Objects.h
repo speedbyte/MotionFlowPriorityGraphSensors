@@ -9,6 +9,16 @@
 #include <opencv2/core/types.hpp>
 #include "ObjectMetaData.h"
 
+
+typedef struct {
+
+    cv::Point2f mean_pts;  // pixels that are visible according to the algorithm. In case of ground truth, all pixels are visible
+    cv::Point2f mean_displacement;  // subset of visible pixels, and are within a tolerance. In case of ground truth, this is equsl to visiblePixel
+    cv::Point2f stddev_pts;
+    cv::Point2f stddev_displacement;
+
+} OBJECTS_MEAN_STDDEV;
+
 class Objects {
 
 private:
@@ -33,7 +43,7 @@ protected:
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_object_edge_point_displacement;
 
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+    std::vector<std::vector<std::vector<OBJECTS_MEAN_STDDEV> > >
             m_list_object_dataprocessing_mean_centroid_displacement;
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >
@@ -80,7 +90,7 @@ public:
         return m_objectName;
     }
 
-    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_list_object_dataprocessing_mean_centroid_displacement() const {
+    const std::vector<std::vector<std::vector<OBJECTS_MEAN_STDDEV > > > &get_list_object_dataprocessing_mean_centroid_displacement() const {
         return m_list_object_dataprocessing_mean_centroid_displacement;
     }
 
