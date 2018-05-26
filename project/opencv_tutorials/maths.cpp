@@ -4,8 +4,8 @@
 #include <iostream>
 #include <gnuplot-iostream/gnuplot-iostream.h>
 #include "opencv2/opencv.hpp"
-#include <iostream>
-#include <math.h>
+//#include <cmath>
+#include <cassert>
 
 void fitLine() {
 
@@ -19,7 +19,7 @@ void fitLine() {
             float a        = (float) rng.uniform(0., 200.);
             float b        = (float) rng.uniform(0., 40.);
             float angle    = (float) rng.uniform(0., CV_PI);
-            float cos_a    = cos(angle), sin_a = sin(angle);
+            float cos_a    = std::cos(angle), sin_a = std::sin(angle);
             cv::Point pt1, pt2;
             std::vector< cv::Point > points( count );
             cv::Vec4f line;
@@ -119,8 +119,8 @@ void mahalanobis() {
         magnitude_real.push_back(0);
         magnitude_noise.push_back(0);
         // Noise
-        noise_x.push_back(1*cos(theta[i]*CV_PI/180.0)/(1.0+std::pow(sin(theta[i]*CV_PI/180.0), 2))) ;
-        noise_y.push_back(1*(cos(theta[i]*CV_PI/180.0)*sin(theta[i]*CV_PI/180.0))/(0.2+std::pow(sin
+        noise_x.push_back(1*std::cos(theta[i]*CV_PI/180.0)/(1.0+std::pow(std::sin(theta[i]*CV_PI/180.0), 2))) ;
+        noise_y.push_back(1*(std::cos(theta[i]*CV_PI/180.0)*std::sin(theta[i]*CV_PI/180.0))/(0.2+std::pow(sin
                                                                                                         (theta[i]*CV_PI/180.0)
                 , 2))) ;
         // Real
@@ -137,35 +137,35 @@ void mahalanobis() {
     cv::magnitude(realx,realy,magnitude_real);
     cv::magnitude(noise_x,noise_y,magnitude_noise);
 
-    cv::Mat M1(1,100,CV_32FC1),M2(1,100,CV_32FC1);
-    memcpy(M1.data, magnitude_real.data(), magnitude_real.size()*sizeof(float));
+    cv::Mat vec1(1,100,CV_32FC1),M2(1,100,CV_32FC1);
+    memcpy(vec1.data, magnitude_real.data(), magnitude_real.size()*sizeof(float));
     memcpy(M2.data, magnitude_noise.data(), magnitude_noise.size()*sizeof(float));
 
-    std::cout << "\nMagnitude Real\n" << M1;
+    std::cout << "\nMagnitude Real\n" << vec1;
     std::cout << "\nMagnitude Noise\n" << M2;
 
     cv::Mat samples(2,100,CV_32FC1);
-    M1.copyTo(samples.row(0)); // magnitude real
-    M1.copyTo(samples.row(1)); // magnitude noise
+    vec1.copyTo(samples.row(0)); // magnitude real
+    vec1.copyTo(samples.row(1)); // magnitude noise
 
     // Covariance of samples in magnitude_noise, and magnitude_real
-    cv::calcCovarMatrix(M1, covar, mean, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS);
+    cv::calcCovarMatrix(vec1, covar, mean, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS);
     icovar = covar.inv();
     std::cout << "\nmean\n" << mean << "\ncovar\n" << covar <<  "\nicovar\n" << icovar << std::endl;
 
     icovar.convertTo(icovar,CV_32FC1);
-    std::cout << M1.type() << " " << icovar.type();
+    std::cout << vec1.type() << " " << icovar.type();
 
-    assert(M1.type() == M2.type());
-    assert(M1.type() == icovar.type());
-    assert(M1.size() == M2.size());
-    //assert((M1.size().width*M1.size().height*M1.channels()) == icovar.rows);
+    assert(vec1.type() == M2.type());
+    assert(vec1.type() == icovar.type());
+    assert(vec1.size() == M2.size());
+    //assert((vec1.size().width*vec1.size().height*vec1.channels()) == icovar.rows);
 
     for ( int i = 0; i< 100; i++ ) {
-        dm.push_back(std::pow((M1.at<float>(0)-mean.at<float>(0)),2)*icovar);
+        dm.push_back(std::pow((vec1.at<float>(0)-mean.at<float>(0)),2)*icovar);
         xy_pts_dm.push_back(std::make_pair(realx[i],dm.at<float>(i)));
     }
-    //dm = cv::Mahalanobis(M1, M2, icovar);
+    //dm = cv::Mahalanobis(vec1, M2, icovar);
     //plot();
 
     Gnuplot gp;
@@ -179,21 +179,60 @@ void mahalanobis() {
 }
 
 void meanStdDeviation() {
-    std::vector<int> m0(4),m1(6);
 
-    cv::randu(m0, 1, 1);
-    cv::randn(m1, 0, 4);
+    std::vector<float> vec0(10),vec1(10);
 
-    cv::Scalar mean, stddev;
-    std::copy(m0.begin(), m0.end(), std::ostream_iterator<float>(std::cout, " "));
+
+    cv::randu(vec0, 0, 6);
+    cv::randn(vec1, 0, 4);
+
+    cv::Scalar mean1, stddev1;
+    cv::Scalar mean2, stddev2;
+    std::copy(vec0.begin(), vec0.end(), std::ostream_iterator<float>(std::cout, " "));
     std::cout << std::endl;
-    std::copy(m1.begin(), m1.end(), std::ostream_iterator<float>(std::cout, " "));
+    std::copy(vec1.begin(), vec1.end(), std::ostream_iterator<float>(std::cout, " "));
     std::cout << std::endl;
 
-    cv::meanStdDev(m0,mean,stddev);  // Automatically gives 4 channels.
-    std::cout << "Mean " << mean << " Std Dev " << stddev << std::endl;
-    cv::meanStdDev(m1,mean,stddev);  // Automatically gives 4 channels.
-    std::cout << "Mean " << mean << " Std Dev " << stddev << std::endl;
+    cv::meanStdDev(vec0,mean1,stddev1);  // Automatically gives 4 channels.
+    std::cout << "Mean " << mean1 << " Std Dev " << stddev1 << std::endl;
+    cv::meanStdDev(vec1,mean2,stddev2);  // Automatically gives 4 channels.
+    std::cout << "Mean " << mean2 << " Std Dev " << stddev2 << std::endl;
+
+    cv::Mat samples1(1, 10, CV_32FC1, vec0.data(), sizeof(float));
+    cv::Mat samples2(1, 10, CV_32FC1, vec1.data(), sizeof(float));
+
+    std::cout << samples1 << "\n" << samples2 << std::endl;
+
+    cv::Mat samples(2,10,CV_32FC1);
+    samples1.copyTo(samples.row(0));
+    samples2.copyTo(samples.row(1));
+
+//    samples << 2.0, 2.0, 2.0, 5.0, 6.0, 5.0, 7.0, 3.0, 4.0, 7.0,
+//               6.0, 4.0, 5.0, 3.0, 4.0, 6.0, 2.0, 5.0, 1.0, 3.0;//    1, 1, 1, 1, 1, 1, 1, 1, 1, 1;
+
+    // operator overloading is only valid for template type Mat
+    //samples <<
+    //        2,2,2,2,2,2,6,2,2,2;
+    //        //4,4,4,4,4,4,4,4,4,5;
+
+    cv::Mat cov, mu;
+
+    // I dont need a double precision
+    calcCovarMatrix(samples, cov, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS, CV_32FC1 );
+
+    // SCALE - divides by sample size, that is 10 in the above sample. ROWS means that the dataset elements are in columns
+
+    std::cout << samples << std::endl;
+    std::cout << "cov: " << std::endl;
+    std::cout << cov << std::endl;
+
+    std::cout << "mu: " << std::endl;
+    std::cout << mu << std::endl;
+
+    assert(((std::floor(mean1(0)*10000))/10000.0) == ((std::floor(mu.at<float>(0,0)*10000))/10000.0));
+
+
+
 }
 
 void cartToPolar() {

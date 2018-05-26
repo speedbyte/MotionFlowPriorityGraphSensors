@@ -13,7 +13,7 @@ dict_datafilters = {
     "datafilter_3": "datafilter_3",
 }
 
-datafilter_list = [ "0", "2" ]
+datafilter_list = [ "0", ]
 
 dict_environment = {
     "blue_sky" : 0,
@@ -43,7 +43,7 @@ environment_list = ["blue_sky",]
 
 number_of_sensors = 1
 
-step_list = [2]
+step_list = [5]
 
 fps_list = ["30", "15", "10", "7.5"]#night
 fps_list = ["30",]
@@ -68,10 +68,10 @@ template_of_pixel_density_gt = [
     "pixel_density_ground_truth_",
 ]
 template_of_pixel_density = [
-    "pixel_density_datafilter_0results_FB_",
-    "pixel_density_datafilter_1results_FB_",
-    "pixel_density_datafilter_2results_FB_",
-    "pixel_density_datafilter_3results_FB_",
+    "pixel_density_datafilter_0results_",
+    "pixel_density_datafilter_1results_",
+    "pixel_density_datafilter_2results_",
+    "pixel_density_datafilter_3results_",
 ]
 
 template_of_collision_points_gt = [
@@ -79,10 +79,10 @@ template_of_collision_points_gt = [
 ]
 
 template_of_obj_displacement = [
-    "obj_displacement_datafilter_0results_FB_",
-    "obj_displacement_datafilter_1results_FB_",
-    "obj_displacement_datafilter_2results_FB_",
-    "obj_displacement_datafilter_3results_FB_",
+    "obj_displacement_datafilter_0results_",
+    "obj_displacement_datafilter_1results_",
+    "obj_displacement_datafilter_2results_",
+    "obj_displacement_datafilter_3results_",
 
 ]
 
@@ -92,17 +92,17 @@ template_of_obj_displacement_gt = [
 
 template_of_collision = [
 
-    "collision_points_datafilter_0results_FB_",
-    "collision_points_datafilter_1results_FB_",
-    "collision_points_datafilter_2results_FB_",
-    "collision_points_datafilter_3results_FB_",
+    "collision_points_datafilter_0results_",
+    "collision_points_datafilter_1results_",
+    "collision_points_datafilter_2results_",
+    "collision_points_datafilter_3results_",
 
 ]
 
 
 template_of_displacement_occurence = [
     "scenario_displacement_occurence_sensor_index_1_datafilter_0_ground_truth",
-    "scenario_displacement_occurence_sensor_index_1_datafilter_0results_FB_none_",
+    "scenario_displacement_occurence_sensor_index_1_datafilter_0results_none_",
 ]
 
 color_of_displacement_occurence = ["blue", "red"]

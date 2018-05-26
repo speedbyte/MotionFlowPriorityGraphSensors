@@ -364,7 +364,8 @@ if __name__ == '__main__':
 
     collectPlots = list()
 
-    for x in [0,1,2]:
+    #for x in [0,1]:
+    for x in [0]:
 
         thread_pixel = None
         thread_deviation = None
