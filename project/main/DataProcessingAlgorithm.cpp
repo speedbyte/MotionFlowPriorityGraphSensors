@@ -46,7 +46,7 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
                 /* ------------------------------------------------------------------------------ */
 
-                std::cout << "mean_displacement and mean stddev " + m_algoName << multiframe_centroid_displacement.at(frame_count).mean_displacement << multiframe_centroid_displacement.at(frame_count).stddev_displacement<< std::endl;
+                //std::cout << "mean_displacement and mean stddev " + m_algoName << multiframe_centroid_displacement.at(frame_count).mean_displacement << multiframe_centroid_displacement.at(frame_count).stddev_displacement<< std::endl;
 
                 if (frame_count > 0) {
                     assert(std::abs(multiframe_centroid_displacement.at(frame_count).mean_displacement.x)> 0);
@@ -214,7 +214,7 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
         mean(3) = 0;
     }
 
-    std::cout << "max_voted_x " << mean(2) << " max_voted_y " << mean(3) << std::endl;
+    //std::cout << "max_voted_x " << mean(2) << " max_voted_y " << mean(3) << std::endl;
 
     //std::cout << "max_voted_displacement_x " << max_voted_displacement_x << " max_voted_displacement_y " << max_voted_displacement_y << std::endl;
     // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm

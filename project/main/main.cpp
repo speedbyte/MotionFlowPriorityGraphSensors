@@ -353,12 +353,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             for (ushort stepSize = 5; stepSize <= 5; stepSize += 4) {
 
-                ptr_list_of_simulated_objects_base.clear();
-                std::vector<SimulatedObjects> list_of_simulated_objects_base;
-                std::vector<Objects *> ptr_list_of_simulated_objects;
-
                 // Generate Algorithm data flow --------------------------------------
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+
+                    ptr_list_of_simulated_objects_base.clear();
+                    std::vector<SimulatedObjects> list_of_simulated_objects_base;
+                    std::vector<Objects *> ptr_list_of_simulated_objects;
 
                     if ( algorithmIndex == 0 ) {
 
@@ -371,55 +371,53 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     }
 
-                    if (cpp_dataset.execute || vires_dataset.execute) {
+                    std::vector<SimulatedObjects> list_of_simulated_objects;
+                    // just to be sure, all lists are empty
+                    list_of_simulated_objects.clear();
+                    ptr_list_of_simulated_objects.clear();
 
-                        std::vector<SimulatedObjects> list_of_simulated_objects;
-                        // just to be sure, all lists are empty
-                        list_of_simulated_objects.clear();
-                        ptr_list_of_simulated_objects.clear();
+                    SimulatedObjects::SimulatedobjectCurrentCount = 0; // start from 0 for each list_of_algorithm
 
-                        SimulatedObjects::SimulatedobjectCurrentCount = 0; // start from 0 for each list_of_algorithm
+                    for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
+                        //two objects
+                        std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
+                                obj_index).get_object_extrapolated_visibility();
 
-                        for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
-                            //two objects
-                            std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
-                                    obj_index).get_object_extrapolated_visibility();
-
-                            SimulatedObjects objects(
-                                    "simulated_" + list_of_gt_objects_base.at(obj_index).getObjectName(), extrapolated_visibility);
-                            list_of_simulated_objects.push_back(objects);  // mke two new objects
-                        }
-
-                        // push the objects into the pointer. The pointer here will contain two elements.
-                        for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                            ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
-                        }
-
-                        if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
-
-                            ptr_list_of_algorithm_flow[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
-                            // TODO - do something for stepSize.. its redundant here.
-                            ptr_list_of_algorithm_flow[env_index]->run_optical_flow_algorithm(video_frames, environment_list[env_index], fps);
-                            ptr_list_of_algorithm_flow[env_index]->generate_flow_frames();
-
-                            if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
-                                for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                                    list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
-                                    ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_index));
-                                }
-                            }
-
-                            for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
-                                list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement("algorithm");
-                            }
-
-                            //ptr_list_of_algorithm_flow[env_index].generate_collision_points();
-                            ptr_list_of_algorithm_flow[env_index]->generate_metrics_optical_flow_algorithm();
-                            //ptr_list_of_algorithm_flow[env_index].visualiseStencilAlgorithms();
-                        }
+                        SimulatedObjects objects(
+                                "simulated_" + list_of_gt_objects_base.at(obj_index).getObjectName(), extrapolated_visibility);
+                        list_of_simulated_objects.push_back(objects);  // mke two new objects
                     }
-                    auto position = ptr_list_of_algorithm_flow.at(algorithmIndex)->getResultOrdner().find('/');
-                    std::string suffix = ptr_list_of_algorithm_flow.at(algorithmIndex)->getResultOrdner().replace(position, 1, "_");
+
+                    // push the objects into the pointer. The pointer here will contain two elements.
+                    for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                        ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
+                    }
+
+                    if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
+
+                        ptr_list_of_algorithm_flow[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
+                        // TODO - do something for stepSize.. its redundant here.
+                        ptr_list_of_algorithm_flow[env_index]->run_optical_flow_algorithm(video_frames, fps);
+                        //ptr_list_of_algorithm_flow[env_index]->generate_flow_frames();
+
+                        if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
+                            for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                                list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
+                                ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_index));
+                            }
+                        }
+
+                        for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
+                            list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement("algorithm");
+                        }
+
+                        //ptr_list_of_algorithm_flow[env_index].generate_collision_points();
+                        ptr_list_of_algorithm_flow[env_index]->generate_metrics_optical_flow_algorithm();
+                        //ptr_list_of_algorithm_flow[env_index].visualiseStencilAlgorithms();
+                    }
+
+                    auto position = ptr_list_of_algorithm_flow.at(env_index)->getResultOrdner().find('/');
+                    std::string suffix = ptr_list_of_algorithm_flow.at(env_index)->getResultOrdner().replace(position, 1, "_");
 
                     time_map["algorithm_flow_" + suffix ] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
                     tic = steady_clock::now();
@@ -430,8 +428,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                             //vectorRobustness.generateVectorRobustness(*ptr_list_of_algorithm_flow[env_index], *ptr_list_of_algorithm_flow[0]);
                     }
 
-                    time_map["robustness_" + suffix] = (duration_cast<milliseconds>(
-                            steady_clock::now() - tic).count());
+                    time_map["robustness_" + suffix] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
                     tic = steady_clock::now();
 
                 }
@@ -451,21 +448,22 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
             }
 
-            fs << "time_map" << "[";
-            int total = 0;
-            for (auto &n : time_map) {
-                fs << "{:" << n.first << n.second << "}";
-                std::cout << n.first << " " << n.second << std::endl;
-                total += n.second;
-            }
-
-            time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
-            fs << "{:" << "total" << time_map["total"] << "}";
-            fs << "]";
-            std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;
             //system("python ../../main_python/motionflow_graphs.py");
 
         }
+
+        fs << "time_map" << "[";
+        int total = 0;
+        for (auto &n : time_map) {
+            fs << "{:" << n.first << n.second << "}";
+            std::cout << n.first << " " << n.second << std::endl;
+            total += n.second;
+        }
+
+        time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
+        fs << "{:" << "total" << time_map["total"] << "}";
+        fs << "]";
+        std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;
 
         fs.release();
     }
@@ -503,7 +501,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             // The ground truth generate_flow_frame and image is already available from the base dataset. Hence only results can be
             // calculated here.
 
-            algo->run_optical_flow_algorithm(video_frames, "blue_sky", 30);
+            algo->run_optical_flow_algorithm(video_frames, 30);
 
             //make_video_from_regex((boost::filesystem::path)KITTI_FLOW_DATASET_PATH, "data/stereo_flow/image_02/");
             //make_video_from_regex((boost::filesystem::path)KITTI_RAW_DATASET_PATH,"data/2011_09_28_drive_0016_sync/image_02/data/");
