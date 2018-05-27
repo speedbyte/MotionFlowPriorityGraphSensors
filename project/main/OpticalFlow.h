@@ -52,7 +52,7 @@ protected:
 
     std::vector<Objects *> &m_ptr_list_gt_objects;
 
-    std::vector<Objects *> &m_ptr_list_simulated_objects_base;
+    std::vector<std::unique_ptr<Objects >> &m_ptr_list_simulated_objects_base;
 
     std::vector<Objects *> &m_ptr_list_simulated_objects;
 
@@ -77,7 +77,7 @@ protected:
 
 public:
 
-    OpticalFlow( std::string weather, std::string opticalFlowName, std::vector<Objects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects *> &ptr_list_simulated_objects, ushort stepSize ) : m_weather(weather), m_opticalFlowName(opticalFlowName), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
+    OpticalFlow( std::string weather, std::string opticalFlowName, std::vector<Objects *> &ptr_list_gt_objects, std::vector<std::unique_ptr<Objects>> &ptr_list_simulated_objects_base, std::vector<Objects *> &ptr_list_simulated_objects, ushort stepSize ) : m_weather(weather), m_opticalFlowName(opticalFlowName), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 
     const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > & getCollisionPoints () const {
         return m_list_sensor_collision_points;

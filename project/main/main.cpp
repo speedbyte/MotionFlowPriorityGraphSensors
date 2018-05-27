@@ -239,7 +239,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         std::vector<GroundTruthObjects> list_of_gt_objects_base;
         std::vector<Sensors> list_of_gt_sensors_base;
 
-        std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
+        std::vector<Objects *> ptr_list_of_gt_objects_base;
+        std::vector<std::unique_ptr<Objects>> ptr_list_of_simulated_objects_base;
 
         PixelRobustness pixelRobustness(fs);
         VectorRobustness vectorRobustness(fs);
@@ -352,12 +353,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::vector<std::unique_ptr<AlgorithmFlow>> ptr_list_of_algorithm_flow;
 
             for (ushort stepSize = 5; stepSize <= 5; stepSize += 4) {
-
+                ptr_list_of_simulated_objects_base.clear();
+                std::vector<SimulatedObjects> list_of_simulated_objects_base;
                 // Generate Algorithm data flow --------------------------------------
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-                    ptr_list_of_simulated_objects_base.clear();
-                    std::vector<SimulatedObjects> list_of_simulated_objects_base;
                     std::vector<Objects *> ptr_list_of_simulated_objects;
 
                     if ( algorithmIndex == 0 ) {
@@ -385,7 +385,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         SimulatedObjects objects(
                                 "simulated_" + list_of_gt_objects_base.at(obj_index).getObjectName(), extrapolated_visibility);
-                        list_of_simulated_objects.push_back(objects);  // mke two new objects
+                        list_of_simulated_objects.push_back(objects);  // mke new objects
                     }
 
                     // push the objects into the pointer. The pointer here will contain two elements.
@@ -403,8 +403,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                             for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
                                 list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
-                                ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_index));
+                                ptr_list_of_simulated_objects_base.push_back(std::make_unique<SimulatedObjects>((list_of_simulated_objects_base.at(obj_index))));
+                                assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
                             }
+                        }
+
+                        for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                            assert(list_of_simulated_objects_base.at(obj_index).getObjectId() == obj_index);
+                            assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
                         }
 
                         for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
@@ -493,7 +499,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
 
-            std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
+            std::vector<Objects *> ptr_list_of_gt_objects_base;
+            std::vector<std::unique_ptr<Objects>> ptr_list_of_simulated_objects_base;
             std::vector<Objects *> ptr_list_of_simulated_objects;
 
             Farneback fback("blue_sky", fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1);

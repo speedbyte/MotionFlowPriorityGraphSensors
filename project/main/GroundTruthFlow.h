@@ -28,8 +28,8 @@ private:
 
 public:
 
-    GroundTruthFlow( std::string weather, std::vector<Objects *> &list_gt_objects, std::vector<Objects *> &list_simulated_objects, std::vector<Objects *> &list_simulated_objects_base ) :
-            OpticalFlow(weather, "ground_truth", list_gt_objects, list_simulated_objects, list_simulated_objects_base, 0) {
+    GroundTruthFlow( std::string weather, std::vector<Objects *> &list_gt_objects, std::vector<std::unique_ptr<Objects>> &list_simulated_objects_base, std::vector<Objects *> &list_gt_objects_base ) :
+            OpticalFlow(weather, "ground_truth", list_gt_objects, list_simulated_objects_base, list_gt_objects_base, 0) {
     }
 
     void generate_edge_images();
