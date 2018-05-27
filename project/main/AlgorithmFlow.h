@@ -28,14 +28,14 @@ private:
 
 public:
 
-    AlgorithmFlow( ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : mAlgo(algo),
-    OpticalFlow(opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize) {
+    AlgorithmFlow( std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : mAlgo(algo),
+    OpticalFlow(weather, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize) {
 
     }
 
     void prepare_directories(std::string noise, ushort fps, ushort stepSize) override ;
 
-    void run_optical_flow_algorithm(FRAME_TYPES frame_types, std::string  noise, ushort fps);
+    void run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort fps);
 
     virtual void execute(const cv::Mat &prevGray, const cv::Mat &curGray, std::vector<cv::Point2f> &frame_prev_pts, std::vector<cv::Point2f> &frame_next_pts, std::vector<cv::Point2f> &displacement_array, bool &needToInit) {
         std::cout << "cannot be called" << std::endl;
@@ -50,7 +50,7 @@ private:
 
 public:
 
-    Farneback(ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
+    Farneback(std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( weather, algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
 
         flowFrame.create(Dataset::getFrameSize(), CV_32FC2);
         flowFrame = cv::Scalar_<float>(0,0); //  the flow frame consists of next iterations
@@ -136,7 +136,7 @@ private:
 
 public:
 
-    LukasKanade(ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
+    LukasKanade(std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( weather, algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
 
     }
 

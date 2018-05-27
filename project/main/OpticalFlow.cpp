@@ -63,13 +63,13 @@ void OpticalFlow::prepare_directories_common() {
 }
 
 
-void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) {
+void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility) {
 
 
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> >  frame_stencil_displacement;
-        std::vector<bool>  frame_visibility;
+        std::vector<bool>  frame_stencil_visibility;
 
         if ( m_resultordner == "/ground_truth") {
             frame_next_pts_array.clear();
@@ -115,31 +115,46 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
 
                         frame_stencil_displacement.push_back(
                                 std::make_pair(cv::Point2f(columnBegin + j, rowBegin + k), gt_displacement));
-                        frame_visibility.push_back(visibility);
+                        frame_stencil_visibility.push_back(visibility);
 
                     }
                 }
             }
 
             else {
-                // 2nd method
-                // TODO scratch : This is for the base model for algorithms
-                for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
-                    for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
-                        for ( ushort next_pts_index = 0; next_pts_index < frame_next_pts_array.size(); next_pts_index++ ) {
-                            if ( (( roi_offset.x + col_index ) == std::round(frame_next_pts_array.at(next_pts_index).x)) &&
-                                 (( roi_offset.y + row_index ) == std::round(frame_next_pts_array.at(next_pts_index).y))) {
+                if (  1==1) {
 
-                                cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
+                    assert(m_ptr_list_simulated_objects.size() == m_ptr_list_gt_objects.size());
+                    // 2nd method
+                    // TODO scratch : This is for the base model for algorithms
+                    for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
+                        for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
-                                frame_stencil_displacement.push_back(
-                                        std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index), algo_displacement));
-                                frame_visibility.push_back(visibility);
+                            for (ushort next_pts_index = 0;
+                                 next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
+                                if (((roi_offset.x + col_index) ==
+                                     std::round(frame_next_pts_array.at(next_pts_index).x)) &&
+                                    ((roi_offset.y + row_index) ==
+                                     std::round(frame_next_pts_array.at(next_pts_index).y))) {
 
+                                    cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
+
+                                    frame_stencil_displacement.push_back(
+                                            std::make_pair(
+                                                    cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
+                                                    algo_displacement));
+                                    frame_stencil_visibility.push_back(visibility);
+
+                                }
                             }
                         }
                     }
+                }
+                else {
+                    assert(m_ptr_list_simulated_objects.size() == m_ptr_list_simulated_objects_base.size());
+                    std::cout << "making a stencil on the basis of base algorithm object " << m_ptr_list_simulated_objects_base.at(obj_index)->getObjectId() << std::endl;
+
                 }
             }
 
@@ -153,13 +168,13 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
         else {
 
             frame_stencil_displacement.push_back(std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0)));
-            frame_visibility.push_back(false);
+            frame_stencil_visibility.push_back(false);
 
 
         }
 
         multiframe_stencil_displacement.at(obj_index).push_back(frame_stencil_displacement);
-        multiframe_visibility.at(obj_index).push_back(frame_visibility);
+        multiframe_stencil_visibility.at(obj_index).push_back(frame_stencil_visibility);
 
     }
 

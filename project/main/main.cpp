@@ -241,8 +241,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
 
-        GroundTruthFlow gt_flow(ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                                ptr_list_of_gt_objects_base);
+        PixelRobustness pixelRobustness(fs);
+        VectorRobustness vectorRobustness(fs);
+        SensorFusionRobustness sensorFusionRobustness(fs);
 
         for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
@@ -299,6 +300,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 list_of_gt_objects = list_of_gt_objects_base;
                 ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
 
+                GroundTruthFlow gt_flow(environ[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_gt_objects_base);
+
                 // Generate Groundtruth data flow --------------------------------------
                 if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
 
@@ -319,34 +322,34 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     //gt_flow.visualiseStencilAlgorithms();
 
                 }
+
+                if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
+
+                    time_map["groundtruth_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
+                    tic = steady_clock::now();
+
+
+                    std::vector<AlgorithmFlow> dummy;
+
+                    if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
+
+                        pixelRobustness.generatePixelRobustness(gt_flow, dummy[0]);
+                        //vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
+                    }
+
+                    time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
+                    tic = steady_clock::now();
+
+                }
             }
         }
 
-        time_map["groundtruth_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
-        tic = steady_clock::now();
-
-
-        std::vector<AlgorithmFlow> dummy;
-
-        PixelRobustness pixelRobustness(fs);
-        VectorRobustness vectorRobustness(fs);
-        SensorFusionRobustness sensorFusionRobustness(fs);
-
-
-        if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
-
-            pixelRobustness.generatePixelRobustness(gt_flow, dummy[0]);
-            //vectorRobustness.generateVectorRobustness(gt_flow, dummy[0]);
-        }
-
-        time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
-        tic = steady_clock::now();
 
         ushort fps = 30;
 
-        for (ushort algorithmIndex = 0; algorithmIndex < 1; algorithmIndex++) {
+        for (ushort algorithmIndex = 0; algorithmIndex < 2; algorithmIndex++) {
 
-            std::vector<AlgorithmFlow *> ptr_list_of_algorithm_flow;
+            std::vector<std::unique_ptr<AlgorithmFlow>> ptr_list_of_algorithm_flow;
 
             for (ushort stepSize = 5; stepSize <= 5; stepSize += 4) {
 
@@ -354,18 +357,18 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 std::vector<SimulatedObjects> list_of_simulated_objects_base;
                 std::vector<Objects *> ptr_list_of_simulated_objects;
 
-                LukasKanade lkanade(lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
-                Farneback fback(fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
-
-
                 // Generate Algorithm data flow --------------------------------------
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
                     if ( algorithmIndex == 0 ) {
-                        ptr_list_of_algorithm_flow.push_back(&lkanade);
+
+                        ptr_list_of_algorithm_flow.push_back(std::make_unique<LukasKanade>(environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+
                     }
                     else if ( algorithmIndex == 1 ) {
-                        ptr_list_of_algorithm_flow.push_back(&fback);
+
+                        ptr_list_of_algorithm_flow.push_back(std::make_unique<Farneback>(environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+
                     }
 
                     if (cpp_dataset.execute || vires_dataset.execute) {
@@ -495,8 +498,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::vector<Objects *> ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base;
             std::vector<Objects *> ptr_list_of_simulated_objects;
 
-            Farneback fback(fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base,
-                            ptr_list_of_simulated_objects, 1);
+            Farneback fback("blue_sky", fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1);
             AlgorithmFlow *algo = &fback;
             // The ground truth generate_flow_frame and image is already available from the base dataset. Hence only results can be
             // calculated here.

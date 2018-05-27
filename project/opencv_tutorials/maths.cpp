@@ -182,7 +182,6 @@ void meanStdDeviation() {
 
     std::vector<float> vec0(10),vec1(10);
 
-
     cv::randu(vec0, 0, 6);
     cv::randn(vec1, 0, 4);
 
@@ -225,11 +224,52 @@ void meanStdDeviation() {
     std::cout << samples << std::endl;
     std::cout << "cov: " << std::endl;
     std::cout << cov << std::endl;
-
     std::cout << "mu: " << std::endl;
     std::cout << mu << std::endl;
 
     assert(((std::floor(mean1(0)*10000))/10000.0) == ((std::floor(mu.at<float>(0,0)*10000))/10000.0));
+
+    std::cout << "-------------------" << std::endl;
+    cv::Mat abc(2,3,CV_32FC2);
+    std::cout << abc.isContinuous() << std::endl;
+    cv::randu(abc, 0, 10);
+    std::cout << abc << std::endl;
+
+    cv::Mat newshape = abc.reshape(1,2);
+
+    std::cout << newshape << std::endl;
+
+    calcCovarMatrix(newshape, cov, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS, CV_32FC1);
+
+    std::cout << "cov: " << std::endl;
+    std::cout << cov << std::endl;
+    std::cout << "mu: " << std::endl;
+    std::cout << mu << std::endl;
+
+    // point vector displacement x and y point2f. so its a 2 channel cluster_size. convert this 2 channel into 1 channel.
+
+    std::vector<cv::Point2f> vec0_pts(10),vec1_pts(10);
+
+    cv::randu(vec0_pts, 0, 6);
+    cv::randn(vec1_pts, 0, 4);
+
+    cv::Mat samples_disp_bluesky(10, 1, CV_32FC2, vec0_pts.data());
+    cv::Mat samples_disp_heavysnow(10, 1, CV_32FC2, vec0_pts.data());
+
+    cv::Mat combine(10,2,CV_32FC2);
+    samples_disp_bluesky.copyTo(combine.col(0));
+    samples_disp_heavysnow.copyTo(combine.col(1));
+
+    cv::Mat newsample_pts = combine.reshape(1,10);
+
+    std::cout << newsample_pts<< std::endl;
+
+    calcCovarMatrix(newsample_pts, cov, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
+
+    std::cout << "cov: " << std::endl;
+    std::cout << cov << std::endl;
+    std::cout << "mu: " << std::endl;
+    std::cout << mu << std::endl;
 
 
 

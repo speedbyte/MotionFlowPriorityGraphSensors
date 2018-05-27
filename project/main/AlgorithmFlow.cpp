@@ -50,7 +50,7 @@ void AlgorithmFlow::prepare_directories(std::string noise, ushort fps, ushort st
     }
 }
 
-void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, std::string noise, ushort fps ) {
+void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort fps ) {
 
     char sensor_index_folder_suffix[50];
 
