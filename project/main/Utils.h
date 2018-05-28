@@ -345,22 +345,25 @@ public:
 
     }
 
-    static void getCovarMatrix(cv::Mat_<cv::Vec2f> &samples, cv::Mat &cov, cv::Scalar mean ) {
+    static void getCovarMatrix(cv::Mat_<cv::Vec4f> &samples, cv::Mat &cov_pts, cv::Mat &cov_displacement, cv::Scalar mean ) {
 
-        ushort CLUSTER_SIZE = samples.cols;
-
-        cv::Scalar stddev;
         cv::Mat mu;
 
         std::cout << "mean " << mean << "\n";
 
         samples = samples - mean;
 
-        cv::Mat samples_rescale = samples.reshape(1,CLUSTER_SIZE);
+        cv::Mat samples_rescale = samples.reshape(1, samples.cols);
 
-        calcCovarMatrix(samples_rescale, cov, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
+        cv::Mat roi_pts = samples_rescale.colRange(0,2);
+        //std::cout << roi_displacement << std::endl;
+        calcCovarMatrix(roi_pts, cov_pts, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
 
-        std::cout << "cov: " << cov << std::endl;
+        cv::Mat roi_displacement = samples_rescale.colRange(2,4);
+        //std::cout << roi_displacement << std::endl;
+        calcCovarMatrix(roi_displacement, cov_displacement, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
+
+        std::cout << "cov: " << cov_displacement << std::endl;
 
     }
 

@@ -173,7 +173,7 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
 
 
     cv::Scalar mean, stddev;
-    cv::Mat_<cv::Vec2f> samples(1, CLUSTER_SIZE, CV_32FC2);
+    cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
 
     std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
 
@@ -187,7 +187,7 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
         cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
                 sensor_index).at(frame_count).at(cluster_index).second;
 
-        samples.at<cv::Vec2f>(0, cluster_index) = {gt_displacement.x, gt_displacement.y};
+        samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
 
         // get samples from template
         data_x.push_back(std::round(gt_displacement.x * 1000) / 1000);
@@ -199,11 +199,6 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
         frame_dataprocessing_displacement.push_back(std::make_pair(pts,cv::Point2f(mean(2), mean(3))));
 
     }
-
-    cv::Mat covar;
-    cv::meanStdDev(samples, mean, stddev);
-
-    Utils::getCovarMatrix(samples, covar, mean);
 
     std::vector<cv::Mat> histogram_x, histogram_y;
 
@@ -291,6 +286,10 @@ void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort frame_cou
     }
 
     cv::meanStdDev(samples, mean, stddev);
+
+    cv::Mat covar_pts, covar_displacement;
+    // Covariance matrix of the displacement dataset
+    Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean);
 
     //cv::calcCovarMatrix(samples, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
 

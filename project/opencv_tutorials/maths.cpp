@@ -308,7 +308,8 @@ void maha_points() {
     cv::Mat samples_blue_rescale = samples_blue.reshape(1,SIZE);
     cv::Mat samples_snow_rescale = samples_snow.reshape(1,SIZE);
 
-    std::cout << "rescale samples_blue " <<  samples_blue_rescale << std::endl;
+    cv::Mat roi_pts = samples_blue_rescale.colRange(0,2);
+    std::cout << "rescale samples_blue " <<  roi_pts << std::endl;
     std::cout << "rescale samples_snow " << samples_snow_rescale << std::endl;
 
     calcCovarMatrix(samples_blue_rescale, cov_blue, mu_blue, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
