@@ -128,15 +128,13 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
                 }
             } else {
 
-                if (m_weather == "blue_sky") {
+                if (m_weather == "blue_sky"  || m_weather == "heavy_snow") {
 
                     assert(m_ptr_list_simulated_objects.size() == m_ptr_list_gt_objects.size());
 
                     std::cout << "making a stencil on the basis of groundtruth object "
                               << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
-                    auto COUNT = m_ptr_list_simulated_objects_base.size();
-                    assert(COUNT == 0);
                     //std::cout << next_pts_array << std::endl;
 
                     for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
@@ -188,7 +186,6 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
                             }
                         }
                     }
-
                 }
             }
 

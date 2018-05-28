@@ -398,7 +398,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         ptr_list_of_algorithm_flow[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
                         // TODO - do something for stepSize.. its redundant here.
                         ptr_list_of_algorithm_flow[env_index]->run_optical_flow_algorithm(video_frames, fps);
-                        //ptr_list_of_algorithm_flow[env_index]->generate_flow_frames();
+                        ptr_list_of_algorithm_flow[env_index]->generate_flow_frames();
 
                         if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                             for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {

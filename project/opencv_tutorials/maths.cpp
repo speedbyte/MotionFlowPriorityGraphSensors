@@ -178,15 +178,26 @@ void mahalanobis() {
     cv::waitKey(0);
 }
 
+#define SIZE 4
+
 void meanStdDeviation() {
 
-    std::vector<float> vec0(10),vec1(10);
+    std::vector<float> vec0(SIZE),vec1(SIZE);
 
     cv::randu(vec0, 0, 6);
     cv::randn(vec1, 0, 4);
 
+    for ( auto &x:vec0) {
+        x = 1;
+    }
+
+    for ( auto &x:vec0) {
+        x = 2;
+    }
+
     cv::Scalar mean1, stddev1;
     cv::Scalar mean2, stddev2;
+
     std::copy(vec0.begin(), vec0.end(), std::ostream_iterator<float>(std::cout, " "));
     std::cout << std::endl;
     std::copy(vec1.begin(), vec1.end(), std::ostream_iterator<float>(std::cout, " "));
@@ -197,14 +208,17 @@ void meanStdDeviation() {
     cv::meanStdDev(vec1,mean2,stddev2);  // Automatically gives 4 channels.
     std::cout << "Mean " << mean2 << " Std Dev " << stddev2 << std::endl;
 
-    cv::Mat samples1(1, 10, CV_32FC1, vec0.data(), sizeof(float));
-    cv::Mat samples2(1, 10, CV_32FC1, vec1.data(), sizeof(float));
+    cv::Mat samples1(1, SIZE, CV_32FC1, vec0.data(), sizeof(float));
+    cv::Mat samples2(1, SIZE, CV_32FC1, vec1.data(), sizeof(float));
 
-    std::cout << samples1 << "\n" << samples2 << std::endl;
+    std::cout << "samples1 " << samples1 << "\n";
+    std::cout << "samples2 " << samples2 << std::endl;
 
-    cv::Mat samples(2,10,CV_32FC1);
-    samples1.copyTo(samples.row(0));
-    samples2.copyTo(samples.row(1));
+    cv::Mat samples(2, SIZE, CV_32FC1);
+    //samples1.copyTo(samples.row(0));
+    //samples2.copyTo(samples.row(1));
+
+    std::cout << "combine samples " << samples << std::endl;
 
 //    samples << 2.0, 2.0, 2.0, 5.0, 6.0, 5.0, 7.0, 3.0, 4.0, 7.0,
 //               6.0, 4.0, 5.0, 3.0, 4.0, 6.0, 2.0, 5.0, 1.0, 3.0;//    1, 1, 1, 1, 1, 1, 1, 1, 1, 1;
@@ -214,23 +228,27 @@ void meanStdDeviation() {
     //        2,2,2,2,2,2,6,2,2,2;
     //        //4,4,4,4,4,4,4,4,4,5;
 
-    cv::Mat cov, mu;
+    cv::Mat cov1, mu1;
+    cv::Mat cov2, mu2;
 
     // I dont need a double precision
-    calcCovarMatrix(samples, cov, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS, CV_32FC1 );
+    calcCovarMatrix(samples1, cov1, mu1, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS, CV_32FC1 );
+
+    // I dont need a double precision
+    calcCovarMatrix(samples2, cov2, mu2, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS, CV_32FC1 );
 
     // SCALE - divides by sample size, that is 10 in the above sample. ROWS means that the dataset elements are in columns
 
-    std::cout << samples << std::endl;
     std::cout << "cov: " << std::endl;
-    std::cout << cov << std::endl;
+    std::cout << cov1 << std::endl;
     std::cout << "mu: " << std::endl;
-    std::cout << mu << std::endl;
+    std::cout << mu1 << std::endl;
 
-    assert(((std::floor(mean1(0)*10000))/10000.0) == ((std::floor(mu.at<float>(0,0)*10000))/10000.0));
+
+    assert(((std::floor(mean1(0)*10000))/10000.0) == ((std::floor(mu1.at<float>(0,0)*10000))/10000.0));
 
     std::cout << "-------------------" << std::endl;
-    cv::Mat abc(2,3,CV_32FC2);
+    cv::Mat abc(2, SIZE, CV_32FC2);
     std::cout << abc.isContinuous() << std::endl;
     cv::randu(abc, 0, 10);
     std::cout << abc << std::endl;
@@ -239,41 +257,88 @@ void meanStdDeviation() {
 
     std::cout << newshape << std::endl;
 
-    calcCovarMatrix(newshape, cov, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS, CV_32FC1);
+    calcCovarMatrix(newshape, cov1, mu1, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_COLS, CV_32FC1);
 
     std::cout << "cov: " << std::endl;
-    std::cout << cov << std::endl;
+    std::cout << cov1 << std::endl;
     std::cout << "mu: " << std::endl;
-    std::cout << mu << std::endl;
+    std::cout << mu1 << std::endl;
 
-    // point vector displacement x and y point2f. so its a 2 channel cluster_size. convert this 2 channel into 1 channel.
 
-    std::vector<cv::Point2f> vec0_pts(10),vec1_pts(10);
-
-    cv::randu(vec0_pts, 0, 6);
-    cv::randn(vec1_pts, 0, 4);
-
-    cv::Mat samples_disp_bluesky(10, 1, CV_32FC2, vec0_pts.data());
-    cv::Mat samples_disp_heavysnow(10, 1, CV_32FC2, vec0_pts.data());
-
-    cv::Mat combine(10,2,CV_32FC2);
-    samples_disp_bluesky.copyTo(combine.col(0));
-    samples_disp_heavysnow.copyTo(combine.col(1));
-
-    cv::Mat newsample_pts = combine.reshape(1,10);
-
-    std::cout << newsample_pts<< std::endl;
-
-    calcCovarMatrix(newsample_pts, cov, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
-
-    std::cout << "cov: " << std::endl;
-    std::cout << cov << std::endl;
-    std::cout << "mu: " << std::endl;
-    std::cout << mu << std::endl;
 
 
 
 }
+
+
+void maha_points() {
+
+    cv::Scalar mean_blue, stddev_blue;
+    cv::Mat cov_blue, icov_blue, mu_blue;
+
+    cv::Scalar mean_snow, stddev_snow;
+    cv::Mat cov_snow, icov_snow, mu_snow;
+
+    // point vector displacement x and y point2f. so its a 2 channel cluster_size. convert this 2 channel into 1 channel.
+    std::vector<cv::Point2f> vec0_pts(SIZE),vec1_pts(SIZE);
+
+    cv::randu(vec0_pts, 0, 6);
+    cv::randn(vec1_pts, 0, 4);
+
+    cv::Mat samples_blue(SIZE, 1, CV_32FC2, vec0_pts.data());
+    cv::Mat samples_snow(SIZE, 1, CV_32FC2, vec1_pts.data());
+
+    cv::meanStdDev(samples_blue, mean_blue, stddev_blue);
+    cv::meanStdDev(samples_snow, mean_snow, stddev_snow);
+
+    samples_blue = samples_blue - mean_blue(0);
+    samples_snow = samples_snow - mean_snow(0);
+
+    std::cout << "samples1 " << samples_blue << "\n";
+    std::cout << "samples2 " << samples_snow << std::endl;
+
+    cv::Mat samples_blue_rescale = samples_blue.reshape(1,SIZE);
+    cv::Mat samples_snow_rescale = samples_snow.reshape(1,SIZE);
+
+    std::cout << samples_blue_rescale << std::endl;
+    std::cout << samples_snow_rescale << std::endl;
+
+    cv::Mat combine(SIZE, 2, CV_32FC2);
+    samples_blue.copyTo(combine.col(0));
+    samples_snow.copyTo(combine.col(1));
+
+    cv::Mat newsample_pts = combine.reshape(1,SIZE);
+
+    std::cout << newsample_pts<< std::endl;
+
+
+    calcCovarMatrix(samples_blue_rescale, cov_blue, mu_blue, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
+    calcCovarMatrix(samples_snow_rescale, cov_snow, mu_snow, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
+
+    std::cout << "cov: " << cov_blue  << std::endl;
+    std::cout << "cov: " << cov_snow  << std::endl;
+    std::cout << "mu: " << mu_blue << std::endl;
+    std::cout << "mu: " << mu_snow << std::endl;
+
+    cv::Mat cov_pooled;
+    cov_pooled = ( cov_blue*samples_blue.cols + cov_snow*samples_snow.cols ) / (samples_blue.cols + samples_snow.cols);
+
+    // matrix 2*2
+    cv::Mat icov_pooled = cov_pooled.inv(cv::DECOMP_SVD);
+    std::cout << " icov " << icov_pooled << std::endl;
+
+    cv::Mat_<float> mean_difference(2,1);
+    mean_difference.push_back(mean_blue(0) - mean_snow(0));
+    mean_difference.push_back(mean_blue(1) - mean_snow(1));
+
+    auto ma = icov_pooled*mean_difference;
+    //double ma = cv::Mahalanobis(samples1, samples2, icov);
+    std::cout << ma << std::endl;
+
+
+
+}
+
 
 void cartToPolar() {
     std::vector<cv::Point2f> xy;
@@ -576,7 +641,7 @@ int main ( int argc, char *argv[]) {
     std::cout << "\nsolvePoly----------------------------------------------" << std::endl;
     //solvePoly();
     std::cout << "\nmean and std dev----------------------------------------------" << std::endl;
-    meanStdDeviation();
+    //meanStdDeviation();
     std::cout << "\nlinearPolar----------------------------------------------" << std::endl;
     //linearPolar();
     std::cout << "\nmahalonobis----------------------------------------------" << std::endl;
@@ -587,7 +652,7 @@ int main ( int argc, char *argv[]) {
     //linearLeastSquare();
     std::cout << "\nangle----------------------------------------------" << std::endl;
     //angle_and_magnitude()
-
+    maha_points();
 
 
     return 0;
