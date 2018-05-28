@@ -345,6 +345,52 @@ public:
 
     }
 
+    static void getCovarMatrix(cv::Mat_<cv::Vec2f> &samples, cv::Mat &cov, cv::Scalar mean ) {
+
+        ushort CLUSTER_SIZE = samples.cols;
+
+        cv::Scalar stddev;
+        cv::Mat mu;
+
+        std::cout << "mean " << mean << "\n";
+
+        samples = samples - mean;
+
+        cv::Mat samples_rescale = samples.reshape(1,CLUSTER_SIZE);
+
+        calcCovarMatrix(samples_rescale, cov, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
+
+        std::cout << "cov: " << cov << std::endl;
+
+    }
+
+
+    static double getMahalanobisDistance(cv::Mat cov_blue, cv::Mat cov_snow, ushort CLUSTER_SIZE_BLUE, ushort CLUSTER_SIZE_SNOW, cv::Scalar mean_blue, cv::Scalar mean_snow ) {
+
+        std::cout << "cov_blue: " << cov_blue  << std::endl;
+        std::cout << "cov_snow: " << cov_snow  << std::endl;
+
+        cv::Mat cov_pooled;
+        cov_pooled = ( cov_blue * CLUSTER_SIZE_BLUE + cov_snow * CLUSTER_SIZE_SNOW) / (CLUSTER_SIZE_BLUE+ CLUSTER_SIZE_SNOW);
+
+        // matrix 2*2
+        cv::Mat icov_pooled = cov_pooled.inv(cv::DECOMP_SVD);
+        std::cout << "cov_pooled" << cov_pooled << "\n icov " << icov_pooled << std::endl;
+
+        cv::Mat_<float> mean_difference(2,1);
+        mean_difference.at<float>(0,0) = (float)(mean_blue(0) - mean_snow(0));
+        mean_difference.at<float>(1,0) = (float)(mean_blue(1) - mean_snow(1));
+
+        std::cout << mean_difference << std::endl;
+
+        cv::Mat_<float> ma = (mean_difference.t()*icov_pooled*mean_difference);   // 1*2 * 2*2 * 2*1
+        //double ma = cv::Mahalanobis(samples1, samples2, icov);
+        std::cout << ma << std::endl;
+
+        return ma.at<float>(0);
+
+    }
+
 };
 
 

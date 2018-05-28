@@ -280,58 +280,59 @@ void maha_points() {
     cv::Mat cov_snow, icov_snow, mu_snow;
 
     // point vector displacement x and y point2f. so its a 2 channel cluster_size. convert this 2 channel into 1 channel.
-    std::vector<cv::Point2f> vec0_pts(SIZE),vec1_pts(SIZE);
+    std::vector<cv::Point2f> vec0_pts(SIZE), vec1_pts(SIZE);
 
     cv::randu(vec0_pts, 0, 6);
-    cv::randn(vec1_pts, 0, 4);
+    cv::randu(vec1_pts, 0, 4);
+
+    std::cout << vec0_pts << std::endl;
 
     cv::Mat samples_blue(SIZE, 1, CV_32FC2, vec0_pts.data());
     cv::Mat samples_snow(SIZE, 1, CV_32FC2, vec1_pts.data());
 
+    //samples_blue.setTo(cv::Scalar(1,3));
+    //samples_snow.setTo(cv::Scalar(2,4));
+
     cv::meanStdDev(samples_blue, mean_blue, stddev_blue);
     cv::meanStdDev(samples_snow, mean_snow, stddev_snow);
 
-    samples_blue = samples_blue - mean_blue(0);
-    samples_snow = samples_snow - mean_snow(0);
+    std::cout << "samples_blue " << samples_blue << "\n";
+    std::cout << "samples_snow " << samples_snow << std::endl;
 
-    std::cout << "samples1 " << samples_blue << "\n";
-    std::cout << "samples2 " << samples_snow << std::endl;
+    std::cout << "mean_blue " << mean_blue << "\n";
+    std::cout << "mean_snow " << mean_snow << std::endl;
+
+    samples_blue = samples_blue - mean_blue;
+    samples_snow = samples_snow - mean_snow;
 
     cv::Mat samples_blue_rescale = samples_blue.reshape(1,SIZE);
     cv::Mat samples_snow_rescale = samples_snow.reshape(1,SIZE);
 
-    std::cout << samples_blue_rescale << std::endl;
-    std::cout << samples_snow_rescale << std::endl;
-
-    cv::Mat combine(SIZE, 2, CV_32FC2);
-    samples_blue.copyTo(combine.col(0));
-    samples_snow.copyTo(combine.col(1));
-
-    cv::Mat newsample_pts = combine.reshape(1,SIZE);
-
-    std::cout << newsample_pts<< std::endl;
-
+    std::cout << "rescale samples_blue " <<  samples_blue_rescale << std::endl;
+    std::cout << "rescale samples_snow " << samples_snow_rescale << std::endl;
 
     calcCovarMatrix(samples_blue_rescale, cov_blue, mu_blue, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
     calcCovarMatrix(samples_snow_rescale, cov_snow, mu_snow, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
 
-    std::cout << "cov: " << cov_blue  << std::endl;
-    std::cout << "cov: " << cov_snow  << std::endl;
-    std::cout << "mu: " << mu_blue << std::endl;
-    std::cout << "mu: " << mu_snow << std::endl;
+    std::cout << "cov_blue: " << cov_blue  << std::endl;
+    std::cout << "cov_snow: " << cov_snow  << std::endl;
+    std::cout << "mu_blue: " << mu_blue << std::endl;
+    std::cout << "mu_snow: " << mu_snow << std::endl;
 
     cv::Mat cov_pooled;
     cov_pooled = ( cov_blue*samples_blue.cols + cov_snow*samples_snow.cols ) / (samples_blue.cols + samples_snow.cols);
 
     // matrix 2*2
     cv::Mat icov_pooled = cov_pooled.inv(cv::DECOMP_SVD);
-    std::cout << " icov " << icov_pooled << std::endl;
+    std::cout << "cov_pooled" << cov_pooled << "\n icov " << icov_pooled << std::endl;
 
     cv::Mat_<float> mean_difference(2,1);
-    mean_difference.push_back(mean_blue(0) - mean_snow(0));
-    mean_difference.push_back(mean_blue(1) - mean_snow(1));
+    mean_difference.at<float>(0,0) = (float)(mean_blue(0) - mean_snow(0));
+    mean_difference.at<float>(1,0) = (float)(mean_blue(1) - mean_snow(1));
 
-    auto ma = icov_pooled*mean_difference;
+    std::cout << mean_difference << std::endl;
+
+    auto ma = mean_difference.t()*icov_pooled*mean_difference;   // 1*2 * 2*2 * 2*1
     //double ma = cv::Mahalanobis(samples1, samples2, icov);
     std::cout << ma << std::endl;
 
