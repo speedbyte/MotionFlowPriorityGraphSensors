@@ -41,14 +41,20 @@ void DataProcessingAlgorithm::common(Objects *object) {
                 const unsigned CLUSTER_SIZE = (unsigned) object->get_object_stencil_point_displacement().at
                         (sensor_index).at(frame_count).size();
 
+                cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
                 /*-----------------------------------------------------------------------------*/
 
-                execute(object, sensor_index, frame_count, CLUSTER_SIZE, mean, stddev, frame_dataprocessing_displacement);
+                execute(object, sensor_index, frame_count, CLUSTER_SIZE, mean, stddev, frame_dataprocessing_displacement, samples);
 
                 /* ------------------------------------------------------------------------------ */
 
+                cv::Mat covar_pts, covar_displacement;
+                // Covariance matrix of the displacement dataset
+                Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean);
+
                 multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3))});
                 multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
+
 
                 //std::cout << "mean_displacement and mean stddev " + m_algoName << multiframe_centroid_displacement.at(frame_count).mean_displacement << multiframe_centroid_displacement.at(frame_count).stddev_displacement<< std::endl;
 
@@ -75,9 +81,8 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
 
 void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                          cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement) {
+                          cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
-    cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
@@ -93,19 +98,14 @@ void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort frame_cou
 
     cv::meanStdDev(samples, mean, stddev);
 
-    cv::Mat covar_pts, covar_displacement;
-    // Covariance matrix of the displacement dataset
-    Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean);
-
-    // the execute function returns a new cluster size. This could be lesser or more than the cluster size depending on the underlying algorithm
 
 }
 
 void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                            cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement) {
+                            cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
-    cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+    
 
 
 
@@ -131,10 +131,10 @@ void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
 
 
 void MovingAverage::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                                  cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement) {
+                                  cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
-    cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+    
 
 
 
@@ -164,11 +164,11 @@ void MovingAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
 
 }
 
-void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement) {
+void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
 
-    cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+    
 
     std::vector<float> data_x, data_y;
     std::vector<float> data_x_pts, data_y_pts;
@@ -216,10 +216,10 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
 
 }
 
-void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement) {
+void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
-    cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+    
 
 
 
@@ -274,10 +274,10 @@ void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_coun
 
 
 void SensorFusion::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
-                                 cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement) {
+                                 cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
-    cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
+    
 
 
 
