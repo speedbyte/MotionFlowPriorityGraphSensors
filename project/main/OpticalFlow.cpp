@@ -617,6 +617,8 @@ void OpticalFlow::visualiseStencilAlgorithms() {
                     }
                 }
             }
+            cv::imshow("ww", tempGroundTruthImage);
+            cv::waitKey(0);
             cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
         }
     }
