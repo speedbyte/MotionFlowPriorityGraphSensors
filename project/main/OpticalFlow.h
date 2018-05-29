@@ -20,6 +20,8 @@ typedef struct {
     cv::Point2f object_dimension;
     cv::Point2f mean_object_displacement;
     cv::Point2f stddev_object_displacement;
+    cv::Mat covar_pts;
+    cv::Mat covar_displacement;
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
 

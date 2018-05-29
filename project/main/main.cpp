@@ -427,16 +427,16 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 time_map["algorithm_flow_" + suffix ] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
                 tic = steady_clock::now();
 
-                if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
-
-                        pixelRobustness.generatePixelRobustness(*ptr_list_of_algorithm_flow[env_index], *ptr_list_of_algorithm_flow[0]);
-                        //vectorRobustness.generateVectorRobustness(*ptr_list_of_algorithm_flow[env_index], *ptr_list_of_algorithm_flow[0]);
-                }
-
-                time_map["robustness_" + suffix] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
-                tic = steady_clock::now();
-
             }
+
+            if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
+
+                pixelRobustness.generatePixelRobustness(*ptr_list_of_algorithm_flow[0], *ptr_list_of_algorithm_flow[1]);
+                //vectorRobustness.generateVectorRobustness(*ptr_list_of_algorithm_flow[env_index], *ptr_list_of_algorithm_flow[0]);
+            }
+
+            time_map["robustness_" + std::string("blue_snow")] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
+            tic = steady_clock::now();
 
             if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {

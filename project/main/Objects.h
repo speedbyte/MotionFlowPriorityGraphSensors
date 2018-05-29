@@ -16,6 +16,8 @@ typedef struct {
     cv::Point2f mean_displacement;  // subset of visible pixels, and are within a tolerance. In case of ground truth, this is equsl to visiblePixel
     cv::Point2f stddev_pts;
     cv::Point2f stddev_displacement;
+    cv::Mat covar_pts;
+    cv::Mat covar_displacement;
 
 } OBJECTS_MEAN_STDDEV;
 

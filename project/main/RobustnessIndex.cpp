@@ -56,6 +56,8 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                     std::pair<cv::Point2f, cv::Point2f> displacementPoints = std::make_pair(
                     opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mean_object_displacement);
 
+                    //Utils::getMahalanobisDistance()
+
                     m_fs << "{:" << "frame_count" <<
                          opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).frame_count
                             << "obj_index" <<

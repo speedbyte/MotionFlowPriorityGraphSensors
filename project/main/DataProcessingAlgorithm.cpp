@@ -35,8 +35,9 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
             if (visibility) {
 
-                cv::Mat_<float> covar_new, mean_new, corr;
+                cv::Mat_<float>  corr;
                 cv::Scalar mean, stddev;
+                cv::Mat covar_pts, covar_displacement;
 
                 const unsigned CLUSTER_SIZE = (unsigned) object->get_object_stencil_point_displacement().at
                         (sensor_index).at(frame_count).size();
@@ -48,11 +49,10 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
                 /* ------------------------------------------------------------------------------ */
 
-                cv::Mat covar_pts, covar_displacement;
                 // Covariance matrix of the displacement dataset
                 Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean);
 
-                multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3))});
+                multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3)), covar_pts, covar_displacement});
                 multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
 
 

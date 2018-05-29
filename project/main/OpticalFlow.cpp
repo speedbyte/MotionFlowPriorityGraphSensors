@@ -443,6 +443,16 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(frame_count).stddev_displacement;
 
+                        evaluationData.at(obj_index).covar_pts = list_of_current_objects.at(
+                                obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(frame_count).covar_pts;
+
+                        evaluationData.at(obj_index).covar_displacement = list_of_current_objects.at(
+                                obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(frame_count).covar_displacement;
+
                         evaluationData.at(
                                 obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
                         evaluationData.at(
@@ -543,7 +553,7 @@ void OpticalFlow::visualiseStencilAlgorithms() {
 
     std::cout << "visualise stencil algorithm at " << m_generatepath.string() + "stencil/" << std::endl;
 
-    char file_name_image[50], file_name_image_output[50];
+    char file_name_image_output[50];
 
     cv::Mat image_data_and_shape;
 
