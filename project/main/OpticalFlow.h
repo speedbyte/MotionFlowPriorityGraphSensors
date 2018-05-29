@@ -18,8 +18,10 @@ typedef struct {
     int visiblePixels;  // pixels that are visible according to the algorithm. In case of ground truth, all pixels are visible
     int goodPixels;  // subset of visible pixels, and are within a tolerance. In case of ground truth, this is equsl to visiblePixel
     cv::Point2f object_dimension;
-    cv::Point2f mean_object_displacement;
-    cv::Point2f stddev_object_displacement;
+    cv::Point2f mean_pts;
+    cv::Point2f mean_displacement;
+    cv::Point2f stddev_pts;
+    cv::Point2f stddev_displacement;
     cv::Mat covar_pts;
     cv::Mat covar_displacement;
 

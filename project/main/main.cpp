@@ -431,7 +431,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
 
-                pixelRobustness.generatePixelRobustness(*ptr_list_of_algorithm_flow[0], *ptr_list_of_algorithm_flow[1]);
+                pixelRobustness.generatePixelRobustness(*ptr_list_of_algorithm_flow[1], *ptr_list_of_algorithm_flow[0]);
                 //vectorRobustness.generateVectorRobustness(*ptr_list_of_algorithm_flow[env_index], *ptr_list_of_algorithm_flow[0]);
             }
 

@@ -12,8 +12,8 @@
 
 typedef struct {
 
-    cv::Point2f mean_pts;  // pixels that are visible according to the algorithm. In case of ground truth, all pixels are visible
-    cv::Point2f mean_displacement;  // subset of visible pixels, and are within a tolerance. In case of ground truth, this is equsl to visiblePixel
+    cv::Point2f mean_pts;
+    cv::Point2f mean_displacement;
     cv::Point2f stddev_pts;
     cv::Point2f stddev_displacement;
     cv::Mat covar_pts;

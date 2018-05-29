@@ -434,11 +434,20 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         evaluationData.at(obj_index).object_dimension = dimension;
 
-                        evaluationData.at(obj_index).mean_object_displacement = list_of_current_objects.at(obj_index)->
+                        evaluationData.at(obj_index).mean_pts = list_of_current_objects.at(obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(frame_count).mean_pts;
+
+                        evaluationData.at(obj_index).mean_displacement = list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(frame_count).mean_displacement;
 
-                        evaluationData.at(obj_index).stddev_object_displacement = list_of_current_objects.at(
+                        evaluationData.at(obj_index).stddev_pts = list_of_current_objects.at(
+                                obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(frame_count).stddev_pts;
+
+                        evaluationData.at(obj_index).stddev_displacement = list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(frame_count).stddev_displacement;
@@ -528,6 +537,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
         m_sensor_scenario_displacement_occurence = sensor_scenario_displacement_occurence;
         m_sensor_multiframe_evaluation_data.push_back(sensor_multiframe_evaluation_data);
+        std::cout << "adding list to object" << std::endl;
 
     }
 
@@ -628,7 +638,7 @@ void OpticalFlow::visualiseStencilAlgorithms() {
                 }
             }
             cv::imshow("ww", tempGroundTruthImage);
-            cv::waitKey(0);
+            cv::waitKey(100);
             cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
         }
     }

@@ -54,7 +54,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                 for (unsigned points = 0; points < POINTS; points++) {
 
                     std::pair<cv::Point2f, cv::Point2f> displacementPoints = std::make_pair(
-                    opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mean_object_displacement);
+                    opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mean_displacement);
 
                     //Utils::getMahalanobisDistance()
 
@@ -69,7 +69,7 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow, co
                             << "total_pixels" <<
                          opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension.x * opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension.y
                             << "stddev" <<
-                         (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).stddev_object_displacement)
+                         (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).stddev_displacement)
 
                          << "}";
                     //xsamples.push_back(shapepoints.first);
