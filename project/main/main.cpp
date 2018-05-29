@@ -346,7 +346,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     ushort fps = 30;
 
-    for (ushort algorithmIndex = 0; algorithmIndex < 2; algorithmIndex++) {
+    for (ushort algorithmIndex = 0; algorithmIndex < 1; algorithmIndex++) {
 
         std::vector<std::unique_ptr<AlgorithmFlow>> ptr_list_of_algorithm_flow;
 
@@ -416,8 +416,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
 
                     //ptr_list_of_algorithm_flow[env_index].generate_collision_points();
+                    ptr_list_of_algorithm_flow[env_index]->visualiseStencilAlgorithms();
                     ptr_list_of_algorithm_flow[env_index]->generate_metrics_optical_flow_algorithm();
-                    //ptr_list_of_algorithm_flow[env_index].visualiseStencilAlgorithms();
+
                 }
 
                 auto position = ptr_list_of_algorithm_flow.at(env_index)->getResultOrdner().find('/');
