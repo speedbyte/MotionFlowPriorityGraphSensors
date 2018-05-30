@@ -31,7 +31,7 @@ public:
 class PixelRobustness : public RobustnessIndex {
 
 private:
-    std::vector<double> evaluation_data_frame_write;
+    std::vector<std::vector<std::vector<std::vector<double> > > > m_list_evaluation_data_multiframe;
 
 public:
 
