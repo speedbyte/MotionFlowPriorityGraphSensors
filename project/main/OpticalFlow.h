@@ -24,6 +24,7 @@ typedef struct {
     cv::Point2f stddev_displacement;
     cv::Mat covar_pts;
     cv::Mat covar_displacement;
+    double mahalanobisDistance;
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
 

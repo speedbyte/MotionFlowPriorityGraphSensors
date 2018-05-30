@@ -44,7 +44,7 @@ typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Alg
 #define MAX_ALLOWED_OBJECTS 10
 #define MAX_ALLOWED_SENSORS 10
 
-#define MAX_ALLOWED_SENSOR_GROUPS 1
+#define MAX_ALLOWED_SENSOR_GROUPS 2
 #define SENSOR_COUNT MAX_ALLOWED_SENSOR_GROUPS
 
 #define MAX_DUMPS 10
@@ -65,7 +65,7 @@ typedef enum {
     fb
 } ALGO_TYPES;
 
-#define DATAFILTER_COUNT 1
+#define DATAFILTER_COUNT 2
 
 
 

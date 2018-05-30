@@ -30,11 +30,14 @@ public:
 
 class PixelRobustness : public RobustnessIndex {
 
+private:
+    std::vector<double> evaluation_data_frame_write;
+
 public:
 
     PixelRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
     void generatePixelRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
-
+    void writeToYaml(const OpticalFlow &opticalFlow);
 
 };
 

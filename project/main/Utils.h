@@ -368,7 +368,7 @@ public:
     }
 
 
-    static double getMahalanobisDistance(cv::Mat cov_blue, cv::Mat cov_snow, ushort CLUSTER_SIZE_BLUE, ushort CLUSTER_SIZE_SNOW, cv::Scalar mean_blue, cv::Scalar mean_snow ) {
+    static double getMahalanobisDistance(cv::Mat cov_blue, cv::Mat cov_snow, ushort CLUSTER_SIZE_BLUE, ushort CLUSTER_SIZE_SNOW, cv::Point2f mean_blue, cv::Point2f mean_snow ) {
 
         std::cout << "cov_blue: " << cov_blue  << std::endl;
         std::cout << "cov_snow: " << cov_snow  << std::endl;
@@ -381,8 +381,8 @@ public:
         std::cout << "cov_pooled" << cov_pooled << "\n icov " << icov_pooled << std::endl;
 
         cv::Mat_<float> mean_difference(2,1);
-        mean_difference.at<float>(0,0) = (float)(mean_blue(0) - mean_snow(0));
-        mean_difference.at<float>(1,0) = (float)(mean_blue(1) - mean_snow(1));
+        mean_difference.at<float>(0,0) = (float)(mean_blue.x - mean_snow.y);
+        mean_difference.at<float>(1,0) = (float)(mean_blue.x - mean_snow.y);
 
         std::cout << mean_difference << std::endl;
 
