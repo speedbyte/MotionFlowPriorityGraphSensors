@@ -368,21 +368,21 @@ public:
     }
 
 
-    static double getMahalanobisDistance(cv::Mat cov_blue, cv::Mat cov_snow, ushort CLUSTER_SIZE_BLUE, ushort CLUSTER_SIZE_SNOW, cv::Point2f mean_blue, cv::Point2f mean_snow ) {
+    static double getMahalanobisDistance(cv::Mat cov_base, cv::Mat cov_snow, int CLUSTER_SIZE_BASE, int  CLUSTER_SIZE_SNOW, cv::Point2f mean_base, cv::Point2f mean_snow ) {
 
-        std::cout << "cov_blue: " << cov_blue  << std::endl;
+        std::cout << "cov_base: " << cov_base  << std::endl;
         std::cout << "cov_snow: " << cov_snow  << std::endl;
 
         cv::Mat cov_pooled;
-        cov_pooled = ( cov_blue * CLUSTER_SIZE_BLUE + cov_snow * CLUSTER_SIZE_SNOW) / (CLUSTER_SIZE_BLUE+ CLUSTER_SIZE_SNOW);
+        cov_pooled = ( cov_base * CLUSTER_SIZE_BASE + cov_snow * CLUSTER_SIZE_SNOW) / (CLUSTER_SIZE_BASE+ CLUSTER_SIZE_SNOW);
 
         // matrix 2*2
         cv::Mat icov_pooled = cov_pooled.inv(cv::DECOMP_SVD);
         std::cout << "cov_pooled" << cov_pooled << "\n icov " << icov_pooled << std::endl;
 
         cv::Mat_<float> mean_difference(2,1);
-        mean_difference.at<float>(0,0) = (float)(mean_blue.x - mean_snow.y);
-        mean_difference.at<float>(1,0) = (float)(mean_blue.x - mean_snow.y);
+        mean_difference.at<float>(0,0) = (float)(mean_base.x - mean_snow.y);
+        mean_difference.at<float>(1,0) = (float)(mean_base.x - mean_snow.y);
 
         std::cout << mean_difference << std::endl;
 

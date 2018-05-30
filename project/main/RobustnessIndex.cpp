@@ -52,8 +52,15 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_bas
 
                     cv::Point2f mean_displacement =  opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mean_displacement;
 
-                    double maha = Utils::getMahalanobisDistance(covar_base, covar, 100, 100, mean_displacement_base, mean_displacement);
+                    int cluster_size_base = opticalFlow_base.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).visiblePixels;
 
+                    int cluster_size = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).visiblePixels;
+
+                    double maha;
+                    if ( covar_base.data != NULL && covar.data != NULL ) {
+                        maha = Utils::getMahalanobisDistance(covar_base, covar, cluster_size_base, cluster_size, mean_displacement_base, mean_displacement);
+
+                    }
                     evaluation_data_frame_write.push_back(maha);
 
                 }
