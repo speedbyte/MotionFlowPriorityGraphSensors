@@ -15,8 +15,8 @@ typedef struct {
 
     int frame_count;
     int obj_index;
-    int visiblePixels;  // pixels that are visible according to the algorithm. In case of ground truth, all pixels are visible
-    int goodPixels;  // subset of visible pixels, and are within a tolerance. In case of ground truth, this is equsl to visiblePixel
+    int visiblePixels;
+    int goodPixels;
     cv::Point2f object_dimension;
     cv::Point2f mean_pts;
     cv::Point2f mean_displacement;

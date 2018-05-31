@@ -107,10 +107,10 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
             // Send to plotter
 
             if ( suffix == "_ground_truth") {
-                m_fs << (std::string("pixel_density")  + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
+                m_fs << (std::string("evaluation_data")  + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
             }
             else {
-                m_fs << (std::string("pixel_density") +
+                m_fs << (std::string("evaluation_data") +
                          std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
             }
 
@@ -132,7 +132,7 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
                          opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).goodPixels
                          << "visible_pixels" <<
                          opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).visiblePixels
-                         << "total_pixels" <<
+                         << "ground_truth_pixels" <<
                          opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension.x * opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension.y
                          << "stddev" <<
                          (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).stddev_displacement)

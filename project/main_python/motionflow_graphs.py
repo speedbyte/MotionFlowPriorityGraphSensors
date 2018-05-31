@@ -39,7 +39,7 @@ def plot_at_once(figures_plot_array, sensor_index):
             lower_y = min(figures_plot[figures_plot_index][7], lower_y)
             upper_y = max(figures_plot[figures_plot_index][8], upper_y)
 
-    print lower_x, lower_y, upper_x, upper_y
+    print lower_x, upper_x, lower_y, upper_y
 
     for figures_plot in figures_plot_array:
 
@@ -108,7 +108,7 @@ def scenario_displacement_occurence():
     yaml_list_index_offset=0
 
     yaml_file_handle = YAMLParser(file)
-    yaml_load = yaml_file_handle.load()
+    yaml_file_data = yaml_file_handle.load()
 
     #ax = fig.add_subplot(111, projection='3d')
     fig1 = plt.figure()
@@ -123,7 +123,7 @@ def scenario_displacement_occurence():
 
     for env_index in range(1): # ground_truth
 
-        scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[env_index]]
+        scenario_displacement_occurence = yaml_file_data[list_of_displacement_occurence_metrics[env_index]]
         occurences = list()
         for count in range(len(scenario_displacement_occurence)):
             xyz = list()
@@ -137,7 +137,7 @@ def scenario_displacement_occurence():
 
         x_gt, y_gt, occurence_gt = data.T
 
-        scenario_displacement_occurence = yaml_load[list_of_displacement_occurence_metrics[env_index+1]]
+        scenario_displacement_occurence = yaml_file_data[list_of_displacement_occurence_metrics[env_index+1]]
         occurences = list()
         for count in range(len(scenario_displacement_occurence)):
             xyz = list()
@@ -205,10 +205,10 @@ def scenario_displacement_occurence():
 
 class thread1(threading.Thread):
 
-    def __init__(self, yaml_load, sensor_plot):
+    def __init__(self, yaml_file_data, sensor_plot):
         threading.Thread.__init__(self)
         self.threadRun = False
-        self.yaml_load = yaml_load
+        self.yaml_file_data = yaml_file_data
         self.sensor_plot = sensor_plot
 
 
@@ -228,7 +228,8 @@ class thread1(threading.Thread):
 
             # ---------------------------------
             for weather in environment_list:
-                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("pixel", yaml_load, weather, step_size))
+                plot_data = self.sensor_plot.templateToYamlMapping("pixel", yaml_file_data, weather, step_size)
+                self.plot_at_once_figures.append(plot_data)
 
         self.threadRun = False
 
@@ -243,10 +244,10 @@ class thread1(threading.Thread):
 
 class thread2(threading.Thread):
 
-    def __init__(self, yaml_load, sensor_plot):
+    def __init__(self, yaml_file_data, sensor_plot):
         threading.Thread.__init__(self)
         self.threadRun = False
-        self.yaml_load = yaml_load
+        self.yaml_file_data = yaml_file_data
         self.sensor_plot = sensor_plot
 
 
@@ -265,7 +266,7 @@ class thread2(threading.Thread):
                 current_list = environment_list
 
             for weather in environment_list:
-                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("deviation", yaml_load, weather, step_size))
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("deviation", yaml_file_data, weather, step_size))
 
         self.threadRun = False
 
@@ -278,10 +279,10 @@ class thread2(threading.Thread):
 
 class thread3(threading.Thread):
 
-    def __init__(self, yaml_load, sensor_plot):
+    def __init__(self, yaml_file_data, sensor_plot):
         threading.Thread.__init__(self)
         self.threadRun = False
-        self.yaml_load = yaml_load
+        self.yaml_file_data = yaml_file_data
         self.sensor_plot = sensor_plot
 
 
@@ -300,7 +301,7 @@ class thread3(threading.Thread):
                 current_list = environment_list
 
             for weather in environment_list:
-                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("collision", yaml_load, weather, step_size))
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("collision", yaml_file_data, weather, step_size))
 
         self.threadRun = False
 
@@ -313,10 +314,10 @@ class thread3(threading.Thread):
 
 class thread4(threading.Thread):
 
-    def __init__(self, yaml_load, sensor_plot):
+    def __init__(self, yaml_file_data, sensor_plot):
         threading.Thread.__init__(self)
         self.threadRun = False
-        self.yaml_load = yaml_load
+        self.yaml_file_data = yaml_file_data
         self.sensor_plot = sensor_plot
 
 
@@ -335,7 +336,7 @@ class thread4(threading.Thread):
                 current_list = environment_list
 
             for weather in environment_list:
-                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("obj_displacement", yaml_load, weather, step_size))
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("obj_displacement", yaml_file_data, weather, step_size))
         self.threadRun = False
 
     def getThreadState(self):
@@ -352,7 +353,7 @@ import subprocess
 if __name__ == '__main__':
 
     yaml_file_handle = YAMLParser(file)
-    yaml_load = yaml_file_handle.load()
+    yaml_file_data = yaml_file_handle.load()
 
     command = "rm " + output_folder + "*.png"
     try:
@@ -376,22 +377,22 @@ if __name__ == '__main__':
 
         if ( 1 ):
 
-            thread_pixel = thread1(yaml_load, sensor_plot)
+            thread_pixel = thread1(yaml_file_data, sensor_plot)
             thread_pixel.start()
 
         if ( 0 ):
 
-            thread_deviation = thread2(yaml_load, sensor_plot)
+            thread_deviation = thread2(yaml_file_data, sensor_plot)
             thread_deviation.start()
 
         if ( 0 ):
 
-            thread_collision = thread3(yaml_load, sensor_plot)
+            thread_collision = thread3(yaml_file_data, sensor_plot)
             thread_collision.start()
 
         if ( 0 ):
 
-            thread_obj_displacement = thread4(yaml_load, sensor_plot)
+            thread_obj_displacement = thread4(yaml_file_data, sensor_plot)
             thread_obj_displacement.start()
 
         if thread_pixel != None:

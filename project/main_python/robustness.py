@@ -21,37 +21,37 @@ class SensorDataPlot(object):
         self.sensor_number = sensor_number
 
 
-    def templateToYamlMapping(self, meausuring_parameter, yaml_load, weather, step_size):
+    def templateToYamlMapping(self, meausuring_parameter, yaml_file_data, weather, step_size):
 
         if ( meausuring_parameter == "pixel"):
-            template = template_of_pixel_density
-            template_gt = template_of_pixel_density_gt
+            template_name_ = template_name_of_evaluation_data
+            template_name_gt = template_name_of_evaluation_data_gt
         elif ( meausuring_parameter == "deviation"):
-            template = template_of_collision
-            template_gt = template_of_collision_points_gt
+            template_name_ = template_name_of_collision
+            template_name_gt = template_name_of_collision_points_gt
         elif ( meausuring_parameter == "collision"):
-            template = template_of_collision
-            template_gt = template_of_collision_points_gt
+            template_name_ = template_name_of_collision
+            template_name_gt = template_name_of_collision_points_gt
         elif ( meausuring_parameter == "obj_displacement"):
-            template = template_of_obj_displacement
-            template_gt = template_of_obj_displacement_gt
+            template_name_ = template_name_of_obj_displacement
+            template_name_gt = template_name_of_obj_displacement_gt
 
-        list_of_pixel_density = list()
-        temp_list = map(lambda x : (x + "LK_" + weather + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.getSensorIndex())), template)
-        list_of_pixel_density += temp_list
+        evaluation_data_list_name = list()
+        temp_list = map(lambda x : (x + "LK_" + weather + "_" + fps_list[0] + '_' + str(step_size) + '_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
+        evaluation_data_list_name += temp_list
 
-        custom_data_list = list()
-        custom_data_list.append(template_gt[0] + "sensor_index_" + str(self.getSensorIndex()))
+        custom_data_list_name = list()
+        custom_data_list_name.append(template_name_gt[0] + "sensor_index_" + str(self.getSensorIndex()))
         for x in datafilter_list:
-            custom_data_list.append(list_of_pixel_density[int(x,10)])
+            custom_data_list_name.append(evaluation_data_list_name[int(x,10)])
 
-        print custom_data_list
+        print custom_data_list_name
+        plot_data = self.robustness_(meausuring_parameter, yaml_file_data, weather, str(step_size), custom_data_list_name, color_list_algorithms, label_list_algorithm, "jaccard index " + weather )
+        return (plot_data)
 
-        return (self.robustness_(yaml_load, meausuring_parameter, weather, str(step_size), custom_data_list, color_list_algorithms, label_list_algorithm, "jaccard index " + weather ))
 
 
-
-    def robustness_(self, yaml_load, measuring_parameter, weather, stepSize, data_list, color_list, label_list, label=""):
+    def robustness_(self, measuring_parameter, yaml_file_data, weather, stepSize, data_list, color_list, label_list, label=""):
 
 
         figures_plot = list()
@@ -64,28 +64,28 @@ class SensorDataPlot(object):
 
         # Ground Truth
         if ( measuring_parameter == "deviation"):
-            data_points_gt = yaml_load[data_list[0]]
+            data_points_gt = yaml_file_data[data_list[0]]
             print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getDeviationPoints(data_points_gt, data_points_gt)
 
-        elif ( measuring_parameter == "pixel_"):
-            data_points_gt = yaml_load[data_list[0]]
+        elif ( measuring_parameter == "pixel"):
+            data_points_gt = yaml_file_data[data_list[0]]
             print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getShape(data_points_gt, data_points_gt)
 
         elif ( measuring_parameter == "stddev"):
-            data_points_gt = yaml_load[data_list[0]]
+            data_points_gt = yaml_file_data[data_list[0]]
             print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getStdDev(data_points_gt, data_points_gt)
 
         elif ( measuring_parameter == "collision"):
-            data_points_gt = yaml_load[data_list[0]]
+            data_points_gt = yaml_file_data[data_list[0]]
             print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
             # collision sorted
 
         elif ( measuring_parameter == "obj_displacement"):
-            data_points_gt = yaml_load[data_list[0]]
+            data_points_gt = yaml_file_data[data_list[0]]
             print "getting " , data_list[0]
             x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getObjectDisplacement(data_points_gt, data_points_gt)
 
@@ -115,11 +115,11 @@ class SensorDataPlot(object):
 
                 if ( just_ground_truth == False ):
 
-                    data_points = yaml_load[data_list[yaml_list_index_offset+1+datafilter_index]]
+                    data_points = yaml_file_data[data_list[yaml_list_index_offset+1+datafilter_index]]
                     print "getting ", data_list[yaml_list_index_offset+1+datafilter_index]
                     if ( measuring_parameter == "deviation"):
                         x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points)
-                    elif ( measuring_parameter == "pixel_"):
+                    elif ( measuring_parameter == "pixel"):
                         x_axis, y_axis, y_axis_mean = self.getShape(data_points_gt, data_points)
                     elif ( measuring_parameter == "stddev"):
                         x_axis, y_axis, y_axis_mean = self.getStdDev(data_points_gt, data_points)
@@ -133,7 +133,7 @@ class SensorDataPlot(object):
 
             else:
 
-                data_points = yaml_load[data_list[yaml_list_index_offset+datafilter_index]]
+                data_points = yaml_file_data[data_list[yaml_list_index_offset+datafilter_index]]
                 print "getting " , data_list[yaml_list_index_offset+datafilter_index]
                 if ( measuring_parameter == "deviation"):
                     x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points)
@@ -292,11 +292,13 @@ class SensorDataPlot(object):
         data = list()
 
         for count in range(len(data_points_gt)):
-            xy = list()
-            xy.append(data_points_gt[count]["frame_count"])
-            xy.append(data_points_gt[count]["good_pixels"])
-            xy.append(data_points_gt[count]["visible_pixels"])
-            data.append(xy)
+
+            if ( data_points_gt[count]["obj_index"] == 0 ):
+                xy = list()
+                xy.append(data_points_gt[count]["frame_count"])
+                xy.append(data_points_gt[count]["visible_pixels"])
+                xy.append(data_points_gt[count]["ground_truth_pixels"])
+                data.append(xy)
 
 
         newshape = self.fuseDataFromSameFrames(data)
@@ -306,15 +308,16 @@ class SensorDataPlot(object):
         y_axis_mean = 0
         data = numpy.array(newshape)
         x0_gt, y0_gt = data.T
+        y_axis = x0_gt/y0_gt
 
         data = list()
 
         for count in range(len(data_points)):
-            xy = list()
-            if ( data_points[count]["obj_index"] == 1 ):
-                xy.append(data_points[count]["frame_count"])
-                xy.append(data_points[count]["good_pixels"])
-                xy.append(data_points[count]["visible_pixels"])
+            if ( data_points_gt[count]["obj_index"] == 0 ):
+                xy = list()
+                xy.append(data_points_gt[count]["frame_count"])
+                xy.append(data_points_gt[count]["visible_pixels"])
+                xy.append(data_points_gt[count]["ground_truth_pixels"])
                 data.append(xy)
 
         newshape = self.fuseDataFromSameFrames(data)
@@ -434,29 +437,27 @@ class SensorDataPlot(object):
         total_count = 0
         for count in range(len(data)):
 
-
             if ( data[count][0] != previous_x_axis ):
 
                 previous_x_axis = data[count][0]
                 xy = list()
                 if ( total_count == 0 ):
                     xy.append(numpy.nan)
-                    #xy.append(numpy.nan)
+                    xy.append(numpy.nan)
                 else:
                     xy.append(elem_1)
-                    #xy.append(elem_2)
+                    xy.append(elem_2)
 
                 newshape.append(xy)
                 total_count = 0
                 elem_1 = 0
-                #elem_2 = 0
+                elem_2 = 0
 
-            # ddata[coumt][0] has the frame_count
+            # data[count][0] has the frame_count
             if ( data[count][0] == previous_x_axis ):
-                if ( data[count][1] == data[count][1] ):
                     total_count = total_count+1
                     elem_1 = elem_1 + data[count][1]
-                    #elem_2 = elem_2 + data[count][2]
+                    elem_2 = elem_2 + data[count][2]
 
             # the last leg
             if ( count == len(data)-1 ):
@@ -465,10 +466,10 @@ class SensorDataPlot(object):
                 xy = list()
                 if ( total_count == 0 ):
                     xy.append(numpy.nan)
-                    #xy.append(numpy.nan)
+                    xy.append(numpy.nan)
                 else:
                     xy.append(elem_1)
-                    #xy.append(elem_2)
+                    xy.append(elem_2)
 
                 newshape.append(xy)
 

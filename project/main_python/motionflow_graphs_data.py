@@ -64,21 +64,21 @@ color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 label_list_bar = ['ground truth', 'moving average', 'voted mean', 'ranked mean']
 
 
-template_of_pixel_density_gt = [
-    "pixel_density_ground_truth_",
+template_name_of_evaluation_data_gt = [
+    "evaluation_data_ground_truth_",
 ]
-template_of_pixel_density = [
-    "pixel_density_datafilter_0results_",
-    "pixel_density_datafilter_1results_",
-    "pixel_density_datafilter_2results_",
-    "pixel_density_datafilter_3results_",
+template_name_of_evaluation_data = [
+    "evaluation_data_datafilter_0results_",
+    "evaluation_data_datafilter_1results_",
+    "evaluation_data_datafilter_2results_",
+    "evaluation_data_datafilter_3results_",
 ]
 
-template_of_collision_points_gt = [
+template_name_of_collision_points_gt = [
     "collision_points_ground_truth_",
 ]
 
-template_of_obj_displacement = [
+template_name_of_obj_displacement = [
     "obj_displacement_datafilter_0results_",
     "obj_displacement_datafilter_1results_",
     "obj_displacement_datafilter_2results_",
@@ -86,11 +86,11 @@ template_of_obj_displacement = [
 
 ]
 
-template_of_obj_displacement_gt = [
+template_name_of_obj_displacement_gt = [
     "obj_displacement_ground_truth_",
 ]
 
-template_of_collision = [
+template_name_of_collision = [
 
     "collision_points_datafilter_0results_",
     "collision_points_datafilter_1results_",
@@ -100,10 +100,10 @@ template_of_collision = [
 ]
 
 
-template_of_displacement_occurence = [
+template_name_of_displacement_occurence = [
     "scenario_displacement_occurence_sensor_index_1_datafilter_0_ground_truth",
     "scenario_displacement_occurence_sensor_index_1_datafilter_0results_none_",
 ]
 
 color_of_displacement_occurence = ["blue", "red"]
-assert(len(template_of_displacement_occurence) == len(color_of_displacement_occurence))
+assert(len(template_name_of_displacement_occurence) == len(color_of_displacement_occurence))
