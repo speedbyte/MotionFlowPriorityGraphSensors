@@ -71,7 +71,7 @@ class Figures(object):
             elif ( measuring_parameter == "pixel"):
 
                 self.list_of_plots[figure_index].set_xlabel("frame_count")
-                self.list_of_plots[figure_index].set_ylabel("jaccard index ( overlap of visible pixels / ground truth pixels )")
+                self.list_of_plots[figure_index].set_ylabel("visible pixels / ground truth pixels")
 
             elif ( measuring_parameter == "deviation"):
 

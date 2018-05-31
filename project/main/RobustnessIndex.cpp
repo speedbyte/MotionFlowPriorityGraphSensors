@@ -107,11 +107,10 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
             // Send to plotter
 
             if ( suffix == "_ground_truth") {
-                m_fs << (std::string("evaluation_data")  + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
+                m_fs << (std::string("evaluation_data") + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
             }
             else {
-                m_fs << (std::string("evaluation_data") +
-                         std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
+                m_fs << (std::string("evaluation_data_") + suffix + std::string("datafilter_") + std::to_string(datafilter_index) + "_" + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
             }
 
             for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {

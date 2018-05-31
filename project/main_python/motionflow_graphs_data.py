@@ -15,7 +15,11 @@ dict_datafilters = {
 
 datafilter_list = [ "0", ]
 
+algorithm_list = ["LK", "FB",]
+
+
 dict_environment = {
+    "ground_truth" : 0,
     "blue_sky" : 0,
     "light_snow"   : 0,
     "mild_snow"    : 0,
@@ -39,7 +43,7 @@ dict_environment_label = {
 
 environment_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 environment_list = ["blue_sky", "heavy_snow",]
-environment_list = ["blue_sky",]
+#environment_list = ["blue_sky",]
 
 number_of_sensors = 1
 
@@ -68,10 +72,7 @@ template_name_of_evaluation_data_gt = [
     "evaluation_data_ground_truth_",
 ]
 template_name_of_evaluation_data = [
-    "evaluation_data_datafilter_0results_",
-    "evaluation_data_datafilter_1results_",
-    "evaluation_data_datafilter_2results_",
-    "evaluation_data_datafilter_3results_",
+    "evaluation_data_results_",
 ]
 
 template_name_of_collision_points_gt = [

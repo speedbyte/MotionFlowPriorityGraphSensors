@@ -75,3 +75,247 @@ for env_name in environment_list:
         'pixel_mild_snow_7':  [1.0, 0.300394977273299, 0.52059040724647876, 0.5145554052260507],
         'pixel_heavy_snow_7': [1.0, 0.264877294075811, 0.49535830145631016, 0.4947636068633854],
     }
+
+
+
+
+
+
+
+
+class thread2(threading.Thread):
+
+    def __init__(self, yaml_file_data, sensor_plot):
+        threading.Thread.__init__(self)
+        self.threadRun = False
+        self.yaml_file_data = yaml_file_data
+        self.sensor_plot = sensor_plot
+
+
+    def stop(self):
+        self.threadRun = False
+
+    def run(self):
+        self.threadRun = True
+        #while ( self.threadRun ):
+        print "i am in thread deviation "
+
+        self.plot_at_once_figures = list()
+        for step_size in step_list:
+
+            if ( evaluation == "environment"):
+                current_list = environment_list
+
+            for weather in environment_list:
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("deviation", yaml_file_data, weather, step_size))
+
+        self.threadRun = False
+
+    def getThreadState(self):
+        return self.threadRun
+
+    def getPlotList(self):
+        return self.plot_at_once_figures
+
+
+class thread3(threading.Thread):
+
+    def __init__(self, yaml_file_data, sensor_plot):
+        threading.Thread.__init__(self)
+        self.threadRun = False
+        self.yaml_file_data = yaml_file_data
+        self.sensor_plot = sensor_plot
+
+
+    def stop(self):
+        self.threadRun = False
+
+    def run(self):
+        self.threadRun = True
+        #while ( self.threadRun ):
+        print "i am in thread collision "
+
+        self.plot_at_once_figures = list()
+        for step_size in step_list:
+
+            if ( evaluation == "environment"):
+                current_list = environment_list
+
+            for weather in environment_list:
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("collision", yaml_file_data, weather, step_size))
+
+        self.threadRun = False
+
+    def getThreadState(self):
+        return self.threadRun
+
+    def getPlotList(self):
+        return self.plot_at_once_figures
+
+
+class thread4(threading.Thread):
+
+    def __init__(self, yaml_file_data, sensor_plot):
+        threading.Thread.__init__(self)
+        self.threadRun = False
+        self.yaml_file_data = yaml_file_data
+        self.sensor_plot = sensor_plot
+
+
+    def stop(self):
+        self.threadRun = False
+
+    def run(self):
+        self.threadRun = True
+        #while ( self.threadRun ):
+        print "i am in thread obj displacement"
+
+        self.plot_at_once_figures = list()
+        for step_size in step_list:
+
+            if ( evaluation == "environment"):
+                current_list = environment_list
+
+            for weather in environment_list:
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("obj_displacement", yaml_file_data, weather, step_size))
+        self.threadRun = False
+
+    def getThreadState(self):
+        return self.threadRun
+
+    def getPlotList(self):
+        return self.plot_at_once_figures
+
+
+
+
+    #---------------        if ( 0 ):
+
+    thread_deviation = thread2(yaml_file_data, sensor_plot)
+    thread_deviation.start()
+
+if ( 0 ):
+
+    thread_collision = thread3(yaml_file_data, sensor_plot)
+    thread_collision.start()
+
+if ( 0 ):
+
+    thread_obj_displacement = thread4(yaml_file_data, sensor_plot)
+    thread_obj_displacement.start()
+
+
+
+
+
+if ( thread_deviation != None ):
+
+        while ( True ):
+            time.sleep(1)
+            if ( thread_deviation.getThreadState() == False ):
+
+                plot_at_once_figures = thread_deviation.getPlotList()
+                collectPlots.append(plot_at_once_figures)
+                plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+
+                # summary
+                summary = sensor_plot.get_summary()
+                figures = Figures(1)
+                figures.evaluate_deviation(summary, step_list)
+                figures.save_figure("deviation", "summary")
+
+                break
+
+
+    if ( thread_collision != None ):
+
+        while ( True ):
+            time.sleep(1)
+            if ( thread_collision.getThreadState() == False ):
+
+                plot_at_once_figures = thread_collision.getPlotList()
+                plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+
+                # summary
+                #summary = sensor_plot.get_summary()
+                #figures = Figures(1)
+                #figures.evaluate_collision(summary, step_list)
+                #figures.save_figure("collision", "summary")
+
+                break
+
+
+    # ---------------------------------
+    if ( thread_obj_displacement != None ):
+
+        while ( True ):
+            time.sleep(1)
+            if ( thread_obj_displacement.getThreadState() == False ):
+
+                plot_at_once_figures = thread_obj_displacement.getPlotList()
+                plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+
+                # summary
+                summary = sensor_plot.get_summary()
+                figures = Figures(1)
+                figures.evaluate_obj_displacement(summary, step_list)
+                figures.save_figure("obj_displacement", "summary")
+
+                break
+
+                #scenario_displacement_occurence()
+                #histogramm()
+
+
+
+
+###2
+
+        elif ( measuring_parameter == "deviation"):
+        data_points_gt = yaml_file_data[data_list[0]]
+        print "getting " , data_list[0]
+        x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getDeviationPoints(data_points_gt, data_points_gt)
+
+    elif ( measuring_parameter == "stddev"):
+        data_points_gt = yaml_file_data[data_list[0]]
+        print "getting " , data_list[0]
+        x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getStdDev(data_points_gt, data_points_gt)
+
+    elif ( measuring_parameter == "collision"):
+        data_points_gt = yaml_file_data[data_list[0]]
+        print "getting " , data_list[0]
+        x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
+        # collision sorted
+
+    elif ( measuring_parameter == "obj_displacement"):
+        data_points_gt = yaml_file_data[data_list[0]]
+        print "getting " , data_list[0]
+        x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getObjectDisplacement(data_points_gt, data_points_gt)
+
+
+###3
+    elif ( measuring_parameter == "deviation"):
+        x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points)
+    elif ( measuring_parameter == "stddev"):
+        x_axis, y_axis, y_axis_mean = self.getStdDev(data_points_gt, data_points)
+    elif ( measuring_parameter == "collision"):
+        x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
+    elif ( measuring_parameter == "obj_displacement"):
+        x_axis, y_axis, y_axis_mean = self.getObjectDisplacement(data_points_gt, data_points)
+
+## tmeplate_to_yaml_mapping
+
+def templateToYamlMapping(self, meausuring_parameter, yaml_file_data, weather, step_size):
+
+    if ( meausuring_parameter == "pixel"):
+        template_name_ = template_name_of_evaluation_data
+        template_name_gt = template_name_of_evaluation_data_gt
+    elif ( meausuring_parameter == "deviation"):
+        template_name_ = template_name_of_collision
+        template_name_gt = template_name_of_collision_points_gt
+    elif ( meausuring_parameter == "collision"):
+        template_name_ = template_name_of_collision
+        template_name_gt = template_name_of_collision_points_gt
+    elif ( meausuring_parameter == "obj_displacement"):
+        template_name_ = template_name_of_obj_displacement
+        template_name_gt = template_name_of_obj_displacement_gt
