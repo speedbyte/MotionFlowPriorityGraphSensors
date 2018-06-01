@@ -10,10 +10,9 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
 from motionflow_graphs_common import Figures, YAMLParser
-from robustness import SensorDataPlot
+from SensorDataPlot import SensorDataPlot
 from motionflow_graphs_data import *
 
-import  robustness
 import threading
 import time
 
@@ -53,53 +52,31 @@ def plot_at_once(figures_plot_array, sensor_index):
     figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_env_index(), figures_plot_array[0].get_step_size(), sensor_index)
 
 
-class thread1(threading.Thread):
-
-    def __init__(self, yaml_file_data, sensor_plot):
-        threading.Thread.__init__(self)
-        self.threadRun = False
-        self.yaml_file_data = yaml_file_data
-        self.sensor_plot = sensor_plot
+def getPlotList(sensor_plot, measuring_parameter, x_label, y_label):
 
 
-    def stop(self):
-        self.threadRun = False
+    plot_at_once_figures = list()
 
-    def run(self):
-        self.threadRun = True
-        #while ( self.threadRun ):
-        print "i am in thread pixel "
+    for step_size in step_list:
 
-        self.plot_at_once_figures = list()
-        for step_size in step_list:
-
-            if ( evaluation == "environment"):
-                current_list = environment_list
-
-            # ---------------------------------
+        for n, weather in enumerate(weather_list):
 
             custom_data_list_name = list()
-            plot_mapping = self.sensor_plot.templateToYamlMapping_GT("pixel")
-            custom_data_list_name.append(plot_mapping)
-            plot_data = self.sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, "pixel", algorithm_list[0], "ground_truth", str(step_size), 0, "jaccard index " + algorithm_list[0] )
-            self.plot_at_once_figures.append(plot_data)
-            custom_data_list_name.append(plot_mapping)
 
-            for n,i in enumerate(environment_list):
-                plot_mapping = self.sensor_plot.templateToYamlMapping("pixel",i, step_size)
-                custom_data_list_name[1] = plot_mapping
+            plot_mapping = sensor_plot.templateToYamlMapping_GT(measuring_parameter)
+            custom_data_list_name.append(plot_mapping)
+            plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, algorithm_list[0], weather, str(step_size), 0, x_label, y_label )
+
+            if ( weather != "ground_truth"):
+                plot_mapping = sensor_plot.templateToYamlMapping(measuring_parameter, weather, step_size)
+                custom_data_list_name.append(plot_mapping)
                 print custom_data_list_name
-                plot_data = self.sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, "pixel", algorithm_list[0], i, str(step_size), 0, "jaccard index " + algorithm_list[0] )
+                plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, algorithm_list[0], weather, str(step_size), 0, x_label, y_label)
                 print plot_data.get_x_axis()
-                self.plot_at_once_figures.append(plot_data)
 
-        self.threadRun = False
+            plot_at_once_figures.append(plot_data)
 
-    def getThreadState(self):
-        return self.threadRun
-
-    def getPlotList(self):
-        return self.plot_at_once_figures
+    return plot_at_once_figures
 
 #    plt.close("all")
 
@@ -121,38 +98,23 @@ if __name__ == '__main__':
     collectPlots = list()
 
     #for x in [0,1]:
-    for x in [0]:
-
-        thread_pixel = None
-        thread_deviation = None
-        thread_collision = None
-        thread_obj_displacement = None
+    for x in sensor_list:
 
         sensor_plot = SensorDataPlot(x)
 
-        thread_pixel = thread1(yaml_file_data, sensor_plot)
-        thread_pixel.start()
+        plot_at_once_figures = getPlotList(sensor_plot, "visible_pixels", "frame_count", "visible pixels / ground truth pixels")
+        collectPlots.append(plot_at_once_figures)
+        plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
-        if thread_pixel != None:
+        # summary
+        summary = sensor_plot.get_summary()
+        figures = Figures(1)
+        figures.evaluate_pixel(summary)
+        figures.save_figure("visible_pixels", "summary")
 
-            while ( True ):
-                time.sleep(1)
-                if ( thread_pixel.getThreadState() == False ):
-
-                        plot_at_once_figures = thread_pixel.getPlotList()
-                        collectPlots.append(plot_at_once_figures)
-                        plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
-
-                        # summary
-                        summary = sensor_plot.get_summary()
-                        figures = Figures(1)
-                        figures.evaluate_pixel(summary, step_list)
-                        figures.save_figure("pixel", "summary")
-
-                        break
-
-
-
+        plot_at_once_figures = getPlotList(sensor_plot, "good_pixels", "frame_count", "good pixels / visible pixels")
+        collectPlots.append(plot_at_once_figures)
+        plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
 
     #for x in [1,2]:

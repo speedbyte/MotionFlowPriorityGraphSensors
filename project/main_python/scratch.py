@@ -11,53 +11,53 @@ index_x0_gt_sorted = numpy.argsort(x0_gt)
 #y0 = numpy.setdiff1d(y0, delete_point_array)
 
 
-for env_name in environment_list:
+for env_name in weather_list:
     for stepSize in step_list:
-        ground_truth.append((summary['pixel_' + env_name + '_' + str(stepSize)][0]))
+        ground_truth.append((summary["visible_pixels_" + env_name + '_' + str(stepSize)][0]))
     rects1 = self.list_of_plots[0].bar(index+bar_width, ground_truth, bar_width, color='#f2f2f2')
 
-for env_name in environment_list:
+for env_name in weather_list:
     for stepSize in step_list:
-        moving_avg.append((summary['pixel_' + env_name + '_' + str(stepSize)][1]))
+        moving_avg.append((summary["visible_pixels_" + env_name + '_' + str(stepSize)][1]))
     rects2 = self.list_of_plots[0].bar(index+bar_width, moving_avg, bar_width, color='#cccccc')
 
-for env_name in environment_list:
+for env_name in weather_list:
     for stepSize in step_list:
-        voted_mean.append((summary['pixel_' + env_name + '_' + str(stepSize)][2]))
+        voted_mean.append((summary["visible_pixels_" + env_name + '_' + str(stepSize)][2]))
     rects3 = self.list_of_plots[0].bar(index+2*bar_width, voted_mean, bar_width, color='#808080')
 
-for env_name in environment_list:
+for env_name in weather_list:
     for stepSize in step_list:
-        ranked_mean.append((summary['pixel_' + env_name + '_' + str(stepSize)][3]))
+        ranked_mean.append((summary["visible_pixels_" + env_name + '_' + str(stepSize)][3]))
     rects4 = self.list_of_plots[0].bar(index+3*bar_width, ranked_mean, bar_width, color='#000000')
 
 
 
 
 
-    for n,i in enumerate(environment_list):
+    for n,i in enumerate(weather_list):
         for stepSize in step_list:
-            ground_truth.append((summary['pixel_' + i + '_' + str(stepSize)][0]))
+            ground_truth.append((summary["visible_pixels_" + i + '_' + str(stepSize)][0]))
     print "length = " , (len(ground_truth))
 
     ground_truth = list()
-    for n,i in enumerate(environment_list):
+    for n,i in enumerate(weather_list):
         for stepSize in step_list:
-            ground_truth.append((summary['pixel_' + i + '_' + str(stepSize)][1]))
+            ground_truth.append((summary["visible_pixels_" + i + '_' + str(stepSize)][1]))
     print "length = " , (len(ground_truth))
     rects1 = self.list_of_plots[0].bar(index+12*bar_width, ground_truth, bar_width, color='#000000')
 
     ground_truth = list()
-    for n,i in enumerate(environment_list):
+    for n,i in enumerate(weather_list):
         for stepSize in step_list:
-            ground_truth.append((summary['pixel_' + i + '_' + str(stepSize)][2]))
+            ground_truth.append((summary["visible_pixels_" + i + '_' + str(stepSize)][2]))
     print "length = " , (len(ground_truth))
     rects1 = self.list_of_plots[0].bar(index+24*bar_width, ground_truth, bar_width, color='#f2f2f2')
 
     ground_truth = list()
-    for n,i in enumerate(environment_list):
+    for n,i in enumerate(weather_list):
         for stepSize in step_list:
-            ground_truth.append((summary['pixel_' + i + '_' + str(stepSize)][3]))
+            ground_truth.append((summary["visible_pixels_" + i + '_' + str(stepSize)][3]))
     print "length = " , (len(ground_truth))
     rects1 = self.list_of_plots[0].bar(index+36*bar_width, ground_truth, bar_width, color='#f2f2f2')
 
@@ -103,10 +103,10 @@ class thread2(threading.Thread):
         self.plot_at_once_figures = list()
         for step_size in step_list:
 
-            if ( evaluation == "environment"):
-                current_list = environment_list
+            if ( evaluation == "weather"):
+                current_list = weather_list
 
-            for weather in environment_list:
+            for weather in weather_list:
                 self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("deviation", yaml_file_data, weather, step_size))
 
         self.threadRun = False
@@ -138,10 +138,10 @@ class thread3(threading.Thread):
         self.plot_at_once_figures = list()
         for step_size in step_list:
 
-            if ( evaluation == "environment"):
-                current_list = environment_list
+            if ( evaluation == "weather"):
+                current_list = weather_list
 
-            for weather in environment_list:
+            for weather in weather_list:
                 self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("collision", yaml_file_data, weather, step_size))
 
         self.threadRun = False
@@ -173,10 +173,10 @@ class thread4(threading.Thread):
         self.plot_at_once_figures = list()
         for step_size in step_list:
 
-            if ( evaluation == "environment"):
-                current_list = environment_list
+            if ( evaluation == "weather"):
+                current_list = weather_list
 
-            for weather in environment_list:
+            for weather in weather_list:
                 self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("obj_displacement", yaml_file_data, weather, step_size))
         self.threadRun = False
 
@@ -307,7 +307,7 @@ if ( thread_deviation != None ):
 
 def templateToYamlMapping(self, meausuring_parameter, yaml_file_data, weather, step_size):
 
-    if ( meausuring_parameter == "pixel"):
+    if ( meausuring_parameter == "visible_pixels"):
         template_name_ = template_name_of_evaluation_data
         template_name_gt = template_name_of_evaluation_data_gt
     elif ( meausuring_parameter == "deviation"):

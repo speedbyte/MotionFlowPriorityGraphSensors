@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # _*_ encoding:utf-8 _*_
 
-
-
 just_ground_truth = False
 
 dict_datafilters = {
@@ -13,48 +11,34 @@ dict_datafilters = {
     "datafilter_3": "datafilter_3",
 }
 
-datafilter_list = [ "0", ]
-
-algorithm_list = ["LK", "FB",]
-
-
-dict_label_environment = {
+dict_label_weather = {
     "ground_truth" : "ground_truth",
-    "blue_sky" : "blue_sky",
+    "blue_sky"     : "blue_sky",
     "light_snow"   : "light_snow",
     "mild_snow"    : "mild_snow",
     "heavy_snow"   : "heavy_snow",
 }
 
-dict_color_environment = {
+dict_color_weather = {
     "ground_truth" : "blue",
-    "blue_sky" : "red",
+    "blue_sky"     : "red",
     "light_snow"   : "yellow",
     "mild_snow"    : "green",
     "heavy_snow"   : "brown",
 }
 
-environment_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
-environment_list = ["blue_sky", "heavy_snow",]
-#environment_list = ["blue_sky",]
-
-number_of_sensors = 1
-
-step_list = [5]
-
-fps_list = ["30", "15", "10", "7.5"]#night
-fps_list = ["30",]
-
-evaluation = "environment"
+datafilter_list  = [ "0", ]
+algorithm_list   = ["LK", "FB",]
+weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
+weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
+#weather_list = ["blue_sky",]
+sensor_list      = [0,]
+step_list        = [5]
+fps_list         = ["30", "15", "10", "7.5"]#night
+fps_list         = ["30",]
 
 color_list_algorithms = ["blue", "red", "yellow", "green", "brown"]
-color_list_environment = ["blue", "gray", "brown", "black", "brown"]
-
-label_list_algorithm = [dict_datafilters["ground_truth"]]
-for x in range(len(datafilter_list)):
-    label_list_algorithm.append(dict_datafilters["datafilter_" + datafilter_list[x]])
-
-
+color_list_weather = ["blue", "gray", "brown", "black", "brown"]
 
 #color_list_algorithms = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']

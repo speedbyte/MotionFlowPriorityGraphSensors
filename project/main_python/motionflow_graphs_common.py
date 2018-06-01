@@ -62,25 +62,8 @@ class Figures(object):
         for figure_index in range(1):
 
             measuring_parameter = plot_data[0].get_measuring_parameter()
-            if ( measuring_parameter == "obj_displacement" ):
-
-                self.list_of_plots[figure_index].set_xlabel("object dimension")
-                self.list_of_plots[figure_index].set_ylabel("deviation of object displacements from ground truth ( px )")
-
-            elif ( measuring_parameter == "pixel"):
-
-                self.list_of_plots[figure_index].set_xlabel("frame_count")
-                self.list_of_plots[figure_index].set_ylabel("visible pixels / ground truth pixels")
-
-            elif ( measuring_parameter == "deviation"):
-
-                self.list_of_plots[figure_index].set_xlabel("frame_count")
-                self.list_of_plots[figure_index].set_ylabel("deviation of collision points from ground truth ( px )")
-
-            elif ( measuring_parameter == "collision"):
-
-                self.list_of_plots[figure_index].set_xlabel("frame_count")
-                self.list_of_plots[figure_index].set_ylabel("collision points ( px )")
+            self.list_of_plots[figure_index].set_xlabel(plot_data[0].get_x_label())
+            self.list_of_plots[figure_index].set_ylabel(plot_data[0].get_y_label())
 
             #self.list_of_plots[figure_index].set_xlabel(plot_data[figure_index][0])
             #self.list_of_plots[figure_index].set_ylabel(plot_data[figure_index][1])
@@ -112,19 +95,19 @@ class Figures(object):
                                                             plot_data[x][3]/SCALE, 'ko', lw=1,
                                                             color=plot_data[x][4][env_index],
                                                             label=plot_data[x][5][env_index])
-                elif ( measuring_parameter == "pixel" ) :
-
-                    line1 = self.list_of_plots[figure_index].plot(x_axis_data,
-                                                                  y_axis_data/SCALE, 'ko', lw=1,
-                                                                  color=dict_color_environment[env_index],
-                                                                  label=dict_label_environment[env_index])
-
                 elif ( measuring_parameter == "deviation" ) :
                     line = self.list_of_plots[figure_index].plot(plot_data[figure_index][2][x],
                                                                  plot_data[figure_index][3][x]/10, 'ko', lw=1,
                                                                  color=plot_data[figure_index][4][x+env_index],
                                                                  label=plot_data[figure_index][5][x+env_index])
 
+
+                else :
+
+                    line1 = self.list_of_plots[figure_index].plot(x_axis_data,
+                                                                  y_axis_data/SCALE, 'ko', lw=1,
+                                                                  color=dict_color_weather[env_index],
+                                                                  label=dict_label_weather[env_index])
 
                 self.list_of_plots[figure_index].legend(loc='upper right', fontsize='small')
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
@@ -176,19 +159,19 @@ class Figures(object):
         plt.close("all")
 
 
-    def evaluate_pixel(self, summary, step_list):
+    def evaluate_pixel(self, summary):
 
         print summary
 
-        n_groups = len(environment_list)
+        n_groups = len(weather_list)
         bar_width = 0.1
         opacity = 0.4
         index = np.arange(0, 2*n_groups, 2)
 
         regroup = list()
 
-        for env_name in environment_list:
-            regroup.append(summary['pixel_' + env_name + '_' + str(step_list[0])][0])
+        for env_name in weather_list:
+            regroup.append(summary["visible_pixels_" + env_name + '_' + str(step_list[0])][0])
 
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
@@ -197,9 +180,9 @@ class Figures(object):
             for n, step_size in enumerate(step_list):
                 regroup = list()
                 shift = shift+1
-                for env_name in environment_list:
-                    #print 'pixel_' + env_name + '_' + str(step_size)
-                    regroup.append(summary['pixel_' + env_name + '_' + str(step_size)][n+1])
+                for env_name in weather_list:
+                    print "visible_pixels_" + env_name + '_' + str(step_size)
+                    regroup.append(summary["visible_pixels_" + env_name + '_' + str(step_size)][n])
                 rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[n+1], edgecolor='black')
             rects1.set_label(label_list_bar[n+1])
 
@@ -224,14 +207,14 @@ class Figures(object):
     def evaluate_deviation(self, summary, step_list):
 
 
-        n_groups = len(environment_list)
+        n_groups = len(weather_list)
         bar_width = 0.1
         opacity = 0.4
         index = np.arange(0, 2*n_groups, 2)
 
         regroup = list()
 
-        for env_name in environment_list:
+        for env_name in weather_list:
             regroup.append(summary['deviation_' + env_name + '_' + str(step_list[0])][0])
 
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
@@ -242,7 +225,7 @@ class Figures(object):
                 for step_size in step_list:
                     regroup = list()
                     shift = shift+1
-                    for env_name in environment_list:
+                    for env_name in weather_list:
                         print 'deviation_' + env_name + '_' + str(step_size)
                         regroup.append(summary['deviation_' + env_name + '_' + str(step_size)][val+1])
                     rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
@@ -261,14 +244,14 @@ class Figures(object):
 
         print summary
 
-        n_groups = len(environment_list)
+        n_groups = len(weather_list)
         bar_width = 0.1
         opacity = 0.4
         index = np.arange(0, 2*n_groups, 2)
 
         regroup = list()
 
-        for env_name in environment_list:
+        for env_name in weather_list:
             regroup.append(summary['obj_displacement_' + env_name + '_' + str(step_list[0])][0])
 
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
@@ -279,7 +262,7 @@ class Figures(object):
                 for step_size in step_list:
                     regroup = list()
                     shift = shift+1
-                    for env_name in environment_list:
+                    for env_name in weather_list:
                         print 'obj_displacement_' + env_name + '_' + str(step_size)
                         y_data = [summary['obj_displacement_' + env_name + '_' + str(step_size)][val+1]]
                         y_data = np.array(y_data)

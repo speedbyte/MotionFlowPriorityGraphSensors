@@ -15,11 +15,13 @@ OUTLIER = 100000
 
 class PlotData(object):
 
-    def __init__(self, plot1, measuring_parameter, weather, stepSize):
+    def __init__(self, plot1, measuring_parameter, weather, stepSize, x_label, y_label):
         self.plot1 = plot1
         self.measuring_parameter = measuring_parameter
         self.weather = weather
         self.stepSize = stepSize
+        self.x_label = x_label
+        self.y_label = y_label
 
     def get_x_axis(self):
         return self.plot1[2]
@@ -48,6 +50,11 @@ class PlotData(object):
     def get_step_size(self):
         return self.stepSize
 
+    def get_x_label(self):
+        return self.x_label
+
+    def get_y_label(self):
+        return self.y_label
 
 class SensorDataPlot(object):
 
@@ -58,8 +65,7 @@ class SensorDataPlot(object):
 
     def templateToYamlMapping(self, meausuring_parameter, i, step_size):
 
-        if ( meausuring_parameter == "pixel"):
-            template_name_ = template_name_of_evaluation_data
+        template_name_ = template_name_of_evaluation_data
 
         temp_list = map(lambda x : (x + algorithm_list[0] + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
 
@@ -68,8 +74,7 @@ class SensorDataPlot(object):
 
     def templateToYamlMapping_GT(self, meausuring_parameter):
 
-        if ( meausuring_parameter == "pixel"):
-            template_name_gt = template_name_of_evaluation_data_gt
+        template_name_gt = template_name_of_evaluation_data_gt
 
         temp_list = list()
         temp_list.append(template_name_gt[0] + "sensor_index_" + str(self.getSensorIndex()))
@@ -77,7 +82,7 @@ class SensorDataPlot(object):
         return (temp_list[0])
 
 
-    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, algorithm, weather, stepSize, datafilter_index=0, label=""):
+    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, algorithm, weather, stepSize, datafilter_index, x_label, y_label):
 
         figures_plot = list()
 
@@ -90,8 +95,11 @@ class SensorDataPlot(object):
 
             data_points_gt = yaml_file_data[data_list[0]]
             print "getting " , data_list[0]
-            if ( measuring_parameter == "pixel"):
-                x_axis, y_axis, y_axis_mean = self.getShape(data_points_gt, data_points_gt)
+
+            if ( measuring_parameter == "visible_pixels"):
+                x_axis, y_axis, y_axis_mean = self.getVisiblePixels(data_points_gt, data_points_gt)
+            elif ( measuring_parameter == "good_pixels"):
+                x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points_gt)
 
         # ###2
         elif ( len(data_list) == 2 ):
@@ -99,8 +107,10 @@ class SensorDataPlot(object):
                 data_points_gt = yaml_file_data[data_list[0]]
                 data_points = yaml_file_data[data_list[1]]
                 print "getting ", data_list[1]
-                if ( measuring_parameter == "pixel"):
-                    x_axis, y_axis, y_axis_mean = self.getShape(data_points_gt, data_points)
+                if ( measuring_parameter == "visible_pixels"):
+                    x_axis, y_axis, y_axis_mean = self.getVisiblePixels(data_points_gt, data_points)
+                elif ( measuring_parameter == "good_pixels"):
+                    x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points)
                 # ###3
 
         lower_x = min(numpy.nanmin(x_axis), lower_x)
@@ -120,7 +130,6 @@ class SensorDataPlot(object):
 
         print "Table " + measuring_parameter + " robustness for " + weather
         mean_list = list()
-        mean_list.append(y_axis_mean)
 
         mean_list.append(y_axis_mean)
 
@@ -132,7 +141,7 @@ class SensorDataPlot(object):
         self.summary_mean[measuring_parameter + '_' + weather + '_' + str(stepSize) ] = mean_list
         lock.release()
 
-        plotData = PlotData(plot1, measuring_parameter, weather, stepSize)
+        plotData = PlotData(plot1, measuring_parameter, weather, stepSize, x_label, y_label)
 
         return plotData
 
@@ -227,7 +236,7 @@ class SensorDataPlot(object):
         return x_axis, y_axis, y_axis_mean
 
 
-    def getShape(self, data_points_gt, data_points):
+    def getVisiblePixels(self, data_points_gt, data_points):
 
         data = list()
 
@@ -258,6 +267,58 @@ class SensorDataPlot(object):
                 xy.append(data_points[count]["frame_count"])
                 xy.append(data_points[count]["visible_pixels"])
                 xy.append(data_points[count]["ground_truth_pixels"])
+                data.append(xy)
+
+        newshape = self.fuseDataFromSameFrames(data)
+        print newshape
+
+        y_axis_mean = 0
+        data = numpy.array(newshape)
+        x0, y0 = data.T
+        y_axis = 1.0*x0/y0   # dividing by total pixels gt considering step size
+
+        count = 0
+        for n,i in enumerate(y_axis):
+            if ( i == i ):
+                count = count+1
+                y_axis_mean=y_axis_mean+i
+
+        y_axis_mean = y_axis_mean/(count)
+        x_axis = numpy.arange(0.0, len(newshape), 1)
+        return x_axis, y_axis, y_axis_mean
+
+
+    def getGoodPixels(self, data_points_gt, data_points):
+
+        data = list()
+
+        for count in range(len(data_points_gt)):
+
+            if ( data_points_gt[count]["obj_index"] == 0 ):
+                xy = list()
+                xy.append(data_points_gt[count]["frame_count"])
+                xy.append(data_points_gt[count]["good_pixels"])
+                xy.append(data_points_gt[count]["visible_pixels"])
+                data.append(xy)
+
+
+        newshape = self.fuseDataFromSameFrames(data)
+        print newshape
+
+
+        y_axis_mean = 0
+        data = numpy.array(newshape)
+        x0_gt, y0_gt = data.T
+        y_axis = x0_gt/y0_gt
+
+        data = list()
+
+        for count in range(len(data_points)):
+            if ( data_points[count]["obj_index"] == 0 ):
+                xy = list()
+                xy.append(data_points[count]["frame_count"])
+                xy.append(data_points[count]["good_pixels"])
+                xy.append(data_points[count]["visible_pixels"])
                 data.append(xy)
 
         newshape = self.fuseDataFromSameFrames(data)
