@@ -57,10 +57,11 @@ class Figures(object):
         self.ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
 
 
-    def plot_all(self, plot_data, measuring_parameter):
+    def plot_all(self, plot_data):
 
         for figure_index in range(1):
 
+            measuring_parameter = plot_data[0].get_measuring_parameter()
             if ( measuring_parameter == "obj_displacement" ):
 
                 self.list_of_plots[figure_index].set_xlabel("object dimension")

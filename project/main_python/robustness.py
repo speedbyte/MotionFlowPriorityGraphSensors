@@ -13,6 +13,32 @@ lock = threading.BoundedSemaphore()
 OUTLIER = 100000
 
 
+class PlotData(object):
+
+    def __init__(self, plot1, measuring_parameter, weather, stepSize):
+        self.plot1 = plot1
+        self.measuring_parameter = measuring_parameter
+        self.weather = weather
+        self.stepSize = stepSize
+
+    def get_x_axis(self):
+        return self.plot1[2]
+
+    def get_x_axis_limits(self):
+        return self.plot1[5]
+
+    def get_y_axis_limits(self):
+        return self.plot1[6]
+
+    def set_x_axis_limits(self, limits):
+        self.plot1[5] = limits
+
+    def set_y_axis_limits(self, limits):
+        self.plot1[6] = limits
+
+    def get_measuring_parameter(self):
+        return self.measuring_parameter
+
 
 class SensorDataPlot(object):
 
@@ -68,6 +94,12 @@ class SensorDataPlot(object):
                     x_axis, y_axis, y_axis_mean = self.getShape(data_points_gt, data_points)
                 # ###3
 
+        lower_x = min(numpy.nanmin(x_axis), lower_x)
+        upper_x = max(numpy.nanmax(x_axis), upper_x)
+
+        lower_y = min(numpy.nanmin(y_axis), lower_y)
+        upper_y = max(numpy.nanmax(y_axis), upper_y)
+
         plot1 = ['x_axis',
                  'y_axis',
                  x_axis,
@@ -83,11 +115,6 @@ class SensorDataPlot(object):
 
         mean_list.append(y_axis_mean)
 
-        lower_x = min(numpy.nanmin(x_axis), lower_x)
-        upper_x = max(numpy.nanmax(x_axis), upper_x)
-
-        lower_y = min(numpy.nanmin(y_axis), lower_y)
-        upper_y = max(numpy.nanmax(y_axis), upper_y)
 
 
         # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
@@ -96,9 +123,9 @@ class SensorDataPlot(object):
         self.summary_mean[measuring_parameter + '_' + weather + '_' + str(stepSize) ] = mean_list
         lock.release()
 
-        figures_plot.append([plot1, measuring_parameter, weather, stepSize, lower_x, upper_x, lower_y, upper_y])
+        plotData = PlotData(plot1, measuring_parameter, weather, stepSize)
 
-        return figures_plot
+        return plotData
 
 
     def getSensorIndex(self):

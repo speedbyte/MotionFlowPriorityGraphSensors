@@ -34,26 +34,21 @@ def plot_at_once(figures_plot_array, sensor_index):
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
     print figures_plot_array
 
-    for figures_plot in figures_plot_array:
-        figures = Figures(len(figures_plot))
+    figures = Figures(len(figures_plot_array))
 
-        for figures_plot_index in range(len(figures_plot)):
+    for figures_plot_index in figures_plot_array:
+            lower_x = min(figures_plot_index.get_x_axis_limits()[0], lower_x)
+            upper_x = max(figures_plot_index.get_x_axis_limits()[1], upper_x)
+            lower_y = min(figures_plot_index.get_y_axis_limits()[0], lower_y)
+            upper_y = max(figures_plot_index.get_y_axis_limits()[1], upper_y)
 
-            lower_x = min(figures_plot[figures_plot_index][4], lower_x)
-            upper_x = max(figures_plot[figures_plot_index][5], upper_x)
-            lower_y = min(figures_plot[figures_plot_index][6], lower_y)
-            upper_y = max(figures_plot[figures_plot_index][7], upper_y)
-
-    for figures_plot in figures_plot_array:
-        for figures_plot_index in range(len(figures_plot)):
-            figures_plot[figures_plot_index][0][5][0] = lower_x
-            figures_plot[figures_plot_index][0][5][1] = upper_x
-            figures_plot[figures_plot_index][0][6][0] = lower_y
-            figures_plot[figures_plot_index][0][6][1] = upper_y
+    for figures_plot_index in figures_plot_array:
+        figures_plot_index.set_x_axis_limits([lower_x, upper_x])
+        figures_plot_index.set_y_axis_limits([lower_y, upper_y])
 
     print lower_x, upper_x, lower_y, upper_y
 
-    figures.plot_all(figures_plot_array, measuring_parameter=figures_plot[figures_plot_index][1])
+git    figures.plot_all(figures_plot_array)
 
     figures.save_figure(figures_plot[figures_plot_index][1], figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], sensor_index)
 
@@ -95,11 +90,10 @@ class thread1(threading.Thread):
                 custom_data_list_name[1] = plot_mapping
                 print custom_data_list_name
                 plot_data = self.sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, "pixel", algorithm_list[0], i, str(step_size), 0, "jaccard index " + algorithm_list[0] )
+                print plot_data.get_x_axis()
                 self.plot_at_once_figures.append(plot_data)
 
-
         self.threadRun = False
-
 
     def getThreadState(self):
         return self.threadRun
