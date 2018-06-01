@@ -42,7 +42,7 @@ class SensorDataPlot(object):
         return (temp_list[0])
 
 
-    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, algorithm, weather, stepSize, color_list, label_list, datafilter_index=0, label=""):
+    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, algorithm, weather, stepSize, datafilter_index=0, label=""):
 
         figures_plot = list()
 
@@ -72,9 +72,9 @@ class SensorDataPlot(object):
                  'y_axis',
                  x_axis,
                  y_axis,
-                 color_list,
-                 label_list,
                  measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize), #title
+                 [lower_x, upper_x],
+                 [lower_y, upper_y]
                  ]
 
         print "Table " + measuring_parameter + " robustness for " + weather
@@ -96,7 +96,7 @@ class SensorDataPlot(object):
         self.summary_mean[measuring_parameter + '_' + weather + '_' + str(stepSize) ] = mean_list
         lock.release()
 
-        figures_plot.append((plot1, dict_environment[weather], measuring_parameter, weather, stepSize, lower_x, upper_x, lower_y, upper_y))
+        figures_plot.append([plot1, measuring_parameter, weather, stepSize, lower_x, upper_x, lower_y, upper_y])
 
         return figures_plot
 

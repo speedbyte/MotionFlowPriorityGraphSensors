@@ -57,11 +57,9 @@ class Figures(object):
         self.ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
 
 
-    def plot_all(self, plot_number, env_index, measuring_parameter):
+    def plot_all(self, plot_data, measuring_parameter):
 
-        assert(self.figure_index == len(plot_number))
-
-        for figure_index in range(len(plot_number)):
+        for figure_index in range(1):
 
             if ( measuring_parameter == "obj_displacement" ):
 
@@ -83,57 +81,59 @@ class Figures(object):
                 self.list_of_plots[figure_index].set_xlabel("frame_count")
                 self.list_of_plots[figure_index].set_ylabel("collision points ( px )")
 
-            #self.list_of_plots[figure_index].set_xlabel(plot_number[figure_index][0])
-            #self.list_of_plots[figure_index].set_ylabel(plot_number[figure_index][1])
+            #self.list_of_plots[figure_index].set_xlabel(plot_data[figure_index][0])
+            #self.list_of_plots[figure_index].set_ylabel(plot_data[figure_index][1])
 
-            plot_configuration = plot_number[figure_index][2]
-
-            for x in range(len(plot_configuration)):
-
+            print plot_data
+            for x in range(len(plot_data)):
                 #print 4*env_index+figure_index+x  # this was used for label until now.
 
+                print "-------------"
+                print plot_data[x]
+                env_index = plot_data[x][0][2]
+                print env_index
                 if ( measuring_parameter == "obj_displacement" or measuring_parameter == "collision"):
 
                     if ( measuring_parameter == "collision" ) :
-                        s = np.argsort(plot_number[figure_index][2][x])
-                        line1 = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x][s],
-                                                                  plot_number[figure_index][3][x][s]/SCALE, 'ko', lw=1,
-                                                                  color=plot_number[figure_index][4][x+env_index],
-                                                                  label=plot_number[figure_index][5][x+env_index])
+                        s = np.argsort(plot_data[figure_index][2][x])
+                        line1 = self.list_of_plots[figure_index].plot(plot_data[figure_index][2][x][s],
+                                                                  plot_data[figure_index][3][x][s]/SCALE, 'ko', lw=1,
+                                                                  color=plot_data[figure_index][4][x+env_index],
+                                                                  label=plot_data[figure_index][5][x+env_index])
 
                     else:
 
-                        line1 = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
-                                                            plot_number[figure_index][3][x]/SCALE, 'ko', lw=1,
-                                                            color=plot_number[figure_index][4][x+env_index],
-                                                            label=plot_number[figure_index][5][x+env_index])
+                        line1 = self.list_of_plots[figure_index].plot(plot_data[x][2],
+                                                            plot_data[x][3]/SCALE, 'ko', lw=1,
+                                                            color=plot_data[x][4][env_index],
+                                                            label=plot_data[x][5][env_index])
                 elif ( measuring_parameter == "pixel" ) :
-                    line = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
-                                                             plot_number[figure_index][3][x]/SCALE, 'ko', lw=1,
-                                                             color=plot_number[figure_index][4][x+env_index],
-                                                             label=plot_number[figure_index][5][x+env_index])
+                    print plot_data[x][0][0][2]
+                    line1 = self.list_of_plots[figure_index].plot(plot_data[x][0][0][2],
+                                                                  plot_data[x][0][0][3]/SCALE, 'ko', lw=1,
+                                                                  color=dict_color_environment[env_index],
+                                                                  label=dict_label_environment[env_index])
 
                 elif ( measuring_parameter == "deviation" ) :
-                    line = self.list_of_plots[figure_index].plot(plot_number[figure_index][2][x],
-                                                                 plot_number[figure_index][3][x]/10, 'ko', lw=1,
-                                                                 color=plot_number[figure_index][4][x+env_index],
-                                                                 label=plot_number[figure_index][5][x+env_index])
+                    line = self.list_of_plots[figure_index].plot(plot_data[figure_index][2][x],
+                                                                 plot_data[figure_index][3][x]/10, 'ko', lw=1,
+                                                                 color=plot_data[figure_index][4][x+env_index],
+                                                                 label=plot_data[figure_index][5][x+env_index])
 
 
                 self.list_of_plots[figure_index].legend(loc='upper right', fontsize='small')
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
-                #self.list_of_plots[figure_index].set_title(plot_number[figure_index][6])
+                #self.list_of_plots[figure_index].set_title(plot_data[figure_index][6])
 
-                self.list_of_plots[figure_index].set_xlim([plot_number[figure_index][7][0],
-                                                           plot_number[figure_index][7][1]])
+                self.list_of_plots[figure_index].set_xlim([plot_data[x][0][0][5][0],
+                                                           plot_data[x][0][0][5][1]])
 
                 if ( measuring_parameter == "deviation"):
-                    self.list_of_plots[figure_index].set_ylim([0,
-                                                               1000])
+                    self.list_of_plots[figure_index].set_ylim([0, 1000])
 
                 else:
-                    self.list_of_plots[figure_index].set_ylim([plot_number[figure_index][8][0],
-                                                              plot_number[figure_index][8][1]])
+                    self.list_of_plots[figure_index].set_ylim([plot_data[x][0][0][6][0],
+                                                              plot_data[x][0][0][6][1]])
 
 
     def plot_show_vector_coll_blue_sky(self):

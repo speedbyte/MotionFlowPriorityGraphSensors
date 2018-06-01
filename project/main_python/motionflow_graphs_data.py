@@ -18,27 +18,20 @@ datafilter_list = [ "0", ]
 algorithm_list = ["LK", "FB",]
 
 
-dict_environment = {
-    "ground_truth" : 0,
-    "blue_sky" : 0,
-    "light_snow"   : 0,
-    "mild_snow"    : 0,
-    "heavy_snow"   : 0,
+dict_label_environment = {
+    "ground_truth" : "ground_truth",
+    "blue_sky" : "blue_sky",
+    "light_snow"   : "light_snow",
+    "mild_snow"    : "mild_snow",
+    "heavy_snow"   : "heavy_snow",
 }
 
-dict_environment_sep_graphs_noise_keyword = {
-    "blue_sky" : 0,
-    "light_snow"   : 1,
-    "mild_snow"    : 2,
-    "heavy_snow"   : 3,
-}
-
-
-dict_environment_label = {
-    "blue_sky":  "blue_sky",
-    "env_0": "light snow",
-    "env_1": "mild snow",
-    "env_2": "heavy snow",
+dict_color_environment = {
+    "ground_truth" : "blue",
+    "blue_sky" : "red",
+    "light_snow"   : "yellow",
+    "mild_snow"    : "green",
+    "heavy_snow"   : "brown",
 }
 
 environment_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
@@ -61,7 +54,7 @@ label_list_algorithm = [dict_datafilters["ground_truth"]]
 for x in range(len(datafilter_list)):
     label_list_algorithm.append(dict_datafilters["datafilter_" + datafilter_list[x]])
 
-label_list_enironment = [dict_environment_label["blue_sky"], dict_environment_label["env_0"], dict_environment_label["env_1"], dict_environment_label["env_2"]]
+
 
 #color_list_algorithms = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']

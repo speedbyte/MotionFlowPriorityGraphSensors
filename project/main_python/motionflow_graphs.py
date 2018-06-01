@@ -32,31 +32,30 @@ SCALE = 1
 def plot_at_once(figures_plot_array, sensor_index):
 
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
+    print figures_plot_array
+
+    for figures_plot in figures_plot_array:
+        figures = Figures(len(figures_plot))
+
+        for figures_plot_index in range(len(figures_plot)):
+
+            lower_x = min(figures_plot[figures_plot_index][4], lower_x)
+            upper_x = max(figures_plot[figures_plot_index][5], upper_x)
+            lower_y = min(figures_plot[figures_plot_index][6], lower_y)
+            upper_y = max(figures_plot[figures_plot_index][7], upper_y)
+
     for figures_plot in figures_plot_array:
         for figures_plot_index in range(len(figures_plot)):
-            lower_x = min(figures_plot[figures_plot_index][5], lower_x)
-            upper_x = max(figures_plot[figures_plot_index][6], upper_x)
-            lower_y = min(figures_plot[figures_plot_index][7], lower_y)
-            upper_y = max(figures_plot[figures_plot_index][8], upper_y)
+            figures_plot[figures_plot_index][0][5][0] = lower_x
+            figures_plot[figures_plot_index][0][5][1] = upper_x
+            figures_plot[figures_plot_index][0][6][0] = lower_y
+            figures_plot[figures_plot_index][0][6][1] = upper_y
 
     print lower_x, upper_x, lower_y, upper_y
 
-    for figures_plot in figures_plot_array:
+    figures.plot_all(figures_plot_array, measuring_parameter=figures_plot[figures_plot_index][1])
 
-        figures = Figures(len(figures_plot[0][0]))
-
-        for figures_plot_index in range(len(figures_plot)):
-
-            figures_plot[figures_plot_index][0][0][7][0] = lower_x
-            figures_plot[figures_plot_index][0][0][7][1] = upper_x
-            figures_plot[figures_plot_index][0][0][8][0] = lower_y
-            figures_plot[figures_plot_index][0][0][8][1] = upper_y
-
-            print figures_plot[figures_plot_index][0][0][8][1]
-
-            figures.plot_all(figures_plot[figures_plot_index][0], env_index=figures_plot[figures_plot_index][1], measuring_parameter=figures_plot[figures_plot_index][2])
-
-        figures.save_figure(figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], figures_plot[figures_plot_index][4], sensor_index)
+    figures.save_figure(figures_plot[figures_plot_index][1], figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], sensor_index)
 
 
 class thread1(threading.Thread):
@@ -87,7 +86,7 @@ class thread1(threading.Thread):
             custom_data_list_name = list()
             plot_mapping = self.sensor_plot.templateToYamlMapping_GT("pixel")
             custom_data_list_name.append(plot_mapping)
-            plot_data = self.sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, "pixel", algorithm_list[0], "ground_truth", str(step_size), color_list_algorithms, label_list_algorithm, 0, "jaccard index " + algorithm_list[0] )
+            plot_data = self.sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, "pixel", algorithm_list[0], "ground_truth", str(step_size), 0, "jaccard index " + algorithm_list[0] )
             self.plot_at_once_figures.append(plot_data)
             custom_data_list_name.append(plot_mapping)
 
@@ -95,7 +94,7 @@ class thread1(threading.Thread):
                 plot_mapping = self.sensor_plot.templateToYamlMapping("pixel",i, step_size)
                 custom_data_list_name[1] = plot_mapping
                 print custom_data_list_name
-                plot_data = self.sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, "pixel", algorithm_list[0], i, str(step_size), color_list_algorithms, label_list_algorithm, 0, "jaccard index " + algorithm_list[0] )
+                plot_data = self.sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, "pixel", algorithm_list[0], i, str(step_size), 0, "jaccard index " + algorithm_list[0] )
                 self.plot_at_once_figures.append(plot_data)
 
 
