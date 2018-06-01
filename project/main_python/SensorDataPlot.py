@@ -15,13 +15,14 @@ OUTLIER = 100000
 
 class PlotData(object):
 
-    def __init__(self, plot1, measuring_parameter, weather, stepSize, x_label, y_label):
+    def __init__(self, plot1, algorithm, measuring_parameter, weather, stepSize, x_label, y_label):
         self.plot1 = plot1
         self.measuring_parameter = measuring_parameter
         self.weather = weather
         self.stepSize = stepSize
         self.x_label = x_label
         self.y_label = y_label
+        self.algorithm = algorithm
 
     def get_x_axis(self):
         return self.plot1[2]
@@ -55,6 +56,9 @@ class PlotData(object):
 
     def get_y_label(self):
         return self.y_label
+
+    def get_algorithm(self):
+        return self.algorithm
 
 class SensorDataPlot(object):
 
@@ -141,7 +145,7 @@ class SensorDataPlot(object):
         self.summary_mean[measuring_parameter + '_' + weather + '_' + str(stepSize) ] = mean_list
         lock.release()
 
-        plotData = PlotData(plot1, measuring_parameter, weather, stepSize, x_label, y_label)
+        plotData = PlotData(plot1, algorithm, measuring_parameter, weather, stepSize, x_label, y_label)
 
 
         return plotData

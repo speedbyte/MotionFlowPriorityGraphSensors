@@ -127,12 +127,10 @@ class Figures(object):
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
-    def save_figure(self, measuring_parameter, noise, stepSize=65535, sensor_index=1 ):
+    def save_figure(self, measuring_parameter, noise, stepSize=65535, sensor_index=65535 ):
 
         if ( self.figure_index >= 1 ):
             step_suffix = "stepSize_" + str(stepSize)
-            if noise == "summary":
-                step_suffix = ''
             self.fig1.savefig(output_folder + measuring_parameter + '_' + noise + '_' + step_suffix + '_' "sensor_" + str(sensor_index), bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 2 ):

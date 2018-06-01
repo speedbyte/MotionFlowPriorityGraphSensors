@@ -51,7 +51,7 @@ def plot_at_once(figures_plot_array, sensor_index):
 
     figures.plot_all(figures_plot_array)
 
-    figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_env_index(), figures_plot_array[0].get_step_size(), sensor_index)
+    figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), sensor_index)
 
 
 def getPlotList(sensor_plot, measuring_parameter, x_label, y_label):
@@ -111,10 +111,11 @@ if __name__ == '__main__':
         plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
         # summary
-        summary = sensor_plot.get_summary()
-        figures = Figures(1)
-        figures.evaluate_pixel(summary)
-        figures.save_figure("visible_pixels", "summary")
+        if ( 0 ):
+            summary = sensor_plot.get_summary()
+            figures = Figures(1)
+            figures.evaluate_pixel(summary)
+            figures.save_figure("visible_pixels", "summary", step_list[0], x)
 
         plot_at_once_figures = getPlotList(sensor_plot, "good_pixels", "frame_count", "good pixels / visible pixels")
         collectPlots.append(plot_at_once_figures)
