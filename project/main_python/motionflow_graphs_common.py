@@ -161,39 +161,39 @@ class Figures(object):
 
     def evaluate_pixel(self, summary):
 
+        # each group member is positioned at bar position. hence array of group members and array of bar_position should be equal.
         print summary
 
-        n_groups = len(weather_list)
+        n_groups = len(algorithm_list)
         bar_width = 0.1
         opacity = 0.4
-        index = np.arange(0, 2*n_groups, 2)
 
-        regroup = list()
-
-        for env_name in weather_list:
-            regroup.append(summary["visible_pixels_" + env_name + '_' + str(step_list[0])][0])
-
-        rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
+        index = np.arange(0, 4*n_groups, 1)
+        print index
 
         shift = 0
-        if ( just_ground_truth == False ):
-            for n, step_size in enumerate(step_list):
-                regroup = list()
-                shift = shift+1
-                for env_name in weather_list:
-                    print "visible_pixels_" + env_name + '_' + str(step_size)
-                    regroup.append(summary["visible_pixels_" + env_name + '_' + str(step_size)][n])
-                rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[n+1], edgecolor='black')
-            rects1.set_label(label_list_bar[n+1])
 
-            self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
-            self.list_of_plots[0].set_ylabel('Average Jaccard index of displacement vectors over all frames')
-            #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
-            plt.xticks(index + 4*bar_width, ('Blue Sky', 'Heavy Snow', 'xxxx', 'xxxx'))
-            #self.list_of_plots[0].legend()
+        for n, env_name in enumerate(weather_list):
+        #for n, step_size in enumerate(step_list):
+            regroup = len(index)*[0]
+            shift = shift+1
+            for algorithm in algorithm_list:
+                print "visible_pixels_" + env_name + '_' + str(5)
+                regroup[0] = summary["visible_pixels_" + env_name + '_' + str(5)][0]
+            bar_positions = index+shift*bar_width
+            print bar_positions
+            rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n+1], edgecolor='black')
+            rects1.set_label(env_name)
 
+        #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
+        self.list_of_plots[0].set_xticks(index + 2*bar_width)
+        self.list_of_plots[0].set_xticklabels(algorithm_list, rotation=90)
+        self.list_of_plots[0].legend()
+        self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
 
-            #self.list_of_plots[0].tight_layout()
+        self.list_of_plots[0].set_ylabel('Average Jaccard index of displacement vectors over all frames')
+
+        #self.list_of_plots[0].tight_layout()
 
 
         #rects1 = plt.bar(index, means_men, bar_width,

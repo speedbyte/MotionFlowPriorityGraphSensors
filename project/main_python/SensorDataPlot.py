@@ -143,6 +143,7 @@ class SensorDataPlot(object):
 
         plotData = PlotData(plot1, measuring_parameter, weather, stepSize, x_label, y_label)
 
+
         return plotData
 
 
@@ -251,7 +252,7 @@ class SensorDataPlot(object):
 
 
         newshape = self.fuseDataFromSameFrames(data)
-        print newshape
+        #print newshape
 
 
         y_axis_mean = 0
@@ -270,7 +271,7 @@ class SensorDataPlot(object):
                 data.append(xy)
 
         newshape = self.fuseDataFromSameFrames(data)
-        print newshape
+        #print newshape
 
         y_axis_mean = 0
         data = numpy.array(newshape)
@@ -303,7 +304,7 @@ class SensorDataPlot(object):
 
 
         newshape = self.fuseDataFromSameFrames(data)
-        print newshape
+        #print newshape
 
 
         y_axis_mean = 0
@@ -322,7 +323,7 @@ class SensorDataPlot(object):
                 data.append(xy)
 
         newshape = self.fuseDataFromSameFrames(data)
-        print newshape
+        #print newshape
 
         y_axis_mean = 0
         data = numpy.array(newshape)
@@ -353,7 +354,7 @@ class SensorDataPlot(object):
 
 
         newshape = self.fuseDataFromSameFrames(data)
-        print newshape
+        #print newshape
 
 
         y_axis_mean = 0
@@ -370,7 +371,7 @@ class SensorDataPlot(object):
                 data.append(xy)
 
         newshape = self.fuseDataFromSameFrames(data)
-        print newshape
+        #print newshape
 
         y_axis_mean = 0
         data = numpy.array(newshape)

@@ -30,6 +30,8 @@ SCALE = 1
 
 def plot_at_once(figures_plot_array, sensor_index):
 
+    print "---------------------------"
+
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
     print figures_plot_array
 
@@ -61,20 +63,23 @@ def getPlotList(sensor_plot, measuring_parameter, x_label, y_label):
 
         for n, weather in enumerate(weather_list):
 
+            print "---------------------------"
             custom_data_list_name = list()
 
             plot_mapping = sensor_plot.templateToYamlMapping_GT(measuring_parameter)
             custom_data_list_name.append(plot_mapping)
-            plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, algorithm_list[0], weather, str(step_size), 0, x_label, y_label )
+            plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, algorithm_list[0], "ground_truth", str(step_size), 0, x_label, y_label )
 
             if ( weather != "ground_truth"):
                 plot_mapping = sensor_plot.templateToYamlMapping(measuring_parameter, weather, step_size)
                 custom_data_list_name.append(plot_mapping)
-                print custom_data_list_name
                 plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, algorithm_list[0], weather, str(step_size), 0, x_label, y_label)
-                print plot_data.get_x_axis()
+                #print plot_data.get_x_axis()
 
+            print custom_data_list_name
             plot_at_once_figures.append(plot_data)
+
+        print "---------------------------"
 
     return plot_at_once_figures
 
@@ -97,7 +102,6 @@ if __name__ == '__main__':
 
     collectPlots = list()
 
-    #for x in [0,1]:
     for x in sensor_list:
 
         sensor_plot = SensorDataPlot(x)
@@ -116,7 +120,4 @@ if __name__ == '__main__':
         collectPlots.append(plot_at_once_figures)
         plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
-
-    #for x in [1,2]:
-    #    plot_at_once(collectPlots[x-1], x)
 
