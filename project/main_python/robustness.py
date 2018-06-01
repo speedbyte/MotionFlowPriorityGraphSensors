@@ -24,6 +24,9 @@ class PlotData(object):
     def get_x_axis(self):
         return self.plot1[2]
 
+    def get_y_axis(self):
+        return self.plot1[3]
+
     def get_x_axis_limits(self):
         return self.plot1[5]
 
@@ -39,6 +42,8 @@ class PlotData(object):
     def get_measuring_parameter(self):
         return self.measuring_parameter
 
+    def get_env_index(self):
+        return self.weather
 
 class SensorDataPlot(object):
 

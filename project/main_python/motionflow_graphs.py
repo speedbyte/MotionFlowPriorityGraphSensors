@@ -48,7 +48,7 @@ def plot_at_once(figures_plot_array, sensor_index):
 
     print lower_x, upper_x, lower_y, upper_y
 
-git    figures.plot_all(figures_plot_array)
+    figures.plot_all(figures_plot_array)
 
     figures.save_figure(figures_plot[figures_plot_index][1], figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], sensor_index)
 

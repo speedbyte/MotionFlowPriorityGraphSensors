@@ -85,14 +85,18 @@ class Figures(object):
             #self.list_of_plots[figure_index].set_xlabel(plot_data[figure_index][0])
             #self.list_of_plots[figure_index].set_ylabel(plot_data[figure_index][1])
 
-            print plot_data
             for x in range(len(plot_data)):
-                #print 4*env_index+figure_index+x  # this was used for label until now.
+
+                x_axis_data = plot_data[x].get_x_axis()
+                y_axis_data = plot_data[x].get_y_axis()
 
                 print "-------------"
-                print plot_data[x]
-                env_index = plot_data[x][0][2]
+                env_index = plot_data[x].get_env_index()
                 print env_index
+
+                x_axis_limits = plot_data[x].get_x_axis_limits()
+                y_axis_limits = plot_data[x].get_y_axis_limits()
+
                 if ( measuring_parameter == "obj_displacement" or measuring_parameter == "collision"):
 
                     if ( measuring_parameter == "collision" ) :
@@ -109,9 +113,9 @@ class Figures(object):
                                                             color=plot_data[x][4][env_index],
                                                             label=plot_data[x][5][env_index])
                 elif ( measuring_parameter == "pixel" ) :
-                    print plot_data[x][0][0][2]
-                    line1 = self.list_of_plots[figure_index].plot(plot_data[x][0][0][2],
-                                                                  plot_data[x][0][0][3]/SCALE, 'ko', lw=1,
+
+                    line1 = self.list_of_plots[figure_index].plot(x_axis_data,
+                                                                  y_axis_data/SCALE, 'ko', lw=1,
                                                                   color=dict_color_environment[env_index],
                                                                   label=dict_label_environment[env_index])
 
@@ -126,15 +130,13 @@ class Figures(object):
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
                 #self.list_of_plots[figure_index].set_title(plot_data[figure_index][6])
 
-                self.list_of_plots[figure_index].set_xlim([plot_data[x][0][0][5][0],
-                                                           plot_data[x][0][0][5][1]])
+                self.list_of_plots[figure_index].set_xlim([x_axis_limits[0],x_axis_limits[1]])
 
                 if ( measuring_parameter == "deviation"):
                     self.list_of_plots[figure_index].set_ylim([0, 1000])
 
                 else:
-                    self.list_of_plots[figure_index].set_ylim([plot_data[x][0][0][6][0],
-                                                              plot_data[x][0][0][6][1]])
+                    self.list_of_plots[figure_index].set_ylim([y_axis_limits[0], y_axis_limits[1]])
 
 
     def plot_show_vector_coll_blue_sky(self):
