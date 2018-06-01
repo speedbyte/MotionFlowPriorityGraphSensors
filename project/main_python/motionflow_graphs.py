@@ -34,7 +34,7 @@ def plot_at_once(figures_plot_array, sensor_index):
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
     print figures_plot_array
 
-    figures = Figures(len(figures_plot_array))
+    figures = Figures(1)
 
     for figures_plot_index in figures_plot_array:
             lower_x = min(figures_plot_index.get_x_axis_limits()[0], lower_x)
@@ -50,7 +50,7 @@ def plot_at_once(figures_plot_array, sensor_index):
 
     figures.plot_all(figures_plot_array)
 
-    figures.save_figure(figures_plot[figures_plot_index][1], figures_plot[figures_plot_index][2], figures_plot[figures_plot_index][3], sensor_index)
+    figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_env_index(), figures_plot_array[0].get_step_size(), sensor_index)
 
 
 class thread1(threading.Thread):

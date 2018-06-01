@@ -45,6 +45,10 @@ class PlotData(object):
     def get_env_index(self):
         return self.weather
 
+    def get_step_size(self):
+        return self.stepSize
+
+
 class SensorDataPlot(object):
 
     def __init__(self, sensor_number):
