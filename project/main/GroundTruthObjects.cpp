@@ -13,10 +13,9 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
     //Initialization
 
-    m_object_base_all.clear();
+    std::vector<STRUCT_GT_OBJECTS_ALL>  multiframe_object_base_all;
+    std::vector<bool>  multiframe_object_base_visibility;
     m_object_base_point_displacement.clear();
-    m_object_base_visibility.clear();
-
 
     assert(gt_data.getAll().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
 
@@ -38,10 +37,10 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
             /*if ( gt_data.getAll().at(current_index).m_object_occlusion.occlusion_inertial == 127 || gt_data.getAll().at(current_index).visMask == 0
                 || gt_data.getAll().at(current_index).m_object_location_inertial_m.location_x_m == 0 || gt_data.getAll().at(current_index).m_region_of_interest_px.x <= 0) { */
-            m_object_base_visibility.push_back((true));
+            multiframe_object_base_visibility.push_back((true));
         }
         else{
-            m_object_base_visibility.push_back((false));
+            multiframe_object_base_visibility.push_back((false));
         }
 
 
@@ -90,14 +89,52 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
         }
 
-        printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)m_object_base_visibility.at(current_index)?"true":"false"), frame_count, current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
+        printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)multiframe_object_base_visibility.at(current_index)?"true":"false"), frame_count, current_index, gt_data.getAll().at(current_index).m_object_location_px.cog_px.x, gt_data.getAll().at(current_index).m_object_location_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
         );
 
-        m_object_base_all.push_back(gt_data.getAll().at(current_index));
+        multiframe_object_base_all.push_back(gt_data.getAll().at(current_index));
         current_index++;
     }
-    m_object_extrapolated_all.push_back(m_object_base_all);
+    m_object_extrapolated_all.push_back(multiframe_object_base_all);
     m_object_extrapolated_point_displacement.push_back(m_object_base_point_displacement);
-    m_object_extrapolated_visibility.push_back(m_object_base_visibility);
+    m_object_extrapolated_visibility.push_back(multiframe_object_base_visibility);
+
+}
+
+
+void GroundTruthObjects::generate_combined_sensor_data() {
+
+
+    std::vector<std::pair<cv::Point2f, cv::Point2f> > sensor_combined_point_displacement;
+    std::vector<bool> sensor_combined_visibility;
+
+    for (ushort frame_count = 0; frame_count < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; frame_count++) {
+
+
+        cv::Point2f pts;
+        cv::Point2f displacement;
+        bool visibility_1, visibility_2;
+
+        pts = m_object_extrapolated_point_displacement.at(0).at(frame_count).first;
+        visibility_1 = m_object_extrapolated_visibility.at(0).at(frame_count);
+        visibility_2 = m_object_extrapolated_visibility.at(1).at(frame_count);
+
+        displacement = m_object_extrapolated_point_displacement.at(0).at(frame_count).second;
+        displacement += m_object_extrapolated_point_displacement.at(1).at(frame_count).second;
+        displacement /= 2;
+        sensor_combined_point_displacement.push_back(std::make_pair(pts, displacement));
+
+        sensor_combined_visibility.push_back(visibility_1 | visibility_2);
+
+
+    }
+
+    m_object_extrapolated_point_displacement.push_back(sensor_combined_point_displacement);
+    m_object_extrapolated_visibility.push_back(sensor_combined_visibility);
+    std::vector<STRUCT_GT_OBJECTS_ALL> sensor_combined_object_extrapolated_all;
+
+    std::copy(m_object_extrapolated_all.at(0).begin(), m_object_extrapolated_all.at(0).end(), std::back_inserter(sensor_combined_object_extrapolated_all));
+
+    m_object_extrapolated_all.push_back(sensor_combined_object_extrapolated_all);
 
 }

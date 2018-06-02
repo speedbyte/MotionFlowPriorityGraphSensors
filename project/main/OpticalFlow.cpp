@@ -86,7 +86,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
         int height = cvRound(
                 m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
                         frame_count).m_region_of_interest_px.height_px);
-        bool visibility = m_ptr_list_simulated_objects.at(obj_index)->get_object_extrapolated_visibility().at(
+        bool visibility = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(
                 sensor_index).at(frame_count);
 
         cv::Mat flowFrame;

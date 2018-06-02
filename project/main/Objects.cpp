@@ -13,7 +13,6 @@ using namespace std::chrono;
 
 
 void Objects::set_object_stencil_point_displacement_pixel_visibility(
-
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement,  std::vector<std::vector<bool> > sensor_stencil_visibility ) {
 
     m_object_stencil_point_displacement.push_back(sensor_stencil_movement);
@@ -180,7 +179,6 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
     generate_object_mean_lineparameters(post_processing_algorithm);
 
 }
-
 
 
 void Objects::generate_updated_mean_from_multiple_sensors( std::string post_processing_algorithm,
@@ -443,4 +441,3 @@ void Objects::generate_object_mean_lineparameters( std::string post_processing_a
     assert(m_list_object_line_parameters.at(0).at(0).size() == m_object_stencil_point_displacement.at(0).size());
     std::cout << "line done" << std::endl;
 }
-

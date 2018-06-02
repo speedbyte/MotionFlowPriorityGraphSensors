@@ -27,8 +27,6 @@ private:
 
 protected:
 
-    std::vector<STRUCT_GT_OBJECTS_ALL>
-            m_object_base_all;
 
     std::vector<std::vector<STRUCT_GT_OBJECTS_ALL> >
             m_object_extrapolated_all;
@@ -50,9 +48,6 @@ protected:
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >
             m_list_object_dataprocessing_stencil_points_displacement;
-
-    std::vector<bool>
-            m_object_base_visibility;
 
     std::vector<std::vector<bool> >
             m_object_extrapolated_visibility;
@@ -110,10 +105,6 @@ public:
 
     const std::vector<std::vector<STRUCT_GT_OBJECTS_ALL> > &getExtrapolatedGroundTruthDetails() const {
         return m_object_extrapolated_all;
-    }
-
-    const std::vector<bool>  &get_object_base_visibility()    const {
-        return m_object_base_visibility;
     }
 
     const std::vector<std::vector<bool> >  &get_object_extrapolated_visibility() const {

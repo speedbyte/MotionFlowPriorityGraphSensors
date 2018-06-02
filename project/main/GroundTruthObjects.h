@@ -21,13 +21,14 @@ public:
 
     void generate_object_base_point_displacement(ObjectMetaData gt_data);
 
+    void generate_combined_sensor_data();
+
 private:
 
     ushort m_startPoint;
 
     ObjectImageShapeData m_image_data_and_shape;
 
-    void generate_object_pixel_position_pixel_displacement();
 
 public:
 
@@ -46,12 +47,9 @@ public:
 
         if ( m_objectName != "BackgroundCanvas") {
 
-            printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str
-                    (), getObjectId());
+            printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str(), getObjectId());
 
             generate_object_base_point_displacement(gt_data);
-
-            //generate_object_pixel_position_pixel_displacement();
 
         }
     }

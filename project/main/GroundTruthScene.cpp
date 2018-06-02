@@ -151,7 +151,7 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
     cv::FileStorage write_fs;
     write_fs.open("../position_" + suffix + ".yml", cv::FileStorage::WRITE);
 
-    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index < MAX_ALLOWED_SENSOR_GROUPS; sensor_index++) {
 
         std::cout << "write yaml file for sensor_index  " << (sensor_index) << std::endl;
 
@@ -331,7 +331,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
 
-    for (unsigned sensor_index = 0; sensor_index< SENSOR_COUNT; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index< MAX_ALLOWED_SENSOR_GROUPS; sensor_index++) {
 
         ushort  objectCount = 0;
         ushort  sensorCount = 0;
@@ -529,6 +529,9 @@ void GroundTruthScene::startEvaluating(Noise noise) {
             // each object is monitored by n sensor group.
             m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index));
 
+        }
+        if ( MAX_ALLOWED_SENSOR_GROUPS >= 2 ) {
+            m_list_gt_objects.at(obj_index).generate_combined_sensor_data();
         }
 
     }
