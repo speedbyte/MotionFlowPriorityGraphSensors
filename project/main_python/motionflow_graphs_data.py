@@ -29,7 +29,7 @@ dict_color_weather = {
 
 datafilter_list  = [ "0", ]
 algorithm_list   = ["LK", "FB",]
-algorithm_list   = ["LK", ]
+#algorithm_list   = ["LK", ]
 weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
 #weather_list = ["blue_sky",]

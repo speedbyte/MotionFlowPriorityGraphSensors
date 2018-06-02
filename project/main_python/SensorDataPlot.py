@@ -62,21 +62,25 @@ class PlotData(object):
 
 class SensorDataPlot(object):
 
-    def __init__(self, sensor_number):
+    def __init__(self, sensor_number, algorithm):
         self.summary_mean = dict()
         self.sensor_number = sensor_number
+        self.algorithm = algorithm
 
 
-    def templateToYamlMapping(self, algorithm, i, step_size):
+    def get_algorithm(self):
+        return self.algorithm
+
+    def templateToYamlMapping(self, i, step_size):
 
         template_name_ = template_name_of_evaluation_data
 
-        temp_list = map(lambda x : (x + algorithm + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
+        temp_list = map(lambda x : (x + self.algorithm + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
 
         return (temp_list[0])
 
 
-    def templateToYamlMapping_GT(self, algorithm):
+    def templateToYamlMapping_GT(self):
 
         template_name_gt = template_name_of_evaluation_data_gt
 
@@ -86,7 +90,7 @@ class SensorDataPlot(object):
         return (temp_list[0])
 
 
-    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, algorithm, weather, stepSize, datafilter_index, x_label, y_label):
+    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, weather, stepSize, datafilter_index, x_label, y_label):
 
         figures_plot = list()
 
@@ -142,10 +146,10 @@ class SensorDataPlot(object):
         # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
         lock.acquire()
         print "mean " + measuring_parameter + '_' + weather + '_' + str(stepSize), y_axis_mean
-        self.summary_mean[measuring_parameter + '_' + weather + '_' + str(stepSize) ] = mean_list
+        self.summary_mean[measuring_parameter + '_' + self.algorithm + '_' + weather + '_' + str(stepSize) ] = mean_list
         lock.release()
 
-        plotData = PlotData(plot1, algorithm, measuring_parameter, weather, stepSize, x_label, y_label)
+        plotData = PlotData(plot1, self.algorithm, measuring_parameter, weather, stepSize, x_label, y_label)
 
 
         return plotData

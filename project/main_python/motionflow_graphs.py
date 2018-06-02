@@ -30,10 +30,11 @@ SCALE = 1
 
 def plot_at_once(figures_plot_array, sensor_index):
 
-    print "---------------------------"
+    print "plot_at_once---------------------------"
+    print figures_plot_array
+    print "plot_at_once---------------------------"
 
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
-    print figures_plot_array
 
     figures = Figures(1)
 
@@ -58,28 +59,27 @@ def getPlotList(sensor_plot, measuring_parameter, x_label, y_label):
 
     plot_at_once_figures = list()
 
-    for algorithm in algorithm_list:
-        for step_size in step_list:
+    for step_size in step_list:
 
-            for n, weather in enumerate(weather_list):
-
-                print "---------------------------"
-                custom_data_list_name = list()
-
-                plot_mapping = sensor_plot.templateToYamlMapping_GT(algorithm)
-                custom_data_list_name.append(plot_mapping)
-                plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, algorithm_list[0], "ground_truth", str(step_size), 0, x_label, y_label )
-
-                if ( weather != "ground_truth"):
-                    plot_mapping = sensor_plot.templateToYamlMapping(algorithm, weather, step_size)
-                    custom_data_list_name.append(plot_mapping)
-                    plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, algorithm_list[0], weather, str(step_size), 0, x_label, y_label)
-                    #print plot_data.get_x_axis()
-
-                print custom_data_list_name
-                plot_at_once_figures.append(plot_data)
+        for n, weather in enumerate(weather_list):
 
             print "---------------------------"
+            custom_data_list_name = list()
+
+            plot_mapping = sensor_plot.templateToYamlMapping_GT()
+            custom_data_list_name.append(plot_mapping)
+            plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, "ground_truth", str(step_size), 0, x_label, y_label )
+
+            if ( weather != "ground_truth"):
+                plot_mapping = sensor_plot.templateToYamlMapping(weather, step_size)
+                custom_data_list_name.append(plot_mapping)
+                plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, weather, str(step_size), 0, x_label, y_label)
+                #print plot_data.get_x_axis()
+
+            print custom_data_list_name
+            plot_at_once_figures.append(plot_data)
+
+        print "---------------------------"
 
     return plot_at_once_figures
 
@@ -102,23 +102,27 @@ if __name__ == '__main__':
 
     collectPlots = list()
 
-    for x in sensor_list:
+    summary_list = list()
+    for sensor_index in sensor_list:
 
-        sensor_plot = SensorDataPlot(x)
+        for algorithm in algorithm_list:
 
-        plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="visible_pixels", x_label="frame_count", y_label="visible pixels / ground truth pixels")
-        collectPlots.append(plot_at_once_figures)
-        plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+            sensor_plot = SensorDataPlot(sensor_index, algorithm)
 
-        # summary
-        if ( 1 ):
-            summary = sensor_plot.get_summary()
-            figures = Figures(1)
-            figures.evaluate_pixel(summary)
-            figures.save_figure("visible_pixels", "summary", step_list[0], x)
+            plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="visible_pixels", x_label="frame_count", y_label="visible pixels / ground truth pixels")
+            collectPlots.append(plot_at_once_figures)
+            plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
-        plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="frame_count", y_label="good pixels / visible pixels")
-        collectPlots.append(plot_at_once_figures)
-        plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+            # summary
+            summary_list.append(sensor_plot.get_summary())
 
 
+            plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="frame_count", y_label="good pixels / visible pixels")
+            collectPlots.append(plot_at_once_figures)
+            plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+
+
+    for sensor_index in sensor_list:
+        figures = Figures(1)
+        figures.evaluate_pixel(summary_list)
+        figures.save_figure("visible_pixels", "summary", step_list[0], sensor_index)

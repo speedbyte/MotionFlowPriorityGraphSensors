@@ -157,36 +157,35 @@ class Figures(object):
         plt.close("all")
 
 
-    def evaluate_pixel(self, summary):
+    def evaluate_pixel(self, summary_list):
 
         # each group member is positioned at bar position. hence array of group members and array of bar_position should be equal.
-        print summary
 
         n_groups = len(algorithm_list)
         bar_width = 0.1
         opacity = 0.4
 
-        index = np.arange(0, 4*n_groups, 1)
+        index = np.arange(0, 4*n_groups, 2)
         print index
 
         shift = 0
 
-        for n, env_name in enumerate(weather_list):
+        for n, weather in enumerate(weather_list):
         #for n, step_size in enumerate(step_list):
             regroup = len(index)*[0]
             shift = shift+1
-            for algorithm in algorithm_list:
-                print "visible_pixels_" + env_name + '_' + str(5)
-                regroup[0] = summary["visible_pixels_" + env_name + '_' + str(5)][0]
-            bar_positions = index+shift*bar_width
+            print "visible_pixels_" + weather + '_' + str(5)
+            for p, algorithm in enumerate(algorithm_list):
+                regroup[p] = summary_list[p]["visible_pixels_" + algorithm + '_' + weather + '_' + str(5)][0]
+            bar_positions = index + (shift*bar_width)
             print bar_positions
             rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n+1], edgecolor='black')
-            rects1.set_label(env_name)
+            rects1.set_label(weather)
 
         #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
         self.list_of_plots[0].set_xticks(index + 2*bar_width)
         self.list_of_plots[0].set_xticklabels(algorithm_list, rotation=90)
-        self.list_of_plots[0].legend()
+        #self.list_of_plots[0].legend()
         self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
 
         self.list_of_plots[0].set_ylabel('Average Jaccard index of displacement vectors over all frames')
@@ -212,8 +211,8 @@ class Figures(object):
 
         regroup = list()
 
-        for env_name in weather_list:
-            regroup.append(summary['deviation_' + env_name + '_' + str(step_list[0])][0])
+        for weather in weather_list:
+            regroup.append(summary['deviation_' + weather + '_' + str(step_list[0])][0])
 
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
@@ -223,9 +222,9 @@ class Figures(object):
                 for step_size in step_list:
                     regroup = list()
                     shift = shift+1
-                    for env_name in weather_list:
-                        print 'deviation_' + env_name + '_' + str(step_size)
-                        regroup.append(summary['deviation_' + env_name + '_' + str(step_size)][val+1])
+                    for weather in weather_list:
+                        print 'deviation_' + weather + '_' + str(step_size)
+                        regroup.append(summary['deviation_' + weather + '_' + str(step_size)][val+1])
                     rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
 
@@ -249,8 +248,8 @@ class Figures(object):
 
         regroup = list()
 
-        for env_name in weather_list:
-            regroup.append(summary['obj_displacement_' + env_name + '_' + str(step_list[0])][0])
+        for weather in weather_list:
+            regroup.append(summary['obj_displacement_' + weather + '_' + str(step_list[0])][0])
 
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
@@ -260,9 +259,9 @@ class Figures(object):
                 for step_size in step_list:
                     regroup = list()
                     shift = shift+1
-                    for env_name in weather_list:
-                        print 'obj_displacement_' + env_name + '_' + str(step_size)
-                        y_data = [summary['obj_displacement_' + env_name + '_' + str(step_size)][val+1]]
+                    for weather in weather_list:
+                        print 'obj_displacement_' + weather + '_' + str(step_size)
+                        y_data = [summary['obj_displacement_' + weather + '_' + str(step_size)][val+1]]
                         y_data = np.array(y_data)
                         y_data = y_data*100
                         regroup.append(y_data)
