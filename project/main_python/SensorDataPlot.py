@@ -67,16 +67,16 @@ class SensorDataPlot(object):
         self.sensor_number = sensor_number
 
 
-    def templateToYamlMapping(self, meausuring_parameter, i, step_size):
+    def templateToYamlMapping(self, algorithm, i, step_size):
 
         template_name_ = template_name_of_evaluation_data
 
-        temp_list = map(lambda x : (x + algorithm_list[0] + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
+        temp_list = map(lambda x : (x + algorithm + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
 
         return (temp_list[0])
 
 
-    def templateToYamlMapping_GT(self, meausuring_parameter):
+    def templateToYamlMapping_GT(self, algorithm):
 
         template_name_gt = template_name_of_evaluation_data_gt
 

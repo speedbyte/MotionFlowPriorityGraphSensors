@@ -164,13 +164,30 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  combined_stencil_sensor;
         std::vector<std::vector<bool> > combined_sensor_stencil_visibility;
 
-        const std::vector<std::pair<cv::Point2f, cv::Point2f> > elements_combined_stencil_sensor;
 
-        const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > stencil_sensor_1 =   m_ptr_list_simulated_objects.at(obj_index)->get_object_stencil_point_displacement();
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > stencil_sensor_1 =   m_ptr_list_simulated_objects.at(obj_index)->get_object_stencil_point_displacement();
+
 
         std::copy(stencil_sensor_1.at(0).begin(), stencil_sensor_1.at(0).end(), std::back_inserter(combined_stencil_sensor));
 
         for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
+
+            std::vector<std::pair<cv::Point2f, cv::Point2f> > elements_combined_stencil_sensor;
+
+            cv::Point2f cog_1 = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(frame_count).m_object_location_px.cog_px;
+
+            cv::Point2f cog_2 = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                    (1).at(frame_count).m_object_location_px.cog_px;
+
+
+            unsigned CLUSTER_COUNT = (unsigned) stencil_sensor_1.at(1).at(frame_count).size();
+
+            for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
+                elements_combined_stencil_sensor.push_back(std::make_pair((stencil_sensor_1.at(1).at(frame_count).at(cluster_index).first + ( cog_1 - cog_2)), stencil_sensor_1.at(1).at(frame_count).at(cluster_index).second ));
+            }
+
+            stencil_sensor_1.at(1).at(frame_count) = elements_combined_stencil_sensor;
 
             std::copy(stencil_sensor_1.at(1).at(frame_count).begin(), stencil_sensor_1.at(1).at(frame_count).end(), std::back_inserter(combined_stencil_sensor.at(frame_count)));
 
