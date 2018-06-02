@@ -54,7 +54,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
 
     char sensor_index_folder_suffix[50];
 
-    for ( ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
+    for ( ushort sensor_index = 0; sensor_index < MAX_ALLOWED_SENSOR_GROUPS; sensor_index++ ) {
 
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
@@ -150,10 +150,36 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
-            m_ptr_list_simulated_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
         }
 
         cv::destroyAllWindows();
     }
+
+    std::vector<std::vector<bool> > combined_sensor_stencil_visibility(3);
+
+    for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+
+
+        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >  combined_stencil_sensor;
+        std::vector<std::vector<bool> > combined_sensor_stencil_visibility;
+
+        const std::vector<std::pair<cv::Point2f, cv::Point2f> > elements_combined_stencil_sensor;
+
+        const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > stencil_sensor_1 =   m_ptr_list_simulated_objects.at(obj_index)->get_object_stencil_point_displacement();
+
+        std::copy(stencil_sensor_1.at(0).begin(), stencil_sensor_1.at(0).end(), std::back_inserter(combined_stencil_sensor));
+
+        for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
+
+            std::copy(stencil_sensor_1.at(1).at(frame_count).begin(), stencil_sensor_1.at(1).at(frame_count).end(), std::back_inserter(combined_stencil_sensor.at(frame_count)));
+
+        }
+
+
+        m_ptr_list_simulated_objects.at(obj_index)->push_back_object_stencil_point_displacement_pixel_visibility(combined_stencil_sensor, combined_sensor_stencil_visibility);
+
+    }
+
 
 }

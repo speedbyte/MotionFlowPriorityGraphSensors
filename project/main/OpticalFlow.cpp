@@ -50,12 +50,6 @@ void OpticalFlow::prepare_directories_common() {
         path =  m_plots_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
-        // post processing step
-        boost::filesystem::path bbox_dir = m_generatepath.string() + "/stencil/";
-        if (boost::filesystem::exists(m_generatepath)) {
-            system(("rm -rf " + bbox_dir.string()).c_str());
-        }
-        boost::filesystem::create_directories(bbox_dir);
     }
 
     std::cout << "Ending Flow directories " << m_resultordner << std::endl;
@@ -249,7 +243,7 @@ void OpticalFlow::generate_displacement_vector() {
 
         for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
-            m_ptr_list_gt_objects.at(obj_index)->set_object_stencil_point_displacement_pixel_visibility(
+            m_ptr_list_gt_objects.at(obj_index)->push_back_object_stencil_point_displacement_pixel_visibility(
                     multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
         }
 
