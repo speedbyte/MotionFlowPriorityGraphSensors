@@ -89,6 +89,7 @@ import subprocess
 
 if __name__ == '__main__':
 
+
     yaml_file_handle = YAMLParser(file)
     yaml_file_data = yaml_file_handle.load()
 
@@ -100,17 +101,14 @@ if __name__ == '__main__':
         if e.returncode != 1:
             exit(0)
 
-    collectPlots = list()
 
     summary_list = list()
     for sensor_index in sensor_list:
-
         for algorithm in algorithm_list:
 
             sensor_plot = SensorDataPlot(sensor_index, algorithm)
 
             plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="visible_pixels", x_label="frame_count", y_label="visible pixels / ground truth pixels")
-            collectPlots.append(plot_at_once_figures)
             plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
             # summary
@@ -118,11 +116,12 @@ if __name__ == '__main__':
 
 
             plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="frame_count", y_label="good pixels / visible pixels")
-            collectPlots.append(plot_at_once_figures)
             plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
 
-    for sensor_index in sensor_list:
-        figures = Figures(1)
-        figures.evaluate_pixel(summary_list)
-        figures.save_figure("visible_pixels", "summary", step_list[0], sensor_index)
+    figures = Figures(1)
+    flatten_summary_list = dict()
+    for summary in summary_list:
+        flatten_summary_list.update(summary)
+    figures.evaluate_pixel(flatten_summary_list)
+    figures.save_figure("visible_pixels", "summary")

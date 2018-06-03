@@ -62,9 +62,9 @@ class PlotData(object):
 
 class SensorDataPlot(object):
 
-    def __init__(self, sensor_number, algorithm):
+    def __init__(self, sensor_index, algorithm):
         self.summary_mean = dict()
-        self.sensor_number = sensor_number
+        self.sensor_index = sensor_index
         self.algorithm = algorithm
 
 
@@ -145,8 +145,9 @@ class SensorDataPlot(object):
 
         # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
         lock.acquire()
-        print "mean " + measuring_parameter + '_' + weather + '_' + str(stepSize), y_axis_mean
-        self.summary_mean[measuring_parameter + '_' + self.algorithm + '_' + weather + '_' + str(stepSize) ] = mean_list
+        map_to_data = measuring_parameter + '_' + self.algorithm + '_' + weather + '_' + str(stepSize) + '_' + str(self.sensor_index)
+        print map_to_data, y_axis_mean
+        self.summary_mean[map_to_data] = mean_list
         lock.release()
 
         plotData = PlotData(plot1, self.algorithm, measuring_parameter, weather, stepSize, x_label, y_label)
@@ -156,7 +157,7 @@ class SensorDataPlot(object):
 
 
     def getSensorIndex(self):
-        return self.sensor_number
+        return self.sensor_index
 
     def getDeviationPoints(self, data_points_gt, data_points ):
 

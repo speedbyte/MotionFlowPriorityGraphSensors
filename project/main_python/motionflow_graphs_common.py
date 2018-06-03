@@ -157,7 +157,7 @@ class Figures(object):
         plt.close("all")
 
 
-    def evaluate_pixel(self, summary_list):
+    def evaluate_pixel(self, summary_dict):
 
         # each group member is positioned at bar position. hence array of group members and array of bar_position should be equal.
 
@@ -170,17 +170,20 @@ class Figures(object):
 
         shift = 0
 
-        for n, weather in enumerate(weather_list):
-        #for n, step_size in enumerate(step_list):
-            regroup = len(index)*[0]
-            shift = shift+1
-            print "visible_pixels_" + weather + '_' + str(5)
-            for p, algorithm in enumerate(algorithm_list):
-                regroup[p] = summary_list[p]["visible_pixels_" + algorithm + '_' + weather + '_' + str(5)][0]
-            bar_positions = index + (shift*bar_width)
-            print bar_positions
-            rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n+1], edgecolor='black')
-            rects1.set_label(weather)
+        print summary_dict
+        for sensor_index in sensor_list:
+            for n, weather in enumerate(weather_list):
+            #for n, step_size in enumerate(step_list):
+                regroup = len(index)*[0]
+                shift = shift+1
+                for p, algorithm in enumerate(algorithm_list):
+                    map_to_data = "visible_pixels_" + algorithm + '_' + weather + '_' + str(5) + '_' + str(sensor_index)
+                    print map_to_data
+                    regroup[p] = summary_dict[map_to_data][0]
+                bar_positions = index + (shift*bar_width)
+                print bar_positions
+                rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n+1], edgecolor='black')
+                rects1.set_label(weather)
 
         #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
         self.list_of_plots[0].set_xticks(index + 2*bar_width)
