@@ -156,6 +156,10 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
         cv::destroyAllWindows();
     }
 
+}
+
+void AlgorithmFlow::combine_sensor_data() {
+
     std::vector<std::vector<bool> > combined_sensor_stencil_visibility(3);
 
     for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
@@ -193,10 +197,8 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
 
         }
 
-
         m_ptr_list_simulated_objects.at(obj_index)->push_back_object_stencil_point_displacement_pixel_visibility(combined_stencil_sensor, combined_sensor_stencil_visibility);
 
     }
-
 
 }

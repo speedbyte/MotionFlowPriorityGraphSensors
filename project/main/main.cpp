@@ -348,7 +348,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     for (ushort algorithmIndex = 0; algorithmIndex < 2; algorithmIndex++) {
 
-        std::vector<std::unique_ptr<AlgorithmFlow>> ptr_list_of_algorithm_flow;
+        std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
 
         for (ushort stepSize = 5; stepSize <= 5; stepSize += 4) {
             ptr_list_of_simulated_objects_base.clear();
@@ -360,12 +360,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 if ( algorithmIndex == 0 ) {
 
-                    ptr_list_of_algorithm_flow.push_back(std::make_unique<LukasKanade>(environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<LukasKanade>(environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
                 }
                 else if ( algorithmIndex == 1 ) {
 
-                    ptr_list_of_algorithm_flow.push_back(std::make_unique<Farneback>(environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
                 }
 
@@ -393,9 +393,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
-                    ptr_list_of_algorithm_flow[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
                     // TODO - do something for stepSize.. its redundant here.
-                    ptr_list_of_algorithm_flow[env_index]->run_optical_flow_algorithm(video_frames, fps);
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(video_frames, fps);
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
 
                     if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
@@ -414,23 +415,23 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement("algorithm");
                     }
 
-                    //ptr_list_of_algorithm_flow[env_index].generate_collision_points();
-                    ptr_list_of_algorithm_flow[env_index]->generate_flow_frames();
-                    ptr_list_of_algorithm_flow[env_index]->visualiseStencilAlgorithms();
-                    ptr_list_of_algorithm_flow[env_index]->generate_metrics_optical_flow_algorithm();
+                    //list_of_ptr_of_environment_OFalgorithm[env_index].generate_collision_points();
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_flow_frames();
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->visualiseStencilAlgorithms();
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm();
 
                 }
 
-                auto position = ptr_list_of_algorithm_flow.at(env_index)->getResultOrdner().find('/');
-                std::string suffix = ptr_list_of_algorithm_flow.at(env_index)->getResultOrdner().replace(position, 1, "_");
+                auto position = list_of_ptr_of_environment_OFalgorithm.at(env_index)->getResultOrdner().find('/');
+                std::string suffix = list_of_ptr_of_environment_OFalgorithm.at(env_index)->getResultOrdner().replace(position, 1, "_");
 
                 time_map["algorithm_flow_" + suffix ] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
                 tic = steady_clock::now();
 
                 if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
 
-                    pixelRobustness.generatePixelRobustness(*ptr_list_of_algorithm_flow[0], *ptr_list_of_algorithm_flow[env_index]);
-                    //vectorRobustness.generateVectorRobustness(*ptr_list_of_algorithm_flow[env_index], *ptr_list_of_algorithm_flow[0]);
+                    pixelRobustness.generatePixelRobustness(*list_of_ptr_of_environment_OFalgorithm[0], *list_of_ptr_of_environment_OFalgorithm[env_index]);
+                    //vectorRobustness.generateVectorRobustness(*list_of_ptr_of_environment_OFalgorithm[env_index], *list_of_ptr_of_environment_OFalgorithm[0]);
 
                     time_map["robustness_" + suffix] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
                     tic = steady_clock::now();

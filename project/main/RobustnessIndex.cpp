@@ -50,24 +50,6 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_bas
 
                 for (unsigned points = 0; points < POINTS; points++) {
 
-                    cv::Mat covar_base =  opticalFlow_base.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).covar_displacement;
-
-                    cv::Point2f mean_displacement_base =  opticalFlow_base.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mean_displacement;
-
-                    cv::Mat covar =  opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).covar_displacement;
-
-                    cv::Point2f mean_displacement =  opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mean_displacement;
-
-                    int cluster_size_base = opticalFlow_base.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).visiblePixels;
-
-                    int cluster_size = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).visiblePixels;
-
-                    double maha;
-                    if ( covar_base.data != NULL && covar.data != NULL ) {
-                        maha = Utils::getMahalanobisDistance(covar_base, covar, cluster_size_base, cluster_size, mean_displacement_base, mean_displacement);
-
-                    }
-                    evaluation_data_frame.push_back(maha);
                 }
                 evaluation_data_multiframe.push_back(evaluation_data_frame);
             }
@@ -136,7 +118,11 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
                          << "stddev" <<
                          (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).stddev_displacement)
                          << "ma_distance" <<
-                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(frame_count).at(points))
+                         (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mahalanobisDistance)
+                            << "l1_distance" <<
+                            (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).l1)
+                            << "l2_distance" <<
+                            (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).l2)
 
                          << "}";
                     //xsamples.push_back(shapepoints.first);

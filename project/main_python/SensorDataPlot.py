@@ -108,6 +108,8 @@ class SensorDataPlot(object):
                 x_axis, y_axis, y_axis_mean = self.getVisiblePixels(data_points_gt, data_points_gt)
             elif ( measuring_parameter == "good_pixels"):
                 x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points_gt)
+            elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
+                x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
 
         # ###2
         elif ( len(data_list) == 2 ):
@@ -119,6 +121,8 @@ class SensorDataPlot(object):
                     x_axis, y_axis, y_axis_mean = self.getVisiblePixels(data_points_gt, data_points)
                 elif ( measuring_parameter == "good_pixels"):
                     x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points)
+                elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
+                    x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
                 # ###3
 
         lower_x = min(numpy.nanmin(x_axis), lower_x)
@@ -350,15 +354,15 @@ class SensorDataPlot(object):
         return x_axis, y_axis, y_axis_mean
 
 
-    def getStdDev(self, data_points_gt, data_points):
+    def getSingleVal(self, data_points_gt, data_points, key):
 
         data = list()
 
         for count in range(len(data_points_gt)):
-            if ( data_points[count]["obj_index"] == 1 ):
+            if ( data_points[count]["obj_index"] == 0 ):
                 xy = list()
                 xy.append(data_points_gt[count]["frame_count"])
-                xy.append(data_points_gt[count]["stddev"][0])
+                xy.append(data_points_gt[count][key])
                 data.append(xy)
 
 
@@ -369,14 +373,15 @@ class SensorDataPlot(object):
         y_axis_mean = 0
         data = numpy.array(newshape)
         x0_gt = data.T
+        y_axis = x0_gt
 
         data = list()
 
         for count in range(len(data_points)):
             xy = list()
-            if ( data_points[count]["obj_index"] == 1 ):
+            if ( data_points[count]["obj_index"] == 0 ):
                 xy.append(data_points[count]["frame_count"])
-                xy.append(data_points[count]["stddev"][0])
+                xy.append(data_points[count][key])
                 data.append(xy)
 
         newshape = self.fuseDataFromSameFrames(data)
@@ -384,8 +389,8 @@ class SensorDataPlot(object):
 
         y_axis_mean = 0
         data = numpy.array(newshape)
-        x0 = data.T
-        y_axis = x0[0]   # dividing by total pixels gt considering step size
+        x0 = data
+        y_axis = x0
 
         count = 0
         for n,i in enumerate(y_axis):
@@ -441,6 +446,8 @@ class SensorDataPlot(object):
 
     def fuseDataFromSameFrames(self, data):
 
+        data_length =  len(data[0])
+
         newshape = list()
         previous_x_axis = 0
         elem_1 = 0
@@ -454,10 +461,12 @@ class SensorDataPlot(object):
                 xy = list()
                 if ( total_count == 0 ):
                     xy.append(numpy.nan)
-                    xy.append(numpy.nan)
+                    if ( data_length == 3 ):
+                        xy.append(numpy.nan)
                 else:
                     xy.append(elem_1)
-                    xy.append(elem_2)
+                    if ( data_length == 3 ):
+                        xy.append(elem_2)
 
                 newshape.append(xy)
                 total_count = 0
@@ -468,7 +477,8 @@ class SensorDataPlot(object):
             if ( data[count][0] == previous_x_axis ):
                     total_count = total_count+1
                     elem_1 = elem_1 + data[count][1]
-                    elem_2 = elem_2 + data[count][2]
+                    if ( data_length == 3 ):
+                        elem_2 = elem_2 + data[count][2]
 
             # the last leg
             if ( count == len(data)-1 ):
@@ -477,10 +487,12 @@ class SensorDataPlot(object):
                 xy = list()
                 if ( total_count == 0 ):
                     xy.append(numpy.nan)
-                    xy.append(numpy.nan)
+                    if ( data_length == 3 ):
+                        xy.append(numpy.nan)
                 else:
                     xy.append(elem_1)
-                    xy.append(elem_2)
+                    if ( data_length == 3 ):
+                        xy.append(elem_2)
 
                 newshape.append(xy)
 

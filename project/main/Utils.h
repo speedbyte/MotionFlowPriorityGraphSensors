@@ -351,7 +351,7 @@ public:
 
         std::cout << "mean " << mean << "\n";
 
-        samples = samples - mean;
+        //samples = samples - mean;
 
         cv::Mat samples_rescale = samples.reshape(1, samples.cols);
 
@@ -368,27 +368,37 @@ public:
     }
 
 
-    static double getMahalanobisDistance(cv::Mat cov_base, cv::Mat cov_snow, int CLUSTER_SIZE_BASE, int  CLUSTER_SIZE_SNOW, cv::Point2f mean_base, cv::Point2f mean_snow ) {
 
-        std::cout << "cov_base: " << cov_base  << std::endl;
-        std::cout << "cov_snow: " << cov_snow  << std::endl;
+    static cv::Mat getInverseCovar(cv::Mat cov_first, cv::Mat cov_second, int CLUSTER_SIZE_FIRST, int  CLUSTER_SIZE_SECOND ) {
+
+        std::cout << "cov_first: " << cov_first  << std::endl;
+        std::cout << "cov_second: " << cov_second  << std::endl;
 
         cv::Mat cov_pooled;
-        cov_pooled = ( cov_base * CLUSTER_SIZE_BASE + cov_snow * CLUSTER_SIZE_SNOW) / (CLUSTER_SIZE_BASE+ CLUSTER_SIZE_SNOW);
+        cov_pooled = ( cov_first * ( CLUSTER_SIZE_FIRST  ) + cov_second * ( CLUSTER_SIZE_SECOND  ) / (CLUSTER_SIZE_FIRST + CLUSTER_SIZE_SECOND ));
 
         // matrix 2*2
         cv::Mat icov_pooled = cov_pooled.inv(cv::DECOMP_SVD);
         std::cout << "cov_pooled" << cov_pooled << "\n icov " << icov_pooled << std::endl;
 
-        cv::Mat_<float> mean_difference(2,1);
-        mean_difference.at<float>(0,0) = (float)(mean_base.x - mean_snow.y);
-        mean_difference.at<float>(1,0) = (float)(mean_base.x - mean_snow.y);
+        return icov_pooled;
 
-        std::cout << mean_difference << std::endl;
+    }
+
+
+    static double getMahalanobisDistance(cv::Mat icov_pooled, cv::Point2f point, cv::Point2f mean ) {
+
+
+        cv::Mat_<float> mean_difference(2,1);
+        mean_difference.at<float>(0,0) = (float)(point.x - mean.x);
+        mean_difference.at<float>(1,0) = (float)(point.y - mean.y);
+
+
+        //std::cout << mean_difference << std::endl;
 
         cv::Mat_<float> ma = (mean_difference.t()*icov_pooled*mean_difference);   // 1*2 * 2*2 * 2*1
         //double ma = cv::Mahalanobis(samples1, samples2, icov);
-        std::cout << ma << std::endl;
+        //std::cout << ma << std::endl;
 
         return ma.at<float>(0);
 

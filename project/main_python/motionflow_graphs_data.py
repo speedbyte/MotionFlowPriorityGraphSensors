@@ -27,6 +27,9 @@ dict_color_weather = {
     "heavy_snow"   : "brown",
 }
 
+
+parameter_list = [ "ma_distance", "l1_distance", "l2_distance"]
+#parameter_list = [ "mahalanobis", "l1", "visible_pixels", good_pixels", ]
 datafilter_list  = [ "0", ]
 algorithm_list   = ["LK", "FB",]
 #algorithm_list   = ["LK", ]

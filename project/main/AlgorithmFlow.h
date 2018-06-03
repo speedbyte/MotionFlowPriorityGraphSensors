@@ -37,6 +37,8 @@ public:
 
     void run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort fps);
 
+    void combine_sensor_data();
+
     virtual void execute(const cv::Mat &prevGray, const cv::Mat &curGray, std::vector<cv::Point2f> &frame_prev_pts, std::vector<cv::Point2f> &frame_next_pts, std::vector<cv::Point2f> &displacement_array, bool &needToInit) {
         std::cout << "cannot be called" << std::endl;
     }

@@ -102,26 +102,31 @@ if __name__ == '__main__':
             exit(0)
 
 
-    summary_list = list()
-    for sensor_index in sensor_list:
-        for algorithm in algorithm_list:
+    for parameter in parameter_list:
+        summary_list = list()
+        for sensor_index in sensor_list:
+            for algorithm in algorithm_list:
 
-            sensor_plot = SensorDataPlot(sensor_index, algorithm)
+                sensor_plot = SensorDataPlot(sensor_index, algorithm)
 
-            plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="visible_pixels", x_label="frame_count", y_label="visible pixels / ground truth pixels")
-            plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+                plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter=parameter, x_label="frame_count", y_label="mahalanobis distance")
+                plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
-            # summary
-            summary_list.append(sensor_plot.get_summary())
-
-
-            plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="frame_count", y_label="good pixels / visible pixels")
-            plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+                # summary
+                summary_list.append(sensor_plot.get_summary())
+                print len(sensor_plot.get_summary())
 
 
-    figures = Figures(1)
-    flatten_summary_list = dict()
-    for summary in summary_list:
-        flatten_summary_list.update(summary)
-    figures.evaluate_pixel(flatten_summary_list)
-    figures.save_figure("visible_pixels", "summary")
+                #plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="frame_count", y_label="good pixels / visible pixels")
+                #plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+
+
+        figures = Figures(1)
+
+        flatten_summary_list = dict()
+        for summary in summary_list:
+            flatten_summary_list.update(summary)
+        print len(flatten_summary_list)
+        figures.evaluate_pixel(flatten_summary_list, parameter )
+        figures.save_figure(parameter , "summary")
+

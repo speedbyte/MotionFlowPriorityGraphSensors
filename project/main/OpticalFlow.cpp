@@ -9,6 +9,7 @@
 #include "OpticalFlow.h"
 #include "FlowImageExtended.h"
 #include "Objects.h"
+#include "Utils.h"
 
 using namespace std::chrono;
 
@@ -388,12 +389,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
+
                     // displacements found by the ground truth for this object
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
-                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
-
-                    // displacements found by the algorithm for this object
-                    auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
 
                     //if (list_of_current_objects.at(obj_index)->getObjectName() == "New Character" ||
@@ -461,6 +459,17 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         evaluationData.at(
                                 obj_index).goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
+                        double maha = 0;
+                        double l1 = 0;
+                        double l2 = 0;
+                        cv::Mat icovar;
+                        // this should be sent to Objects.cpp
+                        if ( evaluationData.at(obj_index).covar_displacement.data != NULL ) {
+
+                            icovar = evaluationData.at(obj_index).covar_displacement.inv(cv::DECOMP_SVD);
+
+                        }
+
                         if (m_opticalFlowName != "ground_truth") {
 
                             // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
@@ -491,8 +500,21 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                     evaluationData.at(
                                             obj_index).goodPixels++; // how many pixels in the found pixel are actually valid
                                 }
+
+                                maha += Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
+                                l1 += ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y )) ;
+
+                                l2 += ( std::pow((algo_displacement.x - gt_displacement.x ),2 ) + std::pow((algo_displacement.y - gt_displacement.y ),2 ) ) ;
+
                             }
                         }
+
+                        //maha = std::sqrt(maha);
+                        //l2 = std::sqrt(l2);
+
+                        evaluationData.at(obj_index).mahalanobisDistance = maha;
+                        evaluationData.at(obj_index).l1 = l1;
+                        evaluationData.at(obj_index).l2 = l2;
 
                         std::cout << "goodPixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
