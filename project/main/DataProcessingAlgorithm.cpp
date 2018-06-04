@@ -39,6 +39,11 @@ void DataProcessingAlgorithm::common(Objects *object) {
                 cv::Scalar mean, stddev;
                 cv::Mat covar_pts, covar_displacement;
 
+                mean = cv::Scalar::all(65535);
+                stddev = cv::Scalar::all(65535);
+                covar_pts = cv::Scalar::all(65535);
+                covar_displacement = cv::Scalar::all(65535);
+
                 const unsigned CLUSTER_SIZE = (unsigned) object->get_object_stencil_point_displacement().at
                         (sensor_index).at(frame_count).size();
 
@@ -50,7 +55,9 @@ void DataProcessingAlgorithm::common(Objects *object) {
                 /* ------------------------------------------------------------------------------ */
 
                 // Covariance matrix of the displacement dataset
-                Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean);
+                if ( CLUSTER_SIZE != 0 ) {
+                    Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean);
+                }
 
                 multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3)), covar_pts, covar_displacement});
                 multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
@@ -58,7 +65,7 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
                 //std::cout << "mean_displacement and mean stddev " + m_algoName << multiframe_centroid_displacement.at(frame_count).mean_displacement << multiframe_centroid_displacement.at(frame_count).stddev_displacement<< std::endl;
 
-                if (frame_count > 0) {
+                if (frame_count > 0 && CLUSTER_SIZE != 0) {
                     assert(std::abs(multiframe_centroid_displacement.at(frame_count).mean_displacement.x)> 0);
                     assert(std::abs(multiframe_centroid_displacement.at(frame_count).mean_displacement.y)> 0);
                 }
@@ -67,6 +74,7 @@ void DataProcessingAlgorithm::common(Objects *object) {
             else {
 
                 std::cout << "not visible" << std::endl;
+                //TODO change 0,0 to 65535,65535
                 multiframe_centroid_displacement.push_back({cv::Point2f(0, 0),cv::Point2f(0,0), cv::Point2f(0, 0), cv::Point2f(0, 0)});
                 multiframe_dataprocessing_displacement.push_back({std::make_pair(cv::Point2f(0, 0),cv::Point2f(0,0))});
             }
@@ -195,7 +203,7 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
 
     std::vector<cv::Mat> histogram_x, histogram_y;
 
-    if (frame_count > 0) {
+    if (frame_count > 0 && CLUSTER_SIZE != 0 ) {
         Utils::drawHistogram(data_x, histogram_x, false);
         mean(2) = Utils::getHistogramPeak(histogram_x);
         Utils::drawHistogram(data_y, histogram_y, false);

@@ -115,10 +115,22 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
                 needToInit = false;
                 execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
 
+                std::vector<float> x_pts, y_pts;
+
                 for (unsigned i = 0; i < frame_next_pts_array.size(); i++) {
                     //cv::circle(image_02_frame, frame_next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
                     cv::arrowedLine(image_02_frame, frame_prev_pts_array[i], frame_next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
+                    x_pts.push_back(displacement_array.at(i).x);
+                    y_pts.push_back(displacement_array.at(i).y);
                 }
+
+                std::vector<boost::tuple<std::vector<float>, std::vector<float>> > graph_displacement_points;
+                graph_displacement_points.push_back(boost::make_tuple(x_pts, y_pts));
+
+                Gnuplot gp2d;
+                gp2d << "set xrange [0:200]\n";
+                gp2d << "set yrange [0:100]\n";
+                gp2d << "plot" << gp2d.binFile2d(graph_displacement_points, "record") << " with lines title 'vec of boost::tuple of vec'\n";
 
                 common_flow_frame(sensor_index, frame_count, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
 

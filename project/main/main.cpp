@@ -214,7 +214,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     std::vector<float> time;
     double sum_time = 0;
-    std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
 
     ushort depth = CV_8U;
     ushort cn = 3;
@@ -222,7 +221,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_IMAGES);
     assert(MAX_ITERATION_GT_SCENE_GENERATION_IMAGES <= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
 
-    const std::vector<std::string> scenarios_list = {"three"};
+    const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
@@ -274,7 +273,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 if ((env_index == environment_list.size() - 1) && vires_dataset.gt) {
                     base_ptr_gt_scene->stopSimulation();
                     // Hack the images and the position_file
-                    system("python ../quicky_1.py");
+                    //system("python ../quicky_1.py 1");
                     exit(0);
                 }
 

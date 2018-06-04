@@ -97,7 +97,8 @@ void GroundTruthScene::visualiseBoundingBox(void) {
 
 
             cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            cv::imshow("BB", tempGroundTruthImage);
+            cv::
+            how("BB", tempGroundTruthImage);
             cv::waitKey(0);
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             //---------------------------------------------------------------------------------
@@ -166,9 +167,9 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
             char temp_str_fc[20];
             sprintf(temp_str_fc, "frame_count_%03d", frame_count);
 
-            if ( frame_count < 25 ) {
-                continue;
-            }
+            //if ( frame_count < 25 ) {
+            //    continue;
+            //}
 
             write_fs << temp_str_fc << "[";
             for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {

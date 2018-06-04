@@ -164,15 +164,15 @@ private:
 
     std::string start = "<SimCtrl> <Start/> </SimCtrl>";
 
-    std::string project_name = "<SimCtrl><Project name=\"Movement\" path=\"/local/git/MotionFlowPriorityGrapSensors/VIRES/VTD.2.0/Data/Projects/Current\" parameters=\"sync_extern\"/></SimCtrl>";
+    std::string project_name = "<SimCtrl><Project name=\"Movement\" path=\"/local/git/MotionFlowPriorityGrapSensors/VIRES/VTD.2.1/Data/Projects/Current\" parameters=\"RDBTrigger\"/></SimCtrl>";
 
-    std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/Current/Scenarios/traffic_demo.xml\" /><Start mode=\"operation\" /></SimCtrl>";
+    std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/Current/Scenarios/traffic_demo.xml\" /><Start mode=\"operation\" /></SimCtrl>";
 
     std::string image_generator = "<ImageGenerator> <Window width=\"1200\" height=\"400\" x=\"0\" y=\"0\" screen=\"0\" border=\"true\"/></ImageGenerator>";
 
     std::string module_manager_libModuleSensor_CameraTemplate =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
                     "   <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
@@ -187,7 +187,7 @@ private:
 
     std::string module_manager_libModuleSensor_PerfectTemplate =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
                     "   <Position dx=\"0.000000\" dy=\"0.000000\" dz=\"0.000000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
@@ -202,10 +202,10 @@ private:
 
     std::string module_manager_libModuleSensor_PerfectInertialTemplate =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.0/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
-                    "   <Position dx=\"2.000000\" dy=\"-1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Position dx=\"2.000000\" dy=\"1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "
                     "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"false\" /> "
@@ -503,12 +503,12 @@ public:
             to_replace = "4/8";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
-                m_environment_scp_message.replace(position, to_replace.length(), "8/8");
+                m_environment_scp_message.replace(position, to_replace.length(), "0/8");
             }
             to_replace = "100000.000000";
             position = m_environment_scp_message.find(to_replace);
             if ( position != std::string::npos) {
-                m_environment_scp_message.replace(position, to_replace.length(), "70.000000");
+                m_environment_scp_message.replace(position, to_replace.length(), "100000.000000");
             }
             to_replace = "0.500000";
             position = m_environment_scp_message.find(to_replace);

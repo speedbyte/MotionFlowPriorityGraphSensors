@@ -105,7 +105,7 @@ class Figures(object):
                 else :
 
                     line1 = self.list_of_plots[figure_index].plot(x_axis_data,
-                                                                  y_axis_data/SCALE, 'ko', lw=1,
+                                                                  y_axis_data/SCALE, 'ko-', lw=1,
                                                                   color=dict_color_weather[env_index],
                                                                   label=dict_label_weather[env_index])
 

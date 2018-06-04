@@ -102,14 +102,14 @@ if __name__ == '__main__':
             exit(0)
 
 
-    for parameter in parameter_list:
+    for n, parameter in enumerate(parameter_list):
         summary_list = list()
         for sensor_index in sensor_list:
             for algorithm in algorithm_list:
 
                 sensor_plot = SensorDataPlot(sensor_index, algorithm)
 
-                plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter=parameter, x_label="frame_count", y_label="mahalanobis distance")
+                plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter=parameter, x_label="frame_count", y_label=y_axis_label_dict[parameter])
                 plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
                 # summary

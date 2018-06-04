@@ -93,13 +93,14 @@ def change_ground_truth_scene() :
 
 
 
-def make_video_from_extension(directory_path, extension ):
+def extend_images(input_folders):
+    pass
 
 
 
 if  __name__ == '__main__':
     #change_ground_truth_scene()
-    make_video_from_extension(image_folder, "_edge.png")
+    extend_images(input_folders)
 
 
 

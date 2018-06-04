@@ -27,9 +27,13 @@ dict_color_weather = {
     "heavy_snow"   : "brown",
 }
 
+y_axis_label_dict = {
+    "visible_pixels" : "visible_pixel/ground_truth_pixels",
+    "good_pixels": "good_pixels/visible_pixels"
+}
 
 parameter_list = [ "ma_distance", "l1_distance", "l2_distance"]
-#parameter_list = [ "mahalanobis", "l1", "visible_pixels", good_pixels", ]
+parameter_list = [ "visible_pixels", "good_pixels" ]
 datafilter_list  = [ "0", ]
 algorithm_list   = ["LK", "FB",]
 #algorithm_list   = ["LK", ]

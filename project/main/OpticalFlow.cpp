@@ -186,7 +186,8 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
 
             std::cout << "stencil size = " << frame_stencil_displacement.size() << " " << frame_next_pts_array.size()
                       << std::endl;
-            assert(frame_stencil_displacement.size() != 0);
+
+            //assert(frame_stencil_displacement.size() != 0);
 
             // TODO scratch : if frame_stencil_displacement does not work
 
