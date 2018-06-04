@@ -509,8 +509,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             }
                         }
 
-                        //maha = std::sqrt(maha);
-                        //l2 = std::sqrt(l2);
+                        maha = std::sqrt(maha) / CLUSTER_COUNT;
+                        l2   = std::sqrt(l2) / CLUSTER_COUNT;
+                        l1   = l1 / CLUSTER_COUNT;
 
                         evaluationData.at(obj_index).mahalanobisDistance = maha;
                         evaluationData.at(obj_index).l1 = l1;
