@@ -72,9 +72,12 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
     char file_name_image_output[50];
     sprintf(file_name_image_output, "000%03d_10.png", frame_count);
 
-    for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
+    Gnuplot gp2d;
 
+
+    for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
         std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement;
+
         std::vector<bool> frame_stencil_visibility;
 
         if (m_resultordner == "/ground_truth") {
@@ -113,11 +116,12 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
             cv::Point roi_offset;
             roi.locateROI(roi_size, roi_offset);
 
+            cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
+                    obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
+                    frame_count).second;
+
             if (m_resultordner == "/ground_truth") {
                 // gt_displacement
-                cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
-                        obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
-                        frame_count).second;
                 roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
 
                 for (unsigned j = 0; j < width; j += 1) {
@@ -142,7 +146,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
                               << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
                     //std::cout << next_pts_array << std::endl;
-                    std::vector<float> x_pts, y_pts;
+                    std::vector<std::pair<float, float>> xy_pts, gt_pts;
 
                     std::string output_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
@@ -158,8 +162,8 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
 
                                     cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
 
-                                    x_pts.push_back(algo_displacement.x);
-                                    y_pts.push_back(algo_displacement.y);
+                                    xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
+                                    //y_pts.push_back(algo_displacement.y);
 
 
                                     frame_stencil_displacement.push_back(std::make_pair(
@@ -171,17 +175,25 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
                             }
                         }
                     }
-                    std::vector<boost::tuple<std::vector<float>, std::vector<float>> > graph_displacement_points;
-                    graph_displacement_points.push_back(boost::make_tuple(x_pts, y_pts));
+
+                    gt_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
 
                     if ( obj_index == 0 ) {
-                        Gnuplot gp2d;
                         gp2d << "set term png size 400,400\n";
-                        //gp2d << "set output \"/local/tmp/gnuplot_1.png\"\n";
                         gp2d << "set output \"" + output_image_file_with_path + "\"\n";
                         gp2d << "set xrange [-5:5]\n";
                         gp2d << "set yrange [-5:5]\n";
-                        gp2d << "plot" << gp2d.binFile2d(graph_displacement_points, "record") << " with points title 'vec of boost::tuple of vec'\n";
+                        gp2d << "plot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT', "
+                                "'-' with points title 'Boy', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT'\n";
+                        gp2d.send1d(xy_pts);
+                        gp2d.send1d(gt_pts);
+                    }
+                    else if ( obj_index == 1 ) {
+
+                        //gp2d << "replot\n";
+                        //gp2d << "replot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT'\n";
+                        gp2d.send1d(xy_pts);
+                        gp2d.send1d(gt_pts);
                     }
 
                 } else {
