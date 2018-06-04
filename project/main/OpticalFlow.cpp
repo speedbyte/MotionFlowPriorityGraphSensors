@@ -176,7 +176,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
 
                     if ( obj_index == 0 ) {
                         Gnuplot gp2d;
-                        gp2d << "set term png\n";
+                        gp2d << "set term png size 400,400\n";
                         //gp2d << "set output \"/local/tmp/gnuplot_1.png\"\n";
                         gp2d << "set output \"" + output_image_file_with_path + "\"\n";
                         gp2d << "set xrange [-5:5]\n";
@@ -392,15 +392,12 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
         list_of_current_objects = m_ptr_list_simulated_objects;
     }
 
-    char sensor_index_folder_suffix[50];
     for (unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++) {
 
         std::vector<std::map<std::pair<float, float>, int> > sensor_scenario_displacement_occurence;
         std::vector<std::vector<std::vector<OPTICAL_FLOW_EVALUATION_METRICS> > > sensor_multiframe_evaluation_data;
 
         for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
-
-            sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
             std::cout << "generating shape points in OpticalFlow.cpp for sensor index " << sensor_index
                       << " for opticalflow  " << m_opticalFlowName << std::endl;
@@ -415,6 +412,12 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
             for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
+                char file_name_image_output[50];
+                std::string output_image_file_with_path, output_image_file_with_path_stiched;
+                sprintf(file_name_image_output, "000%03d_10.png", frame_count);
+                output_image_file_with_path = m_gnuplots_path.string() + "0" + std::to_string(sensor_index) + "/" + file_name_image_output;
+
+                output_image_file_with_path_stiched = m_gnuplots_path.string() + "0" + std::to_string(SENSOR_COUNT-1) + "/" + file_name_image_output;
 
                 std::cout << "frame_count " << frame_count << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
@@ -539,6 +542,32 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 l2 += ( std::pow((algo_displacement.x - gt_displacement.x ),2 ) + std::pow((algo_displacement.y - gt_displacement.y ),2 ) ) ;
 
                             }
+                            if ( obj_index == 0 && frame_count > 0  && sensor_index != (SENSOR_COUNT-1) ) {
+
+                                cv::Mat stich_plots;
+
+                                std::string ground_truth_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_image_output;
+                                cv::Mat ground_truth_image = cv::imread(ground_truth_image_path, CV_LOAD_IMAGE_ANYCOLOR);
+                                if (boost::filesystem::exists(output_image_file_with_path_stiched)) {
+                                    stich_plots = cv::imread(output_image_file_with_path_stiched, CV_LOAD_IMAGE_ANYCOLOR);
+                                }
+                                else {
+                                    stich_plots.create(1200, 1200, CV_8UC3);
+                                    stich_plots = cv::Scalar::all(0);
+                                }
+                                cv::Mat roi = stich_plots.rowRange(400, 800).colRange(0+sensor_index*400, sensor_index*400+400);
+                                cv::Mat roi_vires_image = stich_plots.rowRange(0+(sensor_index*400)*2, (sensor_index*400)*2 + 400);
+                                ground_truth_image.copyTo(roi_vires_image);
+
+                                cv::Mat get_image;
+                                while (get_image.data == NULL) {
+                                    get_image = cv::imread(output_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+                                    usleep(100);
+                                }
+                                get_image.copyTo(roi);
+                                cv::imwrite(output_image_file_with_path_stiched, stich_plots);
+                            }
+
                         }
 
                         maha = std::sqrt(maha) / CLUSTER_COUNT;
@@ -594,7 +623,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
 
 
-void OpticalFlow::visualiseStencilAlgorithms() {
+void OpticalFlow::plot_stencil() {
 
     std::vector<Objects*> list_of_current_objects;
 
@@ -612,7 +641,6 @@ void OpticalFlow::visualiseStencilAlgorithms() {
 
     std::cout << "visualise stencil algorithm at " << m_generatepath.string() + "stencil/" << std::endl;
 
-    char file_name_image_output[50];
 
     cv::Mat image_data_and_shape;
 
@@ -638,10 +666,9 @@ void OpticalFlow::visualiseStencilAlgorithms() {
 
         for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
 
+            char file_name_image_output[50];
             std::string output_image_file_with_path;
-
             sprintf(file_name_image_output, "000%03d_10.png", frame_count);
-
             output_image_file_with_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
             //---------------------------------------------------------------------------------

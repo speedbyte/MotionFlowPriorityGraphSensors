@@ -121,7 +121,7 @@ public:
 
     void common_flow_frame(ushort sensor_index, ushort frame_count,  std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
 
-    void visualiseStencilAlgorithms(void);
+    void plot_stencil(void);
 
     void generate_flow_frames();
 

@@ -317,7 +317,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 //gt_flow.generate_collision_points();
                 gt_flow.generate_metrics_optical_flow_algorithm(); // this is to just create Jaccard Index  =  1
-                //gt_flow.visualiseStencilAlgorithms();
+                //gt_flow.plot_stencil();
 
             }
 
@@ -415,8 +415,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
 
                     //list_of_ptr_of_environment_OFalgorithm[env_index].generate_collision_points();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_flow_frames();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->visualiseStencilAlgorithms();
+                    //list_of_ptr_of_environment_OFalgorithm[env_index]->generate_flow_frames();
+                    //list_of_ptr_of_environment_OFalgorithm[env_index]->plot_stencil();
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm();
 
                 }
