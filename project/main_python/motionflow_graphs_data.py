@@ -29,11 +29,15 @@ dict_color_weather = {
 
 y_axis_label_dict = {
     "visible_pixels" : "visible_pixel/ground_truth_pixels",
-    "good_pixels": "good_pixels/visible_pixels"
+    "good_pixels": "good_pixels/visible_pixels",
+     "ma_distance" : "ma_distance",
+    "l1_distance" : "l1_distance",
+    "l2_distance" : "l2_distance",
 }
 
-parameter_list = [ "ma_distance", "l1_distance", "l2_distance"]
-parameter_list = [ "visible_pixels", "good_pixels" ]
+parameter_list = [  ]
+parameter_list = [ "visible_pixels", "good_pixels", "ma_distance", "l1_distance", "l2_distance"]
+
 datafilter_list  = [ "0", ]
 algorithm_list   = ["LK", "FB",]
 #algorithm_list   = ["LK", ]
