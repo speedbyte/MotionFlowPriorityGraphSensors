@@ -57,6 +57,8 @@ protected:
 
     boost::filesystem::path  m_plots_path;
 
+    boost::filesystem::path  m_gnuplots_path;
+
     std::vector<Objects *> &m_ptr_list_gt_objects;
 
     std::vector<std::unique_ptr<Objects >> &m_ptr_list_simulated_objects_base;

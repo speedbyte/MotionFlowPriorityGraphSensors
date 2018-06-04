@@ -10,6 +10,7 @@
 #include "FlowImageExtended.h"
 #include "Objects.h"
 #include "Utils.h"
+#include <gnuplot-iostream/gnuplot-iostream.h>
 
 using namespace std::chrono;
 
@@ -51,6 +52,11 @@ void OpticalFlow::prepare_directories_common() {
         path =  m_plots_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
+        m_gnuplots_path = m_generatepath.string() + "/gnuplots_";
+        path =  m_gnuplots_path.string() + char_dir_append;
+        boost::filesystem::create_directories(path);
+
+
     }
 
     std::cout << "Ending Flow directories " << m_resultordner << std::endl;
@@ -60,6 +66,11 @@ void OpticalFlow::prepare_directories_common() {
 
 void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility) {
 
+    char sensor_index_folder_suffix[50];
+    sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
+
+    char file_name_image_output[50];
+    sprintf(file_name_image_output, "000%03d_10.png", frame_count);
 
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
@@ -131,6 +142,9 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
                               << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
                     //std::cout << next_pts_array << std::endl;
+                    std::vector<float> x_pts, y_pts;
+
+                    std::string output_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
                     for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                         for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
@@ -144,6 +158,10 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
 
                                     cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
 
+                                    x_pts.push_back(algo_displacement.x);
+                                    y_pts.push_back(algo_displacement.y);
+
+
                                     frame_stencil_displacement.push_back(std::make_pair(
                                             cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
                                             algo_displacement));
@@ -153,6 +171,19 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
                             }
                         }
                     }
+                    std::vector<boost::tuple<std::vector<float>, std::vector<float>> > graph_displacement_points;
+                    graph_displacement_points.push_back(boost::make_tuple(x_pts, y_pts));
+
+                    if ( obj_index == 0 ) {
+                        Gnuplot gp2d;
+                        gp2d << "set term png\n";
+                        //gp2d << "set output \"/local/tmp/gnuplot_1.png\"\n";
+                        gp2d << "set output \"" + output_image_file_with_path + "\"\n";
+                        gp2d << "set xrange [-5:5]\n";
+                        gp2d << "set yrange [-5:5]\n";
+                        gp2d << "plot" << gp2d.binFile2d(graph_displacement_points, "record") << " with points title 'vec of boost::tuple of vec'\n";
+                    }
+
                 } else {
 
                     std::cout << "making a stencil on the basis of base algorithm object "
