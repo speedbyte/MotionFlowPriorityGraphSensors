@@ -61,9 +61,9 @@ void OpticalFlow::generate_collision_points() {
 
             assert(FRAME_COUNT > 0);
 
-            for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                std::cout << "frame_count " << frame_count << " for datafilter_index " << datafilter_index<< std::endl;
+                std::cout << "current_frame_index " << current_frame_index << " for datafilter_index " << datafilter_index<< std::endl;
 
 
                 std::vector<cv::Point2f> frame_collision_points;
@@ -72,7 +72,7 @@ void OpticalFlow::generate_collision_points() {
 
                 char file_name_image[50];
 
-                sprintf(file_name_image, "000%03d_10.png", frame_count);
+                sprintf(file_name_image, "000%03d_10.png", current_frame_index);
                 std::string temp_collision_image_path =
                         m_collision_object_path.string() + sensor_index_folder_suffix + "/" + file_name_image;
 
@@ -90,10 +90,10 @@ void OpticalFlow::generate_collision_points() {
                     if ((list_of_current_objects_combination.at(
                                     obj_index).first->get_object_extrapolated_visibility().at(
                                     sensor_index)
-                            .at(frame_count)) && (list_of_current_objects_combination.at(obj_index).second->
+                            .at(current_frame_index)) && (list_of_current_objects_combination.at(obj_index).second->
                                     get_object_extrapolated_visibility()
                             .at(sensor_index)
-                            .at(frame_count))) {
+                            .at(current_frame_index))) {
 
                         // First Freeze lineparamter1 and look for collision points
                         // Then freeze lineparameter2 and find collision point.
@@ -102,13 +102,13 @@ void OpticalFlow::generate_collision_points() {
                         cv::Point2f lineparameters1 = list_of_current_objects_combination.at(
                                         obj_index).first->get_list_object_line_parameters().at(datafilter_index).at
                                         (sensor_index)
-                                .at(frame_count);
+                                .at(current_frame_index);
 
                         cv::Point2f temp_line_parameters1 = lineparameters1;
 
 
                         cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(
-                                obj_index).second->get_list_object_line_parameters().at(0).at(sensor_index).at(frame_count);
+                                obj_index).second->get_list_object_line_parameters().at(0).at(sensor_index).at(current_frame_index);
 
                         std::cout << "object "
                                 << list_of_current_objects_combination.at(obj_index).first->getObjectId()
@@ -123,11 +123,11 @@ void OpticalFlow::generate_collision_points() {
                         lineparameters1 = list_of_current_objects_combination.at(
                                         obj_index).second->get_list_object_line_parameters().at(datafilter_index).at
                                         (sensor_index)
-                                .at(frame_count);
+                                .at(current_frame_index);
 
                         lineparameters2 = list_of_gt_objects_combination.at(obj_index).first->get_list_object_line_parameters
                                         ().at(0).at(sensor_index)
-                                .at(frame_count);
+                                .at(current_frame_index);
 
                         std::cout << "object "
                                 << list_of_current_objects_combination.at(obj_index).second->getObjectId()
@@ -138,7 +138,7 @@ void OpticalFlow::generate_collision_points() {
                         find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2,
                                 tempMatrix, frame_collision_points);
 
-                        if ( frame_count > 0 ) {
+                        if ( current_frame_index > 0 ) {
                             assert(temp_line_parameters1!=lineparameters1);
                         }
 
@@ -155,13 +155,13 @@ void OpticalFlow::generate_collision_points() {
                                 list_of_current_objects_combination.at(
                                                 obj_index).first->get_object_extrapolated_visibility().at(
                                                 sensor_index)
-                                        .at(frame_count) << " and object "
+                                        .at(current_frame_index) << " and object "
                                 << list_of_gt_objects_combination.at(obj_index)
                                         .second->getObjectId() << " visibility = "
                                 << list_of_current_objects_combination.at(
                                                 obj_index).second->get_object_extrapolated_visibility().at(
                                                 sensor_index)
-                                        .at(frame_count)
+                                        .at(current_frame_index)
                                 << " and hence not generating any collision points for this object combination "
                                 << std::endl;
                     }
@@ -170,13 +170,13 @@ void OpticalFlow::generate_collision_points() {
                 for (auto i = 0; i < frame_collision_points.size(); i = i + 2) {
                     if (frame_collision_points.at(i) != cv::Point2f(-1, -1) &&
                             frame_collision_points.at(i + 1) != cv::Point2f(-1, -1)) {
-                        frame_collision_points_average.push_back(std::make_pair(cv::Point2i(frame_count, 0 ),  cv::Point2f(
+                        frame_collision_points_average.push_back(std::make_pair(cv::Point2i(current_frame_index, 0 ),  cv::Point2f(
                                         ((frame_collision_points.at(i).x + frame_collision_points.at(i + 1).x) / 2),
                                         ((frame_collision_points.at(i).y + frame_collision_points.at(i + 1).y) /
                                                 2))));
                     }
                     else {
-                        frame_collision_points_average.push_back(std::make_pair(cv::Point2i(frame_count, 0 ), cv::Point2f(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity())));
+                        frame_collision_points_average.push_back(std::make_pair(cv::Point2i(current_frame_index, 0 ), cv::Point2f(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity())));
                     }
                 }
 
@@ -257,26 +257,26 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
 
     std::cout << "generating shape points in OpticalFlow.cpp for sensor fusion" << m_resultordner << " for datafilter " << datafilter_index << std::endl;
 
-    for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
         assert(FRAME_COUNT > 0);
 
         std::vector<std::pair<cv::Point2i, cv::Point2f>> frame_shape_points;
-        std::cout << "frame_count " << frame_count << " for datafilter_index " << datafilter_index<< std::endl;
+        std::cout << "current_frame_index " << current_frame_index << " for datafilter_index " << datafilter_index<< std::endl;
 
         for (unsigned sensor_index = 0; sensor_index <= 0 ; sensor_index++) {
 
             for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                 auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
-                        obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(0).at(0).at(frame_count).size();
+                        obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(0).at(0).at(current_frame_index).size();
 
                 auto CLUSTER_COUNT_GT_2 = m_ptr_list_gt_objects.at(
-                        obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(0).at(1).at(frame_count).size();
+                        obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(0).at(1).at(current_frame_index).size();
 
 //CLUSTER_COUNT_GT =  ( CLUSTER_COUNT_GT + CLUSTER_COUNT_GT_2 ) /2;
-                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(frame_count) ||
-                    list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(frame_count)) {
+                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(current_frame_index) ||
+                    list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(current_frame_index)) {
 
 // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
@@ -284,10 +284,10 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     float baseTreffer;
 
                     cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at
-                            (0).at(frame_count).second;
+                            (0).at(current_frame_index).second;
 
                     cv::Point2f gt_displacement_2 = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at
-                            (1).at(frame_count).second;
+                            (1).at(current_frame_index).second;
 
 //gt_displacement = (gt_displacement + gt_displacement_2)/2;
 
@@ -307,16 +307,16 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     }
                     else {
 
-                        if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(frame_count)) {
+                        if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(current_frame_index)) {
 
                             auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
-                                    obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(0).at(frame_count).size();
+                                    obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(0).at(current_frame_index).size();
 
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_ALGO; cluster_index++) {
 
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
                                         get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index
-                                ).at(0).at(frame_count).at(cluster_index).second;
+                                ).at(0).at(current_frame_index).at(cluster_index).second;
 
                                 auto dist_algo = cv::norm(algo_displacement);
                                 auto dist_err = std::abs(dist_gt - dist_algo);
@@ -342,16 +342,16 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                             baseTreffer = ((float) CLUSTER_COUNT_GT) / mStepSize;
                         }
 
-                        else if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(frame_count)) {
+                        else if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(current_frame_index)) {
 
                             auto CLUSTER_COUNT_ALGO_2 = list_of_current_objects.at(
-                                    obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(1).at(frame_count).size();
+                                    obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(1).at(current_frame_index).size();
 
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_ALGO_2; cluster_index++) {
 
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
                                         get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index
-                                ).at(1).at(frame_count).at(cluster_index).second;
+                                ).at(1).at(current_frame_index).at(cluster_index).second;
 
                                 auto dist_algo = cv::norm(algo_displacement);
                                 auto dist_err = std::abs(dist_gt - dist_algo);
@@ -378,7 +378,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                         }
 
                     }
-                    frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count, 0), cv::Point2f(vollTreffer, baseTreffer)));
+                    frame_shape_points.push_back(std::make_pair(cv::Point2i(current_frame_index, 0), cv::Point2f(vollTreffer, baseTreffer)));
 
                     std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
                               << vollTreffer << std::endl;
@@ -390,10 +390,10 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                 } else {
                     std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
                               list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
-                                      .at(frame_count)
+                                      .at(current_frame_index)
                               << " and hence not generating any shape points for this object " << std::endl;
 
-                    frame_shape_points.push_back(std::make_pair(cv::Point2i(frame_count,0), cv::Point2f(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity())));
+                    frame_shape_points.push_back(std::make_pair(cv::Point2i(current_frame_index,0), cv::Point2f(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity())));
 
                 }
             }
@@ -430,29 +430,29 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
             .size();
 
 
-    for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+    for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
         // gt_displacement
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> >
                 frame_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
 
-        std::cout << "frame_count " << frame_count << std::endl;
+        std::cout << "current_frame_index " << current_frame_index << std::endl;
 
         float mean_pts_sensor_fusion_mean_x = 0.0f;
         float mean_pts_sensor_fusion_mean_y = 0.0f;
         float mean_displacement_vector_sensor_fusion_mean_x = 0.0f;
         float mean_displacement_vector_sensor_fusion_mean_y = 0.0f;
 
-        bool visibility_1 = m_object_extrapolated_visibility.at(0).at(frame_count);
-        bool visibility_2 = m_object_extrapolated_visibility.at(1).at(frame_count);
+        bool visibility_1 = m_object_extrapolated_visibility.at(0).at(current_frame_index);
+        bool visibility_2 = m_object_extrapolated_visibility.at(1).at(current_frame_index);
 
         if (visibility_1 || visibility_2 ) {
 
             unsigned cluster_size_sensor_fusion_mean_x = 0,
                     cluster_size_sensor_fusion_mean_y = 0;
 
-            cv::Point2f pts = multi_sensor_input_flow_vector.at(0).at(frame_count).first;
-            cv::Point2f pts_2 = multi_sensor_input_flow_vector.at(1).at(frame_count).first;
+            cv::Point2f pts = multi_sensor_input_flow_vector.at(0).at(current_frame_index).first;
+            cv::Point2f pts_2 = multi_sensor_input_flow_vector.at(1).at(current_frame_index).first;
 
             cv::Mat_<float> covar_new, mean_new, corr;
             cv::Scalar mean;
@@ -463,8 +463,8 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
 
             visibility_mat << visibility_1, visibility_2;
 
-            mean_mat_x << multi_sensor_input_flow_vector.at(0).at(frame_count).second.x, multi_sensor_input_flow_vector.at(1).at(frame_count).second.x;
-            mean_mat_y << multi_sensor_input_flow_vector.at(0).at(frame_count).second.y, multi_sensor_input_flow_vector.at(1).at(frame_count).second.y;
+            mean_mat_x << multi_sensor_input_flow_vector.at(0).at(current_frame_index).second.x, multi_sensor_input_flow_vector.at(1).at(current_frame_index).second.x;
+            mean_mat_y << multi_sensor_input_flow_vector.at(0).at(current_frame_index).second.y, multi_sensor_input_flow_vector.at(1).at(current_frame_index).second.y;
 
             mean_displacement_vector_sensor_fusion_mean_x = ((cv::Mat)( mean_mat_x * visibility_mat)).at<float>(0) / (visibility_1+visibility_2);
             mean_displacement_vector_sensor_fusion_mean_y = ((cv::Mat)( mean_mat_y * visibility_mat)).at<float>(0) / (visibility_1+visibility_2);
@@ -480,13 +480,13 @@ void Objects::generate_updated_mean_from_multiple_sensors( std::string post_proc
              std::cout << "mean_displacement_vector_sensor_fusion_mean " << cv::Point2f(mean_displacement_vector_sensor_fusion_mean_x, mean_displacement_vector_sensor_fusion_mean_y) << std::endl;
 
 
-            if (frame_count > 0) {
+            if (current_frame_index > 0) {
 
                 assert(mean_displacement_vector_sensor_fusion_mean_x!=0);
             }
 
             const unsigned CLUSTER_SIZE_1 = (unsigned) multi_sensor_input_shape.at
-                    (0).at(frame_count).size();
+                    (0).at(current_frame_index).size();
 
 
             for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE_1; cluster_index++) {

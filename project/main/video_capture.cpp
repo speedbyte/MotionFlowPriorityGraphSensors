@@ -134,7 +134,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
     pyramid1.create(frame_size, CV_8UC1);
     pyramid2.create(frame_size, CV_8UC1);
 
-    unsigned frame_count = 0;
+    unsigned current_frame_index = 0;
 
     cv::namedWindow(algo, CV_WINDOW_AUTOSIZE);
 
@@ -158,7 +158,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
         cap >> frame;
         if (frame.empty())
             break;
-        frame_count++;
+        current_frame_index++;
 
         // Resize the frame
         //cv::resize(frame, frame, cv::Size(), scalingFactor, scalingFactor, cv::INTER_AREA);
@@ -250,7 +250,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
                     cv::arrowedLine(frame, prev_pts[i], next_pts[i], cv::Scalar(0, 255, 0), 1, CV_AA, 0);
                 }
                 next_pts.resize(count);
-                printf(" new size is %i for frame number %u\n", count, frame_count);
+                printf(" new size is %i for frame number %u\n", count, current_frame_index);
                 z_pts.push_back(count);
             }
         }

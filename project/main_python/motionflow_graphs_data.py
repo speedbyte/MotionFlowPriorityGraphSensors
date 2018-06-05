@@ -40,11 +40,12 @@ parameter_list = [ "visible_pixels", "good_pixels", "ma_distance", "l1_distance"
 
 datafilter_list  = [ "0", ]
 algorithm_list   = ["LK", "FB",]
-#algorithm_list   = ["LK", ]
+algorithm_list   = ["LK", ]
 weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
-#weather_list = ["blue_sky",]
+#weather_list = ["ground_truth", "blue_sky",]
 sensor_list      = [0, 1, 2]
+#sensor_list      = [0, ]
 step_list        = [5]
 fps_list         = ["30", "15", "10", "7.5"]#night
 fps_list         = ["30",]

@@ -22,7 +22,7 @@ public:
     }
     void common(Objects *objects);
 
-    virtual void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+    virtual void execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
         std::cout << "not implemented" << std::endl;
         throw;
     }
@@ -46,7 +46,7 @@ public:
 
     RankedMean() : DataProcessingAlgorithm("ranked mean") {}
 
-    void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+    void execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                        cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) override;
 };
 
@@ -59,7 +59,7 @@ public:
 
     VotedMean() : DataProcessingAlgorithm("voted mean") {}
 
-    void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+    void execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                        cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) override;
 };
 
@@ -70,7 +70,7 @@ public:
 
     SimpleAverage() : DataProcessingAlgorithm("simple average") {}
 
-    void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+    void execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                        cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) override;
 };
 
@@ -81,7 +81,7 @@ public:
 
     MovingAverage() : DataProcessingAlgorithm("moving average") {}
 
-    void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+    void execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                        cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) override;
 };
 
@@ -92,7 +92,7 @@ public:
 
     NoAlgorithm() : DataProcessingAlgorithm("no algorithm") {}
 
-    void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+    void execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                  cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) override;
 };
 
@@ -102,7 +102,7 @@ public:
 
     SensorFusion() : DataProcessingAlgorithm("sensor fusion") {}
 
-    void execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+    void execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                        cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) override;
 };
 

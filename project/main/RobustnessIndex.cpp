@@ -42,9 +42,9 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_bas
 
             unsigned long FRAME_COUNT = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(
                     sensor_index).size();
-            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                unsigned long POINTS = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).size();
+                unsigned long POINTS = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).size();
 
                 std::vector<double> evaluation_data_frame;
 
@@ -95,34 +95,34 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
                 m_fs << (std::string("evaluation_data_") + suffix + std::string("datafilter_") + std::to_string(datafilter_index) + "_" + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
             }
 
-            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                unsigned long POINTS = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).size();
+                unsigned long POINTS = opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).size();
 
                 for (unsigned points = 0; points < POINTS; points++) {
 
                     std::pair<cv::Point2f, cv::Point2f> displacementPoints_base = std::make_pair(
-                            opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mean_displacement);
+                            opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).object_dimension, opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).mean_displacement);
 
 
-                    m_fs << "{:" << "frame_count" <<
-                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).frame_count
+                    m_fs << "{:" << "current_frame_index" <<
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).current_frame_index
                          << "obj_index" <<
-                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).obj_index
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).obj_index
                          << "good_pixels" <<
-                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).goodPixels
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).goodPixels
                          << "visible_pixels" <<
-                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).visiblePixels
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).visiblePixels
                          << "ground_truth_pixels" <<
-                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension.x * opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).object_dimension.y
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).object_dimension.x * opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).object_dimension.y
                          << "stddev" <<
-                         (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).stddev_displacement)
+                         (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).stddev_displacement)
                          << "ma_distance" <<
-                         (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).mahalanobisDistance)
+                         (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).mahalanobisDistance)
                             << "l1_distance" <<
-                            (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).l1)
+                            (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).l1)
                             << "l2_distance" <<
-                            (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(frame_count).at(points).l2)
+                            (opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).l2)
 
                          << "}";
                     //xsamples.push_back(shapepoints.first);
@@ -206,19 +206,19 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
 
             unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index).size();
 
-            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                unsigned long POINTS = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index).at(frame_count).size();
+                unsigned long POINTS = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index).at(current_frame_index).size();
 
                 for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-                    std::pair<cv::Point2i, cv::Point2f> collisionpoints = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index).at(frame_count).at(points);
+                    std::pair<cv::Point2i, cv::Point2f> collisionpoints = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points);
 
                     xsamples.push_back(collisionpoints.first);
                     ysamples.push_back(collisionpoints.second);
 
                     /*
-                    cv::Point2f lineangles = opticalFlow.getLineAngles().at(datafilter_index).at(sensor_index).at(frame_count).at(points);
+                    cv::Point2f lineangles = opticalFlow.getLineAngles().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points);
 
                     xsamples_line.push_back(std::tanh(lineangles.x)*180/CV_PI);
                     ysamples_line.push_back(std::tanh(lineangles.y)*180/CV_PI);
@@ -241,7 +241,7 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, 
             }
 
             for (unsigned i = 0; i < xsamples.size(); i++) {
-                m_fs << "{:" << "frame_count" << xsamples[i] << "collision_points" << ysamples[i] << "}";
+                m_fs << "{:" << "current_frame_index" << xsamples[i] << "collision_points" << ysamples[i] << "}";
 
             }
             m_fs << "]";

@@ -13,7 +13,7 @@
 
 typedef struct {
 
-    int frame_count;
+    int current_frame_index;
     int obj_index;
     int visiblePixels;
     int goodPixels;
@@ -119,7 +119,7 @@ public:
 
 
 
-    void common_flow_frame(ushort sensor_index, ushort frame_count,  std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
+    void common_flow_frame(ushort sensor_index, ushort current_frame_index,  std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
 
     void plot_stencil(void);
 

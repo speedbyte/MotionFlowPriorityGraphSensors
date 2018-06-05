@@ -272,6 +272,11 @@ public:
 
     virtual void pushVisibility(bool visibility) {}
 
+    void atFrameNumberFrameCount(ushort frameNumber) {
+        m_object_gt_all.at(frameNumber).frame_no = frameNumber;
+    }
+
+
     void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions, float total_distance_travelled) {
         //m_pixel_position.at(frameNumber) = position;
         m_object_gt_all.at(frameNumber).m_object_location_px.location_x_m = position.x;

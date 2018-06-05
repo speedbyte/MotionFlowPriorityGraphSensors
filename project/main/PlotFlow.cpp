@@ -22,11 +22,11 @@ void PlotFlow::plot(const std::string &resultsordner) {
         sprintf(folder_name_plot, "plots_%02d", sensor_index);
         cv::namedWindow(sensor_index_folder_suffix, CV_WINDOW_AUTOSIZE);
 
-        for (ushort frame_count=1; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
-            if ( frame_count%sensor_index != 0 ) {
+        for (ushort current_frame_index=1; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
+            if ( current_frame_index%sensor_index != 0 ) {
                 continue;
             }
-            sprintf(file_name_image, "000%03d_10.png", frame_count*sensor_index);
+            sprintf(file_name_image, "000%03d_10.png", current_frame_index*sensor_index);
             std::string temp_gt_flow_path = Dataset::getGroundTruthPath().string() + sensor_index_folder_suffix + "/"
                                             + file_name_image;
             std::string temp_result_flow_path = Dataset::getResultPath().string() + "/" + resultsordner + "/" +

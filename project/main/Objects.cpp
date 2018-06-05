@@ -38,14 +38,14 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
 
         std::cout << "making a edge contour on the basis of " << post_processing_algorithm << " for object " << m_objectName << " for sensor index " << sensor_index << std::endl;
 
-        for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
+        for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
             //draw new ground truth flow.
 
 
             cv::Mat objectEdgeFrame( Dataset::getFrameSize(), CV_8UC1 );
             objectEdgeFrame = cv::Scalar_<char>(0);
 
-            sprintf(file_name_input_image, "000%03d_10.png", frame_count);
+            sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
 
             temp_result_edge_path = Dataset::getGroundTruthPath().string() + "ground_truth/edge_" + sensor_index_folder_suffix + "/" + file_name_input_image;
 
@@ -59,18 +59,18 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
             cv::cvtColor(edge_02_frame, edge_02_frame_gray, CV_RGB2GRAY);
 
             // Calculate optical generate_flow_frame map using LK algorithm
-            std::cout << "frame_count " << frame_count << std::endl;
+            std::cout << "current_frame_index " << current_frame_index << std::endl;
 
-            if ( frame_count > 0 ) {
+            if ( current_frame_index > 0 ) {
 
                     objectEdgeFrame = cv::Scalar_<char>(0);
-                    bool visibility = m_object_extrapolated_visibility.at(sensor_index).at(frame_count);
+                    bool visibility = m_object_extrapolated_visibility.at(sensor_index).at(current_frame_index);
                     if ( visibility ) {
 
                         // This is for the base model
                         std::vector<std::pair<cv::Point2f, cv::Point2f> >  edge_movement;
 
-                        next_pts_array = m_object_stencil_point_displacement.at(sensor_index).at(frame_count);
+                        next_pts_array = m_object_stencil_point_displacement.at(sensor_index).at(current_frame_index);
 
                         //std::cout << roi_offset.x + col_index << std::endl;
                         auto COUNT = next_pts_array.size();
@@ -202,17 +202,17 @@ void Objects::generate_object_mean_lineparameters( std::string post_processing_a
                     m_list_object_dataprocessing_mean_centroid_displacement.at(datafilter_index).at
                             (sensor_index).size();
 
-            for (unsigned frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 // gt_displacement
 
-                if (m_object_extrapolated_visibility.at(sensor_index).at(frame_count) == true) {
+                if (m_object_extrapolated_visibility.at(sensor_index).at(current_frame_index) == true) {
 
-                    if ( frame_count > 0 ) {
+                    if ( current_frame_index > 0 ) {
                         cv::Point2f next_pts = m_list_object_dataprocessing_mean_centroid_displacement.at(datafilter_index).at
-                                (sensor_index).at(frame_count).mean_pts;
+                                (sensor_index).at(current_frame_index).mean_pts;
                         cv::Point2f mean_displacement_vector =
                                 m_list_object_dataprocessing_mean_centroid_displacement.at(datafilter_index).at
-                                        (sensor_index).at(frame_count).mean_displacement;
+                                        (sensor_index).at(current_frame_index).mean_displacement;
 
                         float m, c;
                         //Invert Y co-ordinates to match Cartesian co-ordinate system. This is just for the line angle and
@@ -246,7 +246,7 @@ void Objects::generate_object_mean_lineparameters( std::string post_processing_a
                                 pt2.y = 0;
                             }
                         } else if (m == 0) {
-                            //std::cout << frame_count << " " << next_pts<<  " " << m << " " << mean_displacement_vector << std::endl;
+                            //std::cout << current_frame_index << " " << next_pts<<  " " << m << " " << mean_displacement_vector << std::endl;
                             if (std::signbit(m)) { //  going left
                                 pt2.x = 0;
                                 pt2.y = next_pts.y;

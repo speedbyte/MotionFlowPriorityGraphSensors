@@ -24,14 +24,14 @@ void DataProcessingAlgorithm::common(Objects *object) {
         unsigned long FRAME_COUNT = object->get_object_stencil_point_displacement().at(sensor_index)
                 .size();
 
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
             // gt_displacement
 
             std::vector<std::pair<cv::Point2f, cv::Point2f>> frame_dataprocessing_displacement;
 
-            bool visibility = object->get_object_extrapolated_visibility().at(sensor_index).at(frame_count);
+            bool visibility = object->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index);
 
-            std::cout << "frame_count " << frame_count << std::endl;
+            std::cout << "current_frame_index " << current_frame_index << std::endl;
 
             if (visibility) {
 
@@ -45,12 +45,12 @@ void DataProcessingAlgorithm::common(Objects *object) {
                 covar_displacement = cv::Scalar::all(65535);
 
                 const unsigned CLUSTER_SIZE = (unsigned) object->get_object_stencil_point_displacement().at
-                        (sensor_index).at(frame_count).size();
+                        (sensor_index).at(current_frame_index).size();
 
                 cv::Mat_<cv::Vec4f> samples(1, CLUSTER_SIZE, CV_32FC4);
                 /*-----------------------------------------------------------------------------*/
 
-                execute(object, sensor_index, frame_count, CLUSTER_SIZE, mean, stddev, frame_dataprocessing_displacement, samples);
+                execute(object, sensor_index, current_frame_index, CLUSTER_SIZE, mean, stddev, frame_dataprocessing_displacement, samples);
 
                 /* ------------------------------------------------------------------------------ */
 
@@ -63,11 +63,11 @@ void DataProcessingAlgorithm::common(Objects *object) {
                 multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
 
 
-                //std::cout << "mean_displacement and mean stddev " + m_algoName << multiframe_centroid_displacement.at(frame_count).mean_displacement << multiframe_centroid_displacement.at(frame_count).stddev_displacement<< std::endl;
+                //std::cout << "mean_displacement and mean stddev " + m_algoName << multiframe_centroid_displacement.at(current_frame_index).mean_displacement << multiframe_centroid_displacement.at(current_frame_index).stddev_displacement<< std::endl;
 
-                if (frame_count > 0 && CLUSTER_SIZE != 0) {
-                    assert(std::abs(multiframe_centroid_displacement.at(frame_count).mean_displacement.x)> 0);
-                    assert(std::abs(multiframe_centroid_displacement.at(frame_count).mean_displacement.y)> 0);
+                if (current_frame_index > 0 && CLUSTER_SIZE != 0) {
+                    assert(std::abs(multiframe_centroid_displacement.at(current_frame_index).mean_displacement.x)> 0);
+                    assert(std::abs(multiframe_centroid_displacement.at(current_frame_index).mean_displacement.y)> 0);
                 }
             }
 
@@ -88,16 +88,16 @@ void DataProcessingAlgorithm::common(Objects *object) {
 }
 
 
-void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                           cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
-                .at(frame_count).at(cluster_index).first;
+                .at(current_frame_index).at(cluster_index).first;
         cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
-                sensor_index).at(frame_count).at(cluster_index).second;
+                sensor_index).at(current_frame_index).at(cluster_index).second;
 
         samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
 
@@ -109,7 +109,7 @@ void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort frame_cou
 
 }
 
-void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                             cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
@@ -120,9 +120,9 @@ void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
-                .at(frame_count).at(cluster_index).first;
+                .at(current_frame_index).at(cluster_index).first;
         cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
-                sensor_index).at(frame_count).at(cluster_index).second;
+                sensor_index).at(current_frame_index).at(cluster_index).second;
 
         samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
 
@@ -138,7 +138,7 @@ void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
 }
 
 
-void MovingAverage::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+void MovingAverage::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                                   cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
@@ -149,9 +149,9 @@ void MovingAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
-                .at(frame_count).at(cluster_index).first;
+                .at(current_frame_index).at(cluster_index).first;
         cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
-                sensor_index).at(frame_count).at(cluster_index).second;
+                sensor_index).at(current_frame_index).at(cluster_index).second;
 
         samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
 
@@ -172,7 +172,7 @@ void MovingAverage::execute(Objects *object, ushort sensor_index, ushort frame_c
 
 }
 
-void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+void VotedMean::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
 
@@ -184,9 +184,9 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
-                .at(frame_count).at(cluster_index).first;
+                .at(current_frame_index).at(cluster_index).first;
         cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
-                sensor_index).at(frame_count).at(cluster_index).second;
+                sensor_index).at(current_frame_index).at(cluster_index).second;
 
         samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
 
@@ -203,7 +203,7 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
 
     std::vector<cv::Mat> histogram_x, histogram_y;
 
-    if (frame_count > 0 && CLUSTER_SIZE != 0 ) {
+    if (current_frame_index > 0 && CLUSTER_SIZE != 0 ) {
         Utils::drawHistogram(data_x, histogram_x, false);
         mean(2) = Utils::getHistogramPeak(histogram_x);
         Utils::drawHistogram(data_y, histogram_y, false);
@@ -224,7 +224,7 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort frame_count
 
 }
 
-void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+void RankedMean::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
     
@@ -234,9 +234,9 @@ void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_coun
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
-                .at(frame_count).at(cluster_index).first;
+                .at(current_frame_index).at(cluster_index).first;
         cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
-                sensor_index).at(frame_count).at(cluster_index).second;
+                sensor_index).at(current_frame_index).at(cluster_index).second;
 
         //samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
 
@@ -250,16 +250,16 @@ void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_coun
     }
 
     const unsigned CLUSTER_EDGE_SIZE = (unsigned) object->get_object_edge_point_displacement().at
-            (sensor_index).at(frame_count).size();
+            (sensor_index).at(current_frame_index).size();
 
     ushort WEIGHT = 100;
 
     for (unsigned cluster_edge_index = 0; cluster_edge_index < CLUSTER_EDGE_SIZE; cluster_edge_index++) {
 
         cv::Point2f pts_edge = object->get_object_edge_point_displacement().at(
-                sensor_index).at(frame_count).at(cluster_edge_index).first;
+                sensor_index).at(current_frame_index).at(cluster_edge_index).first;
         cv::Point2f gt_displacement = object->get_object_edge_point_displacement().at(
-                sensor_index).at(frame_count).at(cluster_edge_index).second;
+                sensor_index).at(current_frame_index).at(cluster_edge_index).second;
 
         mean(0) += WEIGHT * pts_edge.x;
         mean(1) += WEIGHT * pts_edge.y;
@@ -281,7 +281,7 @@ void RankedMean::execute(Objects *object, ushort sensor_index, ushort frame_coun
 }
 
 
-void SensorFusion::execute(Objects *object, ushort sensor_index, ushort frame_count, unsigned CLUSTER_SIZE,
+void SensorFusion::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                                  cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
@@ -291,9 +291,9 @@ void SensorFusion::execute(Objects *object, ushort sensor_index, ushort frame_co
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
-                .at(frame_count).at(cluster_index).first;
+                .at(current_frame_index).at(cluster_index).first;
         cv::Point2f gt_displacement = object->get_object_stencil_point_displacement().at(
-                sensor_index).at(frame_count).at(cluster_index).second;
+                sensor_index).at(current_frame_index).at(cluster_index).second;
 
         samples.at<cv::Vec4f>(0, cluster_index) = {pts.x, pts.y, gt_displacement.x, gt_displacement.y};
 

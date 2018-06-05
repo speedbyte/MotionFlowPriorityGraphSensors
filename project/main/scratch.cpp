@@ -572,7 +572,7 @@ void run_optical_flow_algorithm() {
         for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
             for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
-                cv::Point2f algo_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(frame_count).second;
+                cv::Point2f algo_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(current_frame_index).second;
                 //std::cout << roi_offset.x + col_index << std::endl;
                 stencil_movement.at(obj_index).push_back(
                         std::make_pair(cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),

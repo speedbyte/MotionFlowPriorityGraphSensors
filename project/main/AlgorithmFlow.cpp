@@ -74,7 +74,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
         std::cout << "results will be stored in " << m_resultordner << std::endl;
         std::cout << "creating flow files for sensor_index " << sensor_index << std::endl;
 
-        for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
+        for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
 
             // Break out of the loop if the user presses the Esc key
             char c = (char) cv::waitKey(10);
@@ -92,7 +92,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
             }
 
             char file_name_input_image[50];
-            sprintf(file_name_input_image, "000%03d_10.png", frame_count);
+            sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
             std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_input_image;
             image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
             if ( image_02_frame.data == NULL ) {
@@ -110,7 +110,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
             // Calculate optical generate_flow_frame map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
 
-                std::cout << "frame_count " << frame_count << std::endl;
+                std::cout << "current_frame_index " << current_frame_index << std::endl;
 
                 needToInit = false;
                 execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
@@ -120,13 +120,13 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
                     cv::arrowedLine(image_02_frame, frame_prev_pts_array[i], frame_next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }
 
-                common_flow_frame(sensor_index, frame_count, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
+                common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
 
             }
 
             else {
 
-                std::cout << "skipping first frame frame count " << frame_count << std::endl;
+                std::cout << "skipping first frame frame count " << current_frame_index << std::endl;
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
                     multiframe_stencil_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
@@ -140,8 +140,8 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
 
 
             // Display the output image
-            //cv::namedWindow(m_resultordner+"_" + std::to_string(frame_count), CV_WINDOW_AUTOSIZE);
-            //cv::imshow(m_resultordner+"_"+std::to_string(frame_count), image_02_frame);
+            //cv::namedWindow(m_resultordner+"_" + std::to_string(current_frame_index), CV_WINDOW_AUTOSIZE);
+            //cv::imshow(m_resultordner+"_"+std::to_string(current_frame_index), image_02_frame);
             //cv::waitKey(0);
             cv::destroyAllWindows();
             cv::imwrite(position_path, image_02_frame);
@@ -174,26 +174,26 @@ void AlgorithmFlow::combine_sensor_data() {
 
         std::copy(stencil_sensor_1.at(0).begin(), stencil_sensor_1.at(0).end(), std::back_inserter(combined_stencil_sensor));
 
-        for (ushort frame_count=0; frame_count < MAX_ITERATION_RESULTS; frame_count++) {
+        for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
 
             std::vector<std::pair<cv::Point2f, cv::Point2f> > elements_combined_stencil_sensor;
 
             cv::Point2f cog_1 = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                    (0).at(frame_count).m_object_location_px.cog_px;
+                    (0).at(current_frame_index).m_object_location_px.cog_px;
 
             cv::Point2f cog_2 = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                    (1).at(frame_count).m_object_location_px.cog_px;
+                    (1).at(current_frame_index).m_object_location_px.cog_px;
 
 
-            unsigned CLUSTER_COUNT = (unsigned) stencil_sensor_1.at(1).at(frame_count).size();
+            unsigned CLUSTER_COUNT = (unsigned) stencil_sensor_1.at(1).at(current_frame_index).size();
 
             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
-                elements_combined_stencil_sensor.push_back(std::make_pair((stencil_sensor_1.at(1).at(frame_count).at(cluster_index).first + ( cog_1 - cog_2)), stencil_sensor_1.at(1).at(frame_count).at(cluster_index).second ));
+                elements_combined_stencil_sensor.push_back(std::make_pair((stencil_sensor_1.at(1).at(current_frame_index).at(cluster_index).first + ( cog_1 - cog_2)), stencil_sensor_1.at(1).at(current_frame_index).at(cluster_index).second ));
             }
 
-            stencil_sensor_1.at(1).at(frame_count) = elements_combined_stencil_sensor;
+            stencil_sensor_1.at(1).at(current_frame_index) = elements_combined_stencil_sensor;
 
-            std::copy(stencil_sensor_1.at(1).at(frame_count).begin(), stencil_sensor_1.at(1).at(frame_count).end(), std::back_inserter(combined_stencil_sensor.at(frame_count)));
+            std::copy(stencil_sensor_1.at(1).at(current_frame_index).begin(), stencil_sensor_1.at(1).at(current_frame_index).end(), std::back_inserter(combined_stencil_sensor.at(current_frame_index)));
 
         }
 

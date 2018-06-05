@@ -18,8 +18,8 @@
 
 void Achterbahn::process(cv::Size frame_size) {
     std::vector<ushort> theta;
-    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count+=1) {
-        theta.push_back(frame_count);
+    for ( ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_THETA; current_frame_index+=1) {
+        theta.push_back(current_frame_index);
     }
     // Prepare points
     cv::Point2f l_pixel_position;
@@ -44,8 +44,8 @@ void Achterbahn::process(cv::Size frame_size) {
 void Circle::process(cv::Size frame_size) {
 
     std::vector<ushort> theta;
-    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
-        theta.push_back(frame_count);
+    for ( ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_THETA; current_frame_index++) {
+        theta.push_back(current_frame_index);
     }
     // Prepare points
     cv::Point2f l_pixel_position;
@@ -64,8 +64,8 @@ void Circle::process(cv::Size frame_size) {
 void Ramp::process(cv::Size frame_size) {
 
     std::vector<ushort> theta;
-    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
-        theta.push_back(frame_count);
+    for ( ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_THETA; current_frame_index++) {
+        theta.push_back(current_frame_index);
     }
     // Prepare points
     cv::Point2f l_pixel_position;
@@ -88,8 +88,8 @@ void Ramp::process(cv::Size frame_size) {
 void NegativeRamp::process(cv::Size frame_size) {
 
     std::vector<ushort> theta;
-    for ( ushort frame_count = 0; frame_count < MAX_ITERATION_THETA; frame_count++) {
-        theta.push_back(frame_count);
+    for ( ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_THETA; current_frame_index++) {
+        theta.push_back(current_frame_index);
     }
     // Prepare points
     cv::Point2f l_pixel_position;

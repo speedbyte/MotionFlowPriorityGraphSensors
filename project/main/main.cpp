@@ -345,7 +345,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     ushort fps = 30;
 
-    for (ushort algorithm_index = 0; algorithm_index < 2; algorithm_index++) {
+    for (ushort algorithm_index = 0; algorithm_index < 1; algorithm_index++) {
 
         std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
 
@@ -395,7 +395,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories(environment_list[env_index], fps, stepSize);
                     // TODO - do something for stepSize.. its redundant here.
                     list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(video_frames, fps);
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
+                    if ( SENSOR_COUNT > 1 ) {
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
+                    }
 
                     if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {

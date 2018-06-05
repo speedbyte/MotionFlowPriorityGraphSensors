@@ -176,7 +176,7 @@ class SensorDataPlot(object):
         data = numpy.array(data)
         x0_gt, y0_gt = data.T
 
-        frame_count = numpy.arange(0.0, len(data_points), 1)
+        current_frame_index = numpy.arange(0.0, len(data_points), 1)
 
         data = list()
 
@@ -189,7 +189,7 @@ class SensorDataPlot(object):
         y_axis_mean = 0
         data = numpy.array(data)
         x0, y0 = data.T
-        x_axis = frame_count
+        x_axis = current_frame_index
         y_axis = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2)
 
         count = 0
@@ -258,7 +258,7 @@ class SensorDataPlot(object):
 
             if ( data_points_gt[count]["obj_index"] == 0 ):
                 xy = list()
-                xy.append(data_points_gt[count]["frame_count"])
+                xy.append(data_points_gt[count]["current_frame_index"])
                 xy.append(data_points_gt[count]["visible_pixels"])
                 xy.append(data_points_gt[count]["ground_truth_pixels"])
                 data.append(xy)
@@ -278,7 +278,7 @@ class SensorDataPlot(object):
         for count in range(len(data_points)):
             if ( data_points[count]["obj_index"] == 0 ):
                 xy = list()
-                xy.append(data_points[count]["frame_count"])
+                xy.append(data_points[count]["current_frame_index"])
                 xy.append(data_points[count]["visible_pixels"])
                 xy.append(data_points[count]["ground_truth_pixels"])
                 data.append(xy)
@@ -310,7 +310,7 @@ class SensorDataPlot(object):
 
             if ( data_points_gt[count]["obj_index"] == 0 ):
                 xy = list()
-                xy.append(data_points_gt[count]["frame_count"])
+                xy.append(data_points_gt[count]["current_frame_index"])
                 xy.append(data_points_gt[count]["good_pixels"])
                 xy.append(data_points_gt[count]["visible_pixels"])
                 data.append(xy)
@@ -330,7 +330,7 @@ class SensorDataPlot(object):
         for count in range(len(data_points)):
             if ( data_points[count]["obj_index"] == 0 ):
                 xy = list()
-                xy.append(data_points[count]["frame_count"])
+                xy.append(data_points[count]["current_frame_index"])
                 xy.append(data_points[count]["good_pixels"])
                 xy.append(data_points[count]["visible_pixels"])
                 data.append(xy)
@@ -361,7 +361,7 @@ class SensorDataPlot(object):
         for count in range(len(data_points_gt)):
             if ( data_points[count]["obj_index"] == 0 ):
                 xy = list()
-                xy.append(data_points_gt[count]["frame_count"])
+                xy.append(data_points_gt[count]["current_frame_index"])
                 xy.append(data_points_gt[count][key])
                 data.append(xy)
 
@@ -380,7 +380,7 @@ class SensorDataPlot(object):
         for count in range(len(data_points)):
             xy = list()
             if ( data_points[count]["obj_index"] == 0 ):
-                xy.append(data_points[count]["frame_count"])
+                xy.append(data_points[count]["current_frame_index"])
                 xy.append(data_points[count][key])
                 data.append(xy)
 
@@ -473,7 +473,7 @@ class SensorDataPlot(object):
                 elem_1 = 0
                 elem_2 = 0
 
-            # data[count][0] has the frame_count
+            # data[count][0] has the current_frame_index
             if ( data[count][0] == previous_x_axis ):
                     total_count = total_count+1
                     elem_1 = elem_1 + data[count][1]

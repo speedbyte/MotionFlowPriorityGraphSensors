@@ -8,7 +8,7 @@
 
 class ViresObjects {
 public:
-    unsigned frame_count;
+    unsigned current_frame_index;
     RDB_OBJECT_STATE_t objectProperties;
 };
 

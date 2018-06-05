@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
                 sensor_plot = SensorDataPlot(sensor_index, algorithm)
 
-                plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter=parameter, x_label="frame_count", y_label=y_axis_label_dict[parameter])
+                plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter=parameter, x_label="current_frame_index", y_label=y_axis_label_dict[parameter])
                 plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
                 # summary
@@ -117,7 +117,7 @@ if __name__ == '__main__':
                 print len(sensor_plot.get_summary())
 
 
-                #plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="frame_count", y_label="good pixels / visible pixels")
+                #plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="current_frame_index", y_label="good pixels / visible pixels")
                 #plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
 

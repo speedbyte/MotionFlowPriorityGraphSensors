@@ -64,13 +64,13 @@ void OpticalFlow::prepare_directories_common() {
 }
 
 
-void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility) {
+void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility) {
 
     char sensor_index_folder_suffix[50];
     sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
     char file_name_image_output[50];
-    sprintf(file_name_image_output, "000%03d_10.png", frame_count);
+    sprintf(file_name_image_output, "000%03d_10.png", current_frame_index);
 
     Gnuplot gp2d;
 
@@ -86,17 +86,17 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
         }
 
         float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                (sensor_index).at(frame_count).m_region_of_interest_px.x;
+                (sensor_index).at(current_frame_index).m_region_of_interest_px.x;
         float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                (sensor_index).at(frame_count).m_region_of_interest_px.y;
+                (sensor_index).at(current_frame_index).m_region_of_interest_px.y;
         int width = cvRound(
                 m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                        frame_count).m_region_of_interest_px.width_px);
+                        current_frame_index).m_region_of_interest_px.width_px);
         int height = cvRound(
                 m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                        frame_count).m_region_of_interest_px.height_px);
+                        current_frame_index).m_region_of_interest_px.height_px);
         bool visibility = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(
-                sensor_index).at(frame_count);
+                sensor_index).at(current_frame_index);
 
         cv::Mat flowFrame;
         flowFrame.create(Dataset::getFrameSize(), CV_32FC3);
@@ -118,7 +118,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
 
             cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                     obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
-                    frame_count).second;
+                    current_frame_index).second;
 
             if (m_resultordner == "/ground_truth") {
                 // gt_displacement
@@ -183,8 +183,8 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
                         gp2d << "set output \"" + output_image_file_with_path + "\"\n";
                         gp2d << "set xrange [-5:5]\n";
                         gp2d << "set yrange [-5:5]\n";
-                        gp2d << "plot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT', "
-                                "'-' with points title 'Boy', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT'\n";
+                        gp2d << "plot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT', "
+                                "'-' with points title 'Boy', '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'\n";
                         gp2d.send1d(xy_pts);
                         gp2d.send1d(gt_pts);
                     }
@@ -204,15 +204,15 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort frame_count, std
 
                     auto COUNT = m_ptr_list_simulated_objects_base.at(
                             obj_index)->get_object_stencil_point_displacement().at
-                            (sensor_index).at(frame_count).size();
+                            (sensor_index).at(current_frame_index).size();
                     for (auto count = 0; count < COUNT; count++) {
 
                         float x = m_ptr_list_simulated_objects_base.at(
                                 obj_index)->get_object_stencil_point_displacement().at
-                                (sensor_index).at(frame_count).at(count).first.x;
+                                (sensor_index).at(current_frame_index).at(count).first.x;
                         float y = m_ptr_list_simulated_objects_base.at(
                                 obj_index)->get_object_stencil_point_displacement().at
-                                (sensor_index).at(frame_count).at(count).first.y;
+                                (sensor_index).at(current_frame_index).at(count).first.y;
 
                         for (auto next_pts_index = 0;
                              next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
@@ -274,14 +274,14 @@ void OpticalFlow::generate_displacement_vector() {
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
         std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-            std::cout << "frame_count " << frame_count << std::endl;
+            std::cout << "current_frame_index " << current_frame_index << std::endl;
 
 
             std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
-            common_flow_frame(sensor_index, frame_count, frame_next_pts_array, displacement_array,
+            common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array,
                               multiframe_stencil_displacement, multiframe_visibility);
 
         }
@@ -327,33 +327,33 @@ void OpticalFlow::generate_flow_frames() {
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
         std::cout << "saving flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             char file_name_input_image[50];
 
-            sprintf(file_name_input_image, "000%03d_10.png", frame_count);
+            sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
 
-            std::cout << "frame_count " << frame_count << std::endl;
+            std::cout << "current_frame_index " << current_frame_index << std::endl;
 
             float max_magnitude = 0.0;
 
             for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                 unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
-                        obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
+                        obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
                 for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
                     cv::Point2f pts = list_of_current_objects.at(obj_index)->
-                            get_object_stencil_point_displacement().at(sensor_index).at(frame_count).at(
+                            get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).at(
                             cluster_index).first;
 
                     cv::Point2f displacement = list_of_current_objects.at(obj_index)->
-                            get_object_stencil_point_displacement().at(sensor_index).at(frame_count).at(
+                            get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).at(
                             cluster_index).second;
 
                     max_magnitude = std::max((float) cv::norm(displacement), max_magnitude);
@@ -421,17 +421,17 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
             std::vector<std::vector<OPTICAL_FLOW_EVALUATION_METRICS> > multiframe_evaluation_data;
 
-            for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+            for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
                 char file_name_image_output[50];
                 std::string output_image_file_with_path, output_image_file_with_path_stiched;
-                sprintf(file_name_image_output, "000%03d_10.png", frame_count);
+                sprintf(file_name_image_output, "000%03d_10.png", current_frame_index);
                 output_image_file_with_path = m_gnuplots_path.string() + "0" + std::to_string(sensor_index) + "/" + file_name_image_output;
 
                 output_image_file_with_path_stiched = m_gnuplots_path.string() + "0" + std::to_string(SENSOR_COUNT-1) + "/" + file_name_image_output;
 
-                std::cout << "frame_count " << frame_count << " for opticalflow_index " << m_opticalFlowName
+                std::cout << "current_frame_index " << current_frame_index << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
@@ -439,34 +439,34 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                     // displacements found by the ground truth for this object
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
-                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(frame_count).size();
+                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
                     //if (list_of_current_objects.at(obj_index)->getObjectName() == "New Character" ||
                     //    list_of_current_objects.at(obj_index)->getObjectName() == "simulated_New Character") {
 
                     cv::Point2i dimension = {
                             cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                    sensor_index).at(frame_count).m_region_of_interest_px.width_px),
+                                    sensor_index).at(current_frame_index).m_region_of_interest_px.width_px),
                             cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                    sensor_index).at(frame_count).m_region_of_interest_px.height_px)
+                                    sensor_index).at(current_frame_index).m_region_of_interest_px.height_px)
                     };
 
                     // displacements found by the algorithm for this object
                     unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
-                            frame_count).size();
+                            current_frame_index).size();
 
-                    evaluationData.at(obj_index).frame_count = frame_count;
+                    evaluationData.at(obj_index).current_frame_index = current_frame_index;
                     evaluationData.at(obj_index).obj_index = obj_index;
 
                     if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
-                            sensor_index).at(frame_count)) {
+                            sensor_index).at(current_frame_index)) {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
                         cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                                 obj_index)->get_object_extrapolated_point_displacement().at
-                                (sensor_index).at(frame_count).second;
+                                (sensor_index).at(current_frame_index).second;
 
                         auto dist_gt = cv::norm(gt_displacement);
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
@@ -475,31 +475,31 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         evaluationData.at(obj_index).mean_pts = list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
-                        ).at(sensor_index).at(frame_count).mean_pts;
+                        ).at(sensor_index).at(current_frame_index).mean_pts;
 
                         evaluationData.at(obj_index).mean_displacement = list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
-                        ).at(sensor_index).at(frame_count).mean_displacement;
+                        ).at(sensor_index).at(current_frame_index).mean_displacement;
 
                         evaluationData.at(obj_index).stddev_pts = list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
-                        ).at(sensor_index).at(frame_count).stddev_pts;
+                        ).at(sensor_index).at(current_frame_index).stddev_pts;
 
                         evaluationData.at(obj_index).stddev_displacement = list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
-                        ).at(sensor_index).at(frame_count).stddev_displacement;
+                        ).at(sensor_index).at(current_frame_index).stddev_displacement;
 
                         evaluationData.at(obj_index).covar_pts = list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
-                        ).at(sensor_index).at(frame_count).covar_pts;
+                        ).at(sensor_index).at(current_frame_index).covar_pts;
 
                         evaluationData.at(obj_index).covar_displacement = list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
-                        ).at(sensor_index).at(frame_count).covar_displacement;
+                        ).at(sensor_index).at(current_frame_index).covar_displacement;
 
                         evaluationData.at(
                                 obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
@@ -527,7 +527,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
                                         get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index
-                                ).at(sensor_index).at(frame_count).at(cluster_index).second;
+                                ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
                                 auto dist_algo = cv::norm(algo_displacement);
                                 auto dist_err = std::abs(dist_gt - dist_algo);
@@ -554,7 +554,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 l2 += ( std::pow((algo_displacement.x - gt_displacement.x ),2 ) + std::pow((algo_displacement.y - gt_displacement.y ),2 ) ) ;
 
                             }
-                            if ( obj_index == 0 && frame_count > 0  && sensor_index != (SENSOR_COUNT-1) ) {
+                            if ( obj_index == 0 && current_frame_index > 0  && sensor_index != (SENSOR_COUNT-1) ) {
 
                                 cv::Mat stich_plots;
 
@@ -604,7 +604,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = " <<
                                   list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
                                                   sensor_index)
-                                          .at(frame_count)
+                                          .at(current_frame_index)
                                   << " and hence not generating any shape points for this object " << std::endl;
 
                         evaluationData.at(obj_index).goodPixels = 0;
@@ -676,11 +676,11 @@ void OpticalFlow::plot_stencil() {
 
         assert(FRAME_COUNT > 0);
 
-        for (ushort frame_count = 0; frame_count < FRAME_COUNT; frame_count++) {
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             char file_name_image_output[50];
             std::string output_image_file_with_path;
-            sprintf(file_name_image_output, "000%03d_10.png", frame_count);
+            sprintf(file_name_image_output, "000%03d_10.png", current_frame_index);
             output_image_file_with_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
             //---------------------------------------------------------------------------------
@@ -690,17 +690,17 @@ void OpticalFlow::plot_stencil() {
                 throw;
             }
 
-            std::cout << "frame_count " << frame_count << " for datafilter_index " << datafilter_index<< std::endl;
+            std::cout << "current_frame_index " << current_frame_index << " for datafilter_index " << datafilter_index<< std::endl;
 
             for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
-                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(frame_count) ) {
+                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index) ) {
 
                     cv::Point2f pts_gt = m_ptr_list_gt_objects.at(
-                            obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(frame_count).mean_pts;
+                            obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_pts;
 
                     cv::Point2f displacement_gt = m_ptr_list_gt_objects.at(
-                            obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(frame_count).mean_displacement;
+                            obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_displacement;
 
                     cv::Point2f next_pts = cv::Point2f(pts_gt.x + displacement_gt.x*10, pts_gt.y + displacement_gt.y*10);
 
@@ -713,10 +713,10 @@ void OpticalFlow::plot_stencil() {
                     else {
 
                         cv::Point2f algo_pts = m_ptr_list_simulated_objects.at(
-                                obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(frame_count).mean_pts;
+                                obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_pts;
 
                         cv::Point2f algo_displacement = m_ptr_list_simulated_objects.at(
-                                obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(frame_count).mean_displacement;
+                                obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_displacement;
 
                         cv::Point2f next_pts = cv::Point2f(algo_pts.x + algo_displacement.x*10, algo_pts.y + algo_displacement.y*10);
 
