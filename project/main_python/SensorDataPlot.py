@@ -66,10 +66,13 @@ class SensorDataPlot(object):
         self.summary_mean = dict()
         self.sensor_index = sensor_index
         self.algorithm = algorithm
-
+        self.measuring_parameter = None
 
     def get_algorithm(self):
         return self.algorithm
+
+    def set_measuring_parameter(self, measuring_parameter):
+        self.measuring_parameter = measuring_parameter
 
     def templateToYamlMapping(self, i, step_size):
 
@@ -106,7 +109,7 @@ class SensorDataPlot(object):
 
             if ( measuring_parameter == "visible_pixels"):
                 x_axis, y_axis, y_axis_mean = self.getVisiblePixels(data_points_gt, data_points_gt)
-            elif ( measuring_parameter == "good_pixels"):
+            elif ( measuring_parameter == self.measuring_parameter):
                 x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points_gt)
             elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
                 x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
@@ -119,7 +122,7 @@ class SensorDataPlot(object):
                 print "getting ", data_list[1]
                 if ( measuring_parameter == "visible_pixels"):
                     x_axis, y_axis, y_axis_mean = self.getVisiblePixels(data_points_gt, data_points)
-                elif ( measuring_parameter == "good_pixels"):
+                elif ( measuring_parameter == self.measuring_parameter):
                     x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points)
                 elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
                     x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
@@ -311,7 +314,7 @@ class SensorDataPlot(object):
             if ( data_points_gt[count]["obj_index"] == 0 ):
                 xy = list()
                 xy.append(data_points_gt[count]["current_frame_index"])
-                xy.append(data_points_gt[count]["good_pixels"])
+                xy.append(data_points_gt[count][self.measuring_parameter])
                 xy.append(data_points_gt[count]["visible_pixels"])
                 data.append(xy)
 
@@ -331,7 +334,7 @@ class SensorDataPlot(object):
             if ( data_points[count]["obj_index"] == 0 ):
                 xy = list()
                 xy.append(data_points[count]["current_frame_index"])
-                xy.append(data_points[count]["good_pixels"])
+                xy.append(data_points[count][self.measuring_parameter])
                 xy.append(data_points[count]["visible_pixels"])
                 data.append(xy)
 

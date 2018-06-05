@@ -334,9 +334,7 @@ void OpticalFlow::generate_flow_frames() {
             char file_name_input_image[50];
             ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
-            if ( vires_frame_count == MAX_ITERATION_RESULTS-1 ) {
-                break;
-            }
+
             sprintf(file_name_input_image, "000%03d_10.png", vires_frame_count);
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
@@ -464,7 +462,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
                             current_frame_index).size();
 
-                    evaluationData.at(obj_index).current_frame_index = current_frame_index;
+                    evaluationData.at(obj_index).current_frame_index = vires_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
 
                     if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(

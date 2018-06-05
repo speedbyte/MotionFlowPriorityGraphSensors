@@ -108,6 +108,7 @@ if __name__ == '__main__':
             for algorithm in algorithm_list:
 
                 sensor_plot = SensorDataPlot(sensor_index, algorithm)
+                sensor_plot.set_measuring_parameter(parameter)
 
                 plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter=parameter, x_label="current_frame_index", y_label=y_axis_label_dict[parameter])
                 plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
