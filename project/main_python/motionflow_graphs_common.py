@@ -177,7 +177,7 @@ class Figures(object):
                 regroup = len(index)*[0]
                 shift = shift+1
                 for p, algorithm in enumerate(algorithm_list):
-                    map_to_data = measuring_parameter + '_' + algorithm + '_' + weather + '_' + str(5) + '_' + str(sensor_index)
+                    map_to_data = measuring_parameter + '_' + algorithm + '_' + weather + '_' + str(step_list[0]) + '_' + str(sensor_index)
                     print map_to_data
                     regroup[p] = summary_dict[map_to_data][0]
                 bar_positions = index + (shift*bar_width)

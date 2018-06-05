@@ -109,7 +109,7 @@ class SensorDataPlot(object):
 
             if ( measuring_parameter == "visible_pixels"):
                 x_axis, y_axis, y_axis_mean = self.getVisiblePixels(data_points_gt, data_points_gt)
-            elif ( measuring_parameter == self.measuring_parameter):
+            elif ( measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
                 x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points_gt)
             elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
                 x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
@@ -122,7 +122,7 @@ class SensorDataPlot(object):
                 print "getting ", data_list[1]
                 if ( measuring_parameter == "visible_pixels"):
                     x_axis, y_axis, y_axis_mean = self.getVisiblePixels(data_points_gt, data_points)
-                elif ( measuring_parameter == self.measuring_parameter):
+                elif ( measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
                     x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points)
                 elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
                     x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
