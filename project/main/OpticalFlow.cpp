@@ -513,7 +513,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         evaluationData.at(
                                 obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
                         evaluationData.at(
-                                obj_index).goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
+                                obj_index).goodPixels_l2 = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
                         evaluationData.at(
                                 obj_index).goodPixels_maha = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
@@ -533,7 +533,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                             // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
                             evaluationData.at(
-                                    obj_index).goodPixels = 0; // how many pixels in the found pixel are actually valid
+                                    obj_index).goodPixels_l2 = 0; // how many pixels in the found pixel are actually valid
                             evaluationData.at(
                                     obj_index).goodPixels_maha = 0; // how many pixels in the found pixel are actually valid
 
@@ -567,7 +567,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                                         ) {
                                     evaluationData.at(
-                                            obj_index).goodPixels++; // how many pixels in the found pixel are actually valid
+                                            obj_index).goodPixels_l2++; // how many pixels in the found pixel are actually valid
                                 }
                                 if (
                                         (maha_dist_algo) < DISTANCE_ERROR_TOLERANCE
@@ -615,9 +615,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         evaluationData.at(obj_index).l1 = l1_cumulative;
                         evaluationData.at(obj_index).l2 = l2_cumulative;
 
-                        std::cout << "goodPixels for object "
+                        std::cout << "goodPixels_l2 for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).goodPixels << std::endl;
+                                  << evaluationData.at(obj_index).goodPixels_l2 << std::endl;
                         std::cout << "goodPixels_maha for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.at(obj_index).goodPixels_maha << std::endl;
@@ -625,7 +625,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.at(obj_index).visiblePixels << std::endl;
 
-                        //assert(evaluationData.goodPixels <= std::ceil(evaluationData.algorithmPixels) + 20 );
+                        //assert(evaluationData.goodPixels_l2 <= std::ceil(evaluationData.algorithmPixels) + 20 );
 
                     } else {
                         std::cout << "visibility of object "
@@ -635,7 +635,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                           .at(current_frame_index)
                                   << " and hence not generating any shape points for this object " << std::endl;
 
-                        evaluationData.at(obj_index).goodPixels = 0;
+                        evaluationData.at(obj_index).goodPixels_l2 = 0;
                         evaluationData.at(obj_index).goodPixels_maha = 0;
                         evaluationData.at(obj_index).visiblePixels = 0;
 

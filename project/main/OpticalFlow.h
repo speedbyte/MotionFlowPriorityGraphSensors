@@ -16,7 +16,7 @@ typedef struct {
     int current_frame_index;
     int obj_index;
     int visiblePixels;
-    int goodPixels;
+    int goodPixels_l2;
     int goodPixels_maha;
     cv::Point2f object_dimension;
     cv::Point2f mean_pts;

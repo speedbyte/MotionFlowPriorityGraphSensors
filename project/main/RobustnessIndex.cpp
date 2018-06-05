@@ -109,8 +109,8 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
                          opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).current_frame_index
                          << "obj_index" <<
                          opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).obj_index
-                         << "good_pixels" <<
-                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).goodPixels
+                         << "good_pixels_l2" <<
+                         opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).goodPixels_l2
                          << "good_pixels_maha" <<
                             opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points).goodPixels_maha
                          << "visible_pixels" <<
