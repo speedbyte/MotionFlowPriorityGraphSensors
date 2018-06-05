@@ -180,17 +180,20 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
                     gt_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
 
-                    if ( obj_index == 0 ) {
+                    if ( obj_index == 1 ) {
                         gp2d << "set term png size 400,400\n";
                         gp2d << "set output \"" + output_image_file_with_path + "\"\n";
                         gp2d << "set xrange [-5:5]\n";
                         gp2d << "set yrange [-5:5]\n";
-                        gp2d << "plot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT', "
-                                "'-' with points title 'Boy', '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'\n";
+                        gp2d << "plot '-' with points title 'Boy'"
+                                //", '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
+                                //", '-' with points title 'Boy'
+                                // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
+                                "\n";
                         gp2d.send1d(xy_pts);
-                        gp2d.send1d(gt_pts);
+                        //gp2d.send1d(gt_pts);
                     }
-                    else if ( obj_index == 1 ) {
+                    else if ( obj_index == 5 ) {
 
                         //gp2d << "replot\n";
                         //gp2d << "replot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT'\n";
@@ -474,7 +477,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 obj_index)->get_object_extrapolated_point_displacement().at
                                 (sensor_index).at(current_frame_index).second;
 
-                        auto dist_gt = cv::norm(gt_displacement);
+                        auto euclidean_dist_gt = cv::norm(gt_displacement);
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
                         evaluationData.at(obj_index).object_dimension = dimension;
@@ -511,10 +514,13 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
                         evaluationData.at(
                                 obj_index).goodPixels = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
+                        evaluationData.at(
+                                obj_index).goodPixels_maha = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
-                        double maha = 0;
-                        double l1 = 0;
-                        double l2 = 0;
+                        double maha_cumulative = 0;
+                        double l1_cumulative = 0;
+                        double l2_cumulative = 0;
+
                         cv::Mat icovar;
                         // this should be sent to Objects.cpp
                         if ( evaluationData.at(obj_index).covar_displacement.data != NULL ) {
@@ -528,6 +534,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
                             evaluationData.at(
                                     obj_index).goodPixels = 0; // how many pixels in the found pixel are actually valid
+                            evaluationData.at(
+                                    obj_index).goodPixels_maha = 0; // how many pixels in the found pixel are actually valid
 
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
@@ -535,29 +543,41 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                         get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index
                                 ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
-                                auto dist_algo = cv::norm(algo_displacement);
-                                auto dist_err = std::abs(dist_gt - dist_algo);
 
+                                l1_cumulative += ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y )) ;
+
+                                auto euclidean_dist_algo = cv::norm(algo_displacement);
+                                l2_cumulative += euclidean_dist_algo;
+
+                                auto maha_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
+                                maha_cumulative += maha_dist_algo;
+
+                                auto euclidean_dist_err = std::abs(euclidean_dist_gt - euclidean_dist_algo);
+                                //auto maha_dist_err = std::abs(euclidean_dist_gt - maha_dist_algo);
                                 auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
 
                                 auto angle_err = std::abs(angle_algo - angle_gt);
                                 auto angle_err_dot = std::cosh(
-                                        algo_displacement.dot(gt_displacement) / (dist_gt * dist_algo));
+                                        algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * euclidean_dist_algo));
 
                                 //assert(angle_err_dot==angle_err);
                                 if (
-                                        (dist_err) < DISTANCE_ERROR_TOLERANCE &&
-                                        (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
+                                        (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
+                                        && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
 
                                         ) {
                                     evaluationData.at(
                                             obj_index).goodPixels++; // how many pixels in the found pixel are actually valid
                                 }
+                                if (
+                                        (maha_dist_algo) < DISTANCE_ERROR_TOLERANCE
+                                    // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
 
-                                maha += Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
-                                l1 += ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y )) ;
+                                        ) {
+                                    evaluationData.at(
+                                            obj_index).goodPixels_maha++; // how many pixels in the found pixel are actually valid
+                                }
 
-                                l2 += ( std::pow((algo_displacement.x - gt_displacement.x ),2 ) + std::pow((algo_displacement.y - gt_displacement.y ),2 ) ) ;
 
                             }
                             if ( obj_index == 0 && current_frame_index > 0  && sensor_index != (SENSOR_COUNT-1) ) {
@@ -587,18 +607,20 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             }
 
                         }
+                        l1_cumulative   = l1_cumulative / CLUSTER_COUNT;
+                        l2_cumulative   = std::sqrt(l2_cumulative) / CLUSTER_COUNT;
+                        maha_cumulative = std::sqrt(maha_cumulative) / CLUSTER_COUNT;
 
-                        maha = std::sqrt(maha) / CLUSTER_COUNT;
-                        l2   = std::sqrt(l2) / CLUSTER_COUNT;
-                        l1   = l1 / CLUSTER_COUNT;
-
-                        evaluationData.at(obj_index).mahalanobisDistance = maha;
-                        evaluationData.at(obj_index).l1 = l1;
-                        evaluationData.at(obj_index).l2 = l2;
+                        evaluationData.at(obj_index).mahalanobisDistance = maha_cumulative;
+                        evaluationData.at(obj_index).l1 = l1_cumulative;
+                        evaluationData.at(obj_index).l2 = l2_cumulative;
 
                         std::cout << "goodPixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.at(obj_index).goodPixels << std::endl;
+                        std::cout << "goodPixels_maha for object "
+                                  << list_of_current_objects.at(obj_index)->getObjectName() << " = "
+                                  << evaluationData.at(obj_index).goodPixels_maha << std::endl;
                         std::cout << "visiblePixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.at(obj_index).visiblePixels << std::endl;
@@ -614,6 +636,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                   << " and hence not generating any shape points for this object " << std::endl;
 
                         evaluationData.at(obj_index).goodPixels = 0;
+                        evaluationData.at(obj_index).goodPixels_maha = 0;
                         evaluationData.at(obj_index).visiblePixels = 0;
 
                     }
