@@ -45,7 +45,8 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
             cv::Mat objectEdgeFrame( Dataset::getFrameSize(), CV_8UC1 );
             objectEdgeFrame = cv::Scalar_<char>(0);
 
-            sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
+            ushort vires_frame_count = m_object_extrapolated_all.at(0).at(current_frame_index).frame_no;
+            sprintf(file_name_input_image, "000%03d_10.png", vires_frame_count);
 
             temp_result_edge_path = Dataset::getGroundTruthPath().string() + "ground_truth/edge_" + sensor_index_folder_suffix + "/" + file_name_input_image;
 
@@ -156,11 +157,11 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
     m_list_object_dataprocessing_stencil_points_displacement.push_back(votedMean.get_object_dataprocessing_stencil_point_displacement());
 
     if ( post_processing_algorithm != "ground_truth" ) {
-        generate_edge_contour(post_processing_algorithm);
-        RankedMean rankedMean;
-        rankedMean.common(this);
-        m_list_object_dataprocessing_mean_centroid_displacement.push_back(rankedMean.get_object_dataprocessing_mean_centroid_displacement());
-        m_list_object_dataprocessing_stencil_points_displacement.push_back(rankedMean.get_object_dataprocessing_stencil_point_displacement());
+        //generate_edge_contour(post_processing_algorithm);
+        //RankedMean rankedMean;
+        //rankedMean.common(this);
+        //m_list_object_dataprocessing_mean_centroid_displacement.push_back(rankedMean.get_object_dataprocessing_mean_centroid_displacement());
+        //m_list_object_dataprocessing_stencil_points_displacement.push_back(rankedMean.get_object_dataprocessing_stencil_point_displacement());
 
     }
 

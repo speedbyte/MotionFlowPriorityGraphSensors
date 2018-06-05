@@ -23,7 +23,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
     std::cout << "generate_object_base_point_displacement with start_point " << m_startPoint << std::endl;
 
-    for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; current_frame_index++) {
+    for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
         // The first frame is the reference frame, hence it is skipped
 
 
@@ -52,21 +52,23 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         else {
 
             //If we are at the end of the path vector, we need to reset our iterators
-            if (frame_number >= MAX_ITERATION_RESULTS) {
+            if (frame_number >= ITERATION_END_POINT) {
 
                 frame_number = 0;
-                gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.x - gt_data.getAll().at(MAX_ITERATION_RESULTS - 1).m_object_location_px.cog_px.x;
-                gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.y - gt_data.getAll().at(MAX_ITERATION_RESULTS - 1).m_object_location_px.cog_px.y;
+                gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.x - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_px.cog_px.x;
+                gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.y - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_px.cog_px.y;
 
-                gt_displacement_inertial.x = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(MAX_ITERATION_RESULTS - 1).m_object_location_inertial_m.location_x_m;
-                gt_displacement_inertial.y = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(MAX_ITERATION_RESULTS - 1).m_object_location_inertial_m.location_y_m;
+                gt_displacement_inertial.x = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_inertial_m.location_x_m;
+                gt_displacement_inertial.y = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_inertial_m.location_y_m;
 
-                gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_m.location_x_m - gt_data.getAll().at(MAX_ITERATION_RESULTS-(ushort)1).m_object_location_m.location_x_m;
-                gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_m.location_y_m - gt_data.getAll().at(MAX_ITERATION_RESULTS-(ushort)1).m_object_location_m.location_y_m;
+                gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_m.location_x_m - gt_data.getAll().at(ITERATION_END_POINT-(ushort)1).m_object_location_m.location_x_m;
+                gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_m.location_y_m - gt_data.getAll().at(ITERATION_END_POINT-(ushort)1).m_object_location_m.location_y_m;
 
             } else {
 
                 gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.x - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_px.cog_px.x;
+
+
                 gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.y - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_px.cog_px.y;
 
                 gt_displacement_inertial.x = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_inertial_m.location_x_m;
@@ -78,7 +80,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
             }
 
-            if ( frame_number != MAX_ITERATION_RESULTS && frame_number != 0 ) {
+            if ( frame_number != ITERATION_END_POINT && frame_number != 0 ) {
                 if (gt_data.getAll().at(frame_number - (ushort) 1).m_object_location_inertial_m.location_x_m != 0) {
                     auto dist_inertial = cv::norm(gt_displacement_inertial);
                     auto dist_usk = cv::norm(gt_displacement_usk);

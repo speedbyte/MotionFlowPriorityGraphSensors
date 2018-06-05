@@ -71,8 +71,9 @@ void OpticalFlow::generate_collision_points() {
                 std::vector<cv::Point2f> frame_line_angles;
 
                 char file_name_image[50];
-
-                sprintf(file_name_image, "000%03d_10.png", current_frame_index);
+                ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                        (0).at(current_frame_index).frame_no;
+                sprintf(file_name_image, "000%03d_10.png", vires_frame_count);
                 std::string temp_collision_image_path =
                         m_collision_object_path.string() + sensor_index_folder_suffix + "/" + file_name_image;
 

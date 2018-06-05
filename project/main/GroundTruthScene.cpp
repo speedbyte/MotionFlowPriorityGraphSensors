@@ -351,7 +351,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
         sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         std::cout << "read yaml file for sensor_index " << (sensor_index) << std::endl;
         //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_object_shape_point_displacement().at(sensor_index).size();
-        unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;
+        unsigned long FRAME_COUNT = ITERATION_END_POINT;
         assert(FRAME_COUNT > 0);
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
@@ -731,7 +731,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
         sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         //write_fs << temp_str_fs << "[";
 
-        unsigned long FRAME_COUNT = MAX_ITERATION_RESULTS;
+        unsigned long FRAME_COUNT = ITERATION_END_POINT;
         assert(FRAME_COUNT > 0);
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {

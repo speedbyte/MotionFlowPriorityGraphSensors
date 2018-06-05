@@ -70,7 +70,9 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
     char file_name_image_output[50];
-    sprintf(file_name_image_output, "000%03d_10.png", current_frame_index);
+    ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+            (0).at(current_frame_index).frame_no;
+    sprintf(file_name_image_output, "000%03d_10.png", vires_frame_count);
 
     Gnuplot gp2d;
 
@@ -330,8 +332,12 @@ void OpticalFlow::generate_flow_frames() {
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             char file_name_input_image[50];
-
-            sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
+            ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(current_frame_index).frame_no;
+            if ( vires_frame_count == MAX_ITERATION_RESULTS-1 ) {
+                break;
+            }
+            sprintf(file_name_input_image, "000%03d_10.png", vires_frame_count);
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
@@ -426,7 +432,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
                 char file_name_image_output[50];
                 std::string output_image_file_with_path, output_image_file_with_path_stiched;
-                sprintf(file_name_image_output, "000%03d_10.png", current_frame_index);
+                ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                        (0).at(current_frame_index).frame_no;
+                sprintf(file_name_image_output, "000%03d_10.png", vires_frame_count);
                 output_image_file_with_path = m_gnuplots_path.string() + "0" + std::to_string(sensor_index) + "/" + file_name_image_output;
 
                 output_image_file_with_path_stiched = m_gnuplots_path.string() + "0" + std::to_string(SENSOR_COUNT-1) + "/" + file_name_image_output;
@@ -680,7 +688,9 @@ void OpticalFlow::plot_stencil() {
 
             char file_name_image_output[50];
             std::string output_image_file_with_path;
-            sprintf(file_name_image_output, "000%03d_10.png", current_frame_index);
+            ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(current_frame_index).frame_no;
+            sprintf(file_name_image_output, "000%03d_10.png", vires_frame_count);
             output_image_file_with_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
             //---------------------------------------------------------------------------------
