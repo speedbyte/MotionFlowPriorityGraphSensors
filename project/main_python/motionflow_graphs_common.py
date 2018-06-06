@@ -114,7 +114,7 @@ class Figures(object):
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
                 #self.list_of_plots[figure_index].set_title(plot_data[figure_index][6])
 
-                self.list_of_plots[figure_index].set_xlim([x_axis_limits[0],x_axis_limits[1]])
+                #self.list_of_plots[figure_index].set_xlim([x_axis_limits[0],x_axis_limits[1]])
 
                 if ( measuring_parameter == "deviation"):
                     self.list_of_plots[figure_index].set_ylim([0, 1000])

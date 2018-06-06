@@ -98,8 +98,8 @@ class SensorDataPlot(object):
         figures_plot = list()
 
         #axes limits
-        lower_x = 0; upper_x = 0;
-        lower_y = 0; upper_y = 0;
+        lower_x = 10000; upper_x = -100000;
+        lower_y = 10000; upper_y = -100000;
 
         # Ground Truth
         if ( len(data_list) == 1 ):
@@ -128,6 +128,7 @@ class SensorDataPlot(object):
                     x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
                 # ###3
 
+        print x_axis
         lower_x = min(numpy.nanmin(x_axis), lower_x)
         upper_x = max(numpy.nanmax(x_axis), upper_x)
 
@@ -286,6 +287,13 @@ class SensorDataPlot(object):
                 xy.append(data_points[count]["ground_truth_pixels"])
                 data.append(xy)
 
+        # append x_axis
+        data_ = numpy.array(data)
+        a,b,c = data_.T
+        x_axis = numpy.array(a)
+        index = [0]
+        x_axis = numpy.delete(x_axis, index)
+
         newshape = self.fuseDataFromSameFrames(data)
         #print newshape
 
@@ -294,6 +302,9 @@ class SensorDataPlot(object):
         x0, y0 = data.T
         y_axis = 1.0*x0/y0   # dividing by total pixels gt considering step size
 
+        index = [0,1]
+        y_axis = numpy.delete(y_axis, index)
+
         count = 0
         for n,i in enumerate(y_axis):
             if ( i == i ):
@@ -301,7 +312,7 @@ class SensorDataPlot(object):
                 y_axis_mean=y_axis_mean+i
 
         y_axis_mean = y_axis_mean/(count)
-        x_axis = numpy.arange(0.0, len(newshape), 1)
+
         return x_axis, y_axis, y_axis_mean
 
 
@@ -317,6 +328,14 @@ class SensorDataPlot(object):
                 xy.append(data_points_gt[count][self.measuring_parameter])
                 xy.append(data_points_gt[count]["visible_pixels"])
                 data.append(xy)
+
+
+        # append x_axis
+        data_ = numpy.array(data)
+        a,b,c = data_.T
+        x_axis = numpy.array(a)
+        index = [0]
+        x_axis = numpy.delete(x_axis, index)
 
 
         newshape = self.fuseDataFromSameFrames(data)
@@ -346,6 +365,9 @@ class SensorDataPlot(object):
         x0, y0 = data.T
         y_axis = 1.0*x0/y0   # dividing by total pixels gt considering step size
 
+        index = [0,1]
+        y_axis = numpy.delete(y_axis, index)
+
         count = 0
         for n,i in enumerate(y_axis):
             if ( i == i ):
@@ -353,7 +375,6 @@ class SensorDataPlot(object):
                 y_axis_mean=y_axis_mean+i
 
         y_axis_mean = y_axis_mean/(count)
-        x_axis = numpy.arange(0.0, len(newshape), 1)
         return x_axis, y_axis, y_axis_mean
 
 
@@ -368,6 +389,14 @@ class SensorDataPlot(object):
                 xy.append(data_points_gt[count][key])
                 data.append(xy)
 
+
+        # append x_axis
+        data_ = numpy.array(data)
+        a,b = data_.T
+        x_axis = numpy.array(a)
+
+        index = [0]
+        x_axis = numpy.delete(x_axis, index)
 
         newshape = self.fuseDataFromSameFrames(data)
         #print newshape
@@ -395,6 +424,9 @@ class SensorDataPlot(object):
         x0 = data
         y_axis = x0
 
+        index = [0,1]
+        y_axis = numpy.delete(y_axis, index)
+
         count = 0
         for n,i in enumerate(y_axis):
             if ( i == i ):
@@ -402,7 +434,6 @@ class SensorDataPlot(object):
                 y_axis_mean=y_axis_mean+i
 
         y_axis_mean = y_axis_mean/(count)
-        x_axis = numpy.arange(0.0, len(newshape), 1)
         return x_axis, y_axis, y_axis_mean
 
     def getObjectDisplacement(self, data_points_gt, data_points):
