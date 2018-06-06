@@ -331,7 +331,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
 //assert(angle_err_dot==angle_err);
 
                                 if (
-                                        (dist_err) < DISTANCE_ERROR_TOLERANCE &&
+                                        //(dist_err) < DISTANCE_ERROR_TOLERANCE &&
                                         (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
 
                                         ) {
@@ -366,7 +366,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
 //assert(angle_err_dot==angle_err);
 
                                 if (
-                                        (dist_err) < DISTANCE_ERROR_TOLERANCE &&
+                                        //(dist_err) < DISTANCE_ERROR_TOLERANCE &&
                                         (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
 
                                         ) {

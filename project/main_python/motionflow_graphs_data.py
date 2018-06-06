@@ -42,8 +42,8 @@ parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_d
 
 datafilter_list  = [ "0", ]
 algorithm_list   = ["LK", "FB",]
-#algorithm_list   = ["FB", ]
 weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
+algorithm_list   = ["FB", ]
 weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
 #weather_list = ["ground_truth", "blue_sky",]
 sensor_list      = [0, 1, 2]

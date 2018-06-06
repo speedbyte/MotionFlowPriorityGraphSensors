@@ -287,11 +287,12 @@ void VectorRobustness::fitLineForCollisionPoints(const cv::Mat_<float> &samples_
     std::string coord1;
     std::string coord2;
     std::string gp_line;
+    cv::Vec4f line;
+
     // XY, 2XY and 2X2Y all gives the same correlation
     cv::Mat_<float> covar, mean, corr;
     cv::Scalar mean_x, mean_y, stddev_x, stddev_y;
 
-    cv::Vec4f line;
     cv::Mat mat_samples(1, samples_xy.cols, CV_32FC(2));
 
     std::cout << "\nsamples_xy\n" << samples_xy;

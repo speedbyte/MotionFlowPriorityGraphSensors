@@ -345,7 +345,7 @@ public:
 
     }
 
-    static void getCovarMatrix(cv::Mat_<cv::Vec4f> &samples, cv::Mat &cov_pts, cv::Mat &cov_displacement, cv::Scalar mean ) {
+    static void getCovarMatrix(cv::Mat_<cv::Vec4f> &samples, cv::Mat &cov_pts, cv::Mat &cov_displacement, cv::Scalar mean, cv::Vec4f &line) {
 
         cv::Mat mu;
 
@@ -362,6 +362,8 @@ public:
         cv::Mat roi_displacement = samples_rescale.colRange(2,4);
         //std::cout << roi_displacement << std::endl;
         calcCovarMatrix(roi_displacement, cov_displacement, mu, cv::COVAR_NORMAL | cv::COVAR_SCALE | cv::COVAR_ROWS, CV_32FC1);
+        cv::fitLine(roi_displacement, line, CV_DIST_L2, 0, 0.01, 0.01); // radius and angle from the origin - a kind of
+        // constraint
 
         std::cout << "cov: " << cov_displacement << std::endl;
 

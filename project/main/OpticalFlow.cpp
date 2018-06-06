@@ -74,8 +74,6 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
             (0).at(current_frame_index).frame_no;
     sprintf(file_name_image_output, "000%03d_10.png", vires_frame_count);
 
-    Gnuplot gp2d;
-
 
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
         std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement;
@@ -148,7 +146,6 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
                               << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
                     //std::cout << next_pts_array << std::endl;
-                    std::vector<std::pair<float, float>> xy_pts, gt_pts;
 
                     std::string output_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
@@ -164,10 +161,6 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
                                     cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
 
-                                    xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
-                                    //y_pts.push_back(algo_displacement.y);
-
-
                                     frame_stencil_displacement.push_back(std::make_pair(
                                             cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
                                             algo_displacement));
@@ -178,28 +171,6 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
                         }
                     }
 
-                    gt_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
-
-                    if ( obj_index == 0 ) {
-                        gp2d << "set term png size 400,400\n";
-                        gp2d << "set output \"" + output_image_file_with_path + "\"\n";
-                        gp2d << "set xrange [-5:5]\n";
-                        gp2d << "set yrange [-5:5]\n";
-                        gp2d << "plot '-' with points title 'Boy'"
-                                ", '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
-                                //", '-' with points title 'Boy'
-                                // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
-                                "\n";
-                        gp2d.send1d(xy_pts);
-                        gp2d.send1d(gt_pts);
-                    }
-                    else if ( obj_index == 5 ) {
-
-                        //gp2d << "replot\n";
-                        //gp2d << "replot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT'\n";
-                        gp2d.send1d(xy_pts);
-                        gp2d.send1d(gt_pts);
-                    }
 
                 } else {
 
@@ -402,6 +373,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
     std::vector<Objects *> list_of_current_objects;
 
+    const float DISTANCE_ERROR_TOLERANCE = 2;
+
     unsigned COUNT;
     if (m_opticalFlowName == "ground_truth") {
         COUNT = 1;
@@ -442,6 +415,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                 std::cout << "current_frame_index " << current_frame_index << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
+
+                Gnuplot gp2d;
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
@@ -541,6 +516,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             evaluationData.at(
                                     obj_index).goodPixels_maha = 0; // how many pixels in the found pixel are actually valid
 
+                            std::vector<std::pair<float, float>> xy_pts;
+
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
                                 cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
@@ -582,8 +559,57 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                             obj_index).goodPixels_maha++; // how many pixels in the found pixel are actually valid
                                 }
 
+                                xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
+                            }
+
+                            std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
+                            gt_mean_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
+                            algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x, evaluationData.at(obj_index).mean_displacement.y));
+
+                            float m, c;
+                            std::string coord1;
+                            std::string coord2;
+                            std::string gp_line;
+                            cv::Vec4f line = list_of_current_objects.at(
+                                    obj_index)->
+                                    get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                            ).at(sensor_index).at(current_frame_index).regression_line;;
+
+                            m = line[1] / line[0];
+                            c = line[3] - line[2] * m;
+                            coord1 = "-4," + std::to_string(m*(-4) + c);
+                            coord2 = "4," + std::to_string(m*(4) + c);
+                            gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
+
+                            if ( obj_index == 0 ) {
+                                gp2d << "set term png size 400,400\n";
+                                gp2d << "set output \"" + output_image_file_with_path + "\"\n";
+                                gp2d << "set xrange [-5:5]\n";
+                                gp2d << "set yrange [-5:5]\n";
+                                gp2d << gp_line;
+                                gp2d << "plot '-' with points title 'Car'"
+                                        ", '-' with points pt 22 notitle 'GT'"
+                                        ", '-' with points pt 15 notitle 'Algo'"
+                                        //", '-' with points title 'Boy'
+                                        // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
+                                        "\n";
+                                gp2d.send1d(xy_pts);
+                                gp2d.send1d(gt_mean_pts);
+                                gp2d.send1d(algo_mean_pts);
+
+
 
                             }
+                            else if ( obj_index == 5 ) {
+
+                                //gp2d << "replot\n";
+                                //gp2d << "replot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT'\n";
+                                gp2d.send1d(xy_pts);
+                                gp2d.send1d(gt_mean_pts);
+                                gp2d.send1d(algo_mean_pts);
+                            }
+
+                            // shift stich plots somewhere else
                             if ( obj_index == 0 && current_frame_index > 0  && sensor_index != (SENSOR_COUNT-1) ) {
 
                                 cv::Mat stich_plots;
@@ -734,10 +760,10 @@ void OpticalFlow::plot_stencil() {
                     cv::Point2f pts_gt = m_ptr_list_gt_objects.at(
                             obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_pts;
 
-                    cv::Point2f displacement_gt = m_ptr_list_gt_objects.at(
+                    cv::Point2f mean_displacement_gt = m_ptr_list_gt_objects.at(
                             obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_displacement;
 
-                    cv::Point2f next_pts = cv::Point2f(pts_gt.x + displacement_gt.x*10, pts_gt.y + displacement_gt.y*10);
+                    cv::Point2f next_pts = cv::Point2f(pts_gt.x + mean_displacement_gt.x*10, pts_gt.y + mean_displacement_gt.y*10);
 
                     cv::arrowedLine(tempGroundTruthImage, pts_gt, next_pts, cv::Scalar(0,0,255), 2);
 

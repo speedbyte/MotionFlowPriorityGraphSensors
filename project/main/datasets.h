@@ -23,8 +23,8 @@ typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Alg
 
 #define DISPLACEMENT_ROUND_OFF 100
 
-#define ITERATION_START_POINT 40
-#define ITERATION_END_POINT 55
+#define ITERATION_START_POINT 1
+#define ITERATION_END_POINT 16
 
 #define MAX_ITERATION_RESULTS ITERATION_END_POINT - ITERATION_START_POINT // 60 generate result. this cannot be more than vector
 
@@ -41,7 +41,6 @@ typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Alg
 #define IMAGE_WIDTH 1200
 #define IMAGE_HEIGHT 400
 
-#define DISTANCE_ERROR_TOLERANCE 1
 #define ANGLE_ERROR_TOLERANCE 5
 
 #define MAX_ALLOWED_OBJECTS 10

@@ -38,6 +38,7 @@ void DataProcessingAlgorithm::common(Objects *object) {
                 cv::Mat_<float>  corr;
                 cv::Scalar mean, stddev;
                 cv::Mat covar_pts, covar_displacement;
+                cv::Vec4f line;
 
                 mean = cv::Scalar::all(65535);
                 stddev = cv::Scalar::all(65535);
@@ -56,10 +57,10 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
                 // Covariance matrix of the displacement dataset
                 if ( CLUSTER_SIZE != 0 ) {
-                    Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean);
+                    Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean, line);
                 }
 
-                multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3)), covar_pts, covar_displacement});
+                multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3)), covar_pts, covar_displacement, line});
                 multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
 
 

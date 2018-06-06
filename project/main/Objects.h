@@ -18,6 +18,7 @@ typedef struct {
     cv::Point2f stddev_displacement;
     cv::Mat covar_pts;
     cv::Mat covar_displacement;
+    cv::Vec4f regression_line;
 
 } OBJECTS_MEAN_STDDEV;
 

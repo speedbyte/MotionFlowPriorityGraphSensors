@@ -345,7 +345,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     ushort fps = 30;
 
-    for (ushort algorithm_index = 0; algorithm_index < 2; algorithm_index++) {
+    for (ushort algorithm_index = 0; algorithm_index < 1; algorithm_index++) {
 
         std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
 
@@ -357,12 +357,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 std::vector<Objects *> ptr_list_of_simulated_objects;
 
-                if ( algorithm_index == 1 ) {
+                if ( algorithm_index == 0 ) {
 
                     list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<LukasKanade>(environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
                 }
-                else if ( algorithm_index == 0 ) {
+                else if ( algorithm_index == 1 ) {
 
                     list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
