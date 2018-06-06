@@ -21,6 +21,7 @@ typedef struct {
     cv::Point2f object_dimension;
     cv::Point2f mean_pts;
     cv::Point2f mean_displacement;
+    cv::Point2f gt_mean_displacement;
     cv::Point2f stddev_pts;
     cv::Point2f stddev_displacement;
     cv::Mat covar_pts;

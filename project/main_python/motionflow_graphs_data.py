@@ -20,11 +20,11 @@ dict_label_weather = {
 }
 
 dict_color_weather = {
-    "ground_truth" : "blue",
-    "blue_sky"     : "red",
-    "light_snow"   : "yellow",
-    "mild_snow"    : "green",
-    "heavy_snow"   : "brown",
+    "ground_truth" : "green",
+    "blue_sky"     : "blue",
+    "light_snow"   : "red",
+    "mild_snow"    : "brown",
+    "heavy_snow"   : "black",
 }
 
 y_axis_label_dict = {
@@ -37,11 +37,12 @@ y_axis_label_dict = {
 }
 
 parameter_list = [  ]
-parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l1_distance", "l2_distance"]
+parameter_list = [ "good_pixels_l2", "good_pixels_maha", "ma_distance", "l1_distance", "l2_distance"]
+#parameter_list = [ "ma_distance",]
 
 datafilter_list  = [ "0", ]
 algorithm_list   = ["LK", "FB",]
-algorithm_list   = ["FB", ]
+#algorithm_list   = ["FB", ]
 weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
 #weather_list = ["ground_truth", "blue_sky",]
@@ -51,7 +52,7 @@ step_list        = [5]
 fps_list         = ["30", "15", "10", "7.5"]#night
 fps_list         = ["30",]
 
-color_list_algorithms = ["blue", "red", "yellow", "green", "brown"]
+color_list_algorithms = ["blue", "green", "blue", "black", "brown"]
 color_list_weather = ["blue", "gray", "brown", "black", "brown"]
 
 #color_list_algorithms = ['#f2f2f2', '#cccccc', '#808080', '#000000']

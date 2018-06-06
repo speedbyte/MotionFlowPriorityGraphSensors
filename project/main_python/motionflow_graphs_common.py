@@ -59,11 +59,12 @@ class Figures(object):
 
     def plot_all(self, plot_data):
 
+        print plot_data
         for figure_index in range(1):
 
-            measuring_parameter = plot_data[0].get_measuring_parameter()
-            self.list_of_plots[figure_index].set_xlabel(plot_data[0].get_x_label())
-            self.list_of_plots[figure_index].set_ylabel(plot_data[0].get_y_label())
+            measuring_parameter = plot_data[figure_index].get_measuring_parameter()
+            self.list_of_plots[figure_index].set_xlabel(plot_data[figure_index].get_x_label())
+            self.list_of_plots[figure_index].set_ylabel(plot_data[figure_index].get_y_label())
 
             #self.list_of_plots[figure_index].set_xlabel(plot_data[figure_index][0])
             #self.list_of_plots[figure_index].set_ylabel(plot_data[figure_index][1])

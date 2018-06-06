@@ -180,18 +180,18 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
                     gt_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
 
-                    if ( obj_index == 1 ) {
+                    if ( obj_index == 0 ) {
                         gp2d << "set term png size 400,400\n";
                         gp2d << "set output \"" + output_image_file_with_path + "\"\n";
                         gp2d << "set xrange [-5:5]\n";
                         gp2d << "set yrange [-5:5]\n";
                         gp2d << "plot '-' with points title 'Boy'"
-                                //", '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
+                                ", '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
                                 //", '-' with points title 'Boy'
                                 // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
                                 "\n";
                         gp2d.send1d(xy_pts);
-                        //gp2d.send1d(gt_pts);
+                        gp2d.send1d(gt_pts);
                     }
                     else if ( obj_index == 5 ) {
 
@@ -490,6 +490,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).mean_displacement;
 
+                        evaluationData.at(obj_index).gt_mean_displacement = m_ptr_list_gt_objects.at(obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(current_frame_index).mean_displacement;
+
                         evaluationData.at(obj_index).stddev_pts = list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
@@ -544,26 +548,26 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
 
-                                l1_cumulative += ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y )) ;
+                                l1_cumulative += ( std::abs(algo_displacement.x ) + std::abs(algo_displacement.y)) ;
 
-                                auto euclidean_dist_algo = cv::norm(algo_displacement);
-                                l2_cumulative += euclidean_dist_algo;
+                                auto euclidean_dist_algo_square = (std::pow((algo_displacement.x),2 ) + std::pow((algo_displacement.y),2 ));
+                                l2_cumulative += euclidean_dist_algo_square;
 
                                 auto maha_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
                                 maha_cumulative += maha_dist_algo;
 
-                                auto euclidean_dist_err = std::abs(euclidean_dist_gt - euclidean_dist_algo);
+                                auto euclidean_dist_err = std::abs(euclidean_dist_gt - std::sqrt(euclidean_dist_algo_square));
                                 //auto maha_dist_err = std::abs(euclidean_dist_gt - maha_dist_algo);
                                 auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
 
                                 auto angle_err = std::abs(angle_algo - angle_gt);
                                 auto angle_err_dot = std::cosh(
-                                        algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * euclidean_dist_algo));
+                                        algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * std::sqrt(euclidean_dist_algo_square)));
 
                                 //assert(angle_err_dot==angle_err);
                                 if (
                                         (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
-                                        && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
+                                        //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
 
                                         ) {
                                     evaluationData.at(

@@ -345,7 +345,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     ushort fps = 30;
 
-    for (ushort algorithm_index = 0; algorithm_index < 1; algorithm_index++) {
+    for (ushort algorithm_index = 0; algorithm_index < 2; algorithm_index++) {
 
         std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
 

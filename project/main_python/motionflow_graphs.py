@@ -28,31 +28,37 @@ file = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
 SCALE = 1
 
 
-def plot_at_once(figures_plot_array, sensor_index):
+def plot_at_once(figures_plot_array_all, sensor_index):
 
     print "plot_at_once---------------------------"
-    print figures_plot_array
+    print figures_plot_array_all
     print "plot_at_once---------------------------"
 
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
 
-    figures = Figures(1)
+    for figures_plot_index_all in range(len(figures_plot_array_all)):
+        figures_plot_array = figures_plot_array_all[figures_plot_index_all]
+        for figures_plot_index in figures_plot_array:
+                lower_x = min(figures_plot_index.get_x_axis_limits()[0], lower_x)
+                upper_x = max(figures_plot_index.get_x_axis_limits()[1], upper_x)
+                lower_y = min(figures_plot_index.get_y_axis_limits()[0], lower_y)
+                upper_y = max(figures_plot_index.get_y_axis_limits()[1], upper_y)
 
-    for figures_plot_index in figures_plot_array:
-            lower_x = min(figures_plot_index.get_x_axis_limits()[0], lower_x)
-            upper_x = max(figures_plot_index.get_x_axis_limits()[1], upper_x)
-            lower_y = min(figures_plot_index.get_y_axis_limits()[0], lower_y)
-            upper_y = max(figures_plot_index.get_y_axis_limits()[1], upper_y)
-
-    for figures_plot_index in figures_plot_array:
-        figures_plot_index.set_x_axis_limits([lower_x, upper_x])
-        figures_plot_index.set_y_axis_limits([lower_y, upper_y])
+    for figures_plot_index_all in range(len(figures_plot_array_all)):
+        figures_plot_array = figures_plot_array_all[figures_plot_index_all]
+        for figures_plot_index in figures_plot_array:
+            figures_plot_index.set_x_axis_limits([lower_x, upper_x])
+            figures_plot_index.set_y_axis_limits([lower_y, upper_y])
 
     print lower_x, upper_x, lower_y, upper_y
 
-    figures.plot_all(figures_plot_array)
+    for figures_plot_index_all in range(len(figures_plot_array_all)):
+        figures = Figures(1)
+        figures_plot_array = figures_plot_array_all[figures_plot_index_all]
+        #for figures_plot_index in figures_plot_array:
+        figures.plot_all(figures_plot_array)
 
-    figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), sensor_index)
+        figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), sensor_index)
 
 
 def getPlotList(sensor_plot, measuring_parameter, x_label, y_label):
@@ -105,19 +111,23 @@ if __name__ == '__main__':
     for n, parameter in enumerate(parameter_list):
         summary_list = list()
         for sensor_index in sensor_list:
+
+            plot_at_once_figures = list()
+
             for algorithm in algorithm_list:
 
                 sensor_plot = SensorDataPlot(sensor_index, algorithm)
                 sensor_plot.set_measuring_parameter(parameter)
 
-                plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter=parameter, x_label="current_frame_index", y_label=y_axis_label_dict[parameter])
-                plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+                plot_at_once_figures.append(getPlotList(sensor_plot, measuring_parameter=parameter, x_label="current_frame_index", y_label=y_axis_label_dict[parameter]))
+
 
                 # summary
                 summary_list.append(sensor_plot.get_summary())
                 print len(sensor_plot.get_summary())
 
 
+            plot_at_once(plot_at_once_figures, 0)
                 #plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="current_frame_index", y_label="good pixels / visible pixels")
                 #plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
