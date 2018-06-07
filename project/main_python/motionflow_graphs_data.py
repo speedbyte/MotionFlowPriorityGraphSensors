@@ -38,12 +38,15 @@ y_axis_label_dict = {
 
 parameter_list = [  ]
 parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l1_distance", "l2_distance"]
+parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l2_distance"]
 #parameter_list = [ "visible_pixels",]
 
 datafilter_list  = [ "0", ]
+
 algorithm_list   = ["LK", "FB",]
-weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 algorithm_list   = ["FB", ]
+
+weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
 #weather_list = ["ground_truth", "blue_sky",]
 sensor_list      = [0, 1, 2]

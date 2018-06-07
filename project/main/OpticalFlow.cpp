@@ -496,9 +496,12 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         evaluationData.at(
                                 obj_index).goodPixels_maha = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
-                        double maha_cumulative = 0;
                         double l1_cumulative = 0;
                         double l2_cumulative = 0;
+                        double maha_cumulative = 0;
+
+                        double l2_good = 0;
+                        double maha_good = 0;
 
                         cv::Mat icovar;
                         // this should be sent to Objects.cpp
@@ -527,13 +530,13 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                                 l1_cumulative += ( std::abs(algo_displacement.x ) + std::abs(algo_displacement.y)) ;
 
-                                auto euclidean_dist_algo_square = (std::pow((algo_displacement.x),2 ) + std::pow((algo_displacement.y),2 ));
+                                auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
                                 l2_cumulative += euclidean_dist_algo_square;
 
                                 auto maha_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
                                 maha_cumulative += maha_dist_algo;
 
-                                auto euclidean_dist_err = std::abs(euclidean_dist_gt - std::sqrt(euclidean_dist_algo_square));
+                                auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
                                 //auto maha_dist_err = std::abs(euclidean_dist_gt - maha_dist_algo);
                                 auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
 
@@ -547,6 +550,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                         //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
 
                                         ) {
+                                    l2_good += euclidean_dist_algo_square;
                                     evaluationData.at(
                                             obj_index).goodPixels_l2++; // how many pixels in the found pixel are actually valid
                                 }
@@ -555,6 +559,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                     // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
 
                                         ) {
+                                    maha_good += euclidean_dist_algo_square;
                                     evaluationData.at(
                                             obj_index).goodPixels_maha++; // how many pixels in the found pixel are actually valid
                                 }
@@ -566,7 +571,52 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             gt_mean_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
                             algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x, evaluationData.at(obj_index).mean_displacement.y));
 
+                            //Get the eigenvalues and eigenvectors
+                            cv::Mat_<float> ellipse(3,1);
+
+                            if ( CLUSTER_COUNT > 1 ) {
+                                double chisquare_val = 2.4477;
+                                cv::Mat_<float> eigenvectors(2,2);
+                                cv::Mat_<float> eigenvalues(1,2);
+
+                                cv::eigen(evaluationData.at(obj_index).covar_displacement, eigenvalues, eigenvectors);
+
+
+                                //std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
+
+                                if ( eigenvectors.data != NULL ) {
+                                    //Calculate the angle between the largest eigenvector and the x-axis
+                                    double angle = atan2(eigenvectors(0,1), eigenvectors(0,0));
+
+                                    //Shift the angle to the [0, 2pi] interval instead of [-pi, pi]
+                                    if(angle < 0)
+                                        angle += 6.28318530718;
+
+                                    //Conver to degrees instead of radians
+                                    angle = 180*angle/3.14159265359;
+
+                                    //Calculate the size of the minor and major axes
+                                    double halfmajoraxissize=chisquare_val*sqrt(eigenvalues(0));
+                                    double halfminoraxissize=chisquare_val*sqrt(eigenvalues(1));
+
+
+                                    //Return the oriented ellipse
+                                    //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise
+                                    ellipse << halfmajoraxissize, halfminoraxissize, -angle;
+
+                                    //std::cout << "ellips" << ellipse;
+
+                                    //cv::Mat visualizeimage(240, 320, CV_8UC1, cv::Scalar::all(0));
+                                    //cv::ellipse(visualizeimage, ellipse, cv::Scalar::all(255), 2);
+                                    //cv::imshow("EllipseDemo", visualizeimage);
+                                    //cv::waitKey(1000);
+
+                                }
+
+                            }
+
                             float m, c;
+
                             std::string coord1;
                             std::string coord2;
                             std::string gp_line;
@@ -581,12 +631,18 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             coord2 = "4," + std::to_string(m*(4) + c);
                             gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
 
-                            if ( obj_index == 0 ) {
+                            if ( obj_index == 1 ) {
+
+                                std::cout << "ellipse" << ellipse ;
+
+                                std::string ellipse_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse(0)) + "," +  std::to_string(ellipse(1)) + "  angle " + std::to_string(ellipse(2)) + " lw 5 front fs empty bo 3\n";
+
                                 gp2d << "set term png size 400,400\n";
                                 gp2d << "set output \"" + output_image_file_with_path + "\"\n";
                                 gp2d << "set xrange [-5:5]\n";
                                 gp2d << "set yrange [-5:5]\n";
                                 gp2d << gp_line;
+                                gp2d << ellipse_plot;
                                 gp2d << "plot '-' with points title 'Car'"
                                         ", '-' with points pt 22 notitle 'GT'"
                                         ", '-' with points pt 15 notitle 'Algo'"
@@ -638,12 +694,17 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         }
                         l1_cumulative   = l1_cumulative / CLUSTER_COUNT;
-                        l2_cumulative   = std::sqrt(l2_cumulative) / CLUSTER_COUNT;
-                        maha_cumulative = std::sqrt(maha_cumulative) / CLUSTER_COUNT;
+                        l2_cumulative   = (l2_cumulative) / CLUSTER_COUNT;
+                        maha_cumulative = (maha_cumulative) / CLUSTER_COUNT;
 
-                        evaluationData.at(obj_index).mahalanobisDistance = maha_cumulative;
+                        l2_good   = (l2_good) / CLUSTER_COUNT;
+                        maha_good = (maha_good) / CLUSTER_COUNT;
+
                         evaluationData.at(obj_index).l1 = l1_cumulative;
                         evaluationData.at(obj_index).l2 = l2_cumulative;
+                        evaluationData.at(obj_index).l2 = l2_good;
+                        evaluationData.at(obj_index).mahalanobisDistance = maha_cumulative;
+                        evaluationData.at(obj_index).mahalanobisDistance = maha_good;
 
                         std::cout << "goodPixels_l2 for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "

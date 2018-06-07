@@ -137,22 +137,22 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
             sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
 
     NoAlgorithm noAlgorithm;
-    noAlgorithm.common(this);
+    noAlgorithm.common(this, post_processing_algorithm);
     m_list_object_dataprocessing_mean_centroid_displacement.push_back(noAlgorithm.get_object_dataprocessing_mean_centroid_displacement());
     m_list_object_dataprocessing_stencil_points_displacement.push_back(noAlgorithm.get_object_dataprocessing_stencil_point_displacement());
 
     SimpleAverage simpleAverage;
-    simpleAverage.common(this);
+    simpleAverage.common(this, post_processing_algorithm );
     m_list_object_dataprocessing_mean_centroid_displacement.push_back(simpleAverage.get_object_dataprocessing_mean_centroid_displacement());
     m_list_object_dataprocessing_stencil_points_displacement.push_back(simpleAverage.get_object_dataprocessing_stencil_point_displacement());
 
     MovingAverage movingAverage;
-    movingAverage.common(this);
+    movingAverage.common(this, post_processing_algorithm);
     m_list_object_dataprocessing_mean_centroid_displacement.push_back(movingAverage.get_object_dataprocessing_mean_centroid_displacement());
     m_list_object_dataprocessing_stencil_points_displacement.push_back(movingAverage.get_object_dataprocessing_stencil_point_displacement());
 
     VotedMean votedMean;
-    votedMean.common(this);
+    votedMean.common(this, post_processing_algorithm);
     m_list_object_dataprocessing_mean_centroid_displacement.push_back(votedMean.get_object_dataprocessing_mean_centroid_displacement());
     m_list_object_dataprocessing_stencil_points_displacement.push_back(votedMean.get_object_dataprocessing_stencil_point_displacement());
 

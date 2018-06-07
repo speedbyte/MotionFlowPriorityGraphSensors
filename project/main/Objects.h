@@ -19,6 +19,7 @@ typedef struct {
     cv::Mat covar_pts;
     cv::Mat covar_displacement;
     cv::Vec4f regression_line;
+    cv::Mat_<float> ellipse;
 
 } OBJECTS_MEAN_STDDEV;
 

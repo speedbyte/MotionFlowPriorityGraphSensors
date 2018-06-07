@@ -126,9 +126,22 @@ class SensorDataPlot(object):
                     x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points)
                 elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
                     x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
+                    y_axis = numpy.array([  5.77203477e-03,   9.91367989e-03,   1.73532113e-02,   6.29578717e-03,
+                                            1.94707540e-02,   1.14479451e-02,   4.31693510e-02,   4.22310921e-02,
+                                            9.36508192e-03,   4.58104766e-03,   1.35933067e-02,   3.69559132e-02,
+                                            1.16417298e-02,   2.11236515e-02,   1.94673714e-02,   2.56826392e-02,
+                                            6.28068283e-03,   2.05168799e-02,   2.47222316e-02,   1.47125838e-02,
+                                            6.00599536e-02,   3.08720353e-01,   1.73231634e-01,   1.60320725e+00,
+                                            4.52652730e+00,   4.56670953e+00,   6.85051402e+00,   5.94330222e+00,
+                                            6.48781172e+00,   5.81008687e+00,   6.53212056e+00,   5.77043841e+00,
+                                            6.13221324e+00,   6.23887829e+00 ,  5.93207632e+00,   5.11896968e+00,
+                                            5.44394344e+00,   5.57486421e+00 ,  6.05818539e+00,   5.57207384e+00,
+                                            5.06644720e+00,   5.06284805e+00 ,  5.18940501e+00,   5.91152729e+00,
+                                            3.50244267e+00,   4.44660885e+00 ,  3.63849921e+00,   4.40959813e+00,
+                                            2.37613203e+00,   4.51817943e+00,   4.81969555e+00 ,  4.48599058e+00,
+                                            5.22786046e+00])
                 # ###3
 
-        print x_axis
         lower_x = min(numpy.nanmin(x_axis), lower_x)
         upper_x = max(numpy.nanmax(x_axis), upper_x)
 
@@ -280,7 +293,7 @@ class SensorDataPlot(object):
         data = list()
 
         for count in range(len(data_points)):
-            if ( data_points[count]["obj_index"] == 0 ):
+            if ( data_points[count]["obj_index"] == 1 ):
                 xy = list()
                 xy.append(data_points[count]["current_frame_index"])
                 xy.append(data_points[count]["visible_pixels"])
@@ -300,7 +313,7 @@ class SensorDataPlot(object):
         y_axis_mean = 0
         data = numpy.array(newshape)
         x0, y0 = data.T
-        y_axis = 1.0*x0/y0   # dividing by total pixels gt considering step size
+        y_axis = 1.0*x0#/y0   # dividing by total pixels gt considering step size
 
         index = [0,1]
         y_axis = numpy.delete(y_axis, index)
@@ -350,7 +363,7 @@ class SensorDataPlot(object):
         data = list()
 
         for count in range(len(data_points)):
-            if ( data_points[count]["obj_index"] == 0 ):
+            if ( data_points[count]["obj_index"] == 1 ):
                 xy = list()
                 xy.append(data_points[count]["current_frame_index"])
                 xy.append(data_points[count][self.measuring_parameter])
@@ -363,7 +376,7 @@ class SensorDataPlot(object):
         y_axis_mean = 0
         data = numpy.array(newshape)
         x0, y0 = data.T
-        y_axis = 1.0*x0/y0   # dividing by total pixels gt considering step size
+        y_axis = 1.0*x0#/y0   # dividing by total pixels gt considering step size
 
         index = [0,1]
         y_axis = numpy.delete(y_axis, index)
@@ -383,7 +396,7 @@ class SensorDataPlot(object):
         data = list()
 
         for count in range(len(data_points_gt)):
-            if ( data_points[count]["obj_index"] == 0 ):
+            if ( data_points[count]["obj_index"] == 1 ):
                 xy = list()
                 xy.append(data_points_gt[count]["current_frame_index"])
                 xy.append(data_points_gt[count][key])
@@ -411,7 +424,7 @@ class SensorDataPlot(object):
 
         for count in range(len(data_points)):
             xy = list()
-            if ( data_points[count]["obj_index"] == 0 ):
+            if ( data_points[count]["obj_index"] == 1 ):
                 xy.append(data_points[count]["current_frame_index"])
                 xy.append(data_points[count][key])
                 data.append(xy)

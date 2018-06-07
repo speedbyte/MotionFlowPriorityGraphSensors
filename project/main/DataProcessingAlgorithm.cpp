@@ -11,7 +11,7 @@
 #include "Objects.h"
 
 
-void DataProcessingAlgorithm::common(Objects *object) {
+void DataProcessingAlgorithm::common(Objects *object, std::string post_processing_algorithm) {
 
     for (ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
@@ -37,13 +37,13 @@ void DataProcessingAlgorithm::common(Objects *object) {
 
                 cv::Mat_<float>  corr;
                 cv::Scalar mean, stddev;
-                cv::Mat covar_pts, covar_displacement;
+                cv::Mat covar_pts(2,2, CV_32FC1), covar_displacement(2,2, CV_32FC1);
                 cv::Vec4f line;
 
                 mean = cv::Scalar::all(65535);
                 stddev = cv::Scalar::all(65535);
-                covar_pts = cv::Scalar::all(65535);
-                covar_displacement = cv::Scalar::all(65535);
+                covar_pts = cv::Scalar::all(65535.0d);
+                covar_displacement = cv::Scalar::all(65535.0d);
 
                 const unsigned CLUSTER_SIZE = (unsigned) object->get_object_stencil_point_displacement().at
                         (sensor_index).at(current_frame_index).size();
@@ -60,8 +60,10 @@ void DataProcessingAlgorithm::common(Objects *object) {
                     Utils::getCovarMatrix(samples, covar_pts, covar_displacement, mean, line);
                 }
 
-                multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3)), covar_pts, covar_displacement, line});
+                cv::Mat_<float> ellipse(3,1);
+                multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3)), covar_pts, covar_displacement, line, ellipse});
                 multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
+
 
 
                 //std::cout << "mean_displacement and mean stddev " + m_algoName << multiframe_centroid_displacement.at(current_frame_index).mean_displacement << multiframe_centroid_displacement.at(current_frame_index).stddev_displacement<< std::endl;
