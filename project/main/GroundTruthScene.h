@@ -311,11 +311,6 @@ $
 
     int m_scpSocket;
 
-    int m_moduleManagerSocket_Camera;
-
-    int m_moduleManagerSocket_Perfect;
-
-    int m_moduleManagerSocket_PerfectInertial;
 
     std::vector<ViresObjects> viresObjects;
 
@@ -333,8 +328,7 @@ public:
 
         close(m_scpSocket);
         close(m_triggerSocket);
-        close(m_moduleManagerSocket_Camera);
-
+        viresObjects.at(0).closeAllSockets();
 
 
     }

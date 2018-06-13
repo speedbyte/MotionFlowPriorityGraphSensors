@@ -1007,7 +1007,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         // initalize the server variable
         std::string serverName = "127.0.0.1";
 
-        setServer(serverName.c_str());
+        viresObjects.at(0).setServer(serverName.c_str());
 
         fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n", viresObjects.at(0).getShmKey(), getCheckMask(),
                 getForceBuffer());
@@ -1111,13 +1111,16 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
 
         //if ( m_environment == "blue_sky") {
-        m_moduleManagerSocket_Camera = openNetwork(viresObjects.at(0).getSensorConfiguration().at(0).get<2>());
-        m_moduleManagerSocket_Perfect = openNetwork(viresObjects.at(0).getSensorConfiguration().at(1).get<2>());
-        m_moduleManagerSocket_PerfectInertial = openNetwork(viresObjects.at(0).getSensorConfiguration().at(2).get<2>());
+        viresObjects.at(0).openAllSockets();
         //}
 
-        std::cout << "mm socket - " << m_moduleManagerSocket_Camera << std::endl;
-        if (m_moduleManagerSocket_Camera != -1) {
+
+        int moduleManagerSocket_Camera = viresObjects.at(0).getCameraSocketHandler();
+        int moduleManagerSocket_Perfect = viresObjects.at(0).getPerfectSocketHandler();
+        int moduleManagerSocket_PerfectInertial = viresObjects.at(0).getPerfectInertialSocketHandler();
+
+        std::cout << "mm socket - " << viresObjects.at(0).getSensorConfiguration().at(0).get<1>() << std::endl;
+        if (moduleManagerSocket_Camera != -1) {
             connected_module_manager_port = true;
         }
 
@@ -1182,11 +1185,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     }
 
-                    readNetwork(m_moduleManagerSocket_Camera);  // this calls parseRDBMessage() in vires_common.cpp
+                    readNetwork(moduleManagerSocket_Camera);  // this calls parseRDBMessage() in vires_common.cpp
 
-                    readNetwork(m_moduleManagerSocket_Perfect);  // this calls parseRDBMessage() in vires_common.cpp
+                    readNetwork(moduleManagerSocket_Perfect);  // this calls parseRDBMessage() in vires_common.cpp
 
-                    readNetwork(m_moduleManagerSocket_PerfectInertial);  // this calls parseRDBMessage() in vires_common.cpp
+                    readNetwork(moduleManagerSocket_PerfectInertial);  // this calls parseRDBMessage() in vires_common.cpp
 
 
                     usleep(100000); // wait, 100 ms which is equivalent to 10 Hz. Normally VIRES runs with 60 Hz. So this number should not be a problem.

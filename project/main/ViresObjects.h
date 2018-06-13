@@ -8,8 +8,9 @@
 #include <iostream>
 #include <unistd.h>
 #include <boost/tuple/tuple.hpp>
+#include <vires-interface/vires_configuration.h>
 
-class ViresObjects {
+class ViresObjects: public Framework::ViresConfiguration{
 
 private:
     std::vector<boost::tuple<std::string, std::string, ushort > > sensor_group;
@@ -17,6 +18,12 @@ private:
     unsigned current_frame_index;
 
     unsigned int mShmKey;      // key of the SHM segment
+
+    int m_moduleManagerSocket_Camera;
+
+    int m_moduleManagerSocket_Perfect;
+
+    int m_moduleManagerSocket_PerfectInertial;
 
 
 public:
@@ -118,6 +125,33 @@ public:
 
     const unsigned int &getShmKey() {
         return mShmKey;
+    }
+
+    void closeAllSockets() {
+
+        close(m_moduleManagerSocket_Camera);
+        close(m_moduleManagerSocket_Perfect);
+        close(m_moduleManagerSocket_PerfectInertial);
+    }
+
+    void openAllSockets() {
+
+        m_moduleManagerSocket_Camera = openNetwork(sensor_group.at(0).get<2>());
+        m_moduleManagerSocket_Perfect = openNetwork(sensor_group.at(1).get<2>());
+        m_moduleManagerSocket_PerfectInertial = openNetwork(sensor_group.at(2).get<2>());
+
+    }
+
+    int getCameraSocketHandler() {
+        return m_moduleManagerSocket_Camera;
+    }
+
+    int getPerfectSocketHandler() {
+        return m_moduleManagerSocket_Perfect;
+    }
+
+    int getPerfectInertialSocketHandler() {
+        return m_moduleManagerSocket_PerfectInertial;
     }
 
 };
