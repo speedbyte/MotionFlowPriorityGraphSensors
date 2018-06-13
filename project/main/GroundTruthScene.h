@@ -255,7 +255,7 @@ private:
     std::string view_parameters_eyepoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string view_parameters_sensorpoint_intrinsicparams = "<Camera name=\"VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM_PerfectInertial\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
+    std::string view_parameters_sensorpoint_intrinsicparams = "<Camera name=\"VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
 
     std::string view_parameters_sensorpoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"true\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
@@ -404,7 +404,7 @@ $
         to_replace = "Sensor_MM";
         position = module_manager_libModulePerfectSensorInertial.find(to_replace);
         if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "Sensor_MM_Perfect_Inertial");
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "Sensor_MM_PerfectInertial");
         }
 
         //sensor coordinate

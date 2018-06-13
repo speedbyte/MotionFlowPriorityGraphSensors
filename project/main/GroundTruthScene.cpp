@@ -119,32 +119,27 @@ void GroundTruthScene::prepare_directories() {
 
             std::cout << "prepare gt_scene directories" << std::endl;
 
-            if (boost::filesystem::exists(m_generatepath)) {
-                system(("rm -rf " + m_generatepath.string()).c_str());
+            for ( ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++) {
+                std::string m_generatepath_sensor = m_generatepath.string() + "_" + std::to_string(i);
+                if (boost::filesystem::exists(m_generatepath_sensor)) {
+                    system(("rm -rf " + m_generatepath_sensor).c_str());
+                }
+                boost::filesystem::create_directories(m_generatepath_sensor);
+
+                char char_dir_append[20];
+                boost::filesystem::path path;
+
+                for (int i = 0; i < m_list_gt_objects.size(); i++) {
+
+                    sprintf(char_dir_append, "%02d", i);
+                    m_position_object_path = m_generatepath_sensor + "position_object_";
+                    path = m_position_object_path.string() + char_dir_append;
+                    //boost::filesystem::create_directories(path);
+                }
             }
-            boost::filesystem::create_directories(m_generatepath);
 
-            char char_dir_append[20];
-            boost::filesystem::path path;
-
-            for (int i = 0; i < m_list_gt_objects.size(); i++) {
-
-                sprintf(char_dir_append, "%02d", i);
-                m_position_object_path = m_generatepath.string() + "position_object_";
-                path = m_position_object_path.string() + char_dir_append;
-                //boost::filesystem::create_directories(path);
-
-            }
         }
-    } else {
-        // post processing step. At the moment I dont need this.
-        boost::filesystem::path bbox_dir = m_generatepath.string() + "bounding_box/";
-        if (boost::filesystem::exists(m_generatepath)) {
-            system(("rm -rf " + bbox_dir.string()).c_str());
-        }
-        //boost::filesystem::create_directories(bbox_dir);
     }
-
 }
 
 void GroundTruthScene::writePositionInYaml(std::string suffix) {
@@ -649,7 +644,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_DATASET; current_frame_index++) {
 
         sprintf(file_name_image, "000%03d_10.png", current_frame_index);
-        std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
+        std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(0) + "/" + file_name_image; //+ file_name_image;
 
 
         //draw new ground truth image.
@@ -1051,17 +1046,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        for ( ushort i = 0; i < 3; i++ ) {
+        for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS*3; i++ ) {
 
             sendSCPMessage(m_scpSocket, sensor_group_1.at(i).get<0>().c_str());
 
             sleep(1);
-
-            //sendSCPMessage(m_scpSocket, module_manager_libModulePerfectSensor.c_str());
-
-            //sendSCPMessage(m_scpSocket, module_manager_libModulePerfectSensorInertial.c_str());
-
-
 
         }
 
@@ -1598,7 +1587,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_IMAGE_t *data, const double &simTi
 
             if (!m_dumpInitialFrames) {
                 sprintf(file_name_image, "000%03d_10.png", mImageCount);
-                std::string input_image_file_with_path = m_generatepath.string() + "/" +  file_name_image;
+                std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(0) + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS+1) ) {
                     fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
