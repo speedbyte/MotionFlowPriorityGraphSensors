@@ -225,8 +225,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"blue_sky"};
+    //const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
+    const std::vector<std::string> environment_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -349,7 +349,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
 
-        for (ushort stepSize = 5; stepSize <= 5; stepSize += 4) {
+        for (ushort stepSize = 1; stepSize <= 1; stepSize += 4) {
             ptr_list_of_simulated_objects_base.clear();
             std::vector<SimulatedObjects> list_of_simulated_objects_base;
             // Generate Algorithm data flow --------------------------------------
@@ -417,8 +417,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
 
                     //list_of_ptr_of_environment_OFalgorithm[env_index].generate_collision_points();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_flow_frames();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->plot_stencil();
+                    //list_of_ptr_of_environment_OFalgorithm[env_index]->generate_flow_frames();
+                    //list_of_ptr_of_environment_OFalgorithm[env_index]->plot_stencil();
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm();
 
                 }
@@ -439,6 +439,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 }
             }
+
+            //ffmpeg -framerate 10 -pattern_typ e glob -i '*.png' -r 30 -pix_fmt yuv420p movement.avi
 
             if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
