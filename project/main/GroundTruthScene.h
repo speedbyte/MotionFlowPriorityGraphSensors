@@ -12,6 +12,7 @@
 #include "ObjectMetaData.h"
 #include "Sensors.h"
 #include <vires-interface/vires_common.h>
+#include <boost/tuple/tuple.hpp>
 
 class GroundTruthScene  {
 
@@ -200,7 +201,22 @@ private:
                     "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
                     "</Sensor>";
 
-    std::string module_manager_libModuleSensor_PerfectInertialTemplate =
+    std::string module_manager_libModuleSensor_PerfectInertialTemplate_left =
+            "<Sensor name=\"Sensor_MM\" type=\"video\" > "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Player name=\"MovingCar\"/> "
+                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
+                    "   <Position dx=\"2.000000\" dy=\"-1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Origin type=\"usk\" /> "
+                    "   <Cull maxObjects=\"10\" enable=\"true\" /> "
+                    "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"false\" /> "
+                    "   <Filter objectType=\"none\" />"
+                    "   <Filter objectType=\"pedestrian\" /> "
+                    "   <Filter objectType=\"vehicle\" /> "
+                    "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
+                    "</Sensor>";
+
+    std::string module_manager_libModuleSensor_PerfectInertialTemplate_right =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
@@ -214,10 +230,6 @@ private:
                     "   <Filter objectType=\"vehicle\" /> "
                     "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
                     "</Sensor>";
-
-    std::string module_manager_libModuleCameraSensor;
-    std::string module_manager_libModulePerfectSensor;
-    std::string module_manager_libModulePerfectSensorInertial;
 
     std::string module_manager_libModuleSingleRaySensor =
             "<Sensor name=\"simpleSensor\" type=\"radar\">\n"
@@ -319,14 +331,22 @@ $
 
     int m_moduleManagerSocket_PerfectInertial;
 
+    std::vector<boost::tuple<std::string, std::string, uint > > sensor_group_1;
+
 
     void configureSensor() {
+
+
+        std::string module_manager_libModuleCameraSensor;
+        std::string module_manager_libModulePerfectSensor;
+        std::string module_manager_libModulePerfectSensorInertial;
 
         std::string to_replace;
 
         std::string::size_type position;
 
         ///Start sensor
+        ///--------------------------
         module_manager_libModuleCameraSensor = module_manager_libModuleSensor_CameraTemplate;
 
         to_replace = std::to_string(65535);
@@ -335,9 +355,11 @@ $
             module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT));
         }
 
-        module_manager_libModulePerfectSensor = module_manager_libModuleSensor_PerfectTemplate;
-        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_PerfectInertialTemplate;
+        sensor_group_1.push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", DEFAULT_RX_PORT));
 
+        ///--------------------------
+
+        module_manager_libModulePerfectSensor = module_manager_libModuleSensor_PerfectTemplate;
         //port number
         to_replace = std::to_string(65535);
         position = module_manager_libModulePerfectSensor.find(to_replace);
@@ -359,8 +381,11 @@ $
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
         }
 
+        sensor_group_1.push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", DEFAULT_RX_PORT_PERFECT));
+
         ///--------------------------
 
+        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_PerfectInertialTemplate_left;
         //port number
         to_replace = std::to_string(65535);
         position = module_manager_libModulePerfectSensorInertial.find(to_replace);
@@ -388,6 +413,8 @@ $
         if ( position != std::string::npos) {
             module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
         }
+
+        sensor_group_1.push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", DEFAULT_RX_PORT_PERFECT_INERTIAL));
 
         ///End sensor
 

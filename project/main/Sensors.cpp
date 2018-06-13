@@ -19,7 +19,7 @@ void Sensors::generate_sen_base_point_displacement(SensorMetaData gt_data) {
 
     std::cout << "generate_sen_base_point_displacement with start_point " << m_startPoint << std::endl;
 
-    for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; current_frame_index++) {
+    for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
         // The first frame is the reference frame, hence it is skipped
 
         /*

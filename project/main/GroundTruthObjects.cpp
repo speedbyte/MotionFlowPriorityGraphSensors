@@ -17,7 +17,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
     std::vector<bool>  multiframe_object_base_visibility;
     m_object_base_point_displacement.clear();
 
-    assert(gt_data.getAll().size() >= MAX_ITERATION_GT_SCENE_GENERATION_VECTOR);
+    assert(gt_data.getAll().size() >= MAX_ITERATION_RESULTS);
 
     ushort frame_number = m_startPoint;
 
@@ -112,7 +112,7 @@ void GroundTruthObjects::generate_combined_sensor_data() {
     std::vector<std::pair<cv::Point2f, cv::Point2f> > sensor_combined_point_displacement;
     std::vector<bool> sensor_combined_visibility;
 
-    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_VECTOR; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
 
 
         cv::Point2f pts;

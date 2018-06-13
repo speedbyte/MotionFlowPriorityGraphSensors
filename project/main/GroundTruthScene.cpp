@@ -115,7 +115,7 @@ void GroundTruthScene::prepare_directories() {
     m_generatepath = m_groundtruthpath.string() + "/" + m_environment;
 
     if (m_regenerate_yaml_file) {
-        if (!m_datasetpath.string().compare(CPP_DATASET_PATH) || !m_datasetpath.string().compare(VIRES_DATASET_PATH)) {
+        if (m_datasetpath.string() == std::string(CPP_DATASET_PATH) || m_datasetpath.string() == std::string(VIRES_DATASET_PATH)) {
 
             std::cout << "prepare gt_scene directories" << std::endl;
 
@@ -160,7 +160,7 @@ void GroundTruthScene::writePositionInYaml(std::string suffix) {
         sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         //write_fs << temp_str_fs << "[";
 
-        unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC;
+        unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
         assert(FRAME_COUNT > 0);
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
@@ -646,7 +646,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         tempGroundTruthImageBase = m_canvas.getCanvasShapeAndData().get().clone();
     }
 
-    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_IMAGES; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_DATASET; current_frame_index++) {
 
         sprintf(file_name_image, "000%03d_10.png", current_frame_index);
         std::string input_image_file_with_path = m_generatepath.string() + file_name_image;
@@ -1051,17 +1051,20 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, module_manager_libModuleCameraSensor.c_str());
+        for ( ushort i = 0; i < 3; i++ ) {
 
-        sleep(1);
+            sendSCPMessage(m_scpSocket, sensor_group_1.at(i).get<0>().c_str());
 
-        sendSCPMessage(m_scpSocket, module_manager_libModulePerfectSensor.c_str());
+            sleep(1);
 
-        sleep(1);
+            //sendSCPMessage(m_scpSocket, module_manager_libModulePerfectSensor.c_str());
 
-        sendSCPMessage(m_scpSocket, module_manager_libModulePerfectSensorInertial.c_str());
+            //sendSCPMessage(m_scpSocket, module_manager_libModulePerfectSensorInertial.c_str());
 
-        sleep(1);
+
+
+        }
+
 
         //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_openglfrustum.c_str());
         sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams.c_str());
@@ -1263,7 +1266,7 @@ void GroundTruthSceneExternal::parseEndOfFrame(const double &simTime, const unsi
     //mLastNetworkFrame = simFrame;
     fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 
-    if (simFrame > MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC + MAX_DUMPS) {
+    if (simFrame > MAX_ITERATION_GT_SCENE_GENERATION_DATASET + MAX_DUMPS) {
         m_breaking = true;
     }
 
@@ -1358,7 +1361,7 @@ void GroundTruthSceneExternal::parseEntry(RDB_SENSOR_STATE_t *data, const double
 
         if (data->type == RDB_SENSOR_TYPE_VIDEO || data->type == RDB_SENSOR_TYPE_RADAR) {
 
-            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
+            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
 
                 fprintf(stderr, "saving sensor truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
                         data->name);
@@ -1409,7 +1412,7 @@ simFrame, const
     if (m_environment == "blue_sky") {
 
         if (data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR) {
-            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
+            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
 
                 /*
                 fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
@@ -1497,7 +1500,7 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
     if (m_environment == "blue_sky") {
 
         if (data->type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->type == RDB_OBJECT_TYPE_PLAYER_CAR) {
-            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DYNAMIC ) ) {
+            if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
 
                 //fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
                 //        data->name, simFrame, data->pos.x, data->pos.y, data->geo.dimX, data->
