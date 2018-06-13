@@ -11,6 +11,7 @@
 #include "Canvas.h"
 #include "ObjectMetaData.h"
 #include "Sensors.h"
+#include "ViresObjects.h"
 #include <vires-interface/vires_common.h>
 #include <boost/tuple/tuple.hpp>
 
@@ -299,7 +300,6 @@ $
 
     int mImageCount=-1;
 
-    unsigned int mShmKey;      // key of the SHM segment
 
     // image skip factor
     static const unsigned short mImageSkipFactor;
@@ -317,95 +317,7 @@ $
 
     int m_moduleManagerSocket_PerfectInertial;
 
-    std::vector<boost::tuple<std::string, std::string, uint > > sensor_group_1;
-
-
-    void configureSensor() {
-
-
-        std::string module_manager_libModuleCameraSensor;
-        std::string module_manager_libModulePerfectSensor;
-        std::string module_manager_libModulePerfectSensorInertial;
-
-        std::string to_replace;
-
-        std::string::size_type position;
-
-        ///Start sensor
-        ///--------------------------
-        module_manager_libModuleCameraSensor = module_manager_libModuleSensor_CameraTemplate;
-
-        to_replace = std::to_string(65535);
-        position = module_manager_libModuleCameraSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT));
-        }
-
-        sensor_group_1.push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", DEFAULT_RX_PORT));
-
-        ///--------------------------
-
-        module_manager_libModulePerfectSensor = module_manager_libModuleSensor_PerfectTemplate;
-        //port number
-        to_replace = std::to_string(65535);
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT));
-        }
-
-        //sensorlibrary
-        to_replace = "libModuleCameraSensor";
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "libModulePerfectSensor");
-        }
-
-        //sensor name
-        to_replace = "Sensor_MM";
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
-        }
-
-        sensor_group_1.push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", DEFAULT_RX_PORT_PERFECT));
-
-        ///--------------------------
-
-        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_PerfectInertialTemplate_left;
-        //port number
-        to_replace = std::to_string(65535);
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT_INERTIAL));
-        }
-
-        //sensorlibrary
-        to_replace = "libModuleCameraSensor";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "libModulePerfectSensor");
-        }
-
-        //sensor name
-        to_replace = "Sensor_MM";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "Sensor_MM_PerfectInertial");
-        }
-
-        //sensor coordinate
-        to_replace = "usk";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
-        }
-
-        sensor_group_1.push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", DEFAULT_RX_PORT_PERFECT_INERTIAL));
-
-        ///End sensor
-
-    }
-
+    std::vector<ViresObjects> viresObjects;
 
 public:
 
@@ -433,8 +345,7 @@ public:
 
     double getTime();
 
-    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
-    GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
+    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) : GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
 
 
         std::string to_replace = "traffic_demo";
@@ -449,7 +360,18 @@ public:
             stop.replace(position2, to_replace.length(), std::string(m_scenario));
         }
 
-        configureSensor();
+
+        viresObjects.push_back(ViresObjects(RDB_SHM_ID_IMG_GENERATOR_OUT));      // key of the SHM segment
+        if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
+            viresObjects.push_back(ViresObjects(0x816b));
+        }
+
+
+        viresObjects.at(0).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_left);
+
+        if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
+            viresObjects.at(1).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_left);
+        }
 
         if ( environment == "blue_sky") {
             m_environment_scp_message = environment_parameters_dry;
@@ -555,8 +477,6 @@ public:
 
         mImageCount = -1;
 
-        mShmKey       = RDB_SHM_ID_IMG_GENERATOR_OUT;      // key of the SHM segment
-
     }
 
     void generate_gt_scene() override;
@@ -594,10 +514,8 @@ public:
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
 
-
-
-
 };
+
 
 
 

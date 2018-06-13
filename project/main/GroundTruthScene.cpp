@@ -1009,7 +1009,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         setServer(serverName.c_str());
 
-        fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n", mShmKey, getCheckMask(),
+        fprintf(stderr, "ValidateArgs: key = 0x%x, checkMask = 0x%x, mForceBuffer = %d\n", viresObjects.at(0).getShmKey(), getCheckMask(),
                 getForceBuffer());
 
         bool connected_trigger_port = false;
@@ -1048,12 +1048,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS*3; i++ ) {
 
-            sendSCPMessage(m_scpSocket, sensor_group_1.at(i).get<0>().c_str());
+            sendSCPMessage(m_scpSocket, viresObjects.at(0).getSensorConfiguration().at(i).get<0>().c_str());
 
             sleep(1);
 
         }
-
 
         //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_openglfrustum.c_str());
         sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams.c_str());
@@ -1112,9 +1111,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
 
         //if ( m_environment == "blue_sky") {
-        m_moduleManagerSocket_Camera = openNetwork(DEFAULT_RX_PORT);
-        m_moduleManagerSocket_Perfect = openNetwork(DEFAULT_RX_PORT_PERFECT);
-        m_moduleManagerSocket_PerfectInertial = openNetwork(DEFAULT_RX_PORT_PERFECT_INERTIAL);
+        m_moduleManagerSocket_Camera = openNetwork(viresObjects.at(0).getSensorConfiguration().at(0).get<2>());
+        m_moduleManagerSocket_Perfect = openNetwork(viresObjects.at(0).getSensorConfiguration().at(1).get<2>());
+        m_moduleManagerSocket_PerfectInertial = openNetwork(viresObjects.at(0).getSensorConfiguration().at(2).get<2>());
         //}
 
         std::cout << "mm socket - " << m_moduleManagerSocket_Camera << std::endl;
@@ -1125,10 +1124,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
 
             // open the shared memory for IG image output (try to attach without creating a new segment)
-            fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", mShmKey);
+            fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", viresObjects.at(0).getShmKey());
 
             while (!getShmPtr()) {
-                openShm(mShmKey);
+                openShm(viresObjects.at(0).getShmKey());
                 usleep(1000);     // do not overload the CPU
             }
 
