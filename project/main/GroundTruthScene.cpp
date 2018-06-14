@@ -1129,8 +1129,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             // open the shared memory for IG image output (try to attach without creating a new segment)
             fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", viresObjects.at(0).getShmKey());
 
-            while (!getShmPtr()) {
-                openShm(viresObjects.at(0).getShmKey());
+            void *shmPtr;
+            while (!shmPtr) {
+                shmPtr = openShm(viresObjects.at(0).getShmKey());
                 usleep(1000);     // do not overload the CPU
             }
 
@@ -1166,7 +1167,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     while (mCheckForImage) {
 
-                        checkShm();
+                        checkShm(shmPtr);
 
                         if (mHaveImage) {
                             //fprintf( stderr, "main: got it! at %d\n", mSimFrame );
@@ -1180,7 +1181,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                         usleep(100000);
                         std::cerr << "Flushing images in shared memory" << std::endl;
-                        checkShm();  //empty IG buffer of spurious images
+                        checkShm(shmPtr);  //empty IG buffer of spurious images
                         // only in the beginning.
 
                     }
