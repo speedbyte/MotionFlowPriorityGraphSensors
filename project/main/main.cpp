@@ -247,7 +247,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
             std::vector<Objects *> ptr_list_of_gt_objects;
-            GroundTruthObjects::objectCurrentCount = 0;
+            GroundTruthObjects::groundTruthObjectTotalCount = 0;
 
             cv::Size_<unsigned> frame_size(IMAGE_WIDTH, IMAGE_HEIGHT);
             std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
@@ -371,7 +371,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 list_of_simulated_objects.clear();
                 ptr_list_of_simulated_objects.clear();
 
-                SimulatedObjects::SimulatedobjectCurrentCount = 0; // start from 0 for each list_of_algorithm
+                SimulatedObjects::simulatedObjectTotalCount = 0; // start from 0 for each list_of_algorithm
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                     //two objects

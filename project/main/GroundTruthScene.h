@@ -12,7 +12,7 @@
 #include "ObjectMetaData.h"
 #include "Sensors.h"
 #include "ViresObjects.h"
-#include <vires-interface/vires_common.h>
+#include <vires-interface/vires_configuration.h>
 #include <boost/tuple/tuple.hpp>
 
 class GroundTruthScene  {
@@ -40,25 +40,20 @@ protected:
 
     bool m_regenerate_yaml_file;
 
+
+
     std::vector<ObjectMetaData> objectMetaDataList;
-
     std::vector<std::vector<ObjectMetaData *> > m_ptr_customObjectMetaDataList;
-
-    std::vector<std::map<std::string, ObjectMetaData*> > m_mapObjectNameToObjectMetaData;
-
-    ushort m_objectCount = 0;
-
-    std::vector<SensorMetaData> sensorMetaDataList;
-
     std::vector<std::vector<SensorMetaData *> > m_ptr_customSensorMetaDataList;
-
+    std::vector<std::map<std::string, ObjectMetaData*> > m_mapObjectNameToObjectMetaData;
     std::vector<std::map<std::string, SensorMetaData*> > m_mapSensorNameToSensorMetaData;
-
-    std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
-
     std::map<unsigned int, std::string> m_mapObjectIdToObjectName;
-
+    std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
+    std::vector<SensorMetaData> sensorMetaDataList;
+    ushort m_objectCount = 0;
     ushort m_sensorCount = 0;
+
+
 
 
 
@@ -86,8 +81,6 @@ public:
 
     void readPositionFromFile(std::string positionFileName);
 
-    void writePositionInYaml(std::string suffix);
-
     virtual void generate_gt_scene() {
         std::cout << "base implementation of generate_gt_scene()" << std::endl;
     };
@@ -95,8 +88,6 @@ public:
     void generate_bird_view();
 
     void prepare_directories();
-
-    void visualiseBoundingBox();
 
     void stopSimulation() {
         char command[1024];
@@ -130,7 +121,7 @@ public:
 
 };
 
-class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::ViresInterface {
+class GroundTruthSceneExternal : public GroundTruthScene, public Framework::ViresConfiguration {
 
 
     // <SimCtrl><Stop /></SimCtrl>
@@ -207,7 +198,7 @@ private:
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
-                    "   <Position dx=\"2.000000\" dy=\"-1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Position dx=\"2.000000\" dy=\"1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
                     "   <Origin type=\"usk\" /> "
                     "   <Cull maxObjects=\"10\" enable=\"true\" /> "
                     "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"false\" /> "
@@ -217,6 +208,20 @@ private:
                     "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
                     "</Sensor>";
 
+    std::string module_manager_libModuleSensor_PerfectInertialTemplate_right =
+            "<Sensor name=\"Sensor_MM\" type=\"video\" > "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Player name=\"MovingCar\"/> "
+                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
+                    "   <Position dx=\"2.000000\" dy=\"-1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Origin type=\"usk\" /> "
+                    "   <Cull maxObjects=\"10\" enable=\"true\" /> "
+                    "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"false\" /> "
+                    "   <Filter objectType=\"none\" />"
+                    "   <Filter objectType=\"pedestrian\" /> "
+                    "   <Filter objectType=\"vehicle\" /> "
+                    "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
+                    "</Sensor>";
 
     std::string module_manager_libModuleSingleRaySensor =
             "<Sensor name=\"simpleSensor\" type=\"radar\">\n"
@@ -279,27 +284,17 @@ $
      */
 
 
-    bool m_breaking = false;
-    bool m_dumpInitialFrames = true;
     unsigned int mFirstIgnoredFrame = 65535;
     int          mLastNetworkFrame = -1;
-
-    int          mHaveImage ;                                 // is an image available?
 
     // some stuff for performance measurement
     double       mStartTime;
 
-    bool         mHaveFirstFrame;
-    bool         mHaveFirstImage;
-    bool         mCheckForImage;
 
     int          mTotalNoImages;
 
     // total number of errors
     unsigned int mTotalErrorCount;
-
-    int mImageCount=-1;
-
 
     // image skip factor
     static const unsigned short mImageSkipFactor;
@@ -355,16 +350,16 @@ public:
         }
 
 
-        viresObjects.push_back(ViresObjects(RDB_SHM_ID_IMG_GENERATOR_OUT));      // key of the SHM segment
+        viresObjects.push_back(ViresObjects(RDB_SHM_ID_IMG_GENERATOR_OUT, m_generatepath));      // key of the SHM segment
         if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
-            viresObjects.push_back(ViresObjects(0x816b));
+            viresObjects.push_back(ViresObjects(0x816b, m_generatepath));
         }
 
 
         viresObjects.at(0).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_left);
 
         if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
-            viresObjects.at(1).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_left);
+            viresObjects.at(1).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_right);
         }
 
         if ( environment == "blue_sky") {
@@ -455,52 +450,21 @@ public:
             }
         }
 
-        mHaveImage    = 0;                                 // is an image available?
 
         // some stuff for performance measurement
         mStartTime = -1.0;
 
-        mHaveFirstFrame    = false;
-        mHaveFirstImage    = false;
-        mCheckForImage  = false;
 
         mTotalNoImages= 0;
 
         // total number of errors
         mTotalErrorCount = 0;
 
-        mImageCount = -1;
 
     }
 
     void generate_gt_scene() override;
 
-    void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
-
-    void parseEndOfFrame( const double & simTime, const unsigned int & simFrame );
-
-    void parseEntry( RDB_IMAGE_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &totalElem );
-
-    void parseEntry( RDB_OBJECT_STATE_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &
-    totalElem );
-
-    void parseEntry( RDB_OBJECT_CFG_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
-
-    void parseEntry( RDB_DRIVER_CTRL_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &totalElem );
-
-    void parseEntry( RDB_TRIGGER_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
-            const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
-
-    void parseEntry( RDB_SENSOR_STATE_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
-            const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
-
-    void parseEntry(RDB_SENSOR_OBJECT_t *data, const double &simTime, const unsigned int &
-    simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsigned int &elemId,
-            const unsigned int &totalElem);
 
 
 

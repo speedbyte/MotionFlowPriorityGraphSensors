@@ -12,7 +12,7 @@
 class SimulatedObjects : public Objects {
 public:
 
-    static unsigned SimulatedobjectCurrentCount; // assingn object id
+    static unsigned simulatedObjectTotalCount; // assingn object id
 
 private:
 
@@ -22,8 +22,8 @@ public:
     SimulatedObjects(std::string objectName, std::vector<std::vector<bool> >  extrapolated_visibility) :
             Objects(objectName, extrapolated_visibility ) {
 
-        m_objectId = SimulatedobjectCurrentCount ;
-        SimulatedobjectCurrentCount += 1;
+        m_objectId = simulatedObjectTotalCount ;
+        simulatedObjectTotalCount += 1;
     }
 
 };
