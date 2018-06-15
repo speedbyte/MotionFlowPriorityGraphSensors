@@ -165,6 +165,7 @@ private:
 
     std::string module_manager_libModuleSensor_CameraTemplate =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
+                    "   <Config cameraId=\"0\" verbose=\"false\"/> "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
@@ -247,12 +248,15 @@ private:
     std::string view_parameters_eyepoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string view_parameters_sensorpoint_intrinsicparams = "<Camera name=\"VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
+    std::string view_parameters_sensorpoint_intrinsicparams_left = "<Camera name=\"LEFT_VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM_0\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
+
+    std::string view_parameters_sensorpoint_intrinsicparams_right = "<Camera name=\"RIGHT_VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM_1\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /></Camera>";
+
 
     std::string view_parameters_sensorpoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"true\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
+    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
 
     std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
 

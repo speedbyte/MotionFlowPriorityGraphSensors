@@ -795,8 +795,13 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
 
         //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_openglfrustum.c_str());
-        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams.c_str());
+        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_left.c_str());
         sleep(1);
+
+        if ( MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
+            sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_right.c_str());
+            sleep(1);
+        }
 
         sendSCPMessage(m_scpSocket, display_parameters.c_str());
 

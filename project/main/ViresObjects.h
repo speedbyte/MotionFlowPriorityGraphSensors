@@ -104,10 +104,10 @@ public:
 
         //sensor name
         to_replace = "Sensor_MM";
-        with_replace = to_replace + std::to_string(m_sensorGroupCount);
+        with_replace = "Sensor_MM" + '_' + std::to_string(m_sensorGroupCount);
         position = module_manager_libModuleCameraSensor.find(to_replace);
         if ( position != std::string::npos) {
-            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), "Sensor_MM_PerfectInertial");
+            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), with_replace);
         }
 
         to_replace = std::to_string(65535);
@@ -137,9 +137,10 @@ public:
 
         //sensor name
         to_replace = "Sensor_MM";
+        with_replace = "Sensor_MM_Perfect" + '_' + std::to_string(m_sensorGroupCount);
         position = module_manager_libModulePerfectSensor.find(to_replace);
         if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), with_replace);
         }
 
         sensor_group.push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data));
@@ -163,9 +164,10 @@ public:
 
         //sensor name
         to_replace = "Sensor_MM";
+        with_replace = "Sensor_MM_PerfectInertial" + '_' + std::to_string(m_sensorGroupCount);
         position = module_manager_libModulePerfectSensorInertial.find(to_replace);
         if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "Sensor_MM_PerfectInertial");
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), with_replace);
         }
 
         //sensor coordinate
