@@ -5,5 +5,5 @@
 #include "SimulatedObjects.h"
 #include "Dataset.h"
 
-unsigned SimulatedObjects::SimulatedobjectCurrentCount = 0;
+unsigned SimulatedObjects::simulatedObjectTotalCount = 0;
 

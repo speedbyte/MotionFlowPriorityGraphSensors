@@ -7,7 +7,7 @@
 #define MAIN_DATASETS_H_H
 
 
-typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Algorithms;
+//typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Algorithms;
 
 #define DEFAULT_RX_PORT_PERFECT_INERTIAL     48187   /* for image port it should be 48192 */
 
@@ -46,7 +46,6 @@ typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Alg
 #define MAX_ALLOWED_SENSOR_GROUPS 1
 #define SENSOR_COUNT MAX_ALLOWED_SENSOR_GROUPS + (1%MAX_ALLOWED_SENSOR_GROUPS)
 
-#define MAX_DUMPS 10
 
 #define STENCIL_GRID_EXTENDER 15 // 10 pixels more than roi on each side
 

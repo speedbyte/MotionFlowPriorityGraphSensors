@@ -6,7 +6,7 @@
 #include "GroundTruthObjects.h"
 
 
-unsigned GroundTruthObjects::objectCurrentCount = 0;
+unsigned GroundTruthObjects::groundTruthObjectTotalCount = 0;
 
 
 void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData gt_data) {

@@ -11,7 +11,8 @@
 #include "Canvas.h"
 #include "ObjectMetaData.h"
 #include "Sensors.h"
-#include <vires-interface/vires_common.h>
+#include "ViresObjects.h"
+#include <vires-interface/vires_configuration.h>
 #include <boost/tuple/tuple.hpp>
 
 class GroundTruthScene  {
@@ -39,25 +40,20 @@ protected:
 
     bool m_regenerate_yaml_file;
 
+
+
     std::vector<ObjectMetaData> objectMetaDataList;
-
     std::vector<std::vector<ObjectMetaData *> > m_ptr_customObjectMetaDataList;
-
-    std::vector<std::map<std::string, ObjectMetaData*> > m_mapObjectNameToObjectMetaData;
-
-    ushort m_objectCount = 0;
-
-    std::vector<SensorMetaData> sensorMetaDataList;
-
     std::vector<std::vector<SensorMetaData *> > m_ptr_customSensorMetaDataList;
-
+    std::vector<std::map<std::string, ObjectMetaData*> > m_mapObjectNameToObjectMetaData;
     std::vector<std::map<std::string, SensorMetaData*> > m_mapSensorNameToSensorMetaData;
-
-    std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
-
     std::map<unsigned int, std::string> m_mapObjectIdToObjectName;
-
+    std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
+    std::vector<SensorMetaData> sensorMetaDataList;
+    ushort m_objectCount = 0;
     ushort m_sensorCount = 0;
+
+
 
 
 
@@ -85,8 +81,6 @@ public:
 
     void readPositionFromFile(std::string positionFileName);
 
-    void writePositionInYaml(std::string suffix);
-
     virtual void generate_gt_scene() {
         std::cout << "base implementation of generate_gt_scene()" << std::endl;
     };
@@ -94,8 +88,6 @@ public:
     void generate_bird_view();
 
     void prepare_directories();
-
-    void visualiseBoundingBox();
 
     void stopSimulation() {
         char command[1024];
@@ -129,7 +121,7 @@ public:
 
 };
 
-class GroundTruthSceneExternal : public GroundTruthScene, protected Framework::ViresInterface {
+class GroundTruthSceneExternal : public GroundTruthScene, public Framework::ViresConfiguration {
 
 
     // <SimCtrl><Stop /></SimCtrl>
@@ -173,6 +165,7 @@ private:
 
     std::string module_manager_libModuleSensor_CameraTemplate =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
+                    "   <Config cameraId=\"0\" verbose=\"false\"/> "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
@@ -216,6 +209,20 @@ private:
                     "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
                     "</Sensor>";
 
+    std::string module_manager_libModuleSensor_PerfectInertialTemplate_right =
+            "<Sensor name=\"Sensor_MM\" type=\"video\" > "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Player name=\"MovingCar\"/> "
+                    "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
+                    "   <Position dx=\"2.000000\" dy=\"-1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
+                    "   <Origin type=\"usk\" /> "
+                    "   <Cull maxObjects=\"10\" enable=\"true\" /> "
+                    "   <Port name=\"RDBout\" number=\"65535\" type=\"TCP\" sendEgo=\"false\" /> "
+                    "   <Filter objectType=\"none\" />"
+                    "   <Filter objectType=\"pedestrian\" /> "
+                    "   <Filter objectType=\"vehicle\" /> "
+                    "   <Debug enable=\"false\" detection=\"false\" road=\"false\" position=\"false\" dimensions=\"false\" camera=\"false\" packages=\"false\" culling=\"false\" /> "
+                    "</Sensor>";
 
     std::string module_manager_libModuleSingleRaySensor =
             "<Sensor name=\"simpleSensor\" type=\"radar\">\n"
@@ -241,12 +248,15 @@ private:
     std::string view_parameters_eyepoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string view_parameters_sensorpoint_intrinsicparams = "<Camera name=\"VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
+    std::string view_parameters_sensorpoint_intrinsicparams_left = "<Camera name=\"LEFT_VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM_0\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /></Camera>";
+
+    std::string view_parameters_sensorpoint_intrinsicparams_right = "<Camera name=\"RIGHT_VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"600\" focalY=\"600\" height=\"400\" near=\"0.100000\" principalX=\"600\" principalY=\"200\" width=\"1200\" /><PosSensor sensor=\"Sensor_MM_1\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /></Camera>";
+
 
     std::string view_parameters_sensorpoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"true\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
+    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM_0\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
 
     std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
 
@@ -256,7 +266,7 @@ private:
 
     std::string rdbtrigger_portnumber = "<TaskControl><RDB client=\"false\" enable=\"true\" interface=\"eth0\" portRx=\"48190\" portTx=\"48190\" portType=\"TCP\" /></TaskControl>";
 
-    std::string message_scp = "<Symbol name=\"expl01\" > <Text data=\"Time for snow\" colorRGB=\"0xffff00\" size=\"50.0\" /> <PosScreen x=\"0.01\" y=\"0.05\" /></Symbol>";
+    std::string  message_scp = "<Symbol name=\"expl01\" > <Text data=\"Time for snow\" colorRGB=\"0xffff00\" size=\"50.0\" /> <PosScreen x=\"0.01\" y=\"0.05\" /></Symbol>";
 
     std::string popup_scp = "<Info level=\"info\"> <Message popup=\"true\" text=\"snow!!!!\"/> </Info>";
 
@@ -278,28 +288,17 @@ $
      */
 
 
-    bool m_breaking = false;
-    bool m_dumpInitialFrames = true;
     unsigned int mFirstIgnoredFrame = 65535;
     int          mLastNetworkFrame = -1;
-
-    int          mHaveImage ;                                 // is an image available?
 
     // some stuff for performance measurement
     double       mStartTime;
 
-    bool         mHaveFirstFrame;
-    bool         mHaveFirstImage;
-    bool         mCheckForImage;
 
     int          mTotalNoImages;
 
     // total number of errors
     unsigned int mTotalErrorCount;
-
-    int mImageCount=-1;
-
-    unsigned int mShmKey;      // key of the SHM segment
 
     // image skip factor
     static const unsigned short mImageSkipFactor;
@@ -311,101 +310,8 @@ $
 
     int m_scpSocket;
 
-    int m_moduleManagerSocket_Camera;
 
-    int m_moduleManagerSocket_Perfect;
-
-    int m_moduleManagerSocket_PerfectInertial;
-
-    std::vector<boost::tuple<std::string, std::string, uint > > sensor_group_1;
-
-
-    void configureSensor() {
-
-
-        std::string module_manager_libModuleCameraSensor;
-        std::string module_manager_libModulePerfectSensor;
-        std::string module_manager_libModulePerfectSensorInertial;
-
-        std::string to_replace;
-
-        std::string::size_type position;
-
-        ///Start sensor
-        ///--------------------------
-        module_manager_libModuleCameraSensor = module_manager_libModuleSensor_CameraTemplate;
-
-        to_replace = std::to_string(65535);
-        position = module_manager_libModuleCameraSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT));
-        }
-
-        sensor_group_1.push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", DEFAULT_RX_PORT));
-
-        ///--------------------------
-
-        module_manager_libModulePerfectSensor = module_manager_libModuleSensor_PerfectTemplate;
-        //port number
-        to_replace = std::to_string(65535);
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT));
-        }
-
-        //sensorlibrary
-        to_replace = "libModuleCameraSensor";
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "libModulePerfectSensor");
-        }
-
-        //sensor name
-        to_replace = "Sensor_MM";
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "Sensor_MM_Perfect");
-        }
-
-        sensor_group_1.push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", DEFAULT_RX_PORT_PERFECT));
-
-        ///--------------------------
-
-        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_PerfectInertialTemplate_left;
-        //port number
-        to_replace = std::to_string(65535);
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(DEFAULT_RX_PORT_PERFECT_INERTIAL));
-        }
-
-        //sensorlibrary
-        to_replace = "libModuleCameraSensor";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "libModulePerfectSensor");
-        }
-
-        //sensor name
-        to_replace = "Sensor_MM";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "Sensor_MM_PerfectInertial");
-        }
-
-        //sensor coordinate
-        to_replace = "usk";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
-        }
-
-        sensor_group_1.push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", DEFAULT_RX_PORT_PERFECT_INERTIAL));
-
-        ///End sensor
-
-    }
-
+    std::vector<ViresObjects> viresObjects;
 
 public:
 
@@ -421,9 +327,9 @@ public:
 
         close(m_scpSocket);
         close(m_triggerSocket);
-        close(m_moduleManagerSocket_Camera);
-
-
+        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
+            viresObjects.at(i).closeAllSockets();
+        }
 
     }
 
@@ -433,8 +339,7 @@ public:
 
     double getTime();
 
-    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
-    GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
+    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) : GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
 
 
         std::string to_replace = "traffic_demo";
@@ -448,8 +353,6 @@ public:
         if ( position2 != std::string::npos ) {
             stop.replace(position2, to_replace.length(), std::string(m_scenario));
         }
-
-        configureSensor();
 
         if ( environment == "blue_sky") {
             m_environment_scp_message = environment_parameters_dry;
@@ -539,54 +442,21 @@ public:
             }
         }
 
-        mHaveImage    = 0;                                 // is an image available?
 
         // some stuff for performance measurement
         mStartTime = -1.0;
 
-        mHaveFirstFrame    = false;
-        mHaveFirstImage    = false;
-        mCheckForImage  = false;
 
         mTotalNoImages= 0;
 
         // total number of errors
         mTotalErrorCount = 0;
 
-        mImageCount = -1;
-
-        mShmKey       = RDB_SHM_ID_IMG_GENERATOR_OUT;      // key of the SHM segment
 
     }
 
     void generate_gt_scene() override;
 
-    void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
-
-    void parseEndOfFrame( const double & simTime, const unsigned int & simFrame );
-
-    void parseEntry( RDB_IMAGE_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &totalElem );
-
-    void parseEntry( RDB_OBJECT_STATE_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &
-    totalElem );
-
-    void parseEntry( RDB_OBJECT_CFG_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
-
-    void parseEntry( RDB_DRIVER_CTRL_t *data, const double & simTime, const unsigned int & simFrame, const
-    unsigned short & pkgId, const unsigned short & flags, const unsigned int & elemId, const unsigned int &totalElem );
-
-    void parseEntry( RDB_TRIGGER_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
-            const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
-
-    void parseEntry( RDB_SENSOR_STATE_t *data, const double & simTime, const unsigned int & simFrame, const unsigned short & pkgId,
-            const unsigned short & flags, const unsigned int & elemId, const unsigned int & totalElem );
-
-    void parseEntry(RDB_SENSOR_OBJECT_t *data, const double &simTime, const unsigned int &
-    simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsigned int &elemId,
-            const unsigned int &totalElem);
 
 
 
@@ -594,10 +464,8 @@ public:
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
 
-
-
-
 };
+
 
 
 
