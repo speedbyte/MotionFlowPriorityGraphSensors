@@ -327,8 +327,9 @@ public:
 
         close(m_scpSocket);
         close(m_triggerSocket);
-        viresObjects.at(0).closeAllSockets();
-
+        for (ushort i = 0 ; i <= MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
+            viresObjects.at(i).closeAllSockets();
+        }
 
     }
 
@@ -352,7 +353,6 @@ public:
         if ( position2 != std::string::npos ) {
             stop.replace(position2, to_replace.length(), std::string(m_scenario));
         }
-
 
         viresObjects.push_back(ViresObjects(RDB_SHM_ID_IMG_GENERATOR_OUT, m_generatepath));      // key of the SHM segment
         if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {

@@ -35,7 +35,7 @@ private:
 
     int m_moduleManagerSocket_PerfectInertial;
 
-    bool m_dumpInitialFrames = true;
+    bool m_dumpInitialFrames;
 
     bool         mCheckForImage;
 
@@ -45,9 +45,9 @@ private:
 
     bool         mHaveFirstImage;
 
-    int mImageCount=-1;
+    int mImageCount;
 
-    bool m_breaking = false;
+    bool m_breaking;
 
     boost::filesystem::path  m_generatepath;
 
@@ -59,8 +59,8 @@ private:
     std::map<unsigned int, std::string> m_mapObjectIdToObjectName;
     std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
     std::vector<SensorMetaData> sensorMetaDataList;
-    ushort m_objectCount = 0;
-    ushort m_sensorCount = 0;
+    ushort m_objectCount;
+    ushort m_sensorCount;
 
     static ushort m_sensorGroupTotalCount;
     ushort m_sensorGroupCount;
@@ -80,6 +80,11 @@ public:
         m_sensorGroupCount = m_sensorGroupTotalCount;
         m_sensorGroupTotalCount++;
 
+        m_breaking = false;
+        m_dumpInitialFrames = true;
+
+        m_objectCount = 0;
+        m_sensorCount = 0;
     }
 
     ViresObjects() {}
