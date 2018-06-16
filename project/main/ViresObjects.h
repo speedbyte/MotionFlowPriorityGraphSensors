@@ -239,7 +239,7 @@ public:
         return m_moduleManagerSocket_PerfectInertial;
     }
 
-    void getGroundTruthInformation(bool withTrigger, int triggerSocket, bool getGroundTruthData);
+    void getGroundTruthInformation(bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages);
 
 
     void openShmWrapper() {

@@ -9,7 +9,14 @@
 
 //typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Algorithms;
 
-#define DEFAULT_RX_PORT_PERFECT_INERTIAL     48187   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_CAM_0     48182   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_0     48183   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_INERTIAL_0     48184   /* for image port it should be 48192 */
+
+#define DEFAULT_RX_PORT_CAM_1     48185   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_1     48186   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_INERTIAL_1     48187   /* for image port it should be 48192 */
+
 
 #define KITTI_FLOW_DATASET_PATH "../../../datasets/kitti_flow_dataset/"
 #define KITTI_RAW_DATASET_PATH "../../../datasets/kitti_raw_dataset/"

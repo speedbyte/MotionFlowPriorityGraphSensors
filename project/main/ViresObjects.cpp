@@ -184,7 +184,7 @@ void ViresObjects::writePositionInYaml(std::string suffix) {
 }
 
 
-void ViresObjects::getGroundTruthInformation(bool withTrigger, int triggerSocket, bool getGroundTruthData) {
+void ViresObjects::getGroundTruthInformation(bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages) {
 
     fprintf(stderr,
             "------------------------------------------------------------------------------------\n");
@@ -202,7 +202,7 @@ void ViresObjects::getGroundTruthInformation(bool withTrigger, int triggerSocket
 
     } else {
         deltaTime = 0.03;
-        mCheckForImage = true;
+        mCheckForImage = getGroundTruthImages;
         if ( withTrigger) {
             fprintf(stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = true \n",
                     deltaTime);
@@ -231,7 +231,7 @@ void ViresObjects::getGroundTruthInformation(bool withTrigger, int triggerSocket
 
     }
 
-    if ( getGroundTruthData == true ) {
+    if ( getGroundTruthData ) {
 
         readNetwork(m_moduleManagerSocket_Camera);  // this calls parseRDBMessage() in vires_common.cpp
 
