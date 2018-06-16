@@ -69,13 +69,14 @@ private:
 
 public:
 
-    ViresObjects(unsigned int shmKey, boost::filesystem::path  generatepath): mShmKey(shmKey), m_generatepath(generatepath) {
+    ViresObjects(unsigned int shmKey, boost::filesystem::path  generatepath): mShmKey(shmKey), m_generatepath(generatepath),
+            m_ptr_customObjectMetaDataList(MAX_ALLOWED_SENSOR_GROUPS), m_mapObjectNameToObjectMetaData(MAX_ALLOWED_SENSOR_GROUPS), m_ptr_customSensorMetaDataList(MAX_ALLOWED_SENSOR_GROUPS), m_mapSensorNameToSensorMetaData(MAX_ALLOWED_SENSOR_GROUPS) {
 
         mCheckForImage  = false;
         mHaveImage    = 0;                                 // is an image available?
         mHaveFirstFrame    = false;
         mHaveFirstImage    = false;
-        mImageCount = -1;
+        mImageCount = 0;
 
         m_sensorGroupCount = m_sensorGroupTotalCount;
         m_sensorGroupTotalCount++;
@@ -85,6 +86,16 @@ public:
 
         m_objectCount = 0;
         m_sensorCount = 0;
+
+        for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
+            ObjectMetaData objMetaData;
+            objectMetaDataList.push_back(objMetaData);
+        }
+        for (int i = 0; i < MAX_ALLOWED_SENSORS; ++i) {
+            SensorMetaData senMetaData;
+            sensorMetaDataList.push_back(senMetaData);
+        }
+
     }
 
     ViresObjects() {}
@@ -109,7 +120,7 @@ public:
 
         //sensor name
         to_replace = "Sensor_MM";
-        with_replace = "Sensor_MM" + '_' + std::to_string(m_sensorGroupCount);
+        with_replace = "Sensor_MM_" + std::to_string(m_sensorGroupCount);
         position = module_manager_libModuleCameraSensor.find(to_replace);
         if ( position != std::string::npos) {
             module_manager_libModuleCameraSensor.replace(position, to_replace.length(), with_replace);
@@ -142,7 +153,7 @@ public:
 
         //sensor name
         to_replace = "Sensor_MM";
-        with_replace = "Sensor_MM_Perfect" + '_' + std::to_string(m_sensorGroupCount);
+        with_replace = "Sensor_MM_Perfect_" + std::to_string(m_sensorGroupCount);
         position = module_manager_libModulePerfectSensor.find(to_replace);
         if ( position != std::string::npos) {
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), with_replace);
@@ -169,7 +180,7 @@ public:
 
         //sensor name
         to_replace = "Sensor_MM";
-        with_replace = "Sensor_MM_PerfectInertial" + '_' + std::to_string(m_sensorGroupCount);
+        with_replace = "Sensor_MM_PerfectInertial_" + std::to_string(m_sensorGroupCount);
         position = module_manager_libModulePerfectSensorInertial.find(to_replace);
         if ( position != std::string::npos) {
             module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), with_replace);

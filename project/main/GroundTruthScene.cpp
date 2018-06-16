@@ -274,7 +274,7 @@ void GroundTruthScene::startEvaluating(Noise noise) {
             m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index));
 
         }
-        if ( MAX_ALLOWED_SENSOR_GROUPS >= 2 ) {
+        if ( MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
             m_list_gt_objects.at(obj_index).generate_combined_sensor_data();
         }
 
@@ -713,6 +713,18 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 void GroundTruthSceneExternal::generate_gt_scene() {
 
 
+    viresObjects.push_back(ViresObjects(RDB_SHM_ID_IMG_GENERATOR_OUT, m_generatepath));      // key of the SHM segment
+    if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
+        viresObjects.push_back(ViresObjects(0x816b, m_generatepath));
+    }
+
+
+    viresObjects.at(0).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_left);
+
+    if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
+        viresObjects.at(1).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_right);
+    }
+
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
 
         char command[1024];
@@ -756,6 +768,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         bool connected_scp_port = false;
         bool connected_module_manager_port = false;
 
+        std::string serverName = "127.0.0.1";
+        setServer(serverName.c_str());
         m_scpSocket = openNetwork(SCP_DEFAULT_PORT);
 
         std::cout << "scp socket - " << m_scpSocket << std::endl;
@@ -788,6 +802,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS; i++ ) {
 
             for ( ushort j = 0; j < 3; j++ ) {
+                std::cout << viresObjects.at(i).getSensorConfiguration().at(j).get<0>().c_str();
                 sendSCPMessage(m_scpSocket, viresObjects.at(i).getSensorConfiguration().at(j).get<0>().c_str());
 
                 sleep(1);
@@ -854,7 +869,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             connected_trigger_port = true;
         }
 
-        for (ushort i = 0 ; i <= MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
+        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
             viresObjects.at(i).openNetworkSockets();
             std::cout << "mm socket - " << viresObjects.at(0).getSensorConfiguration().at(0).get<1>() << std::endl;
             if (viresObjects.at(i).getCameraSocketHandler() != -1 &&
@@ -874,7 +889,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             // open the shared memory for IG image output (try to attach without creating a new segment)
             fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", viresObjects.at(0).getShmKey());
 
-            for (ushort i = 0 ; i <= MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
+            for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
                 viresObjects.at(i).openShmWrapper();
                 usleep(1000);     // do not overload the CPU
             }
@@ -891,7 +906,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     }
 
                     viresObjects.at(0).getGroundTruthInformation(true, m_triggerSocket, (m_environment == "blue_sky"));
-                    viresObjects.at(1).getGroundTruthInformation(false, m_triggerSocket, (m_environment == "blue_sky"));
+                    if ( MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
+                        viresObjects.at(1).getGroundTruthInformation(false, m_triggerSocket, (m_environment == "blue_sky"));
+                    }
 
                     usleep(100000); // wait, 100 ms which is equivalent to 10 Hz. Normally VIRES runs with 60 Hz. So this number should not be a problem.
                     //std::cout << "getting data from VIRES\n";

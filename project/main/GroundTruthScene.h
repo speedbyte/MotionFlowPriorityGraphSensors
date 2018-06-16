@@ -256,7 +256,7 @@ private:
     std::string view_parameters_sensorpoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"true\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
-    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
+    std::string display_parameters = "<Display>  <SensorSymbols enable=\"false\" sensor=\"Sensor_MM_0\" showCone=\"false\" /> <Database enable=\"true\" streetLamps=\"false\"/> <VistaOverlay enable=\"false\" /> </Display>";
 
     std::string elevation = "<VIL><Imu dbElevation=\"true\" /></VIL>";
 
@@ -266,7 +266,7 @@ private:
 
     std::string rdbtrigger_portnumber = "<TaskControl><RDB client=\"false\" enable=\"true\" interface=\"eth0\" portRx=\"48190\" portTx=\"48190\" portType=\"TCP\" /></TaskControl>";
 
-    std::string message_scp = "<Symbol name=\"expl01\" > <Text data=\"Time for snow\" colorRGB=\"0xffff00\" size=\"50.0\" /> <PosScreen x=\"0.01\" y=\"0.05\" /></Symbol>";
+    std::string  message_scp = "<Symbol name=\"expl01\" > <Text data=\"Time for snow\" colorRGB=\"0xffff00\" size=\"50.0\" /> <PosScreen x=\"0.01\" y=\"0.05\" /></Symbol>";
 
     std::string popup_scp = "<Info level=\"info\"> <Message popup=\"true\" text=\"snow!!!!\"/> </Info>";
 
@@ -327,7 +327,7 @@ public:
 
         close(m_scpSocket);
         close(m_triggerSocket);
-        for (ushort i = 0 ; i <= MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
+        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
             viresObjects.at(i).closeAllSockets();
         }
 
@@ -352,18 +352,6 @@ public:
         std::string::size_type position2 = stop.find(to_replace);
         if ( position2 != std::string::npos ) {
             stop.replace(position2, to_replace.length(), std::string(m_scenario));
-        }
-
-        viresObjects.push_back(ViresObjects(RDB_SHM_ID_IMG_GENERATOR_OUT, m_generatepath));      // key of the SHM segment
-        if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
-            viresObjects.push_back(ViresObjects(0x816b, m_generatepath));
-        }
-
-
-        viresObjects.at(0).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_left);
-
-        if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
-            viresObjects.at(1).configureSensor(DEFAULT_RX_PORT, DEFAULT_RX_PORT_PERFECT, DEFAULT_RX_PORT_PERFECT_INERTIAL, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_right);
         }
 
         if ( environment == "blue_sky") {
