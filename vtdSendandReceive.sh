@@ -8,7 +8,7 @@ SETUP="Standard_test"
 if [ $# == 1 ]; then	#set project
 PROJECT=$1
 else
-PROJECT="Movement"
+PROJECT="SampleProject"
 fi
 
 echo $SETUP
