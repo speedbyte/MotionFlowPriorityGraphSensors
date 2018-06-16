@@ -38,138 +38,138 @@ void ViresObjects::writePositionInYaml(std::string suffix) {
             //}
 
             write_fs << temp_str_fc << "[";
-            for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
+            for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
                 write_fs
 
-                        << "{:" << "name" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getObjectName()
+                        << "{:" << "name" << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName()
 
-                        << "visMask" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "visMask" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).visMask
-                        << "x_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_px.location_x_m
-                        << "y_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_px.location_y_m
-                        << "z_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_px.location_z_m
+                        << "x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        current_frame_index).m_object_location_px.location_x_px
+                        << "y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        current_frame_index).m_object_location_px.location_y_px
+                        << "z_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                        current_frame_index).m_object_location_px.location_z_px
 
-                        << "x_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "x_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_location_inertial_m.location_x_m
-                        << "y_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "y_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_location_inertial_m.location_y_m
-                        << "z_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "z_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_location_inertial_m.location_z_m
 
-                        << "x_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "x_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_location_m.location_x_m
-                        << "y_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "y_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_location_m.location_y_m
-                        << "z_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "z_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_location_m.location_z_m
 
-                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_dimensions_px.width_px
-                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_dimensions_px.height_px
 
-                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_realworld_dim_m.dim_length_m
-                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_realworld_dim_m.dim_width_m
-                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_realworld_dim_m.dim_height_m
 
                         << "speed_x_inertial"
-                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.x
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.x
                         << "speed_y_inertial"
-                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.y
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.y
                         << "speed_z_inertial"
-                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.z
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.z
 
-                        << "speed_x" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(current_frame_index).m_object_speed.x
-                        << "speed_y" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(current_frame_index).m_object_speed.y
+                        << "speed_x" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed.x
+                        << "speed_y" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed.y
 
                         << "off_x"
-                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_x
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_x
                         << "off_y"
-                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_y
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_y
                         << "off_z"
-                        << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_z
+                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_z
 
-                        << "h_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "h_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_rotation_inertial_rad.rotation_rz_yaw_rad
-                        << "p_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "p_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_rotation_inertial_rad.rotation_ry_pitch_rad
-                        << "r_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "r_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_rotation_inertial_rad.rotation_rx_roll_rad
 
-                        << "h_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "h_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_rotation_rad.rotation_rz_yaw_rad
-                        << "p_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "p_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_rotation_rad.rotation_ry_pitch_rad
-                        << "r_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "r_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_rotation_rad.rotation_rx_roll_rad
 
-                        << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_distances.sensor_to_obj
-                        << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_distances.total_distance_covered
 
-                        << "occ_px" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "occ_px" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_occlusion.occlusion_px
-                        << "occ_usk" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "occ_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_occlusion.occlusion_usk
-                        << "occ_inertial" << m_ptr_customObjectMetaDataList.at(0).at(obj_index)->getAll().at(
+                        << "occ_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_occlusion.occlusion_inertial
 
 
                         << "}";  //dont close the brace yet
             }
-            for (int sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.at(0).size(); sen_index++) {
+            for (int sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.size(); sen_index++) {
                 write_fs
 
-                        << "{:" << "name" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getSensorName()
+                        << "{:" << "name" << m_ptr_customSensorMetaDataList.at(sen_index)->getSensorName()
 
-                        << "visible" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).visMask
+                        << "visible" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).visMask
 
-                        << "x_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "x_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_location_carrier_m.location_x_m
-                        << "y_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "y_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_location_carrier_m.location_y_m
-                        << "z_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "z_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_location_carrier_m.location_z_m
 
-                        //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_x_m
-                        //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_y_m
-                        //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_z_m
+                        //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_x_m
+                        //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_y_m
+                        //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_z_m
 
-                        << "h_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "h_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad
-                        << "p_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "p_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad
-                        << "r_carrier" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "r_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad
 
-                        << "h_sensor" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "h_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_rotation_rad.rotation_rz_yaw_rad
-                        << "p_sensor" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "p_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_rotation_rad.rotation_ry_pitch_rad
-                        << "r_sensor" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "r_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_rotation_rad.rotation_rx_roll_rad
 
                         << "off_x_sensor"
-                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_x
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_x
                         << "off_y_sensor"
-                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_y
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_y
                         << "off_z_sensor"
-                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_z
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_z
 
                         << "fov_horizontal"
-                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.horizontal
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.horizontal
                         << "fov_vertical"
-                        << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.vertical
-                        << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.vertical
+                        << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_fov_rad.horizontal_offset
-                        << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(0).at(sen_index)->getAll().at(
+                        << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
                         current_frame_index).m_sensor_fov_rad.vertical_offset
 
                         << "}";
@@ -366,13 +366,13 @@ void ViresObjects::parseEntry(RDB_SENSOR_STATE_t *data, const double &simTime, c
             fprintf(stderr, "saving sensor truth for sensor_state simFrame = %d, simTime %f %s\n", simFrame, simTime,
                     data->name);
 
-            if (m_mapSensorNameToSensorMetaData[0].count(data->name) == 0) {
+            if (m_mapSensorNameToSensorMetaData.count(data->name) == 0) {
 
                 m_mapSensorIdToSensorName[data->id] = data->name;
-                m_ptr_customSensorMetaDataList[0].push_back(&sensorMetaDataList.at(m_sensorCount));
-                m_mapSensorNameToSensorMetaData[0][data->name] = m_ptr_customSensorMetaDataList.at(0).at(m_sensorCount);
-                m_ptr_customSensorMetaDataList.at(0).at(m_sensorCount)->setSensorName(data->name);
-                m_ptr_customSensorMetaDataList.at(0).at(m_sensorCount)->setStartPoint(0);
+                m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
+                m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
+                m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
+                m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
                 m_sensorCount += 1;
             }
 
@@ -388,7 +388,7 @@ void ViresObjects::parseEntry(RDB_SENSOR_STATE_t *data, const double &simTime, c
 
             fov = cv::Point2f(data->fovHV[0], data->fovHV[1]);
 
-            m_mapSensorNameToSensorMetaData[0][data->name]->atFrameNumberSensorState(
+            m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
                     (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_sensor_carrier,
                     orientation_sensor_carrier, orientation_sensor, offset_sensor, fov);
         }
@@ -420,15 +420,15 @@ simFrame, const
             fprintf(stderr, "saving ground truth for object_state simFrame = %d, simTime %f %s\n", simFrame, simTime,
                     data->base.name);
 
-            if (m_mapObjectNameToObjectMetaData[0].count(data->base.name) == 0) {
+            if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
 
                 m_mapObjectIdToObjectName[data->base.id] = data->base.name;
-                m_ptr_customObjectMetaDataList.at(0).push_back(&objectMetaDataList.at(m_objectCount));
+                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
                 Rectangle rectangle((int) (data->base.geo.dimX), (int) (data->base.geo.dimY)); // width, height
-                m_mapObjectNameToObjectMetaData[0][data->base.name] = m_ptr_customObjectMetaDataList.at(0).at(m_objectCount);
-                m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setObjectShape(rectangle);
-                m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setObjectName(data->base.name);
-                m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setStartPoint(0);
+                m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
+                m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
+                m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
+                m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
                 m_objectCount += 1;
             }
             if (data->base.pos.type == RDB_COORD_TYPE_WINDOW) {
@@ -439,10 +439,10 @@ simFrame, const
                 offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY,
                                      (float) data->base.geo.offZ);
                 total_distance_travelled = data->ext.traveledDist;
-                m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberCameraSensor(
+                m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset,
                         dimension_pixel, total_distance_travelled);
-                m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberVisibility(
+                m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
 
             } else if (data->base.pos.type == RDB_COORD_TYPE_USK) {
@@ -455,10 +455,10 @@ simFrame, const
                                                   (float) data->base.geo.dimZ);
                 speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                 total_distance_travelled = data->ext.traveledDist;
-                m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberPerfectSensor(
+                m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_usk,
                         orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
-                m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberVisibility(
+                m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
 
             } else if (data->base.pos.type == RDB_COORD_TYPE_INERTIAL) {
@@ -471,10 +471,10 @@ simFrame, const
                                                   (float) data->base.geo.dimZ);
                 speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
                 total_distance_travelled = data->ext.traveledDist;
-                m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberPerfectSensorInertial(
+                m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_inertial,
                         orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
-                m_mapObjectNameToObjectMetaData[0][data->base.name]->atFrameNumberVisibility(
+                m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->base.visMask);
             }
         } else {
@@ -505,27 +505,27 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
             fprintf(stderr, "saving ground truth for sensor_object simFrame = %d, simTime %f %d\n", simFrame, simTime,
             data->id); //m_mapObjectIdToObjectName[data->id]);
 
-            if (m_mapObjectNameToObjectMetaData[0].count(m_mapObjectIdToObjectName[data->id]) == 0) {
+            if (m_mapObjectNameToObjectMetaData.count(m_mapObjectIdToObjectName[data->id]) == 0) {
 
-                m_ptr_customObjectMetaDataList.at(0).push_back(&objectMetaDataList.at(m_objectCount));
+                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
                 //Rectangle rectangle((int) (data->geo.dimX), (int) (data->geo.dimY)); // width, height
-                m_mapObjectNameToObjectMetaData[0][m_mapObjectIdToObjectName[data->id]] = m_ptr_customObjectMetaDataList.at(0).at(m_objectCount);
-                //m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setObjectShape(rectangle);
-                m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setObjectName(m_mapObjectIdToObjectName[data->id]);
-                m_ptr_customObjectMetaDataList.at(0).at(m_objectCount)->setStartPoint(0);
+                m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]] = m_ptr_customObjectMetaDataList.at(m_objectCount);
+                //m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
+                m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(m_mapObjectIdToObjectName[data->id]);
+                m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
                 m_objectCount += 1;
             }
             if (data->sensorPos.type == RDB_COORD_TYPE_WINDOW) {
 
-                m_mapObjectNameToObjectMetaData[0][m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
+                m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
             } else if (data->sensorPos.type == RDB_COORD_TYPE_USK) {
 
-                m_mapObjectNameToObjectMetaData[0][m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionUsk(
+                m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionUsk(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
             } else if (data->sensorPos.type== RDB_COORD_TYPE_INERTIAL) {
 
-                m_mapObjectNameToObjectMetaData[0][m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionInertial(
+                m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionInertial(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data->occlusion);
             }
         } else {

@@ -46,7 +46,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
         if ( current_frame_index == 0 ) {
 
-            m_object_base_point_displacement.push_back(std::make_pair(cv::Point2f(gt_data.getAll().at(frame_number).m_object_location_px.location_x_m, gt_data.getAll().at(frame_number).m_object_location_px.location_y_m) , cv::Point2f(0,0)));
+            m_object_base_point_displacement.push_back(std::make_pair(gt_data.getAll().at(frame_number).m_object_location_px.cog_px, cv::Point2f(0,0)));
 
         }
         else {

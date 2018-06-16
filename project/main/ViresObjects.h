@@ -52,10 +52,10 @@ private:
     boost::filesystem::path  m_generatepath;
 
     std::vector<ObjectMetaData> objectMetaDataList;
-    std::vector<std::vector<ObjectMetaData *> > m_ptr_customObjectMetaDataList;
-    std::vector<std::vector<SensorMetaData *> > m_ptr_customSensorMetaDataList;
-    std::vector<std::map<std::string, ObjectMetaData*> > m_mapObjectNameToObjectMetaData;
-    std::vector<std::map<std::string, SensorMetaData*> > m_mapSensorNameToSensorMetaData;
+    std::vector<ObjectMetaData *>  m_ptr_customObjectMetaDataList;
+    std::vector<SensorMetaData *>  m_ptr_customSensorMetaDataList;
+    std::map<std::string, ObjectMetaData*>  m_mapObjectNameToObjectMetaData;
+    std::map<std::string, SensorMetaData*>  m_mapSensorNameToSensorMetaData;
     std::map<unsigned int, std::string> m_mapObjectIdToObjectName;
     std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
     std::vector<SensorMetaData> sensorMetaDataList;
@@ -69,8 +69,7 @@ private:
 
 public:
 
-    ViresObjects(unsigned int shmKey, boost::filesystem::path  generatepath): mShmKey(shmKey), m_generatepath(generatepath),
-            m_ptr_customObjectMetaDataList(MAX_ALLOWED_SENSOR_GROUPS), m_mapObjectNameToObjectMetaData(MAX_ALLOWED_SENSOR_GROUPS), m_ptr_customSensorMetaDataList(MAX_ALLOWED_SENSOR_GROUPS), m_mapSensorNameToSensorMetaData(MAX_ALLOWED_SENSOR_GROUPS) {
+    ViresObjects(unsigned int shmKey, boost::filesystem::path  generatepath): mShmKey(shmKey), m_generatepath(generatepath) {
 
         mCheckForImage  = false;
         mHaveImage    = 0;                                 // is an image available?
@@ -103,7 +102,7 @@ public:
     void writePositionInYaml(std::string suffix);
 
     void configureSensor(const int port_number_camera_sensor_data, const int port_number_usk_sensor_data, const int port_number_inertial_sensor_data,
-    std::string module_manager_libModuleSensor_CameraTemplate, std::string module_manager_libModuleSensor_PerfectTemplate, std::string module_manager_libModuleSensor_PerfectInertialTemplate) {
+    std::string module_manager_libModuleSensor_CameraTemplate, std::string module_manager_libModuleSensor_PerfectTemplate) {
 
 
         std::string module_manager_libModuleCameraSensor;
@@ -144,13 +143,6 @@ public:
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(port_number_usk_sensor_data));
         }
 
-        //sensorlibrary
-        to_replace = "libModuleCameraSensor";
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), "libModulePerfectSensor");
-        }
-
         //sensor name
         to_replace = "Sensor_MM";
         with_replace = "Sensor_MM_Perfect_" + std::to_string(m_sensorGroupCount);
@@ -163,19 +155,12 @@ public:
 
         ///--------------------------
 
-        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_PerfectInertialTemplate;
+        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_CameraTemplate;
         //port number
         to_replace = std::to_string(65535);
         position = module_manager_libModulePerfectSensorInertial.find(to_replace);
         if ( position != std::string::npos) {
             module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(port_number_inertial_sensor_data));
-        }
-
-        //sensorlibrary
-        to_replace = "libModuleCameraSensor";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "libModulePerfectSensor");
         }
 
         //sensor name

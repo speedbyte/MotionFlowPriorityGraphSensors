@@ -719,10 +719,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     }
 
 
-    viresObjects.at(0).configureSensor(DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_left);
+    viresObjects.at(0).configureSensor(DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate_left, module_manager_libModuleSensor_PerfectTemplate_left);
 
     if (MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
-        viresObjects.at(1).configureSensor(DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate, module_manager_libModuleSensor_PerfectTemplate, module_manager_libModuleSensor_PerfectInertialTemplate_right);
+        viresObjects.at(1).configureSensor(DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
     }
 
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
@@ -814,13 +814,17 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         sleep(1);
 
         if ( MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
-            //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_right.c_str());
+            sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_right.c_str());
             sleep(1);
         }
 
-        sendSCPMessage(m_scpSocket, display_parameters.c_str());
+        sendSCPMessage(m_scpSocket, display_parameters_left.c_str());
 
-        sleep(2);
+        sleep(1);
+
+        sendSCPMessage(m_scpSocket, display_parameters_right.c_str());
+
+        sleep(1);
 
         sendSCPMessage(m_scpSocket, m_environment_scp_message.c_str());
 
@@ -905,9 +909,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                         break;
                     }
 
-                    viresObjects.at(0).getGroundTruthInformation(true, m_triggerSocket, (m_environment == "blue_sky"), false);
-                    if ( MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
-                        viresObjects.at(1).getGroundTruthInformation(false, m_triggerSocket, (m_environment == "blue_sky"), false);
+
+                    for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
+
+                        viresObjects.at(i).getGroundTruthInformation(((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), false);
                     }
 
                     usleep(100000); // wait, 100 ms which is equivalent to 10 Hz. Normally VIRES runs with 60 Hz. So this number should not be a problem.

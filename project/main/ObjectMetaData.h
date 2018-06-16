@@ -57,7 +57,7 @@ typedef struct object_location_m { float location_x_m; float location_y_m; float
 typedef struct region_of_interest_px { float x; float y; float width_px; float height_px;} region_of_interest_px_str;
 
 //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
-typedef struct object_location_px { float location_x_m; float location_y_m; float location_z_m; cv::Point2f cog_px;} object_location_px_str;
+typedef struct object_location_px { float location_x_px; float location_y_px; float location_z_px; cv::Point2f cog_px;} object_location_px_str;
 
 //x3d, y3d, z3d: KITTI-like 3D object 'location', respectively x, y, z in camera coordinates in meters
 typedef struct object_occlusion { signed char occlusion_px; signed char occlusion_usk; signed char occlusion_inertial; } object_occlusion_str;
@@ -279,9 +279,9 @@ public:
 
     void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions, float total_distance_travelled) {
         //m_pixel_position.at(frameNumber) = position;
-        m_object_gt_all.at(frameNumber).m_object_location_px.location_x_m = position.x;
-        m_object_gt_all.at(frameNumber).m_object_location_px.location_y_m = position.y;
-        m_object_gt_all.at(frameNumber).m_object_location_px.location_z_m = position.z;
+        m_object_gt_all.at(frameNumber).m_object_location_px.location_x_px = position.x;
+        m_object_gt_all.at(frameNumber).m_object_location_px.location_y_px = position.y;
+        m_object_gt_all.at(frameNumber).m_object_location_px.location_z_px = position.z;
 
         m_object_gt_all.at(frameNumber).m_object_offset_m.offset_x = offset.x;
         m_object_gt_all.at(frameNumber).m_object_offset_m.offset_y = offset.y;
