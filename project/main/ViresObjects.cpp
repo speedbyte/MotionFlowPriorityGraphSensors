@@ -363,7 +363,7 @@ void ViresObjects::parseEntry(RDB_SENSOR_STATE_t *data, const double &simTime, c
 
         if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
 
-            fprintf(stderr, "saving sensor truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
+            fprintf(stderr, "saving sensor truth for sensor_state simFrame = %d, simTime %f %s\n", simFrame, simTime,
                     data->name);
 
             if (m_mapSensorNameToSensorMetaData[0].count(data->name) == 0) {
@@ -417,7 +417,7 @@ simFrame, const
                     data->base.name, simFrame, data->base.pos.x, data->base.pos.y, data->base.geo.dimX, data->base
                             .geo.dimY);
 */
-            fprintf(stderr, "saving ground truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
+            fprintf(stderr, "saving ground truth for object_state simFrame = %d, simTime %f %s\n", simFrame, simTime,
                     data->base.name);
 
             if (m_mapObjectNameToObjectMetaData[0].count(data->base.name) == 0) {
@@ -502,8 +502,8 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
             //        data->name, simFrame, data->pos.x, data->pos.y, data->geo.dimX, data->
             //                .geo.dimY);
 
-            fprintf(stderr, "saving ground truth for simFrame = %d, simTime %f %s\n", simFrame, simTime,
-                    m_mapObjectIdToObjectName[data->id]);
+            fprintf(stderr, "saving ground truth for sensor_object simFrame = %d, simTime %f %d\n", simFrame, simTime,
+            data->id); //m_mapObjectIdToObjectName[data->id]);
 
             if (m_mapObjectNameToObjectMetaData[0].count(m_mapObjectIdToObjectName[data->id]) == 0) {
 

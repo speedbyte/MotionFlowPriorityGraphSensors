@@ -932,7 +932,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             try {
                 for ( ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++) {
-                    viresObjects.at(i).writePositionInYaml("vires");
+                    viresObjects.at(i).writePositionInYaml("vires_");
                 }
             }
             catch (...) {
