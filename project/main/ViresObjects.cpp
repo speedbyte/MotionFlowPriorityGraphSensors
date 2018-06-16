@@ -16,7 +16,7 @@ ushort ViresObjects::m_sensorGroupTotalCount = 0;
 void ViresObjects::writePositionInYaml(std::string suffix) {
 
     cv::FileStorage write_fs;
-    write_fs.open("../position_" + suffix + ".yml", cv::FileStorage::WRITE);
+    write_fs.open("../position_" + suffix + std::to_string(m_sensorGroupCount) + ".yml", cv::FileStorage::WRITE);
 
     for (unsigned sensor_index = 0; sensor_index < MAX_ALLOWED_SENSOR_GROUPS; sensor_index++) {
 
@@ -593,7 +593,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
 
             if (!m_dumpInitialFrames) {
                 sprintf(file_name_image, "000%03d_10.png", mImageCount);
-                std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(0) + "/" + file_name_image; //+ "/" +  file_name_image;
+                std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS+1) ) {
                     fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
