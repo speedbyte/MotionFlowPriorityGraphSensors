@@ -793,7 +793,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS; i++ ) {
+        for ( ushort i = 0; i < 1; i++ ) {
 
             for ( ushort j = 0; j < 3; j++ ) {
                 std::cout << viresObjects.at(i).getSensorConfiguration().at(j).get<0>().c_str();

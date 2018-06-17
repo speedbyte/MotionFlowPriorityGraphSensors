@@ -40,7 +40,7 @@ RADAR_DATASET:
 VIRES_DATASET:
    PATH: "../../../datasets/vires_dataset/"
    EXECUTE: 1
-   GT: 0
+   GT: 1
    FB: 1
    PLOT: 1
    VIDEO: 0
