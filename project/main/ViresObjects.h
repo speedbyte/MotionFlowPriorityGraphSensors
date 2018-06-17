@@ -155,7 +155,7 @@ public:
 
         ///--------------------------
 
-        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_CameraTemplate;
+        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_PerfectTemplate;
         //port number
         to_replace = std::to_string(65535);
         position = module_manager_libModulePerfectSensorInertial.find(to_replace);

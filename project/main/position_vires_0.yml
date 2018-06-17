@@ -2,7 +2,7 @@
 ---
 frame_count_000:
    - { name:SpyingCar, visMask:7, x_camera:4.0565527343750000e+02,
-       y_camera:1.5756777954101562e+02, z_camera:1.3983516693115234e+01,
+       y_camera:1.5756777954101562e+02, z_camera:1.1866113662719727e+01,
        x_inertial:-6.1019409179687500e+01,
        y_inertial:2.4685227050781250e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3241959571838379e+01,
@@ -22,7 +22,7 @@ frame_count_000:
        total_distance_covered:3.6666664481163025e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -41,8 +41,8 @@ frame_count_000:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -50,8 +50,8 @@ frame_count_000:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -65,7 +65,7 @@ frame_count_000:
        fov_vertical_off:0. }
 frame_count_001:
    - { name:SpyingCar, visMask:7, x_camera:4.0743341064453125e+02,
-       y_camera:1.5756535339355469e+02, z_camera:1.3972167968750000e+01,
+       y_camera:1.5756535339355469e+02, z_camera:1.1855648994445801e+01,
        x_inertial:-6.0992214202880859e+01,
        y_inertial:2.4685419921875000e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3241367340087891e+01,
@@ -85,7 +85,7 @@ frame_count_001:
        total_distance_covered:3.9999997615814209e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -104,8 +104,8 @@ frame_count_001:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -113,8 +113,8 @@ frame_count_001:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -128,7 +128,7 @@ frame_count_001:
        fov_vertical_off:0. }
 frame_count_002:
    - { name:SpyingCar, visMask:7, x_camera:4.0921166992187500e+02,
-       y_camera:1.5756291198730469e+02, z_camera:1.3960888862609863e+01,
+       y_camera:1.5756291198730469e+02, z_camera:1.1845269203186035e+01,
        x_inertial:-6.0965015411376953e+01,
        y_inertial:2.4685612792968750e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3240775108337402e+01,
@@ -148,7 +148,7 @@ frame_count_002:
        total_distance_covered:4.3333330750465393e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -167,8 +167,8 @@ frame_count_002:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -176,8 +176,8 @@ frame_count_002:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -191,7 +191,7 @@ frame_count_002:
        fov_vertical_off:0. }
 frame_count_003:
    - { name:SpyingCar, visMask:7, x_camera:4.1099017333984375e+02,
-       y_camera:1.5756048583984375e+02, z_camera:1.3949680328369141e+01,
+       y_camera:1.5756048583984375e+02, z_camera:1.1834973335266113e+01,
        x_inertial:-6.0937816619873047e+01,
        y_inertial:2.4685805664062500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3240182876586914e+01,
@@ -211,7 +211,7 @@ frame_count_003:
        dist_cam_to_obj:0., total_distance_covered:4.6666663885116577e-01,
        occ_px:0, occ_usk:0, occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -230,8 +230,8 @@ frame_count_003:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -239,8 +239,8 @@ frame_count_003:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -254,7 +254,7 @@ frame_count_003:
        fov_vertical_off:0. }
 frame_count_004:
    - { name:SpyingCar, visMask:7, x_camera:4.1276885986328125e+02,
-       y_camera:1.5755804443359375e+02, z_camera:1.3938543319702148e+01,
+       y_camera:1.5755804443359375e+02, z_camera:1.1824763298034668e+01,
        x_inertial:-6.0910617828369141e+01,
        y_inertial:2.4685998535156250e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3239589691162109e+01,
@@ -275,7 +275,7 @@ frame_count_004:
        total_distance_covered:4.9999997019767761e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -294,8 +294,8 @@ frame_count_004:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -303,8 +303,8 @@ frame_count_004:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -318,7 +318,7 @@ frame_count_004:
        fov_vertical_off:0. }
 frame_count_005:
    - { name:SpyingCar, visMask:7, x_camera:4.1454772949218750e+02,
-       y_camera:1.5755561828613281e+02, z_camera:1.3927475929260254e+01,
+       y_camera:1.5755561828613281e+02, z_camera:1.1814638137817383e+01,
        x_inertial:-6.0883419036865234e+01,
        y_inertial:2.4686191406250000e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3238997459411621e+01,
@@ -338,7 +338,7 @@ frame_count_005:
        total_distance_covered:5.3333330154418945e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -357,8 +357,8 @@ frame_count_005:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -366,8 +366,8 @@ frame_count_005:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -381,7 +381,7 @@ frame_count_005:
        fov_vertical_off:0. }
 frame_count_006:
    - { name:SpyingCar, visMask:7, x_camera:4.1632675170898438e+02,
-       y_camera:1.5755317687988281e+02, z_camera:1.3916480064392090e+01,
+       y_camera:1.5755317687988281e+02, z_camera:1.1804598808288574e+01,
        x_inertial:-6.0856224060058594e+01,
        y_inertial:2.4686384277343750e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3238404273986816e+01,
@@ -401,7 +401,7 @@ frame_count_006:
        total_distance_covered:5.6666666269302368e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -420,8 +420,8 @@ frame_count_006:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -429,8 +429,8 @@ frame_count_006:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -444,7 +444,7 @@ frame_count_006:
        fov_vertical_off:0. }
 frame_count_007:
    - { name:SpyingCar, visMask:7, x_camera:4.1810598754882812e+02,
-       y_camera:1.5755073547363281e+02, z_camera:1.3905555725097656e+01,
+       y_camera:1.5755073547363281e+02, z_camera:1.1794645309448242e+01,
        x_inertial:-6.0829025268554688e+01,
        y_inertial:2.4686577148437500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3237811088562012e+01,
@@ -464,7 +464,7 @@ frame_count_007:
        total_distance_covered:6.0000002384185791e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -483,8 +483,8 @@ frame_count_007:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -492,8 +492,8 @@ frame_count_007:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -507,7 +507,7 @@ frame_count_007:
        fov_vertical_off:0. }
 frame_count_008:
    - { name:SpyingCar, visMask:7, x_camera:4.1988543701171875e+02,
-       y_camera:1.5754830932617188e+02, z_camera:1.3894701957702637e+01,
+       y_camera:1.5754830932617188e+02, z_camera:1.1784776687622070e+01,
        x_inertial:-6.0801826477050781e+01,
        y_inertial:2.4686770019531250e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3237217903137207e+01,
@@ -527,7 +527,7 @@ frame_count_008:
        total_distance_covered:6.3333338499069214e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -546,8 +546,8 @@ frame_count_008:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -555,8 +555,8 @@ frame_count_008:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -570,7 +570,7 @@ frame_count_008:
        fov_vertical_off:0. }
 frame_count_009:
    - { name:SpyingCar, visMask:7, x_camera:4.2166503906250000e+02,
-       y_camera:1.5754586791992188e+02, z_camera:1.3883920669555664e+01,
+       y_camera:1.5754586791992188e+02, z_camera:1.1774994850158691e+01,
        x_inertial:-6.0774627685546875e+01,
        y_inertial:2.4686962890625000e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3236624717712402e+01,
@@ -590,7 +590,7 @@ frame_count_009:
        dist_cam_to_obj:0., total_distance_covered:6.6666674613952637e-01,
        occ_px:0, occ_usk:0, occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -609,8 +609,8 @@ frame_count_009:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -618,8 +618,8 @@ frame_count_009:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -633,7 +633,7 @@ frame_count_009:
        fov_vertical_off:0. }
 frame_count_010:
    - { name:SpyingCar, visMask:7, x_camera:4.2344485473632812e+02,
-       y_camera:1.5754342651367188e+02, z_camera:1.3873209953308105e+01,
+       y_camera:1.5754342651367188e+02, z_camera:1.1765298843383789e+01,
        x_inertial:-6.0747428894042969e+01,
        y_inertial:2.4687155761718750e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3236031532287598e+01,
@@ -653,7 +653,7 @@ frame_count_010:
        total_distance_covered:7.0000010728836060e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -672,8 +672,8 @@ frame_count_010:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -681,8 +681,8 @@ frame_count_010:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -696,7 +696,7 @@ frame_count_010:
        fov_vertical_off:0. }
 frame_count_011:
    - { name:SpyingCar, visMask:7, x_camera:4.2522485351562500e+02,
-       y_camera:1.5754098510742188e+02, z_camera:1.3862571716308594e+01,
+       y_camera:1.5754098510742188e+02, z_camera:1.1755689620971680e+01,
        x_inertial:-6.0720230102539062e+01,
        y_inertial:2.4687348632812500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3235438346862793e+01,
@@ -716,7 +716,7 @@ frame_count_011:
        total_distance_covered:7.3333346843719482e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -735,8 +735,8 @@ frame_count_011:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -744,8 +744,8 @@ frame_count_011:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -759,7 +759,7 @@ frame_count_011:
        fov_vertical_off:0. }
 frame_count_012:
    - { name:SpyingCar, visMask:7, x_camera:4.2700503540039062e+02,
-       y_camera:1.5753855895996094e+02, z_camera:1.3852005958557129e+01,
+       y_camera:1.5753855895996094e+02, z_camera:1.1746167182922363e+01,
        x_inertial:-6.0693031311035156e+01,
        y_inertial:2.4687541503906250e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3234844207763672e+01,
@@ -779,7 +779,7 @@ frame_count_012:
        total_distance_covered:7.6666682958602905e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -798,8 +798,8 @@ frame_count_012:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -807,8 +807,8 @@ frame_count_012:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -822,7 +822,7 @@ frame_count_012:
        fov_vertical_off:0. }
 frame_count_013:
    - { name:SpyingCar, visMask:7, x_camera:4.2878540039062500e+02,
-       y_camera:1.5753613281250000e+02, z_camera:1.3841511726379395e+01,
+       y_camera:1.5753613281250000e+02, z_camera:1.1736731529235840e+01,
        x_inertial:-6.0665832519531250e+01,
        y_inertial:2.4687734375000000e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3234251022338867e+01,
@@ -842,7 +842,7 @@ frame_count_013:
        total_distance_covered:8.0000019073486328e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -861,8 +861,8 @@ frame_count_013:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -870,8 +870,8 @@ frame_count_013:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -885,7 +885,7 @@ frame_count_013:
        fov_vertical_off:0. }
 frame_count_014:
    - { name:SpyingCar, visMask:7, x_camera:4.3056597900390625e+02,
-       y_camera:1.5753369140625000e+02, z_camera:1.3831089973449707e+01,
+       y_camera:1.5753369140625000e+02, z_camera:1.1727382659912109e+01,
        x_inertial:-6.0638633728027344e+01,
        y_inertial:2.4687927246093750e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3233656883239746e+01,
@@ -905,7 +905,7 @@ frame_count_014:
        total_distance_covered:8.3333355188369751e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -924,8 +924,8 @@ frame_count_014:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -933,8 +933,8 @@ frame_count_014:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -948,7 +948,7 @@ frame_count_014:
        fov_vertical_off:0. }
 frame_count_015:
    - { name:SpyingCar, visMask:7, x_camera:4.3234671020507812e+02,
-       y_camera:1.5753125000000000e+02, z_camera:1.3820740699768066e+01,
+       y_camera:1.5753125000000000e+02, z_camera:1.1718121528625488e+01,
        x_inertial:-6.0611434936523438e+01,
        y_inertial:2.4688117675781250e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3233063697814941e+01,
@@ -968,7 +968,7 @@ frame_count_015:
        dist_cam_to_obj:0., total_distance_covered:8.6666691303253174e-01,
        occ_px:0, occ_usk:0, occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -987,8 +987,8 @@ frame_count_015:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -996,8 +996,8 @@ frame_count_015:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1011,7 +1011,7 @@ frame_count_015:
        fov_vertical_off:0. }
 frame_count_016:
    - { name:SpyingCar, visMask:7, x_camera:4.3412765502929688e+02,
-       y_camera:1.5752882385253906e+02, z_camera:1.3810463905334473e+01,
+       y_camera:1.5752882385253906e+02, z_camera:1.1708948135375977e+01,
        x_inertial:-6.0584236145019531e+01,
        y_inertial:2.4688310546875000e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3232469558715820e+01,
@@ -1031,7 +1031,7 @@ frame_count_016:
        total_distance_covered:9.0000027418136597e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -1050,8 +1050,8 @@ frame_count_016:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1059,8 +1059,8 @@ frame_count_016:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1074,7 +1074,7 @@ frame_count_016:
        fov_vertical_off:0. }
 frame_count_017:
    - { name:SpyingCar, visMask:7, x_camera:4.3590875244140625e+02,
-       y_camera:1.5752638244628906e+02, z_camera:1.3800260543823242e+01,
+       y_camera:1.5752638244628906e+02, z_camera:1.1699861526489258e+01,
        x_inertial:-6.0557037353515625e+01,
        y_inertial:2.4688503417968750e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3231875419616699e+01,
@@ -1094,7 +1094,7 @@ frame_count_017:
        total_distance_covered:9.3333363533020020e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -1113,8 +1113,8 @@ frame_count_017:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1122,8 +1122,8 @@ frame_count_017:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1137,7 +1137,7 @@ frame_count_017:
        fov_vertical_off:0. }
 frame_count_018:
    - { name:SpyingCar, visMask:7, x_camera:4.3769012451171875e+02,
-       y_camera:1.5752395629882812e+02, z_camera:1.3790129661560059e+01,
+       y_camera:1.5752395629882812e+02, z_camera:1.1690863609313965e+01,
        x_inertial:-6.0529838562011719e+01,
        y_inertial:2.4688696289062500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3231281280517578e+01,
@@ -1157,7 +1157,7 @@ frame_count_018:
        total_distance_covered:9.6666699647903442e-01, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -1176,8 +1176,8 @@ frame_count_018:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1185,8 +1185,8 @@ frame_count_018:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1200,7 +1200,7 @@ frame_count_018:
        fov_vertical_off:0. }
 frame_count_019:
    - { name:SpyingCar, visMask:7, x_camera:4.3947161865234375e+02,
-       y_camera:1.5752151489257812e+02, z_camera:1.3780072212219238e+01,
+       y_camera:1.5752151489257812e+02, z_camera:1.1681954383850098e+01,
        x_inertial:-6.0502639770507812e+01,
        y_inertial:2.4688889160156250e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3230687141418457e+01,
@@ -1220,7 +1220,7 @@ frame_count_019:
        total_distance_covered:1.0000003576278687e+00, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -1239,8 +1239,8 @@ frame_count_019:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1248,8 +1248,8 @@ frame_count_019:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1263,7 +1263,7 @@ frame_count_019:
        fov_vertical_off:0. }
 frame_count_020:
    - { name:SpyingCar, visMask:7, x_camera:4.4125329589843750e+02,
-       y_camera:1.5751907348632812e+02, z_camera:1.3770088195800781e+01,
+       y_camera:1.5751907348632812e+02, z_camera:1.1673132896423340e+01,
        x_inertial:-6.0475440979003906e+01,
        y_inertial:2.4689082031250000e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3230093002319336e+01,
@@ -1283,7 +1283,7 @@ frame_count_020:
        total_distance_covered:1.0333336591720581e+00, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -1302,8 +1302,8 @@ frame_count_020:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1311,8 +1311,8 @@ frame_count_020:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1326,7 +1326,7 @@ frame_count_020:
        fov_vertical_off:0. }
 frame_count_021:
    - { name:SpyingCar, visMask:7, x_camera:4.4303524780273438e+02,
-       y_camera:1.5751664733886719e+02, z_camera:1.3760177612304688e+01,
+       y_camera:1.5751664733886719e+02, z_camera:1.1664400100708008e+01,
        x_inertial:-6.0448242187500000e+01,
        y_inertial:2.4689274902343750e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3229498863220215e+01,
@@ -1346,7 +1346,7 @@ frame_count_021:
        total_distance_covered:1.0666669607162476e+00, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -1365,8 +1365,8 @@ frame_count_021:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1374,8 +1374,8 @@ frame_count_021:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1389,7 +1389,7 @@ frame_count_021:
        fov_vertical_off:0. }
 frame_count_022:
    - { name:SpyingCar, visMask:7, x_camera:4.4481732177734375e+02,
-       y_camera:1.5751420593261719e+02, z_camera:1.3750340461730957e+01,
+       y_camera:1.5751420593261719e+02, z_camera:1.1655755996704102e+01,
        x_inertial:-6.0421043395996094e+01,
        y_inertial:2.4689467773437500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3228904724121094e+01,
@@ -1409,7 +1409,7 @@ frame_count_022:
        total_distance_covered:1.1000002622604370e+00, occ_px:0, occ_usk:0,
        occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -1428,8 +1428,8 @@ frame_count_022:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1437,8 +1437,8 @@ frame_count_022:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1452,7 +1452,7 @@ frame_count_022:
        fov_vertical_off:0. }
 frame_count_023:
    - { name:SpyingCar, visMask:7, x_camera:4.4659954833984375e+02,
-       y_camera:1.5751176452636719e+02, z_camera:1.3740577697753906e+01,
+       y_camera:1.5751176452636719e+02, z_camera:1.1647200584411621e+01,
        x_inertial:-6.0393844604492188e+01,
        y_inertial:2.4689660644531250e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.3228310585021973e+01,
@@ -1472,7 +1472,7 @@ frame_count_023:
        dist_cam_to_obj:0., total_distance_covered:1.1333335638046265e+00,
        occ_px:0, occ_usk:0, occ_inertial:0 }
    - { name:Pedesterian, visMask:7, x_camera:5.6767071533203125e+02,
-       y_camera:1.5648970031738281e+02, z_camera:1.5403935432434082e+01,
+       y_camera:1.5648970031738281e+02, z_camera:1.3411505699157715e+01,
        x_inertial:-5.9242347717285156e+01,
        y_inertial:2.4723950195312500e+03,
        z_inertial:9.5000000000000000e+00, x_usk:1.5308162689208984e+01,
@@ -1491,8 +1491,8 @@ frame_count_023:
    - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
@@ -1500,8 +1500,8 @@ frame_count_023:
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
        h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
-       off_y_sensor:0., off_z_sensor:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
+       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
        fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
        fov_vertical_off:0. }
