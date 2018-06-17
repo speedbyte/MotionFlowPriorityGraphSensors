@@ -46,7 +46,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
         if ( current_frame_index == 0 ) {
 
-            m_object_base_point_displacement.push_back(std::make_pair(gt_data.getAll().at(frame_number).m_object_location_px.cog_px, cv::Point2f(0,0)));
+            m_object_base_point_displacement.push_back(std::make_pair(gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px, cv::Point2f(0,0)));
 
         }
         else {
@@ -55,27 +55,27 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
             if (frame_number >= ITERATION_END_POINT) {
 
                 frame_number = 0;
-                gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.x - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_px.cog_px.x;
-                gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.y - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_px.cog_px.y;
+                gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_camera_px.cog_px.x;
+                gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.y - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_camera_px.cog_px.y;
 
                 gt_displacement_inertial.x = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_inertial_m.location_x_m;
                 gt_displacement_inertial.y = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_inertial_m.location_y_m;
 
-                gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_m.location_x_m - gt_data.getAll().at(ITERATION_END_POINT-(ushort)1).m_object_location_m.location_x_m;
-                gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_m.location_y_m - gt_data.getAll().at(ITERATION_END_POINT-(ushort)1).m_object_location_m.location_y_m;
+                gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_x_m - gt_data.getAll().at(ITERATION_END_POINT-(ushort)1).m_object_location_usk_m.location_x_m;
+                gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_y_m - gt_data.getAll().at(ITERATION_END_POINT-(ushort)1).m_object_location_usk_m.location_y_m;
 
             } else {
 
-                gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.x - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_px.cog_px.x;
+                gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_camera_px.cog_px.x;
 
 
-                gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_px.cog_px.y - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_px.cog_px.y;
+                gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.y - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_camera_px.cog_px.y;
 
                 gt_displacement_inertial.x = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_inertial_m.location_x_m;
                 gt_displacement_inertial.y = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_inertial_m.location_y_m;
 
-                gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_m.location_x_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_m.location_x_m;
-                gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_m.location_y_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_m.location_y_m;
+                gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_x_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_usk_m.location_x_m;
+                gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_y_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_usk_m.location_y_m;
 
 
             }
@@ -89,11 +89,11 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
             }
 
             // make m_centroid_displacement_with_coordinate_gt with smallest resolution.
-            m_object_base_point_displacement.push_back(std::make_pair(gt_data.getAll().at(frame_number).m_object_location_px.cog_px, gt_displacement));
+            m_object_base_point_displacement.push_back(std::make_pair(gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px, gt_displacement));
 
         }
 
-        printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)multiframe_object_base_visibility.at(current_frame_index)?"true":"false"), current_frame_index, frame_number, gt_data.getAll().at(frame_number).m_object_location_px.cog_px.x, gt_data.getAll().at(frame_number).m_object_location_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
+        printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)multiframe_object_base_visibility.at(current_frame_index)?"true":"false"), current_frame_index, frame_number, gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x, gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
         );
 
         multiframe_object_base_all.push_back(gt_data.getAll().at(frame_number));

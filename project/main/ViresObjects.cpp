@@ -46,11 +46,11 @@ void ViresObjects::writePositionInYaml(std::string suffix) {
                         << "visMask" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).visMask
                         << "x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_px.location_x_px
+                        current_frame_index).m_object_location_camera_px.location_x_px
                         << "y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_px.location_y_px
+                        current_frame_index).m_object_location_camera_px.location_y_px
                         << "z_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_px.location_z_px
+                        current_frame_index).m_object_location_camera_px.location_z_px
 
                         << "x_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_location_inertial_m.location_x_m
@@ -60,23 +60,23 @@ void ViresObjects::writePositionInYaml(std::string suffix) {
                         current_frame_index).m_object_location_inertial_m.location_z_m
 
                         << "x_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_m.location_x_m
+                        current_frame_index).m_object_location_usk_m.location_x_m
                         << "y_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_m.location_y_m
+                        current_frame_index).m_object_location_usk_m.location_y_m
                         << "z_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_m.location_z_m
+                        current_frame_index).m_object_location_usk_m.location_z_m
 
                         << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_dimensions_px.width_px
+                        current_frame_index).m_object_dimension_camera_px.width_px
                         << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_dimensions_px.height_px
+                        current_frame_index).m_object_dimension_camera_px.height_px
 
                         << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_realworld_dim_m.dim_length_m
+                        current_frame_index).m_object_dimension_realworld_m.dim_length_m
                         << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_realworld_dim_m.dim_width_m
+                        current_frame_index).m_object_dimension_realworld_m.dim_width_m
                         << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_realworld_dim_m.dim_height_m
+                        current_frame_index).m_object_dimension_realworld_m.dim_height_m
 
                         << "speed_x_inertial"
                         << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.x

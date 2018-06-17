@@ -499,7 +499,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                 object_realworld_dim_m_str object_realworld_dim_m = m_ptr_customObjectMetaDataList.at(
                         sensor_index).at(obj_index)->getAll().at(
-                        current_frame_index).m_object_realworld_dim_m;
+                        current_frame_index).m_object_dimension_realworld_m;
 
                 object_location_inertial_m_str pos_object_inertial = m_ptr_customObjectMetaDataList.at(
                         sensor_index).at(obj_index)->getAll().at(
@@ -507,7 +507,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                 object_location_m_str object_location_m = m_ptr_customObjectMetaDataList.at(sensor_index).at(
                         obj_index)->getAll().at(
-                        current_frame_index).m_object_location_m;
+                        current_frame_index).m_object_location_usk_m;
 
                 object_rotation_inertial_rad_str orientation_object_inertial = m_ptr_customObjectMetaDataList.at(
                         sensor_index).at(obj_index)->getAll().at(
@@ -622,23 +622,23 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
                     }
 
-                    std::cout << "cam" << cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y)
+                    std::cout << "converting inertial to usk" << cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y)
                             << std::endl;
-                    std::cout << "usk"
+                    std::cout << "original usk"
                             << cv::Point2f(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                    current_frame_index).m_object_location_m.location_x_m,
+                                    current_frame_index).m_object_location_usk_m.location_x_m,
                                     m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                            current_frame_index).m_object_location_m.location_y_m) << std::endl;
+                                            current_frame_index).m_object_location_usk_m.location_y_m) << std::endl;
 
-                    auto dist = cv::norm(cv::Point2f(bounding_points_3d.at(8).x + sensor_offset_m.offset_x,
+                    auto dist_usk_from_inertial = cv::norm(cv::Point2f(bounding_points_3d.at(8).x + sensor_offset_m.offset_x,
                             bounding_points_3d.at(8).y + sensor_offset_m.offset_y));
-                    auto dist_usk = cv::norm(
+                    auto dist_usk_original = cv::norm(
                             cv::Point2f(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                    current_frame_index).m_object_location_m.location_x_m,
+                                    current_frame_index).m_object_location_usk_m.location_x_m,
                                     m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                            current_frame_index).m_object_location_m.location_y_m));
-                    assert(std::abs(dist - dist_usk) < 0.5);
-                    std::cout << "distance is " << dist << " for "
+                                            current_frame_index).m_object_location_usk_m.location_y_m));
+                    assert(std::abs(dist_usk_from_inertial - dist_usk_original) < 0.5);
+                    std::cout << "distance is " << dist_usk_from_inertial << " for "
                             << m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getObjectName()
                             << std::endl;
 
@@ -655,9 +655,9 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                             cvRound(xx.x),
                             cvRound(xx.y),
                             cvRound(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                    current_frame_index).m_object_dimensions_px.width_px),
+                                    current_frame_index).m_object_dimension_camera_px.width_px),
                             cvRound(m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                    current_frame_index).m_object_dimensions_px.height_px));
+                                    current_frame_index).m_object_dimension_camera_px.height_px));
 
                     //cv::rectangle(tempGroundTruthImage, boundingbox, cv::Scalar(0, 255, 0), 1, 8, 0);
 
@@ -686,9 +686,9 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                     }
                     cv::circle(tempGroundTruthImage, cv::Point2i(
                             m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                    current_frame_index).m_object_location_px.cog_px.x,
+                                    current_frame_index).m_object_location_camera_px.cog_px.x,
                             m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
-                                    current_frame_index).m_object_location_px.cog_px.y), 2, cv::Scalar(0, 255, 0), 4);
+                                    current_frame_index).m_object_location_camera_px.cog_px.y), 2, cv::Scalar(0, 255, 0), 4);
                     cv::Rect box_points = cv::boundingRect(box);
                     cv::rectangle(tempGroundTruthImage, box_points, cv::Scalar(0, 0, 255), 1, 8, 0);
 
@@ -699,10 +699,10 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 }
             }
 
-            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            //cv::imshow("BB", tempGroundTruthImage);
-            //cv::waitKey(0);
-            //cv::destroyAllWindows();
+            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            cv::imshow("BB", tempGroundTruthImage);
+            cv::waitKey(0);
+            cv::destroyAllWindows();
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 
@@ -714,7 +714,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
 
     viresObjects.push_back(ViresObjects(0x816a, m_generatepath));      // key of the SHM segment
-    viresObjects.push_back(ViresObjects(0x120a, m_generatepath));
+    viresObjects.push_back(ViresObjects(0x816a, m_generatepath));
 
     viresObjects.at(0).configureSensor(DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate_left, module_manager_libModuleSensor_PerfectTemplate_left);
     viresObjects.at(1).configureSensor(DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
@@ -793,11 +793,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        for ( ushort i = 0; i < 1; i++ ) {
+        for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS; i++ ) {
 
             for ( ushort j = 0; j < 3; j++ ) {
-                std::cout << viresObjects.at(i).getSensorConfiguration().at(j).get<0>().c_str();
-                sendSCPMessage(m_scpSocket, viresObjects.at(i).getSensorConfiguration().at(j).get<0>().c_str());
+                std::cout << viresObjects.at(1).getSensorConfiguration().at(j).get<0>().c_str();
+                sendSCPMessage(m_scpSocket, viresObjects.at(1).getSensorConfiguration().at(j).get<0>().c_str());
 
                 sleep(1);
             }
@@ -865,11 +865,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
 
         for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
-            viresObjects.at(i).openNetworkSockets();
+            viresObjects.at(1).openNetworkSockets();
             std::cout << "mm socket - " << viresObjects.at(i).getSensorConfiguration().at(0).get<2>() << std::endl;
-            if (viresObjects.at(i).getCameraSocketHandler() != -1 &&
-                viresObjects.at(i).getPerfectSocketHandler() != -1 &&
-                viresObjects.at(i).getPerfectInertialSocketHandler() != -1 ) {
+            if (viresObjects.at(1).getCameraSocketHandler() != -1 &&
+                viresObjects.at(1).getPerfectSocketHandler() != -1 &&
+                viresObjects.at(1).getPerfectInertialSocketHandler() != -1 ) {
                 connected_module_manager_port = true;
             }
             else {
@@ -885,7 +885,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", viresObjects.at(0).getShmKey());
 
             for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
-                viresObjects.at(i).openShmWrapper();
+                viresObjects.at(1).openShmWrapper();
                 usleep(1000);     // do not overload the CPU
             }
 
@@ -896,14 +896,14 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             try {
                 while (1) {
 
-                    if (viresObjects.at(0).getBreaking()) {
+                    if (viresObjects.at(1).getBreaking()) {
                         break;
                     }
 
 
                     for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
 
-                        viresObjects.at(i).getGroundTruthInformation(((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), true);
+                        viresObjects.at(1).getGroundTruthInformation(((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), true);
                     }
 
                     usleep(100000); // wait, 100 ms which is equivalent to 10 Hz. Normally VIRES runs with 60 Hz. So this number should not be a problem.
@@ -928,7 +928,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             try {
                 for ( ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++) {
-                    viresObjects.at(i).writePositionInYaml("vires_");
+                    viresObjects.at(1).writePositionInYaml("vires_");
                 }
             }
             catch (...) {

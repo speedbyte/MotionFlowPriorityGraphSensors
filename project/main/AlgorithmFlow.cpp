@@ -182,10 +182,10 @@ void AlgorithmFlow::combine_sensor_data() {
             std::vector<std::pair<cv::Point2f, cv::Point2f> > elements_combined_stencil_sensor;
 
             cv::Point2f cog_1 = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                    (0).at(current_frame_index).m_object_location_px.cog_px;
+                    (0).at(current_frame_index).m_object_location_camera_px.cog_px;
 
             cv::Point2f cog_2 = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-                    (1).at(current_frame_index).m_object_location_px.cog_px;
+                    (1).at(current_frame_index).m_object_location_camera_px.cog_px;
 
 
             unsigned CLUSTER_COUNT = (unsigned) stencil_sensor_1.at(1).at(current_frame_index).size();

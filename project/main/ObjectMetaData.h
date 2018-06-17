@@ -101,15 +101,15 @@ public:
         cv::Point2f bb_higher_left_px;
     } m_bounding_box;
 
-    object_dimensions_px_str m_object_dimensions_px;
+    object_dimensions_px_str m_object_dimension_camera_px;
 
-    object_realworld_dim_m_str m_object_realworld_dim_m;
+    object_realworld_dim_m_str m_object_dimension_realworld_m;
 
     object_location_inertial_m_str m_object_location_inertial_m;
 
-    object_location_m_str m_object_location_m;
+    object_location_m_str m_object_location_usk_m;
 
-    object_location_px_str m_object_location_px;
+    object_location_px_str m_object_location_camera_px;
 
     object_occlusion_str m_object_occlusion;
 
@@ -279,33 +279,33 @@ public:
 
     void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions, float total_distance_travelled) {
         //m_pixel_position.at(frameNumber) = position;
-        m_object_gt_all.at(frameNumber).m_object_location_px.location_x_px = position.x;
-        m_object_gt_all.at(frameNumber).m_object_location_px.location_y_px = position.y;
-        m_object_gt_all.at(frameNumber).m_object_location_px.location_z_px = position.z;
+        m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_x_px = position.x;
+        m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_y_px = position.y;
+        m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_z_px = position.z;
 
         m_object_gt_all.at(frameNumber).m_object_offset_m.offset_x = offset.x;
         m_object_gt_all.at(frameNumber).m_object_offset_m.offset_y = offset.y;
         m_object_gt_all.at(frameNumber).m_object_offset_m.offset_z = offset.z;
 
-        m_object_gt_all.at(frameNumber).m_object_dimensions_px.width_px = dimensions.x;
-        m_object_gt_all.at(frameNumber).m_object_dimensions_px.height_px = dimensions.y;
+        m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.width_px = dimensions.x;
+        m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.height_px = dimensions.y;
 
         m_object_gt_all.at(frameNumber).m_object_distances.total_distance_covered = total_distance_travelled;
 
     }
 
     void atFrameNumberPerfectSensor(ushort frameNumber, cv::Point3f position, cv::Point3f orientation, cv::Point3f dimensions, cv::Point2f speed, float total_distance_travelled) {
-        m_object_gt_all.at(frameNumber).m_object_location_m.location_x_m = position.x;
-        m_object_gt_all.at(frameNumber).m_object_location_m.location_y_m = position.y;
-        m_object_gt_all.at(frameNumber).m_object_location_m.location_z_m = position.z;
+        m_object_gt_all.at(frameNumber).m_object_location_usk_m.location_x_m = position.x;
+        m_object_gt_all.at(frameNumber).m_object_location_usk_m.location_y_m = position.y;
+        m_object_gt_all.at(frameNumber).m_object_location_usk_m.location_z_m = position.z;
 
         m_object_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rz_yaw_rad = orientation.x; //h
         m_object_gt_all.at(frameNumber).m_object_rotation_rad.rotation_ry_pitch_rad = orientation.y; //p
         m_object_gt_all.at(frameNumber).m_object_rotation_rad.rotation_rx_roll_rad = orientation.x; //r
 
-        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.x;
-        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.y;
-        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.z;
+        m_object_gt_all.at(frameNumber).m_object_dimension_realworld_m.dim_length_m = dimensions.x;
+        m_object_gt_all.at(frameNumber).m_object_dimension_realworld_m.dim_width_m = dimensions.y;
+        m_object_gt_all.at(frameNumber).m_object_dimension_realworld_m.dim_height_m = dimensions.z;
 
         m_object_gt_all.at(frameNumber).m_object_speed.x = speed.x;
         m_object_gt_all.at(frameNumber).m_object_speed.y = speed.y;
@@ -323,9 +323,9 @@ public:
         m_object_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_ry_pitch_rad = orientation.y; //p
         m_object_gt_all.at(frameNumber).m_object_rotation_inertial_rad.rotation_rx_roll_rad = orientation.z; //r
 
-        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_length_m = dimensions.x;
-        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_width_m = dimensions.y;
-        m_object_gt_all.at(frameNumber).m_object_realworld_dim_m.dim_height_m = dimensions.z;
+        m_object_gt_all.at(frameNumber).m_object_dimension_realworld_m.dim_length_m = dimensions.x;
+        m_object_gt_all.at(frameNumber).m_object_dimension_realworld_m.dim_width_m = dimensions.y;
+        m_object_gt_all.at(frameNumber).m_object_dimension_realworld_m.dim_height_m = dimensions.z;
 
         m_object_gt_all.at(frameNumber).m_object_speed_inertial.x = speed.x;
         m_object_gt_all.at(frameNumber).m_object_speed_inertial.y = speed.y;
@@ -357,7 +357,7 @@ public:
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = roi_2d.width;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.height_px = roi_2d.height;
 
-        m_object_gt_all.at(frameNumber).m_object_location_px.cog_px = bbox_points.at(8);
+        m_object_gt_all.at(frameNumber).m_object_location_camera_px.cog_px = bbox_points.at(8);
 
 
 
