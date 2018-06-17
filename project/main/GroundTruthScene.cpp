@@ -637,7 +637,7 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                                     current_frame_index).m_object_location_m.location_x_m,
                                     m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getAll().at(
                                             current_frame_index).m_object_location_m.location_y_m));
-                    assert(std::abs(dist - dist_usk) < 1.5);
+                    assert(std::abs(dist - dist_usk) < 0.5);
                     std::cout << "distance is " << dist << " for "
                             << m_ptr_customObjectMetaDataList.at(sensor_index).at(obj_index)->getObjectName()
                             << std::endl;

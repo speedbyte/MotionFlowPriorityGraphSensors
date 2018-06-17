@@ -166,7 +166,7 @@ private:
     std::string module_manager_libModuleSensor_CameraTemplate_left =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
 //                    "   <Config cameraId=\"1\" verbose=\"true\"/> "
-                    "   <Load lib=\"libModuleCameraSensor.so.4.3.1\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
                     "   <Position dx=\"2.000000\" dy=\"1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
@@ -182,7 +182,7 @@ private:
     std::string module_manager_libModuleSensor_CameraTemplate_right =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
 //                    "   <Config cameraId=\"2\" verbose=\"true\"/> "
-                    "   <Load lib=\"libModuleCameraSensor.so.4.3.1\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
                     "   <Position dx=\"2.000000\" dy=\"-1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "

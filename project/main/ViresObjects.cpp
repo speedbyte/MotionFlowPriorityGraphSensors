@@ -594,7 +594,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             if (!m_dumpInitialFrames) {
                 sprintf(file_name_image, "000%03d_10.png", mImageCount);
                 std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + file_name_image; //+ "/" +  file_name_image;
-                if ( simFrame > (MAX_DUMPS+1) ) {
+                if ( simFrame > (MAX_DUMPS) ) {
                     fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
                     save_image.write(input_image_file_with_path);
