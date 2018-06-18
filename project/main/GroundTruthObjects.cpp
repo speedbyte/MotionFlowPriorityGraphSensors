@@ -33,16 +33,6 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         gt_dimensions.x = gt_data.getAll().at(frame_number).m_region_of_interest_px.width_px;
         gt_dimensions.y = gt_data.getAll().at(frame_number).m_region_of_interest_px.height_px;
 
-        if (gt_data.getAll().at(frame_number).visMask && gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m != 0 ) {
-
-            /*if ( gt_data.getAll().at(frame_number).m_object_occlusion.occlusion_inertial == 127 || gt_data.getAll().at(frame_number).visMask == 0
-                || gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m == 0 || gt_data.getAll().at(frame_number).m_region_of_interest_px.x <= 0) { */
-            multiframe_object_base_visibility.push_back((true));
-        }
-        else{
-            multiframe_object_base_visibility.push_back((false));
-        }
-
 
         if ( current_frame_index == 0 ) {
 
@@ -92,6 +82,19 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
             m_object_base_point_displacement.push_back(std::make_pair(gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px, gt_displacement));
 
         }
+
+        // Either there is an occlusion or the object is still not in the frame or the object is stationary, the set visiblity to true
+        if ((gt_data.getAll().at(frame_number).visMask && gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m != 0) ||
+                (gt_displacement == cv::Point2f(0,0))  ) {
+
+            /*if ( gt_data.getAll().at(frame_number).m_object_occlusion.occlusion_inertial == 127 || gt_data.getAll().at(frame_number).visMask == 0
+                || gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m == 0 || gt_data.getAll().at(frame_number).m_region_of_interest_px.x <= 0) { */
+            multiframe_object_base_visibility.push_back((true));
+        }
+        else{
+            multiframe_object_base_visibility.push_back((false));
+        }
+
 
         printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)multiframe_object_base_visibility.at(current_frame_index)?"true":"false"), current_frame_index, frame_number, gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x, gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
         );

@@ -53,6 +53,8 @@ protected:
     ushort m_objectCount = 0;
     ushort m_sensorCount = 0;
 
+    std::vector<ushort> evaluation_sensor_list;
+
 
 
 
@@ -75,6 +77,8 @@ public:
             SensorMetaData senMetaData;
             sensorMetaDataList.push_back(senMetaData);
         }
+
+        evaluation_sensor_list = {1};
     };
 
     void startEvaluating(Noise noise);

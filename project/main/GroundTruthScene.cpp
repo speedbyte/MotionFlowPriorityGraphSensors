@@ -74,7 +74,9 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
 
-    for (unsigned sensor_index = 0; sensor_index< MAX_ALLOWED_SENSOR_GROUPS; sensor_index++) {
+    for (unsigned sensor_index_iter = 0; sensor_index_iter< MAX_ALLOWED_SENSOR_GROUPS; sensor_index_iter++) {
+
+        ushort sensor_index = evaluation_sensor_list.at(sensor_index_iter);
 
         ushort  objectCount = 0;
         ushort  sensorCount = 0;
@@ -466,8 +468,9 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
 
-    for ( ushort sensor_index = 0; sensor_index < m_ptr_customSensorMetaDataList.size(); sensor_index++) {
+    for ( ushort sensor_index_iter = 0; sensor_index_iter < MAX_ALLOWED_SENSOR_GROUPS; sensor_index_iter++) {
 
+        ushort sensor_index = evaluation_sensor_list.at(sensor_index_iter);
         char temp_str_fs[20];
         sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         //write_fs << temp_str_fs << "[";
@@ -796,8 +799,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS; i++ ) {
 
             for ( ushort j = 0; j < 3; j++ ) {
-                std::cout << viresObjects.at(1).getSensorConfiguration().at(j).get<0>().c_str();
-                sendSCPMessage(m_scpSocket, viresObjects.at(1).getSensorConfiguration().at(j).get<0>().c_str());
+                std::cout << viresObjects.at(evaluation_sensor_list.at(i)).getSensorConfiguration().at(j).get<0>().c_str();
+                sendSCPMessage(m_scpSocket, viresObjects.at(evaluation_sensor_list.at(i)).getSensorConfiguration().at(j).get<0>().c_str());
 
                 sleep(1);
             }
@@ -865,11 +868,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
 
         for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
-            viresObjects.at(1).openNetworkSockets();
+            viresObjects.at(evaluation_sensor_list.at(i)).openNetworkSockets();
             std::cout << "mm socket - " << viresObjects.at(i).getSensorConfiguration().at(0).get<2>() << std::endl;
-            if (viresObjects.at(1).getCameraSocketHandler() != -1 &&
-                viresObjects.at(1).getPerfectSocketHandler() != -1 &&
-                viresObjects.at(1).getPerfectInertialSocketHandler() != -1 ) {
+            if (viresObjects.at(evaluation_sensor_list.at(i)).getCameraSocketHandler() != -1 &&
+                viresObjects.at(evaluation_sensor_list.at(i)).getPerfectSocketHandler() != -1 &&
+                viresObjects.at(evaluation_sensor_list.at(i)).getPerfectInertialSocketHandler() != -1 ) {
                 connected_module_manager_port = true;
             }
             else {
@@ -885,7 +888,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", viresObjects.at(0).getShmKey());
 
             for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
-                viresObjects.at(1).openShmWrapper();
+                viresObjects.at(evaluation_sensor_list.at(i)).openShmWrapper();
                 usleep(1000);     // do not overload the CPU
             }
 
@@ -896,14 +899,14 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             try {
                 while (1) {
 
-                    if (viresObjects.at(1).getBreaking()) {
+                    if (viresObjects.at(evaluation_sensor_list.at(0)).getBreaking()) {
                         break;
                     }
 
 
                     for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
 
-                        viresObjects.at(1).getGroundTruthInformation(((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), true);
+                        viresObjects.at(evaluation_sensor_list.at(i)).getGroundTruthInformation(((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), true);
                     }
 
                     usleep(100000); // wait, 100 ms which is equivalent to 10 Hz. Normally VIRES runs with 60 Hz. So this number should not be a problem.
@@ -920,6 +923,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
     }
 
+
     Noise noNoise;
 
     if (m_environment == "blue_sky") {
@@ -928,7 +932,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             try {
                 for ( ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++) {
-                    viresObjects.at(1).writePositionInYaml("vires_");
+                    viresObjects.at(evaluation_sensor_list.at(i)).writePositionInYaml("vires_");
                 }
             }
             catch (...) {
