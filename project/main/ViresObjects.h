@@ -97,7 +97,6 @@ public:
     void writePositionInYaml(std::string suffix);
 
     void readObjectStateFromBinaryFile(std::string suffix);
-    void readObjectCfgFromBinaryFile(std::string suffix);
     void readSensorObjectFromBinaryFile(std::string suffix);
     void readSensorStateFromBinaryFile(std::string suffix);
 
