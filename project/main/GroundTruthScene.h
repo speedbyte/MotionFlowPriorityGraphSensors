@@ -342,7 +342,7 @@ public:
 
         close(m_scpSocket);
         close(m_triggerSocket);
-        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++ ) {
+        for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
             closeAllSockets(/* send a list of socket numbers*/);
         }
 

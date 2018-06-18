@@ -803,7 +803,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION; i++ ) {
+        for ( ushort i = 0; i < m_generation_sensor_list.size(); i++ ) {
 
             for ( ushort j = 0; j < 3; j++ ) {
                 std::cout << sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<0>().c_str();
@@ -875,13 +875,13 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
 
 
-        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++ ) {
+        for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
 
             for (ushort j = 0 ; j < 3; j++ ) {
 
                 int socket   = openNetwork(sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<2>());
 
-                std::cout << "mm socket - " << sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<4>() << std::endl;
+                std::cout << "mm socket - " << socket << std::endl;
                 if (    socket != -1) {
                     connected_module_manager_port = true;
                     sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<4>() = socket;
@@ -897,7 +897,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
 
 
-            for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++ ) {
+            for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
                 // open the shared memory for IG image output (try to attach without creating a new segment)
                 fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", sensor_group.at(i).at(0).get<3>());
                 mShmPtr = openShm(sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<3>());
@@ -916,7 +916,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     }
 
 
-                    for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++ ) {
+                    for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
 
                         viresObjects.at(m_generation_sensor_list.at(i)).getGroundTruthInformation(mShmPtr, ((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), true,
                         sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(1).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(2).get<4>());
@@ -944,7 +944,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (m_regenerate_yaml_file) {
 
             try {
-                for ( ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++) {
+                for ( ushort i = 0 ; i < m_generation_sensor_list.size() ; i++) {
                     viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
                 }
             }
