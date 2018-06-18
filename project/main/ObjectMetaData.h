@@ -8,6 +8,7 @@
 #include <opencv2/core/utility.hpp>
 #include "Dataset.h"
 #include <iostream>
+#include <vires-interface/Common/viRDBIcd.h>
 #include "datasets.h"
 #include "ObjectImageShapeData.h"
 
@@ -215,6 +216,7 @@ class ObjectMetaData {
 
 protected:
     std::vector<STRUCT_GT_OBJECTS_ALL> m_object_gt_all;
+    std::vector<RDB_OBJECT_STATE_t> m_object_state_all;
 
 private:
     ObjectImageShapeData m_objectMetaData_shape;
@@ -276,6 +278,10 @@ public:
         m_object_gt_all.at(frameNumber).frame_no = frameNumber;
     }
 
+    void atAllObjectStateData(ushort frameNumber, RDB_OBJECT_STATE_t* data) {
+        // dereference and store data
+        m_object_state_all.push_back(*data);
+    }
 
     void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions, float total_distance_travelled) {
         //m_pixel_position.at(frameNumber) = position;

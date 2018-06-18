@@ -439,6 +439,10 @@ simFrame, const
                 offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY,
                                      (float) data->base.geo.offZ);
                 total_distance_travelled = data->ext.traveledDist;
+
+                m_mapObjectNameToObjectMetaData[data->base.name]->atAllObjectStateData(
+                        (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), data);
+
                 m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor(
                         (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC), position_pixel, offset,
                         dimension_pixel, total_distance_travelled);
