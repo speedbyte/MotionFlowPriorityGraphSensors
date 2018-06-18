@@ -945,6 +945,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             try {
                 for ( ushort i = 0 ; i < m_generation_sensor_list.size() ; i++) {
+                    viresObjects.at(m_generation_sensor_list.at(i)).readObjectStateFromBinaryFile("vires_");
                     viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
                 }
             }

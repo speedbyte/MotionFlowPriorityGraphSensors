@@ -54,6 +54,10 @@ private:
 
     ushort m_sensorGroupCount;
 
+    std::ofstream fstream_output_object_state;
+    std::ofstream fstream_output_sensor_state;
+    std::ofstream fstream_output_sensor_object;
+
 
 
 
@@ -82,13 +86,20 @@ public:
             sensorMetaDataList.push_back(senMetaData);
         }
 
+        fstream_output_object_state = std::ofstream("object_state_" + std::to_string(current_sensor_group_index) + ".bin", std::ios::out | std::ios::binary);
+        fstream_output_sensor_state = std::ofstream("sensor_state_" + std::to_string(current_sensor_group_index) + ".bin", std::ios::out | std::ios::binary);
+        fstream_output_sensor_object = std::ofstream("sensor_object_" + std::to_string(current_sensor_group_index) + ".bin", std::ios::out | std::ios::binary);
+
     }
 
     ViresObjects() {}
 
     void writePositionInYaml(std::string suffix);
 
-
+    void readObjectStateFromBinaryFile(std::string suffix);
+    void readObjectCfgFromBinaryFile(std::string suffix);
+    void readSensorObjectFromBinaryFile(std::string suffix);
+    void readSensorStateFromBinaryFile(std::string suffix);
 
     void getGroundTruthInformation(void* shmPtr, bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages,
             ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushort m_moduleManagerSocket_PerfectInertial);
