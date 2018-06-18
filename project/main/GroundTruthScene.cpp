@@ -25,7 +25,7 @@
 using namespace std::chrono;
 
 
-void GroundTruthScene::prepare_directories() {
+void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
 
     m_groundtruthpath = Dataset::getGroundTruthPath(); // data/stereo_flow
 
@@ -36,23 +36,21 @@ void GroundTruthScene::prepare_directories() {
 
             std::cout << "prepare gt_scene directories" << std::endl;
 
-            for ( ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++) {
-                std::string m_generatepath_sensor = m_generatepath.string() + "_" + std::to_string(i);
-                if (boost::filesystem::exists(m_generatepath_sensor)) {
-                    system(("rm -rf " + m_generatepath_sensor).c_str());
-                }
-                boost::filesystem::create_directories(m_generatepath_sensor);
+            std::string m_generatepath_sensor = m_generatepath.string() + "_" + std::to_string(sensor_group_index);
+            if (boost::filesystem::exists(m_generatepath_sensor)) {
+                system(("rm -rf " + m_generatepath_sensor).c_str());
+            }
+            boost::filesystem::create_directories(m_generatepath_sensor);
 
-                char char_dir_append[20];
-                boost::filesystem::path path;
+            char char_dir_append[20];
+            boost::filesystem::path path;
 
-                for (int i = 0; i < m_list_gt_objects.size(); i++) {
+            for (int i = 0; i < m_list_gt_objects.size(); i++) {
 
-                    sprintf(char_dir_append, "%02d", i);
-                    m_position_object_path = m_generatepath_sensor + "position_object_";
-                    path = m_position_object_path.string() + char_dir_append;
-                    //boost::filesystem::create_directories(path);
-                }
+                sprintf(char_dir_append, "%02d", i);
+                m_position_object_path = m_generatepath_sensor + "position_object_";
+                path = m_position_object_path.string() + char_dir_append;
+                //boost::filesystem::create_directories(path);
             }
 
         }
@@ -74,9 +72,9 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
 
-    for (unsigned sensor_index_iter = 0; sensor_index_iter< MAX_ALLOWED_SENSOR_GROUPS; sensor_index_iter++) {
+    for (unsigned sensor_index_iter = 0; sensor_index_iter< m_evaluation_sensor_list.size(); sensor_index_iter++) {
 
-        ushort sensor_index = evaluation_sensor_list.at(sensor_index_iter);
+        ushort sensor_index = m_evaluation_sensor_list.at(sensor_index_iter);
 
         ushort  objectCount = 0;
         ushort  sensorCount = 0;
@@ -98,7 +96,7 @@ void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
         unsigned long FRAME_COUNT = ITERATION_END_POINT;
         assert(FRAME_COUNT > 0);
 
-        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+          for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             std::cout << current_frame_index << std::endl;
             char temp_str_fc[20];
@@ -276,7 +274,7 @@ void GroundTruthScene::startEvaluating(Noise noise) {
             m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index));
 
         }
-        if ( MAX_ALLOWED_SENSOR_GROUPS > 1 ) {
+        if ( MAX_ALLOWED_SENSOR_GROUPS_EVALUATION > 1 ) {
             m_list_gt_objects.at(obj_index).generate_combined_sensor_data();
         }
 
@@ -468,9 +466,9 @@ void GroundTruthScene::calcBBFrom3DPosition() {
 
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
 
-    for ( ushort sensor_index_iter = 0; sensor_index_iter < MAX_ALLOWED_SENSOR_GROUPS; sensor_index_iter++) {
+    for ( ushort sensor_index_iter = 0; sensor_index_iter < MAX_ALLOWED_SENSOR_GROUPS_EVALUATION; sensor_index_iter++) {
 
-        ushort sensor_index = evaluation_sensor_list.at(sensor_index_iter);
+        ushort sensor_index = m_evaluation_sensor_list.at(sensor_index_iter);
         char temp_str_fs[20];
         sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
         //write_fs << temp_str_fs << "[";
@@ -702,10 +700,10 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                 }
             }
 
-            cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-            cv::imshow("BB", tempGroundTruthImage);
-            cv::waitKey(0);
-            cv::destroyAllWindows();
+            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("BB", tempGroundTruthImage);
+            //cv::waitKey(0);
+            //cv::destroyAllWindows();
             //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
             /*---------------------------------------------------------------------------------*/
 
@@ -713,16 +711,25 @@ void GroundTruthScene::calcBBFrom3DPosition() {
     }
 }
 
+#define DEFAULT_RX_PORT_CAM_0     48182   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_0     48183   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_INERTIAL_0     48184   /* for image port it should be 48192 */
+
+#define DEFAULT_RX_PORT_CAM_1     48185   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_1     48186   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_INERTIAL_1     48187   /* for image port it should be 48192 */
+
 void GroundTruthSceneExternal::generate_gt_scene() {
 
 
-    viresObjects.push_back(ViresObjects(0x816a, m_generatepath));      // key of the SHM segment
-    viresObjects.push_back(ViresObjects(0x816a, m_generatepath));
-
-    viresObjects.at(0).configureSensor(DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate_left, module_manager_libModuleSensor_PerfectTemplate_left);
-    viresObjects.at(1).configureSensor(DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
 
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
+
+        viresObjects.push_back(ViresObjects(0, m_generatepath));      // key of the SHM segment
+        viresObjects.push_back(ViresObjects(1, m_generatepath));
+
+        configureSensor(0, 0x816a, DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate_left, module_manager_libModuleSensor_PerfectTemplate_left);
+        configureSensor(1, 0x816a, DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
 
         char command[1024];
 
@@ -796,11 +803,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS; i++ ) {
+        for ( ushort i = 0; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION; i++ ) {
 
             for ( ushort j = 0; j < 3; j++ ) {
-                std::cout << viresObjects.at(evaluation_sensor_list.at(i)).getSensorConfiguration().at(j).get<0>().c_str();
-                sendSCPMessage(m_scpSocket, viresObjects.at(evaluation_sensor_list.at(i)).getSensorConfiguration().at(j).get<0>().c_str());
+                std::cout << sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<0>().c_str();
+                sendSCPMessage(m_scpSocket, sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<0>().c_str());
 
                 sleep(1);
             }
@@ -867,28 +874,33 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             connected_trigger_port = true;
         }
 
-        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
-            viresObjects.at(evaluation_sensor_list.at(i)).openNetworkSockets();
-            std::cout << "mm socket - " << viresObjects.at(i).getSensorConfiguration().at(0).get<2>() << std::endl;
-            if (viresObjects.at(evaluation_sensor_list.at(i)).getCameraSocketHandler() != -1 &&
-                viresObjects.at(evaluation_sensor_list.at(i)).getPerfectSocketHandler() != -1 &&
-                viresObjects.at(evaluation_sensor_list.at(i)).getPerfectInertialSocketHandler() != -1 ) {
-                connected_module_manager_port = true;
-            }
-            else {
-                connected_module_manager_port = false;
-                break;
+
+        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++ ) {
+
+            for (ushort j = 0 ; j < 3; j++ ) {
+
+                int socket   = openNetwork(sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<2>());
+
+                std::cout << "mm socket - " << sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<4>() << std::endl;
+                if (    socket != -1) {
+                    connected_module_manager_port = true;
+                    sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<4>() = socket;
+                }
+                else {
+                    connected_module_manager_port = false;
+                    break;
+                }
             }
         }
 
 
         if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
 
-            // open the shared memory for IG image output (try to attach without creating a new segment)
-            fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", viresObjects.at(0).getShmKey());
 
-            for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
-                viresObjects.at(evaluation_sensor_list.at(i)).openShmWrapper();
+            for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++ ) {
+                // open the shared memory for IG image output (try to attach without creating a new segment)
+                fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", sensor_group.at(i).at(0).get<3>());
+                mShmPtr = openShm(sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<3>());
                 usleep(1000);     // do not overload the CPU
             }
 
@@ -899,14 +911,15 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             try {
                 while (1) {
 
-                    if (viresObjects.at(evaluation_sensor_list.at(0)).getBreaking()) {
+                    if (viresObjects.at(m_generation_sensor_list.at(0)).getBreaking()) {
                         break;
                     }
 
 
-                    for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
+                    for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++ ) {
 
-                        viresObjects.at(evaluation_sensor_list.at(i)).getGroundTruthInformation(((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), true);
+                        viresObjects.at(m_generation_sensor_list.at(i)).getGroundTruthInformation(mShmPtr, ((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), true,
+                        sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(1).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(2).get<4>());
                     }
 
                     usleep(100000); // wait, 100 ms which is equivalent to 10 Hz. Normally VIRES runs with 60 Hz. So this number should not be a problem.
@@ -931,8 +944,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (m_regenerate_yaml_file) {
 
             try {
-                for ( ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++) {
-                    viresObjects.at(evaluation_sensor_list.at(i)).writePositionInYaml("vires_");
+                for ( ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++) {
+                    viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
                 }
             }
             catch (...) {

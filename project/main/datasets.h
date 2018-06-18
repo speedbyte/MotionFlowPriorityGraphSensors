@@ -9,14 +9,6 @@
 
 //typedef std::vector<std::vector<std::vector<cv::Point2f > > > Container_List_Algorithms;
 
-#define DEFAULT_RX_PORT_CAM_0     48182   /* for image port it should be 48192 */
-#define DEFAULT_RX_PORT_PERFECT_0     48183   /* for image port it should be 48192 */
-#define DEFAULT_RX_PORT_PERFECT_INERTIAL_0     48184   /* for image port it should be 48192 */
-
-#define DEFAULT_RX_PORT_CAM_1     48185   /* for image port it should be 48192 */
-#define DEFAULT_RX_PORT_PERFECT_1     48186   /* for image port it should be 48192 */
-#define DEFAULT_RX_PORT_PERFECT_INERTIAL_1     48187   /* for image port it should be 48192 */
-
 
 #define KITTI_FLOW_DATASET_PATH "../../../datasets/kitti_flow_dataset/"
 #define KITTI_RAW_DATASET_PATH "../../../datasets/kitti_raw_dataset/"
@@ -31,7 +23,7 @@
 #define DISPLACEMENT_ROUND_OFF 100
 
 #define ITERATION_START_POINT 15
-#define ITERATION_END_POINT 65
+#define ITERATION_END_POINT 20 //65
 #define MAX_ITERATION_RESULTS (ITERATION_END_POINT - ITERATION_START_POINT) // 60 generate result. this cannot be more than vector
 
 #define MAX_ITERATION_DATASET MAX_ITERATION_RESULTS // 60 generate result. this cannot be more than vector
@@ -50,8 +42,10 @@
 #define MAX_ALLOWED_OBJECTS 10
 #define MAX_ALLOWED_SENSORS 10
 
-#define MAX_ALLOWED_SENSOR_GROUPS 1
-#define SENSOR_COUNT MAX_ALLOWED_SENSOR_GROUPS + (1%MAX_ALLOWED_SENSOR_GROUPS)
+#define MAX_ALLOWED_SENSOR_GROUPS_GENERATION 1
+
+#define MAX_ALLOWED_SENSOR_GROUPS_EVALUATION 2
+#define SENSOR_COUNT MAX_ALLOWED_SENSOR_GROUPS_EVALUATION + (1%MAX_ALLOWED_SENSOR_GROUPS_EVALUATION)
 
 #define STENCIL_GRID_EXTENDER 15 // 10 pixels more than roi on each side
 

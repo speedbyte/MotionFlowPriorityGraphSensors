@@ -11,172 +11,161 @@
 #include "datasets.h"
 
 
-ushort ViresObjects::m_sensorGroupTotalCount = 0;
-
 void ViresObjects::writePositionInYaml(std::string suffix) {
 
     cv::FileStorage write_fs;
     write_fs.open("../position_" + suffix + std::to_string(m_sensorGroupCount) + ".yml", cv::FileStorage::WRITE);
 
-    for (unsigned sensor_index = 0; sensor_index < MAX_ALLOWED_SENSOR_GROUPS; sensor_index++) {
+    unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
+    assert(FRAME_COUNT > 0);
 
-        std::cout << "write yaml file for sensor_index  " << (sensor_index) << std::endl;
+    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+        char temp_str_fc[20];
+        sprintf(temp_str_fc, "frame_count_%03d", current_frame_index);
 
-        char temp_str_fs[20];
-        sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
-        //write_fs << temp_str_fs << "[";
+        //if ( current_frame_index < 25 ) {
+        //    continue;
+        //}
 
-        unsigned long FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
-        assert(FRAME_COUNT > 0);
+        write_fs << temp_str_fc << "[";
+        for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+            write_fs
 
-        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
-            char temp_str_fc[20];
-            sprintf(temp_str_fc, "frame_count_%03d", current_frame_index);
+                    << "{:" << "name" << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName()
 
-            //if ( current_frame_index < 25 ) {
-            //    continue;
-            //}
+                    << "visMask" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).visMask
+                    << "x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_camera_px.location_x_px
+                    << "y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_camera_px.location_y_px
+                    << "z_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_camera_px.location_z_px
 
-            write_fs << temp_str_fc << "[";
-            for (int obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
-                write_fs
+                    << "x_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_inertial_m.location_x_m
+                    << "y_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_inertial_m.location_y_m
+                    << "z_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_inertial_m.location_z_m
 
-                        << "{:" << "name" << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName()
+                    << "x_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_usk_m.location_x_m
+                    << "y_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_usk_m.location_y_m
+                    << "z_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_usk_m.location_z_m
 
-                        << "visMask" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).visMask
-                        << "x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_camera_px.location_x_px
-                        << "y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_camera_px.location_y_px
-                        << "z_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_camera_px.location_z_px
+                    << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_dimension_camera_px.width_px
+                    << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_dimension_camera_px.height_px
 
-                        << "x_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_inertial_m.location_x_m
-                        << "y_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_inertial_m.location_y_m
-                        << "z_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_inertial_m.location_z_m
+                    << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_dimension_realworld_m.dim_length_m
+                    << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_dimension_realworld_m.dim_width_m
+                    << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_dimension_realworld_m.dim_height_m
 
-                        << "x_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_usk_m.location_x_m
-                        << "y_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_usk_m.location_y_m
-                        << "z_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_location_usk_m.location_z_m
+                    << "speed_x_inertial"
+                    << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.x
+                    << "speed_y_inertial"
+                    << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.y
+                    << "speed_z_inertial"
+                    << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.z
 
-                        << "dim_x_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_dimension_camera_px.width_px
-                        << "dim_y_camera" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_dimension_camera_px.height_px
+                    << "speed_x" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed.x
+                    << "speed_y" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed.y
 
-                        << "dim_x_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_dimension_realworld_m.dim_length_m
-                        << "dim_y_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_dimension_realworld_m.dim_width_m
-                        << "dim_z_realworld" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_dimension_realworld_m.dim_height_m
+                    << "off_x"
+                    << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_x
+                    << "off_y"
+                    << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_y
+                    << "off_z"
+                    << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_z
 
-                        << "speed_x_inertial"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.x
-                        << "speed_y_inertial"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.y
-                        << "speed_z_inertial"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed_inertial.z
+                    << "h_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_rotation_inertial_rad.rotation_rz_yaw_rad
+                    << "p_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_rotation_inertial_rad.rotation_ry_pitch_rad
+                    << "r_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_rotation_inertial_rad.rotation_rx_roll_rad
 
-                        << "speed_x" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed.x
-                        << "speed_y" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_speed.y
+                    << "h_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_rotation_rad.rotation_rz_yaw_rad
+                    << "p_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_rotation_rad.rotation_ry_pitch_rad
+                    << "r_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_rotation_rad.rotation_rx_roll_rad
 
-                        << "off_x"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_x
-                        << "off_y"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_y
-                        << "off_z"
-                        << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_offset_m.offset_z
+                    << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_distances.sensor_to_obj
+                    << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_distances.total_distance_covered
 
-                        << "h_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_rotation_inertial_rad.rotation_rz_yaw_rad
-                        << "p_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_rotation_inertial_rad.rotation_ry_pitch_rad
-                        << "r_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_rotation_inertial_rad.rotation_rx_roll_rad
-
-                        << "h_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_rotation_rad.rotation_rz_yaw_rad
-                        << "p_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_rotation_rad.rotation_ry_pitch_rad
-                        << "r_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_rotation_rad.rotation_rx_roll_rad
-
-                        << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_distances.sensor_to_obj
-                        << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_distances.total_distance_covered
-
-                        << "occ_px" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_occlusion.occlusion_px
-                        << "occ_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_occlusion.occlusion_usk
-                        << "occ_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                        current_frame_index).m_object_occlusion.occlusion_inertial
+                    << "occ_px" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_occlusion.occlusion_px
+                    << "occ_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_occlusion.occlusion_usk
+                    << "occ_inertial" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_occlusion.occlusion_inertial
 
 
-                        << "}";  //dont close the brace yet
-            }
-            for (int sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.size(); sen_index++) {
-                write_fs
-
-                        << "{:" << "name" << m_ptr_customSensorMetaDataList.at(sen_index)->getSensorName()
-
-                        << "visible" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).visMask
-
-                        << "x_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_location_carrier_m.location_x_m
-                        << "y_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_location_carrier_m.location_y_m
-                        << "z_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_location_carrier_m.location_z_m
-
-                        //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_x_m
-                        //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_y_m
-                        //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_z_m
-
-                        << "h_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad
-                        << "p_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad
-                        << "r_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad
-
-                        << "h_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_rotation_rad.rotation_rz_yaw_rad
-                        << "p_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_rotation_rad.rotation_ry_pitch_rad
-                        << "r_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_rotation_rad.rotation_rx_roll_rad
-
-                        << "off_x_sensor"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_x
-                        << "off_y_sensor"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_y
-                        << "off_z_sensor"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_z
-
-                        << "fov_horizontal"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.horizontal
-                        << "fov_vertical"
-                        << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.vertical
-                        << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_fov_rad.horizontal_offset
-                        << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                        current_frame_index).m_sensor_fov_rad.vertical_offset
-
-                        << "}";
-            }
-
-            write_fs << "]";
+                    << "}";  //dont close the brace yet
         }
+        for (int sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.size(); sen_index++) {
+            write_fs
+
+                    << "{:" << "name" << m_ptr_customSensorMetaDataList.at(sen_index)->getSensorName()
+
+                    << "visible" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).visMask
+
+                    << "x_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_location_carrier_m.location_x_m
+                    << "y_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_location_carrier_m.location_y_m
+                    << "z_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_location_carrier_m.location_z_m
+
+                    //<< "x_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_x_m
+                    //<< "y_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_y_m
+                    //<< "z_sensor" <<  m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_location_m.location_z_m
+
+                    << "h_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_rotation_carrier_rad.rotation_rz_yaw_rad
+                    << "p_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_rotation_carrier_rad.rotation_ry_pitch_rad
+                    << "r_carrier" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_rotation_carrier_rad.rotation_rx_roll_rad
+
+                    << "h_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_rotation_rad.rotation_rz_yaw_rad
+                    << "p_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_rotation_rad.rotation_ry_pitch_rad
+                    << "r_sensor" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_rotation_rad.rotation_rx_roll_rad
+
+                    << "off_x_sensor"
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_x
+                    << "off_y_sensor"
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_y
+                    << "off_z_sensor"
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_z
+
+                    << "fov_horizontal"
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.horizontal
+                    << "fov_vertical"
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.vertical
+                    << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_fov_rad.horizontal_offset
+                    << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
+                    current_frame_index).m_sensor_fov_rad.vertical_offset
+
+                    << "}";
+        }
+
+        write_fs << "]";
     }
     //write_fs << "]";
     write_fs.release();
@@ -184,7 +173,8 @@ void ViresObjects::writePositionInYaml(std::string suffix) {
 }
 
 
-void ViresObjects::getGroundTruthInformation(bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages) {
+void ViresObjects::getGroundTruthInformation(void* shmPtr, bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages,
+ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushort m_moduleManagerSocket_PerfectInertial) {
 
     fprintf(stderr,
             "------------------------------------------------------------------------------------\n");
@@ -197,7 +187,7 @@ void ViresObjects::getGroundTruthInformation(bool withTrigger, int triggerSocket
         if ( withTrigger) {
             fprintf(stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = false\n",
                     deltaTime);
-            sendRDBTrigger(triggerSocket, 0, 0, false, deltaTime); // Extend the simulation by 10 ms
+            sendRDBTrigger(triggerSocket, 0, 0, mCheckForImage, deltaTime); // Extend the simulation by 10 ms
         }
 
     } else {
@@ -206,13 +196,13 @@ void ViresObjects::getGroundTruthInformation(bool withTrigger, int triggerSocket
         if ( withTrigger) {
             fprintf(stderr, "sendRDBTrigger: sending trigger, deltaT = %.4lf, requestImage = true \n",
                     deltaTime);
-            sendRDBTrigger(triggerSocket, 0, 0, true, deltaTime); // Extend the simulation by 100 ms
+            sendRDBTrigger(triggerSocket, 0, 0, mCheckForImage, deltaTime); // Extend the simulation by 100 ms
         }
     }
 
     while (mCheckForImage) {
 
-        checkShm(mShmPtr);
+        checkShm(shmPtr);
 
         if (mHaveImage) {
             //fprintf( stderr, "main: got it! at %d\n", mSimFrame );
@@ -226,7 +216,7 @@ void ViresObjects::getGroundTruthInformation(bool withTrigger, int triggerSocket
 
         usleep(100000);
         std::cerr << "Flushing images in shared memory" << std::endl;
-        checkShm(mShmPtr);  //empty IG buffer of spurious images
+        checkShm(shmPtr);  //empty IG buffer of spurious images
         // only in the beginning.
 
     }

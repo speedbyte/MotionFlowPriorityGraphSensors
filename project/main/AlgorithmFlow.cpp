@@ -54,7 +54,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort f
 
     char sensor_index_folder_suffix[50];
 
-    for ( ushort sensor_index = 0; sensor_index < MAX_ALLOWED_SENSOR_GROUPS; sensor_index++ ) {
+    for ( ushort sensor_index = 0; sensor_index < MAX_ALLOWED_SENSOR_GROUPS_EVALUATION; sensor_index++ ) {
 
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);

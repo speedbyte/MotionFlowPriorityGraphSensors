@@ -21,19 +21,9 @@
 class ViresObjects: protected Framework::ViresInterface {
 
 private:
-    std::vector<boost::tuple<std::string, std::string, ushort > > sensor_group;
 
     unsigned current_frame_index;
 
-    unsigned int mShmKey;      // key of the SHM segment
-
-    void *mShmPtr;
-
-    int m_moduleManagerSocket_Camera;
-
-    int m_moduleManagerSocket_Perfect;
-
-    int m_moduleManagerSocket_PerfectInertial;
 
     bool m_dumpInitialFrames;
 
@@ -62,23 +52,20 @@ private:
     ushort m_objectCount;
     ushort m_sensorCount;
 
-    static ushort m_sensorGroupTotalCount;
     ushort m_sensorGroupCount;
+
 
 
 
 public:
 
-    ViresObjects(unsigned int shmKey, boost::filesystem::path  generatepath): mShmKey(shmKey), m_generatepath(generatepath) {
+    ViresObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath) {
 
         mCheckForImage  = false;
         mHaveImage    = 0;                                 // is an image available?
         mHaveFirstFrame    = false;
         mHaveFirstImage    = false;
         mImageCount = 0;
-
-        m_sensorGroupCount = m_sensorGroupTotalCount;
-        m_sensorGroupTotalCount++;
 
         m_breaking = false;
         m_dumpInitialFrames = true;
@@ -101,135 +88,11 @@ public:
 
     void writePositionInYaml(std::string suffix);
 
-    void configureSensor(const int port_number_camera_sensor_data, const int port_number_usk_sensor_data, const int port_number_inertial_sensor_data,
-    std::string module_manager_libModuleSensor_CameraTemplate, std::string module_manager_libModuleSensor_PerfectTemplate) {
 
 
-        std::string module_manager_libModuleCameraSensor;
-        std::string module_manager_libModulePerfectSensor;
-        std::string module_manager_libModulePerfectSensorInertial;
+    void getGroundTruthInformation(void* shmPtr, bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages,
+            ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushort m_moduleManagerSocket_PerfectInertial);
 
-        std::string to_replace, with_replace;
-
-        std::string::size_type position;
-
-        ///Start sensor
-        ///--------------------------
-        module_manager_libModuleCameraSensor = module_manager_libModuleSensor_CameraTemplate;
-
-        //sensor name
-        to_replace = "Sensor_MM";
-        with_replace = "Sensor_MM_" + std::to_string(m_sensorGroupCount);
-        position = module_manager_libModuleCameraSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), with_replace);
-        }
-
-        to_replace = std::to_string(65535);
-        position = module_manager_libModuleCameraSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(port_number_camera_sensor_data));
-        }
-
-        sensor_group.push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", port_number_camera_sensor_data));
-
-        ///--------------------------
-
-        module_manager_libModulePerfectSensor = module_manager_libModuleSensor_PerfectTemplate;
-        //port number
-        to_replace = std::to_string(65535);
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(port_number_usk_sensor_data));
-        }
-
-        //sensor name
-        to_replace = "Sensor_MM";
-        with_replace = "Sensor_MM_Perfect_" + std::to_string(m_sensorGroupCount);
-        position = module_manager_libModulePerfectSensor.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), with_replace);
-        }
-
-        sensor_group.push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data));
-
-        ///--------------------------
-
-        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_PerfectTemplate;
-        //port number
-        to_replace = std::to_string(65535);
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(port_number_inertial_sensor_data));
-        }
-
-        //sensor name
-        to_replace = "Sensor_MM";
-        with_replace = "Sensor_MM_PerfectInertial_" + std::to_string(m_sensorGroupCount);
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), with_replace);
-        }
-
-        //sensor coordinate
-        to_replace = "usk";
-        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
-        if ( position != std::string::npos) {
-            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
-        }
-
-        sensor_group.push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", port_number_inertial_sensor_data));
-
-        ///End sensor
-
-    }
-
-    const std::vector<boost::tuple< std::string, std::string, ushort > >  &getSensorConfiguration() {
-        return sensor_group;
-    }
-
-    const unsigned int &getShmKey() {
-        return mShmKey;
-    }
-
-    void closeAllSockets() {
-
-        close(m_moduleManagerSocket_Camera);
-        close(m_moduleManagerSocket_Perfect);
-        close(m_moduleManagerSocket_PerfectInertial);
-    }
-
-    void openNetworkSockets() {
-
-        // initalize the server variable
-        std::string serverName = "127.0.0.1";
-
-        setServer(serverName.c_str());
-
-        m_moduleManagerSocket_Camera = openNetwork(sensor_group.at(0).get<2>());
-        m_moduleManagerSocket_Perfect = openNetwork(sensor_group.at(1).get<2>());
-        m_moduleManagerSocket_PerfectInertial = openNetwork(sensor_group.at(2).get<2>());
-
-    }
-
-    int getCameraSocketHandler() {
-        return m_moduleManagerSocket_Camera;
-    }
-
-    int getPerfectSocketHandler() {
-        return m_moduleManagerSocket_Perfect;
-    }
-
-    int getPerfectInertialSocketHandler() {
-        return m_moduleManagerSocket_PerfectInertial;
-    }
-
-    void getGroundTruthInformation(bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages);
-
-
-    void openShmWrapper() {
-        mShmPtr = openShm(mShmKey);
-    }
 
     bool getBreaking() {
         return m_breaking;

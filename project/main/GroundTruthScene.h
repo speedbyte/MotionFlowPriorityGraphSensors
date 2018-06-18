@@ -53,9 +53,8 @@ protected:
     ushort m_objectCount = 0;
     ushort m_sensorCount = 0;
 
-    std::vector<ushort> evaluation_sensor_list;
 
-
+    std::vector<ushort> m_evaluation_sensor_list;
 
 
 
@@ -63,7 +62,7 @@ public:
 
 
     GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
-    m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file), m_ptr_customObjectMetaDataList(MAX_ALLOWED_SENSOR_GROUPS), m_mapObjectNameToObjectMetaData(MAX_ALLOWED_SENSOR_GROUPS), m_ptr_customSensorMetaDataList(MAX_ALLOWED_SENSOR_GROUPS), m_mapSensorNameToSensorMetaData(MAX_ALLOWED_SENSOR_GROUPS)
+    m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file), m_ptr_customObjectMetaDataList(MAX_ALLOWED_SENSOR_GROUPS_EVALUATION), m_mapObjectNameToObjectMetaData(MAX_ALLOWED_SENSOR_GROUPS_EVALUATION), m_ptr_customSensorMetaDataList(MAX_ALLOWED_SENSOR_GROUPS_EVALUATION), m_mapSensorNameToSensorMetaData(MAX_ALLOWED_SENSOR_GROUPS_EVALUATION)
     {
 
         //m_ptr_customObjectMetaDataList = {};
@@ -78,7 +77,8 @@ public:
             sensorMetaDataList.push_back(senMetaData);
         }
 
-        evaluation_sensor_list = {1};
+        m_evaluation_sensor_list = {0, 1};
+
     };
 
     void startEvaluating(Noise noise);
@@ -91,7 +91,7 @@ public:
 
     void generate_bird_view();
 
-    void prepare_directories();
+    void prepare_directories(ushort sensor_group_index);
 
     void stopSimulation() {
         char command[1024];
@@ -318,8 +318,15 @@ $
 
     int m_scpSocket;
 
+    unsigned int mShmKey;      // key of the SHM segment
+    void *mShmPtr;
+
+    std::vector<std::vector<boost::tuple<std::string, std::string, ushort, ushort, ushort > > > sensor_group;
 
     std::vector<ViresObjects> viresObjects;
+
+    std::vector<ushort> m_generation_sensor_list;
+
 
 public:
 
@@ -335,8 +342,8 @@ public:
 
         close(m_scpSocket);
         close(m_triggerSocket);
-        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS ; i++ ) {
-            viresObjects.at(i).closeAllSockets();
+        for (ushort i = 0 ; i < MAX_ALLOWED_SENSOR_GROUPS_GENERATION ; i++ ) {
+            closeAllSockets(/* send a list of socket numbers*/);
         }
 
     }
@@ -347,7 +354,8 @@ public:
 
     double getTime();
 
-    GroundTruthSceneExternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) : GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
+    GroundTruthSceneExternal(std::vector<ushort> generation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
+            m_generation_sensor_list(generation_sensor_list), sensor_group(2), GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
 
 
         std::string to_replace = "traffic_demo";
@@ -465,6 +473,100 @@ public:
 
     void generate_gt_scene() override;
 
+    void closeAllSockets() {
+
+        //close(m_moduleManagerSocket_Camera);
+        //close(m_moduleManagerSocket_Perfect);
+        //close(m_moduleManagerSocket_PerfectInertial);
+    }
+
+
+    void configureSensor(ushort sensor_group_index, ushort shmKey, const int port_number_camera_sensor_data, const int port_number_usk_sensor_data, const int port_number_inertial_sensor_data,
+            std::string module_manager_libModuleSensor_CameraTemplate, std::string module_manager_libModuleSensor_PerfectTemplate) {
+
+
+        std::string module_manager_libModuleCameraSensor;
+        std::string module_manager_libModulePerfectSensor;
+        std::string module_manager_libModulePerfectSensorInertial;
+
+        std::string to_replace, with_replace;
+
+        std::string::size_type position;
+
+        ///Start sensor
+        ///--------------------------
+        module_manager_libModuleCameraSensor = module_manager_libModuleSensor_CameraTemplate;
+
+        //sensor name
+        to_replace = "Sensor_MM";
+        with_replace = "Sensor_MM_" + std::to_string(sensor_group_index);
+        position = module_manager_libModuleCameraSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), with_replace);
+        }
+
+        to_replace = std::to_string(65535);
+        position = module_manager_libModuleCameraSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(port_number_camera_sensor_data));
+        }
+
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", port_number_camera_sensor_data, shmKey, 0));
+
+        ///--------------------------
+
+        module_manager_libModulePerfectSensor = module_manager_libModuleSensor_PerfectTemplate;
+        //port number
+        to_replace = std::to_string(65535);
+        position = module_manager_libModulePerfectSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), std::to_string(port_number_usk_sensor_data));
+        }
+
+        //sensor name
+        to_replace = "Sensor_MM";
+        with_replace = "Sensor_MM_Perfect_" + std::to_string(sensor_group_index);
+        position = module_manager_libModulePerfectSensor.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensor.replace(position, to_replace.length(), with_replace);
+        }
+
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data, shmKey, 0));
+
+        ///--------------------------
+
+        module_manager_libModulePerfectSensorInertial = module_manager_libModuleSensor_PerfectTemplate;
+        //port number
+        to_replace = std::to_string(65535);
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), std::to_string(port_number_inertial_sensor_data));
+        }
+
+        //sensor name
+        to_replace = "Sensor_MM";
+        with_replace = "Sensor_MM_PerfectInertial_" + std::to_string(sensor_group_index);
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), with_replace);
+        }
+
+        //sensor coordinate
+        to_replace = "usk";
+        position = module_manager_libModulePerfectSensorInertial.find(to_replace);
+        if ( position != std::string::npos) {
+            module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
+        }
+
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", port_number_inertial_sensor_data, shmKey, 0));
+
+        ///End sensor
+
+    }
+
+    void openShmWrapper() {
+        mShmPtr = openShm(mShmKey);
+    }
 
 
 

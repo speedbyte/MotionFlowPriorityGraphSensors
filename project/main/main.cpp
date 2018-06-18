@@ -260,11 +260,16 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
-                GroundTruthSceneExternal gt_scene(scenarios_list[0], environment_list[env_index],
+
+                std::vector<ushort> generation_sensor_list = {1};
+
+                GroundTruthSceneExternal gt_scene(generation_sensor_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base,
                                                   vires_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
-                base_ptr_gt_scene->prepare_directories();
+                for ( ushort i = 0; i < generation_sensor_list.size(); i++ ) {
+                    base_ptr_gt_scene->prepare_directories(generation_sensor_list.at(i));
+                }
                 base_ptr_gt_scene->generate_gt_scene();
                 base_ptr_gt_scene->generate_bird_view();
 
@@ -281,7 +286,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
-                base_ptr_gt_scene->prepare_directories();
+                std::vector<ushort> sensor_group_index = {1};
+                for ( ushort i = 0; i < sensor_group_index.size(); i++ ) {
+                    base_ptr_gt_scene->prepare_directories(sensor_group_index.at(i));
+                }
                 base_ptr_gt_scene->generate_gt_scene();
                 base_ptr_gt_scene->generate_bird_view();
 
