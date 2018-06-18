@@ -92,7 +92,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
     std::vector<unsigned> x_pts;
     std::vector<double> y_pts;
     std::vector<unsigned> z_pts;
-    std::vector<boost::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
+    std::vector<std::tuple<std::vector<unsigned>, std::vector<double>> > pts_exectime;
 
     bool needToInit = true;
     std::vector<cv::Point2f> prev_pts;
@@ -265,7 +265,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
         std::swap(prevGray, curGray);
 
     }
-    pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
+    pts_exectime.push_back(std::make_tuple(x_pts, y_pts));
     video_out.release();
     cv::destroyAllWindows();
 
@@ -273,7 +273,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
     Gnuplot gp2d;
     gp2d << "set xrange [0:200]\n";
     gp2d << "set yrange [0:100]\n";
-    gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << " with lines title 'vec of boost::tuple of vec'\n";
+    gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << " with lines title 'vec of std::tuple of vec'\n";
 
 }
 

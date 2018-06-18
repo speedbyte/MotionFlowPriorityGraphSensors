@@ -321,7 +321,7 @@ $
     unsigned int mShmKey;      // key of the SHM segment
     void *mShmPtr;
 
-    std::vector<std::vector<boost::tuple<std::string, std::string, ushort, ushort, ushort > > > sensor_group;
+    std::vector<std::vector<std::tuple<std::string, std::string, ushort, ushort, ushort > > > sensor_group;
 
     std::vector<ViresObjects> viresObjects;
 
@@ -511,7 +511,7 @@ public:
             module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(port_number_camera_sensor_data));
         }
 
-        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", port_number_camera_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(std::make_tuple(module_manager_libModuleCameraSensor, "suffix", port_number_camera_sensor_data, shmKey, 0));
 
         ///--------------------------
 
@@ -531,7 +531,7 @@ public:
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), with_replace);
         }
 
-        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(std::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data, shmKey, 0));
 
         ///--------------------------
 
@@ -558,7 +558,7 @@ public:
             module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
         }
 
-        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", port_number_inertial_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(std::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", port_number_inertial_sensor_data, shmKey, 0));
 
         ///End sensor
 

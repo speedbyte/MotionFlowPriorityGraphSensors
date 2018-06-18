@@ -6,6 +6,10 @@
 #include <map>
 #include <unordered_map>
 
+typedef struct message {
+    unsigned int a = 0;
+    char c[32];
+} STRUCT_MESSAGE;
 
 int main()
 {
@@ -69,6 +73,25 @@ int main()
 
     std::cout << pt.get<std::string>("Section1.section1_val1") << std::endl;
     std::cout << pt.get<std::string>("Section1.section1_val2") << std::endl;
+
+    STRUCT_MESSAGE msg1, msg2;
+
+    memset(&msg1, 0x0, sizeof(msg1));
+    msg1.a = 0xAA;
+    sprintf(msg1.c, "first");
+    std::ofstream myfile = std::ofstream("file.bin", std::ios::out | std::ios::binary);
+    myfile.write((char *)&msg1, sizeof(msg1));
+    myfile.close();
+
+    std::ifstream myfile_in;
+    myfile_in = std::ifstream("file.bin", std::ios::binary);
+    myfile_in.read((char *)&msg2, sizeof(msg1));
+    myfile_in.close();
+
+    printf("0x%X", msg2.a);
+    //std::cout << msg2.a;
+
 }
+
 
 
