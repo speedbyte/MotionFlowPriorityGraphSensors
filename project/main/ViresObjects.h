@@ -86,10 +86,12 @@ public:
             sensorMetaDataList.push_back(senMetaData);
         }
 
-        fstream_output_object_state = std::ofstream("object_state_" + std::to_string(current_sensor_group_index) + ".bin", std::ios::out | std::ios::binary);
-        fstream_output_sensor_state = std::ofstream("sensor_state_" + std::to_string(current_sensor_group_index) + ".bin", std::ios::out | std::ios::binary);
-        fstream_output_sensor_object = std::ofstream("sensor_object_" + std::to_string(current_sensor_group_index) + ".bin", std::ios::out | std::ios::binary);
+    }
 
+    void openAllFileHandles() {
+        fstream_output_object_state = std::ofstream("../object_state_" + std::to_string(m_sensorCount) + ".bin", std::ios::out | std::ios::binary);
+        fstream_output_sensor_state = std::ofstream("../sensor_state_" + std::to_string(m_sensorCount) + ".bin", std::ios::out | std::ios::binary);
+        fstream_output_sensor_object = std::ofstream("../sensor_object_" + std::to_string(m_sensorCount) + ".bin", std::ios::out | std::ios::binary);
     }
 
     ViresObjects() {}

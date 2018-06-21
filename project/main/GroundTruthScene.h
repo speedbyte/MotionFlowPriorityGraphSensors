@@ -77,7 +77,7 @@ public:
             sensorMetaDataList.push_back(senMetaData);
         }
 
-        m_evaluation_sensor_list = {0, 1};
+        m_evaluation_sensor_list = {0};
 
     };
 

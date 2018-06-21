@@ -26,7 +26,7 @@ void ViresObjects::readObjectStateFromBinaryFile(std::string suffix) {
 
     ushort frame_number;
 
-    std::ifstream fstream_input_object_state = std::ifstream("object_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
+    std::ifstream fstream_input_object_state = std::ifstream("../object_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
 
     char marker[3];
     fstream_input_object_state.read(marker, sizeof(marker-1));
@@ -112,9 +112,16 @@ void ViresObjects::readSensorObjectFromBinaryFile(std::string suffix) {
 
     ushort frame_number;
 
-    std::ifstream fstream_input_sensor_object = std::ifstream("object_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
+    std::ifstream fstream_input_sensor_object = std::ifstream("../sensor_object_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
+    char marker[3];
+    fstream_input_sensor_object.read(marker, sizeof(marker-1));
+    marker[2] = '\0';
+    if ( strcmp(marker, "$$") != 0 ) {
+        std::cout << "not in sync" << std::endl;
+        throw;
+    }
     fstream_input_sensor_object.read((char *)&frame_number, sizeof(ushort));
-    fstream_input_sensor_object.read((char *)&data, sizeof(RDB_SENSOR_OBJECT_t));
+    fstream_input_sensor_object.read((char *)data, sizeof(RDB_SENSOR_OBJECT_t));
 
     if (m_mapObjectNameToObjectMetaData.count(m_mapObjectIdToObjectName[data->id]) == 0) {
 
@@ -153,9 +160,16 @@ void ViresObjects::readSensorStateFromBinaryFile(std::string suffix) {
 
     ushort frame_number;
 
-    std::ifstream fstream_input_sensor_state = std::ifstream("object_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
+    std::ifstream fstream_input_sensor_state = std::ifstream("../sensor_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
+    char marker[3];
+    fstream_input_sensor_state.read(marker, sizeof(marker-1));
+    marker[2] = '\0';
+    if ( strcmp(marker, "$$") != 0 ) {
+        std::cout << "not in sync" << std::endl;
+        throw;
+    }
     fstream_input_sensor_state.read((char *)&frame_number, sizeof(ushort));
-    fstream_input_sensor_state.read((char *)&data, sizeof(RDB_SENSOR_STATE_t));
+    fstream_input_sensor_state.read((char *)data, sizeof(RDB_SENSOR_STATE_t));
     if (m_mapSensorNameToSensorMetaData.count(data->name) == 0) {
 
         m_mapSensorIdToSensorName[data->id] = data->name;
