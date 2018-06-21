@@ -453,7 +453,7 @@ std::vector<unsigned> z_pts;
 
 auto max = (std::max_element(y_pts.begin(), y_pts.end())).operator*();
 
-pts_exectime.push_back(std::make_tuple(x_pts, y_pts));
+pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
 // gnuplot_2d
 Gnuplot gp2d;
 gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";

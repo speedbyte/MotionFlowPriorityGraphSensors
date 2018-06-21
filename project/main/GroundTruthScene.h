@@ -93,14 +93,6 @@ public:
 
     void prepare_directories(ushort sensor_group_index);
 
-    void stopSimulation() {
-        char command[1024];
-        sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
-        std::cout << command << std::endl;
-        system(command);
-        std::cout << "End of generation" << std::endl;
-    }
-
     void calcBBFrom3DPosition();
 
 };
@@ -321,7 +313,7 @@ $
     unsigned int mShmKey;      // key of the SHM segment
     void *mShmPtr;
 
-    std::vector<std::vector<std::tuple<std::string, std::string, ushort, ushort, ushort > > > sensor_group;
+    std::vector<std::vector<boost::tuple<std::string, std::string, ushort, ushort, ushort > > > sensor_group;
 
     std::vector<ViresObjects> viresObjects;
 
@@ -334,10 +326,6 @@ public:
 
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, stop.c_str());
-
-        sleep(1);
-
         sendSCPMessage(m_scpSocket, config.c_str());
 
         close(m_scpSocket);
@@ -347,6 +335,22 @@ public:
         }
 
     }
+
+    void stopSimulation() {
+
+        close(m_scpSocket);
+        close(m_triggerSocket);
+        for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
+            closeAllSockets(/* send a list of socket numbers*/);
+        }
+
+        char command[1024];
+        sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
+        std::cout << command << std::endl;
+        system(command);
+        std::cout << "End of generation" << std::endl;
+    }
+
 
     void analyzeImage( RDB_IMAGE_t* img, const unsigned int & simFrame, unsigned int index );
 
@@ -475,9 +479,12 @@ public:
 
     void closeAllSockets() {
 
-        //close(m_moduleManagerSocket_Camera);
-        //close(m_moduleManagerSocket_Perfect);
-        //close(m_moduleManagerSocket_PerfectInertial);
+        for (ushort i = 0; i < m_generation_sensor_list.size(); i++) {
+
+            for (ushort j = 0; j < 3; j++) {
+                close(sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<4>());
+            }
+        }
     }
 
 
@@ -511,7 +518,7 @@ public:
             module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(port_number_camera_sensor_data));
         }
 
-        sensor_group.at(sensor_group_index).push_back(std::make_tuple(module_manager_libModuleCameraSensor, "suffix", port_number_camera_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", port_number_camera_sensor_data, shmKey, 0));
 
         ///--------------------------
 
@@ -531,7 +538,7 @@ public:
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), with_replace);
         }
 
-        sensor_group.at(sensor_group_index).push_back(std::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data, shmKey, 0));
 
         ///--------------------------
 
@@ -558,7 +565,7 @@ public:
             module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
         }
 
-        sensor_group.at(sensor_group_index).push_back(std::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", port_number_inertial_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", port_number_inertial_sensor_data, shmKey, 0));
 
         ///End sensor
 

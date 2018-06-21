@@ -729,7 +729,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         viresObjects.push_back(ViresObjects(1, m_generatepath));
 
         configureSensor(0, 0x120a, DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate_left, module_manager_libModuleSensor_PerfectTemplate_left);
-        configureSensor(1, 0x120b, DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
+        //configureSensor(1, 0x120b, DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
 
         char command[1024];
 
@@ -751,13 +751,16 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(5); // Wait before starting vtd again.
 
-        if (m_environment == "blue_sky") {
+        //if (m_environment == "blue_sky") {
             sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
                     project.c_str());
             std::cout << command << std::endl;
             system(command);
             std::cout << " I am out of bash" << std::endl;
-        }
+        //}
+        //else {
+        //    sendSCPMessage(m_scpSocket, apply.c_str());
+        //}
 
         sleep(5); // Give some time before you send SCP commands.
 
@@ -783,9 +786,18 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1); // Give some time before you send the next SCP command.
 
-        sendSCPMessage(m_scpSocket, apply.c_str());
 
-        sleep(5); // This is very important !! Mimimum 5 seconds of wait, till you start the simulation
+        // end of autoConfig ! autoconfig automatically sends Apply
+        sleep(1);
+
+        // start of autoStart ! autoStart calls tcAutoStart.sh implicitly. But my tcAutoStart is empty. I send scpCommands from vtdRunScp.sh
+
+        sendSCPMessage(m_scpSocket, stop.c_str());
+        sleep(1);
+
+        sprintf(command, "cd %s../../ ; bash vtdRunScp.sh", (m_datasetpath.string()).c_str());
+        std::cout << command << std::endl;
+        system(command);
 
         sendSCPMessage(m_scpSocket, project_name.c_str());
 
@@ -808,7 +820,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             for ( ushort j = 0; j < 3; j++ ) {
                 std::cout << sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<0>().c_str();
                 sendSCPMessage(m_scpSocket, sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<0>().c_str());
-
                 sleep(1);
             }
         }
@@ -818,15 +829,15 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_left.c_str());
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_right.c_str());
-        sleep(1);
+        //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_right.c_str());
+        //sleep(1);
 
         sendSCPMessage(m_scpSocket, display_parameters_left.c_str());
 
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, display_parameters_right.c_str());
-        sleep(1);
+        //sendSCPMessage(m_scpSocket, display_parameters_right.c_str());
+        //sleep(1);
 
 
         sendSCPMessage(m_scpSocket, m_environment_scp_message.c_str());
@@ -853,12 +864,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         //sendSCPMessage(m_scpSocket, bbox.c_str());
 
         sleep(1);
-
-        sprintf(command, "cd %s../../ ; bash vtdRunScp.sh", (m_datasetpath.string()).c_str());
-        std::cout << command << std::endl;
-        system(command);
-
-        sleep(10);  // Give some time before you start the trigger and module manager ports.
 
         //readScpNetwork(m_scpSocket);
 
@@ -932,7 +937,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 return;
             };
 
-            configVires();
+            stopSimulation();
+            //configVires();
         }
     }
 
