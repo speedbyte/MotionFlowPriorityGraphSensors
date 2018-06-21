@@ -388,15 +388,13 @@ ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushor
 
     }
 
-    if ( getGroundTruthData ) {
 
-        readNetwork(m_moduleManagerSocket_Camera);  // this calls parseRDBMessage() in vires_common.cpp
+    readNetwork(m_moduleManagerSocket_Camera);  // this calls parseRDBMessage() in vires_common.cpp
 
-        readNetwork(m_moduleManagerSocket_Perfect);  // this calls parseRDBMessage() in vires_common.cpp
+    readNetwork(m_moduleManagerSocket_Perfect);  // this calls parseRDBMessage() in vires_common.cpp
 
-        readNetwork(m_moduleManagerSocket_PerfectInertial);  // this calls parseRDBMessage() in vires_common.cpp
+    readNetwork(m_moduleManagerSocket_PerfectInertial);  // this calls parseRDBMessage() in vires_common.cpp
 
-    }
 
 }
 

@@ -5,6 +5,7 @@
 
 SETUP="Standard_test"
 
+
 if [ $# == 1 ]; then	#set project
 PROJECT=$1
 else
@@ -21,7 +22,7 @@ VIRES_DIR=$SOURCE_DIR/VIRES/VTD.2.1/bin
 VIRES_DATASET_DIR=$SOURCE_DIR/datasets/vires_dataset
 
 cd $VIRES_DIR 
-./vtdStart.sh -setup=$SETUP -project=$PROJECT & 
+./vtdStart.sh -setup=$SETUP -project=$PROJECT -autoConfig& 
 echo "vtdStart.sh pid = $!"
 
 
