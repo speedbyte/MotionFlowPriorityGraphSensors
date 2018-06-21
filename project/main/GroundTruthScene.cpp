@@ -749,7 +749,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                                                       "moving_truck.xml", "moving.xml", "one.xml",
                                                       "truck.xml", "two.xml"};
 
-        sleep(5); // Wait before starting vtd again.
+        sleep(1); // Wait before starting vtd again.
 
         //if (m_environment == "blue_sky") {
             sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
@@ -762,7 +762,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         //    sendSCPMessage(m_scpSocket, apply.c_str());
         //}
 
-        sleep(5); // Give some time before you send SCP commands.
+        sleep(1); // Give some time before you send SCP commands.
 
         // std::string m_server;
         boost::filesystem::path m_ts_gt_out_dir;
@@ -952,9 +952,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             try {
                 for ( ushort i = 0 ; i < m_generation_sensor_list.size() ; i++) {
+                    viresObjects.at(m_generation_sensor_list.at(i)).closeAllFileHandles();
+
                     viresObjects.at(m_generation_sensor_list.at(i)).readObjectStateFromBinaryFile("vires_");
                     viresObjects.at(m_generation_sensor_list.at(i)).readSensorObjectFromBinaryFile("vires_");
                     viresObjects.at(m_generation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
+
                     viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
                 }
             }

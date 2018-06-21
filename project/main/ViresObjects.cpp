@@ -27,8 +27,16 @@ void ViresObjects::readObjectStateFromBinaryFile(std::string suffix) {
     ushort frame_number;
 
     std::ifstream fstream_input_object_state = std::ifstream("object_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
+
+    char marker[3];
+    fstream_input_object_state.read(marker, sizeof(marker-1));
+    marker[2] = '\0';
+    if ( strcmp(marker, "$$") != 0 ) {
+        std::cout << "not in sync" << std::endl;
+        throw;
+    }
     fstream_input_object_state.read((char *)&frame_number, sizeof(ushort));
-    fstream_input_object_state.read((char *)&data, sizeof(RDB_OBJECT_STATE_t));
+    fstream_input_object_state.read((char *)data, sizeof(RDB_OBJECT_STATE_t));
 
     if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
 
@@ -520,8 +528,11 @@ void ViresObjects::parseEntry(RDB_SENSOR_STATE_t *data, const double &simTime, c
                     data->name);
 
             ushort frame_number = (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC);
-            fstream_output_sensor_state.write((char *)frame_number, sizeof(frame_number));
-            fstream_output_sensor_state.write((char *)data, sizeof(data));
+            const char marker[] = "$$";
+            std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_SENSOR_STATE_t) << std::endl;
+            fstream_output_sensor_state.write(marker, sizeof(marker-1));
+            fstream_output_sensor_state.write((char *)&frame_number, sizeof(frame_number));
+            fstream_output_sensor_state.write((char *)data, sizeof(RDB_SENSOR_STATE_t));
 
         }
     }
@@ -547,8 +558,11 @@ simFrame, const
                     data->base.name);
 
             ushort frame_number = (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC);
-            fstream_output_object_state.write((char *)frame_number, sizeof(frame_number));
-            fstream_output_object_state.write((char *)data, sizeof(data));
+            const char marker[] = "$$";
+            std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_OBJECT_STATE_t) << std::endl;
+            fstream_output_object_state.write(marker, sizeof(marker-1));
+            fstream_output_object_state.write((char *)&frame_number, sizeof(frame_number));
+            fstream_output_object_state.write((char *)data, sizeof(RDB_OBJECT_STATE_t));
 
         } else {
             //std::cout << data->base.type << std::endl;
@@ -579,8 +593,11 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
             data->id); //m_mapObjectIdToObjectName[data->id]);
 
             ushort frame_number = (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC);
-            fstream_output_sensor_object.write((char *)frame_number, sizeof(frame_number));
-            fstream_output_sensor_object.write((char *)data, sizeof(data));
+            const char marker[] = "$$";
+            std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_SENSOR_OBJECT_t) << std::endl;
+            fstream_output_sensor_object.write(marker, sizeof(marker-1));
+            fstream_output_sensor_object.write((char *)&frame_number, sizeof(frame_number));
+            fstream_output_sensor_object.write((char *)data, sizeof(RDB_SENSOR_OBJECT_t));
 
 
         } else {
