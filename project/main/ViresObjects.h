@@ -100,6 +100,11 @@ public:
     void readSensorObjectFromBinaryFile(std::string suffix);
     void readSensorStateFromBinaryFile(std::string suffix);
 
+    void closeAllFileHandles() {
+        fstream_output_object_state.close();
+        fstream_output_sensor_object.close();
+        fstream_output_sensor_state.close();
+    }
     void getGroundTruthInformation(void* shmPtr, bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages,
             ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushort m_moduleManagerSocket_PerfectInertial);
 
