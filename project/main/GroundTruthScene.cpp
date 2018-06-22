@@ -57,199 +57,6 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
     }
 }
 
-void GroundTruthScene::readPositionFromFile(std::string positionFileName) {
-
-
-    cv::Point2f speed_usk, speed_inertial;
-    cv::Point2f dimension_pixel, sensor_fov;
-    cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
-    cv::Point3f position_inertial_pre, position_usk_pre, position_pixel_pre;
-    float totalDistanceTravelled;
-
-    cv::Point3f orientation_inertial, orientation_usk;
-
-
-    cv::FileNode file_node;
-    cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
-
-    for (unsigned sensor_index_iter = 0; sensor_index_iter< m_evaluation_sensor_list.size(); sensor_index_iter++) {
-
-        ushort sensor_index = m_evaluation_sensor_list.at(sensor_index_iter);
-
-        ushort  objectCount = 0;
-        ushort  sensorCount = 0;
-        cv::FileStorage fs;
-        if ( sensor_index == 0 ) {
-            fs.open("../position_vires_0.yml", cv::FileStorage::READ);
-        }
-        else {
-            fs.open("../position_vires_1.yml", cv::FileStorage::READ);
-        }
-
-        assert(fs.isOpened());
-
-        //std::string temp_str = "_sensor_count_" + sensor_index;
-        char temp_str_fs[20];
-        sprintf(temp_str_fs, "sensor_index_%03d", sensor_index);
-        std::cout << "read yaml file for sensor_index " << (sensor_index) << std::endl;
-        //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_object_shape_point_displacement().at(sensor_index).size();
-        unsigned long FRAME_COUNT = ITERATION_END_POINT;
-        assert(FRAME_COUNT > 0);
-
-          for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
-
-            std::cout << current_frame_index << std::endl;
-            char temp_str_fc[20];
-            sprintf(temp_str_fc, "frame_count_%03d", current_frame_index);
-            file_node = fs[temp_str_fc];
-            if (file_node.isNone() || file_node.empty()) {
-                std::cout << temp_str_fc << " cannot be found" << std::endl;
-            } else {
-
-                //std::cout << file_node.size() << " found" << std::endl;
-                file_node_iterator_begin = file_node.begin();
-                file_node_iterator_end = file_node.end();
-
-                for (file_node_iterator = file_node_iterator_begin; file_node_iterator != file_node_iterator_end;
-                     file_node_iterator++) {
-
-                    if (((*file_node_iterator)["name"].string()).find("Sensor") == std::string::npos) {
-
-                        if (m_mapObjectNameToObjectMetaData[sensor_index].count((*file_node_iterator)["name"].string()) == 0
-                                ) {
-                            m_ptr_customObjectMetaDataList.at(sensor_index).push_back(&objectMetaDataList.at(m_objectCount));
-                            m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(sensor_index).at(
-                                    objectCount);
-                            m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setObjectName(
-                                    (*file_node_iterator)["name"].string());
-                            Rectangle rectangle(Dataset::getFrameSize().width,
-                                                Dataset::getFrameSize().height); // width, height
-                            m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setObjectShape(rectangle);
-                            m_ptr_customObjectMetaDataList.at(sensor_index).at(objectCount)->setStartPoint(ITERATION_START_POINT);
-                            m_objectCount += 1;
-                            objectCount += 1;
-                        }
-
-                        std::cout << (*file_node_iterator)["name"].string() << " "
-                                  << (double) (*file_node_iterator)["x_camera"] << " "
-                                  << (double) (*file_node_iterator)["y_camera"] << std::endl;
-
-                        position_pixel = cv::Point3f((double) (*file_node_iterator)["x_camera"],
-                                                     (double) (*file_node_iterator)["y_camera"],
-                                                     (double) (*file_node_iterator)["z_camera"]);
-
-                        position_inertial = cv::Point3f((double) (*file_node_iterator)["x_inertial"],
-                                                        (double) (*file_node_iterator)["y_inertial"],
-                                                        (double) (*file_node_iterator)["z_inertial"]);
-
-                        position_usk = cv::Point3f((double) (*file_node_iterator)["x_usk"],
-                                                   (double) (*file_node_iterator)["y_usk"],
-                                                   (double) (*file_node_iterator)["z_usk"]);
-
-                        dimension_pixel = cv::Point2f((int) (*file_node_iterator)["dim_x_camera"],
-                                                      (int) (*file_node_iterator)["dim_y_camera"]);
-
-                        dimension_realworld = cv::Point3f((double) (*file_node_iterator)["dim_x_realworld"],
-                                                          (double) (*file_node_iterator)["dim_y_realworld"],
-                                                          (double) (*file_node_iterator)["dim_z_realworld"]);
-
-                        speed_inertial = cv::Point2f((int) (*file_node_iterator)["speed_inertial"],
-                                                     (int) (*file_node_iterator)["speed_inertial"]);
-
-                        speed_usk = cv::Point2f((int) (*file_node_iterator)["speed_x"],
-                                                (int) (*file_node_iterator)["speed_y"]);
-
-                        offset = cv::Point3f((double) (*file_node_iterator)["off_x"],
-                                             (double) (*file_node_iterator)["off_y"],
-                                             (double) (*file_node_iterator)["off_z"]);
-
-                        orientation_inertial = cv::Point3f((double) (*file_node_iterator)["h_inertial"],
-                                                           (double) (*file_node_iterator)["p_inertial"],
-                                                           (double) (*file_node_iterator)["r_inertial"]);
-
-                        orientation_usk = cv::Point3f((double) (*file_node_iterator)["h_usk"],
-                                                      (double) (*file_node_iterator)["p_usk"],
-                                                      (double) (*file_node_iterator)["r_usk"]);
-
-                        totalDistanceTravelled = (float) (*file_node_iterator)["total_distance_covered"];
-
-                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberFrameCount(
-                                current_frame_index);
-                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(
-                                current_frame_index, position_pixel, offset, dimension_pixel, totalDistanceTravelled);
-                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(
-                                current_frame_index, position_usk, orientation_usk, dimension_realworld, speed_usk,
-                                totalDistanceTravelled);
-                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(
-                                current_frame_index, position_inertial, orientation_inertial, dimension_realworld,
-                                speed_inertial, totalDistanceTravelled);
-
-                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
-                                current_frame_index, (int) (*file_node_iterator)["visMask"]);
-
-                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionWindow(
-                                current_frame_index, (int) (*file_node_iterator)["occ_px"]);
-
-                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionUsk(
-                                current_frame_index, (int) (*file_node_iterator)["occ_usk"]);
-
-                        (m_mapObjectNameToObjectMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionInertial(
-                                current_frame_index, (int) (*file_node_iterator)["occ_inertial"]);
-
-                        position_inertial_pre = position_inertial;
-                        position_pixel_pre = position_pixel;
-                        position_usk_pre = position_usk;
-
-                    }
-                    else
-                    {
-                        if (m_mapSensorNameToSensorMetaData[sensor_index].count((*file_node_iterator)["name"].string()) == 0) {
-                            m_ptr_customSensorMetaDataList[sensor_index].push_back(&sensorMetaDataList.at(m_sensorCount));
-                            m_mapSensorNameToSensorMetaData[sensor_index][(*file_node_iterator)["name"].string()] = m_ptr_customSensorMetaDataList.at(sensor_index).at(sensorCount);
-                            m_ptr_customSensorMetaDataList.at(sensor_index).at(sensorCount)->setSensorName(
-                                    (*file_node_iterator)["name"].string());
-                            m_ptr_customSensorMetaDataList.at(sensor_index).at(sensorCount)->setStartPoint(0);
-                            m_sensorCount += 1;
-                            sensorCount += 1;
-                        }
-
-                        std::cout << (*file_node_iterator)["name"].string() << " "
-                                  << (double) (*file_node_iterator)["x_carrier"] << " "
-                                  << (double) (*file_node_iterator)["y_carrier"] << std::endl;
-
-                        position_inertial = cv::Point3f((double) (*file_node_iterator)["x_carrier"],
-                                                        (double) (*file_node_iterator)["y_carrier"],
-                                                        (double) (*file_node_iterator)["z_carrier"]);
-
-                        offset = cv::Point3f((double) (*file_node_iterator)["off_x_sensor"],
-                                             (double) (*file_node_iterator)["off_y_sensor"],
-                                             (double) (*file_node_iterator)["off_z_sensor"]);
-
-                        orientation_inertial = cv::Point3f((double) (*file_node_iterator)["h_carrier"],
-                                                           (double) (*file_node_iterator)["p_carrier"],
-                                                           (double) (*file_node_iterator)["r_carrier"]);
-
-                        orientation_usk = cv::Point3f((double) (*file_node_iterator)["h_sensor"],
-                                                      (double) (*file_node_iterator)["p_sensor"],
-                                                      (double) (*file_node_iterator)["r_sensor"]);
-
-                        sensor_fov = cv::Point2f((double) (*file_node_iterator)["fov_horizontal"],
-                                                 (double) (*file_node_iterator)["fov_vertical"]);
-
-                        (m_mapSensorNameToSensorMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberSensorState(
-                                current_frame_index, position_inertial, orientation_inertial, orientation_usk, offset,
-                                sensor_fov);
-
-                        (m_mapSensorNameToSensorMetaData[sensor_index][(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
-                                current_frame_index, (int) (*file_node_iterator)["visible"]);
-                    }
-                }
-            }
-        }
-        fs.release();
-    }
-}
-
 void GroundTruthScene::startEvaluating(Noise noise) {
 
     calcBBFrom3DPosition();
@@ -320,7 +127,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         if (!m_regenerate_yaml_file) { // dont generate, just read
 
-            readPositionFromFile("../position_cpp.yml");
+            //readPositionFromFile("../position_cpp.yml");
 
             ushort map_pair_count = 0;
             for (const auto &myPair : m_mapObjectNameToObjectMetaData[0]) {
@@ -974,9 +781,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 viresObjects.at(m_evaluation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
 
                 viresObjects.at(m_evaluation_sensor_list.at(i)).writePositionInYaml("vires_");
+
+                viresObjects.at(m_evaluation_sensor_list.at(i)).readPositionFromFile("dummy");
+
             }
 
-            readPositionFromFile("dummy");
 
             ushort map_pair_count = 0;
             for (const auto &myPair : m_mapObjectNameToObjectMetaData[0]) {

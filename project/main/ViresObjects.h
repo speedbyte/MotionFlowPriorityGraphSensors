@@ -115,6 +115,8 @@ public:
         return m_breaking;
     }
 
+    void readPositionFromFile(std::string positionFileName);
+
 
     void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
 

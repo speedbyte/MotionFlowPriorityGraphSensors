@@ -11,6 +11,189 @@
 #include "datasets.h"
 
 
+void ViresObjects::readPositionFromFile(std::string positionFileName) {
+
+
+    cv::Point2f speed_usk, speed_inertial;
+    cv::Point2f dimension_pixel, sensor_fov;
+    cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
+    cv::Point3f position_inertial_pre, position_usk_pre, position_pixel_pre;
+    float totalDistanceTravelled;
+
+    cv::Point3f orientation_inertial, orientation_usk;
+
+
+    cv::FileNode file_node;
+    cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
+
+
+    ushort  objectCount = 0;
+    ushort  sensorCount = 0;
+    cv::FileStorage fs;
+    fs.open("../position_vires_" + std::to_string(m_sensorGroupCount) + ".yml", cv::FileStorage::READ);
+
+    assert(fs.isOpened());
+
+    //std::string temp_str = "_sensor_count_" + sensor_index;
+    std::cout << "read yaml file for sensor_index " << (m_sensorGroupCount) << std::endl;
+    //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_object_shape_point_displacement().at(sensor_index).size();
+    unsigned long FRAME_COUNT = ITERATION_END_POINT;
+    assert(FRAME_COUNT > 0);
+
+    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+        std::cout << current_frame_index << std::endl;
+        char temp_str_fc[20];
+        sprintf(temp_str_fc, "frame_count_%03d", current_frame_index);
+        file_node = fs[temp_str_fc];
+        if (file_node.isNone() || file_node.empty()) {
+            std::cout << temp_str_fc << " cannot be found" << std::endl;
+        } else {
+
+            //std::cout << file_node.size() << " found" << std::endl;
+            file_node_iterator_begin = file_node.begin();
+            file_node_iterator_end = file_node.end();
+
+            for (file_node_iterator = file_node_iterator_begin; file_node_iterator != file_node_iterator_end;
+                 file_node_iterator++) {
+
+                if (((*file_node_iterator)["name"].string()).find("Sensor") == std::string::npos) {
+
+                    if (m_mapObjectNameToObjectMetaData.count((*file_node_iterator)["name"].string()) == 0
+                            ) {
+                        m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
+                        m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(
+                                objectCount);
+                        m_ptr_customObjectMetaDataList.at(objectCount)->setObjectName(
+                                (*file_node_iterator)["name"].string());
+                        Rectangle rectangle(Dataset::getFrameSize().width,
+                                            Dataset::getFrameSize().height); // width, height
+                        m_ptr_customObjectMetaDataList.at(objectCount)->setObjectShape(rectangle);
+                        m_ptr_customObjectMetaDataList.at(objectCount)->setStartPoint(ITERATION_START_POINT);
+                        m_objectCount += 1;
+                        objectCount += 1;
+                    }
+
+                    std::cout << (*file_node_iterator)["name"].string() << " "
+                              << (double) (*file_node_iterator)["x_camera"] << " "
+                              << (double) (*file_node_iterator)["y_camera"] << std::endl;
+
+                    position_pixel = cv::Point3f((double) (*file_node_iterator)["x_camera"],
+                                                 (double) (*file_node_iterator)["y_camera"],
+                                                 (double) (*file_node_iterator)["z_camera"]);
+
+                    position_inertial = cv::Point3f((double) (*file_node_iterator)["x_inertial"],
+                                                    (double) (*file_node_iterator)["y_inertial"],
+                                                    (double) (*file_node_iterator)["z_inertial"]);
+
+                    position_usk = cv::Point3f((double) (*file_node_iterator)["x_usk"],
+                                               (double) (*file_node_iterator)["y_usk"],
+                                               (double) (*file_node_iterator)["z_usk"]);
+
+                    dimension_pixel = cv::Point2f((int) (*file_node_iterator)["dim_x_camera"],
+                                                  (int) (*file_node_iterator)["dim_y_camera"]);
+
+                    dimension_realworld = cv::Point3f((double) (*file_node_iterator)["dim_x_realworld"],
+                                                      (double) (*file_node_iterator)["dim_y_realworld"],
+                                                      (double) (*file_node_iterator)["dim_z_realworld"]);
+
+                    speed_inertial = cv::Point2f((int) (*file_node_iterator)["speed_inertial"],
+                                                 (int) (*file_node_iterator)["speed_inertial"]);
+
+                    speed_usk = cv::Point2f((int) (*file_node_iterator)["speed_x"],
+                                            (int) (*file_node_iterator)["speed_y"]);
+
+                    offset = cv::Point3f((double) (*file_node_iterator)["off_x"],
+                                         (double) (*file_node_iterator)["off_y"],
+                                         (double) (*file_node_iterator)["off_z"]);
+
+                    orientation_inertial = cv::Point3f((double) (*file_node_iterator)["h_inertial"],
+                                                       (double) (*file_node_iterator)["p_inertial"],
+                                                       (double) (*file_node_iterator)["r_inertial"]);
+
+                    orientation_usk = cv::Point3f((double) (*file_node_iterator)["h_usk"],
+                                                  (double) (*file_node_iterator)["p_usk"],
+                                                  (double) (*file_node_iterator)["r_usk"]);
+
+                    totalDistanceTravelled = (float) (*file_node_iterator)["total_distance_covered"];
+
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberFrameCount(
+                            current_frame_index);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberCameraSensor(
+                            current_frame_index, position_pixel, offset, dimension_pixel, totalDistanceTravelled);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensor(
+                            current_frame_index, position_usk, orientation_usk, dimension_realworld, speed_usk,
+                            totalDistanceTravelled);
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberPerfectSensorInertial(
+                            current_frame_index, position_inertial, orientation_inertial, dimension_realworld,
+                            speed_inertial, totalDistanceTravelled);
+
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
+                            current_frame_index, (int) (*file_node_iterator)["visMask"]);
+
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionWindow(
+                            current_frame_index, (int) (*file_node_iterator)["occ_px"]);
+
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionUsk(
+                            current_frame_index, (int) (*file_node_iterator)["occ_usk"]);
+
+                    (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionInertial(
+                            current_frame_index, (int) (*file_node_iterator)["occ_inertial"]);
+
+                    position_inertial_pre = position_inertial;
+                    position_pixel_pre = position_pixel;
+                    position_usk_pre = position_usk;
+
+                }
+                else
+                {
+                    if (m_mapSensorNameToSensorMetaData.count((*file_node_iterator)["name"].string()) == 0) {
+                        m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
+                        m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customSensorMetaDataList.at(sensorCount);
+                        m_ptr_customSensorMetaDataList.at(sensorCount)->setSensorName(
+                                (*file_node_iterator)["name"].string());
+                        m_ptr_customSensorMetaDataList.at(sensorCount)->setStartPoint(0);
+                        m_sensorCount += 1;
+                        sensorCount += 1;
+                    }
+
+                    std::cout << (*file_node_iterator)["name"].string() << " "
+                              << (double) (*file_node_iterator)["x_carrier"] << " "
+                              << (double) (*file_node_iterator)["y_carrier"] << std::endl;
+
+                    position_inertial = cv::Point3f((double) (*file_node_iterator)["x_carrier"],
+                                                    (double) (*file_node_iterator)["y_carrier"],
+                                                    (double) (*file_node_iterator)["z_carrier"]);
+
+                    offset = cv::Point3f((double) (*file_node_iterator)["off_x_sensor"],
+                                         (double) (*file_node_iterator)["off_y_sensor"],
+                                         (double) (*file_node_iterator)["off_z_sensor"]);
+
+                    orientation_inertial = cv::Point3f((double) (*file_node_iterator)["h_carrier"],
+                                                       (double) (*file_node_iterator)["p_carrier"],
+                                                       (double) (*file_node_iterator)["r_carrier"]);
+
+                    orientation_usk = cv::Point3f((double) (*file_node_iterator)["h_sensor"],
+                                                  (double) (*file_node_iterator)["p_sensor"],
+                                                  (double) (*file_node_iterator)["r_sensor"]);
+
+                    sensor_fov = cv::Point2f((double) (*file_node_iterator)["fov_horizontal"],
+                                             (double) (*file_node_iterator)["fov_vertical"]);
+
+                    (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberSensorState(
+                            current_frame_index, position_inertial, orientation_inertial, orientation_usk, offset,
+                            sensor_fov);
+
+                    (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
+                            current_frame_index, (int) (*file_node_iterator)["visible"]);
+                }
+            }
+        }
+    }
+    fs.release();
+}
+
+
 void ViresObjects::readObjectStateFromBinaryFile(std::string suffix) {
 
     cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
@@ -28,127 +211,132 @@ void ViresObjects::readObjectStateFromBinaryFile(std::string suffix) {
 
     std::ifstream fstream_input_object_state = std::ifstream("../object_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
 
-    char marker[3];
-    fstream_input_object_state.read(marker, sizeof(marker-1));
-    marker[2] = '\0';
-    if ( strcmp(marker, "$$") != 0 ) {
-        std::cout << "not in sync" << std::endl;
-        throw;
-    }
-    fstream_input_object_state.read((char *)&frame_number, sizeof(ushort));
-    fstream_input_object_state.read((char *)data, sizeof(RDB_OBJECT_STATE_t));
+    while ( !fstream_input_object_state.eof() ) {
+        char marker[3];
+        fstream_input_object_state.read(marker, sizeof(marker - 1));
+        marker[2] = '\0';
+        if (strcmp(marker, "$$") != 0) {
+            std::cout << "not in sync" << std::endl;
+            throw;
+        }
+        fstream_input_object_state.read((char *) &frame_number, sizeof(ushort));
+        fstream_input_object_state.read((char *) data, sizeof(RDB_OBJECT_STATE_t));
 
-    if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
+        if (m_mapObjectNameToObjectMetaData.count(data->base.name) == 0) {
 
-        m_mapObjectIdToObjectName[data->base.id] = data->base.name;
-        m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
-        Rectangle rectangle((int) (data->base.geo.dimX), (int) (data->base.geo.dimY)); // width, height
-        m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
-        m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
-        m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
-        m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
-        m_objectCount += 1;
-    }
+            m_mapObjectIdToObjectName[data->base.id] = data->base.name;
+            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
+            Rectangle rectangle((int) (data->base.geo.dimX), (int) (data->base.geo.dimY)); // width, height
+            m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
+            m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
+            m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
+            m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
+            m_objectCount += 1;
+        }
 
-    m_mapObjectNameToObjectMetaData[data->base.name]->atAllObjectStateData(
-            (ushort) frame_number, data);
-
-
-    if (data->base.pos.type == RDB_COORD_TYPE_WINDOW) {
-
-        position_pixel = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
-                                     float(data->base.pos.z));
-        dimension_pixel = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
-        offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY,
-                             (float) data->base.geo.offZ);
-        total_distance_travelled = data->ext.traveledDist;
+        m_mapObjectNameToObjectMetaData[data->base.name]->atAllObjectStateData(
+                (ushort) frame_number, data);
 
 
-        m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor(
-                (ushort) frame_number, position_pixel, offset,
-                dimension_pixel, total_distance_travelled);
-        m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                (ushort) frame_number, data->base.visMask);
+        if (data->base.pos.type == RDB_COORD_TYPE_WINDOW) {
 
-    } else if (data->base.pos.type == RDB_COORD_TYPE_USK) {
+            position_pixel = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                         float(data->base.pos.z));
+            dimension_pixel = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
+            offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY,
+                                 (float) data->base.geo.offZ);
+            total_distance_travelled = data->ext.traveledDist;
 
-        position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
-                                   (float) data->base.pos.z);
-        orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p,
-                                      (float) data->base.pos.r);
-        dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY,
-                                          (float) data->base.geo.dimZ);
-        speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-        total_distance_travelled = data->ext.traveledDist;
-        m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor(
-                (ushort) frame_number, position_usk,
-                orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
-        m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                (ushort) frame_number, data->base.visMask);
 
-    } else if (data->base.pos.type == RDB_COORD_TYPE_INERTIAL) {
+            m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberCameraSensor(
+                    (ushort) frame_number, position_pixel, offset,
+                    dimension_pixel, total_distance_travelled);
+            m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                    (ushort) frame_number, data->base.visMask);
 
-        position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
-                                        (float) data->base.pos.z);
-        orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p,
-                                           (float) data->base.pos.r);
-        dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY,
-                                          (float) data->base.geo.dimZ);
-        speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
-        total_distance_travelled = data->ext.traveledDist;
-        m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial(
-                (ushort) frame_number, position_inertial,
-                orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
-        m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
-                (ushort) frame_number, data->base.visMask);
-    }
+        } else if (data->base.pos.type == RDB_COORD_TYPE_USK) {
 
-}
+            position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                       (float) data->base.pos.z);
+            orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p,
+                                          (float) data->base.pos.r);
+            dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY,
+                                              (float) data->base.geo.dimZ);
+            speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
+            total_distance_travelled = data->ext.traveledDist;
+            m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensor(
+                    (ushort) frame_number, position_usk,
+                    orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
+            m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                    (ushort) frame_number, data->base.visMask);
 
-void ViresObjects::readSensorObjectFromBinaryFile(std::string suffix) {
+        } else if (data->base.pos.type == RDB_COORD_TYPE_INERTIAL) {
 
-    RDB_SENSOR_OBJECT_t sensor_object_data;
-    RDB_SENSOR_OBJECT_t *data = &sensor_object_data;
-
-    ushort frame_number;
-
-    std::ifstream fstream_input_sensor_object = std::ifstream("../sensor_object_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
-    char marker[3];
-    fstream_input_sensor_object.read(marker, sizeof(marker-1));
-    marker[2] = '\0';
-    if ( strcmp(marker, "$$") != 0 ) {
-        std::cout << "not in sync" << std::endl;
-        throw;
-    }
-    fstream_input_sensor_object.read((char *)&frame_number, sizeof(ushort));
-    fstream_input_sensor_object.read((char *)data, sizeof(RDB_SENSOR_OBJECT_t));
-
-    if (m_mapObjectNameToObjectMetaData.count(m_mapObjectIdToObjectName[data->id]) == 0) {
-
-        m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
-        //Rectangle rectangle((int) (data->geo.dimX), (int) (data->geo.dimY)); // width, height
-        m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]] = m_ptr_customObjectMetaDataList.at(m_objectCount);
-        //m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
-        m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(m_mapObjectIdToObjectName[data->id]);
-        m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
-        m_objectCount += 1;
-    }
-    if (data->sensorPos.type == RDB_COORD_TYPE_WINDOW) {
-
-        m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
-                (ushort) frame_number, data->occlusion);
-    } else if (data->sensorPos.type == RDB_COORD_TYPE_USK) {
-
-        m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionUsk(
-                (ushort) frame_number, data->occlusion);
-    } else if (data->sensorPos.type== RDB_COORD_TYPE_INERTIAL) {
-
-        m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionInertial(
-                (ushort) frame_number, data->occlusion);
+            position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                            (float) data->base.pos.z);
+            orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p,
+                                               (float) data->base.pos.r);
+            dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY,
+                                              (float) data->base.geo.dimZ);
+            speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
+            total_distance_travelled = data->ext.traveledDist;
+            m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberPerfectSensorInertial(
+                    (ushort) frame_number, position_inertial,
+                    orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
+            m_mapObjectNameToObjectMetaData[data->base.name]->atFrameNumberVisibility(
+                    (ushort) frame_number, data->base.visMask);
+            }
+        }
     }
 
+    void ViresObjects::readSensorObjectFromBinaryFile(std::string suffix) {
 
-}
+        RDB_SENSOR_OBJECT_t sensor_object_data;
+        RDB_SENSOR_OBJECT_t *data = &sensor_object_data;
+
+        ushort frame_number;
+
+        std::ifstream fstream_input_sensor_object = std::ifstream("../sensor_object_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
+
+        while ( !fstream_input_sensor_object.eof() ) {
+
+            char marker[3];
+            fstream_input_sensor_object.read(marker, sizeof(marker - 1));
+            marker[2] = '\0';
+            if (strcmp(marker, "$$") != 0) {
+                std::cout << "not in sync" << std::endl;
+                throw;
+            }
+            fstream_input_sensor_object.read((char *) &frame_number, sizeof(ushort));
+            fstream_input_sensor_object.read((char *) data, sizeof(RDB_SENSOR_OBJECT_t));
+
+            if (m_mapObjectNameToObjectMetaData.count(m_mapObjectIdToObjectName[data->id]) == 0) {
+
+                m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
+                //Rectangle rectangle((int) (data->geo.dimX), (int) (data->geo.dimY)); // width, height
+                m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]] = m_ptr_customObjectMetaDataList.at(
+                        m_objectCount);
+                //m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
+                m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(m_mapObjectIdToObjectName[data->id]);
+                m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
+                m_objectCount += 1;
+            }
+            if (data->sensorPos.type == RDB_COORD_TYPE_WINDOW) {
+
+                m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
+                        (ushort) frame_number, data->occlusion);
+            } else if (data->sensorPos.type == RDB_COORD_TYPE_USK) {
+
+                m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionUsk(
+                        (ushort) frame_number, data->occlusion);
+            } else if (data->sensorPos.type == RDB_COORD_TYPE_INERTIAL) {
+
+                m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionInertial(
+                        (ushort) frame_number, data->occlusion);
+            }
+        }
+    }
+
 
 void ViresObjects::readSensorStateFromBinaryFile(std::string suffix) {
 
@@ -161,40 +349,43 @@ void ViresObjects::readSensorStateFromBinaryFile(std::string suffix) {
     ushort frame_number;
 
     std::ifstream fstream_input_sensor_state = std::ifstream("../sensor_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::binary);
-    char marker[3];
-    fstream_input_sensor_state.read(marker, sizeof(marker-1));
-    marker[2] = '\0';
-    if ( strcmp(marker, "$$") != 0 ) {
-        std::cout << "not in sync" << std::endl;
-        throw;
+
+    while ( !fstream_input_sensor_state.eof() ) {
+        char marker[3];
+        fstream_input_sensor_state.read(marker, sizeof(marker - 1));
+        marker[2] = '\0';
+        if (strcmp(marker, "$$") != 0) {
+            std::cout << "not in sync" << std::endl;
+            throw;
+        }
+        fstream_input_sensor_state.read((char *) &frame_number, sizeof(ushort));
+        fstream_input_sensor_state.read((char *) data, sizeof(RDB_SENSOR_STATE_t));
+        if (m_mapSensorNameToSensorMetaData.count(data->name) == 0) {
+
+            m_mapSensorIdToSensorName[data->id] = data->name;
+            m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
+            m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
+            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
+            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
+            m_sensorCount += 1;
+        }
+
+        position_sensor_carrier = cv::Point3f((float) data->originCoordSys.x, (float) data->originCoordSys.y,
+                                              (float) data->originCoordSys.z);
+        orientation_sensor_carrier = cv::Point3f((float) data->originCoordSys.h, (float) data->originCoordSys.p,
+                                                 (float) data->originCoordSys.r);
+
+        offset_sensor = cv::Point3f((float) data->pos.x, (float) data->pos.y,
+                                    (float) data->pos.z);
+        orientation_sensor = cv::Point3f((float) data->pos.h, (float) data->pos.p,
+                                         (float) data->pos.r);
+
+        fov = cv::Point2f(data->fovHV[0], data->fovHV[1]);
+
+        m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
+                (ushort) frame_number, position_sensor_carrier,
+                orientation_sensor_carrier, orientation_sensor, offset_sensor, fov);
     }
-    fstream_input_sensor_state.read((char *)&frame_number, sizeof(ushort));
-    fstream_input_sensor_state.read((char *)data, sizeof(RDB_SENSOR_STATE_t));
-    if (m_mapSensorNameToSensorMetaData.count(data->name) == 0) {
-
-        m_mapSensorIdToSensorName[data->id] = data->name;
-        m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
-        m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
-        m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
-        m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
-        m_sensorCount += 1;
-    }
-
-    position_sensor_carrier = cv::Point3f((float) data->originCoordSys.x, (float) data->originCoordSys.y,
-                                          (float) data->originCoordSys.z);
-    orientation_sensor_carrier = cv::Point3f((float) data->originCoordSys.h, (float) data->originCoordSys.p,
-                                             (float) data->originCoordSys.r);
-
-    offset_sensor = cv::Point3f((float) data->pos.x, (float) data->pos.y,
-                                (float) data->pos.z);
-    orientation_sensor = cv::Point3f((float) data->pos.h, (float) data->pos.p,
-                                     (float) data->pos.r);
-
-    fov = cv::Point2f(data->fovHV[0], data->fovHV[1]);
-
-    m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
-            (ushort) frame_number, position_sensor_carrier,
-            orientation_sensor_carrier, orientation_sensor, offset_sensor, fov);
 
 }
 

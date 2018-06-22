@@ -83,8 +83,6 @@ public:
 
     void startEvaluating(Noise noise);
 
-    void readPositionFromFile(std::string positionFileName);
-
     virtual void generate_gt_scene() {
         std::cout << "base implementation of generate_gt_scene()" << std::endl;
     };
