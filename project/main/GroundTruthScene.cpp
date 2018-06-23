@@ -558,6 +558,28 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1); // Wait before starting vtd again.
 
+        /*
+        mWidth=1200
+        mHeight=400
+        mPosX=200
+        mPosY=600
+        mBorder=true
+        mScreen=0
+        mVisual=$7
+        mViewportLeft=$8
+        mViewportRight=$9
+        mViewportBottom=$10
+        mViewportTop=$11
+        */
+
+
+        sprintf(command, "cd /local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Setups/Standard_test/Scripts/; bash configureDisplay.sh %d %d 200 600 true 0",
+                Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+        std::cout << command << std::endl;
+        system(command);
+        std::cout << " start script" << std::endl;
+
+
         //if (m_environment == "blue_sky") {
             sprintf(command, "cd %s../../ ; bash vtdSendandReceive.sh %s", (m_datasetpath.string()).c_str(),
                     project.c_str());
@@ -610,9 +632,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        sendSCPMessage(m_scpSocket, image_generator.c_str());
-
-        sleep(1);
+        //the below scp command to set the image height and width has no effect
+        //sendSCPMessage(m_scpSocket, image_generator.c_str());
+        //sleep(1);
 
         sendSCPMessage(m_scpSocket, rdbtrigger_portnumber.c_str());
 
@@ -734,7 +756,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
 
-                        bool getGroundTruthImages = false;
+                        bool getGroundTruthImages = true;
                         viresObjects.at(m_generation_sensor_list.at(i)).getGroundTruthInformation(mShmPtr, ((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), getGroundTruthImages,
                         sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(1).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(2).get<4>());
                     }
@@ -751,6 +773,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             stopSimulation();
             //configVires();
+        }
+        else {
+            stopSimulation();
         }
     }
 
@@ -793,7 +818,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 map_pair_count++;
             }
 
-            exit(0);
+            //exit(0);
             startEvaluating(noNoise);
         }
     }

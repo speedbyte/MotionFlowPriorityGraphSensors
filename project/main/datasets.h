@@ -63,6 +63,9 @@ typedef enum {
 
 #define DATAFILTER_COUNT 1
 
+#define FOCAL_X 600
+#define FOCAL_Y 600
+
 
 
 #endif //MAIN_DATASETS_H_H

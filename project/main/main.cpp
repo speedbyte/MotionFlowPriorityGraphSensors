@@ -446,7 +446,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
             }
 
-            //ffmpeg -framerate 10 -pattern_typ e glob -i '*.png' -r 30 -pix_fmt yuv420p movement.avi
+            //ffmpeg -framerate 10 -pattern_type glob -i '*.png' -r 30 -pix_fmt yuv420p movement.avi
 
             if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
