@@ -21,6 +21,7 @@
 #include "ObjectMetaData.h"
 #include <vires-interface/vires_configuration.h>
 #include "Utils.h"
+#include <boost/test/unit_test.hpp>
 
 using namespace std::chrono;
 
@@ -532,7 +533,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     viresObjects.push_back(ViresObjects(0, m_generatepath));
     viresObjects.push_back(ViresObjects(1, m_generatepath));
 
-    if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
+    if (0) { // call VIRES only at the time of generating the files
 
         configureSensor(0, 0x120a, DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate_left, module_manager_libModuleSensor_PerfectTemplate_left);
         configureSensor(1, 0x120b, DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
@@ -795,7 +796,14 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     viresObjects.at(m_generation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
 
                     viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
-                    system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
+
+                    std::ifstream original_file("../position_vires_original_15_65.yml", std::ios::binary);
+                    std::ifstream generated_file("../position_vires.yml", std::ios::binary);
+
+                    std::istream_iterator<char> b1(original_file), e1;
+                    std::istream_iterator<char> b2(generated_file), e2;
+
+                    BOOST_CHECK_EQUAL_COLLECTIONS(b1, e1, b2, e2);
                 }
 
             }
