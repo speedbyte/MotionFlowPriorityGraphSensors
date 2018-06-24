@@ -518,13 +518,13 @@ void GroundTruthScene::calcBBFrom3DPosition() {
     }
 }
 
-#define DEFAULT_RX_PORT_CAM_0     48182   /* for image port it should be 48192 */
-#define DEFAULT_RX_PORT_PERFECT_0     48183   /* for image port it should be 48192 */
-#define DEFAULT_RX_PORT_PERFECT_INERTIAL_0     48184   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_CAM_0               48182   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_0           48183   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_INERTIAL_0  48184   /* for image port it should be 48192 */
 
-#define DEFAULT_RX_PORT_CAM_1     48185   /* for image port it should be 48192 */
-#define DEFAULT_RX_PORT_PERFECT_1     48186   /* for image port it should be 48192 */
-#define DEFAULT_RX_PORT_PERFECT_INERTIAL_1     48187   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_CAM_1               48185   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_1           48186   /* for image port it should be 48192 */
+#define DEFAULT_RX_PORT_PERFECT_INERTIAL_1  48187   /* for image port it should be 48192 */
 
 void GroundTruthSceneExternal::generate_gt_scene() {
 
@@ -533,7 +533,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     viresObjects.push_back(ViresObjects(1, m_generatepath));
 
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
-
 
         configureSensor(0, 0x120a, DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate_left, module_manager_libModuleSensor_PerfectTemplate_left);
         configureSensor(1, 0x120b, DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
@@ -788,9 +787,17 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             try {
                 for ( ushort i = 0 ; i < m_generation_sensor_list.size() ; i++) {
+
                     viresObjects.at(m_generation_sensor_list.at(i)).closeAllFileHandles();
 
+                    viresObjects.at(m_generation_sensor_list.at(i)).readObjectStateFromBinaryFile("vires_");
+                    viresObjects.at(m_generation_sensor_list.at(i)).readSensorObjectFromBinaryFile("vires_");
+                    viresObjects.at(m_generation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
+
+                    viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
+                    system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
                 }
+
             }
             catch (...) {
                 std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
