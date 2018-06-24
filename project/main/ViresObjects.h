@@ -17,8 +17,46 @@
 
 #define MAX_DUMPS 10
 
+class BasicObjects {
 
-class ViresObjects: protected Framework::ViresInterface {
+    std::vector<ObjectMetaData *>  m_ptr_customObjectMetaDataList;
+    std::vector<SensorMetaData *>  m_ptr_customSensorMetaDataList;
+
+    std::vector<ObjectMetaData> objectMetaDataList;
+    std::vector<SensorMetaData> sensorMetaDataList;
+
+    ushort m_sensorGroupCount;
+    boost::filesystem::path  m_generatepath;
+
+
+
+public:
+
+    BasicObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath) {
+
+
+        for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
+            ObjectMetaData objMetaData;
+            objectMetaDataList.push_back(objMetaData);
+        }
+        for (int i = 0; i < MAX_ALLOWED_SENSORS; ++i) {
+            SensorMetaData senMetaData;
+            sensorMetaDataList.push_back(senMetaData);
+        }
+
+
+    }
+    void calcBBFrom3DPosition();
+
+
+};
+
+class CppObjects: public BasicObjects {
+
+};
+
+
+class ViresObjects: protected Framework::ViresInterface, public BasicObjects {
 
 private:
 
@@ -39,20 +77,14 @@ private:
 
     bool m_breaking;
 
-    boost::filesystem::path  m_generatepath;
-
-    std::vector<ObjectMetaData> objectMetaDataList;
-    std::vector<ObjectMetaData *>  m_ptr_customObjectMetaDataList;
-    std::vector<SensorMetaData *>  m_ptr_customSensorMetaDataList;
     std::map<std::string, ObjectMetaData*>  m_mapObjectNameToObjectMetaData;
     std::map<std::string, SensorMetaData*>  m_mapSensorNameToSensorMetaData;
     std::map<unsigned int, std::string> m_mapObjectIdToObjectName;
     std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
-    std::vector<SensorMetaData> sensorMetaDataList;
+
     ushort m_objectCount;
     ushort m_sensorCount;
 
-    ushort m_sensorGroupCount;
 
     std::ofstream fstream_output_object_state;
     std::ofstream fstream_output_sensor_state;
@@ -63,7 +95,7 @@ private:
 
 public:
 
-    ViresObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath) {
+    ViresObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath): BasicObjects(current_sensor_group_index, generatepath) {
 
         mCheckForImage  = false;
         mHaveImage    = 0;                                 // is an image available?
@@ -77,14 +109,6 @@ public:
         m_objectCount = 0;
         m_sensorCount = 0;
 
-        for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
-            ObjectMetaData objMetaData;
-            objectMetaDataList.push_back(objMetaData);
-        }
-        for (int i = 0; i < MAX_ALLOWED_SENSORS; ++i) {
-            SensorMetaData senMetaData;
-            sensorMetaDataList.push_back(senMetaData);
-        }
 
     }
 

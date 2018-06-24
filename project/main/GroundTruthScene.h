@@ -42,6 +42,7 @@ protected:
 
 
 
+/*
     std::vector<ObjectMetaData> objectMetaDataList;
     std::vector<std::vector<ObjectMetaData *> > m_ptr_customObjectMetaDataList;
     std::vector<std::vector<SensorMetaData *> > m_ptr_customSensorMetaDataList;
@@ -51,7 +52,7 @@ protected:
     std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
     std::vector<SensorMetaData> sensorMetaDataList;
 
-
+*/
     std::vector<ushort> m_evaluation_sensor_list;
 
 
@@ -60,20 +61,12 @@ public:
 
 
     GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
-    m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file), m_ptr_customObjectMetaDataList(MAX_ALLOWED_SENSOR_GROUPS_EVALUATION), m_mapObjectNameToObjectMetaData(MAX_ALLOWED_SENSOR_GROUPS_EVALUATION), m_ptr_customSensorMetaDataList(MAX_ALLOWED_SENSOR_GROUPS_EVALUATION), m_mapSensorNameToSensorMetaData(MAX_ALLOWED_SENSOR_GROUPS_EVALUATION)
+    m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file)
     {
 
         //m_ptr_customObjectMetaDataList = {};
         m_datasetpath = Dataset::getDatasetPath();
         m_groundtruthpath = Dataset::getGroundTruthPath();
-        for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
-            ObjectMetaData objMetaData;
-            objectMetaDataList.push_back(objMetaData);
-        }
-        for (int i = 0; i < MAX_ALLOWED_SENSORS; ++i) {
-            SensorMetaData senMetaData;
-            sensorMetaDataList.push_back(senMetaData);
-        }
 
         m_evaluation_sensor_list = {0};
 
@@ -88,8 +81,6 @@ public:
     void generate_bird_view();
 
     void prepare_directories(ushort sensor_group_index);
-
-    void calcBBFrom3DPosition();
 
 };
 
