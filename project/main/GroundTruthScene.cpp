@@ -631,9 +631,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        //the below scp command to set the image height and width has no effect
-        //sendSCPMessage(m_scpSocket, image_generator.c_str());
-        //sleep(1);
+        sendSCPMessage(m_scpSocket, image_generator.c_str());
+        sleep(1);
 
         sendSCPMessage(m_scpSocket, rdbtrigger_portnumber.c_str());
 

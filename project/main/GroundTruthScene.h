@@ -153,12 +153,14 @@ private:
 
     std::string scenario_name = "<SimCtrl><UnloadSensors /><LoadScenario filename=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/Current/Scenarios/traffic_demo.xml\" /><Start mode=\"operation\" /></SimCtrl>";
 
-    std::string image_generator = "<ImageGenerator> <Window width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" x=\"" + std::to_string(0) + "\" y=\"" + std::to_string(0) + "\" screen=\"0\" border=\"true\"/></ImageGenerator>";
+    std::string image_generator_ = "<ImageGenerator> <Window width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" x=\"" + std::to_string(0) + "\" y=\"" + std::to_string(0) + "\" screen=\"0\" border=\"true\"/></ImageGenerator>";
+
+    std::string image_generator = "<ImageGenerator ignore=\"true\"></ImageGenerator>";
 
     std::string module_manager_libModuleSensor_CameraTemplate_left =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-                    "   <Config cameraId=\"1\" verbose=\"true\"/> "
-                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+//                    "   <Config cameraId=\"1\" verbose=\"true\"/> "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"\" persistent=\"true\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
                     "   <Position dx=\"2.000000\" dy=\"1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
@@ -174,7 +176,7 @@ private:
     std::string module_manager_libModuleSensor_CameraTemplate_right =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
 //                    "   <Config cameraId=\"2\" verbose=\"true\"/> "
-                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Load lib=\"libModuleCameraSensor.so\" path=\"\" persistent=\"true\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
                     "   <Position dx=\"2.000000\" dy=\"-1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
@@ -189,7 +191,7 @@ private:
 
     std::string module_manager_libModuleSensor_PerfectTemplate_left =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-                    "   <Load lib=\"libModulePerfectSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Load lib=\"libModulePerfectSensor.so\" path=\"\" persistent=\"true\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
                     "   <Position dx=\"2.000000\" dy=\"1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
@@ -205,7 +207,7 @@ private:
 
     std::string module_manager_libModuleSensor_PerfectTemplate_right=
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-                    "   <Load lib=\"libModulePerfectSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
+                    "   <Load lib=\"libModulePerfectSensor.so\" path=\"\" persistent=\"true\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
                     "   <Position dx=\"2.000000\" dy=\"-1.000000\" dz=\"1.500000\" dhDeg=\"0.000000\" dpDeg=\"0.000000\" drDeg=\"0.000000\" /> "
@@ -243,9 +245,9 @@ private:
             "<PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
     // I tested and the name of the camera does not matter. What matters is the channel number.
-    std::string view_parameters_sensorpoint_intrinsicparams_left = "<Camera name=\"cam1\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosSensor sensor=\"Sensor_MM_0\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set/></Camera>";
+    std::string view_parameters_sensorpoint_intrinsicparams_left = "<Camera name=\"cam1\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosRelative player=\"MovingCar\" dx=\"2\" dy=\"1\" dz=\"1.2\"/><Set/></Camera>";
 
-    std::string view_parameters_eyepoint_intrinsicparams_right = "<Camera name=\"cam2\" showOwner=\"true\"><Projection far=\"150.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /></Camera>";
+    std::string view_parameters_eyepoint_intrinsicparams_right = "<Camera name=\"cam2\" showOwner=\"true\"><Projection far=\"150.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosRelative player=\"MovingCar\" dx=\"2\" dy=\"-1\" dz=\"1.2\"/><Set/></Camera>";
 
     std::string view_parameters_sensorpoint_intrinsicparams_right = "<Camera name=\"RIGHT_VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosSensor sensor=\"Sensor_MM_1\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set channel=\"0x2\"/></Camera>";
 
