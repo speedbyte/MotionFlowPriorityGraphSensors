@@ -756,7 +756,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
 
-                        bool getGroundTruthImages = true;
+                        bool getGroundTruthImages = false;
                         viresObjects.at(m_generation_sensor_list.at(i)).getGroundTruthInformation(sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<5>(), ((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), getGroundTruthImages,
                         sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(1).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(2).get<4>());
                     }
