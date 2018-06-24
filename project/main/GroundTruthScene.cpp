@@ -787,23 +787,27 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (m_regenerate_yaml_file) {
 
             try {
-                for ( ushort i = 0 ; i < m_generation_sensor_list.size() ; i++) {
 
-                    viresObjects.at(m_generation_sensor_list.at(i)).closeAllFileHandles();
+                BOOST_AUTO_TEST_CASE( test ) {
+                    for ( ushort i = 0 ; i < m_generation_sensor_list.size() ; i++) {
 
-                    viresObjects.at(m_generation_sensor_list.at(i)).readObjectStateFromBinaryFile("vires_");
-                    viresObjects.at(m_generation_sensor_list.at(i)).readSensorObjectFromBinaryFile("vires_");
-                    viresObjects.at(m_generation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
+                        viresObjects.at(m_generation_sensor_list.at(i)).closeAllFileHandles();
 
-                    viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
+                        viresObjects.at(m_generation_sensor_list.at(i)).readObjectStateFromBinaryFile("vires_");
+                        viresObjects.at(m_generation_sensor_list.at(i)).readSensorObjectFromBinaryFile("vires_");
+                        viresObjects.at(m_generation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
 
-                    std::ifstream original_file("../position_vires_original_15_65.yml", std::ios::binary);
-                    std::ifstream generated_file("../position_vires.yml", std::ios::binary);
+                        viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
 
-                    std::istream_iterator<char> b1(original_file), e1;
-                    std::istream_iterator<char> b2(generated_file), e2;
 
-                    BOOST_CHECK_EQUAL_COLLECTIONS(b1, e1, b2, e2);
+                        std::ifstream original_file("../position_vires_original_15_65.yml", std::ios::binary);
+                        std::ifstream generated_file("../position_vires.yml", std::ios::binary);
+
+                        std::istream_iterator<char> b1(original_file), e1;
+                        std::istream_iterator<char> b2(generated_file), e2;
+
+                        BOOST_CHECK_EQUAL_COLLECTIONS(b1, e1, b2, e2);
+                    }
                 }
 
             }
