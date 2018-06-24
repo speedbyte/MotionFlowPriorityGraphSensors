@@ -424,8 +424,8 @@ void GroundTruthScene::calcBBFrom3DPosition() {
                         // The resulting points are the bounding box points in the USK co-ordinate system.
                         bounding_points_3d.at(i) = final;
 
-                        cv::Point2f camPoint = Utils::worldToCameraIntrinsc(final, fov_rad.vertical, 600, 600);
-                        //cv::Point2f camPoint_openglfrustum = Utils::worldToCamera(final, fov_rad.vertical, 600, 600);
+                        cv::Point2f camPoint = Utils::worldToCameraIntrinsc(final, fov_rad.vertical, FOCAL_X, FOCAL_Y);
+                        //cv::Point2f camPoint_openglfrustum = Utils::worldToCamera(final, fov_rad.vertical, FOCAL_X, FOCAL_Y);
                         bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
 
                     }
@@ -572,11 +572,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         */
 
 
-        sprintf(command, "cd /local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Setups/Standard_test/Scripts/; bash configureDisplay.sh %d %d 200 600 true 0",
-                Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+        //sprintf(command, "cd /local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Setups/Standard_test/Scripts/; bash configureDisplay.sh %d %d 200 600 true 0",
+        //        Dataset::getFrameSize().width, Dataset::getFrameSize().height);
         std::cout << command << std::endl;
         system(command);
-        std::cout << " start script" << std::endl;
+        std::cout << " configureDisplay for Image Generator - render surface, location, height, etc. Parameters will be fine tunedusing SCP commands" << std::endl;
 
 
         //if (m_environment == "blue_sky") {
@@ -755,7 +755,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
 
-                        bool getGroundTruthImages = true;
+                        bool getGroundTruthImages = false;
                         viresObjects.at(m_generation_sensor_list.at(i)).getGroundTruthInformation(mShmPtr, ((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), getGroundTruthImages,
                         sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(1).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(2).get<4>());
                     }
@@ -795,7 +795,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     viresObjects.at(m_generation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
 
                     viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
-                    system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
+                    //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
                 }
 
             }
