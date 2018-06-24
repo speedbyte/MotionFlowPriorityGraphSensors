@@ -50,8 +50,6 @@ protected:
     std::map<unsigned int, std::string> m_mapObjectIdToObjectName;
     std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
     std::vector<SensorMetaData> sensorMetaDataList;
-    ushort m_objectCount = 0;
-    ushort m_sensorCount = 0;
 
 
     std::vector<ushort> m_evaluation_sensor_list;
@@ -159,7 +157,7 @@ private:
 
     std::string module_manager_libModuleSensor_CameraTemplate_left =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-                    "   <Config cameraId=\"0\" verbose=\"true\"/> "
+                    "   <Config cameraId=\"1\" verbose=\"true\"/> "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/../Distros/Distro/Plugins/ModuleManager\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
@@ -247,7 +245,7 @@ private:
     // I tested and the name of the camera does not matter. What matters is the channel number.
     std::string view_parameters_sensorpoint_intrinsicparams_left = "<Camera name=\"cam1\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosSensor sensor=\"Sensor_MM_0\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set/></Camera>";
 
-    std::string view_parameters_eyepoint_intrinsicparams_right = "<Camera name=\"cam2\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set channel=\"0x2\"/></Camera>";
+    std::string view_parameters_eyepoint_intrinsicparams_right = "<Camera name=\"cam2\" showOwner=\"true\"><Projection far=\"150.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /></Camera>";
 
     std::string view_parameters_sensorpoint_intrinsicparams_right = "<Camera name=\"RIGHT_VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosSensor sensor=\"Sensor_MM_1\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set channel=\"0x2\"/></Camera>";
 
@@ -310,10 +308,7 @@ $
 
     int m_scpSocket;
 
-    unsigned int mShmKey;      // key of the SHM segment
-    void *mShmPtr;
-
-    std::vector<std::vector<boost::tuple<std::string, std::string, ushort, ushort, ushort > > > sensor_group;
+    std::vector<std::vector<boost::tuple<std::string, std::string, ushort, ushort, ushort, void*> > > sensor_group;
 
     std::vector<ViresObjects> viresObjects;
 
@@ -518,7 +513,7 @@ public:
             module_manager_libModuleCameraSensor.replace(position, to_replace.length(), std::to_string(port_number_camera_sensor_data));
         }
 
-        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", port_number_camera_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModuleCameraSensor, "suffix", port_number_camera_sensor_data, shmKey, 0, (void *)0x0));
 
         ///--------------------------
 
@@ -538,7 +533,7 @@ public:
             module_manager_libModulePerfectSensor.replace(position, to_replace.length(), with_replace);
         }
 
-        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensor, "suffix", port_number_usk_sensor_data, shmKey, 0, (void *)NULL));
 
         ///--------------------------
 
@@ -565,16 +560,11 @@ public:
             module_manager_libModulePerfectSensorInertial.replace(position, to_replace.length(), "inertial");
         }
 
-        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", port_number_inertial_sensor_data, shmKey, 0));
+        sensor_group.at(sensor_group_index).push_back(boost::make_tuple(module_manager_libModulePerfectSensorInertial, "suffix", port_number_inertial_sensor_data, shmKey, 0, (void *)NULL));
 
         ///End sensor
 
     }
-
-    void openShmWrapper() {
-        mShmPtr = openShm(mShmKey);
-    }
-
 
 
     ~GroundTruthSceneExternal(){

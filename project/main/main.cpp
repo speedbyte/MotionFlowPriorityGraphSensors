@@ -261,7 +261,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
 
-                std::vector<ushort> generation_list = {0};
+                std::vector<ushort> generation_list = {0, 1};
 
                 GroundTruthSceneExternal gt_scene(generation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base,

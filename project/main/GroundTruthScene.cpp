@@ -737,7 +737,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
                 // open the shared memory for IG image output (try to attach without creating a new segment)
                 fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", sensor_group.at(i).at(0).get<3>());
-                mShmPtr = openShm(sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<3>());
+                void *shmPtr = openShm(sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<3>());
+                sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<5>() = shmPtr;
                 usleep(1000);     // do not overload the CPU
             }
 
@@ -755,8 +756,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
 
-                        bool getGroundTruthImages = false;
-                        viresObjects.at(m_generation_sensor_list.at(i)).getGroundTruthInformation(mShmPtr, ((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), getGroundTruthImages,
+                        bool getGroundTruthImages = true;
+                        viresObjects.at(m_generation_sensor_list.at(i)).getGroundTruthInformation(sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<5>(), ((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), getGroundTruthImages,
                         sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(1).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(2).get<4>());
                     }
 
