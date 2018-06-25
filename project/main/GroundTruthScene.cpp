@@ -124,38 +124,19 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     if (m_environment == "blue_sky") {
 
-
         if (!m_regenerate_yaml_file) { // dont generate, just read
-
-            //readPositionFromFile("../position_cpp.yml");
-            ushort map_pair_count = 0;
-            for (const auto &myPair : m_mapObjectNameToObjectMetaData[0]) {
-                std::cout << myPair.first << "\n";
-                map_pair_count++;
+            for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
+                //cppObjects.at(i).readPositionFromFile("../position_cpp.yml");
             }
         } else { // genreate yaml file
             boost::filesystem::remove("../position_cpp.yml");
-
-            CppObjects cppObjects;
-
-            Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
-
-            Achterbahn achterbahn;
-
-            achterbahn = Achterbahn(rectangle, "rectangle_long", 60);
-            achterbahn.process(Dataset::getFrameSize());
-            objectMetaDataList.at(0) = achterbahn;
-            m_ptr_customObjectMetaDataList.at(0).push_back(&objectMetaDataList.at(0));
-
-            achterbahn = Achterbahn(rectangle, "random_object", 120);
-            achterbahn.process(Dataset::getFrameSize());
-            objectMetaDataList.at(1) = achterbahn;
-            m_ptr_customObjectMetaDataList.at(0).push_back(&objectMetaDataList.at(1));
-
+            cppObjects.push_back(CppObjects(0,m_generatepath));
+            for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
+                cppObjects.at(i).process();
+            }
         }
 
         startEvaluating(colorfulNoise);
-
     }
 
     cv::Mat tempGroundTruthImage, tempGroundTruthImageBase;
@@ -206,41 +187,44 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         char sensor_index_folder_suffix[50];
 
-        for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
+        for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
+            for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
-            sprintf(sensor_index_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
-            std::string position_image_file_with_path = m_position_object_path.string() +
-                                                        sensor_index_folder_suffix + "/" + file_name_image;
+                sprintf(sensor_index_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
+                std::string position_image_file_with_path = m_position_object_path.string() +
+                                                            sensor_index_folder_suffix + "/" + file_name_image;
 
-            image_data_and_shape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
-            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(
-                    obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    current_frame_index).m_region_of_interest_px.height_px)).colRange(0, cvRound(m_list_gt_objects.at(
-                    obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    current_frame_index).m_region_of_interest_px.width_px));
-            positionShape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
-            positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(
-                    obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    current_frame_index).m_region_of_interest_px.height_px)).colRange(0, cvRound(m_list_gt_objects.at(
-                    obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    current_frame_index).m_region_of_interest_px.width_px));
+                image_data_and_shape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
+                image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(
+                        obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
+                        current_frame_index).m_region_of_interest_px.height_px)).colRange(0, cvRound(m_list_gt_objects.at(
+                        obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
+                        current_frame_index).m_region_of_interest_px.width_px));
+                positionShape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
+                positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(
+                        obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
+                        current_frame_index).m_region_of_interest_px.height_px)).colRange(0, cvRound(m_list_gt_objects.at(
+                        obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
+                        current_frame_index).m_region_of_interest_px.width_px));
 
-            if ((!m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(current_frame_index).occluded )) {
+                if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).occluded )) {
 
-                image_data_and_shape.copyTo(tempGroundTruthImage(
-                        cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
-                                current_frame_index).first.x),
-                                 cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
-                                         current_frame_index).first.y),
-                                 cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(current_frame_index).m_region_of_interest_px.width_px),
-                                 cvRound(m_ptr_customObjectMetaDataList.at(0).at(0)->getAll().at(current_frame_index).m_region_of_interest_px.height_px))));
+                    image_data_and_shape.copyTo(tempGroundTruthImage(
+                            cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
+                                    current_frame_index).first.x),
+                                     cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
+                                             current_frame_index).first.y),
+                                     cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_region_of_interest_px.width_px),
+                                     cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_region_of_interest_px.height_px))));
 
+                }
             }
         }
 
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
 
     }
+
 
 }
 

@@ -40,6 +40,8 @@ protected:
 
     bool m_regenerate_yaml_file;
 
+    std::vector<ushort> m_generation_sensor_list;
+
 
 
 /*
@@ -60,7 +62,7 @@ protected:
 public:
 
 
-    GroundTruthScene(std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_scenario(scenario), m_environment(environment),
+    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_generation_sensor_list(generation_sensor_list), m_scenario(scenario), m_environment(environment),
     m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file)
     {
 
@@ -87,6 +89,9 @@ public:
 class GroundTruthSceneInternal : public GroundTruthScene {
 
 private:
+
+    std::vector<CppObjects> cppObjects;
+
 
 
 public:
@@ -305,7 +310,6 @@ $
 
     std::vector<ViresObjects> viresObjects;
 
-    std::vector<ushort> m_generation_sensor_list;
 
 
 public:
@@ -346,8 +350,7 @@ public:
 
     double getTime();
 
-    GroundTruthSceneExternal(std::vector<ushort> generation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
-            m_generation_sensor_list(generation_sensor_list), sensor_group(2), GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
+    GroundTruthSceneExternal(std::vector<ushort> generation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) : sensor_group(2), GroundTruthScene(generation_sensor_list, scenario, environment, list_objects, list_sensors, generate_yaml_file) {
 
 
         std::string to_replace = "traffic_demo";

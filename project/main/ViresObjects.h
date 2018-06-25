@@ -19,6 +19,7 @@
 
 class BasicObjects {
 
+protected:
     std::vector<ObjectMetaData *>  m_ptr_customObjectMetaDataList;
     std::vector<SensorMetaData *>  m_ptr_customSensorMetaDataList;
 
@@ -34,7 +35,6 @@ public:
 
     BasicObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath) {
 
-
         for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
             ObjectMetaData objMetaData;
             objectMetaDataList.push_back(objMetaData);
@@ -44,14 +44,43 @@ public:
             sensorMetaDataList.push_back(senMetaData);
         }
 
-
     }
+
+    BasicObjects() {}
+
     void calcBBFrom3DPosition();
 
 
 };
 
 class CppObjects: public BasicObjects {
+
+
+public:
+
+    CppObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath): BasicObjects(current_sensor_group_index, generatepath) {}
+
+    CppObjects() {}
+
+    void process() {
+
+        Rectangle rectangle(Dataset::getFrameSize().width, Dataset::getFrameSize().height); // width, height
+
+        Achterbahn achterbahn;
+
+        achterbahn = Achterbahn(rectangle, "rectangle_long", 60);
+        achterbahn.process(Dataset::getFrameSize());
+        objectMetaDataList.at(0) = achterbahn;
+        m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
+
+        achterbahn = Achterbahn(rectangle, "random_object", 120);
+        achterbahn.process(Dataset::getFrameSize());
+        objectMetaDataList.at(1) = achterbahn;
+        m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
+
+    }
+
+
 
 };
 
