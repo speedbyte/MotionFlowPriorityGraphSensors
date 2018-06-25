@@ -68,7 +68,7 @@ public:
         m_datasetpath = Dataset::getDatasetPath();
         m_groundtruthpath = Dataset::getGroundTruthPath();
 
-        m_evaluation_sensor_list = {1};
+        m_evaluation_sensor_list = { 0, 1 };
 
     };
 
