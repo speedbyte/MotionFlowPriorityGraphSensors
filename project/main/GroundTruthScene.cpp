@@ -59,15 +59,16 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
 
 void GroundTruthSceneExternal::startEvaluating(Noise noise) {
 
-    viresObjects.at(m_generation_sensor_list.at(0)).calcBBFrom3DPosition();
+    for (ushort sensor_group_index = 0; sensor_group_index < m_evaluation_sensor_list.size(); sensor_group_index++ ) {
+        viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition();
+    }
 
     for (ushort obj_index = 0; obj_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
 
         GroundTruthObjects gt_obj;
 
         // how many objects were found. The assumption is that in each frame, the number of objects would be constant.
-
-        for ( ushort sensor_group_index = 0; sensor_group_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); sensor_group_index++) {
+        for (ushort sensor_group_index = 0; sensor_group_index < m_evaluation_sensor_list.size(); sensor_group_index++ ) {
 
             std::cout << "send object name " << viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName() << std::endl;
 
@@ -92,7 +93,7 @@ void GroundTruthSceneExternal::startEvaluating(Noise noise) {
         // how many sensors were found. The assumption is that in each frame, the number of sensors would be constant.
 
 
-        for ( ushort sensor_group_index = 0; sensor_group_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customSensorMetaDataList().size(); sensor_group_index++) {
+        for (ushort sensor_group_index = 0; sensor_group_index < m_evaluation_sensor_list.size(); sensor_group_index++ ) {
 
             Sensors gt_sen(viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorStartPoint(), &noise,
                     viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorName());
