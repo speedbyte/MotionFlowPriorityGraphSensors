@@ -261,14 +261,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
 
-                std::vector<ushort> generation_list = {0, 1};
+                std::vector<ushort> generation_list = {0};
 
                 GroundTruthSceneExternal gt_scene(generation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base,
                                                   vires_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
-                for ( ushort i = 0; i < generation_list.size(); i++ ) {
-                    base_ptr_gt_scene->prepare_directories(generation_list.at(i));
+                for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
+                    base_ptr_gt_scene->prepare_directories(generation_list.at(sensor_group_index));
                 }
                 base_ptr_gt_scene->generate_gt_scene();
                 base_ptr_gt_scene->generate_bird_view();
@@ -283,7 +283,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             } else if (cpp_dataset.execute) {
 
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
-                GroundTruthSceneInternal gt_scene(scenarios_list[0], environment_list[env_index],
+                std::vector<ushort> generation_list = {0, 1};
+                GroundTruthSceneInternal gt_scene(generation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
                 std::vector<ushort> sensor_group_index = {1};

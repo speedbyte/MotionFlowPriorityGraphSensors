@@ -50,6 +50,13 @@ public:
 
     void calcBBFrom3DPosition();
 
+    const std::vector<ObjectMetaData *>  get_ptr_customObjectMetaDataList() {
+        return m_ptr_customObjectMetaDataList;
+    }
+
+    const std::vector<SensorMetaData *>  get_ptr_customSensorMetaDataList() {
+        return m_ptr_customSensorMetaDataList;
+    }
 
 };
 

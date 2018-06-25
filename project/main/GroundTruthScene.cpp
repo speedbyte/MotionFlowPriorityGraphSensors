@@ -57,50 +57,83 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
     }
 }
 
-void GroundTruthScene::startEvaluating(Noise noise) {
+void GroundTruthSceneExternal::startEvaluating(Noise noise) {
 
     //calcBBFrom3DPosition();
 
-    for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.at(0).size(); obj_index++) {
+    for (ushort obj_index = 0; obj_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
 
         GroundTruthObjects gt_obj;
 
         // how many objects were found. The assumption is that in each frame, the number of objects would be constant.
 
-        for ( ushort sensor_index_group = 0; sensor_index_group < m_ptr_customSensorMetaDataList.size(); sensor_index_group++) {
+        for ( ushort sensor_group_index = 0; sensor_group_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); sensor_group_index++) {
 
-            std::cout << "send object name " << m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index)->getObjectName() << std::endl;
+            std::cout << "send object name " << viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName() << std::endl;
 
-            if ( sensor_index_group == 0 ) {
-                gt_obj = GroundTruthObjects(m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index)->getObjectShape(),
-                                          m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index)->getObjectStartPoint(), noise,
-                                          m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index)->getObjectName());
+            if ( sensor_group_index == 0 ) {
+                gt_obj = GroundTruthObjects(viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectShape(),
+                        viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectStartPoint(), noise,
+                        viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName());
                 m_list_gt_objects.push_back(gt_obj);
             }
             // each object is monitored by n sensor group.
-            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*m_ptr_customObjectMetaDataList.at(sensor_index_group).at(obj_index));
+            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index));
 
         }
-        if ( MAX_ALLOWED_SENSOR_GROUPS_EVALUATION > 1 ) {
+        if ( m_evaluation_sensor_list.size() > 1 ) {
             m_list_gt_objects.at(obj_index).generate_combined_sensor_data();
         }
 
     }
 
-    for (ushort sen_index = 0; sen_index < m_ptr_customSensorMetaDataList.at(0).size(); sen_index++) {
+    for (ushort sen_index = 0; sen_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customSensorMetaDataList().size(); sen_index++) {
 
         // how many sensors were found. The assumption is that in each frame, the number of sensors would be constant.
 
 
-        for ( ushort sensor_index_group = 0; sensor_index_group < m_ptr_customSensorMetaDataList.size(); sensor_index_group++) {
+        for ( ushort sensor_group_index = 0; sensor_group_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customSensorMetaDataList().size(); sensor_group_index++) {
 
-            Sensors gt_sen(m_ptr_customSensorMetaDataList.at(0).at(sensor_index_group)->getSensorStartPoint(), &noise,
-                           m_ptr_customSensorMetaDataList.at(0).at(sensor_index_group)->getSensorName());
+            Sensors gt_sen(viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorStartPoint(), &noise,
+                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorName());
             m_list_gt_sensors.push_back(gt_sen);
             // each sensor is monitored by n sensor group.
 
-            m_list_gt_sensors.at(sen_index).beginGroundTruthGeneration(*m_ptr_customSensorMetaDataList.at(sensor_index_group).at(sen_index));
+            m_list_gt_sensors.at(sen_index).beginGroundTruthGeneration(*viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(sen_index));
 
+        }
+
+    }
+
+}
+
+
+void GroundTruthSceneInternal::startEvaluating(Noise noise) {
+
+    //calcBBFrom3DPosition();
+
+    for (ushort obj_index = 0; obj_index < cppObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
+
+        GroundTruthObjects gt_obj;
+
+        // how many objects were found. The assumption is that in each frame, the number of objects would be constant.
+
+        for (ushort sensor_group_index = 0; sensor_group_index < m_evaluation_sensor_list.size(); sensor_group_index++ ) {
+
+            std::cout << "send object name " << cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName() << std::endl;
+
+            if ( sensor_group_index == 0 ) {
+                gt_obj = GroundTruthObjects(cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectShape(),
+                        cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectStartPoint(), noise,
+                        cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName());
+                m_list_gt_objects.push_back(gt_obj);
+            }
+            // each object is monitored by n sensor group.
+            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(*cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index));
+
+        }
+        if ( m_evaluation_sensor_list.size() > 1 ) {
+            m_list_gt_objects.at(obj_index).generate_combined_sensor_data();
         }
 
     }
@@ -125,14 +158,14 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     if (m_environment == "blue_sky") {
 
         if (!m_regenerate_yaml_file) { // dont generate, just read
-            for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
-                //cppObjects.at(i).readPositionFromFile("../position_cpp.yml");
+            for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+                //cppObjects.at(sensor_group_index).readPositionFromFile("../position_cpp.yml");
             }
         } else { // genreate yaml file
             boost::filesystem::remove("../position_cpp.yml");
             cppObjects.push_back(CppObjects(0,m_generatepath));
-            for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
-                cppObjects.at(i).process();
+            for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+                cppObjects.at(sensor_group_index).process();
             }
         }
 
@@ -187,8 +220,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         char sensor_index_folder_suffix[50];
 
-        for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
-            for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+        for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+            for (unsigned obj_index = 0; obj_index < cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
 
                 sprintf(sensor_index_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
                 std::string position_image_file_with_path = m_position_object_path.string() +
@@ -207,15 +240,15 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                         obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
                         current_frame_index).m_region_of_interest_px.width_px));
 
-                if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).occluded )) {
+                if ((!cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getAll().at(current_frame_index).occluded )) {
 
                     image_data_and_shape.copyTo(tempGroundTruthImage(
                             cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
                                     current_frame_index).first.x),
                                      cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
                                              current_frame_index).first.y),
-                                     cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_region_of_interest_px.width_px),
-                                     cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_region_of_interest_px.height_px))));
+                                     cvRound(cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getAll().at(current_frame_index).m_region_of_interest_px.width_px),
+                                     cvRound(cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getAll().at(current_frame_index).m_region_of_interest_px.height_px))));
 
                 }
             }
@@ -235,7 +268,7 @@ void GroundTruthScene::generate_bird_view() {
         for ( auto position_index = 0;  position_index <  MAX_ITERATION_RESULTS; position_index++ ) {
 
             cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
-            for ( auto object_index= 0; object_index < m_ptr_customObjectMetaDataList.at(0).size(); object_index++ ) {
+            for ( auto object_index= 0; object_index < get_ptr_customObjectMetaDataList().at(0).size(); object_index++ ) {
                 birdview_frame.at(m_list_gt_objects.at(object_index).get_object_base_point_displacement().at(position_index).first.x, m_list_gt_objects.at(object_index).get_object_range().at(position_index)) = 100;
                 cv::Mat roi_objects;
                 roi_objects = birdview_frame.rowRange(m_list_gt_objects.at(object_index).get_object_range().at(position_index), m_list_gt_objects.at(object_index).get_object_dimension().at(position_index).z_offset )
@@ -373,11 +406,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1);
 
-        for ( ushort i = 0; i < m_generation_sensor_list.size(); i++ ) {
+        for ( ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
             for ( ushort j = 0; j < 3; j++ ) {
-                std::cout << sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<0>().c_str();
-                sendSCPMessage(m_scpSocket, sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<0>().c_str());
+                std::cout << sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(j).get<0>().c_str();
+                sendSCPMessage(m_scpSocket, sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(j).get<0>().c_str());
                 sleep(1);
             }
         }
@@ -438,20 +471,20 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         }
 
 
-        for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
+        for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
             if ( m_environment == "blue_sky") {
-                viresObjects.at(m_generation_sensor_list.at(i)).openAllFileHandles();
+                viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).openAllFileHandles();
             }
 
             for (ushort j = 0 ; j < 3; j++ ) {
 
-                int socket   = openNetwork(sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<2>());
+                int socket   = openNetwork(sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(j).get<2>());
 
                 std::cout << "mm socket - " << socket << std::endl;
                 if (    socket != -1) {
                     connected_module_manager_port = true;
-                    sensor_group.at(m_generation_sensor_list.at(i)).at(j).get<4>() = socket;
+                    sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(j).get<4>() = socket;
                 }
                 else {
                     connected_module_manager_port = false;
@@ -464,11 +497,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
 
 
-            for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
+            for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
                 // open the shared memory for IG image output (try to attach without creating a new segment)
-                fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", sensor_group.at(i).at(0).get<3>());
-                void *shmPtr = openShm(sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<3>());
-                sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<5>() = shmPtr;
+                fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", sensor_group.at(sensor_group_index).at(0).get<3>());
+                void *shmPtr = openShm(sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(0).get<3>());
+                sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(0).get<5>() = shmPtr;
                 usleep(1000);     // do not overload the CPU
             }
 
@@ -484,11 +517,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     }
 
 
-                    for (ushort i = 0 ; i < m_generation_sensor_list.size() ; i++ ) {
+                    for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
-                        bool getGroundTruthImages = false;
-                        viresObjects.at(m_generation_sensor_list.at(i)).getGroundTruthInformation(sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<5>(), ((i==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), getGroundTruthImages,
-                        sensor_group.at(m_generation_sensor_list.at(i)).at(0).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(1).get<4>(), sensor_group.at(m_generation_sensor_list.at(i)).at(2).get<4>());
+                        bool getGroundTruthImages = true;
+                        viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).getGroundTruthInformation(sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(0).get<5>(), ((sensor_group_index==0)?true:false), m_triggerSocket, (m_environment == "blue_sky"), getGroundTruthImages,
+                        sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(0).get<4>(), sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(1).get<4>(), sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(2).get<4>());
                     }
 
                     usleep(100000); // wait, 100 ms which is equivalent to 10 Hz. Normally VIRES runs with 60 Hz. So this number should not be a problem.
@@ -507,25 +540,21 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         else {
             stopSimulation();
         }
-    }
 
+        Noise noNoise;
 
-    Noise noNoise;
-
-    if (m_environment == "blue_sky") {
-
-        if (m_regenerate_yaml_file) {
+        if (m_environment == "blue_sky") {
 
             try {
-                for ( ushort i = 0 ; i < m_generation_sensor_list.size() ; i++) {
+                for ( ushort sensor_group_index = 0 ; sensor_group_index < m_generation_sensor_list.size() ; sensor_group_index++) {
 
-                    viresObjects.at(m_generation_sensor_list.at(i)).closeAllFileHandles();
+                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).closeAllFileHandles();
 
-                    viresObjects.at(m_generation_sensor_list.at(i)).readObjectStateFromBinaryFile("vires_");
-                    viresObjects.at(m_generation_sensor_list.at(i)).readSensorObjectFromBinaryFile("vires_");
-                    viresObjects.at(m_generation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
+                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readObjectStateFromBinaryFile("vires_");
+                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorObjectFromBinaryFile("vires_");
+                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorStateFromBinaryFile("vires_");
 
-                    viresObjects.at(m_generation_sensor_list.at(i)).writePositionInYaml("vires_");
+                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
                     //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
                 }
 
@@ -535,32 +564,33 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 stopSimulation();
             }
 
-        } else { // dont generate, just read
+        }
 
-            for ( ushort i = 0 ; i < m_evaluation_sensor_list.size() ; i++) {
+    } else {
 
-                viresObjects.at(m_evaluation_sensor_list.at(i)).readObjectStateFromBinaryFile("vires_");
-                viresObjects.at(m_evaluation_sensor_list.at(i)).readSensorObjectFromBinaryFile("vires_");
-                viresObjects.at(m_evaluation_sensor_list.at(i)).readSensorStateFromBinaryFile("vires_");
+        Noise noNoise;
 
-                viresObjects.at(m_evaluation_sensor_list.at(i)).writePositionInYaml("vires_");
+        if (m_environment == "blue_sky") {
 
-                viresObjects.at(m_evaluation_sensor_list.at(i)).readPositionFromFile("dummy");
+            for ( ushort sensor_group_index = 0 ; sensor_group_index < m_evaluation_sensor_list.size() ; sensor_group_index++) {
+
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readObjectStateFromBinaryFile("vires_");
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readSensorObjectFromBinaryFile("vires_");
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readSensorStateFromBinaryFile("vires_");
+
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
+
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("dummy");
 
             }
 
-
-            ushort map_pair_count = 0;
-            for (const auto &myPair : m_mapObjectNameToObjectMetaData[0]) {
-                std::cout << myPair.first << "\n";
-                map_pair_count++;
-            }
-
-            //exit(0);
             startEvaluating(noNoise);
         }
     }
+
 }
+
+
 double GroundTruthSceneExternal::getTime() {
     struct timeval tme;
     gettimeofday(&tme, 0);

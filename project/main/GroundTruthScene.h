@@ -74,7 +74,6 @@ public:
 
     };
 
-    void startEvaluating(Noise noise);
 
     virtual void generate_gt_scene() {
         std::cout << "base implementation of generate_gt_scene()" << std::endl;
@@ -96,9 +95,11 @@ private:
 
 public:
 
-    GroundTruthSceneInternal(std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
-    GroundTruthScene(scenario, environment, list_objects, list_sensors, generate_yaml_file) {
+    GroundTruthSceneInternal(std::vector<ushort> generation_sensor_lists, std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
+    GroundTruthScene(generation_sensor_lists, scenario, environment, list_objects, list_sensors, generate_yaml_file) {
     }
+
+    void startEvaluating(Noise noise);
 
     void generate_gt_scene() override;
 
@@ -241,9 +242,9 @@ private:
             "<PosEyepoint player=\"MovingCar\" distance=\"6.000000\" azimuth=\"0.000000\" elevation=\"0.261799\" slew=\"1\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";
 
     // I tested and the name of the camera does not matter. What matters is the channel number.
-    std::string view_parameters_sensorpoint_intrinsicparams_left = "<Camera name=\"cam1\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosRelative player=\"MovingCar\" dx=\"2\" dy=\"1\" dz=\"1.2\"/><Set/></Camera>";
+    std::string view_parameters_sensorpoint_intrinsicparams_left = "<Camera name=\"cam1\" showOwner=\"false\"><Projection far=\"15.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosRelative player=\"MovingCar\" dx=\"2\" dy=\" 1\" dz=\"1.2\"/><Set/></Camera>";
 
-    std::string view_parameters_eyepoint_intrinsicparams_right = "<Camera name=\"cam2\" showOwner=\"true\"><Projection far=\"150.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosRelative player=\"MovingCar\" dx=\"2\" dy=\"-1\" dz=\"1.2\"/><Set/></Camera>";
+    std::string view_parameters_eyepoint_intrinsicparams_right   = "<Camera name=\"cam2\" showOwner=\"false\"><Projection far=\"15.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosRelative player=\"MovingCar\" dx=\"2\" dy=\"-1\" dz=\"1.2\"/><Set channel=\"0x2\"/></Camera>";
 
     std::string view_parameters_sensorpoint_intrinsicparams_right = "<Camera name=\"RIGHT_VIEW_CAMERA\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosSensor sensor=\"Sensor_MM_1\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set channel=\"0x2\"/></Camera>";
 
@@ -313,6 +314,8 @@ $
 
 
 public:
+
+    void startEvaluating(Noise noise);
 
     void configVires() {
 
