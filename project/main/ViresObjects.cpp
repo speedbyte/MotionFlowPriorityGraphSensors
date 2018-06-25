@@ -42,8 +42,7 @@ void BasicObjects::calcBBFrom3DPosition() {
         tempGroundTruthImage = cv::Scalar::all(255);
         tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
-        for (ushort obj_index = 0;
-             obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+        for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
 
             object_realworld_dim_m_str object_realworld_dim_m = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
@@ -242,10 +241,10 @@ void BasicObjects::calcBBFrom3DPosition() {
             }
         }
 
-        //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-        //cv::imshow("BB", tempGroundTruthImage);
-        //cv::waitKey(0);
-        //cv::destroyAllWindows();
+        cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+        cv::imshow("BB", tempGroundTruthImage);
+        cv::waitKey(0);
+        cv::destroyAllWindows();
         //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
         /*---------------------------------------------------------------------------------*/
 
