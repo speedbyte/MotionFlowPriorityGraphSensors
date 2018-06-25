@@ -115,11 +115,6 @@ void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort current_f
 void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                             cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
-
-    
-
-
-
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
         cv::Point2f pts = object->get_object_stencil_point_displacement().at(sensor_index)
@@ -143,11 +138,6 @@ void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort current
 
 void MovingAverage::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
                                   cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
-
-
-    
-
-
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 

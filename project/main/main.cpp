@@ -287,10 +287,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 GroundTruthSceneInternal gt_scene(generation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
                 base_ptr_gt_scene = &gt_scene;
-                std::vector<ushort> sensor_group_index = {1};
-                for ( ushort i = 0; i < sensor_group_index.size(); i++ ) {
-                    base_ptr_gt_scene->prepare_directories(sensor_group_index.at(i));
+                for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
+                    base_ptr_gt_scene->prepare_directories(generation_list.at(sensor_group_index));
                 }
+
                 base_ptr_gt_scene->generate_gt_scene();
                 base_ptr_gt_scene->generate_bird_view();
 

@@ -84,8 +84,8 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         }
 
         // Either there is an occlusion or the object is still not in the frame or the object is stationary, the set visiblity to true
-        if ((gt_data.getAll().at(frame_number).visMask && gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m != 0) ||
-                (gt_displacement == cv::Point2f(0,0))  ) {
+        if ((gt_data.getAll().at(frame_number).visMask && gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m != 0) &&
+                (gt_displacement != cv::Point2f(0,0))  ) {
 
             /*if ( gt_data.getAll().at(frame_number).m_object_occlusion.occlusion_inertial == 127 || gt_data.getAll().at(frame_number).visMask == 0
                 || gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m == 0 || gt_data.getAll().at(frame_number).m_region_of_interest_px.x <= 0) { */

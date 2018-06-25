@@ -44,11 +44,11 @@ public:
 
     }
 
-    void beginGroundTruthGeneration(ObjectMetaData gt_data) {
+    void beginGroundTruthGeneration(ushort sensor_group_index, ObjectMetaData gt_data) {
 
         if ( m_objectName != "BackgroundCanvas") {
 
-            printf("generating ground truth basic displacement for name %s with object id %u\n", getObjectName().c_str(), getObjectId());
+            printf("generating ground truth basic displacement for sensor %d name %s with object id %u\n", sensor_group_index, getObjectName().c_str(), getObjectId());
 
             generate_object_base_point_displacement(gt_data);
 

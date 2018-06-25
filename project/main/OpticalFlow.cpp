@@ -631,7 +631,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             coord2 = "4," + std::to_string(m*(4) + c);
                             gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
 
-                            if ( obj_index == 1 ) {
+                            if ( obj_index == 0 ) {
 
                                 std::cout << "ellipse" << ellipse ;
 
@@ -643,7 +643,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 gp2d << "set yrange [-5:5]\n";
                                 gp2d << gp_line;
                                 gp2d << ellipse_plot;
-                                gp2d << "plot '-' with points title 'Boy'"
+                                gp2d << "plot '-' with points title 'Car'"
                                         ", '-' with points pt 22 notitle 'GT'"
                                         ", '-' with points pt 15 notitle 'Algo'"
                                         //", '-' with points title 'Boy'
