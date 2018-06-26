@@ -231,7 +231,297 @@ Traffic
 Traffic
 <Traffic><InfoAction id="2" owner="New Character01" status="stop" trgName=" type="CharacterPath" /></Traffic>
 
+----------------
+
+ NEW
+
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><Stop /></SimCtrl>
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><Apply /></SimCtrl>
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><Apply /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<TaskControl><RDB client="false" enable="true" interface="eth0" portRx="48190" portTx="48190" portType="TCP" /></TaskControl>
+------------------------------------------------------------
+TaskControl
+<TaskControl><Interface name="eth0" /><ImageGenerator autoConfig="true" autoHeadlight="true" autoRestart="true" ctrlPortConnect="true" dynPlayerConfig="true" idleImgId="20" imgPortConnect="true" portType="TCP" protocol="precision10" showIdleImg="true" /><Traffic controlHeadlights="true" /><Mockup force="false" type="none" /><Joystick debug="false" type="custom"><Axis /><Axis /><Axis /><Button /><Button /><Button /><Button /><Button /><Button /><Button /><Button /><Button /><Button /></Joystick><Sound enable="false" /><DataVis enable="false" /><ScVis enable="true" portType="loopback" /><Instruments enable="false" /><RDB enable="true" imageTransfer="false" portType="TCP" /><RDB enable="false" name="rdb2" /><RDB enable="false" name="rdb3" /><RecPlay autoRec="false" dummyPedestrians="auto" playSCP="true" /><Video buffer="color" liveStream="false" motionBlurMs="0" motionBlurRes="0" saveToFile="false" /><Dynamics syncMode="frame" /><Sync frameTimeMs="40" realTime="true" source="RDB" /><Config publish="true" /><Debug egoSpeed="true" simTime="true" /></TaskControl>
+------------------------------------------------------------
+TaskControl
+<TaskControl><RDB client="false" enable="true" interface="eth0" portRx="48190" portTx="48190" portType="TCP" /></TaskControl>
+------------------------------------------------------------
+TaskControl
+<TaskControl><Interface name="eth0" /><ImageGenerator autoConfig="true" autoHeadlight="true" autoRestart="true" ctrlPortConnect="true" dynPlayerConfig="true" idleImgId="20" imgPortConnect="true" portType="TCP" protocol="precision10" showIdleImg="true" /><Traffic controlHeadlights="true" /><Mockup force="false" type="none" /><Joystick debug="false" type="custom"><Axis /><Axis /><Axis /><Button /><Button /><Button /><Button /><Button /><Button /><Button /><Button /><Button /><Button /></Joystick><Sound enable="false" /><DataVis enable="false" /><ScVis enable="true" portType="loopback" /><Instruments enable="false" /><RDB enable="true" imageTransfer="false" portType="TCP" /><RDB enable="false" name="rdb2" /><RDB enable="false" name="rdb3" /><RecPlay autoRec="false" dummyPedestrians="auto" playSCP="true" /><Video buffer="color" liveStream="false" motionBlurMs="0" motionBlurRes="0" saveToFile="false" /><Dynamics syncMode="frame" /><Sync frameTimeMs="40" realTime="true" source="RDB" /><Config publish="true" /><Debug egoSpeed="true" simTime="true" /></TaskControl>
+
+
+
+
+
+
+
+
+
+
+------------
+
+
+
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><Project name="SampleProject" path="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/Current" /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<TaskControl><RDB client="false" enable="true" interface="eth0" portRx="48190" portTx="48190" portType="TCP" /></TaskControl>
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/Current/Scenarios/traffic_demo.xml" /><Start mode="operation" /></SimCtrl>
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><Project name="SampleProject" path="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/Current" /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<TaskControl><RDB client="false" enable="true" interface="eth0" portRx="48190" portTx="48190" portType="TCP" /></TaskControl>
+------------------------------------------------------------
+VT-GUI
+<SimCtrl><UnloadSensors /><LoadScenario filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Projects/Current/Scenarios/traffic_demo.xml" /><Start mode="operation" /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<SimCtrl><LayoutFile filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Distros/Distro/Databases/Town/Odr/townGer.xodr" /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<Set entity="player" id="1" name="Ego"><PosInertial hDeg="114.9093" pDeg="0.0128" rDeg="0.0000" x="1860.674" y="713.983" z="5.000" /><Path id="-1" s="0.000" /></Set>
+------------------------------------------------------------
+TaskControl
+<Player name="Ego"><Config dynamics="default" initialSpeed="0.000" scenarioEntity="1" visualModel="1" /></Player>
+------------------------------------------------------------
+TaskControl
+<SimCtrl><LayoutFile filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Distros/Distro/Databases/Town/Odr/townGer.xodr" /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<Set entity="player" id="1" name="Ego"><PosInertial hDeg="114.9093" pDeg="0.0128" rDeg="0.0000" x="1860.674" y="713.983" z="5.000" /><Path id="-1" s="0.000" /></Set>
+------------------------------------------------------------
+TaskControl
+<Player name="Ego"><Config dynamics="default" initialSpeed="0.000" scenarioEntity="1" visualModel="1" /></Player>
+------------------------------------------------------------
+VT-GUI
+<Environment><Friction value="1.000000" /><TimeOfDay headlights="auto" value="39600" /><Sky cloudState="0/8" visibility="100000.000000" /><Precipitation intensity="0.000000" type="none" /><Road effectScale="0.500000" state="dry" /></Environment>
+------------------------------------------------------------
+VT-GUI
+<Camera name="VIEW_CAMERA" showOwner="false"><Frustum far="1500.000000" fovHor="40.000000" fovVert="30.000000" near="1.000000" offsetHor="0.000000" offsetVert="0.000000" /><PosEyepoint /><ViewRelative dh="0.000000" dp="0.000000" dr="0.000000" /><Set /></Camera>
+------------------------------------------------------------
+VT-GUI
+<Display><Database enable="true" streetLamps="false" /><VistaOverlay enable="false" /></Display>
+------------------------------------------------------------
+VT-GUI
+<VIL><Imu dbElevation="true" /></VIL>
+------------------------------------------------------------
+VT-GUI
+<VIL><EyepointOffset hDeg="0.000000" pDeg="0.000000" rDeg="0.000000" x="0.000000" y="0.000000" z="0.000000" /></VIL>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><ModelDescription name="Car_Audi_A3"><Mirrors><Mirror name="MirrorCenter" x="1.671" y="0" z="1.257" /><Mirror name="MirrorLeft" x="1.799" y="0.898" z="1.027" /><Mirror name="MirrorRight" x="1.799" y="-0.898" z="1.027" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.152" y="0.355" z="1.161" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.15" y="0.654" z="0.678" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.15" y="-0.654" z="0.678" /><LightSource name="TaillightLeft" type="Taillight" x="-0.572" y="0.668" z="0.903" /><LightSource name="TaillightRight" type="Taillight" x="-0.572" y="-0.668" z="0.903" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Set entity="player" name="Ego"><PosInertial hDeg="114.909" jumpToPos="true" x="1860.67" y="713.983" z="4.99979" /></Set>
+------------------------------------------------------------
+Traffic
+<Player name="SlowCar"><ModelDescription name="Car_Audi_A4"><Mirrors><Mirror name="MirrorCenter" x="1.681" y="0" z="1.249" /><Mirror name="MirrorLeft" x="1.855" y="0.931" z="1.045" /><Mirror name="MirrorRight" x="1.855" y="-0.931" z="1.045" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.197" y="0.335" z="1.212" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.316" y="0.686" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.316" y="-0.686" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.781" y="0.586" z="0.86" /><LightSource name="TaillightRight" type="Taillight" x="-0.781" y="-0.586" z="0.86" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="FastCar"><ModelDescription name="Car_Audi_A4"><Mirrors><Mirror name="MirrorCenter" x="1.681" y="0" z="1.249" /><Mirror name="MirrorLeft" x="1.855" y="0.931" z="1.045" /><Mirror name="MirrorRight" x="1.855" y="-0.931" z="1.045" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.197" y="0.335" z="1.212" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.316" y="0.686" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.316" y="-0.686" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.781" y="0.586" z="0.86" /><LightSource name="TaillightRight" type="Taillight" x="-0.781" y="-0.586" z="0.86" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Activator"><ModelDescription name="Car_VWPassatVariant_2011"><Mirrors><Mirror name="MirrorCenter" x="1.835" y="0" z="1.202" /><Mirror name="MirrorLeft" x="1.959" y="0.908" z="1.02" /><Mirror name="MirrorRight" x="1.959" y="-0.908" z="1.02" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.365" y="0.433" z="1.184" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.232" y="0.692" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.232" y="-0.692" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.909" y="0.593" z="0.911" /><LightSource name="TaillightRight" type="Taillight" x="-0.909" y="-0.593" z="0.911" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_1"><ModelDescription name="Car_VWTouran"><Mirrors><Mirror name="MirrorCenter" x="1.759" y="0" z="1.394" /><Mirror name="MirrorLeft" x="2.049" y="0.957" z="1.076" /><Mirror name="MirrorRight" x="2.049" y="-0.957" z="1.076" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.411" y="0.391" z="1.288" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.205" y="0.717" z="0.76" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.205" y="-0.717" z="0.76" /><LightSource name="TaillightLeft" type="Taillight" x="-0.603" y="0.749" z="0.804" /><LightSource name="TaillightRight" type="Taillight" x="-0.603" y="-0.749" z="0.804" /></LightSources><Switches brakelights="true" driver="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_2"><ModelDescription name="Car_Audi_A6"><Mirrors><Mirror name="MirrorCenter" x="1.815" y="0" z="1.251" /><Mirror name="MirrorLeft" x="2.002" y="0.889" z="0.979" /><Mirror name="MirrorRight" x="2.002" y="-0.889" z="0.979" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.289" y="0.365" z="1.211" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.379" y="0.634" z="0.617" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.379" y="-0.634" z="0.617" /><LightSource name="TaillightLeft" type="Taillight" x="-0.848" y="0.648" z="0.797" /><LightSource name="TaillightRight" type="Taillight" x="-0.848" y="-0.648" z="0.797" /></LightSources><Switches brakelights="true" driver="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_3"><ModelDescription name="Car_Audi_Q5"><Mirrors><Mirror name="MirrorCenter" x="1.794" y="0" z="1.455" /><Mirror name="MirrorLeft" x="1.856" y="1.022" z="1.229" /><Mirror name="MirrorRight" x="1.856" y="-1.022" z="1.229" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.222" y="0.413" z="1.386" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.335" y="0.749" z="0.831" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.335" y="-0.749" z="0.831" /><LightSource name="TaillightLeft" type="Taillight" x="-0.69" y="0.672" z="1.021" /><LightSource name="TaillightRight" type="Taillight" x="-0.69" y="-0.672" z="1.021" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Sleeper"><ModelDescription name="Car_Smart"><Mirrors><Mirror name="MirrorCenter" x="1.078" y="0" z="1.332" /><Mirror name="MirrorLeft" x="1.318" y="0.727" z="1.027" /><Mirror name="MirrorRight" x="1.318" y="-0.727" z="1.027" /></Mirrors><EyePoints><EyePoint name="Driver" x="0.541" y="0.268" z="1.34" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="1.797" y="0.513" z="0.799" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="1.797" y="-0.513" z="0.799" /><LightSource name="TaillightLeft" type="Taillight" x="-0.28" y="0.595" z="0.806" /><LightSource name="TaillightRight" type="Taillight" x="-0.28" y="-0.595" z="0.806" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="AutonomousOvertaker"><ModelDescription name="Car_VWGolf-2010"><Mirrors><Mirror name="MirrorCenter" x="1.676" y="0" z="1.247" /><Mirror name="MirrorLeft" x="1.871" y="0.905" z="0.991" /><Mirror name="MirrorRight" x="1.871" y="-0.905" z="0.991" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.246" y="0.391" z="1.141" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.126" y="0.562" z="0.724" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.126" y="-0.562" z="0.724" /><LightSource name="TaillightLeft" type="Taillight" x="-0.514" y="0.606" z="0.899" /><LightSource name="TaillightRight" type="Taillight" x="-0.514" y="-0.606" z="0.899" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+TaskControl
+<SimCtrl><LayoutFile filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Distros/Distro/Databases/Town/Odr/townGer.xodr" /></SimCtrl>
+------------------------------------------------------------
+VT-GUI
+<Environment><Friction value="1.000000" /><TimeOfDay headlights="auto" value="39600" /><Sky cloudState="0/8" visibility="100000.000000" /><Precipitation intensity="0.000000" type="none" /><Road effectScale="0.500000" state="dry" /></Environment>
+------------------------------------------------------------
+VT-GUI
+<Camera name="VIEW_CAMERA" showOwner="false"><Frustum far="1500.000000" fovHor="40.000000" fovVert="30.000000" near="1.000000" offsetHor="0.000000" offsetVert="0.000000" /><PosEyepoint /><ViewRelative dh="0.000000" dp="0.000000" dr="0.000000" /><Set /></Camera>
+------------------------------------------------------------
+VT-GUI
+<Display><Database enable="true" streetLamps="false" /><VistaOverlay enable="false" /></Display>
+------------------------------------------------------------
+VT-GUI
+<VIL><Imu dbElevation="true" /></VIL>
+------------------------------------------------------------
+VT-GUI
+<VIL><EyepointOffset hDeg="0.000000" pDeg="0.000000" rDeg="0.000000" x="0.000000" y="0.000000" z="0.000000" /></VIL>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><ModelDescription name="Car_Audi_A3"><Mirrors><Mirror name="MirrorCenter" x="1.671" y="0" z="1.257" /><Mirror name="MirrorLeft" x="1.799" y="0.898" z="1.027" /><Mirror name="MirrorRight" x="1.799" y="-0.898" z="1.027" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.152" y="0.355" z="1.161" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.15" y="0.654" z="0.678" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.15" y="-0.654" z="0.678" /><LightSource name="TaillightLeft" type="Taillight" x="-0.572" y="0.668" z="0.903" /><LightSource name="TaillightRight" type="Taillight" x="-0.572" y="-0.668" z="0.903" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Set entity="player" name="Ego"><PosInertial hDeg="114.909" jumpToPos="true" x="1860.67" y="713.983" z="4.99979" /></Set>
+------------------------------------------------------------
+Traffic
+<Player name="SlowCar"><ModelDescription name="Car_Audi_A4"><Mirrors><Mirror name="MirrorCenter" x="1.681" y="0" z="1.249" /><Mirror name="MirrorLeft" x="1.855" y="0.931" z="1.045" /><Mirror name="MirrorRight" x="1.855" y="-0.931" z="1.045" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.197" y="0.335" z="1.212" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.316" y="0.686" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.316" y="-0.686" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.781" y="0.586" z="0.86" /><LightSource name="TaillightRight" type="Taillight" x="-0.781" y="-0.586" z="0.86" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="FastCar"><ModelDescription name="Car_Audi_A4"><Mirrors><Mirror name="MirrorCenter" x="1.681" y="0" z="1.249" /><Mirror name="MirrorLeft" x="1.855" y="0.931" z="1.045" /><Mirror name="MirrorRight" x="1.855" y="-0.931" z="1.045" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.197" y="0.335" z="1.212" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.316" y="0.686" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.316" y="-0.686" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.781" y="0.586" z="0.86" /><LightSource name="TaillightRight" type="Taillight" x="-0.781" y="-0.586" z="0.86" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Activator"><ModelDescription name="Car_VWPassatVariant_2011"><Mirrors><Mirror name="MirrorCenter" x="1.835" y="0" z="1.202" /><Mirror name="MirrorLeft" x="1.959" y="0.908" z="1.02" /><Mirror name="MirrorRight" x="1.959" y="-0.908" z="1.02" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.365" y="0.433" z="1.184" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.232" y="0.692" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.232" y="-0.692" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.909" y="0.593" z="0.911" /><LightSource name="TaillightRight" type="Taillight" x="-0.909" y="-0.593" z="0.911" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_1"><ModelDescription name="Car_VWTouran"><Mirrors><Mirror name="MirrorCenter" x="1.759" y="0" z="1.394" /><Mirror name="MirrorLeft" x="2.049" y="0.957" z="1.076" /><Mirror name="MirrorRight" x="2.049" y="-0.957" z="1.076" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.411" y="0.391" z="1.288" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.205" y="0.717" z="0.76" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.205" y="-0.717" z="0.76" /><LightSource name="TaillightLeft" type="Taillight" x="-0.603" y="0.749" z="0.804" /><LightSource name="TaillightRight" type="Taillight" x="-0.603" y="-0.749" z="0.804" /></LightSources><Switches brakelights="true" driver="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_2"><ModelDescription name="Car_Audi_A6"><Mirrors><Mirror name="MirrorCenter" x="1.815" y="0" z="1.251" /><Mirror name="MirrorLeft" x="2.002" y="0.889" z="0.979" /><Mirror name="MirrorRight" x="2.002" y="-0.889" z="0.979" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.289" y="0.365" z="1.211" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.379" y="0.634" z="0.617" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.379" y="-0.634" z="0.617" /><LightSource name="TaillightLeft" type="Taillight" x="-0.848" y="0.648" z="0.797" /><LightSource name="TaillightRight" type="Taillight" x="-0.848" y="-0.648" z="0.797" /></LightSources><Switches brakelights="true" driver="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_3"><ModelDescription name="Car_Audi_Q5"><Mirrors><Mirror name="MirrorCenter" x="1.794" y="0" z="1.455" /><Mirror name="MirrorLeft" x="1.856" y="1.022" z="1.229" /><Mirror name="MirrorRight" x="1.856" y="-1.022" z="1.229" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.222" y="0.413" z="1.386" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.335" y="0.749" z="0.831" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.335" y="-0.749" z="0.831" /><LightSource name="TaillightLeft" type="Taillight" x="-0.69" y="0.672" z="1.021" /><LightSource name="TaillightRight" type="Taillight" x="-0.69" y="-0.672" z="1.021" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Sleeper"><ModelDescription name="Car_Smart"><Mirrors><Mirror name="MirrorCenter" x="1.078" y="0" z="1.332" /><Mirror name="MirrorLeft" x="1.318" y="0.727" z="1.027" /><Mirror name="MirrorRight" x="1.318" y="-0.727" z="1.027" /></Mirrors><EyePoints><EyePoint name="Driver" x="0.541" y="0.268" z="1.34" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="1.797" y="0.513" z="0.799" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="1.797" y="-0.513" z="0.799" /><LightSource name="TaillightLeft" type="Taillight" x="-0.28" y="0.595" z="0.806" /><LightSource name="TaillightRight" type="Taillight" x="-0.28" y="-0.595" z="0.806" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="AutonomousOvertaker"><ModelDescription name="Car_VWGolf-2010"><Mirrors><Mirror name="MirrorCenter" x="1.676" y="0" z="1.247" /><Mirror name="MirrorLeft" x="1.871" y="0.905" z="0.991" /><Mirror name="MirrorRight" x="1.871" y="-0.905" z="0.991" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.246" y="0.391" z="1.141" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.126" y="0.562" z="0.724" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.126" y="-0.562" z="0.724" /><LightSource name="TaillightLeft" type="Taillight" x="-0.514" y="0.606" z="0.899" /><LightSource name="TaillightRight" type="Taillight" x="-0.514" y="-0.606" z="0.899" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+TaskControl
+<SimCtrl><LayoutFile filename="/local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Distros/Distro/Databases/Town/Odr/townGer.xodr" /></SimCtrl>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><ModelDescription name="Car_Audi_A3"><Mirrors><Mirror name="MirrorCenter" x="1.671" y="0" z="1.257" /><Mirror name="MirrorLeft" x="1.799" y="0.898" z="1.027" /><Mirror name="MirrorRight" x="1.799" y="-0.898" z="1.027" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.152" y="0.355" z="1.161" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.15" y="0.654" z="0.678" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.15" y="-0.654" z="0.678" /><LightSource name="TaillightLeft" type="Taillight" x="-0.572" y="0.668" z="0.903" /><LightSource name="TaillightRight" type="Taillight" x="-0.572" y="-0.668" z="0.903" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Set entity="player" name="Ego"><PosInertial hDeg="114.909" jumpToPos="true" x="1860.67" y="713.983" z="4.99979" /></Set>
+------------------------------------------------------------
+Traffic
+<Player name="SlowCar"><ModelDescription name="Car_Audi_A4"><Mirrors><Mirror name="MirrorCenter" x="1.681" y="0" z="1.249" /><Mirror name="MirrorLeft" x="1.855" y="0.931" z="1.045" /><Mirror name="MirrorRight" x="1.855" y="-0.931" z="1.045" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.197" y="0.335" z="1.212" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.316" y="0.686" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.316" y="-0.686" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.781" y="0.586" z="0.86" /><LightSource name="TaillightRight" type="Taillight" x="-0.781" y="-0.586" z="0.86" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="FastCar"><ModelDescription name="Car_Audi_A4"><Mirrors><Mirror name="MirrorCenter" x="1.681" y="0" z="1.249" /><Mirror name="MirrorLeft" x="1.855" y="0.931" z="1.045" /><Mirror name="MirrorRight" x="1.855" y="-0.931" z="1.045" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.197" y="0.335" z="1.212" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.316" y="0.686" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.316" y="-0.686" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.781" y="0.586" z="0.86" /><LightSource name="TaillightRight" type="Taillight" x="-0.781" y="-0.586" z="0.86" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Activator"><ModelDescription name="Car_VWPassatVariant_2011"><Mirrors><Mirror name="MirrorCenter" x="1.835" y="0" z="1.202" /><Mirror name="MirrorLeft" x="1.959" y="0.908" z="1.02" /><Mirror name="MirrorRight" x="1.959" y="-0.908" z="1.02" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.365" y="0.433" z="1.184" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.232" y="0.692" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.232" y="-0.692" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.909" y="0.593" z="0.911" /><LightSource name="TaillightRight" type="Taillight" x="-0.909" y="-0.593" z="0.911" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_1"><ModelDescription name="Car_VWTouran"><Mirrors><Mirror name="MirrorCenter" x="1.759" y="0" z="1.394" /><Mirror name="MirrorLeft" x="2.049" y="0.957" z="1.076" /><Mirror name="MirrorRight" x="2.049" y="-0.957" z="1.076" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.411" y="0.391" z="1.288" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.205" y="0.717" z="0.76" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.205" y="-0.717" z="0.76" /><LightSource name="TaillightLeft" type="Taillight" x="-0.603" y="0.749" z="0.804" /><LightSource name="TaillightRight" type="Taillight" x="-0.603" y="-0.749" z="0.804" /></LightSources><Switches brakelights="true" driver="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_2"><ModelDescription name="Car_Audi_A6"><Mirrors><Mirror name="MirrorCenter" x="1.815" y="0" z="1.251" /><Mirror name="MirrorLeft" x="2.002" y="0.889" z="0.979" /><Mirror name="MirrorRight" x="2.002" y="-0.889" z="0.979" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.289" y="0.365" z="1.211" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.379" y="0.634" z="0.617" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.379" y="-0.634" z="0.617" /><LightSource name="TaillightLeft" type="Taillight" x="-0.848" y="0.648" z="0.797" /><LightSource name="TaillightRight" type="Taillight" x="-0.848" y="-0.648" z="0.797" /></LightSources><Switches brakelights="true" driver="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_3"><ModelDescription name="Car_Audi_Q5"><Mirrors><Mirror name="MirrorCenter" x="1.794" y="0" z="1.455" /><Mirror name="MirrorLeft" x="1.856" y="1.022" z="1.229" /><Mirror name="MirrorRight" x="1.856" y="-1.022" z="1.229" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.222" y="0.413" z="1.386" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.335" y="0.749" z="0.831" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.335" y="-0.749" z="0.831" /><LightSource name="TaillightLeft" type="Taillight" x="-0.69" y="0.672" z="1.021" /><LightSource name="TaillightRight" type="Taillight" x="-0.69" y="-0.672" z="1.021" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Sleeper"><ModelDescription name="Car_Smart"><Mirrors><Mirror name="MirrorCenter" x="1.078" y="0" z="1.332" /><Mirror name="MirrorLeft" x="1.318" y="0.727" z="1.027" /><Mirror name="MirrorRight" x="1.318" y="-0.727" z="1.027" /></Mirrors><EyePoints><EyePoint name="Driver" x="0.541" y="0.268" z="1.34" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="1.797" y="0.513" z="0.799" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="1.797" y="-0.513" z="0.799" /><LightSource name="TaillightLeft" type="Taillight" x="-0.28" y="0.595" z="0.806" /><LightSource name="TaillightRight" type="Taillight" x="-0.28" y="-0.595" z="0.806" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="AutonomousOvertaker"><ModelDescription name="Car_VWGolf-2010"><Mirrors><Mirror name="MirrorCenter" x="1.676" y="0" z="1.247" /><Mirror name="MirrorLeft" x="1.871" y="0.905" z="0.991" /><Mirror name="MirrorRight" x="1.871" y="-0.905" z="0.991" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.246" y="0.391" z="1.141" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.126" y="0.562" z="0.724" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.126" y="-0.562" z="0.724" /><LightSource name="TaillightLeft" type="Taillight" x="-0.514" y="0.606" z="0.899" /><LightSource name="TaillightRight" type="Taillight" x="-0.514" y="-0.606" z="0.899" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><ModelDescription name="Car_Audi_A3"><Mirrors><Mirror name="MirrorCenter" x="1.671" y="0" z="1.257" /><Mirror name="MirrorLeft" x="1.799" y="0.898" z="1.027" /><Mirror name="MirrorRight" x="1.799" y="-0.898" z="1.027" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.152" y="0.355" z="1.161" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.15" y="0.654" z="0.678" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.15" y="-0.654" z="0.678" /><LightSource name="TaillightLeft" type="Taillight" x="-0.572" y="0.668" z="0.903" /><LightSource name="TaillightRight" type="Taillight" x="-0.572" y="-0.668" z="0.903" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Set entity="player" name="Ego"><PosInertial hDeg="114.909" jumpToPos="true" x="1860.67" y="713.983" z="4.99979" /></Set>
+------------------------------------------------------------
+Traffic
+<Player name="SlowCar"><ModelDescription name="Car_Audi_A4"><Mirrors><Mirror name="MirrorCenter" x="1.681" y="0" z="1.249" /><Mirror name="MirrorLeft" x="1.855" y="0.931" z="1.045" /><Mirror name="MirrorRight" x="1.855" y="-0.931" z="1.045" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.197" y="0.335" z="1.212" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.316" y="0.686" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.316" y="-0.686" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.781" y="0.586" z="0.86" /><LightSource name="TaillightRight" type="Taillight" x="-0.781" y="-0.586" z="0.86" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="FastCar"><ModelDescription name="Car_Audi_A4"><Mirrors><Mirror name="MirrorCenter" x="1.681" y="0" z="1.249" /><Mirror name="MirrorLeft" x="1.855" y="0.931" z="1.045" /><Mirror name="MirrorRight" x="1.855" y="-0.931" z="1.045" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.197" y="0.335" z="1.212" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.316" y="0.686" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.316" y="-0.686" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.781" y="0.586" z="0.86" /><LightSource name="TaillightRight" type="Taillight" x="-0.781" y="-0.586" z="0.86" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Activator"><ModelDescription name="Car_VWPassatVariant_2011"><Mirrors><Mirror name="MirrorCenter" x="1.835" y="0" z="1.202" /><Mirror name="MirrorLeft" x="1.959" y="0.908" z="1.02" /><Mirror name="MirrorRight" x="1.959" y="-0.908" z="1.02" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.365" y="0.433" z="1.184" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.232" y="0.692" z="0.683" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.232" y="-0.692" z="0.683" /><LightSource name="TaillightLeft" type="Taillight" x="-0.909" y="0.593" z="0.911" /><LightSource name="TaillightRight" type="Taillight" x="-0.909" y="-0.593" z="0.911" /></LightSources><Switches brakelights="true" daytimeRunningLight="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_1"><ModelDescription name="Car_VWTouran"><Mirrors><Mirror name="MirrorCenter" x="1.759" y="0" z="1.394" /><Mirror name="MirrorLeft" x="2.049" y="0.957" z="1.076" /><Mirror name="MirrorRight" x="2.049" y="-0.957" z="1.076" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.411" y="0.391" z="1.288" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.205" y="0.717" z="0.76" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.205" y="-0.717" z="0.76" /><LightSource name="TaillightLeft" type="Taillight" x="-0.603" y="0.749" z="0.804" /><LightSource name="TaillightRight" type="Taillight" x="-0.603" y="-0.749" z="0.804" /></LightSources><Switches brakelights="true" driver="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_2"><ModelDescription name="Car_Audi_A6"><Mirrors><Mirror name="MirrorCenter" x="1.815" y="0" z="1.251" /><Mirror name="MirrorLeft" x="2.002" y="0.889" z="0.979" /><Mirror name="MirrorRight" x="2.002" y="-0.889" z="0.979" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.289" y="0.365" z="1.211" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.379" y="0.634" z="0.617" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.379" y="-0.634" z="0.617" /><LightSource name="TaillightLeft" type="Taillight" x="-0.848" y="0.648" z="0.797" /><LightSource name="TaillightRight" type="Taillight" x="-0.848" y="-0.648" z="0.797" /></LightSources><Switches brakelights="true" driver="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Follower_3"><ModelDescription name="Car_Audi_Q5"><Mirrors><Mirror name="MirrorCenter" x="1.794" y="0" z="1.455" /><Mirror name="MirrorLeft" x="1.856" y="1.022" z="1.229" /><Mirror name="MirrorRight" x="1.856" y="-1.022" z="1.229" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.222" y="0.413" z="1.386" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.335" y="0.749" z="0.831" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.335" y="-0.749" z="0.831" /><LightSource name="TaillightLeft" type="Taillight" x="-0.69" y="0.672" z="1.021" /><LightSource name="TaillightRight" type="Taillight" x="-0.69" y="-0.672" z="1.021" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Sleeper"><ModelDescription name="Car_Smart"><Mirrors><Mirror name="MirrorCenter" x="1.078" y="0" z="1.332" /><Mirror name="MirrorLeft" x="1.318" y="0.727" z="1.027" /><Mirror name="MirrorRight" x="1.318" y="-0.727" z="1.027" /></Mirrors><EyePoints><EyePoint name="Driver" x="0.541" y="0.268" z="1.34" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="1.797" y="0.513" z="0.799" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="1.797" y="-0.513" z="0.799" /><LightSource name="TaillightLeft" type="Taillight" x="-0.28" y="0.595" z="0.806" /><LightSource name="TaillightRight" type="Taillight" x="-0.28" y="-0.595" z="0.806" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="AutonomousOvertaker"><ModelDescription name="Car_VWGolf-2010"><Mirrors><Mirror name="MirrorCenter" x="1.676" y="0" z="1.247" /><Mirror name="MirrorLeft" x="1.871" y="0.905" z="0.991" /><Mirror name="MirrorRight" x="1.871" y="-0.905" z="0.991" /></Mirrors><EyePoints><EyePoint name="Driver" x="1.246" y="0.391" z="1.141" /></EyePoints><LightSources><LightSource ID="DefaultHeadlight" name="HeadLightLeft" type="Headlight" x="3.126" y="0.562" z="0.724" /><LightSource ID="DefaultHeadlight" name="HeadLightRight" type="Headlight" x="3.126" y="-0.562" z="0.724" /><LightSource name="TaillightLeft" type="Taillight" x="-0.514" y="0.606" z="0.899" /><LightSource name="TaillightRight" type="Taillight" x="-0.514" y="-0.606" z="0.899" /></LightSources><Switches brakelights="true" driver="true" foglightFront="true" foglightRear="true" headlights="true" indicatorLeft="true" indicatorRight="true" litNumberPlate="true" reverseDrivinglight="true" /></ModelDescription></Player>
+------------------------------------------------------------
+Traffic
+<Player name="Ego"><VehicleDef airDragCoefficient="0.26" distCoupling="3.467 0 0.385" distFront="3.467" distHeight="1.423" distHitch="-0.833 0 0.385" distLeft="0.888" distRear="0.833" distRight="0.888" enginePower="103000" frontSurfaceEffective="2" gradientPitchAngle="-1" gradientRollAngle="-1" mass="1560" maxDecel="-9.5" maxSpeed="58.4" maxSteering="0.48" maxTorque="320" overallEfficiency="0.75" rollingResistance="0.013" trackWidth="-1" wheelBase="2.591" wheelDiameter="0.641" wheelDiameterDynamic="0.705" wheelDrive="wheel_drive_front" wheelSkewStiffness="12" /></Player>
+------------------------------------------------------------
+TaskControl
+<SimCtrl><InitDone place="checkInitConfirmation" /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<SimCtrl><Run currentState="6" /></SimCtrl>
+------------------------------------------------------------
+viTrafficDyn
+<Player name="Ego"><Driver ctrlLatLong="ghostdriver" /></Player>
+------------------------------------------------------------
+TaskControl
+<SimCtrl><InitDone place="checkInitConfirmation" /></SimCtrl>
+------------------------------------------------------------
+TaskControl
+<SimCtrl><Run currentState="6" /></SimCtrl>
+------------------------------------------------------------
+viTrafficDyn
+<Player name="Ego"><Driver ctrlLatLong="ghostdriver" /></Player>
+
+
+
  */
+
+
 
 
 
