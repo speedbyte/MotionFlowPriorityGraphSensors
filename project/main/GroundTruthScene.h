@@ -8,10 +8,10 @@
 
 #include <map>
 #include <unistd.h>
-#include "Canvas.h"
 #include "ObjectMetaData.h"
 #include "Sensors.h"
 #include "ViresObjects.h"
+#include "GroundTruthObjects.h"
 #include <vires-interface/vires_configuration.h>
 #include <boost/tuple/tuple.hpp>
 
@@ -33,8 +33,6 @@ protected:
     std::string m_scenario;
 
     std::string m_environment;
-
-    Canvas m_canvas;
 
     cv::FileStorage m_write_fs;
 
@@ -99,7 +97,7 @@ public:
     GroundTruthScene(generation_sensor_lists, scenario, environment, list_objects, list_sensors, generate_yaml_file) {
     }
 
-    void startEvaluating(Noise noise);
+    void startEvaluating(std::unique_ptr<Noise> &noise);
 
     void generate_gt_scene() override;
 
@@ -319,7 +317,7 @@ $
 
 public:
 
-    void startEvaluating(Noise noise);
+    void startEvaluating(std::unique_ptr<Noise> &noise);
 
     void configVires() {
 

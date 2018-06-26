@@ -57,7 +57,7 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
     }
 }
 
-void GroundTruthSceneExternal::startEvaluating(Noise noise) {
+void GroundTruthSceneExternal::startEvaluating(std::unique_ptr<Noise> &noise) {
 
 
     for (ushort obj_index = 0; obj_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
@@ -92,7 +92,7 @@ void GroundTruthSceneExternal::startEvaluating(Noise noise) {
 
         for (ushort sensor_group_index = 0; sensor_group_index < m_evaluation_sensor_list.size(); sensor_group_index++ ) {
 
-            Sensors gt_sen(viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorStartPoint(), &noise,
+            Sensors gt_sen(viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorStartPoint(), noise,
                     viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorName());
             m_list_gt_sensors.push_back(gt_sen);
             // each sensor is monitored by n sensor group.
@@ -106,7 +106,7 @@ void GroundTruthSceneExternal::startEvaluating(Noise noise) {
 }
 
 
-void GroundTruthSceneInternal::startEvaluating(Noise noise) {
+void GroundTruthSceneInternal::startEvaluating(std::unique_ptr<Noise> &noise) {
 
 
     for (ushort obj_index = 0; obj_index < cppObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
@@ -147,7 +147,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         cv::Point2f points(a,b);
     }
 */
-    ColorfulNoise colorfulNoise;
+    std::unique_ptr<Noise> colorfulNoise = std::make_unique<ColorfulNoise>();
 
     if (m_environment == "blue_sky") {
 
@@ -161,19 +161,15 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
                 std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
 
-                cv::Mat tempGroundTruthImageBase;
-
-                // apply black noise in case of night
+                std::unique_ptr<Noise> noise;
                 if (m_environment == "night") {
-                    BlackNoise noise;
-                    ObjectImageShapeData newCanvas = m_canvas.getCanvasShapeAndData();
-                    newCanvas.applyNoise(&noise);
-                    tempGroundTruthImageBase = newCanvas.get().clone();
+                    BlackNoise blackNoise;
+                    noise = std::make_unique<BlackNoise>(blackNoise);
                 } else {
-                    tempGroundTruthImageBase = m_canvas.getCanvasShapeAndData().get().clone();
+                    WhiteNoise whiteNoise;
+                    noise = std::make_unique<WhiteNoise>(whiteNoise);
                 }
-
-                cppObjects.at(sensor_group_index).process(tempGroundTruthImageBase);
+                cppObjects.at(sensor_group_index).process(noise);
 
             }
         } else { // genreate yaml file
@@ -185,8 +181,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         // calcBB is not required
         startEvaluating(colorfulNoise);
     }
-
-
 
 }
 
@@ -501,7 +495,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
     } else {
 
-        Noise noNoise;
+        std::unique_ptr<Noise> noNoise = std::make_unique<NoNoise>();
 
         if (m_environment == "blue_sky") {
 

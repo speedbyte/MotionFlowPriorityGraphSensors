@@ -34,12 +34,12 @@ private:
 public:
 
     GroundTruthObjects() {}
-    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, ushort startPoint, Noise noise, std::string objectName) : m_image_data_and_shape(image_data_and_shape), m_startPoint(startPoint), Objects(objectName)
+    GroundTruthObjects( ObjectImageShapeData image_data_and_shape, ushort startPoint, std::unique_ptr<Noise> &noise, std::string objectName) : m_image_data_and_shape(image_data_and_shape), m_startPoint(startPoint), Objects(objectName)
 
     {
         m_objectId = groundTruthObjectTotalCount ;
         image_data_and_shape.process();
-        image_data_and_shape.applyNoise(&noise);
+        image_data_and_shape.applyNoise(noise);
         groundTruthObjectTotalCount += 1;
 
     }

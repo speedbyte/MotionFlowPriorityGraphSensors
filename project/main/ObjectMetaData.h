@@ -215,10 +215,12 @@ public:
 class ObjectMetaData {
 
 protected:
+    // meta data
     std::vector<STRUCT_GT_OBJECTS_ALL> m_object_gt_all;
     std::vector<RDB_OBJECT_STATE_t> m_object_state_all;
 
 private:
+    // shape data
     ObjectImageShapeData m_objectMetaData_shape;
     std::string m_objectMetaData_name;
     ushort m_objectMetaData_startPoint;
@@ -278,9 +280,66 @@ public:
         m_object_gt_all.at(frameNumber).frame_no = frameNumber;
     }
 
-    void atAllObjectStateData(ushort frameNumber, RDB_OBJECT_STATE_t* data) {
+    void atAllObjectStateData(ushort frame_number, RDB_OBJECT_STATE_t* data) {
         // dereference and store data
+        cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
+        cv::Point2f dimension_pixel;
+        cv::Point2f speed_inertial, speed_usk;
+        cv::Point3f orientation_usk, orientation_inertial;
+        float dist_cam_to_obj;
+        float total_distance_travelled;
+
         m_object_state_all.push_back(*data);
+
+        if (data->base.pos.type == RDB_COORD_TYPE_WINDOW) {
+
+            position_pixel = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                         float(data->base.pos.z));
+            dimension_pixel = cv::Point2f((float) data->base.geo.dimX, (float) data->base.geo.dimY);
+            offset = cv::Point3f((float) data->base.geo.offX, (float) data->base.geo.offY,
+                                 (float) data->base.geo.offZ);
+            total_distance_travelled = data->ext.traveledDist;
+
+
+            atFrameNumberCameraSensor(
+                    (ushort) frame_number, position_pixel, offset,
+                    dimension_pixel, total_distance_travelled);
+            atFrameNumberVisibility(
+                    (ushort) frame_number, data->base.visMask);
+
+        } else if (data->base.pos.type == RDB_COORD_TYPE_USK) {
+
+            position_usk = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                       (float) data->base.pos.z);
+            orientation_usk = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p,
+                                          (float) data->base.pos.r);
+            dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY,
+                                              (float) data->base.geo.dimZ);
+            speed_usk = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
+            total_distance_travelled = data->ext.traveledDist;
+            atFrameNumberPerfectSensor(
+                    (ushort) frame_number, position_usk,
+                    orientation_usk, dimension_realworld, speed_usk, total_distance_travelled);
+            atFrameNumberVisibility(
+                    (ushort) frame_number, data->base.visMask);
+
+        } else if (data->base.pos.type == RDB_COORD_TYPE_INERTIAL) {
+
+            position_inertial = cv::Point3f((float) data->base.pos.x, (float) data->base.pos.y,
+                                            (float) data->base.pos.z);
+            orientation_inertial = cv::Point3f((float) data->base.pos.h, (float) data->base.pos.p,
+                                               (float) data->base.pos.r);
+            dimension_realworld = cv::Point3f((float) data->base.geo.dimX, (float) data->base.geo.dimY,
+                                              (float) data->base.geo.dimZ);
+            speed_inertial = cv::Point2f((float) data->ext.speed.x, (float) data->ext.speed.y);
+            total_distance_travelled = data->ext.traveledDist;
+            atFrameNumberPerfectSensorInertial(
+                    (ushort) frame_number, position_inertial,
+                    orientation_inertial, dimension_realworld, speed_inertial, total_distance_travelled);
+            atFrameNumberVisibility(
+                    (ushort) frame_number, data->base.visMask);
+        }
+
     }
 
     void atFrameNumberCameraSensor(ushort frameNumber, cv::Point3f position, cv::Point3f offset, cv::Point2f dimensions, float total_distance_travelled) {

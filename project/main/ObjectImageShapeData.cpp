@@ -9,3 +9,9 @@ void Rectangle::process() {
 
     m_data.create(m_objectHeight, m_objectWidth, CV_8UC3);
 }
+
+void Canvas::process() {
+
+    m_data.create(m_objectHeight, m_objectWidth, CV_8UC3);
+
+}

@@ -6,6 +6,7 @@
 #define MAIN_OBJECTSHAPE_H
 
 #include <opencv2/core/mat.hpp>
+#include <bits/unique_ptr.h>
 #include "Noise.h"
 
 class ObjectImageShapeData {
@@ -20,34 +21,43 @@ public:
 
     ObjectImageShapeData() {};
 
-    ObjectImageShapeData(ushort width, ushort height ) : m_objectWidth(width), m_objectHeight
-            (height) {
+    ObjectImageShapeData(ushort width, ushort height, std::unique_ptr<Noise> &noise ) : m_objectWidth(width), m_objectHeight
+            (height){
         m_data.create(height, width, CV_8UC3);
+        applyNoise(noise);
     }
 
     virtual void process() {};
 
-    void applyNoise(Noise *noise) {
-
+    void applyNoise(std::unique_ptr<Noise> &noise) {
         noise->apply(m_data);
-    }
-
-    ushort getWidth() {
-        return m_objectWidth;
-    }
-
-    ushort getHeight() {
-        return m_objectHeight;
     }
 
     cv::Mat get() {
         return m_data;
     }
 
-    cv::Mat set() {
-        m_data = cv::Scalar::all(0);
-    }
 };
+
+
+// Canvas is a kind of Object ( its just a big object, and hence has the same property )
+class Canvas  : public ObjectImageShapeData {
+
+private:
+
+
+public:
+
+
+    // The canvas can move to simulate a moving car. Hence we need position etc.
+    Canvas( ushort width, ushort height, std::unique_ptr<Noise> &noise ) : ObjectImageShapeData(width, height, noise) {
+    };
+
+    void process() override ;
+
+
+};
+
 
 class Rectangle :  public ObjectImageShapeData {
 
@@ -55,7 +65,7 @@ private:
 
 public:
 
-    Rectangle(ushort width, ushort height) : ObjectImageShapeData(width, height) {};
+    Rectangle(ushort width, ushort height, std::unique_ptr<Noise> &noise) : ObjectImageShapeData(width, height, noise) {};
 
     void process() override ;
 

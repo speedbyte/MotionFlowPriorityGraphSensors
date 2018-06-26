@@ -32,7 +32,7 @@ protected:
 
 public:
 
-    Sensors (ushort startPoint, Noise *noise, const std::string sensorName) : m_startPoint(startPoint), m_sensorName(sensorName) {
+    Sensors (ushort startPoint, std::unique_ptr<Noise> &noise, const std::string sensorName) : m_startPoint(startPoint), m_sensorName(sensorName) {
 
         //image_data_and_shape.process();
 

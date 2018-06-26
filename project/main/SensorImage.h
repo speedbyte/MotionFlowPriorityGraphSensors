@@ -7,7 +7,6 @@
 
 #include <opencv2/core/mat.hpp>
 #include "Noise.h"
-#include "ObjectImageShapeData.h"
 
 class Noise;
 
@@ -20,8 +19,6 @@ public:
 
     virtual void clearNoise() {}
 
-    virtual ObjectImageShapeData getImageShapeAndData() const  {
-    }
 };
 
 
@@ -30,23 +27,19 @@ class CameraSensor : public SensorImage {
 protected:
 
     Noise m_noise;
-    ObjectImageShapeData m_image_data_and_shape;
     cv::Matx33f camaera_intrinsic_parameters;
     cv::Matx33f camaera_pose_parameters;
 
 
 public:
 
-    CameraSensor(ObjectImageShapeData &image_data_and_shape, Noise &noise) : m_image_data_and_shape(image_data_and_shape),
-            m_noise(noise) {
+    CameraSensor(Noise &noise) : m_noise(noise) {
 
-        m_image_data_and_shape.applyNoise(&m_noise);
     }
 
     virtual void setNoise( Noise &noise ) override {
         //SensorImage image;
         m_noise = noise;
-        m_image_data_and_shape.applyNoise(&m_noise);
     }
 
     virtual void appendNoise( Noise &noise ) override {
