@@ -242,6 +242,14 @@ public:
         }
     } ;
 
+    ObjectMetaData(std::string name, ushort startPoint) :
+            m_objectMetaData_name(name), m_objectMetaData_startPoint(startPoint) {
+        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
+            STRUCT_GT_OBJECTS_ALL s = {};
+            m_object_gt_all.push_back(s);
+        }
+    } ;
+
     void fillData() {
 
     }
@@ -494,7 +502,7 @@ class Achterbahn : public ObjectMetaData {
 public:
 
     Achterbahn() {};
-    Achterbahn(ObjectImageShapeData shape, std::string name, ushort startPoint) : ObjectMetaData(shape, name, startPoint) {} ;
+    Achterbahn(std::string name, ushort startPoint) : ObjectMetaData(name, startPoint) {} ;
 
     void process(cv::Size frame_size) override ;
 

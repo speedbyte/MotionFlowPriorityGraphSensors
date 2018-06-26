@@ -13,29 +13,25 @@
 void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
     Achterbahn achterbahn;
-    ColorfulNoise colorfulNoise;
 
     std::unique_ptr<Noise> objectNoise = std::make_unique<ColorfulNoise>();
     cv::Mat tempGroundTruthImageBase;
 
     Canvas canvas((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height, noise);
-    Rectangle rectangle((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height, objectNoise); // width, height
 
     tempGroundTruthImageBase = canvas.get().clone();
 
-    achterbahn = Achterbahn(rectangle, "rectangle_long", 60);
+    achterbahn = Achterbahn("rectangle_long", 60);
     achterbahn.process(Dataset::getFrameSize());
     objectMetaDataList.at(0) = achterbahn;
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
-    m_ptr_customObjectMetaDataList.at(0)->setObjectShape(rectangle);
 
-    achterbahn = Achterbahn(rectangle, "random_object", 120);
+    achterbahn = Achterbahn("random_object", 120);
     achterbahn.process(Dataset::getFrameSize());
     objectMetaDataList.at(1) = achterbahn;
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
 
-    m_ptr_customObjectMetaDataList.at(1)->setObjectShape(rectangle);
 
     cv::Mat tempGroundTruthPosition;
     tempGroundTruthPosition.create(Dataset::getFrameSize(), CV_32FC3);
@@ -69,21 +65,13 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
+            Rectangle rectangle((ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px,
+                                (ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px, objectNoise); // width, height
+            m_ptr_customObjectMetaDataList.at(obj_index)->setObjectShape(rectangle);
+
             std::string position_image_file_with_path = m_generatepath.string() + '_' + std::to_string(m_sensorGroupCount)+ "/" + file_name_image;
 
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().get().clone();
-            image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                    current_frame_index).m_object_dimension_camera_px.height_px)).colRange(0, cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                    current_frame_index).m_object_dimension_camera_px.width_px));
-
-
-            image_data_and_shape.copyTo(tempGroundTruthImage(
-                    cv::Rect(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                            current_frame_index).m_object_location_camera_px.cog_px.x),
-                             cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                                     current_frame_index).m_object_location_camera_px.cog_px.y),
-                             cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px),
-                             cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px))));
 
 
             if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).occluded )) {
