@@ -12,6 +12,7 @@
 #include "Sensors.h"
 #include "ViresObjects.h"
 #include "GroundTruthObjects.h"
+#include "CppObjects.h"
 #include <vires-interface/vires_configuration.h>
 #include <boost/tuple/tuple.hpp>
 
