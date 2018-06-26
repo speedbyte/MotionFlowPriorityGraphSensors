@@ -154,7 +154,7 @@ private:
 
     std::string module_manager_libModuleSensor_CameraTemplate_left =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-//                    "   <Config cameraId=\"1\" verbose=\"true\"/> "
+                    "   <Config cameraId=\"1\" verbose=\"true\"/> "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"\" persistent=\"true\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
@@ -170,7 +170,7 @@ private:
 
     std::string module_manager_libModuleSensor_CameraTemplate_right =
             "<Sensor name=\"Sensor_MM\" type=\"video\" > "
-//                    "   <Config cameraId=\"2\" verbose=\"true\"/> "
+                    "   <Config cameraId=\"2\" verbose=\"true\"/> "
                     "   <Load lib=\"libModuleCameraSensor.so\" path=\"\" persistent=\"true\" /> "
                     "   <Player name=\"MovingCar\"/> "
                     "   <Frustum near=\"1.000000\" far=\"40.000000\" left=\"30.000000\" right=\"30.000000\" bottom=\"20.000000\" top=\"20.000000\" /> "
@@ -245,7 +245,7 @@ private:
     std::string view_parameters_eyepoint_intrinsicparams_right   = "<Camera name=\"cam2\" showOwner=\"false\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosRelative player=\"MovingCar\" dx=\"2\" dy=\"-1\" dz=\"1.2\"/><Set channel=\"0x2\"/></Camera>";
 
     std::string view_parameters_sensorpoint_intrinsicparams_left = "<Camera name=\"cam1\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosSensor sensor=\"Sensor_MM_0\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set/></Camera>";
-    std::string view_parameters_sensorpoint_intrinsicparams_right = "<Camera name=\"cam1\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosSensor sensor=\"Sensor_MM_1\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set/></Camera>";
+    std::string view_parameters_sensorpoint_intrinsicparams_right = "<Camera name=\"cam1\" showOwner=\"true\"><Projection far=\"1501.000000\" focalX=\"" + std::to_string(FOCAL_X) + "\" focalY=\"" + std::to_string(FOCAL_Y) + "\" height=\"" + std::to_string(Dataset::getFrameSize().height) + "\" near=\"0.100000\" principalX=\"" + std::to_string(Dataset::getFrameSize().width/2) + "\" principalY=\"" + std::to_string(Dataset::getFrameSize().height/2) + "\" width=\"" + std::to_string(Dataset::getFrameSize().width) + "\" /><PosSensor sensor=\"Sensor_MM_1\" useCamFrustum=\"false\" /><ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /></Camera>";
 
     std::string view_parameters_sensorpoint_openglfrustum = "<Camera name=\"VIEW_CAMERA\" showOwner=\"false\"> <Frustum near=\"0.100000\" far=\"1501.000000\" fovHor=\"60.000000\" fovVert=\"40.000000\" offsetHor=\"0.000000\" offsetVert=\"0.000000\" /> "
             "<PosSensor sensor=\"Sensor_MM\" useCamFrustum=\"true\" /> <ViewRelative dh=\"0.000000\" dp=\"0.000000\" dr=\"0.000000\" /><Set /> </Camera>";

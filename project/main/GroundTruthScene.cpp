@@ -295,7 +295,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
 
         configureSensor(0, 0x120a, DEFAULT_RX_PORT_CAM_0, DEFAULT_RX_PORT_PERFECT_0, DEFAULT_RX_PORT_PERFECT_INERTIAL_0, module_manager_libModuleSensor_CameraTemplate_left, module_manager_libModuleSensor_PerfectTemplate_left);
-        configureSensor(1, 0x120a, DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
+        configureSensor(1, 0x120b, DEFAULT_RX_PORT_CAM_1, DEFAULT_RX_PORT_PERFECT_1, DEFAULT_RX_PORT_PERFECT_INERTIAL_1, module_manager_libModuleSensor_CameraTemplate_right, module_manager_libModuleSensor_PerfectTemplate_right);
 
         char command[1024];
 
@@ -417,14 +417,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         //sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_left.c_str());
         //sleep(1);
 
-        if ( m_generation_sensor_list.at(0) == 0 ) {
-            sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_left.c_str());
-            sleep(1);
-        } else {
-            sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_right.c_str());
-            sleep(1);
+        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_left.c_str());
+        sleep(1);
 
-        }
+        sendSCPMessage(m_scpSocket, view_parameters_sensorpoint_intrinsicparams_right.c_str());
+        sleep(1);
 
         sendSCPMessage(m_scpSocket, display_parameters_left.c_str());
 
