@@ -153,10 +153,28 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         if (m_regenerate_yaml_file) { // dont generate, just read
             boost::filesystem::remove("../position_cpp.yml");
+
             cppObjects.push_back(CppObjects(0,m_generatepath));
             cppObjects.push_back(CppObjects(1,m_generatepath));
+
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
-                cppObjects.at(sensor_group_index).process();
+
+                std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
+
+                cv::Mat tempGroundTruthImageBase;
+
+                // apply black noise in case of night
+                if (m_environment == "night") {
+                    BlackNoise noise;
+                    ObjectImageShapeData newCanvas = m_canvas.getCanvasShapeAndData();
+                    newCanvas.applyNoise(&noise);
+                    tempGroundTruthImageBase = newCanvas.get().clone();
+                } else {
+                    tempGroundTruthImageBase = m_canvas.getCanvasShapeAndData().get().clone();
+                }
+
+                cppObjects.at(sensor_group_index).process(tempGroundTruthImageBase);
+
             }
         } else { // genreate yaml file
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
@@ -168,91 +186,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         startEvaluating(colorfulNoise);
     }
 
-    cv::Mat tempGroundTruthImage, tempGroundTruthImageBase;
-    tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
-    assert(tempGroundTruthImage.channels() == 3);
-
-    cv::Mat tempGroundTruthPosition;
-    tempGroundTruthPosition.create(Dataset::getFrameSize(), CV_32FC3);
-    assert(tempGroundTruthPosition.channels() == 3);
-    tempGroundTruthPosition = cv::Scalar::all(255);
-
-    cv::Mat tempGroundTruthPosition_2;
-    tempGroundTruthPosition_2.create(Dataset::getFrameSize(), CV_32FC3);
-    assert(tempGroundTruthPosition_2.channels() == 3);
-    tempGroundTruthPosition_2 = cv::Scalar::all(255);
-
-
-    std::map<std::string, double> time_map = {{"generate_single_scene_image", 0},
-                                              {"generate_all_scene_image",    0}};
-
-    std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << std::endl;
-
-    char file_name_image[50];
-
-    cv::Mat image_data_and_shape;
-    cv::Mat positionShape;
-
-    const ushort sensor_index = 0; // image is generated only once irrespective of skips.
-
-    // apply black noise in case of night
-    if (m_environment == "night") {
-        BlackNoise noise;
-        ObjectImageShapeData newCanvas = m_canvas.getCanvasShapeAndData();
-        newCanvas.applyNoise(&noise);
-        tempGroundTruthImageBase = newCanvas.get().clone();
-    } else {
-        tempGroundTruthImageBase = m_canvas.getCanvasShapeAndData().get().clone();
-    }
-
-    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
-
-        sprintf(file_name_image, "000%03d_10.png", current_frame_index);
-        std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(0) + "/" + file_name_image; //+ file_name_image;
-
-        //draw new ground truth image.
-        tempGroundTruthImage = tempGroundTruthImageBase.clone();
-
-        char sensor_index_folder_suffix[50];
-
-        for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
-            for (unsigned obj_index = 0; obj_index < cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
-
-                sprintf(sensor_index_folder_suffix, "%02d", m_list_gt_objects.at(obj_index).getObjectId());
-                std::string position_image_file_with_path = m_position_object_path.string() +
-                                                            sensor_index_folder_suffix + "/" + file_name_image;
-
-                image_data_and_shape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
-                image_data_and_shape = image_data_and_shape.rowRange(0, cvRound(m_list_gt_objects.at(
-                        obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                        current_frame_index).m_object_dimension_camera_px.height_px)).colRange(0, cvRound(m_list_gt_objects.at(
-                        obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                        current_frame_index).m_object_dimension_camera_px.width_px));
-
-                positionShape = m_list_gt_objects.at(obj_index).getImageShapeAndData().get().clone();
-                positionShape = positionShape.rowRange(0, cvRound(m_list_gt_objects.at(
-                        obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                        current_frame_index).m_object_dimension_camera_px.height_px)).colRange(0, cvRound(m_list_gt_objects.at(
-                        obj_index).getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                        current_frame_index).m_object_dimension_camera_px.width_px));
-
-                if ((!cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getAll().at(current_frame_index).occluded )) {
-
-                    image_data_and_shape.copyTo(tempGroundTruthImage(
-                            cv::Rect(cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
-                                    current_frame_index).first.x),
-                                     cvRound(m_list_gt_objects.at(obj_index).get_object_base_point_displacement().at(
-                                             current_frame_index).first.y),
-                                     cvRound(cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getAll().at(current_frame_index).m_region_of_interest_px.width_px),
-                                     cvRound(cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getAll().at(current_frame_index).m_region_of_interest_px.height_px))));
-
-                }
-            }
-        }
-
-        cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
-
-    }
 
 
 }
