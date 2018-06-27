@@ -391,7 +391,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
         for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-            std::cout << "generating shape points in OpticalFlow.cpp for sensor index " << sensor_index
+            std::cout << "generating evaluation metrics in OpticalFlow.cpp for sensor index " << sensor_index
                       << " for opticalflow  " << m_opticalFlowName << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
