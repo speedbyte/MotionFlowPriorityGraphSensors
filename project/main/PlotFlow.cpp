@@ -10,7 +10,7 @@
 #include "FlowImageExtended.h"
 
 
-void PlotFlow::plot(const std::string &resultsordner) {
+void PlotFlow::plot(ushort SENSOR_COUNT, const std::string &resultsordner) {
 
     char sensor_index_folder_suffix[50], folder_name_plot[50];
     char file_name_image[50];

@@ -32,7 +32,7 @@ public:
             OpticalFlow(weather, "ground_truth", list_gt_objects, list_simulated_objects_base, list_gt_objects_base, 0) {
     }
 
-    void generate_edge_images();
+    void generate_edge_images(ushort SENSOR_COUNT);
 
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;
@@ -40,7 +40,7 @@ public:
 
     void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
 
-    void prepare_directories(std::string noise, ushort fps, ushort stepSize) override;
+    void prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) override;
 
 
 

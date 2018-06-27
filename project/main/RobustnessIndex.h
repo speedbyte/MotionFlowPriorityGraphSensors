@@ -36,8 +36,8 @@ private:
 public:
 
     PixelRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
-    void generatePixelRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
-    void writeToYaml(const OpticalFlow &opticalFlow);
+    void generatePixelRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
+    void writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow);
 
 };
 
@@ -46,7 +46,7 @@ class VectorRobustness : public RobustnessIndex {
 public:
 
     VectorRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
-    void generateVectorRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
+    void generateVectorRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
 
 private:
 

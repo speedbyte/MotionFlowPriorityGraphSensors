@@ -20,7 +20,7 @@ public:
     DataProcessingAlgorithm(std::string algoName): m_algoName(algoName) {
 
     }
-    void common(Objects *objects, std::string post_processing_algorithm);
+    void common(ushort SENSOR_COUNT, Objects *objects, std::string post_processing_algorithm);
 
     virtual void execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
         std::cout << "not implemented" << std::endl;

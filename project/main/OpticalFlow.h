@@ -111,23 +111,23 @@ public:
     };
 
 
-    void prepare_directories_common();
+    void prepare_directories_common(ushort SENSOR_COUNT);
 
-    virtual void prepare_directories(std::string noise, ushort fps, ushort stepSize) {};
+    virtual void prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {};
 
-    void generate_collision_points();
+    void generate_collision_points(ushort SENSOR_COUNT);
 
-    void generate_displacement_vector();
+    void generate_displacement_vector(ushort SENSOR_COUNT);
 
 
 
     void common_flow_frame(ushort sensor_index, ushort current_frame_index,  std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
 
-    void plot_stencil(void);
+    void plot_stencil(ushort SENSOR_COUNT);
 
-    void generate_flow_frames();
+    void generate_flow_frames(ushort SENSOR_COUNT);
 
-    void generate_metrics_optical_flow_algorithm();
+    void generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT);
 
     void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_shape_points);
 

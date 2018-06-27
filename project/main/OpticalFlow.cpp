@@ -15,7 +15,7 @@
 using namespace std::chrono;
 
 
-void OpticalFlow::prepare_directories_common() {
+void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
 
     char char_dir_append[20];
 
@@ -226,7 +226,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 }
 
 
-void OpticalFlow::generate_displacement_vector() {
+void OpticalFlow::generate_displacement_vector(ushort SENSOR_COUNT) {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
@@ -275,7 +275,7 @@ void OpticalFlow::generate_displacement_vector() {
 
 }
 
-void OpticalFlow::generate_flow_frames() {
+void OpticalFlow::generate_flow_frames(ushort SENSOR_COUNT) {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
@@ -369,7 +369,7 @@ void OpticalFlow::getCombination(const std::vector<Objects *> &m_list_objects,
 }
 
 
-void OpticalFlow::generate_metrics_optical_flow_algorithm() {
+void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
     std::vector<Objects *> list_of_current_objects;
 
@@ -755,7 +755,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
 
 
-void OpticalFlow::plot_stencil() {
+void OpticalFlow::plot_stencil(ushort SENSOR_COUNT) {
 
     std::vector<Objects*> list_of_current_objects;
 

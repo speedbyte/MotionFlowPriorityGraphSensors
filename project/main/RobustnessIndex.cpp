@@ -12,7 +12,7 @@
 #include "Utils.h"
 
 
-void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
+void PixelRobustness::generatePixelRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
@@ -57,10 +57,10 @@ void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_bas
         }
         m_list_evaluation_data_multiframe.push_back(sensor_evaluation_data_multiframe);
     }
-    writeToYaml(opticalFlow);
+    writeToYaml(SENSOR_COUNT, opticalFlow);
 }
 
-void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
+void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
@@ -183,7 +183,7 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
 }
 
 
-void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo) {
+void VectorRobustness::generateVectorRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");

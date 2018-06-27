@@ -21,7 +21,7 @@ void Objects::push_back_object_stencil_point_displacement_pixel_visibility(
 }
 
 
-void Objects::generate_edge_contour(std::string post_processing_algorithm) {
+void Objects::generate_edge_contour(ushort SENSOR_COUNT, std::string post_processing_algorithm) {
 
     for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
 
@@ -122,7 +122,7 @@ void Objects::generate_edge_contour(std::string post_processing_algorithm) {
 }
 
 
-void Objects::generate_object_mean_centroid_displacement(std::string post_processing_algorithm) {
+void Objects::generate_object_mean_centroid_displacement(ushort SENSOR_COUNT, std::string post_processing_algorithm) {
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
@@ -137,22 +137,22 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
             sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
 
     NoAlgorithm noAlgorithm;
-    noAlgorithm.common(this, post_processing_algorithm);
+    noAlgorithm.common(SENSOR_COUNT, this, post_processing_algorithm);
     m_list_object_dataprocessing_mean_centroid_displacement.push_back(noAlgorithm.get_object_dataprocessing_mean_centroid_displacement());
     m_list_object_dataprocessing_stencil_points_displacement.push_back(noAlgorithm.get_object_dataprocessing_stencil_point_displacement());
 
     SimpleAverage simpleAverage;
-    simpleAverage.common(this, post_processing_algorithm );
+    simpleAverage.common(SENSOR_COUNT, this, post_processing_algorithm );
     m_list_object_dataprocessing_mean_centroid_displacement.push_back(simpleAverage.get_object_dataprocessing_mean_centroid_displacement());
     m_list_object_dataprocessing_stencil_points_displacement.push_back(simpleAverage.get_object_dataprocessing_stencil_point_displacement());
 
     MovingAverage movingAverage;
-    movingAverage.common(this, post_processing_algorithm);
+    movingAverage.common(SENSOR_COUNT, this, post_processing_algorithm);
     m_list_object_dataprocessing_mean_centroid_displacement.push_back(movingAverage.get_object_dataprocessing_mean_centroid_displacement());
     m_list_object_dataprocessing_stencil_points_displacement.push_back(movingAverage.get_object_dataprocessing_stencil_point_displacement());
 
     VotedMean votedMean;
-    votedMean.common(this, post_processing_algorithm);
+    votedMean.common(SENSOR_COUNT, this, post_processing_algorithm);
     m_list_object_dataprocessing_mean_centroid_displacement.push_back(votedMean.get_object_dataprocessing_mean_centroid_displacement());
     m_list_object_dataprocessing_stencil_points_displacement.push_back(votedMean.get_object_dataprocessing_stencil_point_displacement());
 
@@ -165,14 +165,14 @@ void Objects::generate_object_mean_centroid_displacement(std::string post_proces
 
     }
 
-    generate_object_mean_lineparameters(post_processing_algorithm);
+    generate_object_mean_lineparameters(SENSOR_COUNT, post_processing_algorithm);
 
 }
 
 
 
 
-void Objects::generate_object_mean_lineparameters( std::string post_processing_algorithm) {
+void Objects::generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::string post_processing_algorithm) {
 
 
     /// BEWARE !! I am in Cartesian co-ordinate system here.

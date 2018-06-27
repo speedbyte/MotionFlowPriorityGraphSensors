@@ -12,7 +12,7 @@
 class PlotFlow : public FlowImageExtended {
 
 public:
-    static void plot(const std::string &resultsordner);
+    static void plot(ushort SENSOR_COUNT, const std::string &resultsordner);
 
 };
 

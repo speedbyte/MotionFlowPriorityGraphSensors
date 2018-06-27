@@ -10,7 +10,7 @@
 #include "FlowImageExtended.h"
 
 
-void OpticalFlow::generate_collision_points() {
+void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
 
     std::vector<Objects*> list_of_current_objects;
     std::vector<std::pair<Objects*, Objects* > > list_of_current_objects_combination;

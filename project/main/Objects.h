@@ -64,7 +64,7 @@ protected:
 
     std::string m_objectName;
 
-    void generate_object_mean_lineparameters( std::string post_processing_algorithm);
+    void generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::string post_processing_algorithm);
 
 public:
 
@@ -75,7 +75,7 @@ public:
 
     Objects( std::string objectName, std::vector<std::vector<bool> >  extrapolated_visibility) : m_objectName(objectName), m_object_extrapolated_visibility(extrapolated_visibility) {}
 
-    void generate_object_mean_centroid_displacement(std::string post_processing_algorithm);
+    void generate_object_mean_centroid_displacement(ushort SENSOR_COUNT, std::string post_processing_algorithm);
 
     void generate_updated_mean_from_multiple_sensors( std::string post_processing_algorithm,
             const std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &multi_sensor_input_flow_vector,
@@ -131,7 +131,7 @@ public:
 
     void push_back_object_stencil_point_displacement_pixel_visibility( std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement,  std::vector<std::vector<bool> > sensor_base_visibility);
 
-    void generate_edge_contour(std::string post_processing_algorithm);
+    void generate_edge_contour(ushort SENSOR_COUNT, std::string post_processing_algorithm);
 
 };
 

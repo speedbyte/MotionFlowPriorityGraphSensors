@@ -11,7 +11,7 @@
 #include "Objects.h"
 
 
-void DataProcessingAlgorithm::common(Objects *object, std::string post_processing_algorithm) {
+void DataProcessingAlgorithm::common(ushort SENSOR_COUNT, Objects *object, std::string post_processing_algorithm) {
 
     for (ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 

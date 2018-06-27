@@ -31,7 +31,7 @@
 using namespace std::chrono;
 
 
-void GroundTruthFlow::prepare_directories(std::string noise, ushort fps, ushort stepSize) {
+void GroundTruthFlow::prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/blue_sky";
 
@@ -41,7 +41,7 @@ void GroundTruthFlow::prepare_directories(std::string noise, ushort fps, ushort 
 
     if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
-        prepare_directories_common();
+        prepare_directories_common(SENSOR_COUNT);
 
     }
 }
@@ -97,7 +97,7 @@ void GroundTruthFlow::CannyEdgeDetection(std::string flow_path, std::string edge
 }
 
 
-void GroundTruthFlow::generate_edge_images() {
+void GroundTruthFlow::generate_edge_images(ushort SENSOR_COUNT) {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file

@@ -1,7 +1,5 @@
 //
-// Created by veikas on 26.01.18.
-//
-
+// Created by veiER
 #include <iostream>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem.hpp>
@@ -19,7 +17,7 @@
 using namespace std::chrono;
 
 
-void AlgorithmFlow::prepare_directories(std::string noise, ushort fps, ushort stepSize) {
+void AlgorithmFlow::prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/" + noise;
 
@@ -45,16 +43,16 @@ void AlgorithmFlow::prepare_directories(std::string noise, ushort fps, ushort st
 
     if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
 
-        prepare_directories_common();
+        prepare_directories_common(SENSOR_COUNT);
 
     }
 }
 
-void AlgorithmFlow::run_optical_flow_algorithm(FRAME_TYPES frame_types, ushort fps ) {
+void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list, FRAME_TYPES frame_types, ushort fps ) {
 
     char sensor_index_folder_suffix[50];
 
-    for ( ushort sensor_index = 0; sensor_index < MAX_ALLOWED_SENSOR_GROUPS_EVALUATION; sensor_index++ ) {
+    for ( ushort sensor_index = 0; sensor_index < evaluation_sensor_list.size(); sensor_index++ ) {
 
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
