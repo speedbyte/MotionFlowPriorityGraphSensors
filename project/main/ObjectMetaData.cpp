@@ -23,7 +23,7 @@ void Achterbahn::process(cv::Size frame_size) {
     }
     // Prepare points
     cv::Point2f l_pixel_position;
-    for ( int i = 0; i< MAX_ITERATION_THETA; i++) {
+    for ( ushort i = 0; i< MAX_ITERATION_THETA; i++) {
 
         l_pixel_position.x = static_cast<float>((frame_size.width/2) + (100 * cos(theta[i] *CV_PI / 180.0) /
                                                                         (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
@@ -31,8 +31,6 @@ void Achterbahn::process(cv::Size frame_size) {
         l_pixel_position.y = static_cast<float>((frame_size.height/2) + (55 * (cos(theta[i] * CV_PI / 180.0) *
                                                                                sin(theta[i] * CV_PI / 180.0)) /
                                                                          (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
-
-
 
         m_object_gt_all.at(i).occluded = 0;
 
@@ -50,6 +48,8 @@ void Achterbahn::process(cv::Size frame_size) {
 
         m_object_gt_all.at(i).m_region_of_interest_px.width_px = 30;
         m_object_gt_all.at(i).m_region_of_interest_px.height_px = 70;
+
+        m_object_gt_all.at(i).frame_no = i;
 
 
     }

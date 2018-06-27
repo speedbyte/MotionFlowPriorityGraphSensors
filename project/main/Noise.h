@@ -71,8 +71,6 @@ public:
 
     void apply(cv::Mat &image) override {
 
-        std::cout << "rows"  << image.rows << std::endl;
-
         uchar r = 0;
         uchar b = 0;
 

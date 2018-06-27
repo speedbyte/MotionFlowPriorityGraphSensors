@@ -316,12 +316,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
 
+// in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
                 gt_flow.generate_displacement_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                //gt_flow.generate_flow_frames();
-                //gt_flow.generate_edge_images();
+                gt_flow.generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                     ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()),
@@ -430,7 +431,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
 
                     //list_of_ptr_of_environment_OFalgorithm[env_index].generate_collision_points();
-                    //list_of_ptr_of_environment_OFalgorithm[env_index]->generate_flow_frames();
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                     //list_of_ptr_of_environment_OFalgorithm[env_index]->plot_stencil();
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 

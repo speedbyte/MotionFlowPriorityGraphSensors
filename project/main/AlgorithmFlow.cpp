@@ -90,10 +90,10 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
             }
 
             char file_name_input_image[50];
-            ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
 
-            sprintf(file_name_input_image, "000%03d_10.png", vires_frame_count);
+            sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
             std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_input_image;
             image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
             if ( image_02_frame.data == NULL ) {

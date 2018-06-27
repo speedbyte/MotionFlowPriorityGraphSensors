@@ -6,6 +6,7 @@
 #include <memory>
 #include <map>
 #include <opencv2/imgcodecs.hpp>
+#include <opencv/cv.hpp>
 #include "Noise.h"
 #include "ObjectMetaData.h"
 #include "CppObjects.h"
@@ -21,13 +22,13 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
     tempGroundTruthImageBase = canvas.get().clone();
 
-    achterbahn = Achterbahn("rectangle_long", 20);
+    achterbahn = Achterbahn("rectangle_long", 100);
     achterbahn.process(Dataset::getFrameSize());
     objectMetaDataList.at(0) = achterbahn;
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
 
-    achterbahn = Achterbahn("random_object", 100);
+    achterbahn = Achterbahn("random_object", 220);
     achterbahn.process(Dataset::getFrameSize());
     objectMetaDataList.at(1) = achterbahn;
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
@@ -59,7 +60,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     std::vector<ushort> current_index = {get_ptr_customObjectMetaDataList().at(0)->getObjectStartPoint(),get_ptr_customObjectMetaDataList().at(1)->getObjectStartPoint()};
 
     std::cout << m_ptr_customObjectMetaDataList.at(0)->getObjectStartPoint() << " " << m_ptr_customObjectMetaDataList.at(1)->getObjectStartPoint();
-    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_THETA; current_frame_index++) {
 
         sprintf(file_name_image, "000%03d_10.png", current_frame_index);
         std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + file_name_image; //+ file_name_image;
@@ -69,7 +70,8 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
             current_index.at(obj_index)++;
-            if ( current_index.at(obj_index) > 360 ) {
+
+            if ( current_index.at(obj_index) == MAX_ITERATION_THETA ) {
                 current_index.at(obj_index) = 0;
             }
             Rectangle rectangle((ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).m_object_dimension_camera_px.width_px,
@@ -82,18 +84,20 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
             if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).occluded )) {
 
-                std::cout << current_index.at(obj_index) << std::endl;
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                                current_frame_index).m_region_of_interest_px.x),
+                                current_index.at(obj_index)).m_region_of_interest_px.x),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                                         current_frame_index).m_region_of_interest_px.y),
+                                         current_index.at(obj_index)).m_region_of_interest_px.y),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).m_region_of_interest_px.width_px),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).m_region_of_interest_px.height_px))));
 
             }
         }
 
+        //cv::namedWindow("render", CV_WINDOW_AUTOSIZE);
+        //cv::imshow("render", tempGroundTruthImage);
+        //cv::waitKey(0);
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
 
     }
