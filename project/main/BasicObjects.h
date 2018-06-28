@@ -6,6 +6,7 @@
 #define MAIN_BASICOBJECTS_H
 
 
+#include <map>
 #include "SensorMetaData.h"
 #include "ObjectMetaData.h"
 
@@ -13,6 +14,13 @@
 class BasicObjects {
 
 protected:
+
+    std::map<std::string, ObjectMetaData*>  m_mapObjectNameToObjectMetaData;
+    std::map<std::string, SensorMetaData*>  m_mapSensorNameToSensorMetaData;
+
+    ushort m_objectCount;
+    ushort m_sensorCount;
+
     std::vector<ObjectMetaData *>  m_ptr_customObjectMetaDataList;
     std::vector<SensorMetaData *>  m_ptr_customSensorMetaDataList;
 
@@ -50,6 +58,10 @@ public:
     const std::vector<SensorMetaData *>  get_ptr_customSensorMetaDataList() {
         return m_ptr_customSensorMetaDataList;
     }
+
+    void writePositionInYaml(std::string suffix);
+
+    void readPositionFromFile(std::string positionFileName);
 
 };
 

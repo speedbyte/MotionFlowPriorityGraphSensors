@@ -299,6 +299,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 base_ptr_gt_scene->generate_gt_scene();
                 base_ptr_gt_scene->generate_bird_view();
+                exit(0);
 
             }
 

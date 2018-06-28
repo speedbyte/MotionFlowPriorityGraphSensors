@@ -37,20 +37,14 @@ void Achterbahn::process(cv::Size frame_size) {
         m_object_gt_all.at(i).m_object_dimension_camera_px.width_px = 30;
         m_object_gt_all.at(i).m_object_dimension_camera_px.height_px = 70;
 
-        m_object_gt_all.at(i).m_region_of_interest_px.x = (l_pixel_position.x);
-        m_object_gt_all.at(i).m_region_of_interest_px.y = (l_pixel_position.y);
+        m_object_gt_all.at(i).m_object_location_camera_px.location_x_px = (l_pixel_position.x);
+        m_object_gt_all.at(i).m_object_location_camera_px.location_y_px = (l_pixel_position.y);
 
-        m_object_gt_all.at(i).m_object_location_camera_px.cog_px.x = (m_object_gt_all.at(i).m_region_of_interest_px.x + m_object_gt_all.at(i).m_object_dimension_camera_px.width_px/2);
-        m_object_gt_all.at(i).m_object_location_camera_px.cog_px.y = (m_object_gt_all.at(i).m_region_of_interest_px.y + m_object_gt_all.at(i).m_object_dimension_camera_px.height_px/2);
 
         m_object_gt_all.at(i).m_object_location_inertial_m.location_x_m = 1;
         m_object_gt_all.at(i).visMask = 7;
 
-        m_object_gt_all.at(i).m_region_of_interest_px.width_px = 30;
-        m_object_gt_all.at(i).m_region_of_interest_px.height_px = 70;
-
         m_object_gt_all.at(i).frame_no = i;
-
 
     }
 }

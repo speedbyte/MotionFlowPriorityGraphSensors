@@ -151,7 +151,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     if (m_environment == "blue_sky") {
 
-        if (m_regenerate_yaml_file) { // dont generate, just read
+        if (m_regenerate_yaml_file) {
             boost::filesystem::remove("../position_cpp.yml");
 
             cppObjects.push_back(CppObjects(0,m_generatepath));
@@ -170,16 +170,18 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     noise = std::make_unique<WhiteNoise>(whiteNoise);
                 }
                 cppObjects.at(sensor_group_index).process(noise);
+                cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("cpp_");
 
             }
         } else { // genreate yaml file
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
-                //cppObjects.at(sensor_group_index).readPositionFromFile("../position_cpp.yml");
+                cppObjects.at(sensor_group_index).readPositionFromFile("cpp_");
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition();
             }
+
+            startEvaluating(colorfulNoise);
         }
 
-        // calcBB is not required
-        startEvaluating(colorfulNoise);
     }
 
 }
@@ -507,7 +509,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
 
-                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("dummy");
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("vires_");
 
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition();
             }

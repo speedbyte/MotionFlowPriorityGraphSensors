@@ -43,14 +43,8 @@ private:
 
     bool m_breaking;
 
-    std::map<std::string, ObjectMetaData*>  m_mapObjectNameToObjectMetaData;
-    std::map<std::string, SensorMetaData*>  m_mapSensorNameToSensorMetaData;
     std::map<unsigned int, std::string> m_mapObjectIdToObjectName;
     std::map<unsigned int, std::string> m_mapSensorIdToSensorName;
-
-    ushort m_objectCount;
-    ushort m_sensorCount;
-
 
     std::ofstream fstream_output_object_state;
     std::ofstream fstream_output_sensor_state;
@@ -86,8 +80,6 @@ public:
 
     ViresObjects() {}
 
-    void writePositionInYaml(std::string suffix);
-
     void readObjectStateFromBinaryFile(std::string suffix);
     void readSensorObjectFromBinaryFile(std::string suffix);
     void readSensorStateFromBinaryFile(std::string suffix);
@@ -104,9 +96,6 @@ public:
     bool getBreaking() {
         return m_breaking;
     }
-
-    void readPositionFromFile(std::string positionFileName);
-
 
     void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
 
