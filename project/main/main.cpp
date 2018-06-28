@@ -346,7 +346,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
 
                     pixelRobustness.generatePixelRobustness((ushort)(evaluation_list.size()+1%evaluation_list.size()), gt_flow, gt_flow);
-                    vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), gt_flow, dummy[0]);
+                    //vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), gt_flow, dummy[0]);
                 }
 
                 time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
@@ -446,7 +446,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
 
                     pixelRobustness.generatePixelRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[0], *list_of_ptr_of_environment_OFalgorithm[env_index]);
-                    vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[env_index], *list_of_ptr_of_environment_OFalgorithm[0]);
+                    //vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[env_index], *list_of_ptr_of_environment_OFalgorithm[0]);
 
                     time_map["robustness_" + suffix] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
                     tic = steady_clock::now();
