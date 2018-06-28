@@ -1,5 +1,5 @@
 //
-// Created by veiER
+// Created by veikas
 #include <iostream>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem.hpp>

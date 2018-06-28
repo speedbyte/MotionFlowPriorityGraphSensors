@@ -62,7 +62,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     std::cout << m_ptr_customObjectMetaDataList.at(0)->getObjectStartPoint() << " " << m_ptr_customObjectMetaDataList.at(1)->getObjectStartPoint();
     for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_THETA; current_frame_index++) {
 
-        sprintf(file_name_image, "000%03d_10.png", current_frame_index);
+        sprintf(file_name_image, "000%03d_10.png", current_index.at(0));
         std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + file_name_image; //+ file_name_image;
 
         tempGroundTruthImage = tempGroundTruthImageBase.clone();
