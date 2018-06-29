@@ -18,8 +18,8 @@ protected:
     std::map<std::string, ObjectMetaData*>  m_mapObjectNameToObjectMetaData;
     std::map<std::string, SensorMetaData*>  m_mapSensorNameToSensorMetaData;
 
-    ushort m_objectCount;
-    ushort m_sensorCount;
+    ushort m_objectCount=0;
+    ushort m_sensorCount=0;
 
     std::vector<ObjectMetaData *>  m_ptr_customObjectMetaDataList;
     std::vector<SensorMetaData *>  m_ptr_customSensorMetaDataList;

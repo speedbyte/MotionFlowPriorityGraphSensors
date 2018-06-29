@@ -409,15 +409,16 @@ public:
 
     void setCppData(ushort frameNumber) {
 
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_x_px;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_y_px;
+
         m_object_gt_all.at(frameNumber).m_object_location_camera_px.cog_px.x = (m_object_gt_all.at(frameNumber).m_region_of_interest_px.x + m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.width_px/2);
         m_object_gt_all.at(frameNumber).m_object_location_camera_px.cog_px.y = (m_object_gt_all.at(frameNumber).m_region_of_interest_px.y + m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.height_px/2);
 
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.width_px;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.height_px = m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.height_px;
 
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_x_px;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_y_px;
-                
+
     }
     
     void setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points) {

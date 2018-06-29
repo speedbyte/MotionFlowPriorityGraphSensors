@@ -150,11 +150,11 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     if (m_environment == "blue_sky") {
 
+        cppObjects.push_back(CppObjects(0,m_generatepath));
+        cppObjects.push_back(CppObjects(1,m_generatepath));
+
         if (m_regenerate_yaml_file) {
             boost::filesystem::remove("../position_cpp.yml");
-
-            cppObjects.push_back(CppObjects(0,m_generatepath));
-            cppObjects.push_back(CppObjects(1,m_generatepath));
 
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
