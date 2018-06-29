@@ -218,12 +218,12 @@ protected:
     // meta data
     std::vector<STRUCT_GT_OBJECTS_ALL> m_object_gt_all;
     std::vector<RDB_OBJECT_STATE_t> m_object_state_all;
+    ushort m_objectMetaData_startPoint;
 
 private:
     // shape data
     ObjectImageShapeData m_objectMetaData_shape;
     std::string m_objectMetaData_name;
-    ushort m_objectMetaData_startPoint;
 
 public:
 

@@ -57,40 +57,40 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
     assert(tempGroundTruthImage.channels() == 3);
 
-    std::vector<ushort> current_index = {get_ptr_customObjectMetaDataList().at(0)->getObjectStartPoint(),get_ptr_customObjectMetaDataList().at(1)->getObjectStartPoint()};
+    //std::vector<ushort> current_index = {get_ptr_customObjectMetaDataList().at(0)->getObjectStartPoint(),get_ptr_customObjectMetaDataList().at(1)->getObjectStartPoint()};
 
     std::cout << m_ptr_customObjectMetaDataList.at(0)->getObjectStartPoint() << " " << m_ptr_customObjectMetaDataList.at(1)->getObjectStartPoint();
-    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_THETA; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_DATASET; current_frame_index++) {
 
-        sprintf(file_name_image, "000%03d_10.png", current_index.at(0));
+        // TO DO - when the variable overflows.
+
+        sprintf(file_name_image, "000%03d_10.png", current_frame_index);
         std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + file_name_image; //+ file_name_image;
 
         tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
-            current_index.at(obj_index)++;
-
-            if ( current_index.at(obj_index) == MAX_ITERATION_THETA ) {
-                current_index.at(obj_index) = 0;
+            if ( current_frame_index == MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) {
+                current_frame_index = 0;
             }
-            Rectangle rectangle((ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).m_object_dimension_camera_px.width_px,
-                                (ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).m_object_dimension_camera_px.height_px, objectNoise); // width, height
+            Rectangle rectangle((ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px,
+                                (ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px, objectNoise); // width, height
             m_ptr_customObjectMetaDataList.at(obj_index)->setObjectShape(rectangle);
 
             std::string position_image_file_with_path = m_generatepath.string() + '_' + std::to_string(m_sensorGroupCount)+ "/" + file_name_image;
 
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().get().clone();
 
-            if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).occluded )) {
+            if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).occluded )) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                                current_index.at(obj_index)).m_region_of_interest_px.x),
+                                current_frame_index).m_object_location_camera_px.location_x_px),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                                         current_index.at(obj_index)).m_region_of_interest_px.y),
-                                 cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).m_region_of_interest_px.width_px),
-                                 cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_index.at(obj_index)).m_region_of_interest_px.height_px))));
+                                         current_frame_index).m_object_location_camera_px.location_y_px),
+                                 cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px),
+                                 cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px))));
 
             }
         }

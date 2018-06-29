@@ -23,8 +23,8 @@
 #define DISPLACEMENT_ROUND_OFF 100
 
 #define ITERATION_START_POINT 15
-#define ITERATION_END_POINT 360 // 20
-#define MAX_ITERATION_RESULTS 5 //(ITERATION_END_POINT - ITERATION_START_POINT) // 60 generate result. this cannot be more than vector
+#define ITERATION_END_POINT  20
+#define MAX_ITERATION_RESULTS (ITERATION_END_POINT - ITERATION_START_POINT) // 60 generate result. this cannot be more than vector
 
 #define MAX_ITERATION_DATASET MAX_ITERATION_RESULTS // 60 generate result. this cannot be more than vector
 #define MAX_ITERATION_GT_SCENE_GENERATION_DATASET (MAX_ITERATION_DATASET)*IMAGE_SKIP_FACTOR_DYNAMIC + IMAGE_SKIP_FACTOR_DYNAMIC*20  // generate always five images more than required.

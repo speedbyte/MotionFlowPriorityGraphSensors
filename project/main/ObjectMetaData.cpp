@@ -23,7 +23,9 @@ void Achterbahn::process(cv::Size frame_size) {
     }
     // Prepare points
     cv::Point2f l_pixel_position;
-    for ( ushort i = 0; i< MAX_ITERATION_THETA; i++) {
+    ushort current_frame_index = 0;
+    for ( ushort i = m_objectMetaData_startPoint; i< MAX_ITERATION_GT_SCENE_GENERATION_DATASET+m_objectMetaData_startPoint; i++) {
+
 
         l_pixel_position.x = static_cast<float>((frame_size.width/2) + (100 * cos(theta[i] *CV_PI / 180.0) /
                                                                         (1.0 + std::pow(sin(theta[i] * CV_PI / 180.0), 2))));
@@ -32,19 +34,21 @@ void Achterbahn::process(cv::Size frame_size) {
                                                                                sin(theta[i] * CV_PI / 180.0)) /
                                                                          (0.2 +std::pow(sin(theta[i] * CV_PI / 180.0),2))));
 
-        m_object_gt_all.at(i).occluded = 0;
+        m_object_gt_all.at(current_frame_index).occluded = 0;
 
-        m_object_gt_all.at(i).m_object_dimension_camera_px.width_px = 30;
-        m_object_gt_all.at(i).m_object_dimension_camera_px.height_px = 70;
+        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = 30;
+        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = 70;
 
-        m_object_gt_all.at(i).m_object_location_camera_px.location_x_px = (l_pixel_position.x);
-        m_object_gt_all.at(i).m_object_location_camera_px.location_y_px = (l_pixel_position.y);
+        m_object_gt_all.at(current_frame_index).m_object_location_camera_px.location_x_px = (l_pixel_position.x);
+        m_object_gt_all.at(current_frame_index).m_object_location_camera_px.location_y_px = (l_pixel_position.y);
 
 
-        m_object_gt_all.at(i).m_object_location_inertial_m.location_x_m = 1;
-        m_object_gt_all.at(i).visMask = 7;
+        m_object_gt_all.at(current_frame_index).m_object_location_inertial_m.location_x_m = 1;
+        m_object_gt_all.at(current_frame_index).visMask = 7;
 
-        m_object_gt_all.at(i).frame_no = i;
+        m_object_gt_all.at(current_frame_index).frame_no = current_frame_index;
+
+        current_frame_index++;
 
     }
 }

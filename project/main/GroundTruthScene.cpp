@@ -105,7 +105,6 @@ void GroundTruthSceneExternal::startEvaluating(std::unique_ptr<Noise> &noise) {
 
 }
 
-
 void GroundTruthSceneInternal::startEvaluating(std::unique_ptr<Noise> &noise) {
 
 
