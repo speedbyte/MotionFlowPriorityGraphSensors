@@ -146,7 +146,6 @@ public:
         video_write.release();
     }
 
-
     static cv::Point2f worldToCamera(cv::Point3f final, float fov_rad, float fx, float fy) {
 
         //transform to VTD coordinates, x = depth, y = width, z = height. Hence the camera co-ordinates needs to be changed similarly.
@@ -183,7 +182,6 @@ public:
         return cv::Point2f(x_image, y_image);
 
     }
-
 
     static void drawHistogramLegacy(std::vector<float> &raw_data, float &max_voted) {
         // create histogram of values for displacement.
@@ -369,8 +367,6 @@ public:
 
     }
 
-
-
     static cv::Mat getInverseCovar(cv::Mat cov_first, cv::Mat cov_second, int CLUSTER_SIZE_FIRST, int  CLUSTER_SIZE_SECOND ) {
 
         std::cout << "cov_first: " << cov_first  << std::endl;
@@ -386,7 +382,6 @@ public:
         return icov_pooled;
 
     }
-
 
     static double getMahalanobisDistance(cv::Mat icov_pooled, cv::Point2f point, cv::Point2f mean ) {
 
@@ -405,6 +400,60 @@ public:
         return ma.at<float>(0);
 
     }
+
+    static void fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::string &plot_least_square_line_list) {
+
+        float m, c;
+        std::string coord1;
+        std::string coord2;
+        std::string gp_line;
+        cv::Vec4f line;
+
+        // XY, 2XY and 2X2Y all gives the same correlation
+        cv::Mat_<float> covar, mean, corr;
+        cv::Scalar mean_x, mean_y, stddev_x, stddev_y;
+
+        cv::Mat mat_samples(1, samples_xy.cols, CV_32FC(2));
+
+        std::cout << "\nsamples_xy\n" << samples_xy;
+
+        if ( !samples_xy.empty() ) {
+
+            cv::calcCovarMatrix(samples_xy, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
+
+            cv::meanStdDev(samples_xy.row(0), mean_x, stddev_x);
+            cv::meanStdDev(samples_xy.row(1), mean_y, stddev_y);
+
+            //assert(std::floor(mean(0) * 100) == std::floor(mean_x(0) * 100));
+            //assert(std::floor(mean(1) * 100) == std::floor(mean_y(0) * 100));
+
+            cv::Mat_<float> stddev(2, 2);
+            stddev << stddev_x[0] * stddev_x[0], stddev_x[0] * stddev_y[0], stddev_x[0] * stddev_y[0], stddev_y[0] *
+                                                                                                       stddev_y[0];
+            corr = covar / stddev;
+
+            std::cout << "\nMean\n" << mean << "\nCovar\n" << covar <<
+                      "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
+                      "\ncorr\n" << corr << std::endl;
+
+
+            for (unsigned i = 0; i < samples_xy.cols; i++) {
+                mat_samples.at<cv::Vec<float, 2>>(0, i)[0] = samples_xy[0][i];
+                mat_samples.at<cv::Vec<float, 2>>(0, i)[1] = samples_xy[1][i];
+            }
+
+            cv::fitLine(mat_samples, line, CV_DIST_L2, 0, 0.01, 0.01); // radius and angle from the origin - a kind of
+            // constraint
+            m = line[1] / line[0];
+            c = line[3] - line[2] * m;
+            coord1 = "0," + std::to_string(c);
+            coord2 = std::to_string((2000 - c ) / m) + ",375";
+            gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
+            plot_least_square_line_list = gp_line;
+
+        }
+    }
+
 
 };
 

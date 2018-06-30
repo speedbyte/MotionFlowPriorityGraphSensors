@@ -76,7 +76,10 @@ class SensorDataPlot(object):
 
     def templateToYamlMapping(self, i, step_size):
 
-        template_name_ = template_name_of_evaluation_data
+        if ( self.measuring_parameter == "deviation" or self.measuring_parameter == "collision"):
+            template_name_ = template_name_of_collisionpoints
+        else:
+            template_name_ = template_name_of_evaluation_data
 
         temp_list = map(lambda x : (x + self.algorithm + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
 
@@ -85,7 +88,10 @@ class SensorDataPlot(object):
 
     def templateToYamlMapping_GT(self):
 
-        template_name_gt = template_name_of_evaluation_data_gt
+        if ( self.measuring_parameter == "deviation" or self.measuring_parameter == "collision"):
+            template_name_gt = template_name_of_collisionpoints_gt
+        else:
+            template_name_gt = template_name_of_evaluation_data_gt
 
         temp_list = list()
         temp_list.append(template_name_gt[0] + "sensor_index_" + str(self.getSensorIndex()))
@@ -113,6 +119,11 @@ class SensorDataPlot(object):
                 x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points_gt)
             elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
                 x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
+            elif ( measuring_parameter == "collision" ):
+                x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
+                # collision sorted
+            elif ( measuring_parameter == "deviation"):
+                x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points_gt)
 
         # ###2
         elif ( len(data_list) == 2 ):
@@ -126,34 +137,11 @@ class SensorDataPlot(object):
                     x_axis, y_axis, y_axis_mean = self.getGoodPixels(data_points_gt, data_points)
                 elif ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance"):
                     x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
-                    y_axis[38] = 3
-                    y_axis[39] = 0.1
-                    y_axis[40] = 1.343
-                    y_axis[41] = 0.1544
-                    y_axis[42] = 0.54656
-                    y_axis[43] = 0.13434
-                    y_axis[44] = 0.123243
-                    y_axis[45] = 0.24546
-                    y_axis[46] = 0.1
-                    y_axis[47] = 0.1213
-                    y_axis[48] = 0.189383
                     print x_axis
-                    #y_axis = numpy.append(y_axis, 4)
-                    #y_axis = numpy.array([  5.77203477e-03,   9.91367989e-03,   1.73532113e-02,   6.29578717e-03,
-                    #                        1.94707540e-02,   1.14479451e-02,   4.31693510e-02,   4.22310921e-02,
-                    #                        9.36508192e-03,   4.58104766e-03,   1.35933067e-02,   3.69559132e-02,
-                    #                        1.16417298e-02,   2.11236515e-02,   1.94673714e-02,   2.56826392e-02,
-                    #                        6.28068283e-03,   2.05168799e-02,   2.47222316e-02,   1.47125838e-02,
-                    #                        6.00599536e-02,   3.08720353e-01,   1.73231634e-01,   1.60320725e+00,
-                    #                        4.52652730e+00,   4.56670953e+00,   6.85051402e+00,   5.94330222e+00,
-                    #                        6.48781172e+00,   5.81008687e+00,   6.53212056e+00,   5.77043841e+00,
-                    #                        6.13221324e+00,   6.23887829e+00 ,  5.93207632e+00,   5.11896968e+00,
-                    #                        5.44394344e+00,   5.57486421e+00 ,  6.05818539e+00,   5.57207384e+00,
-                    #                        5.06644720e+00,   5.06284805e+00 ,  5.18940501e+00,   5.91152729e+00,
-                    #                        3.50244267e+00,   4.44660885e+00 ,  3.63849921e+00,   4.40959813e+00,
-                    #                        2.37613203e+00,   4.51817943e+00,   4.81969555e+00 ,  4.48599058e+00,
-                    #                        5.22786046e+00])
-                # ###3
+                elif ( measuring_parameter == "collision"):
+                    x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
+                elif ( measuring_parameter == "deviation"):
+                    x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points)
 
         lower_x = min(numpy.nanmin(x_axis), lower_x)
         upper_x = max(numpy.nanmax(x_axis), upper_x)
@@ -328,7 +316,7 @@ class SensorDataPlot(object):
         x0, y0 = data.T
         y_axis = 1.0*x0#/y0   # dividing by total pixels gt considering step size
 
-        index = [0,1]
+        index = [0]
         y_axis = numpy.delete(y_axis, index)
 
         count = 0
@@ -338,6 +326,7 @@ class SensorDataPlot(object):
                 y_axis_mean=y_axis_mean+i
 
         y_axis_mean = y_axis_mean/(count)
+        assert(x_axis.size == y_axis.size)
 
         return x_axis, y_axis, y_axis_mean
 
@@ -391,7 +380,7 @@ class SensorDataPlot(object):
         x0, y0 = data.T
         y_axis = 1.0*x0#/y0   # dividing by total pixels gt considering step size
 
-        index = [0,1]
+        index = [0]
         y_axis = numpy.delete(y_axis, index)
 
         count = 0
@@ -401,10 +390,12 @@ class SensorDataPlot(object):
                 y_axis_mean=y_axis_mean+i
 
         y_axis_mean = y_axis_mean/(count)
+
+        assert(x_axis.size == y_axis.size)
         return x_axis, y_axis, y_axis_mean
 
 
-    def getSingleVal(self, data_points_gt, data_points, key):
+    def getSingleVal(self, data_points_gt, data_points, dict_key):
 
         data = list()
 
@@ -412,7 +403,7 @@ class SensorDataPlot(object):
             if ( data_points[count]["obj_index"] == 1 ):
                 xy = list()
                 xy.append(data_points_gt[count]["current_frame_index"])
-                xy.append(data_points_gt[count][key])
+                xy.append(data_points_gt[count][dict_key])
                 data.append(xy)
 
 
@@ -439,7 +430,7 @@ class SensorDataPlot(object):
             xy = list()
             if ( data_points[count]["obj_index"] == 1 ):
                 xy.append(data_points[count]["current_frame_index"])
-                xy.append(data_points[count][key])
+                xy.append(data_points[count][dict_key])
                 data.append(xy)
 
         newshape = self.fuseDataFromSameFrames(data)
@@ -450,7 +441,7 @@ class SensorDataPlot(object):
         x0 = data
         y_axis = x0
 
-        index = [0,1]
+        index = [0]
         y_axis = numpy.delete(y_axis, index)
 
         count = 0
@@ -460,6 +451,8 @@ class SensorDataPlot(object):
                 y_axis_mean=y_axis_mean+i
 
         y_axis_mean = y_axis_mean/(count)
+
+        assert(x_axis.size == y_axis.size)
         return x_axis, y_axis, y_axis_mean
 
     def getObjectDisplacement(self, data_points_gt, data_points):

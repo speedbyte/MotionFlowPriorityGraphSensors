@@ -31,7 +31,7 @@ public:
 class PixelRobustness : public RobustnessIndex {
 
 private:
-    std::vector<std::vector<std::vector<std::vector<double> > > > m_list_evaluation_data_multiframe;
+    std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_EVALUATION_METRICS> > > > m_list_evaluation_data_multiframe;
 
 public:
 
@@ -43,14 +43,16 @@ public:
 
 class VectorRobustness : public RobustnessIndex {
 
+private:
+
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_list_collision_data_multiframe;
+
 public:
 
     VectorRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
     void generateVectorRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
+    void writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow);
 
-private:
-
-    void fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::string &list_gp_lines );
 
 };
 
@@ -60,8 +62,6 @@ class SensorFusionRobustness : public RobustnessIndex {
 public:
 
     SensorFusionRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
-    void compareHistograms(const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo);
-
 
 };
 

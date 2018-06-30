@@ -81,7 +81,7 @@ class Figures(object):
                 x_axis_limits = plot_data[x].get_x_axis_limits()
                 y_axis_limits = plot_data[x].get_y_axis_limits()
 
-                if ( measuring_parameter == "obj_displacement" or measuring_parameter == "collision"):
+                if ( measuring_parameter == "objdisplacement" or measuring_parameter == "collision"):
 
                     if ( measuring_parameter == "collision" ) :
                         s = np.argsort(plot_data[figure_index][2][x])
@@ -97,11 +97,10 @@ class Figures(object):
                                                             color=plot_data[x][4][env_index],
                                                             label=plot_data[x][5][env_index])
                 elif ( measuring_parameter == "deviation" ) :
-                    line = self.list_of_plots[figure_index].plot(plot_data[figure_index][2][x],
-                                                                 plot_data[figure_index][3][x]/10, 'ko', lw=1,
-                                                                 color=plot_data[figure_index][4][x+env_index],
-                                                                 label=plot_data[figure_index][5][x+env_index])
-
+                    line1 = self.list_of_plots[figure_index].plot(x_axis_data,
+                                                                  y_axis_data/SCALE, 'ko-', lw=1,
+                                                                  color=dict_color_weather[env_index],
+                                                                  label=dict_label_weather[env_index])
 
                 else :
 
@@ -241,7 +240,7 @@ class Figures(object):
         plt.tight_layout()
 
 
-    def evaluate_obj_displacement(self, summary, step_list):
+    def evaluate_objdisplacement(self, summary, step_list):
 
         print summary
 
@@ -253,7 +252,7 @@ class Figures(object):
         regroup = list()
 
         for weather in weather_list:
-            regroup.append(summary['obj_displacement_' + weather + '_' + str(step_list[0])][0])
+            regroup.append(summary['objdisplacement_' + weather + '_' + str(step_list[0])][0])
 
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
@@ -264,8 +263,8 @@ class Figures(object):
                     regroup = list()
                     shift = shift+1
                     for weather in weather_list:
-                        print 'obj_displacement_' + weather + '_' + str(step_size)
-                        y_data = [summary['obj_displacement_' + weather + '_' + str(step_size)][val+1]]
+                        print 'objdisplacement_' + weather + '_' + str(step_size)
+                        y_data = [summary['objdisplacement_' + weather + '_' + str(step_size)][val+1]]
                         y_data = np.array(y_data)
                         y_data = y_data*100
                         regroup.append(y_data)
@@ -274,7 +273,7 @@ class Figures(object):
 
         self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
         self.list_of_plots[0].set_ylabel('Average deviation of collision points from ground truth over all frames ( px )')
-        #plt.title('Obj_displacement of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
+        #plt.title('objdisplacement of Blue Sky, Light Snow, Mild Snow and Heavy Snow')
         plt.xticks(index + 4*bar_width, ('Blue Sky', 'Light Snow', 'Mild Snow', 'Heavy Snow'))
         self.list_of_plots[0].legend()
 

@@ -34,12 +34,13 @@ y_axis_label_dict = {
      "ma_distance" : "ma_distance",
     "l1_distance" : "l1_distance",
     "l2_distance" : "l2_distance",
+    "deviation" : "deviation",
 }
 
 parameter_list = [  ]
 parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l1_distance", "l2_distance"]
-parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l2_distance"]
-parameter_list = [ "ma_distance",]
+parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l2_distance", "deviation"]
+#parameter_list = [ "ma_distance",]
 
 datafilter_list  = [ "0", ]
 
@@ -70,30 +71,23 @@ template_name_of_evaluation_data = [
     "evaluation_data_results_",
 ]
 
-template_name_of_collision_points_gt = [
-    "collision_points_ground_truth_",
+template_name_of_collisionpoints_gt = [
+    "collisionpoints_ground_truth_",
 ]
 
-template_name_of_obj_displacement = [
-    "obj_displacement_datafilter_0results_",
-    "obj_displacement_datafilter_1results_",
-    "obj_displacement_datafilter_2results_",
-    "obj_displacement_datafilter_3results_",
-
+template_name_of_collisionpoints = [
+    "collisionpoints_data_results_",
 ]
 
-template_name_of_obj_displacement_gt = [
-    "obj_displacement_ground_truth_",
+template_name_of_objdisplacement_gt = [
+    "objdisplacement_ground_truth_",
 ]
 
-template_name_of_collision = [
-
-    "collision_points_datafilter_0results_",
-    "collision_points_datafilter_1results_",
-    "collision_points_datafilter_2results_",
-    "collision_points_datafilter_3results_",
-
+template_name_of_objdisplacement = [
+    "objdisplacement_data_results_",
 ]
+
+
 
 
 template_name_of_displacement_occurence = [

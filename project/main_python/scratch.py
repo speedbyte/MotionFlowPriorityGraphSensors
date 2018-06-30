@@ -177,7 +177,7 @@ class thread4(threading.Thread):
                 current_list = weather_list
 
             for weather in weather_list:
-                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("obj_displacement", yaml_file_data, weather, step_size))
+                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("objdisplacement", yaml_file_data, weather, step_size))
         self.threadRun = False
 
     def getThreadState(self):
@@ -196,13 +196,8 @@ class thread4(threading.Thread):
 
 if ( 0 ):
 
-    thread_collision = thread3(yaml_file_data, sensor_plot)
-    thread_collision.start()
-
-if ( 0 ):
-
-    thread_obj_displacement = thread4(yaml_file_data, sensor_plot)
-    thread_obj_displacement.start()
+    thread_objdisplacement = thread4(yaml_file_data, sensor_plot)
+    thread_objdisplacement.start()
 
 
 
@@ -227,39 +222,22 @@ if ( thread_deviation != None ):
                 break
 
 
-    if ( thread_collision != None ):
-
-        while ( True ):
-            time.sleep(1)
-            if ( thread_collision.getThreadState() == False ):
-
-                plot_at_once_figures = thread_collision.getPlotList()
-                plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
-
-                # summary
-                #summary = sensor_plot.get_summary()
-                #figures = Figures(1)
-                #figures.evaluate_collision(summary, step_list)
-                #figures.save_figure("collision", "summary")
-
-                break
-
 
     # ---------------------------------
-    if ( thread_obj_displacement != None ):
+    if ( thread_objdisplacement != None ):
 
         while ( True ):
             time.sleep(1)
-            if ( thread_obj_displacement.getThreadState() == False ):
+            if ( thread_objdisplacement.getThreadState() == False ):
 
-                plot_at_once_figures = thread_obj_displacement.getPlotList()
+                plot_at_once_figures = thread_objdisplacement.getPlotList()
                 plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
 
                 # summary
                 summary = sensor_plot.get_summary()
                 figures = Figures(1)
-                figures.evaluate_obj_displacement(summary, step_list)
-                figures.save_figure("obj_displacement", "summary")
+                figures.evaluate_objdisplacement(summary, step_list)
+                figures.save_figure("objdisplacement", "summary")
 
                 break
 
@@ -281,41 +259,23 @@ if ( thread_deviation != None ):
         print "getting " , data_list[0]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getStdDev(data_points_gt, data_points_gt)
 
-    elif ( measuring_parameter == "collision"):
-        data_points_gt = yaml_file_data[data_list[0]]
-        print "getting " , data_list[0]
-        x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
-        # collision sorted
 
-    elif ( measuring_parameter == "obj_displacement"):
+    elif ( measuring_parameter == "objdisplacement"):
         data_points_gt = yaml_file_data[data_list[0]]
         print "getting " , data_list[0]
         x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getObjectDisplacement(data_points_gt, data_points_gt)
 
 
 ###3
-    elif ( measuring_parameter == "deviation"):
-        x_axis, y_axis, y_axis_mean = self.getDeviationPoints(data_points_gt, data_points)
     elif ( measuring_parameter == "stddev"):
         x_axis, y_axis, y_axis_mean = self.getStdDev(data_points_gt, data_points)
-    elif ( measuring_parameter == "collision"):
-        x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
-    elif ( measuring_parameter == "obj_displacement"):
+    elif ( measuring_parameter == "objdisplacement"):
         x_axis, y_axis, y_axis_mean = self.getObjectDisplacement(data_points_gt, data_points)
 
 ## tmeplate_to_yaml_mapping
 
 def templateToYamlMapping(self, meausuring_parameter, yaml_file_data, weather, step_size):
 
-    if ( meausuring_parameter == "visible_pixels"):
-        template_name_ = template_name_of_evaluation_data
-        template_name_gt = template_name_of_evaluation_data_gt
-    elif ( meausuring_parameter == "deviation"):
-        template_name_ = template_name_of_collision
-        template_name_gt = template_name_of_collision_points_gt
-    elif ( meausuring_parameter == "collision"):
-        template_name_ = template_name_of_collision
-        template_name_gt = template_name_of_collision_points_gt
-    elif ( meausuring_parameter == "obj_displacement"):
-        template_name_ = template_name_of_obj_displacement
-        template_name_gt = template_name_of_obj_displacement_gt
+    elif ( meausuring_parameter == "objdisplacement"):
+        template_name_ = template_name_of_objdisplacement
+        template_name_gt = template_name_of_objdisplacement_gt
