@@ -1,0 +1,161 @@
+//
+// Created by veikas on 30.06.18.
+//
+
+#include <opencv/cv.hpp>
+#include <iostream>
+#include <map>
+#include "RobustnessIndex.h"
+#include "Utils.h"
+
+void VectorRobustness::generateVectorRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow, const OpticalFlow &opticalFlow_base_algo) {
+
+    auto position = opticalFlow.getResultOrdner().find('/');
+    std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
+    unsigned COUNT;
+    if ( suffix == "_ground_truth") {
+        COUNT = 1;
+    }
+    else {
+        COUNT = DATAFILTER_COUNT;
+    }
+
+    for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
+
+        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+
+            std::cout << "generating vector robustness in RobustnessIndex.cpp for " << suffix << " " << sensor_index
+                      << " for datafilter " << datafilter_index << std::endl;
+
+            std::vector<cv::Point2f>  xsamples, ysamples;
+            std::vector<float> xsamples_line,ysamples_line;
+
+
+            const std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > collisionPoints =
+                                                                                          opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index);
+
+            unsigned long FRAME_COUNT = collisionPoints.size();
+
+            for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+                unsigned long TOTAL_OBJECTS = collisionPoints.at(current_frame_index).size();
+
+                for ( unsigned objIndex = 0 ; objIndex < TOTAL_OBJECTS; objIndex++ ) {
+
+                    std::pair<cv::Point2i, cv::Point2f> collisionpoints = collisionPoints.at(current_frame_index).at(objIndex);
+
+                    xsamples.push_back(collisionpoints.first);
+                    ysamples.push_back(collisionpoints.second);
+
+                    /*
+                    cv::Point2f lineangles = opticalFlow.getLineAngles().at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex);
+
+                    xsamples_line.push_back(std::tanh(lineangles.x)*180/CV_PI);
+                    ysamples_line.push_back(std::tanh(lineangles.y)*180/CV_PI);
+                     */
+
+                }
+            }
+
+            // Send to plotter
+            std::string plot_least_square_line_list;
+            std::vector<std::pair<double, double>> xypoints_lineangles;
+
+            if ( suffix == "_ground_truth") {
+                m_fs << (std::string("collisionpoints") + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
+
+            } else {
+                m_fs << (std::string("collisionpoints") +  std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
+
+            }
+
+            for (unsigned i = 0; i < xsamples.size(); i++) {
+                /*m_fs << "{:" << "current_frame_index" <<
+                     opticalFlow.get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).current_frame_index; */
+                m_fs << "{:" << "current_frame_index" << xsamples[i] << "collisionpoints" << ysamples[i] << "}";
+
+            }
+            m_fs << "]";
+
+
+/*
+            if ( suffix == "_ground_truth") {
+                m_fs << (std::string("line_angles") + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
+
+            } else {
+                m_fs << (std::string("line_angles") +  std::string("_datafilter_") + std::to_string(datafilter_index) + suffix + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
+
+            }
+
+            for (unsigned i = 0; i < xsamples_line.size(); i++) {
+                xypoints_lineangles.push_back(std::make_pair(xsamples_line.at(i), ysamples_line.at(i)));
+                m_fs << "{:" << "obj1" <<  xypoints_lineangles.at(i).first << "obj2" << xypoints_lineangles.at(i).second << "}";
+            }
+            m_fs << "]";
+*/
+            cv::Mat_<float> samples_xy_collision(2, xsamples.size());
+
+            for ( auto i = 0; i < xsamples.size(); i++) {
+                samples_xy_collision(0,i) = ysamples.at(i).x;
+                samples_xy_collision(1,i) = ysamples.at(i).y;
+            }
+
+            // Linear least square
+            fitLineForCollisionPoints(samples_xy_collision, plot_least_square_line_list);
+
+        }
+    }
+}
+
+void VectorRobustness::fitLineForCollisionPoints(const cv::Mat_<float> &samples_xy, std::string &plot_least_square_line_list) {
+
+    float m, c;
+    std::string coord1;
+    std::string coord2;
+    std::string gp_line;
+    cv::Vec4f line;
+
+    // XY, 2XY and 2X2Y all gives the same correlation
+    cv::Mat_<float> covar, mean, corr;
+    cv::Scalar mean_x, mean_y, stddev_x, stddev_y;
+
+    cv::Mat mat_samples(1, samples_xy.cols, CV_32FC(2));
+
+    std::cout << "\nsamples_xy\n" << samples_xy;
+
+    if ( !samples_xy.empty() ) {
+
+        cv::calcCovarMatrix(samples_xy, covar, mean, cv::COVAR_NORMAL | cv::COVAR_COLS | cv::COVAR_SCALE, CV_32FC1);
+
+        cv::meanStdDev(samples_xy.row(0), mean_x, stddev_x);
+        cv::meanStdDev(samples_xy.row(1), mean_y, stddev_y);
+
+        //assert(std::floor(mean(0) * 100) == std::floor(mean_x(0) * 100));
+        //assert(std::floor(mean(1) * 100) == std::floor(mean_y(0) * 100));
+
+        cv::Mat_<float> stddev(2, 2);
+        stddev << stddev_x[0] * stddev_x[0], stddev_x[0] * stddev_y[0], stddev_x[0] * stddev_y[0], stddev_y[0] *
+                                                                                                   stddev_y[0];
+        corr = covar / stddev;
+
+        std::cout << "\nMean\n" << mean << "\nCovar\n" << covar <<
+                  "\nstddev_x\n" << stddev_x << "\nstddev_y\n" << stddev_y <<
+                  "\ncorr\n" << corr << std::endl;
+
+
+        for (unsigned i = 0; i < samples_xy.cols; i++) {
+            mat_samples.at<cv::Vec<float, 2>>(0, i)[0] = samples_xy[0][i];
+            mat_samples.at<cv::Vec<float, 2>>(0, i)[1] = samples_xy[1][i];
+        }
+
+        cv::fitLine(mat_samples, line, CV_DIST_L2, 0, 0.01, 0.01); // radius and angle from the origin - a kind of
+        // constraint
+        m = line[1] / line[0];
+        c = line[3] - line[2] * m;
+        coord1 = "0," + std::to_string(c);
+        coord2 = std::to_string((2000 - c ) / m) + ",375";
+        gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
+        plot_least_square_line_list = gp_line;
+
+    }
+}

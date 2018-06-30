@@ -425,9 +425,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
-                    //if (list_of_current_objects.at(obj_index)->getObjectName() == "New Character" ||
-                    //    list_of_current_objects.at(obj_index)->getObjectName() == "simulated_New Character") {
-
                     cv::Point2i dimension = {
                             cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
                                     sensor_index).at(current_frame_index).m_region_of_interest_px.width_px),
