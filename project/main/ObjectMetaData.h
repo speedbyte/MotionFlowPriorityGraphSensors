@@ -278,7 +278,7 @@ public:
         m_objectMetaData_startPoint = startPoint;
     }
 
-    virtual void process(cv::Size frame_size) {};
+    virtual void process(cv::Size frame_size)  {};
 
     virtual void pushPositionPoints(cv::Point2f points) {}
 
@@ -514,7 +514,7 @@ public:
     Achterbahn() {};
     Achterbahn(std::string name, ushort startPoint) : ObjectMetaData(name, startPoint) {} ;
 
-    void process(cv::Size frame_size) override ;
+    void process(cv::Size frame_size) override;
 
 };
 
@@ -524,7 +524,7 @@ public:
 
     Circle(ObjectImageShapeData shape, std::string name, ushort startPoint) : ObjectMetaData(shape, name, startPoint) {} ;
 
-    void process(cv::Size frame_size) override ;
+    void process(cv::Size frame_size) override;
 
 };
 
@@ -532,9 +532,9 @@ class Ramp : public ObjectMetaData {
 
 public:
 
-    Ramp(ObjectImageShapeData shape, std::string name, ushort startPoint) : ObjectMetaData(shape, name, startPoint) {} ;
+    Ramp(std::string name, ushort startPoint) : ObjectMetaData(name, startPoint) {} ;
 
-    void process(cv::Size frame_size) override ;
+    void process(cv::Size frame_size) override;
 
 };
 
@@ -542,9 +542,9 @@ class NegativeRamp : public ObjectMetaData {
 
 public:
 
-    NegativeRamp(ObjectImageShapeData shape, std::string name, ushort startPoint) : ObjectMetaData(shape, name, startPoint) {} ;
+    NegativeRamp(std::string name, ushort startPoint) : ObjectMetaData(name, startPoint) {} ;
 
-    void process(cv::Size frame_size) override ;
+    void process(cv::Size frame_size) override;
 
 };
 
@@ -552,7 +552,7 @@ class NoPosition: public ObjectMetaData {
 
 public:
 
-    NoPosition(ObjectImageShapeData shape, std::string name, ushort startPoint) : ObjectMetaData(shape, name, startPoint) {} ;
+    NoPosition(std::string name, ushort startPoint) : ObjectMetaData(name, startPoint) {} ;
 
     void process(cv::Size frame_size) override;
 

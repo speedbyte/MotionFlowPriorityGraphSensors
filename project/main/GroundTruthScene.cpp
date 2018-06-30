@@ -154,10 +154,10 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         cppObjects.push_back(CppObjects(1,m_generatepath));
 
         if (m_regenerate_yaml_file) {
-            boost::filesystem::remove("../position_cpp.yml");
 
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
+                boost::filesystem::remove("../position_cpp_" + std::to_string(sensor_group_index) + ".yml");
                 std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
 
                 std::unique_ptr<Noise> noise;
@@ -518,7 +518,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
     }
 
 }
-
 
 double GroundTruthSceneExternal::getTime() {
     struct timeval tme;

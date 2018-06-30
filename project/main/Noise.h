@@ -117,9 +117,7 @@ class NoNoise: public Noise {
 public:
     void apply(cv::Mat &image) override {
 
-        std::cout << "plain blue item" << std::endl;
-        image = cv::Scalar(255,0,255);
-        // manipulate image with noise and return
+        // dont do anything with the object or canvas
     }
 };
 

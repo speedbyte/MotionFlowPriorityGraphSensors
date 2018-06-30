@@ -206,15 +206,18 @@ void VectorRobustness::generateVectorRobustness(ushort SENSOR_COUNT, const Optic
             std::vector<float> xsamples_line,ysamples_line;
 
 
-            unsigned long FRAME_COUNT = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index).size();
+            const std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > collisionPoints =
+                    opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index);
+
+            unsigned long FRAME_COUNT = collisionPoints.size();
 
             for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                unsigned long POINTS = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index).at(current_frame_index).size();
+                unsigned long POINTS = collisionPoints.at(current_frame_index).size();
 
                 for ( unsigned points = 0 ; points < POINTS; points++ ) {
 
-                    std::pair<cv::Point2i, cv::Point2f> collisionpoints = opticalFlow.getCollisionPoints().at(datafilter_index).at(sensor_index).at(current_frame_index).at(points);
+                    std::pair<cv::Point2i, cv::Point2f> collisionpoints = collisionPoints.at(current_frame_index).at(points);
 
                     xsamples.push_back(collisionpoints.first);
                     ysamples.push_back(collisionpoints.second);

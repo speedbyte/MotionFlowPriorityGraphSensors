@@ -24,13 +24,21 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
     achterbahn = Achterbahn("rectangle_long", 100);
     achterbahn.process(Dataset::getFrameSize());
-    objectMetaDataList.at(0) = achterbahn;
+
+    Ramp ramp = Ramp("rectangle_long", 100);
+    ramp.process(Dataset::getFrameSize());
+
+    objectMetaDataList.at(0) = ramp;
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
 
     achterbahn = Achterbahn("random_object", 220);
     achterbahn.process(Dataset::getFrameSize());
-    objectMetaDataList.at(1) = achterbahn;
+
+    NegativeRamp negativeRamp = NegativeRamp("random_object", 100);
+    negativeRamp.process(Dataset::getFrameSize());
+
+    objectMetaDataList.at(1) = negativeRamp;
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
 
 
@@ -57,9 +65,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
     assert(tempGroundTruthImage.channels() == 3);
 
-    //std::vector<ushort> current_index = {get_ptr_customObjectMetaDataList().at(0)->getObjectStartPoint(),get_ptr_customObjectMetaDataList().at(1)->getObjectStartPoint()};
-
-    std::cout << m_ptr_customObjectMetaDataList.at(0)->getObjectStartPoint() << " " << m_ptr_customObjectMetaDataList.at(1)->getObjectStartPoint();
     for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_DATASET; current_frame_index++) {
 
         // TO DO - when the variable overflows.

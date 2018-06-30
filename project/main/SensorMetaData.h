@@ -216,7 +216,7 @@ public:
 
     }
 
-    virtual void process(cv::Size frame_size) {};
+    virtual void process(cv::Size frame_size, ushort startTrajectoryPoint) {};
 
     virtual void pushPositionPoints(cv::Point2f points) {}
 
