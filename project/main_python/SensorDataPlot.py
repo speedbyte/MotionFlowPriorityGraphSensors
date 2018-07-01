@@ -297,12 +297,11 @@ class SensorDataPlot(object):
 
         y_axis_mean = 0
         data = numpy.array(newshape)
-        if ( measuring_parameter == "visible_pixels"):
-            x0_gt, y0_gt = data.T
+        x0_gt, y0_gt = data.T
+        if ( measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
             y_axis = x0_gt/y0_gt
         else:
-            x0_gt = data.T
-            y_axis = x0_gt
+            y_axis = y0_gt
 
         data = list()
 
@@ -327,9 +326,8 @@ class SensorDataPlot(object):
         data = numpy.array(newshape)
         x0, y0 = data.T
         if ( measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
-            y_axis = 1.0*x0#/y0   # dividing by total pixels gt considering step size
+            y_axis = 1.0*x0/y0   # dividing by total pixels gt considering step size
         else:
-            x0 = data.T
             y_axis = y0
 
         index = [0]
