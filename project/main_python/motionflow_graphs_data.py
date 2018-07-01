@@ -39,7 +39,7 @@ y_axis_label_dict = {
 
 parameter_list = [  ]
 parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l1_distance", "l2_distance"]
-parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l2_distance", "deviation"]
+parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l2_distance"]
 #parameter_list = [ "ma_distance",]
 
 datafilter_list  = [ "0", ]
