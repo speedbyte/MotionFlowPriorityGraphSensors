@@ -3,11 +3,12 @@
 
 CPP_DATASET:
    PATH: "../../../datasets/cpp_dataset/"
-   EXECUTE: 0
-   GT: 1
+   EXECUTE: 1
+   GT: 0
    FB: 1
    PLOT: 1
-   VIDEO: 1
+   VIDEO: 0
+>>>>>>> 32dc9655ea44a988ddaa5868ac5c266be68dee57
 
 MATLAB_DATASET:
    PATH: "../../../datasets/matlab_dataset/"
@@ -39,7 +40,7 @@ RADAR_DATASET:
 
 VIRES_DATASET:
    PATH: "../../../datasets/vires_dataset/"
-   EXECUTE: 1
+   EXECUTE: 0
    GT: 0
    FB: 1
    PLOT: 1

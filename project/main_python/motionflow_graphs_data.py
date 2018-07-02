@@ -34,13 +34,13 @@ y_axis_label_dict = {
      "ma_distance" : "ma_distance",
     "l1_distance" : "l1_distance",
     "l2_distance" : "l2_distance",
-    "deviation" : "deviation",
+    "collisionpoints" : "deviation",
 }
 
 parameter_list = [  ]
 parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l1_distance", "l2_distance"]
 parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l2_distance"]
-#parameter_list = [ "ma_distance",]
+parameter_list = [ "collisionpoints",]
 
 datafilter_list  = [ "0", ]
 
@@ -63,7 +63,6 @@ color_list_weather = ["blue", "gray", "brown", "black", "brown"]
 color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 label_list_bar = ['ground truth', 'moving average', 'voted mean', 'ranked mean']
 
-
 template_name_of_evaluation_data_gt = [
     "evaluation_data_ground_truth_",
 ]
@@ -72,7 +71,7 @@ template_name_of_evaluation_data = [
 ]
 
 template_name_of_collisionpoints_gt = [
-    "collisionpoints_ground_truth_",
+    "collisionpoints_data_ground_truth_",
 ]
 
 template_name_of_collisionpoints = [
@@ -86,9 +85,6 @@ template_name_of_objdisplacement_gt = [
 template_name_of_objdisplacement = [
     "objdisplacement_data_results_",
 ]
-
-
-
 
 template_name_of_displacement_occurence = [
     "scenario_displacement_occurence_sensor_index_1_datafilter_0_ground_truth",

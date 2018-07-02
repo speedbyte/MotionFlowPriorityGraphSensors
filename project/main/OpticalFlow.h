@@ -32,6 +32,14 @@ typedef struct {
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
 
+typedef struct {
+
+    int current_frame_index;
+    int obj_index;
+    cv::Point2f collisionpoints;
+
+} OPTICAL_FLOW_COLLISION_METRICS;
+
 
 class OpticalFlow {
 
@@ -71,7 +79,7 @@ protected:
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_mean_displacement_points;
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_list_sensor_collision_points;
+    std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS> > > > m_list_sensor_collision_points;
 
     std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > >m_list_sensor_line_angles;
 
@@ -90,7 +98,7 @@ public:
 
     OpticalFlow( std::string weather, std::string opticalFlowName, std::vector<Objects *> &ptr_list_gt_objects, std::vector<std::unique_ptr<Objects>> &ptr_list_simulated_objects_base, std::vector<Objects *> &ptr_list_simulated_objects, ushort stepSize ) : m_weather(weather), m_opticalFlowName(opticalFlowName), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 
-    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f> > > > > & getCollisionPoints () const {
+    const std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS > > > > & getCollisionPoints () const {
         return m_list_sensor_collision_points;
     }
 
