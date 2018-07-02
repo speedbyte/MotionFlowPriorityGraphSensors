@@ -885,12 +885,12 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
 
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > sensor_collision_points;
+        std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS> > > sensor_collision_points;
         std::vector<std::vector<std::vector<cv::Point2f> > > sensor_line_angles;
 
         for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-            std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > sensor_frame_collision_points;
+            std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS> > sensor_frame_collision_points;
             std::vector<std::vector<cv::Point2f> > sensor_frame_line_angles;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
@@ -909,7 +909,7 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
 
 
                 std::vector<cv::Point2f> frame_collision_points;
-                std::vector<std::pair<cv::Point2i, cv::Point2f>> frame_collision_points_average;
+                std::vector<OPTICAL_FLOW_COLLISION_METRICS> frame_collision_points_average;
                 std::vector<cv::Point2f> frame_line_angles;
 
                 char file_name_image[50];
@@ -1015,13 +1015,13 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
                 for (auto i = 0; i < frame_collision_points.size(); i = i + 2) {
                     if (frame_collision_points.at(i) != cv::Point2f(-1, -1) &&
                         frame_collision_points.at(i + 1) != cv::Point2f(-1, -1)) {
-                        frame_collision_points_average.push_back(std::make_pair(cv::Point2i(current_frame_index, 0 ),  cv::Point2f(
+                        frame_collision_points_average.push_back({current_frame_index,  0, cv::Point2f(
                                 ((frame_collision_points.at(i).x + frame_collision_points.at(i + 1).x) / 2),
                                 ((frame_collision_points.at(i).y + frame_collision_points.at(i + 1).y) /
-                                 2))));
+                                 2))});
                     }
                     else {
-                        frame_collision_points_average.push_back(std::make_pair(cv::Point2i(current_frame_index, 0 ), cv::Point2f(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity())));
+                        frame_collision_points_average.push_back({current_frame_index, 0, cv::Point2f(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity())});
                     }
                 }
 

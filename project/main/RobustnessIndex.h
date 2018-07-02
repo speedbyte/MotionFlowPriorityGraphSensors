@@ -45,7 +45,7 @@ class VectorRobustness : public RobustnessIndex {
 
 private:
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_list_collision_data_multiframe;
+    std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS> > > > m_list_collision_data_multiframe;
 
 public:
 

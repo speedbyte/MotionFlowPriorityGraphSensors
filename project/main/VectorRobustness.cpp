@@ -7,6 +7,7 @@
 #include <map>
 #include "RobustnessIndex.h"
 #include "Utils.h"
+#include "OpticalFlow.h"
 
 
 void VectorRobustness::generateVectorRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
@@ -54,10 +55,10 @@ void VectorRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optic
 
             // Send to plotter
             if ( suffix == "_ground_truth") {
-                m_fs << (std::string("collisionpoints") + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
+                m_fs << (std::string("collisionpoints_data") + suffix + std::string("_sensor_index_") + std::to_string(sensor_index)) << "[";
             }
             else {
-                m_fs << (std::string("collisionpoints_") + suffix + std::string("datafilter_") + std::to_string(datafilter_index) + "_" + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
+                m_fs << (std::string("collisionpoints_data_") + suffix + std::string("datafilter_") + std::to_string(datafilter_index) + "_" + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
             }
 
 
@@ -68,10 +69,11 @@ void VectorRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optic
                 for (unsigned objIndex = 0; objIndex < TOTAL_OBJECTS; objIndex++) {
 
                     m_fs << "{:" << "current_frame_index" <<
-                         m_list_collision_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).first
-                         << "collisionpoints" <<
-                         (m_list_collision_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).second)
-
+                            m_list_collision_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).current_frame_index
+                            << "obj_index" <<
+                            m_list_collision_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).obj_index
+                            << "collisionpoints" <<
+                            (m_list_collision_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).collisionpoints)
                          << "}";
                 }
             }
