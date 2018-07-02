@@ -83,42 +83,8 @@ for env_name in weather_list:
 
 
 
-class thread2(threading.Thread):
 
-    def __init__(self, yaml_file_data, sensor_plot):
-        threading.Thread.__init__(self)
-        self.threadRun = False
-        self.yaml_file_data = yaml_file_data
-        self.sensor_plot = sensor_plot
-
-
-    def stop(self):
-        self.threadRun = False
-
-    def run(self):
-        self.threadRun = True
-        #while ( self.threadRun ):
-        print "i am in thread deviation "
-
-        self.plot_at_once_figures = list()
-        for step_size in step_list:
-
-            if ( evaluation == "weather"):
-                current_list = weather_list
-
-            for weather in weather_list:
-                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("deviation", yaml_file_data, weather, step_size))
-
-        self.threadRun = False
-
-    def getThreadState(self):
-        return self.threadRun
-
-    def getPlotList(self):
-        return self.plot_at_once_figures
-
-
-class thread3(threading.Thread):
+class thread_example(threading.Thread):
 
     def __init__(self, yaml_file_data, sensor_plot):
         threading.Thread.__init__(self)
@@ -153,53 +119,8 @@ class thread3(threading.Thread):
         return self.plot_at_once_figures
 
 
-class thread4(threading.Thread):
-
-    def __init__(self, yaml_file_data, sensor_plot):
-        threading.Thread.__init__(self)
-        self.threadRun = False
-        self.yaml_file_data = yaml_file_data
-        self.sensor_plot = sensor_plot
-
-
-    def stop(self):
-        self.threadRun = False
-
-    def run(self):
-        self.threadRun = True
-        #while ( self.threadRun ):
-        print "i am in thread obj displacement"
-
-        self.plot_at_once_figures = list()
-        for step_size in step_list:
-
-            if ( evaluation == "weather"):
-                current_list = weather_list
-
-            for weather in weather_list:
-                self.plot_at_once_figures.append(self.sensor_plot.templateToYamlMapping("objdisplacement", yaml_file_data, weather, step_size))
-        self.threadRun = False
-
-    def getThreadState(self):
-        return self.threadRun
-
-    def getPlotList(self):
-        return self.plot_at_once_figures
-
-
-
-
-    #---------------        if ( 0 ):
-
     thread_deviation = thread2(yaml_file_data, sensor_plot)
     thread_deviation.start()
-
-if ( 0 ):
-
-    thread_objdisplacement = thread4(yaml_file_data, sensor_plot)
-    thread_objdisplacement.start()
-
-
 
 
 
@@ -223,59 +144,51 @@ if ( thread_deviation != None ):
 
 
 
-    # ---------------------------------
-    if ( thread_objdisplacement != None ):
-
-        while ( True ):
-            time.sleep(1)
-            if ( thread_objdisplacement.getThreadState() == False ):
-
-                plot_at_once_figures = thread_objdisplacement.getPlotList()
-                plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
-
-                # summary
-                summary = sensor_plot.get_summary()
-                figures = Figures(1)
-                figures.evaluate_objdisplacement(summary, step_list)
-                figures.save_figure("objdisplacement", "summary")
-
-                break
-
-                #scenario_displacement_occurence()
-                #histogramm()
-
-
-
-
-###2
-
-        elif ( measuring_parameter == "deviation"):
-        data_points_gt = yaml_file_data[data_list[0]]
-        print "getting " , data_list[0]
-        x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getDeviationPoints(data_points_gt, data_points_gt)
-
-    elif ( measuring_parameter == "stddev"):
-        data_points_gt = yaml_file_data[data_list[0]]
-        print "getting " , data_list[0]
-        x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getStdDev(data_points_gt, data_points_gt)
-
-
-    elif ( measuring_parameter == "objdisplacement"):
-        data_points_gt = yaml_file_data[data_list[0]]
-        print "getting " , data_list[0]
-        x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getObjectDisplacement(data_points_gt, data_points_gt)
-
-
-###3
-    elif ( measuring_parameter == "stddev"):
-        x_axis, y_axis, y_axis_mean = self.getStdDev(data_points_gt, data_points)
-    elif ( measuring_parameter == "objdisplacement"):
-        x_axis, y_axis, y_axis_mean = self.getObjectDisplacement(data_points_gt, data_points)
-
-## tmeplate_to_yaml_mapping
-
 def templateToYamlMapping(self, meausuring_parameter, yaml_file_data, weather, step_size):
 
     elif ( meausuring_parameter == "objdisplacement"):
         template_name_ = template_name_of_objdisplacement
         template_name_gt = template_name_of_objdisplacement_gt
+
+
+def getObjectDisplacement(self, data_points_gt, data_points):
+
+    data = list()
+
+    for count in range(len(data_points_gt)):
+        xy = list()
+        xy.append(data_points_gt[count]["objDim"][0])
+        xy.append(data_points_gt[count]["objDim"][1])
+        xy.append(data_points_gt[count]["objDisp"][0])
+        xy.append(data_points_gt[count]["objDisp"][1])
+        data.append(xy)
+
+    data = numpy.array(data)
+    dim_x_gt, dim_y_gt, disp_x_gt, disp_y_gt = data.T
+
+    data = list()
+
+    for count in range(len(data_points)):
+        xy = list()
+        xy.append(data_points[count]["objDim"][0])
+        xy.append(data_points[count]["objDim"][1])
+        xy.append(data_points[count]["objDisp"][0])
+        xy.append(data_points[count]["objDisp"][1])
+        data.append(xy)
+
+    y_axis_mean = 0
+    data = numpy.array(data)
+    dim_x, dim_y, disp_x, disp_y = data.T
+    y_axis = numpy.sqrt((disp_x_gt - disp_x) ** 2 + (disp_y_gt - disp_y) ** 2)
+    x_axis = dim_x*dim_y
+
+    count = 0
+    for n,i in enumerate(y_axis):
+        if ( i == i ):
+            count = count+1
+            y_axis_mean=y_axis_mean+i
+
+    y_axis_mean = y_axis_mean/(count)
+    return x_axis, y_axis, y_axis_mean
+
+

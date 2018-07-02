@@ -113,11 +113,11 @@ class SensorDataPlot(object):
             data_points_gt = yaml_file_data[data_list[0]]
             print "getting " , data_list
 
-            if ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance" or measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha" or measuring_parameter == "collisionpoints"):
-                x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
-            elif ( measuring_parameter == "collision" ):
-                x_axis_gt, y_axis_gt, y_axis_gt_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
+            if ( measuring_parameter == "collision" ):
+                x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
                 # collision sorted
+            else:
+                x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
 
         # ###2
         elif ( len(data_list) == 2 ):
@@ -125,11 +125,11 @@ class SensorDataPlot(object):
             data_points_gt = yaml_file_data[data_list[0]]
             data_points = yaml_file_data[data_list[1]]
             print "getting ", data_list
-            if ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance" or measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha" or measuring_parameter == "collisionpoints"):
+            if ( measuring_parameter == "collision"):
+                x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
+            else :
                 x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
                 print x_axis
-            elif ( measuring_parameter == "collision"):
-                x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
 
         lower_x = min(numpy.nanmin(x_axis), lower_x)
         upper_x = max(numpy.nanmax(x_axis), upper_x)
@@ -151,8 +151,6 @@ class SensorDataPlot(object):
 
         mean_list.append(y_axis_mean)
 
-
-
         # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
         lock.acquire()
         map_to_data = measuring_parameter + '_' + self.algorithm + '_' + weather + '_' + str(stepSize) + '_' + str(self.sensor_index)
@@ -162,14 +160,11 @@ class SensorDataPlot(object):
 
         plotData = PlotData(plot1, self.algorithm, measuring_parameter, weather, stepSize, x_label, y_label)
 
-
         return plotData
 
 
     def getSensorIndex(self):
         return self.sensor_index
-
-
 
     def getCollisionPoints(self, data_points_gt, data_points):
 
@@ -208,7 +203,6 @@ class SensorDataPlot(object):
         return x_axis, y_axis, y_axis_mean
 
 
-
     def getSingleVal(self, data_points_gt, data_points, measuring_parameter):
 
         data = list()
@@ -227,6 +221,9 @@ class SensorDataPlot(object):
                 elif (measuring_parameter == "collisionpoints"):
                     for x in range(len(data_points_gt[count][measuring_parameter])):
                         xy.append(data_points_gt[count][measuring_parameter][x]) # change!
+                else:
+                    xy.append(data_points_gt[count][measuring_parameter])
+
 
                 data.append(xy)
 
@@ -281,6 +278,8 @@ class SensorDataPlot(object):
                 elif (measuring_parameter == "collisionpoints"):
                     for x in range(len(data_points[count][measuring_parameter])):
                         xy.append(data_points[count][measuring_parameter][x]) # change!
+                else:
+                    xy.append(data_points[count][measuring_parameter])
 
                 data.append(xy)
 
@@ -315,47 +314,6 @@ class SensorDataPlot(object):
 
         assert(x_axis.size == y_axis.size)
         return x_axis, y_axis, y_axis_mean
-
-    def getObjectDisplacement(self, data_points_gt, data_points):
-
-        data = list()
-
-        for count in range(len(data_points_gt)):
-            xy = list()
-            xy.append(data_points_gt[count]["objDim"][0])
-            xy.append(data_points_gt[count]["objDim"][1])
-            xy.append(data_points_gt[count]["objDisp"][0])
-            xy.append(data_points_gt[count]["objDisp"][1])
-            data.append(xy)
-
-        data = numpy.array(data)
-        dim_x_gt, dim_y_gt, disp_x_gt, disp_y_gt = data.T
-
-        data = list()
-
-        for count in range(len(data_points)):
-            xy = list()
-            xy.append(data_points[count]["objDim"][0])
-            xy.append(data_points[count]["objDim"][1])
-            xy.append(data_points[count]["objDisp"][0])
-            xy.append(data_points[count]["objDisp"][1])
-            data.append(xy)
-
-        y_axis_mean = 0
-        data = numpy.array(data)
-        dim_x, dim_y, disp_x, disp_y = data.T
-        y_axis = numpy.sqrt((disp_x_gt - disp_x) ** 2 + (disp_y_gt - disp_y) ** 2)
-        x_axis = dim_x*dim_y
-
-        count = 0
-        for n,i in enumerate(y_axis):
-            if ( i == i ):
-                count = count+1
-                y_axis_mean=y_axis_mean+i
-
-        y_axis_mean = y_axis_mean/(count)
-        return x_axis, y_axis, y_axis_mean
-
 
 
     def fuseDataFromSameFrames(self, data):

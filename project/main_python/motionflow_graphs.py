@@ -109,6 +109,7 @@ if __name__ == '__main__':
 
 
     for n, parameter in enumerate(parameter_list):
+        print "PARAMETER ----- ", parameter
         summary_list = list()
         for sensor_index in sensor_list:
 
