@@ -8,7 +8,6 @@ CPP_DATASET:
    FB: 1
    PLOT: 1
    VIDEO: 0
->>>>>>> 32dc9655ea44a988ddaa5868ac5c266be68dee57
 
 MATLAB_DATASET:
    PATH: "../../../datasets/matlab_dataset/"

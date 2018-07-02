@@ -111,7 +111,7 @@ class SensorDataPlot(object):
         if ( len(data_list) == 1 ):
 
             data_points_gt = yaml_file_data[data_list[0]]
-            print "getting " , data_list[0]
+            print "getting " , data_list
 
             if ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance" or measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
                 x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
@@ -126,7 +126,7 @@ class SensorDataPlot(object):
 
             data_points_gt = yaml_file_data[data_list[0]]
             data_points = yaml_file_data[data_list[1]]
-            print "getting ", data_list[1]
+            print "getting ", data_list
             if ( measuring_parameter == "ma_distance" or measuring_parameter == "l1_distance" or measuring_parameter == "l2_distance" or measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
                 x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
                 print x_axis
@@ -200,7 +200,6 @@ class SensorDataPlot(object):
             newshape = self.fuseDataFromSameFrames(data)
             #print newshape
         else:
-            print data
             data_ = numpy.array(data)
             a,b,c = data_.T
             x_axis = numpy.array(a)
@@ -223,8 +222,8 @@ class SensorDataPlot(object):
             if ( data_points[count]["obj_index"] == 0 ):
                 xy = list()
                 xy.append(data_points[count]["current_frame_index"])
-                xy.append(data_points_gt[count][measuring_parameter][0]) # change!
-                xy.append(data_points_gt[count][measuring_parameter][1]) # change!
+                xy.append(data_points[count][measuring_parameter][0]) # change!
+                xy.append(data_points[count][measuring_parameter][1]) # change!
                 if ( measuring_parameter == "visible_pixels"):
                     xy.append(data_points[count]["ground_truth_pixels"])
                 elif ( measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
@@ -236,6 +235,7 @@ class SensorDataPlot(object):
             #print newshape
         else:
             newshape = data
+            print newshape
 
         y_axis_mean = 0
         data = numpy.array(newshape)
