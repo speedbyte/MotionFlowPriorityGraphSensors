@@ -259,7 +259,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if (vires_dataset.execute) {
 
-                generation_list = {0, 1};
+                generation_list = {1};
                 evaluation_list = {0, 1};
 
                 Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
