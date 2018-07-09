@@ -492,7 +492,40 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                         simFrame, simTime, data->imgSize, data->id);
             }
         } else {
-            fprintf(stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+            png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
+            unsigned int count = 0;
+            for (int32_t v = 0; v < image_info_.height; v++) {
+                for (int32_t u = 0; u < image_info_.width; u++) {
+                    png::rgba_pixel val;
+                    val.red = (unsigned char) image_data_[count++];
+                    val.green = (unsigned char) image_data_[count++];
+                    val.blue = (unsigned char) image_data_[count++];
+                    val.alpha = (unsigned char)image_data_[count++];
+                    depth_image.set_pixel(u, v, val);
+                }
+            }
+
+            char depth_file_name_image[50];
+
+            if (!m_dumpInitialFrames) {
+                sprintf(depth_file_name_image, "depth_000%03d_10.png", mImageCount);
+                std::string input_image_depth_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + depth_file_name_image; //+ "/" +  file_name_image;
+                if ( simFrame > (MAX_DUMPS) ) {
+                    fprintf(stderr, "saving depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                            simFrame, simTime, data->imgSize, data->id);
+                    depth_image.write(input_image_depth_file_with_path);
+                }
+                else {
+                    fprintf(stderr, "ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                            simFrame, simTime, data->imgSize, data->id);
+                }
+                //mImageCount++;
+            } else {
+                fprintf(stderr, "ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                        simFrame, simTime, data->imgSize, data->id);
+            }
+
+            fprintf(stderr, "ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                     simFrame, simTime, data->imgSize, data->id);
         }
         mHaveImage = true;
