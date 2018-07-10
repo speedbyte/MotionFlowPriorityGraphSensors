@@ -486,7 +486,6 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                     fprintf(stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
                 }
-                mImageCount++;
             } else {
                 fprintf(stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                         simFrame, simTime, data->imgSize, data->id);
@@ -527,7 +526,14 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
 
             fprintf(stderr, "ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                     simFrame, simTime, data->imgSize, data->id);
+
+            if (!m_dumpInitialFrames) {
+                mImageCount++;
+            }
+
         }
+
+
         mHaveImage = true;
     }
 }

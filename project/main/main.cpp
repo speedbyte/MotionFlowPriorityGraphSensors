@@ -257,10 +257,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             GroundTruthScene *base_ptr_gt_scene;
 
-            if (vires_dataset.execute) {
+            generation_list = {0};
+            evaluation_list = {0, 1};
 
-                generation_list = {1};
-                evaluation_list = {0, 1};
+            if (vires_dataset.execute) {
 
                 Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
@@ -287,8 +287,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             } else if (cpp_dataset.execute) {
 
                 Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
-                generation_list = {0};
-                evaluation_list = {0};
 
                 GroundTruthSceneInternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
