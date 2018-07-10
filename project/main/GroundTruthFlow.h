@@ -33,6 +33,7 @@ public:
     }
 
     void generate_edge_images(ushort SENSOR_COUNT);
+    void generate_depth_images(ushort SENSOR_COUNT);
 
     ~GroundTruthFlow(){
         std::cout << "killing previous GroundTruthFlow object\n" ;

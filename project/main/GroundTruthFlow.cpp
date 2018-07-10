@@ -108,7 +108,6 @@ void GroundTruthFlow::generate_edge_images(ushort SENSOR_COUNT) {
     char sensor_index_folder_suffix[50];
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
         cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
@@ -138,6 +137,46 @@ void GroundTruthFlow::generate_edge_images(ushort SENSOR_COUNT) {
 
 }
 
+
+void GroundTruthFlow::generate_depth_images(ushort SENSOR_COUNT) {
+
+    // reads the flow vector array already created at the time of instantiation of the object.
+    // Additionally stores the frames in a png file
+    // Additionally stores the position in a png file
+
+    auto tic_all = steady_clock::now();
+
+    char sensor_index_folder_suffix[50];
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+
+        unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
+        assert(FRAME_COUNT>0);
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
+        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
+        std::cout << "saving edge files in edge/ for sensor_index  " << sensor_index << std::endl;
+
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+            char file_name_input_image[50];
+            std::cout << "current_frame_index " << current_frame_index << std::endl;
+            ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(current_frame_index).frame_no;
+            sprintf(file_name_input_image, "depth_000%03d_10.png", vires_frame_count);
+            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_input_image;
+            image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
+            if ( image_02_frame.data == NULL ) {
+                std::cerr << input_image_path << " not found" << std::endl;
+                throw ("No image file found error");
+            }
+            cv::MatConstIterator iterate_depth;
+            cv::imshow("depth_image", image_02_frame);
+            cv::waitKey(0);
+        }
+    }
+
+    std::cout << "end of showing ground truth depth files " << std::endl;
+
+}
 
 
 /*
