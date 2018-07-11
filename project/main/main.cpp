@@ -321,9 +321,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
-                gt_flow.generate_displacement_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                //gt_flow.generate_displacement_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                //gt_flow.generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                //gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
