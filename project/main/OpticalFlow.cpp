@@ -30,7 +30,7 @@ void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
 
     for (int i = 0; i < SENSOR_COUNT; ++i) {
 
-        sprintf(char_dir_append, "%02d", i);
+        sprintf(char_dir_append, "%02d", m_evaluation_list.at(i));
 
         m_collision_object_path = m_generatepath.string() + "/collision_object_";
         path =  m_collision_object_path.string() + char_dir_append;
@@ -300,8 +300,8 @@ void OpticalFlow::generate_flow_frames(ushort SENSOR_COUNT) {
                 sensor_index).size();
         assert(FRAME_COUNT > 0);
         cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
-        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        std::cout << "saving flow files in flow/ for sensor_index  " << sensor_index << std::endl;
+        sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
+        std::cout << "saving flow files in flow/ for sensor_index  " << sensor_index_folder_suffix << std::endl;
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 

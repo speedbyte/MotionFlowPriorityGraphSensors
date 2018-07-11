@@ -258,7 +258,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             GroundTruthScene *base_ptr_gt_scene;
 
             generation_list = {0};
-            evaluation_list = {0, 1};
+            evaluation_list = {1};
 
             if (vires_dataset.execute) {
 
@@ -312,7 +312,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             list_of_gt_objects = list_of_gt_objects_base;
             ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
 
-            GroundTruthFlow gt_flow(environ[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_gt_objects_base);
+            GroundTruthFlow gt_flow(evaluation_list, environ[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_gt_objects_base);
 
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
@@ -324,6 +324,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 gt_flow.generate_displacement_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                     ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()),
@@ -374,12 +375,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 if ( algorithm_index == 1 ) {
 
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<LukasKanade>(environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
                 }
                 else if ( algorithm_index == 0 ) {
 
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
                 }
 
@@ -520,7 +521,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::vector<std::unique_ptr<Objects>> ptr_list_of_simulated_objects_base;
             std::vector<Objects *> ptr_list_of_simulated_objects;
 
-            Farneback fback("blue_sky", fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1);
+            Farneback fback(evaluation_list, "blue_sky", fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1);
             AlgorithmFlow *algo = &fback;
             // The ground truth generate_flow_frame and image is already available from the base dataset. Hence only results can be
             // calculated here.

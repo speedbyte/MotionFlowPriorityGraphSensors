@@ -31,12 +31,14 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
 
     m_generatepath = m_groundtruthpath.string() + "/" + m_environment;
 
+    char sensor_index_folder_suffix[50];
     if (m_regenerate_yaml_file) {
         if (m_datasetpath.string() == std::string(CPP_DATASET_PATH) || m_datasetpath.string() == std::string(VIRES_DATASET_PATH)) {
 
             std::cout << "prepare gt_scene directories" << std::endl;
 
-            std::string m_generatepath_sensor = m_generatepath.string() + "_" + std::to_string(sensor_group_index);
+            sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
+            std::string m_generatepath_sensor = m_generatepath.string() + "_" + sensor_index_folder_suffix;
             if (boost::filesystem::exists(m_generatepath_sensor)) {
                 system(("rm -rf " + m_generatepath_sensor).c_str());
             }

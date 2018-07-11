@@ -111,17 +111,17 @@ void GroundTruthFlow::generate_edge_images(ushort SENSOR_COUNT) {
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
         cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
-        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        std::cout << "saving edge files in edge/ for sensor_index  " << sensor_index << std::endl;
+        sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
+        std::cout << "saving edge files in edge/ for sensor_index  " <<  sensor_index_folder_suffix << std::endl;
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             char file_name_input_image[50];
             std::cout << "current_frame_index " << current_frame_index << std::endl;
-            ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+            ushort evaluation_frame_index = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
-            sprintf(file_name_input_image, "000%03d_10.png", vires_frame_count);
-            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_input_image;
+            sprintf(file_name_input_image, "000%03d_10.png", evaluation_frame_index);
+            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
             image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
             if ( image_02_frame.data == NULL ) {
                 std::cerr << input_image_path << " not found" << std::endl;
@@ -152,18 +152,17 @@ void GroundTruthFlow::generate_depth_images(ushort SENSOR_COUNT) {
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
         cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
-        sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        std::cout << "saving edge files in edge/ for sensor_index  " << sensor_index << std::endl;
+        sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
+        std::cout << "saving depth files in edge/ for sensor_index  " << sensor_index_folder_suffix << std::endl;
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             char file_name_input_image[50];
             std::cout << "current_frame_index " << current_frame_index << std::endl;
-            ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+            ushort evaluation_frame_index = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
-            sprintf(file_name_input_image, "depth_000%03d_10.png", vires_frame_count);
-            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_input_image;
-            image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
+            sprintf(file_name_input_image, "depth_000%03d_10.png", evaluation_frame_index);
+            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;            image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
             if ( image_02_frame.data == NULL ) {
                 std::cerr << input_image_path << " not found" << std::endl;
                 throw ("No image file found error");

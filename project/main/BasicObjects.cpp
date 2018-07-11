@@ -267,12 +267,14 @@ void BasicObjects::calcBBFrom3DPosition() {
     unsigned long FRAME_COUNT = ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
+    char sensor_index_folder_suffix[50];
+    sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
     for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
         tempGroundTruthImage = cv::Scalar::all(255);
 
         sprintf(file_name_image, "000%03d_10.png", current_frame_index );
-        std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + file_name_image;
+        std::string input_image_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image;
 
         sprintf(file_name_image_output, "000%03d_10_bb.png", current_frame_index );
         //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
