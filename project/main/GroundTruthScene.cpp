@@ -159,7 +159,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
-                boost::filesystem::remove("../position_cpp_" + std::to_string(sensor_group_index) + ".yml");
                 std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
 
                 std::unique_ptr<Noise> noise;
@@ -247,12 +246,16 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
         sleep(1); // Wait before starting vtd again.
 
+
+        ushort mWidth=(ushort)Dataset::getFrameSize().width;
+        ushort mHeight=(ushort)Dataset::getFrameSize().height;
+        ushort mPosX_left=200;
+        ushort mPosY_left=0;
+        ushort mPosX_right=200;
+        ushort mPosY_right=600;
+        bool mBorder=true;
+
         /*
-        mWidth=1200
-        mHeight=400
-        mPosX=200
-        mPosY=600
-        mBorder=true
         mScreen=0
         mVisual=$7
         mViewportLeft=$8
@@ -262,11 +265,20 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         */
 
 
-        //sprintf(command, "cd /local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Setups/Standard_test/Scripts/; bash configureDisplay.sh %d %d 200 600 true 0",
-        //        Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+        sprintf(command, "cd /local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Setups/Standard_test/Scripts/; bash configureDisplay.sh %d %d %d %d %s AutoCfgDisplay1.xml",
+                mWidth, mHeight,mPosX_left,mPosY_left,(mBorder==true?"on":"off"));
         std::cout << command << std::endl;
         system(command);
-        std::cout << " configureDisplay for Image Generator - render surface, location, height, etc. Parameters will be fine tunedusing SCP commands" << std::endl;
+
+        std::cout << " configureDisplay for Image Generator - render surface, location, height, etc. Parameters will be fine tuned using SCP commands" << std::endl;
+        sleep(1); // Give some time for bash process to complete
+
+        sprintf(command, "cd /local/git/MotionFlowPriorityGraphSensors/VIRES/VTD.2.1/Data/Setups/Standard_test/Scripts/; bash configureDisplay.sh %d %d %d %d %s AutoCfgDisplay2.xml",
+                mWidth, mHeight,mPosX_right,mPosY_right,(mBorder==true?"on":"off"));
+        std::cout << command << std::endl;
+        system(command);
+
+        sleep(1); // Give some time for bash process to complete
 
 
         //if (m_environment == "blue_sky") {

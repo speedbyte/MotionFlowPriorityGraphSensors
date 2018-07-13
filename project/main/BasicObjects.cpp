@@ -306,6 +306,8 @@ void BasicObjects::calcBBFrom3DPosition() {
 
 void BasicObjects::writePositionInYaml(std::string suffix) {
 
+    boost::filesystem::remove("../position_" + suffix + std::to_string(m_sensorGroupCount) + ".yml");
+
     cv::FileStorage write_fs;
     write_fs.open("../position_" + suffix + std::to_string(m_sensorGroupCount) + ".yml", cv::FileStorage::WRITE);
     unsigned long FRAME_COUNT = 0;

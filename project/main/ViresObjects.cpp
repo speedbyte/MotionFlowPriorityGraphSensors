@@ -524,9 +524,6 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                         simFrame, simTime, data->imgSize, data->id);
             }
 
-            fprintf(stderr, "ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
-                    simFrame, simTime, data->imgSize, data->id);
-
             if (!m_dumpInitialFrames) {
                 mImageCount++;
             }
