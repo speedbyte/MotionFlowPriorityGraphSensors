@@ -167,7 +167,8 @@ void GroundTruthFlow::generate_depth_images(ushort SENSOR_COUNT) {
                 std::cerr << input_image_path << " not found" << std::endl;
                 throw ("No image file found error");
             }
-            cv::MatConstIterator iterate_depth;
+            cv::MatConstIterator iterate_depth = image_02_frame.begin();
+            for ( ; )
             cv::imshow("depth_image", image_02_frame);
             cv::waitKey(0);
         }

@@ -245,6 +245,11 @@ void Mat_to_array() {
     cv::Mat tempMatrix(3,3,CV_32FC2);
     cv::randu(tempMatrix, 1, 5);
 
+    cv::Mat tempMatrix_depth = cv::imread("/local/git/MotionFlowPriorityGraphSensors/local_datasets//vires_dataset/data/stereo_flow/two/blue_sky_01/depth_000000_10.png", CV_LOAD_IMAGE_UNCHANGED);
+
+    std::cout << tempMatrix_depth.channels() << " " << tempMatrix_depth.total();
+
+
     //assert(tempMatrix.channels() == 3);
 
     // TODO take all the non 0 data in a float matrix and then call FlowImage Constructor with additional data
@@ -255,7 +260,6 @@ void Mat_to_array() {
 
     //float array[m_dataset.getFrameSize().width*m_dataset.getFrameSize().height][3];
     float *array = (float *)malloc(2*sizeof(float)*3*3);
-    //cv::MatConstIterator_<cv::Vec3f> it = tempMatrix.begin<cv::Vec3f>();
     cv::MatConstIterator_<cv::Vec2f> it = tempMatrix.begin<cv::Vec2f>();
     for (unsigned i = 0; it != tempMatrix.end<cv::Vec2f>(); it++ ) {
         std::cout << (*it)[0] << std::endl;
@@ -266,6 +270,23 @@ void Mat_to_array() {
             i++;
         }
     }
+
+
+    cv::MatConstIterator it_depth = tempMatrix_depth.begin<cv::Vec4b>();
+
+    for (unsigned row = 0; row < tempMatrix_depth.rows; row++ ) {
+        for (unsigned col = 0; col < tempMatrix_depth.cols; col++ ) {
+//            for (unsigned channel = 0; channel < tempMatrix_depth.channels(); channel++ ) {
+                ushort channel = 3;
+                ushort val = tempMatrix_depth.at<cv::Vec4b>(row, col)[channel];
+                if ( val != 255 ) {
+                    printf("%u for channel = %d\n", val, channel);
+                }
+                //std::cout << tempMatrix_depth.at<cv::Vec4b>(row, col)[channel] << std::endl;
+            //}
+        }
+    }
+
     std::cout << tempMatrix << std::endl;
     for ( unsigned i = 0; i < 18 ; i++ ) {
         std::cout << *(array+i) << std::endl;
