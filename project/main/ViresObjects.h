@@ -73,8 +73,14 @@ public:
     }
 
     void openAllFileHandles() {
+
+        boost::filesystem::remove("../object_state_" + std::to_string(m_sensorGroupCount) + ".bin");
         fstream_output_object_state = std::ofstream("../object_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::out | std::ios::binary);
+
+        boost::filesystem::remove("../sensor_state_" + std::to_string(m_sensorGroupCount) + ".bin");
         fstream_output_sensor_state = std::ofstream("../sensor_state_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::out | std::ios::binary);
+
+        boost::filesystem::remove("../sensor_object_" + std::to_string(m_sensorGroupCount) + ".bin");
         fstream_output_sensor_object = std::ofstream("../sensor_object_" + std::to_string(m_sensorGroupCount) + ".bin", std::ios::out | std::ios::binary);
     }
 
