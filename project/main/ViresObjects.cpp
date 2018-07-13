@@ -458,7 +458,11 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
         // jump data header
         memcpy(image_data_, reinterpret_cast<char *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
 
+        char file_name_image[50], sensor_index_folder_suffix[50];
+        sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+
         if (image_info_.imgSize == image_info_.width * image_info_.height * 3) {
+            sprintf(file_name_image, "000%03d_10.png", mImageCount);
             png::image<png::rgb_pixel> save_image(image_info_.width, image_info_.height);
             unsigned int count = 0;
             for (int32_t v = 0; v < image_info_.height; v++) {
@@ -472,11 +476,8 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                 }
             }
 
-            char file_name_image[50];
-
             if (!m_dumpInitialFrames) {
-                sprintf(file_name_image, "000%03d_10.png", mImageCount);
-                std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + file_name_image; //+ "/" +  file_name_image;
+                std::string input_image_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
                     fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
@@ -493,6 +494,8 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
         } else {
             png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
             unsigned int count = 0;
+            sprintf(file_name_image, "depth_000%03d_10.png", mImageCount);
+
             for (int32_t v = 0; v < image_info_.height; v++) {
                 for (int32_t u = 0; u < image_info_.width; u++) {
                     png::rgba_pixel val;
@@ -504,11 +507,8 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                 }
             }
 
-            char depth_file_name_image[50];
-
             if (!m_dumpInitialFrames) {
-                sprintf(depth_file_name_image, "depth_000%03d_10.png", mImageCount);
-                std::string input_image_depth_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + depth_file_name_image; //+ "/" +  file_name_image;
+                std::string input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
                     fprintf(stderr, "saving depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
@@ -527,9 +527,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             if (!m_dumpInitialFrames) {
                 mImageCount++;
             }
-
         }
-
 
         mHaveImage = true;
     }
