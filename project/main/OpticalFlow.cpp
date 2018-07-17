@@ -100,7 +100,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
         cv::Mat flowFrame;
         flowFrame.create(Dataset::getFrameSize(), CV_32FC3);
-        flowFrame = cv::Scalar_<unsigned>(0, 0, 0);
+        flowFrame.setTo(cv::Scalar_<unsigned>(0, 0, 0));
         assert(flowFrame.channels() == 3);
 
         if (visibility) {
@@ -112,6 +112,10 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
                     colRange(cvRound(columnBegin - (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER)),
                              (cvRound(columnBegin + width + (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER))));
 
+            // 2nd method - Frame differencing
+
+
+
             cv::Size roi_size;
             cv::Point roi_offset;
             roi.locateROI(roi_size, roi_offset);
@@ -121,7 +125,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
                     current_frame_index).second;
 
             if (m_resultordner == "/ground_truth") {
-                // gt_displacement
+                // gt_displacement - 1st method
                 roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
 
                 for (unsigned j = 0; j < width; j += 1) {
@@ -136,6 +140,17 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
                     }
                 }
+
+                // gt_displacement - 2nd method
+                std::vector<cv::Point2i> dummy(100);
+                for (unsigned pts_index = 0; pts_index < dummy.size(); pts_index++) {
+
+                        frame_stencil_displacement.push_back(std::make_pair(
+                                cv::Point2f(dummy.at(pts_index).x, dummy.at(pts_index).y),
+                                gt_displacement));
+                        frame_stencil_visibility.push_back(visibility);
+                }
+
             } else {
 
                 if (m_weather == "blue_sky"  || m_weather == "heavy_snow") {
@@ -146,9 +161,9 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
                               << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
                     //std::cout << next_pts_array << std::endl;
-
                     std::string output_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
+                    // 1st method
                     for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                         for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
@@ -165,8 +180,28 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
                                             cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
                                             algo_displacement));
                                     frame_stencil_visibility.push_back(visibility);
-
                                 }
+                            }
+                        }
+                    }
+
+                    // 2nd method
+                    std::vector<cv::Point2i> dummy(100);
+                    for (unsigned pts_index = 0; pts_index < dummy.size(); pts_index++) {
+
+                        for (ushort next_pts_index = 0;
+                             next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
+                            if (((dummy.at(pts_index).x ) ==
+                                 std::round(frame_next_pts_array.at(next_pts_index).x)) &&
+                                ((dummy.at(pts_index).y ) ==
+                                 std::round(frame_next_pts_array.at(next_pts_index).y))) {
+
+                                cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
+
+                                frame_stencil_displacement.push_back(std::make_pair(
+                                        cv::Point2f(dummy.at(pts_index).x, dummy.at(pts_index).y),
+                                        algo_displacement));
+                                frame_stencil_visibility.push_back(visibility);
                             }
                         }
                     }
