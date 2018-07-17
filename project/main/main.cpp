@@ -219,7 +219,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     ushort cn = 3;
     //assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_DATASET);
 
-    const std::vector<std::string> scenarios_list = {"two_none"};
+    const std::vector<std::string> scenarios_list = {"two"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
@@ -322,9 +322,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
                 gt_flow.generate_displacement_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                //gt_flow.generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                //gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                //gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                     ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()),

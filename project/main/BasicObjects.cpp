@@ -280,7 +280,7 @@ void BasicObjects::calcBBFrom3DPosition() {
         //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
 
         cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
-        if ( tempGroundTruthImageBase.data == NULL ) {
+        if ( tempGroundTruthImageBase.empty()== true ) {
             std::cerr << input_image_file_with_path << " not found" << std::endl;
             throw ("No image file found error");
         }
