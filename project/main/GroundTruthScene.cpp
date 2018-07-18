@@ -19,7 +19,6 @@
 #include "kbhit.h"
 #include "ViresObjects.h"
 #include "ObjectMetaData.h"
-#include <vires-interface/vires_configuration.h>
 #include "Utils.h"
 
 using namespace std::chrono;
@@ -286,7 +285,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     project.c_str());
             std::cout << command << std::endl;
             system(command);
-            std::cout << " I am out of bash" << std::endl;
+            std::cout << "I am out of bash" << std::endl;
         //}
         //else {
         //    sendSCPMessage(m_scpSocket, apply.c_str());
@@ -304,6 +303,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         bool connected_trigger_port = false;
         bool connected_scp_port = false;
         bool connected_module_manager_port = false;
+        bool connected_shm = false;
 
         std::string serverName = "127.0.0.1";
         setServer(serverName.c_str());
@@ -439,15 +439,24 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         if (connected_trigger_port && connected_module_manager_port && connected_scp_port) {
 
 
-            for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+            for (ushort sensor_group_index = 0;
+                    sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++) {
                 // open the shared memory for IG image output (try to attach without creating a new segment)
-                fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n", sensor_group.at(sensor_group_index).at(0).get<3>());
+                fprintf(stderr, "openCommunication: attaching to shared memory (IG image output) 0x%x....\n",
+                        sensor_group.at(sensor_group_index).at(0).get<3>());
                 void *shmPtr = openShm(sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(0).get<3>());
                 sensor_group.at(m_generation_sensor_list.at(sensor_group_index)).at(0).get<5>() = shmPtr;
                 usleep(1000);     // do not overload the CPU
+                unsigned int totalSize = 64 * 1024;
+                //connected_shm = viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).shmConfigure(shmPtr, 2, totalSize);
+                connected_shm = true;
             }
+        }
 
-            // now check the SHM for the time being
+        if (connected_shm ) {
+
+
+                // now check the SHM for the time being
             bool breaking = false;
             int count = 0;
 
@@ -480,6 +489,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             //configVires();
         }
         else {
+            std::cerr << "Error in generation" << std::endl;
             stopSimulation();
         }
 
@@ -496,9 +506,12 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorObjectFromBinaryFile("vires_");
                     viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorStateFromBinaryFile("vires_");
 
+                    // writePosition deletes the file before generating yaml file
                     viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
                     //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
                 }
+                std::cout << "Validate ground truth generation completed" << std::endl;
+
 
             }
             catch (...) {

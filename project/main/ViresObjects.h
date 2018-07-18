@@ -8,8 +8,8 @@
 #include <iostream>
 #include <unistd.h>
 #include <boost/tuple/tuple.hpp>
-#include <vires-interface/vires_configuration.h>
-#include <vires-interface/vires_common.h>
+#include <vires-interface/ViresConfiguration.h>
+#include <vires-interface/ViresInterface.h>
 #include <map>
 #include <opencv2/imgcodecs.hpp>
 #include "ObjectMetaData.h"
@@ -22,7 +22,7 @@
 
 
 
-class ViresObjects: protected Framework::ViresInterface, public BasicObjects {
+class ViresObjects: public Framework::ViresInterface, public BasicObjects {
 
 private:
 
@@ -38,8 +38,6 @@ private:
     bool         mHaveFirstFrame;
 
     bool         mHaveFirstImage;
-
-    int mImageCount;
 
     bool m_breaking;
 
@@ -61,7 +59,6 @@ public:
         mHaveImage    = 0;                                 // is an image available?
         mHaveFirstFrame    = false;
         mHaveFirstImage    = false;
-        mImageCount = 0;
 
         m_breaking = false;
         m_dumpInitialFrames = true;
@@ -102,6 +99,8 @@ public:
     bool getBreaking() {
         return m_breaking;
     }
+
+    void configureShm(void *shmPtr, unsigned int shmTotalSize);
 
     void parseStartOfFrame(const double &simTime, const unsigned int &simFrame);
 

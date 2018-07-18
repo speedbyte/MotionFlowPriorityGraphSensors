@@ -201,8 +201,10 @@ ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushor
     if (!mHaveFirstFrame) {
 
         usleep(100000);
-        std::cerr << "Flushing images in shared memory" << std::endl;
-        checkShm(shmPtr);  //empty IG buffer of spurious images
+        std::cerr << "Flushing images in shared memory before starting the simulation" << std::endl;
+        shmBufferClear(0);
+        shmBufferClear(1);
+        //checkShm(shmPtr);  //empty IG buffer of spurious images
         // only in the beginning.
 
     }
@@ -228,13 +230,16 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
 void ViresObjects::parseStartOfFrame(const double &simTime, const unsigned int &simFrame) {
     //fprintf(stderr, "I am in GroundTruthFlow %d\n,", RDB_PKG_ID_START_OF_FRAME);
     //mHaveFirstFrame = true;
-    //fprintf(stderr, "RDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
+    //fprintf(stderr, "------\nRDBHandler::parseStartOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 }
 
 void ViresObjects::parseEndOfFrame(const double &simTime, const unsigned int &simFrame) {
 
     if (simFrame == MAX_DUMPS) {
         m_dumpInitialFrames = false;
+        fprintf(stderr, "RDBHandler::shmBufferClear() simTime = %.3f, simFrame = %d\n", simTime, simFrame);
+        shmBufferClear(0);
+        shmBufferClear(1);
     }
     mHaveFirstFrame = true;
 
@@ -340,7 +345,7 @@ void ViresObjects::parseEntry(RDB_SENSOR_STATE_t *data, const double &simTime, c
 
             ushort frame_number = (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC);
             const char marker[] = "$$";
-            std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_SENSOR_STATE_t) << std::endl;
+            //std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_SENSOR_STATE_t) << std::endl;
             fstream_output_sensor_state.write(marker, sizeof(marker-1));
             fstream_output_sensor_state.write((char *)&frame_number, sizeof(frame_number));
             fstream_output_sensor_state.write((char *)data, sizeof(RDB_SENSOR_STATE_t));
@@ -368,9 +373,9 @@ simFrame, const
             fprintf(stderr, "saving ground truth for object_state simFrame = %d, simTime %f %s\n", simFrame, simTime,
                     data->base.name);
 
-            ushort frame_number = (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC);
+            ushort frame_number = (ushort) ((simFrame - (MAX_DUMPS+2)) / IMAGE_SKIP_FACTOR_DYNAMIC);
             const char marker[] = "$$";
-            std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_OBJECT_STATE_t) << std::endl;
+            //std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_OBJECT_STATE_t) << std::endl;
             fstream_output_object_state.write(marker, sizeof(marker-1));
             fstream_output_object_state.write((char *)&frame_number, sizeof(frame_number));
             fstream_output_object_state.write((char *)data, sizeof(RDB_OBJECT_STATE_t));
@@ -403,9 +408,9 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
             fprintf(stderr, "saving ground truth for sensor_object simFrame = %d, simTime %f %d\n", simFrame, simTime,
             data->id); //m_mapObjectIdToObjectName[data->id]);
 
-            ushort frame_number = (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC);
+            ushort frame_number = (ushort) ((simFrame - (MAX_DUMPS+2)) / IMAGE_SKIP_FACTOR_DYNAMIC);
             const char marker[] = "$$";
-            std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_SENSOR_OBJECT_t) << std::endl;
+            //std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_SENSOR_OBJECT_t) << std::endl;
             fstream_output_sensor_object.write(marker, sizeof(marker-1));
             fstream_output_sensor_object.write((char *)&frame_number, sizeof(frame_number));
             fstream_output_sensor_object.write((char *)data, sizeof(RDB_SENSOR_OBJECT_t));
@@ -462,7 +467,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
         sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
 
         if (image_info_.imgSize == image_info_.width * image_info_.height * 3) {
-            sprintf(file_name_image, "000%03d_10.png", mImageCount);
+            sprintf(file_name_image, "000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
             png::image<png::rgb_pixel> save_image(image_info_.width, image_info_.height);
             unsigned int count = 0;
             for (int32_t v = 0; v < image_info_.height; v++) {
@@ -484,7 +489,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                     save_image.write(input_image_file_with_path);
                 }
                 else {
-                    fprintf(stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                    fprintf(stderr, "force ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
                 }
             } else {
@@ -494,7 +499,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
         } else {
             png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
             unsigned int count = 0;
-            sprintf(file_name_image, "depth_000%03d_10.png", mImageCount);
+            sprintf(file_name_image, "depth_000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
 
             for (int32_t v = 0; v < image_info_.height; v++) {
                 for (int32_t u = 0; u < image_info_.width; u++) {
@@ -515,7 +520,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                     depth_image.write(input_image_depth_file_with_path);
                 }
                 else {
-                    fprintf(stderr, "ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                    fprintf(stderr, "force ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
                 }
                 //mImageCount++;
@@ -524,9 +529,6 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                         simFrame, simTime, data->imgSize, data->id);
             }
 
-            if (!m_dumpInitialFrames) {
-                mImageCount++;
-            }
         }
 
         mHaveImage = true;
