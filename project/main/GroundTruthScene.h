@@ -486,6 +486,10 @@ public:
             std::string module_manager_libModuleSensor_CameraTemplate, std::string module_manager_libModuleSensor_PerfectTemplate) {
 
 
+        char command[50];
+        sprintf(command, "ipcrm -M 0x%05X", shmKey);
+        system(command);
+
         std::string module_manager_libModuleCameraSensor;
         std::string module_manager_libModulePerfectSensor;
         std::string module_manager_libModulePerfectSensorInertial;

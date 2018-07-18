@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <png++/rgb_pixel.hpp>
 #include <png++/image.hpp>
+#include <vires-interface/Common/viRDBIcd.h>
 #include "ViresObjects.h"
 #include "datasets.h"
 #include "Utils.h"
@@ -238,8 +239,6 @@ void ViresObjects::parseEndOfFrame(const double &simTime, const unsigned int &si
     if (simFrame == MAX_DUMPS) {
         m_dumpInitialFrames = false;
         fprintf(stderr, "RDBHandler::shmBufferClear() simTime = %.3f, simFrame = %d\n", simTime, simFrame);
-        shmBufferClear(0);
-        shmBufferClear(1);
     }
     mHaveFirstFrame = true;
 
@@ -448,27 +447,36 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
     }
 
     if (mHaveFirstImage) { // always ignore the first image after real acquisition.
-        char *image_data_ = NULL;
+
         RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
 
         /// RDB image information of \see image_data_
         RDB_IMAGE_t image_info_;
         memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
 
-        if (NULL == image_data_) {
-            image_data_ = reinterpret_cast<char *>(malloc(image_info_.imgSize));
-        } else {
-            image_data_ = reinterpret_cast<char *>(realloc(image_data_, image_info_.imgSize));
-        }
-        // jump data header
-        memcpy(image_data_, reinterpret_cast<char *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
-
         char file_name_image[50], sensor_index_folder_suffix[50];
         sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
 
-        if (image_info_.imgSize == image_info_.width * image_info_.height * 3) {
+        std::cout << (ushort)image_info_.pixelFormat << std::endl;
+        if (image_info_.pixelFormat == RDB_PIX_FORMAT_RGB8) {
+
+            char *image_data_ = NULL;
+
+            if (NULL == image_data_) {
+                image_data_ = reinterpret_cast<char *>(malloc(image_info_.imgSize));
+            } else {
+                image_data_ = reinterpret_cast<char *>(realloc(image_data_, image_info_.imgSize));
+            }
+            // jump data header
+            memcpy(image_data_, reinterpret_cast<char *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
+
             sprintf(file_name_image, "000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
-            png::image<png::rgb_pixel> save_image(image_info_.width, image_info_.height);
+
+            cv::Mat color_image_opencv(image_info_.height, image_info_.width, CV_8UC3, image_data_);
+            cv::cvtColor(color_image_opencv, color_image_opencv, CV_RGB2BGR);
+
+            /*
+            png::image<png::rgb_pixel> color_image(image_info_.width, image_info_.height);
             unsigned int count = 0;
             for (int32_t v = 0; v < image_info_.height; v++) {
                 for (int32_t u = 0; u < image_info_.width; u++) {
@@ -477,16 +485,18 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                     val.green = (unsigned char) image_data_[count++];
                     val.blue = (unsigned char) image_data_[count++];
                     //val.alpha = (unsigned char)image_data_[count++];
-                    save_image.set_pixel(u, v, val);
+                    color_image.set_pixel(u, v, val);
                 }
             }
+            */
 
             if (!m_dumpInitialFrames) {
-                std::string input_image_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
+                std::string input_image_color_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
+                    cv::imwrite(input_image_color_file_with_path, color_image_opencv);
+                    //color_image.write(input_image_color_file_with_path);
                     fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
-                    save_image.write(input_image_file_with_path);
                 }
                 else {
                     fprintf(stderr, "force ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
@@ -496,10 +506,28 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                 fprintf(stderr, "ignoring image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                         simFrame, simTime, data->imgSize, data->id);
             }
-        } else {
+        } else if (image_info_.pixelFormat == RDB_PIX_FORMAT_DEPTH32 ) {
+
+            float *image_data_ = NULL;
+
+            if (NULL == image_data_) {
+                image_data_ = reinterpret_cast<float *>(malloc(image_info_.imgSize/4));
+            } else {
+                image_data_ = reinterpret_cast<float *>(realloc(image_data_, image_info_.imgSize/4));
+            }
+            // jump data header
+            memcpy(image_data_, reinterpret_cast<float *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize/4);
+
+            sprintf(file_name_image, "depth_000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
+
+            cv::Mat depth_image_opencv_converted;
+            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, image_data_);
+            //cv::cvtColor(depth_image_opencv, depth_image_opencv, CV_RGBA2GRAY);
+            //depth_image_opencv.convertTo(depth_image_opencv_converted, CV_32F);
+
+            /*
             png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
             unsigned int count = 0;
-            sprintf(file_name_image, "depth_000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
 
             for (int32_t v = 0; v < image_info_.height; v++) {
                 for (int32_t u = 0; u < image_info_.width; u++) {
@@ -511,13 +539,15 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                     depth_image.set_pixel(u, v, val);
                 }
             }
+            */
 
             if (!m_dumpInitialFrames) {
                 std::string input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
+                    cv::imwrite(input_image_depth_file_with_path, depth_image_opencv);
+                    //depth_image.write(input_image_depth_file_with_path);
                     fprintf(stderr, "saving depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
-                    depth_image.write(input_image_depth_file_with_path);
                 }
                 else {
                     fprintf(stderr, "force ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
@@ -528,7 +558,6 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                 fprintf(stderr, "ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                         simFrame, simTime, data->imgSize, data->id);
             }
-
         }
 
         mHaveImage = true;

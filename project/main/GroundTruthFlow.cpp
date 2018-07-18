@@ -162,12 +162,21 @@ void GroundTruthFlow::generate_depth_images(ushort SENSOR_COUNT) {
             ushort evaluation_frame_index = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
             sprintf(file_name_input_image, "depth_000%03d_10.png", evaluation_frame_index);
-            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;            image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
+            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+            image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_UNCHANGED);
             if ( image_02_frame.data == NULL ) {
                 std::cerr << input_image_path << " not found" << std::endl;
                 throw ("No image file found error");
             }
-            cv::MatConstIterator iterate_depth = image_02_frame.begin<cv::Vec4b>();
+
+            unsigned count = 0;
+            for ( ushort row = 0; row < image_02_frame.rows; row++) {
+                for ( ushort col = 0; col < image_02_frame.cols; col++) {
+
+                    std::cout << (float)image_02_frame.at<float>(row,col) << std::endl;
+                }
+            }
+
             cv::imshow("depth_image", image_02_frame);
             cv::waitKey(0);
         }

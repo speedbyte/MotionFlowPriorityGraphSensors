@@ -258,7 +258,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             GroundTruthScene *base_ptr_gt_scene;
 
             generation_list = {0};
-            evaluation_list = {1};
+            evaluation_list = {0};
 
             if (vires_dataset.execute) {
 
@@ -324,7 +324,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 gt_flow.generate_displacement_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                //gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                     ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()),

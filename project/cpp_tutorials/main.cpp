@@ -86,6 +86,20 @@ protected:
 
 int main ( int argc, char *argv[]) {
 
+    float *image_data_ = NULL;
+    char *trying = "abcdefghijklmnopqrstuvwx";
+
+    printf("%d", sizeof(trying));
+
+    image_data_ = reinterpret_cast<float *>(malloc(sizeof(trying)/4));
+    // jump data header
+    //memcpy(image_data_, reinterpret_cast<float *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize/4);
+    memcpy(image_data_, reinterpret_cast<float *>(trying), sizeof(trying));
+
+    for ( auto n = 0 ; n < 24; n++) {
+        printf("%f\n", image_data_[n]);
+    }
+
 
     auto dist_a = 0.033503235849331521;
     auto dist_b = 0.033333729126862222;
