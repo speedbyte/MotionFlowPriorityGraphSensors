@@ -1,4 +1,3 @@
-//
 // Created by veikas on 10.02.18.
 //
 
@@ -318,6 +317,24 @@ typedef struct
     uint32_t spare1;                                /**< reserved for future use                                       @unit _                                  @version 0x0100 */
 } RDB_OBJECT_CFG_DUMMY_t;
 
+/** ------ camera information ------ */
+typedef struct
+{
+    uint16_t    id;                         /**< unique ID of the camera                                @unit _                        @version 0x0100 */
+    uint16_t    width;                      /**< width of viewport                                      @unit pixel                    @version 0x0100 */
+    uint16_t    height;                     /**< height of viewport                                     @unit pixel                    @version 0x0100 */
+    uint16_t    spare0;                     /**< for future use                                         @unit _                        @version 0x0100 */
+    float       clipNear;                   /**< near clipping plane                                    @unit m                        @version 0x0100 */
+    float       clipFar;                    /**< far clipping plane                                     @unit m                        @version 0x0100 */
+    float       focalX;                     /**< focal length in x direction                            @unit pixel                    @version 0x0100 */
+    float       focalY;                     /**< focal length in y direction                            @unit pixel                    @version 0x0100 */
+    float       principalX;                 /**< position of principal point in x direction             @unit pixel                    @version 0x0100 */
+    float       principalY;                 /**< position of principal point in y direction             @unit pixel                    @version 0x0100 */
+    RDB_COORD_t pos;                        /**< position and orientation                               @unit m,m,m,rad,rad,rad        @version 0x0100 */
+    uint32_t    spare1[4];                  /**< for future use                                         @unit _                        @version 0x0100 */
+} RDB_CAMERA_DUMMY_t;
+
+
 void ViresObjects::parseEntry(RDB_OBJECT_CFG_t *data, const double &simTime, const unsigned int &
 simFrame, const
                                           unsigned short &pkgId, const unsigned short &flags,
@@ -448,11 +465,9 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
 
     if (mHaveFirstImage) { // always ignore the first image after real acquisition.
 
-        RDB_IMAGE_t *image = reinterpret_cast<RDB_IMAGE_t *>(data); /// raw image data
-
         /// RDB image information of \see image_data_
         RDB_IMAGE_t image_info_;
-        memcpy(&image_info_, image, sizeof(RDB_IMAGE_t));
+        memcpy(&image_info_, data, sizeof(RDB_IMAGE_t));
 
         char file_name_image[50], sensor_index_folder_suffix[50];
         sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
@@ -460,41 +475,15 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
         std::cout << (ushort)image_info_.pixelFormat << std::endl;
         if (image_info_.pixelFormat == RDB_PIX_FORMAT_RGB8) {
 
-            char *image_data_ = NULL;
-
-            if (NULL == image_data_) {
-                image_data_ = reinterpret_cast<char *>(malloc(image_info_.imgSize));
-            } else {
-                image_data_ = reinterpret_cast<char *>(realloc(image_data_, image_info_.imgSize));
-            }
-            // jump data header
-            memcpy(image_data_, reinterpret_cast<char *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize);
-
             sprintf(file_name_image, "000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
 
-            cv::Mat color_image_opencv(image_info_.height, image_info_.width, CV_8UC3, image_data_);
+            cv::Mat color_image_opencv(image_info_.height, image_info_.width, CV_8UC3, (reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
             cv::cvtColor(color_image_opencv, color_image_opencv, CV_RGB2BGR);
-
-            /*
-            png::image<png::rgb_pixel> color_image(image_info_.width, image_info_.height);
-            unsigned int count = 0;
-            for (int32_t v = 0; v < image_info_.height; v++) {
-                for (int32_t u = 0; u < image_info_.width; u++) {
-                    png::rgb_pixel val;
-                    val.red = (unsigned char) image_data_[count++];
-                    val.green = (unsigned char) image_data_[count++];
-                    val.blue = (unsigned char) image_data_[count++];
-                    //val.alpha = (unsigned char)image_data_[count++];
-                    color_image.set_pixel(u, v, val);
-                }
-            }
-            */
 
             if (!m_dumpInitialFrames) {
                 std::string input_image_color_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
                     cv::imwrite(input_image_color_file_with_path, color_image_opencv);
-                    //color_image.write(input_image_color_file_with_path);
                     fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
                 }
@@ -508,20 +497,16 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             }
         } else if (image_info_.pixelFormat == RDB_PIX_FORMAT_DEPTH32 ) {
 
-            float *image_data_ = NULL;
-
-            if (NULL == image_data_) {
-                image_data_ = reinterpret_cast<float *>(malloc(image_info_.imgSize/4));
-            } else {
-                image_data_ = reinterpret_cast<float *>(realloc(image_data_, image_info_.imgSize/4));
-            }
-            // jump data header
-            memcpy(image_data_, reinterpret_cast<float *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize/4);
-
             sprintf(file_name_image, "depth_000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
 
+            unsigned* roundoff_float = new unsigned[image_info_.imgSize/sizeof(unsigned)];
+            float *input_float = reinterpret_cast<float *>((reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
+            for ( auto x = 0; x < 100; /*image_info_.imgSize/sizeof(unsigned)*/ x++) {
+                roundoff_float[x] = static_cast<unsigned>(std::floor(input_float[x]));
+                printf("%u\t" , roundoff_float[x]);
+            }
             cv::Mat depth_image_opencv_converted;
-            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, image_data_);
+            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_8UC4, roundoff_float);
             //cv::cvtColor(depth_image_opencv, depth_image_opencv, CV_RGBA2GRAY);
             //depth_image_opencv.convertTo(depth_image_opencv_converted, CV_32F);
 

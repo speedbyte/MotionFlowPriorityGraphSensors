@@ -602,3 +602,19 @@ void run_optical_flow_algorithm() {
 
 
 }
+
+
+/*
+png::image<png::rgb_pixel> color_image(image_info_.width, image_info_.height);
+unsigned int count = 0;
+for (int32_t v = 0; v < image_info_.height; v++) {
+    for (int32_t u = 0; u < image_info_.width; u++) {
+        png::rgb_pixel val;
+        val.red = (unsigned char) image_data_[count++];
+        val.green = (unsigned char) image_data_[count++];
+        val.blue = (unsigned char) image_data_[count++];
+        //val.alpha = (unsigned char)image_data_[count++];
+        color_image.set_pixel(u, v, val);
+    }
+}
+*/

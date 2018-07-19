@@ -111,6 +111,8 @@ void char_to_type() {
 
     printf("%ld\n", strlen(char_data_));
 
+    // Copies count bytes from the object pointed to by src to the object pointed to by dest.
+    // Both objects are reinterpreted as arrays of unsigned char.
     memcpy(my_type_data_memcpy, (char_data_), strlen(char_data_));
     my_type *my_type_data_simple = reinterpret_cast<my_type *>(char_data_);
 
@@ -129,6 +131,21 @@ void char_to_type() {
 }
 
 int main ( int argc, char *argv[]) {
+
+    unsigned int val = 0xfbc0a8fb;
+    float float_val = *(reinterpret_cast<float *>( &val ));
+    printf("answer - %f\n", float_val);
+
+    /*
+    (gdb) x 0x7fffe988134c+sizeof(RDB_IMAGE_t)
+    0x7fffe988136c:	0xfa53f8fa
+            (gdb) x 0x7fffe988134c+sizeof(RDB_IMAGE_t) + 1200*200
+    0x7fffe98bbcec:	0xfbc086fb
+            (gdb) x 0x7fffe988134c+sizeof(RDB_IMAGE_t) + 1200*200+200
+    0x7fffe98bbdb4:	0xfbc0a8fb
+     */
+
+    return 0;
 
     char_to_type<unsigned>();
     char_to_type<float>();
