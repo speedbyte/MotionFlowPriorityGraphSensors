@@ -84,22 +84,58 @@ protected:
     int num_, denom_;
 };
 
-int main ( int argc, char *argv[]) {
 
-    float *image_data_ = NULL;
-    char *trying = "abcdefghijklmnopqrstuvwx";
+float Q_rsqrt( float number )
+{
+    long i;
+    float x2, y;
+    const float threehalfs = 1.5F;
 
-    printf("%d", sizeof(trying));
+    x2 = number * 0.5F;
+    y  = number;
+    i  = * ( long * ) &y;                       // evil floating point bit level hacking
+    i = y;
+    i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
+    y  = * ( float * ) &i;
+    y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
+//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
 
-    image_data_ = reinterpret_cast<float *>(malloc(sizeof(trying)/4));
-    // jump data header
-    //memcpy(image_data_, reinterpret_cast<float *>(image) + sizeof(RDB_IMAGE_t), image_info_.imgSize/4);
-    memcpy(image_data_, reinterpret_cast<float *>(trying), sizeof(trying));
+    return y;
+}
 
-    for ( auto n = 0 ; n < 24; n++) {
-        printf("%f\n", image_data_[n]);
+template<typename my_type>
+void char_to_type() {
+
+    char  *char_data_  = static_cast<char *>("abcdefghijklmnopqrstuvwx");
+    my_type *my_type_data_memcpy = reinterpret_cast<my_type *>(malloc(strlen(char_data_)));
+
+    printf("%ld\n", strlen(char_data_));
+
+    memcpy(my_type_data_memcpy, (char_data_), strlen(char_data_));
+    my_type *my_type_data_simple = reinterpret_cast<my_type *>(char_data_);
+
+    for ( auto n = 0 ; n < strlen(char_data_)/sizeof(my_type); n++) {
+        printf("%08X\n", *(my_type_data_simple + n));
     }
 
+    printf("end of simple copy\n");
+
+    for ( auto n = 0 ; n < strlen(char_data_)/sizeof(my_type); n++) {
+        printf("%08X\n", *(my_type_data_memcpy + n));
+    }
+
+    printf("end of mem copy\n");
+
+}
+
+int main ( int argc, char *argv[]) {
+
+    char_to_type<unsigned>();
+    char_to_type<float>();
+
+    std::cout << "end of malloc, calloc" << std::endl;
+
+    printf("long %ld\n", sizeof(float));
 
     auto dist_a = 0.033503235849331521;
     auto dist_b = 0.033333729126862222;
@@ -266,7 +302,7 @@ int main ( int argc, char *argv[]) {
     ptr = nullptr;
     value = nullptr;
     //std::cout << *ptr; // Dereferencing a dangling pointer will cause undefined behavior
-    //delete ptr; // trying to deallocate the memory again will also lead to undefined behavior.
+    //delete ptr; // char_data_ to deallocate the memory again will also lead to undefined behavior.
     std::cout << "Begin Template examples" << std::endl;
     // Declare a non-pointer Storage to show it works
 
