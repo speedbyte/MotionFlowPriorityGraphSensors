@@ -499,16 +499,33 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
 
             sprintf(file_name_image, "depth_000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
 
-            unsigned* roundoff_float = new unsigned[image_info_.imgSize/sizeof(unsigned)];
-            float *input_float = reinterpret_cast<float *>((reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
-            for ( auto x = 0; x < 100; /*image_info_.imgSize/sizeof(unsigned)*/ x++) {
-                roundoff_float[x] = static_cast<unsigned>(std::floor(input_float[x]));
-                printf("%u\t" , roundoff_float[x]);
+            float *depthImageFloat = reinterpret_cast<float *>((reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
+            unsigned int *depthUnsigned = reinterpret_cast<unsigned int*>((reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
+
+            float *depthImageOutput = new float[image_info_.width * image_info_.height * 1];
+
+            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, depthImageFloat);
+
+            float nearClip = 0.1; //m_camera_info.clipNear;
+            float farClip = 1500; //m_camera_info.clipFar;
+            /*
+             *float alpha = cameraInfo->focalY / 2;
+             *float n = cameraInfo->height / 2 / tan(alpha);
+             */
+
+            for(size_t index = 0; index < image_info_.width * image_info_.height; ++index)
+            {
+                unsigned int z = depthUnsigned[index];
+                float z_normalized = (float)z / std::numeric_limits<uint>::max(); // ZMAX
+
+                //z_normalized = 0.5*(f+n)/(f-n) + (-f*n)/(f-n) * (1/d) + 0.5
+                //z_normalized: z-buffer value (normalized in [0,1]. Non-normalized fixed point zf = z * (s^n - 1 ) where n is bit depth of the depth buffer)
+                //d: distance of fragment (pixel) to xy plane of camera coordinate system
+                //nearClip: near plane (camera frustum setting)
+                //farClip: far plane (camera frustum setting)
+                float depth = ((-farClip*nearClip)/(farClip-nearClip))/(z_normalized-0.5f-0.5f*(farClip+nearClip)/(farClip-nearClip));
+                depthImageOutput[index] = depth;
             }
-            cv::Mat depth_image_opencv_converted;
-            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_8UC4, roundoff_float);
-            //cv::cvtColor(depth_image_opencv, depth_image_opencv, CV_RGBA2GRAY);
-            //depth_image_opencv.convertTo(depth_image_opencv_converted, CV_32F);
 
             /*
             png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);

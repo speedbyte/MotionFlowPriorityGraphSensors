@@ -28,42 +28,11 @@ void VTDCameraSensor::process(RDB_IMAGE_t* image)
 		std::unique_ptr<DepthImage>& depthImage = *m_depth_img;
 		copyBuffToImageData<DepthImage>(buf_img, *depthImage);
 		convertToDepth(*depthImage);
-	} else {
-		if (m_left_img) return;
-		// DONT access m_image_info.spare1 or .color, as these are pointers!
-		// See comment below in process(RDB_CAMERA_t*)
-		m_image_info = *image;
-		size_t channels = 3;
-
-		// Left image
-		m_left_img = new std::unique_ptr<ByteImage>(new ByteImage(width, height, channels));
-		std::unique_ptr<ByteImage>& leftImage = *m_left_img;
-		copyBuffToImageData<ByteImage>(buf_img, *leftImage);
-
-		// Right image
-		m_right_img = new std::unique_ptr<ByteImage>(new ByteImage(width, height, channels));
-		std::unique_ptr<ByteImage>& rightImage = *m_right_img;
-		copyBuffToImageData<ByteImage>(buf_img, *rightImage);
 	}
+
 }
 
-void VTDCameraSensor::process(RDB_CAMERA_t* camera)
-{
-	//	std::cout << "camera" << std::endl;
 
-	// DONT access m_camera_info.spare1, for it is a pointer and not deep
-	// copied by this shallow copy operation. This only works because there are
-	// no pointers in the RDB_CAMERA_t struct (and all its member strutcts)!
-	m_camera_info = *camera;
-}
-
-QImage VTDCameraSensor::getCutFromLeftImage(QRect rect)
-{
-	return QImage(m_left_img->get()->ptr,
-	              m_image_info.width,
-	              m_image_info.height,
-	              QImage::Format_RGB888).copy(rect);
-}
 
 void VTDCameraSensor::convertToDepth(DepthImage& image)
 {
@@ -94,10 +63,3 @@ void VTDCameraSensor::convertToDepth(DepthImage& image)
 	}
 }
 
-template<typename T>
-void VTDCameraSensor::copyBuffToImageData(uchar* buf_img, T& image) {
-	image.frame_nr = FrameNumber();
-	size_t bufSize = image.getImageSize();
-	memcpy(image.ptr, buf_img, bufSize);
-	ImageUtils::hFlipImageData<T>(image);
-}

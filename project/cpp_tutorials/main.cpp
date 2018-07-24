@@ -132,6 +132,24 @@ void char_to_type() {
 
 int main ( int argc, char *argv[]) {
 
+    typedef struct something {
+        float a = 120.0f;
+        unsigned int b = 0;
+    } SOMETHING;
+
+    SOMETHING float_int_conversion_tutorial;
+
+    unsigned int* ui_src = reinterpret_cast<unsigned int *>(&float_int_conversion_tutorial);
+    *ui_src = 0x3f800000;
+    float val_from_ui_src = *(reinterpret_cast<float *>(ui_src + 0));
+
+    printf( "%f\n", val_from_ui_src);
+
+    float* float_src = reinterpret_cast<float*>(&float_int_conversion_tutorial);
+    float val_from_float_src = *(float_src + 0);
+
+    printf( "%f\n", val_from_float_src);
+
     unsigned int val = 0xfbc0a8fb;
     float float_val = *(reinterpret_cast<float *>( &val ));
     printf("answer - %f\n", float_val);
