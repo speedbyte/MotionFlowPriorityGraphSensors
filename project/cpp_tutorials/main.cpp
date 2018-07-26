@@ -155,7 +155,7 @@ int main ( int argc, char *argv[]) {
     float float_val = *(reinterpret_cast<float *>( &val ));
     printf("answer - %f\n", float_val);
 
-    float z_normalized = (float)(0xfbc0a8fb / std::numeric_limits<uint>::max()); // ZMAX
+    float z_normalized = (float)(0xfbc0a8fb) / std::numeric_limits<uint>::max(); // ZMAX
 
     float nearClip = 0.1; //m_camera_info.clipNear;
     float farClip = 1500; //m_camera_info.clipFar;

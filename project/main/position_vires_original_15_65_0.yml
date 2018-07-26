@@ -44,8 +44,8 @@ frame_count_000:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -53,16 +53,16 @@ frame_count_000:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_001:
    - { name:SpyingCar, visMask:7, x_camera:4.0743341064453125e+02,
        y_camera:1.5756535339355469e+02, z_camera:1.1855648994445801e+01,
@@ -107,8 +107,8 @@ frame_count_001:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -116,16 +116,16 @@ frame_count_001:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_002:
    - { name:SpyingCar, visMask:7, x_camera:4.0921166992187500e+02,
        y_camera:1.5756291198730469e+02, z_camera:1.1845269203186035e+01,
@@ -170,8 +170,8 @@ frame_count_002:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -179,16 +179,16 @@ frame_count_002:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_003:
    - { name:SpyingCar, visMask:7, x_camera:4.1099017333984375e+02,
        y_camera:1.5756048583984375e+02, z_camera:1.1834973335266113e+01,
@@ -233,8 +233,8 @@ frame_count_003:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -242,16 +242,16 @@ frame_count_003:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_004:
    - { name:SpyingCar, visMask:7, x_camera:4.1276885986328125e+02,
        y_camera:1.5755804443359375e+02, z_camera:1.1824763298034668e+01,
@@ -297,8 +297,8 @@ frame_count_004:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -306,16 +306,16 @@ frame_count_004:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_005:
    - { name:SpyingCar, visMask:7, x_camera:4.1454772949218750e+02,
        y_camera:1.5755561828613281e+02, z_camera:1.1814638137817383e+01,
@@ -360,8 +360,8 @@ frame_count_005:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -369,16 +369,16 @@ frame_count_005:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_006:
    - { name:SpyingCar, visMask:7, x_camera:4.1632675170898438e+02,
        y_camera:1.5755317687988281e+02, z_camera:1.1804598808288574e+01,
@@ -423,8 +423,8 @@ frame_count_006:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -432,16 +432,16 @@ frame_count_006:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_007:
    - { name:SpyingCar, visMask:7, x_camera:4.1810598754882812e+02,
        y_camera:1.5755073547363281e+02, z_camera:1.1794645309448242e+01,
@@ -486,8 +486,8 @@ frame_count_007:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -495,16 +495,16 @@ frame_count_007:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_008:
    - { name:SpyingCar, visMask:7, x_camera:4.1988543701171875e+02,
        y_camera:1.5754830932617188e+02, z_camera:1.1784776687622070e+01,
@@ -549,8 +549,8 @@ frame_count_008:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -558,16 +558,16 @@ frame_count_008:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_009:
    - { name:SpyingCar, visMask:7, x_camera:4.2166503906250000e+02,
        y_camera:1.5754586791992188e+02, z_camera:1.1774994850158691e+01,
@@ -612,8 +612,8 @@ frame_count_009:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -621,16 +621,16 @@ frame_count_009:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_010:
    - { name:SpyingCar, visMask:7, x_camera:4.2344485473632812e+02,
        y_camera:1.5754342651367188e+02, z_camera:1.1765298843383789e+01,
@@ -675,8 +675,8 @@ frame_count_010:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -684,16 +684,16 @@ frame_count_010:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_011:
    - { name:SpyingCar, visMask:7, x_camera:4.2522485351562500e+02,
        y_camera:1.5754098510742188e+02, z_camera:1.1755689620971680e+01,
@@ -738,8 +738,8 @@ frame_count_011:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -747,16 +747,16 @@ frame_count_011:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_012:
    - { name:SpyingCar, visMask:7, x_camera:4.2700503540039062e+02,
        y_camera:1.5753855895996094e+02, z_camera:1.1746167182922363e+01,
@@ -801,8 +801,8 @@ frame_count_012:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -810,16 +810,16 @@ frame_count_012:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_013:
    - { name:SpyingCar, visMask:7, x_camera:4.2878540039062500e+02,
        y_camera:1.5753613281250000e+02, z_camera:1.1736731529235840e+01,
@@ -864,8 +864,8 @@ frame_count_013:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -873,16 +873,16 @@ frame_count_013:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_014:
    - { name:SpyingCar, visMask:7, x_camera:4.3056597900390625e+02,
        y_camera:1.5753369140625000e+02, z_camera:1.1727382659912109e+01,
@@ -927,8 +927,8 @@ frame_count_014:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -936,16 +936,16 @@ frame_count_014:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_015:
    - { name:SpyingCar, visMask:7, x_camera:4.3234671020507812e+02,
        y_camera:1.5753125000000000e+02, z_camera:1.1718121528625488e+01,
@@ -990,8 +990,8 @@ frame_count_015:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -999,16 +999,16 @@ frame_count_015:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_016:
    - { name:SpyingCar, visMask:7, x_camera:4.3412765502929688e+02,
        y_camera:1.5752882385253906e+02, z_camera:1.1708948135375977e+01,
@@ -1053,8 +1053,8 @@ frame_count_016:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1062,16 +1062,16 @@ frame_count_016:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_017:
    - { name:SpyingCar, visMask:7, x_camera:4.3590875244140625e+02,
        y_camera:1.5752638244628906e+02, z_camera:1.1699861526489258e+01,
@@ -1116,8 +1116,8 @@ frame_count_017:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1125,16 +1125,16 @@ frame_count_017:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_018:
    - { name:SpyingCar, visMask:7, x_camera:4.3769012451171875e+02,
        y_camera:1.5752395629882812e+02, z_camera:1.1690863609313965e+01,
@@ -1179,8 +1179,8 @@ frame_count_018:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1188,16 +1188,16 @@ frame_count_018:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_019:
    - { name:SpyingCar, visMask:7, x_camera:4.3947161865234375e+02,
        y_camera:1.5752151489257812e+02, z_camera:1.1681954383850098e+01,
@@ -1242,8 +1242,8 @@ frame_count_019:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1251,16 +1251,16 @@ frame_count_019:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_020:
    - { name:SpyingCar, visMask:7, x_camera:4.4125329589843750e+02,
        y_camera:1.5751907348632812e+02, z_camera:1.1673132896423340e+01,
@@ -1305,8 +1305,8 @@ frame_count_020:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1314,16 +1314,16 @@ frame_count_020:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_021:
    - { name:SpyingCar, visMask:7, x_camera:4.4303524780273438e+02,
        y_camera:1.5751664733886719e+02, z_camera:1.1664400100708008e+01,
@@ -1368,8 +1368,8 @@ frame_count_021:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1377,16 +1377,16 @@ frame_count_021:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_022:
    - { name:SpyingCar, visMask:7, x_camera:4.4481732177734375e+02,
        y_camera:1.5751420593261719e+02, z_camera:1.1655755996704102e+01,
@@ -1431,8 +1431,8 @@ frame_count_022:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1440,16 +1440,16 @@ frame_count_022:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_023:
    - { name:SpyingCar, visMask:7, x_camera:4.4659954833984375e+02,
        y_camera:1.5751176452636719e+02, z_camera:1.1647200584411621e+01,
@@ -1494,8 +1494,8 @@ frame_count_023:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1503,16 +1503,16 @@ frame_count_023:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_024:
    - { name:SpyingCar, visMask:7, x_camera:4.4838204956054688e+02,
        y_camera:1.5750933837890625e+02, z_camera:1.1638734817504883e+01,
@@ -1559,8 +1559,8 @@ frame_count_024:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1568,16 +1568,16 @@ frame_count_024:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_025:
    - { name:SpyingCar, visMask:7, x_camera:4.5016470336914062e+02,
        y_camera:1.5750689697265625e+02, z_camera:1.1630358695983887e+01,
@@ -1624,8 +1624,8 @@ frame_count_025:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1633,16 +1633,16 @@ frame_count_025:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_026:
    - { name:SpyingCar, visMask:7, x_camera:4.5194754028320312e+02,
        y_camera:1.5750447082519531e+02, z_camera:1.1622071266174316e+01,
@@ -1689,8 +1689,8 @@ frame_count_026:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1698,16 +1698,16 @@ frame_count_026:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_027:
    - { name:SpyingCar, visMask:7, x_camera:4.5373059082031250e+02,
        y_camera:1.5750202941894531e+02, z_camera:1.1613874435424805e+01,
@@ -1754,8 +1754,8 @@ frame_count_027:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1763,16 +1763,16 @@ frame_count_027:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_028:
    - { name:SpyingCar, visMask:7, x_camera:4.5551379394531250e+02,
        y_camera:1.5749960327148438e+02, z_camera:1.1605766296386719e+01,
@@ -1819,8 +1819,8 @@ frame_count_028:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1828,16 +1828,16 @@ frame_count_028:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_029:
    - { name:SpyingCar, visMask:7, x_camera:4.5729724121093750e+02,
        y_camera:1.5749716186523438e+02, z_camera:1.1597749710083008e+01,
@@ -1884,8 +1884,8 @@ frame_count_029:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1893,16 +1893,16 @@ frame_count_029:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_030:
    - { name:SpyingCar, visMask:7, x_camera:4.5908081054687500e+02,
        y_camera:1.5749472045898438e+02, z_camera:1.1589822769165039e+01,
@@ -1949,8 +1949,8 @@ frame_count_030:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -1958,16 +1958,16 @@ frame_count_030:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_031:
    - { name:SpyingCar, visMask:7, x_camera:4.6086462402343750e+02,
        y_camera:1.5749229431152344e+02, z_camera:1.1581986427307129e+01,
@@ -2014,8 +2014,8 @@ frame_count_031:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -2023,16 +2023,16 @@ frame_count_031:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_032:
    - { name:SpyingCar, visMask:7, x_camera:4.6264862060546875e+02,
        y_camera:1.5748985290527344e+02, z_camera:1.1574240684509277e+01,
@@ -2079,8 +2079,8 @@ frame_count_032:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -2088,16 +2088,16 @@ frame_count_032:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_033:
    - { name:SpyingCar, visMask:7, x_camera:4.6443280029296875e+02,
        y_camera:1.5748742675781250e+02, z_camera:1.1566585540771484e+01,
@@ -2144,8 +2144,8 @@ frame_count_033:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -2153,16 +2153,16 @@ frame_count_033:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_034:
    - { name:SpyingCar, visMask:7, x_camera:4.6621716308593750e+02,
        y_camera:1.5748498535156250e+02, z_camera:1.1559021949768066e+01,
@@ -2209,8 +2209,8 @@ frame_count_034:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -2218,16 +2218,16 @@ frame_count_034:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_035:
    - { name:SpyingCar, visMask:7, x_camera:4.6800177001953125e+02,
        y_camera:1.5748254394531250e+02, z_camera:1.1551548957824707e+01,
@@ -2275,8 +2275,8 @@ frame_count_035:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -2284,16 +2284,16 @@ frame_count_035:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_036:
    - { name:SpyingCar, visMask:7, x_camera:4.6978649902343750e+02,
        y_camera:1.5748010253906250e+02, z_camera:1.1544168472290039e+01,
@@ -2340,8 +2340,8 @@ frame_count_036:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -2349,16 +2349,16 @@ frame_count_036:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_037:
    - { name:SpyingCar, visMask:7, x_camera:4.7157144165039062e+02,
        y_camera:1.5747767639160156e+02, z_camera:1.1536878585815430e+01,
@@ -2405,8 +2405,8 @@ frame_count_037:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -2414,16 +2414,16 @@ frame_count_037:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_038:
    - { name:SpyingCar, visMask:7, x_camera:4.7335656738281250e+02,
        y_camera:1.5747525024414062e+02, z_camera:1.1529680252075195e+01,
@@ -2471,8 +2471,8 @@ frame_count_038:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_Perfect_0, visible:0,
        x_carrier:-4.8790000915527344e+01,
        y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
@@ -2480,81 +2480,49 @@ frame_count_038:
        h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
        off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
        off_x_sensor:2., off_y_sensor:1.,
        off_z_sensor:1.5000000000000000e+00,
        fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       fov_vertical:6.9813168048858643e-01, clip_horizontal:1.,
+       clip_vertical:40. }
 frame_count_039:
-   - { name:SpyingCar, visMask:7, x_camera:4.7514190673828125e+02,
-       y_camera:1.5747280883789062e+02, z_camera:1.1522574424743652e+01,
-       x_inertial:-5.9958652496337891e+01,
-       y_inertial:2.4692744140625000e+03,
-       z_inertial:9.5000000000000000e+00, x_usk:1.3218791961669922e+01,
-       y_usk:4.1412091255187988e+00, z_usk:0.,
-       dim_x_camera:1.5203222656250000e+02,
-       dim_y_camera:8.7353179931640625e+01,
-       dim_x_realworld:2.5139999389648438e+00,
-       dim_y_realworld:1.4800000190734863e+00,
-       dim_z_realworld:1.5199999809265137e+00,
-       speed_x_inertial:9.0665417909622192e-01,
-       speed_y_inertial:6.4229750633239746e-01, speed_z_inertial:0.,
-       speed_x:-1.9842211157083511e-02, speed_y:-1.1109338998794556e+00,
-       off_x:9.0100002288818359e-01, off_y:0., off_z:0.,
-       h_inertial:6.1635935306549072e-01, p_inertial:0.,
-       r_inertial:-3.2510496339455131e-07, h_usk:-1.5886546373367310e+00,
-       p_usk:0., r_usk:-1.5886546373367310e+00, dist_cam_to_obj:0.,
-       total_distance_covered:1.6666663885116577e+00, occ_px:0, occ_usk:0,
-       occ_inertial:0 }
-   - { name:Pedesterian, visMask:7, x_camera:5.5364862060546875e+02,
-       y_camera:1.5651586914062500e+02, z_camera:1.3439600944519043e+01,
-       x_inertial:-5.9498050689697266e+01,
-       y_inertial:2.4722167968750000e+03,
-       z_inertial:9.5000000000000000e+00, x_usk:1.5316114425659180e+01,
-       y_usk:2.0266339778900146e+00, z_usk:0.,
-       dim_x_camera:1.5319335937500000e+01,
-       dim_y_camera:4.9950500488281250e+01,
-       dim_x_realworld:3.0671301484107971e-01,
-       dim_y_realworld:3.3163401484489441e-01,
-       dim_z_realworld:1.0839899778366089e+00,
-       speed_x_inertial:-7.7463787794113159e-01,
-       speed_y_inertial:-5.3710937500000000e-01, speed_z_inertial:0.,
-       speed_x:2.6349047198891640e-02, speed_y:9.4226115942001343e-01,
-       off_x:0., off_y:0., off_z:0., h_inertial:-2.5325872898101807e+00,
-       p_inertial:0., r_inertial:0., h_usk:1.5455840826034546e+00,
-       p_usk:0., r_usk:1.5455840826034546e+00, dist_cam_to_obj:0.,
-       total_distance_covered:9.2025780677795410e-01, occ_px:0,
-       occ_usk:38, occ_inertial:38 }
-   - { name:Sensor_MM_0, visible:0, x_carrier:-4.8790000915527344e+01,
-       y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
-       h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
-       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
-       fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
-   - { name:Sensor_MM_Perfect_0, visible:0,
-       x_carrier:-4.8790000915527344e+01,
-       y_carrier:2.4610800781250000e+03, z_carrier:9.5000000000000000e+00,
-       h_carrier:2.2050139904022217e+00, p_carrier:0., r_carrier:0.,
-       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:2.,
-       off_y_sensor:1., off_z_sensor:1.5000000000000000e+00,
-       fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+   - { name:SpyingCar, visMask:0, x_camera:0., y_camera:0., z_camera:0.,
+       x_inertial:0., y_inertial:0., z_inertial:0., x_usk:0., y_usk:0.,
+       z_usk:0., dim_x_camera:0., dim_y_camera:0., dim_x_realworld:0.,
+       dim_y_realworld:0., dim_z_realworld:0., speed_x_inertial:0.,
+       speed_y_inertial:0., speed_z_inertial:0., speed_x:0., speed_y:0.,
+       off_x:0., off_y:0., off_z:0., h_inertial:0., p_inertial:0.,
+       r_inertial:0., h_usk:0., p_usk:0., r_usk:0., dist_cam_to_obj:0.,
+       total_distance_covered:0., occ_px:0, occ_usk:0, occ_inertial:0 }
+   - { name:Pedesterian, visMask:0, x_camera:0., y_camera:0., z_camera:0.,
+       x_inertial:0., y_inertial:0., z_inertial:0., x_usk:0., y_usk:0.,
+       z_usk:0., dim_x_camera:0., dim_y_camera:0., dim_x_realworld:0.,
+       dim_y_realworld:0., dim_z_realworld:0., speed_x_inertial:0.,
+       speed_y_inertial:0., speed_z_inertial:0., speed_x:0., speed_y:0.,
+       off_x:0., off_y:0., off_z:0., h_inertial:0., p_inertial:0.,
+       r_inertial:0., h_usk:0., p_usk:0., r_usk:0., dist_cam_to_obj:0.,
+       total_distance_covered:0., occ_px:0, occ_usk:0, occ_inertial:0 }
+   - { name:Sensor_MM_0, visible:0, x_carrier:0., y_carrier:0.,
+       z_carrier:0., h_carrier:0., p_carrier:0., r_carrier:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
+       off_y_sensor:0., off_z_sensor:0., fov_horizontal:0.,
+       fov_vertical:0., clip_horizontal:0., clip_vertical:0. }
+   - { name:Sensor_MM_Perfect_0, visible:0, x_carrier:0., y_carrier:0.,
+       z_carrier:0., h_carrier:0., p_carrier:0., r_carrier:0.,
+       h_sensor:0., p_sensor:0., r_sensor:0., off_x_sensor:0.,
+       off_y_sensor:0., off_z_sensor:0., fov_horizontal:0.,
+       fov_vertical:0., clip_horizontal:0., clip_vertical:0. }
    - { name:Sensor_MM_PerfectInertial_0, visible:0, x_carrier:0.,
        y_carrier:0., z_carrier:0., h_carrier:0., p_carrier:0.,
        r_carrier:0., h_sensor:0., p_sensor:0., r_sensor:0.,
-       off_x_sensor:2., off_y_sensor:1.,
-       off_z_sensor:1.5000000000000000e+00,
-       fov_horizontal:1.0471975803375244e+00,
-       fov_vertical:6.9813168048858643e-01, fov_horizontal_off:0.,
-       fov_vertical_off:0. }
+       off_x_sensor:0., off_y_sensor:0., off_z_sensor:0.,
+       fov_horizontal:0., fov_vertical:0., clip_horizontal:0.,
+       clip_vertical:0. }
 frame_count_040:
    - { name:SpyingCar, visMask:7, x_camera:4.7692742919921875e+02,
        y_camera:1.5747036743164062e+02, z_camera:1.1515561103820801e+01,

@@ -109,6 +109,7 @@ void ViresObjects::readSensorStateFromBinaryFile(std::string suffix) {
 
     cv::Point3f position_sensor_carrier, orientation_sensor_carrier, position_sensor, orientation_sensor, offset_sensor;
     cv::Point2f fov;
+    cv::Point2f clip;
 
     RDB_SENSOR_STATE_t sensor_state_data;
     RDB_SENSOR_STATE_t *data = &sensor_state_data;
@@ -148,10 +149,11 @@ void ViresObjects::readSensorStateFromBinaryFile(std::string suffix) {
                                          (float) data->pos.r);
 
         fov = cv::Point2f(data->fovHV[0], data->fovHV[1]);
+        clip = cv::Point2f(data->clipNF[0], data->clipNF[1]);
 
         m_mapSensorNameToSensorMetaData[data->name]->atFrameNumberSensorState(
                 (ushort) frame_number, position_sensor_carrier,
-                orientation_sensor_carrier, orientation_sensor, offset_sensor, fov);
+                orientation_sensor_carrier, orientation_sensor, offset_sensor, fov, clip);
     }
 
 }

@@ -45,7 +45,7 @@ typedef struct sensor_rotation_carrier_rad { float rotation_rx_roll_rad; float r
 //offset. Shift of point from the center of mass
 typedef struct sensor_offset_m { float offset_x; float offset_y; float offset_z; } sensor_offset_m_str;
 
-typedef struct sensor_fov_rad { float horizontal; float vertical; float horizontal_offset; float vertical_offset; } sensor_fov_rad_str;
+typedef struct sensor_cam_info { float fov_horizontal_rad; float fov_vertical_rad; float near_m; float far_m; } sensor_cam_info_str;
 
 
 class STRUCT_GT_SENSORS_ALL {
@@ -116,7 +116,7 @@ public:
 
     sensor_offset_m_str m_sensor_offset_m;
 
-    sensor_fov_rad_str m_sensor_fov_rad;
+    sensor_cam_info_str m_sensor_cam_info;
 
     /*
      Remarks about 3D information
@@ -222,7 +222,8 @@ public:
 
     virtual void pushVisibility(bool visibility) {}
 
-    void atFrameNumberSensorState(ushort frameNumber, cv::Point3f position_carrier, cv::Point3f orientation_carrier,  cv::Point3f orientation_sensor, cv::Point3f offset_sensor, cv::Point2f fov ) {
+    void atFrameNumberSensorState(ushort frameNumber, cv::Point3f position_carrier, cv::Point3f orientation_carrier,  cv::Point3f orientation_sensor, cv::Point3f offset_sensor, cv::Point2f fov,
+            cv::Point2f clip) {
 
         m_sensor_gt_all.at(frameNumber).m_sensor_location_carrier_m.location_x_m = position_carrier.x;
         m_sensor_gt_all.at(frameNumber).m_sensor_location_carrier_m.location_y_m = position_carrier.y;
@@ -240,8 +241,10 @@ public:
         m_sensor_gt_all.at(frameNumber).m_sensor_offset_m.offset_y = offset_sensor.y;
         m_sensor_gt_all.at(frameNumber).m_sensor_offset_m.offset_z = offset_sensor.z;
 
-        m_sensor_gt_all.at(frameNumber).m_sensor_fov_rad.horizontal = fov.x;
-        m_sensor_gt_all.at(frameNumber).m_sensor_fov_rad.vertical = fov.y;
+        m_sensor_gt_all.at(frameNumber).m_sensor_cam_info.fov_horizontal_rad = fov.x;
+        m_sensor_gt_all.at(frameNumber).m_sensor_cam_info.fov_vertical_rad = fov.y;
+        m_sensor_gt_all.at(frameNumber).m_sensor_cam_info.near_m = clip.x;
+        m_sensor_gt_all.at(frameNumber).m_sensor_cam_info.far_m = clip.y;
 
 
     }

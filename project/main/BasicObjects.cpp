@@ -115,7 +115,7 @@ void BasicObjects::calcBBFrom3DPosition() {
                 cv::Point3f final;
 
                 sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(
-                        current_frame_index).m_sensor_fov_rad;
+                        current_frame_index).m_sensor_cam_info;
 
 
                 for (auto i = 0; i < 9; i++) {
@@ -449,13 +449,13 @@ void BasicObjects::writePositionInYaml(std::string suffix) {
                     << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_offset_m.offset_z
 
                     << "fov_horizontal"
-                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.horizontal
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_cam_info.fov_horizontal_rad
                     << "fov_vertical"
-                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_fov_rad.vertical
-                    << "fov_horizontal_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                    current_frame_index).m_sensor_fov_rad.horizontal_offset
-                    << "fov_vertical_off" << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(
-                    current_frame_index).m_sensor_fov_rad.vertical_offset
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_cam_info.fov_vertical_rad
+                    << "clip_horizontal"
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_cam_info.near_m
+                    << "clip_vertical"
+                    << m_ptr_customSensorMetaDataList.at(sen_index)->getAll().at(current_frame_index).m_sensor_cam_info.far_m
 
                     << "}";
         }
@@ -472,7 +472,7 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
 
 
     cv::Point2f speed_usk, speed_inertial;
-    cv::Point2f dimension_pixel, sensor_fov;
+    cv::Point2f dimension_pixel, sensor_fov, sensor_clip;
     cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
     cv::Point3f position_inertial_pre, position_usk_pre, position_pixel_pre;
     float totalDistanceTravelled;
@@ -640,9 +640,12 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
                     sensor_fov = cv::Point2f((double) (*file_node_iterator)["fov_horizontal"],
                                              (double) (*file_node_iterator)["fov_vertical"]);
 
+                    sensor_clip = cv::Point2f((double) (*file_node_iterator)["clip_near"],
+                            (double) (*file_node_iterator)["clip_far"]);
+
                     (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberSensorState(
                             current_frame_index, position_inertial, orientation_inertial, orientation_usk, offset,
-                            sensor_fov);
+                            sensor_fov, sensor_clip);
 
                     (m_mapSensorNameToSensorMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberVisibility(
                             current_frame_index, (int) (*file_node_iterator)["visible"]);
