@@ -133,6 +133,7 @@ void char_to_type() {
 int main ( int argc, char *argv[]) {
 
     typedef struct something {
+        // 0x3f800000
         float a = 120.0f;
         unsigned int b = 0;
     } SOMETHING;
@@ -153,6 +154,12 @@ int main ( int argc, char *argv[]) {
     unsigned int val = 0xfbc0a8fb;
     float float_val = *(reinterpret_cast<float *>( &val ));
     printf("answer - %f\n", float_val);
+
+    float z_normalized = (float)(0xfbc0a8fb / std::numeric_limits<uint>::max()); // ZMAX
+
+    float nearClip = 0.1; //m_camera_info.clipNear;
+    float farClip = 1500; //m_camera_info.clipFar;
+    float depth = ((-farClip*nearClip)/(farClip-nearClip))/(z_normalized-0.5f-0.5f*(farClip+nearClip)/(farClip-nearClip));
 
     /*
     (gdb) x 0x7fffe988134c+sizeof(RDB_IMAGE_t)
