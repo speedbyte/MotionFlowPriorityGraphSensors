@@ -176,7 +176,7 @@ public:
         float v =  pos.y * fy /pos.z ;
 
         // Change from optical axis to origin ( top, left )
-        float x_image =  Dataset::getFrameSize().width/2 + u;
+        float x_image =  Dataset::getFrameSize().width/2 + u; // here we can get the camera info from VIRES
         float y_image =  Dataset::getFrameSize().height/2 + v;
 
         return cv::Point2f(x_image, y_image);

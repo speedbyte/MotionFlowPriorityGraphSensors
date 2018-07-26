@@ -162,6 +162,7 @@ void BasicObjects::calcBBFrom3DPosition() {
                     bounding_points_3d.at(i) = final;
 
                     cv::Point2f camPoint = Utils::worldToCameraIntrinsc(final, fov_rad.vertical, FOCAL_X, FOCAL_Y);
+                    // FOCAL_X, FOCAL_Y, principalx and principaly can be obtained from the camera info from VIRES
                     //cv::Point2f camPoint_openglfrustum = Utils::worldToCamera(final, fov_rad.vertical, FOCAL_X, FOCAL_Y);
                     bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
 

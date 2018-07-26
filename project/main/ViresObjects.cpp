@@ -506,8 +506,6 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
 
             float *depthImageOutput = new float[image_info_.width * image_info_.height * 1];
 
-            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, depthImageFloat);
-
             float nearClip = 0.1; //m_camera_info.clipNear;
             float farClip = 1500; //m_camera_info.clipFar;
             /*
@@ -518,7 +516,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             for(size_t index = 0; index < image_info_.width * image_info_.height; ++index)
             {
                 unsigned int z = depthUnsigned[index];
-                float z_normalized = (float)z / std::numeric_limits<uint>::max(); // ZMAX
+                float z_normalized = ((float)z) / std::numeric_limits<uint>::max(); // ZMAX
 
                 //z_normalized = 0.5*(f+n)/(f-n) + (-f*n)/(f-n) * (1/d) + 0.5
                 //z_normalized: z-buffer value (normalized in [0,1]. Non-normalized fixed point zf = z * (s^n - 1 ) where n is bit depth of the depth buffer)
@@ -527,7 +525,10 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                 //farClip: far plane (camera frustum setting)
                 float depth = ((-farClip*nearClip)/(farClip-nearClip))/(z_normalized-0.5f-0.5f*(farClip+nearClip)/(farClip-nearClip));
                 depthImageOutput[index] = depth;
+
             }
+
+            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, depthImageOutput);
 
             /*
             png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
