@@ -132,6 +132,7 @@ void char_to_type() {
 
 int main ( int argc, char *argv[]) {
 
+
     typedef struct something {
         // 0x3f800000
         float a = 120.0f;

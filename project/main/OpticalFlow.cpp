@@ -136,8 +136,16 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
                 current_frame_index).second;
 
-        if (m_resultordner == "/ground_truth") {
-            // gt_displacement - 1st method
+        if ( m_resultordner == "/ground_truth" ) {
+
+            //gt_displacement - 1st method
+            //cv::compare(image, image_background)
+
+            //bool pairCompare(const std::pair<double, Processor*>& firstElem, const std::pair<double, Processor*>& secondElem) {
+            //    return firstElem.first < secondElem.first;
+            //}
+            //std::sort(baryProc.begin(), baryProc.end(), pairCompare);
+
             roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
 
             for (unsigned j = 0; j < width; j += 1) {
@@ -152,6 +160,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 }
             }
+
+            bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end());
+            std::cout << "Ground truth stencil is " << isSorted << std::endl;
 
         } else {
 
@@ -345,7 +356,7 @@ void OpticalFlow::frame_stencil_displacement_frame_differencing_method(ushort se
 }
 
 
-void OpticalFlow::generate_displacement_vector(ushort SENSOR_COUNT) {
+void OpticalFlow::generate_flow_vector(ushort SENSOR_COUNT) {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
@@ -367,7 +378,8 @@ void OpticalFlow::generate_displacement_vector(ushort SENSOR_COUNT) {
 
 
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
+
+        std::cout << "saving " + m_resultordner + " flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
@@ -390,11 +402,11 @@ void OpticalFlow::generate_displacement_vector(ushort SENSOR_COUNT) {
         cv::destroyAllWindows();
     }
 
-    std::cout << "end of saving ground truth flow files " << std::endl;
+    std::cout << "end of saving " + m_resultordner + " flow files " << std::endl;
 
 }
 
-void OpticalFlow::generate_flow_frames(ushort SENSOR_COUNT) {
+void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file

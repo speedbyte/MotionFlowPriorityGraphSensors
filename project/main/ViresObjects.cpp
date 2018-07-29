@@ -547,7 +547,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             */
 
             if (!m_dumpInitialFrames) {
-                std::string input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
+                std::basic_string<char> input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
                     cv::imwrite(input_image_depth_file_with_path, depth_image_opencv);
                     //depth_image.write(input_image_depth_file_with_path);

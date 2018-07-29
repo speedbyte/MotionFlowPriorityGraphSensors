@@ -4,8 +4,12 @@ project(cpp-tutorials)
 set(CMAKE_CXX_STANDARD 11)
 
 find_package(Boost REQUIRED system filesystem)
+find_package(OpenCV REQUIRED core)
 
 include_directories(${Boost_INCLUDE_DIRS})
+include_directories(sort ${OpenCV_INCLUDE_DIRS})
+
+
 
 set(SOURCE_FILES main.cpp Overload.cpp Template.cpp Larger.cpp)
 add_executable(main ${SOURCE_FILES})
@@ -34,6 +38,12 @@ target_link_libraries(boost_try ${Boost_LIBRARIES})
 
 add_executable(ClassTutorials ClassTutorials.cpp)
 target_link_libraries(ClassTutorials)
+
+add_executable(sort sort.cpp)
+target_link_libraries(sort ${OpenCV_LIBRARIES})
+
+add_executable(set set.cpp)
+target_link_libraries(set )
 
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}")
 message("CMAKE_MODULE_PATH is ${CMAKE_MODULE_PATH}")

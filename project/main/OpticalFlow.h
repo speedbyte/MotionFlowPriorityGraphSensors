@@ -131,7 +131,7 @@ public:
 
     void generate_collision_points(ushort SENSOR_COUNT);
 
-    void generate_displacement_vector(ushort SENSOR_COUNT);
+    void generate_flow_vector(ushort SENSOR_COUNT);
 
 
 
@@ -139,7 +139,7 @@ public:
 
     void plot_stencil(ushort SENSOR_COUNT);
 
-    void generate_flow_frames(ushort SENSOR_COUNT);
+    void save_flow_vector(ushort SENSOR_COUNT);
 
     void generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT);
 

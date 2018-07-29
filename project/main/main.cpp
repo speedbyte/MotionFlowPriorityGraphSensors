@@ -321,8 +321,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 //                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
-                gt_flow.generate_displacement_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
@@ -373,12 +373,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 std::vector<Objects *> ptr_list_of_simulated_objects;
 
-                if ( algorithm_index == 1 ) {
+                if ( algorithm_index == 0 ) {
 
                     list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
                 }
-                else if ( algorithm_index == 0 ) {
+                else if ( algorithm_index == 1 ) {
 
                     list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
@@ -433,7 +433,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
 
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_flow_frames((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                     //list_of_ptr_of_environment_OFalgorithm[env_index]->plot_stencil();
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 

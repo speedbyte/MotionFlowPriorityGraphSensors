@@ -7,34 +7,51 @@
 #include <iomanip>
 #include <algorithm>
 #include <cfloat>
+#include <functional>
 
 int main (int argc, char *argv[]) {
 
     std::cout << FLT_MAX << " " << INT32_MIN << " " << INT32_MAX << " " << std::numeric_limits<float>::infinity() << std::endl;
 
-    for ( int a = 0; a < 100; a++) {
+    std::vector<unsigned> unsigned_vector(100);
+
+    for ( auto a:unsigned_vector) {
         std::cout << rand()%255 << std::endl;
 
     }
 
     float rand_range = rand()%100;
 
-    time_t rawtime; time(&rawtime);
+    time_t rawtime;
+    time(&rawtime);
     std::cout << asctime(localtime(&rawtime));
 
+    // Combination of default_random_engine and uniform_distribution
+    // An engine is a function object that generates a uniformly distributed sequence of integer values.
+    std::default_random_engine set_of_numbers(6);
+    std::cout << set_of_numbers;
+    // A distribution is a function object that generates a sequence of values according to a mathematical formula given a sequence of values from an engine as inputs.
+    std::uniform_int_distribution<int> uniform_dist(1, 6);
+    int mean = std::uniform_int_distribution<int>{1,6}(set_of_numbers); //uniform_dist(set_of_numbers);
+
+    auto gen = std::bind(std::uniform_int_distribution<int>{1,6}, set_of_numbers);
+    mean = gen();
+    auto gen2 = std::bind(std::uniform_int_distribution<int>{1,6}, set_of_numbers);
+    mean = gen2();
+
+    std::cout << "Randomly-chosen mean: " << mean << '\n';
+
+
+    // Combination of random_device_engine and uniform_distribution
     // Seed with a real random value, if available
     std::random_device r;
     std::cout << r() << std::endl;
 
-    // Choose a random mean between 1 and 6
-    std::default_random_engine e1(6);
-    std::uniform_int_distribution<int> uniform_dist(1, 6);
-    int mean = uniform_dist(e1);
-    std::cout << "Randomly-chosen mean: " << mean << '\n';
-
     // Generate a normal distribution around that mean
     std::seed_seq seed2{r(), r(), r(), r(), r(), r(), r(), r()};
-    std::mt19937 e2(seed2);
+    std::mt19937 e2(seed2); // distribution with random_device_engine
+
+
     std::normal_distribution<> normal_dist(mean, 2);
 
     std::map<int, int> hist;
