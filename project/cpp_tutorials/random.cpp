@@ -11,6 +11,18 @@
 
 int main (int argc, char *argv[]) {
 
+    std::vector<unsigned> x_values(5), y_values(5);
+    // seed initializer
+    std::seed_seq seed({100, 1000});
+    // engine
+    std::mt19937 mt(seed);
+    // fill value
+    for ( ushort index = 0; index < 5; index++ ) {
+        x_values.at(index) = (unsigned)mt() % 100;
+        y_values.at(index) = (unsigned)mt() % 100;
+    };
+
+
     std::cout << FLT_MAX << " " << INT32_MIN << " " << INT32_MAX << " " << std::numeric_limits<float>::infinity() << std::endl;
 
     std::vector<unsigned> unsigned_vector(100);

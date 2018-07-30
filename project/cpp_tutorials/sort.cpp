@@ -20,6 +20,11 @@ struct pointSort
 };
 
 template <typename T>
+int pairSort(T lhs, T rhs){
+    return lhs < rhs ;
+}
+
+template <typename T>
 void print_coordinates(T coordinates1, T coordinates2) {
 
     for ( ushort index = 0; index < MAX_INDEX; index++ ) {
@@ -120,27 +125,9 @@ void points_mine_float() {
 
 }
 
+//coordinates1 = {{1, 2}, {9, 10}, {5.4, 6.1}, {7, 8}, {5.4, 4.5}};
+//coordinates2 = {{1, 2}, {0, 0}, {5.4, 4.5}, {7, 8}, {9, 10}};
 
-void pairs_original() {
-
-    std::vector<std::pair<unsigned, unsigned>> coordinates1(MAX_INDEX), coordinates2(MAX_INDEX);
-
-    coordinates1 = {{1, 2}, {9, 10}, {5, 6}, {7, 8}, {5, 4}};
-    coordinates2 = {{1, 2}, {0, 0}, {5, 4}, {7, 8}, {9, 10}};
-
-    std::sort(coordinates1.begin(), coordinates1.end());
-    std::sort(coordinates2.begin(), coordinates2.end());
-
-    print_coordinates<std::vector<std::pair<unsigned, unsigned>>>(coordinates1, coordinates2);
-
-    std::vector<std::pair<unsigned, unsigned>> results_coordinates(10);
-    std::set_intersection(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin());
-
-    std::cout << "begin intersection" << std::endl;
-    for ( const auto index : results_coordinates )  {
-        std::cout << index.first << " " << index.second << std::endl;
-    }
-}
 
 typedef bool (*CompareFunctionPtrPairs)(std::vector<std::pair<unsigned, unsigned>>::iterator, std::vector<std::pair<unsigned, unsigned>>::iterator);
 
@@ -163,11 +150,6 @@ T __set_intersection_pairs(T __first1, T __last1, T __first2, T __last2, T __res
 }
 
 template <typename T>
-int comparePairsSort(T lhs, T rhs){
-    return lhs < rhs ;
-}
-
-template <typename T>
 bool comparePairsIntersection(T lhs, T rhs){
     return ( (*lhs).first < (*rhs).first ) ;
 }
@@ -179,8 +161,8 @@ void pairs_mine() {
     coordinates1 = {{1, 2}, {9, 10}, {5, 6}, {7, 8}, {5, 4}};
     coordinates2 = {{1, 2}, {0, 0}, {5, 4}, {7, 8}, {9, 10}};
 
-    std::sort(coordinates1.begin(), coordinates1.end(), comparePairsSort<std::pair<unsigned, unsigned>>);
-    std::sort(coordinates2.begin(), coordinates2.end(), comparePairsSort<std::pair<unsigned, unsigned>>);
+    std::sort(coordinates1.begin(), coordinates1.end(), pairSort<std::pair<unsigned, unsigned>>);
+    std::sort(coordinates2.begin(), coordinates2.end(), pairSort<std::pair<unsigned, unsigned>>);
 
     print_coordinates<std::vector<std::pair<unsigned, unsigned>>>(coordinates1, coordinates2);
 
@@ -194,52 +176,16 @@ void pairs_mine() {
 
 }
 
-void single_values() {
-
-    std::vector<unsigned> x_values(MAX_INDEX), y_values(MAX_INDEX);
-
-    // seed initializer
-    std::seed_seq seed({100, 1000});
-    // mersenne twister with seed
-    std::mt19937 mt(seed);
-
-    for ( ushort index = 0; index < MAX_INDEX; index++ ) {
-
-        x_values.at(index) = (unsigned)mt() % 100;
-        y_values.at(index) = (unsigned)mt() % 100;
-
-    };
-
-    std::sort(x_values.begin(), x_values.end());
-    std::sort(y_values.begin(), y_values.end());
-
-    for ( ushort index = 0; index < MAX_INDEX; index++ ) {
-        std::cout << " x " << x_values.at(index) << " y " << y_values.at(index) << std::endl;
-    }
-
-    std::vector<unsigned> result(MAX_INDEX);
-    std::set_intersection(x_values.begin(), x_values.end(), y_values.begin(), y_values.end(), result.begin());
-
-    std::cout << "begin intersection" << std::endl;
-    for ( const auto index : result )  {
-        std::cout << index << std::endl;
-    }
-
-}
-
 
 int main(int argc, char *argv[]) {
 
-    //single_values();
-    //pairs_original();
-    std::cout << "-------------------------------" << std::endl;
-    //pairs_original_float();
+    // single value and pairs ( unsigend, float ... ) is implemented in STL
     std::cout << "-------------------------------" << std::endl;
     //pairs_mine();
     std::cout << "-------------------------------" << std::endl;
-    points_mine_integer();
+    //points_mine_integer();
     std::cout << "-------------------------------" << std::endl;
-    points_mine_float();
+    //points_mine_float();
     std::cout << "-------------------------------" << std::endl;
     std::cout << "-------------------------------" << std::endl;
 
