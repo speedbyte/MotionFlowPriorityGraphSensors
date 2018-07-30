@@ -96,6 +96,15 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
 }
 
+template <typename T>
+bool OpticalFlow::comparePointsSort(T lhs, T rhs){
+    if ( lhs.x == rhs.x )
+        return (lhs.y < rhs.y);
+    else
+        return (lhs.x < rhs.x) ;
+}
+
+
 
 void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
 
@@ -160,6 +169,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 }
             }
+
+            std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), comparePointsSort<std::pair<cv::Point2f, cv::Point2f>>);
+
 
             bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end());
             std::cout << "Ground truth stencil is " << isSorted << std::endl;
