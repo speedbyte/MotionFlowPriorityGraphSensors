@@ -9,6 +9,17 @@
 #define MAX_INDEX 5
 
 template <typename T>
+struct pointSort
+{
+    inline bool operator() (const T& lhs, const T& rhs) {
+        if(lhs.x == rhs.x)
+            return (lhs.y < rhs.y);
+        else
+            return lhs.x < rhs.x;
+    }
+};
+
+template <typename T>
 void print_coordinates(T coordinates1, T coordinates2) {
 
     for ( ushort index = 0; index < MAX_INDEX; index++ ) {
@@ -21,24 +32,20 @@ void print_coordinates(T coordinates1, T coordinates2) {
 
 }
 
-typedef bool (*CompareFunctionPtrPoints)(std::vector<cv::Point2i>::iterator, std::vector<cv::Point2i>::iterator);
+typedef bool (*CompareFunctionPtrPointsInteger)(std::vector<cv::Point2i>::iterator, std::vector<cv::Point2i>::iterator);
+typedef bool (*CompareFunctionPtrPointsFloat)(std::vector<cv::Point2f>::iterator, std::vector<cv::Point2f>::iterator);
+
+typedef bool (*CompareFunctionPtrPointsStrange)(std::vector<std::pair<cv::Point2f, cv::Point2f>>::iterator, std::vector<std::pair<cv::Point2f, cv::Point2f>>::iterator);
+
 
 template <typename T>
 bool comparePointsIntersection(T lhs, T rhs){
     return ( (*lhs).x < (*rhs).x) ;
 }
 
-template <typename T>
-bool comparePointsSort(T lhs, T rhs){
-    if ( lhs.x == rhs.x )
-        return (lhs.y < rhs.y);
-    else
-        return (lhs.x < rhs.x) ;
-}
 
-
-template <typename T>
-T __set_intersection_points(T __first1, T __last1, T __first2, T __last2, T __result, CompareFunctionPtrPoints __comp)
+template <typename T, typename Compare>
+T __set_intersection_points(T __first1, T __last1, T __first2, T __last2, T __result, Compare __comp)
 {
     while (__first1 != __last1 && __first2 != __last2)
         if (__comp(__first1, __first2))
@@ -56,15 +63,15 @@ T __set_intersection_points(T __first1, T __last1, T __first2, T __last2, T __re
 }
 
 
-void points_mine() {
+void points_mine_integer() {
 
     std::vector<cv::Point2i> coordinates1(MAX_INDEX), coordinates2(MAX_INDEX);
 
     coordinates1 = {{1, 2}, {9, 10}, {5, 6}, {7, 8}, {5, 4}};
     coordinates2 = {{1, 2}, {0, 0}, {5, 4}, {7, 8}, {9, 10}};
 
-    std::sort(coordinates1.begin(), coordinates1.end(), comparePointsSort<cv::Point2i>);
-    std::sort(coordinates2.begin(), coordinates2.end(), comparePointsSort<cv::Point2i>);
+    std::sort(coordinates1.begin(), coordinates1.end(), pointSort<cv::Point2i>());
+    std::sort(coordinates2.begin(), coordinates2.end(), pointSort<cv::Point2i>());
 
     for ( ushort index = 0; index < MAX_INDEX; index++ ) {
         std::cout << "co1 " << coordinates1.at(index).x << " " << coordinates1.at(index).y << std::endl;
@@ -76,13 +83,43 @@ void points_mine() {
 
     std::vector<cv::Point2i> results_coordinates(10);
 
-    __set_intersection_points<std::vector<cv::Point2i>::iterator>(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &comparePointsIntersection<std::vector<cv::Point2i>::iterator>);
+    __set_intersection_points<std::vector<cv::Point2i>::iterator, CompareFunctionPtrPointsInteger>(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &comparePointsIntersection<std::vector<cv::Point2i>::iterator>);
     std::cout << "begin intersection" << std::endl;
     for ( const auto index : results_coordinates )  {
         std::cout << index.x << " " << index.y << std::endl;
     }
 
 }
+
+void points_mine_float() {
+
+    std::vector<cv::Point2f> coordinates1(MAX_INDEX), coordinates2(MAX_INDEX);
+
+    coordinates1 = {{1, 2}, {9, 10}, {5, 6}, {7, 8}, {5, 4}};
+    coordinates2 = {{1, 2}, {0, 0}, {5, 4}, {7, 8}, {9, 10}};
+
+    std::sort(coordinates1.begin(), coordinates1.end(), pointSort<cv::Point2f>());
+    std::sort(coordinates2.begin(), coordinates2.end(), pointSort<cv::Point2f>());
+
+    for ( ushort index = 0; index < MAX_INDEX; index++ ) {
+        std::cout << "co1 " << coordinates1.at(index).x << " " << coordinates1.at(index).y << std::endl;
+    }
+
+    for ( ushort index = 0; index < MAX_INDEX; index++ ) {
+        std::cout << "co2 " << coordinates2.at(index).x << " " << coordinates2.at(index).y << std::endl;
+    }
+
+
+    std::vector<cv::Point2f> results_coordinates(10);
+
+    __set_intersection_points<std::vector<cv::Point2f>::iterator, CompareFunctionPtrPointsFloat>(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &comparePointsIntersection<std::vector<cv::Point2f>::iterator>);
+    std::cout << "begin intersection" << std::endl;
+    for ( const auto index : results_coordinates )  {
+        std::cout << index.x << " " << index.y << std::endl;
+    }
+
+}
+
 
 void pairs_original() {
 
@@ -194,11 +231,16 @@ void single_values() {
 int main(int argc, char *argv[]) {
 
     //single_values();
-    pairs_original();
+    //pairs_original();
     std::cout << "-------------------------------" << std::endl;
-    pairs_mine();
+    //pairs_original_float();
     std::cout << "-------------------------------" << std::endl;
-    points_mine();
+    //pairs_mine();
+    std::cout << "-------------------------------" << std::endl;
+    points_mine_integer();
+    std::cout << "-------------------------------" << std::endl;
+    points_mine_float();
+    std::cout << "-------------------------------" << std::endl;
     std::cout << "-------------------------------" << std::endl;
 
 }
