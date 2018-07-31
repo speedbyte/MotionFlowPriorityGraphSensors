@@ -37,7 +37,16 @@ void print_coordinates(T coordinates1, T coordinates2) {
 
 }
 
-typedef bool (*CompareFunctionPtrPairs)(std::vector<std::pair<float, float>>::iterator, std::vector<std::pair<float, float>>::iterator);
+/*
+template <typename T>
+struct CompareFunctionPtrPairsMine {
+    typedef bool (*type)(typename std::vector<std::pair<T, T>>::iterator, typename std::vector<std::pair<T, T>>::iterator);
+};
+*/
+template <typename T>
+using CompareFunctionPtrPairsMine = bool (*)(typename std::vector<std::pair<T, T>>::iterator, typename std::vector<std::pair<T, T>>::iterator);
+
+//typedef bool (*CompareFunctionPtrPairs)(std::vector<std::pair<float, float>>::iterator, std::vector<std::pair<float, float>>::iterator);
 
 typedef bool (*CompareFunctionPtrPointsInteger)(std::vector<cv::Point2i>::iterator, std::vector<cv::Point2i>::iterator);
 typedef bool (*CompareFunctionPtrPointsFloat)(std::vector<cv::Point2f>::iterator, std::vector<cv::Point2f>::iterator);
