@@ -10,6 +10,7 @@
 #include "FlowImageExtended.h"
 #include "Objects.h"
 #include "Utils.h"
+#include "SortandIntersect.h"
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
 using namespace std::chrono;
@@ -96,15 +97,6 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
 }
 
-template <typename T>
-bool OpticalFlow::comparePointsSort(T lhs, T rhs){
-    if ( lhs.x == rhs.x )
-        return (lhs.y < rhs.y);
-    else
-        return (lhs.x < rhs.x) ;
-}
-
-
 
 void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
 
@@ -150,11 +142,6 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             //gt_displacement - 1st method
             //cv::compare(image, image_background)
 
-            //bool pairCompare(const std::pair<double, Processor*>& firstElem, const std::pair<double, Processor*>& secondElem) {
-            //    return firstElem.first < secondElem.first;
-            //}
-            //std::sort(baryProc.begin(), baryProc.end(), pairCompare);
-
             roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
 
             for (unsigned j = 0; j < width; j += 1) {
@@ -170,10 +157,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 }
             }
 
-            std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), comparePointsSort<std::pair<cv::Point2f, cv::Point2f>>);
-
-
-            bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end());
+            std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PointsSort<float>());
+            bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PointsSort<float>());
             std::cout << "Ground truth stencil is " << isSorted << std::endl;
 
         } else {
@@ -187,6 +172,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 //std::cout << next_pts_array << std::endl;
 
+                // benchmark tjis and then use intersection
                 for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                     for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 

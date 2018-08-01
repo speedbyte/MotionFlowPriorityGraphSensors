@@ -86,8 +86,9 @@ void points_mine() {
 /// --------------------------------------------------------------------------------------------------------------------
 
 template <typename T>
-struct pointSortProject
+class PointsSort
 {
+public:
     inline bool operator() (const std::pair<cv::Point_<T>, cv::Point_<T>>& lhs, const std::pair<cv::Point_<T>, cv::Point_<T>>& rhs) {
         if(lhs.first.x == rhs.first.x)
             return (lhs.first.y < rhs.first.y);
@@ -120,12 +121,12 @@ void points_mine_project() {
     coordinates1 = {std::make_pair(cv::Point_<T>(1, 2), cv::Point_<T>(0,0)), std::make_pair(cv::Point_<T>(9, 10), cv::Point_<T>(0,0)), std::make_pair(cv::Point_<T>(5.4, 6.1), cv::Point_<T>(0,0)), std::make_pair(cv::Point_<T>(7, 8), cv::Point_<T>(0,0)), std::make_pair(cv::Point_<T>(5.4, 4.5), cv::Point_<T>(0,0))};
     coordinates2 = {std::make_pair(cv::Point_<T>(1, 2), cv::Point_<T>(0,0)), std::make_pair(cv::Point_<T>(0, 0), cv::Point_<T>(0,0)), std::make_pair(cv::Point_<T>(5.4, 4.5), cv::Point_<T>(0,0)), std::make_pair(cv::Point_<T>(7, 8), cv::Point_<T>(0,0)), std::make_pair(cv::Point_<T>(9, 10), cv::Point_<T>(0,0))};
 
-    std::sort(coordinates1.begin(), coordinates1.end(), pointSortProject<T>());
-    std::sort(coordinates2.begin(), coordinates2.end(), pointSortProject<T>());
+    std::sort(coordinates1.begin(), coordinates1.end(), PointsSort<T>());
+    std::sort(coordinates2.begin(), coordinates2.end(), PointsSort<T>());
 
     print_coordinates_points_project(coordinates1, coordinates2);
 
-    bool sorted = std::is_sorted(coordinates1.begin(), coordinates1.end(), pointSortProject<T>());
+    bool sorted = std::is_sorted(coordinates1.begin(), coordinates1.end(), PointsSort<T>());
     std::cout << "sorted = " << sorted << std::endl;
 
     std::vector<std::pair<cv::Point_<T>, cv::Point_<T> > > results_coordinates(10);
