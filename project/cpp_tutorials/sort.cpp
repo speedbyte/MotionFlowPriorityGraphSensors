@@ -88,22 +88,22 @@ void points_mine() {
 template <typename T>
 struct pointSortProject
 {
-    inline bool operator() (const cv::Point_<T>& lhs, const cv::Point_<T>& rhs) {
-        if(lhs.x == rhs.x)
-            return (lhs.y < rhs.y);
+    inline bool operator() (const std::pair<cv::Point_<T>, cv::Point_<T>>& lhs, const std::pair<cv::Point_<T>, cv::Point_<T>>& rhs) {
+        if(lhs.first.x == rhs.first.x)
+            return (lhs.first.y < rhs.first.y);
         else
-            return lhs.x < rhs.x;
+            return lhs.first.x < rhs.first.x;
     }
 };
 
 template <typename T>
 void print_coordinates_points_project(T &coordinates1, T &coordinates2) {
     for (ushort index = 0; index < MAX_INDEX; index++) {
-        std::cout << "co1 " << coordinates1.at(index).first.x << " " << coordinates1.at(index).first.y << std::endl;
+        std::cout << "co1 " << coordinates1.at(index).first.x << " " << coordinates1.at(index).first.y << " " << coordinates1.at(index).second.x << " " << coordinates1.at(index).second.y << std::endl;
     }
 
     for (ushort index = 0; index < MAX_INDEX; index++) {
-        std::cout << "co2 " << coordinates2.at(index).first.x << " " << coordinates2.at(index).first.y << std::endl;
+        std::cout << "co2 " << coordinates2.at(index).first.x << " " << coordinates2.at(index).first.y << " " << coordinates2.at(index).second.x << " " << coordinates2.at(index).second.y << std::endl;
     }
 }
 
@@ -127,6 +127,7 @@ void points_mine_project() {
 
     std::vector<std::pair<cv::Point_<T>, cv::Point_<T> > > results_coordinates(10);
 
+    /*
     MyIntersection myIntersection;
     myIntersection.__set_intersection_pairs(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &(comparePointsIntersectionExplizitProject<T>));
 
@@ -134,6 +135,7 @@ void points_mine_project() {
     for ( const auto index : results_coordinates )  {
         std::cout << index.first.x << " " << index.first.y << std::endl;
     }
+     */
 }
 
 /// --------------------------------------------------------------------------------------------------------------------
@@ -196,8 +198,8 @@ int main(int argc, char *argv[]) {
 
     // single value and pairs ( unsigned, float ... ) is implemented in STL
     std::cout << "-------------------------------" << std::endl;
-    pairs_mine<float>();
-    points_mine<float>();
-    //points_mine_project<float>();
+    //pairs_mine<float>();
+    //points_mine<float>();
+    points_mine_project<float>();
 
 }
