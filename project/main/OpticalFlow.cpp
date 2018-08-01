@@ -157,8 +157,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 }
             }
 
-            std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PointsSort<float>());
-            bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PointsSort<float>());
+            //std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
+            bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
             std::cout << "Ground truth stencil is " << isSorted << std::endl;
 
         } else {
@@ -166,13 +166,12 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             if (m_weather == "blue_sky"  || m_weather == "heavy_snow") {
 
                 assert(m_ptr_list_simulated_objects.size() == m_ptr_list_gt_objects.size());
-
                 std::cout << "making a stencil on the basis of groundtruth object "
                           << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
                 //std::cout << next_pts_array << std::endl;
-
-                // benchmark tjis and then use intersection
+                // benchmark this and then use intersection
+                auto tic = std::chrono::steady_clock::now();
                 for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                     for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
@@ -194,6 +193,39 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                         }
                     }
                 }
+
+                printf ( "method 1 = %f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
+
+                frame_stencil_displacement.clear();
+                frame_stencil_visibility.clear();
+
+                std::sort(frame_next_pts_array.begin(), frame_next_pts_array.end(), PointsSort<float>());
+
+                // benchmark this and then use intersection
+                tic = std::chrono::steady_clock::now();
+                for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
+                    for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
+
+                        for (ushort next_pts_index = 0;
+                             next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
+                            if (((roi_offset.x + col_index) ==
+                                 std::round(frame_next_pts_array.at(next_pts_index).x)) &&
+                                ((roi_offset.y + row_index) ==
+                                 std::round(frame_next_pts_array.at(next_pts_index).y))) {
+
+                                cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
+
+                                frame_stencil_displacement.push_back(std::make_pair(
+                                        cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
+                                        algo_displacement));
+                                frame_stencil_visibility.push_back(visibility);
+
+                            }
+                        }
+                    }
+                }
+                std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic);
+                printf ( "method 2 = %f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
 
             } else {
 
