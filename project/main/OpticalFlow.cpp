@@ -127,6 +127,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 colRange(cvRound(columnBegin - (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER)),
                          (cvRound(columnBegin + width + (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER))));
 
+
         // 2nd method - Frame differencing
 
         cv::Size roi_size;
@@ -172,6 +173,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 //std::cout << next_pts_array << std::endl;
                 // benchmark this and then use intersection
                 auto tic = std::chrono::steady_clock::now();
+
                 for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                     for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
@@ -196,13 +198,23 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 printf ( "method 1 = %f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
 
+                // benchmark this and then use intersection
+                tic = std::chrono::steady_clock::now();
+
                 frame_stencil_displacement.clear();
                 frame_stencil_visibility.clear();
 
-                std::sort(frame_next_pts_array.begin(), frame_next_pts_array.end(), PointsSort<float>());
+                std::vector<std::pair<cv::Point2f,cv::Point2f > > temp_frame_coordinates_displacement;
+                for (ushort next_pts_index = 0;
+                     next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
+                    temp_frame_coordinates_displacement.push_back(std::make_pair(frame_next_pts_array.at(next_pts_index), displacement_array.at(next_pts_index)));
+                }
 
-                // benchmark this and then use intersection
-                tic = std::chrono::steady_clock::now();
+                std::sort(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(), PairPointsSort<float>());
+                bool isSorted = std::is_sorted(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(), PairPointsSort<float>());
+
+                //std::sort(frame_next_pts_array.begin(), frame_next_pts_array.end(), PointsSort<float>());
+
                 for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
                     for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
 
@@ -397,7 +409,6 @@ void OpticalFlow::generate_flow_vector(ushort SENSOR_COUNT) {
         std::cout << "generate_object_stencil_point_displacement_pixel_visibility for sensor_index " << sensor_index
                   << std::endl;
 
-
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(
                 m_ptr_list_gt_objects.size());
         std::vector<std::vector<std::vector<bool> > > multiframe_visibility(m_ptr_list_gt_objects.size());
@@ -406,7 +417,6 @@ void OpticalFlow::generate_flow_vector(ushort SENSOR_COUNT) {
                 sensor_index).size();
         assert(FRAME_COUNT > 0);
 
-
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
         std::cout << "saving " + m_resultordner + " flow files in flow/ for sensor_index  " << sensor_index << std::endl;
@@ -414,7 +424,6 @@ void OpticalFlow::generate_flow_vector(ushort SENSOR_COUNT) {
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             std::cout << "current_frame_index " << current_frame_index << std::endl;
-
 
             std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
@@ -455,7 +464,6 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
     char sensor_index_folder_suffix[50];
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
-
 
         unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
                 sensor_index).size();

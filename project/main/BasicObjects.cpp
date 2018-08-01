@@ -14,7 +14,7 @@
 #include "ObjectMetaData.h"
 #include "SensorMetaData.h"
 #include "Utils.h"
-/*
+
 void BasicObjects::calcBBFrom3DPosition() {
 
     cv::FileStorage write_fs;
@@ -31,8 +31,12 @@ void BasicObjects::calcBBFrom3DPosition() {
 
         tempGroundTruthImage = cv::Scalar::all(255);
 
+        char sensor_index_folder_suffix[20];
+        sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+
+
         sprintf(file_name_image, "000%03d_10.png", current_frame_index );
-        std::string input_image_file_with_path = m_generatepath.string() + "_" + std::to_string(m_sensorGroupCount) + "/" + file_name_image;
+        std::string input_image_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image;
 
         sprintf(file_name_image_output, "000%03d_10_bb.png", current_frame_index );
         //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
@@ -114,7 +118,7 @@ void BasicObjects::calcBBFrom3DPosition() {
 
                 cv::Point3f final;
 
-                sensor_fov_rad_str fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(
+                sensor_cam_info_str sensor_fov_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(
                         current_frame_index).m_sensor_cam_info;
 
 
@@ -161,7 +165,7 @@ void BasicObjects::calcBBFrom3DPosition() {
                     // The resulting points are the bounding box points in the USK co-ordinate system.
                     bounding_points_3d.at(i) = final;
 
-                    cv::Point2f camPoint = Utils::worldToCameraIntrinsc(final, fov_rad.vertical, FOCAL_X, FOCAL_Y);
+                    cv::Point2f camPoint = Utils::worldToCameraIntrinsc(final, sensor_fov_rad.fov_vertical_rad, FOCAL_X, FOCAL_Y);
                     // FOCAL_X, FOCAL_Y, principalx and principaly can be obtained from the camera info from VIRES
                     //cv::Point2f camPoint_openglfrustum = Utils::worldToCamera(final, fov_rad.vertical, FOCAL_X, FOCAL_Y);
                     bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
@@ -193,7 +197,7 @@ void BasicObjects::calcBBFrom3DPosition() {
 
                 cv::Point2f xx = Utils::worldToCameraIntrinsc(
                         cv::Point3f(object_location_m.location_y_m, object_location_m.location_z_m,
-                                    object_location_m.location_x_m), fov_rad.vertical, 980, 980);
+                                    object_location_m.location_x_m), sensor_fov_rad.fov_vertical_rad, 980, 980);
 
                 //if (( !m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).occluded )) {
 
@@ -245,17 +249,19 @@ void BasicObjects::calcBBFrom3DPosition() {
             }
         }
 
-        //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-        //cv::imshow("BB", tempGroundTruthImage);
-        //cv::waitKey(0);
-        //cv::destroyAllWindows();
+        cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+        cv::imshow("BB", tempGroundTruthImage);
+        cv::waitKey(0);
+        cv::destroyAllWindows();
         //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
         //---------------------------------------------------------------------------------
 
     }
 }
 
-*/
+
+
+/*
 void BasicObjects::calcBBFrom3DPosition() {
 
     cv::FileStorage write_fs;
@@ -290,7 +296,6 @@ void BasicObjects::calcBBFrom3DPosition() {
 
         for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
-
             m_ptr_customObjectMetaDataList.at(obj_index)->setCppData(current_frame_index);
 
         }
@@ -300,10 +305,10 @@ void BasicObjects::calcBBFrom3DPosition() {
         //cv::waitKey(0);
         //cv::destroyAllWindows();
         //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
-        /*---------------------------------------------------------------------------------*/
 
     }
 }
+*/
 
 void BasicObjects::writePositionInYaml(std::string suffix) {
 

@@ -513,7 +513,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 }
                 std::cout << "Validate ground truth generation completed" << std::endl;
 
-
             }
             catch (...) {
                 std::cerr << "VTD Generation complete, but error in generating images" << std::endl;

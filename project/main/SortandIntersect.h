@@ -8,7 +8,7 @@
 #include <opencv2/core/types.hpp>
 
 template <typename T>
-class PointsSort
+class PairPointsSort
 {
 public:
     inline bool operator() (const std::pair<cv::Point_<T>, cv::Point_<T>>& lhs, const std::pair<cv::Point_<T>, cv::Point_<T>>& rhs) {
@@ -16,6 +16,18 @@ public:
             return (lhs.first.y < rhs.first.y);
         else
             return lhs.first.x < rhs.first.x;
+    }
+};
+
+template <typename T>
+class PointsSort
+{
+public:
+    inline bool operator() (const cv::Point_<T>& lhs, const cv::Point_<T>& rhs) {
+        if(lhs.x == rhs.x)
+            return (lhs.y < rhs.y);
+        else
+            return lhs.x < rhs.x;
     }
 };
 

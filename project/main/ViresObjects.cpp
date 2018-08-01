@@ -480,12 +480,14 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             sprintf(file_name_image, "000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
 
             cv::Mat color_image_opencv(image_info_.height, image_info_.width, CV_8UC3, (reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
+            cv::Mat color_image_opencv_flipped;
             cv::cvtColor(color_image_opencv, color_image_opencv, CV_RGB2BGR);
 
             if (!m_dumpInitialFrames) {
                 std::string input_image_color_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
-                    cv::imwrite(input_image_color_file_with_path, color_image_opencv);
+                    cv::flip(color_image_opencv, color_image_opencv_flipped, 0);
+                    cv::imwrite(input_image_color_file_with_path, color_image_opencv_flipped);
                     fprintf(stderr, "saving image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
                 }
@@ -529,6 +531,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             }
 
             cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, depthImageOutput);
+            cv::Mat depth_image_opencv_flipped;
 
             /*
             png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
@@ -549,7 +552,8 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             if (!m_dumpInitialFrames) {
                 std::basic_string<char> input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
-                    cv::imwrite(input_image_depth_file_with_path, depth_image_opencv);
+                    cv::flip(depth_image_opencv, depth_image_opencv_flipped, 0);
+                    cv::imwrite(input_image_depth_file_with_path, depth_image_opencv_flipped);
                     //depth_image.write(input_image_depth_file_with_path);
                     fprintf(stderr, "saving depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
