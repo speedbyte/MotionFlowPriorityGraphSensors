@@ -11,6 +11,24 @@
 
 using namespace cpp_tutorials;
 
+template <typename T>
+struct CompareFunctionPtrPairsMine_ {
+    typedef bool (*type)(typename std::vector<std::pair<T, T>>::iterator, typename std::vector<std::pair<T, T>>::iterator);
+};
+
+template <typename T>
+using CompareFunctionPtrPairsMine = bool (*)(typename std::vector<std::pair<T, T>>::iterator, typename std::vector<std::pair<T, T>>::iterator);
+typedef bool (*FnPointerUnsigned)(typename std::vector<std::pair<unsigned, unsigned>>::iterator, typename std::vector<std::pair<unsigned, unsigned>>::iterator);
+
+
+typedef bool (*CompareFunctionPtrPairs)(std::vector<std::pair<float, float>>::iterator, std::vector<std::pair<float, float>>::iterator);
+
+typedef bool (*CompareFunctionPtrPointsInteger)(std::vector<cv::Point2i>::iterator, std::vector<cv::Point2i>::iterator);
+typedef bool (*CompareFunctionPtrPointsFloat)(std::vector<cv::Point2f>::iterator, std::vector<cv::Point2f>::iterator);
+
+typedef bool (*CompareFunctionPtrPointsStrange)(std::vector<std::pair<cv::Point2f, cv::Point2f>>::iterator, std::vector<std::pair<cv::Point2f, cv::Point2f>>::iterator);
+
+
 class MyException : public std::exception {
 public:
     const char * what () const throw () {
