@@ -125,9 +125,11 @@ void points_mine_project() {
 
     print_coordinates_points_project(coordinates1, coordinates2);
 
+    bool sorted = std::is_sorted(coordinates1.begin(), coordinates1.end(), pointSortProject<T>());
+    std::cout << "sorted = " << sorted << std::endl;
+
     std::vector<std::pair<cv::Point_<T>, cv::Point_<T> > > results_coordinates(10);
 
-    /*
     MyIntersection myIntersection;
     myIntersection.__set_intersection_pairs(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &(comparePointsIntersectionExplizitProject<T>));
 
@@ -135,7 +137,7 @@ void points_mine_project() {
     for ( const auto index : results_coordinates )  {
         std::cout << index.first.x << " " << index.first.y << std::endl;
     }
-     */
+
 }
 
 /// --------------------------------------------------------------------------------------------------------------------
@@ -181,6 +183,9 @@ void pairs_mine() {
 
     print_coordinates_pair(coordinates1, coordinates2);
 
+    bool sorted = std::is_sorted(coordinates1.begin(), coordinates1.end());
+    std::cout << "sorted = " << sorted << std::endl;
+
     std::vector<std::pair<T, T>> results_coordinates(10);
     MyIntersection myIntersection;
     myIntersection.__set_intersection_pairs(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &(comparePairsIntersectionExplizit<T>) );
@@ -198,7 +203,7 @@ int main(int argc, char *argv[]) {
 
     // single value and pairs ( unsigned, float ... ) is implemented in STL
     std::cout << "-------------------------------" << std::endl;
-    //pairs_mine<float>();
+    pairs_mine<float>();
     //points_mine<float>();
     points_mine_project<float>();
 
