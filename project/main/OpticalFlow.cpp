@@ -113,27 +113,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
     bool visibility = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(
             sensor_index).at(current_frame_index);
 
-    cv::Mat flowFrame;
-    flowFrame.create(Dataset::getFrameSize(), CV_32FC3);
-    flowFrame = cv::Scalar_<unsigned>(0, 0, 0);
-    assert(flowFrame.channels() == 3);
 
     if (visibility) {
-
-        cv::Mat roi = flowFrame.
-                rowRange(cvRound(rowBegin - (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER)),
-                         (cvRound(rowBegin + height + (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER)))).
-                colRange(cvRound(columnBegin - (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER)),
-                         (cvRound(columnBegin + width + (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER))));
-
-
-        cv::Size roi_size;
-        cv::Point roi_offset;
-        roi.locateROI(roi_size, roi_offset);
-
-        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
-                obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
-                current_frame_index).second;
 
         if ( m_resultordner == "/ground_truth" ) {
 
@@ -142,12 +123,12 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
             // 1st method
             //roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
+            cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
+                    obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
+                    current_frame_index).second;
 
             for (unsigned j = 0; j < width; j += 1) {
                 for (unsigned k = 0; k < height; k += 1) {
-
-                    //frame_next_pts_array.push_back(cv::Point2f(columnBegin + j, rowBegin + k));
-                    //displacement_array.push_back(gt_displacement);
 
                     frame_stencil_displacement.push_back(
                             std::make_pair(cv::Point2f(columnBegin + j, rowBegin + k), gt_displacement));
@@ -174,20 +155,20 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 // benchmark this and then use intersection
                 auto tic = std::chrono::steady_clock::now();
 
-                for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
-                    for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
+                for (unsigned row_index = (unsigned)rowBegin; row_index < rowBegin+height; row_index++) {
+                    for (unsigned col_index = (unsigned)columnBegin; col_index < columnBegin+width; col_index++) {
 
                         for (ushort next_pts_index = 0;
                              next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
-                            if (((roi_offset.x + col_index) ==
+                            if (((col_index) ==
                                  std::round(frame_next_pts_array.at(next_pts_index).x)) &&
-                                ((roi_offset.y + row_index) ==
+                                ((row_index) ==
                                  std::round(frame_next_pts_array.at(next_pts_index).y))) {
 
                                 cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
 
                                 frame_stencil_displacement.push_back(std::make_pair(
-                                        cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
+                                        cv::Point2f(col_index, row_index),
                                         algo_displacement));
                                 frame_stencil_visibility.push_back(visibility);
 
@@ -215,27 +196,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 //std::sort(frame_next_pts_array.begin(), frame_next_pts_array.end(), PointsSort<float>());
 
-                for (unsigned row_index = 0; row_index < roi.rows; row_index++) {
-                    for (unsigned col_index = 0; col_index < roi.cols; col_index++) {
+                MyIntersection myIntersection;
+                myIntersection.__set_intersection_pairs(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(), m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(), m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(), frame_stencil_displacement.begin());
 
-                        for (ushort next_pts_index = 0;
-                             next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
-                            if (((roi_offset.x + col_index) ==
-                                 std::round(frame_next_pts_array.at(next_pts_index).x)) &&
-                                ((roi_offset.y + row_index) ==
-                                 std::round(frame_next_pts_array.at(next_pts_index).y))) {
-
-                                cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
-
-                                frame_stencil_displacement.push_back(std::make_pair(
-                                        cv::Point2f(roi_offset.x + col_index, roi_offset.y + row_index),
-                                        algo_displacement));
-                                frame_stencil_visibility.push_back(visibility);
-
-                            }
-                        }
-                    }
-                }
                 std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic);
                 printf ( "method 2 = %f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
 

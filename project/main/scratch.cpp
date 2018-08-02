@@ -618,3 +618,9 @@ for (int32_t v = 0; v < image_info_.height; v++) {
     }
 }
 */
+
+
+roi_offset
+roi_size
+roi(rowrange.colrange)
+roi.locateROI(roi_size, roi_offset);
