@@ -65,7 +65,7 @@ void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
 }
 
 
-void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility) {
+void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility) {
 
     char sensor_index_folder_suffix[50];
     sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
@@ -83,8 +83,8 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
         std::vector<bool> frame_stencil_visibility;
 
         if (m_resultordner == "/ground_truth") {
-            frame_next_pts_array.clear();
-            displacement_array.clear();
+            //frame_next_pts_array.clear();
+            //displacement_array.clear();
         }
 
         frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility);
@@ -98,7 +98,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 }
 
 
-void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
+void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
 
     float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
             (sensor_index).at(current_frame_index).m_region_of_interest_px.x;
@@ -120,15 +120,12 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
     if (visibility) {
 
-        // 1st method
         cv::Mat roi = flowFrame.
                 rowRange(cvRound(rowBegin - (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER)),
                          (cvRound(rowBegin + height + (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER)))).
                 colRange(cvRound(columnBegin - (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER)),
                          (cvRound(columnBegin + width + (DO_STENCIL_GRID_EXTENSION * STENCIL_GRID_EXTENDER))));
 
-
-        // 2nd method - Frame differencing
 
         cv::Size roi_size;
         cv::Point roi_offset;
@@ -143,13 +140,14 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             //gt_displacement - 1st method
             //cv::compare(image, image_background)
 
-            roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
+            // 1st method
+            //roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
 
             for (unsigned j = 0; j < width; j += 1) {
                 for (unsigned k = 0; k < height; k += 1) {
 
-                    frame_next_pts_array.push_back(cv::Point2f(columnBegin + j, rowBegin + k));
-                    displacement_array.push_back(gt_displacement);
+                    //frame_next_pts_array.push_back(cv::Point2f(columnBegin + j, rowBegin + k));
+                    //displacement_array.push_back(gt_displacement);
 
                     frame_stencil_displacement.push_back(
                             std::make_pair(cv::Point2f(columnBegin + j, rowBegin + k), gt_displacement));
@@ -157,6 +155,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 }
             }
+
+            // 2nd method - Frame differencing
 
             //std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
             bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
@@ -425,6 +425,7 @@ void OpticalFlow::generate_flow_vector(ushort SENSOR_COUNT) {
 
             std::cout << "current_frame_index " << current_frame_index << std::endl;
 
+            // dummy declare frame_next_pts_array. Just to maintain the arguement list
             std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
             common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array,
