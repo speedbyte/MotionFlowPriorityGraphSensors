@@ -28,6 +28,32 @@ struct MyIntersection {
         return __result;
     }
 
+    template < typename T >
+    T __set_intersection_pairs(T __first1, T __last1, T __first2, T __last2, T __result)
+    {
+        while (__first1 != __last1 && __first2 != __last2)
+            if (__comp<float>(__first1, __first2))
+                ++__first1;
+            else if (__comp<float>(__first2, __first1))
+                ++__first2;    template <typename T>
+    bool __comp(typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::iterator lhs, typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::iterator rhs){
+        return ( (*lhs).first.x < (*rhs).first.x) ;
+
+            else
+            {
+                *__result = *__first1;
+                ++__first1;
+                ++__first2;
+                ++__result;
+            }
+        return __result;
+    }
+
+    template <typename T>
+    bool __comp(typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::iterator lhs, typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::iterator rhs){
+        return ( (*lhs).first.x < (*rhs).first.x) ;
+    }
+
 };
 
 /// ---------------------------------------------------------------------------------------------------------------------
@@ -132,7 +158,9 @@ void points_mine_project() {
     std::vector<std::pair<cv::Point_<T>, cv::Point_<T> > > results_coordinates(10);
 
     MyIntersection myIntersection;
-    myIntersection.__set_intersection_pairs(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &(comparePointsIntersectionExplizitProject<T>));
+    //myIntersection.__set_intersection_pairs(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &(comparePointsIntersectionExplizitProject<T>));
+
+    myIntersection.__set_intersection_pairs(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin());
 
     std::cout << "begin intersection" << std::endl;
     for ( const auto index : results_coordinates )  {
@@ -204,7 +232,7 @@ int main(int argc, char *argv[]) {
 
     // single value and pairs ( unsigned, float ... ) is implemented in STL
     std::cout << "-------------------------------" << std::endl;
-    pairs_mine<float>();
+    //pairs_mine<float>();
     //points_mine<float>();
     points_mine_project<float>();
 

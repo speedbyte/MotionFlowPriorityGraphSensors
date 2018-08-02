@@ -45,10 +45,7 @@ class OpticalFlow {
 
 private:
 
-    template <typename T>
-    bool comparePointsSort(T lhs, T rhs);
-
-    void frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility);
+    void frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility);
 
     void frame_stencil_displacement_frame_differencing_method(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility);
 
@@ -138,7 +135,7 @@ public:
 
 
 
-    void common_flow_frame(ushort sensor_index, ushort current_frame_index,  std::vector<cv::Point2f> &next_pts_array, std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
+    void common_flow_frame(ushort sensor_index, ushort current_frame_index,  const std::vector<cv::Point2f> &next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility) ;
 
     void plot_stencil(ushort SENSOR_COUNT);
 
