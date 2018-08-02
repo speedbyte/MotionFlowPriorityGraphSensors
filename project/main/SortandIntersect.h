@@ -33,8 +33,8 @@ public:
 
 struct MyIntersection {
 
-    template < typename T>
-    T __set_intersection_pairs(T __first1, T __last1, T __first2, T __last2, T __result)
+    template < typename T1, typename T2 >
+    T1 __set_intersection_pairs(T1 __first1, T1 __last1, T2 __first2, T2 __last2, T1 __result)
     {
         while (__first1 != __last1 && __first2 != __last2)
             if (__comp<float>(__first1, __first2))
@@ -52,7 +52,7 @@ struct MyIntersection {
     }
 
     template <typename T>
-    bool __comp(typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::iterator lhs, typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::iterator rhs){
+    bool __comp(typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator lhs, typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator rhs){
         return ( (*lhs).first.x < (*rhs).first.x) ;
     }
 

@@ -197,7 +197,10 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 //std::sort(frame_next_pts_array.begin(), frame_next_pts_array.end(), PointsSort<float>());
 
                 MyIntersection myIntersection;
-                myIntersection.__set_intersection_pairs(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(), m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(), m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(), frame_stencil_displacement.begin());
+                myIntersection.__set_intersection_pairs(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(),
+                        m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
+                        m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
+                        frame_stencil_displacement.begin());
 
                 std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic);
                 printf ( "method 2 = %f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
