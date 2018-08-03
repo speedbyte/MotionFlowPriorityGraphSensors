@@ -183,7 +183,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 tic = std::chrono::steady_clock::now();
 
                 frame_stencil_displacement.clear();
-                frame_stencil_visibility.clear();
+                //frame_stencil_visibility.clear();
 
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > temp_frame_coordinates_displacement;
                 for (ushort next_pts_index = 0;
@@ -197,11 +197,14 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 //std::sort(frame_next_pts_array.begin(), frame_next_pts_array.end(), PointsSort<float>());
 
                 MyIntersection myIntersection;
-                myIntersection.__set_intersection_pairs(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(),
+                std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
+
+                result_it = myIntersection.find_intersection(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(),
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
                         frame_stencil_displacement.begin());
 
+                //assert(result_it == frame_stencil_displacement.begin());
                 std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic);
                 printf ( "method 2 = %f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
 

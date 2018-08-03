@@ -34,7 +34,7 @@ public:
 struct MyIntersection {
 
     template < typename T1, typename T2 >
-    T1 __set_intersection_pairs(T1 __first1, T1 __last1, T2 __first2, T2 __last2, T1 __result)
+    T1 find_intersection(T1 __first1, T1 __last1, T2 __first2, T2 __last2, T1 __result)
     {
         while (__first1 != __last1 && __first2 != __last2)
             if (__comp<float>(__first1, __first2))
@@ -53,7 +53,20 @@ struct MyIntersection {
 
     template <typename T>
     bool __comp(typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator lhs, typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator rhs){
+        std::cout << "pair of points" << std::endl;
         return ( (*lhs).first.x < (*rhs).first.x) ;
+    }
+
+    template<typename T>
+    bool __comp(typename std::vector<std::pair<T, T>>::iterator lhs, typename std::vector<std::pair<T, T>>::iterator rhs){
+        std::cout << "pair of basic types" << std::endl;
+        return ( (*lhs).first < (*rhs).first ) ;
+    }
+
+    template<typename T>
+    bool __comp(typename std::vector<cv::Point_<T>>::iterator lhs, typename std::vector<cv::Point_<T>>::iterator rhs){
+        std::cout << "point types" << std::endl;
+        return ( (*lhs).x < (*rhs).x ) ;
     }
 
 };
