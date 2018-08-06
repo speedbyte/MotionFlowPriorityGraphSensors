@@ -14,9 +14,9 @@ struct MyIntersection {
     T1 find_intersection(T1 __first1, T1 __last1, T2 __first2, T2 __last2, T1 __result)
     {
         while (__first1 != __last1 && __first2 != __last2)
-            if (__comp<float>(__first1, __first2))
+            if (__comp(__first1, __first2))
                 ++__first1;
-            else if (__comp<float>(__first2, __first1))
+            else if (__comp(__first2, __first1))
                 ++__first2;
             else
             {
@@ -28,10 +28,14 @@ struct MyIntersection {
         return __result;
     }
 
-    template <typename T>
-    bool __comp(typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator lhs, typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator rhs){
+    template <typename T1, typename T2>
+    bool __comp(T1 lhs, T2 rhs){
         std::cout << "pair of points" << std::endl;
-        return ( (*lhs).first.x < (*rhs).first.x) ;
+        if((*lhs).first.x == (*rhs).first.x) {
+            return ((*lhs).first.y < (*rhs).first.y);
+        }
+        else
+            return (*lhs).first.x < (*rhs).first.x;
     }
 
     template<typename T>
@@ -149,14 +153,12 @@ void points_mine_project() {
     bool sorted = std::is_sorted(coordinates1.begin(), coordinates1.end(), PointsSort<T>());
     std::cout << "sorted = " << sorted << std::endl;
 
-    std::vector<std::pair<cv::Point_<T>, cv::Point_<T> > > results_coordinates(10);
+    std::vector<std::pair<cv::Point_<T>, cv::Point_<T> > > results_coordinates;
 
     MyIntersection myIntersection;
-    typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator it_second_begin = coordinates2.begin();
-    typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator it_second_end = coordinates2.end();
     //myIntersection.__set_intersection_pairs(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &(comparePointsIntersectionExplizitProject<T>));
 
-    myIntersection.find_intersection(coordinates1.begin(), coordinates1.end(), it_second_begin, it_second_end, results_coordinates.begin());
+    myIntersection.find_intersection(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin());
 
     std::cout << "begin intersection" << std::endl;
     for ( const auto index : results_coordinates )  {
@@ -215,8 +217,8 @@ int main(int argc, char *argv[]) {
 
     // single value and pairs ( unsigned, float ... ) is implemented in STL
     std::cout << "-------------------------------" << std::endl;
-    pairs_mine<float>();
-    points_mine<float>();
+    //pairs_mine<float>();
+    //points_mine<float>();
     points_mine_project<float>();
 
 }

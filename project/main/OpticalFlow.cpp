@@ -196,6 +196,11 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 //std::sort(frame_next_pts_array.begin(), frame_next_pts_array.end(), PointsSort<float>());
 
+
+                //327, 250 until 327, 278 in current_frame_index = 1, starts from index 69
+                //327, 250 until 327, 286 in current_frame_index = 1, starts from index 52 . ground truth
+
+
                 MyIntersection myIntersection;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 

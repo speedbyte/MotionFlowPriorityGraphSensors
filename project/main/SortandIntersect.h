@@ -37,13 +37,14 @@ struct MyIntersection {
     T1 find_intersection(T1 __first1, T1 __last1, T2 __first2, T2 __last2, T1 __result)
     {
         while (__first1 != __last1 && __first2 != __last2)
-            if (__comp<float>(__first1, __first2))
+            if (__comp(__first1, __first2))
                 ++__first1;
-            else if (__comp<float>(__first2, __first1))
+            else if (__comp(__first2, __first1))
                 ++__first2;
             else
             {
                 *__result = *__first1;
+                std::cout << "found intersection" << std::endl;
                 ++__first1;
                 ++__first2;
                 ++__result;
@@ -51,10 +52,16 @@ struct MyIntersection {
         return __result;
     }
 
-    template <typename T>
-    bool __comp(typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator lhs, typename std::vector<std::pair<cv::Point_<T>, cv::Point_<T>>>::const_iterator rhs){
-        std::cout << "pair of points" << std::endl;
-        return ( (*lhs).first.x < (*rhs).first.x) ;
+    template <typename T1, typename T2>
+    bool __comp(T1 lhs, T2 rhs){
+        if((*lhs).first.x == (*rhs).first.x) {
+            if ( (*lhs).first.x == 327 ) {
+                //std::cout << "pair of points" << std::endl;
+            }
+            return ((*lhs).first.y < (*rhs).first.y);
+        }
+        else
+            return (*lhs).first.x < (*rhs).first.x;
     }
 
     template<typename T>
