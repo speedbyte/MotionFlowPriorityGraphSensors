@@ -79,11 +79,8 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
-        std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement(frame_next_pts_array.size());
-        std::vector<bool> frame_stencil_visibility(frame_next_pts_array.size());
-
-        frame_stencil_displacement.clear();
-        frame_stencil_visibility.clear();
+        std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement;
+        std::vector<bool> frame_stencil_visibility;
 
         frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility);
         //frame_stencil_displacement_frame_differencing_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility);
@@ -114,25 +111,76 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
         if ( m_resultordner == "/ground_truth" ) {
 
-            //gt_displacement - 1st method
-            //cv::compare(image, image_background)
-
-            // 1st method
-            //roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
+            // 1st method - gt_displacement
+            // roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
+            std::vector<std::pair<cv::Point2f,cv::Point2f > > temp_frame_coordinates_displacement;
+            std::vector<std::pair<cv::Point2f,cv::Point2f > > temp_frame_coordinates_displacement2;
             cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                     obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
                     current_frame_index).second;
 
             for (unsigned j = 0; j < width; j += 1) {
                 for (unsigned k = 0; k < height; k += 1) {
-                    frame_stencil_displacement.push_back(
+                    temp_frame_coordinates_displacement.push_back(
                             std::make_pair(cv::Point2f(columnBegin + j, rowBegin + k), gt_displacement));
-                    frame_stencil_visibility.push_back(visibility);
+                    //frame_stencil_visibility.push_back(visibility);
                 }
             }
 
+            frame_stencil_displacement.resize(temp_frame_coordinates_displacement.size());
+            frame_stencil_visibility.resize(temp_frame_coordinates_displacement.size());
+
+            frame_stencil_displacement.clear();
+            frame_stencil_visibility.clear();
+
+
             // 2nd method - Frame differencing
-            //std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
+            char sensor_index_folder_suffix[50];
+            sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
+
+            char file_name_input_image[50];
+            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(current_frame_index).frame_no;
+
+            sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+            cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
+            if ( image_02_frame.data == NULL ) {
+                std::cerr << input_image_path << " not found" << std::endl;
+                throw ("No image file found error");
+            }
+
+            std::string input_image_path_background = Dataset::getGroundTruthPath().string() + "base_frame_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+            cv::Mat backgroundImage = cv::imread(input_image_path_background, CV_LOAD_IMAGE_COLOR);
+            if ( backgroundImage.data == NULL ) {
+                std::cerr << input_image_path_background << " not found" << std::endl;
+                throw ("No image file found error");
+            }
+            cv::Mat final, finalGray;
+            cv::compare(backgroundImage, image_02_frame, final, cv::CMP_EQ);
+            cv::cvtColor(final, finalGray, cv::COLOR_BGR2GRAY);
+            //cv::imshow("try", final);
+            //cv::waitKey(0);
+
+            for (unsigned j = 0; j < final.cols; j += 1) {
+                for (unsigned k = 0; k < final.rows; k += 1) {
+                    if ( finalGray.at<char>(k,j) == 0 ) {
+                        temp_frame_coordinates_displacement2.push_back(
+                                std::make_pair(cv::Point2f(j, k), gt_displacement));
+                    }
+                    //frame_stencil_visibility.push_back(visibility);
+                }
+            }
+            // intersection of final and roi
+            MyIntersection myIntersection;
+            std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
+
+            result_it = myIntersection.find_intersection(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(),
+                                                         temp_frame_coordinates_displacement2.begin(), temp_frame_coordinates_displacement2.end(),
+                                                         frame_stencil_displacement.begin());
+            frame_stencil_displacement = myIntersection.getResult();
+
+            // std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
             bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
             std::cout << "Ground truth stencil is " << isSorted << std::endl;
 
@@ -140,9 +188,16 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
             if (m_weather == "blue_sky"  || m_weather == "heavy_snow") {
 
+                frame_stencil_displacement.resize(frame_next_pts_array.size());
+                frame_stencil_visibility.resize(frame_next_pts_array.size());
+
+                frame_stencil_displacement.clear();
+                frame_stencil_visibility.clear();
+
                 assert(m_ptr_list_simulated_objects.size() == m_ptr_list_gt_objects.size());
                 std::cout << "making a stencil on the basis of groundtruth object "
                           << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
+
 
                 //std::cout << next_pts_array << std::endl;
                 // benchmark this and then use intersection
