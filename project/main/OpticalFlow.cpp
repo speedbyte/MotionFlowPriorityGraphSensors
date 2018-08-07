@@ -78,14 +78,12 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     std::string output_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
-        std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement;
 
-        std::vector<bool> frame_stencil_visibility;
+        std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement(frame_next_pts_array.size());
+        std::vector<bool> frame_stencil_visibility(frame_next_pts_array.size());
 
-        if (m_resultordner == "/ground_truth") {
-            //frame_next_pts_array.clear();
-            //displacement_array.clear();
-        }
+        frame_stencil_displacement.clear();
+        frame_stencil_visibility.clear();
 
         frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility);
         //frame_stencil_displacement_frame_differencing_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility);
@@ -94,7 +92,6 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
         multiframe_stencil_visibility.at(obj_index).push_back(frame_stencil_visibility);
 
     }
-
 }
 
 
@@ -113,7 +110,6 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
     bool visibility = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(
             sensor_index).at(current_frame_index);
 
-
     if (visibility) {
 
         if ( m_resultordner == "/ground_truth" ) {
@@ -129,16 +125,13 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
             for (unsigned j = 0; j < width; j += 1) {
                 for (unsigned k = 0; k < height; k += 1) {
-
                     frame_stencil_displacement.push_back(
                             std::make_pair(cv::Point2f(columnBegin + j, rowBegin + k), gt_displacement));
                     frame_stencil_visibility.push_back(visibility);
-
                 }
             }
 
             // 2nd method - Frame differencing
-
             //std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
             bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
             std::cout << "Ground truth stencil is " << isSorted << std::endl;
@@ -155,6 +148,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 // benchmark this and then use intersection
                 auto tic = std::chrono::steady_clock::now();
 
+                /*
                 for (unsigned row_index = (unsigned)rowBegin; row_index < rowBegin+height; row_index++) {
                     for (unsigned col_index = (unsigned)columnBegin; col_index < columnBegin+width; col_index++) {
 
@@ -176,13 +170,13 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                         }
                     }
                 }
+                */
 
                 printf ( "method 1 = %f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
-
                 // benchmark this and then use intersection
                 tic = std::chrono::steady_clock::now();
 
-                frame_stencil_displacement.clear();
+                //frame_stencil_displacement.clear();
                 //frame_stencil_visibility.clear();
 
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > temp_frame_coordinates_displacement;
@@ -194,12 +188,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 std::sort(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(), PairPointsSort<float>());
                 bool isSorted = std::is_sorted(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(), PairPointsSort<float>());
 
-                //std::sort(frame_next_pts_array.begin(), frame_next_pts_array.end(), PointsSort<float>());
-
-
                 //327, 250 until 327, 278 in current_frame_index = 1, starts from index 69
                 //327, 250 until 327, 286 in current_frame_index = 1, starts from index 52 . ground truth
-
 
                 MyIntersection myIntersection;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
@@ -209,7 +199,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
                         frame_stencil_displacement.begin());
 
-                //assert(result_it == frame_stencil_displacement.begin());
+                frame_stencil_displacement = myIntersection.getResult();
+                frame_stencil_visibility.resize(frame_stencil_displacement.size());
+                std::fill(frame_stencil_visibility.begin(), frame_stencil_visibility.end(), (bool)1);
                 std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic);
                 printf ( "method 2 = %f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
 
@@ -254,123 +246,14 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
     } else {
 
         frame_stencil_displacement.push_back(std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0)));
-        frame_stencil_visibility.push_back(false);
+        frame_stencil_visibility.push_back(visibility);
 
     }
 
 }
-
-
-
 void OpticalFlow::frame_stencil_displacement_frame_differencing_method(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
 
-    bool visibility = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(
-            sensor_index).at(current_frame_index);
-
-
-    if (visibility) {
-
-        // 2nd method - Frame differencing- TODO
-
-        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
-                obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
-                current_frame_index).second;
-
-        if (m_resultordner == "/ground_truth") {
-
-            // gt_displacement - 2nd method
-            std::vector<cv::Point2i> dummy(100);
-            for (unsigned pts_index = 0; pts_index < dummy.size(); pts_index++) {
-
-                frame_stencil_displacement.push_back(std::make_pair(
-                        cv::Point2f(dummy.at(pts_index).x, dummy.at(pts_index).y),
-                        gt_displacement));
-                frame_stencil_visibility.push_back(visibility);
-            }
-
-        } else {
-
-            if (m_weather == "blue_sky"
-                || m_weather == "heavy_snow") { // hack because base stencil doesnt work
-
-                assert(m_ptr_list_simulated_objects.size() == m_ptr_list_gt_objects.size());
-
-                std::cout << "making a stencil on the basis of groundtruth object "
-                          << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
-
-                //std::cout << next_pts_array << std::endl;
-
-                // 2nd method
-                std::vector<cv::Point2i> dummy(100);
-                for (unsigned pts_index = 0; pts_index < dummy.size(); pts_index++) {
-
-                    for (ushort next_pts_index = 0;
-                         next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
-                        if (((dummy.at(pts_index).x ) ==
-                             std::round(frame_next_pts_array.at(next_pts_index).x)) &&
-                            ((dummy.at(pts_index).y ) ==
-                             std::round(frame_next_pts_array.at(next_pts_index).y))) {
-
-                            cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
-
-                            frame_stencil_displacement.push_back(std::make_pair(
-                                    cv::Point2f(dummy.at(pts_index).x, dummy.at(pts_index).y),
-                                    algo_displacement));
-                            frame_stencil_visibility.push_back(visibility);
-                        }
-                    }
-                }
-
-
-            } else {
-
-                std::cout << "making a stencil on the basis of base algorithm object "
-                          << m_ptr_list_simulated_objects_base.at(obj_index)->getObjectId() << std::endl;
-                assert(m_ptr_list_simulated_objects.size() == m_ptr_list_simulated_objects_base.size());
-
-                auto COUNT = m_ptr_list_simulated_objects_base.at(
-                        obj_index)->get_object_stencil_point_displacement().at
-                        (sensor_index).at(current_frame_index).size();
-                for (auto count = 0; count < COUNT; count++) {
-
-                    float x = m_ptr_list_simulated_objects_base.at(
-                            obj_index)->get_object_stencil_point_displacement().at
-                            (sensor_index).at(current_frame_index).at(count).first.x;
-                    float y = m_ptr_list_simulated_objects_base.at(
-                            obj_index)->get_object_stencil_point_displacement().at
-                            (sensor_index).at(current_frame_index).at(count).first.y;
-
-                    for (auto next_pts_index = 0;
-                         next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
-                        if (((x) == frame_next_pts_array.at(next_pts_index).x) &&
-                            ((y) == frame_next_pts_array.at(next_pts_index).y)) {
-
-                            cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
-
-                            frame_stencil_displacement.push_back(
-                                    std::make_pair(cv::Point2f(x, y), algo_displacement));
-                        }
-                    }
-
-                }
-            }
-        }
-
-        std::cout << "stencil size = " << frame_stencil_displacement.size() << " " << frame_next_pts_array.size()
-                  << std::endl;
-
-        //assert(frame_stencil_displacement.size() != 0);
-        // TODO scratch : if frame_stencil_displacement does not work
-
-    } else {
-
-        frame_stencil_displacement.push_back(std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0)));
-        frame_stencil_visibility.push_back(false);
-
-    }
-
 }
-
 
 void OpticalFlow::generate_flow_vector(ushort SENSOR_COUNT) {
 

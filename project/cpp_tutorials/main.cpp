@@ -8,6 +8,7 @@
 #include "Virtual.h"
 #include <boost/filesystem.hpp>
 #include <exception>
+#include <opencv2/core/types.hpp>
 
 using namespace cpp_tutorials;
 
@@ -154,6 +155,20 @@ inline T const& Max (T const& a, T const& b) {
 }
 
 int main ( int argc, char *argv[]) {
+
+    std::vector<unsigned> check_clear_operation(10);
+
+    std::cout << " " << check_clear_operation.size() << std::endl;
+
+    check_clear_operation.clear();
+
+    std::cout << " " << check_clear_operation.size() << std::endl;
+
+    check_clear_operation.push_back(9);
+
+    for ( auto &x : check_clear_operation ) {
+        std::cout << " " << check_clear_operation.size() << " " << x;
+    }
 
     int i = 39;
     int j = 20;

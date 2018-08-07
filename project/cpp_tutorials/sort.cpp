@@ -10,6 +10,8 @@
 
 struct MyIntersection {
 
+    std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > > m_result;
+
     template < typename T1, typename T2 >
     T1 find_intersection(T1 __first1, T1 __last1, T2 __first2, T2 __last2, T1 __result)
     {
@@ -21,12 +23,18 @@ struct MyIntersection {
             else
             {
                 *__result = *__first1;
+                m_result.push_back(*__result);
+                std::cout << "found intersection" << std::endl;
                 ++__first1;
                 ++__first2;
                 ++__result;
             }
         return __result;
     }
+
+    std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > > getResult() {
+        return m_result;
+    };
 
     template <typename T1, typename T2>
     bool __comp(T1 lhs, T2 rhs){
@@ -153,15 +161,15 @@ void points_mine_project() {
     bool sorted = std::is_sorted(coordinates1.begin(), coordinates1.end(), PointsSort<T>());
     std::cout << "sorted = " << sorted << std::endl;
 
-    std::vector<std::pair<cv::Point_<T>, cv::Point_<T> > > results_coordinates;
+    std::vector<std::pair<cv::Point_<T>, cv::Point_<T> > > results_coordinates(10);
 
     MyIntersection myIntersection;
     //myIntersection.__set_intersection_pairs(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin(), &(comparePointsIntersectionExplizitProject<T>));
 
     myIntersection.find_intersection(coordinates1.begin(), coordinates1.end(), coordinates2.begin(), coordinates2.end(), results_coordinates.begin());
 
-    std::cout << "begin intersection" << std::endl;
-    for ( const auto index : results_coordinates )  {
+    std::cout << "show intersection" << std::endl;
+    for ( const auto index : myIntersection.getResult() )  {
         std::cout << index.first.x << " " << index.first.y << std::endl;
     }
 

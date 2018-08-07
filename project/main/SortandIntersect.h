@@ -33,6 +33,8 @@ public:
 
 struct MyIntersection {
 
+    std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > > m_result;
+
     template < typename T1, typename T2 >
     T1 find_intersection(T1 __first1, T1 __last1, T2 __first2, T2 __last2, T1 __result)
     {
@@ -44,13 +46,18 @@ struct MyIntersection {
             else
             {
                 *__result = *__first1;
-                std::cout << "found intersection" << std::endl;
+                m_result.push_back(*__result);
+                //std::cout << "found intersection" << std::endl;
                 ++__first1;
                 ++__first2;
                 ++__result;
             }
         return __result;
     }
+
+    const std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > >& getResult() {
+        return m_result;
+    };
 
     template <typename T1, typename T2>
     bool __comp(T1 lhs, T2 rhs){
