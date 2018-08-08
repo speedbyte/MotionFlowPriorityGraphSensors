@@ -94,9 +94,9 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
 void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
 
-    float columnBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+    float columnBegin = (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
             (sensor_index).at(current_frame_index).m_region_of_interest_px.x;
-    float rowBegin = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+    float rowBegin = (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
             (sensor_index).at(current_frame_index).m_region_of_interest_px.y;
     int width = cvRound(
             m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
@@ -159,7 +159,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             cv::Mat final, finalGray;
             cv::compare(backgroundImage, image_02_frame, final, cv::CMP_EQ);
             cv::cvtColor(final, finalGray, cv::COLOR_BGR2GRAY);
-            //cv::imshow("try", final);
+            //cv::imshow("try", finalGray);
             //cv::waitKey(0);
 
             for (unsigned j = 0; j < final.cols; j += 1) {
