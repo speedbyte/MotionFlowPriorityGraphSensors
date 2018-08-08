@@ -13,7 +13,7 @@
 
 
 
-void ViresObjects::readObjectStateFromBinaryFile(std::string suffix) {
+void ViresObjects::readObjectStateFromBinaryFile() {
 
 
     RDB_OBJECT_STATE_t object_state_data;
@@ -55,7 +55,7 @@ void ViresObjects::readObjectStateFromBinaryFile(std::string suffix) {
 }
 
 
-void ViresObjects::readSensorObjectFromBinaryFile(std::string suffix) {
+void ViresObjects::readSensorObjectFromBinaryFile() {
 
     RDB_SENSOR_OBJECT_t sensor_object_data;
     RDB_SENSOR_OBJECT_t *data = &sensor_object_data;
@@ -79,15 +79,11 @@ void ViresObjects::readSensorObjectFromBinaryFile(std::string suffix) {
 
         if (m_mapObjectNameToObjectMetaData.count(m_mapObjectIdToObjectName[data->id]) == 0) {
 
-            m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
-            //Rectangle rectangle((int) (data->geo.dimX), (int) (data->geo.dimY)); // width, height
             m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]] = m_ptr_customObjectMetaDataList.at(
                     m_objectCount);
-            //m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(m_mapObjectIdToObjectName[data->id]);
-            m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
-            m_objectCount += 1;
         }
+
         if (data->sensorPos.type == RDB_COORD_TYPE_WINDOW) {
 
             m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
@@ -105,7 +101,7 @@ void ViresObjects::readSensorObjectFromBinaryFile(std::string suffix) {
 }
 
 
-void ViresObjects::readSensorStateFromBinaryFile(std::string suffix) {
+void ViresObjects::readSensorStateFromBinaryFile() {
 
     cv::Point3f position_sensor_carrier, orientation_sensor_carrier, position_sensor, orientation_sensor, offset_sensor;
     cv::Point2f fov;
@@ -714,6 +710,16 @@ void ViresObjects::parseEntry(RDB_DRIVER_CTRL_t *data, const double &simTime, co
 
     // remember last simulation time
     sLastSimTime = simTime;
+}
+
+void ViresObjects::readObjectData() {
+    readObjectStateFromBinaryFile();
+    readSensorObjectFromBinaryFile();
+}
+
+void ViresObjects::readSensorData() {
+    readSensorStateFromBinaryFile();
+
 }
 
 

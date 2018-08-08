@@ -48,7 +48,9 @@ private:
     std::ofstream fstream_output_sensor_state;
     std::ofstream fstream_output_sensor_object;
 
-
+    void readObjectStateFromBinaryFile();
+    void readSensorObjectFromBinaryFile();
+    void readSensorStateFromBinaryFile();
 
 
 public:
@@ -83,9 +85,10 @@ public:
 
     ViresObjects() {}
 
-    void readObjectStateFromBinaryFile(std::string suffix);
-    void readSensorObjectFromBinaryFile(std::string suffix);
-    void readSensorStateFromBinaryFile(std::string suffix);
+
+    void readObjectData();
+    void readSensorData();
+
 
     void closeAllFileHandles() {
         fstream_output_object_state.close();

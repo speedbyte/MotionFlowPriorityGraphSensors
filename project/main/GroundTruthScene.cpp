@@ -503,9 +503,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).closeAllFileHandles();
 
-                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readObjectStateFromBinaryFile("vires_");
-                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorObjectFromBinaryFile("vires_");
-                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorStateFromBinaryFile("vires_");
+                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readObjectData();
+                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorData();
 
                     // writePosition deletes the file before generating yaml file
                     viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
@@ -529,9 +528,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
             for ( ushort sensor_group_index = 0 ; sensor_group_index < m_evaluation_sensor_list.size() ; sensor_group_index++) {
 
-                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readObjectStateFromBinaryFile("vires_");
-                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readSensorObjectFromBinaryFile("vires_");
-                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readSensorStateFromBinaryFile("vires_");
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readObjectData();
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readSensorData();
 
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
 
