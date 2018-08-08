@@ -13,28 +13,40 @@ class ObjectImageShapeData {
 
 protected:
 
-    cv::Mat m_data;
+    cv::Mat m_data_image;
+    cv::Mat m_data_depth;
     ushort m_objectWidth;
     ushort m_objectHeight;
+    ushort m_depth;
 
 public:
 
     ObjectImageShapeData() {};
 
-    ObjectImageShapeData(ushort width, ushort height, std::unique_ptr<Noise> &noise ) : m_objectWidth(width), m_objectHeight
-            (height){
-        m_data.create(height, width, CV_8UC3);
+    ObjectImageShapeData(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth ) : m_objectWidth(width), m_objectHeight
+            (height), m_depth(depth) {
+        m_data_image.create(height, width, CV_8UC3);
+        m_data_depth.create(height, width, CV_8UC1);
         applyNoise(noise);
+        applyDepth(depth);
     }
 
     virtual void process() {};
 
     void applyNoise(std::unique_ptr<Noise> &noise) {
-        noise->apply(m_data);
+        noise->apply(m_data_image);
     }
 
-    cv::Mat get() {
-        return m_data;
+    void applyDepth(ushort depth) {
+        m_data_depth.setTo(depth);
+    }
+
+    cv::Mat getImage() {
+        return m_data_image;
+    }
+
+    cv::Mat getDepth() {
+        return m_data_depth;
     }
 
 };
@@ -50,7 +62,7 @@ public:
 
 
     // The canvas can move to simulate a moving car. Hence we need position etc.
-    Canvas( ushort width, ushort height, std::unique_ptr<Noise> &noise ) : ObjectImageShapeData(width, height, noise) {
+    Canvas( ushort width, ushort height, std::unique_ptr<Noise> &noise ) : ObjectImageShapeData(width, height, noise, 0) {
     };
 
     void process() override ;
@@ -65,7 +77,7 @@ private:
 
 public:
 
-    Rectangle(ushort width, ushort height, std::unique_ptr<Noise> &noise) : ObjectImageShapeData(width, height, noise) {};
+    Rectangle(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(width, height, noise, depth) {};
 
     void process() override ;
 

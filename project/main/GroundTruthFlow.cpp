@@ -170,6 +170,7 @@ void GroundTruthFlow::generate_depth_images(ushort SENSOR_COUNT) {
                 throw ("No image file found error");
             }
 
+            printf("%d", image_02_frame.at<char>((unsigned)m_ptr_list_gt_objects.at(1)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y,(unsigned)m_ptr_list_gt_objects.at(1)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x));
             //cv::imshow("depth_image", image_02_frame);
             //cv::waitKey(0);
         }

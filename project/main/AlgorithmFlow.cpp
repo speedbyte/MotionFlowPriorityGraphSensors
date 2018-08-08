@@ -138,7 +138,6 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
             }
 
-
             // Display the output image
             //cv::namedWindow(m_resultordner+"_" + std::to_string(current_frame_index), CV_WINDOW_AUTOSIZE);
             //cv::imshow(m_resultordner+"_"+std::to_string(current_frame_index), image_02_frame);

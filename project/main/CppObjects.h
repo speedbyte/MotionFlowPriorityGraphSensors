@@ -18,8 +18,6 @@ public:
 
     void process(std::unique_ptr<Noise> &noise);
 
-
-
 };
 
 

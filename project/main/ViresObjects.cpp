@@ -40,7 +40,7 @@ void ViresObjects::readObjectStateFromBinaryFile() {
             m_mapObjectIdToObjectName[data->base.id] = data->base.name;
             m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
             std::unique_ptr<Noise> noNoise = std::make_unique<NoNoise>();
-            Rectangle rectangle((int) (data->base.geo.dimX), (int) (data->base.geo.dimY), noNoise); // width, height
+            Rectangle rectangle((int) (data->base.geo.dimX), (int) (data->base.geo.dimY), noNoise, 0); // width, height
             m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
