@@ -168,14 +168,14 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     WhiteNoise whiteNoise;
                     noise = std::make_unique<WhiteNoise>(whiteNoise);
                 }
-                cppObjects.at(sensor_group_index).process(noise);
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise);
                 cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("cpp_");
 
             }
         } else { // genreate yaml file
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
-                cppObjects.at(sensor_group_index).readPositionFromFile("cpp_");
-                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition();
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
             }
 
             startEvaluating(colorfulNoise);
@@ -535,7 +535,7 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("vires_");
 
-                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition();
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("vires_");
             }
 
             startEvaluating(noNoise);

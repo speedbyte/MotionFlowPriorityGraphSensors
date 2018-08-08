@@ -49,7 +49,7 @@ public:
 
     BasicObjects() {}
 
-    void calcBBFrom3DPosition();
+    void calcBBFrom3DPosition(std::string suffix);
 
     const std::vector<ObjectMetaData *>  get_ptr_customObjectMetaDataList() {
         return m_ptr_customObjectMetaDataList;
