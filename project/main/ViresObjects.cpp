@@ -44,7 +44,7 @@ void ViresObjects::readObjectStateFromBinaryFile() {
             m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
-            m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(0);
+            m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(ITERATION_START_POINT);
             m_objectCount += 1;
         }
 
@@ -130,7 +130,7 @@ void ViresObjects::readSensorStateFromBinaryFile() {
             m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
             m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
             m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
-            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
+            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(ITERATION_START_POINT);
             m_sensorCount += 1;
         }
 
