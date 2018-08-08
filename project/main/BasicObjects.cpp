@@ -525,6 +525,18 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
 
                 if (((*file_node_iterator)["name"].string()).find("Sensor") == std::string::npos) {
 
+                    if (m_mapObjectNameToObjectMetaData.count((*file_node_iterator)["name"].string()) == 0 ) {
+                        m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(m_objectCount));
+                        m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(objectCount);
+                        m_ptr_customObjectMetaDataList.at(objectCount)->setObjectName((*file_node_iterator)["name"].string());
+                        std::unique_ptr<Noise> noNoise = std::make_unique<NoNoise>(NoNoise());
+                        Rectangle rectangle((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height, noNoise); // width, height
+                        m_ptr_customObjectMetaDataList.at(objectCount)->setObjectShape(rectangle);
+                        m_ptr_customObjectMetaDataList.at(objectCount)->setStartPoint(ITERATION_START_POINT);
+                        m_objectCount += 1;
+                        objectCount += 1;
+                    }
+
                     std::cout << (*file_node_iterator)["name"].string() << " "
                               << (double) (*file_node_iterator)["x_camera"] << " "
                               << (double) (*file_node_iterator)["y_camera"] << std::endl;
