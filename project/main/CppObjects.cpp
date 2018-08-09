@@ -7,15 +7,23 @@
 #include <map>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv/cv.hpp>
+#include <algorithm>
 #include "Noise.h"
 #include "ObjectMetaData.h"
 #include "CppObjects.h"
 
 void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
+    std::unique_ptr<Noise> objectNoise = std::make_unique<ColorfulNoise>();
+
+    Rectangle rectangle_obj1(30, 70, objectNoise, 11); // width, height
+    Circle circle_obj1(std::max(30,70), objectNoise, 11); // width, height
+
+    Rectangle rectangle_obj2(30, 70, objectNoise, 200); // width, height
+    Circle circle_obj2(std::max(30,70), objectNoise, 200); // width, height
+
     Achterbahn achterbahn;
 
-    std::unique_ptr<Noise> objectNoise = std::make_unique<ColorfulNoise>();
     cv::Mat tempGroundTruthImageBase;
 
     Canvas canvas((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height, noise);
@@ -29,6 +37,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     ramp.process(Dataset::getFrameSize());
 
     objectMetaDataList.at(0) = achterbahn;
+    objectMetaDataList.at(0).setObjectShape(circle_obj1);
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
 
@@ -39,8 +48,8 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     negativeRamp.process(Dataset::getFrameSize());
 
     objectMetaDataList.at(1) = achterbahn;
+    objectMetaDataList.at(1).setObjectShape(circle_obj2);
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
-
 
     cv::Mat tempGroundTruthPosition;
     tempGroundTruthPosition.create(Dataset::getFrameSize(), CV_32FC3);
@@ -89,21 +98,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
             if ( current_frame_index == MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) {
                 current_frame_index = 0;
             }
-            if ( obj_index == 0 ) {
-
-                Rectangle rectangle((ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px,
-                                    (ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px, objectNoise, 11); // width, height
-                m_ptr_customObjectMetaDataList.at(obj_index)->setObjectShape(rectangle);
-
-            }
-            else if ( obj_index == 1 ){
-
-                Rectangle rectangle((ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px,
-                                    (ushort)m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px, objectNoise, 200); // width, height
-                m_ptr_customObjectMetaDataList.at(obj_index)->setObjectShape(rectangle);
-
-            }
-
             std::string position_image_file_with_path = m_generatepath.string() + '_' + std::to_string(m_sensorGroupCount)+ "/" + file_name_image;
 
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getImage().clone();

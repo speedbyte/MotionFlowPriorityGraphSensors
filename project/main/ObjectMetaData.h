@@ -272,6 +272,12 @@ public:
 
     void setObjectShape(ObjectImageShapeData objectShape) {
         m_objectMetaData_shape = objectShape;
+        ushort current_frame_index = 0;
+        for ( ushort i = m_objectMetaData_startPoint; i< MAX_ITERATION_GT_SCENE_GENERATION_DATASET+m_objectMetaData_startPoint; i++) {
+            m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = m_objectMetaData_shape.getImage().cols;
+            m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = m_objectMetaData_shape.getImage().rows;
+            current_frame_index++;
+        }
     }
 
     void setStartPoint(ushort startPoint) {
@@ -518,11 +524,11 @@ public:
 
 };
 
-class Circle : public ObjectMetaData {
+class CircleTrajectory : public ObjectMetaData {
 
 public:
 
-    Circle(ObjectImageShapeData shape, std::string name, ushort startPoint) : ObjectMetaData(shape, name, startPoint) {} ;
+    CircleTrajectory(ObjectImageShapeData shape, std::string name, ushort startPoint) : ObjectMetaData(shape, name, startPoint) {} ;
 
     void process(cv::Size frame_size) override;
 

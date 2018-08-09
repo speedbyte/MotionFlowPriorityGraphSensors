@@ -17,6 +17,7 @@ protected:
     cv::Mat m_data_depth;
     ushort m_objectWidth;
     ushort m_objectHeight;
+    ushort m_objectRadius;
     ushort m_depth;
 
 public:
@@ -27,6 +28,15 @@ public:
             (height), m_depth(depth) {
         m_data_image.create(height, width, CV_8UC3);
         m_data_depth.create(height, width, CV_8UC1);
+        applyNoise(noise);
+        applyDepth(depth);
+    }
+
+    ObjectImageShapeData(ushort radius, std::unique_ptr<Noise> &noise, ushort depth ) : m_objectWidth(radius), m_objectHeight
+            (radius), m_objectRadius(radius/2), m_depth(depth) {
+        m_data_image.create(radius, radius, CV_8UC3);
+        m_data_depth.create(radius, radius, CV_8UC1);
+        cv::circle(m_data_image, cv::Point(m_objectRadius, m_objectRadius), m_objectRadius, cv::Scalar(255,0,0));
         applyNoise(noise);
         applyDepth(depth);
     }
@@ -78,6 +88,18 @@ private:
 public:
 
     Rectangle(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(width, height, noise, depth) {};
+
+    void process() override ;
+
+};
+
+class Circle :  public ObjectImageShapeData {
+
+private:
+
+public:
+
+    Circle(ushort radius, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(radius, noise, depth) {};
 
     void process() override ;
 

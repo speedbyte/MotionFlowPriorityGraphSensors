@@ -36,9 +36,6 @@ void Achterbahn::process(cv::Size frame_size) {
 
         m_object_gt_all.at(current_frame_index).occluded = 0;
 
-        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = 30;
-        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = 70;
-
         m_object_gt_all.at(current_frame_index).m_object_location_camera_px.location_x_px = (l_pixel_position.x);
         m_object_gt_all.at(current_frame_index).m_object_location_camera_px.location_y_px = (l_pixel_position.y);
 
@@ -53,7 +50,7 @@ void Achterbahn::process(cv::Size frame_size) {
     }
 }
 
-void Circle::process(cv::Size frame_size) {
+void CircleTrajectory::process(cv::Size frame_size) {
 
     std::vector<ushort> theta;
     for ( ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_THETA; current_frame_index++) {
@@ -94,9 +91,6 @@ void Ramp::process(cv::Size frame_size) {
 
         m_object_gt_all.at(current_frame_index).occluded = 0;
 
-        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = 30;
-        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = 70;
-
         m_object_gt_all.at(current_frame_index).m_object_location_camera_px.location_x_px = (l_pixel_position.x);
         m_object_gt_all.at(current_frame_index).m_object_location_camera_px.location_y_px = (l_pixel_position.y);
 
@@ -131,9 +125,6 @@ void NegativeRamp::process(cv::Size frame_size) {
         l_pixel_position.y = static_cast<float>(0  + (theta[i]));
 
         m_object_gt_all.at(current_frame_index).occluded = 0;
-
-        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = 30;
-        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = 70;
 
         m_object_gt_all.at(current_frame_index).m_object_location_camera_px.location_x_px = (l_pixel_position.x);
         m_object_gt_all.at(current_frame_index).m_object_location_camera_px.location_y_px = (l_pixel_position.y);

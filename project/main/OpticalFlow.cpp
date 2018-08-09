@@ -939,7 +939,6 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
     // frame_stencil_displacement contains ground truth - all pixels are present in the vector
 
     // -----
-
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
         unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
@@ -991,11 +990,13 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                                                                  intersection_ground_truth_objects.begin());
                 intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResult();
                 //myIntersection_gt_object_pairs.showResult();
+
+                // occlusion image
+                // occlusion boundary
             }
         }
         // -----
     }
-
 }
 
 
