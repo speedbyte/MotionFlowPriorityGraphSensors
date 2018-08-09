@@ -95,8 +95,9 @@ public:
 
     Circle(ushort radius, std::unique_ptr<Noise> &noise, ushort depth) : m_objectRadius(radius/2), ObjectImageShapeData(radius, radius, noise, depth) {
         m_data_image.create(radius, radius, CV_8UC3);
+        m_data_image.setTo(cv::Scalar(255,255,255));
         m_data_depth.create(radius, radius, CV_8UC1);
-        cv::circle(m_data_image, cv::Point(m_objectRadius, m_objectRadius), m_objectRadius, cv::Scalar(255,0,0));
+        cv::circle(m_data_image, cv::Point(m_objectRadius, m_objectRadius), m_objectRadius, cv::Scalar(255,0,0), CV_FILLED);
         applyNoise(noise);
         applyDepth(depth);
     };

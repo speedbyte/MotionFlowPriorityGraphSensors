@@ -21,7 +21,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     Circle circle_obj1(std::max(30,70), objectNoise_noNoise, 11); // width, height
 
     Rectangle rectangle_obj2(30, 70, objectNoise, 200); // width, height
-    Circle circle_obj2(std::max(30,70), objectNoise, 200); // width, height
+    Circle circle_obj2(std::max(30,70), objectNoise_noNoise, 200); // width, height
 
     Achterbahn achterbahn;
 
@@ -103,6 +103,23 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getImage().clone();
             depth_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getDepth().clone();
 
+            cv::Mat binary_image, gray_image;
+            std::vector<std::vector<cv::Point> > contours;
+            cv::cvtColor(image_data_and_shape, gray_image, CV_BGR2GRAY);
+            cv::threshold(gray_image, binary_image, 128, 255, CV_THRESH_BINARY);
+            cv::findContours(binary_image, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE );
+
+            //Draw the contours
+            cv::Mat contourImage(binary_image.size(), CV_8UC3, cv::Scalar(0,0,0));
+            cv::Scalar colors[3];
+            colors[0] = cv::Scalar(255, 0, 0);
+            colors[1] = cv::Scalar(0, 255, 0);
+            colors[2] = cv::Scalar(0, 0, 255);
+            for (size_t idx = 0; idx < contours.size(); idx++) {
+                cv::drawContours(contourImage, contours, idx, colors[idx % 3]);
+            }
+            cv::imshow("con", contourImage);
+            cv::waitKey(0);
             if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).occluded )) {
 
                 image_data_and_shape.copyTo(tempGroundTruthImage(
