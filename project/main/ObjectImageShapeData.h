@@ -17,7 +17,6 @@ protected:
     cv::Mat m_data_depth;
     ushort m_objectWidth;
     ushort m_objectHeight;
-    ushort m_objectRadius;
     ushort m_depth;
 
 public:
@@ -26,19 +25,6 @@ public:
 
     ObjectImageShapeData(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth ) : m_objectWidth(width), m_objectHeight
             (height), m_depth(depth) {
-        m_data_image.create(height, width, CV_8UC3);
-        m_data_depth.create(height, width, CV_8UC1);
-        applyNoise(noise);
-        applyDepth(depth);
-    }
-
-    ObjectImageShapeData(ushort radius, std::unique_ptr<Noise> &noise, ushort depth ) : m_objectWidth(radius), m_objectHeight
-            (radius), m_objectRadius(radius/2), m_depth(depth) {
-        m_data_image.create(radius, radius, CV_8UC3);
-        m_data_depth.create(radius, radius, CV_8UC1);
-        cv::circle(m_data_image, cv::Point(m_objectRadius, m_objectRadius), m_objectRadius, cv::Scalar(255,0,0));
-        applyNoise(noise);
-        applyDepth(depth);
     }
 
     virtual void process() {};
@@ -73,6 +59,8 @@ public:
 
     // The canvas can move to simulate a moving car. Hence we need position etc.
     Canvas( ushort width, ushort height, std::unique_ptr<Noise> &noise ) : ObjectImageShapeData(width, height, noise, 0) {
+        m_data_image.create(height, width, CV_8UC3);
+        applyNoise(noise);
     };
 
     void process() override ;
@@ -87,7 +75,12 @@ private:
 
 public:
 
-    Rectangle(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(width, height, noise, depth) {};
+    Rectangle(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(width, height, noise, depth) {
+        m_data_image.create(height, width, CV_8UC3);
+        m_data_depth.create(height, width, CV_8UC1);
+        applyNoise(noise);
+        applyDepth(depth);
+    };
 
     void process() override ;
 
@@ -96,10 +89,17 @@ public:
 class Circle :  public ObjectImageShapeData {
 
 private:
+    ushort m_objectRadius;
 
 public:
 
-    Circle(ushort radius, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(radius, noise, depth) {};
+    Circle(ushort radius, std::unique_ptr<Noise> &noise, ushort depth) : m_objectRadius(radius/2), ObjectImageShapeData(radius, radius, noise, depth) {
+        m_data_image.create(radius, radius, CV_8UC3);
+        m_data_depth.create(radius, radius, CV_8UC1);
+        cv::circle(m_data_image, cv::Point(m_objectRadius, m_objectRadius), m_objectRadius, cv::Scalar(255,0,0));
+        applyNoise(noise);
+        applyDepth(depth);
+    };
 
     void process() override ;
 

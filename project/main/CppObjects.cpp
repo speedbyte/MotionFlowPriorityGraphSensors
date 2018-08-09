@@ -15,9 +15,10 @@
 void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
     std::unique_ptr<Noise> objectNoise = std::make_unique<ColorfulNoise>();
+    std::unique_ptr<Noise> objectNoise_noNoise = std::make_unique<NoNoise>();
 
     Rectangle rectangle_obj1(30, 70, objectNoise, 11); // width, height
-    Circle circle_obj1(std::max(30,70), objectNoise, 11); // width, height
+    Circle circle_obj1(std::max(30,70), objectNoise_noNoise, 11); // width, height
 
     Rectangle rectangle_obj2(30, 70, objectNoise, 200); // width, height
     Circle circle_obj2(std::max(30,70), objectNoise, 200); // width, height
@@ -39,7 +40,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     objectMetaDataList.at(0) = achterbahn;
     objectMetaDataList.at(0).setObjectShape(circle_obj1);
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
-
 
     achterbahn = Achterbahn("random_object", 220);
     achterbahn.process(Dataset::getFrameSize());
