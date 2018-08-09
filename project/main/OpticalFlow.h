@@ -98,13 +98,13 @@ protected:
     void getCombination( const std::vector<Objects *> &m_list_objects, std::vector<std::pair<Objects*, Objects*> > &list_of_objects_combination);
 
     void find_collision_points_given_two_line_parameters(const cv::Point2f lineparameters1, const cv::Point2f lineparameters2,
-                                                         cv::Mat &tempMatrix, std::vector<cv::Point2f> &collision_points);
+                                                         std::vector<cv::Point2f> &collision_points);
 
 public:
 
     OpticalFlow( std::vector<ushort> evaluation_list, std::string weather, std::string opticalFlowName, std::vector<Objects *> &ptr_list_gt_objects, std::vector<std::unique_ptr<Objects>> &ptr_list_simulated_objects_base, std::vector<Objects *> &ptr_list_simulated_objects, ushort stepSize ) : m_evaluation_list(evaluation_list), m_weather(weather), m_opticalFlowName(opticalFlowName), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 
-    const std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS > > > > & getCollisionPoints () const {
+    const std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS > > > > &getCollisionPoints () const {
         return m_list_sensor_collision_points;
     }
 
@@ -124,10 +124,11 @@ public:
         return m_sensor_scenario_displacement_occurence;
     };
 
-
     void prepare_directories_common(ushort SENSOR_COUNT);
 
     virtual void prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {};
+
+    void find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT);
 
     void generate_collision_points(ushort SENSOR_COUNT);
 

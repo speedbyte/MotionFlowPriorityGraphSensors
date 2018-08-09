@@ -323,6 +323,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
                 gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.find_ground_truth_flow_occlusion_boundary((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 

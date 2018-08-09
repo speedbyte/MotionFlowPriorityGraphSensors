@@ -33,10 +33,12 @@ public:
 
 struct MyIntersection {
 
+private:
     std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > > m_result;
 
-    template < typename T1, typename T2 >
-    T1 find_intersection(T1 __first1, T1 __last1, T2 __first2, T2 __last2, T1 __result)
+public:
+    template < typename T1, typename T2, typename R >
+    T1 find_intersection(T1 __first1, T1 __last1, T2 __first2, T2 __last2, R __result)
     {
         while (__first1 != __last1 && __first2 != __last2)
             if (__comp(__first1, __first2))
@@ -82,6 +84,14 @@ struct MyIntersection {
         std::cout << "point types" << std::endl;
         return ( (*lhs).x < (*rhs).x ) ;
     }
+
+    void showResult() {
+
+        for (ushort index = 0; index < m_result.size(); index++) {
+            std::cout << "co1 " << m_result.at(index).first.x << " " << m_result.at(index).first.y << std::endl;
+        }
+    }
+
 
 };
 

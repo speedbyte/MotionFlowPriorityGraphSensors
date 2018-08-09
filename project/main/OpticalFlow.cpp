@@ -64,7 +64,6 @@ void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
 
 }
 
-
 void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility) {
 
     char sensor_index_folder_suffix[50];
@@ -90,7 +89,6 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
     }
 }
-
 
 void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
 
@@ -172,13 +170,13 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 }
             }
             // intersection of final and roi
-            MyIntersection myIntersection;
+            MyIntersection myIntersection_gt_roi_objects;
             std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 
-            result_it = myIntersection.find_intersection(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(),
+            result_it = myIntersection_gt_roi_objects.find_intersection(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(),
                                                          temp_frame_coordinates_displacement2.begin(), temp_frame_coordinates_displacement2.end(),
                                                          frame_stencil_displacement.begin());
-            frame_stencil_displacement = myIntersection.getResult();
+            frame_stencil_displacement = myIntersection_gt_roi_objects.getResult();
 
             // std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
             bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
@@ -434,7 +432,6 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
 }
 
-
 void OpticalFlow::getCombination(const std::vector<Objects *> &m_list_objects,
                                  std::vector<std::pair<Objects *, Objects *> > &list_of_objects_combination) {
     std::vector<Objects *>::const_iterator objectIterator = m_list_objects.begin();
@@ -449,7 +446,6 @@ void OpticalFlow::getCombination(const std::vector<Objects *> &m_list_objects,
         }
     }
 }
-
 
 void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
@@ -832,8 +828,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
 }
 
-
-
 void OpticalFlow::plot_stencil(ushort SENSOR_COUNT) {
 
     std::vector<Objects*> list_of_current_objects;
@@ -933,36 +927,103 @@ void OpticalFlow::plot_stencil(ushort SENSOR_COUNT) {
     }
 }
 
+void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT) {
+
+    // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
+    // pixels lie on the occlusion boundary.
+    // intersection coordinates, convert to Mat, fill with 0, and then find the contour. This is the occlusion boundary.
+    // subtract area for evaluation from the object farther away.
+    // total = visible part object front + visible part object back
+    // boundary = common
+    // invisible part = total object part back - visible part object back
+    // frame_stencil_displacement contains ground truth - all pixels are present in the vector
+
+    // -----
+
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+
+        unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
+                sensor_index).size();
+        assert(FRAME_COUNT > 0);
+
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+            std::cout << "current_frame_index " << current_frame_index << std::endl;
+
+            std::vector<std::pair<Objects *, Objects *> > list_of_current_objects_combination;
+            std::vector<std::pair<Objects *, Objects *> > list_of_gt_objects_combination;
+            std::vector<std::pair<Objects *, Objects *> > list_of_simulated_objects_combination;
+
+            unsigned COUNT;
+            if (m_opticalFlowName == "ground_truth") {
+                COUNT = 1;
+                getCombination(m_ptr_list_gt_objects, list_of_gt_objects_combination);
+                list_of_current_objects_combination = list_of_gt_objects_combination;
+
+            } else {
+                COUNT = DATAFILTER_COUNT;
+                getCombination(m_ptr_list_simulated_objects, list_of_simulated_objects_combination);
+                list_of_current_objects_combination = list_of_simulated_objects_combination;
+            }
+
+            for (ushort obj_combination_index = 0;
+                 obj_combination_index < list_of_current_objects_combination.size(); obj_combination_index++) {
+                std::cout << "collision between object name "
+                          << list_of_current_objects_combination.at(obj_combination_index).first->getObjectName() <<
+                          " and object name "
+                          << list_of_current_objects_combination.at(obj_combination_index).second->getObjectName()
+                          << "\n";
+                const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject1 = list_of_current_objects_combination.at(
+                        obj_combination_index).first->get_object_stencil_point_displacement().at
+                        (sensor_index).at(current_frame_index);
+
+                const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject2 = list_of_current_objects_combination.at(
+                        obj_combination_index).second->get_object_stencil_point_displacement().at
+                        (sensor_index).at(current_frame_index);
+                MyIntersection myIntersection_gt_object_pairs;
+
+                std::vector<std::pair<cv::Point2f, cv::Point2f>> intersection_ground_truth_objects(
+                        groundtruthobject1.size());
+                intersection_ground_truth_objects.clear();
+
+                myIntersection_gt_object_pairs.find_intersection(groundtruthobject1.begin(), groundtruthobject1.end(),
+                                                                 groundtruthobject2.begin(), groundtruthobject2.end(),
+                                                                 intersection_ground_truth_objects.begin());
+                intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResult();
+                //myIntersection_gt_object_pairs.showResult();
+            }
+        }
+        // -----
+    }
+
+}
+
+
 
 void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
 
-    std::vector<Objects*> list_of_current_objects;
     std::vector<std::pair<Objects*, Objects* > > list_of_current_objects_combination;
-
-    std::vector<std::pair<Objects*, Objects*> > list_of_gt_objects_combination;
+    std::vector<std::pair<Objects*, Objects* > > list_of_gt_objects_combination;
     std::vector<std::pair<Objects*, Objects* > > list_of_simulated_objects_combination;
 
     getCombination(m_ptr_list_gt_objects, list_of_gt_objects_combination);
-    getCombination(m_ptr_list_simulated_objects, list_of_simulated_objects_combination);
 
     unsigned COUNT;
     if ( m_opticalFlowName == "ground_truth") {
         COUNT = 1;
-        list_of_current_objects = m_ptr_list_gt_objects;
         list_of_current_objects_combination = list_of_gt_objects_combination;
     }
     else {
         COUNT = DATAFILTER_COUNT;
-        list_of_current_objects = m_ptr_list_simulated_objects;
+        getCombination(m_ptr_list_simulated_objects, list_of_simulated_objects_combination);
         list_of_current_objects_combination = list_of_simulated_objects_combination;
     }
 
     char sensor_index_folder_suffix[50];
-
-    for ( ushort obj_index = 0; obj_index < list_of_current_objects_combination.size(); obj_index++ ) {
-        std::cout << "collision between object name " << list_of_current_objects_combination.at(obj_index).first->getObjectName() <<
+    for ( ushort obj_combination_index = 0; obj_combination_index < list_of_current_objects_combination.size(); obj_combination_index++ ) {
+        std::cout << "collision between object name " << list_of_current_objects_combination.at(obj_combination_index).first->getObjectName() <<
                   " and object name "
-                  << list_of_current_objects_combination.at(obj_index).second->getObjectName()<< "\n";
+                  << list_of_current_objects_combination.at(obj_combination_index).second->getObjectName()<< "\n";
     }
 
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
@@ -975,12 +1036,10 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
             std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS> > sensor_frame_collision_points;
             std::vector<std::vector<cv::Point2f> > sensor_frame_line_angles;
 
-            sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-
             std::cout << "generating collision points in OpticalFlow.cpp for " << m_resultordner << " " << sensor_index
                       << " for datafilter " << datafilter_index << std::endl;
 
-            unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
+            unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)
                     ->get_list_object_line_parameters().at(0).at(sensor_index).size();
 
             assert(FRAME_COUNT > 0);
@@ -988,7 +1047,6 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
             for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
                 std::cout << "current_frame_index " << current_frame_index << " for datafilter_index " << datafilter_index<< std::endl;
-
 
                 std::vector<cv::Point2f> frame_collision_points;
                 std::vector<OPTICAL_FLOW_COLLISION_METRICS> frame_collision_points_average;
@@ -998,70 +1056,51 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
                 ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                         (0).at(current_frame_index).frame_no;
                 sprintf(file_name_image, "000%03d_10.png", vires_frame_count);
-                std::string temp_collision_image_path =
-                        m_collision_object_path.string() + sensor_index_folder_suffix + "/" + file_name_image;
 
-
-                FlowImageExtended F_png_write(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
-
-                cv::Mat tempMatrix;
-                tempMatrix.create(Dataset::getFrameSize(), CV_32FC3);
-                tempMatrix = cv::Scalar_<unsigned>(255, 255, 255);
-                assert(tempMatrix.channels() == 3);
-
-                for (unsigned obj_index = 0;
-                     obj_index < list_of_current_objects_combination.size(); obj_index++) {
+                for (unsigned obj_combination_index = 0;
+                     obj_combination_index < list_of_current_objects_combination.size(); obj_combination_index++) {
 
                     if ((list_of_current_objects_combination.at(
-                                    obj_index).first->get_object_extrapolated_visibility().at(
-                                    sensor_index)
-                            .at(current_frame_index)) && (list_of_current_objects_combination.at(obj_index).second->
-                                    get_object_extrapolated_visibility()
-                            .at(sensor_index)
-                            .at(current_frame_index))) {
+                                    obj_combination_index).first->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index)) &&
+                            (list_of_current_objects_combination.at(obj_combination_index).second->get_object_extrapolated_visibility()
+                            .at(sensor_index).at(current_frame_index))) {
 
                         // First Freeze lineparamter1 and look for collision points
                         // Then freeze lineparameter2 and find collision point.
                         // Then push_back the two points in the vector
 
                         cv::Point2f lineparameters1 = list_of_current_objects_combination.at(
-                                        obj_index).first->get_list_object_line_parameters().at(datafilter_index).at
-                                        (sensor_index)
-                                .at(current_frame_index);
+                                        obj_combination_index).first->get_list_object_line_parameters().at(datafilter_index).at
+                                        (sensor_index).at(current_frame_index);
 
                         cv::Point2f temp_line_parameters1 = lineparameters1;
 
-
                         cv::Point2f lineparameters2 = list_of_gt_objects_combination.at(
-                                obj_index).second->get_list_object_line_parameters().at(0).at(sensor_index).at(current_frame_index);
+                                obj_combination_index).second->get_list_object_line_parameters().at(0).at(sensor_index).at(current_frame_index);
 
                         std::cout << "object "
-                                  << list_of_current_objects_combination.at(obj_index).first->getObjectId()
+                                  << list_of_current_objects_combination.at(obj_combination_index).first->getObjectId()
                                   << " = " <<
-                                  lineparameters1 << " and object " << list_of_gt_objects_combination.at(obj_index)
+                                  lineparameters1 << " and object " << list_of_gt_objects_combination.at(obj_combination_index)
                                           .second->getObjectId() << " = " << lineparameters2 << std::endl;
 
-                        find_collision_points_given_two_line_parameters(lineparameters1,
-                                                                        lineparameters2, tempMatrix,
-                                                                        frame_collision_points);
+                        find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2, frame_collision_points);
 
                         lineparameters1 = list_of_current_objects_combination.at(
-                                        obj_index).second->get_list_object_line_parameters().at(datafilter_index).at
-                                        (sensor_index)
-                                .at(current_frame_index);
+                                        obj_combination_index).second->get_list_object_line_parameters().at(datafilter_index).at
+                                        (sensor_index).at(current_frame_index);
 
-                        lineparameters2 = list_of_gt_objects_combination.at(obj_index).first->get_list_object_line_parameters
-                                        ().at(0).at(sensor_index)
-                                .at(current_frame_index);
+                        lineparameters2 = list_of_gt_objects_combination.at(obj_combination_index).first->get_list_object_line_parameters
+                                        ().at(0).at(sensor_index).at(current_frame_index);
 
                         std::cout << "object "
-                                  << list_of_current_objects_combination.at(obj_index).second->getObjectId()
+                                  << list_of_current_objects_combination.at(obj_combination_index).second->getObjectId()
                                   << " = " <<
-                                  lineparameters1 << " and object " << list_of_gt_objects_combination.at(obj_index)
+                                  lineparameters1 << " and object " << list_of_gt_objects_combination.at(obj_combination_index)
                                           .first->getObjectId() << " = " << lineparameters2 << std::endl;
 
                         find_collision_points_given_two_line_parameters(lineparameters1, lineparameters2,
-                                                                        tempMatrix, frame_collision_points);
+                                                                        frame_collision_points);
 
                         if ( current_frame_index > 0 ) {
                             assert(temp_line_parameters1!=lineparameters1);
@@ -1075,18 +1114,16 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
                         frame_collision_points.push_back(cv::Point2f(-1, -1));
                         frame_collision_points.push_back(cv::Point2f(-1, -1));
                         std::cout << "object "
-                                  << list_of_current_objects_combination.at(obj_index).first->getObjectId()
+                                  << list_of_current_objects_combination.at(obj_combination_index).first->getObjectId()
                                   << " visibility = " <<
                                   list_of_current_objects_combination.at(
-                                                  obj_index).first->get_object_extrapolated_visibility().at(
-                                                  sensor_index)
-                                          .at(current_frame_index) << " and object "
-                                  << list_of_gt_objects_combination.at(obj_index)
+                                                  obj_combination_index).first->get_object_extrapolated_visibility().at(
+                                                  sensor_index).at(current_frame_index) << " and object "
+                                  << list_of_gt_objects_combination.at(obj_combination_index)
                                           .second->getObjectId() << " visibility = "
                                   << list_of_current_objects_combination.at(
-                                                  obj_index).second->get_object_extrapolated_visibility().at(
-                                                  sensor_index)
-                                          .at(current_frame_index)
+                                                  obj_combination_index).second->get_object_extrapolated_visibility().at(
+                                                  sensor_index).at(current_frame_index)
                                   << " and hence not generating any collision points for this object combination "
                                   << std::endl;
                     }
@@ -1107,19 +1144,6 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
                     }
                 }
 
-                //Create png Matrix with 3 channels: x mean_displacement. y displacment and ObjectId
-                for (int32_t row = 0; row < Dataset::getFrameSize().height; row++) { // rows
-                    for (int32_t column = 0; column < Dataset::getFrameSize().width; column++) {  // cols
-                        if (tempMatrix.at<cv::Vec3f>(row, column)[2] > 0.5) {
-                            F_png_write.setFlowU(column, row, tempMatrix.at<cv::Vec3f>(row, column)[1]);
-                            F_png_write.setFlowV(column, row, tempMatrix.at<cv::Vec3f>(row, column)[0]);
-                            F_png_write.setObjectId(column, row, tempMatrix.at<cv::Vec3f>(row, column)[2]);
-                        }
-                    }
-                }
-
-                F_png_write.writeExtended(temp_collision_image_path);
-
                 sensor_frame_collision_points.push_back(frame_collision_points_average);
                 sensor_frame_line_angles.push_back(frame_line_angles);
             }
@@ -1136,9 +1160,8 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
     std::cout << m_resultordner + " collision generation done"  << std::endl;
 }
 
-
 void OpticalFlow::find_collision_points_given_two_line_parameters(const cv::Point2f lineparameters1, const cv::Point2f lineparameters2,
-                                                                  cv::Mat &tempMatrix, std::vector<cv::Point2f> &frame_collision_points) {
+                                                                  std::vector<cv::Point2f> &frame_collision_points) {
     // first fill rowco
     cv::Matx<float,2,2> coefficients (-lineparameters1.x,1,-lineparameters2.x,1);
     cv::Matx<float,2,1> rhs(lineparameters1.y,lineparameters2.y);
