@@ -154,17 +154,19 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 throw ("No image file found error");
             }
             cv::Mat final, finalGray;
+            cv::cvtColor(image_02_frame, image_02_frame, cv::COLOR_BGR2GRAY);
+            cv::cvtColor(backgroundImage, backgroundImage, cv::COLOR_BGR2GRAY);
+
             cv::compare(backgroundImage, image_02_frame, final, cv::CMP_EQ);
             // When the comparison result is true, the corresponding element of output
             // array is set to 255. The comparison operations can be replaced with the
             // equivalent matrix expressions:
-            cv::cvtColor(final, finalGray, cv::COLOR_BGR2GRAY);
-            //cv::imshow("try", finalGray);
+            //cv::imshow("try", final);
             //cv::waitKey(0);
 
             for (unsigned j = 0; j < final.cols; j += 1) {
                 for (unsigned k = 0; k < final.rows; k += 1) {
-                    if ( finalGray.at<char>(k,j) == 0 ) {
+                    if ( final.at<char>(k,j) == 0 ) {
                         temp_frame_coordinates_displacement2.push_back(
                                 std::make_pair(cv::Point2f(j, k), gt_displacement));
                     }
