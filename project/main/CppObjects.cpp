@@ -72,7 +72,8 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
         //draw new ground truth image.
         cv::Mat tempGroundTruthImage = canvas.getImage().clone();
-        cv::Mat tempGroundTruthDepthImage(Dataset::getFrameSize(), CV_8UC1);
+        cv::Mat tempGroundTruthDepthImage(Dataset::getFrameSize(), CV_8UC1, cv::Scalar(255));
+        //tempGroundTruthDepthImage = cv::Mat::zeros(Dataset::getFrameSize(), CV_8UC1);
 
         assert((tempGroundTruthImage.channels() == 3 ) && ( tempGroundTruthDepthImage.channels() == 1 ));
 
@@ -123,10 +124,16 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                     //cv::drawContours(tempGroundTruthImage, contours, idx, cv::Scalar(0,0,0));
                     break;
                 }
+                cv::Scalar color;
                 //cv::fillConvexPoly(tempGroundTruthDepthImage, contours.at(0), cv::Scalar(255,0,0));
+                if ( obj_index == 0 ) {
+                    color = cv::Scalar(255,0,0);
+                } else {
+                    color = cv::Scalar(0,255,0);
+                }
 
                 cv::circle(tempGroundTruthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
-                                                           cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar(255,0,0), CV_FILLED);
+                                                           cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, color, CV_FILLED);
 
                 /*
                 image_data_and_shape.copyTo(tempGroundTruthImage(
