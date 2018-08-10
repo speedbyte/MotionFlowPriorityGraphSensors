@@ -495,7 +495,7 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
                         m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()] = m_ptr_customObjectMetaDataList.at(objectCount);
                         m_ptr_customObjectMetaDataList.at(objectCount)->setObjectName((*file_node_iterator)["name"].string());
                         std::unique_ptr<Noise> noNoise = std::make_unique<NoNoise>(NoNoise());
-                        Rectangle rectangle((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height, noNoise, 0); // width, height
+                        Rectangle rectangle((int)(*file_node_iterator)["dim_x_camera"], (int)(*file_node_iterator)["dim_y_camera"], noNoise, 0); // width, height
                         m_ptr_customObjectMetaDataList.at(objectCount)->setObjectShape(rectangle);
                         m_ptr_customObjectMetaDataList.at(objectCount)->setStartPoint(ITERATION_START_POINT);
                         m_objectCount += 1;
