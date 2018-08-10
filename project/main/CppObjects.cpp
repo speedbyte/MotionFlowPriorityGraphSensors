@@ -103,25 +103,38 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getImage().clone();
             depth_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getDepth().clone();
 
+            //cv::imshow("con", image_data_and_shape);
+            //cv::waitKey(0);
+
             cv::Mat binary_image, gray_image;
             std::vector<std::vector<cv::Point> > contours;
             cv::cvtColor(image_data_and_shape, gray_image, CV_BGR2GRAY);
             cv::threshold(gray_image, binary_image, 128, 255, CV_THRESH_BINARY);
-            cv::findContours(binary_image, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE );
+            cv::findContours(binary_image, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
+                             cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                                     current_frame_index).m_object_location_camera_px.location_x_px),
+                                       cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                                               current_frame_index).m_object_location_camera_px.location_y_px)));
+
+            //cv::imshow("con", binary_image);
+            //Key(0);
 
             //Draw the contours
             cv::Mat contourImage(binary_image.size(), CV_8UC3, cv::Scalar(0,0,0));
-            cv::Scalar colors[3];
-            colors[0] = cv::Scalar(255, 0, 0);
-            colors[1] = cv::Scalar(0, 255, 0);
-            colors[2] = cv::Scalar(0, 0, 255);
             for (size_t idx = 0; idx < contours.size(); idx++) {
-                cv::drawContours(contourImage, contours, idx, colors[idx % 3]);
+                //cv::drawContours(contourImage, contours, idx, cv::Scalar(255,255,255));
+                break;
             }
-            cv::imshow("con", contourImage);
-            cv::waitKey(0);
+            //cv::imshow("con", contourImage);
+            //cv::waitKey(0);
             if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).occluded )) {
 
+                for (size_t idx = 0; idx < contours.size(); idx++) {
+                    cv::drawContours(tempGroundTruthImage, contours, idx, cv::Scalar(0,0,0));
+                    break;
+                }
+
+                /*
                 image_data_and_shape.copyTo(tempGroundTruthImage(
                         cv::Rect(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                 current_frame_index).m_object_location_camera_px.location_x_px),
@@ -130,7 +143,8 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px))));
 
-                depth_data_and_shape.copyTo(tempGroundTruthDepthImage(
+                */
+                 depth_data_and_shape.copyTo(tempGroundTruthDepthImage(
                         cv::Rect(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                 current_frame_index).m_object_location_camera_px.location_x_px),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
