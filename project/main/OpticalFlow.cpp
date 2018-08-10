@@ -131,7 +131,6 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             frame_stencil_displacement.clear();
             frame_stencil_visibility.clear();
 
-
             // 2nd method - Frame differencing
             char sensor_index_folder_suffix[50];
             sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
@@ -156,6 +155,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             }
             cv::Mat final, finalGray;
             cv::compare(backgroundImage, image_02_frame, final, cv::CMP_EQ);
+            // When the comparison result is true, the corresponding element of output
+            // array is set to 255. The comparison operations can be replaced with the
+            // equivalent matrix expressions:
             cv::cvtColor(final, finalGray, cv::COLOR_BGR2GRAY);
             //cv::imshow("try", finalGray);
             //cv::waitKey(0);
@@ -177,6 +179,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                                                          temp_frame_coordinates_displacement2.begin(), temp_frame_coordinates_displacement2.end(),
                                                          frame_stencil_displacement.begin());
             frame_stencil_displacement = myIntersection_gt_roi_objects.getResult();
+
+            assert(frame_stencil_displacement.size()>0);
 
             // std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());
             bool isSorted = std::is_sorted(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());

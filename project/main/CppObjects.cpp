@@ -25,11 +25,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
     Achterbahn achterbahn;
 
-    cv::Mat tempGroundTruthImageBase;
-
     Canvas canvas((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height, noise);
-
-    tempGroundTruthImageBase = canvas.getImage().clone();
 
     achterbahn = Achterbahn("rectangle_long", 100);
     achterbahn.process(Dataset::getFrameSize());
@@ -69,29 +65,24 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     cv::Mat image_data_and_shape;
     cv::Mat depth_data_and_shape;
 
-    //draw new ground truth image.
-    cv::Mat tempGroundTruthImage;
-    cv::Mat tempGroundTruthDepthImage;
-
-    tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
-    tempGroundTruthDepthImage.create(Dataset::getFrameSize(), CV_8UC1);
-
-    assert((tempGroundTruthImage.channels() == 3 ) && ( tempGroundTruthDepthImage.channels() == 1 ));
 
     for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_DATASET; current_frame_index++) {
 
-        // TO DO - when the variable overflows.
+        // TODO - when the variable overflows.
+
+        //draw new ground truth image.
+        cv::Mat tempGroundTruthImage = canvas.getImage().clone();
+        cv::Mat tempGroundTruthDepthImage(Dataset::getFrameSize(), CV_8UC1);
+
+        assert((tempGroundTruthImage.channels() == 3 ) && ( tempGroundTruthDepthImage.channels() == 1 ));
 
         char file_name_image[50], file_name_depth_image[50], sensor_index_folder_suffix[50];
         sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
         sprintf(file_name_image, "000%03d_10.png", current_frame_index);
         sprintf(file_name_depth_image, "depth_000%03d_10.png", current_frame_index);
+        std::basic_string<char> base_image_file_with_path = m_generatepath.string() + "/" + file_name_image; //+ file_name_image;
         std::basic_string<char> input_image_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ file_name_image;
         std::basic_string<char> input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_depth_image; //+ "/" +  file_name_depth;
-
-        tempGroundTruthImage = tempGroundTruthImageBase.clone();
-        cv::cvtColor(tempGroundTruthImageBase.clone(), tempGroundTruthDepthImage, CV_BGR2GRAY);
-
 
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
@@ -135,7 +126,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                 //cv::fillConvexPoly(tempGroundTruthDepthImage, contours.at(0), cv::Scalar(255,0,0));
 
                 cv::circle(tempGroundTruthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
-                                                           cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar(255,0,0,11), CV_FILLED);
+                                                           cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar(255,0,0), CV_FILLED);
 
                 /*
                 image_data_and_shape.copyTo(tempGroundTruthImage(
@@ -158,8 +149,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                 ushort depth;
                 if ( obj_index == 0 ) {
                     depth = 200;
-                }
-                else {
+                } else {
                     depth = 11;
                 }
                 cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),

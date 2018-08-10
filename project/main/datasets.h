@@ -23,7 +23,7 @@
 #define DISPLACEMENT_ROUND_OFF 100
 
 #define ITERATION_START_POINT 0
-#define ITERATION_END_POINT 40
+#define ITERATION_END_POINT 9
 #define MAX_ITERATION_RESULTS (ITERATION_END_POINT - ITERATION_START_POINT) // 60 generate result. this cannot be more than vector
 
 #define MAX_ITERATION_DATASET MAX_ITERATION_RESULTS // 60 generate result. this cannot be more than vector
