@@ -27,49 +27,56 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
     unsigned long FRAME_COUNT = ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
-    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
-
-        tempGroundTruthImage = cv::Scalar::all(255);
-        char sensor_index_folder_suffix[20];
-        sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
-
-        sprintf(file_name_image, "000%03d_10.png", current_frame_index );
-        std::string input_image_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image;
-
-        sprintf(file_name_image_output, "000%03d_10_bb.png", current_frame_index );
-        //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
-
-        cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
-        if ( tempGroundTruthImageBase.data == NULL ) {
-            std::cerr << input_image_file_with_path << " not found" << std::endl;
-            throw ("No image file found error");
-        }
-        tempGroundTruthImage = cv::Scalar::all(255);
-        tempGroundTruthImage = tempGroundTruthImageBase.clone();
-
+    if ( suffix == "cpp_") {
         for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+            m_ptr_customObjectMetaDataList.at(obj_index)->setCppData();
+        }
+    }
+    else {
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-            if ( suffix == "cpp_") {
-                m_ptr_customObjectMetaDataList.at(obj_index)->setCppData(current_frame_index);
+            tempGroundTruthImage = cv::Scalar::all(255);
+            char sensor_index_folder_suffix[20];
+            sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+
+            sprintf(file_name_image, "000%03d_10.png", current_frame_index);
+            std::string input_image_file_with_path =
+                    m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image;
+
+            sprintf(file_name_image_output, "000%03d_10_bb.png", current_frame_index);
+            //output_image_file_with_path = m_generatepath.string() + "stencil/" + file_name_image_output;
+
+            cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+            if (tempGroundTruthImageBase.data == NULL) {
+                std::cerr << input_image_file_with_path << " not found" << std::endl;
+                throw ("No image file found error");
             }
-            else {
+            tempGroundTruthImage = cv::Scalar::all(255);
+            tempGroundTruthImage = tempGroundTruthImageBase.clone();
 
-                object_realworld_dim_m_str object_realworld_dim_m = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+            for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+
+                object_realworld_dim_m_str object_realworld_dim_m = m_ptr_customObjectMetaDataList.at(
+                        obj_index)->getAll().at(
                         current_frame_index).m_object_dimension_realworld_m;
 
-                object_location_inertial_m_str pos_object_inertial = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                object_location_inertial_m_str pos_object_inertial = m_ptr_customObjectMetaDataList.at(
+                        obj_index)->getAll().at(
                         current_frame_index).m_object_location_inertial_m;
 
                 object_location_m_str object_location_m = m_ptr_customObjectMetaDataList.at(
                         obj_index)->getAll().at(
                         current_frame_index).m_object_location_usk_m;
 
-                object_rotation_inertial_rad_str orientation_object_inertial = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                object_rotation_inertial_rad_str orientation_object_inertial = m_ptr_customObjectMetaDataList.at(
+                        obj_index)->getAll().at(
                         current_frame_index).m_object_rotation_inertial_rad;
 
-                sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_ptr_customSensorMetaDataList.at(0)->getAll().at(current_frame_index).m_sensor_location_carrier_m;
+                sensor_location_carrier_m_str pos_sensor_carrier_inertial = m_ptr_customSensorMetaDataList.at(
+                        0)->getAll().at(current_frame_index).m_sensor_location_carrier_m;
 
-                sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_ptr_customSensorMetaDataList.at(0)->getAll().at(
+                sensor_rotation_carrier_rad_str sensor_rotation_carrier_rad = m_ptr_customSensorMetaDataList.at(
+                        0)->getAll().at(
                         current_frame_index).m_sensor_rotation_carrier_rad;
 
                 sensor_offset_m_str sensor_offset_m = m_ptr_customSensorMetaDataList.at(
@@ -83,7 +90,8 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
                 float offset_z = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                         current_frame_index).m_object_offset_m.offset_z;
 
-                if (m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).visMask && pos_object_inertial.location_x_m != 0) {
+                if (m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).visMask &&
+                    pos_object_inertial.location_x_m != 0) {
 
                     std::vector<cv::Point3f> bounding_points_3d(9);
                     std::vector<cv::Point2f> bounding_points_2d(9);
@@ -167,23 +175,27 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
                         // The resulting points are the bounding box points in the USK co-ordinate system.
                         bounding_points_3d.at(i) = final;
 
-                        cv::Point2f camPoint = Utils::worldToCameraIntrinsc(final, sensor_fov_rad.fov_vertical_rad, FOCAL_X, FOCAL_Y);
+                        cv::Point2f camPoint = Utils::worldToCameraIntrinsc(final, sensor_fov_rad.fov_vertical_rad,
+                                                                            FOCAL_X, FOCAL_Y);
                         // FOCAL_X, FOCAL_Y, principalx and principaly can be obtained from the camera info from VIRES
                         //cv::Point2f camPoint_openglfrustum = Utils::worldToCamera(final, fov_rad.vertical, FOCAL_X, FOCAL_Y);
                         bounding_points_2d.at(i) = cv::Point2f(camPoint.x, camPoint.y);
 
                     }
 
-                    std::cout << "converting inertial to usk" << cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y)
+                    std::cout << "converting inertial to usk"
+                              << cv::Point2f(bounding_points_3d.at(8).x, bounding_points_3d.at(8).y)
                               << std::endl;
                     std::cout << "original usk"
                               << cv::Point2f(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                       current_frame_index).m_object_location_usk_m.location_x_m,
                                              m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                                                     current_frame_index).m_object_location_usk_m.location_y_m) << std::endl;
+                                                     current_frame_index).m_object_location_usk_m.location_y_m)
+                              << std::endl;
 
-                    auto dist_usk_from_inertial = cv::norm(cv::Point2f(bounding_points_3d.at(8).x + sensor_offset_m.offset_x,
-                                                                       bounding_points_3d.at(8).y + sensor_offset_m.offset_y));
+                    auto dist_usk_from_inertial = cv::norm(
+                            cv::Point2f(bounding_points_3d.at(8).x + sensor_offset_m.offset_x,
+                                        bounding_points_3d.at(8).y + sensor_offset_m.offset_y));
                     auto dist_usk_original = cv::norm(
                             cv::Point2f(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                     current_frame_index).m_object_location_usk_m.location_x_m,
@@ -240,26 +252,27 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
                             m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                     current_frame_index).m_object_location_camera_px.cog_px.x,
                             m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                                    current_frame_index).m_object_location_camera_px.cog_px.y), 2, cv::Scalar(0, 255, 0), 4);
+                                    current_frame_index).m_object_location_camera_px.cog_px.y), 2,
+                               cv::Scalar(0, 255, 0), 4);
                     cv::Rect box_points = cv::boundingRect(box);
                     cv::rectangle(tempGroundTruthImage, box_points, cv::Scalar(0, 0, 255), 1, 8, 0);
 
                     //}
-                }
-                else {
-                    std::cout << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName() << " is occlued" << std::endl;
+                } else {
+                    std::cout << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName() << " is occlued"
+                              << std::endl;
                 }
             }
         }
-
-        //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
-        //cv::imshow("BB", tempGroundTruthImage);
-        //cv::waitKey(0);
-        //cv::destroyAllWindows();
-        //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
-        //---------------------------------------------------------------------------------
-
     }
+
+    //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+    //cv::imshow("BB", tempGroundTruthImage);
+    //cv::waitKey(0);
+    //cv::destroyAllWindows();
+    //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+    //---------------------------------------------------------------------------------
+
 }
 
 void BasicObjects::writePositionInYaml(std::string suffix) {

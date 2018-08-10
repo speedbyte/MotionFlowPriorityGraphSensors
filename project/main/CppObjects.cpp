@@ -73,10 +73,10 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     cv::Mat tempGroundTruthImage;
     cv::Mat tempGroundTruthDepthImage;
 
-    tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC3);
+    tempGroundTruthImage.create(Dataset::getFrameSize(), CV_32FC4);
     tempGroundTruthDepthImage.create(Dataset::getFrameSize(), CV_8UC1);
 
-    assert((tempGroundTruthImage.channels() == 3 ) && ( tempGroundTruthDepthImage.channels() == 1 ));
+    assert((tempGroundTruthImage.channels() == 4 ) && ( tempGroundTruthDepthImage.channels() == 1 ));
 
     for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_DATASET; current_frame_index++) {
 
@@ -118,7 +118,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
             //cv::imshow("con", binary_image);
             //Key(0);
-
             //Draw the contours
             cv::Mat contourImage(binary_image.size(), CV_8UC3, cv::Scalar(0,0,0));
             for (size_t idx = 0; idx < contours.size(); idx++) {
@@ -130,9 +129,13 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
             if ((!m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).occluded )) {
 
                 for (size_t idx = 0; idx < contours.size(); idx++) {
-                    cv::drawContours(tempGroundTruthImage, contours, idx, cv::Scalar(0,0,0));
+                    //cv::drawContours(tempGroundTruthImage, contours, idx, cv::Scalar(0,0,0));
                     break;
                 }
+                //cv::fillConvexPoly(tempGroundTruthDepthImage, contours.at(0), cv::Scalar(255,0,0));
+
+                cv::circle(tempGroundTruthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
+                                                           cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 35, cv::Scalar(255,0,0), CV_FILLED);
 
                 /*
                 image_data_and_shape.copyTo(tempGroundTruthImage(

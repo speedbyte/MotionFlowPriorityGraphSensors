@@ -272,12 +272,7 @@ public:
 
     void setObjectShape(ObjectImageShapeData objectShape) {
         m_objectMetaData_shape = objectShape;
-        ushort current_frame_index = 0;
-        for ( ushort i = m_objectMetaData_startPoint; i< MAX_ITERATION_GT_SCENE_GENERATION_DATASET+m_objectMetaData_startPoint; i++) {
-            m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = m_objectMetaData_shape.getImage().cols;
-            m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = m_objectMetaData_shape.getImage().rows;
-            current_frame_index++;
-        }
+        setCppData();
     }
 
     void setStartPoint(ushort startPoint) {
@@ -413,18 +408,32 @@ public:
 
     }
 
-    void setCppData(ushort frameNumber) {
+    void setCppData() {
 
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_x_px;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = m_object_gt_all.at(frameNumber).m_object_location_camera_px.location_y_px;
+        ushort current_frame_index = 0;
+        for ( ushort i = m_objectMetaData_startPoint; i< MAX_ITERATION_GT_SCENE_GENERATION_DATASET+m_objectMetaData_startPoint; i++) {
 
-        m_object_gt_all.at(frameNumber).m_object_location_camera_px.cog_px.x = (m_object_gt_all.at(frameNumber).m_region_of_interest_px.x + m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.width_px/2);
-        m_object_gt_all.at(frameNumber).m_object_location_camera_px.cog_px.y = (m_object_gt_all.at(frameNumber).m_region_of_interest_px.y + m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.height_px/2);
+            m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = m_objectMetaData_shape.getImage().cols;
+            m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = m_objectMetaData_shape.getImage().rows;
 
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.width_px;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.height_px = m_object_gt_all.at(frameNumber).m_object_dimension_camera_px.height_px;
+            m_object_gt_all.at(current_frame_index).m_region_of_interest_px.x = m_object_gt_all.at(
+                    current_frame_index).m_object_location_camera_px.location_x_px;
+            m_object_gt_all.at(current_frame_index).m_region_of_interest_px.y = m_object_gt_all.at(
+                    current_frame_index).m_object_location_camera_px.location_y_px;
 
+            m_object_gt_all.at(current_frame_index).m_object_location_camera_px.cog_px.x = (
+                    m_object_gt_all.at(current_frame_index).m_region_of_interest_px.x +
+                    m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px / 2);
+            m_object_gt_all.at(current_frame_index).m_object_location_camera_px.cog_px.y = (
+                    m_object_gt_all.at(current_frame_index).m_region_of_interest_px.y +
+                    m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px / 2);
 
+            m_object_gt_all.at(current_frame_index).m_region_of_interest_px.width_px = m_object_gt_all.at(
+                    current_frame_index).m_object_dimension_camera_px.width_px;
+            m_object_gt_all.at(current_frame_index).m_region_of_interest_px.height_px = m_object_gt_all.at(
+                    current_frame_index).m_object_dimension_camera_px.height_px;
+            current_frame_index++;
+        }
     }
     
     void setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
