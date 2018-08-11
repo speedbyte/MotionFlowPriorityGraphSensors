@@ -93,7 +93,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
             std::string position_image_file_with_path = m_generatepath.string() + '_' + std::to_string(m_sensorGroupCount)+ "/" + file_name_image;
 
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getImage().clone();
-            depth_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getDepth().clone();
+            depth_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getDepthImage().clone();
 
             //cv::imshow("con", image_data_and_shape);
             //cv::waitKey(0);
@@ -153,14 +153,17 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px))));
                 */
-                ushort depth;
+                unsigned char depth;
                 if ( obj_index == 0 ) {
                     depth = 200;
                 } else {
                     depth = 11;
                 }
                 cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
-                                                                cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar(depth), CV_FILLED);
+                                                                cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar_<unsigned char>(depth), CV_FILLED);
+
+                printf("! %u %u %u !", tempGroundTruthDepthImage.at<unsigned char>(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y));
+
 
             }
         }
@@ -172,5 +175,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         cv::imwrite(input_image_depth_file_with_path, tempGroundTruthDepthImage);
 
     }
+    std::cout << std::endl;
 
 }

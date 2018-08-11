@@ -70,9 +70,9 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
     char file_name_image_output[50];
-    ushort evaluation_frame_index = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+    ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
             (0).at(current_frame_index).frame_no;
-    sprintf(file_name_image_output, "000%03d_10.png", evaluation_frame_index);
+    sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
 
     std::string output_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
@@ -113,6 +113,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             // roi = cv::Scalar(gt_displacement.x, gt_displacement.y, static_cast<float>(1.0f));
             std::vector<std::pair<cv::Point2f,cv::Point2f > > temp_frame_coordinates_displacement;
             std::vector<std::pair<cv::Point2f,cv::Point2f > > temp_frame_coordinates_displacement2;
+            std::vector<cv::Point2f> depthCoordinates;
             cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                     obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
                     current_frame_index).second;
@@ -137,12 +138,22 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
 
             char file_name_input_image[50];
+            char file_name_input_image_depth[50];
+
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
 
             sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+            sprintf(file_name_input_image_depth, "depth_000%03d_10.png", image_frame_count);
+
+            std::cout << "current_frame_index " << current_frame_index << std::endl;
+
             std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string input_image_path_depth = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+
             cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
+            cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_GRAYSCALE);
+
             if ( image_02_frame.data == NULL ) {
                 std::cerr << input_image_path << " not found" << std::endl;
                 throw ("No image file found error");
@@ -154,7 +165,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 std::cerr << input_image_path_background << " not found" << std::endl;
                 throw ("No image file found error");
             }
-            cv::Mat final, finalGray;
+            cv::Mat final, finalDepth(Dataset::getFrameSize(),CV_8UC1);
             cv::cvtColor(image_02_frame, image_02_frame, cv::COLOR_BGR2GRAY);
             cv::cvtColor(backgroundImage, backgroundImage, cv::COLOR_BGR2GRAY);
 
@@ -162,21 +173,32 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             // When the comparison result is true, the corresponding element of output
             // array is set to 255. The comparison operations can be replaced with the
             // equivalent matrix expressions:
+            printf("%u %u %u\n", depth_02_frame.at<unsigned char>(cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y));
+
             //cv::imshow("try", final);
             //cv::waitKey(0);
             // frame differencing with depth map = moving objects depth map
             // ground truth flow is the pixels in the moving objects depth map.
+            // final should be a SparseArray here.
 
             // obselete method take all the objects found in final
             for (unsigned j = 0; j < final.cols; j += 1) {
                 for (unsigned k = 0; k < final.rows; k += 1) {
-                    if ( final.at<char>(k,j) == 0 ) {
-                        temp_frame_coordinates_displacement2.push_back(
-                                std::make_pair(cv::Point2f(j, k), gt_displacement));
+                    if ( final.at<char>(k,j) == 0 ) { // non equal matches in compare
+                        unsigned char val = depth_02_frame.at<unsigned char>(k,j);
+
+                        finalDepth.at<char>(k,j) = depth_02_frame.at<char>(k,j);
+
+                        if ( depth_02_frame.at<char>(k,j) == cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk))  {
+                            temp_frame_coordinates_displacement2.push_back(
+                                    std::make_pair(cv::Point2f(j, k), gt_displacement));
+                        }
                     }
                     //frame_stencil_visibility.push_back(visibility);
                 }
             }
+
+
 
             // new method - divide final into contours
             std::vector<std::vector<cv::Point> > contours;
@@ -407,10 +429,10 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             char file_name_input_image[50];
-            ushort evaluation_frame_index = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
 
-            sprintf(file_name_input_image, "000%03d_10.png", evaluation_frame_index);
+            sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
@@ -505,9 +527,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
                 char file_name_image_output[50];
                 std::string output_image_file_with_path, output_image_file_with_path_stiched;
-                ushort evaluation_frame_index = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                         (0).at(current_frame_index).frame_no;
-                sprintf(file_name_image_output, "000%03d_10.png", evaluation_frame_index);
+                sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
                 output_image_file_with_path = m_gnuplots_path.string() + "0" + std::to_string(sensor_index) + "/" + file_name_image_output;
 
                 output_image_file_with_path_stiched = m_gnuplots_path.string() + "0" + std::to_string(SENSOR_COUNT-1) + "/" + file_name_image_output;
@@ -536,7 +558,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
                             current_frame_index).size();
 
-                    evaluationData.at(obj_index).current_frame_index = evaluation_frame_index;
+                    evaluationData.at(obj_index).current_frame_index = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
 
                     if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
@@ -894,9 +916,9 @@ void OpticalFlow::plot_stencil(ushort SENSOR_COUNT) {
 
             char file_name_image_output[50];
             std::string output_image_file_with_path;
-            ushort evaluation_frame_index = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
-            sprintf(file_name_image_output, "000%03d_10.png", evaluation_frame_index);
+            sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
             output_image_file_with_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
             //---------------------------------------------------------------------------------

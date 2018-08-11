@@ -41,8 +41,12 @@ public:
         return m_data_image;
     }
 
-    cv::Mat getDepth() {
+    cv::Mat getDepthImage() {
         return m_data_depth;
+    }
+
+    float getObjectDepth() {
+        return m_depth;
     }
 
 };

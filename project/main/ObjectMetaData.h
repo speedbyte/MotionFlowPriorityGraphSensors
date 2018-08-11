@@ -125,7 +125,7 @@ public:
 
     region_of_interest_px_str m_region_of_interest_px;
 
-    struct object_distances { float sensor_to_obj; float total_distance_covered; } m_object_distances;
+    struct object_distances { float sensor_to_obj_px; float sensor_to_obj_usk; float total_distance_covered; } m_object_distances;
 
     //truncr: (changed in v1.3) object 2D truncation ratio in [0..1] (0: no truncation, 1: entirely truncated)
     bool truncr;
@@ -408,34 +408,8 @@ public:
 
     }
 
-    void setCppData() {
+    void setCppData();
 
-        ushort current_frame_index = 0;
-        for ( ushort i = m_objectMetaData_startPoint; i< MAX_ITERATION_GT_SCENE_GENERATION_DATASET+m_objectMetaData_startPoint; i++) {
-
-            m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = m_objectMetaData_shape.getImage().cols;
-            m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = m_objectMetaData_shape.getImage().rows;
-
-            m_object_gt_all.at(current_frame_index).m_region_of_interest_px.x = m_object_gt_all.at(
-                    current_frame_index).m_object_location_camera_px.location_x_px;
-            m_object_gt_all.at(current_frame_index).m_region_of_interest_px.y = m_object_gt_all.at(
-                    current_frame_index).m_object_location_camera_px.location_y_px;
-
-            m_object_gt_all.at(current_frame_index).m_object_location_camera_px.cog_px.x = (
-                    m_object_gt_all.at(current_frame_index).m_region_of_interest_px.x +
-                    m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px / 2);
-            m_object_gt_all.at(current_frame_index).m_object_location_camera_px.cog_px.y = (
-                    m_object_gt_all.at(current_frame_index).m_region_of_interest_px.y +
-                    m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px / 2);
-
-            m_object_gt_all.at(current_frame_index).m_region_of_interest_px.width_px = m_object_gt_all.at(
-                    current_frame_index).m_object_dimension_camera_px.width_px;
-            m_object_gt_all.at(current_frame_index).m_region_of_interest_px.height_px = m_object_gt_all.at(
-                    current_frame_index).m_object_dimension_camera_px.height_px;
-            current_frame_index++;
-        }
-    }
-    
     void setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
 
         m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(7);
@@ -461,12 +435,14 @@ public:
 
     }
 
-    void atFrameNumberOcclusionWindow(ushort frameNumber, signed char occlusion) {
+    void atFrameNumberOcclusionWindow(ushort frameNumber, signed char occlusion, float distance_cam_to_object) {
         m_object_gt_all.at(frameNumber).m_object_occlusion.occlusion_px = occlusion;
+        m_object_gt_all.at(frameNumber).m_object_distances.sensor_to_obj_px = distance_cam_to_object;
     }
 
-    void atFrameNumberOcclusionUsk(ushort frameNumber, signed char occlusion) {
+    void atFrameNumberOcclusionUsk(ushort frameNumber, signed char occlusion, float distance_cam_to_object) {
         m_object_gt_all.at(frameNumber).m_object_occlusion.occlusion_usk= occlusion;
+        m_object_gt_all.at(frameNumber).m_object_distances.sensor_to_obj_usk = distance_cam_to_object;
     }
 
     void atFrameNumberOcclusionInertial(ushort frameNumber, signed char occlusion) {

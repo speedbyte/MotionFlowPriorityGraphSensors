@@ -201,7 +201,13 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
                                     current_frame_index).m_object_location_usk_m.location_x_m,
                                         m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                                 current_frame_index).m_object_location_usk_m.location_y_m));
+                    auto dist_usk_from_vires = m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                            current_frame_index).m_object_distances.sensor_to_obj_usk;
+
+
                     assert(std::abs(dist_usk_from_inertial - dist_usk_original) < 0.5);
+                    assert(dist_usk_original == dist_usk_from_vires);
+
                     std::cout << "distance is " << dist_usk_from_inertial << " for "
                               << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName()
                               << std::endl;
@@ -365,8 +371,10 @@ void BasicObjects::writePositionInYaml(std::string suffix) {
                     << "r_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                     current_frame_index).m_object_rotation_rad.rotation_rx_roll_rad
 
-                    << "dist_cam_to_obj" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
-                    current_frame_index).m_object_distances.sensor_to_obj
+                    << "dist_cam_to_obj_px" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_distances.sensor_to_obj_px
+                    << "dist_cam_to_obj_usk" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_distances.sensor_to_obj_usk
                     << "total_distance_covered" << m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                     current_frame_index).m_object_distances.total_distance_covered
 
@@ -447,6 +455,7 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
     cv::Point3f offset, position_inertial, position_usk, position_pixel, dimension_realworld;
     cv::Point3f position_inertial_pre, position_usk_pre, position_pixel_pre;
     float totalDistanceTravelled;
+    float sensor_to_obj;
 
     cv::Point3f orientation_inertial, orientation_usk;
 
@@ -560,10 +569,10 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
                             current_frame_index, (int) (*file_node_iterator)["visMask"]);
 
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionWindow(
-                            current_frame_index, (int) (*file_node_iterator)["occ_px"]);
+                            current_frame_index, (int) (*file_node_iterator)["occ_px"], (float) (*file_node_iterator)["dist_cam_to_obj_px"]);
 
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionUsk(
-                            current_frame_index, (int) (*file_node_iterator)["occ_usk"]);
+                            current_frame_index, (int) (*file_node_iterator)["occ_usk"], (float) (*file_node_iterator)["dist_cam_to_obj_usk"]);
 
                     (m_mapObjectNameToObjectMetaData[(*file_node_iterator)["name"].string()])->atFrameNumberOcclusionInertial(
                             current_frame_index, (int) (*file_node_iterator)["occ_inertial"]);

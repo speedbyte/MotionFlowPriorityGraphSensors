@@ -87,11 +87,11 @@ void ViresObjects::readSensorObjectFromBinaryFile() {
         if (data->sensorPos.type == RDB_COORD_TYPE_WINDOW) {
 
             m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionWindow(
-                    (ushort) frame_number, data->occlusion);
+                    (ushort) frame_number, data->occlusion, data->dist);
         } else if (data->sensorPos.type == RDB_COORD_TYPE_USK) {
 
             m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionUsk(
-                    (ushort) frame_number, data->occlusion);
+                    (ushort) frame_number, data->occlusion, data->dist);
         } else if (data->sensorPos.type == RDB_COORD_TYPE_INERTIAL) {
 
             m_mapObjectNameToObjectMetaData[m_mapObjectIdToObjectName[data->id]]->atFrameNumberOcclusionInertial(
