@@ -125,6 +125,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 }
             }
 
+
             frame_stencil_displacement.resize(temp_frame_coordinates_displacement.size());
             frame_stencil_visibility.resize(temp_frame_coordinates_displacement.size());
 
@@ -163,7 +164,10 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             // equivalent matrix expressions:
             //cv::imshow("try", final);
             //cv::waitKey(0);
+            // frame differencing with depth map = moving objects depth map
+            // ground truth flow is the pixels in the moving objects depth map.
 
+            // obselete method take all the objects found in final
             for (unsigned j = 0; j < final.cols; j += 1) {
                 for (unsigned k = 0; k < final.rows; k += 1) {
                     if ( final.at<char>(k,j) == 0 ) {
@@ -172,6 +176,17 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                     }
                     //frame_stencil_visibility.push_back(visibility);
                 }
+            }
+
+            // new method - divide final into contours
+            std::vector<std::vector<cv::Point> > contours;
+            cv::findContours(final, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+
+            cv::Point2f max_val = (*std::max_element(contours.at(0).begin(), contours.at(0).end(), PointsSort<int>()));
+
+            if ( cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_location_camera_px.cog_px.x)  )
+            {
+
             }
             // intersection of final and roi
             MyIntersection myIntersection_gt_roi_objects;
