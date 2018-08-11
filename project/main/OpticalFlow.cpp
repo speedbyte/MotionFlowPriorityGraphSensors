@@ -149,7 +149,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             std::cout << "current_frame_index " << current_frame_index << std::endl;
 
             std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
-            std::string input_image_path_depth = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string input_image_path_depth = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image_depth;
 
             cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
             cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_GRAYSCALE);
@@ -184,13 +184,13 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             // obselete method take all the objects found in final
             for (unsigned j = 0; j < final.cols; j += 1) {
                 for (unsigned k = 0; k < final.rows; k += 1) {
-                    if ( final.at<char>(k,j) == 0 ) { // non equal matches in compare
+                    if ( final.at<unsigned char>(k,j) == 0 ) { // non equal matches in compare
                         unsigned char val = depth_02_frame.at<unsigned char>(k,j);
+                        unsigned int depth_value_object = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk);
+                        finalDepth.at<unsigned char>(k,j) = depth_02_frame.at<unsigned char>(k,j);
 
-                        finalDepth.at<char>(k,j) = depth_02_frame.at<char>(k,j);
-
-                        if ( depth_02_frame.at<char>(k,j) == cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk))  {
-                            temp_frame_coordinates_displacement2.push_back(
+                        if ( val == depth_value_object )  {
+                            frame_stencil_displacement.push_back(
                                     std::make_pair(cv::Point2f(j, k), gt_displacement));
                         }
                     }
@@ -198,27 +198,23 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 }
             }
 
-
-
             // new method - divide final into contours
             std::vector<std::vector<cv::Point> > contours;
             cv::findContours(final, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
 
             cv::Point2f max_val = (*std::max_element(contours.at(0).begin(), contours.at(0).end(), PointsSort<int>()));
 
-            if ( cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_location_camera_px.cog_px.x)  )
-            {
-
+            if ( cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_location_camera_px.cog_px.x)  ) {
             }
             // intersection of final and roi
             MyIntersection myIntersection_gt_roi_objects;
             std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 
-            result_it = myIntersection_gt_roi_objects.find_intersection(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(),
+            /*result_it = myIntersection_gt_roi_objects.find_intersection(temp_frame_coordinates_displacement.begin(), temp_frame_coordinates_displacement.end(),
                                                          temp_frame_coordinates_displacement2.begin(), temp_frame_coordinates_displacement2.end(),
                                                          frame_stencil_displacement.begin());
             frame_stencil_displacement = myIntersection_gt_roi_objects.getResult();
-
+            */
             assert(frame_stencil_displacement.size()>0);
 
             // std::sort(frame_stencil_displacement.begin(), frame_stencil_displacement.end(), PairPointsSort<float>());

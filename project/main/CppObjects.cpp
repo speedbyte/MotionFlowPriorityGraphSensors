@@ -162,7 +162,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                 cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
                                                                 cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar_<unsigned char>(depth), CV_FILLED);
 
-                printf("! %u %u %u !", tempGroundTruthDepthImage.at<unsigned char>(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y));
+                printf("! WRITE %u %u %u !\n", tempGroundTruthDepthImage.at<unsigned char>(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y));
 
 
             }
@@ -174,6 +174,19 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
         cv::imwrite(input_image_depth_file_with_path, tempGroundTruthDepthImage);
 
+        cv::Mat depth_02_frame = cv::imread(input_image_depth_file_with_path, CV_LOAD_IMAGE_GRAYSCALE);
+
+        for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+            printf("! READ %u %u %u !\n", depth_02_frame.at < unsigned
+            char > (cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                    current_frame_index).m_object_location_camera_px.cog_px.y), cvRound(
+                    m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                            current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(
+                    m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                            current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(
+                    m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
+                            current_frame_index).m_object_location_camera_px.cog_px.y));
+        }
     }
     std::cout << std::endl;
 
