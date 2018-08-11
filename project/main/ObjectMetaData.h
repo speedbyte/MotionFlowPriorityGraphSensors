@@ -21,9 +21,10 @@ protected:
 
     cv::Mat m_data_image;
     cv::Mat m_data_depth;
+
     ushort m_objectWidth;
     ushort m_objectHeight;
-    ushort m_depth;
+    float m_depth;
 
 public:
 
@@ -55,6 +56,13 @@ public:
         return m_depth;
     }
 
+    ushort getObjectWidth() {
+        return m_objectWidth;
+    }
+
+    ushort getObjectHeight() {
+        return m_objectHeight;
+    }
 };
 
 /*

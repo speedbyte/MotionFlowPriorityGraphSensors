@@ -27,12 +27,8 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
     unsigned long FRAME_COUNT = ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
-    if ( suffix == "cpp_") {
-        for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
-            m_ptr_customObjectMetaDataList.at(obj_index)->setCppData();
-        }
-    }
-    else {
+    if ( suffix == "vires_") {
+        //
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             tempGroundTruthImage = cv::Scalar::all(255);
