@@ -9,7 +9,7 @@
 #include "Dataset.h"
 #include <iostream>
 #include "datasets.h"
-#include "ObjectImageShapeData.h"
+
 
 
 /*
@@ -186,7 +186,7 @@ protected:
 
 private:
 
-    ObjectImageShapeData m_sensorMetaData_shape;
+    //ObjectImageShapeData m_sensorMetaData_shape;
     std::string m_sensorMetaData_name;
     ushort m_sensorMetaData_startPoint;
 

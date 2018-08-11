@@ -8,6 +8,7 @@
 
 #include <opencv2/core/types.hpp>
 #include "SensorMetaData.h"
+#include "Noise.h"
 
 class Sensors {
 
