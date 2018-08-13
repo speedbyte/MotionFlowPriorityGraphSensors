@@ -74,13 +74,25 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
 
     std::string output_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
+    std::string frame_difference_path = Dataset::getGroundTruthPath().string() + "/frame_difference_"  + sensor_index_folder_suffix + "/" + file_name_image_output;
+    cv::Mat frameDifference = cv::imread(frame_difference_path, CV_LOAD_IMAGE_ANYCOLOR);
+
+    // DEPTH READ
+    cv::Mat finalDepth(Dataset::getFrameSize(),CV_8UC1);
+    char file_name_input_image_depth[50];
+    sprintf(file_name_input_image_depth, "depth_000%03d_10.png", image_frame_count);
+    std::string input_image_path_depth = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image_depth;
+    cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_GRAYSCALE);
+
 
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
+
+        printf("%u %u %u\n", depth_02_frame.at<unsigned char>(cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y));
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement;
         std::vector<bool> frame_stencil_visibility;
 
-        frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility);
+        frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility, frameDifference, depth_02_frame);
         //frame_stencil_displacement_frame_differencing_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility);
 
         multiframe_stencil_displacement.at(obj_index).push_back(frame_stencil_displacement);
@@ -89,7 +101,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     }
 }
 
-void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
+void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility, const cv::Mat& frameDifference, const cv::Mat& depth_02_frame) {
 
     auto START_BENCHMARK
 
@@ -126,18 +138,19 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 }
             }
 
-
-            /*
-            // DEPTH READ
-            cv::Mat finalDepth(Dataset::getFrameSize(),CV_8UC1);
-            char file_name_input_image_depth[50];
-            sprintf(file_name_input_image_depth, "depth_000%03d_10.png", image_frame_count);
-            std::string input_image_path_depth = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image_depth;
-            cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_GRAYSCALE);
-            printf("%u %u %u\n", depth_02_frame.at<unsigned char>(cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y));
-
+            std::vector<std::pair<cv::Point2f,cv::Point2f > > all_moving_objects_in_frame;
+            for (unsigned j = 0; j < frameDifference.cols; j += 1) {
+                for (unsigned k = 0; k < frameDifference.rows; k += 1) {
+                    if ( frameDifference.at<char>(k,j) == 0 ) {
+                        all_moving_objects_in_frame.push_back(
+                                std::make_pair(cv::Point2f(j, k), gt_displacement));
+                    }
+                    //frame_stencil_visibility.push_back(visibility);
+                }
+            }
 
             // 1st method - Intersection of Squared ROI and Frame Differencing
+            // ---------------------------------------------------------------------------------------------------------
             gt_frame_stencil_displacement_from_roi.resize(squared_region_of_interest.size());
             frame_stencil_visibility.resize(squared_region_of_interest.size());
             gt_frame_stencil_displacement_from_roi.clear();
@@ -149,10 +162,12 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                                                          all_moving_objects_in_frame.begin(), all_moving_objects_in_frame.end(),
                                                                         gt_frame_stencil_displacement_from_roi.begin());
             gt_frame_stencil_displacement_from_roi = myIntersection_gt_roi_objects.getResult();
-            assert(gt_frame_stencil_displacement_from_roi.size()>0);
 
+            frame_stencil_displacement = gt_frame_stencil_displacement_from_roi;
+            assert(frame_stencil_displacement.size()>0);
+
+            // ---------------------------------------------------------------------------------------------------------
             // 2nd method - Intersection of Depth and Frame differencing
-            std::cout << "current_frame_index " << current_frame_index << std::endl;
             // frame differencing with depth map = moving objects depth map
             // ground truth flow is the pixels in the moving objects depth map.
             // final should be a SparseArray here.
@@ -162,7 +177,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                     if ( frameDifference.at<unsigned char>(k,j) == 0 ) { // non equal matches in compare
                         unsigned char val = depth_02_frame.at<unsigned char>(k,j);
                         unsigned int depth_value_object = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk);
-                        finalDepth.at<unsigned char>(k,j) = depth_02_frame.at<unsigned char>(k,j);
+                        //finalDepth.at<unsigned char>(k,j) = depth_02_frame.at<unsigned char>(k,j);
                         if ( val == depth_value_object )  {
                             gt_frame_stencil_displacement_from_depth.push_back(
                                     std::make_pair(cv::Point2f(j, k), gt_displacement));
@@ -171,16 +186,16 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                     //frame_stencil_visibility.push_back(visibility);
                 }
             }
-            assert(gt_frame_stencil_displacement_from_depth.size()>0);
+
+            frame_stencil_displacement = gt_frame_stencil_displacement_from_depth;
+            assert(frame_stencil_displacement.size()>0);
 
             // new method - divide final into contours
             std::vector<std::vector<cv::Point> > contours;
             cv::findContours(frameDifference, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
 
-
             cv::Point2f max_val = (*std::max_element(contours.at(0).begin(), contours.at(0).end(), PointsSort<int>()));
 
-            */
             if ( cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_location_camera_px.cog_px.x)  ) {
             }
 

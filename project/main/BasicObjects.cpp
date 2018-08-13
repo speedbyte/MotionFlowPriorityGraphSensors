@@ -315,11 +315,15 @@ void BasicObjects::generateFrameDifferenceImage() {
         cv::cvtColor(image_02_frame, image_02_frame, cv::COLOR_BGR2GRAY);
         cv::cvtColor(backgroundImage, backgroundImage, cv::COLOR_BGR2GRAY);
         cv::compare(backgroundImage, image_02_frame, frameDifference, cv::CMP_EQ);
+        // When the comparison result is true, the corresponding element of output
+        // array is set to 255. The comparison operations can be replaced with the
+        // equivalent matrix expressions:
+
         //cv::imshow("try", frameDifference);
         //cv::waitKey(0);
         std::string frame_difference_image_path =
                 m_framedifferencepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
-        cv::imwrite(frame_difference_image_path, backgroundImage);
+        cv::imwrite(frame_difference_image_path, frameDifference);
     }
 }
 

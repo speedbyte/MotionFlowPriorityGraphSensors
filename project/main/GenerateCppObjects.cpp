@@ -176,29 +176,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
         cv::imwrite(input_image_depth_file_with_path, tempGroundTruthDepthImage);
 
-        generateFrameDifferenceImage();
-
-        /*
-        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
-                obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
-                current_frame_index).second;
-        std::vector<std::pair<cv::Point2f,cv::Point2f > > all_moving_objects_in_frame;
-        for (unsigned j = 0; j < frameDifference.cols; j += 1) {
-            for (unsigned k = 0; k < frameDifference.rows; k += 1) {
-                if ( frameDifference.at<char>(k,j) == 0 ) {
-                    all_moving_objects_in_frame.push_back(
-                            std::make_pair(cv::Point2f(j, k), gt_displacement));
-                }
-                //frame_stencil_visibility.push_back(visibility);
-            }
-        }
-        */
-
-        // When the comparison result is true, the corresponding element of output
-        // array is set to 255. The comparison operations can be replaced with the
-        // equivalent matrix expressions:
-
-
         // Validate
         cv::Mat depth_02_frame = cv::imread(input_image_depth_file_with_path, CV_LOAD_IMAGE_GRAYSCALE);
 
@@ -214,6 +191,9 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                             current_frame_index).m_object_location_camera_px.cog_px.y));
         }
     }
+
+    generateFrameDifferenceImage();
+
     std::cout << std::endl;
 
 }
