@@ -267,6 +267,12 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
             }
         }
     }
+    else if ( suffix == "cpp_") {
+        for (ushort obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
+            m_ptr_customObjectMetaDataList.at(obj_index)->setCppData();
+        }
+    }
+
 
     //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
     //cv::imshow("BB", tempGroundTruthImage);

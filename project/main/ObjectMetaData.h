@@ -326,7 +326,6 @@ public:
 
     void setObjectShape(ObjectImageShapeData objectShape) {
         m_objectMetaData_shape = objectShape;
-        setCppData();
     }
 
     void setStartPoint(ushort startPoint) {

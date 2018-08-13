@@ -7,7 +7,7 @@
 #include <png++/rgb_pixel.hpp>
 #include <png++/image.hpp>
 #include <vires-interface/Common/viRDBIcd.h>
-#include "ViresObjects.h"
+#include "GenerateViresObjects.h"
 #include "datasets.h"
 #include "Utils.h"
 
@@ -155,6 +155,15 @@ void ViresObjects::readSensorStateFromBinaryFile() {
 }
 
 
+void ViresObjects::readObjectData() {
+    readObjectStateFromBinaryFile();
+    readSensorObjectFromBinaryFile();
+}
+
+void ViresObjects::readSensorData() {
+    readSensorStateFromBinaryFile();
+
+}
 
 
 void ViresObjects::getGroundTruthInformation(void* shmPtr, bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages,
@@ -216,7 +225,6 @@ ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushor
 
 
 }
-
 
 
 void ViresObjects::parseEntry(RDB_TRIGGER_t *data, const double &simTime, const unsigned int &
@@ -711,15 +719,3 @@ void ViresObjects::parseEntry(RDB_DRIVER_CTRL_t *data, const double &simTime, co
     // remember last simulation time
     sLastSimTime = simTime;
 }
-
-void ViresObjects::readObjectData() {
-    readObjectStateFromBinaryFile();
-    readSensorObjectFromBinaryFile();
-}
-
-void ViresObjects::readSensorData() {
-    readSensorStateFromBinaryFile();
-
-}
-
-

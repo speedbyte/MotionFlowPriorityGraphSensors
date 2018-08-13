@@ -26,13 +26,11 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
     for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
         // The first frame is the reference frame, hence it is skipped
 
-
         cv::Point2f gt_displacement = {0,0}, gt_displacement_inertial = {0,0}, gt_displacement_usk = {0,0};
         cv::Point2f gt_dimensions = {0,0};
 
         gt_dimensions.x = gt_data.getAll().at(frame_number).m_region_of_interest_px.width_px;
         gt_dimensions.y = gt_data.getAll().at(frame_number).m_region_of_interest_px.height_px;
-
 
         if ( current_frame_index == 0 ) {
 
@@ -67,7 +65,6 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
                 gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_x_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_usk_m.location_x_m;
                 gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_y_m - gt_data.getAll().at(frame_number-(ushort)1).m_object_location_usk_m.location_y_m;
 
-
             }
 
             if ( frame_number != ITERATION_END_POINT && frame_number != 0 ) {
@@ -94,7 +91,6 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         else{
             multiframe_object_base_visibility.push_back((false));
         }
-
 
         printf("%s, %u, %u , points %f, %f, displacement %f, %f dimension - %f %f\n", ((bool)multiframe_object_base_visibility.at(current_frame_index)?"true":"false"), current_frame_index, frame_number, gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x, gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.y, gt_displacement.x, gt_displacement.y, gt_dimensions.x, gt_dimensions.y
         );

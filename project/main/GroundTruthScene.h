@@ -10,9 +10,9 @@
 #include <unistd.h>
 #include "ObjectMetaData.h"
 #include "Sensors.h"
-#include "ViresObjects.h"
+#include "GenerateViresObjects.h"
 #include "GroundTruthObjects.h"
-#include "CppObjects.h"
+#include "GenerateCppObjects.h"
 #include <boost/tuple/tuple.hpp>
 
 class GroundTruthScene  {

@@ -17,7 +17,7 @@
 #include <opencv/cv.hpp>
 #include "GroundTruthScene.h"
 #include "kbhit.h"
-#include "ViresObjects.h"
+#include "GenerateViresObjects.h"
 #include "ObjectMetaData.h"
 #include "Utils.h"
 

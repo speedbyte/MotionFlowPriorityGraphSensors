@@ -10,7 +10,7 @@
 #include <algorithm>
 #include "Noise.h"
 #include "ObjectMetaData.h"
-#include "CppObjects.h"
+#include "GenerateCppObjects.h"
 
 void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
@@ -35,6 +35,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
     objectMetaDataList.at(0) = achterbahn;
     objectMetaDataList.at(0).setObjectShape(circle_obj1);
+    objectMetaDataList.at(0).setCppData();
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
     achterbahn = Achterbahn("random_object", 220);
@@ -45,6 +46,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
     objectMetaDataList.at(1) = achterbahn;
     objectMetaDataList.at(1).setObjectShape(circle_obj2);
+    objectMetaDataList.at(1).setCppData();
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
 
     cv::Mat tempGroundTruthPosition;
