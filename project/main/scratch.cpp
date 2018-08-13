@@ -624,3 +624,21 @@ roi_offset
 roi_size
 roi(rowrange.colrange)
 roi.locateROI(roi_size, roi_offset);
+
+
+
+for (unsigned j = 0; j < width; j += 1) {
+for (unsigned k = 0; k < height; k += 1) {
+temp_frame_coordinates_displacement.push_back(
+        std::make_pair(cv::Point2f(columnBegin + j, rowBegin + k), gt_displacement));
+//frame_stencil_visibility.push_back(visibility);
+}
+}
+
+frame_stencil_displacement.resize(temp_frame_coordinates_displacement.size());
+frame_stencil_visibility.resize(temp_frame_coordinates_displacement.size());
+
+frame_stencil_displacement.clear();
+frame_stencil_visibility.clear();
+
+

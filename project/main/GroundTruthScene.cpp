@@ -30,6 +30,10 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
 
     m_generatepath = m_groundtruthpath.string() + "/" + m_environment;
 
+    m_baseframepath = m_groundtruthpath.string() + "/" + "base_frame";
+
+    m_frame_difference_path = m_groundtruthpath.string() + "/" + "frame_difference";
+
     char sensor_index_folder_suffix[50];
     if (m_regenerate_yaml_file) {
         if (m_datasetpath.string() == std::string(CPP_DATASET_PATH) || m_datasetpath.string() == std::string(VIRES_DATASET_PATH)) {
@@ -37,22 +41,28 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
             std::cout << "prepare gt_scene directories" << std::endl;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
-            std::string m_generatepath_sensor = m_generatepath.string() + "_" + sensor_index_folder_suffix;
-            if (boost::filesystem::exists(m_generatepath_sensor)) {
-                system(("rm -rf " + m_generatepath_sensor).c_str());
+            std::string generatepath_sensor = m_generatepath.string() + "_" + sensor_index_folder_suffix;
+            std::string baseframepath_sensor = m_baseframepath.string() + "_" + sensor_index_folder_suffix;
+            std::string framedifferencepath_sensor = m_frame_difference_path.string() + "_" + sensor_index_folder_suffix;
+            if (boost::filesystem::exists(generatepath_sensor)) {
+                system(("rm -rf " + generatepath_sensor).c_str());
             }
-            boost::filesystem::create_directories(m_generatepath_sensor);
+            boost::filesystem::create_directories(generatepath_sensor);
+            if (boost::filesystem::exists(framedifferencepath_sensor)) {
+                system(("rm -rf " + framedifferencepath_sensor).c_str());
+            }
+            boost::filesystem::create_directories(framedifferencepath_sensor);
 
-            char char_dir_append[20];
+            /*char char_dir_append[20];
             boost::filesystem::path path;
-
             for (int i = 0; i < m_list_gt_objects.size(); i++) {
 
                 sprintf(char_dir_append, "%02d", i);
-                m_position_object_path = m_generatepath_sensor + "position_object_";
+                m_position_object_path = generatepath_sensor + "position_object_";
                 path = m_position_object_path.string() + char_dir_append;
-                //boost::filesystem::create_directories(path);
+                boost::filesystem::create_directories(path);
             }
+            */
 
         }
     }

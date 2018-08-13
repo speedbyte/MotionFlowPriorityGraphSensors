@@ -28,6 +28,10 @@ protected:
 
     boost::filesystem::path  m_generatepath;
 
+    boost::filesystem::path m_baseframepath;
+
+    boost::filesystem::path m_frame_difference_path;
+
     boost::filesystem::path  m_position_object_path;
 
     std::string m_scenario;

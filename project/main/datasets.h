@@ -66,6 +66,9 @@ typedef enum {
 #define FOCAL_X 600
 #define FOCAL_Y 600
 
+#define START_BENCHMARK tic = std::chrono::steady_clock::now();
+#define PRINT_BENCHMARK(prefix) printf ( #prefix"%f\n", static_cast<float>(std::chrono::duration_cast<milliseconds>(std::chrono::steady_clock::now() - tic).count()) );
+
 
 
 #endif //MAIN_DATASETS_H_H
