@@ -15,7 +15,6 @@
 
 using namespace std::chrono;
 
-
 void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
 
     char char_dir_append[20];
@@ -76,6 +75,11 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     std::string output_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
     std::string frame_difference_path = Dataset::getGroundTruthPath().string() + "/frame_difference_"  + sensor_index_folder_suffix + "/" + file_name_image_output;
     cv::Mat frameDifference = cv::imread(frame_difference_path, CV_LOAD_IMAGE_ANYCOLOR);
+    if ( frameDifference.data == NULL ) {
+        std::cout << "no image found, exiting" << std::endl;
+        throw;
+    }
+
 
     // DEPTH READ
     cv::Mat finalDepth(Dataset::getFrameSize(),CV_8UC1);
@@ -164,7 +168,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             gt_frame_stencil_displacement_from_roi = myIntersection_gt_roi_objects.getResult();
 
             frame_stencil_displacement = gt_frame_stencil_displacement_from_roi;
-            assert(frame_stencil_displacement.size()>0);
+            //assert(frame_stencil_displacement.size()>0);
 
             // ---------------------------------------------------------------------------------------------------------
             // 2nd method - Intersection of Depth and Frame differencing
@@ -275,7 +279,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 frame_stencil_visibility.resize(frame_stencil_displacement.size());
                 std::fill(frame_stencil_visibility.begin(), frame_stencil_visibility.end(), (bool)1);
 
-                PRINT_BENCHMARK("method 1")
+                PRINT_BENCHMARK(method_1)
 
             } else {
 
@@ -321,8 +325,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
         frame_stencil_visibility.push_back(visibility);
 
     }
-
 }
+
 void OpticalFlow::frame_stencil_displacement_frame_differencing_method(ushort sensor_index, ushort current_frame_index, std::vector<cv::Point2f> &frame_next_pts_array, std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility) {
 
 }
@@ -998,6 +1002,7 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                 const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject2 = list_of_current_objects_combination.at(
                         obj_combination_index).second->get_object_stencil_point_displacement().at
                         (sensor_index).at(current_frame_index);
+
                 MyIntersection myIntersection_gt_object_pairs;
 
                 std::vector<std::pair<cv::Point2f, cv::Point2f>> intersection_ground_truth_objects(
@@ -1008,7 +1013,21 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                                                                  groundtruthobject2.begin(), groundtruthobject2.end(),
                                                                  intersection_ground_truth_objects.begin());
                 intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResult();
-                //myIntersection_gt_object_pairs.showResult();
+                myIntersection_gt_object_pairs.showResult();
+                std::cout << intersection_ground_truth_objects.size();
+
+                cv::Mat check_intersection(Dataset::getFrameSize(), CV_8UC3, cv::Scalar(255,255,255));
+
+                for ( auto it = groundtruthobject1.begin(); it != groundtruthobject1.end(); it++) {
+                    //cv::circle(check_intersection, (*it).first, 1, cv::Scalar(255,0,0));
+                }
+
+                for ( auto it = groundtruthobject2.begin(); it != groundtruthobject2.end(); it++) {
+                    cv::circle(check_intersection, (*it).first, 1, cv::Scalar(0,0,255));
+                }
+
+                cv::imshow("int", check_intersection);
+                cv::waitKey(0);
 
                 // occlusion image
                 // occlusion boundary

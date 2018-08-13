@@ -202,7 +202,7 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
 
 
                     assert(std::abs(dist_usk_from_inertial - dist_usk_original) < 0.5);
-                    assert(dist_usk_original == dist_usk_from_vires);
+                    assert(std::floor((float)dist_usk_original*1000) == std::floor(dist_usk_from_vires*1000));
 
                     std::cout << "distance is " << dist_usk_from_inertial << " for "
                               << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName()

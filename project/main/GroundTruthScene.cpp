@@ -185,6 +185,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
             }
 
             startEvaluating(colorfulNoise);
@@ -545,6 +546,9 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("vires_");
 
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("vires_");
+
+                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
+
             }
 
             startEvaluating(noNoise);

@@ -192,8 +192,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         }
     }
 
-    generateFrameDifferenceImage();
-
     std::cout << std::endl;
 
 }

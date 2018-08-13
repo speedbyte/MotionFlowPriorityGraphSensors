@@ -322,7 +322,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
                 gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                //gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.find_ground_truth_flow_occlusion_boundary((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
@@ -407,6 +407,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
                 }
 
+                list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), environment_list[env_index], fps, stepSize);
                 if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
 
                     list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), environment_list[env_index], fps, stepSize);
@@ -442,8 +443,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 auto position = list_of_ptr_of_environment_OFalgorithm.at(env_index)->getResultOrdner().find('/');
                 std::string suffix = list_of_ptr_of_environment_OFalgorithm.at(env_index)->getResultOrdner().replace(position, 1, "_");
-
-                time_map["algorithm_flow_" + suffix ] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
+                time_map["algorithm_flow_" + suffix] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
                 tic = steady_clock::now();
 
                 if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
