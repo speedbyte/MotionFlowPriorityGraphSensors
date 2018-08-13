@@ -12,7 +12,7 @@ class CppObjects: public BasicObjects {
 
 public:
 
-    CppObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath): BasicObjects(current_sensor_group_index, generatepath) {}
+    CppObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath, boost::filesystem::path  framedifferencepath): BasicObjects(current_sensor_group_index, generatepath, framedifferencepath) {}
 
     CppObjects() {}
 

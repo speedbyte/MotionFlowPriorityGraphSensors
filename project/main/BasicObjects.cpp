@@ -282,13 +282,57 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
     //---------------------------------------------------------------------------------
 
 }
+void BasicObjects::generateFrameDifferenceImage() {
+    // Frame Differencing
+
+    unsigned long FRAME_COUNT = 0;
+    FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
+    assert(FRAME_COUNT > 0);
+
+    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+        char sensor_index_folder_suffix[50];
+        sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+
+        char file_name_input_image[50];
+        sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
+        std::string input_image_path =
+                m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+
+        cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
+        if (image_02_frame.data == NULL) {
+            std::cerr << input_image_path << " not found" << std::endl;
+            throw ("No image file found error");
+        }
+        std::string input_image_path_background =
+                Dataset::getGroundTruthPath().string() + "base_frame_" + sensor_index_folder_suffix + "/" +
+                file_name_input_image;
+        cv::Mat backgroundImage = cv::imread(input_image_path_background, CV_LOAD_IMAGE_COLOR);
+        if (backgroundImage.data == NULL) {
+            std::cerr << input_image_path_background << " not found" << std::endl;
+            throw ("No image file found error");
+        }
+        cv::Mat frameDifference;
+        cv::cvtColor(image_02_frame, image_02_frame, cv::COLOR_BGR2GRAY);
+        cv::cvtColor(backgroundImage, backgroundImage, cv::COLOR_BGR2GRAY);
+        cv::compare(backgroundImage, image_02_frame, frameDifference, cv::CMP_EQ);
+        //cv::imshow("try", frameDifference);
+        //cv::waitKey(0);
+        std::string frame_difference_image_path =
+                m_framedifferencepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+        cv::imwrite(frame_difference_image_path, backgroundImage);
+    }
+}
+
 
 void BasicObjects::writePositionInYaml(std::string suffix) {
 
-    boost::filesystem::remove("../position_" + suffix + std::to_string(m_sensorGroupCount) + ".yml");
+    char sensor_index_folder_suffix[50];
+    sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+
+    boost::filesystem::remove("../position_" + suffix + sensor_index_folder_suffix + ".yml");
 
     cv::FileStorage write_fs;
-    write_fs.open("../position_" + suffix + std::to_string(m_sensorGroupCount) + ".yml", cv::FileStorage::WRITE);
+    write_fs.open("../position_" + suffix + sensor_index_folder_suffix + ".yml", cv::FileStorage::WRITE);
     unsigned long FRAME_COUNT = 0;
     FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
     assert(FRAME_COUNT > 0);
@@ -465,16 +509,18 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
     cv::FileNode file_node;
     cv::FileNodeIterator file_node_iterator_begin, file_node_iterator_end, file_node_iterator;
 
+    char sensor_index_folder_suffix[50];
+    sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
 
     ushort  objectCount = 0;
     ushort  sensorCount = 0;
     cv::FileStorage fs;
-    fs.open("../position_" + suffix + std::to_string(m_sensorGroupCount) + ".yml", cv::FileStorage::READ);
+    fs.open("../position_" + suffix + sensor_index_folder_suffix + ".yml", cv::FileStorage::READ);
 
     assert(fs.isOpened());
 
     //std::string temp_str = "_sensor_count_" + sensor_index;
-    std::cout << "read yaml file for sensor_index " << (m_sensorGroupCount) << std::endl;
+    std::cout << "read yaml file for sensor_index " << sensor_index_folder_suffix << std::endl;
     //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_object_shape_point_displacement().size();
     unsigned long FRAME_COUNT;
     FRAME_COUNT = ITERATION_END_POINT;

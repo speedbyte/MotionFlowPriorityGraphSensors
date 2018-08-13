@@ -127,6 +127,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             }
 
 
+            /*
             // DEPTH READ
             cv::Mat finalDepth(Dataset::getFrameSize(),CV_8UC1);
             char file_name_input_image_depth[50];
@@ -176,8 +177,10 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             std::vector<std::vector<cv::Point> > contours;
             cv::findContours(frameDifference, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
 
+
             cv::Point2f max_val = (*std::max_element(contours.at(0).begin(), contours.at(0).end(), PointsSort<int>()));
 
+            */
             if ( cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_location_camera_px.cog_px.x)  ) {
             }
 

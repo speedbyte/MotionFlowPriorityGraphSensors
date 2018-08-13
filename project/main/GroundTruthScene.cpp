@@ -161,8 +161,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     if (m_environment == "blue_sky") {
 
-        cppObjects.push_back(CppObjects(0,m_generatepath));
-        cppObjects.push_back(CppObjects(1,m_generatepath));
+        cppObjects.push_back(CppObjects(0,m_generatepath,m_frame_difference_path));
+        cppObjects.push_back(CppObjects(1,m_generatepath,m_frame_difference_path));
 
         if (m_regenerate_yaml_file) {
 
@@ -180,9 +180,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 }
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise);
                 cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("cpp_");
-
             }
-        } else { // genreate yaml file
+        } else { // do not genreate yaml file
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
@@ -227,8 +226,8 @@ void GroundTruthScene::generate_bird_view() {
 void GroundTruthSceneExternal::generate_gt_scene() {
 
 
-    viresObjects.push_back(ViresObjects(0, m_generatepath));
-    viresObjects.push_back(ViresObjects(1, m_generatepath));
+    viresObjects.push_back(ViresObjects(0, m_generatepath,m_frame_difference_path));
+    viresObjects.push_back(ViresObjects(1, m_generatepath,m_frame_difference_path));
 
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
 

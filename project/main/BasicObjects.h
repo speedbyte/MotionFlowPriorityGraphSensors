@@ -29,12 +29,13 @@ protected:
 
     ushort m_sensorGroupCount;
     boost::filesystem::path  m_generatepath;
+    boost::filesystem::path  m_framedifferencepath;
 
 
 
 public:
 
-    BasicObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath) {
+    BasicObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath, boost::filesystem::path frame_differencepath): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath), m_framedifferencepath(frame_differencepath) {
 
         for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
             ObjectMetaData objMetaData;
@@ -62,6 +63,8 @@ public:
     void writePositionInYaml(std::string suffix);
 
     void readPositionFromFile(std::string positionFileName);
+
+    void generateFrameDifferenceImage();
 
 };
 
