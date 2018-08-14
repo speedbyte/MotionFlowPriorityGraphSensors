@@ -180,12 +180,12 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 }
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise);
                 cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("cpp_");
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
             }
         } else { // do not genreate yaml file
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
-                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
             }
 
             startEvaluating(colorfulNoise);
