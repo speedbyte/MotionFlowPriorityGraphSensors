@@ -17,13 +17,13 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
     std::vector<bool>  multiframe_object_base_visibility;
     m_object_base_point_displacement.clear();
 
-    assert(gt_data.getAll().size() >= MAX_ITERATION_RESULTS);
+    assert(gt_data.getAll().size() >= Dataset::MAX_ITERATION_RESULTS);
 
     ushort frame_number = m_startPoint;
 
     std::cout << "generate_object_base_point_displacement with start_point " << m_startPoint << std::endl;
 
-    for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
+    for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
         // The first frame is the reference frame, hence it is skipped
 
         cv::Point2f gt_displacement = {0,0}, gt_displacement_inertial = {0,0}, gt_displacement_usk = {0,0};
@@ -40,17 +40,17 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         else {
 
             //If we are at the end of the path vector, we need to reset our iterators
-            if (frame_number >= ITERATION_END_POINT) {
+            if (frame_number >= Dataset::ITERATION_END_POINT) {
 
                 frame_number = 0;
-                gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_camera_px.cog_px.x;
-                gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.y - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_camera_px.cog_px.y;
+                gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x - gt_data.getAll().at(Dataset::ITERATION_END_POINT - 1).m_object_location_camera_px.cog_px.x;
+                gt_displacement.y = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.y - gt_data.getAll().at(Dataset::ITERATION_END_POINT - 1).m_object_location_camera_px.cog_px.y;
 
-                gt_displacement_inertial.x = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_inertial_m.location_x_m;
-                gt_displacement_inertial.y = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(ITERATION_END_POINT - 1).m_object_location_inertial_m.location_y_m;
+                gt_displacement_inertial.x = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_x_m - gt_data.getAll().at(Dataset::ITERATION_END_POINT - 1).m_object_location_inertial_m.location_x_m;
+                gt_displacement_inertial.y = gt_data.getAll().at(frame_number).m_object_location_inertial_m.location_y_m - gt_data.getAll().at(Dataset::ITERATION_END_POINT - 1).m_object_location_inertial_m.location_y_m;
 
-                gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_x_m - gt_data.getAll().at(ITERATION_END_POINT-(ushort)1).m_object_location_usk_m.location_x_m;
-                gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_y_m - gt_data.getAll().at(ITERATION_END_POINT-(ushort)1).m_object_location_usk_m.location_y_m;
+                gt_displacement_usk.x = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_x_m - gt_data.getAll().at(Dataset::ITERATION_END_POINT-(ushort)1).m_object_location_usk_m.location_x_m;
+                gt_displacement_usk.y = gt_data.getAll().at(frame_number).m_object_location_usk_m.location_y_m - gt_data.getAll().at(Dataset::ITERATION_END_POINT-(ushort)1).m_object_location_usk_m.location_y_m;
 
             } else {
 
@@ -67,7 +67,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
             }
 
-            if ( frame_number != ITERATION_END_POINT && frame_number != 0 ) {
+            if ( frame_number != Dataset::ITERATION_END_POINT && frame_number != 0 ) {
                 if (gt_data.getAll().at(frame_number - (ushort) 1).m_object_location_inertial_m.location_x_m != 0) {
                     auto dist_inertial = cv::norm(gt_displacement_inertial);
                     auto dist_usk = cv::norm(gt_displacement_usk);
@@ -111,7 +111,7 @@ void GroundTruthObjects::generate_combined_sensor_data() {
     std::vector<std::pair<cv::Point2f, cv::Point2f> > sensor_combined_point_displacement;
     std::vector<bool> sensor_combined_visibility;
 
-    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
 
 
         cv::Point2f pts;

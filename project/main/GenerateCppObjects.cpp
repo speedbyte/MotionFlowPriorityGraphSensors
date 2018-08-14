@@ -68,7 +68,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     cv::Mat depth_data_and_shape;
 
 
-    for (ushort current_frame_index = 0; current_frame_index < ITERATION_END_POINT; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < Dataset::ITERATION_END_POINT; current_frame_index++) {
 
         // TODO - when the variable overflows.
 

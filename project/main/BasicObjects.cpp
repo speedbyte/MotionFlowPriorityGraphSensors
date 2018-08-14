@@ -24,7 +24,7 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
 
     cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
 
-    unsigned long FRAME_COUNT = ITERATION_END_POINT;
+    unsigned long FRAME_COUNT = Dataset::ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
     if ( suffix == "vires_") {
@@ -286,7 +286,7 @@ void BasicObjects::generateFrameDifferenceImage() {
     // Frame Differencing
 
     unsigned long FRAME_COUNT = 0;
-    FRAME_COUNT = ITERATION_END_POINT;
+    FRAME_COUNT = Dataset::ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
     for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
@@ -338,7 +338,7 @@ void BasicObjects::writePositionInYaml(std::string suffix) {
     cv::FileStorage write_fs;
     write_fs.open("../position_" + suffix + sensor_index_folder_suffix + ".yml", cv::FileStorage::WRITE);
     unsigned long FRAME_COUNT = 0;
-    FRAME_COUNT = ITERATION_END_POINT;
+    FRAME_COUNT = Dataset::ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
     for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
@@ -527,7 +527,7 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
     std::cout << "read yaml file for sensor_index " << sensor_index_folder_suffix << std::endl;
     //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_object_shape_point_displacement().size();
     unsigned long FRAME_COUNT;
-    FRAME_COUNT = ITERATION_END_POINT;
+    FRAME_COUNT = Dataset::ITERATION_END_POINT;
 
 
     assert(FRAME_COUNT > 0);
@@ -558,7 +558,7 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
                         std::unique_ptr<Noise> noNoise = std::make_unique<NoNoise>(NoNoise());
                         Rectangle rectangle((int)(*file_node_iterator)["dim_x_camera"], (int)(*file_node_iterator)["dim_y_camera"], noNoise, (float)(*file_node_iterator)["dist_cam_to_obj_usk"]); // width, height
                         m_ptr_customObjectMetaDataList.at(objectCount)->setObjectShape(rectangle);
-                        m_ptr_customObjectMetaDataList.at(objectCount)->setStartPoint(ITERATION_START_POINT);
+                        m_ptr_customObjectMetaDataList.at(objectCount)->setStartPoint(Dataset::ITERATION_START_POINT);
                         m_objectCount += 1;
                         objectCount += 1;
                     }

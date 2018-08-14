@@ -71,7 +71,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
         std::cout << "results will be stored in " << m_resultordner << std::endl;
         std::cout << "creating flow files for sensor_index " << sensor_index << std::endl;
 
-        for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
+        for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
 
             // Break out of the loop if the user presses the Esc key
             char c = (char) cv::waitKey(10);
@@ -173,7 +173,7 @@ void AlgorithmFlow::combine_sensor_data() {
 
         std::copy(stencil_sensor_1.at(0).begin(), stencil_sensor_1.at(0).end(), std::back_inserter(combined_stencil_sensor));
 
-        for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
+        for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
 
             std::vector<std::pair<cv::Point2f, cv::Point2f> > elements_combined_stencil_sensor;
 

@@ -22,7 +22,7 @@ void PlotFlow::plot(ushort SENSOR_COUNT, const std::string &resultsordner) {
         sprintf(folder_name_plot, "plots_%02d", sensor_index);
         cv::namedWindow(sensor_index_folder_suffix, CV_WINDOW_AUTOSIZE);
 
-        for (ushort current_frame_index=1; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
+        for (ushort current_frame_index=1; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
             if ( current_frame_index%sensor_index != 0 ) {
                 continue;
             }

@@ -105,6 +105,8 @@ int main ( int argc, char *argv[]) {
         }
     */
     typedef struct {
+        ushort start;
+        ushort stop;
         std::string path;
         bool execute;
         bool gt;
@@ -113,6 +115,7 @@ int main ( int argc, char *argv[]) {
         bool analyse;
         bool video;
     } CONFIG_FILE_DATA;
+
 
     CONFIG_FILE_DATA
             cpp_dataset,
@@ -150,6 +153,8 @@ int main ( int argc, char *argv[]) {
         if (node.isNone() || node.empty()) {
             std::cout << (*it).first << " cannot be found" << std::endl;
         }
+        it->second->start = (int) node["START"];
+        it->second->stop = (int) node["STOP"];
         it->second->path = node["PATH"].string();
         it->second->execute = (bool) (int) node["EXECUTE"];
         it->second->gt = (bool) (int) (node["GT"]);
@@ -161,6 +166,25 @@ int main ( int argc, char *argv[]) {
         std::cout << it->second->path << " " << it->second->execute << " " << it->second->gt << std::endl;
 
     }
+
+
+/*
+
+#define ITERATION_START_POINT 27
+#define ITERATION_END_POINT 39
+#define MAX_ITERATION_RESULTS (ITERATION_END_POINT - ITERATION_START_POINT) // 60 generate result. this cannot be more than vector
+
+#define MAX_ITERATION_DATASET MAX_ITERATION_RESULTS // 60 generate result. this cannot be more than vector
+#define MAX_ITERATION_GT_SCENE_GENERATION_DATASET (MAX_ITERATION_DATASET)*IMAGE_SKIP_FACTOR_DYNAMIC + IMAGE_SKIP_FACTOR_DYNAMIC*20  // generate always twenty images more than required.
+#define IMAGE_SKIP_FACTOR_DYNAMIC 1  // 10
+
+ */
+
+    ushort ITERATION_START_POINT;
+    ushort ITERATION_END_POINT;
+    ushort MAX_ITERATION_RESULTS;
+    ushort MAX_ITERATION_DATASET;
+    ushort MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
 
     /*
 D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset consisting of 50 high resolution monocular
@@ -262,7 +286,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if (vires_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
+                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.start, vires_dataset.stop);
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
 
@@ -286,7 +310,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             } else if (cpp_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output);
+                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.start, cpp_dataset.stop);
 
                 GroundTruthSceneInternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
@@ -508,7 +532,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             cv::Size_<unsigned> frame_size(1242, 375);
             std::string input = "data/stereo_flow/image_02";
-            Dataset::fillDataset(frame_size, depth, cn, MATLAB_DATASET_PATH, input, "results");
+            Dataset::fillDataset(frame_size, depth, cn, MATLAB_DATASET_PATH, input, "results", matlab_dataset.start, matlab_dataset.stop);
             //AlgorithmFlow algo();
 
         }
@@ -523,7 +547,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         if ( kitti_flow_dataset.execute ) {
 
-            Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output);
+            Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, kitti_flow_dataset.start, kitti_flow_dataset.stop);
 
             std::vector<Objects *> ptr_list_of_gt_objects_base;
             std::vector<std::unique_ptr<Objects>> ptr_list_of_simulated_objects_base;

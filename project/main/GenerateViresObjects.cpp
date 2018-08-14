@@ -44,7 +44,7 @@ void ViresObjects::readObjectStateFromBinaryFile() {
             m_mapObjectNameToObjectMetaData[data->base.name] = m_ptr_customObjectMetaDataList.at(m_objectCount);
             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectShape(rectangle);
             m_ptr_customObjectMetaDataList.at(m_objectCount)->setObjectName(data->base.name);
-            m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(ITERATION_START_POINT);
+            m_ptr_customObjectMetaDataList.at(m_objectCount)->setStartPoint(Dataset::ITERATION_START_POINT);
             m_objectCount += 1;
         }
 
@@ -130,7 +130,7 @@ void ViresObjects::readSensorStateFromBinaryFile() {
             m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
             m_mapSensorNameToSensorMetaData[data->name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
             m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(data->name);
-            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(ITERATION_START_POINT);
+            m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(Dataset::ITERATION_START_POINT);
             m_sensorCount += 1;
         }
 
@@ -250,7 +250,7 @@ void ViresObjects::parseEndOfFrame(const double &simTime, const unsigned int &si
     //mLastNetworkFrame = simFrame;
     fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 
-    if (simFrame > MAX_ITERATION_GT_SCENE_GENERATION_DATASET + MAX_DUMPS) {
+    if (simFrame > Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET + MAX_DUMPS) {
         m_breaking = true;
     }
 
@@ -360,7 +360,7 @@ void ViresObjects::parseEntry(RDB_SENSOR_STATE_t *data, const double &simTime, c
 
     if (data->type == RDB_SENSOR_TYPE_VIDEO || data->type == RDB_SENSOR_TYPE_RADAR) {
 
-        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
+        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
 
             fprintf(stderr, "saving sensor truth for sensor_state simFrame = %d, simTime %f %s\n", simFrame, simTime,
                     data->name);
@@ -385,7 +385,7 @@ simFrame, const
 
     if (data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR) {
 
-        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
+        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
 
             /*
             fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
@@ -421,7 +421,7 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
 
 
     if (data->type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->type == RDB_OBJECT_TYPE_PLAYER_CAR) {
-        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
+        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
 
             //fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
             //        data->name, simFrame, data->pos.x, data->pos.y, data->geo.dimX, data->

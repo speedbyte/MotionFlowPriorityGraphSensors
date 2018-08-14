@@ -1,0 +1,7 @@
+
+
+namespace MyNamespace {
+
+    ushort hello;
+
+}

@@ -9,6 +9,7 @@
 #include <boost/filesystem.hpp>
 #include <exception>
 #include <opencv2/core/types.hpp>
+#include "namespace.h"
 
 using namespace cpp_tutorials;
 
@@ -154,8 +155,11 @@ inline T const& Max (T const& a, T const& b) {
     return a < b ? b:a;
 }
 
+
+
 int main ( int argc, char *argv[]) {
 
+    MyNamespace::hello = 5;
 
     std::vector<unsigned> check_clear_operation(10);
 

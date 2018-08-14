@@ -5,59 +5,49 @@
 #ifndef MAIN_DATASET_H
 #define MAIN_DATASET_H
 
-
 #include <opencv2/core/types.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem.hpp>
 
-typedef struct {
 
-
-    cv::Size_<unsigned> m_frame_size;
-
-    ushort m_depth;
-
-    ushort m_cn;
-
-    boost::filesystem::path m_dataset_basepath;
-
-    boost::filesystem::path  m_directory_path_gt;
-
-    boost::filesystem::path  m_directory_path_result;
-
-
-} DATASET_STRUCT;
-
-static DATASET_STRUCT  datasetStruct;
 
 class Dataset {
 
-
-private:
-
-    Dataset() {}
-
 public:
 
+    static cv::Size_<unsigned> m_frame_size;
+
+    static ushort m_depth;
+
+    static ushort m_cn;
+
+    static ushort ITERATION_START_POINT;
+    static ushort ITERATION_END_POINT;
+    static ushort MAX_ITERATION_RESULTS;
+    static ushort MAX_ITERATION_DATASET;
+    static ushort MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
+
+    static boost::filesystem::path m_dataset_basepath;
+
+    static boost::filesystem::path  m_directory_path_gt;
+
+    static boost::filesystem::path  m_directory_path_result;
+
     static void fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
-            std::string unterordner, std::string resultordner) ;
+            std::string unterordner, std::string resultordner, ushort start, ushort stop);
+    static const cv::Size_<unsigned> getFrameSize()  ;
 
-    const static cv::Size_<unsigned> getFrameSize()  ;
+    static const boost::filesystem::path getDatasetPath() ;
 
-    const static boost::filesystem::path getDatasetPath() ;
+    static const boost::filesystem::path getGroundTruthPath()  ;
 
-    const static boost::filesystem::path getGroundTruthPath()  ;
+    static const boost::filesystem::path getResultPath();
 
-    const static boost::filesystem::path getResultPath();
+    static const ushort getDepth();
 
-    const static ushort getDepth();
+    static const ushort getChannel();
 
-    const static ushort getChannel();
-
-    const static ushort getMakeType();
-
-
-
+    static const ushort getMakeType();
 
 };
 

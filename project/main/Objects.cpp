@@ -36,7 +36,7 @@ void Objects::generate_edge_contour(ushort SENSOR_COUNT, std::string post_proces
 
         std::cout << "making a edge contour on the basis of " << post_processing_algorithm << " for object " << m_objectName << " for sensor index " << sensor_index << std::endl;
 
-        for (ushort current_frame_index=0; current_frame_index < MAX_ITERATION_RESULTS; current_frame_index++) {
+        for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
             //draw new ground truth flow.
 
 

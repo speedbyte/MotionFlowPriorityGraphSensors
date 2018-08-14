@@ -4,49 +4,72 @@
 
 #include "Dataset.h"
 
+cv::Size_<unsigned> Dataset::m_frame_size;
+ushort Dataset::m_depth;
+ushort Dataset::m_cn;
+ushort Dataset::ITERATION_START_POINT;
+ushort Dataset::ITERATION_END_POINT;
+ushort Dataset::MAX_ITERATION_RESULTS;
+ushort Dataset::MAX_ITERATION_DATASET;
+ushort Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
+boost::filesystem::path Dataset::m_dataset_basepath;
+boost::filesystem::path  Dataset::m_directory_path_gt;
+boost::filesystem::path  Dataset::m_directory_path_result;
+
+
 void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
-        std::string unterordner, std::string resultordner) {
+                          std::string unterordner, std::string resultordner, ushort start, ushort stop) {
 
-    datasetStruct.m_frame_size = frame_size;
+    ITERATION_START_POINT = start;
 
-    datasetStruct.m_depth = depth;
+    ITERATION_END_POINT = stop;
 
-    datasetStruct.m_cn = cn;
+    MAX_ITERATION_RESULTS = (ITERATION_END_POINT - ITERATION_START_POINT);// 60 generate result. this cannot be more than vector
 
-    datasetStruct.m_dataset_basepath = dataset_path;
+    MAX_ITERATION_DATASET = MAX_ITERATION_RESULTS; // 60 generate result. this cannot be more than vector
 
-    datasetStruct.m_directory_path_gt = datasetStruct.m_dataset_basepath.string() + unterordner;
+    MAX_ITERATION_GT_SCENE_GENERATION_DATASET = (MAX_ITERATION_DATASET) + (ushort)20;  // generate always twenty images more than required.
 
-    datasetStruct.m_directory_path_result = datasetStruct.m_dataset_basepath.string() + resultordner;
+    m_frame_size = frame_size;
+
+    m_depth = depth;
+
+    m_cn = cn;
+
+    m_dataset_basepath = dataset_path;
+
+    m_directory_path_gt = m_dataset_basepath.string() + unterordner;
+
+    m_directory_path_result = m_dataset_basepath.string() + resultordner;
 
 }
 
 const cv::Size_<unsigned> Dataset::getFrameSize() {
-    return datasetStruct.m_frame_size;
+    return m_frame_size;
 }
 
 const ushort Dataset::getDepth() {
-    return datasetStruct.m_depth;
+    return m_depth;
 }
 
 const ushort Dataset::getChannel() {
-    return datasetStruct.m_cn;
+    return m_cn;
 }
 
 const ushort Dataset::getMakeType() {
-    return static_cast<ushort>(CV_MAKETYPE(datasetStruct.m_depth, datasetStruct.m_cn));
+    return static_cast<ushort>(CV_MAKETYPE(m_depth, m_cn));
 }
 
 const boost::filesystem::path Dataset::getDatasetPath() {
-    return datasetStruct.m_dataset_basepath;
+    return m_dataset_basepath;
 }
 
 //data/stereo_flow/
 const boost::filesystem::path Dataset::getGroundTruthPath() {
-    return datasetStruct.m_directory_path_gt;
+    return m_directory_path_gt;
 }
 
 //resultsgenerated/
 const boost::filesystem::path Dataset::getResultPath() {
-    return datasetStruct.m_directory_path_result;
+    return m_directory_path_result;
 }
