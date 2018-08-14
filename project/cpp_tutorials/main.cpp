@@ -157,10 +157,6 @@ inline T const& Max (T const& a, T const& b) {
 int main ( int argc, char *argv[]) {
 
 
-    float a_float = 14.316255555;
-    float b_float = 14.31627899;
-    assert(std::floor(a_float*1000)/1000 == std::floor(b_float*1000)/1000);
-
     std::vector<unsigned> check_clear_operation(10);
 
     std::cout << " " << check_clear_operation.size() << std::endl;

@@ -82,16 +82,17 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
 
     // DEPTH READ
-    cv::Mat finalDepth(Dataset::getFrameSize(),CV_8UC1);
+    cv::Mat finalDepth(Dataset::getFrameSize(),CV_32FC1);
     char file_name_input_image_depth[50];
     sprintf(file_name_input_image_depth, "depth_000%03d_10.png", image_frame_count);
     std::string input_image_path_depth = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image_depth;
-    cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_GRAYSCALE);
+    cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_UNCHANGED);
 
+    std::cout << depth_02_frame.type();
 
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
-        printf("%u %u %u\n", depth_02_frame.at<unsigned char>(cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y));
+        printf("depth %u at cog %u %u\n", depth_02_frame.at<unsigned char>(cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y));
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement;
         std::vector<bool> frame_stencil_visibility;
@@ -153,7 +154,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 }
             }
 
-            // 1st method - Intersection of Squared ROI and Frame Differencing
+            // 1st step - Intersection of Squared ROI and Frame Differencing
             // ---------------------------------------------------------------------------------------------------------
             gt_frame_stencil_displacement_from_roi.resize(squared_region_of_interest.size());
             frame_stencil_visibility.resize(squared_region_of_interest.size());
@@ -167,28 +168,18 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                                                                         gt_frame_stencil_displacement_from_roi.begin());
             gt_frame_stencil_displacement_from_roi = myIntersection_gt_roi_objects.getResult();
 
-            frame_stencil_displacement = gt_frame_stencil_displacement_from_roi;
-            //assert(frame_stencil_displacement.size()>0);
+            //frame_stencil_displacement = gt_frame_stencil_displacement_from_roi;
+            assert(gt_frame_stencil_displacement_from_roi.size()>0);
 
             // ---------------------------------------------------------------------------------------------------------
-            // 2nd method - Intersection of Depth and Frame differencing
-            // frame differencing with depth map = moving objects depth map
-            // ground truth flow is the pixels in the moving objects depth map.
-            // final should be a SparseArray here.
-            // obselete method take all the objects found in final
-            for (unsigned j = 0; j < frameDifference.cols; j += 1) {
-                for (unsigned k = 0; k < frameDifference.rows; k += 1) {
-                    if ( frameDifference.at<unsigned char>(k,j) == 0 ) { // non equal matches in compare
-                        unsigned char val = depth_02_frame.at<unsigned char>(k,j);
-                        unsigned int depth_value_object = cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk);
-                        //finalDepth.at<unsigned char>(k,j) = depth_02_frame.at<unsigned char>(k,j);
-                        if ( val == depth_value_object )  {
-                            gt_frame_stencil_displacement_from_depth.push_back(
-                                    std::make_pair(cv::Point2f(j, k), gt_displacement));
-                        }
-                    }
-                    //frame_stencil_visibility.push_back(visibility);
+            // 2nd step - Refine intersection in case multiple objects are inside the ROI.
+            for (unsigned j = 0; j < all_moving_objects_in_frame.size(); j += 1) {
+                unsigned char val = depth_02_frame.at<unsigned char>(all_moving_objects_in_frame.at(j).first);
+                float depth_value_object = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk;
+                if ( val > (depth_value_object-3)  && val < ( depth_value_object+2) )  {
+                    gt_frame_stencil_displacement_from_depth.push_back(all_moving_objects_in_frame.at(j));
                 }
+                //frame_stencil_visibility.push_back(visibility);
             }
 
             frame_stencil_displacement = gt_frame_stencil_displacement_from_depth;
@@ -1026,8 +1017,8 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                     cv::circle(check_intersection, (*it).first, 1, cv::Scalar(0,0,255));
                 }
 
-                cv::imshow("int", check_intersection);
-                cv::waitKey(0);
+                //cv::imshow("int", check_intersection);
+                //cv::waitKey(0);
 
                 // occlusion image
                 // occlusion boundary

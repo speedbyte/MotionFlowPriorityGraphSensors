@@ -110,7 +110,7 @@ int main ( int argc, char *argv[]) {
         bool gt;
         bool lk;
         bool fb;
-        bool plot;
+        bool analyse;
         bool video;
     } CONFIG_FILE_DATA;
 
@@ -155,7 +155,7 @@ int main ( int argc, char *argv[]) {
         it->second->gt = (bool) (int) (node["GT"]);
         it->second->lk = (bool) (int) (node["LK"]);
         it->second->fb = (bool) (int) (node["FB"]);
-        it->second->plot = (bool) (int) (node["PLOT"]);
+        it->second->analyse = (bool) (int) (node["ANALYSE"]);
         it->second->video = (bool) (int) (node["VIDEO"]);
         //map_input_txt_to_main.push_back(map_object);
         std::cout << it->second->path << " " << it->second->execute << " " << it->second->gt << std::endl;
@@ -322,7 +322,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
                 gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                //gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.find_ground_truth_flow_occlusion_boundary((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
@@ -334,7 +334,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 gt_flow.generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_metrics_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size())); // this is to just create Jaccard Index  =  1
-                //gt_flow.plot_stencil();
+                //gt_flow.analyse_stencil();
 
             }
 
@@ -346,7 +346,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 std::vector<AlgorithmFlow> dummy;
 
-                if ((cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.plot && vires_dataset.execute)) {
+                if ((cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.analyse && vires_dataset.execute)) {
 
                     pixelRobustness.generatePixelRobustness((ushort)(evaluation_list.size()+1%evaluation_list.size()), gt_flow, gt_flow);
                     vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), gt_flow, gt_flow);
@@ -382,6 +382,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 else if ( algorithm_index == 0 ) {
 
                     list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+
+                }
+
+                else if ( algorithm_index == 2 ) {
+
+                    //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "simple_flow", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
 
                 }
 
@@ -436,7 +443,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                     list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                    //list_of_ptr_of_environment_OFalgorithm[env_index]->plot_stencil();
+                    //list_of_ptr_of_environment_OFalgorithm[env_index]->analyse_stencil();
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 }
@@ -446,7 +453,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 time_map["algorithm_flow_" + suffix] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
                 tic = steady_clock::now();
 
-                if ((cpp_dataset.fb && cpp_dataset.plot && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.plot && vires_dataset.execute)) {
+                if ((cpp_dataset.fb && cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.analyse && vires_dataset.execute)) {
 
                     pixelRobustness.generatePixelRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[0], *list_of_ptr_of_environment_OFalgorithm[env_index]);
                     vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[env_index], *list_of_ptr_of_environment_OFalgorithm[0]);

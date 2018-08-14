@@ -111,3 +111,6 @@ target_link_libraries(camshiftdemo ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
 
 add_executable(cornerSubPix_Demo cornerSubPix_Demo.cpp)
 target_link_libraries(cornerSubPix_Demo ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(findContours findContours.cpp)
+target_link_libraries(findContours ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})

@@ -103,7 +103,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
             cv::Mat binary_image, gray_image;
             std::vector<std::vector<cv::Point> > contours;
             cv::cvtColor(image_data_and_shape, gray_image, CV_BGR2GRAY);
-            cv::threshold(gray_image, binary_image, 128, 255, CV_THRESH_BINARY);
+            cv::threshold(gray_image, binary_image, 128, 255, CV_THRESH_BINARY); // invert and see what happens
             cv::findContours(binary_image, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
                              cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(
                                      current_frame_index).m_object_location_camera_px.location_x_px),

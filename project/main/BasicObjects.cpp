@@ -286,7 +286,7 @@ void BasicObjects::generateFrameDifferenceImage() {
     // Frame Differencing
 
     unsigned long FRAME_COUNT = 0;
-    FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
+    FRAME_COUNT = ITERATION_END_POINT+1;
     assert(FRAME_COUNT > 0);
 
     for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
@@ -338,7 +338,7 @@ void BasicObjects::writePositionInYaml(std::string suffix) {
     cv::FileStorage write_fs;
     write_fs.open("../position_" + suffix + sensor_index_folder_suffix + ".yml", cv::FileStorage::WRITE);
     unsigned long FRAME_COUNT = 0;
-    FRAME_COUNT = MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
+    FRAME_COUNT = ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
     for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
