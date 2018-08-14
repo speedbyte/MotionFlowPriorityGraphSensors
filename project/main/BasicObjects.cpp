@@ -286,7 +286,7 @@ void BasicObjects::generateFrameDifferenceImage() {
     // Frame Differencing
 
     unsigned long FRAME_COUNT = 0;
-    FRAME_COUNT = ITERATION_END_POINT+1;
+    FRAME_COUNT = ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
     for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {

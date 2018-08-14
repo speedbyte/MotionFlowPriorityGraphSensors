@@ -68,7 +68,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     cv::Mat depth_data_and_shape;
 
 
-    for (ushort current_frame_index = 0; current_frame_index < MAX_ITERATION_GT_SCENE_GENERATION_DATASET; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < ITERATION_END_POINT; current_frame_index++) {
 
         // TODO - when the variable overflows.
 
@@ -89,9 +89,10 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
+            /*
             if ( current_frame_index == MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) {
                 current_frame_index = 0;
-            }
+            }*/
             std::string position_image_file_with_path = m_generatepath.string() + '_' + std::to_string(m_sensorGroupCount)+ "/" + file_name_image;
 
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getImage().clone();
@@ -167,6 +168,9 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                 printf("! WRITE %u %u %u !\n", tempGroundTruthDepthImage.at<unsigned char>(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y));
 
 
+            }
+            else {
+                std::cout << "unable to generate, since object is occluded" << std::endl;
             }
         }
 
