@@ -25,13 +25,13 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
     Achterbahn achterbahn;
 
-    Canvas canvas((ushort)Dataset::getFrameSize().width, (ushort)Dataset::getFrameSize().height, noise);
+    Canvas canvas((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, noise);
 
     achterbahn = Achterbahn("rectangle_long", 100);
-    achterbahn.process(Dataset::getFrameSize());
+    achterbahn.process(Dataset::m_frame_size);
 
     Ramp ramp = Ramp("rectangle_long", 100);
-    ramp.process(Dataset::getFrameSize());
+    ramp.process(Dataset::m_frame_size);
 
     objectMetaDataList.at(0) = achterbahn;
     objectMetaDataList.at(0).setObjectShape(circle_obj1);
@@ -39,10 +39,10 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
     achterbahn = Achterbahn("random_object", 220);
-    achterbahn.process(Dataset::getFrameSize());
+    achterbahn.process(Dataset::m_frame_size);
 
     NegativeRamp negativeRamp = NegativeRamp("random_object", 100);
-    negativeRamp.process(Dataset::getFrameSize());
+    negativeRamp.process(Dataset::m_frame_size);
 
     objectMetaDataList.at(1) = achterbahn;
     objectMetaDataList.at(1).setObjectShape(circle_obj2);
@@ -50,12 +50,12 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
 
     cv::Mat tempGroundTruthPosition;
-    tempGroundTruthPosition.create(Dataset::getFrameSize(), CV_32FC3);
+    tempGroundTruthPosition.create(Dataset::m_frame_size, CV_32FC3);
     assert(tempGroundTruthPosition.channels() == 3);
     tempGroundTruthPosition = cv::Scalar::all(255);
 
     cv::Mat tempGroundTruthPosition_2;
-    tempGroundTruthPosition_2.create(Dataset::getFrameSize(), CV_32FC3);
+    tempGroundTruthPosition_2.create(Dataset::m_frame_size, CV_32FC3);
     assert(tempGroundTruthPosition_2.channels() == 3);
     tempGroundTruthPosition_2 = cv::Scalar::all(255);
 
@@ -74,8 +74,8 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
         //draw new ground truth image.
         cv::Mat tempGroundTruthImage = canvas.getImage().clone();
-        cv::Mat tempGroundTruthDepthImage(Dataset::getFrameSize(), CV_8UC1, cv::Scalar(255));
-        //tempGroundTruthDepthImage = cv::Mat::zeros(Dataset::getFrameSize(), CV_8UC1);
+        cv::Mat tempGroundTruthDepthImage(Dataset::m_frame_size, CV_8UC1, cv::Scalar(255));
+        //tempGroundTruthDepthImage = cv::Mat::zeros(Dataset::m_frame_size, CV_8UC1);
 
         assert((tempGroundTruthImage.channels() == 3 ) && ( tempGroundTruthDepthImage.channels() == 1 ));
 

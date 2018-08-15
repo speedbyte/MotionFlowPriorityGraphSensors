@@ -22,7 +22,7 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
 
     cv::Mat image_data_and_shape;
 
-    cv::Mat tempGroundTruthImage(Dataset::getFrameSize(), CV_8UC3);
+    cv::Mat tempGroundTruthImage(Dataset::m_frame_size, CV_8UC3);
 
     unsigned long FRAME_COUNT = Dataset::ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
@@ -282,6 +282,7 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
     //---------------------------------------------------------------------------------
 
 }
+
 void BasicObjects::generateFrameDifferenceImage() {
     // Frame Differencing
 
@@ -304,7 +305,7 @@ void BasicObjects::generateFrameDifferenceImage() {
             throw ("No image file found error");
         }
         std::string input_image_path_background =
-                Dataset::getGroundTruthPath().string() + "base_frame_" + sensor_index_folder_suffix + "/" +
+                Dataset::m_dataset_gtpath.string() + "base_frame_" + sensor_index_folder_suffix + "/" +
                 file_name_input_image;
         cv::Mat backgroundImage = cv::imread(input_image_path_background, CV_LOAD_IMAGE_COLOR);
         if (backgroundImage.data == NULL) {
@@ -326,7 +327,6 @@ void BasicObjects::generateFrameDifferenceImage() {
         cv::imwrite(frame_difference_image_path, frameDifference);
     }
 }
-
 
 void BasicObjects::writePositionInYaml(std::string suffix) {
 
@@ -496,9 +496,7 @@ void BasicObjects::writePositionInYaml(std::string suffix) {
 
 }
 
-
 void BasicObjects::readPositionFromFile(std::string suffix) {
-
 
     cv::Point2f speed_usk, speed_inertial;
     cv::Point2f dimension_pixel, sensor_fov, sensor_clip;

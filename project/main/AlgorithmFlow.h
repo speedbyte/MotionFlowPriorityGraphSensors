@@ -54,7 +54,7 @@ public:
 
     Farneback(std::vector<ushort> evaluation_list, std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<std::unique_ptr<Objects>> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( evaluation_list, weather, algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
 
-        flowFrame.create(Dataset::getFrameSize(), CV_32FC2);
+        flowFrame.create(Dataset::m_frame_size, CV_32FC2);
         flowFrame = cv::Scalar_<float>(0,0); //  the flow frame consists of next iterations
         assert(flowFrame.channels() == 2);
 
@@ -85,8 +85,8 @@ public:
                                          cv::OPTFLOW_USE_INITIAL_FLOW);
             frame_prev_pts.clear();
             frame_next_pts.clear();
-            for (int32_t row = 0; row < Dataset::getFrameSize().height; row += mStepSize) { // rows
-                for (int32_t col = 0; col < Dataset::getFrameSize().width; col += 1) {  // cols
+            for (int32_t row = 0; row < Dataset::m_frame_size.height; row += mStepSize) { // rows
+                for (int32_t col = 0; col < Dataset::m_frame_size.width; col += 1) {  // cols
 
                     cv::Point2f algo_displacement(flowFrame.at<cv::Point2f>(row, col).x,
                                                   flowFrame.at<cv::Point2f>(row, col).y);

@@ -15,12 +15,9 @@ void VectorRobustness::generateVectorRobustness(ushort SENSOR_COUNT, const Optic
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
 
-    unsigned COUNT;
     if ( suffix == "_ground_truth") {
-        COUNT = 1;
     }
     else {
-        COUNT = DATAFILTER_COUNT;
     }
 
     m_list_collision_data_multiframe = opticalFlow.getCollisionPoints();
@@ -38,7 +35,7 @@ void VectorRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optic
         COUNT = 1;
     }
     else {
-        COUNT = DATAFILTER_COUNT;
+        COUNT = (unsigned)m_list_collision_data_multiframe.size();
     }
 
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {

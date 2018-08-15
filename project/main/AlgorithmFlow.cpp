@@ -19,7 +19,7 @@ using namespace std::chrono;
 
 void AlgorithmFlow::prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {
 
-    m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/" + noise;
+    m_GroundTruthImageLocation = Dataset::m_dataset_gtpath.string() + "/" + noise;
 
     m_resultordner = "results_";
 
@@ -39,9 +39,9 @@ void AlgorithmFlow::prepare_directories(ushort SENSOR_COUNT, std::string noise, 
 
     m_resultordner += noise + "_" + std::to_string(fps) + "_" + std::to_string(stepSize) + "/";
 
-    m_generatepath = Dataset::getResultPath().string() + "/" +  m_resultordner;
+    m_generatepath = Dataset::m_dataset_resultpath.string() + "/" +  m_resultordner;
 
-    if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
+    if (!Dataset::m_dataset_basepath.compare(CPP_DATASET_PATH) || !Dataset::m_dataset_basepath.compare(VIRES_DATASET_PATH)) {
 
         prepare_directories_common(SENSOR_COUNT);
 

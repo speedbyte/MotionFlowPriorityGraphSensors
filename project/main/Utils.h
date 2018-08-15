@@ -151,15 +151,15 @@ public:
         //transform to VTD coordinates, x = depth, y = width, z = height. Hence the camera co-ordinates needs to be changed similarly.
         cv::Point3f pos = cv::Point3f(-final.y, -final.z, final.x);
 
-        float distToImagePlane = 0.5 * Dataset::getFrameSize().height / tan(fov_rad/ 2); // [px] from camera position.
+        float distToImagePlane = 0.5 * Dataset::m_frame_size.height / tan(fov_rad/ 2); // [px] from camera position.
         float pxSize = 2.2e-6; // [m/px]
 
         float x = pos.x * ((distToImagePlane) / pos.z);
         float y = pos.y * ((distToImagePlane) / pos.z);
 
         // Change from optical axis to origin ( top, left )
-        float x_image =  Dataset::getFrameSize().width/2 + x;
-        float y_image =  Dataset::getFrameSize().height/2 + y;
+        float x_image =  Dataset::m_frame_size.width/2 + x;
+        float y_image =  Dataset::m_frame_size.height/2 + y;
 
         return cv::Point2f(x_image, y_image);
 
@@ -176,8 +176,8 @@ public:
         float v =  pos.y * fy /pos.z ;
 
         // Change from optical axis to origin ( top, left )
-        float x_image =  Dataset::getFrameSize().width/2 + u; // here we can get the camera info from VIRES
-        float y_image =  Dataset::getFrameSize().height/2 + v;
+        float x_image =  Dataset::m_frame_size.width/2 + u; // here we can get the camera info from VIRES
+        float y_image =  Dataset::m_frame_size.height/2 + v;
 
         return cv::Point2f(x_image, y_image);
 

@@ -458,7 +458,7 @@ pts_exectime.push_back(boost::make_tuple(x_pts, y_pts));
 Gnuplot gp2d;
 gp2d << "set xrange [0:" + std::to_string(MAX_ITERATION_RESULTS) + "]\n";
 gp2d << "set yrange [0:" + std::to_string(max*2) + "]\n";
-std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::getGroundTruthPath().string() +
+std::string tmp = std::string(" with points title ") + std::string("'") + Dataset::m_dataset_gtpath.string() +
                   std::string(" y axis - ms, x axis - image_02_frame\n'");
 //gp2d << "plot" << gp2d.binFile2d(pts_exectime, "record") << tmp;
 
@@ -539,14 +539,14 @@ void scratch() {
         assert(boost::filesystem::exists(video_out_path.parent_path()) != 0);
 //frame_size.height =	(unsigned) cap.get(CV_CAP_PROP_FRAME_HEIGHT );
 //frame_size.width =	(unsigned) cap.get(CV_CAP_PROP_FRAME_WIDTH );
-        video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, Dataset::getFrameSize());
+        video_out.open(video_out_path.string(),CV_FOURCC('D','I','V','X'), 5, Dataset::m_frame_size);
         printf("Writer eingerichtet\n");
     }
 
 
     if ( frame_types == video_frames) {
         cv::VideoCapture cap;
-        cap.open(Dataset::getGroundTruthPath().string() + "image_02/movement.avi");
+        cap.open(Dataset::m_dataset_gtpath.string() + "image_02/movement.avi");
         if (!cap.isOpened()) {
             std::cout << "Could not initialize capturing...\n";
             return;
@@ -642,3 +642,27 @@ frame_stencil_displacement.clear();
 frame_stencil_visibility.clear();
 
 
+/*
+const std::vector<std::pair<cv::Point2f,cv::Point2f > > &ground_truth = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index);
+for (unsigned row_index = (unsigned)rowBegin; row_index < rowBegin+height; row_index++) {
+    for (unsigned col_index = (unsigned)columnBegin; col_index < columnBegin+width; col_index++) {
+
+        for (ushort next_pts_index = 0;
+             next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
+            if (((col_index) ==
+                 std::round(frame_next_pts_array.at(next_pts_index).x)) &&
+                ((row_index) ==
+                 std::round(frame_next_pts_array.at(next_pts_index).y))) {
+
+                cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
+
+                frame_stencil_displacement.push_back(std::make_pair(
+                        cv::Point2f(col_index, row_index),
+                        algo_displacement));
+                frame_stencil_visibility.push_back(visibility);
+
+            }
+        }
+    }
+}
+*/

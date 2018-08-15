@@ -27,16 +27,16 @@ void PlotFlow::plot(ushort SENSOR_COUNT, const std::string &resultsordner) {
                 continue;
             }
             sprintf(file_name_image, "000%03d_10.png", current_frame_index*sensor_index);
-            std::string temp_gt_flow_path = Dataset::getGroundTruthPath().string() + sensor_index_folder_suffix + "/"
+            std::string temp_gt_flow_path = Dataset::m_dataset_gtpath.string() + sensor_index_folder_suffix + "/"
                                             + file_name_image;
-            std::string temp_result_flow_path = Dataset::getResultPath().string() + "/" + resultsordner + "/" +
+            std::string temp_result_flow_path = Dataset::m_dataset_resultpath.string() + "/" + resultsordner + "/" +
                                                 sensor_index_folder_suffix + "/" + file_name_image;
-            std::string temp_plot_flow_path = Dataset::getResultPath().string() + "/" + resultsordner + "/" +
+            std::string temp_plot_flow_path = Dataset::m_dataset_resultpath.string() + "/" + resultsordner + "/" +
                                               folder_name_plot + "/" + file_name_image;
             FlowImageExtended gt_flow_read(temp_gt_flow_path);
             FlowImageExtended result_flow_read(temp_result_flow_path);
 
-            png::image<png::rgb_pixel> errorImage(Dataset::getFrameSize().width, Dataset::getFrameSize().height);
+            png::image<png::rgb_pixel> errorImage(Dataset::m_frame_size.width, Dataset::m_frame_size.height);
 
             // all black when the flow is identical. logcolor = false
             // all blue when the flow is identical. logcolor = true

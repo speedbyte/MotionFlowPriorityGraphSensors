@@ -2,6 +2,7 @@
 // Created by veikas on 26.01.18.
 //
 
+#include <map>
 #include "Dataset.h"
 
 cv::Size_<unsigned> Dataset::m_frame_size;
@@ -13,12 +14,13 @@ ushort Dataset::MAX_ITERATION_RESULTS;
 ushort Dataset::MAX_ITERATION_DATASET;
 ushort Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
 boost::filesystem::path Dataset::m_dataset_basepath;
-boost::filesystem::path  Dataset::m_directory_path_gt;
-boost::filesystem::path  Dataset::m_directory_path_result;
+boost::filesystem::path  Dataset::m_dataset_gtpath;
+boost::filesystem::path  Dataset::m_dataset_resultpath;
+std::map<std::string, bool> Dataset::m_dataprocessing_map;
 
 
 void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
-                          std::string unterordner, std::string resultordner, ushort start, ushort stop) {
+                          std::string unterordner, std::string resultordner, ushort start, ushort stop, std::map<std::string, bool> dataprocessing_map) {
 
     ITERATION_START_POINT = start;
 
@@ -36,40 +38,16 @@ void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort c
 
     m_cn = cn;
 
+    m_dataprocessing_map = dataprocessing_map;
+
     m_dataset_basepath = dataset_path;
 
-    m_directory_path_gt = m_dataset_basepath.string() + unterordner;
+    m_dataset_gtpath = m_dataset_basepath.string() + unterordner;
 
-    m_directory_path_result = m_dataset_basepath.string() + resultordner;
+    m_dataset_resultpath = m_dataset_basepath.string() + resultordner;
 
-}
-
-const cv::Size_<unsigned> Dataset::getFrameSize() {
-    return m_frame_size;
-}
-
-const ushort Dataset::getDepth() {
-    return m_depth;
-}
-
-const ushort Dataset::getChannel() {
-    return m_cn;
 }
 
 const ushort Dataset::getMakeType() {
     return static_cast<ushort>(CV_MAKETYPE(m_depth, m_cn));
-}
-
-const boost::filesystem::path Dataset::getDatasetPath() {
-    return m_dataset_basepath;
-}
-
-//data/stereo_flow/
-const boost::filesystem::path Dataset::getGroundTruthPath() {
-    return m_directory_path_gt;
-}
-
-//resultsgenerated/
-const boost::filesystem::path Dataset::getResultPath() {
-    return m_directory_path_result;
 }

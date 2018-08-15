@@ -26,7 +26,7 @@ using namespace std::chrono;
 
 void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
 
-    m_groundtruthpath = Dataset::getGroundTruthPath(); // data/stereo_flow
+    m_groundtruthpath = Dataset::m_dataset_gtpath; // data/stereo_flow
 
     m_generatepath = m_groundtruthpath.string() + "/" + m_environment;
 
@@ -201,7 +201,7 @@ void GroundTruthScene::generate_bird_view() {
     /*
         for ( auto position_index = 0;  position_index <  MAX_ITERATION_RESULTS; position_index++ ) {
 
-            cv::Mat birdview_frame(Dataset::getFrameSize(), CV_32FC1);
+            cv::Mat birdview_frame(Dataset::m_frame_size, CV_32FC1);
             for ( auto object_index= 0; object_index < get_ptr_customObjectMetaDataList().at(0).size(); object_index++ ) {
                 birdview_frame.at(m_list_gt_objects.at(object_index).get_object_base_point_displacement().at(position_index).first.x, m_list_gt_objects.at(object_index).get_object_range().at(position_index)) = 100;
                 cv::Mat roi_objects;
@@ -257,8 +257,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         sleep(1); // Wait before starting vtd again.
 
 
-        ushort mWidth=(ushort)Dataset::getFrameSize().width;
-        ushort mHeight=(ushort)Dataset::getFrameSize().height;
+        ushort mWidth=(ushort)Dataset::m_frame_size.width;
+        ushort mHeight=(ushort)Dataset::m_frame_size.height;
         ushort mPosX_left=200;
         ushort mPosY_left=0;
         ushort mPosX_right=200;

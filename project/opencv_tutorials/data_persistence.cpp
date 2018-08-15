@@ -26,6 +26,9 @@ void xml_yaml_write() {
     cv::Mat whiteImage3C(8,8,CV_8UC3,cv::Scalar(255,0,0));
 
     cv::FileStorage fs("../../../datasets/pics_dataset/test.yml", cv::FileStorage::WRITE);
+    if ( !fs.isOpened() ) {
+        throw;
+    }
 
     fs << "frameCount" << 5;
     cv::Mat_<double> cameraMatrix(3,3);
@@ -111,9 +114,17 @@ void xml_yaml_read() {
         cv::Vec<uchar,1> data; (*file_node_iterator)["lbp"] >> data;
         create_image.at<uchar>((int)(*file_node_iterator)["row"] ,(int)(*file_node_iterator)["col"]) = data[0];
     }
-    cv::namedWindow("yaml image", CV_WINDOW_KEEPRATIO);
-    cv::imshow("yaml image", create_image);
-    cv::waitKey(0);
+
+
+    cv::FileNode main_node = fs["CPP_DATASET"];
+    for ( cv::FileNodeIterator iterator_dictNode = main_node.begin(); iterator_dictNode!= main_node.end(); iterator_dictNode++) {
+
+        std::cout << (*iterator_dictNode).name();
+        if ( (*iterator_dictNode).name() == "DATAPROCESSING")
+            std::cout << "hurra" << (int)(*iterator_dictNode)["val"];
+    }
+    //cv::imshow("yaml image", create_image);
+    //cv::waitKey(0);
 }
 
 
@@ -170,9 +181,9 @@ void read_nested() {
 
 int main (int argc, char *argv[]) {
     //xml_yaml_write();
-    //xml_yaml_read();
+    xml_yaml_read();
     //nested_yaml();
-    read_nested();
+    //read_nested();
 }
 
 /*

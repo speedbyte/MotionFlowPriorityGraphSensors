@@ -33,13 +33,13 @@ using namespace std::chrono;
 
 void GroundTruthFlow::prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {
 
-    m_GroundTruthImageLocation = Dataset::getGroundTruthPath().string() + "/blue_sky";
+    m_GroundTruthImageLocation = Dataset::m_dataset_gtpath.string() + "/blue_sky";
 
     m_resultordner="/ground_truth";
 
-    m_generatepath = Dataset::getGroundTruthPath().string() + m_resultordner;
+    m_generatepath = Dataset::m_dataset_gtpath.string() + m_resultordner;
 
-    if (!Dataset::getDatasetPath().compare(CPP_DATASET_PATH) || !Dataset::getDatasetPath().compare(VIRES_DATASET_PATH)) {
+    if (!Dataset::m_dataset_basepath.compare(CPP_DATASET_PATH) || !Dataset::m_dataset_basepath.compare(VIRES_DATASET_PATH)) {
 
         prepare_directories_common(SENSOR_COUNT);
 
@@ -110,7 +110,7 @@ void GroundTruthFlow::generate_edge_images(ushort SENSOR_COUNT) {
 
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
-        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::getFrameSize(), CV_32FC3);
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::m_frame_size, CV_32FC3);
         sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
         std::cout << "saving edge files in edge/ for sensor_index  " <<  sensor_index_folder_suffix << std::endl;
 
@@ -184,7 +184,7 @@ void GroundTruthFlow::generate_depth_images(ushort SENSOR_COUNT) {
 /*
         //cv::Vec3f *datagt_next_ptsr = flowFrame.gt_next_ptsr<cv::Vec3f>(0); // pointer to the first channel of the first element in the
         // first row. The r, g b  value of single pixels are continous.
-        float *array = (float *)malloc(3*sizeof(float)*Dataset::getFrameSize().width*Dataset::getFrameSize().height);
+        float *array = (float *)malloc(3*sizeof(float)*Dataset::m_frame_size.width*Dataset::m_frame_size.height);
         cv::MatConstIterator_<cv::Vec3f> it = roi.begin<cv::Vec3f>();
         for (unsigned i = 0; it != roi.end<cv::Vec3f>(); it++ ) {
             for ( unsigned j = 0; j < 3; j++ ) {
@@ -192,7 +192,7 @@ void GroundTruthFlow::generate_depth_images(ushort SENSOR_COUNT) {
                 i++;
             }
         }
-        FlowImageExtended temp = FlowImageExtended(array, Dataset::getFrameSize().width, Dataset::getFrameSize().height );
+        FlowImageExtended temp = FlowImageExtended(array, Dataset::m_frame_size.width, Dataset::m_frame_size.height );
         F_png_write = temp;
 
  */

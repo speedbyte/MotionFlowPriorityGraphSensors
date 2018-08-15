@@ -40,13 +40,13 @@ void Objects::generate_edge_contour(ushort SENSOR_COUNT, std::string post_proces
             //draw new ground truth flow.
 
 
-            cv::Mat objectEdgeFrame( Dataset::getFrameSize(), CV_8UC1 );
+            cv::Mat objectEdgeFrame( Dataset::m_frame_size, CV_8UC1 );
             objectEdgeFrame = cv::Scalar_<char>(0);
 
             ushort vires_frame_count = m_object_extrapolated_all.at(0).at(current_frame_index).frame_no;
             sprintf(file_name_input_image, "000%03d_10.png", vires_frame_count);
 
-            temp_result_edge_path = Dataset::getGroundTruthPath().string() + "ground_truth/edge_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+            temp_result_edge_path = Dataset::m_dataset_gtpath.string() + "ground_truth/edge_" + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             cv::Mat edge_02_frame = cv::imread(temp_result_edge_path, CV_LOAD_IMAGE_COLOR);
             if ( edge_02_frame.data == NULL ) {
@@ -133,25 +133,39 @@ void Objects::generate_object_mean_centroid_displacement(ushort SENSOR_COUNT, st
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
 
-    NoAlgorithm noAlgorithm;
-    noAlgorithm.common(SENSOR_COUNT, this, post_processing_algorithm);
-    m_list_object_dataprocessing_mean_centroid_displacement.push_back(noAlgorithm.get_object_dataprocessing_mean_centroid_displacement());
-    m_list_object_dataprocessing_stencil_points_displacement.push_back(noAlgorithm.get_object_dataprocessing_stencil_point_displacement());
+    if ( Dataset::m_dataprocessing_map["NoAlgorithm"]) {
+        NoAlgorithm noAlgorithm;
+        noAlgorithm.common(SENSOR_COUNT, this, post_processing_algorithm);
+        m_list_object_dataprocessing_mean_centroid_displacement.push_back(noAlgorithm.get_object_dataprocessing_mean_centroid_displacement());
+        m_list_object_dataprocessing_stencil_points_displacement.push_back(noAlgorithm.get_object_dataprocessing_stencil_point_displacement());
+    }
 
-    SimpleAverage simpleAverage;
-    simpleAverage.common(SENSOR_COUNT, this, post_processing_algorithm );
-    m_list_object_dataprocessing_mean_centroid_displacement.push_back(simpleAverage.get_object_dataprocessing_mean_centroid_displacement());
-    m_list_object_dataprocessing_stencil_points_displacement.push_back(simpleAverage.get_object_dataprocessing_stencil_point_displacement());
+    if ( Dataset::m_dataprocessing_map["SimpleAverage"]) {
+        SimpleAverage simpleAverage;
+        simpleAverage.common(SENSOR_COUNT, this, post_processing_algorithm);
+        m_list_object_dataprocessing_mean_centroid_displacement.push_back(
+                simpleAverage.get_object_dataprocessing_mean_centroid_displacement());
+        m_list_object_dataprocessing_stencil_points_displacement.push_back(
+                simpleAverage.get_object_dataprocessing_stencil_point_displacement());
+    }
 
-    MovingAverage movingAverage;
-    movingAverage.common(SENSOR_COUNT, this, post_processing_algorithm);
-    m_list_object_dataprocessing_mean_centroid_displacement.push_back(movingAverage.get_object_dataprocessing_mean_centroid_displacement());
-    m_list_object_dataprocessing_stencil_points_displacement.push_back(movingAverage.get_object_dataprocessing_stencil_point_displacement());
+    if ( Dataset::m_dataprocessing_map["MovingAverage"]) {
+        MovingAverage movingAverage;
+        movingAverage.common(SENSOR_COUNT, this, post_processing_algorithm);
+        m_list_object_dataprocessing_mean_centroid_displacement.push_back(
+                movingAverage.get_object_dataprocessing_mean_centroid_displacement());
+        m_list_object_dataprocessing_stencil_points_displacement.push_back(
+                movingAverage.get_object_dataprocessing_stencil_point_displacement());
+    }
 
-    VotedMean votedMean;
-    votedMean.common(SENSOR_COUNT, this, post_processing_algorithm);
-    m_list_object_dataprocessing_mean_centroid_displacement.push_back(votedMean.get_object_dataprocessing_mean_centroid_displacement());
-    m_list_object_dataprocessing_stencil_points_displacement.push_back(votedMean.get_object_dataprocessing_stencil_point_displacement());
+    if ( Dataset::m_dataprocessing_map["VotedMean"]) {
+        VotedMean votedMean;
+        votedMean.common(SENSOR_COUNT, this, post_processing_algorithm);
+        m_list_object_dataprocessing_mean_centroid_displacement.push_back(
+                votedMean.get_object_dataprocessing_mean_centroid_displacement());
+        m_list_object_dataprocessing_stencil_points_displacement.push_back(
+                votedMean.get_object_dataprocessing_stencil_point_displacement());
+    }
 
     if ( post_processing_algorithm != "ground_truth" ) {
         //generate_edge_contour(post_processing_algorithm);
@@ -177,7 +191,7 @@ void Objects::generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::str
         COUNT = 1;
     }
     else {
-        COUNT = DATAFILTER_COUNT;
+        COUNT = m_list_object_dataprocessing_mean_centroid_displacement.size();
     }
 
     std::vector<std::vector<std::vector<cv::Point2f > > > list_object_line_parameters;
@@ -235,7 +249,7 @@ void Objects::generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::str
                         if (std::isinf(m)) {
                             if (mean_displacement_vector.y > 0.0f) {  // going up
                                 pt2.x = next_pts.x;
-                                pt2.y = Dataset::getFrameSize().height;
+                                pt2.y = Dataset::m_frame_size.height;
                             } else {  // going down
                                 pt2.x = next_pts.x;
                                 pt2.y = 0;
@@ -246,14 +260,14 @@ void Objects::generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::str
                                 pt2.x = 0;
                                 pt2.y = next_pts.y;
                             } else {  // going right
-                                pt2.x = Dataset::getFrameSize().width;
+                                pt2.x = Dataset::m_frame_size.width;
                                 pt2.y = next_pts.y;
                             }
                         }
 
                         if (mean_displacement_vector.y > 0.0f) {
-                            pt2.x = (Dataset::getFrameSize().height - c) / m; //
-                            pt2.y = Dataset::getFrameSize().height;
+                            pt2.x = (Dataset::m_frame_size.height - c) / m; //
+                            pt2.y = Dataset::m_frame_size.height;
                         } else if (mean_displacement_vector.y < 0.0f) {
                             pt2.x = (-c / m); //
                             pt2.y = 0;

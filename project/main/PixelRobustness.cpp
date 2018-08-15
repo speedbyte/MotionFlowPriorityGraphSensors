@@ -14,13 +14,6 @@ void PixelRobustness::generatePixelRobustness(ushort SENSOR_COUNT, const Optical
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
 
-    unsigned COUNT;
-    if ( suffix == "_ground_truth") {
-        COUNT = 1;
-    }
-    else {
-        COUNT = DATAFILTER_COUNT;
-    }
 
     m_list_evaluation_data_multiframe = opticalFlow.get_sensor_multiframe_evaluation_data();
     writeToYaml(SENSOR_COUNT, opticalFlow);
@@ -37,7 +30,7 @@ void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optica
         COUNT = 1;
     }
     else {
-        COUNT = DATAFILTER_COUNT;
+        COUNT = (unsigned)m_list_evaluation_data_multiframe.size();
     }
 
     // shape of algorithhm, with shape of ground truth

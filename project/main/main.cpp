@@ -114,6 +114,7 @@ int main ( int argc, char *argv[]) {
         bool fb;
         bool analyse;
         bool video;
+        std::map<std::string, bool> dataprocessing_map;
     } CONFIG_FILE_DATA;
 
 
@@ -162,7 +163,18 @@ int main ( int argc, char *argv[]) {
         it->second->fb = (bool) (int) (node["FB"]);
         it->second->analyse = (bool) (int) (node["ANALYSE"]);
         it->second->video = (bool) (int) (node["VIDEO"]);
-        //map_input_txt_to_main.push_back(map_object);
+
+        for ( cv::FileNodeIterator iterator_subNode = node.begin(); iterator_subNode!= node.end(); iterator_subNode++) {
+
+            if ((*iterator_subNode).name() == "DATAPROCESSING") {
+                it->second->dataprocessing_map["NoAlgorithm"] = (bool)(int) (*iterator_subNode)["NoAlgorithm"];
+                it->second->dataprocessing_map["SimpleAverage"] = (bool) (int) (*iterator_subNode)["SimpleAverage"];
+                it->second->dataprocessing_map["MovingAverage"] = (bool) (int) (*iterator_subNode)["MovingAverage"];
+                it->second->dataprocessing_map["VotedMean"] = (bool) (int) (*iterator_subNode)["VotedMean"];
+                it->second->dataprocessing_map["RankedMean"] = (bool) (int) (*iterator_subNode)["RankedMean"];
+            }
+        }
+         //map_input_txt_to_main.push_back(map_object);
         std::cout << it->second->path << " " << it->second->execute << " " << it->second->gt << std::endl;
 
     }
@@ -286,7 +298,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if (vires_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.start, vires_dataset.stop);
+                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.start, vires_dataset.stop, vires_dataset.dataprocessing_map);
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
 
@@ -310,7 +322,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             } else if (cpp_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.start, cpp_dataset.stop);
+                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.dataprocessing_map);
 
                 GroundTruthSceneInternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
@@ -342,7 +354,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
 
 // in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
-//                    fs.open((Dataset::getGroundTruthPath().string() + "/values.yml"), cv::FileStorage::WRITE);
+//                    fs.open((Dataset::m_dataset_gtpath.string() + "/values.yml"), cv::FileStorage::WRITE);
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
                 gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
@@ -494,10 +506,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
                     for (int sensors = 0; sensors < (ushort)(evaluation_list.size() + 1%evaluation_list.size()); sensors++) {
                         Utils::make_video_from_regex(
-                                Dataset::getGroundTruthPath().string() + '/' + environment_list[env_index] + '_' +
+                                Dataset::m_dataset_gtpath.string() + '/' + environment_list[env_index] + '_' +
                                 std::to_string(sensors));
                         Utils::make_video_from_regex(
-                                Dataset::getResultPath().string() + "/results_FB_" + environment_list[env_index] +
+                                Dataset::m_dataset_resultpath.string() + "/results_FB_" + environment_list[env_index] +
                                 '_' + std::to_string(fps) + "_" + std::to_string(stepSize) + "/position_occ_0" +
                                 std::to_string(sensors) + '/');
                     }
@@ -532,7 +544,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             cv::Size_<unsigned> frame_size(1242, 375);
             std::string input = "data/stereo_flow/image_02";
-            Dataset::fillDataset(frame_size, depth, cn, MATLAB_DATASET_PATH, input, "results", matlab_dataset.start, matlab_dataset.stop);
+            //Dataset::fillDataset(frame_size, depth, cn, MATLAB_DATASET_PATH, input, "results", matlab_dataset.start, matlab_dataset.stop);
             //AlgorithmFlow algo();
 
         }
@@ -547,7 +559,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         if ( kitti_flow_dataset.execute ) {
 
-            Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, kitti_flow_dataset.start, kitti_flow_dataset.stop);
+            //Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, kitti_flow_dataset.start, kitti_flow_dataset.stop);
 
             std::vector<Objects *> ptr_list_of_gt_objects_base;
             std::vector<std::unique_ptr<Objects>> ptr_list_of_simulated_objects_base;
