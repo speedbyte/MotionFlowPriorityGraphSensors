@@ -110,11 +110,10 @@ int main ( int argc, char *argv[]) {
         std::string path;
         bool execute;
         bool gt;
-        bool lk;
-        bool fb;
         bool analyse;
         bool video;
         std::map<std::string, bool> dataprocessing_map;
+        std::map<std::string, ushort> algorithm_map;
     } CONFIG_FILE_DATA;
 
 
@@ -159,8 +158,6 @@ int main ( int argc, char *argv[]) {
         it->second->path = node["PATH"].string();
         it->second->execute = (bool) (int) node["EXECUTE"];
         it->second->gt = (bool) (int) (node["GT"]);
-        it->second->lk = (bool) (int) (node["LK"]);
-        it->second->fb = (bool) (int) (node["FB"]);
         it->second->analyse = (bool) (int) (node["ANALYSE"]);
         it->second->video = (bool) (int) (node["VIDEO"]);
 
@@ -172,6 +169,11 @@ int main ( int argc, char *argv[]) {
                 it->second->dataprocessing_map["MovingAverage"] = (bool) (int) (*iterator_subNode)["MovingAverage"];
                 it->second->dataprocessing_map["VotedMean"] = (bool) (int) (*iterator_subNode)["VotedMean"];
                 it->second->dataprocessing_map["RankedMean"] = (bool) (int) (*iterator_subNode)["RankedMean"];
+            }
+            else if ((*iterator_subNode).name() == "ALGORITHMS") {
+                it->second->algorithm_map["FB"] = (ushort) (int) (*iterator_subNode)["FB"];
+                it->second->algorithm_map["LK"] = (ushort) (int) (*iterator_subNode)["LK"];
+                it->second->algorithm_map["SF"] = (ushort) (int) (*iterator_subNode)["SF"];
             }
         }
          //map_input_txt_to_main.push_back(map_object);
@@ -298,7 +300,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if (vires_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.start, vires_dataset.stop, vires_dataset.dataprocessing_map);
+                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.start, vires_dataset.stop, vires_dataset.dataprocessing_map,
+                vires_dataset.algorithm_map);
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
 
@@ -322,7 +325,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             } else if (cpp_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.dataprocessing_map);
+                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map);
 
                 GroundTruthSceneInternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);
@@ -455,12 +458,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
 
                 list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), environment_list[env_index], fps, stepSize);
-                if ((cpp_dataset.fb && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.execute)) {
+                if ((Dataset::m_execute_algorithm && cpp_dataset.execute) || (Dataset::m_execute_algorithm && vires_dataset.execute)) {
 
                     list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), environment_list[env_index], fps, stepSize);
                     // TODO - do something for stepSize.. its redundant here.
                     /// run optical flow algorithm
                     list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list, video_frames, fps);
+                    /// combine sensor data
                     if ( (evaluation_list.size() + 1%evaluation_list.size()) > 1 ) {
                         list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
                     }
@@ -494,7 +498,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 time_map["algorithm_flow_" + suffix] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
                 tic = steady_clock::now();
 
-                if ((cpp_dataset.fb && cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.fb && vires_dataset.analyse && vires_dataset.execute)) {
+                if ((Dataset::m_execute_algorithm && cpp_dataset.analyse && cpp_dataset.execute) || (Dataset::m_execute_algorithm && vires_dataset.analyse && vires_dataset.execute)) {
 
                     pixelRobustness.generatePixelRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[0], *list_of_ptr_of_environment_OFalgorithm[env_index]);
                     vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[env_index], *list_of_ptr_of_environment_OFalgorithm[0]);

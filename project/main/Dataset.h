@@ -31,10 +31,13 @@ public:
     static boost::filesystem::path  m_dataset_resultpath;
 
     static std::map<std::string, bool> m_dataprocessing_map;
+    static std::map<std::string, ushort> m_algorithm_map;
+
+    static bool m_execute_algorithm;
 
     static void fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
-            std::string unterordner, std::string resultordner, ushort start, ushort stop, std::map<std::string, bool> dataprocessing_map);
-    static const cv::Size_<unsigned> getFrameSize()  ;
+            std::string unterordner, std::string resultordner, ushort start, ushort stop, std::map<std::string, bool> dataprocessing_map,
+                            std::map<std::string, ushort> algorithm_map);
 
     static const ushort getMakeType();
 

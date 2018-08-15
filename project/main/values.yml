@@ -1,7 +1,7 @@
 %YAML:1.0
 ---
 time_map:
-   - { algorithm_flow_results_FB_blue_sky_30_1_:24354. }
-   - { groundtruth_flow:15348. }
+   - { algorithm_flow_results_FB_blue_sky_30_1_:3. }
+   - { groundtruth_flow:3342. }
    - { robustness_gt_flow:0. }
-   - { total:39703. }
+   - { total:3345. }

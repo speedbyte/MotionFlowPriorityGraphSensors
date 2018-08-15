@@ -7,10 +7,10 @@ CPP_DATASET:
     PATH: "../../../datasets/cpp_dataset/"
     EXECUTE: 1
     GT: 0
-    FB: 1
     ANALYSE: 0
     VIDEO: 0
     DATAPROCESSING: {NoAlgorithm: 1, SimpleAverage: 0, MovingAverage: 0, VotedMean: 0, RankedMean: 0}
+    ALGORITHMS: {FB: 1, LK: 0, SF: 0}
 
 MATLAB_DATASET:
     PATH: "../../../datasets/matlab_dataset/"
@@ -46,7 +46,7 @@ VIRES_DATASET:
     PATH: "../../../datasets/vires_dataset/"
     EXECUTE: 0
     GT: 0
-    FB: 0
     ANALYSE: 0
     VIDEO: 0
     DATAPROCESSING: {NoAlgorithm: 1, SimpleAverage: 0, MovingAverage: 0, VotedMean: 0, RankedMean: 0}
+    ALGORITHMS: {FB: 1, LK: 0, SF: 0}
