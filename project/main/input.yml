@@ -10,7 +10,7 @@ CPP_DATASET:
     FB: 1
     ANALYSE: 0
     VIDEO: 0
-    DATAPROCESSING: {NoAlgorithm: 1, SimpleAverage: 1, MovingAverage: 0, VotedMean: 0, RankedMean: 0}
+    DATAPROCESSING: {NoAlgorithm: 1, SimpleAverage: 0, MovingAverage: 0, VotedMean: 0, RankedMean: 0}
 
 MATLAB_DATASET:
     PATH: "../../../datasets/matlab_dataset/"

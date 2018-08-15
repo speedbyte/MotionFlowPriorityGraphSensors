@@ -356,12 +356,16 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 // in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
 //                    fs.open((Dataset::m_dataset_gtpath.string() + "/values.yml"), cv::FileStorage::WRITE);
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
+
+                /// the following snippet prepares the ground truth edge, depth etc.
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
+                gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+
+                /// the following snippet generates mean centroid displacement for various data processing algorithms
                 gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.find_ground_truth_flow_occlusion_boundary((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                     ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()),
@@ -455,11 +459,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), environment_list[env_index], fps, stepSize);
                     // TODO - do something for stepSize.. its redundant here.
+                    /// run optical flow algorithm
                     list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list, video_frames, fps);
                     if ( (evaluation_list.size() + 1%evaluation_list.size()) > 1 ) {
                         list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
                     }
-
                     if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
                             list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
@@ -467,18 +471,19 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                             assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
                         }
                     }
-
                     for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
                         assert(list_of_simulated_objects_base.at(obj_index).getObjectId() == obj_index);
                         assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
                     }
 
+                    /// generate and save flow vector
                     for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                         list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "algorithm");
                     }
-
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                     list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+
+                    /// analysis and metrics
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                     //list_of_ptr_of_environment_OFalgorithm[env_index]->analyse_stencil();
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 

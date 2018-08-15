@@ -10,8 +10,6 @@
 #include "FlowImageExtended.h"
 
 
-
-
 void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_shape_points) {
 
     std::vector<Objects*> list_of_current_objects;

@@ -43,7 +43,7 @@ public:
 
     void prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) override;
 
-
+    void generate_flow_vector(ushort SENSOR_COUNT);
 
 };
 
