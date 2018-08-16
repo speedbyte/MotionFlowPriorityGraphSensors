@@ -367,7 +367,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 /// the following snippet generates mean centroid displacement for various data processing algorithms
                 gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                //gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.find_ground_truth_flow_occlusion_boundary((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
@@ -408,6 +408,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {
 
         std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
+        std::map<std::string, std::unique_ptr<AlgorithmFlow>> map_string_to_OFalgorithm;
 
         for (ushort stepSize = 1; stepSize <= 1; stepSize += 4) {
             ptr_list_of_simulated_objects_base.clear();
@@ -418,24 +419,36 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 std::vector<Objects *> ptr_list_of_simulated_objects;
                 bool found = false;
 
-                if ( algorithm_index == 0 && Dataset::m_algorithm_map["LK"]) {
+                map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
+                map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
+                map_string_to_OFalgorithm["SF"] = std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "simple_flow", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
 
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                if ( Dataset::m_algorithm_map["LK"]) {
+
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
                     found = true;
+                    if ( env_index == (environment_list.size()-1)) {
+                        Dataset::m_algorithm_map["LK"] = 0;
+                    }
 
                 }
-                else if ( algorithm_index == 1 && Dataset::m_algorithm_map["FB"] ) {
+                else if ( Dataset::m_algorithm_map["FB"] ) {
 
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
                     found = true;
-
+                    if ( env_index == (environment_list.size()-1)) {
+                        Dataset::m_algorithm_map["FB"] = 0;
+                    }
                 }
 
-                else if ( algorithm_index == 2 && Dataset::m_algorithm_map["SF"]) {
+                else if ( Dataset::m_algorithm_map["SF"]) {
 
                     //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "simple_flow", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["SF"]));
                     found = true;
+                    if ( env_index == (environment_list.size()-1)) {
+                        Dataset::m_algorithm_map["SF"] = 0;
+                    }
 
                 }
 
@@ -492,7 +505,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                         list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "algorithm");
                     }
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                    //list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                     /// analysis and metrics
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
