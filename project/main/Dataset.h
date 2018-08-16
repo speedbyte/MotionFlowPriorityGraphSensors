@@ -14,6 +14,9 @@
 
 class Dataset {
 
+private:
+    Dataset() {}
+
 public:
 
     static cv::Size_<unsigned> m_frame_size;

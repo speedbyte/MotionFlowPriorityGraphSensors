@@ -45,7 +45,7 @@ void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort c
 
     m_algorithm_map = algorithm_map;
 
-    for ( auto &my_map: m_algorithm_map) {
+    for ( auto my_map: m_algorithm_map) {
         if ( my_map.second > 0 ) {
             m_execute_algorithm = true;
             break;

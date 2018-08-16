@@ -405,7 +405,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     ushort fps = 30;
 
-    for (ushort algorithm_index = 0; Dataset::m_algorithm_map.size() ; algorithm_index++) {
+    for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {
 
         std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
 
@@ -416,15 +416,18 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
                 std::vector<Objects *> ptr_list_of_simulated_objects;
+                bool found = false;
 
                 if ( algorithm_index == 0 && Dataset::m_algorithm_map["LK"]) {
 
                     list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    found = true;
 
                 }
                 else if ( algorithm_index == 1 && Dataset::m_algorithm_map["FB"] ) {
 
                     list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    found = true;
 
                 }
 
@@ -432,7 +435,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
                     list_of_ptr_of_environment_OFalgorithm.push_back(std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "simple_flow", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize));
+                    found = true;
 
+                }
+
+                if ( !found ) {
+                    break;
                 }
 
                 std::vector<SimulatedObjects> list_of_simulated_objects;

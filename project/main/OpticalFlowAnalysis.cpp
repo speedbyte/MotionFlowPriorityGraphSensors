@@ -378,7 +378,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
         m_sensor_scenario_displacement_occurence = sensor_scenario_displacement_occurence;
         m_sensor_multiframe_evaluation_data.push_back(sensor_multiframe_evaluation_data);
-        std::cout << "adding list to object" << std::endl;
+        std::cout << "end of generate_metrics_optical_flow_algorithm. this is the last step" << std::endl;
 
     }
 
