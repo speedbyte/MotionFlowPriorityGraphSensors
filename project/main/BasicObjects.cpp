@@ -189,7 +189,7 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
                                                      current_frame_index).m_object_location_usk_m.location_y_m)
                               << std::endl;
 
-                    auto dist_usk_from_inertial = cv::norm(
+                    auto dist_usk_after_converting_from_inertial = cv::norm(
                             cv::Point2f(bounding_points_3d.at(8).x + sensor_offset_m.offset_x,
                                         bounding_points_3d.at(8).y + sensor_offset_m.offset_y));
                     auto dist_usk_original = cv::norm(
@@ -201,10 +201,10 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
                             current_frame_index).m_object_distances.sensor_to_obj_usk;
 
 
-                    assert(std::abs(dist_usk_from_inertial - dist_usk_original) < 0.5);
+                    assert(std::abs(dist_usk_after_converting_from_inertial - dist_usk_original) < 0.5);
                     assert(std::floor((float)dist_usk_original*1000) == std::floor(dist_usk_from_vires*1000));
 
-                    std::cout << "distance is " << dist_usk_from_inertial << " for "
+                    std::cout << "distance is " << dist_usk_after_converting_from_inertial << " for "
                               << m_ptr_customObjectMetaDataList.at(obj_index)->getObjectName()
                               << std::endl;
 

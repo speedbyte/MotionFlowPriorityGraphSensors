@@ -70,7 +70,7 @@ void DataProcessingAlgorithm::common(ushort SENSOR_COUNT, Objects *object, std::
 
                 if (current_frame_index > 0 && CLUSTER_SIZE != 0) {
                     assert(std::abs(multiframe_centroid_displacement.at(current_frame_index).mean_displacement.x)> 0);
-                    assert(std::abs(multiframe_centroid_displacement.at(current_frame_index).mean_displacement.y)> 0);
+                    //assert(std::abs(multiframe_centroid_displacement.at(current_frame_index).mean_displacement.y)> 0);
                 }
             }
 
