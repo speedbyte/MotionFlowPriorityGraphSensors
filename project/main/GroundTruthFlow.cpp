@@ -24,6 +24,7 @@
 
 #include "Dataset.h"
 #include "GroundTruthScene.h"
+#include "SortandIntersect.h"
 
 
 //Creating a movement path. The path is stored in a x and y vector
@@ -73,11 +74,38 @@ void GroundTruthFlow::generate_flow_vector(ushort SENSOR_COUNT) {
 
             std::cout << "current_frame_index " << current_frame_index << std::endl;
 
+            char file_name_image_output[50];
+            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(current_frame_index).frame_no;
+            sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
+
+            std::string frame_difference_path = Dataset::m_dataset_gtpath.string() + "/frame_difference_"  + sensor_index_folder_suffix + "/" + file_name_image_output;
+            cv::Mat frameDifference = cv::imread(frame_difference_path, CV_LOAD_IMAGE_ANYCOLOR);
+            if ( frameDifference.data == NULL ) {
+                std::cout << "no image found, exiting" << std::endl;
+                throw;
+            }
+            // new method - divide final into contours
+            std::vector<std::vector<cv::Point> > contours;
+            cv::findContours(frameDifference, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+
+            cv::Point2f max_val = (*std::max_element(contours.at(0).begin(), contours.at(0).end(), PointsSort<int>()));
+
+            std::vector<cv::Point2f> all_moving_objects_in_frame;
+            for (unsigned j = 0; j < frameDifference.cols; j += 1) {
+                for (unsigned k = 0; k < frameDifference.rows; k += 1) {
+                    if ( frameDifference.at<char>(k,j) == 0 ) {
+                        all_moving_objects_in_frame.push_back(
+                                (cv::Point2f(j, k)));
+                    }
+                }
+            }
+
             // dummy declare frame_next_pts_array. Just to maintain the arguement list
             std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
             common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array,
-                              multiframe_stencil_displacement, multiframe_visibility);
+                              multiframe_stencil_displacement, multiframe_visibility, all_moving_objects_in_frame);
 
         }
 
@@ -144,7 +172,6 @@ void GroundTruthFlow::CannyEdgeDetection(std::string flow_path, std::string edge
     //cv::waitKey(0);
 }
 
-
 void GroundTruthFlow::generate_edge_images(ushort SENSOR_COUNT) {
 
     // reads the flow vector array already created at the time of instantiation of the object.
@@ -184,7 +211,6 @@ void GroundTruthFlow::generate_edge_images(ushort SENSOR_COUNT) {
     std::cout << "end of saving ground truth edge files " << std::endl;
 
 }
-
 
 void GroundTruthFlow::generate_depth_images(ushort SENSOR_COUNT) {
 

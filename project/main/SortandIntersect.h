@@ -34,7 +34,8 @@ public:
 struct MyIntersection {
 
 private:
-    std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > > m_result;
+    std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > > m_result_pair;
+    std::vector<cv::Point_<float>> m_result;
 
 public:
     template < typename T1, typename T2, typename R >
@@ -57,12 +58,45 @@ public:
         return __result;
     }
 
-    const std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > >& getResult() {
+    template < typename T1, typename T2, typename R >
+    T1 find_intersection_pair(T1 __first1, T1 __last1, T2 __first2, T2 __last2, R __result)
+    {
+        while (__first1 != __last1 && __first2 != __last2)
+            if (__comp_pair(__first1, __first2))
+                ++__first1;
+            else if (__comp_pair(__first2, __first1))
+                ++__first2;
+            else
+            {
+                *__result = *__first1;
+                m_result_pair.push_back(*__result);
+                //std::cout << "found intersection" << std::endl;
+                ++__first1;
+                ++__first2;
+                ++__result;
+            }
+        return __result;
+    }
+
+    const std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > >& getResultPair() {
+        return m_result_pair;
+    };
+
+    const std::vector<cv::Point_<float>>& getResult() {
         return m_result;
     };
 
     template <typename T1, typename T2>
-    bool __comp(T1 lhs, T2 rhs){
+    bool __comp(T1 lhs, T2 rhs) {
+        if((*lhs).x == (*rhs).x) {
+            return ((*lhs).y < (*rhs).y);
+        }
+        else
+            return (*lhs).x < (*rhs).x;
+    }
+
+    template <typename T1, typename T2>
+    bool __comp_pair(T1 lhs, T2 rhs){
         if((*lhs).first.x == (*rhs).first.x) {
             if ( (*lhs).first.x == 327 ) {
                 //std::cout << "pair of points" << std::endl;
@@ -88,7 +122,7 @@ public:
     void showResult() {
 
         for (ushort index = 0; index < m_result.size(); index++) {
-            std::cout << "co1 " << m_result.at(index).first.x << " " << m_result.at(index).first.y << std::endl;
+            std::cout << "co1 " << m_result.at(index).x << " " << m_result.at(index).y << std::endl;
         }
     }
 

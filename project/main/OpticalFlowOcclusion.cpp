@@ -64,7 +64,7 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
 
                 float x_distance = (float)cv::norm(cv::Point2f((region_of_interest_px_1.x + region_of_interest_px_1.width_px - region_of_interest_px_2.x), region_of_interest_px_1.y - region_of_interest_px_2.y));
 
-                std::cout << "distance betwen objects = " << x_distance;
+                std::cout << "distance betwen objects = " << x_distance << std::endl;
 
                 cv::Mat image_02_frame(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
 
@@ -74,10 +74,10 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                         groundtruthobject1.size());
                 intersection_ground_truth_objects.clear();
 
-                myIntersection_gt_object_pairs.find_intersection(groundtruthobject1.begin(), groundtruthobject1.end(),
+                myIntersection_gt_object_pairs.find_intersection_pair(groundtruthobject1.begin(), groundtruthobject1.end(),
                                                                  groundtruthobject2.begin(), groundtruthobject2.end(),
                                                                  intersection_ground_truth_objects.begin());
-                intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResult();
+                intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResultPair();
                 //myIntersection_gt_object_pairs.showResult();
                 std::cout << "occlusion intersection between two objects " << intersection_ground_truth_objects.size() << std::endl;
 
@@ -93,8 +93,12 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                     cv::circle(check_intersection, (*it).first, 1, cv::Scalar(0,0,255));
                 }
 
-                cv::imshow("int", check_intersection);
-                cv::waitKey(0);
+                for ( auto it = intersection_ground_truth_objects.begin(); it != intersection_ground_truth_objects.end(); it++) {
+                    cv::circle(check_intersection, (*it).first, 1, cv::Scalar(0,255,0));
+                }
+
+                //cv::imshow("int", check_intersection);
+                //cv::waitKey(0);
 
                 // occlusion image
                 // occlusion boundary

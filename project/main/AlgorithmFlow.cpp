@@ -122,6 +122,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
                 }
 
                 /// put data in frame_stencil_displacement
+                std::vector<std::pair<cv::Point2f,cv::Point2f > > dummy;
                 common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_visibility);
 
             }
