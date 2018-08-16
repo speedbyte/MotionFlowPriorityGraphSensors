@@ -35,6 +35,7 @@ public:
 
     static std::map<std::string, bool> m_dataprocessing_map;
     static std::map<std::string, ushort> m_algorithm_map;
+    static std::map<std::string, ushort> m_algorithm_map_original;
 
     static bool m_execute_algorithm;
 

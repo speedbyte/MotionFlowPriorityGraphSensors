@@ -413,6 +413,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         for (ushort stepSize = 1; stepSize <= 1; stepSize += 4) {
             ptr_list_of_simulated_objects_base.clear();
             std::vector<SimulatedObjects> list_of_simulated_objects_base;
+            Dataset::m_algorithm_map = Dataset::m_algorithm_map_original;
             // Generate Algorithm data flow --------------------------------------
             for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
@@ -430,7 +431,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     if ( env_index == (environment_list.size()-1)) {
                         Dataset::m_algorithm_map["LK"] = 0;
                     }
-
                 }
                 else if ( Dataset::m_algorithm_map["FB"] ) {
 

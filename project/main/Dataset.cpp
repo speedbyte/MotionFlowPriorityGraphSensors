@@ -18,6 +18,7 @@ boost::filesystem::path  Dataset::m_dataset_gtpath;
 boost::filesystem::path  Dataset::m_dataset_resultpath;
 std::map<std::string, bool> Dataset::m_dataprocessing_map;
 std::map<std::string, ushort> Dataset::m_algorithm_map;
+std::map<std::string, ushort> Dataset::m_algorithm_map_original;
 bool Dataset::m_execute_algorithm = false;
 
 
@@ -44,6 +45,8 @@ void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort c
     m_dataprocessing_map = dataprocessing_map;
 
     m_algorithm_map = algorithm_map;
+
+    m_algorithm_map_original = algorithm_map;
 
     for ( auto my_map: m_algorithm_map) {
         if ( my_map.second > 0 ) {
