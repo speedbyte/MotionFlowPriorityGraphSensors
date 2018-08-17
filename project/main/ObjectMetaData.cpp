@@ -121,6 +121,37 @@ void NoPosition::process(cv::Size frame_size) {
 
 };
 
+void ObjectMetaData::setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
+
+    m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(7);
+    m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(6);
+    m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(4);
+    m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(5);
+    m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(3);
+    m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(2);
+    m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(0);
+    m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(1);
+
+    cv::Rect roi_2d = cv::boundingRect(bbox_points);
+    std::cout << roi_2d << std::endl;
+
+    if ( "Pedesterian" == m_object_gt_all.at(frameNumber).object_name ) {
+        // hack
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = roi_2d.x - 3;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = roi_2d.y - 13;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = roi_2d.width + 3;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.height_px = roi_2d.height + 13;
+    } else {
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = roi_2d.x;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = roi_2d.y;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = roi_2d.width;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.height_px = roi_2d.height;
+    }
+
+    m_object_gt_all.at(frameNumber).m_object_location_camera_px.cog_px = bbox_points.at(8);
+}
+
+
 void ObjectMetaData::setCppData() {
 
     for ( ushort current_frame_index = 0; current_frame_index < Dataset::ITERATION_END_POINT; current_frame_index++) {

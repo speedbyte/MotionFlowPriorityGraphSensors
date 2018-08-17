@@ -124,6 +124,8 @@ public:
     //frame: frame index in the video (starts from 0)
     ushort frame_no;
 
+    std::string object_name;
+
     //tid: track identification number (unique for each object instance)
     ushort tid;
 
@@ -277,7 +279,6 @@ private:
     // shape data
     ObjectImageShapeData m_objectMetaData_shape;
     //ObjectTrajectory m_objectTrajectory;
-    std::string m_objectMetaData_name;
 
 public:
 
@@ -289,18 +290,19 @@ public:
     };
 
     ObjectMetaData(ObjectImageShapeData shape, std::string name, ushort startPoint) :
-            m_objectMetaData_shape(shape), m_objectMetaData_name(name), m_objectMetaData_startPoint(startPoint) {
+            m_objectMetaData_shape(shape), m_objectMetaData_startPoint(startPoint) {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
             STRUCT_GT_OBJECTS_ALL s = {};
             m_object_gt_all.push_back(s);
+            m_object_gt_all.at(i).object_name = name;
         }
     } ;
 
-    ObjectMetaData(std::string name, ushort startPoint) :
-            m_objectMetaData_name(name), m_objectMetaData_startPoint(startPoint) {
+    ObjectMetaData(std::string name, ushort startPoint) : m_objectMetaData_startPoint(startPoint) {
         for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
             STRUCT_GT_OBJECTS_ALL s = {};
             m_object_gt_all.push_back(s);
+            m_object_gt_all.at(i).object_name = name;
         }
     } ;
 
@@ -313,7 +315,7 @@ public:
     }
 
     std::string& getObjectName() {
-        return m_objectMetaData_name;
+        return m_object_gt_all.at(0).object_name;
     }
 
     ushort& getObjectStartPoint() {
@@ -321,7 +323,9 @@ public:
     }
 
     void setObjectName(std::string objectName) {
-        m_objectMetaData_name = objectName;
+        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
+            m_object_gt_all.at(i).object_name = objectName;
+        }
     }
 
     void setObjectShape(ObjectImageShapeData objectShape) {
@@ -463,30 +467,7 @@ public:
 
     void setCppData();
 
-    void setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points) {
-
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_bottom_px = bbox_points.at(7);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_right_px = bbox_points.at(6);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_top_px = bbox_points.at(4);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_lower_left_px = bbox_points.at(5);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_bottom_px = bbox_points.at(3);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_right_px = bbox_points.at(2);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_top_px = bbox_points.at(0);
-        m_object_gt_all.at(frameNumber).m_bounding_box.bb_higher_left_px = bbox_points.at(1);
-
-        cv::Rect roi_2d = cv::boundingRect(bbox_points);
-        std::cout << roi_2d << std::endl;
-
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = roi_2d.x;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = roi_2d.y;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = roi_2d.width;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.height_px = roi_2d.height;
-
-        m_object_gt_all.at(frameNumber).m_object_location_camera_px.cog_px = bbox_points.at(8);
-
-
-
-    }
+    void setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Point2f> bbox_points);
 
     void atFrameNumberOcclusionWindow(ushort frameNumber, signed char occlusion, float distance_cam_to_object) {
         m_object_gt_all.at(frameNumber).m_object_occlusion.occlusion_px = occlusion;

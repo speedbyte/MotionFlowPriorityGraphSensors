@@ -137,22 +137,24 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             assert(gt_frame_stencil_displacement_from_roi.size()>0);
 
             cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
-
+            float depth_value_object = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk;
+            if ( m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).object_name == "Pedesterian" ) {
+                depth_value_object++;
+            }
             // ---------------------------------------------------------------------------------------------------------
             // 2nd step - Refine intersection in case multiple objects are inside the ROI.
             for (unsigned j = 0; j < gt_frame_stencil_displacement_from_roi.size(); j += 1) {
-                unsigned char val = depth_02_frame.at<unsigned char>(gt_frame_stencil_displacement_from_roi.at(j));
-                float depth_value_object = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk;
-                // -5 and +5 shows complete covereage
-                if ( val > (depth_value_object-4)  && val < ( depth_value_object + 4) )  {
-                    gt_frame_stencil_displacement_from_depth.push_back(all_moving_objects_in_frame.at(j));
+                ushort val = depth_02_frame.at<unsigned char>(gt_frame_stencil_displacement_from_roi.at(j));
+                //std::cout << (ushort)val << "*" << std::round(depth_value_object-3) << " ";
+                if ( val == std::round(depth_value_object-3)  )  {
+                    gt_frame_stencil_displacement_from_depth.push_back(gt_frame_stencil_displacement_from_roi.at(j));
                 }
             }
             for ( auto it = gt_frame_stencil_displacement_from_depth.begin(); it != gt_frame_stencil_displacement_from_depth.end(); it++) {
                 cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
             }
-            cv::imshow("temp", tempImage);
-            cv::waitKey(0);
+            //cv::imshow("temp", tempImage);
+            //cv::waitKey(0);
             cv::destroyAllWindows();
             cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                                 obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
