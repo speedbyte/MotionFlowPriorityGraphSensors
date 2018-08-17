@@ -9,7 +9,6 @@
 #include <boost/filesystem.hpp>
 #include <exception>
 #include <opencv2/core/types.hpp>
-#include "namespace.h"
 
 using namespace cpp_tutorials;
 
@@ -159,7 +158,10 @@ inline T const& Max (T const& a, T const& b) {
 
 int main ( int argc, char *argv[]) {
 
-    MyNamespace::hello = 5;
+    double dist_usk_original = 13.711999433708751;
+    float dist_usk_from_vires = (float)13.7119989;
+    assert(std::floor((float)(dist_usk_original*1000)) == std::floor(dist_usk_from_vires*1000));
+
 
     std::vector<unsigned> check_clear_operation(10);
 
