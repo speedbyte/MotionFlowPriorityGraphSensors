@@ -139,7 +139,7 @@ void ObjectMetaData::setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Po
         // hack
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = roi_2d.x - 3;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.y = roi_2d.y - 13;
-        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = roi_2d.width + 3;
+        m_object_gt_all.at(frameNumber).m_region_of_interest_px.width_px = roi_2d.width + 4;
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.height_px = roi_2d.height + 13;
     } else {
         m_object_gt_all.at(frameNumber).m_region_of_interest_px.x = roi_2d.x;

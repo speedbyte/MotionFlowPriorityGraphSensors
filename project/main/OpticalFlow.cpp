@@ -323,7 +323,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
                     F_png_write.setFlowU(pts.x, pts.y, displacement.x);
                     F_png_write.setFlowV(pts.x, pts.y, displacement.y);
-                    F_png_write.setValid(pts.x, pts.y, true);
+                    F_png_write.setObjectId(pts.x, pts.y, (obj_index+1));
                 }
 
                 F_png_write.writeExtended(flow_path);
