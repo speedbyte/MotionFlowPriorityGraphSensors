@@ -29,7 +29,6 @@ private:
 
 protected:
 
-
     std::vector<std::vector<STRUCT_GT_OBJECTS_ALL> >
             m_object_extrapolated_all;
 
@@ -83,6 +82,10 @@ public:
             const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multi_sensor_input_shape,
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean
     );
+
+    virtual void setSpecialRegionOfInterest(std::vector<std::vector<std::vector<cv::Point2f> > > all_object_combination_sensor_special_region_of_interest) {
+        throw;
+    };
 
 
     const std::string getObjectName() const {

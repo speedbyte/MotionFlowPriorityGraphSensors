@@ -6,10 +6,14 @@
 void OpticalFlow::plot_stencil(ushort SENSOR_COUNT) {
 
     std::vector<Objects*> list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_derived_objects;
+    for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+    }
 
     unsigned COUNT;
     if ( m_opticalFlowName == "ground_truth") {
-        list_of_current_objects = m_ptr_list_gt_objects;
+        list_of_current_objects = ptr_list_of_derived_objects;
         COUNT = 1;
     }
     else {

@@ -273,7 +273,9 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
     std::vector<Objects *> list_of_current_objects;
 
     if (m_opticalFlowName == "ground_truth") {
-        list_of_current_objects = m_ptr_list_gt_objects;
+        for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+            list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
+        }
     } else {
         list_of_current_objects = m_ptr_list_simulated_objects;
     }

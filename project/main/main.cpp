@@ -272,8 +272,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::vector<GroundTruthObjects> list_of_gt_objects_base;
     std::vector<Sensors> list_of_gt_sensors_base;
 
-    std::vector<Objects *> ptr_list_of_gt_objects_base;
-    std::vector<std::unique_ptr<Objects>> ptr_list_of_simulated_objects_base;
+    std::vector<GroundTruthObjects *> ptr_list_of_gt_objects_base;
+    std::vector<Objects*> ptr_list_of_simulated_objects_base;
 
     PixelRobustness pixelRobustness(fs);
     VectorRobustness vectorRobustness(fs);
@@ -286,7 +286,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         if (cpp_dataset.execute || vires_dataset.execute) {
 
             std::vector<GroundTruthObjects> list_of_gt_objects;
-            std::vector<Objects *> ptr_list_of_gt_objects;
+            std::vector<GroundTruthObjects *> ptr_list_of_gt_objects;
             GroundTruthObjects::groundTruthObjectTotalCount = 0;
 
             cv::Size_<unsigned> frame_size(IMAGE_WIDTH, IMAGE_HEIGHT);
@@ -351,7 +351,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             list_of_gt_objects = list_of_gt_objects_base;
             ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
 
-            GroundTruthFlow gt_flow(evaluation_list, environ[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_gt_objects_base);
+            GroundTruthFlow gt_flow(evaluation_list, environ[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
 
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
@@ -405,7 +405,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     ushort fps = 30;
 
-    for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {
+    //for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {
+    for (ushort algorithm_index = 0; algorithm_index < 1 ; algorithm_index++) {
 
         std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
         std::map<std::string, std::unique_ptr<AlgorithmFlow>> map_string_to_OFalgorithm;
@@ -492,7 +493,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
                             list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
-                            ptr_list_of_simulated_objects_base.push_back(std::make_unique<SimulatedObjects>((list_of_simulated_objects_base.at(obj_index))));
+                            ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_index));
                             assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
                         }
                     }
@@ -591,8 +592,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             //Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, kitti_flow_dataset.start, kitti_flow_dataset.stop);
 
-            std::vector<Objects *> ptr_list_of_gt_objects_base;
-            std::vector<std::unique_ptr<Objects>> ptr_list_of_simulated_objects_base;
+            std::vector<GroundTruthObjects *> ptr_list_of_gt_objects_base;
+            std::vector<Objects *> ptr_list_of_simulated_objects_base;
             std::vector<Objects *> ptr_list_of_simulated_objects;
 
             Farneback fback(evaluation_list, "blue_sky", fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1);

@@ -19,17 +19,22 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
 
 
     std::vector<Objects *> list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_derived_objects;
+    for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+    }
 
     if (m_opticalFlowName == "ground_truth") {
-        list_of_current_objects = m_ptr_list_gt_objects;
+        list_of_current_objects = ptr_list_of_derived_objects;
     } else {
         list_of_current_objects = m_ptr_list_simulated_objects;
     }
 
     char sensor_index_folder_suffix[50];
 
-    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > all_sensors_object_special_region_of_interest(m_ptr_list_gt_objects.size());
 
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
 
         unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
@@ -38,12 +43,16 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
 
         cv::Mat image_02_frame = cv::Mat::zeros(Dataset::m_frame_size, CV_32FC3);
         sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
-        std::cout << "saving flow files in flow/ for sensor_index  " << sensor_index_folder_suffix << std::endl;
-
 
         std::cout << "begin distance calculation between objects" << sensor_index_folder_suffix << std::endl;
 
+        std::vector<std::vector<std::vector<cv::Point2f> > > all_frame_object_special_region_of_interest(m_ptr_list_gt_objects.size());
+
+
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+            std::vector<std::vector<cv::Point2f> > frame_object_special_region_of_interest_1(m_ptr_list_gt_objects.size());
+            std::vector<std::vector<cv::Point2f> > frame_object_special_region_of_interest_2(m_ptr_list_gt_objects.size());
 
             char file_name_input_image[50];
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
@@ -59,8 +68,9 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
             std::vector<std::pair<Objects *, Objects *> > list_of_gt_objects_combination;
             std::vector<std::pair<Objects *, Objects *> > list_of_simulated_objects_combination;
 
+
             if (m_opticalFlowName == "ground_truth") {
-                getCombination(m_ptr_list_gt_objects, list_of_gt_objects_combination);
+                getCombination(ptr_list_of_derived_objects, list_of_gt_objects_combination);
                 list_of_current_objects_combination = list_of_gt_objects_combination;
 
             } else {
@@ -73,6 +83,8 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
             int from_to[] = { 2,0 };
             cv::mixChannels(flow_image, intersection_image, from_to, 1);
 
+
+
             for (ushort obj_combination_index = 0;
                  obj_combination_index < list_of_current_objects_combination.size(); obj_combination_index++) {
                 std::cout << "distance between object name "
@@ -80,6 +92,10 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                           " and object name "
                           << list_of_current_objects_combination.at(obj_combination_index).second->getObjectName()
                           << "\n";
+
+                std::vector<cv::Point2f> frame_special_region_of_interest_1;
+                std::vector<cv::Point2f> frame_special_region_of_interest_2;
+
 
                 const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject1 = list_of_current_objects_combination.at(
                         obj_combination_index).first->get_object_stencil_point_displacement().at
@@ -98,25 +114,73 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                 float x_distance = (float)cv::norm(cv::Point2f((region_of_interest_px_1.x + region_of_interest_px_1.width_px - region_of_interest_px_2.x), region_of_interest_px_1.y - region_of_interest_px_2.y));
 
                 cv::Mat mask_object_1, mask_object_2;
+                cv::Mat mask_object_1_dilated, mask_object_2_dilated;
+
                 ushort val_1 = (ushort)(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId() + 127);
                 ushort val_2 = (ushort)(list_of_current_objects_combination.at(obj_combination_index).second->getObjectId() + 127);
+
                 cv::inRange(intersection_image, val_1, val_1, mask_object_1);
                 cv::inRange(intersection_image, val_2, val_2, mask_object_2);
 
+                mask_object_1_dilated = mask_object_1.clone();
+                mask_object_2_dilated = mask_object_2.clone();
+
                 for (int i=0; i<5; i++) {
-                    cv::dilate(mask_object_1, mask_object_1, cv::Mat());
-                    cv::dilate(mask_object_2, mask_object_2, cv::Mat());
+                    cv::dilate(mask_object_1_dilated, mask_object_1_dilated, cv::Mat());
+                    cv::dilate(mask_object_2_dilated, mask_object_2_dilated, cv::Mat());
                 }
 
-                cv::Mat final = mask_object_1 & mask_object_2;
+                cv::Mat final = mask_object_1_dilated & mask_object_2_dilated;
 
-                //cv::imshow("intersection_1", final);
-                //cv::imshow("original", flow_image);
+                cv::Mat boundary = final & mask_object_2;
+                cv::Mat special_region_of_interest_1 = mask_object_2 & mask_object_1_dilated;
+                cv::Mat special_region_of_interest_2 = mask_object_1 & mask_object_2_dilated;
+
+                // working of dilation, erosion, thinning, and findNonZero
+
+                cv::Mat finalImage(Dataset::m_frame_size, CV_8UC3, cv::Scalar(0,0,0));
+                cv::Mat dummyImage(Dataset::m_frame_size, CV_8UC1, cv::Scalar(0));
+                std::vector<cv::Mat> to_merge = {special_region_of_interest_1, special_region_of_interest_2, dummyImage};
+                cv::merge(to_merge, finalImage);
+
+                //cv::imshow("intersection_1", special_region_of_interest_1);
+                //cv::imshow("intersection_2", special_region_of_interest_2);
+                //cv::imshow("merged", finalImage);
                 //cv::waitKey(0);
 
-                if ( region_of_interest_px_1.x < region_of_interest_px_2.x + region_of_interest_px_2.width_px) {
+                if ( region_of_interest_px_1.x < region_of_interest_px_2.x + region_of_interest_px_2.width_px ) {
                     std::cout << "distance betwen objects = " << x_distance << std::endl;
                 }
+
+                for ( auto x = 0; x < special_region_of_interest_1.cols; x++ ) {
+                    for ( auto y = 0; y < special_region_of_interest_1.rows; y++) {
+                        if ( special_region_of_interest_1.at<unsigned char>(y,x) != 0 ) {
+                            frame_special_region_of_interest_1.push_back(cv::Point2f(x,y));
+                        }
+                    }
+                }
+
+                for ( auto x = 0; x < special_region_of_interest_2.cols; x++ ) {
+                    for ( auto y = 0; y < special_region_of_interest_2.rows; y++) {
+                        if ( special_region_of_interest_2.at<unsigned char>(y,x) != 0 ) {
+                            frame_special_region_of_interest_2.push_back(cv::Point2f(x,y));
+                        }
+                    }
+                }
+
+                /*
+                for ( auto x = 0; x < frame_special_region_of_interest_1.size(); x++) {
+                    frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId()).push_back(frame_special_region_of_interest_1.at(x));
+                }
+                for ( auto x = 0; x < frame_special_region_of_interest_2.size(); x++) {
+                    frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).second->getObjectId()).push_back(frame_special_region_of_interest_2.at(x));
+                }
+                 */
+
+                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId())));
+
+                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).second->getObjectId())));
+
 
                 MyIntersection myIntersection_gt_object_pairs;
 
@@ -145,10 +209,25 @@ void OpticalFlow::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT)
                 // occlusion image
                 // occlusion boundary
             }
+            for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
 
+                all_frame_object_special_region_of_interest.at(obj_index).push_back(
+                        frame_object_special_region_of_interest_1.at(obj_index));
+            }
+        }
+
+        for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+            all_sensors_object_special_region_of_interest.at(obj_index).push_back(all_frame_object_special_region_of_interest.at(obj_index));
         }
         // -----
     }
+    // special region of interest to be set to object ids in the variable m_special_region_of_interest
+    for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+        m_ptr_list_gt_objects.at(obj_index)->setSpecialRegionOfInterest(all_sensors_object_special_region_of_interest.at(obj_index));
+    }
+
+    // validate woth getSpecialRegionOfInterest
+
 }
 
 

@@ -6,7 +6,11 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
     std::vector<std::pair<Objects*, Objects* > > list_of_gt_objects_combination;
     std::vector<std::pair<Objects*, Objects* > > list_of_simulated_objects_combination;
 
-    getCombination(m_ptr_list_gt_objects, list_of_gt_objects_combination);
+    std::vector<Objects *> ptr_list_of_derived_objects;
+    for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+    }
+    getCombination(ptr_list_of_derived_objects, list_of_gt_objects_combination);
 
     unsigned COUNT;
     if ( m_opticalFlowName == "ground_truth") {

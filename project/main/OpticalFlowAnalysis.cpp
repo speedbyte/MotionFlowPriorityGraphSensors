@@ -8,10 +8,15 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
     const float DISTANCE_ERROR_TOLERANCE = 2;
 
+    std::vector<Objects *> ptr_list_of_derived_objects;
+    for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+    }
+
     unsigned COUNT;
     if (m_opticalFlowName == "ground_truth") {
         COUNT = 1;
-        list_of_current_objects = m_ptr_list_gt_objects;
+        list_of_current_objects = ptr_list_of_derived_objects;
     } else {
         list_of_current_objects = m_ptr_list_simulated_objects;
         COUNT = (unsigned)list_of_current_objects.at(0)->

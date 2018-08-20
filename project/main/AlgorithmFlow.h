@@ -28,7 +28,7 @@ private:
 
 public:
 
-    AlgorithmFlow( std::vector<ushort> evaluation_list, std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<std::unique_ptr<Objects>> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : mAlgo(algo),
+    AlgorithmFlow( std::vector<ushort> evaluation_list, std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<GroundTruthObjects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*>  &ptr_list_simulated_objects, ushort stepSize ) : mAlgo(algo),
     OpticalFlow(evaluation_list, weather, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize) {
 
     }
@@ -52,7 +52,7 @@ private:
 
 public:
 
-    Farneback(std::vector<ushort> evaluation_list, std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<std::unique_ptr<Objects>> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( evaluation_list, weather, algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
+    Farneback(std::vector<ushort> evaluation_list, std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<GroundTruthObjects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( evaluation_list, weather, algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
 
         flowFrame.create(Dataset::m_frame_size, CV_32FC2);
         flowFrame = cv::Scalar_<float>(0,0); //  the flow frame consists of next iterations
@@ -138,7 +138,7 @@ private:
 
 public:
 
-    LukasKanade(std::vector<ushort> evaluation_list, std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<Objects*> &ptr_list_gt_objects, std::vector<std::unique_ptr<Objects>> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( evaluation_list, weather, algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
+    LukasKanade(std::vector<ushort> evaluation_list, std::string weather, ALGO_TYPES algo, std::string opticalFlowName, std::vector<GroundTruthObjects*> &ptr_list_gt_objects, std::vector<Objects*> &ptr_list_simulated_base_objects, std::vector<Objects*> &ptr_list_simulated_objects, ushort stepSize ) : AlgorithmFlow( evaluation_list, weather, algo, opticalFlowName, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize ) {
 
     }
 
