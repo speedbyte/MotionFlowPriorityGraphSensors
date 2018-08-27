@@ -63,6 +63,8 @@ protected:
 
     std::string m_objectName;
 
+    std::vector<std::vector<std::vector<cv::Point2f> > > m_special_region_of_interest;
+
     void generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::string post_processing_algorithm);
 
 public:
@@ -135,6 +137,10 @@ public:
     void push_back_object_stencil_point_displacement_pixel_visibility( std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement,  std::vector<std::vector<bool> > sensor_base_visibility);
 
     void generate_edge_contour(ushort SENSOR_COUNT, std::string post_processing_algorithm);
+
+    const std::vector<std::vector<std::vector<cv::Point2f> > > &get_object_special_region_of_interest() const {
+        return m_special_region_of_interest;
+    }
 
 };
 

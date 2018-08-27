@@ -30,12 +30,13 @@ protected:
     ushort m_sensorGroupCount;
     boost::filesystem::path  m_generatepath;
     boost::filesystem::path  m_framedifferencepath;
+    boost::filesystem::path  m_edgepath;
 
-
+    void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
 
 public:
 
-    BasicObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath, boost::filesystem::path frame_differencepath): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath), m_framedifferencepath(frame_differencepath) {
+    BasicObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath, boost::filesystem::path frame_differencepath, boost::filesystem::path edge_path): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath), m_framedifferencepath(frame_differencepath), m_edgepath(edge_path) {
 
         for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
             ObjectMetaData objMetaData;
@@ -65,6 +66,9 @@ public:
     void readPositionFromFile(std::string positionFileName);
 
     void generateFrameDifferenceImage();
+
+    void generate_edge_images();
+
 
 };
 

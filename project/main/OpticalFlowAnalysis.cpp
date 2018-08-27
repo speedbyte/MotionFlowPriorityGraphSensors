@@ -43,11 +43,15 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
             for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
+
                 char file_name_image_output[50];
                 std::string output_image_file_with_path, output_image_file_with_path_stiched;
+
                 ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                         (0).at(current_frame_index).frame_no;
+
                 sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
+
                 output_image_file_with_path = m_gnuplots_path.string() + "0" + std::to_string(sensor_index) + "/" + file_name_image_output;
 
                 output_image_file_with_path_stiched = m_gnuplots_path.string() + "0" + std::to_string(SENSOR_COUNT-1) + "/" + file_name_image_output;
@@ -58,7 +62,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                 Gnuplot gp2d;
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
-
 
                     // displacements found by the ground truth for this object
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
@@ -75,6 +78,21 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
                             current_frame_index).size();
+
+                    unsigned CLUSTER_COUNT_OCCLUSION = (unsigned) list_of_current_objects.at(
+                            obj_index)->get_object_special_region_of_interest().at(sensor_index).at(
+                            current_frame_index).size();
+
+                    unsigned CLUSTER_COUNT_COMPLEMENT_OCCLUSION = (unsigned) list_of_current_objects.at(
+                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
+                            current_frame_index).size();
+
+                    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > eroi_object = list_of_current_objects.at(obj_index)->
+                            get_list_object_dataprocessing_stencil_points_displacement();
+
+                    std::vector<std::vector<std::vector<cv::Point2f> > >  sroi_object = list_of_current_objects.at(
+                            obj_index)->get_object_special_region_of_interest();
+
 
                     evaluationData.at(obj_index).current_frame_index = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
@@ -159,10 +177,13 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
-                                cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
-                                        get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index
+                                cv::Point2f algo_displacement = eroi_object.at(datafilter_index
                                 ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
+                                //cv::Point2f sroi_frame = sroi_object.at(sensor_index).at(current_frame_index).at(cluster_index).second;
+
+                                //intersection of stencil_points_displacement and sroi_points_displacement;
+                                //cv::Point2f algo_displacement_sroi = list_of_current_objects.at(obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
                                 l1_cumulative += ( std::abs(algo_displacement.x ) + std::abs(algo_displacement.y)) ;
 
@@ -217,7 +238,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                                 cv::eigen(evaluationData.at(obj_index).covar_displacement, eigenvalues, eigenvectors);
 
-
                                 //std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
 
                                 if ( eigenvectors.data != NULL ) {
@@ -234,7 +254,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                     //Calculate the size of the minor and major axes
                                     double halfmajoraxissize=chisquare_val*sqrt(eigenvalues(0));
                                     double halfminoraxissize=chisquare_val*sqrt(eigenvalues(1));
-
 
                                     //Return the oriented ellipse
                                     //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise

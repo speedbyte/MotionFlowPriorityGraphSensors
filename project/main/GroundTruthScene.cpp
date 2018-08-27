@@ -34,6 +34,9 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
 
     m_frame_difference_path = m_groundtruthpath.string() + "/" + "frame_difference";
 
+    m_edge_path = m_groundtruthpath.string() + "/" + "edge";
+
+
     char sensor_index_folder_suffix[50];
     if (m_regenerate_yaml_file) {
         if (m_datasetpath.string() == std::string(CPP_DATASET_PATH) || m_datasetpath.string() == std::string(VIRES_DATASET_PATH)) {
@@ -41,17 +44,25 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
             std::cout << "prepare gt_scene directories" << std::endl;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
-            std::string generatepath_sensor = m_generatepath.string() + "_" + sensor_index_folder_suffix;
-            std::string baseframepath_sensor = m_baseframepath.string() + "_" + sensor_index_folder_suffix;
-            std::string framedifferencepath_sensor = m_frame_difference_path.string() + "_" + sensor_index_folder_suffix;
-            if (boost::filesystem::exists(generatepath_sensor)) {
-                system(("rm -rf " + generatepath_sensor).c_str());
+            std::string generate_path_sensor = m_generatepath.string() + "_" + sensor_index_folder_suffix;
+            std::string baseframe_path_sensor = m_baseframepath.string() + "_" + sensor_index_folder_suffix;
+            std::string framedifference_path_sensor = m_frame_difference_path.string() + "_" + sensor_index_folder_suffix;
+            std::string edge_path_sensor = m_edge_path.string() + "_" + sensor_index_folder_suffix;
+
+            if (boost::filesystem::exists(generate_path_sensor)) {
+                system(("rm -rf " + generate_path_sensor).c_str());
             }
-            boost::filesystem::create_directories(generatepath_sensor);
-            if (boost::filesystem::exists(framedifferencepath_sensor)) {
-                system(("rm -rf " + framedifferencepath_sensor).c_str());
+            boost::filesystem::create_directories(generate_path_sensor);
+
+            if (boost::filesystem::exists(framedifference_path_sensor)) {
+                system(("rm -rf " + framedifference_path_sensor).c_str());
             }
-            boost::filesystem::create_directories(framedifferencepath_sensor);
+            boost::filesystem::create_directories(framedifference_path_sensor);
+
+            if (boost::filesystem::exists(edge_path_sensor)) {
+                system(("rm -rf " + edge_path_sensor).c_str());
+            }
+            boost::filesystem::create_directories(edge_path_sensor);
 
             /*char char_dir_append[20];
             boost::filesystem::path path;
@@ -161,8 +172,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     if (m_environment == "blue_sky") {
 
-        cppObjects.push_back(CppObjects(0,m_generatepath,m_frame_difference_path));
-        cppObjects.push_back(CppObjects(1,m_generatepath,m_frame_difference_path));
+        cppObjects.push_back(CppObjects(0,m_generatepath,m_frame_difference_path, m_edge_path));
+        cppObjects.push_back(CppObjects(1,m_generatepath,m_frame_difference_path, m_edge_path));
 
         if (m_regenerate_yaml_file) {
 
@@ -181,6 +192,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise);
                 cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("cpp_");
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images();
+
             }
         } else { // do not genreate yaml file
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
@@ -227,8 +240,8 @@ void GroundTruthScene::generate_bird_view() {
 void GroundTruthSceneExternal::generate_gt_scene() {
 
 
-    viresObjects.push_back(ViresObjects(0, m_generatepath,m_frame_difference_path));
-    viresObjects.push_back(ViresObjects(1, m_generatepath,m_frame_difference_path));
+    viresObjects.push_back(ViresObjects(0, m_generatepath,m_frame_difference_path,m_edge_path));
+    viresObjects.push_back(ViresObjects(1, m_generatepath,m_frame_difference_path,m_edge_path));
 
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
 
@@ -519,6 +532,10 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     // writePosition deletes the file before generating yaml file
                     viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
                     //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
+
+                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
+                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images();
+
                 }
                 std::cout << "Validate ground truth generation completed" << std::endl;
 
@@ -547,7 +564,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("vires_");
 
-                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
 
             }
 

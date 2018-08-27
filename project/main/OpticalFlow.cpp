@@ -40,10 +40,6 @@ void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
         path =  m_flow_occ_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);
 
-        m_edge_path = m_generatepath.string() + "/edge_";
-        path =  m_edge_path.string() + char_dir_append;
-        boost::filesystem::create_directories(path);
-
         m_position_occ_path = m_generatepath.string() + "/position_occ_";
         path =  m_position_occ_path.string() + char_dir_append;
         boost::filesystem::create_directories(path);

@@ -65,8 +65,6 @@ protected:
 
     boost::filesystem::path  m_flow_occ_path;
 
-    boost::filesystem::path  m_edge_path;
-
     boost::filesystem::path  m_position_occ_path;
 
     boost::filesystem::path  m_plots_path;
@@ -125,8 +123,6 @@ public:
     void prepare_directories_common(ushort SENSOR_COUNT);
 
     virtual void prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {};
-
-    void find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT);
 
     void generate_collision_points(ushort SENSOR_COUNT);
 

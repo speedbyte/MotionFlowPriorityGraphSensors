@@ -13,9 +13,7 @@
 
 #include "AlgorithmFlow.h"
 
-
 using namespace std::chrono;
-
 
 void AlgorithmFlow::prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {
 
@@ -49,7 +47,6 @@ void AlgorithmFlow::prepare_directories(ushort SENSOR_COUNT, std::string noise, 
 }
 
 void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list, FRAME_TYPES frame_types, ushort fps ) {
-
 
     for ( ushort sensor_index = 0; sensor_index < evaluation_sensor_list.size(); sensor_index++ ) {
 

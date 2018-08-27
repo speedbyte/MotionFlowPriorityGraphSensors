@@ -283,6 +283,86 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
 
 }
 
+void BasicObjects::CannyEdgeDetection(std::string flow_path, std::string edge_path) {
+
+    cv::Mat src, src_gray;
+    cv::Mat dst, detected_edges, blurred_image;
+
+    int edgeThresh = 1;
+    int lowThreshold=15;
+
+    int const max_lowThreshold = 100;
+    int ratio = 10;
+    int kernel_size = 3;
+    std::string window_name = "Edge Map";
+    std::string path;
+    src = cv::imread(flow_path);
+
+    if( !src.data ) {
+        std::cout << "no image found";
+        exit(-1);
+    }
+
+    /// Create a matrix of the same type and size as src (for dst)
+    dst.create( src.size(), src.type() );
+
+    /// Convert the image to grayscale
+    cv::cvtColor( src, src_gray, CV_BGR2GRAY );
+
+    /// Create a Trackbar for user to enter threshold
+    //cv::createTrackbar( "Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold );
+
+    /// Reduce noise with a kernel 3x3
+    cv::blur( src_gray, blurred_image, cv::Size(3,3) );
+
+    /// Canny detector
+    cv::Canny( blurred_image, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+
+    /// Using Canny's output as a mask, we display our result
+    dst = cv::Scalar::all(0);
+
+    src.copyTo( dst, detected_edges);
+    cv::imwrite( edge_path, dst );
+    //cv::imshow( window_name, dst);
+    //cv::waitKey(0);
+}
+
+void BasicObjects::generate_edge_images() {
+
+    // reads the flow vector array already created at the time of instantiation of the object.
+    // Additionally stores the frames in a png file
+    // Additionally stores the position in a png file
+
+    unsigned long FRAME_COUNT = 0;
+    FRAME_COUNT = Dataset::ITERATION_END_POINT;
+    assert(FRAME_COUNT > 0);
+
+    char sensor_index_folder_suffix[50];
+    sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+    std::cout << "saving edge files in edge/ for sensor_index  " <<  sensor_index_folder_suffix << std::endl;
+
+    for (ushort current_frame_index = 0; current_frame_index <= FRAME_COUNT; current_frame_index++) {
+
+        char file_name_input_image[50];
+        sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
+        std::string input_image_path =
+                m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+
+        cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
+        if (image_02_frame.data == NULL) {
+            std::cerr << input_image_path << " not found" << std::endl;
+            throw ("No image file found error");
+        }
+
+        std::string edge_path = m_edgepath.string()  + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+        CannyEdgeDetection(input_image_path, edge_path);
+    }
+
+    std::cout << "end of saving ground truth edge files " << std::endl;
+
+}
+
+
 void BasicObjects::generateFrameDifferenceImage() {
     // Frame Differencing
 
@@ -290,9 +370,11 @@ void BasicObjects::generateFrameDifferenceImage() {
     FRAME_COUNT = Dataset::ITERATION_END_POINT;
     assert(FRAME_COUNT > 0);
 
-    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
-        char sensor_index_folder_suffix[50];
-        sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+    char sensor_index_folder_suffix[50];
+    sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+    std::cout << "saving frame difference files in framedifference/ for sensor_index  " <<  sensor_index_folder_suffix << std::endl;
+
+    for (ushort current_frame_index = 0; current_frame_index <= FRAME_COUNT; current_frame_index++) {
 
         char file_name_input_image[50];
         sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);

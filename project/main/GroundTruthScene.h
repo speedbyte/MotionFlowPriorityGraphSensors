@@ -32,6 +32,8 @@ protected:
 
     boost::filesystem::path m_frame_difference_path;
 
+    boost::filesystem::path  m_edge_path;
+
     boost::filesystem::path  m_position_object_path;
 
     std::string m_scenario;
@@ -62,15 +64,11 @@ protected:
 public:
 
 
-    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment),
-    m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file)
-    {
+    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment), m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file) {
 
         //m_ptr_customObjectMetaDataList = {};
         m_datasetpath = Dataset::m_dataset_basepath;
         m_groundtruthpath = Dataset::m_dataset_gtpath;
-
-
 
     };
 

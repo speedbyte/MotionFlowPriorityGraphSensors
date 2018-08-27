@@ -14,7 +14,7 @@
 
 #include "GridLayout.h"
 #include "datasets.h"
-#include "GroundTruthFlow.h"
+#include "PrepareGroundTruth.h"
 #include "AlgorithmFlow.h"
 #include "GroundTruthScene.h"
 #include "GroundTruthObjects.h"
@@ -351,7 +351,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             list_of_gt_objects = list_of_gt_objects_base;
             ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
 
-            GroundTruthFlow gt_flow(evaluation_list, environ[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
+            PrepareGroundTruth gt_flow(evaluation_list, environ[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
 
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
@@ -362,7 +362,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 /// the following snippet prepares the ground truth edge, depth etc.
                 gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
-                gt_flow.generate_edge_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                 gt_flow.generate_depth_images((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                 /// the following snippet generates mean centroid displacement for various data processing algorithms
@@ -383,7 +382,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
 
-                time_map["groundtruth_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
+                time_map["prepare_ground_truth"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
                 tic = steady_clock::now();
 
 
