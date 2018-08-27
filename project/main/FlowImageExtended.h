@@ -33,17 +33,12 @@ public:
         data_[3*(v*width_+u)+2] = objId;
     }
 
-    // write flow field to png file
-    void writeExtended (const std::string file_name) {
-        writeFlowField (file_name);
-    }
-
     // get optical flow u-component at given pixel
     inline float getObjectId (const int32_t u,const int32_t v) {
         return data_[3*(v*width_+u)+2];
     }
 
-    void writeFlowField (const std::string file_name) {
+    void writeFlowField (const std::string file_name) override {
 
         png::image< png::rgb_pixel_16 > image(width_,height_);
         for (int32_t v=0; v<height_; v++) {
@@ -85,17 +80,17 @@ public:
     }
 
     // set optical flow u-component at given pixel
-    inline void setFlowU (const int32_t u,const int32_t v,const float val) {
+    inline void setFlowU (const int32_t u,const int32_t v,const float val) override {
         data_[3*(v*width_+u)+0] = val;
     }
 
     // set optical flow v-component at given pixel
-    inline void setFlowV (const int32_t u,const int32_t v,const float val) {
+    inline void setFlowV (const int32_t u,const int32_t v,const float val) override {
         data_[3*(v*width_+u)+1] = val;
     }
 
     // set optical flow at given pixel to valid / invalid
-    inline void setValid (const int32_t u,const int32_t v,const bool valid) {
+    inline void setValid (const int32_t u,const int32_t v,const bool valid) override {
         data_[3*(v*width_+u)+2] = valid; //? 1 : 0;
     }
 

@@ -191,8 +191,12 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 }
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise);
                 cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("cpp_");
+
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
+
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images();
+
 
             }
         } else { // do not genreate yaml file
@@ -533,8 +537,11 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                     viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
                     //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
 
+                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
+
                     viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
                     viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images();
+
 
                 }
                 std::cout << "Validate ground truth generation completed" << std::endl;
@@ -563,8 +570,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("vires_");
 
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("vires_");
-
-                viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
 
             }
 
