@@ -201,7 +201,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 MyIntersection myIntersection;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 
-                // Look for only those pixels that lie within the ground truth stencil
+                // Look for only those pixels that lie within the ground truth stencil of this particular object
                 result_it = myIntersection.find_intersection_pair(base_algorithm_result_pts_displacement.begin(), base_algorithm_result_pts_displacement.end(),
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
@@ -249,7 +249,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
         std::cout << "stencil size = " << frame_stencil_displacement.size() << " " << frame_next_pts_array.size()
                   << std::endl;
 
-        //assert(frame_stencil_displacement.size() != 0);
+        assert(frame_stencil_displacement.size() != 0);
         // TODO scratch : if frame_stencil_displacement does not work
 
     } else {

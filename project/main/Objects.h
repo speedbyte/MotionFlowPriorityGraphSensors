@@ -63,7 +63,7 @@ protected:
 
     std::string m_objectName;
 
-    std::vector<std::vector<std::vector<cv::Point2f> > > m_special_region_of_interest;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_special_region_of_interest;
 
     void generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::string post_processing_algorithm);
 
@@ -85,7 +85,7 @@ public:
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &sensor_multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean
     );
 
-    virtual void setSpecialRegionOfInterest(std::vector<std::vector<std::vector<cv::Point2f> > > all_object_combination_sensor_special_region_of_interest) {
+    virtual void setSpecialRegionOfInterest(std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > all_object_combination_sensor_special_region_of_interest) {
         throw;
     };
 
@@ -138,7 +138,7 @@ public:
 
     void generate_edge_contour(ushort SENSOR_COUNT, std::string post_processing_algorithm);
 
-    const std::vector<std::vector<std::vector<cv::Point2f> > > &get_object_special_region_of_interest() const {
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_special_region_of_interest() const {
         return m_special_region_of_interest;
     }
 

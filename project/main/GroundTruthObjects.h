@@ -53,7 +53,7 @@ public:
         }
     }
 
-    void setSpecialRegionOfInterest(std::vector<std::vector<std::vector<cv::Point2f> > > all_object_combination_sensor_special_region_of_interest) override {
+    void setSpecialRegionOfInterest(std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > all_object_combination_sensor_special_region_of_interest) override {
         std::cout << "in derived" << std::endl;
         m_special_region_of_interest = all_object_combination_sensor_special_region_of_interest;
     }

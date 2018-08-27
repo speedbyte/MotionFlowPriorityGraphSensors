@@ -90,7 +90,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > eroi_object = list_of_current_objects.at(obj_index)->
                             get_list_object_dataprocessing_stencil_points_displacement();
 
-                    std::vector<std::vector<std::vector<cv::Point2f> > >  sroi_object = list_of_current_objects.at(
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  sroi_object = list_of_current_objects.at(
                             obj_index)->get_object_special_region_of_interest();
 
 

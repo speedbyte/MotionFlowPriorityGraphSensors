@@ -666,3 +666,35 @@ for (unsigned row_index = (unsigned)rowBegin; row_index < rowBegin+height; row_i
     }
 }
 */
+
+
+/*
+first find all moving objects in the frame through frame differencing
+then find the bounding box of these moving objects
+then mark the region of interest
+then find the interesection of bounding box region of interest and all moving objects
+then refine the intersection of region of interest using depth information.
+
+the depth information is only unique when the objects are overlapping each other. Otherwise multiple objects can have the same depth.
+
+finalImage can be used for presentation because it consists the occlusion boundaries.
+
+ */
+
+// The following code ddid not work because the ground truth objects will never have common corrdinates.
+MyIntersection myIntersection_gt_object_pairs;
+
+std::vector<std::pair<cv::Point2f, cv::Point2f>> intersection_ground_truth_objects(
+        groundtruthobject1.size());
+intersection_ground_truth_objects.clear();
+
+myIntersection_gt_object_pairs.find_intersection_pair(groundtruthobject1.begin(), groundtruthobject1.end(),
+        groundtruthobject2.begin(), groundtruthobject2.end(),
+        intersection_ground_truth_objects.begin());
+intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResultPair();
+//myIntersection_gt_object_pairs.showResult();
+std::cout << "occlusion intersection between two objects" << intersection_ground_truth_objects.size() << std::endl;
+
+for ( auto it = intersection_ground_truth_objects.begin(); it != intersection_ground_truth_objects.end(); it++) {
+cv::circle(check_intersection, (*it).first, 1, cv::Scalar(0,255,0));
+}

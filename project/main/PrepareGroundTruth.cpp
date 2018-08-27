@@ -157,7 +157,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
     char sensor_index_folder_suffix[50];
 
-    std::vector<std::vector<std::vector<std::vector<cv::Point2f> > > > all_sensors_object_special_region_of_interest(m_ptr_list_gt_objects.size());
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > all_sensors_object_special_region_of_interest(m_ptr_list_gt_objects.size());
 
     for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
@@ -171,13 +171,12 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
         std::cout << "begin distance calculation between objects" << sensor_index_folder_suffix << std::endl;
 
-        std::vector<std::vector<std::vector<cv::Point2f> > > all_frame_object_special_region_of_interest(m_ptr_list_gt_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > all_frame_object_special_region_of_interest(m_ptr_list_gt_objects.size());
 
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-            std::vector<std::vector<cv::Point2f> > frame_object_special_region_of_interest_1(m_ptr_list_gt_objects.size());
-            std::vector<std::vector<cv::Point2f> > frame_object_special_region_of_interest_2(m_ptr_list_gt_objects.size());
+            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > frame_object_special_region_of_interest(m_ptr_list_gt_objects.size());
 
             char file_name_input_image[50];
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
@@ -205,33 +204,26 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
             cv::Mat flow_image = cv::imread(flow_path, CV_LOAD_IMAGE_COLOR);
             cv::Mat intersection_image(Dataset::m_frame_size, CV_8UC1);
-            int from_to[] = { 2,0 };
+            int from_to[] = { 2,0 };  // copy the third channel ( channel 2 object id ) to the first channel of intersection_image
             cv::mixChannels(flow_image, intersection_image, from_to, 1);
-
-
 
             for (ushort obj_combination_index = 0;
                  obj_combination_index < list_of_current_objects_combination.size(); obj_combination_index++) {
-                std::cout << "distance between object name "
-                          << list_of_current_objects_combination.at(obj_combination_index).first->getObjectName() <<
-                          " and object name "
-                          << list_of_current_objects_combination.at(obj_combination_index).second->getObjectName()
-                          << "\n";
 
-                std::vector<cv::Point2f> frame_special_region_of_interest_1;
-                std::vector<cv::Point2f> frame_special_region_of_interest_2;
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_1;
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_2;
 
 
-                const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject1 = list_of_current_objects_combination.at(
+                const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject1_all_points = list_of_current_objects_combination.at(
                         obj_combination_index).first->get_object_stencil_point_displacement().at
                         (sensor_index).at(current_frame_index);
 
-                const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject2 = list_of_current_objects_combination.at(
+                const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject2_all_points = list_of_current_objects_combination.at(
                         obj_combination_index).second->get_object_stencil_point_displacement().at
                         (sensor_index).at(current_frame_index);
 
-
-                // This is tailored for the dataset with a car and a ped. Not a general case
+                // The distance calculation is tailored for the dataset with a car and a ped. Not a general case.
+                // To make a general case every corner needs to be considered.
                 region_of_interest_px_str region_of_interest_px_1 = list_of_current_objects_combination.at(obj_combination_index).first->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
 
                 region_of_interest_px_str region_of_interest_px_2 = list_of_current_objects_combination.at(obj_combination_index).second->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
@@ -262,25 +254,28 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 cv::Mat special_region_of_interest_2 = mask_object_1 & mask_object_2_dilated;
 
                 // working of dilation, erosion, thinning, and findNonZero
-
+                // this can be omitted. just to validate if the algorithm has worked. otherwise finalImage has no use.
                 cv::Mat finalImage(Dataset::m_frame_size, CV_8UC3, cv::Scalar(0,0,0));
                 cv::Mat dummyImage(Dataset::m_frame_size, CV_8UC1, cv::Scalar(0));
                 std::vector<cv::Mat> to_merge = {special_region_of_interest_1, special_region_of_interest_2, dummyImage};
                 cv::merge(to_merge, finalImage);
-
                 //cv::imshow("intersection_1", special_region_of_interest_1);
                 //cv::imshow("intersection_2", special_region_of_interest_2);
                 //cv::imshow("merged", finalImage);
                 //cv::waitKey(0);
 
                 if ( region_of_interest_px_1.x < region_of_interest_px_2.x + region_of_interest_px_2.width_px ) {
-                    std::cout << "distance betwen objects = " << x_distance << std::endl;
+                    std::cout << "distance between object name "
+                              << list_of_current_objects_combination.at(obj_combination_index).first->getObjectName() <<
+                              " and object name "
+                              << list_of_current_objects_combination.at(obj_combination_index).second->getObjectName() <<
+                    " = " << x_distance << std::endl;
                 }
 
                 for ( auto x = 0; x < special_region_of_interest_1.cols; x++ ) {
                     for ( auto y = 0; y < special_region_of_interest_1.rows; y++) {
                         if ( special_region_of_interest_1.at<unsigned char>(y,x) != 0 ) {
-                            frame_special_region_of_interest_1.push_back(cv::Point2f(x,y));
+                            frame_special_region_of_interest_1.push_back(std::make_pair(cv::Point2f(x,y), cv::Point2f(0,0)));
                         }
                     }
                 }
@@ -288,45 +283,30 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 for ( auto x = 0; x < special_region_of_interest_2.cols; x++ ) {
                     for ( auto y = 0; y < special_region_of_interest_2.rows; y++) {
                         if ( special_region_of_interest_2.at<unsigned char>(y,x) != 0 ) {
-                            frame_special_region_of_interest_2.push_back(cv::Point2f(x,y));
+                            frame_special_region_of_interest_2.push_back(std::make_pair(cv::Point2f(x,y), cv::Point2f(0,0)));
                         }
                     }
                 }
 
+                // frame_object_special_region_of_interest_1 will contain all the intersection pixels for each object combination.
+                // Hence this list will grow in case a single object has interesection points with multiple objects.
+                // back_inserter simply pushes back the values and is an easy way to tackle appending an array.
+
+                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId())));
+
+                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_current_objects_combination.at(obj_combination_index).second->getObjectId())));
+
+                // alternative and efficient method is stated above. Leaving this just for reference.
                 /*
                 for ( auto x = 0; x < frame_special_region_of_interest_1.size(); x++) {
                     frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId()).push_back(frame_special_region_of_interest_1.at(x));
                 }
-                for ( auto x = 0; x < frame_special_region_of_interest_2.size(); x++) {
-                    frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).second->getObjectId()).push_back(frame_special_region_of_interest_2.at(x));
-                }
                  */
-
-                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId())));
-
-                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).second->getObjectId())));
-
-
-                MyIntersection myIntersection_gt_object_pairs;
-
-                std::vector<std::pair<cv::Point2f, cv::Point2f>> intersection_ground_truth_objects(
-                        groundtruthobject1.size());
-                intersection_ground_truth_objects.clear();
-
-                myIntersection_gt_object_pairs.find_intersection_pair(groundtruthobject1.begin(), groundtruthobject1.end(),
-                                                                      groundtruthobject2.begin(), groundtruthobject2.end(),
-                                                                      intersection_ground_truth_objects.begin());
-                intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResultPair();
-                //myIntersection_gt_object_pairs.showResult();
-                std::cout << "occlusion intersection between two objects" << intersection_ground_truth_objects.size() << std::endl;
 
                 cv::Mat check_intersection(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
 
                 cv::line(check_intersection, cv::Point2f((region_of_interest_px_1.x + region_of_interest_px_1.width_px), region_of_interest_px_1.y), cv::Point2f((region_of_interest_px_2.x), region_of_interest_px_2.y), cv::Scalar(255,0,0) );
 
-                for ( auto it = intersection_ground_truth_objects.begin(); it != intersection_ground_truth_objects.end(); it++) {
-                    cv::circle(check_intersection, (*it).first, 1, cv::Scalar(0,255,0));
-                }
 
                 //cv::imshow("int", check_intersection);
                 //cv::waitKey(0);
@@ -334,10 +314,13 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 // occlusion image
                 // occlusion boundary
             }
+
+            // TODO: find complement of frame_object_special_region_of_interest_1 of an object id and all_points from groundtruth_object
+
             for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
 
                 all_frame_object_special_region_of_interest.at(obj_index).push_back(
-                        frame_object_special_region_of_interest_1.at(obj_index));
+                        frame_object_special_region_of_interest.at(obj_index));
             }
         }
 
@@ -346,6 +329,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
         }
         // -----
     }
+
     // special region of interest to be set to object ids in the variable m_special_region_of_interest
     for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
         m_ptr_list_gt_objects.at(obj_index)->setSpecialRegionOfInterest(all_sensors_object_special_region_of_interest.at(obj_index));
