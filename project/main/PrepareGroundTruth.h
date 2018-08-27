@@ -40,7 +40,7 @@ public:
 
     void generate_flow_vector(ushort SENSOR_COUNT);
 
-    void find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT);
+    void find_ground_truth_object_special_region_of_interest(ushort SENSOR_COUNT);
 
 };
 

@@ -120,10 +120,13 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
 
     std::cout << "end of saving " + m_resultordner + " flow files in an vector" << std::endl;
 
+    save_flow_vector((ushort)(SENSOR_COUNT));
+    find_ground_truth_object_special_region_of_interest((ushort)(SENSOR_COUNT));
+
 }
 
 
-void PrepareGroundTruth::find_ground_truth_flow_occlusion_boundary(ushort SENSOR_COUNT) {
+void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ushort SENSOR_COUNT) {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
     // pixels lie on the occlusion boundary.
@@ -134,6 +137,8 @@ void PrepareGroundTruth::find_ground_truth_flow_occlusion_boundary(ushort SENSOR
     // invisible part = total object part back - visible part object back
     // frame_stencil_displacement contains ground truth - all pixels are present in the vector
     // Intersection bounding box
+
+    // depends on flow image and flow stencil
 
     // -----
 
