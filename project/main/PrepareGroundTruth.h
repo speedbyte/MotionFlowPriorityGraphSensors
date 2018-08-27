@@ -32,8 +32,6 @@ public:
             OpticalFlow(evaluation_list, weather, "ground_truth", list_gt_objects, list_simulated_objects_base, list_simulated_objects, 0) {
     }
 
-    void generate_depth_images(ushort SENSOR_COUNT);
-
     ~PrepareGroundTruth(){
         std::cout << "killing previous PrepareGroundTruth object\n" ;
     }

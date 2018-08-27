@@ -69,6 +69,7 @@ public:
 
     void generate_edge_images();
 
+    void validate_depth_images();
 
 };
 

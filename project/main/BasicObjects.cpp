@@ -282,6 +282,44 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
     //---------------------------------------------------------------------------------
 
 }
+void BasicObjects::validate_depth_images() {
+
+    // reads the flow vector array already created at the time of instantiation of the object.
+    // Additionally stores the frames in a png file
+    // Additionally stores the position in a png file
+    unsigned long FRAME_COUNT = 0;
+    FRAME_COUNT = Dataset::ITERATION_END_POINT;
+    assert(FRAME_COUNT > 0);
+
+    char sensor_index_folder_suffix[50];
+    sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
+    std::cout << "validating depth files for sensor_index  " <<  sensor_index_folder_suffix << std::endl;
+
+    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+        char file_name_input_image[50];
+        sprintf(file_name_input_image, "depth_000%03d_10.png", current_frame_index);
+        std::string input_image_path =
+                m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+        cv::Mat depth_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_ANYCOLOR);
+
+        if ( depth_02_frame.data == NULL ) {
+            std::cerr << input_image_path << " not found" << std::endl;
+            throw ("No image file found error");
+        }
+
+        ushort obj_index = 1;
+        /*
+        printf("validating depth image for object id %d - depth %u at cog %u %u\n", m_ptr_list_gt_objects.at(obj_index)->getObjectId(), depth_02_frame.at<unsigned char>(cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(m_evaluation_list.at(sensor_index)).at(current_frame_index).m_object_location_camera_px.cog_px.y));
+        */
+        //cv::imshow("depth_image", depth_02_frame);
+        //cv::waitKey(0);
+    }
+
+    std::cout << "end of validating ground truth depth files " << std::endl;
+
+}
+
 
 void BasicObjects::CannyEdgeDetection(std::string flow_path, std::string edge_path) {
 
