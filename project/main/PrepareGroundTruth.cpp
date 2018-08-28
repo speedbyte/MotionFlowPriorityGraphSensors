@@ -213,15 +213,6 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_1;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_2;
 
-
-                const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject1_all_points = list_of_current_objects_combination.at(
-                        obj_combination_index).first->get_object_stencil_point_displacement().at
-                        (sensor_index).at(current_frame_index);
-
-                const std::vector<std::pair<cv::Point2f, cv::Point2f>> &groundtruthobject2_all_points = list_of_current_objects_combination.at(
-                        obj_combination_index).second->get_object_stencil_point_displacement().at
-                        (sensor_index).at(current_frame_index);
-
                 // The distance calculation is tailored for the dataset with a car and a ped. Not a general case.
                 // To make a general case every corner needs to be considered.
                 region_of_interest_px_str region_of_interest_px_1 = list_of_current_objects_combination.at(obj_combination_index).first->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
@@ -315,8 +306,6 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 // occlusion boundary
             }
 
-            // TODO: find complement of frame_object_special_region_of_interest_1 of an object id and all_points from groundtruth_object
-
             for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
 
                 all_frame_object_special_region_of_interest.at(obj_index).push_back(
@@ -332,7 +321,13 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
     // special region of interest to be set to object ids in the variable m_special_region_of_interest
     for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+
         m_ptr_list_gt_objects.at(obj_index)->setSpecialRegionOfInterest(all_sensors_object_special_region_of_interest.at(obj_index));
+
+        // TODO: find complement of frame_object_special_region_of_interest_1 of an object id and all_points from groundtruth_object by writing a minus operator between the two types
+        const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &groundtruthobject1_all_points = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement();
+        m_ptr_list_gt_objects.at(obj_index)->setUnaffectedRegionOfInterest(all_sensors_object_special_region_of_interest.at(obj_index));
+
     }
 
     // validate woth getSpecialRegionOfInterest
