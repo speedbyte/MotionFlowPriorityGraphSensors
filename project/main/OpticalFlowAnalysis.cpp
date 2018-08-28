@@ -67,13 +67,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
-                    cv::Point2i dimension = {
-                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                    sensor_index).at(current_frame_index).m_region_of_interest_px.width_px),
-                            cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(
-                                    sensor_index).at(current_frame_index).m_region_of_interest_px.height_px)
-                    };
-
                     // displacements found by the algorithm for this object
                     unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
@@ -108,8 +101,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                         auto euclidean_dist_gt = cv::norm(gt_displacement);
                         auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
-
-                        evaluationData.at(obj_index).object_dimension = dimension;
 
                         evaluationData.at(obj_index).mean_pts = list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index

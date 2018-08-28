@@ -148,22 +148,37 @@ int main ( int argc, char *argv[]) {
     cv::FileNode node;
     for (std::map<std::string, CONFIG_FILE_DATA *>::iterator it = map_object.begin(); it != map_object.end(); ++it) {
 
-        std::cout << it->first << '\n';
         node = fs_configfile[(*it).first];
         if (node.isNone() || node.empty()) {
             std::cout << (*it).first << " cannot be found" << std::endl;
+            continue;
         }
-        it->second->start = (int) node["START"];
-        it->second->stop = (int) node["STOP"];
-        it->second->path = node["PATH"].string();
-        it->second->execute = (bool) (int) node["EXECUTE"];
-        it->second->gt = (bool) (int) (node["GT"]);
-        it->second->analyse = (bool) (int) (node["ANALYSE"]);
-        it->second->video = (bool) (int) (node["VIDEO"]);
+        std::cout << node.name() << '\n';
 
         for ( cv::FileNodeIterator iterator_subNode = node.begin(); iterator_subNode!= node.end(); iterator_subNode++) {
 
-            if ((*iterator_subNode).name() == "DATAPROCESSING") {
+            if ((*iterator_subNode).name() == "START") {
+                it->second->start = (int) node[(*iterator_subNode).name()];
+            }
+            else if ((*iterator_subNode).name() == "STOP") {
+                it->second->stop = (int) node[(*iterator_subNode).name()];
+            }
+            else if ((*iterator_subNode).name() == "PATH") {
+                it->second->path = node[(*iterator_subNode).name()].string();
+            }
+            else if ((*iterator_subNode).name() == "EXECUTE") {
+                it->second->execute = (bool) (int) node[(*iterator_subNode).name()];
+            }
+            else if ((*iterator_subNode).name() == "GT") {
+                it->second->gt = (bool) (int) (node[(*iterator_subNode).name()]);
+            }
+            else if ((*iterator_subNode).name() == "ANALYSE") {
+                it->second->analyse = (bool) (int) (node[(*iterator_subNode).name()]);
+            }
+            else if ((*iterator_subNode).name() == "VIDEO") {
+                it->second->video = (bool) (int) (node[(*iterator_subNode).name()]);
+            }
+            else if ((*iterator_subNode).name() == "DATAPROCESSING") {
                 it->second->dataprocessing_map["NoAlgorithm"] = (bool)(int) (*iterator_subNode)["NoAlgorithm"];
                 it->second->dataprocessing_map["SimpleAverage"] = (bool) (int) (*iterator_subNode)["SimpleAverage"];
                 it->second->dataprocessing_map["MovingAverage"] = (bool) (int) (*iterator_subNode)["MovingAverage"];
@@ -176,23 +191,10 @@ int main ( int argc, char *argv[]) {
                 it->second->algorithm_map["SF"] = (ushort) (int) (*iterator_subNode)["SF"];
             }
         }
-         //map_input_txt_to_main.push_back(map_object);
+        // map_input_txt_to_main.push_back(map_object);
         std::cout << it->second->path << " " << it->second->execute << " " << it->second->gt << std::endl;
 
     }
-
-
-/*
-
-#define ITERATION_START_POINT 27
-#define ITERATION_END_POINT 39
-#define MAX_ITERATION_RESULTS (ITERATION_END_POINT - ITERATION_START_POINT) // 60 generate result. this cannot be more than vector
-
-#define MAX_ITERATION_DATASET MAX_ITERATION_RESULTS // 60 generate result. this cannot be more than vector
-#define MAX_ITERATION_GT_SCENE_GENERATION_DATASET (MAX_ITERATION_DATASET)*IMAGE_SKIP_FACTOR_DYNAMIC + IMAGE_SKIP_FACTOR_DYNAMIC*20  // generate always twenty images more than required.
-#define IMAGE_SKIP_FACTOR_DYNAMIC 1  // 10
-
- */
 
     ushort ITERATION_START_POINT;
     ushort ITERATION_END_POINT;

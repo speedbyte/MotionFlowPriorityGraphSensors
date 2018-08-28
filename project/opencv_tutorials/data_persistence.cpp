@@ -73,6 +73,15 @@ void xml_yaml_write() {
         row++;
     }
     fs << "]";
+
+    fs << "CPP_DATASET";
+    fs << "[";
+    fs << "{" << "current_frame_index" << 20 << "}" ;
+    fs << "[";
+    fs << "{:"  << "val" << 5 << "val2" << 10 << "}";
+    fs << "{:"  << "val" << 15 << "val2" << 20 << "}";
+    fs << "]";
+    fs << "]";
     fs.release();
     try {
         cv::FileStorage yaml_check("../../../datasets/pics_dataset/test.yml", cv::FileStorage::READ);
@@ -180,8 +189,8 @@ void read_nested() {
 }
 
 int main (int argc, char *argv[]) {
-    //xml_yaml_write();
-    xml_yaml_read();
+    xml_yaml_write();
+    //xml_yaml_read();
     //nested_yaml();
     //read_nested();
 }
