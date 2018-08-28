@@ -147,6 +147,10 @@ public:
         return m_special_region_of_interest;
     }
 
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_unaffected_region_of_interest() const {
+        return m_unaffected_region_of_interest;
+    }
+
 };
 
 

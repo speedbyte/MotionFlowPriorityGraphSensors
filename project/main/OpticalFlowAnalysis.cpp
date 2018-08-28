@@ -84,7 +84,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             current_frame_index).size();
 
                     unsigned CLUSTER_COUNT_COMPLEMENT_OCCLUSION = (unsigned) list_of_current_objects.at(
-                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
+                            obj_index)->get_object_unaffected_region_of_interest().at(sensor_index).at(
                             current_frame_index).size();
 
                     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > eroi_object = list_of_current_objects.at(obj_index)->
@@ -150,19 +150,19 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                         evaluationData.at(
                                 obj_index).goodPixels_maha = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
-                        double l1_cumulative = 0;
-                        double l2_cumulative = 0;
-                        double maha_cumulative = 0;
+                        double l1_cumulative_error_all_pixels = 0;
+                        double l2_cumulative_error_all_pixels = 0;
+                        double maha_cumulative_error_all_pixels = 0;
 
-                        double l2_good = 0;
-                        double maha_good = 0;
+                        double l1_cumulative_error_tolerated = 0;
+                        double l2_cumulative_error_tolerated = 0;
+                        double maha_cumulative_error_tolerated = 0;
 
                         cv::Mat icovar;
                         // this should be sent to Objects.cpp
                         if ( evaluationData.at(obj_index).covar_displacement.data != NULL ) {
 
                             icovar = evaluationData.at(obj_index).covar_displacement.inv(cv::DECOMP_SVD);
-
                         }
 
                         if (m_opticalFlowName != "ground_truth") {
@@ -175,52 +175,46 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                             std::vector<std::pair<float, float>> xy_pts;
 
+                            // all pixels
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
                                 cv::Point2f algo_displacement = eroi_object.at(datafilter_index
                                 ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
-                                //cv::Point2f sroi_frame = sroi_object.at(sensor_index).at(current_frame_index).at(cluster_index).second;
+                                // l1 error
+                                l1_cumulative_error_all_pixels += ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y)) ;
 
-                                //intersection of stencil_points_displacement and sroi_points_displacement;
-                                //cv::Point2f algo_displacement_sroi = list_of_current_objects.at(obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).at(cluster_index).second;
-
-                                l1_cumulative += ( std::abs(algo_displacement.x ) + std::abs(algo_displacement.y)) ;
-
+                                // l2 error
                                 auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
-                                l2_cumulative += euclidean_dist_algo_square;
-
-                                auto maha_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
-                                maha_cumulative += maha_dist_algo;
-
                                 auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
-                                //auto maha_dist_err = std::abs(euclidean_dist_gt - maha_dist_algo);
-                                auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
+                                l2_cumulative_error_all_pixels += euclidean_dist_err;
 
-                                auto angle_err = std::abs(angle_algo - angle_gt);
-                                auto angle_err_dot = std::cosh(
-                                        algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * std::sqrt(euclidean_dist_algo_square)));
+                                // maha error
+                                auto maha_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
+                                maha_cumulative_error_all_pixels += maha_dist_algo;
 
+                                //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
+                                //auto angle_err = std::abs(angle_algo - angle_gt);
+                                //auto angle_err_dot = std::cosh(algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * std::sqrt(euclidean_dist_algo_square)));
                                 //assert(angle_err_dot==angle_err);
+                                
                                 if (
                                         (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
                                     //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-
                                         ) {
-                                    l2_good += euclidean_dist_algo_square;
+                                    l2_cumulative_error_tolerated += euclidean_dist_err;
                                     evaluationData.at(
                                             obj_index).goodPixels_l2++; // how many pixels in the found pixel are actually valid
                                 }
                                 if (
                                         (maha_dist_algo) < DISTANCE_ERROR_TOLERANCE
                                     // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-
                                         ) {
-                                    maha_good += euclidean_dist_algo_square;
+                                    maha_cumulative_error_tolerated += maha_dist_algo;
                                     evaluationData.at(
                                             obj_index).goodPixels_maha++; // how many pixels in the found pixel are actually valid
                                 }
-
+                                
                                 xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
                             }
 
@@ -348,19 +342,25 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             }
 
                         }
-                        l1_cumulative   = l1_cumulative / CLUSTER_COUNT;
-                        l2_cumulative   = (l2_cumulative) / CLUSTER_COUNT;
-                        maha_cumulative = (maha_cumulative) / CLUSTER_COUNT;
+                        
+                        l1_cumulative_error_all_pixels   = l1_cumulative_error_all_pixels / CLUSTER_COUNT;
+                        l2_cumulative_error_all_pixels   = (l2_cumulative_error_all_pixels) / CLUSTER_COUNT;
+                        maha_cumulative_error_all_pixels = (maha_cumulative_error_all_pixels) / CLUSTER_COUNT;
 
-                        l2_good   = (l2_good) / CLUSTER_COUNT;
-                        maha_good = (maha_good) / CLUSTER_COUNT;
+                        l2_cumulative_error_tolerated   = (l2_cumulative_error_tolerated) / CLUSTER_COUNT;
+                        maha_cumulative_error_tolerated = (maha_cumulative_error_tolerated) / CLUSTER_COUNT;
 
-                        evaluationData.at(obj_index).l1 = l1_cumulative;
-                        evaluationData.at(obj_index).l2 = l2_cumulative;
-                        evaluationData.at(obj_index).l2 = l2_good;
-                        evaluationData.at(obj_index).mahalanobisDistance = maha_cumulative;
-                        evaluationData.at(obj_index).mahalanobisDistance = maha_good;
+                        evaluationData.at(obj_index).l1 = l1_cumulative_error_all_pixels;
+                        evaluationData.at(obj_index).l2 = l2_cumulative_error_all_pixels;
+                        evaluationData.at(obj_index).mahalanobisDistance = maha_cumulative_error_all_pixels;
 
+                        evaluationData.at(obj_index).goodPixels_l1 = l1_cumulative_error_tolerated;
+                        evaluationData.at(obj_index).goodPixels_l2 = l2_cumulative_error_tolerated;
+                        evaluationData.at(obj_index).goodPixels_maha = maha_cumulative_error_tolerated;
+
+                        std::cout << "goodPixels_l1 for object "
+                                  << list_of_current_objects.at(obj_index)->getObjectName() << " = "
+                                  << evaluationData.at(obj_index).goodPixels_l1 << std::endl;
                         std::cout << "goodPixels_l2 for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.at(obj_index).goodPixels_l2 << std::endl;

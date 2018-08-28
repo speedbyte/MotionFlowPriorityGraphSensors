@@ -16,6 +16,10 @@ typedef struct {
     int current_frame_index;
     int obj_index;
     int visiblePixels;
+    double l1;
+    double l2;
+    double mahalanobisDistance;
+    int goodPixels_l1;
     int goodPixels_l2;
     int goodPixels_maha;
     cv::Point2f object_dimension;
@@ -26,9 +30,6 @@ typedef struct {
     cv::Point2f stddev_displacement;
     cv::Mat covar_pts;
     cv::Mat covar_displacement;
-    double mahalanobisDistance;
-    double l1;
-    double l2;
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
 

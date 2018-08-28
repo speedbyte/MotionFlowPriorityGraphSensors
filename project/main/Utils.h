@@ -397,7 +397,7 @@ public:
         //double ma = cv::Mahalanobis(samples1, samples2, icov);
         //std::cout << ma << std::endl;
 
-        return ma.at<float>(0);
+        return std::sqrt(ma.at<float>(0));
 
     }
 
