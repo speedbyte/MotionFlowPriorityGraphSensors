@@ -64,33 +64,38 @@ void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optica
                 for (unsigned objIndex = 0; objIndex < TOTAL_OBJECTS; objIndex++) {
 
                     m_fs << "{"
-                             << "obj_index" <<
-                             m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).obj_index
+                         << "obj_index" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).obj_index
 
-                            << "ground_truth_pixels" <<
-                            m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).groundTruthPixels
+                         << "visibility" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblity
 
-                            << "visible_pixels" <<
-                            m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblePixels
+                         << "ground_truth_pixels" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).groundTruthPixels
 
-                            << "l1_error_all" <<
-                            (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_l1_error)
-                            << "l2_error_all" <<
-                            (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_l2_error)
-                            << "ma_error_all" <<
-                            (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_ma_error)
+                         << "visible_pixels" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblePixels
 
-                             << "good_pixels_l1_error" <<
-                             m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l1_error
-                             << "good_pixels_l2_error" <<
-                             m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l2_error
-                             << "good_pixels_ma_error" <<
-                             m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_ma_error
+                         << "l1_error_all" <<
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_l1_error)
+                         << "l2_error_all" <<
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_l2_error)
+                         << "ma_error_all" <<
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_ma_error)
 
-                             << "stddev_displacement" <<
-                             (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).stddev_displacement)
+                         << "good_pixels_l1_error" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l1_error
+                         << "good_pixels_l2_error" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l2_error
+                         << "good_pixels_ma_error" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_ma_error
+
+                         << "stddev_displacement" <<
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).stddev_displacement)
 
                          << "}";
+
+
                 }
                 m_fs << "]";
             }

@@ -89,9 +89,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                     evaluationData.at(obj_index).current_frame_index = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
+                    evaluationData.at(obj_index).visiblity = list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index);
 
-                    if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
-                            sensor_index).at(current_frame_index)) {
+                    if (evaluationData.at(obj_index).visiblity) {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 

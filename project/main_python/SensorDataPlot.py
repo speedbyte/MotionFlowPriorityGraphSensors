@@ -207,25 +207,26 @@ class SensorDataPlot(object):
 
         data = list()
 
-        for count in range(len(data_points_gt)):
+        count = 0
+        for index in range(len(data_points_gt)/2):
             #only survey for a specific object
-            if ( data_points[count]["obj_index"] == 0 ):
+            if ( data_points_gt[count+1][0]["visibility"] == 1 and data_points_gt[count+1][0]["obj_index"] == 0):
                 xy = list()
                 xy.append(data_points_gt[count]["current_frame_index"])
                 if ( measuring_parameter == "visible_pixels"):
-                    xy.append(data_points_gt[count][measuring_parameter])
-                    xy.append(data_points_gt[count]["ground_truth_pixels"])
+                    xy.append(data_points_gt[count+1][0][measuring_parameter])
+                    xy.append(data_points_gt[count+1][0]["ground_truth_pixels"])
                 elif ( measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
-                    xy.append(data_points_gt[count][measuring_parameter])
-                    xy.append(data_points_gt[count]["visible_pixels"])
+                    xy.append(data_points_gt[count+1][0][measuring_parameter])
+                    xy.append(data_points_gt[count+1][0]["visible_pixels"])
                 elif (measuring_parameter == "collisionpoints"):
-                    for x in range(len(data_points_gt[count][measuring_parameter])):
-                        xy.append(data_points_gt[count][measuring_parameter][x]) # change!
+                    for x in range(len(data_points_gt[count+1][0][measuring_parameter])):
+                        xy.append(data_points_gt[count+1][0][measuring_parameter][x]) # change!
                 else:
-                    xy.append(data_points_gt[count][measuring_parameter])
-
+                    xy.append(data_points_gt[count+1][0][measuring_parameter])
 
                 data.append(xy)
+            count = count + 2
 
         if ( measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha" ):
             data_ = numpy.array(data)
@@ -265,21 +266,21 @@ class SensorDataPlot(object):
 
         data = list()
 
-        for count in range(len(data_points)):
-            if ( data_points[count]["obj_index"] == 0 ):
+        for count in range(len(data_points[1])):
+            if ( data_points[1][count]["visibility"] == 1 and data_points[1][count]["obj_index"] == 0):
                 xy = list()
-                xy.append(data_points[count]["current_frame_index"])
+                xy.append(data_points[0]["current_frame_index"])
                 if ( measuring_parameter == "visible_pixels"):
-                    xy.append(data_points[count][measuring_parameter])
-                    xy.append(data_points[count]["ground_truth_pixels"])
+                    xy.append(data_points[1][count][measuring_parameter])
+                    xy.append(data_points[1][count]["ground_truth_pixels"])
                 elif ( measuring_parameter == "good_pixels_l2" or measuring_parameter == "good_pixels_maha"):
-                    xy.append(data_points[count][measuring_parameter])
-                    xy.append(data_points[count]["visible_pixels"])
+                    xy.append(data_points[1][count][measuring_parameter])
+                    xy.append(data_points[1][count]["visible_pixels"])
                 elif (measuring_parameter == "collisionpoints"):
-                    for x in range(len(data_points[count][measuring_parameter])):
-                        xy.append(data_points[count][measuring_parameter][x]) # change!
+                    for x in range(len(data_points[1][count][measuring_parameter])):
+                        xy.append(data_points[1][count][measuring_parameter][x]) # change!
                 else:
-                    xy.append(data_points[count][measuring_parameter])
+                    xy.append(data_points[1][count][measuring_parameter])
 
                 data.append(xy)
 

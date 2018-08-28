@@ -15,6 +15,8 @@ typedef struct {
 
     int current_frame_index;
     int obj_index;
+    bool visiblity;
+
 
     int groundTruthPixels;
     int visiblePixels;

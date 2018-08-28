@@ -252,7 +252,10 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
         assert(frame_stencil_displacement.size() != 0);
         // TODO scratch : if frame_stencil_displacement does not work
 
-    } else {
+
+    }
+
+    else {
 
         frame_stencil_displacement.push_back(std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0)));
         frame_stencil_visibility.push_back(visibility);
