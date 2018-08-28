@@ -143,20 +143,23 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).covar_displacement;
 
+
+                        evaluationData.at(
+                                obj_index).groundTruthPixels = CLUSTER_COUNT_GT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
                         evaluationData.at(
                                 obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
                         evaluationData.at(
-                                obj_index).goodPixels_l2 = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
+                                obj_index).goodPixels_l2_error = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
                         evaluationData.at(
-                                obj_index).goodPixels_maha = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
+                                obj_index).goodPixels_ma_error = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
 
                         double l1_cumulative_error_all_pixels = 0;
                         double l2_cumulative_error_all_pixels = 0;
-                        double maha_cumulative_error_all_pixels = 0;
+                        double ma_cumulative_error_all_pixels = 0;
 
                         double l1_cumulative_error_tolerated = 0;
                         double l2_cumulative_error_tolerated = 0;
-                        double maha_cumulative_error_tolerated = 0;
+                        double ma_cumulative_error_tolerated = 0;
 
                         cv::Mat icovar;
                         // this should be sent to Objects.cpp
@@ -169,9 +172,11 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                             // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
                             evaluationData.at(
-                                    obj_index).goodPixels_l2 = 0; // how many pixels in the found pixel are actually valid
+                                    obj_index).goodPixels_l1_error = 0; // how many pixels in the found pixel are actually valid
                             evaluationData.at(
-                                    obj_index).goodPixels_maha = 0; // how many pixels in the found pixel are actually valid
+                                    obj_index).goodPixels_l2_error = 0; // how many pixels in the found pixel are actually valid
+                            evaluationData.at(
+                                    obj_index).goodPixels_ma_error = 0; // how many pixels in the found pixel are actually valid
 
                             std::vector<std::pair<float, float>> xy_pts;
 
@@ -181,17 +186,17 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 cv::Point2f algo_displacement = eroi_object.at(datafilter_index
                                 ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
-                                // l1 error
+                                // allPixels_l1_error
                                 l1_cumulative_error_all_pixels += ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y)) ;
 
-                                // l2 error
+                                // allPixels_l2_error
                                 auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
                                 auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
                                 l2_cumulative_error_all_pixels += euclidean_dist_err;
 
-                                // maha error
-                                auto maha_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
-                                maha_cumulative_error_all_pixels += maha_dist_algo;
+                                // allPixels_ma_error
+                                auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
+                                ma_cumulative_error_all_pixels += ma_dist_algo;
 
                                 //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
                                 //auto angle_err = std::abs(angle_algo - angle_gt);
@@ -204,15 +209,15 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                         ) {
                                     l2_cumulative_error_tolerated += euclidean_dist_err;
                                     evaluationData.at(
-                                            obj_index).goodPixels_l2++; // how many pixels in the found pixel are actually valid
+                                            obj_index).goodPixels_l2_error++; // how many pixels in the found pixel are actually valid
                                 }
                                 if (
-                                        (maha_dist_algo) < DISTANCE_ERROR_TOLERANCE
+                                        (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
                                     // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                                         ) {
-                                    maha_cumulative_error_tolerated += maha_dist_algo;
+                                    ma_cumulative_error_tolerated += ma_dist_algo;
                                     evaluationData.at(
-                                            obj_index).goodPixels_maha++; // how many pixels in the found pixel are actually valid
+                                            obj_index).goodPixels_ma_error++; // how many pixels in the found pixel are actually valid
                                 }
                                 
                                 xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
@@ -345,33 +350,34 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                         
                         l1_cumulative_error_all_pixels   = l1_cumulative_error_all_pixels / CLUSTER_COUNT;
                         l2_cumulative_error_all_pixels   = (l2_cumulative_error_all_pixels) / CLUSTER_COUNT;
-                        maha_cumulative_error_all_pixels = (maha_cumulative_error_all_pixels) / CLUSTER_COUNT;
+                        ma_cumulative_error_all_pixels = (ma_cumulative_error_all_pixels) / CLUSTER_COUNT;
 
+                        l1_cumulative_error_tolerated   = (l1_cumulative_error_tolerated) / CLUSTER_COUNT;
                         l2_cumulative_error_tolerated   = (l2_cumulative_error_tolerated) / CLUSTER_COUNT;
-                        maha_cumulative_error_tolerated = (maha_cumulative_error_tolerated) / CLUSTER_COUNT;
+                        ma_cumulative_error_tolerated = (ma_cumulative_error_tolerated) / CLUSTER_COUNT;
 
-                        evaluationData.at(obj_index).l1 = l1_cumulative_error_all_pixels;
-                        evaluationData.at(obj_index).l2 = l2_cumulative_error_all_pixels;
-                        evaluationData.at(obj_index).mahalanobisDistance = maha_cumulative_error_all_pixels;
+                        evaluationData.at(obj_index).allPixels_l1_error = l1_cumulative_error_all_pixels;
+                        evaluationData.at(obj_index).allPixels_l2_error = l2_cumulative_error_all_pixels;
+                        evaluationData.at(obj_index).allPixels_ma_error = ma_cumulative_error_all_pixels;
 
-                        evaluationData.at(obj_index).goodPixels_l1 = l1_cumulative_error_tolerated;
-                        evaluationData.at(obj_index).goodPixels_l2 = l2_cumulative_error_tolerated;
-                        evaluationData.at(obj_index).goodPixels_maha = maha_cumulative_error_tolerated;
+                        evaluationData.at(obj_index).goodPixels_l1_error = l1_cumulative_error_tolerated;
+                        evaluationData.at(obj_index).goodPixels_l2_error = l2_cumulative_error_tolerated;
+                        evaluationData.at(obj_index).goodPixels_ma_error = ma_cumulative_error_tolerated;
 
-                        std::cout << "goodPixels_l1 for object "
+                        std::cout << "goodPixels_l1_error for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).goodPixels_l1 << std::endl;
-                        std::cout << "goodPixels_l2 for object "
+                                  << evaluationData.at(obj_index).goodPixels_l1_error << std::endl;
+                        std::cout << "goodPixels_l2_error for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).goodPixels_l2 << std::endl;
-                        std::cout << "goodPixels_maha for object "
+                                  << evaluationData.at(obj_index).goodPixels_l2_error << std::endl;
+                        std::cout << "goodPixels_ma_error for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).goodPixels_maha << std::endl;
+                                  << evaluationData.at(obj_index).goodPixels_ma_error << std::endl;
                         std::cout << "visiblePixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.at(obj_index).visiblePixels << std::endl;
 
-                        //assert(evaluationData.goodPixels_l2 <= std::ceil(evaluationData.algorithmPixels) + 20 );
+                        //assert(evaluationData.goodPixels_l2_error <= std::ceil(evaluationData.algorithmPixels) + 20 );
 
                     } else {
                         std::cout << "visibility of object "
@@ -381,8 +387,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                           .at(current_frame_index)
                                   << " and hence not generating any shape points for this object " << std::endl;
 
-                        evaluationData.at(obj_index).goodPixels_l2 = 0;
-                        evaluationData.at(obj_index).goodPixels_maha = 0;
+                        evaluationData.at(obj_index).goodPixels_l1_error = 0;
+                        evaluationData.at(obj_index).goodPixels_l2_error = 0;
+                        evaluationData.at(obj_index).goodPixels_ma_error = 0;
                         evaluationData.at(obj_index).visiblePixels = 0;
 
                     }

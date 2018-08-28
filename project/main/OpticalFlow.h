@@ -15,19 +15,30 @@ typedef struct {
 
     int current_frame_index;
     int obj_index;
-    int visiblePixels;
-    double l1;
-    double l2;
-    double mahalanobisDistance;
-    int goodPixels_l1;
-    int goodPixels_l2;
-    int goodPixels_maha;
     cv::Point2f object_dimension;
+
+    int groundTruthPixels;
+    int visiblePixels;
+
+    double allPixels_l1_error;
+    double allPixels_l2_error;
+    double allPixels_ma_error;
+
+    int goodPixels_l1_error;
+    int goodPixels_l2_error;
+    int goodPixels_ma_error;
+
+    cv::Point2f gt_mean_displacement;
+
+    // Mean
     cv::Point2f mean_pts;
     cv::Point2f mean_displacement;
-    cv::Point2f gt_mean_displacement;
+
+    // Stddev
     cv::Point2f stddev_pts;
     cv::Point2f stddev_displacement;
+
+    // Covariance
     cv::Mat covar_pts;
     cv::Mat covar_displacement;
 
