@@ -29,18 +29,18 @@ dict_color_weather = {
 
 y_axis_label_dict = {
     "visible_pixels" : "visible_pixel/ground_truth_pixels",
-    "good_pixels_l2": "good_pixels/visible_pixels",
-    "good_pixels_maha": "good_pixels/visible_pixels",
-     "ma_distance" : "ma_distance",
-    "l1_distance" : "l1_distance",
-    "l2_distance" : "l2_distance",
+    "good_pixels_l2_error": "good_pixels/visible_pixels",
+    "good_pixels_ma_error": "good_pixels/visible_pixels",
+     "ma_error_all" : "ma_error_all",
+    "l1_error_all" : "l1_error_all",
+    "l2_error_all" : "l2_error_all",
     "collisionpoints" : "deviation",
 }
 
 parameter_list = [  ]
-parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l1_distance", "l2_distance"]
-parameter_list = [ "visible_pixels", "good_pixels_l2", "good_pixels_maha", "ma_distance", "l2_distance", "collisionpoints"]
-parameter_list = [ "visible_pixels",]
+parameter_list = [ "visible_pixels", "good_pixels_l2_error", "good_pixels_ma_error", "ma_error_all", "l1_error_all", "l2_error_all"]
+parameter_list = [ "visible_pixels", "good_pixels_l2_error", "good_pixels_ma_error", "ma_error_all", "l2_error_all", "collisionpoints"]
+parameter_list = [ "visible_pixels", "l2_error_all", "ma_error_all", "good_pixels_l2_error", "good_pixels_ma_error"]
 
 datafilter_list  = [ "0", ]
 
@@ -50,6 +50,8 @@ algorithm_list   = ["FB", ]
 weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
 weather_list = ["ground_truth", "blue_sky",]
+weather_list = ["ground_truth"]
+
 sensor_list      = [0, 1, 2]
 sensor_list      = [0, ]
 step_list        = [1]
