@@ -128,11 +128,14 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                     break;
                 }
                 cv::Scalar color;
+                unsigned char depth;
                 //cv::fillConvexPoly(tempGroundTruthDepthImage, contours.at(0), cv::Scalar(255,0,0));
                 if ( obj_index == 0 ) {
                     color = cv::Scalar(255,0,0);
+                    depth = 11;
                 } else {
                     color = cv::Scalar(0,255,0);
+                    depth = 200;
                 }
 
                 cv::circle(tempGroundTruthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
@@ -156,12 +159,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px))));
                 */
-                unsigned char depth;
-                if ( obj_index == 0 ) {
-                    depth = 11;
-                } else {
-                    depth = 200;
-                }
                 cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
                                                                 cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar_<unsigned char>(depth), CV_FILLED);
 

@@ -214,12 +214,12 @@ class SensorDataPlot(object):
                 if ( data_points_gt[count+1][obj_index]["visibility"] == 1 ):
                     xy = list()
                     xy.append(data_points_gt[count]["current_frame_index"])
-                    if ( measuring_parameter == "visible_pixels"):
+                    if ( measuring_parameter == "algorithm_pixels_count"):
                         xy.append(data_points_gt[count+1][obj_index][measuring_parameter])
-                        xy.append(data_points_gt[count+1][obj_index]["ground_truth_pixels"])
+                        xy.append(data_points_gt[count+1][obj_index]["ground_truth_pixels_count"])
                     elif ( measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
                         xy.append(data_points_gt[count+1][obj_index][measuring_parameter])
-                        xy.append(data_points_gt[count+1][obj_index]["visible_pixels"])
+                        xy.append(data_points_gt[count+1][obj_index]["algorithm_pixels_count"])
                     elif (measuring_parameter == "collisionpoints"):
                         for x in range(len(data_points_gt[count+1][obj_index][measuring_parameter])):
                             xy.append(data_points_gt[count+1][obj_index][measuring_parameter][x]) # change!
@@ -228,7 +228,7 @@ class SensorDataPlot(object):
                     data.append(xy)
             count = count + 2
 
-        if ( measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error" ):
+        if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error" ):
             data_ = numpy.array(data)
             a,b,c = data_.T
             x_axis = numpy.array(a)
@@ -261,7 +261,7 @@ class SensorDataPlot(object):
 
         y_axis_mean = 0
         data = numpy.array(newshape)
-        if ( measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
+        if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
             x0_gt, y0_gt = data.T
             y_axis = x0_gt/y0_gt
         elif (measuring_parameter == "collisionpoints"):
@@ -279,12 +279,12 @@ class SensorDataPlot(object):
                 if ( data_points[count+1][obj_index]["visibility"] == 1 ):
                     xy = list()
                     xy.append(data_points[count]["current_frame_index"])
-                    if ( measuring_parameter == "visible_pixels"):
+                    if ( measuring_parameter == "algorithm_pixels_count"):
                         xy.append(data_points[count+1][obj_index][measuring_parameter])
-                        xy.append(data_points[count+1][obj_index]["ground_truth_pixels"])
+                        xy.append(data_points[count+1][obj_index]["ground_truth_pixels_count"])
                     elif ( measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
                         xy.append(data_points[count+1][obj_index][measuring_parameter])
-                        xy.append(data_points[count+1][obj_index]["visible_pixels"])
+                        xy.append(data_points[count+1][obj_index]["algorithm_pixels_count"])
                     elif (measuring_parameter == "collisionpoints"):
                         for x in range(len(data_points[count+1][obj_index][measuring_parameter])):
                             xy.append(data_points[count+1][obj_index][measuring_parameter][x]) # change!
@@ -294,7 +294,7 @@ class SensorDataPlot(object):
                     data.append(xy)
             count = count + 2
 
-        if ( measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
+        if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
             newshape = self.fuseDataFromSameFrames(data)
             #print newshape
         else:
@@ -302,7 +302,7 @@ class SensorDataPlot(object):
 
         y_axis_mean = 0
         data = numpy.array(newshape)
-        if ( measuring_parameter == "visible_pixels" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
+        if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
             x0, y0 = data.T
             y_axis = 1.0*x0/y0   # dividing by total pixels gt considering step size
         elif (measuring_parameter == "collisionpoints"):

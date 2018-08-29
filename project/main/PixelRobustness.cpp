@@ -70,17 +70,20 @@ void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optica
                          << "visibility" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblity
 
-                         << "ground_truth_pixels" <<
+                         << "ground_truth_pixels_count" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).groundTruthPixels
 
-                         << "visible_pixels" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblePixels
+                         << "ground_truth_sroi_pixels_count" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).groundTruthSROIPixels
 
-                         << "l1_good_pixel_count" <<
+                         << "algorithm_pixels_count" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithmPixels
+
+                         << "l1_method_good_pixel_count" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l1_error_count
-                         << "l2_good_pixel_count" <<
+                         << "l2_method_good_pixel_count" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l2_error_count
-                         << "ma_good_pixel_count" <<
+                         << "ma_method_good_pixel_count" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_ma_error_count
 
                          << "l1_error_all" <<

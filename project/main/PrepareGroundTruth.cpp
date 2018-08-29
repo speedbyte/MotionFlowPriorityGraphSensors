@@ -252,7 +252,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 cv::merge(to_merge, finalImage);
                 //cv::imshow("intersection_1", special_region_of_interest_1);
                 //cv::imshow("intersection_2", special_region_of_interest_2);
-                //cv::imshow("merged", finalImage);
+                //cv::imshow("sroi", finalImage);
                 //cv::waitKey(0);
 
                 if ( region_of_interest_px_1.x < region_of_interest_px_2.x + region_of_interest_px_2.width_px ) {
@@ -299,7 +299,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 cv::line(check_intersection, cv::Point2f((region_of_interest_px_1.x + region_of_interest_px_1.width_px), region_of_interest_px_1.y), cv::Point2f((region_of_interest_px_2.x), region_of_interest_px_2.y), cv::Scalar(255,0,0) );
 
 
-                //cv::imshow("int", check_intersection);
+                //cv::imshow("distance", check_intersection);
                 //cv::waitKey(0);
 
                 // occlusion image

@@ -63,29 +63,24 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
+                    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_list_object_dataprocessing_stencil_points_displacement();
+
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
+
                     // displacements found by the ground truth for this object
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
                     // displacements found by the algorithm for this object
-                    unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
-                            obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
+                    unsigned CLUSTER_COUNT_ALGORITHM = (unsigned) entire_roi_object.at(datafilter_index).at(sensor_index).at(
                             current_frame_index).size();
 
-                    unsigned CLUSTER_COUNT_OCCLUSION = (unsigned) m_ptr_list_gt_objects.at(
-                            obj_index)->get_object_special_region_of_interest().at(sensor_index).at(
+                    unsigned CLUSTER_COUNT_SPECIAL_ROI = (unsigned) special_roi_object.at(sensor_index).at(
                             current_frame_index).size();
 
                     unsigned CLUSTER_COUNT_COMPLEMENT_OCCLUSION = (unsigned) m_ptr_list_gt_objects.at(
                             obj_index)->get_object_unaffected_region_of_interest().at(sensor_index).at(
                             current_frame_index).size();
-
-                    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > eroi_object = list_of_current_objects.at(obj_index)->
-                            get_list_object_dataprocessing_stencil_points_displacement();
-
-                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  sroi_object = list_of_current_objects.at(
-                            obj_index)->get_object_special_region_of_interest();
-
 
                     evaluationData.at(obj_index).current_frame_index = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
@@ -137,12 +132,16 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                         evaluationData.at(
                                 obj_index).groundTruthPixels = CLUSTER_COUNT_GT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+
                         evaluationData.at(
-                                obj_index).visiblePixels = CLUSTER_COUNT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+                                obj_index).groundTruthSROIPixels = CLUSTER_COUNT_SPECIAL_ROI; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+
                         evaluationData.at(
-                                obj_index).goodPixels_l2_error = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
+                                obj_index).algorithmPixels = CLUSTER_COUNT_ALGORITHM; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
                         evaluationData.at(
-                                obj_index).goodPixels_ma_error = CLUSTER_COUNT; // how many pixels in the found pixel are actually valid
+                                obj_index).goodPixels_l2_error = CLUSTER_COUNT_ALGORITHM; // how many pixels in the found pixel are actually valid
+                        evaluationData.at(
+                                obj_index).goodPixels_ma_error = CLUSTER_COUNT_ALGORITHM; // how many pixels in the found pixel are actually valid
 
                         double l1_cumulative_error_all_pixels = 0;
                         double l2_cumulative_error_all_pixels = 0;
@@ -172,9 +171,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             std::vector<std::pair<float, float>> xy_pts;
 
                             // all pixels
-                            for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
+                            for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_ALGORITHM; cluster_index++) {
 
-                                cv::Point2f algo_displacement = eroi_object.at(datafilter_index
+                                cv::Point2f algo_displacement = entire_roi_object.at(datafilter_index
                                 ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
                                 // allPixels_l1_error
@@ -230,7 +229,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             //Get the eigenvalues and eigenvectors
                             cv::Mat_<float> ellipse(3,1);
 
-                            if ( CLUSTER_COUNT > 1 ) {
+                            if ( CLUSTER_COUNT_ALGORITHM > 1 ) {
                                 double chisquare_val = 2.4477;
                                 cv::Mat_<float> eigenvectors(2,2);
                                 cv::Mat_<float> eigenvalues(1,2);
@@ -364,9 +363,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                         std::cout << "goodPixels_ma_error for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
                                   << evaluationData.at(obj_index).goodPixels_ma_error << std::endl;
-                        std::cout << "visiblePixels for object "
+                        std::cout << "algorithmPixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).visiblePixels << std::endl;
+                                  << evaluationData.at(obj_index).algorithmPixels << std::endl;
 
                         //assert(evaluationData.goodPixels_l2_error <= std::ceil(evaluationData.algorithmPixels) + 20 );
 
@@ -381,7 +380,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                         evaluationData.at(obj_index).goodPixels_l1_error = 0;
                         evaluationData.at(obj_index).goodPixels_l2_error = 0;
                         evaluationData.at(obj_index).goodPixels_ma_error = 0;
-                        evaluationData.at(obj_index).visiblePixels = 0;
+                        evaluationData.at(obj_index).algorithmPixels = 0;
 
                     }
                 }

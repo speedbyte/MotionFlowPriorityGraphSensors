@@ -17,16 +17,17 @@ typedef struct {
     int obj_index;
     bool visiblity;
 
-    int groundTruthPixels;
-    int visiblePixels;
+    ushort groundTruthPixels;
+    ushort algorithmPixels;
+    ushort groundTruthSROIPixels;
 
     double allPixels_l1_error;
     double allPixels_l2_error;
     double allPixels_ma_error;
 
-    int goodPixels_l1_error_count;
-    int goodPixels_l2_error_count;
-    int goodPixels_ma_error_count;
+    ushort goodPixels_l1_error_count;
+    ushort goodPixels_l2_error_count;
+    ushort goodPixels_ma_error_count;
 
     double goodPixels_l1_error;
     double goodPixels_l2_error;

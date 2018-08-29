@@ -28,9 +28,10 @@ dict_color_weather = {
 }
 
 y_axis_label_dict = {
-    "visible_pixels" : "visible_pixel/ground_truth_pixels",
-    "good_pixels_l2_error": "good_pixels/visible_pixels",
-    "good_pixels_ma_error": "good_pixels/visible_pixels",
+    "ground_truth_pixels_count" : "ground_truth_pixels_count",
+    "algorithm_pixels_count" : "algorithm_pixels_count/ground_truth_pixels_count",
+    "good_pixels_l2_error": "good_pixels/algorithm_pixels_count",
+    "good_pixels_ma_error": "good_pixels/algorithm_pixels_count",
      "ma_error_all" : "ma_error_all",
     "l1_error_all" : "l1_error_all",
     "l2_error_all" : "l2_error_all",
@@ -38,9 +39,10 @@ y_axis_label_dict = {
 }
 
 parameter_list = [  ]
-parameter_list = [ "visible_pixels", "good_pixels_l2_error", "good_pixels_ma_error", "ma_error_all", "l1_error_all", "l2_error_all"]
-parameter_list = [ "visible_pixels", "good_pixels_l2_error", "good_pixels_ma_error", "ma_error_all", "l2_error_all", "collisionpoints"]
-parameter_list = [ "visible_pixels", "l2_error_all", "ma_error_all", "good_pixels_l2_error", "good_pixels_ma_error"]
+parameter_list = [ "algorithm_pixels_count", "good_pixels_l2_error", "good_pixels_ma_error", "ma_error_all", "l1_error_all", "l2_error_all"]
+parameter_list = [ "algorithm_pixels_count", "good_pixels_l2_error", "good_pixels_ma_error", "ma_error_all", "l2_error_all", "collisionpoints"]
+parameter_list = [ "ground_truth_pixels_count", "algorithm_pixels_count", "l1_method_good_pixel_count", "l2_method_good_pixel_count", "ma_method_good_pixel_count"]
+parameter_list = [ "ground_truth_pixels_count"]
 
 datafilter_list  = [ "0", ]
 
