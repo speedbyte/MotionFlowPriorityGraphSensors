@@ -17,7 +17,6 @@ typedef struct {
     int obj_index;
     bool visiblity;
 
-
     int groundTruthPixels;
     int visiblePixels;
 
@@ -25,9 +24,13 @@ typedef struct {
     double allPixels_l2_error;
     double allPixels_ma_error;
 
-    int goodPixels_l1_error;
-    int goodPixels_l2_error;
-    int goodPixels_ma_error;
+    int goodPixels_l1_error_count;
+    int goodPixels_l2_error_count;
+    int goodPixels_ma_error_count;
+
+    double goodPixels_l1_error;
+    double goodPixels_l2_error;
+    double goodPixels_ma_error;
 
     cv::Point2f gt_mean_displacement;
 

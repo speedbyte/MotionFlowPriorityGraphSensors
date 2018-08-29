@@ -23,7 +23,6 @@
 #define DISPLACEMENT_ROUND_OFF 100
 
 #define IMAGE_SKIP_FACTOR_DYNAMIC 1
-#define MAX_ITERATION_THETA 360
 
 #define MAX_SKIPS_REAL 1 // 1 means do not generate flow, 2 means generate base flow
 

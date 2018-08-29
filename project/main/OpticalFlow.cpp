@@ -121,6 +121,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
             // 1st step - Intersection of Squared ROI and Frame Differencing
             // ---------------------------------------------------------------------------------------------------------
+            assert(squared_region_of_interest.size() > 0);
             gt_frame_stencil_displacement_from_roi.resize(squared_region_of_interest.size());
             gt_frame_stencil_displacement_from_roi.clear();
 
@@ -130,22 +131,36 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                                                          all_moving_objects_in_frame.begin(), all_moving_objects_in_frame.end(),
                                                                         gt_frame_stencil_displacement_from_roi.begin());
             gt_frame_stencil_displacement_from_roi = myIntersection_gt_roi_objects.getResult();
-            assert(gt_frame_stencil_displacement_from_roi.size()>0);
+            assert(gt_frame_stencil_displacement_from_roi.size() > 0);
+
+            auto size_stencil_from_roi = gt_frame_stencil_displacement_from_roi.size();
 
             cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
             float depth_value_object = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk;
+
             if ( m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).object_name == "Pedesterian" ) {
                 depth_value_object++;
             }
-            // ---------------------------------------------------------------------------------------------------------
+            for ( auto it = gt_frame_stencil_displacement_from_roi.begin(); it != gt_frame_stencil_displacement_from_roi.end(); it++) {
+                cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
+            }
+            //cv::imshow("roi", tempImage);
+            //cv::waitKey(0);
+            cv::destroyAllWindows();
+            tempImage = cv::Scalar::all(255);
+//---------------------------------------------------------------------------------------------------------
             // 2nd step - Refine intersection in case multiple objects are inside the ROI.
             for (unsigned j = 0; j < gt_frame_stencil_displacement_from_roi.size(); j += 1) {
                 ushort val = depth_02_frame.at<unsigned char>(gt_frame_stencil_displacement_from_roi.at(j));
                 //std::cout << (ushort)val << "*" << std::round(depth_value_object-3) << " ";
-                if ( val == std::round(depth_value_object-3)  )  {
+                //if ( val == std::round(depth_value_object-3)  )  {
+                if ( val == std::round(depth_value_object)  )  {
                     gt_frame_stencil_displacement_from_depth.push_back(gt_frame_stencil_displacement_from_roi.at(j));
                 }
             }
+
+            auto size_stencil_from_depth = gt_frame_stencil_displacement_from_depth.size();
+
             for ( auto it = gt_frame_stencil_displacement_from_depth.begin(); it != gt_frame_stencil_displacement_from_depth.end(); it++) {
                 cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
             }

@@ -76,6 +76,13 @@ void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optica
                          << "visible_pixels" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblePixels
 
+                         << "l1_good_pixel_count" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l1_error_count
+                         << "l2_good_pixel_count" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l2_error_count
+                         << "ma_good_pixel_count" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_ma_error_count
+
                          << "l1_error_all" <<
                          (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_l1_error)
                          << "l2_error_all" <<

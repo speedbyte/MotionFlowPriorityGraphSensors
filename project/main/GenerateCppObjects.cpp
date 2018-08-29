@@ -68,7 +68,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     cv::Mat depth_data_and_shape;
 
 
-    for (ushort current_frame_index = 0; current_frame_index < Dataset::ITERATION_END_POINT; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < Dataset::MAX_ITERATION_DATASET; current_frame_index++) {
 
         // TODO - when the variable overflows.
 
@@ -158,9 +158,9 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                 */
                 unsigned char depth;
                 if ( obj_index == 0 ) {
-                    depth = 200;
-                } else {
                     depth = 11;
+                } else {
+                    depth = 200;
                 }
                 cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
                                                                 cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar_<unsigned char>(depth), CV_FILLED);

@@ -372,14 +372,14 @@ void BasicObjects::generate_edge_images() {
     // Additionally stores the position in a png file
 
     unsigned long FRAME_COUNT = 0;
-    FRAME_COUNT = Dataset::ITERATION_END_POINT;
+    FRAME_COUNT = Dataset::MAX_ITERATION_DATASET;
     assert(FRAME_COUNT > 0);
 
     char sensor_index_folder_suffix[50];
     sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
     std::cout << "saving edge files in edge/ for sensor_index  " <<  sensor_index_folder_suffix << std::endl;
 
-    for (ushort current_frame_index = 0; current_frame_index <= FRAME_COUNT; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
         char file_name_input_image[50];
         sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
@@ -405,14 +405,14 @@ void BasicObjects::generateFrameDifferenceImage() {
     // Frame Differencing
 
     unsigned long FRAME_COUNT = 0;
-    FRAME_COUNT = Dataset::ITERATION_END_POINT;
+    FRAME_COUNT = Dataset::MAX_ITERATION_DATASET;
     assert(FRAME_COUNT > 0);
 
     char sensor_index_folder_suffix[50];
     sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
     std::cout << "saving frame difference files in framedifference/ for sensor_index  " <<  sensor_index_folder_suffix << std::endl;
 
-    for (ushort current_frame_index = 0; current_frame_index <= FRAME_COUNT; current_frame_index++) {
+    for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
         char file_name_input_image[50];
         sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);

@@ -568,7 +568,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
 
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("vires_");
-
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("vires_");
 
             }

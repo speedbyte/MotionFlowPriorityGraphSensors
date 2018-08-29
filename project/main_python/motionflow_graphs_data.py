@@ -50,7 +50,6 @@ algorithm_list   = ["FB", ]
 weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
 weather_list = ["ground_truth", "blue_sky",]
-weather_list = ["ground_truth"]
 
 sensor_list      = [0, 1, 2]
 sensor_list      = [0, ]

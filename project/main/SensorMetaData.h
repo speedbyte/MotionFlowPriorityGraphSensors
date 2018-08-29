@@ -194,7 +194,7 @@ private:
 public:
 
     SensorMetaData() {
-        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
+        for (ushort i = 0; i < Dataset::MAX_ITERATION_DATASET; i++) {
             STRUCT_GT_SENSORS_ALL s = {};
             m_sensor_gt_all.push_back(s);
         }
@@ -202,7 +202,7 @@ public:
 
     SensorMetaData(std::string name, ushort startPoint) :
             m_sensorMetaData_name(name), m_sensorMetaData_startPoint(startPoint) {
-        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
+        for (ushort i = 0; i < Dataset::MAX_ITERATION_DATASET; i++) {
             STRUCT_GT_SENSORS_ALL s = {};
             m_sensor_gt_all.push_back(s);
         }
@@ -272,7 +272,7 @@ public:
     void setDynamic() {
 
         cv::RNG rng(cv::getTickCount());
-        for (ushort i = 0; i < MAX_ITERATION_THETA / 20; i++) {
+        for (ushort i = 0; i < Dataset::MAX_ITERATION_DATASET / 20; i++) {
             ushort index = (ushort) rng.uniform(0, 360);
             m_sensor_gt_all.at(index).visMask = 0;
             //TODO - set pixel position
@@ -282,7 +282,7 @@ public:
         }
         std::cout << std::endl;
 
-        for (ushort i = 0; i < MAX_ITERATION_THETA; i++) {
+        for (ushort i = 0; i < Dataset::MAX_ITERATION_DATASET; i++) {
 
             if (i < (m_sensor_gt_all.size() - 1) && m_sensor_gt_all.at(i + 1).visMask == 0) {
                 m_sensor_gt_all.at(i).visMask = 0;
@@ -294,7 +294,7 @@ public:
         }
 
         std::cout << std::endl;
-        for (ushort i = MAX_ITERATION_THETA; i > 0; i--) {
+        for (ushort i = Dataset::MAX_ITERATION_DATASET; i > 0; i--) {
 
             if (i < (m_sensor_gt_all.size() - 1) && m_sensor_gt_all.at(i - 1).visMask == 0) {
                 m_sensor_gt_all.at(i).visMask = 0;

@@ -107,6 +107,7 @@ int main ( int argc, char *argv[]) {
     typedef struct {
         ushort start;
         ushort stop;
+        ushort stop_generation;
         std::string path;
         bool execute;
         bool gt;
@@ -162,6 +163,9 @@ int main ( int argc, char *argv[]) {
             }
             else if ((*iterator_subNode).name() == "STOP") {
                 it->second->stop = (int) node[(*iterator_subNode).name()];
+            }
+            else if ((*iterator_subNode).name() == "MAX_ITERATION_DATASET") {
+                it->second->stop_generation = (int) node[(*iterator_subNode).name()];
             }
             else if ((*iterator_subNode).name() == "PATH") {
                 it->second->path = node[(*iterator_subNode).name()].string();
@@ -302,7 +306,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if (vires_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.start, vires_dataset.stop, vires_dataset.dataprocessing_map,
+                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.start, vires_dataset.stop, vires_dataset.stop_generation, vires_dataset.dataprocessing_map,
                 vires_dataset.algorithm_map);
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
@@ -327,7 +331,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             } else if (cpp_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map);
+                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.stop_generation, cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map);
 
                 GroundTruthSceneInternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, cpp_dataset.gt);

@@ -72,11 +72,11 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(
                             current_frame_index).size();
 
-                    unsigned CLUSTER_COUNT_OCCLUSION = (unsigned) list_of_current_objects.at(
+                    unsigned CLUSTER_COUNT_OCCLUSION = (unsigned) m_ptr_list_gt_objects.at(
                             obj_index)->get_object_special_region_of_interest().at(sensor_index).at(
                             current_frame_index).size();
 
-                    unsigned CLUSTER_COUNT_COMPLEMENT_OCCLUSION = (unsigned) list_of_current_objects.at(
+                    unsigned CLUSTER_COUNT_COMPLEMENT_OCCLUSION = (unsigned) m_ptr_list_gt_objects.at(
                             obj_index)->get_object_unaffected_region_of_interest().at(sensor_index).at(
                             current_frame_index).size();
 
@@ -178,7 +178,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
                                 // allPixels_l1_error
-                                l1_cumulative_error_all_pixels += ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y)) ;
+                                auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
+                                l1_cumulative_error_all_pixels += l1_dist_err;
 
                                 // allPixels_l2_error
                                 auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
@@ -193,14 +194,22 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 //auto angle_err = std::abs(angle_algo - angle_gt);
                                 //auto angle_err_dot = std::cosh(algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * std::sqrt(euclidean_dist_algo_square)));
                                 //assert(angle_err_dot==angle_err);
-                                
+
+                                if (
+                                        (l1_dist_err) < DISTANCE_ERROR_TOLERANCE
+                                    //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
+                                        ) {
+                                    l1_cumulative_error_tolerated += l1_dist_err;
+                                    evaluationData.at(
+                                            obj_index).goodPixels_l1_error_count++; // how many pixels in the found pixel are actually valid
+                                }
                                 if (
                                         (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
                                     //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                                         ) {
                                     l2_cumulative_error_tolerated += euclidean_dist_err;
                                     evaluationData.at(
-                                            obj_index).goodPixels_l2_error++; // how many pixels in the found pixel are actually valid
+                                            obj_index).goodPixels_l2_error_count++; // how many pixels in the found pixel are actually valid
                                 }
                                 if (
                                         (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
@@ -208,7 +217,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                         ) {
                                     ma_cumulative_error_tolerated += ma_dist_algo;
                                     evaluationData.at(
-                                            obj_index).goodPixels_ma_error++; // how many pixels in the found pixel are actually valid
+                                            obj_index).goodPixels_ma_error_count++; // how many pixels in the found pixel are actually valid
                                 }
                                 
                                 xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
@@ -336,17 +345,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 get_image.copyTo(roi);
                                 cv::imwrite(output_image_file_with_path_stiched, stich_plots);
                             }
-
                         }
                         
-                        l1_cumulative_error_all_pixels   = l1_cumulative_error_all_pixels / CLUSTER_COUNT;
-                        l2_cumulative_error_all_pixels   = (l2_cumulative_error_all_pixels) / CLUSTER_COUNT;
-                        ma_cumulative_error_all_pixels = (ma_cumulative_error_all_pixels) / CLUSTER_COUNT;
-
-                        l1_cumulative_error_tolerated   = (l1_cumulative_error_tolerated) / CLUSTER_COUNT;
-                        l2_cumulative_error_tolerated   = (l2_cumulative_error_tolerated) / CLUSTER_COUNT;
-                        ma_cumulative_error_tolerated = (ma_cumulative_error_tolerated) / CLUSTER_COUNT;
-
                         evaluationData.at(obj_index).allPixels_l1_error = l1_cumulative_error_all_pixels;
                         evaluationData.at(obj_index).allPixels_l2_error = l2_cumulative_error_all_pixels;
                         evaluationData.at(obj_index).allPixels_ma_error = ma_cumulative_error_all_pixels;

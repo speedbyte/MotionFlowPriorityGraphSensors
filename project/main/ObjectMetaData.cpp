@@ -14,7 +14,7 @@ void Achterbahn::process(cv::Size frame_size) {
     // Prepare points
     cv::Point2f l_pixel_position;
     ushort current_frame_index = 0;
-    for ( ushort i = m_objectMetaData_startPoint; i< (Dataset::ITERATION_END_POINT + m_objectMetaData_startPoint); i++) {
+    for ( ushort i = m_objectMetaData_startPoint; i< (Dataset::MAX_ITERATION_DATASET + m_objectMetaData_startPoint); i++) {
 
 
         l_pixel_position.x = static_cast<float>((frame_size.width/2) + (100 * cos((i) *CV_PI / 180.0) /
@@ -154,7 +154,10 @@ void ObjectMetaData::setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Po
 
 void ObjectMetaData::setCppData() {
 
-    for ( ushort current_frame_index = 0; current_frame_index < Dataset::ITERATION_END_POINT; current_frame_index++) {
+    unsigned long FRAME_COUNT = Dataset::MAX_ITERATION_DATASET;
+    assert(FRAME_COUNT > 0);
+
+    for ( ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
         m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = m_objectMetaData_shape.getObjectWidth();
         m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = m_objectMetaData_shape.getObjectHeight();
@@ -178,6 +181,7 @@ void ObjectMetaData::setCppData() {
                 current_frame_index).m_object_dimension_camera_px.height_px;
     }
 }
+
 
 void Rectangle::process() {
 
