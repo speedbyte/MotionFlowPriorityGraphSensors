@@ -6,7 +6,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
     std::vector<Objects *> list_of_current_objects;
 
-    const float DISTANCE_ERROR_TOLERANCE = 2;
+    const float DISTANCE_ERROR_TOLERANCE = 0.5;
 
     std::vector<Objects *> ptr_list_of_derived_objects;
     for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {

@@ -206,179 +206,59 @@ class SensorDataPlot(object):
 
     def getSingleVal(self, data_points_gt, data_points, measuring_parameter):
 
-        data = list()
 
-        count = 0
-        for index in range(len(data_points_gt)/2):
-            for obj_index in range(len(data_points[1])):
-                #only survey for a specific object
-                if ( data_points_gt[count+1][obj_index]["visibility"] == 1 ):
-                    xy = list()
-                    xy.append(data_points_gt[count]["current_frame_index"])
-                    if ( measuring_parameter == "algorithm_pixels_count"):
-                        xy.append(data_points_gt[count+1][obj_index][measuring_parameter])
-                        xy.append(data_points_gt[count+1][obj_index]["ground_truth_pixels_count"])
-                    elif ( measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
-                        xy.append(data_points_gt[count+1][obj_index][measuring_parameter])
-                        xy.append(data_points_gt[count+1][obj_index]["algorithm_pixels_count"])
-                    elif (measuring_parameter == "collisionpoints"):
-                        for x in range(len(data_points_gt[count+1][obj_index][measuring_parameter])):
-                            xy.append(data_points_gt[count+1][obj_index][measuring_parameter][x]) # change!
-                    else:
-                        xy.append(data_points_gt[count+1][obj_index][measuring_parameter])
-                    data.append(xy)
-            count = count + 2
-
-        if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error" ):
-            data_ = numpy.array(data)
-            a,b,c = data_.T
-            x_axis = numpy.array(a)
-            new_x_axis = list()
-            pre_val = -1
-            for val in x_axis:
-                if ( pre_val != val ):
-                    new_x_axis.append(val)
-                pre_val = val
-            x_axis = numpy.array(new_x_axis)
-            newshape = self.fuseDataFromSameFrames(data)
-            #print newshape
-        elif (measuring_parameter == "collisionpoints"):
-            data_ = numpy.array(data)
-            a,b,c = data_.T
-            x_axis = numpy.array(a)
-            newshape = data
-        else:
-            data_ = numpy.array(data)
-            a,b = data_.T
-            x_axis = numpy.array(a)
-            newshape = data
-        #index = [0]
-        #x_axis = numpy.delete(x_axis, index)
-
-
-        y_axis_mean = 0
-        data = numpy.array(newshape)
-        if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
-            x0_gt, y0_gt = data.T
-            y_axis = x0_gt/y0_gt
-        elif (measuring_parameter == "collisionpoints"):
-            cur, x0_gt, y0_gt = data.T   ## change 1
-            y_axis = numpy.sqrt((x0_gt - x0_gt) ** 2 + (y0_gt - y0_gt) ** 2) ## change 2
-        else:
-            x0_gt, y0_gt = data.T
-            y_axis = y0_gt
+        # refine data
+        #scratch 01233
 
         data = list()
 
         count = 0
         for index in range(len(data_points)/2):
             for obj_index in range(len(data_points[1])):
-                if ( data_points[count+1][obj_index]["visibility"] == 1 ):
-                    xy = list()
-                    xy.append(data_points[count]["current_frame_index"])
-                    if ( measuring_parameter == "algorithm_pixels_count"):
-                        xy.append(data_points[count+1][obj_index][measuring_parameter])
-                        xy.append(data_points[count+1][obj_index]["ground_truth_pixels_count"])
-                    elif ( measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
-                        xy.append(data_points[count+1][obj_index][measuring_parameter])
-                        xy.append(data_points[count+1][obj_index]["algorithm_pixels_count"])
-                    elif (measuring_parameter == "collisionpoints"):
-                        for x in range(len(data_points[count+1][obj_index][measuring_parameter])):
-                            xy.append(data_points[count+1][obj_index][measuring_parameter][x]) # change!
-                    else:
-                        xy.append(data_points[count+1][obj_index][measuring_parameter])
+                #only survey for a specific object
+                xy = dict()
+                if ( data_points[count+1][obj_index]["visibility"] == 1 and data_points[count+1][obj_index]["obj_index"] == 0 ):
 
-                    data.append(xy)
+                    xy["current_frame_index"] = data_points[count]["current_frame_index"]
+                    xy[measuring_parameter] = data_points[count+1][obj_index][measuring_parameter]
+
+                    #for x in range(len(data_points_gt[count+1][obj_index][measuring_parameter])):
+                    #    xy_collisionpoints.append(data_points_gt[count+1][obj_index][measuring_parameter][x]) # change!
+                    data.append([xy["current_frame_index"], xy[measuring_parameter]])
             count = count + 2
 
-        if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
-            newshape = self.fuseDataFromSameFrames(data)
-            #print newshape
-        else:
-            newshape = data
+        data_ = numpy.array(data)
+        a,b = data_.T
+        x_axis = numpy.array(a)
+        y_axis = numpy.array(b)
+        new_x_axis = list()
+        new_y_axis = list()
+        pre_val = -1
+        new_index = -1
+        for index, val in enumerate(x_axis):
+            if ( pre_val != val ):
+                new_x_axis.append(val)
+                new_y_axis.append(y_axis[index])
+                new_index = new_index + 1
+            else:
+                new_y_axis[new_index] = new_y_axis[new_index] + y_axis[index]
+            pre_val = val
+        x_axis = numpy.array(new_x_axis)
+        y_axis = numpy.array(new_y_axis)
 
         y_axis_mean = 0
-        data = numpy.array(newshape)
-        if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
-            x0, y0 = data.T
-            y_axis = 1.0*x0/y0   # dividing by total pixels gt considering step size
-        elif (measuring_parameter == "collisionpoints"):
-            cur, x0, y0 = data.T   ## change 1
-            y_axis = numpy.sqrt((x0_gt - x0) ** 2 + (y0_gt - y0) ** 2) ## change 2
-        else:
-            x0, y0 = data.T
-            y_axis = y0
-
-        #index = [0]
-        #y_axis = numpy.delete(y_axis, index)
 
         count = 0
-        for n,i in enumerate(y_axis):
-            if ( i == i ):
+        for index,val in enumerate(y_axis):
+            if ( val == val ):
                 count = count+1
-                y_axis_mean=y_axis_mean+i
+                y_axis_mean=y_axis_mean+val
 
         y_axis_mean = y_axis_mean/(count)
 
         assert(x_axis.size == y_axis.size)
         return x_axis, y_axis, y_axis_mean
 
-
-    def fuseDataFromSameFrames(self, data):
-
-        data_length = len(data[0])
-
-        newshape = list()
-
-        previous_x_axis = 0
-        elem_1 = 0
-        elem_2 = 0
-        total_count = 0
-
-        for count in range(len(data)):
-
-            if ( data[count][0] != previous_x_axis ):
-
-                previous_x_axis = data[count][0]
-                xy = list()
-                if ( total_count == 0 ):
-                    xy.append(numpy.nan)
-                    if ( data_length == 3 ):
-                        xy.append(numpy.nan)
-                else:
-                    xy.append(elem_1)
-                    if ( data_length == 3 ):
-                        xy.append(elem_2)
-
-                newshape.append(xy)
-                total_count = 0
-                elem_1 = 0
-                elem_2 = 0
-
-            # data[count][0] has the current_frame_index
-            if ( data[count][0] == previous_x_axis ):
-                    total_count = total_count+1
-                    elem_1 = elem_1 + data[count][1]
-                    if ( data_length == 3 ):
-                        elem_2 = elem_2 + data[count][2]
-
-            # the last leg
-            if ( count == len(data)-1 ):
-
-                assert(total_count != 0)
-                xy = list()
-                if ( total_count == 0 ):
-                    xy.append(numpy.nan)
-                    if ( data_length == 3 ):
-                        xy.append(numpy.nan)
-                else:
-                    xy.append(elem_1)
-                    if ( data_length == 3 ):
-                        xy.append(elem_2)
-
-                newshape.append(xy)
-
-        return newshape
 
 
     def get_summary(self):

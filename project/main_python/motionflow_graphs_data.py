@@ -29,7 +29,11 @@ dict_color_noise = {
 
 y_axis_label_dict = {
     "ground_truth_pixels_count" : "ground_truth_pixels_count",
+    "ground_truth_sroi_pixels_count" : "ground_truth_sroi_pixels_count",
     "algorithm_pixels_count" : "algorithm_pixels_count/ground_truth_pixels_count",
+    "l1_method_good_pixel_count" : "l1_method_good_pixel_count",
+    "l2_method_good_pixel_count" : "l2_method_good_pixel_count",
+    "ma_method_good_pixel_count" : "ma_method_good_pixel_count",
     "good_pixels_l2_error": "good_pixels/algorithm_pixels_count",
     "good_pixels_ma_error": "good_pixels/algorithm_pixels_count",
      "ma_error_all" : "ma_error_all",
@@ -42,7 +46,8 @@ parameter_list = [  ]
 parameter_list = [ "algorithm_pixels_count", "good_pixels_l2_error", "good_pixels_ma_error", "ma_error_all", "l1_error_all", "l2_error_all"]
 parameter_list = [ "algorithm_pixels_count", "good_pixels_l2_error", "good_pixels_ma_error", "ma_error_all", "l2_error_all", "collisionpoints"]
 parameter_list = [ "ground_truth_pixels_count", "algorithm_pixels_count", "l1_method_good_pixel_count", "l2_method_good_pixel_count", "ma_method_good_pixel_count"]
-parameter_list = [ "ground_truth_pixels_count"]
+parameter_list = [ "algorithm_pixels_count", "ground_truth_sroi_pixels_count", "l1_method_good_pixel_count", "l2_method_good_pixel_count",
+                   "ma_method_good_pixel_count"]
 
 datafilter_list  = [ "0", ]
 
@@ -51,7 +56,7 @@ algorithm_list   = ["FB", ]
 
 noise_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
-noise_list = ["ground_truth"]
+noise_list = ["ground_truth", "blue_sky", ]
 
 sensor_list      = [0, 1, 2]
 sensor_list      = [0, ]
