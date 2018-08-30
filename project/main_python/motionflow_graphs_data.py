@@ -11,7 +11,7 @@ dict_datafilters = {
     "datafilter_3": "datafilter_3",
 }
 
-dict_label_weather = {
+dict_label_noise = {
     "ground_truth" : "ground_truth",
     "blue_sky"     : "blue_sky",
     "light_snow"   : "light_snow",
@@ -19,7 +19,7 @@ dict_label_weather = {
     "heavy_snow"   : "heavy_snow",
 }
 
-dict_color_weather = {
+dict_color_noise = {
     "ground_truth" : "green",
     "blue_sky"     : "blue",
     "light_snow"   : "red",
@@ -49,9 +49,9 @@ datafilter_list  = [ "0", ]
 algorithm_list   = ["LK", "FB",]
 algorithm_list   = ["FB", ]
 
-weather_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
-weather_list = ["ground_truth", "blue_sky", "heavy_snow",]
-weather_list = ["ground_truth", "blue_sky",]
+noise_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
+noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
+noise_list = ["ground_truth"]
 
 sensor_list      = [0, 1, 2]
 sensor_list      = [0, ]
@@ -60,8 +60,7 @@ fps_list         = ["30", "15", "10", "7.5"]#night
 fps_list         = ["30",]
 
 color_list_algorithms = ["blue", "green", "blue", "black", "brown"]
-color_list_weather = ["blue", "gray", "brown", "black", "brown"]
-
+color_list_noise = ["blue", "gray", "brown", "black", "brown"]
 #color_list_algorithms = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 color_list_bar = ['#f2f2f2', '#cccccc', '#808080', '#000000']
 label_list_bar = ['ground truth', 'moving average', 'voted mean', 'ranked mean']
@@ -69,6 +68,7 @@ label_list_bar = ['ground truth', 'moving average', 'voted mean', 'ranked mean']
 template_name_of_evaluation_data_gt = [
     "evaluation_data_ground_truth_",
 ]
+
 template_name_of_evaluation_data = [
     "evaluation_data_results_",
 ]

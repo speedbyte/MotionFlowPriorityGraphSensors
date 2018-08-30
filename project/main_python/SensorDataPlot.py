@@ -15,10 +15,10 @@ OUTLIER = 100000
 
 class PlotData(object):
 
-    def __init__(self, plot1, algorithm, measuring_parameter, weather, stepSize, x_label, y_label):
+    def __init__(self, plot1, algorithm, measuring_parameter, noise, stepSize, x_label, y_label):
         self.plot1 = plot1
         self.measuring_parameter = measuring_parameter
-        self.weather = weather
+        self.noise = noise
         self.stepSize = stepSize
         self.x_label = x_label
         self.y_label = y_label
@@ -46,7 +46,7 @@ class PlotData(object):
         return self.measuring_parameter
 
     def get_env_index(self):
-        return self.weather
+        return self.noise
 
     def get_step_size(self):
         return self.stepSize
@@ -99,7 +99,7 @@ class SensorDataPlot(object):
         return (temp_list[0])
 
 
-    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, weather, stepSize, datafilter_index, x_label, y_label):
+    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, noise, stepSize, datafilter_index, x_label, y_label):
 
         figures_plot = list()
 
@@ -125,11 +125,12 @@ class SensorDataPlot(object):
             data_points_gt = yaml_file_data[data_list[0]]
             data_points = yaml_file_data[data_list[1]]
             print "getting ", data_list
+
             if ( measuring_parameter == "collision"):
                 x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
             else :
                 x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
-                print x_axis
+            print x_axis
 
         lower_x = min(numpy.nanmin(x_axis), lower_x)
         upper_x = max(numpy.nanmax(x_axis), upper_x)
@@ -146,19 +147,19 @@ class SensorDataPlot(object):
                  [lower_y, upper_y]
                  ]
 
-        print "Table " + measuring_parameter + " robustness for " + weather
+        print "Table " + measuring_parameter + " robustness for " + noise
         mean_list = list()
 
         mean_list.append(y_axis_mean)
 
         # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
         lock.acquire()
-        map_to_data = measuring_parameter + '_' + self.algorithm + '_' + weather + '_' + str(stepSize) + '_' + str(self.sensor_index)
+        map_to_data = measuring_parameter + '_' + self.algorithm + '_' + noise + '_' + str(stepSize) + '_' + str(self.sensor_index)
         print map_to_data, y_axis_mean
         self.summary_mean[map_to_data] = mean_list
         lock.release()
 
-        plotData = PlotData(plot1, self.algorithm, measuring_parameter, weather, stepSize, x_label, y_label)
+        plotData = PlotData(plot1, self.algorithm, measuring_parameter, noise, stepSize, x_label, y_label)
 
         return plotData
 
@@ -239,24 +240,20 @@ class SensorDataPlot(object):
                     new_x_axis.append(val)
                 pre_val = val
             x_axis = numpy.array(new_x_axis)
-            #index = [0]
-            #x_axis = numpy.delete(x_axis, index)
             newshape = self.fuseDataFromSameFrames(data)
             #print newshape
         elif (measuring_parameter == "collisionpoints"):
             data_ = numpy.array(data)
             a,b,c = data_.T
             x_axis = numpy.array(a)
-            index = [0]
-            x_axis = numpy.delete(x_axis, index)
             newshape = data
         else:
             data_ = numpy.array(data)
             a,b = data_.T
             x_axis = numpy.array(a)
-            index = [0]
-            x_axis = numpy.delete(x_axis, index)
             newshape = data
+        #index = [0]
+        #x_axis = numpy.delete(x_axis, index)
 
 
         y_axis_mean = 0
@@ -312,8 +309,8 @@ class SensorDataPlot(object):
             x0, y0 = data.T
             y_axis = y0
 
-        index = [0]
-        y_axis = numpy.delete(y_axis, index)
+        #index = [0]
+        #y_axis = numpy.delete(y_axis, index)
 
         count = 0
         for n,i in enumerate(y_axis):

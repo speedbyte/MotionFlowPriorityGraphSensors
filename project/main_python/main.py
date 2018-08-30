@@ -61,40 +61,16 @@ def plot_at_once(figures_plot_array_all, sensor_index):
         figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), sensor_index)
 
 
-def getPlotList(sensor_plot, measuring_parameter, x_label, y_label):
-
-    plot_at_once_figures = list()
-
-    for step_size in step_list:
-
-        for n, weather in enumerate(weather_list):
-
-            print "---------------------------"
-            custom_data_list_name = list()
-
-            plot_mapping = sensor_plot.templateToYamlMapping_GT()
-            custom_data_list_name.append(plot_mapping)
-            plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, "ground_truth", str(step_size), 0, x_label, y_label )
-
-            if ( weather != "ground_truth"):
-                plot_mapping = sensor_plot.templateToYamlMapping(weather, step_size)
-                custom_data_list_name.append(plot_mapping)
-                plot_data = sensor_plot.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, measuring_parameter, weather, str(step_size), 0, x_label, y_label)
-                #print plot_data.get_x_axis()
-
-            print custom_data_list_name
-            plot_at_once_figures.append(plot_data)
-
-        print "---------------------------"
-
-    return plot_at_once_figures
 
 #    plt.close("all")
 
 import subprocess
 
-if __name__ == '__main__':
+# first for ground truth and then for ground truth and the each noise condition. This is because in each plot
+# both ground truth and noise is depicted.
 
+
+if __name__ == '__main__':
 
     yaml_file_handle = YAMLParser(file)
     yaml_file_data = yaml_file_handle.load()
@@ -109,36 +85,66 @@ if __name__ == '__main__':
 
 
     for n, parameter in enumerate(parameter_list):
+    # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
+
         print "PARAMETER ----- ", parameter
         summary_list = list()
+
         for sensor_index in sensor_list:
 
-            plot_at_once_figures = list()
+            parameter_plots_with_details = list()
 
             for algorithm in algorithm_list:
 
-                sensor_plot = SensorDataPlot(sensor_index, algorithm)
-                sensor_plot.set_measuring_parameter(parameter)
+                sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm)
+                sensor_data_plot_object.set_measuring_parameter(parameter)
+                plot_mapping_gt = sensor_data_plot_object.templateToYamlMapping_GT()
 
-                plot_at_once_figures.append(getPlotList(sensor_plot, measuring_parameter=parameter, x_label="current_frame_index", y_label=y_axis_label_dict[parameter]))
+                parameter_plot_at_once_figures = list()
 
+                for step_size in step_list:
+
+                    for n, noise in enumerate(noise_list):
+
+                        print "---------------------------"
+                        custom_data_list_name = list()
+
+                        plot_mapping_noise = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
+
+                        plot_mapping = [plot_mapping_gt, plot_mapping_noise]
+
+                        if noise == "ground_truth":
+                            environment = ["ground_truth"]
+                        else:
+                            environment = ["ground_truth", noise]
+
+                        for index,env in enumerate(environment):
+
+                            custom_data_list_name.append(plot_mapping[index])
+                            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, parameter, env, str(step_size), 0, x_label="current_frame_index", y_label=y_axis_label_dict[parameter] )
+                            parameter_plot_at_once_figures.append(plot_data)
+
+                        print custom_data_list_name
+                    print "---------------------------"
+
+                parameter_plots_with_details.append(parameter_plot_at_once_figures)
 
                 # summary
-                summary_list.append(sensor_plot.get_summary())
-                print len(sensor_plot.get_summary())
+                summary_list.append(sensor_data_plot_object.get_summary())
+                print len(sensor_data_plot_object.get_summary())
 
+            # plotting the figure for each sensor separately
+            plot_at_once(parameter_plots_with_details, 0) #plot_at_once(parameter_plot_at_once_figures, sensor_data_plot_object.getSensorIndex())
+            #parameter_plot_at_once_figures = getPlotList(sensor_data_plot_object, measuring_parameter="good_pixels", x_label="current_frame_index", y_label="good pixels / visible pixels")
+            
 
-            plot_at_once(plot_at_once_figures, 0)
-                #plot_at_once_figures = getPlotList(sensor_plot, measuring_parameter="good_pixels", x_label="current_frame_index", y_label="good pixels / visible pixels")
-                #plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
-
-
-        figures = Figures(1)
+        figures = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
         flatten_summary_list = dict()
         for summary in summary_list:
             flatten_summary_list.update(summary)
         print len(flatten_summary_list)
-        figures.evaluate_pixel(flatten_summary_list, parameter )
+
+        figures.bargraph_pixel(flatten_summary_list, parameter )
         figures.save_figure(parameter , "summary")
 

@@ -99,15 +99,15 @@ class Figures(object):
                 elif ( measuring_parameter == "deviation" ) :
                     line1 = self.list_of_plots[figure_index].plot(x_axis_data,
                                                                   y_axis_data/SCALE, 'ko-', lw=1,
-                                                                  color=dict_color_weather[env_index],
-                                                                  label=dict_label_weather[env_index])
+                                                                  color=dict_color_noise[env_index],
+                                                                  label=dict_label_noise[env_index])
 
                 else :
 
                     line1 = self.list_of_plots[figure_index].plot(x_axis_data,
                                                                   y_axis_data/SCALE, 'ko-', lw=1,
-                                                                  color=dict_color_weather[env_index],
-                                                                  label=dict_label_weather[env_index])
+                                                                  color=dict_color_noise[env_index],
+                                                                  label=dict_label_noise[env_index])
 
                 self.list_of_plots[figure_index].legend(loc='upper right', fontsize='small')
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
@@ -157,7 +157,7 @@ class Figures(object):
         plt.close("all")
 
 
-    def evaluate_pixel(self, summary_dict, measuring_parameter):
+    def bargraph_pixel(self, summary_dict, measuring_parameter):
 
         # each group member is positioned at bar position. hence array of group members and array of bar_position should be equal.
 
@@ -172,18 +172,18 @@ class Figures(object):
 
         print summary_dict
         for sensor_index in sensor_list:
-            for n, weather in enumerate(weather_list):
+            for n, noise in enumerate(noise_list):
             #for n, step_size in enumerate(step_list):
                 regroup = len(index)*[0]
                 shift = shift+1
                 for p, algorithm in enumerate(algorithm_list):
-                    map_to_data = measuring_parameter + '_' + algorithm + '_' + weather + '_' + str(step_list[0]) + '_' + str(sensor_index)
+                    map_to_data = measuring_parameter + '_' + algorithm + '_' + noise + '_' + str(step_list[0]) + '_' + str(sensor_index)
                     print map_to_data
                     regroup[p] = summary_dict[map_to_data][0]
                 bar_positions = index + (shift*bar_width)
                 print bar_positions
                 rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n+1], edgecolor='black')
-                rects1.set_label(weather)
+                rects1.set_label(noise)
 
         #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
         self.list_of_plots[0].set_xticks(index + 2*bar_width)
@@ -204,18 +204,18 @@ class Figures(object):
         #                 label='Men')
 
 
-    def evaluate_deviation(self, summary, step_list):
+    def bargraph_deviation(self, summary, step_list):
 
 
-        n_groups = len(weather_list)
+        n_groups = len(noise_list)
         bar_width = 0.1
         opacity = 0.4
         index = np.arange(0, 2*n_groups, 2)
 
         regroup = list()
 
-        for weather in weather_list:
-            regroup.append(summary['deviation_' + weather + '_' + str(step_list[0])][0])
+        for noise in noise_list:
+            regroup.append(summary['deviation_' + noise + '_' + str(step_list[0])][0])
 
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
@@ -225,9 +225,9 @@ class Figures(object):
                 for step_size in step_list:
                     regroup = list()
                     shift = shift+1
-                    for weather in weather_list:
-                        print 'deviation_' + weather + '_' + str(step_size)
-                        regroup.append(summary['deviation_' + weather + '_' + str(step_size)][val+1])
+                    for noise in noise_list:
+                        print 'deviation_' + noise + '_' + str(step_size)
+                        regroup.append(summary['deviation_' + noise + '_' + str(step_size)][val+1])
                     rects1 = self.list_of_plots[0].bar(index+shift*bar_width, regroup, bar_width, color=color_list_algorithms[val+1], edgecolor='black')
 
 
@@ -240,19 +240,19 @@ class Figures(object):
         plt.tight_layout()
 
 
-    def evaluate_objdisplacement(self, summary, step_list):
+    def bargraph_objdisplacement(self, summary, step_list):
 
         print summary
 
-        n_groups = len(weather_list)
+        n_groups = len(noise_list)
         bar_width = 0.1
         opacity = 0.4
         index = np.arange(0, 2*n_groups, 2)
 
         regroup = list()
 
-        for weather in weather_list:
-            regroup.append(summary['objdisplacement_' + weather + '_' + str(step_list[0])][0])
+        for noise in noise_list:
+            regroup.append(summary['objdisplacement_' + noise + '_' + str(step_list[0])][0])
 
         rects1 = self.list_of_plots[0].bar(index, regroup, bar_width, color='blue')
 
@@ -262,9 +262,9 @@ class Figures(object):
                 for step_size in step_list:
                     regroup = list()
                     shift = shift+1
-                    for weather in weather_list:
-                        print 'objdisplacement_' + weather + '_' + str(step_size)
-                        y_data = [summary['objdisplacement_' + weather + '_' + str(step_size)][val+1]]
+                    for noise in noise_list:
+                        print 'objdisplacement_' + noise + '_' + str(step_size)
+                        y_data = [summary['objdisplacement_' + noise + '_' + str(step_size)][val+1]]
                         y_data = np.array(y_data)
                         y_data = y_data*100
                         regroup.append(y_data)
