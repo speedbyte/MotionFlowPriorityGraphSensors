@@ -105,6 +105,18 @@ public:
 };
 
 
+class RandomNoise : public Noise {
+
+public:
+
+    void apply(cv::Mat &image) override {
+
+        std::cout << "applying white noise" << std::endl;
+        cv::randu(image, 0, 255);
+    }
+};
+
+
 class Reflection: public Noise {
 public:
     void apply(cv::Mat &image) override{

@@ -17,15 +17,16 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     std::unique_ptr<Noise> objectNoise = std::make_unique<ColorfulNoise>();
     std::unique_ptr<Noise> objectNoise_noNoise = std::make_unique<NoNoise>();
 
-    Rectangle rectangle_obj1(30, 70, objectNoise, 11); // width, height
-    Circle circle_obj1(std::max(30,70), objectNoise_noNoise, 11); // width, height
+    Rectangle rectangle_obj1(30, 70, objectNoise, 200); // width, height
+    Circle circle_obj1(std::max(30,70), objectNoise_noNoise, 200); // width, height
 
-    Rectangle rectangle_obj2(30, 70, objectNoise, 200); // width, height
-    Circle circle_obj2(std::max(30,70), objectNoise_noNoise, 200); // width, height
+    Rectangle rectangle_obj2(30, 70, objectNoise, 11); // width, height
+    Circle circle_obj2(std::max(30,70), objectNoise_noNoise, 11); // width, height
 
     Achterbahn achterbahn;
 
     Canvas canvas((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, noise);
+    Canvas background((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, objectNoise);
 
     achterbahn = Achterbahn("rectangle_long", 100);
     achterbahn.process(Dataset::m_frame_size);
@@ -67,7 +68,6 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
     cv::Mat image_data_and_shape;
     cv::Mat depth_data_and_shape;
 
-
     for (ushort current_frame_index = 0; current_frame_index < Dataset::MAX_ITERATION_DATASET; current_frame_index++) {
 
         // TODO - when the variable overflows.
@@ -75,6 +75,8 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         //draw new ground truth image.
         cv::Mat tempGroundTruthImage = canvas.getImage().clone();
         cv::Mat tempGroundTruthDepthImage(Dataset::m_frame_size, CV_8UC1, cv::Scalar(255));
+        cv::Mat base_image_for_circles(Dataset::m_frame_size, CV_8UC3);
+        cv::randu(base_image_for_circles, 0, 0);
         //tempGroundTruthDepthImage = cv::Mat::zeros(Dataset::m_frame_size, CV_8UC1);
 
         assert((tempGroundTruthImage.channels() == 3 ) && ( tempGroundTruthDepthImage.channels() == 1 ));
@@ -87,12 +89,12 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         std::basic_string<char> input_image_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ file_name_image;
         std::basic_string<char> input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_depth_image; //+ "/" +  file_name_depth;
 
+        cv::Mat result(Dataset::m_frame_size, CV_8UC3);
+        result = cv::Scalar::all(0);
+
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
-            /*
-            if ( current_frame_index == MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) {
-                current_frame_index = 0;
-            }*/
+
             std::string position_image_file_with_path = m_generatepath.string() + '_' + std::to_string(m_sensorGroupCount)+ "/" + file_name_image;
 
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getImage().clone();
@@ -112,7 +114,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                                                current_frame_index).m_object_location_camera_px.location_y_px)));
 
             //cv::imshow("con", binary_image);
-            //Key(0);
+            //cv::waitKey(0);
             //Draw the contours
             cv::Mat contourImage(binary_image.size(), CV_8UC3, cv::Scalar(0,0,0));
             for (size_t idx = 0; idx < contours.size(); idx++) {
@@ -131,15 +133,14 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                 unsigned char depth;
                 //cv::fillConvexPoly(tempGroundTruthDepthImage, contours.at(0), cv::Scalar(255,0,0));
                 if ( obj_index == 0 ) {
-                    color = cv::Scalar(255,0,0);
-                    depth = 11;
-                } else {
-                    color = cv::Scalar(0,255,0);
+                    color = cv::Scalar(1,1,1);
                     depth = 200;
+                } else {
+                    color = cv::Scalar(1,1,1);
+                    depth = 11;
                 }
 
-                cv::circle(tempGroundTruthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
-                                                           cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, color, CV_FILLED);
+                cv::circle(result, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, color, CV_FILLED);
 
                 /*
                 image_data_and_shape.copyTo(tempGroundTruthImage(
@@ -159,11 +160,9 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px))));
                 */
-                cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),
-                                                                cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar_<unsigned char>(depth), CV_FILLED);
+                cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar_<unsigned char>(depth), CV_FILLED);
 
                 printf("! WRITE %u %u %u !\n", tempGroundTruthDepthImage.at<unsigned char>(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y));
-
 
             }
             else {
@@ -171,10 +170,14 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
             }
         }
 
+        cv::Mat final = tempGroundTruthImage.clone();
+        tempGroundTruthImage = background.getImage().mul(result);
+        tempGroundTruthImage.copyTo(final, result);
+
         //cv::namedWindow("render", CV_WINDOW_AUTOSIZE);
         //cv::imshow("render", tempGroundTruthImage);
         //cv::waitKey(0);
-        cv::imwrite(input_image_file_with_path, tempGroundTruthImage);
+        cv::imwrite(input_image_file_with_path, final);
         cv::imwrite(input_image_depth_file_with_path, tempGroundTruthDepthImage);
 
         // Validate

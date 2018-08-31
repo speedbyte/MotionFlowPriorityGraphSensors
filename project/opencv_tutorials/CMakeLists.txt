@@ -85,7 +85,7 @@ target_link_libraries(kalman_base ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 add_executable(simpleflow ${SAMPLE_DIR}/simpleflow_demo.cpp)
 target_link_libraries(simpleflow ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
-add_executable(birdview birdview.cpp)
+add_executable(birdview birdview.cpp masking.cpp)
 target_link_libraries(birdview ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} )
 
 add_executable(pinhole pinhole.cpp)
@@ -114,3 +114,6 @@ target_link_libraries(cornerSubPix_Demo ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
 
 add_executable(findContours findContours.cpp)
 target_link_libraries(findContours ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(masking masking.cpp)
+target_link_libraries(masking ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})

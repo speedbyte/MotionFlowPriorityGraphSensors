@@ -342,6 +342,8 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                     F_png_write.setObjectId(pts.x, pts.y, (obj_index+1));
                 }
 
+                //F_png_write.interpolateBackground();
+
                 F_png_write.write(flow_path);
                 F_png_write.writeColor(kitti_path, max_magnitude);
 

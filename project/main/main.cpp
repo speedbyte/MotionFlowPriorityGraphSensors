@@ -23,6 +23,10 @@
 #include "Sensors.h"
 #include "Utils.h"
 
+// find values of algorithm displacement at sroi.
+// why is stencil size in LK 0, why cant we start FB and LK at the same time?
+
+
 
 using namespace std::chrono;
 
@@ -507,7 +511,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                         list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "algorithm");
                     }
-                    //list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                     /// analysis and metrics
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
