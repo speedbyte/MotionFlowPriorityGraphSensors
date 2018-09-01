@@ -171,6 +171,8 @@ void pass_vector_of_base(std::vector<BaseFirst*> base_ptr) {
 int main ( int argc, char *argv[]) {
 
 
+
+
     float a_float = -123.456;
     float b_float = std::round(a_float);
     std::cout << std::round(a_float) << " " << std::floor(a_float) << " " << std::trunc(a_float) << std::endl;

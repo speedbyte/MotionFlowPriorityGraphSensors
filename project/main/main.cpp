@@ -408,6 +408,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     }
 
 
+    //save ground truth objects and ground truth flow.
+    std::ofstream ground_truth_objects_binary("../ground_truth_object_binary.bin", std::ios::out | std::ios::binary);
+    ground_truth_objects_binary.write((char *)ptr_list_of_gt_objects_base.at(0), sizeof(list_of_gt_objects_base.at(0)));
+
+
     ushort fps = 30;
 
     //for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {

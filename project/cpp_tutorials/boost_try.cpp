@@ -76,8 +76,8 @@ int main()
 
     STRUCT_MESSAGE msg_write, msg_read;
 
-    memset(&msg_write, 0x0, sizeof(msg_write));
     std::ofstream myfile = std::ofstream("file.bin", std::ios::out | std::ios::binary);
+    memset(&msg_write, 0x0, sizeof(msg_write));
     msg_write.a = 0xAA;
     sprintf(msg_write.c, "first");
     myfile.write((char *)&msg_write, sizeof(msg_write));
