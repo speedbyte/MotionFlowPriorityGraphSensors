@@ -204,7 +204,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > base_algorithm_result_pts_displacement;
                 for (ushort next_pts_index = 0; next_pts_index < frame_next_pts_array.size(); next_pts_index++) {
-                    base_algorithm_result_pts_displacement.push_back(std::make_pair(frame_next_pts_array.at(next_pts_index), displacement_array.at(next_pts_index)));
+                    base_algorithm_result_pts_displacement.push_back(std::make_pair(cv::Point2f(std::trunc(frame_next_pts_array.at(next_pts_index).x), std::trunc(frame_next_pts_array.at(next_pts_index).y)), displacement_array.at(next_pts_index)));
                 }
 
                 std::sort(base_algorithm_result_pts_displacement.begin(), base_algorithm_result_pts_displacement.end(), PairPointsSort<float>());

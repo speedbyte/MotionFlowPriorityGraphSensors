@@ -170,12 +170,17 @@ void pass_vector_of_base(std::vector<BaseFirst*> base_ptr) {
 
 int main ( int argc, char *argv[]) {
 
+
+    float a_float = -123.456;
+    float b_float = std::round(a_float);
+    std::cout << std::round(a_float) << " " << std::floor(a_float) << " " << std::trunc(a_float) << std::endl;
+
     std::vector<First> list_of_derived_objects(5);
     std::vector<First*> ptr_list_of_derived_objects;
     for ( auto x = 0; x < list_of_derived_objects.size(); x++) {
         ptr_list_of_derived_objects.push_back(&list_of_derived_objects.at(x));
     }
-    pass_vector_of_base(ptr_list_of_derived_objects);
+    //pass_vector_of_base(ptr_list_of_derived_objects);
 
     double dist_usk_original = 13.711999433708751;
     float dist_usk_from_vires = (float)13.7119989;
