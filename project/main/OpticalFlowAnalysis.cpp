@@ -158,7 +158,22 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             icovar = evaluationData.at(obj_index).covar_displacement.inv(cv::DECOMP_SVD);
                         }
 
+                        evaluationData.at(
+                                obj_index).goodPixels_l1_error_count = (ushort)CLUSTER_COUNT_GT;
+                        evaluationData.at(
+                                obj_index).goodPixels_l2_error_count = (ushort)CLUSTER_COUNT_GT;
+                        evaluationData.at(
+                                obj_index).goodPixels_ma_error_count = (ushort)CLUSTER_COUNT_GT;
+
+
                         if (m_opticalFlowName != "ground_truth") {
+
+                            evaluationData.at(
+                                    obj_index).goodPixels_l1_error_count = (ushort) 0;
+                            evaluationData.at(
+                                    obj_index).goodPixels_l2_error_count = (ushort) 0;
+                            evaluationData.at(
+                                    obj_index).goodPixels_ma_error_count = (ushort) 0;
 
                             // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
                             evaluationData.at(
