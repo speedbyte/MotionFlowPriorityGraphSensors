@@ -61,6 +61,8 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(
                 m_ptr_list_gt_objects.size());
         std::vector<std::vector<std::vector<bool> > > multiframe_visibility(m_ptr_list_gt_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement(
+                m_ptr_list_gt_objects.size());
 
         unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
                 sensor_index).size();
@@ -105,7 +107,7 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
             std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
             common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array,
-                              multiframe_stencil_displacement, multiframe_visibility, all_moving_objects_in_frame);
+                              multiframe_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility, all_moving_objects_in_frame);
 
         }
 

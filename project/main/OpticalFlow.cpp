@@ -58,7 +58,7 @@ void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
 
 }
 
-void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility,
+void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility,
                                     std::vector<cv::Point2f> all_moving_objects_in_frame) {
 
     char sensor_index_folder_suffix[50];
@@ -78,18 +78,20 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
         std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_displacement;
+        std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_disjoint_displacement;
         std::vector<bool> frame_stencil_visibility;
 
-        frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility, all_moving_objects_in_frame, depth_02_frame);
+        frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility, frame_stencil_disjoint_displacement, all_moving_objects_in_frame, depth_02_frame);
 
         multiframe_stencil_displacement.at(obj_index).push_back(frame_stencil_displacement);
+        multiframe_stencil_disjoint_displacement.at(obj_index).push_back(frame_stencil_displacement);
         multiframe_stencil_visibility.at(obj_index).push_back(frame_stencil_visibility);
 
     }
     PRINT_BENCHMARK(frame_stencil_displacement_time_required)
 }
 
-void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility, const std::vector<cv::Point2f>& all_moving_objects_in_frame, const cv::Mat& depth_02_frame) {
+void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_disjoint_displacement, const std::vector<cv::Point2f>& all_moving_objects_in_frame, const cv::Mat& depth_02_frame) {
 
     std::vector<cv::Point2f> gt_frame_stencil_displacement_from_roi;
     std::vector<cv::Point2f> gt_frame_stencil_displacement_from_depth;
@@ -230,19 +232,18 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
 
 
-                /*
                 MyIntersection myDisjoint;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_disjoint_it;
 
-                result_it = myIntersection.find_intersection_pair(frame_stencil_displacement.begin(), frame_stencil_displacement.end(),
+                result_disjoint_it = myIntersection.find_disjoint_pair(frame_stencil_displacement.begin(), frame_stencil_displacement.end(),
                                                                   m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
                                                                   m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
                                                                   frame_stencil_displacement.begin());
 
                 frame_stencil_disjoint_displacement = myIntersection.getResultDisjointPair();
-                frame_stencil_disjoint_visibility.resize(frame_stencil_disjoint_displacement.size());
-                std::fill(frame_stencil_disjoint_visibility.begin(), frame_stencil_disjoint_visibility.end(), (bool)1);
-                */
+                //frame_stencil_disjoint_visibility.resize(frame_stencil_disjoint_displacement.size());
+                //std::fill(frame_stencil_disjoint_visibility.begin(), frame_stencil_disjoint_visibility.end(), (bool)1);
+                std::cout << frame_stencil_disjoint_displacement.size() << std::endl;
 
             } else {
 
