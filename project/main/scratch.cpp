@@ -691,7 +691,7 @@ intersection_ground_truth_objects.clear();
 myIntersection_gt_object_pairs.find_intersection_pair(groundtruthobject1.begin(), groundtruthobject1.end(),
         groundtruthobject2.begin(), groundtruthobject2.end(),
         intersection_ground_truth_objects.begin());
-intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResultPair();
+intersection_ground_truth_objects = myIntersection_gt_object_pairs.getResultIntersectingPair();
 //myIntersection_gt_object_pairs.showResult();
 std::cout << "occlusion intersection between two objects" << intersection_ground_truth_objects.size() << std::endl;
 

@@ -189,6 +189,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
             if (m_weather == "blue_sky"  || m_weather == "heavy_snow") {
 
+                // Intersection between ground truth stencil and the algorithm stencil.
+
                 frame_stencil_displacement.resize(frame_next_pts_array.size());
                 frame_stencil_visibility.resize(frame_next_pts_array.size());
 
@@ -222,9 +224,25 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
                         frame_stencil_displacement.begin());
 
-                frame_stencil_displacement = myIntersection.getResultPair();
+                frame_stencil_displacement = myIntersection.getResultIntersectingPair();
                 frame_stencil_visibility.resize(frame_stencil_displacement.size());
                 std::fill(frame_stencil_visibility.begin(), frame_stencil_visibility.end(), (bool)1);
+
+
+
+                /*
+                MyIntersection myDisjoint;
+                std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_disjoint_it;
+
+                result_it = myIntersection.find_intersection_pair(frame_stencil_displacement.begin(), frame_stencil_displacement.end(),
+                                                                  m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
+                                                                  m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
+                                                                  frame_stencil_displacement.begin());
+
+                frame_stencil_disjoint_displacement = myIntersection.getResultDisjointPair();
+                frame_stencil_disjoint_visibility.resize(frame_stencil_disjoint_displacement.size());
+                std::fill(frame_stencil_disjoint_visibility.begin(), frame_stencil_disjoint_visibility.end(), (bool)1);
+                */
 
             } else {
 
@@ -266,7 +284,6 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
         assert(frame_stencil_displacement.size() != 0);
         // TODO scratch : if frame_stencil_displacement does not work
-
 
     }
 
@@ -325,6 +342,11 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                 unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
                         obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
+                unsigned CLUSTER_COUNT_NO_DATA = (unsigned) m_ptr_list_gt_objects.at(
+                        obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size(); - (unsigned) list_of_current_objects.at(
+                        obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
+
+
                 for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
                     cv::Point2f pts = list_of_current_objects.at(obj_index)->
@@ -343,7 +365,6 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                 }
 
                 //F_png_write.interpolateBackground();
-
                 F_png_write.write(flow_path);
                 F_png_write.writeColor(kitti_path, max_magnitude);
 

@@ -35,6 +35,7 @@ struct MyIntersection {
 
 private:
     std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > > m_result_pair;
+    std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > > m_result_disjoint_pair;
     std::vector<cv::Point_<float>> m_result;
 
 public:
@@ -78,8 +79,34 @@ public:
         return __result;
     }
 
-    const std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > >& getResultPair() {
+    template < typename T1, typename T2, typename R >
+    T1 find_disjoint_pair(T1 __first1, T1 __last1, T2 __first2, T2 __last2, R __result)
+    {
+        while (__first1 != __last1 && __first2 != __last2)
+            if (__comp_pair(__first1, __first2))
+                ++__first1;
+            else if (__comp_pair(__first2, __first1)) {
+                ++__first2;
+                m_result_disjoint_pair.push_back(*__result);
+            }
+            else
+            {
+                *__result = *__first1;
+                //std::cout << "found intersection" << std::endl;
+                ++__first1;
+                ++__first2;
+                ++__result;
+            }
+        return __result;
+    }
+
+
+    const std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > >& getResultIntersectingPair() {
         return m_result_pair;
+    };
+
+    const std::vector<std::pair<cv::Point_<float>, cv::Point_<float> > >& getResultDisjointPair() {
+        return m_result_disjoint_pair;
     };
 
     const std::vector<cv::Point_<float>>& getResult() {

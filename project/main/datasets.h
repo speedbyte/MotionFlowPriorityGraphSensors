@@ -50,7 +50,9 @@ typedef enum {
 typedef enum {
     gt,
     lk,
-    fb
+    fb,
+    sf,
+    tvl
 } ALGO_TYPES;
 
 #define FOCAL_X 600

@@ -23,8 +23,10 @@
 #include "Sensors.h"
 #include "Utils.h"
 
+// ijterpolate using splash mechanism
 // find values of algorithm displacement at sroi.
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
+// gnuplot for all objects combined diffferent colors.
 
 
 
@@ -197,6 +199,7 @@ int main ( int argc, char *argv[]) {
                 it->second->algorithm_map["FB"] = (ushort) (int) (*iterator_subNode)["FB"];
                 it->second->algorithm_map["LK"] = (ushort) (int) (*iterator_subNode)["LK"];
                 it->second->algorithm_map["SF"] = (ushort) (int) (*iterator_subNode)["SF"];
+                it->second->algorithm_map["TVL"] = (ushort) (int) (*iterator_subNode)["TVL"];
             }
         }
         // map_input_txt_to_main.push_back(map_object);
@@ -433,7 +436,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
                 map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
-                map_string_to_OFalgorithm["SF"] = std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "simple_flow", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
+                map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list, environment_list[env_index], tvl, "dual_tvl_flow", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
 
                 if ( Dataset::m_algorithm_map["LK"]) {
 
@@ -449,6 +452,15 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     found = true;
                     if ( env_index == (environment_list.size()-1)) {
                         Dataset::m_algorithm_map["FB"] = 0;
+                    }
+                }
+
+                else if ( Dataset::m_algorithm_map["TVL"] ) {
+
+                    list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
+                    found = true;
+                    if ( env_index == (environment_list.size()-1)) {
+                        Dataset::m_algorithm_map["TVL"] = 0;
                     }
                 }
 

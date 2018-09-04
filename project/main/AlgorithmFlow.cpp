@@ -30,6 +30,10 @@ void AlgorithmFlow::prepare_directories(ushort SENSOR_COUNT, std::string noise, 
             m_resultordner += "FB_";
             break;
         }
+        case tvl: {
+            m_resultordner += "TVL_";
+            break;
+        }
         default: {
             throw("algorithm not yet supported");
         }
