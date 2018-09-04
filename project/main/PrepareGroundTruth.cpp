@@ -120,7 +120,7 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
 
     std::cout << "end of saving " + m_resultordner + " flow files in an vector" << std::endl;
 
-    save_flow_vector((ushort)(SENSOR_COUNT));
+    //save_flow_vector((ushort)(SENSOR_COUNT));
     find_ground_truth_object_special_region_of_interest((ushort)(SENSOR_COUNT));
 
 }
@@ -183,7 +183,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                     (0).at(current_frame_index).frame_no;
 
             sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
-            std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string flow_path = m_generatepath.parent_path().string() + "/flow_occ_" + sensor_index_folder_suffix + "/" + file_name_input_image;
             //std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             std::cout << "current_frame_index  " << current_frame_index << std::endl;
@@ -191,7 +191,6 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
             std::vector<std::pair<Objects *, Objects *> > list_of_current_objects_combination;
             std::vector<std::pair<Objects *, Objects *> > list_of_gt_objects_combination;
             std::vector<std::pair<Objects *, Objects *> > list_of_simulated_objects_combination;
-
 
             if (m_opticalFlowName == "ground_truth") {
                 getCombination(ptr_list_of_derived_objects, list_of_gt_objects_combination);
@@ -203,6 +202,9 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
             }
 
             cv::Mat flow_image = cv::imread(flow_path, CV_LOAD_IMAGE_COLOR);
+            if ( flow_image.empty() ) {
+                throw("No image found error");
+            }
             cv::Mat intersection_image(Dataset::m_frame_size, CV_8UC1);
             int from_to[] = { 2,0 };  // copy the third channel ( channel 2 object id ) to the first channel of intersection_image
             cv::mixChannels(flow_image, intersection_image, from_to, 1);

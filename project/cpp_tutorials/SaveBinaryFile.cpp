@@ -5,20 +5,14 @@
 #include <fstream>
 #include <boost/serialization/access.hpp>
 #include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 
 class BaseSaveFile {
 
-private:
+protected:
     std::vector<float> first_vector;
 
-private:
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize ( Archive &ar, const unsigned int version ) {
-        for ( auto x:first_vector)
-            ar & x;
-    }
 
 public:
     void fill_vector(std::vector<float> fill) {
@@ -38,6 +32,14 @@ public:
 
 
 class DerivedSaveFile : public BaseSaveFile {
+private:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize ( Archive &ar, const unsigned int version ) {
+        ar & boost::serialization::base_object<BaseSaveFile>(*this);
+        for ( auto x:first_vector)
+            ar & x;
+    }
 
 };
 
@@ -63,6 +65,15 @@ int main ( int argc, char **argv) {
     boost::archive::text_oarchive oa(save_object);
     oa << derived;
 
+    DerivedSaveFile newg;
+    // create and open an archive for input
+    std::ifstream ifs("../save_object.bin", std::ios::in | std::ios::binary);
+    boost::archive::text_iarchive ia(ifs);
+    // read class state from archive
+    ia >> newg;
+    // archive and stream closed when destructors are called
+
+    newg.show_vector();
 
 }
 

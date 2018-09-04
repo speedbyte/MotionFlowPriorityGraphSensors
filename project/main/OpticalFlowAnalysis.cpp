@@ -6,7 +6,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
     std::vector<Objects *> list_of_current_objects;
 
-    const float DISTANCE_ERROR_TOLERANCE = 0.5;
+    const float DISTANCE_ERROR_TOLERANCE = 1;
 
     std::vector<Objects *> ptr_list_of_derived_objects;
     for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
@@ -245,6 +245,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             cv::Mat_<float> ellipse(3,1);
 
                             if ( CLUSTER_COUNT_ALGORITHM > 1 ) {
+
                                 double chisquare_val = 2.4477;
                                 cv::Mat_<float> eigenvectors(2,2);
                                 cv::Mat_<float> eigenvalues(1,2);
@@ -309,9 +310,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 gp2d << "set output \"" + output_image_file_with_path + "\"\n";
                                 gp2d << "set xrange [-5:5]\n";
                                 gp2d << "set yrange [-5:5]\n";
-                                gp2d << gp_line;
+                                //gp2d << gp_line;
                                 gp2d << ellipse_plot;
-                                gp2d << "plot '-' with points title 'Car'"
+                                gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
                                         ", '-' with points pt 22 notitle 'GT'"
                                         ", '-' with points pt 15 notitle 'Algo'"
                                         //", '-' with points title 'Boy'
