@@ -52,7 +52,7 @@ parameter_list = [ "algorithm_pixels_count", "ground_truth_sroi_pixels_count", "
 datafilter_list  = [ "0", ]
 
 algorithm_list   = ["LK", "FB",]
-algorithm_list   = ["FB", ]
+algorithm_list   = ["TVL", ]
 
 noise_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
