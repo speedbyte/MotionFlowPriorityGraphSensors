@@ -24,6 +24,8 @@ public:
 
     FlowImageExtended(const int32_t width, const int32_t height) : FlowImage(width, height) {
 
+        for (int32_t i=0; i<width*height; i++)
+            data_[i*3+2] = 65535;
     }
 
     FlowImageExtended(const float *data, const int32_t width, const int32_t height) : FlowImage(data, width, height) {}
@@ -37,6 +39,8 @@ public:
     inline float getObjectId (const int32_t u,const int32_t v) {
         return data_[3*(v*width_+u)+2];
     }
+
+
 
     void writeFlowField (const std::string file_name) override {
 
@@ -94,6 +98,7 @@ public:
         data_[3*(v*width_+u)+2] = valid; //? 1 : 0;
     }
 
+    void interpolateBackground() override;
 };
 
 #endif //MAIN_FLOWIMAGEEXTENDED_H

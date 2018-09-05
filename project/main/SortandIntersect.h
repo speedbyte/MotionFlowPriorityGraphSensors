@@ -126,9 +126,6 @@ public:
     template <typename T1, typename T2>
     bool __comp_pair(T1 lhs, T2 rhs){
         if((*lhs).first.x == (*rhs).first.x) {
-            if ( (*lhs).first.x == 327 ) {
-                //std::cout << "pair of points" << std::endl;
-            }
             return ((*lhs).first.y < (*rhs).first.y);
         }
         else

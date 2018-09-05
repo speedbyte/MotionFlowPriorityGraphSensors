@@ -124,7 +124,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
                     cv::arrowedLine(image_02_frame, frame_prev_pts_array[i], frame_next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }
 
-                /// put data in frame_stencil_displacement
+                /// put data in object_stencil_displacement
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > dummy;
                 common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility);
 

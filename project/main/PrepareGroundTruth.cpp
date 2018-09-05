@@ -137,7 +137,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
     // total = visible part object front + visible part object back
     // boundary = common
     // invisible part = total object part back - visible part object back
-    // frame_stencil_displacement contains ground truth - all pixels are present in the vector
+    // object_stencil_displacement contains ground truth - all pixels are present in the vector
     // Intersection bounding box
 
     // depends on flow image and flow stencil

@@ -635,10 +635,10 @@ temp_frame_coordinates_displacement.push_back(
 }
 }
 
-frame_stencil_displacement.resize(temp_frame_coordinates_displacement.size());
+object_stencil_displacement.resize(temp_frame_coordinates_displacement.size());
 frame_stencil_visibility.resize(temp_frame_coordinates_displacement.size());
 
-frame_stencil_displacement.clear();
+object_stencil_displacement.clear();
 frame_stencil_visibility.clear();
 
 
@@ -656,7 +656,7 @@ for (unsigned row_index = (unsigned)rowBegin; row_index < rowBegin+height; row_i
 
                 cv::Point2f algo_displacement = displacement_array.at(next_pts_index);
 
-                frame_stencil_displacement.push_back(std::make_pair(
+                object_stencil_displacement.push_back(std::make_pair(
                         cv::Point2f(col_index, row_index),
                         algo_displacement));
                 frame_stencil_visibility.push_back(visibility);
