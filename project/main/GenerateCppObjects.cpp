@@ -11,6 +11,7 @@
 #include "Noise.h"
 #include "ObjectMetaData.h"
 #include "GenerateCppObjects.h"
+#include "GroundTruthScene.h"
 
 void CppObjects::process(std::unique_ptr<Noise> &noise) {
 
@@ -85,9 +86,9 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         sprintf(sensor_index_folder_suffix, "%02d", m_sensorGroupCount);
         sprintf(file_name_image, "000%03d_10.png", current_frame_index);
         sprintf(file_name_depth_image, "depth_000%03d_10.png", current_frame_index);
-        std::basic_string<char> base_image_file_with_path = m_generatepath.string() + "/" + file_name_image; //+ file_name_image;
-        std::basic_string<char> input_image_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ file_name_image;
-        std::basic_string<char> input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_depth_image; //+ "/" +  file_name_depth;
+        std::basic_string<char> base_image_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "/" + file_name_image; //+ file_name_image;
+        std::basic_string<char> input_image_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ file_name_image;
+        std::basic_string<char> input_image_depth_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_depth_image; //+ "/" +  file_name_depth;
 
         cv::Mat result(Dataset::m_frame_size, CV_8UC3);
         result = cv::Scalar::all(0);
@@ -95,7 +96,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise) {
         for (unsigned obj_index = 0; obj_index < m_ptr_customObjectMetaDataList.size(); obj_index++) {
 
 
-            std::string position_image_file_with_path = m_generatepath.string() + '_' + std::to_string(m_sensorGroupCount)+ "/" + file_name_image;
+            std::string position_image_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + '_' + std::to_string(m_sensorGroupCount)+ "/" + file_name_image;
 
             image_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getImage().clone();
             depth_data_and_shape = m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getDepthImage().clone();

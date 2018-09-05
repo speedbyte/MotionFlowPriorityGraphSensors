@@ -26,13 +26,9 @@ protected:
 
     boost::filesystem::path  m_datasetpath;
 
-    boost::filesystem::path  m_generatepath;
-
     boost::filesystem::path m_baseframepath;
 
-    boost::filesystem::path m_frame_difference_path;
-
-    boost::filesystem::path  m_edge_path;
+    boost::filesystem::path m_ground_truth_framedifference_path;
 
     boost::filesystem::path  m_position_object_path;
 
@@ -62,6 +58,14 @@ protected:
 
 
 public:
+
+    static boost::filesystem::path  m_ground_truth_generate_path;
+
+    static boost::filesystem::path  m_ground_truth_edge_path;
+
+    static boost::filesystem::path  m_ground_truth_flow_path;
+
+    static boost::filesystem::path  m_ground_truth_plot_path;
 
 
     GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment), m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file) {

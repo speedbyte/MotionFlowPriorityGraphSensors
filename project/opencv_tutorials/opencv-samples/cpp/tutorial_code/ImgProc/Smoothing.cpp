@@ -14,7 +14,7 @@ using namespace std;
 using namespace cv;
 
 /// Global Variables
-int DELAY_CAPTION = 1500;
+int DELAY_CAPTION = 3000;
 int DELAY_BLUR = 100;
 int MAX_KERNEL_LENGTH = 31;
 
@@ -34,7 +34,10 @@ int main( void )
   namedWindow( window_name, CV_WINDOW_AUTOSIZE );
 
   /// Load the source image
-  src = imread( "../images/lena.png", 1 );
+  src = imread( "../pics_dataset/lena.png", 1 );
+    if ( src.data == NULL ) {
+        throw ("no image found");
+    }
 
   if( display_caption( "Original Image" ) != 0 ) { return 0; }
 

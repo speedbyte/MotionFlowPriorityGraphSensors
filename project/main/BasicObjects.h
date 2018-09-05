@@ -28,15 +28,12 @@ protected:
     std::vector<SensorMetaData> sensorMetaDataList;
 
     ushort m_sensorGroupCount;
-    boost::filesystem::path  m_generatepath;
-    boost::filesystem::path  m_framedifferencepath;
-    boost::filesystem::path  m_edgepath;
 
     void CannyEdgeDetection(std::string temp_result_flow_path, std::string temp_result_edge_path);
 
 public:
 
-    BasicObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath, boost::filesystem::path frame_differencepath, boost::filesystem::path edge_path): m_sensorGroupCount(current_sensor_group_index), m_generatepath(generatepath), m_framedifferencepath(frame_differencepath), m_edgepath(edge_path) {
+    BasicObjects(ushort current_sensor_group_index): m_sensorGroupCount(current_sensor_group_index) {
 
         for (int i = 0; i < MAX_ALLOWED_OBJECTS; ++i) {
             ObjectMetaData objMetaData;
@@ -65,12 +62,12 @@ public:
 
     void readPositionFromFile(std::string positionFileName);
 
-    void generateFrameDifferenceImage();
-
-    void generate_edge_images();
-
     void validate_depth_images();
 
+    void generate_edge_images(boost::filesystem::path ground_truth_generate_path);
+
+    void generateFrameDifferenceImage(boost::filesystem::path ground_truth_generate_path,
+                                      boost::filesystem::path ground_truth_framedifference_path);
 };
 
 #endif //MAIN_BASICOBJECTS_H

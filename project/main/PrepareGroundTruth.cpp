@@ -74,12 +74,12 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-            std::cout << "current_frame_index " << current_frame_index << std::endl;
-
             char file_name_image_output[50];
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
             sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
+
+            std::cout << "current_frame " << image_frame_count << std::endl;
 
             std::string frame_difference_path = Dataset::m_dataset_gtpath.string() + "/frame_difference_"  + sensor_index_folder_suffix + "/" + file_name_image_output;
             cv::Mat frameDifference = cv::imread(frame_difference_path, CV_LOAD_IMAGE_ANYCOLOR);

@@ -120,3 +120,6 @@ target_link_libraries(findContours ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
 
 add_executable(masking masking.cpp)
 target_link_libraries(masking ${OpenCV_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(smoothing opencv-samples/cpp/tutorial_code/ImgProc/Smoothing.cpp)
+target_link_libraries(smoothing ${OpenCV_LIBRARIES})

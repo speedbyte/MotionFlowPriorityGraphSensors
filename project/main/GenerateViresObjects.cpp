@@ -10,7 +10,7 @@
 #include "GenerateViresObjects.h"
 #include "datasets.h"
 #include "Utils.h"
-
+#include "GroundTruthScene.h"
 
 
 void ViresObjects::readObjectStateFromBinaryFile() {
@@ -488,7 +488,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             cv::cvtColor(color_image_opencv, color_image_opencv, CV_RGB2BGR);
 
             if (!m_dumpInitialFrames) {
-                std::string input_image_color_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
+                std::string input_image_color_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
                     cv::flip(color_image_opencv, color_image_opencv_flipped, 0);
                     cv::imwrite(input_image_color_file_with_path, color_image_opencv_flipped);
@@ -554,7 +554,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             */
 
             if (!m_dumpInitialFrames) {
-                std::basic_string<char> input_image_depth_file_with_path = m_generatepath.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
+                std::basic_string<char> input_image_depth_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
                     cv::flip(depth_image_opencv, depth_image_opencv_flipped, 0);
                     cv::imwrite(input_image_depth_file_with_path, depth_image_opencv_flipped);

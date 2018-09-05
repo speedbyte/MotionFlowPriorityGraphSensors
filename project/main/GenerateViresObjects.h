@@ -55,7 +55,7 @@ private:
 
 public:
 
-    ViresObjects(ushort current_sensor_group_index, boost::filesystem::path  generatepath, boost::filesystem::path  framedifferencepath, boost::filesystem::path  edgepath): BasicObjects(current_sensor_group_index, generatepath, framedifferencepath, edgepath) {
+    ViresObjects(ushort current_sensor_group_index): BasicObjects(current_sensor_group_index) {
 
         mCheckForImage  = false;
         mHaveImage    = 0;                                 // is an image available?

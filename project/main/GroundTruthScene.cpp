@@ -21,20 +21,28 @@
 #include "ObjectMetaData.h"
 #include "Utils.h"
 
-using namespace std::chrono;
+boost::filesystem::path GroundTruthScene::m_ground_truth_generate_path;
+boost::filesystem::path GroundTruthScene::m_ground_truth_edge_path;
+boost::filesystem::path GroundTruthScene::m_ground_truth_flow_path;
+boost::filesystem::path GroundTruthScene::m_ground_truth_plot_path;
 
+using namespace std::chrono;
 
 void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
 
     m_groundtruthpath = Dataset::m_dataset_gtpath; // data/stereo_flow
 
-    m_generatepath = m_groundtruthpath.string() + "/" + m_environment;
+    m_ground_truth_generate_path = m_groundtruthpath.string() + "/" + m_environment;
 
     m_baseframepath = m_groundtruthpath.string() + "/" + "base_frame";
 
-    m_frame_difference_path = m_groundtruthpath.string() + "/" + "frame_difference";
+    m_ground_truth_framedifference_path = m_groundtruthpath.string() + "/" + "frame_difference_";
 
-    m_edge_path = m_groundtruthpath.string() + "/" + "edge";
+    m_ground_truth_flow_path = m_groundtruthpath.string() + "/" + "flow_occ_";
+
+    m_ground_truth_plot_path = m_groundtruthpath.string() + "/" + "plots_";
+
+    m_ground_truth_edge_path = m_groundtruthpath.string() + "/" + "edge_";
 
 
     char sensor_index_folder_suffix[50];
@@ -44,10 +52,13 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
             std::cout << "prepare gt_scene directories" << std::endl;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
-            std::string generate_path_sensor = m_generatepath.string() + "_" + sensor_index_folder_suffix;
+            std::string generate_path_sensor = m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix;
             std::string baseframe_path_sensor = m_baseframepath.string() + "_" + sensor_index_folder_suffix;
-            std::string framedifference_path_sensor = m_frame_difference_path.string() + "_" + sensor_index_folder_suffix;
-            std::string edge_path_sensor = m_edge_path.string() + "_" + sensor_index_folder_suffix;
+            std::string framedifference_path_sensor = m_ground_truth_framedifference_path.string()  + sensor_index_folder_suffix;
+            std::string edge_path_sensor = m_ground_truth_edge_path.string() + sensor_index_folder_suffix;
+            std::string flow_path_sensor = m_ground_truth_flow_path.string() + sensor_index_folder_suffix;
+            std::string plot_path_sensor = m_ground_truth_plot_path.string() + sensor_index_folder_suffix;
+
 
             if (boost::filesystem::exists(generate_path_sensor)) {
                 system(("rm -rf " + generate_path_sensor).c_str());
@@ -63,6 +74,16 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
                 system(("rm -rf " + edge_path_sensor).c_str());
             }
             boost::filesystem::create_directories(edge_path_sensor);
+
+            if (boost::filesystem::exists(flow_path_sensor)) {
+                system(("rm -rf " + flow_path_sensor).c_str());
+            }
+            boost::filesystem::create_directories(flow_path_sensor);
+
+            if (boost::filesystem::exists(plot_path_sensor)) {
+                system(("rm -rf " + plot_path_sensor).c_str());
+            }
+            boost::filesystem::create_directories(plot_path_sensor);
 
             /*char char_dir_append[20];
             boost::filesystem::path path;
@@ -172,8 +193,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
     if (m_environment == "blue_sky") {
 
-        cppObjects.push_back(CppObjects(0,m_generatepath,m_frame_difference_path, m_edge_path));
-        cppObjects.push_back(CppObjects(1,m_generatepath,m_frame_difference_path, m_edge_path));
+        cppObjects.push_back(CppObjects(0));
+        cppObjects.push_back(CppObjects(1));
 
         if (m_regenerate_yaml_file) {
 
@@ -196,8 +217,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
 
-                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
-                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images();
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage(m_ground_truth_generate_path, m_ground_truth_framedifference_path);
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images(m_ground_truth_generate_path);
 
 
             }
@@ -246,8 +267,8 @@ void GroundTruthScene::generate_bird_view() {
 void GroundTruthSceneExternal::generate_gt_scene() {
 
 
-    viresObjects.push_back(ViresObjects(0, m_generatepath,m_frame_difference_path,m_edge_path));
-    viresObjects.push_back(ViresObjects(1, m_generatepath,m_frame_difference_path,m_edge_path));
+    viresObjects.push_back(ViresObjects(0));
+    viresObjects.push_back(ViresObjects(1));
 
     if (m_regenerate_yaml_file) { // call VIRES only at the time of generating the files
 
@@ -541,8 +562,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
 
                     viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
 
-                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
-                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images();
+                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage(m_ground_truth_generate_path, m_ground_truth_framedifference_path);
+                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images(m_ground_truth_generate_path);
 
 
                 }

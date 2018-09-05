@@ -11,6 +11,8 @@
 #include "Objects.h"
 #include "Utils.h"
 #include "SortandIntersect.h"
+#include "InterpolateData.h"
+#include "GroundTruthScene.h"
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
 using namespace std::chrono;
@@ -141,7 +143,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             float depth_value_object = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk;
 
             if ( m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).object_name == "Pedesterian" ) {
-                depth_value_object++;
+                //depth_value_object++;
             }
             for ( auto it = gt_frame_stencil_displacement_from_roi.begin(); it != gt_frame_stencil_displacement_from_roi.end(); it++) {
                 cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
@@ -155,11 +157,16 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             for (unsigned j = 0; j < gt_frame_stencil_displacement_from_roi.size(); j += 1) {
                 ushort val = depth_02_frame.at<unsigned char>(gt_frame_stencil_displacement_from_roi.at(j));
                 //std::cout << (ushort)val << "*" << std::round(depth_value_object-3) << " ";
-                //if ( val == std::round(depth_value_object-3)  )  {
-                if ( val == std::round(depth_value_object)  )  {
+                bool found_correct_depth = (val == std::round(depth_value_object));
+                if  ( Dataset::m_dataset_basepath.string() == VIRES_DATASET_PATH) {
+                    found_correct_depth = (val == std::round(depth_value_object-3));
+                }
+                if ( found_correct_depth )  {
                     gt_frame_stencil_displacement_from_depth.push_back(gt_frame_stencil_displacement_from_roi.at(j));
                 }
             }
+
+            assert(gt_frame_stencil_displacement_from_depth.size()>0);
 
             auto size_stencil_from_depth = gt_frame_stencil_displacement_from_depth.size();
 
@@ -172,6 +179,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                                 obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
                                 current_frame_index).second;
+
 
             for ( auto it = gt_frame_stencil_displacement_from_depth.begin(); it!=gt_frame_stencil_displacement_from_depth.end(); it++) {
                 object_stencil_displacement.push_back(std::make_pair((*it), gt_displacement));
@@ -259,6 +267,10 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 std::cout << "disjoint " << frame_stencil_disjoint_displacement.size() << " found " << object_stencil_displacement.size() << " total " << m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() << std::endl;
 
+                //InterpolateData interpolateData;
+                //interpolateData.interpolateBackground(object_stencil_displacement, frame_stencil_disjoint_displacement);
+
+
             } else {
 
                 // this should contain the intersection between entire_frame_algorithm_result_pts_displacement and algorithm_result_pts_displacement
@@ -343,8 +355,14 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                     (0).at(current_frame_index).frame_no;
 
             sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-            std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string plot_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+
+            if ( m_resultordner == "/ground_truth" ) {
+                flow_path = GroundTruthScene::m_ground_truth_flow_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+                plot_path = GroundTruthScene::m_ground_truth_plot_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            }
 
             FlowImageExtended F_png_write(Dataset::m_frame_size.width, Dataset::m_frame_size.height);
 
@@ -357,8 +375,12 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                 unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
                         obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
-                unsigned CLUSTER_COUNT_NO_DATA = (unsigned) list_of_current_objects.at(
-                        obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
+                unsigned CLUSTER_COUNT_NO_DATA;
+
+                if ( m_resultordner == "/ground_truth" )
+                    CLUSTER_COUNT_NO_DATA = 0;
+                else
+                CLUSTER_COUNT_NO_DATA = (unsigned) list_of_current_objects.at(obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
 
 
                 for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
@@ -402,7 +424,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
                 F_png_write.interpolateBackground();
                 F_png_write.write(flow_path);
-                F_png_write.writeColor(kitti_path, max_magnitude);
+                F_png_write.writeColor(plot_path, max_magnitude);
 
             }
         }

@@ -113,7 +113,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
             // Calculate optical generate_flow_frame map using LK algorithm
             if (prevGray.data) {  // Calculate only on second or subsequent images.
 
-                std::cout << "current_frame_index " << current_frame_index << std::endl;
+                std::cout << "current_frame " << image_frame_count << std::endl;
 
                 needToInit = false;
                 /// execute optical flow algorithms and get the flow vectors
