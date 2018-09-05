@@ -81,17 +81,17 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
         std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_disjoint_displacement;
         std::vector<bool> frame_stencil_visibility;
 
-        frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_visibility, frame_stencil_disjoint_displacement, all_moving_objects_in_frame, depth_02_frame);
+        frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, frame_stencil_displacement, frame_stencil_disjoint_displacement,frame_stencil_visibility,  all_moving_objects_in_frame, depth_02_frame);
 
         multiframe_stencil_displacement.at(obj_index).push_back(frame_stencil_displacement);
-        multiframe_stencil_disjoint_displacement.at(obj_index).push_back(frame_stencil_displacement);
+        multiframe_stencil_disjoint_displacement.at(obj_index).push_back(frame_stencil_disjoint_displacement);
         multiframe_stencil_visibility.at(obj_index).push_back(frame_stencil_visibility);
 
     }
     PRINT_BENCHMARK(frame_stencil_displacement_time_required)
 }
 
-void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<bool> &frame_stencil_visibility, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_disjoint_displacement, const std::vector<cv::Point2f>& all_moving_objects_in_frame, const cv::Mat& depth_02_frame) {
+void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_displacement, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_disjoint_displacement, std::vector<bool> &frame_stencil_visibility, const std::vector<cv::Point2f>& all_moving_objects_in_frame, const cv::Mat& depth_02_frame) {
 
     std::vector<cv::Point2f> gt_frame_stencil_displacement_from_roi;
     std::vector<cv::Point2f> gt_frame_stencil_displacement_from_depth;
@@ -193,6 +193,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 // Intersection between ground truth stencil and the algorithm stencil.
 
+                cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
+
                 frame_stencil_displacement.resize(frame_next_pts_array.size());
                 frame_stencil_visibility.resize(frame_next_pts_array.size());
 
@@ -230,20 +232,29 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 frame_stencil_visibility.resize(frame_stencil_displacement.size());
                 std::fill(frame_stencil_visibility.begin(), frame_stencil_visibility.end(), (bool)1);
 
-
+                for ( auto it = frame_stencil_displacement.begin(); it != frame_stencil_displacement.end(); it++) {
+                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
+                }
 
                 MyIntersection myDisjoint;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_disjoint_it;
 
-                result_disjoint_it = myIntersection.find_disjoint_pair(frame_stencil_displacement.begin(), frame_stencil_displacement.end(),
+                result_disjoint_it = myDisjoint.find_disjoint_pair(frame_stencil_displacement.begin(), frame_stencil_displacement.end(),
                                                                   m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
                                                                   m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
                                                                   frame_stencil_displacement.begin());
 
-                frame_stencil_disjoint_displacement = myIntersection.getResultDisjointPair();
+                frame_stencil_disjoint_displacement = myDisjoint.getResultDisjointPair();
                 //frame_stencil_disjoint_visibility.resize(frame_stencil_disjoint_displacement.size());
                 //std::fill(frame_stencil_disjoint_visibility.begin(), frame_stencil_disjoint_visibility.end(), (bool)1);
-                std::cout << frame_stencil_disjoint_displacement.size() << std::endl;
+                std::cout << "disjoint " << frame_stencil_disjoint_displacement.size() << std::endl;
+
+                for ( auto it = frame_stencil_disjoint_displacement.begin(); it != frame_stencil_disjoint_displacement.end(); it++) {
+                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
+                }
+                //cv::imshow("disjoint", tempImage);
+                //cv::waitKey(0);
+                cv::destroyAllWindows();
 
             } else {
 
@@ -343,9 +354,8 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                 unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
                         obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
-                unsigned CLUSTER_COUNT_NO_DATA = (unsigned) m_ptr_list_gt_objects.at(
-                        obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size(); - (unsigned) list_of_current_objects.at(
-                        obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
+                unsigned CLUSTER_COUNT_NO_DATA = (unsigned) list_of_current_objects.at(
+                        obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
 
 
                 for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
@@ -364,6 +374,28 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                     F_png_write.setFlowV(pts.x, pts.y, displacement.y);
                     F_png_write.setObjectId(pts.x, pts.y, (obj_index+1));
                 }
+
+
+                for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_NO_DATA; cluster_index++) {
+
+                    cv::Point2f pts = list_of_current_objects.at(obj_index)->
+                            get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(
+                            cluster_index).first;
+
+                    cv::Point2f displacement = list_of_current_objects.at(obj_index)->
+                            get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(
+                            cluster_index).second;
+
+                    max_magnitude = std::max((float) cv::norm(displacement), max_magnitude);
+
+                    displacement.x = 1;
+                    displacement.y = 1;
+
+                    F_png_write.setFlowU(pts.x, pts.y, displacement.x);
+                    F_png_write.setFlowV(pts.x, pts.y, displacement.y);
+                    F_png_write.setObjectId(pts.x, pts.y, 65535);
+                }
+
 
                 //F_png_write.interpolateBackground();
                 F_png_write.write(flow_path);

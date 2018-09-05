@@ -80,14 +80,15 @@ public:
     }
 
     template < typename T1, typename T2, typename R >
-    T1 find_disjoint_pair(T1 __first1, T1 __last1, T2 __first2, T2 __last2, R __result)
-    {
+    T1 find_disjoint_pair(T1 __first1, T1 __last1, T2 __first2, T2 __last2, R __result) {
         while (__first1 != __last1 && __first2 != __last2)
-            if (__comp_pair(__first1, __first2))
+            if (__comp_pair(__first1, __first2)) {
                 ++__first1;
+                //m_result_disjoint_pair.push_back(*__first1);
+            }
             else if (__comp_pair(__first2, __first1)) {
                 ++__first2;
-                m_result_disjoint_pair.push_back(*__result);
+                m_result_disjoint_pair.push_back(*__first2);
             }
             else
             {
