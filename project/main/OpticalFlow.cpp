@@ -187,14 +187,15 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             for ( auto it = gt_frame_stencil_displacement_from_depth.begin(); it != gt_frame_stencil_displacement_from_depth.end(); it++) {
                 cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
             }
-            cv::imshow("depth", tempImage);
-            cv::waitKey(0);
+            //cv::imshow("depth", tempImage);
+            //cv::waitKey(0);
             cv::destroyAllWindows();
+
+            //---------------------------------------------------------------------------------------------------------
+            // 4th step - Populate the ground truth object stencil with gt_displacement
             cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                                 obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
                                 current_frame_index).second;
-
-
             for ( auto it = gt_frame_stencil_displacement_from_depth.begin(); it!=gt_frame_stencil_displacement_from_depth.end(); it++) {
                 object_stencil_displacement.push_back(std::make_pair((*it), gt_displacement));
             }
@@ -204,6 +205,10 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
             // std::sort(object_stencil_displacement.begin(), object_stencil_displacement.end(), PairPointsSort<float>());
             bool isSorted = std::is_sorted(object_stencil_displacement.begin(), object_stencil_displacement.end(), PairPointsSort<float>());
+            assert(isSorted==true);
+
+            //---------------------------------------------------------------------------------------------------------
+            // 5th step - Populate the ground truth object stencil visibility with true
             frame_stencil_visibility.resize(object_stencil_displacement.size());
             std::fill(frame_stencil_visibility.begin(), frame_stencil_visibility.end(), (bool)1);
 

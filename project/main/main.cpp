@@ -23,7 +23,7 @@
 #include "Sensors.h"
 #include "Utils.h"
 
-// check if depth is correct
+// check if depth is correct - DONE
 // interpolate using splash mechanism ( bilateral filter )
 // find values of algorithm displacement at sroi.
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
