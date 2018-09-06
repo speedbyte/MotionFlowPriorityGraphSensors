@@ -175,7 +175,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 //std::cout << (ushort)val << "*" << std::round(depth_value_object-3) << " ";
                 bool found_correct_depth = (val == std::round(depth_value_object));
                 if  ( Dataset::m_dataset_basepath.string() == VIRES_DATASET_PATH) {
-                    found_correct_depth = (val >= (std::round(depth_value_object-offset_x-1)) && val <= (std::round(depth_value_object-offset_x-0)));
+                    found_correct_depth = (val >= ((depth_value_object-offset_x-1.5)) && val <= ((depth_value_object-offset_x)));
                 }
                 if ( found_correct_depth )  {
                     gt_frame_stencil_displacement_from_depth.push_back(gt_frame_stencil_displacement_from_roi.at(j));
