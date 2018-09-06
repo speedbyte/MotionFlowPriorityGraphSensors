@@ -95,26 +95,33 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
 
 void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &object_stencil_displacement, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_disjoint_displacement, std::vector<bool> &frame_stencil_visibility, const std::vector<cv::Point2f>& all_moving_objects_in_frame, const cv::Mat& depth_02_frame) {
 
-    std::vector<cv::Point2f> gt_frame_stencil_displacement_from_roi;
-    std::vector<cv::Point2f> gt_frame_stencil_displacement_from_depth;
 
-    float columnBegin = (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-            (sensor_index).at(current_frame_index).m_region_of_interest_px.x;
-    float rowBegin = (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
-            (sensor_index).at(current_frame_index).m_region_of_interest_px.y;
-    int width = cvRound(
-            m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    current_frame_index).m_region_of_interest_px.width_px);
-    int height = cvRound(
-            m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
-                    current_frame_index).m_region_of_interest_px.height_px);
     bool visibility = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(
             sensor_index).at(current_frame_index);
 
     if (visibility) {
 
         if ( m_resultordner == "/ground_truth" ) {
-            // Squared region of Interest
+
+
+            std::vector<cv::Point2f> gt_frame_stencil_displacement_from_roi;
+            std::vector<cv::Point2f> gt_frame_stencil_displacement_from_depth;
+
+            float columnBegin = (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                    (sensor_index).at(current_frame_index).m_region_of_interest_px.x;
+            float rowBegin = (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at
+                    (sensor_index).at(current_frame_index).m_region_of_interest_px.y;
+            int width = cvRound(
+                    m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
+                            current_frame_index).m_region_of_interest_px.width_px);
+            int height = cvRound(
+                    m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
+                            current_frame_index).m_region_of_interest_px.height_px);
+
+
+            cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
+            // ---------------------------------------------------------------------------------------------------------
+            // 1st step - Squared region of Interest
             std::vector<cv::Point2f> squared_region_of_interest;
             for (unsigned j = 0; j < width; j += 1) {
                 for (unsigned k = 0; k < height; k += 1) {
@@ -122,10 +129,18 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                             cv::Point2f(columnBegin + j, rowBegin + k));
                 }
             }
-
-            // 1st step - Intersection of Squared ROI and Frame Differencing
-            // ---------------------------------------------------------------------------------------------------------
             assert(squared_region_of_interest.size() > 0);
+            // Validate
+            tempImage = cv::Scalar::all(255);
+            for ( auto it = squared_region_of_interest.begin(); it != squared_region_of_interest.end(); it++) {
+                cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
+            }
+            //cv::imshow("coarse", tempImage);
+            //cv::waitKey(0);
+            cv::destroyAllWindows();
+
+            // ---------------------------------------------------------------------------------------------------------
+            // 2nd step - Refine intersection between squared ROI and frame difference.
             gt_frame_stencil_displacement_from_roi.resize(squared_region_of_interest.size());
             gt_frame_stencil_displacement_from_roi.clear();
 
@@ -136,45 +151,44 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                                                                         gt_frame_stencil_displacement_from_roi.begin());
             gt_frame_stencil_displacement_from_roi = myIntersection_gt_roi_objects.getResult();
             assert(gt_frame_stencil_displacement_from_roi.size() > 0);
+            // Validate
+            tempImage = cv::Scalar::all(255);
+            for ( auto it = gt_frame_stencil_displacement_from_roi.begin(); it != gt_frame_stencil_displacement_from_roi.end(); it++) {
+                cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
+            }
+            //cv::imshow("refined", tempImage);
+            //cv::waitKey(0);
+            cv::destroyAllWindows();
 
-            auto size_stencil_from_roi = gt_frame_stencil_displacement_from_roi.size();
-
-            cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
+            //---------------------------------------------------------------------------------------------------------
+            // 3rd step - Refine intersection in case multiple objects are inside the ROI.
             float depth_value_object = m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_distances.sensor_to_obj_usk;
 
             if ( m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).object_name == "Pedesterian" ) {
                 //depth_value_object++;
             }
-            for ( auto it = gt_frame_stencil_displacement_from_roi.begin(); it != gt_frame_stencil_displacement_from_roi.end(); it++) {
-                cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
-            }
-            //cv::imshow("roi", tempImage);
-            //cv::waitKey(0);
-            cv::destroyAllWindows();
-            tempImage = cv::Scalar::all(255);
-//---------------------------------------------------------------------------------------------------------
-            // 2nd step - Refine intersection in case multiple objects are inside the ROI.
+            // The problem is that VIRES delivers depth map with respect to the rear axle and not the mounted sensor.
+            // Still to do -> bounding box upper right and lower left corner is the total depth of the object. Right now, I am just considering a straight depth of 1 unit.
+            ushort offset_x = 2; // m_sensor_gt_all.at(frameNumber).m_sensor_offset_m.offset_x
             for (unsigned j = 0; j < gt_frame_stencil_displacement_from_roi.size(); j += 1) {
-                ushort val = depth_02_frame.at<unsigned char>(gt_frame_stencil_displacement_from_roi.at(j));
+                float val = depth_02_frame.at<unsigned char>(gt_frame_stencil_displacement_from_roi.at(j));
                 //std::cout << (ushort)val << "*" << std::round(depth_value_object-3) << " ";
                 bool found_correct_depth = (val == std::round(depth_value_object));
                 if  ( Dataset::m_dataset_basepath.string() == VIRES_DATASET_PATH) {
-                    found_correct_depth = (val == std::round(depth_value_object-3));
+                    found_correct_depth = (val >= (std::round(depth_value_object-offset_x-1)) && val <= (std::round(depth_value_object-offset_x-0)));
                 }
                 if ( found_correct_depth )  {
                     gt_frame_stencil_displacement_from_depth.push_back(gt_frame_stencil_displacement_from_roi.at(j));
                 }
             }
-
             assert(gt_frame_stencil_displacement_from_depth.size()>0);
-
-            auto size_stencil_from_depth = gt_frame_stencil_displacement_from_depth.size();
-
+            // Validate
+            tempImage = cv::Scalar::all(255);
             for ( auto it = gt_frame_stencil_displacement_from_depth.begin(); it != gt_frame_stencil_displacement_from_depth.end(); it++) {
                 cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
             }
-            //cv::imshow("temp", tempImage);
-            //cv::waitKey(0);
+            cv::imshow("depth", tempImage);
+            cv::waitKey(0);
             cv::destroyAllWindows();
             cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                                 obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(
@@ -184,8 +198,6 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             for ( auto it = gt_frame_stencil_displacement_from_depth.begin(); it!=gt_frame_stencil_displacement_from_depth.end(); it++) {
                 object_stencil_displacement.push_back(std::make_pair((*it), gt_displacement));
             }
-            //object_stencil_displacement = gt_frame_stencil_displacement_from_depth;
-            assert(object_stencil_displacement.size()>0);
 
             if ( cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_location_camera_px.cog_px.x)  ) {
             }

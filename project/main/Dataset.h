@@ -40,7 +40,7 @@ public:
     static bool m_execute_algorithm;
 
     static void fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
-            std::string unterordner, std::string resultordner, ushort start, ushort stop, ushort stop_generation, std::map<std::string, bool> dataprocessing_map,
+            std::string unterordner, std::string resultordner, ushort start, ushort stop, ushort max_frames_dataset, std::map<std::string, bool> dataprocessing_map,
                             std::map<std::string, ushort> algorithm_map);
 
     static const ushort getMakeType();

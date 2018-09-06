@@ -3,15 +3,15 @@
 
 CPP_DATASET:
     START: 0
-    STOP: 10
-    MAX_ITERATION_DATASET: 360
+    STOP: 3
+    MAX_GENERATION_DATASET: 360
     PATH: "../../../datasets/cpp_dataset/"
     EXECUTE: 1
     GT: 0
     ANALYSE: 1
     VIDEO: 0
     DATAPROCESSING: {NoAlgorithm: 1, SimpleAverage: 0, MovingAverage: 0, VotedMean: 0, RankedMean: 0}
-    ALGORITHMS: {FB: 1, LK: 0, SF: 0, TVL: 0}
+    ALGORITHMS: {FB: 0, LK: 0, SF: 0, TVL: 0}
 
 MATLAB_DATASET:
     PATH: "../../../datasets/matlab_dataset/"
@@ -42,11 +42,11 @@ RADAR_DATASET:
     ANALYSE: 1
 
 VIRES_DATASET:
-    START: 0
-    STOP: 5
-    MAX_ITERATION_DATASET: 150
+    START: 20
+    STOP: 47
+    MAX_GENERATION_DATASET: 150
     PATH: "../../../datasets/vires_dataset/"
-    EXECUTE: 0
+    EXECUTE: 1
     GT: 0
     ANALYSE: 1
     VIDEO: 0

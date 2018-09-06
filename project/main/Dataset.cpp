@@ -23,7 +23,7 @@ bool Dataset::m_execute_algorithm = false;
 
 
 void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
-                          std::string unterordner, std::string resultordner, ushort start, ushort stop, ushort stop_generation, std::map<std::string, bool> dataprocessing_map,
+                          std::string unterordner, std::string resultordner, ushort start, ushort stop, ushort max_frames_dataset, std::map<std::string, bool> dataprocessing_map,
                           std::map<std::string, ushort> algorithm_map) {
 
     ITERATION_START_POINT = start;
@@ -32,7 +32,7 @@ void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort c
 
     MAX_ITERATION_RESULTS = (ITERATION_END_POINT - ITERATION_START_POINT);// 60 generate result. this cannot be more than vector
 
-    MAX_GENERATION_DATASET = stop_generation;  // generate always twenty images more than required.
+    MAX_GENERATION_DATASET = max_frames_dataset;  // generate always twenty images more than required.
 
     m_frame_size = frame_size;
 
