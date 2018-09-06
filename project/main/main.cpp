@@ -23,10 +23,11 @@
 #include "Sensors.h"
 #include "Utils.h"
 
-// ijterpolate using splash mechanism
+// interpolate using splash mechanism ( bilateral filter )
 // find values of algorithm displacement at sroi.
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
 // gnuplot for all objects combined diffferent colors.
+// quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 
 
 

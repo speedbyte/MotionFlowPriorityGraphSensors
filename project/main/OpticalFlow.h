@@ -13,25 +13,25 @@
 
 typedef struct {
 
-    int current_frame_index;
-    int obj_index;
-    bool visiblity;
+    int    current_frame_index;
+    int    obj_index;
+    bool   visiblity;
 
-    ushort groundTruthPixels;
-    ushort algorithmPixels;
-    ushort groundTruthSROIPixels;
+    ushort ground_truth_pixels_count;
+    ushort algorithm_pixels_count;
+    ushort ground_truth_sroi_pixels_count;
 
-    double allPixels_l1_error;
-    double allPixels_l2_error;
-    double allPixels_ma_error;
+    double l1_cumulative_distance_all_pixels;
+    double l2_cumulative_distance_all_pixels;
+    double ma_cumulative_distance_all_pixels;
 
-    ushort goodPixels_l1_error_count;
-    ushort goodPixels_l2_error_count;
-    ushort goodPixels_ma_error_count;
+    ushort l1_total_count_good_pixels;
+    ushort l2_total_count_good_pixels;
+    ushort ma_total_count_good_pixels;
 
-    double goodPixels_l1_error;
-    double goodPixels_l2_error;
-    double goodPixels_ma_error;
+    double l1_cumulative_distance_good_pixels;
+    double l2_cumulative_distance_good_pixels;
+    double ma_cumulative_distance_good_pixels;
 
     cv::Point2f gt_mean_displacement;
 

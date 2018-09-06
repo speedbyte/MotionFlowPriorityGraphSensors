@@ -194,7 +194,7 @@ def getObjectDisplacement(self, data_points_gt, data_points):
 
     #scratch 01233
     data = numpy.array(newshape)
-    if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "good_pixels_l2_error" or measuring_parameter == "good_pixels_ma_error"):
+    if ( measuring_parameter == "algorithm_pixels_count" or measuring_parameter == "l2_cumulative_distance_good_pixels" or measuring_parameter == "ma_cumulative_distance_good_pixels"):
         x0_gt, y0_gt = data.T
         y_axis = x0_gt/y0_gt
     elif (measuring_parameter == "collisionpoints"):

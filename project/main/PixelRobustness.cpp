@@ -71,34 +71,34 @@ void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optica
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblity
 
                          << "ground_truth_pixels_count" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).groundTruthPixels
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ground_truth_pixels_count
 
                          << "ground_truth_sroi_pixels_count" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).groundTruthSROIPixels
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ground_truth_sroi_pixels_count
 
                          << "algorithm_pixels_count" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithmPixels
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithm_pixels_count
 
-                         << "l1_method_good_pixel_count" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l1_error_count
-                         << "l2_method_good_pixel_count" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l2_error_count
-                         << "ma_method_good_pixel_count" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_ma_error_count
+                         << "l1_total_count_good_pixels" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).l1_total_count_good_pixels
+                         << "l2_total_count_good_pixels" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).l2_total_count_good_pixels
+                         << "ma_total_count_good_pixels" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ma_total_count_good_pixels
 
-                         << "l1_error_all" <<
-                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_l1_error)
-                         << "l2_error_all" <<
-                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_l2_error)
-                         << "ma_error_all" <<
-                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).allPixels_ma_error)
+                         << "l1_cumulative_distance_all_pixels" <<
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).l1_cumulative_distance_all_pixels)
+                         << "l2_cumulative_distance_all_pixels" <<
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).l2_cumulative_distance_all_pixels)
+                         << "ma_cumulative_distance_all_pixels" <<
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ma_cumulative_distance_all_pixels)
 
-                         << "good_pixels_l1_error" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l1_error
-                         << "good_pixels_l2_error" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_l2_error
-                         << "good_pixels_ma_error" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).goodPixels_ma_error
+                         << "l1_cumulative_distance_good_pixels" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).l1_cumulative_distance_good_pixels
+                         << "l2_cumulative_distance_good_pixels" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).l2_cumulative_distance_good_pixels
+                         << "ma_cumulative_distance_good_pixels" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ma_cumulative_distance_good_pixels
 
                          << "stddev_displacement" <<
                          (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).stddev_displacement)

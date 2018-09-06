@@ -131,21 +131,21 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
 
                         evaluationData.at(
-                                obj_index).groundTruthPixels = CLUSTER_COUNT_GT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+                                obj_index).ground_truth_pixels_count = CLUSTER_COUNT_GT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
 
                         evaluationData.at(
-                                obj_index).groundTruthSROIPixels = CLUSTER_COUNT_SPECIAL_ROI; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+                                obj_index).ground_truth_sroi_pixels_count = CLUSTER_COUNT_SPECIAL_ROI; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
 
                         evaluationData.at(
-                                obj_index).algorithmPixels = CLUSTER_COUNT_ALGORITHM; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+                                obj_index).algorithm_pixels_count = CLUSTER_COUNT_ALGORITHM; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
                         evaluationData.at(
-                                obj_index).goodPixels_l2_error = CLUSTER_COUNT_ALGORITHM; // how many pixels in the found pixel are actually valid
+                                obj_index).l2_cumulative_distance_good_pixels = CLUSTER_COUNT_ALGORITHM; // how many pixels in the found pixel are actually valid
                         evaluationData.at(
-                                obj_index).goodPixels_ma_error = CLUSTER_COUNT_ALGORITHM; // how many pixels in the found pixel are actually valid
+                                obj_index).ma_cumulative_distance_good_pixels = CLUSTER_COUNT_ALGORITHM; // how many pixels in the found pixel are actually valid
 
-                        double l1_cumulative_error_all_pixels = 0;
-                        double l2_cumulative_error_all_pixels = 0;
-                        double ma_cumulative_error_all_pixels = 0;
+                        double l1_cumulative_distance_all_pixels = 0;
+                        double l2_cumulative_distance_all_pixels = 0;
+                        double ma_cumulative_distance_all_pixels = 0;
 
                         double l1_cumulative_error_tolerated = 0;
                         double l2_cumulative_error_tolerated = 0;
@@ -159,29 +159,29 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                         }
 
                         evaluationData.at(
-                                obj_index).goodPixels_l1_error_count = (ushort)CLUSTER_COUNT_GT;
+                                obj_index).l1_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
                         evaluationData.at(
-                                obj_index).goodPixels_l2_error_count = (ushort)CLUSTER_COUNT_GT;
+                                obj_index).l2_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
                         evaluationData.at(
-                                obj_index).goodPixels_ma_error_count = (ushort)CLUSTER_COUNT_GT;
+                                obj_index).ma_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
 
 
                         if (m_opticalFlowName != "ground_truth") {
 
                             evaluationData.at(
-                                    obj_index).goodPixels_l1_error_count = (ushort) 0;
+                                    obj_index).l1_total_count_good_pixels = (ushort) 0;
                             evaluationData.at(
-                                    obj_index).goodPixels_l2_error_count = (ushort) 0;
+                                    obj_index).l2_total_count_good_pixels = (ushort) 0;
                             evaluationData.at(
-                                    obj_index).goodPixels_ma_error_count = (ushort) 0;
+                                    obj_index).ma_total_count_good_pixels = (ushort) 0;
 
                             // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
                             evaluationData.at(
-                                    obj_index).goodPixels_l1_error = 0; // how many pixels in the found pixel are actually valid
+                                    obj_index).l1_cumulative_distance_good_pixels = 0; // how many pixels in the found pixel are actually valid
                             evaluationData.at(
-                                    obj_index).goodPixels_l2_error = 0; // how many pixels in the found pixel are actually valid
+                                    obj_index).l2_cumulative_distance_good_pixels = 0; // how many pixels in the found pixel are actually valid
                             evaluationData.at(
-                                    obj_index).goodPixels_ma_error = 0; // how many pixels in the found pixel are actually valid
+                                    obj_index).ma_cumulative_distance_good_pixels = 0; // how many pixels in the found pixel are actually valid
 
                             std::vector<std::pair<float, float>> xy_pts;
 
@@ -191,18 +191,18 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 cv::Point2f algo_displacement = entire_roi_object.at(datafilter_index
                                 ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
-                                // allPixels_l1_error
+                                // l1_cumulative_distance_all_pixels
                                 auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
-                                l1_cumulative_error_all_pixels += l1_dist_err;
+                                l1_cumulative_distance_all_pixels += l1_dist_err;
 
-                                // allPixels_l2_error
+                                // l2_cumulative_distance_all_pixels
                                 auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
                                 auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
-                                l2_cumulative_error_all_pixels += euclidean_dist_err;
+                                l2_cumulative_distance_all_pixels += euclidean_dist_err;
 
-                                // allPixels_ma_error
+                                // ma_cumulative_distance_all_pixels
                                 auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
-                                ma_cumulative_error_all_pixels += ma_dist_algo;
+                                ma_cumulative_distance_all_pixels += ma_dist_algo;
 
                                 //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
                                 //auto angle_err = std::abs(angle_algo - angle_gt);
@@ -215,7 +215,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                         ) {
                                     l1_cumulative_error_tolerated += l1_dist_err;
                                     evaluationData.at(
-                                            obj_index).goodPixels_l1_error_count++; // how many pixels in the found pixel are actually valid
+                                            obj_index).l1_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
                                 }
                                 if (
                                         (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
@@ -223,7 +223,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                         ) {
                                     l2_cumulative_error_tolerated += euclidean_dist_err;
                                     evaluationData.at(
-                                            obj_index).goodPixels_l2_error_count++; // how many pixels in the found pixel are actually valid
+                                            obj_index).l2_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
                                 }
                                 if (
                                         (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
@@ -231,7 +231,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                         ) {
                                     ma_cumulative_error_tolerated += ma_dist_algo;
                                     evaluationData.at(
-                                            obj_index).goodPixels_ma_error_count++; // how many pixels in the found pixel are actually valid
+                                            obj_index).ma_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
                                 }
                                 
                                 xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
@@ -362,28 +362,28 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             }
                         }
                         
-                        evaluationData.at(obj_index).allPixels_l1_error = l1_cumulative_error_all_pixels;
-                        evaluationData.at(obj_index).allPixels_l2_error = l2_cumulative_error_all_pixels;
-                        evaluationData.at(obj_index).allPixels_ma_error = ma_cumulative_error_all_pixels;
+                        evaluationData.at(obj_index).l1_cumulative_distance_all_pixels = l1_cumulative_distance_all_pixels;
+                        evaluationData.at(obj_index).l2_cumulative_distance_all_pixels = l2_cumulative_distance_all_pixels;
+                        evaluationData.at(obj_index).ma_cumulative_distance_all_pixels = ma_cumulative_distance_all_pixels;
 
-                        evaluationData.at(obj_index).goodPixels_l1_error = l1_cumulative_error_tolerated;
-                        evaluationData.at(obj_index).goodPixels_l2_error = l2_cumulative_error_tolerated;
-                        evaluationData.at(obj_index).goodPixels_ma_error = ma_cumulative_error_tolerated;
+                        evaluationData.at(obj_index).l1_cumulative_distance_good_pixels = l1_cumulative_error_tolerated;
+                        evaluationData.at(obj_index).l2_cumulative_distance_good_pixels = l2_cumulative_error_tolerated;
+                        evaluationData.at(obj_index).ma_cumulative_distance_good_pixels = ma_cumulative_error_tolerated;
 
-                        std::cout << "goodPixels_l1_error for object "
+                        std::cout << "l1_cumulative_distance_good_pixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).goodPixels_l1_error << std::endl;
-                        std::cout << "goodPixels_l2_error for object "
+                                  << evaluationData.at(obj_index).l1_cumulative_distance_good_pixels << std::endl;
+                        std::cout << "l2_cumulative_distance_good_pixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).goodPixels_l2_error << std::endl;
-                        std::cout << "goodPixels_ma_error for object "
+                                  << evaluationData.at(obj_index).l2_cumulative_distance_good_pixels << std::endl;
+                        std::cout << "ma_cumulative_distance_good_pixels for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).goodPixels_ma_error << std::endl;
-                        std::cout << "algorithmPixels for object "
+                                  << evaluationData.at(obj_index).ma_cumulative_distance_good_pixels << std::endl;
+                        std::cout << "algorithm_pixels_count for object "
                                   << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).algorithmPixels << std::endl;
+                                  << evaluationData.at(obj_index).algorithm_pixels_count << std::endl;
 
-                        //assert(evaluationData.goodPixels_l2_error <= std::ceil(evaluationData.algorithmPixels) + 20 );
+                        //assert(evaluationData.l2_cumulative_distance_good_pixels <= std::ceil(evaluationData.algorithm_pixels_count) + 20 );
 
                     } else {
                         std::cout << "visibility of object "
@@ -393,10 +393,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                           .at(current_frame_index)
                                   << " and hence not generating any shape points for this object " << std::endl;
 
-                        evaluationData.at(obj_index).goodPixels_l1_error = 0;
-                        evaluationData.at(obj_index).goodPixels_l2_error = 0;
-                        evaluationData.at(obj_index).goodPixels_ma_error = 0;
-                        evaluationData.at(obj_index).algorithmPixels = 0;
+                        evaluationData.at(obj_index).l1_cumulative_distance_good_pixels = 0;
+                        evaluationData.at(obj_index).l2_cumulative_distance_good_pixels = 0;
+                        evaluationData.at(obj_index).ma_cumulative_distance_good_pixels = 0;
+                        evaluationData.at(obj_index).algorithm_pixels_count = 0;
 
                     }
                 }
