@@ -11,7 +11,7 @@ ushort Dataset::m_cn;
 ushort Dataset::ITERATION_START_POINT;
 ushort Dataset::ITERATION_END_POINT;
 ushort Dataset::MAX_ITERATION_RESULTS;
-ushort Dataset::MAX_ITERATION_DATASET;
+ushort Dataset::MAX_GENERATION_DATASET;
 ushort Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
 boost::filesystem::path Dataset::m_dataset_basepath;
 boost::filesystem::path  Dataset::m_dataset_gtpath;
@@ -32,7 +32,7 @@ void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort c
 
     MAX_ITERATION_RESULTS = (ITERATION_END_POINT - ITERATION_START_POINT);// 60 generate result. this cannot be more than vector
 
-    MAX_ITERATION_DATASET = stop_generation;  // generate always twenty images more than required.
+    MAX_GENERATION_DATASET = stop_generation;  // generate always twenty images more than required.
 
     m_frame_size = frame_size;
 

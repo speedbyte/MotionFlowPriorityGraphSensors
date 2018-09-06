@@ -14,7 +14,7 @@ void Achterbahn::process(cv::Size frame_size) {
     // Prepare points
     cv::Point2f l_pixel_position;
     ushort current_frame_index = 0;
-    for ( ushort i = m_objectMetaData_startPoint; i< (Dataset::MAX_ITERATION_DATASET + m_objectMetaData_startPoint); i++) {
+    for ( ushort i = m_objectMetaData_startPoint; i< (Dataset::MAX_GENERATION_DATASET + m_objectMetaData_startPoint); i++) {
 
 
         l_pixel_position.x = static_cast<float>((frame_size.width/2) + (100 * cos((i) *CV_PI / 180.0) /
@@ -154,7 +154,7 @@ void ObjectMetaData::setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Po
 
 void ObjectMetaData::setCppData() {
 
-    unsigned long FRAME_COUNT = Dataset::MAX_ITERATION_DATASET;
+    unsigned long FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
     assert(FRAME_COUNT > 0);
 
     for ( ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {

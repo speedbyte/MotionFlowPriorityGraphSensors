@@ -171,7 +171,7 @@ int main ( int argc, char *argv[]) {
             else if ((*iterator_subNode).name() == "STOP") {
                 it->second->stop = (int) node[(*iterator_subNode).name()];
             }
-            else if ((*iterator_subNode).name() == "MAX_ITERATION_DATASET") {
+            else if ((*iterator_subNode).name() == "MAX_GENERATION_DATASET") {
                 it->second->stop_generation = (int) node[(*iterator_subNode).name()];
             }
             else if ((*iterator_subNode).name() == "PATH") {
@@ -211,7 +211,7 @@ int main ( int argc, char *argv[]) {
     ushort ITERATION_START_POINT;
     ushort ITERATION_END_POINT;
     ushort MAX_ITERATION_RESULTS;
-    ushort MAX_ITERATION_DATASET;
+    ushort MAX_GENERATION_DATASET;
     ushort MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
 
     /*
