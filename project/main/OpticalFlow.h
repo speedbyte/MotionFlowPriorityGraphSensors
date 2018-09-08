@@ -30,6 +30,10 @@ typedef struct {
     ushort l2_total_count_good_pixels;
     ushort ma_total_count_good_pixels;
 
+    ushort l1_total_count_sroi_good_pixels;
+    ushort l2_total_count_sroi_good_pixels;
+    ushort ma_total_count_sroi_good_pixels;
+
     double l1_cumulative_distance_good_pixels;
     double l2_cumulative_distance_good_pixels;
     double ma_cumulative_distance_good_pixels;

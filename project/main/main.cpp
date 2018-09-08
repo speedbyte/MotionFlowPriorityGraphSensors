@@ -24,7 +24,7 @@
 #include "Utils.h"
 
 // check if depth is correct - DONE
-// gnuplot for all objects combined diffferent colors.
+// gnuplot for all objects combined diffferent colors. read about it.
 // find values of algorithm displacement at sroi.
 // interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
