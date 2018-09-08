@@ -44,21 +44,22 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
 
-                char file_name_image_output[50], sensor_index_folder_suffix[10], output_sensor_index_folder_suffix[10];
+                char file_name_image_output[50], file_name_image_output_stiched[50], sensor_index_folder_suffix[10], stiched_sensor_index_folder_suffix[10];
                 sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-                sprintf(output_sensor_index_folder_suffix, "%02d", (SENSOR_COUNT-1));
+                sprintf(stiched_sensor_index_folder_suffix, "%02d", (SENSOR_COUNT-1));
 
-                std::string gnuplot_image_file_with_path_stiched;
                 std::string gnuplot_image_file_with_path;
+                std::string gnuplot_image_file_with_path_stiched;
 
                 ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                         (0).at(current_frame_index).frame_no;
 
                 sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
+                sprintf(file_name_image_output_stiched, "stiched_000%03d_10.png", image_frame_count);
 
                 gnuplot_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
-                gnuplot_image_file_with_path_stiched = m_gnuplots_path.string() + output_sensor_index_folder_suffix + "/" + file_name_image_output;
+                gnuplot_image_file_with_path_stiched = m_gnuplots_path.string() + stiched_sensor_index_folder_suffix + "/" + file_name_image_output_stiched;
 
                 std::cout << "current_frame_index " << current_frame_index << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
@@ -326,7 +327,28 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 gp2d.send1d(gt_mean_pts);
                                 gp2d.send1d(algo_mean_pts);
 
+                                usleep(100000);  // give some time to gnuplot to write the plot on the filesystem
 
+                                if ( sensor_index != (SENSOR_COUNT-1) || ( sensor_index == 0 && SENSOR_COUNT == 1)) {
+
+                                    if ( sensor_index == 0 ) {
+                                        stich_plots.create(800, 2400, CV_8UC3); // make space for 6 objects
+                                        stich_plots = cv::Scalar::all(0);
+                                        //cv::imwrite(gnuplot_image_file_with_path_stiched, stich_plots);
+                                    }
+                                    cv::Mat gnuplot_index = cv::imread(gnuplot_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+                                    if ( gnuplot_index.empty()) {
+                                        throw "no image is found error";
+                                    }
+                                    //cv::imshow("plot", gnuplot_index);
+                                    //cv::waitKey(0);
+
+                                    //stich_plots = cv::imread(gnuplot_image_file_with_path_stiched, CV_LOAD_IMAGE_ANYCOLOR);
+
+                                    cv::Mat object_index_stich_location = stich_plots.rowRange(0+(sensor_index*400)*2, (sensor_index*400)*2 + 400).colRange(0,400);
+                                    gnuplot_index.copyTo(object_index_stich_location);
+
+                                }
 
                             }
                             else if ( obj_index == 5 ) {
@@ -344,22 +366,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 gp2d.send1d(algo_mean_pts);
                             }
 
+
                             // shift stich multiple sensor images in a grid.
-                            if ( current_frame_index > 0  && sensor_index != (SENSOR_COUNT-1) ) {
-
-                                cv::Mat gnuplot_index = cv::imread(gnuplot_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
-                                if (boost::filesystem::exists(gnuplot_image_file_with_path_stiched)) {
-                                    stich_plots = cv::imread(gnuplot_image_file_with_path_stiched, CV_LOAD_IMAGE_ANYCOLOR);
-                                }
-                                else {
-                                    stich_plots.create(800, 1200, CV_8UC3); // make space for 6 objects
-                                    stich_plots = cv::Scalar::all(0);
-                                }
-
-                                cv::Mat object_index_stich_location = stich_plots.rowRange(0+(sensor_index*400)*2, (sensor_index*400)*2 + 400);
-                                gnuplot_index.copyTo(object_index_stich_location);
-
-                            }
 
                         }
 
