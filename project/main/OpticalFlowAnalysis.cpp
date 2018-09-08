@@ -44,22 +44,27 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
 
-                char file_name_image_output[50];
-                std::string output_image_file_with_path, output_image_file_with_path_stiched;
+                char file_name_image_output[50], sensor_index_folder_suffix[10], output_sensor_index_folder_suffix[10];
+                sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
+                sprintf(output_sensor_index_folder_suffix, "%02d", (SENSOR_COUNT-1));
+
+                std::string gnuplot_image_file_with_path_stiched;
+                std::string gnuplot_image_file_with_path;
 
                 ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                         (0).at(current_frame_index).frame_no;
 
                 sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
 
-                output_image_file_with_path = m_gnuplots_path.string() + "0" + std::to_string(sensor_index) + "/" + file_name_image_output;
+                gnuplot_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
-                output_image_file_with_path_stiched = m_gnuplots_path.string() + "0" + std::to_string(SENSOR_COUNT-1) + "/" + file_name_image_output;
+                gnuplot_image_file_with_path_stiched = m_gnuplots_path.string() + output_sensor_index_folder_suffix + "/" + file_name_image_output;
 
                 std::cout << "current_frame_index " << current_frame_index << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
 
                 Gnuplot gp2d;
+                cv::Mat stich_plots;
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
@@ -78,8 +83,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     unsigned CLUSTER_COUNT_SPECIAL_ROI = (unsigned) special_roi_object.at(sensor_index).at(
                             current_frame_index).size();
 
-                    unsigned CLUSTER_COUNT_COMPLEMENT_OCCLUSION = (unsigned) m_ptr_list_gt_objects.at(
-                            obj_index)->get_object_unaffected_region_of_interest().at(sensor_index).at(
+                    unsigned CLUSTER_COUNT_DISJOINT_SPECIAL_ROI = (unsigned) m_ptr_list_gt_objects.at(
+                            obj_index)->get_object_disjoint_special_region_of_interest().at(sensor_index).at(
                             current_frame_index).size();
 
                     evaluationData.at(obj_index).current_frame_index = image_frame_count;
@@ -307,7 +312,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 std::string ellipse_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse(0)) + "," +  std::to_string(ellipse(1)) + "  angle " + std::to_string(ellipse(2)) + " lw 5 front fs empty bo 3\n";
 
                                 gp2d << "set term png size 400,400\n";
-                                gp2d << "set output \"" + output_image_file_with_path + "\"\n";
+                                gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
                                 gp2d << "set xrange [-5:5]\n";
                                 gp2d << "set yrange [-5:5]\n";
                                 //gp2d << gp_line;
@@ -315,7 +320,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
                                         ", '-' with points pt 22 notitle 'GT'"
                                         ", '-' with points pt 15 notitle 'Algo'"
-                                        //", '-' with points title 'Boy'
                                         // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
                                         "\n";
                                 gp2d.send1d(xy_pts);
@@ -328,40 +332,37 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             else if ( obj_index == 5 ) {
 
                                 //gp2d << "replot\n";
-                                //gp2d << "replot '-' with points title 'Car', '-' with circles linecolor rgb \"#FF0000\" fill solid title 'GT'\n";
+
+                                gp2d << "replot '-' with points title'" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
+                                        ", '-' with points pt 22 notitle 'GT'"
+                                        ", '-' with points pt 15 notitle 'Algo'"
+                                        // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
+                                        "\n";
+
                                 gp2d.send1d(xy_pts);
                                 gp2d.send1d(gt_mean_pts);
                                 gp2d.send1d(algo_mean_pts);
                             }
 
-                            // shift stich plots somewhere else
-                            if ( obj_index == 0 && current_frame_index > 0  && sensor_index != (SENSOR_COUNT-1) ) {
+                            // shift stich multiple sensor images in a grid.
+                            if ( current_frame_index > 0  && sensor_index != (SENSOR_COUNT-1) ) {
 
-                                cv::Mat stich_plots;
-
-                                std::string ground_truth_image_path = m_GroundTruthImageLocation.string() + "_" + std::to_string(sensor_index) + "/" + file_name_image_output;
-                                cv::Mat ground_truth_image = cv::imread(ground_truth_image_path, CV_LOAD_IMAGE_ANYCOLOR);
-                                if (boost::filesystem::exists(output_image_file_with_path_stiched)) {
-                                    stich_plots = cv::imread(output_image_file_with_path_stiched, CV_LOAD_IMAGE_ANYCOLOR);
+                                cv::Mat gnuplot_index = cv::imread(gnuplot_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+                                if (boost::filesystem::exists(gnuplot_image_file_with_path_stiched)) {
+                                    stich_plots = cv::imread(gnuplot_image_file_with_path_stiched, CV_LOAD_IMAGE_ANYCOLOR);
                                 }
                                 else {
-                                    stich_plots.create(1200, 1200, CV_8UC3);
+                                    stich_plots.create(800, 1200, CV_8UC3); // make space for 6 objects
                                     stich_plots = cv::Scalar::all(0);
                                 }
-                                cv::Mat roi = stich_plots.rowRange(400, 800).colRange(0+sensor_index*400, sensor_index*400+400);
-                                cv::Mat roi_vires_image = stich_plots.rowRange(0+(sensor_index*400)*2, (sensor_index*400)*2 + 400);
-                                ground_truth_image.copyTo(roi_vires_image);
 
-                                cv::Mat get_image;
-                                while (get_image.data == NULL) {
-                                    get_image = cv::imread(output_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
-                                    usleep(100);
-                                }
-                                get_image.copyTo(roi);
-                                cv::imwrite(output_image_file_with_path_stiched, stich_plots);
+                                cv::Mat object_index_stich_location = stich_plots.rowRange(0+(sensor_index*400)*2, (sensor_index*400)*2 + 400);
+                                gnuplot_index.copyTo(object_index_stich_location);
+
                             }
+
                         }
-                        
+
                         evaluationData.at(obj_index).l1_cumulative_distance_all_pixels = l1_cumulative_distance_all_pixels;
                         evaluationData.at(obj_index).l2_cumulative_distance_all_pixels = l2_cumulative_distance_all_pixels;
                         evaluationData.at(obj_index).ma_cumulative_distance_all_pixels = ma_cumulative_distance_all_pixels;
@@ -401,6 +402,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     }
                 }
 
+                if (m_opticalFlowName != "ground_truth") {
+                    cv::imwrite(gnuplot_image_file_with_path_stiched, stich_plots);
+                }
                 multiframe_evaluation_data.push_back(evaluationData);
             }
 

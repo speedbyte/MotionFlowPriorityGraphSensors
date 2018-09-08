@@ -70,7 +70,7 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
 
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
-        std::cout << "saving " + m_resultordner + " flow files in flow/ for sensor_index  " << sensor_index << std::endl;
+        std::cout << "generating " + m_resultordner + " flow vector for sensor_index  " << sensor_index << std::endl;
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
@@ -332,7 +332,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
         // TODO: find complement of frame_object_special_region_of_interest_1 of an object id and all_points from groundtruth_object by writing a minus operator between the two types
         const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &groundtruthobject1_all_points = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement();
-        m_ptr_list_gt_objects.at(obj_index)->setUnaffectedRegionOfInterest(all_sensors_object_special_region_of_interest.at(obj_index));
+        m_ptr_list_gt_objects.at(obj_index)->setDisjointSpecialRegionOfInterest(all_sensors_object_special_region_of_interest.at(obj_index));
 
     }
 

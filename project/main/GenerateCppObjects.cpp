@@ -13,7 +13,21 @@
 #include "GenerateCppObjects.h"
 #include "GroundTruthScene.h"
 
-void CppObjects::process(std::unique_ptr<Noise> &noise) {
+void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
+
+
+    std::string sensor_name = "Sensor_MM_" + std::to_string(sensor_index);
+    if (m_mapSensorNameToSensorMetaData.count(sensor_name) == 0) {
+
+        //m_mapSensorIdToSensorName[data->id] = sensor_name;
+        m_ptr_customSensorMetaDataList.push_back(&sensorMetaDataList.at(m_sensorCount));
+        m_mapSensorNameToSensorMetaData[sensor_name] = m_ptr_customSensorMetaDataList.at(m_sensorCount);
+        m_ptr_customSensorMetaDataList.at(m_sensorCount)->setSensorName(sensor_name);
+        m_ptr_customSensorMetaDataList.at(m_sensorCount)->setStartPoint(0);
+        m_sensorCount += 1;
+
+    }
+
 
     std::unique_ptr<Noise> objectNoise = std::make_unique<ColorfulNoise>();
     std::unique_ptr<Noise> objectNoise_noNoise = std::make_unique<NoNoise>();

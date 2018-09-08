@@ -444,7 +444,7 @@ void BasicObjects::generateFrameDifferenceImage(boost::filesystem::path ground_t
         //cv::imshow("try", frameDifference);
         //cv::waitKey(0);
         std::string frame_difference_image_path =
-                ground_truth_framedifference_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+                ground_truth_framedifference_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
         cv::imwrite(frame_difference_image_path, frameDifference);
     }
 }

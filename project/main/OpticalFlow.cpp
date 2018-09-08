@@ -101,7 +101,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
     if (visibility) {
 
-        if ( m_resultordner == "/ground_truth" ) {
+        if ( m_opticalFlowName == "ground_truth" ) {
 
 
             std::vector<cv::Point2f> gt_frame_stencil_displacement_from_roi;
@@ -261,7 +261,6 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                     cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
                 }
 
-
                 // Look for only those pixels that does not lie within the ground truth stencil of this particular object
                 MyIntersection myDisjoint;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_disjoint_it;
@@ -286,7 +285,6 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 //InterpolateData interpolateData;
                 //interpolateData.interpolateBackground(object_stencil_displacement, frame_stencil_disjoint_displacement);
-
 
             } else {
 
@@ -376,29 +374,19 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             std::string plot_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
-            if ( m_resultordner == "/ground_truth" ) {
+            if ( m_opticalFlowName == "ground_truth" ) {
                 flow_path = GroundTruthScene::m_ground_truth_flow_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
                 plot_path = GroundTruthScene::m_ground_truth_plot_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             }
 
             FlowImageExtended F_png_write(Dataset::m_frame_size.width, Dataset::m_frame_size.height);
-
             std::cout << "current_frame_index " << current_frame_index << std::endl;
-
             float max_magnitude = 0.0;
 
             for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                 unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
                         obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
-
-                unsigned CLUSTER_COUNT_NO_DATA;
-
-                if ( m_resultordner == "/ground_truth" )
-                    CLUSTER_COUNT_NO_DATA = 0;
-                else
-                CLUSTER_COUNT_NO_DATA = (unsigned) list_of_current_objects.at(obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
-
 
                 for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
@@ -417,8 +405,9 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                     F_png_write.setObjectId(pts.x, pts.y, (obj_index+1));
                 }
 
+                unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) list_of_current_objects.at(obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
 
-                for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_NO_DATA; cluster_index++) {
+                for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_DISJOINT_DATA; cluster_index++) {
 
                     cv::Point2f pts = list_of_current_objects.at(obj_index)->
                             get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(

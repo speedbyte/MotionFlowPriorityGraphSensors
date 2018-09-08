@@ -18,7 +18,7 @@ public:
 
     CppObjects() {}
 
-    void process(std::unique_ptr<Noise> &noise);
+    void process(std::unique_ptr<Noise> &noise, ushort sensor_index);
 
 };
 

@@ -24,10 +24,10 @@
 #include "Utils.h"
 
 // check if depth is correct - DONE
+// gnuplot for all objects combined diffferent colors.
 // find values of algorithm displacement at sroi.
 // interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
-// gnuplot for all objects combined diffferent colors.
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 
 

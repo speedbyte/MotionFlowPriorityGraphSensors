@@ -67,7 +67,7 @@ protected:
     std::string m_objectName;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_special_region_of_interest;
-    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_unaffected_region_of_interest;
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_disjoint_special_region_of_interest;
 
     void generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::string post_processing_algorithm);
 
@@ -93,7 +93,7 @@ public:
         throw;
     };
 
-    virtual void setUnaffectedRegionOfInterest(std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > all_object_combination_sensor_unaffected_region_of_interest) {
+    virtual void setDisjointSpecialRegionOfInterest(std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > all_object_combination_sensor_disjoint_special_region_of_interest) {
         throw;
     };
 
@@ -157,8 +157,8 @@ public:
         return m_special_region_of_interest;
     }
 
-    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_unaffected_region_of_interest() const {
-        return m_unaffected_region_of_interest;
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_disjoint_special_region_of_interest() const {
+        return m_disjoint_special_region_of_interest;
     }
 
 };

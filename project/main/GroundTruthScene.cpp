@@ -177,6 +177,23 @@ void GroundTruthSceneInternal::startEvaluating(std::unique_ptr<Noise> &noise) {
 
     }
 
+    for (ushort sen_index = 0; sen_index < cppObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customSensorMetaDataList().size(); sen_index++) {
+
+        // how many sensors were found. The assumption is that in each frame, the number of sensors would be constant.
+
+        for (ushort sensor_group_index = 0; sensor_group_index < m_evaluation_sensor_list.size(); sensor_group_index++ ) {
+
+            Sensors gt_sen(cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorStartPoint(), noise,
+                           cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorName());
+            m_list_gt_sensors.push_back(gt_sen);
+            // each sensor is monitored by n sensor group.
+
+            m_list_gt_sensors.at(sen_index).beginGroundTruthGeneration(*cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(sen_index));
+
+        }
+
+    }
+
 }
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
@@ -212,7 +229,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                     noise = std::make_unique<WhiteNoise>(whiteNoise_);
                 }
                 //noise = std::make_unique<BlackNoise>(blackNoise);
-                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise);
+                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise, sensor_group_index);
                 cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("cpp_");
 
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
@@ -224,6 +241,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             }
         } else { // do not genreate yaml file
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
             }
