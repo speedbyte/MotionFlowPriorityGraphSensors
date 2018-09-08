@@ -169,7 +169,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             }
             // The problem is that VIRES delivers depth map with respect to the rear axle and not the mounted sensor.
             // Still to do -> bounding box upper right and lower left corner is the total depth of the object. Right now, I am just considering a straight depth of 1 unit.
-            ushort offset_x = 2; // m_sensor_gt_all.at(frameNumber).m_sensor_offset_m.offset_x
+            float offset_x = m_list_of_gt_sensors.at(sensor_index).getExtrapolatedGroundTruthDetails().at(0).at(current_frame_index).m_sensor_offset_m.offset_x;
             for (unsigned j = 0; j < gt_frame_stencil_displacement_from_roi.size(); j += 1) {
                 float val = depth_02_frame.at<unsigned char>(gt_frame_stencil_displacement_from_roi.at(j));
                 //std::cout << (ushort)val << "*" << std::round(depth_value_object-3) << " ";
@@ -205,7 +205,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
             // std::sort(object_stencil_displacement.begin(), object_stencil_displacement.end(), PairPointsSort<float>());
             bool isSorted = std::is_sorted(object_stencil_displacement.begin(), object_stencil_displacement.end(), PairPointsSort<float>());
-            assert(isSorted==true);
+            assert(isSorted);
 
             //---------------------------------------------------------------------------------------------------------
             // 5th step - Populate the ground truth object stencil visibility with true

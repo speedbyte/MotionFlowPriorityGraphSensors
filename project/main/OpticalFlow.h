@@ -9,6 +9,7 @@
 #include "GroundTruthObjects.h"
 #include "SimulatedObjects.h"
 #include "FlowImageExtended.h"
+#include "Sensors.h"
 
 
 typedef struct {
@@ -94,6 +95,8 @@ protected:
 
     std::vector<Objects *> &m_ptr_list_simulated_objects;
 
+    std::vector<Sensors> &m_list_of_gt_sensors;
+
     ushort mStepSize;
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_mean_displacement_points;
@@ -115,7 +118,7 @@ protected:
 
 public:
 
-    OpticalFlow( std::vector<ushort> evaluation_list, std::string weather, std::string opticalFlowName, std::vector<GroundTruthObjects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects*>  &ptr_list_simulated_objects, ushort stepSize ) : m_evaluation_list(evaluation_list), m_weather(weather), m_opticalFlowName(opticalFlowName), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
+    OpticalFlow( std::vector<ushort> evaluation_list, std::string weather, std::string opticalFlowName, std::vector<Sensors> &list_of_gt_sensors_base, std::vector<GroundTruthObjects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects*>  &ptr_list_simulated_objects, ushort stepSize ) : m_evaluation_list(evaluation_list), m_weather(weather), m_opticalFlowName(opticalFlowName), m_list_of_gt_sensors(list_of_gt_sensors_base), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 
     const std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS > > > > &getCollisionPoints () const {
         return m_list_sensor_collision_points;

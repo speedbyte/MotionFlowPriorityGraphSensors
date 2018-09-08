@@ -209,7 +209,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
             }
             cv::Mat intersection_image(Dataset::m_frame_size, CV_8UC1);
             int from_to[] = { 2,0 };  // copy the third channel ( channel 2 object id ) to the first channel of intersection_image
-            cv::mixChannels(flow_image, intersection_image, from_to, 1);
+            cv::mixChannels(flow_image, intersection_image, from_to, 1); // the last parameter is the number of pairs
 
             for (ushort obj_combination_index = 0;
                  obj_combination_index < list_of_current_objects_combination.size(); obj_combination_index++) {
@@ -217,13 +217,6 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_1;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_2;
 
-                // The distance calculation is tailored for the dataset with a car and a ped. Not a general case.
-                // To make a general case every corner needs to be considered.
-                region_of_interest_px_str region_of_interest_px_1 = list_of_current_objects_combination.at(obj_combination_index).first->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
-
-                region_of_interest_px_str region_of_interest_px_2 = list_of_current_objects_combination.at(obj_combination_index).second->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
-
-                float x_distance = (float)cv::norm(cv::Point2f((region_of_interest_px_1.x + region_of_interest_px_1.width_px - region_of_interest_px_2.x), region_of_interest_px_1.y - region_of_interest_px_2.y));
 
                 cv::Mat mask_object_1, mask_object_2;
                 cv::Mat mask_object_1_dilated, mask_object_2_dilated;
@@ -259,16 +252,10 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 //cv::imshow("sroi", finalImage);
                 //cv::waitKey(0);
 
-                if ( region_of_interest_px_1.x < region_of_interest_px_2.x + region_of_interest_px_2.width_px ) {
-                    std::cout << "distance between object name "
-                              << list_of_current_objects_combination.at(obj_combination_index).first->getObjectName() <<
-                              " and object name "
-                              << list_of_current_objects_combination.at(obj_combination_index).second->getObjectName() <<
-                    " = " << x_distance << std::endl;
-                }
 
                 for ( auto x = 0; x < special_region_of_interest_1.cols; x++ ) {
                     for ( auto y = 0; y < special_region_of_interest_1.rows; y++) {
+                        // there is only one object per Mat. Hence we can safely scan the whole frame.
                         if ( special_region_of_interest_1.at<unsigned char>(y,x) != 0 ) {
                             frame_special_region_of_interest_1.push_back(std::make_pair(cv::Point2f(x,y), cv::Point2f(0,0)));
                         }
@@ -298,10 +285,25 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 }
                  */
 
+
+                // The distance calculation is tailored for the dataset with a car and a ped. Not a general case.
+                // To make a general case every corner needs to be considered.
+                region_of_interest_px_str region_of_interest_px_1 = list_of_current_objects_combination.at(obj_combination_index).first->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
+
+                region_of_interest_px_str region_of_interest_px_2 = list_of_current_objects_combination.at(obj_combination_index).second->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
+
+                float x_distance = (float)cv::norm(cv::Point2f((region_of_interest_px_1.x + region_of_interest_px_1.width_px - region_of_interest_px_2.x), region_of_interest_px_1.y - region_of_interest_px_2.y));
+
+                if ( region_of_interest_px_1.x < region_of_interest_px_2.x + region_of_interest_px_2.width_px ) {
+                    std::cout << "distance between object name "
+                              << list_of_current_objects_combination.at(obj_combination_index).first->getObjectName() <<
+                              " and object name "
+                              << list_of_current_objects_combination.at(obj_combination_index).second->getObjectName() <<
+                              " = " << x_distance << std::endl;
+                }
+
                 cv::Mat check_intersection(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
-
                 cv::line(check_intersection, cv::Point2f((region_of_interest_px_1.x + region_of_interest_px_1.width_px), region_of_interest_px_1.y), cv::Point2f((region_of_interest_px_2.x), region_of_interest_px_2.y), cv::Scalar(255,0,0) );
-
 
                 //cv::imshow("distance", check_intersection);
                 //cv::waitKey(0);

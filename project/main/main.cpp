@@ -24,8 +24,8 @@
 #include "Utils.h"
 
 // check if depth is correct - DONE
-// interpolate using splash mechanism ( bilateral filter )
 // find values of algorithm displacement at sroi.
+// interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
 // gnuplot for all objects combined diffferent colors.
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
@@ -366,7 +366,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             list_of_gt_objects = list_of_gt_objects_base;
             ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
 
-            PrepareGroundTruth gt_flow(evaluation_list, environ[env_index], ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
+            PrepareGroundTruth gt_flow(evaluation_list, environ[env_index], list_of_gt_sensors_base,ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
 
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" && !vires_dataset.gt) {
@@ -436,9 +436,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 std::vector<Objects *> ptr_list_of_simulated_objects;
                 bool found = false;
 
-                map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
-                map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
-                map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list, environment_list[env_index], tvl, "dual_tvl_flow", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
+                map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", list_of_gt_sensors_base,ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
+                map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", list_of_gt_sensors_base,ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
+                map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list, environment_list[env_index], tvl, "dual_tvl_flow", list_of_gt_sensors_base,ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
 
                 if ( Dataset::m_algorithm_map["LK"]) {
 
@@ -620,7 +620,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::vector<Objects *> ptr_list_of_simulated_objects_base;
             std::vector<Objects *> ptr_list_of_simulated_objects;
 
-            Farneback fback(evaluation_list, "blue_sky", fb, "fback", ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1);
+            Farneback fback(evaluation_list, "blue_sky", fb, "fback", list_of_gt_sensors_base, ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1);
             AlgorithmFlow *algo = &fback;
             // The ground truth generate_flow_frame and image is already available from the base dataset. Hence only results can be
             // calculated here.

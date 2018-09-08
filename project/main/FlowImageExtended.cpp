@@ -18,7 +18,9 @@ void FlowImageExtended::interpolateBackground () {
         // for each pixel do
         for (int32_t u=0; u<width_; u++) {
 
-            // if flow is valid
+            // if flow is valid. valid flows contains unsigned integers except 65535.
+            // -1 is preserved for no flow detected
+            // 65535 is default value of the flow frame.
             if ( (getObjectId(u,v) != -1) && (getObjectId(u,v) != 65535) ) {
 
                 // at least one pixel requires interpolation

@@ -14,6 +14,8 @@ class Sensors {
 
 private:
 
+    void generate_sen_base_point_displacement(SensorMetaData gt_data);
+
 protected:
 
     std::vector<STRUCT_GT_SENSORS_ALL> m_sen_base_all;
@@ -29,7 +31,6 @@ protected:
     std::vector<bool> m_sen_base_visibility;
 
     std::vector<std::vector<bool> >  m_sen__visibility;
-
 
 public:
 
@@ -65,8 +66,6 @@ public:
     void setSensorName(std::string sensorName) {
         m_sensorName = sensorName;
     }
-
-    void generate_sen_base_point_displacement(SensorMetaData gt_data);
 
     void generate_sen__pixel_position_pixel_displacement();
 
