@@ -1,6 +1,7 @@
 #include "OpticalFlow.h"
 #include <gnuplot-iostream/gnuplot-iostream.h>
 #include "Utils.h"
+#include "SortandIntersect.h"
 
 void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
@@ -257,12 +258,30 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
 
                             // sroi pixels
-                            for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_GT_SPECIAL_ROI; cluster_index++) {
 
+                            // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
+                            std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_algorithm_and_sroi;
 
-                                // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
-                                cv::Point2f algo_displacement = entire_roi_object.at(datafilter_index
-                                ).at(sensor_index).at(current_frame_index).at(cluster_index).(special_roi_object.at(sensor_index).at(current_frame_index).at(cluster_index).second);
+                            MyIntersection intersection_eroi_sroi_objects;
+                            std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
+
+                            result_it = intersection_eroi_sroi_objects.find_intersection_pair(entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(),
+                                                                                        intersection_of_algorithm_and_sroi.begin());
+                            intersection_of_algorithm_and_sroi = intersection_eroi_sroi_objects.getResultIntersectingPair();
+                            //assert(intersection_of_algorithm_and_sroi.size() > 0);
+                            // Validate
+                            cv::Mat tempImage;
+                            tempImage = cv::Scalar::all(255);
+                            for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
+                                cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
+                            }
+                            //cv::imshow("algorithm_sroi", tempImage);
+                            //cv::waitKey(0);
+                            cv::destroyAllWindows();
+
+                            for (auto cluster_index = 0; cluster_index < intersection_of_algorithm_and_sroi.size(); cluster_index++) {
+
+                                cv::Point2f algo_displacement = intersection_of_algorithm_and_sroi.at(cluster_index).second;
 
                                 // l1_cumulative_distance_sroi_pixels
                                 auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
@@ -310,6 +329,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
                             }
 
+
+                            // start gnuplotting
                             std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
                             gt_mean_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
                             algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x, evaluationData.at(obj_index).mean_displacement.y));
