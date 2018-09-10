@@ -158,6 +158,8 @@ public:
 
     void save_flow_vector(ushort SENSOR_COUNT);
 
+    void rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list);
+
     void generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT);
 
     void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_shape_points);

@@ -268,9 +268,14 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             result_it = intersection_eroi_sroi_objects.find_intersection_pair(entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(),
                                                                                         intersection_of_algorithm_and_sroi.begin());
                             intersection_of_algorithm_and_sroi = intersection_eroi_sroi_objects.getResultIntersectingPair();
+                            bool isSorted = std::is_sorted(entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                            assert(isSorted);
+                            bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                            assert(isSorted_sroi);
+
                             //assert(intersection_of_algorithm_and_sroi.size() > 0);
                             // Validate
-                            cv::Mat tempImage;
+                            cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
                             tempImage = cv::Scalar::all(255);
                             for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
                                 cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));

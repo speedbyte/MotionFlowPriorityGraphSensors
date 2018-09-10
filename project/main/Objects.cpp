@@ -19,6 +19,14 @@ void Objects::push_back_object_stencil_point_displacement_pixel_visibility(
 
 }
 
+void Objects::assign_object_stencil_point_displacement_pixel_visibility(
+        std::vector<std::pair<cv::Point2f, cv::Point2f> > sensor_stencil_movement,  std::vector<bool>  sensor_stencil_visibility, ushort sensor_index, ushort current_frame_index ) {
+
+    m_object_stencil_point_displacement.at(sensor_index).at(current_frame_index) = sensor_stencil_movement;
+    m_object_stencil_visibility.at(sensor_index).at(current_frame_index) = sensor_stencil_visibility;
+
+}
+
 void Objects::push_back_object_stencil_point_disjoint_displacement_pixel_visibility(
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_disjoint_movement,  std::vector<std::vector<bool> > sensor_stencil_disjoint_visibility ) {
 

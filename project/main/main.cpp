@@ -510,10 +510,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     // TODO - do something for stepSize.. its redundant here.
                     /// run optical flow algorithm
                     list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list, video_frames, fps);
+
                     /// combine sensor data
                     if ( (evaluation_list.size() + 1%evaluation_list.size()) > 1 ) {
                         list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
                     }
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+
                     if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
                             list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
@@ -530,7 +533,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                         list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "algorithm");
                     }
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
                     /// analysis and metrics
                     list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));

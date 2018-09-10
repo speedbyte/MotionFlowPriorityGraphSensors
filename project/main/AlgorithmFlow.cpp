@@ -118,6 +118,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
                 needToInit = false;
                 /// execute optical flow algorithms and get the flow vectors
                 execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
+                //its already executed. fill frame_next_pts_array, displacement_array with values. The combination of this is stored in interpolated_stencil_pts_displacement
 
                 for (unsigned i = 0; i < frame_next_pts_array.size(); i++) {
                     //cv::circle(image_02_frame, frame_next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
@@ -166,6 +167,8 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
     }
 
 }
+
+
 
 void AlgorithmFlow::combine_sensor_data() {
 
