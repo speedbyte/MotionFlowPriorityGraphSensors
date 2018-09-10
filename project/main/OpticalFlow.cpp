@@ -419,14 +419,13 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
                     max_magnitude = std::max((float) cv::norm(displacement), max_magnitude);
 
-                    displacement.x = 1;
-                    displacement.y = 1;
+                    displacement.x = 0;
+                    displacement.y = 0;
 
                     F_png_write.setFlowU(pts.x, pts.y, displacement.x);
                     F_png_write.setFlowV(pts.x, pts.y, displacement.y);
                     F_png_write.setObjectId(pts.x, pts.y, -1);
                 }
-
 
                 //F_png_write.interpolateBackground();
                 F_png_write.write(flow_path);
@@ -434,21 +433,23 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
             }
 
-            std::vector<float> new_interpolated_frame_vector;
+            std::vector<cv::Point2f> new_interpolated_frame_vector;
 
             // read flow vector
-            /*
+
             cv::Mat interpolatedFrame = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
+            cv::cvtColor(interpolatedFrame, interpolatedFrame, CV_RGB2BGR);
             for ( auto row=0; row < Dataset::m_frame_size.height; row++) {
                 for ( auto col=0; col < Dataset::m_frame_size.width; col++) {
-                    //if ( interpolatedFrame.at<cv::Vec3s>(row,col)[0] != -1 && )
-                    std::cout << interpolatedFrame.at<cv::Vec3s>(row,col)[0] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[1] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[2] << std::endl;
-                    //new_interpolated_frame_vector.push_back(interpolatedFrame.at<cv::Vec3s>(row,col)[0]);
+                    if ( interpolatedFrame.at<cv::Vec3w>(row,col)[2] != 0 )
+                    //std::cout << interpolatedFrame.at<cv::Vec3s>(row,col)[0] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[1] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[2] << std::endl;
+                    new_interpolated_frame_vector.push_back(cv::Point2f((float)((interpolatedFrame.at<cv::Vec3w>(row,col)[0]-32768.0f)/64.0f), (float)((interpolatedFrame.at<cv::Vec3w>(row,col)[1]-32768.0f)/64.0f)));
                 }
-            }*/
+            }
             // convert opencv to vector. This vector will be used as frame_next_pts_displacement_array and then intersected with m_ptr_list_objects.
             // store the frame_next_pts_displacement_array.
-            //rerun_optical_flow_algorithm(m_evaluation_list);
+            rerun_optical_flow_algorithm(m_evaluation_list, new_interpolated_frame_vector);
+            std::cout << "comehere";
         }
     }
 
@@ -457,7 +458,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 }
 
 
-void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list) {
+void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list, std::vector<cv::Point2f> &new_interpolated_frame_vector) {
 
     for ( ushort sensor_index = 0; sensor_index < evaluation_sensor_list.size(); sensor_index++ ) {
 
@@ -513,6 +514,7 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
             std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
+            frame_next_pts_array = new_interpolated_frame_vector;
 
             // Convert to grayscale
             cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
@@ -524,12 +526,13 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
                 needToInit = false;
                 /// execute optical flow algorithms and get the flow vectors
-               // execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
+                //execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
 
+                /*
                 for (unsigned i = 0; i < frame_next_pts_array.size(); i++) {
                     //cv::circle(image_02_frame, frame_next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
                     cv::arrowedLine(image_02_frame, frame_prev_pts_array[i], frame_next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
-                }
+                }*/
 
                 /// put data in object_stencil_displacement
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > dummy;

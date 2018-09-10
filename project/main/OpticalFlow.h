@@ -158,7 +158,7 @@ public:
 
     void save_flow_vector(ushort SENSOR_COUNT);
 
-    void rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list);
+    void rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list, std::vector<cv::Point2f> &new_interpolated_frame_vector);
 
     void generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT);
 

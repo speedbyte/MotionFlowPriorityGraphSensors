@@ -52,9 +52,11 @@ public:
                 val.green = 0;
                 val.blue  = 0;
                 if (getObjectId(u,v) != 65535) {
+                    // -512 to 512 displacement values can be coded
+                    // 0 correspeonds to 32768
                     val.red   = (uint16_t)std::max(std::min(getFlowU(u,v)*64.0f+32768.0f,65535.0f),0.0f);
                     val.green = (uint16_t)std::max(std::min(getFlowV(u,v)*64.0f+32768.0f,65535.0f),0.0f);
-                    val.blue  = (uint16_t)getObjectId(u,v);
+                    val.blue  = (uint16_t)std::max(std::min(getObjectId(u,v)*64.0f+32768.0f,65535.0f),0.0f);
                 }
                 image.set_pixel(u,v,val);
             }
