@@ -21,7 +21,7 @@ void FlowImageExtended::interpolateBackground () {
             // if flow is valid. valid flows contains unsigned integers except 65535.
             // -1 is preserved for no flow detected
             // 65535 is default value of the flow frame.
-            if ( (getObjectId(u,v) != -1) && (getObjectId(u,v) != 65535) ) {
+            if ( (getObjectId(u,v) != -1) && (getObjectId(u,v) != -512) ) {
 
                 // at least one pixel requires interpolation
                 if (count>=1) {
@@ -56,7 +56,7 @@ void FlowImageExtended::interpolateBackground () {
         /*
         // extrapolate to the left
         for (int32_t u=0; u<width_; u++) {
-            if ((getObjectId(u,v) != -1) && (getObjectId(u,v) != 65535)) {
+            if ((getObjectId(u,v) != -1) && (getObjectId(u,v) != -512)) {
                 for (int32_t u2=0; u2<u; u2++) {
                     setFlowU(u2,v,getFlowU(u,v));
                     setFlowV(u2,v,getFlowV(u,v));
@@ -69,7 +69,7 @@ void FlowImageExtended::interpolateBackground () {
 
         // extrapolate to the right
         for (int32_t u=width_-1; u>=0; u--) {
-            if ((getObjectId(u,v) != -1) && (getObjectId(u,v) != 65535)) {
+            if ((getObjectId(u,v) != -1) && (getObjectId(u,v) != -512)) {
                 for (int32_t u2=u+1; u2<=width_-1; u2++) {
                     setFlowU(u2,v,getFlowU(u,v));
                     setFlowV(u2,v,getFlowV(u,v));
@@ -87,7 +87,7 @@ void FlowImageExtended::interpolateBackground () {
 
         // extrapolate to the top
         for (int32_t v=0; v<height_; v++) {
-            if ((getObjectId(u,v) != -1) && (getObjectId(u,v) != 65535)) {
+            if ((getObjectId(u,v) != -1) && (getObjectId(u,v) != -512)) {
                 for (int32_t v2=0; v2<v; v2++) {
                     setFlowU(u,v2,getFlowU(u,v));
                     setFlowV(u,v2,getFlowV(u,v));
@@ -99,7 +99,7 @@ void FlowImageExtended::interpolateBackground () {
 
         // extrapolate to the bottom
         for (int32_t v=height_-1; v>=0; v--) {
-            if ((getObjectId(u,v) != -1) && (getObjectId(u,v) != 65535)) {
+            if ((getObjectId(u,v) != -1) && (getObjectId(u,v) != -512)) {
                 for (int32_t v2=v+1; v2<=height_-1; v2++) {
                     setFlowU(u,v2,getFlowU(u,v));
                     setFlowV(u,v2,getFlowV(u,v));

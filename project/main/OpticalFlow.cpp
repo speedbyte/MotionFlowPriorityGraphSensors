@@ -282,6 +282,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 std::cout << "found " << object_stencil_displacement.size() << " disjoint " << frame_stencil_disjoint_displacement.size() << " total " << m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() << std::endl;
 
+                assert( ((object_stencil_displacement.size() + frame_stencil_disjoint_displacement.size()) <=  m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() + 20)
+                         || ((object_stencil_displacement.size() + frame_stencil_disjoint_displacement.size())  >= m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() - 20));
+
                 //InterpolateData interpolateData;
                 //interpolateData.interpolateBackground(object_stencil_displacement, frame_stencil_disjoint_displacement);
 
@@ -344,6 +347,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
     std::vector<Objects *> list_of_current_objects;
 
+
     if (m_opticalFlowName == "ground_truth") {
         for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
             list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
@@ -401,7 +405,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
                     F_png_write.setFlowU(pts.x, pts.y, displacement.x);
                     F_png_write.setFlowV(pts.x, pts.y, displacement.y);
-                    F_png_write.setObjectId(pts.x, pts.y, (obj_index+1));
+                    F_png_write.setObjectId(pts.x, pts.y, (obj_index));
                 }
 
                 unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) list_of_current_objects.at(obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
@@ -426,7 +430,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                     F_png_write.setObjectId(pts.x, pts.y, -1);
                 }
 
-                //F_png_write.interpolateBackground();
+                F_png_write.interpolateBackground();
                 F_png_write.write(flow_path);
                 F_png_write.writeColor(plot_path, max_magnitude);
 
@@ -454,16 +458,9 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
         std::vector<std::vector<std::vector<bool> >  > multiframe_visibility(m_ptr_list_simulated_objects.size());
 
-        bool needToInit = true;
-
-        cv::Mat curGray, prevGray;
-
-        std::vector<cv::Point2f> frame_prev_pts_array;
-
         std::cout << "rerun algorithm results will be stored in " << m_resultordner << std::endl;
 
         for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
-
 
             std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
@@ -472,40 +469,30 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
                     (0).at(current_frame_index).frame_no;
 
             sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
-
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-            // read flow vector
 
+            // read flow vector
             cv::Mat interpolatedFrame = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
             if ( interpolatedFrame.empty() ) {
                 std::cerr << flow_path << " not found" << std::endl;
                 throw ("No image file found error");
             }
-
-            std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
-            cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
-            if ( image_02_frame.data == NULL ) {
-                std::cerr << input_image_path << " not found" << std::endl;
-                throw ("No image file found error");
-            }
-
-            std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
-
             cv::cvtColor(interpolatedFrame, interpolatedFrame, CV_RGB2BGR);
+
             for ( auto row=0; row < Dataset::m_frame_size.height; row++) {
                 for ( auto col=0; col < Dataset::m_frame_size.width; col++) {
 
-                    if ( interpolatedFrame.at<cv::Vec3w>(row,col)[2] != 0 ) {
-                        //std::cout << interpolatedFrame.at<cv::Vec3s>(row,col)[0] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[1] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[2] << std::endl;
+                    if ( (interpolatedFrame.at<cv::Vec3w>(row,col)[2] != 0 ) && (interpolatedFrame.at<cv::Vec3w>(row,col)[2] != 32704) ) { //never initialised value ( -512 ) && no algorithm detected value ( -1 )
+                        //std::cout << interpolatedFrame.at<cv::Vec3w>(row,col)[0] << " " << interpolatedFrame.at<cv::Vec3w>(row,col)[1] << " " << interpolatedFrame.at<cv::Vec3w>(row,col)[2] << std::endl;
                         frame_next_pts_array.push_back(cv::Point2f(col, row));
-                        displacement_array.push_back(cv::Point2f((float)((interpolatedFrame.at<cv::Vec3w>(row,col)[0]-32768.0f)/64.0f), (float)((interpolatedFrame.at<cv::Vec3w>(row,col)[1]-32768.0f)/64.0f)));
+                        displacement_array.push_back(cv::Point2f(((interpolatedFrame.at<cv::Vec3w>(row,col)[0]-32768.0f)/64.0f), ((interpolatedFrame.at<cv::Vec3w>(row,col)[1]-32768.0f)/64.0f)));
 
                     }
                 }
             }
             // convert opencv to vector. This vector will be used as frame_next_pts_displacement_array and then intersected with m_ptr_list_objects.
             // store the frame_next_pts_displacement_array.
-            std::cout << "comehere";
+            std::cout << "comehere" << std::endl;
 
 
             // Calculate optical generate_flow_frame map using LK algorithm
@@ -513,7 +500,6 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
                 std::cout << "current_frame " << image_frame_count << std::endl;
 
-                needToInit = false;
                 /// execute optical flow algorithms and get the flow vectors
                 //execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
 
@@ -538,14 +524,6 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
                 }
 
             }
-
-            // Display the output image
-            //cv::namedWindow(m_resultordner+"_" + std::to_string(current_frame_index), CV_WINDOW_AUTOSIZE);
-            //cv::imshow(m_resultordner+"_"+std::to_string(current_frame_index), image_02_frame);
-            //cv::waitKey(0);
-            cv::destroyAllWindows();
-            cv::imwrite(position_path, image_02_frame);
-
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {

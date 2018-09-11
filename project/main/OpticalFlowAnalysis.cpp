@@ -76,6 +76,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
 
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > gt_roi_object = m_ptr_list_gt_objects.at(
+                            obj_index)->get_object_stencil_point_displacement();
+
+
                     // displacements found by the ground truth for this object
                     auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
                             obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
@@ -83,9 +87,11 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     unsigned CLUSTER_COUNT_GT_SPECIAL_ROI = (unsigned) special_roi_object.at(sensor_index).at(
                             current_frame_index).size();
 
+                    /*
                     unsigned CLUSTER_COUNT_DISJOINT_SPECIAL_ROI = (unsigned) m_ptr_list_gt_objects.at(
                             obj_index)->get_object_disjoint_special_region_of_interest().at(sensor_index).at(
                             current_frame_index).size();
+                            */
 
                     evaluationData.at(obj_index).current_frame_index = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
@@ -357,7 +363,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 MyIntersection intersection_interpolated_eroi_sroi_objects;
                                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it_interpolated;
 
-                                result_it_interpolated = intersection_interpolated_eroi_sroi_objects.find_intersection_pair(entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).begin(), entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(),
+                                result_it_interpolated = intersection_interpolated_eroi_sroi_objects.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(),
                                                                                                                intersection_of_interpolated_algorithm_and_sroi.begin());
                                 intersection_of_interpolated_algorithm_and_sroi = intersection_interpolated_eroi_sroi_objects.getResultIntersectingPair();
                                 bool isSorted = std::is_sorted(entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).begin(), entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
@@ -372,8 +378,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 for ( auto it = intersection_of_interpolated_algorithm_and_sroi.begin(); it != intersection_of_interpolated_algorithm_and_sroi.end(); it++) {
                                     cv::circle(tempImageInterpolated, (*it).first, 1, cv::Scalar(255,0,0));
                                 }
-                                cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
-                                cv::waitKey(0);
+                                //cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
+                                //cv::waitKey(0);
                                 cv::destroyAllWindows();
 
                                 for (auto cluster_index = 0; cluster_index < intersection_of_interpolated_algorithm_and_sroi.size(); cluster_index++) {
