@@ -147,6 +147,13 @@ public:
         return m_object_stencil_point_disjoint_displacement;
     };
 
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_interpolated_stencil_point_displacement() const {
+        return m_object_interpolated_stencil_point_displacement;
+    };
+
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_interpolated_stencil_point_disjoint_displacement() const {
+        return m_object_interpolated_stencil_point_disjoint_displacement;
+    };
 
     const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_edge_point_displacement() const {
         return m_object_edge_point_displacement;
