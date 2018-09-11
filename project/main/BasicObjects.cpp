@@ -289,7 +289,7 @@ void BasicObjects::validate_depth_images() {
     // Additionally stores the frames in a png file
     // Additionally stores the position in a png file
     unsigned long FRAME_COUNT = 0;
-    FRAME_COUNT = Dataset::ITERATION_END_POINT;
+    FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
     assert(FRAME_COUNT > 0);
 
     char sensor_index_folder_suffix[50];

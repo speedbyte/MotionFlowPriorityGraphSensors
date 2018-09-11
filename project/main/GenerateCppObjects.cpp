@@ -40,13 +40,16 @@ void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
 
     Achterbahn achterbahn;
 
+    ushort start_point_1 = 100; // 100
+    ushort start_point_2 = 220; // 220
+
     Canvas canvas((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, noise);
     Canvas background((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, objectNoise);
 
-    achterbahn = Achterbahn("rectangle_long", 100);
+    achterbahn = Achterbahn("rectangle_long", start_point_1);
     achterbahn.process(Dataset::m_frame_size);
 
-    Ramp ramp = Ramp("rectangle_long", 100);
+    Ramp ramp = Ramp("rectangle_long", start_point_1);
     ramp.process(Dataset::m_frame_size);
 
     objectMetaDataList.at(0) = achterbahn;
@@ -54,10 +57,10 @@ void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
     objectMetaDataList.at(0).setCppData();
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
-    achterbahn = Achterbahn("random_object", 220);
+    achterbahn = Achterbahn("random_object", start_point_2);
     achterbahn.process(Dataset::m_frame_size);
 
-    NegativeRamp negativeRamp = NegativeRamp("random_object", 100);
+    NegativeRamp negativeRamp = NegativeRamp("random_object", start_point_2);
     negativeRamp.process(Dataset::m_frame_size);
 
     objectMetaDataList.at(1) = achterbahn;

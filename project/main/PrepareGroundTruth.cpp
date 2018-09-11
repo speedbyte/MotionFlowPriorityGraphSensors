@@ -55,9 +55,6 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
 
     for (ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
 
-        std::cout << "generate_object_stencil_point_displacement_pixel_visibility for sensor_index " << sensor_index
-                  << std::endl;
-
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(
                 m_ptr_list_gt_objects.size());
         std::vector<std::vector<std::vector<bool> > > multiframe_visibility(m_ptr_list_gt_objects.size());
@@ -122,8 +119,7 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
 
     std::cout << "end of saving " + m_resultordner + " flow files in an vector" << std::endl;
 
-    //save_flow_vector((ushort)(SENSOR_COUNT));
-    find_ground_truth_object_special_region_of_interest((ushort)(SENSOR_COUNT));
+    save_flow_vector((ushort)(SENSOR_COUNT));
 
 }
 
@@ -191,18 +187,9 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
             std::cout << "current_frame_index  " << current_frame_index << std::endl;
 
-            std::vector<std::pair<Objects *, Objects *> > list_of_current_objects_combination;
             std::vector<std::pair<Objects *, Objects *> > list_of_gt_objects_combination;
-            std::vector<std::pair<Objects *, Objects *> > list_of_simulated_objects_combination;
 
-            if (m_opticalFlowName == "ground_truth") {
-                getCombination(ptr_list_of_derived_objects, list_of_gt_objects_combination);
-                list_of_current_objects_combination = list_of_gt_objects_combination;
-
-            } else {
-                getCombination(m_ptr_list_simulated_objects, list_of_simulated_objects_combination);
-                list_of_current_objects_combination = list_of_simulated_objects_combination;
-            }
+            getCombination(ptr_list_of_derived_objects, list_of_gt_objects_combination);
 
             cv::Mat flow_image = cv::imread(flow_path, CV_LOAD_IMAGE_COLOR);
             if ( flow_image.empty() ) {
@@ -213,7 +200,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
             cv::mixChannels(flow_image, intersection_image, from_to, 1); // the last parameter is the number of pairs
 
             for (ushort obj_combination_index = 0;
-                 obj_combination_index < list_of_current_objects_combination.size(); obj_combination_index++) {
+                 obj_combination_index < list_of_gt_objects_combination.size(); obj_combination_index++) {
 
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_1;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_2;
@@ -222,8 +209,8 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 cv::Mat mask_object_1, mask_object_2;
                 cv::Mat mask_object_1_dilated, mask_object_2_dilated;
 
-                ushort val_1 = (ushort)(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId() + 127);
-                ushort val_2 = (ushort)(list_of_current_objects_combination.at(obj_combination_index).second->getObjectId() + 127);
+                ushort val_1 = (ushort)(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId() + 127);
+                ushort val_2 = (ushort)(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId() + 127);
 
                 cv::inRange(intersection_image, val_1, val_1, mask_object_1);
                 cv::inRange(intersection_image, val_2, val_2, mask_object_2);
@@ -275,9 +262,9 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 // Hence this list will grow in case a single object has interesection points with multiple objects.
                 // back_inserter simply pushes back the values and is an easy way to tackle appending an array.
 
-                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId())));
+                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
 
-                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_current_objects_combination.at(obj_combination_index).second->getObjectId())));
+                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
 
                 // alternative and efficient method is stated above. Leaving this just for reference.
                 /*
@@ -289,17 +276,17 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
                 // The distance calculation is tailored for the dataset with a car and a ped. Not a general case.
                 // To make a general case every corner needs to be considered.
-                region_of_interest_px_str region_of_interest_px_1 = list_of_current_objects_combination.at(obj_combination_index).first->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
+                region_of_interest_px_str region_of_interest_px_1 = list_of_gt_objects_combination.at(obj_combination_index).first->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
 
-                region_of_interest_px_str region_of_interest_px_2 = list_of_current_objects_combination.at(obj_combination_index).second->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
+                region_of_interest_px_str region_of_interest_px_2 = list_of_gt_objects_combination.at(obj_combination_index).second->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;
 
                 float x_distance = (float)cv::norm(cv::Point2f((region_of_interest_px_1.x + region_of_interest_px_1.width_px - region_of_interest_px_2.x), region_of_interest_px_1.y - region_of_interest_px_2.y));
 
                 if ( region_of_interest_px_1.x < region_of_interest_px_2.x + region_of_interest_px_2.width_px ) {
                     std::cout << "distance between object name "
-                              << list_of_current_objects_combination.at(obj_combination_index).first->getObjectName() <<
+                              << list_of_gt_objects_combination.at(obj_combination_index).first->getObjectName() <<
                               " and object name "
-                              << list_of_current_objects_combination.at(obj_combination_index).second->getObjectName() <<
+                              << list_of_gt_objects_combination.at(obj_combination_index).second->getObjectName() <<
                               " = " << x_distance << std::endl;
                 }
 
@@ -323,46 +310,40 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > gt_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement();
 
-                {
+                // sroi pixels
+                // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_gt_and_sroi;
 
-                    // sroi pixels
-                    // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
-                    std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_gt_and_sroi;
+                MyIntersection intersection;
+                std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 
-                    MyIntersection intersection;
-                    std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
+                result_it = intersection.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.begin(), special_roi_object.end(),
+                                                                intersection_of_gt_and_sroi.begin());
+                intersection_of_gt_and_sroi = intersection.getResultIntersectingPair();
+                bool isSorted = std::is_sorted(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                assert(isSorted);
+                bool isSorted_sroi = std::is_sorted(special_roi_object.begin(), special_roi_object.end(), PairPointsSort<float>());
+                assert(isSorted_sroi);
 
-                    result_it = intersection.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.begin(), special_roi_object.end(),
-                                                                    intersection_of_gt_and_sroi.begin());
-                    intersection_of_gt_and_sroi = intersection.getResultIntersectingPair();
-                    bool isSorted = std::is_sorted(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                    assert(isSorted);
-                    bool isSorted_sroi = std::is_sorted(special_roi_object.begin(), special_roi_object.end(), PairPointsSort<float>());
-                    assert(isSorted_sroi);
-
-                    //assert(intersection_of_algorithm_and_sroi.size() > 0);
-                    // Validate
-                    cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
-                    tempImage = cv::Scalar::all(255);
-                    for ( auto it = gt_roi_object.at(sensor_index).at(current_frame_index).begin(); it != gt_roi_object.at(sensor_index).at(current_frame_index).end(); it++) {
-                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,255,0));
-                    }
-                    for ( auto it = special_roi_object.begin(); it != special_roi_object.end(); it++) {
-                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
-                    }
-                    for ( auto it = intersection_of_gt_and_sroi.begin(); it != intersection_of_gt_and_sroi.end(); it++) {
-                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
-                    }
-
-                    cv::imshow("gt_sroi", tempImage);
-                    cv::waitKey(0);
-                    cv::destroyAllWindows();
-
+                //assert(intersection_of_algorithm_and_sroi.size() > 0);
+                // Validate
+                cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
+                tempImage = cv::Scalar::all(255);
+                for ( auto it = gt_roi_object.at(sensor_index).at(current_frame_index).begin(); it != gt_roi_object.at(sensor_index).at(current_frame_index).end(); it++) {
+                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,255,0));
+                }
+                for ( auto it = special_roi_object.begin(); it != special_roi_object.end(); it++) {
+                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
+                }
+                for ( auto it = intersection_of_gt_and_sroi.begin(); it != intersection_of_gt_and_sroi.end(); it++) {
+                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
                 }
 
+                //cv::imshow("gt_sroi", tempImage);
+                //cv::waitKey(0);
+                cv::destroyAllWindows();
+
             }
-
-
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {

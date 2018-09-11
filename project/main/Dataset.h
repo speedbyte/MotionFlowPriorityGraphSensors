@@ -25,6 +25,7 @@ public:
 
     static ushort ITERATION_START_POINT;
     static ushort ITERATION_END_POINT;
+    static bool GENERATE;
     static ushort MAX_ITERATION_RESULTS;
     static ushort MAX_GENERATION_DATASET;
     static ushort MAX_ITERATION_GT_SCENE_GENERATION_DATASET;
@@ -40,7 +41,7 @@ public:
     static bool m_execute_algorithm;
 
     static void fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
-            std::string unterordner, std::string resultordner, ushort start, ushort stop, ushort max_frames_dataset, std::map<std::string, bool> dataprocessing_map,
+            std::string unterordner, std::string resultordner, bool generate, ushort start, ushort stop, ushort max_frames_dataset, std::map<std::string, bool> dataprocessing_map,
                             std::map<std::string, ushort> algorithm_map);
 
     static const ushort getMakeType();

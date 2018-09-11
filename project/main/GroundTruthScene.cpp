@@ -239,6 +239,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
 
             }
+            startEvaluating(colorfulNoise);
+
         } else { // do not genreate yaml file
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 

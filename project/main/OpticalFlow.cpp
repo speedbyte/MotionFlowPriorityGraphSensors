@@ -409,29 +409,33 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                     F_png_write.setObjectId(pts.x, pts.y, (obj_index));
                 }
 
-                unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) list_of_current_objects.at(obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
+                if ( m_opticalFlowName != "ground_truth" ) {
+                    unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) list_of_current_objects.at(obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
 
-                for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_DISJOINT_DATA; cluster_index++) {
+                    for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_DISJOINT_DATA; cluster_index++) {
 
-                    cv::Point2f pts = list_of_current_objects.at(obj_index)->
-                            get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(
-                            cluster_index).first;
+                        cv::Point2f pts = list_of_current_objects.at(obj_index)->
+                                get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(
+                                cluster_index).first;
 
-                    cv::Point2f displacement = list_of_current_objects.at(obj_index)->
-                            get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(
-                            cluster_index).second;
+                        cv::Point2f displacement = list_of_current_objects.at(obj_index)->
+                                get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(
+                                cluster_index).second;
 
-                    max_magnitude = std::max((float) cv::norm(displacement), max_magnitude);
+                        max_magnitude = std::max((float) cv::norm(displacement), max_magnitude);
 
-                    displacement.x = 0;
-                    displacement.y = 0;
+                        displacement.x = 0;
+                        displacement.y = 0;
 
-                    F_png_write.setFlowU(pts.x, pts.y, displacement.x);
-                    F_png_write.setFlowV(pts.x, pts.y, displacement.y);
-                    F_png_write.setObjectId(pts.x, pts.y, -1);
+                        F_png_write.setFlowU(pts.x, pts.y, displacement.x);
+                        F_png_write.setFlowV(pts.x, pts.y, displacement.y);
+                        F_png_write.setObjectId(pts.x, pts.y, -1);
+                    }
+
+                    // interpolate only for algorithm
+                    F_png_write.interpolateBackground();
                 }
 
-                F_png_write.interpolateBackground();
                 F_png_write.write(flow_path);
                 F_png_write.writeColor(plot_path, max_magnitude);
 

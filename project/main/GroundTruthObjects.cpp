@@ -23,7 +23,13 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
     std::cout << "generate_object_base_point_displacement with start_point " << m_startPoint << std::endl;
 
-    for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
+    ushort FRAME_COUNT;
+    if ( Dataset::GENERATE) {
+        FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
+    } else {
+        FRAME_COUNT = Dataset::MAX_ITERATION_RESULTS;
+    }
+    for (ushort current_frame_index=0; current_frame_index < FRAME_COUNT; current_frame_index++) {
         // The first frame is the reference frame, hence it is skipped
 
         cv::Point2f gt_displacement = {0,0}, gt_displacement_inertial = {0,0}, gt_displacement_usk = {0,0};
@@ -40,7 +46,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         else {
 
             //If we are at the end of the path vector, we need to reset our iterators
-            if (frame_number >= Dataset::ITERATION_END_POINT) {
+            if (frame_number >= Dataset::ITERATION_END_POINT ) {
 
                 frame_number = 0;
                 gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x - gt_data.getAll().at(Dataset::ITERATION_END_POINT - 1).m_object_location_camera_px.cog_px.x;
