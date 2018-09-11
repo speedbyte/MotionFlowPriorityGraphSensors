@@ -59,8 +59,8 @@ public:
         return __result;
     }
 
-    template < typename T1, typename T2, typename R >
-    T1 find_intersection_pair(T1 __first1, T1 __last1, T2 __first2, T2 __last2, R __result)
+    template < typename T1, typename T2 >
+    void find_intersection_pair(T1 __first1, T1 __last1, T2 __first2, T2 __last2)
     {
         while (__first1 != __last1 && __first2 != __last2)
             if (__comp_pair(__first1, __first2))
@@ -69,14 +69,13 @@ public:
                 ++__first2;
             else
             {
-                *__result = *__first1;
-                m_result_pair.push_back(*__result);
+                //*__result = *__first1;
+                m_result_pair.push_back(*__first1);
                 //std::cout << "found intersection" << std::endl;
                 ++__first1;
                 ++__first2;
-                ++__result;
+                //++__result;
             }
-        return __result;
     }
 
     template < typename T1, typename T2, typename R >

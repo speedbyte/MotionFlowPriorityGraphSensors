@@ -247,13 +247,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 //---------------------------------------------------------------------------------------------------------
                 // Look for only those pixels that lie within the ground truth stencil of this particular object
                 MyIntersection myIntersection;
-                std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
-
-                result_it = myIntersection.find_intersection_pair(entire_frame_algorithm_result_pts_displacement.begin(), entire_frame_algorithm_result_pts_displacement.end(),
+                myIntersection.find_intersection_pair(entire_frame_algorithm_result_pts_displacement.begin(), entire_frame_algorithm_result_pts_displacement.end(),
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
-                        m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
-                        object_stencil_displacement.begin());
-
+                        m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end());
                 object_stencil_displacement = myIntersection.getResultIntersectingPair();
                 frame_stencil_visibility.resize(object_stencil_displacement.size());
                 std::fill(frame_stencil_visibility.begin(), frame_stencil_visibility.end(), (bool)1);
@@ -266,11 +262,13 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 // Look for only those pixels that does not lie within the ground truth stencil of this particular object
                 MyIntersection myDisjoint;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_disjoint_it;
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size());
+
 
                 result_disjoint_it = myDisjoint.find_disjoint_pair(object_stencil_displacement.begin(), object_stencil_displacement.end(),
                                                                   m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
                                                                   m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
-                                                                  object_stencil_displacement.begin());
+                                                                  dummy.begin());
 
                 frame_stencil_disjoint_displacement = myDisjoint.getResultDisjointPair();
                 //frame_stencil_disjoint_visibility.resize(frame_stencil_disjoint_displacement.size());

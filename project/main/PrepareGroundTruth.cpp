@@ -317,10 +317,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
 
                 MyIntersection intersection;
-                std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
-
-                result_it = intersection.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.begin(), special_roi_object.end(),
-                                                                dummy.begin());
+                intersection.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.begin(), special_roi_object.end());
                 intersection_of_gt_and_sroi = intersection.getResultIntersectingPair();
                 bool isSorted = std::is_sorted(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                 assert(isSorted);
