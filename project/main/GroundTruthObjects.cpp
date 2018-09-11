@@ -19,7 +19,12 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
     assert(gt_data.getAll().size() >= Dataset::MAX_ITERATION_RESULTS);
 
-    ushort frame_number = m_startPoint;
+    ushort frame_number;;
+    if ( Dataset::GENERATE) {
+        frame_number = 0;
+    } else {
+        frame_number = m_startPoint;
+    }
 
     std::cout << "generate_object_base_point_displacement with start_point " << m_startPoint << std::endl;
 

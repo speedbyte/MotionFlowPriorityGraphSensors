@@ -152,12 +152,15 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             gt_frame_stencil_displacement_from_roi = myIntersection_gt_roi_objects.getResult();
             assert(gt_frame_stencil_displacement_from_roi.size() > 0);
             // Validate
-            tempImage = cv::Scalar::all(255);
+            //tempImage = cv::Scalar::all(255);
             for ( auto it = gt_frame_stencil_displacement_from_roi.begin(); it != gt_frame_stencil_displacement_from_roi.end(); it++) {
-                cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
+                cv::circle(tempImage, (*it), 1, cv::Scalar(0,255,0));
             }
-            //cv::imshow("refined", tempImage);
-            //cv::waitKey(0);
+            for ( auto it = all_moving_objects_in_frame.begin(); it != all_moving_objects_in_frame.end(); it++) {
+                cv::circle(tempImage, (*it), 1, cv::Scalar(0,0,255));
+            }
+            cv::imshow("refined", tempImage);
+            cv::waitKey(0);
             cv::destroyAllWindows();
 
             //---------------------------------------------------------------------------------------------------------
