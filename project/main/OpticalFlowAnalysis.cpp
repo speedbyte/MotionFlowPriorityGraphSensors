@@ -70,7 +70,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
-                    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_list_object_dataprocessing_stencil_points_displacement();
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
@@ -196,11 +196,19 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                         if (m_opticalFlowName != "ground_truth") {
 
                             // displacements found by the algorithm for this object
-                            unsigned CLUSTER_COUNT_ALGORITHM = (unsigned) entire_roi_object.at(datafilter_index).at(sensor_index).at(
+                            unsigned CLUSTER_COUNT_ALGORITHM = (unsigned) entire_roi_object.at(sensor_index).at(
                                     current_frame_index).size();
+
+                            evaluationData.at(
+                                    obj_index).algorithm_pixels_count = (ushort)CLUSTER_COUNT_ALGORITHM; // how many pixels are visible ( it could be that some pixels are occluded )
+
 
                             unsigned CLUSTER_COUNT_INTERPOLATED_ALGORITHM = (unsigned) entire_roi_object_interpolated.at(sensor_index).at(
                                     current_frame_index).size();
+
+
+                            evaluationData.at(
+                                    obj_index).algorithm_interpolated_pixels_count = (ushort)CLUSTER_COUNT_INTERPOLATED_ALGORITHM; // how many pixels are visible ( it could be that some pixels are occluded )
 
                             evaluationData.at(
                                     obj_index).l1_total_count_good_pixels = (ushort) 0;
@@ -222,8 +230,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             // all pixels
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_ALGORITHM; cluster_index++) {
 
-                                cv::Point2f algo_displacement = entire_roi_object.at(datafilter_index
-                                ).at(sensor_index).at(current_frame_index).at(cluster_index).second;
+                                cv::Point2f algo_displacement = entire_roi_object.at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
                                 // l1_cumulative_distance_all_pixels
                                 auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
@@ -329,13 +336,12 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_algorithm_and_sroi;
                                 std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
 
-                                MyIntersection intersection_eroi_sroi_objects;
+                                MyIntersection intersection;
                                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 
-                                result_it = intersection_eroi_sroi_objects.find_intersection_pair(entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(),
-                                                                                                  dummy.begin());
-                                intersection_of_algorithm_and_sroi = intersection_eroi_sroi_objects.getResultIntersectingPair();
-                                bool isSorted = std::is_sorted(entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                                result_it = intersection.find_intersection_pair(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), dummy.begin());
+                                intersection_of_algorithm_and_sroi = intersection.getResultIntersectingPair();
+                                bool isSorted = std::is_sorted(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                                 assert(isSorted);
                                 bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                                 assert(isSorted_sroi);
@@ -347,22 +353,26 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
                                     cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
                                 }
-                                cv::imshow("algorithm_sroi", tempImage);
-                                cv::waitKey(0);
+                                //cv::imshow("algorithm_sroi", tempImage);
+                                //cv::waitKey(0);
                                 cv::destroyAllWindows();
+
+                                evaluationData.at(
+                                        obj_index).algorithm_sroi_pixels_count = (ushort)intersection_of_algorithm_and_sroi.size();
 
                             }
 
                             {
-                                // sroi pixels
+                                // sroi interpolated pixels
                                 // does eroi_interpolated contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
                                 std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_interpolated_algorithm_and_sroi;
+                                std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
 
                                 MyIntersection intersection_interpolated_eroi_sroi_objects;
                                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it_interpolated;
 
                                 result_it_interpolated = intersection_interpolated_eroi_sroi_objects.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(),
-                                                                                                               intersection_of_interpolated_algorithm_and_sroi.begin());
+                                                                                                               dummy.begin());
                                 intersection_of_interpolated_algorithm_and_sroi = intersection_interpolated_eroi_sroi_objects.getResultIntersectingPair();
                                 bool isSorted = std::is_sorted(entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).begin(), entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                                 assert(isSorted);
@@ -376,9 +386,12 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 for ( auto it = intersection_of_interpolated_algorithm_and_sroi.begin(); it != intersection_of_interpolated_algorithm_and_sroi.end(); it++) {
                                     cv::circle(tempImageInterpolated, (*it).first, 1, cv::Scalar(255,0,0));
                                 }
-                                cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
-                                cv::waitKey(0);
+                                //cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
+                                //cv::waitKey(0);
                                 cv::destroyAllWindows();
+
+                                evaluationData.at(
+                                        obj_index).algorithm_interpolated_sroi_pixels_count = (ushort)intersection_of_interpolated_algorithm_and_sroi.size();
 
                                 for (auto cluster_index = 0; cluster_index < intersection_of_interpolated_algorithm_and_sroi.size(); cluster_index++) {
 

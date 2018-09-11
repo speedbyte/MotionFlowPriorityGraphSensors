@@ -20,7 +20,11 @@ typedef struct {
 
     ushort ground_truth_pixels_count;
     ushort algorithm_pixels_count;
+    ushort algorithm_interpolated_pixels_count;
+
     ushort ground_truth_sroi_pixels_count;
+    ushort algorithm_sroi_pixels_count;
+    ushort algorithm_interpolated_sroi_pixels_count;
 
     double l1_cumulative_distance_all_pixels;
     double l2_cumulative_distance_all_pixels;
