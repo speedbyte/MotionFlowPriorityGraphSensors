@@ -71,8 +71,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
         std::vector<cv::Point2f> frame_prev_pts_array;
 
-        std::cout << "results will be stored in " << m_resultordner << std::endl;
-        std::cout << "creating flow files for sensor_index " << sensor_index << std::endl;
+        std::cout << "run algorithm, results will be stored in " << m_resultordner << std::endl;
 
         for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
 

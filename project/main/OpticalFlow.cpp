@@ -241,13 +241,11 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 std::sort(entire_frame_algorithm_result_pts_displacement.begin(), entire_frame_algorithm_result_pts_displacement.end(), PairPointsSort<float>());
                 bool isSorted = std::is_sorted(entire_frame_algorithm_result_pts_displacement.begin(), entire_frame_algorithm_result_pts_displacement.end(), PairPointsSort<float>());
 
-                //327, 250 until 327, 278 in current_frame_index = 1, starts from index 69
-                //327, 250 until 327, 286 in current_frame_index = 1, starts from index 52 . ground truth
-
+                //---------------------------------------------------------------------------------------------------------
+                // Look for only those pixels that lie within the ground truth stencil of this particular object
                 MyIntersection myIntersection;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 
-                // Look for only those pixels that lie within the ground truth stencil of this particular object
                 result_it = myIntersection.find_intersection_pair(entire_frame_algorithm_result_pts_displacement.begin(), entire_frame_algorithm_result_pts_displacement.end(),
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).begin(),
                         m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).end(),
@@ -261,6 +259,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                     cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
                 }
 
+                //---------------------------------------------------------------------------------------------------------
                 // Look for only those pixels that does not lie within the ground truth stencil of this particular object
                 MyIntersection myDisjoint;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_disjoint_it;
@@ -281,7 +280,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 //cv::waitKey(0);
                 cv::destroyAllWindows();
 
-                std::cout << "disjoint " << frame_stencil_disjoint_displacement.size() << " found " << object_stencil_displacement.size() << " total " << m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() << std::endl;
+                std::cout << "found " << object_stencil_displacement.size() << " disjoint " << frame_stencil_disjoint_displacement.size() << " total " << m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() << std::endl;
 
                 //InterpolateData interpolateData;
                 //interpolateData.interpolateBackground(object_stencil_displacement, frame_stencil_disjoint_displacement);
@@ -432,24 +431,6 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                 F_png_write.writeColor(plot_path, max_magnitude);
 
             }
-
-            std::vector<cv::Point2f> new_interpolated_frame_vector;
-
-            // read flow vector
-
-            cv::Mat interpolatedFrame = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
-            cv::cvtColor(interpolatedFrame, interpolatedFrame, CV_RGB2BGR);
-            for ( auto row=0; row < Dataset::m_frame_size.height; row++) {
-                for ( auto col=0; col < Dataset::m_frame_size.width; col++) {
-                    if ( interpolatedFrame.at<cv::Vec3w>(row,col)[2] != 0 )
-                    //std::cout << interpolatedFrame.at<cv::Vec3s>(row,col)[0] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[1] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[2] << std::endl;
-                    new_interpolated_frame_vector.push_back(cv::Point2f((float)((interpolatedFrame.at<cv::Vec3w>(row,col)[0]-32768.0f)/64.0f), (float)((interpolatedFrame.at<cv::Vec3w>(row,col)[1]-32768.0f)/64.0f)));
-                }
-            }
-            // convert opencv to vector. This vector will be used as frame_next_pts_displacement_array and then intersected with m_ptr_list_objects.
-            // store the frame_next_pts_displacement_array.
-            rerun_optical_flow_algorithm(m_evaluation_list, new_interpolated_frame_vector);
-            std::cout << "comehere";
         }
     }
 
@@ -458,7 +439,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 }
 
 
-void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list, std::vector<cv::Point2f> &new_interpolated_frame_vector) {
+void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list) {
 
     for ( ushort sensor_index = 0; sensor_index < evaluation_sensor_list.size(); sensor_index++ ) {
 
@@ -479,31 +460,28 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
         std::vector<cv::Point2f> frame_prev_pts_array;
 
-        std::cout << "results will be stored in " << m_resultordner << std::endl;
-        std::cout << "creating flow files for sensor_index " << sensor_index << std::endl;
+        std::cout << "rerun algorithm results will be stored in " << m_resultordner << std::endl;
 
         for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
 
-            // Break out of the loop if the user presses the Esc key
-            char c = (char) cv::waitKey(10);
-            switch (c) {
-                case 27:
-                    break;
-                case 'r':
-                    needToInit = true;
-                    break;
-                case 'c':
-                    frame_prev_pts_array.clear();
-                    break;
-                default:
-                    break;
-            }
+
+            std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
             char file_name_input_image[50];
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
 
             sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+
+            std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            // read flow vector
+
+            cv::Mat interpolatedFrame = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
+            if ( interpolatedFrame.empty() ) {
+                std::cerr << flow_path << " not found" << std::endl;
+                throw ("No image file found error");
+            }
+
             std::string input_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
             cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
             if ( image_02_frame.data == NULL ) {
@@ -513,14 +491,25 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
             std::string position_path = m_position_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
-            std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
-            frame_next_pts_array = new_interpolated_frame_vector;
+            cv::cvtColor(interpolatedFrame, interpolatedFrame, CV_RGB2BGR);
+            for ( auto row=0; row < Dataset::m_frame_size.height; row++) {
+                for ( auto col=0; col < Dataset::m_frame_size.width; col++) {
 
-            // Convert to grayscale
-            cv::cvtColor(image_02_frame, curGray, cv::COLOR_BGR2GRAY);
+                    if ( interpolatedFrame.at<cv::Vec3w>(row,col)[2] != 0 ) {
+                        //std::cout << interpolatedFrame.at<cv::Vec3s>(row,col)[0] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[1] << " " << interpolatedFrame.at<cv::Vec3s>(row,col)[2] << std::endl;
+                        frame_next_pts_array.push_back(cv::Point2f(col, row));
+                        displacement_array.push_back(cv::Point2f((float)((interpolatedFrame.at<cv::Vec3w>(row,col)[0]-32768.0f)/64.0f), (float)((interpolatedFrame.at<cv::Vec3w>(row,col)[1]-32768.0f)/64.0f)));
+
+                    }
+                }
+            }
+            // convert opencv to vector. This vector will be used as frame_next_pts_displacement_array and then intersected with m_ptr_list_objects.
+            // store the frame_next_pts_displacement_array.
+            std::cout << "comehere";
+
 
             // Calculate optical generate_flow_frame map using LK algorithm
-            if (prevGray.data) {  // Calculate only on second or subsequent images.
+            if (current_frame_index) {  // Calculate only on second or subsequent images.
 
                 std::cout << "current_frame " << image_frame_count << std::endl;
 
@@ -538,9 +527,7 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > dummy;
                 common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility);
 
-            }
-
-            else {
+            } else {
 
                 std::cout << "skipping first frame frame count " << current_frame_index << std::endl;
 
@@ -550,9 +537,6 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
                     multiframe_visibility.at(obj_index).push_back({{false}});
                 }
 
-                needToInit = true;
-                //execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
-
             }
 
             // Display the output image
@@ -561,14 +545,13 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
             //cv::waitKey(0);
             cv::destroyAllWindows();
             cv::imwrite(position_path, image_02_frame);
-            prevGray = curGray.clone();
 
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
 
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement.at(obj_index), multiframe_visibility.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement.at(obj_index), multiframe_visibility.at(obj_index));
 
         }
 

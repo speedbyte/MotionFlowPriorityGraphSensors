@@ -516,6 +516,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
                     }
                     list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->rerun_optical_flow_algorithm(evaluation_list);
 
                     if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {

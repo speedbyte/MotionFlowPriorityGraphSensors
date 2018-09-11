@@ -42,7 +42,13 @@ protected:
             m_object_stencil_point_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_object_interpolated_stencil_point_displacement;
+
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_object_stencil_point_disjoint_displacement;
+
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_object_interpolated_stencil_point_disjoint_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_object_edge_point_displacement;
@@ -58,6 +64,9 @@ protected:
 
     std::vector<std::vector<std::vector<bool> > >
             m_object_stencil_visibility;
+
+    std::vector<std::vector<std::vector<bool> > >
+            m_object_interpolated_stencil_visibility;
 
     std::vector<std::vector<std::vector<cv::Point2f > > >
             m_list_object_line_parameters;
@@ -149,10 +158,14 @@ public:
 
     void push_back_object_stencil_point_displacement_pixel_visibility( std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement,  std::vector<std::vector<bool> > sensor_base_visibility);
 
+    void push_back_object_interpolated_stencil_point_displacement_pixel_visibility( std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_movement,  std::vector<std::vector<bool> > sensor_base_visibility);
+
     void assign_object_stencil_point_displacement_pixel_visibility(
             std::vector<std::pair<cv::Point2f, cv::Point2f> > sensor_stencil_movement,  std::vector<bool> sensor_stencil_visibility, ushort sensor_index, ushort current_frame_index );
 
     void push_back_object_stencil_point_disjoint_displacement_pixel_visibility( std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_disjoint_movement,  std::vector<std::vector<bool> > sensor_base_disjoint_visibility);
+
+    void push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility( std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_base_disjoint_movement,  std::vector<std::vector<bool> > sensor_base_disjoint_visibility);
 
     void generate_edge_contour(ushort SENSOR_COUNT, std::string post_processing_algorithm);
 
