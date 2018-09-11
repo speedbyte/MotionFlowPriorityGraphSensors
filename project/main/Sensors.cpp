@@ -15,11 +15,24 @@ void Sensors::generate_sen_base_point_displacement(SensorMetaData gt_data) {
 
     m_sen_base_all.clear();
     m_sen_base_visibility.clear();
-    ushort frame_number = m_startPoint;
+
+    ushort frame_number;;
+    if ( Dataset::GENERATE) {
+        frame_number = 0;
+    } else {
+        frame_number = m_startPoint;
+    }
+
+    ushort FRAME_COUNT;
+    if ( Dataset::GENERATE) {
+        FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
+    } else {
+        FRAME_COUNT = Dataset::MAX_ITERATION_RESULTS;
+    }
 
     std::cout << "generate_sen_base_point_displacement with start_point " << m_startPoint << std::endl;
 
-    for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
+    for (ushort current_frame_index=0; current_frame_index < FRAME_COUNT; current_frame_index++) {
         // The first frame is the reference frame, hence it is skipped
 
         /*

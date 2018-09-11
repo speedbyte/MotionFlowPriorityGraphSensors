@@ -119,8 +119,6 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
 
     std::cout << "end of saving " + m_resultordner + " flow files in an vector" << std::endl;
 
-    save_flow_vector((ushort)(SENSOR_COUNT));
-
 }
 
 

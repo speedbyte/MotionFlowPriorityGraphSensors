@@ -375,7 +375,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 /// the following snippet generates mean centroid displacement for various data processing algorithms
                 gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
 
-                if (Dataset::GENERATE) {
+                if (Dataset::GENERATE ) {
+                    gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
                     exit(0);
                 }
 
