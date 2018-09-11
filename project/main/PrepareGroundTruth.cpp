@@ -260,16 +260,19 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 // Hence this list will grow in case a single object has interesection points with multiple objects.
                 // back_inserter simply pushes back the values and is an easy way to tackle appending an array.
 
-                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
+                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
 
-                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
+                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
 
                 // alternative and efficient method is stated above. Leaving this just for reference.
                 /*
-                for ( auto x = 0; x < frame_special_region_of_interest_1.size(); x++) {
-                    frame_object_special_region_of_interest_1.at(list_of_current_objects_combination.at(obj_combination_index).first->getObjectId()).push_back(frame_special_region_of_interest_1.at(x));
+                for ( auto x = 0; x < frame_special_region_of_interest_2.size(); x++) {
+                    frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId()).push_back(frame_special_region_of_interest_2.at(x));
                 }
-                 */
+                for ( auto x = 0; x < frame_special_region_of_interest_1.size(); x++) {
+                    frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId()).push_back(frame_special_region_of_interest_1.at(x));
+                }
+                */
 
 
                 // The distance calculation is tailored for the dataset with a car and a ped. Not a general case.
@@ -311,12 +314,13 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
                 // sroi pixels
                 // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_gt_and_sroi;
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
 
                 MyIntersection intersection;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 
                 result_it = intersection.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.begin(), special_roi_object.end(),
-                                                                intersection_of_gt_and_sroi.begin());
+                                                                dummy.begin());
                 intersection_of_gt_and_sroi = intersection.getResultIntersectingPair();
                 bool isSorted = std::is_sorted(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                 assert(isSorted);
@@ -325,22 +329,23 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
                 //assert(intersection_of_algorithm_and_sroi.size() > 0);
                 // Validate
-                cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
-                tempImage = cv::Scalar::all(255);
-                for ( auto it = gt_roi_object.at(sensor_index).at(current_frame_index).begin(); it != gt_roi_object.at(sensor_index).at(current_frame_index).end(); it++) {
-                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,255,0));
-                }
-                for ( auto it = special_roi_object.begin(); it != special_roi_object.end(); it++) {
-                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
-                }
-                for ( auto it = intersection_of_gt_and_sroi.begin(); it != intersection_of_gt_and_sroi.end(); it++) {
-                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
-                }
+                if ( 0 ) {
+                    cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
+                    tempImage = cv::Scalar::all(255);
+                    for ( auto it = gt_roi_object.at(sensor_index).at(current_frame_index).begin(); it != gt_roi_object.at(sensor_index).at(current_frame_index).end(); it++) {
+                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,255,0));
+                    }
+                    for ( auto it = special_roi_object.begin(); it != special_roi_object.end(); it++) {
+                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
+                    }
+                    for ( auto it = intersection_of_gt_and_sroi.begin(); it != intersection_of_gt_and_sroi.end(); it++) {
+                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
+                    }
 
-                //cv::imshow("gt_sroi", tempImage);
-                //cv::waitKey(0);
-                cv::destroyAllWindows();
-
+                    cv::imshow("gt_sroi", tempImage);
+                    cv::waitKey(0);
+                    cv::destroyAllWindows();
+                }
             }
         }
 

@@ -327,12 +327,13 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 // sroi pixels
                                 // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
                                 std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_algorithm_and_sroi;
+                                std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
 
                                 MyIntersection intersection_eroi_sroi_objects;
                                 std::vector<std::pair<cv::Point2f, cv::Point2f> >::iterator result_it;
 
                                 result_it = intersection_eroi_sroi_objects.find_intersection_pair(entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(),
-                                                                                                  intersection_of_algorithm_and_sroi.begin());
+                                                                                                  dummy.begin());
                                 intersection_of_algorithm_and_sroi = intersection_eroi_sroi_objects.getResultIntersectingPair();
                                 bool isSorted = std::is_sorted(entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(datafilter_index).at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                                 assert(isSorted);
@@ -346,8 +347,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                 for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
                                     cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
                                 }
-                                //cv::imshow("algorithm_sroi", tempImage);
-                                //cv::waitKey(0);
+                                cv::imshow("algorithm_sroi", tempImage);
+                                cv::waitKey(0);
                                 cv::destroyAllWindows();
 
                             }
