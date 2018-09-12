@@ -2,6 +2,7 @@
 #include <gnuplot-iostream/gnuplot-iostream.h>
 #include "Utils.h"
 #include "SortandIntersect.h"
+#include "Objects.h"
 
 void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
@@ -63,9 +64,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                 std::cout << "current_frame_index " << current_frame_index << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
 
-                Gnuplot gp2d;
-                cv::Mat stich_plots;
-
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
 
@@ -93,6 +91,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     if (evaluationData.at(obj_index).visiblity) {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
+
+                        evaluationData.at(obj_index).regression_line = list_of_current_objects.at(obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(current_frame_index).regression_line;
 
                         evaluationData.at(obj_index).mean_pts = list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
@@ -235,133 +237,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             COUNT_METRICS &special_roi_object_interpolated_count_analysis = evaluationData.at(obj_index).algorithm_sroi_interpolated_count_metrics;
                             generate_analysis_data(intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_interpolated_count_analysis, icovar);
 
-
                             // start gnuplotting
-                            std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
-                            gt_mean_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
-                            algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x, evaluationData.at(obj_index).mean_displacement.y));
-
-                            //Get the eigenvalues and eigenvectors
-                            cv::Mat_<float> ellipse(3,1);
-
-                            if ( CLUSTER_COUNT_ALGORITHM > 1 ) {
-
-                                double chisquare_val = 2.4477;
-                                cv::Mat_<float> eigenvectors(2,2);
-                                cv::Mat_<float> eigenvalues(1,2);
-
-                                cv::eigen(evaluationData.at(obj_index).covar_displacement, eigenvalues, eigenvectors);
-
-                                //std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
-
-                                if ( eigenvectors.data != NULL ) {
-                                    //Calculate the angle between the largest eigenvector and the x-axis
-                                    double angle = atan2(eigenvectors(0,1), eigenvectors(0,0));
-
-                                    //Shift the angle to the [0, 2pi] interval instead of [-pi, pi]
-                                    if(angle < 0)
-                                        angle += 6.28318530718;
-
-                                    //Conver to degrees instead of radians
-                                    angle = 180*angle/3.14159265359;
-
-                                    //Calculate the size of the minor and major axes
-                                    double halfmajoraxissize=chisquare_val*sqrt(eigenvalues(0));
-                                    double halfminoraxissize=chisquare_val*sqrt(eigenvalues(1));
-
-                                    //Return the oriented ellipse
-                                    //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise
-                                    ellipse << halfmajoraxissize, halfminoraxissize, -angle;
-
-                                    //std::cout << "ellips" << ellipse;
-
-                                    //cv::Mat visualizeimage(240, 320, CV_8UC1, cv::Scalar::all(0));
-                                    //cv::ellipse(visualizeimage, ellipse, cv::Scalar::all(255), 2);
-                                    //cv::imshow("EllipseDemo", visualizeimage);
-                                    //cv::waitKey(1000);
-
-                                }
-
-                            }
-
-                            float m, c;
-
-                            std::string coord1;
-                            std::string coord2;
-                            std::string gp_line;
-                            cv::Vec4f line = list_of_current_objects.at(
-                                    obj_index)->
-                                    get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
-                            ).at(sensor_index).at(current_frame_index).regression_line;;
-
-                            m = line[1] / line[0];
-                            c = line[3] - line[2] * m;
-                            coord1 = "-4," + std::to_string(m*(-4) + c);
-                            coord2 = "4," + std::to_string(m*(4) + c);
-                            gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
-
-                            if ( obj_index == 0 ) {
-
-                                std::cout << "ellipse" << ellipse ;
-
-                                std::string ellipse_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse(0)) + "," +  std::to_string(ellipse(1)) + "  angle " + std::to_string(ellipse(2)) + " lw 5 front fs empty bo 3\n";
-
-                                gp2d << "set term png size 400,400\n";
-                                gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
-                                gp2d << "set xrange [-5:5]\n";
-                                gp2d << "set yrange [-5:5]\n";
-                                //gp2d << gp_line;
-                                gp2d << ellipse_plot;
-                                gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
-                                        ", '-' with points pt 22 notitle 'GT'"
-                                        ", '-' with points pt 15 notitle 'Algo'"
-                                        // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
-                                        "\n";
-                                gp2d.send1d(xy_pts);
-                                gp2d.send1d(gt_mean_pts);
-                                gp2d.send1d(algo_mean_pts);
-
-                                usleep(100000);  // give some time to gnuplot to write the plot on the filesystem
-
-                                if ( sensor_index != (SENSOR_COUNT-1) || ( sensor_index == 0 && SENSOR_COUNT == 1)) {
-
-                                    if ( sensor_index == 0 ) {
-                                        stich_plots.create(800, 2400, CV_8UC3); // make space for 6 objects
-                                        stich_plots = cv::Scalar::all(0);
-                                        //cv::imwrite(gnuplot_image_file_with_path_stiched, stich_plots);
-                                    }
-                                    cv::Mat gnuplot_index = cv::imread(gnuplot_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
-                                    if ( gnuplot_index.empty()) {
-                                        throw "no image is found error";
-                                    }
-                                    //cv::imshow("plot", gnuplot_index);
-                                    //cv::waitKey(0);
-
-                                    //stich_plots = cv::imread(gnuplot_image_file_with_path_stiched, CV_LOAD_IMAGE_ANYCOLOR);
-
-                                    cv::Mat object_index_stich_location = stich_plots.rowRange(0+(sensor_index*400)*2, (sensor_index*400)*2 + 400).colRange(0,400);
-                                    gnuplot_index.copyTo(object_index_stich_location);
-
-                                }
-
-                            }
-                            else if ( obj_index == 5 ) {
-
-                                //gp2d << "replot\n";
-
-                                gp2d << "replot '-' with points title'" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
-                                        ", '-' with points pt 22 notitle 'GT'"
-                                        ", '-' with points pt 15 notitle 'Algo'"
-                                        // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
-                                        "\n";
-
-                                gp2d.send1d(xy_pts);
-                                gp2d.send1d(gt_mean_pts);
-                                gp2d.send1d(algo_mean_pts);
-                            }
-
-
-                            // shift stich multiple sensor images in a grid.
 
                         }
 
@@ -415,11 +291,12 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
 
     count_anaylsis.total_pixel_count = (ushort)CLUSTER_COUNT;
 
+    std::vector<std::pair<float, float>> xy_pts;
+
 
     for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
 
-        std::vector<std::pair<float, float>> xy_pts;
 
         double l1_cumulative_distance_all_pixels = 0;
         double l2_cumulative_distance_all_pixels = 0;
@@ -483,6 +360,138 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
     std::cout << "count metrics for object index "
               << obj_index << " = "
               << count_anaylsis << std::endl;
+
+
+    //-----------------------------------------------------------------------------------------
+
+    // start gnuplotting
+    Gnuplot gp2d;
+    cv::Mat stich_plots;
+
+    std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
+    gt_mean_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
+    algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x, evaluationData.at(obj_index).mean_displacement.y));
+
+    //Get the eigenvalues and eigenvectors
+    cv::Mat_<float> ellipse(3,1);
+
+    if ( CLUSTER_COUNT > 1 ) {
+
+        double chisquare_val = 2.4477;
+        cv::Mat_<float> eigenvectors(2,2);
+        cv::Mat_<float> eigenvalues(1,2);
+
+        cv::eigen(evaluationData.at(obj_index).covar_displacement, eigenvalues, eigenvectors);
+
+        //std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
+
+        if ( eigenvectors.data != NULL ) {
+            //Calculate the angle between the largest eigenvector and the x-axis
+            double angle = atan2(eigenvectors(0,1), eigenvectors(0,0));
+
+            //Shift the angle to the [0, 2pi] interval instead of [-pi, pi]
+            if(angle < 0)
+                angle += 6.28318530718;
+
+            //Conver to degrees instead of radians
+            angle = 180*angle/3.14159265359;
+
+            //Calculate the size of the minor and major axes
+            double halfmajoraxissize=chisquare_val*sqrt(eigenvalues(0));
+            double halfminoraxissize=chisquare_val*sqrt(eigenvalues(1));
+
+            //Return the oriented ellipse
+            //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise
+            ellipse << halfmajoraxissize, halfminoraxissize, -angle;
+
+            //std::cout << "ellips" << ellipse;
+
+            //cv::Mat visualizeimage(240, 320, CV_8UC1, cv::Scalar::all(0));
+            //cv::ellipse(visualizeimage, ellipse, cv::Scalar::all(255), 2);
+            //cv::imshow("EllipseDemo", visualizeimage);
+            //cv::waitKey(1000);
+
+        }
+
+    }
+
+    float m, c;
+
+    std::string coord1;
+    std::string coord2;
+    std::string gp_line;
+    cv::Vec4f line = evaluationData.at(
+            obj_index).regression_line;
+
+    m = line[1] / line[0];
+    c = line[3] - line[2] * m;
+    coord1 = "-4," + std::to_string(m*(-4) + c);
+    coord2 = "4," + std::to_string(m*(4) + c);
+    gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
+
+    if ( obj_index == 0 ) {
+
+        std::cout << "ellipse" << ellipse ;
+
+        std::string ellipse_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse(0)) + "," +  std::to_string(ellipse(1)) + "  angle " + std::to_string(ellipse(2)) + " lw 5 front fs empty bo 3\n";
+
+        gp2d << "set term png size 400,400\n";
+        gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
+        gp2d << "set xrange [-5:5]\n";
+        gp2d << "set yrange [-5:5]\n";
+        //gp2d << gp_line;
+        gp2d << ellipse_plot;
+        gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
+                ", '-' with points pt 22 notitle 'GT'"
+                ", '-' with points pt 15 notitle 'Algo'"
+                // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
+                "\n";
+        gp2d.send1d(xy_pts);
+        gp2d.send1d(gt_mean_pts);
+        gp2d.send1d(algo_mean_pts);
+
+        usleep(100000);  // give some time to gnuplot to write the plot on the filesystem
+
+        if ( sensor_index != (SENSOR_COUNT-1) || ( sensor_index == 0 && SENSOR_COUNT == 1)) {
+
+            if ( sensor_index == 0 ) {
+                stich_plots.create(800, 2400, CV_8UC3); // make space for 6 objects
+                stich_plots = cv::Scalar::all(0);
+                //cv::imwrite(gnuplot_image_file_with_path_stiched, stich_plots);
+            }
+            cv::Mat gnuplot_index = cv::imread(gnuplot_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+            if ( gnuplot_index.empty()) {
+                throw "no image is found error";
+            }
+            //cv::imshow("plot", gnuplot_index);
+            //cv::waitKey(0);
+
+            //stich_plots = cv::imread(gnuplot_image_file_with_path_stiched, CV_LOAD_IMAGE_ANYCOLOR);
+
+            cv::Mat object_index_stich_location = stich_plots.rowRange(0+(sensor_index*400)*2, (sensor_index*400)*2 + 400).colRange(0,400);
+            gnuplot_index.copyTo(object_index_stich_location);
+
+        }
+
+    }
+    else if ( obj_index == 5 ) {
+
+        //gp2d << "replot\n";
+
+        gp2d << "replot '-' with points title'" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
+                ", '-' with points pt 22 notitle 'GT'"
+                ", '-' with points pt 15 notitle 'Algo'"
+                // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
+                "\n";
+
+        gp2d.send1d(xy_pts);
+        gp2d.send1d(gt_mean_pts);
+        gp2d.send1d(algo_mean_pts);
+    }
+
+
+    // shift stich multiple sensor images in a grid.
+
 
 }
 

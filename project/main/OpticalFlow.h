@@ -61,6 +61,9 @@ typedef struct {
     cv::Mat covar_pts;
     cv::Mat covar_displacement;
 
+    // Regressin line
+    cv::Vec4f regression_line;
+
 } OPTICAL_FLOW_EVALUATION_METRICS;
 
 
