@@ -371,13 +371,18 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             char file_name_input_image[50];
+            char file_name_input_image_interpolated[50];
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
 
             sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+            sprintf(file_name_input_image_interpolated, "interpolated_000%03d_10.png", image_frame_count);
 
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             std::string plot_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+
+            std::string flow_path_interpolated = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_interpolated;
+            std::string plot_path_interpolated = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_interpolated;
 
             if ( m_opticalFlowName == "ground_truth" ) {
                 flow_path = GroundTruthScene::m_ground_truth_flow_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
@@ -409,18 +414,29 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                     F_png_write.setFlowV(pts.x, pts.y, displacement.y);
                     F_png_write.setObjectId(pts.x, pts.y, (obj_index));
                 }
+            }
 
-                if ( m_opticalFlowName != "ground_truth" ) {
-                    unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) list_of_current_objects.at(obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).size();
+            F_png_write.write(flow_path);
+            F_png_write.writeColor(plot_path, max_magnitude);
+
+            FlowImageExtended F_png_write_interpolated(F_png_write);
+
+            for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+                if (m_opticalFlowName != "ground_truth") {
+                    unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) list_of_current_objects.at(
+                            obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(
+                            current_frame_index).size();
 
                     for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_DISJOINT_DATA; cluster_index++) {
 
                         cv::Point2f pts = list_of_current_objects.at(obj_index)->
-                                get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(
+                                get_object_stencil_point_disjoint_displacement().at(sensor_index).at(
+                                current_frame_index).at(
                                 cluster_index).first;
 
                         cv::Point2f displacement = list_of_current_objects.at(obj_index)->
-                                get_object_stencil_point_disjoint_displacement().at(sensor_index).at(current_frame_index).at(
+                                get_object_stencil_point_disjoint_displacement().at(sensor_index).at(
+                                current_frame_index).at(
                                 cluster_index).second;
 
                         max_magnitude = std::max((float) cv::norm(displacement), max_magnitude);
@@ -428,19 +444,17 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
                         displacement.x = 0;
                         displacement.y = 0;
 
-                        F_png_write.setFlowU(pts.x, pts.y, displacement.x);
-                        F_png_write.setFlowV(pts.x, pts.y, displacement.y);
-                        F_png_write.setObjectId(pts.x, pts.y, -1);
+                        F_png_write_interpolated.setFlowU(pts.x, pts.y, displacement.x);
+                        F_png_write_interpolated.setFlowV(pts.x, pts.y, displacement.y);
+                        F_png_write_interpolated.setObjectId(pts.x, pts.y, -1);
                     }
-
-                    // interpolate only for algorithm
-                    F_png_write.interpolateBackground();
                 }
-
-                F_png_write.write(flow_path);
-                F_png_write.writeColor(plot_path, max_magnitude);
-
             }
+            // interpolate only for algorithm
+
+            F_png_write_interpolated.interpolateBackground();
+            F_png_write_interpolated.write(flow_path_interpolated);
+            F_png_write_interpolated.writeColor(plot_path_interpolated, max_magnitude);
         }
     }
 
@@ -474,7 +488,7 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
 
-            sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+            sprintf(file_name_input_image, "interpolated_000%03d_10.png", image_frame_count);
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             // read flow vector
@@ -496,25 +510,17 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
                     }
                 }
             }
-            // convert opencv to vector. This vector will be used as frame_next_pts_displacement_array and then intersected with m_ptr_list_objects.
-            // store the frame_next_pts_displacement_array.
-            std::cout << "comehere" << std::endl;
 
-
-            // Calculate optical generate_flow_frame map using LK algorithm
             if (current_frame_index) {  // Calculate only on second or subsequent images.
 
                 std::cout << "current_frame " << image_frame_count << std::endl;
 
                 /// execute optical flow algorithms and get the flow vectors
-                //execute(prevGray, curGray, frame_prev_pts_array, frame_next_pts_array, displacement_array, needToInit);
-
                 /*
                 for (unsigned i = 0; i < frame_next_pts_array.size(); i++) {
                     //cv::circle(image_02_frame, frame_next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
                     cv::arrowedLine(image_02_frame, frame_prev_pts_array[i], frame_next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
                 }*/
-
                 /// put data in object_stencil_displacement
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > dummy;
                 common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility);
@@ -533,13 +539,12 @@ void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_se
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
 
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
             m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement.at(obj_index), multiframe_visibility.at(obj_index));
 
         }
 
-        cv::destroyAllWindows();
     }
 
 }

@@ -79,6 +79,9 @@ void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optica
                          << "algorithm_pixels_count" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithm_pixels_count
 
+                         << "algorithm_interpolated_pixels_count" <<
+                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithm_interpolated_pixels_count
+
                          << "algorithm_sroi_pixels_count" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithm_sroi_pixels_count
 

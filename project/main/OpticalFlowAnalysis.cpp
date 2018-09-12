@@ -199,6 +199,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             unsigned CLUSTER_COUNT_ALGORITHM = (unsigned) entire_roi_object.at(sensor_index).at(
                                     current_frame_index).size();
 
+
                             evaluationData.at(
                                     obj_index).algorithm_pixels_count = (ushort)CLUSTER_COUNT_ALGORITHM; // how many pixels are visible ( it could be that some pixels are occluded )
 
