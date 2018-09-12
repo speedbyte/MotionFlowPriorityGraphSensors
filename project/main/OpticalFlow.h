@@ -171,7 +171,7 @@ public:
 
     void save_flow_vector(ushort SENSOR_COUNT);
 
-    void rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list);
+    void rerun_optical_flow_algorithm(ushort SENSOR_COUNT);
 
     void generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT);
 
@@ -189,9 +189,10 @@ public:
 
     void generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &entire_roi_object, const ushort sensor_index, const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_anaylsis, cv::Mat &icovar);
 
+    void generate_sroi_intersections(ushort SENSOR_COUNT);
+
 private:
 
-    void generate_sroi_intersections(ushort SENSOR_COUNT);
 };
 
 #endif //MAIN_OPTICALFLOW_H

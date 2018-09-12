@@ -43,7 +43,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
             for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
                 (list_of_current_objects.size());
-                std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData;
+                std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
 
                 char file_name_image_output[50], file_name_image_output_stiched[50], sensor_index_folder_suffix[10], stiched_sensor_index_folder_suffix[10];
                 sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
@@ -79,11 +79,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     unsigned CLUSTER_COUNT_GT_SPECIAL_ROI = (unsigned) special_roi_object.at(sensor_index).at(
                             current_frame_index).size();
 
-                    /*
-                    unsigned CLUSTER_COUNT_DISJOINT_SPECIAL_ROI = (unsigned) m_ptr_list_gt_objects.at(
-                            obj_index)->get_object_disjoint_special_region_of_interest().at(sensor_index).at(
-                            current_frame_index).size();
-                            */
 
                     evaluationData.at(obj_index).current_frame_index = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;

@@ -595,9 +595,9 @@ void OpticalFlow::generate_sroi_intersections(ushort SENSOR_COUNT) {
 
 
 
-void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list) {
+void OpticalFlow::rerun_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
-    for ( ushort sensor_index = 0; sensor_index < evaluation_sensor_list.size(); sensor_index++ ) {
+    for ( ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
 
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);
