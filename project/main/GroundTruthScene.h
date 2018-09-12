@@ -85,6 +85,7 @@ public:
 
     void prepare_directories(ushort sensor_group_index);
 
+    virtual void save_gt_scene_data() {};
 };
 
 class GroundTruthSceneInternal : public GroundTruthScene {
@@ -108,6 +109,8 @@ public:
     ~GroundTruthSceneInternal(){
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
+
+    void save_gt_scene_data() override;
 
 
 };
@@ -580,6 +583,7 @@ public:
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
 
+    void save_gt_scene_data() override;
 };
 
 

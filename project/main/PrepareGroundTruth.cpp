@@ -33,7 +33,7 @@ using namespace std::chrono;
 
 void PrepareGroundTruth::prepare_directories(std::string noise, ushort fps, ushort stepSize) {
 
-    m_GroundTruthImageLocation = Dataset::m_dataset_gtpath.string() + "/blue_sky";
+    m_GroundTruthImageLocation = Dataset::m_dataset_gtpath.string() + noise;
 
     m_resultordner="/ground_truth";
 

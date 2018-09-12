@@ -255,6 +255,10 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
 }
 
+void GroundTruthSceneInternal::save_gt_scene_data() {
+
+}
+
 void GroundTruthScene::generate_bird_view() {
     // the bird view needs the range information of each object
     // Assuming the camera is mounted on the floor.
@@ -564,38 +568,8 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             stopSimulation();
         }
 
-        Noise noNoise;
+        // validate generation
 
-        if (m_environment == "blue_sky") {
-
-            try {
-                for ( ushort sensor_group_index = 0 ; sensor_group_index < m_generation_sensor_list.size() ; sensor_group_index++) {
-
-                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).closeAllFileHandles();
-
-                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readObjectData();
-                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorData();
-
-                    // writePosition deletes the file before generating yaml file
-                    viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
-                    //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
-
-                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
-
-                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage(m_ground_truth_generate_path, m_ground_truth_framedifference_path);
-                    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images(m_ground_truth_generate_path);
-
-
-                }
-                std::cout << "Validate ground truth generation completed" << std::endl;
-
-            }
-            catch (...) {
-                std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
-                stopSimulation();
-            }
-
-        }
 
     } else {
 
@@ -618,7 +592,37 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             startEvaluating(noNoise);
         }
     }
+}
 
+
+void GroundTruthSceneExternal::save_gt_scene_data() {
+
+    try {
+        for ( ushort sensor_group_index = 0 ; sensor_group_index < m_generation_sensor_list.size() ; sensor_group_index++) {
+
+            viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).closeAllFileHandles();
+
+            viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readObjectData();
+            viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).readSensorData();
+
+            // writePosition deletes the file before generating yaml file
+            viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
+            //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
+
+            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
+
+            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage(m_ground_truth_generate_path, m_ground_truth_framedifference_path);
+            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images(m_ground_truth_generate_path);
+
+
+        }
+        std::cout << "Validate ground truth generation completed" << std::endl;
+
+    }
+    catch (...) {
+        std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
+        stopSimulation();
+    }
 }
 
 double GroundTruthSceneExternal::getTime() {

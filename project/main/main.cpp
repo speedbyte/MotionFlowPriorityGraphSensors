@@ -306,77 +306,68 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.gt,
                              vires_dataset.start, vires_dataset.stop, vires_dataset.max_frames_dataset,
                              vires_dataset.dataprocessing_map, vires_dataset.algorithm_map, evaluation_list);
+
     } else if ( cpp_dataset.execute ) {
 
-        Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.gt, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.max_frames_dataset, cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map, evaluation_list);
-
+        Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.gt,
+                             cpp_dataset.start, cpp_dataset.stop, cpp_dataset.max_frames_dataset,
+                             cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map, evaluation_list);
     }
 
     for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
         if (cpp_dataset.execute || vires_dataset.execute) {
 
-            std::vector<GroundTruthObjects> list_of_gt_objects;
-            std::vector<GroundTruthObjects *> ptr_list_of_gt_objects;
             GroundTruthObjects::groundTruthObjectTotalCount = 0;
-
             GroundTruthScene *base_ptr_gt_scene;
-
             if (vires_dataset.execute) {
-
-                // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
-                // through out the life cycle of the program.
 
                 GroundTruthSceneExternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base,
                                                   Dataset::GENERATE);
                 base_ptr_gt_scene = &gt_scene;
-                for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
-                    base_ptr_gt_scene->prepare_directories(generation_list.at(sensor_group_index));
-                }
-                base_ptr_gt_scene->generate_gt_scene();
-                base_ptr_gt_scene->generate_bird_view();
 
-                if ((env_index == environment_list.size() - 1) && Dataset::GENERATE) {
-                    //base_ptr_gt_scene->stopSimulation();
-                    // Hack the images and the position_file
-                    //system("python ../quicky_1.py 1");
-                    exit(0);
-                }
 
             } else if (cpp_dataset.execute) {
-
 
                 GroundTruthSceneInternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, Dataset::GENERATE);
                 base_ptr_gt_scene = &gt_scene;
-                for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
-                    base_ptr_gt_scene->prepare_directories(generation_list.at(sensor_group_index));
-                }
-
-                base_ptr_gt_scene->generate_gt_scene();
-                base_ptr_gt_scene->generate_bird_view();
 
             }
 
-            if (environment_list[env_index] == "blue_sky") {
-                for (auto obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
-                    ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_index)));
-                }
+            for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
+                base_ptr_gt_scene->prepare_directories(generation_list.at(sensor_group_index));
             }
 
-            list_of_gt_objects = list_of_gt_objects_base;
-            ptr_list_of_gt_objects = ptr_list_of_gt_objects_base;
+            base_ptr_gt_scene->generate_gt_scene();
+            base_ptr_gt_scene->generate_bird_view();
 
-            PrepareGroundTruth gt_flow(evaluation_list, environ[env_index], list_of_gt_sensors_base, ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
+            if ((env_index == environment_list.size() - 1) && Dataset::GENERATE) {
+                //base_ptr_gt_scene->stopSimulation();
+                // Hack the images and the position_file
+                //system("python ../quicky_1.py 1");
+                exit(0);
+            }
 
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" ) {
 
-// in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
-//                    fs.open((Dataset::m_dataset_gtpath.string() + "/values.yml"), cv::FileStorage::WRITE);
+                base_ptr_gt_scene->save_gt_scene_data();
+
+                // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
+                // through out the life cycle of the program.
+                for (auto obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
+                    ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_index)));
+                }
+
+                PrepareGroundTruth gt_flow(evaluation_list, environ[env_index], list_of_gt_sensors_base,
+                                           ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
+
+                // in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
+                // fs.open((Dataset::m_dataset_gtpath.string() + "/values.yml"), cv::FileStorage::WRITE);
                 /// the following snippet prepares the ground truth edge, depth etc.
-                gt_flow.prepare_directories("", 0, 0);
+                gt_flow.prepare_directories("blue_sky", 0, 0);
                 /// the following snippet generates mean centroid displacement for various data processing algorithms
                 gt_flow.generate_flow_vector();
 
@@ -386,11 +377,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
 
                 gt_flow.find_ground_truth_object_special_region_of_interest();
-
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
-                    ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement(
+                    ptr_list_of_gt_objects_base.at(obj_index)->generate_object_mean_centroid_displacement(
                             "ground_truth");
                 }
 
@@ -398,12 +388,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 gt_flow.generate_metrics_optical_flow_algorithm(); // this is to just create Jaccard Index  =  1
                 //gt_flow.analyse_stencil();
 
-
                 time_map["prepare_ground_truth"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
                 tic = steady_clock::now();
-
-
-                std::vector<AlgorithmFlow> dummy;
 
                 if ((cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.analyse && vires_dataset.execute)) {
 
