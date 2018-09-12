@@ -24,12 +24,12 @@
 #include "Utils.h"
 
 // check if depth is correct - DONE
-// find values of algorithm displacement at sroi.
+// find values of algorithm displacement at sroi - DONE.
+// quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // gnuplot for all objects combined diffferent colors. read about it.
 // gnuplot interpolated values
 // interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
-// quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 
 
 
@@ -277,8 +277,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"blue_sky"};
+    const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
+    //const std::vector<std::string> environment_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
