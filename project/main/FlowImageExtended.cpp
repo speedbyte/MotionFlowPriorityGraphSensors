@@ -20,7 +20,7 @@ void FlowImageExtended::interpolateBackground () {
 
             // if flow is valid. valid flows contains unsigned integers except 65535.
             // -1 is preserved for no flow detected
-            // 65535 is default value of the flow frame.
+            // -512 is default value of the flow frame.
             if ( (getObjectId(u,v) != -1) && (getObjectId(u,v) != -512) ) {
 
                 // at least one pixel requires interpolation
@@ -33,7 +33,7 @@ void FlowImageExtended::interpolateBackground () {
                     float val = getObjectId(u1-1,v);
 
                     // set pixel to min flow
-                    if (u1>0 && u2<width_-1) {
+                    if (u1>0 && u2<width_-1) { // check for frame boundaries, just in case
                         float fu_ipol = std::min(getFlowU(u1-1,v),getFlowU(u2+1,v));
                         float fv_ipol = std::min(getFlowV(u1-1,v),getFlowV(u2+1,v));
                         for (int32_t u_curr=u1; u_curr<=u2; u_curr++) {

@@ -7,8 +7,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
     std::vector<Objects *> list_of_current_objects;
 
-    const float DISTANCE_ERROR_TOLERANCE = 1;
-
     std::vector<Objects *> ptr_list_of_derived_objects;
     for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
         ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
@@ -43,8 +41,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
             for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
-
+                (list_of_current_objects.size());
+                std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData
                 char file_name_image_output[50], file_name_image_output_stiched[50], sensor_index_folder_suffix[10], stiched_sensor_index_folder_suffix[10];
                 sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
                 sprintf(stiched_sensor_index_folder_suffix, "%02d", (SENSOR_COUNT-1));
@@ -70,9 +68,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
-                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
-
-                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
 
@@ -98,13 +93,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                     if (evaluationData.at(obj_index).visiblity) {
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
-
-                        cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
-                                obj_index)->get_object_extrapolated_point_displacement().at
-                                (sensor_index).at(current_frame_index).second;
-
-                        auto euclidean_dist_gt = cv::norm(gt_displacement);
-                        auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
                         evaluationData.at(obj_index).mean_pts = list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
@@ -145,39 +133,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                         evaluationData.at(
                                 obj_index).ground_truth_sroi_pixels_count = (ushort)CLUSTER_COUNT_GT_SPECIAL_ROI; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
 
-                        evaluationData.at(
-                                obj_index).algorithm_pixels_count = (ushort)0; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
-                        evaluationData.at(
-                                obj_index).l1_cumulative_distance_good_pixels = CLUSTER_COUNT_GT; // how many pixels in the found pixel are actually valid
-                        evaluationData.at(
-                                obj_index).l2_cumulative_distance_good_pixels = CLUSTER_COUNT_GT; // how many pixels in the found pixel are actually valid
-                        evaluationData.at(
-                                obj_index).ma_cumulative_distance_good_pixels = CLUSTER_COUNT_GT; // how many pixels in the found pixel are actually valid
-
-                        double l1_cumulative_distance_all_pixels = 0;
-                        double l2_cumulative_distance_all_pixels = 0;
-                        double ma_cumulative_distance_all_pixels = 0;
-
-                        double l1_cumulative_error_tolerated = 0;
-                        double l2_cumulative_error_tolerated = 0;
-                        double ma_cumulative_error_tolerated = 0;
-
-                        double l1_cumulative_distance_all_pixels_interpolated = 0;
-                        double l2_cumulative_distance_all_pixels_interpolated = 0;
-                        double ma_cumulative_distance_all_pixels_interpolated = 0;
-
-                        double l1_cumulative_error_tolerated_interpolated = 0;
-                        double l2_cumulative_error_tolerated_interpolated = 0;
-                        double ma_cumulative_error_tolerated_interpolated = 0;
-
-                        double l1_cumulative_distance_sroi_pixels = 0;
-                        double l2_cumulative_distance_sroi_pixels = 0;
-                        double ma_cumulative_distance_sroi_pixels = 0;
-
-                        double l1_cumulative_sroi_error_tolerated = 0;
-                        double l2_cumulative_sroi_error_tolerated = 0;
-                        double ma_cumulative_sroi_error_tolerated = 0;
-
 
                         cv::Mat icovar;
                         // this should be sent to Objects.cpp
@@ -186,259 +141,99 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             icovar = evaluationData.at(obj_index).covar_displacement.inv(cv::DECOMP_SVD);
                         }
 
-                        evaluationData.at(
-                                obj_index).l1_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
-                        evaluationData.at(
-                                obj_index).l2_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
-                        evaluationData.at(
-                                obj_index).ma_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
+                        COUNT_METRICS &ground_truth_count_metrics = evaluationData.at(
+                                obj_index).ground_truth_count_metrics;
+
+                        ground_truth_count_metrics.l1_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
+                        ground_truth_count_metrics.l2_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
+                        ground_truth_count_metrics.ma_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
 
                         if (m_opticalFlowName != "ground_truth") {
 
-                            // displacements found by the algorithm for this object
-                            unsigned CLUSTER_COUNT_ALGORITHM = (unsigned) entire_roi_object.at(sensor_index).at(
-                                    current_frame_index).size();
+                            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
 
-
-                            evaluationData.at(
-                                    obj_index).algorithm_pixels_count = (ushort)CLUSTER_COUNT_ALGORITHM; // how many pixels are visible ( it could be that some pixels are occluded )
+                            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
 
                             unsigned CLUSTER_COUNT_INTERPOLATED_ALGORITHM = (unsigned) entire_roi_object_interpolated.at(sensor_index).at(
                                     current_frame_index).size();
 
 
-                            evaluationData.at(
-                                    obj_index).algorithm_interpolated_pixels_count = (ushort)CLUSTER_COUNT_INTERPOLATED_ALGORITHM; // how many pixels are visible ( it could be that some pixels are occluded )
+                            cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
+                                    obj_index)->get_object_extrapolated_point_displacement().at
+                                    (sensor_index).at(current_frame_index).second;
 
-                            evaluationData.at(
-                                    obj_index).l1_total_count_good_pixels = (ushort) 0;
-                            evaluationData.at(
-                                    obj_index).l2_total_count_good_pixels = (ushort) 0;
-                            evaluationData.at(
-                                    obj_index).ma_total_count_good_pixels = (ushort) 0;
+//--------------------------------------------------------------------------------------------
+                            COUNT_METRICS &entire_roi_object_count_analysis = evaluationData.at(obj_index).algorithm_count_metrics;
+                            generate_analysis_data(entire_roi_object, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, entire_roi_object_count_analysis, icovar);
 
-                            // how many pixelsi are visible ( it could be that some pixels are occluded ). This wll be found out using k-means
-                            evaluationData.at(
-                                    obj_index).l1_cumulative_distance_good_pixels = 0; // how many pixels in the found pixel are actually valid
-                            evaluationData.at(
-                                    obj_index).l2_cumulative_distance_good_pixels = 0; // how many pixels in the found pixel are actually valid
-                            evaluationData.at(
-                                    obj_index).ma_cumulative_distance_good_pixels = 0; // how many pixels in the found pixel are actually valid
+                            auto euclidean_dist_gt = cv::norm(gt_displacement);
+                            auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
-                            std::vector<std::pair<float, float>> xy_pts;
+//--------------------------------------------------------------------------------------------
 
-                            // all pixels
-                            for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_ALGORITHM; cluster_index++) {
+                            COUNT_METRICS &entire_roi_interpolated_count_analysis = evaluationData.at(obj_index).algorithm_interpolated_count_metrics;
+                            generate_analysis_data(entire_roi_object_interpolated, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, entire_roi_interpolated_count_analysis, icovar);
 
-                                cv::Point2f algo_displacement = entire_roi_object.at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
-                                // l1_cumulative_distance_all_pixels
-                                auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
-                                l1_cumulative_distance_all_pixels += l1_dist_err;
+//--------------------------------------------------------------------------------------------
 
-                                // l2_cumulative_distance_all_pixels
-                                auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
-                                auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
-                                l2_cumulative_distance_all_pixels += euclidean_dist_err;
+                            // sroi pixels
+                            // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
+                            std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_algorithm_and_sroi;
+                            MyIntersection intersection;
+                            intersection.find_intersection_pair(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
+                            intersection_of_algorithm_and_sroi = intersection.getResultIntersectingPair();
+                            bool isSorted = std::is_sorted(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                            assert(isSorted);
+                            bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                            assert(isSorted_sroi);
 
-                                // ma_cumulative_distance_all_pixels
-                                auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
-                                ma_cumulative_distance_all_pixels += ma_dist_algo;
-
-                                //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
-                                //auto angle_err = std::abs(angle_algo - angle_gt);
-                                //auto angle_err_dot = std::cosh(algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * std::sqrt(euclidean_dist_algo_square)));
-                                //assert(angle_err_dot==angle_err);
-
-                                if (
-                                        (l1_dist_err) < DISTANCE_ERROR_TOLERANCE
-                                    //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                        ) {
-                                    l1_cumulative_error_tolerated += l1_dist_err;
-                                    evaluationData.at(
-                                            obj_index).l1_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
-                                }
-                                if (
-                                        (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
-                                    //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                        ) {
-                                    l2_cumulative_error_tolerated += euclidean_dist_err;
-                                    evaluationData.at(
-                                            obj_index).l2_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
-                                }
-                                if (
-                                        (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
-                                    // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                        ) {
-                                    ma_cumulative_error_tolerated += ma_dist_algo;
-                                    evaluationData.at(
-                                            obj_index).ma_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
-                                }
-                                
-                                xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
+                            //assert(intersection_of_algorithm_and_sroi.size() > 0);
+                            // Validate
+                            cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
+                            tempImage = cv::Scalar::all(255);
+                            for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
+                                cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
                             }
+                            //cv::imshow("algorithm_sroi", tempImage);
+                            //cv::waitKey(0);
+                            cv::destroyAllWindows();
 
+                            COUNT_METRICS &special_roi_object_count_analysis = evaluationData.at(obj_index).algorith_sroi_count_metrics;
+                            generate_analysis_data(intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_count_analysis, icovar);
 
-                            for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_INTERPOLATED_ALGORITHM; cluster_index++) {
+//--------------------------------------------------------------------------------------------
+                            // sroi interpolated pixels
+                            // does eroi_interpolated contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
+                            std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_interpolated_algorithm_and_sroi;
+                            std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
 
-                                cv::Point2f algo_displacement = entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).at(cluster_index).second;
+                            MyIntersection intersection_interpolated_eroi_sroi_objects;
 
-                                // l1_cumulative_distance_all_pixels
-                                auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
-                                l1_cumulative_distance_all_pixels_interpolated += l1_dist_err;
-
-                                // l2_cumulative_distance_all_pixels
-                                auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
-                                auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
-                                l2_cumulative_distance_all_pixels_interpolated += euclidean_dist_err;
-
-                                // ma_cumulative_distance_all_pixels
-                                auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
-                                ma_cumulative_distance_all_pixels_interpolated += ma_dist_algo;
-
-                                //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
-                                //auto angle_err = std::abs(angle_algo - angle_gt);
-                                //auto angle_err_dot = std::cosh(algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * std::sqrt(euclidean_dist_algo_square)));
-                                //assert(angle_err_dot==angle_err);
-
-                                if (
-                                        (l1_dist_err) < DISTANCE_ERROR_TOLERANCE
-                                    //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                        ) {
-                                    l1_cumulative_error_tolerated_interpolated += l1_dist_err;
-                                    evaluationData.at(
-                                            obj_index).l1_total_count_good_pixels_interpolated++; // how many pixels in the found pixel are actually valid
-                                }
-                                if (
-                                        (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
-                                    //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                        ) {
-                                    l2_cumulative_error_tolerated_interpolated += euclidean_dist_err;
-                                    evaluationData.at(
-                                            obj_index).l2_total_count_good_pixels_interpolated++; // how many pixels in the found pixel are actually valid
-                                }
-                                if (
-                                        (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
-                                    // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                        ) {
-                                    ma_cumulative_error_tolerated_interpolated += ma_dist_algo;
-                                    evaluationData.at(
-                                            obj_index).ma_total_count_good_pixels_interpolated++; // how many pixels in the found pixel are actually valid
-                                }
-
-                                xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
-                            }
-
+                            intersection_interpolated_eroi_sroi_objects.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
+                            intersection_of_interpolated_algorithm_and_sroi = intersection_interpolated_eroi_sroi_objects.getResultIntersectingPair();
                             {
-
-                                // sroi pixels
-                                // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
-                                std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_algorithm_and_sroi;
-                                MyIntersection intersection;
-                                intersection.find_intersection_pair(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
-                                intersection_of_algorithm_and_sroi = intersection.getResultIntersectingPair();
-                                bool isSorted = std::is_sorted(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                                assert(isSorted);
-                                bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                                assert(isSorted_sroi);
-
-                                //assert(intersection_of_algorithm_and_sroi.size() > 0);
-                                // Validate
-                                cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
-                                tempImage = cv::Scalar::all(255);
-                                for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
-                                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
-                                }
-                                //cv::imshow("algorithm_sroi", tempImage);
-                                //cv::waitKey(0);
-                                cv::destroyAllWindows();
-
-                                evaluationData.at(
-                                        obj_index).algorithm_sroi_pixels_count = (ushort)intersection_of_algorithm_and_sroi.size();
-
-                            }
-
-                            {
-                                // sroi interpolated pixels
-                                // does eroi_interpolated contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
-                                std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_interpolated_algorithm_and_sroi;
-                                std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
-
-                                MyIntersection intersection_interpolated_eroi_sroi_objects;
-
-                                intersection_interpolated_eroi_sroi_objects.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
-                                intersection_of_interpolated_algorithm_and_sroi = intersection_interpolated_eroi_sroi_objects.getResultIntersectingPair();
                                 bool isSorted = std::is_sorted(entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).begin(), entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                                 assert(isSorted);
                                 bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                                 assert(isSorted_sroi);
 
-                                //assert(intersection_of_algorithm_and_sroi.size() > 0);
-                                // Validate
-                                cv::Mat tempImageInterpolated(Dataset::m_frame_size, CV_8UC3);
-                                tempImageInterpolated = cv::Scalar::all(255);
-                                for ( auto it = intersection_of_interpolated_algorithm_and_sroi.begin(); it != intersection_of_interpolated_algorithm_and_sroi.end(); it++) {
-                                    cv::circle(tempImageInterpolated, (*it).first, 1, cv::Scalar(255,0,0));
-                                }
-                                //cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
-                                //cv::waitKey(0);
-                                cv::destroyAllWindows();
-
-                                evaluationData.at(
-                                        obj_index).algorithm_interpolated_sroi_pixels_count = (ushort)intersection_of_interpolated_algorithm_and_sroi.size();
-
-                                for (auto cluster_index = 0; cluster_index < intersection_of_interpolated_algorithm_and_sroi.size(); cluster_index++) {
-
-                                    cv::Point2f algo_displacement = intersection_of_interpolated_algorithm_and_sroi.at(cluster_index).second;
-
-                                    // l1_cumulative_distance_sroi_pixels
-                                    auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
-                                    l1_cumulative_distance_sroi_pixels += l1_dist_err;
-
-                                    // l2_cumulative_distance_sroi_pixels
-                                    auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
-                                    auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
-                                    l2_cumulative_distance_sroi_pixels += euclidean_dist_err;
-
-                                    // ma_cumulative_distance_sroi_pixels
-                                    auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
-                                    ma_cumulative_distance_sroi_pixels += ma_dist_algo;
-
-                                    //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
-                                    //auto angle_err = std::abs(angle_algo - angle_gt);
-                                    //auto angle_err_dot = std::cosh(algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * std::sqrt(euclidean_dist_algo_square)));
-                                    //assert(angle_err_dot==angle_err);
-
-                                    if (
-                                            (l1_dist_err) < DISTANCE_ERROR_TOLERANCE
-                                        //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                            ) {
-                                        l1_cumulative_sroi_error_tolerated += l1_dist_err;
-                                        evaluationData.at(
-                                                obj_index).l1_total_count_sroi_good_pixels++; // how many pixels in the found pixel are actually valid
-                                    }
-                                    if (
-                                            (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
-                                        //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                            ) {
-                                        l2_cumulative_sroi_error_tolerated += euclidean_dist_err;
-                                        evaluationData.at(
-                                                obj_index).l2_total_count_sroi_good_pixels++; // how many pixels in the found pixel are actually valid
-                                    }
-                                    if (
-                                            (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
-                                        // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
-                                            ) {
-                                        ma_cumulative_sroi_error_tolerated += ma_dist_algo;
-                                        evaluationData.at(
-                                                obj_index).ma_total_count_sroi_good_pixels++; // how many pixels in the found pixel are actually valid
-                                    }
-
-                                    xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
-                                }
-
                             }
+
+                            //assert(intersection_of_algorithm_and_sroi.size() > 0);
+                            // Validate
+                            cv::Mat tempImageInterpolated(Dataset::m_frame_size, CV_8UC3);
+                            tempImageInterpolated = cv::Scalar::all(255);
+                            for ( auto it = intersection_of_interpolated_algorithm_and_sroi.begin(); it != intersection_of_interpolated_algorithm_and_sroi.end(); it++) {
+                                cv::circle(tempImageInterpolated, (*it).first, 1, cv::Scalar(255,0,0));
+                            }
+                            //cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
+                            //cv::waitKey(0);
+                            cv::destroyAllWindows();
+
+                            COUNT_METRICS &special_roi_object_interpolated_count_analysis = evaluationData.at(obj_index).algorithm_sroi_interpolated_count_metrics;
+                            generate_analysis_data(intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_interpolated_count_analysis, icovar);
 
 
                             // start gnuplotting
@@ -570,26 +365,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                         }
 
-                        evaluationData.at(obj_index).l1_cumulative_distance_all_pixels = l1_cumulative_distance_all_pixels;
-                        evaluationData.at(obj_index).l2_cumulative_distance_all_pixels = l2_cumulative_distance_all_pixels;
-                        evaluationData.at(obj_index).ma_cumulative_distance_all_pixels = ma_cumulative_distance_all_pixels;
-
-                        evaluationData.at(obj_index).l1_cumulative_distance_good_pixels = l1_cumulative_error_tolerated;
-                        evaluationData.at(obj_index).l2_cumulative_distance_good_pixels = l2_cumulative_error_tolerated;
-                        evaluationData.at(obj_index).ma_cumulative_distance_good_pixels = ma_cumulative_error_tolerated;
-
-                        std::cout << "l1_cumulative_distance_good_pixels for object "
-                                  << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).l1_cumulative_distance_good_pixels << std::endl;
-                        std::cout << "l2_cumulative_distance_good_pixels for object "
-                                  << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).l2_cumulative_distance_good_pixels << std::endl;
-                        std::cout << "ma_cumulative_distance_good_pixels for object "
-                                  << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).ma_cumulative_distance_good_pixels << std::endl;
-                        std::cout << "algorithm_pixels_count for object "
-                                  << list_of_current_objects.at(obj_index)->getObjectName() << " = "
-                                  << evaluationData.at(obj_index).algorithm_pixels_count << std::endl;
 
                         //assert(evaluationData.l2_cumulative_distance_good_pixels <= std::ceil(evaluationData.algorithm_pixels_count) + 20 );
 
@@ -601,10 +376,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                           .at(current_frame_index)
                                   << " and hence not generating any shape points for this object " << std::endl;
 
-                        evaluationData.at(obj_index).l1_cumulative_distance_good_pixels = 0;
-                        evaluationData.at(obj_index).l2_cumulative_distance_good_pixels = 0;
-                        evaluationData.at(obj_index).ma_cumulative_distance_good_pixels = 0;
-                        evaluationData.at(obj_index).algorithm_pixels_count = 0;
+                        // all struct values are implicitly set to 0.
 
                     }
                 }
@@ -631,3 +403,86 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
     }
 
 }
+
+
+void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_anaylsis, cv::Mat &icovar) {
+
+    const float DISTANCE_ERROR_TOLERANCE = 1;
+
+// displacements found by the algorithm for this object
+    unsigned CLUSTER_COUNT = (unsigned) cluster_to_evaluate.at(sensor_index).at(
+            current_frame_index).size();
+
+    count_anaylsis.total_pixel_count = (ushort)CLUSTER_COUNT;
+
+
+    for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
+
+
+        std::vector<std::pair<float, float>> xy_pts;
+
+        double l1_cumulative_distance_all_pixels = 0;
+        double l2_cumulative_distance_all_pixels = 0;
+        double ma_cumulative_distance_all_pixels = 0;
+
+        double l1_cumulative_error_tolerated = 0;
+        double l2_cumulative_error_tolerated = 0;
+        double ma_cumulative_error_tolerated = 0;
+
+        cv::Point2f algo_displacement = cluster_to_evaluate.at(sensor_index).at(current_frame_index).at(cluster_index).second;
+
+        // l1_cumulative_distance_all_pixels
+        auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
+        l1_cumulative_distance_all_pixels += l1_dist_err;
+        count_anaylsis.l1_cumulative_distance_all_pixels = l1_cumulative_distance_all_pixels;
+
+        // l2_cumulative_distance_all_pixels
+        auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
+        auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
+        l2_cumulative_distance_all_pixels += euclidean_dist_err;
+        count_anaylsis.l2_cumulative_distance_all_pixels = l2_cumulative_distance_all_pixels;
+
+        // ma_cumulative_distance_all_pixels
+        auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
+        ma_cumulative_distance_all_pixels += ma_dist_algo;
+        count_anaylsis.ma_cumulative_distance_all_pixels = ma_cumulative_distance_all_pixels;
+
+        //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
+        //auto angle_err = std::abs(angle_algo - angle_gt);
+        //auto angle_err_dot = std::cosh(algo_displacement.dot(gt_displacement) / (euclidean_dist_gt * std::sqrt(euclidean_dist_algo_square)));
+        //assert(angle_err_dot==angle_err);
+
+        if (
+                (l1_dist_err) < DISTANCE_ERROR_TOLERANCE
+            //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
+                ) {
+            l1_cumulative_error_tolerated += l1_dist_err;
+            count_anaylsis.l1_total_count_good_pixels++; // how many valid pixels in the found pixel are actually
+            count_anaylsis.l1_cumulative_distance_good_pixels = l1_cumulative_error_tolerated;
+        }
+        if (
+                (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
+            //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
+                ) {
+            l2_cumulative_error_tolerated += euclidean_dist_err;
+            count_anaylsis.l2_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
+            count_anaylsis.l2_cumulative_distance_good_pixels = l2_cumulative_error_tolerated;
+        }
+        if (
+                (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
+            // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
+                ) {
+            ma_cumulative_error_tolerated += ma_dist_algo;
+            count_anaylsis.ma_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
+            count_anaylsis.ma_cumulative_distance_good_pixels = ma_cumulative_error_tolerated;
+        }
+
+        xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
+    }
+
+    std::cout << "count metrics for object index "
+              << obj_index << " = "
+              << count_anaylsis << std::endl;
+
+}
+

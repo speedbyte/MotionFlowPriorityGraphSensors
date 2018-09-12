@@ -14,41 +14,38 @@
 
 typedef struct {
 
-    int    current_frame_index;
-    int    obj_index;
-    bool   visiblity;
-
-    ushort ground_truth_pixels_count;
-    ushort algorithm_pixels_count;
-    ushort algorithm_interpolated_pixels_count;
-
-    ushort ground_truth_sroi_pixels_count;
-    ushort algorithm_sroi_pixels_count;
-    ushort algorithm_interpolated_sroi_pixels_count;
-
-    double l1_cumulative_distance_all_pixels;
-    double l2_cumulative_distance_all_pixels;
-    double ma_cumulative_distance_all_pixels;
+    ushort total_pixel_count;
 
     ushort l1_total_count_good_pixels;
     ushort l2_total_count_good_pixels;
     ushort ma_total_count_good_pixels;
 
-    double l1_cumulative_distance_all_pixels_interpolated;
-    double l2_cumulative_distance_all_pixels_interpolated;
-    double ma_cumulative_distance_all_pixels_interpolated;
-
-    ushort l1_total_count_good_pixels_interpolated;
-    ushort l2_total_count_good_pixels_interpolated;
-    ushort ma_total_count_good_pixels_interpolated;
-
-    ushort l1_total_count_sroi_good_pixels;
-    ushort l2_total_count_sroi_good_pixels;
-    ushort ma_total_count_sroi_good_pixels;
+    double l1_cumulative_distance_all_pixels;
+    double l2_cumulative_distance_all_pixels;
+    double ma_cumulative_distance_all_pixels;
 
     double l1_cumulative_distance_good_pixels;
     double l2_cumulative_distance_good_pixels;
     double ma_cumulative_distance_good_pixels;
+
+
+} COUNT_METRICS;
+
+
+typedef struct {
+
+    int    current_frame_index;
+    int    obj_index;
+    bool   visiblity;
+
+    ushort ground_truth_pixels_count;
+    ushort ground_truth_sroi_pixels_count;
+
+    COUNT_METRICS ground_truth_count_metrics;
+    COUNT_METRICS algorithm_count_metrics;
+    COUNT_METRICS algorithm_interpolated_count_metrics;
+    COUNT_METRICS algorith_sroi_count_metrics;
+    COUNT_METRICS algorithm_sroi_interpolated_count_metrics;
 
     cv::Point2f gt_mean_displacement;
 
@@ -65,6 +62,7 @@ typedef struct {
     cv::Mat covar_displacement;
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
+
 
 typedef struct {
 
@@ -185,6 +183,8 @@ public:
     }
 
     void generate_pdf_correct_displacement_x();
+
+    void generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &entire_roi_object, const ushort sensor_index const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_anaylsis, cv::Mat &icovar);
 
 private:
 
