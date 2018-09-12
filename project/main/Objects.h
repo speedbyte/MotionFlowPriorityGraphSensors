@@ -45,6 +45,12 @@ protected:
             m_object_interpolated_stencil_point_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_object_intersection_sroi;
+
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
+            m_object_intersection_sroi_interpolated;
+
+    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_object_stencil_point_disjoint_displacement;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
@@ -151,6 +157,14 @@ public:
         return m_object_interpolated_stencil_point_displacement;
     };
 
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_intersection_sroi() const {
+        return m_object_intersection_sroi;
+    };
+
+    const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_interpolated_intersection_sroi() const {
+        return m_object_intersection_sroi_interpolated;
+    };
+
     const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_interpolated_stencil_point_disjoint_displacement() const {
         return m_object_interpolated_stencil_point_disjoint_displacement;
     };
@@ -184,6 +198,11 @@ public:
         return m_disjoint_special_region_of_interest;
     }
 
+    void push_back_object_intersection_sroi(
+            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>> sensor_stencil_movement);
+
+    void push_back_object_intersection_sroi_interpolated(
+            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>> sensor_stencil_movement);
 };
 
 

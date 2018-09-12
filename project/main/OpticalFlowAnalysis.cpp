@@ -43,7 +43,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
             for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
                 (list_of_current_objects.size());
-                std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData
+                std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData;
+
                 char file_name_image_output[50], file_name_image_output_stiched[50], sensor_index_folder_suffix[10], stiched_sensor_index_folder_suffix[10];
                 sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
                 sprintf(stiched_sensor_index_folder_suffix, "%02d", (SENSOR_COUNT-1));
@@ -157,6 +158,11 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
 
+                            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_intersection_sroi();
+
+                            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_interpolated_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_interpolated_intersection_sroi();
+
+
                             unsigned CLUSTER_COUNT_INTERPOLATED_ALGORITHM = (unsigned) entire_roi_object_interpolated.at(sensor_index).at(
                                     current_frame_index).size();
 
@@ -180,69 +186,17 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
 //--------------------------------------------------------------------------------------------
 
-                            // sroi pixels
-                            // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
-                            std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_algorithm_and_sroi;
-                            MyIntersection intersection;
-                            intersection.find_intersection_pair(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
-                            intersection_of_algorithm_and_sroi = intersection.getResultIntersectingPair();
-                            bool isSorted = std::is_sorted(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                            assert(isSorted);
-                            bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                            assert(isSorted_sroi);
-
-                            //assert(intersection_of_algorithm_and_sroi.size() > 0);
-                            // Validate
-                            cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
-                            tempImage = cv::Scalar::all(255);
-                            for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
-                                cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
-                            }
-                            //cv::imshow("algorithm_sroi", tempImage);
-                            //cv::waitKey(0);
-                            cv::destroyAllWindows();
 
                             COUNT_METRICS &special_roi_object_count_analysis = evaluationData.at(obj_index).algorith_sroi_count_metrics;
                             generate_analysis_data(intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_count_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
-                            // sroi interpolated pixels
-                            // does eroi_interpolated contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
-                            std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_interpolated_algorithm_and_sroi;
-                            std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
-
-                            MyIntersection intersection_interpolated_eroi_sroi_objects;
-
-                            intersection_interpolated_eroi_sroi_objects.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
-                            intersection_of_interpolated_algorithm_and_sroi = intersection_interpolated_eroi_sroi_objects.getResultIntersectingPair();
-                            {
-                                bool isSorted = std::is_sorted(entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).begin(), entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                                assert(isSorted);
-                                bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                                assert(isSorted_sroi);
-
-                            }
-
-                            //assert(intersection_of_algorithm_and_sroi.size() > 0);
-                            // Validate
-                            cv::Mat tempImageInterpolated(Dataset::m_frame_size, CV_8UC3);
-                            tempImageInterpolated = cv::Scalar::all(255);
-                            for ( auto it = intersection_of_interpolated_algorithm_and_sroi.begin(); it != intersection_of_interpolated_algorithm_and_sroi.end(); it++) {
-                                cv::circle(tempImageInterpolated, (*it).first, 1, cv::Scalar(255,0,0));
-                            }
-                            //cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
-                            //cv::waitKey(0);
-                            cv::destroyAllWindows();
 
                             COUNT_METRICS &special_roi_object_interpolated_count_analysis = evaluationData.at(obj_index).algorithm_sroi_interpolated_count_metrics;
                             generate_analysis_data(intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_interpolated_count_analysis, icovar);
 
-                            // start gnuplotting
-
+//--------------------------------------------------------------------------------------------
                         }
-
-
-                        //assert(evaluationData.l2_cumulative_distance_good_pixels <= std::ceil(evaluationData.algorithm_pixels_count) + 20 );
 
                     } else {
                         std::cout << "visibility of object "
@@ -251,14 +205,12 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
                                                   sensor_index)
                                           .at(current_frame_index)
                                   << " and hence not generating any shape points for this object " << std::endl;
-
                         // all struct values are implicitly set to 0.
-
                     }
                 }
 
                 if (m_opticalFlowName != "ground_truth") {
-                    cv::imwrite(gnuplot_image_file_with_path_stiched, stich_plots);
+                    //cv::imwrite(gnuplot_image_file_with_path_stiched, stich_plots);
                 }
                 multiframe_evaluation_data.push_back(evaluationData);
             }
@@ -277,11 +229,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
         std::cout << "end of generate_metrics_optical_flow_algorithm. this is the last step" << std::endl;
 
     }
-
 }
 
 
-void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_anaylsis, cv::Mat &icovar) {
+void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_anaylsis, cv::Mat &icovar) {
 
     const float DISTANCE_ERROR_TOLERANCE = 1;
 
@@ -295,8 +246,6 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
 
 
     for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
-
-
 
         double l1_cumulative_distance_all_pixels = 0;
         double l2_cumulative_distance_all_pixels = 0;
@@ -357,9 +306,8 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
         xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
     }
 
-    std::cout << "count metrics for object index "
-              << obj_index << " = "
-              << count_anaylsis << std::endl;
+    // Overload operator
+    //std::cout << "count metrics for object index "          << obj_index << " = " << count_anaylsis << std::endl;
 
 
     //-----------------------------------------------------------------------------------------
@@ -410,9 +358,7 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
             //cv::ellipse(visualizeimage, ellipse, cv::Scalar::all(255), 2);
             //cv::imshow("EllipseDemo", visualizeimage);
             //cv::waitKey(1000);
-
         }
-
     }
 
     float m, c;
@@ -436,7 +382,8 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
         std::string ellipse_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse(0)) + "," +  std::to_string(ellipse(1)) + "  angle " + std::to_string(ellipse(2)) + " lw 5 front fs empty bo 3\n";
 
         gp2d << "set term png size 400,400\n";
-        gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
+        gp2d << "set output \"" + std::string("../gnuplot.png") + "\"\n";
+        //gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
         gp2d << "set xrange [-5:5]\n";
         gp2d << "set yrange [-5:5]\n";
         //gp2d << gp_line;
@@ -451,6 +398,8 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
         gp2d.send1d(algo_mean_pts);
 
         usleep(100000);  // give some time to gnuplot to write the plot on the filesystem
+
+        /*
 
         if ( sensor_index != (SENSOR_COUNT-1) || ( sensor_index == 0 && SENSOR_COUNT == 1)) {
 
@@ -471,8 +420,7 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
             cv::Mat object_index_stich_location = stich_plots.rowRange(0+(sensor_index*400)*2, (sensor_index*400)*2 + 400).colRange(0,400);
             gnuplot_index.copyTo(object_index_stich_location);
 
-        }
-
+       } */
     }
     else if ( obj_index == 5 ) {
 
@@ -488,10 +436,6 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
         gp2d.send1d(gt_mean_pts);
         gp2d.send1d(algo_mean_pts);
     }
-
-
     // shift stich multiple sensor images in a grid.
-
-
 }
 

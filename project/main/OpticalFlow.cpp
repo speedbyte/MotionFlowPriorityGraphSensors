@@ -463,6 +463,138 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 }
 
 
+
+void OpticalFlow::generate_sroi_intersections(ushort SENSOR_COUNT) {
+
+    // reads the flow vector array already created at the time of instantiation of the object.
+    // Additionally stores the frames in a png file
+    // Additionally stores the position in a png file
+
+    std::vector<Objects *> list_of_current_objects;
+
+    list_of_current_objects = m_ptr_list_simulated_objects;
+
+    char sensor_index_folder_suffix[50];
+    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(m_ptr_list_simulated_objects.size());
+
+        unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
+                sensor_index).size();
+        assert(FRAME_COUNT > 0);
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::m_frame_size, CV_32FC3);
+        sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
+
+        std::cout << "generate intersection data for sensor_index  " << sensor_index_folder_suffix << std::endl;
+
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+            char file_name_input_image[50];
+            char file_name_input_image_interpolated[50];
+            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(current_frame_index).frame_no;
+
+            sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+            sprintf(file_name_input_image_interpolated, "interpolated_000%03d_10.png", image_frame_count);
+
+            std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string plot_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+
+            std::string flow_path_interpolated = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_interpolated;
+            std::string plot_path_interpolated = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_interpolated;
+
+            if ( m_opticalFlowName == "ground_truth" ) {
+                flow_path = GroundTruthScene::m_ground_truth_flow_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+                plot_path = GroundTruthScene::m_ground_truth_plot_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            }
+
+            FlowImageExtended F_png_write(Dataset::m_frame_size.width, Dataset::m_frame_size.height);
+            std::cout << "current_frame_index " << current_frame_index << std::endl;
+            float max_magnitude = 0.0;
+
+            std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_algorithm_and_sroi;
+            std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_interpolated_algorithm_and_sroi;
+
+            for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+
+                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
+
+                // sroi pixels
+                // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
+                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
+                MyIntersection intersection;
+                intersection.find_intersection_pair(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
+                intersection_of_algorithm_and_sroi = intersection.getResultIntersectingPair();
+                bool isSorted = std::is_sorted(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                assert(isSorted);
+                bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                assert(isSorted_sroi);
+
+                //assert(intersection_of_algorithm_and_sroi.size() > 0);
+                // Validate
+                cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
+                tempImage = cv::Scalar::all(255);
+                for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
+                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
+                }
+                //cv::imshow("algorithm_sroi", tempImage);
+                //cv::waitKey(0);
+                cv::destroyAllWindows();
+
+
+
+                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
+
+                // sroi interpolated pixels
+                // does eroi_interpolated contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
+
+                MyIntersection intersection_interpolated_eroi_sroi_objects;
+
+                intersection_interpolated_eroi_sroi_objects.find_intersection_pair(entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).begin(), entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
+                intersection_of_interpolated_algorithm_and_sroi = intersection_interpolated_eroi_sroi_objects.getResultIntersectingPair();
+                {
+                    bool isSorted = std::is_sorted(entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).begin(), entire_roi_object_interpolated.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                    assert(isSorted);
+                    bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                    assert(isSorted_sroi);
+
+                }
+                //assert(intersection_of_algorithm_and_sroi.size() > 0);
+                // Validate
+                cv::Mat tempImageInterpolated(Dataset::m_frame_size, CV_8UC3);
+                tempImageInterpolated = cv::Scalar::all(255);
+                for ( auto it = intersection_of_interpolated_algorithm_and_sroi.begin(); it != intersection_of_interpolated_algorithm_and_sroi.end(); it++) {
+                    cv::circle(tempImageInterpolated, (*it).first, 1, cv::Scalar(255,0,0));
+                }
+                //cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
+                //cv::waitKey(0);
+                cv::destroyAllWindows();
+
+                multiframe_stencil_displacement.at(obj_index).push_back(intersection_of_algorithm_and_sroi);
+                multiframe_stencil_displacement_interpolated.at(obj_index).push_back(intersection_of_interpolated_algorithm_and_sroi);
+
+            }
+
+
+        }
+        for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_intersection_sroi(multiframe_stencil_displacement.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_intersection_sroi_interpolated(multiframe_stencil_displacement_interpolated.at(obj_index));
+
+        }
+    }
+
+
+
+    std::cout << "end of generation " + m_resultordner + " intersection data" << std::endl;
+
+}
+
+
+
+
 void OpticalFlow::rerun_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list) {
 
     for ( ushort sensor_index = 0; sensor_index < evaluation_sensor_list.size(); sensor_index++ ) {
