@@ -277,8 +277,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"blue_sky"};
+    //const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
+    const std::vector<std::string> environment_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -297,6 +297,21 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     std::vector<ushort> generation_list, evaluation_list;
 
+    cv::Size_<unsigned> frame_size(IMAGE_WIDTH, IMAGE_HEIGHT);
+    std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
+    std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
+
+    if (vires_dataset.execute) {
+
+        Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.gt,
+                             vires_dataset.start, vires_dataset.stop, vires_dataset.max_frames_dataset,
+                             vires_dataset.dataprocessing_map, vires_dataset.algorithm_map);
+    } else if ( cpp_dataset.execute ) {
+
+        Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.gt, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.max_frames_dataset, cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map);
+
+    }
+
     for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
         if (cpp_dataset.execute || vires_dataset.execute) {
@@ -305,10 +320,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::vector<GroundTruthObjects *> ptr_list_of_gt_objects;
             GroundTruthObjects::groundTruthObjectTotalCount = 0;
 
-            cv::Size_<unsigned> frame_size(IMAGE_WIDTH, IMAGE_HEIGHT);
-            std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
-            std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
-
             GroundTruthScene *base_ptr_gt_scene;
 
             generation_list = {0};
@@ -316,10 +327,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if (vires_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.gt, vires_dataset.start, vires_dataset.stop, vires_dataset.max_frames_dataset, vires_dataset.dataprocessing_map, vires_dataset.algorithm_map);
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
                 // through out the life cycle of the program.
-
 
                 GroundTruthSceneExternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base,
@@ -340,7 +349,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             } else if (cpp_dataset.execute) {
 
-                Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.gt, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.max_frames_dataset, cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map);
 
                 GroundTruthSceneInternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, Dataset::GENERATE);
@@ -393,9 +401,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 gt_flow.generate_metrics_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size())); // this is to just create Jaccard Index  =  1
                 //gt_flow.analyse_stencil();
 
-            }
-
-            if (environment_list[env_index] == "blue_sky" ) {
 
                 time_map["prepare_ground_truth"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
                 tic = steady_clock::now();
@@ -420,7 +425,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //save ground truth objects and ground truth flow.
     std::ofstream ground_truth_objects_binary("../ground_truth_object_binary.bin", std::ios::out | std::ios::binary);
     ground_truth_objects_binary.write((char *)ptr_list_of_gt_objects_base.at(0), sizeof(list_of_gt_objects_base.at(0)));
-
 
     ushort fps = 30;
 
@@ -478,7 +482,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     if ( env_index == (environment_list.size()-1)) {
                         Dataset::m_algorithm_map["SF"] = 0;
                     }
-
                 }
 
                 if ( !found ) {
