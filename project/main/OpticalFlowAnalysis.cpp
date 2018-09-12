@@ -4,7 +4,7 @@
 #include "SortandIntersect.h"
 #include "Objects.h"
 
-void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
+void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
     std::vector<Objects *> list_of_current_objects;
 
@@ -28,7 +28,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
         std::vector<std::map<std::pair<float, float>, int> > sensor_scenario_displacement_occurence;
         std::vector<std::vector<std::vector<OPTICAL_FLOW_EVALUATION_METRICS> > > sensor_multiframe_evaluation_data;
 
-        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+        for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
             std::cout << "generating evaluation metrics in OpticalFlow.cpp for sensor index " << sensor_index
                       << " for opticalflow  " << m_opticalFlowName << std::endl;
@@ -47,7 +47,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
 
                 char file_name_image_output[50], file_name_image_output_stiched[50], sensor_index_folder_suffix[10], stiched_sensor_index_folder_suffix[10];
                 sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-                sprintf(stiched_sensor_index_folder_suffix, "%02d", (SENSOR_COUNT-1));
+                sprintf(stiched_sensor_index_folder_suffix, "%02d", (Dataset::SENSOR_COUNT-1));
 
                 std::string gnuplot_image_file_with_path;
                 std::string gnuplot_image_file_with_path_stiched;
@@ -214,7 +214,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT) {
             //sensor_scenario_displacement_occurence.push_back(scenario_displacement_occurence);
 
             /* generate for every algorithm, an extra sensor */
-            //if ( sensor_index == (SENSOR_COUNT-1) ) {
+            //if ( sensor_index == (Dataset::SENSOR_COUNT-1) ) {
             //    generate_shape_points_sensor_fusion(datafilter_index, sensor_shape_points );
             //}
         }
@@ -396,7 +396,7 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
 
         /*
 
-        if ( sensor_index != (SENSOR_COUNT-1) || ( sensor_index == 0 && SENSOR_COUNT == 1)) {
+        if ( sensor_index != (Dataset::SENSOR_COUNT-1) || ( sensor_index == 0 && Dataset::SENSOR_COUNT == 1)) {
 
             if ( sensor_index == 0 ) {
                 stich_plots.create(800, 2400, CV_8UC3); // make space for 6 objects

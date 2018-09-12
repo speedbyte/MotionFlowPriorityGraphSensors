@@ -157,23 +157,23 @@ public:
         return m_sensor_scenario_displacement_occurence;
     };
 
-    void prepare_directories_common(ushort SENSOR_COUNT);
+    void prepare_directories_common();
 
-    virtual void prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {};
+    virtual void prepare_directories(std::string noise, ushort fps, ushort stepSize) {};
 
-    void generate_collision_points(ushort SENSOR_COUNT);
+    void generate_collision_points();
 
 
     void common_flow_frame(ushort sensor_index, ushort current_frame_index,  const std::vector<cv::Point2f> &next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement,  std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility,
                            std::vector<cv::Point2f> all_moving_objects_in_frame = {}) ;
 
-    void plot_stencil(ushort SENSOR_COUNT);
+    void plot_stencil();
 
-    void save_flow_vector(ushort SENSOR_COUNT);
+    void save_flow_vector();
 
-    void rerun_optical_flow_algorithm(ushort SENSOR_COUNT);
+    void rerun_optical_flow_algorithm();
 
-    void generate_metrics_optical_flow_algorithm(ushort SENSOR_COUNT);
+    void generate_metrics_optical_flow_algorithm();
 
     void generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_shape_points);
 
@@ -189,7 +189,7 @@ public:
 
     void generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &entire_roi_object, const ushort sensor_index, const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_anaylsis, cv::Mat &icovar);
 
-    void generate_sroi_intersections(ushort SENSOR_COUNT);
+    void generate_sroi_intersections();
 
 private:
 

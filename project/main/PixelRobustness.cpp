@@ -10,18 +10,18 @@
 #include "OpticalFlow.h"
 
 
-void PixelRobustness::generatePixelRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
+void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
 
 
     m_list_evaluation_data_multiframe = opticalFlow.get_sensor_multiframe_evaluation_data();
-    writeToYaml(SENSOR_COUNT, opticalFlow);
+    writeToYaml(opticalFlow);
 }
 
 
-void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow) {
+void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
@@ -37,7 +37,7 @@ void PixelRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optica
     // shape of algorithhm, with shape of ground truth
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+        for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
             std::cout << "generating pixel robustness in RobustnessIndex.cpp for " << suffix << " " << sensor_index
                       << " for datafilter " << datafilter_index << std::endl;

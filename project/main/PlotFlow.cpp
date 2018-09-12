@@ -10,13 +10,13 @@
 #include "FlowImageExtended.h"
 
 
-void PlotFlow::plot(ushort SENSOR_COUNT, const std::string &resultsordner) {
+void PlotFlow::plot(const std::string &resultsordner) {
 
     char sensor_index_folder_suffix[50], folder_name_plot[50];
     char file_name_image[50];
     cv::Mat showErrorImage;
 
-    for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ){
+    for ( int sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++ ){
 
         sprintf(sensor_index_folder_suffix, "flow_occ_%02d", sensor_index);
         sprintf(folder_name_plot, "plots_%02d", sensor_index);

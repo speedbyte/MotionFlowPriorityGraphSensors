@@ -67,9 +67,9 @@ void Objects::push_back_object_interpolated_stencil_point_disjoint_displacement_
 
 
 
-void Objects::generate_edge_contour(ushort SENSOR_COUNT, std::string post_processing_algorithm) {
+void Objects::generate_edge_contour(std::string post_processing_algorithm) {
 
-    for ( int sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
+    for ( int sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++ ) {
 
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_edge_movement;
 
@@ -167,7 +167,7 @@ void Objects::generate_edge_contour(ushort SENSOR_COUNT, std::string post_proces
     }
 }
 
-void Objects::generate_object_mean_centroid_displacement(ushort SENSOR_COUNT, std::string post_processing_algorithm) {
+void Objects::generate_object_mean_centroid_displacement(std::string post_processing_algorithm) {
 
     std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > >
             multiframe_dataprocessing_stencil_points_displacement_sensor_fusion_mean;
@@ -183,14 +183,14 @@ void Objects::generate_object_mean_centroid_displacement(ushort SENSOR_COUNT, st
 
     if ( Dataset::m_dataprocessing_map["NoAlgorithm"]) {
         NoAlgorithm noAlgorithm;
-        noAlgorithm.common(SENSOR_COUNT, this, post_processing_algorithm);
+        noAlgorithm.common(this, post_processing_algorithm);
         m_list_object_dataprocessing_mean_centroid_displacement.push_back(noAlgorithm.get_object_dataprocessing_mean_centroid_displacement());
         m_list_object_dataprocessing_stencil_points_displacement.push_back(noAlgorithm.get_object_dataprocessing_stencil_point_displacement());
     }
 
     if ( Dataset::m_dataprocessing_map["SimpleAverage"]) {
         SimpleAverage simpleAverage;
-        simpleAverage.common(SENSOR_COUNT, this, post_processing_algorithm);
+        simpleAverage.common(this, post_processing_algorithm);
         m_list_object_dataprocessing_mean_centroid_displacement.push_back(
                 simpleAverage.get_object_dataprocessing_mean_centroid_displacement());
         m_list_object_dataprocessing_stencil_points_displacement.push_back(
@@ -199,7 +199,7 @@ void Objects::generate_object_mean_centroid_displacement(ushort SENSOR_COUNT, st
 
     if ( Dataset::m_dataprocessing_map["MovingAverage"]) {
         MovingAverage movingAverage;
-        movingAverage.common(SENSOR_COUNT, this, post_processing_algorithm);
+        movingAverage.common(this, post_processing_algorithm);
         m_list_object_dataprocessing_mean_centroid_displacement.push_back(
                 movingAverage.get_object_dataprocessing_mean_centroid_displacement());
         m_list_object_dataprocessing_stencil_points_displacement.push_back(
@@ -208,7 +208,7 @@ void Objects::generate_object_mean_centroid_displacement(ushort SENSOR_COUNT, st
 
     if ( Dataset::m_dataprocessing_map["VotedMean"]) {
         VotedMean votedMean;
-        votedMean.common(SENSOR_COUNT, this, post_processing_algorithm);
+        votedMean.common(this, post_processing_algorithm);
         m_list_object_dataprocessing_mean_centroid_displacement.push_back(
                 votedMean.get_object_dataprocessing_mean_centroid_displacement());
         m_list_object_dataprocessing_stencil_points_displacement.push_back(
@@ -224,11 +224,11 @@ void Objects::generate_object_mean_centroid_displacement(ushort SENSOR_COUNT, st
 
     }
 
-    generate_object_mean_lineparameters(SENSOR_COUNT, post_processing_algorithm);
+    generate_object_mean_lineparameters(post_processing_algorithm);
 
 }
 
-void Objects::generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::string post_processing_algorithm) {
+void Objects::generate_object_mean_lineparameters( std::string post_processing_algorithm) {
 
 
     /// BEWARE !! I am in Cartesian co-ordinate system here.
@@ -249,7 +249,7 @@ void Objects::generate_object_mean_lineparameters( ushort SENSOR_COUNT, std::str
 
         std::vector<std::vector<cv::Point2f > > sensor_line_parameters;
 
-        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+        for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
             std::cout << "generate_object_mean_lineparameters for sensor_index " << sensor_index << " for datafilter_index " << datafilter_index << " for object name " << m_objectName << " " << std::endl;
 

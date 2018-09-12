@@ -31,7 +31,7 @@
 
 using namespace std::chrono;
 
-void PrepareGroundTruth::prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) {
+void PrepareGroundTruth::prepare_directories(std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::m_dataset_gtpath.string() + "/blue_sky";
 
@@ -41,19 +41,19 @@ void PrepareGroundTruth::prepare_directories(ushort SENSOR_COUNT, std::string no
 
     if (!Dataset::m_dataset_basepath.compare(CPP_DATASET_PATH) || !Dataset::m_dataset_basepath.compare(VIRES_DATASET_PATH)) {
 
-        prepare_directories_common(SENSOR_COUNT);
+        prepare_directories_common();
 
     }
 }
 
 
-void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
+void PrepareGroundTruth::generate_flow_vector() {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
     char sensor_index_folder_suffix[50];
 
-    for (ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+    for (ushort sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(
                 m_ptr_list_gt_objects.size());
@@ -122,7 +122,7 @@ void PrepareGroundTruth::generate_flow_vector(ushort SENSOR_COUNT) {
 }
 
 
-void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ushort SENSOR_COUNT) {
+void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest() {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
     // pixels lie on the occlusion boundary.
@@ -155,7 +155,7 @@ void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest(ush
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > all_sensors_object_special_region_of_interest(m_ptr_list_gt_objects.size());
 
-    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
 
         unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(

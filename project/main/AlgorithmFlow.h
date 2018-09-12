@@ -31,7 +31,7 @@ public:
 
     }
 
-    void prepare_directories(ushort SENSOR_COUNT, std::string noise, ushort fps, ushort stepSize) override ;
+    void prepare_directories(std::string noise, ushort fps, ushort stepSize) override ;
 
     void run_optical_flow_algorithm(std::vector<ushort> evaluation_sensor_list, FRAME_TYPES frame_types, ushort fps);
 

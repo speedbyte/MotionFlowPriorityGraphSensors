@@ -1,6 +1,6 @@
 #include "OpticalFlow.h"
 
-void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
+void OpticalFlow::generate_collision_points() {
 
     std::vector<std::pair<Objects*, Objects* > > list_of_current_objects_combination;
     std::vector<std::pair<Objects*, Objects* > > list_of_gt_objects_combination;
@@ -34,7 +34,7 @@ void OpticalFlow::generate_collision_points(ushort SENSOR_COUNT) {
         std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS> > > sensor_collision_points;
         std::vector<std::vector<std::vector<cv::Point2f> > > sensor_line_angles;
 
-        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+        for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
             std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS> > sensor_frame_collision_points;
             std::vector<std::vector<cv::Point2f> > sensor_frame_line_angles;

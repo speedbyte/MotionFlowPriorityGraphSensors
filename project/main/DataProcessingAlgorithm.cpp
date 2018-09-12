@@ -11,9 +11,9 @@
 #include "Objects.h"
 
 
-void DataProcessingAlgorithm::common(ushort SENSOR_COUNT, Objects *object, std::string post_processing_algorithm) {
+void DataProcessingAlgorithm::common(Objects *object, std::string post_processing_algorithm) {
 
-    for (ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+    for (ushort sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
         std::vector<OBJECTS_MEAN_STDDEV> multiframe_centroid_displacement;
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > multiframe_dataprocessing_displacement;

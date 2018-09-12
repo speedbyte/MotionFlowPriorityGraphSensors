@@ -10,7 +10,7 @@
 #include "OpticalFlow.h"
 
 
-void VectorRobustness::generateVectorRobustness(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
+void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
@@ -21,11 +21,11 @@ void VectorRobustness::generateVectorRobustness(ushort SENSOR_COUNT, const Optic
     }
 
     m_list_collision_data_multiframe = opticalFlow.getCollisionPoints();
-    writeToYaml(SENSOR_COUNT, opticalFlow);
+    writeToYaml(opticalFlow);
 }
 
 
-void VectorRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &opticalFlow) {
+void VectorRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
@@ -40,7 +40,7 @@ void VectorRobustness::writeToYaml(ushort SENSOR_COUNT, const OpticalFlow &optic
 
     for ( unsigned datafilter_index = 0; datafilter_index < COUNT; datafilter_index++ ) {
 
-        for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+        for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
             std::cout << "generating vector robustness in RobustnessIndex.cpp for " << suffix << " " << sensor_index
                       << " for datafilter " << datafilter_index << std::endl;

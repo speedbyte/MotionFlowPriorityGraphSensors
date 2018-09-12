@@ -8,6 +8,7 @@
 cv::Size_<unsigned> Dataset::m_frame_size;
 ushort Dataset::m_depth;
 ushort Dataset::m_cn;
+ushort Dataset::Dataset::SENSOR_COUNT;
 ushort Dataset::ITERATION_START_POINT;
 ushort Dataset::ITERATION_END_POINT;
 bool Dataset::GENERATE;
@@ -25,7 +26,9 @@ bool Dataset::m_execute_algorithm = false;
 
 void Dataset::fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
                           std::string unterordner, std::string resultordner, bool generate, ushort start, ushort stop, ushort max_frames_dataset, std::map<std::string, bool> dataprocessing_map,
-                          std::map<std::string, ushort> algorithm_map) {
+                          std::map<std::string, ushort> algorithm_map, std::vector<ushort> evaluation_list) {
+
+    Dataset::SENSOR_COUNT = (ushort)(evaluation_list.size() + 1%evaluation_list.size());
 
     ITERATION_START_POINT = start;
 

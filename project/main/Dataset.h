@@ -23,6 +23,7 @@ public:
     static ushort m_depth;
     static ushort m_cn;
 
+    static ushort SENSOR_COUNT;
     static ushort ITERATION_START_POINT;
     static ushort ITERATION_END_POINT;
     static bool GENERATE;
@@ -42,7 +43,7 @@ public:
 
     static void fillDataset(cv::Size_<unsigned> frame_size, ushort depth, ushort cn, std::string dataset_path,
             std::string unterordner, std::string resultordner, bool generate, ushort start, ushort stop, ushort max_frames_dataset, std::map<std::string, bool> dataprocessing_map,
-                            std::map<std::string, ushort> algorithm_map);
+                            std::map<std::string, ushort> algorithm_map, std::vector<ushort> evaulation_list);
 
     static const ushort getMakeType();
 

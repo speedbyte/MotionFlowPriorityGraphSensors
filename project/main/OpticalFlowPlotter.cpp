@@ -3,7 +3,7 @@
 #include "OpticalFlow.h"
 
 
-void OpticalFlow::plot_stencil(ushort SENSOR_COUNT) {
+void OpticalFlow::plot_stencil() {
 
     std::vector<Objects*> list_of_current_objects;
     std::vector<Objects *> ptr_list_of_derived_objects;
@@ -34,7 +34,7 @@ void OpticalFlow::plot_stencil(ushort SENSOR_COUNT) {
 
     ushort datafilter_index = 0;
 
-    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
         tempGroundTruthImage = cv::Scalar::all(255);
         F_png_write = FlowImageExtended(Dataset::m_frame_size.width, Dataset::m_frame_size.height);

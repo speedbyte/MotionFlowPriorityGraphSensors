@@ -17,7 +17,7 @@
 
 using namespace std::chrono;
 
-void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
+void OpticalFlow::prepare_directories_common() {
 
     char char_dir_append[20];
 
@@ -30,7 +30,7 @@ void OpticalFlow::prepare_directories_common(ushort SENSOR_COUNT) {
 
     boost::filesystem::path path;
 
-    for (int i = 0; i < SENSOR_COUNT; ++i) {
+    for (int i = 0; i < Dataset::SENSOR_COUNT; ++i) {
 
         sprintf(char_dir_append, "%02d", m_evaluation_list.at(i));
 
@@ -341,7 +341,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
     }
 }
 
-void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
+void OpticalFlow::save_flow_vector() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
@@ -359,7 +359,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
     }
 
     char sensor_index_folder_suffix[50];
-    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
         unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
                 sensor_index).size();
@@ -464,7 +464,7 @@ void OpticalFlow::save_flow_vector(ushort SENSOR_COUNT) {
 
 
 
-void OpticalFlow::generate_sroi_intersections(ushort SENSOR_COUNT) {
+void OpticalFlow::generate_sroi_intersections() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
@@ -475,7 +475,7 @@ void OpticalFlow::generate_sroi_intersections(ushort SENSOR_COUNT) {
     list_of_current_objects = m_ptr_list_simulated_objects;
 
     char sensor_index_folder_suffix[50];
-    for (unsigned sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++) {
+    for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(m_ptr_list_simulated_objects.size());
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(m_ptr_list_simulated_objects.size());
@@ -595,9 +595,9 @@ void OpticalFlow::generate_sroi_intersections(ushort SENSOR_COUNT) {
 
 
 
-void OpticalFlow::rerun_optical_flow_algorithm(ushort SENSOR_COUNT) {
+void OpticalFlow::rerun_optical_flow_algorithm() {
 
-    for ( ushort sensor_index = 0; sensor_index < SENSOR_COUNT; sensor_index++ ) {
+    for ( ushort sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++ ) {
 
         unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
         assert(FRAME_COUNT>0);

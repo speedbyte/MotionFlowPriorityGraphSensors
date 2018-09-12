@@ -295,7 +295,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     VectorRobustness vectorRobustness(fs);
     SensorFusionRobustness sensorFusionRobustness(fs);
 
-    std::vector<ushort> generation_list, evaluation_list;
+    const std::vector<ushort> generation_list = {0}, evaluation_list = {0};
 
     cv::Size_<unsigned> frame_size(IMAGE_WIDTH, IMAGE_HEIGHT);
     std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
@@ -305,10 +305,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.gt,
                              vires_dataset.start, vires_dataset.stop, vires_dataset.max_frames_dataset,
-                             vires_dataset.dataprocessing_map, vires_dataset.algorithm_map);
+                             vires_dataset.dataprocessing_map, vires_dataset.algorithm_map, evaluation_list);
     } else if ( cpp_dataset.execute ) {
 
-        Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.gt, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.max_frames_dataset, cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map);
+        Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.gt, cpp_dataset.start, cpp_dataset.stop, cpp_dataset.max_frames_dataset, cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map, evaluation_list);
 
     }
 
@@ -321,9 +321,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             GroundTruthObjects::groundTruthObjectTotalCount = 0;
 
             GroundTruthScene *base_ptr_gt_scene;
-
-            generation_list = {0};
-            evaluation_list = {0};
 
             if (vires_dataset.execute) {
 
@@ -379,26 +376,26 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 // in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
 //                    fs.open((Dataset::m_dataset_gtpath.string() + "/values.yml"), cv::FileStorage::WRITE);
                 /// the following snippet prepares the ground truth edge, depth etc.
-                gt_flow.prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "", 0, 0);
+                gt_flow.prepare_directories("", 0, 0);
                 /// the following snippet generates mean centroid displacement for various data processing algorithms
-                gt_flow.generate_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.generate_flow_vector();
 
                 if (Dataset::GENERATE ) {
-                    gt_flow.save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                    gt_flow.save_flow_vector();
                     exit(0);
                 }
 
-                gt_flow.find_ground_truth_object_special_region_of_interest((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                gt_flow.find_ground_truth_object_special_region_of_interest();
 
                 fs.open(("../values.yml"), cv::FileStorage::WRITE);
 
                 for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
-                    ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()),
+                    ptr_list_of_gt_objects.at(obj_index)->generate_object_mean_centroid_displacement(
                             "ground_truth");
                 }
 
-                gt_flow.generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                gt_flow.generate_metrics_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size())); // this is to just create Jaccard Index  =  1
+                gt_flow.generate_collision_points();
+                gt_flow.generate_metrics_optical_flow_algorithm(); // this is to just create Jaccard Index  =  1
                 //gt_flow.analyse_stencil();
 
 
@@ -410,8 +407,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 if ((cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.analyse && vires_dataset.execute)) {
 
-                    pixelRobustness.generatePixelRobustness((ushort)(evaluation_list.size()+1%evaluation_list.size()), gt_flow, gt_flow);
-                    vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), gt_flow, gt_flow);
+                    pixelRobustness.generatePixelRobustness(gt_flow, gt_flow);
+                    vectorRobustness.generateVectorRobustness( gt_flow, gt_flow);
                 }
 
                 time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
@@ -510,10 +507,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
                 }
 
-                list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), environment_list[env_index], fps, stepSize);
+                list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories( environment_list[env_index], fps, stepSize);
                 if ((Dataset::m_execute_algorithm && cpp_dataset.execute) || (Dataset::m_execute_algorithm && vires_dataset.execute)) {
 
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories((ushort)(evaluation_list.size() + 1%evaluation_list.size()), environment_list[env_index], fps, stepSize);
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories( environment_list[env_index], fps, stepSize);
                     // TODO - do something for stepSize.. its redundant here.
                     /// run optical flow algorithm
                     list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list, video_frames, fps);
@@ -522,9 +519,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     if ( (evaluation_list.size() + 1%evaluation_list.size()) > 1 ) {
                         list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
                     }
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->rerun_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_sroi_intersections((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector();
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->rerun_optical_flow_algorithm();
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_sroi_intersections();
 
                     if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
@@ -540,13 +537,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     /// generate and save flow vector
                     for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
-                        list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement((ushort)(evaluation_list.size() + 1%evaluation_list.size()), "algorithm");
+                        list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement( "algorithm");
                     }
 
                     /// analysis and metrics
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points();
                     //list_of_ptr_of_environment_OFalgorithm[env_index]->analyse_stencil();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm((ushort)(evaluation_list.size() + 1%evaluation_list.size()));
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm();
 
                 }
 
@@ -557,8 +554,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 if ((Dataset::m_execute_algorithm && cpp_dataset.analyse && cpp_dataset.execute) || (Dataset::m_execute_algorithm && vires_dataset.analyse && vires_dataset.execute)) {
 
-                    pixelRobustness.generatePixelRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[0], *list_of_ptr_of_environment_OFalgorithm[env_index]);
-                    vectorRobustness.generateVectorRobustness((ushort)(evaluation_list.size() + 1%evaluation_list.size()), *list_of_ptr_of_environment_OFalgorithm[env_index], *list_of_ptr_of_environment_OFalgorithm[0]);
+                    pixelRobustness.generatePixelRobustness( *list_of_ptr_of_environment_OFalgorithm[0], *list_of_ptr_of_environment_OFalgorithm[env_index]);
+                    vectorRobustness.generateVectorRobustness( *list_of_ptr_of_environment_OFalgorithm[env_index], *list_of_ptr_of_environment_OFalgorithm[0]);
 
                     time_map["robustness_" + suffix] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
                     tic = steady_clock::now();
@@ -570,7 +567,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
                 for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
-                    for (int sensors = 0; sensors < (ushort)(evaluation_list.size() + 1%evaluation_list.size()); sensors++) {
+                    for (int sensors = 0; sensors < Dataset::SENSOR_COUNT; sensors++) {
                         Utils::make_video_from_regex(
                                 Dataset::m_dataset_gtpath.string() + '/' + environment_list[env_index] + '_' +
                                 std::to_string(sensors));
