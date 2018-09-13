@@ -319,20 +319,17 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         if (cpp_dataset.execute || vires_dataset.execute) {
 
             GroundTruthObjects::groundTruthObjectTotalCount = 0;
-            GroundTruthScene *base_ptr_gt_scene;
+            std::unique_ptr<GroundTruthScene> base_ptr_gt_scene;
             if (vires_dataset.execute) {
 
-                GroundTruthSceneExternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
-                                                  list_of_gt_objects_base, list_of_gt_sensors_base,
-                                                  Dataset::GENERATE);
-                base_ptr_gt_scene = &gt_scene;
-
+                base_ptr_gt_scene = std::make_unique<GroundTruthSceneExternal>(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
+                                                                              list_of_gt_objects_base, list_of_gt_sensors_base,
+                                                                              Dataset::GENERATE);
 
             } else if (cpp_dataset.execute) {
 
-                GroundTruthSceneInternal gt_scene(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
+                base_ptr_gt_scene = std::make_unique<GroundTruthSceneInternal>(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, Dataset::GENERATE);
-                base_ptr_gt_scene = &gt_scene;
 
             }
 

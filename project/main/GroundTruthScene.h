@@ -79,6 +79,7 @@ public:
 
     virtual void generate_gt_scene() {
         std::cout << "base implementation of generate_gt_scene()" << std::endl;
+        throw;
     };
 
     void generate_bird_view();
