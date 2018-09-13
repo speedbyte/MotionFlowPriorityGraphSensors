@@ -42,6 +42,9 @@ void GroundTruthSceneInternal::read_gt_scene_data() {
 
     std::unique_ptr<Noise> noNoise = std::make_unique<NoNoise>();
 
+    cppObjects.push_back(CppObjects(0));
+    cppObjects.push_back(CppObjects(1));
+
     for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
         cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");

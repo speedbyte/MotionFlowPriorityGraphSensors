@@ -300,6 +300,9 @@ void GroundTruthSceneExternal::read_gt_scene_data() {
 
     std::unique_ptr<Noise> noNoise = std::make_unique<NoNoise>();
 
+    viresObjects.push_back(ViresObjects(0));
+    viresObjects.push_back(ViresObjects(1));
+
     for ( ushort sensor_group_index = 0 ; sensor_group_index < m_evaluation_sensor_list.size() ; sensor_group_index++) {
 
         viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readObjectData();
