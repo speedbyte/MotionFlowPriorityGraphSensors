@@ -283,9 +283,11 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 std::cout << "found " << object_stencil_displacement.size() << " disjoint " << frame_stencil_disjoint_displacement.size() << " total " << m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() << std::endl;
 
+                /*
                 assert( ((object_stencil_displacement.size() + frame_stencil_disjoint_displacement.size()) <=  m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() + 25)
                          && ((object_stencil_displacement.size() + frame_stencil_disjoint_displacement.size())  >= m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() - 25)
                 );
+                 */
 
                 //InterpolateData interpolateData;
                 //interpolateData.interpolateBackground(object_stencil_displacement, frame_stencil_disjoint_displacement);
