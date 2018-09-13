@@ -14,41 +14,36 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     }
 */
 
-    if (m_environment == "blue_sky") {
+    cppObjects.push_back(CppObjects(0));
+    cppObjects.push_back(CppObjects(1));
 
-        cppObjects.push_back(CppObjects(0));
-        cppObjects.push_back(CppObjects(1));
+    if (Dataset::GENERATE) {
 
-        if (Dataset::GENERATE) {
+        for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
-            for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+            std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
 
-                std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
-
-                BlackNoise blackNoise;
-                std::unique_ptr<Noise> noise;
-                if (m_environment == "night") {
-                    BlackNoise blackNoise_;
-                    noise = std::make_unique<BlackNoise>(blackNoise_);
-                } else {
-                    WhiteNoise whiteNoise_;
-                    noise = std::make_unique<WhiteNoise>(whiteNoise_);
-                }
-
-                //noise = std::make_unique<BlackNoise>(blackNoise);
-                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise, sensor_group_index);
+            BlackNoise blackNoise;
+            std::unique_ptr<Noise> noise;
+            if (m_environment == "night") {
+                BlackNoise blackNoise_;
+                noise = std::make_unique<BlackNoise>(blackNoise_);
+            } else {
+                WhiteNoise whiteNoise_;
+                noise = std::make_unique<WhiteNoise>(whiteNoise_);
             }
 
-            //save_groundtruth_data
-
-        } else { // do not genreate yaml file
-            for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
-
-                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
-                cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
-            }
-
+            //noise = std::make_unique<BlackNoise>(blackNoise);
+            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise, sensor_group_index);
         }
+
+    } else { // do not genreate yaml file
+        for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+
+            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
+            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
+        }
+
     }
 }
 

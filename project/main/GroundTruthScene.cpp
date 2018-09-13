@@ -38,7 +38,7 @@ void GroundTruthScene::prepare_scene_directories_others(ushort sensor_group_inde
     if (Dataset::GENERATE) {
         if (m_datasetpath.string() == std::string(CPP_DATASET_PATH) || m_datasetpath.string() == std::string(VIRES_DATASET_PATH)) {
 
-            std::cout << "prepare gt_scene directories" << std::endl;
+            std::cout << "prepare scene directories for " << m_environment << std::endl;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
             std::string generate_path_sensor = m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix;
@@ -76,7 +76,7 @@ void GroundTruthScene::prepare_scene_directories_blue_sky(ushort sensor_group_in
     if (Dataset::GENERATE) {
         if (m_datasetpath.string() == std::string(CPP_DATASET_PATH) || m_datasetpath.string() == std::string(VIRES_DATASET_PATH)) {
 
-            std::cout << "prepare gt_scene directories" << std::endl;
+            std::cout << "prepare ground truth base directories for " << m_environment << std::endl;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
             std::string generate_path_sensor = m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix;
