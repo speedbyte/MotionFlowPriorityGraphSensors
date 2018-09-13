@@ -15,7 +15,7 @@
 
 using namespace std::chrono;
 
-void AlgorithmFlow::prepare_directories(std::string noise, ushort fps, ushort stepSize) {
+void AlgorithmFlow::prepare_algorithm_flow_directories(std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::m_dataset_gtpath.string() + "/" + noise;
 

@@ -16,7 +16,7 @@
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
 #include "datasets.h"
-#include "PrepareGroundTruth.h"
+#include "PrepareGroundTruthFlow.h"
 #include "kbhit.h"
 
 #include <unordered_map>
@@ -31,7 +31,7 @@
 
 using namespace std::chrono;
 
-void PrepareGroundTruth::prepare_directories(std::string noise, ushort fps, ushort stepSize) {
+void PrepareGroundTruthFlow::prepare_groundtruth_flow_directories(std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::m_dataset_gtpath.string() + noise;
 
@@ -47,7 +47,7 @@ void PrepareGroundTruth::prepare_directories(std::string noise, ushort fps, usho
 }
 
 
-void PrepareGroundTruth::generate_flow_vector() {
+void PrepareGroundTruthFlow::generate_flow_vector() {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
@@ -122,7 +122,7 @@ void PrepareGroundTruth::generate_flow_vector() {
 }
 
 
-void PrepareGroundTruth::find_ground_truth_object_special_region_of_interest() {
+void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
     // pixels lie on the occlusion boundary.

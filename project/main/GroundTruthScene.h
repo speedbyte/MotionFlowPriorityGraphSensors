@@ -85,7 +85,7 @@ public:
 
     void generate_bird_view();
 
-    void prepare_directories(ushort sensor_group_index);
+    void prepare_scene_directories(ushort sensor_group_index);
 
     virtual void save_gt_scene_data() {};
 };

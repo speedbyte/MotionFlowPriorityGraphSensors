@@ -14,7 +14,7 @@
 
 #include "GridLayout.h"
 #include "datasets.h"
-#include "PrepareGroundTruth.h"
+#include "PrepareGroundTruthFlow.h"
 #include "AlgorithmFlow.h"
 #include "GroundTruthScene.h"
 #include "GroundTruthObjects.h"
@@ -332,7 +332,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             }
 
             for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
-                base_ptr_gt_scene->prepare_directories(generation_list.at(sensor_group_index));
+                base_ptr_gt_scene->prepare_scene_directories(generation_list.at(sensor_group_index));
                 noisePointer = std::make_unique<NoNoise>();
             }
 
@@ -353,13 +353,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_index)));
                 }
 
-                PrepareGroundTruth gt_flow(evaluation_list, environ[env_index], list_of_gt_sensors_base,
+                PrepareGroundTruthFlow gt_flow(evaluation_list, environ[env_index], list_of_gt_sensors_base,
                                            ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
 
                 // in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
                 // fs.open((Dataset::m_dataset_gtpath.string() + "/values.yml"), cv::FileStorage::WRITE);
                 /// the following snippet prepares the ground truth edge, depth etc.
-                gt_flow.prepare_directories("blue_sky", 0, 0);
+                gt_flow.prepare_groundtruth_flow_directories("blue_sky", 0, 0);
                 /// the following snippet generates mean centroid displacement for various data processing algorithms
                 gt_flow.generate_flow_vector();
 
@@ -489,10 +489,10 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
                 }
 
-                list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories( environment_list[env_index], fps, stepSize);
+                list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories( environment_list[env_index], fps, stepSize);
                 if ((Dataset::m_execute_algorithm && cpp_dataset.execute) || (Dataset::m_execute_algorithm && vires_dataset.execute)) {
 
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_directories( environment_list[env_index], fps, stepSize);
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories( environment_list[env_index], fps, stepSize);
                     // TODO - do something for stepSize.. its redundant here.
                     /// run optical flow algorithm
                     list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list, video_frames, fps);

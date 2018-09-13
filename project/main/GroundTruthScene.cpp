@@ -28,11 +28,9 @@ boost::filesystem::path GroundTruthScene::m_ground_truth_plot_path;
 
 using namespace std::chrono;
 
-void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
+void GroundTruthScene::prepare_scene_directories(ushort sensor_group_index) {
 
     m_groundtruthpath = Dataset::m_dataset_gtpath; // data/stereo_flow
-
-    m_ground_truth_generate_path = m_groundtruthpath.string() + "/" + m_environment;
 
     m_baseframepath = m_groundtruthpath.string() + "/" + "base_frame";
 
@@ -43,6 +41,9 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
     m_ground_truth_plot_path = m_groundtruthpath.string() + "/" + "plots_";
 
     m_ground_truth_edge_path = m_groundtruthpath.string() + "/" + "edge_";
+
+    // m_environment. this changes with every environment
+    m_ground_truth_generate_path = m_groundtruthpath.string() + "/" + m_environment;
 
 
     char sensor_index_folder_suffix[50];

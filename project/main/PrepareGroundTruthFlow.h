@@ -2,8 +2,8 @@
 // Created by veikas on 11.01.18.
 //
 
-#ifndef MAIN_PREPAREGROUNDTRUTH_H
-#define MAIN_PREPAREGROUNDTRUTH_H
+#ifndef MAIN_PREPAREGROUNDTRUTHFLOW_H
+#define MAIN_PREPAREGROUNDTRUTHFLOW_H
 
 
 #include "Dataset.h"
@@ -21,22 +21,22 @@
  */
 
 
-class PrepareGroundTruth : public OpticalFlow {
+class PrepareGroundTruthFlow : public OpticalFlow {
 
 private:
 
 
 public:
 
-    PrepareGroundTruth( std::vector<ushort> evaluation_list, std::string weather, std::vector<Sensors> &list_of_gt_sensors_base, std::vector<GroundTruthObjects *> &list_gt_objects, std::vector<Objects*> &list_simulated_objects_base, std::vector<Objects*> &list_simulated_objects ) :
+    PrepareGroundTruthFlow( std::vector<ushort> evaluation_list, std::string weather, std::vector<Sensors> &list_of_gt_sensors_base, std::vector<GroundTruthObjects *> &list_gt_objects, std::vector<Objects*> &list_simulated_objects_base, std::vector<Objects*> &list_simulated_objects ) :
             OpticalFlow(evaluation_list, weather, "ground_truth", list_of_gt_sensors_base, list_gt_objects, list_simulated_objects_base, list_simulated_objects, 0) {
     }
 
-    ~PrepareGroundTruth(){
-        std::cout << "killing previous PrepareGroundTruth object\n" ;
+    ~PrepareGroundTruthFlow(){
+        std::cout << "killing previous PrepareGroundTruthFlow object\n" ;
     }
 
-    void prepare_directories(std::string noise, ushort fps, ushort stepSize) override;
+    void prepare_groundtruth_flow_directories(std::string noise, ushort fps, ushort stepSize);
 
     void generate_flow_vector();
 
@@ -45,4 +45,4 @@ public:
 };
 
 
-#endif //MAIN_PREPAREGROUNDTRUTH_H
+#endif //MAIN_PREPAREGROUNDTRUTHFLOW_H

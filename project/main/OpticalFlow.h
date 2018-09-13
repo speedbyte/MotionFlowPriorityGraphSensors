@@ -159,10 +159,7 @@ public:
 
     void prepare_directories_common();
 
-    virtual void prepare_directories(std::string noise, ushort fps, ushort stepSize) {};
-
     void generate_collision_points();
-
 
     void common_flow_frame(ushort sensor_index, ushort current_frame_index,  const std::vector<cv::Point2f> &next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement,  std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility,
                            std::vector<cv::Point2f> all_moving_objects_in_frame = {}) ;
