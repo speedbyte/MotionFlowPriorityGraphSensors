@@ -28,7 +28,33 @@ boost::filesystem::path GroundTruthScene::m_ground_truth_plot_path;
 
 using namespace std::chrono;
 
-void GroundTruthScene::prepare_scene_directories(ushort sensor_group_index) {
+void GroundTruthScene::prepare_scene_directories_others(ushort sensor_group_index) {
+
+    m_groundtruthpath = Dataset::m_dataset_gtpath; // data/stereo_flow
+    // m_environment. this changes with every environment
+    m_ground_truth_generate_path = m_groundtruthpath.string() + "/" + m_environment;
+
+    char sensor_index_folder_suffix[50];
+    if (Dataset::GENERATE) {
+        if (m_datasetpath.string() == std::string(CPP_DATASET_PATH) || m_datasetpath.string() == std::string(VIRES_DATASET_PATH)) {
+
+            std::cout << "prepare gt_scene directories" << std::endl;
+
+            sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
+            std::string generate_path_sensor = m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix;
+
+
+            if (boost::filesystem::exists(generate_path_sensor)) {
+                system(("rm -rf " + generate_path_sensor).c_str());
+            }
+            boost::filesystem::create_directories(generate_path_sensor);
+
+        }
+    }
+}
+
+
+void GroundTruthScene::prepare_scene_directories_blue_sky(ushort sensor_group_index) {
 
     m_groundtruthpath = Dataset::m_dataset_gtpath; // data/stereo_flow
 

@@ -277,8 +277,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> environment_list = {"blue_sky", "night"};
     //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"blue_sky"};
+    const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
+    //const std::vector<std::string> environment_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -332,7 +332,15 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             }
 
             for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
-                base_ptr_gt_scene->prepare_scene_directories(generation_list.at(sensor_group_index));
+                if (environment_list[env_index] == "blue_sky" ) {
+
+                    base_ptr_gt_scene->prepare_scene_directories_others(generation_list.at(sensor_group_index));
+                    base_ptr_gt_scene->prepare_scene_directories_blue_sky(generation_list.at(sensor_group_index));
+
+                } else {
+
+                    base_ptr_gt_scene->prepare_scene_directories_others(generation_list.at(sensor_group_index));
+                }
                 noisePointer = std::make_unique<NoNoise>();
             }
 
