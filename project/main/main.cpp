@@ -319,8 +319,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-            GroundTruthObjects::groundTruthObjectTotalCount = 0;
             std::unique_ptr<GroundTruthScene> base_ptr_gt_scene;
+            std::unique_ptr<Noise> noisePointer;
             if (vires_dataset.execute) {
 
                 base_ptr_gt_scene = std::make_unique<GroundTruthSceneExternal>(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
@@ -331,14 +331,17 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 base_ptr_gt_scene = std::make_unique<GroundTruthSceneInternal>(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index],
                                                   list_of_gt_objects_base, list_of_gt_sensors_base, Dataset::GENERATE);
+                noisePointer = std::make_unique<ColorfulNoise>();
 
             }
 
             for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
                 base_ptr_gt_scene->prepare_directories(generation_list.at(sensor_group_index));
+                noisePointer = std::make_unique<NoNoise>();
             }
 
             base_ptr_gt_scene->generate_gt_scene();
+            base_ptr_gt_scene->startEvaluating(noisePointer, list_of_gt_objects_base, list_of_gt_sensors_base);
             base_ptr_gt_scene->generate_bird_view();
 
             // Generate Groundtruth data flow --------------------------------------
@@ -403,10 +406,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         }
     }
 
-
-    //save ground truth objects and ground truth flow.
-    std::ofstream ground_truth_objects_binary("../ground_truth_object_binary.bin", std::ios::out | std::ios::binary);
-    ground_truth_objects_binary.write((char *)ptr_list_of_gt_objects_base.at(0), sizeof(list_of_gt_objects_base.at(0)));
 
     ushort fps = 30;
 

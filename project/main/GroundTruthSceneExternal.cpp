@@ -313,8 +313,6 @@ void GroundTruthSceneExternal::generate_gt_scene() {
                 viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("vires_");
 
             }
-
-            startEvaluating(noNoise);
         }
     }
 }
@@ -377,7 +375,7 @@ void GroundTruthSceneExternal::calcStatistics() {
 }
 
 
-void GroundTruthSceneExternal::startEvaluating(std::unique_ptr<Noise> &noise) {
+void GroundTruthSceneExternal::startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) {
 
 
     for (ushort obj_index = 0; obj_index < viresObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
@@ -393,14 +391,14 @@ void GroundTruthSceneExternal::startEvaluating(std::unique_ptr<Noise> &noise) {
                 gt_obj = GroundTruthObjects(viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectShape(),
                                             viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectStartPoint(), noise,
                                             viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName());
-                m_list_gt_objects.push_back(gt_obj);
+                list_of_gt_objects_base.push_back(gt_obj);
             }
             // each object is monitored by n sensor group.
-            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(sensor_group_index, *viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index));
+            list_of_gt_objects_base.at(obj_index).beginGroundTruthGeneration(sensor_group_index, *viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index));
 
         }
         if ( m_evaluation_sensor_list.size() > 1 ) {
-            m_list_gt_objects.at(obj_index).generate_combined_sensor_data();
+            list_of_gt_objects_base.at(obj_index).generate_combined_sensor_data();
         }
 
     }
@@ -414,10 +412,10 @@ void GroundTruthSceneExternal::startEvaluating(std::unique_ptr<Noise> &noise) {
 
             Sensors gt_sen(viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorStartPoint(), noise,
                            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorName());
-            m_list_gt_sensors.push_back(gt_sen);
+            list_of_gt_sensors_base.push_back(gt_sen);
             // each sensor is monitored by n sensor group.
 
-            m_list_gt_sensors.at(sen_index).beginGroundTruthGeneration(*viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(sen_index));
+            list_of_gt_sensors_base.at(sen_index).beginGroundTruthGeneration(*viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(sen_index));
 
         }
 

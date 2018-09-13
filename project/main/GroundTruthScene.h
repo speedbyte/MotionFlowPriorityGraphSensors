@@ -18,9 +18,6 @@
 class GroundTruthScene  {
 
 protected:
-    std::vector<GroundTruthObjects> &m_list_gt_objects;
-
-    std::vector<Sensors> &m_list_gt_sensors;
 
     boost::filesystem::path  m_groundtruthpath;
 
@@ -68,7 +65,7 @@ public:
     static boost::filesystem::path  m_ground_truth_plot_path;
 
 
-    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment), m_list_gt_objects(list_objects), m_list_gt_sensors(list_sensors), m_regenerate_yaml_file(generate_yaml_file) {
+    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment), m_regenerate_yaml_file(generate_yaml_file) {
 
         //m_ptr_customObjectMetaDataList = {};
         m_datasetpath = Dataset::m_dataset_basepath;
@@ -79,6 +76,12 @@ public:
 
     virtual void generate_gt_scene() {
         std::cout << "base implementation of generate_gt_scene()" << std::endl;
+        throw;
+    };
+
+
+    virtual void startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) {
+        std::cout << "base implementation of startEvaluating()" << std::endl;
         throw;
     };
 
@@ -103,7 +106,7 @@ public:
     GroundTruthScene(generation_sensor_lists, evaluation_sensor_lists, scenario, environment, list_objects, list_sensors, generate_yaml_file) {
     }
 
-    void startEvaluating(std::unique_ptr<Noise> &noise);
+    void startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) override;
 
     void generate_gt_scene() override;
 
@@ -325,7 +328,7 @@ $
 
 public:
 
-    void startEvaluating(std::unique_ptr<Noise> &noise);
+    void startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) override;
 
     void configVires() {
 

@@ -13,7 +13,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         cv::Point2f points(a,b);
     }
 */
-    std::unique_ptr<Noise> colorfulNoise = std::make_unique<ColorfulNoise>();
 
     if (m_environment == "blue_sky") {
 
@@ -50,11 +49,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
             }
 
         }
-        startEvaluating(colorfulNoise);
     }
-
 }
-
 
 void GroundTruthSceneInternal::save_gt_scene_data() {
 
@@ -89,7 +85,7 @@ void GroundTruthSceneInternal::save_gt_scene_data() {
 }
 
 
-void GroundTruthSceneInternal::startEvaluating(std::unique_ptr<Noise> &noise) {
+void GroundTruthSceneInternal::startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) {
 
 
     for (ushort obj_index = 0; obj_index < cppObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); obj_index++) {
@@ -106,14 +102,14 @@ void GroundTruthSceneInternal::startEvaluating(std::unique_ptr<Noise> &noise) {
                 gt_obj = GroundTruthObjects(cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectShape(),
                                             cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectStartPoint(), noise,
                                             cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName());
-                m_list_gt_objects.push_back(gt_obj);
+                list_of_gt_objects_base.push_back(gt_obj);
             }
             // each object is monitored by n sensor group.
-            m_list_gt_objects.at(obj_index).beginGroundTruthGeneration(sensor_group_index, *cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index));
+            list_of_gt_objects_base.at(obj_index).beginGroundTruthGeneration(sensor_group_index, *cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index));
 
         }
         if ( m_evaluation_sensor_list.size() > 1 ) {
-            m_list_gt_objects.at(obj_index).generate_combined_sensor_data();
+            list_of_gt_objects_base.at(obj_index).generate_combined_sensor_data();
         }
 
     }
@@ -126,10 +122,10 @@ void GroundTruthSceneInternal::startEvaluating(std::unique_ptr<Noise> &noise) {
 
             Sensors gt_sen(cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorStartPoint(), noise,
                            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(0)->getSensorName());
-            m_list_gt_sensors.push_back(gt_sen);
+            list_of_gt_sensors_base.push_back(gt_sen);
             // each sensor is monitored by n sensor group.
 
-            m_list_gt_sensors.at(sen_index).beginGroundTruthGeneration(*cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(sen_index));
+            list_of_gt_sensors_base.at(sen_index).beginGroundTruthGeneration(*cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customSensorMetaDataList().at(sen_index));
 
         }
 
