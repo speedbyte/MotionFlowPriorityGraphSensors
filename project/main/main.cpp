@@ -266,7 +266,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
     std::map<std::string, double> time_map;
 
-
     std::vector<float> time;
     double sum_time = 0;
 
@@ -341,12 +340,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             }
 
             base_ptr_gt_scene->generate_gt_scene();
-            base_ptr_gt_scene->startEvaluating(noisePointer, list_of_gt_objects_base, list_of_gt_sensors_base);
             base_ptr_gt_scene->generate_bird_view();
 
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" ) {
 
+                base_ptr_gt_scene->startEvaluating(noisePointer, list_of_gt_objects_base, list_of_gt_sensors_base);
                 base_ptr_gt_scene->save_gt_scene_data();
 
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
