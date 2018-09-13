@@ -23,6 +23,7 @@
 
 boost::filesystem::path GroundTruthScene::m_ground_truth_generate_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_edge_path;
+boost::filesystem::path GroundTruthScene::m_ground_truth_depth_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_flow_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_plot_path;
 
@@ -60,6 +61,8 @@ void GroundTruthScene::prepare_scene_directories_blue_sky(ushort sensor_group_in
 
     m_baseframepath = m_groundtruthpath.string() + "/" + "base_frame";
 
+    m_ground_truth_depth_path = m_groundtruthpath.string() + "/" + "depth_";
+
     m_ground_truth_framedifference_path = m_groundtruthpath.string() + "/" + "frame_difference_";
 
     m_ground_truth_flow_path = m_groundtruthpath.string() + "/" + "flow_occ_";
@@ -82,6 +85,7 @@ void GroundTruthScene::prepare_scene_directories_blue_sky(ushort sensor_group_in
             std::string generate_path_sensor = m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix;
             std::string baseframe_path_sensor = m_baseframepath.string() + "_" + sensor_index_folder_suffix;
             std::string framedifference_path_sensor = m_ground_truth_framedifference_path.string()  + sensor_index_folder_suffix;
+            std::string depth_path_sensor = m_ground_truth_depth_path.string()  + sensor_index_folder_suffix;
             std::string edge_path_sensor = m_ground_truth_edge_path.string() + sensor_index_folder_suffix;
             std::string flow_path_sensor = m_ground_truth_flow_path.string() + sensor_index_folder_suffix;
             std::string plot_path_sensor = m_ground_truth_plot_path.string() + sensor_index_folder_suffix;
@@ -96,6 +100,11 @@ void GroundTruthScene::prepare_scene_directories_blue_sky(ushort sensor_group_in
                 system(("rm -rf " + framedifference_path_sensor).c_str());
             }
             boost::filesystem::create_directories(framedifference_path_sensor);
+
+            if (boost::filesystem::exists(depth_path_sensor)) {
+                system(("rm -rf " + depth_path_sensor).c_str());
+            }
+            boost::filesystem::create_directories(depth_path_sensor);
 
             if (boost::filesystem::exists(edge_path_sensor)) {
                 system(("rm -rf " + edge_path_sensor).c_str());

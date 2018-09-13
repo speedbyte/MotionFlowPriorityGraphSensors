@@ -283,6 +283,7 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
     //---------------------------------------------------------------------------------
 
 }
+
 void BasicObjects::validate_depth_images() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
@@ -301,7 +302,7 @@ void BasicObjects::validate_depth_images() {
         char file_name_input_image[50];
         sprintf(file_name_input_image, "depth_000%03d_10.png", current_frame_index);
         std::string input_image_path =
-                GroundTruthScene::m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+                GroundTruthScene::m_ground_truth_depth_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
         cv::Mat depth_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_ANYCOLOR);
 
         if ( depth_02_frame.data == NULL ) {

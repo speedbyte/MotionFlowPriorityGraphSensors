@@ -105,7 +105,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
         sprintf(file_name_depth_image, "depth_000%03d_10.png", current_frame_index);
         std::basic_string<char> base_image_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "/" + file_name_image; //+ file_name_image;
         std::basic_string<char> input_image_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image; //+ file_name_image;
-        std::basic_string<char> input_image_depth_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_depth_image; //+ "/" +  file_name_depth;
+        std::basic_string<char> input_image_depth_file_with_path = GroundTruthScene::m_ground_truth_depth_path.string()  + sensor_index_folder_suffix + "/" + file_name_depth_image; //+ "/" +  file_name_depth;
 
         cv::Mat result(Dataset::m_frame_size, CV_8UC3);
         result = cv::Scalar::all(0);

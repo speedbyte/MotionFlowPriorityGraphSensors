@@ -73,7 +73,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     cv::Mat finalDepth(Dataset::m_frame_size,CV_32FC1);
     char file_name_input_image_depth[50];
     sprintf(file_name_input_image_depth, "depth_000%03d_10.png", image_frame_count);
-    std::string input_image_path_depth = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image_depth;
+    std::string input_image_path_depth = GroundTruthScene::m_ground_truth_depth_path.string()  + sensor_index_folder_suffix + "/" + file_name_input_image_depth;
     cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_UNCHANGED);
 
     auto START_BENCHMARK

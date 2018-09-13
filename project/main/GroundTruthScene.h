@@ -62,6 +62,7 @@ public:
 
     static boost::filesystem::path  m_ground_truth_plot_path;
 
+    static boost::filesystem::path  m_ground_truth_depth_path;
 
     GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment){
 
