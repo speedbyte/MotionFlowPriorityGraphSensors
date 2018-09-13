@@ -46,7 +46,7 @@ void GroundTruthScene::prepare_directories(ushort sensor_group_index) {
 
 
     char sensor_index_folder_suffix[50];
-    if (m_regenerate_yaml_file) {
+    if (Dataset::GENERATE) {
         if (m_datasetpath.string() == std::string(CPP_DATASET_PATH) || m_datasetpath.string() == std::string(VIRES_DATASET_PATH)) {
 
             std::cout << "prepare gt_scene directories" << std::endl;

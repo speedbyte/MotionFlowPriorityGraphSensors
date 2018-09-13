@@ -35,8 +35,6 @@ protected:
 
     cv::FileStorage m_write_fs;
 
-    bool m_regenerate_yaml_file;
-
     std::vector<ushort> m_generation_sensor_list;
     std::vector<ushort> m_evaluation_sensor_list;
 
@@ -65,7 +63,7 @@ public:
     static boost::filesystem::path  m_ground_truth_plot_path;
 
 
-    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects > &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment), m_regenerate_yaml_file(generate_yaml_file) {
+    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment){
 
         //m_ptr_customObjectMetaDataList = {};
         m_datasetpath = Dataset::m_dataset_basepath;
@@ -102,8 +100,8 @@ private:
 
 public:
 
-    GroundTruthSceneInternal(std::vector<ushort> generation_sensor_lists, std::vector<ushort> evaluation_sensor_lists, std::string scenario, std::string environment, std::vector<GroundTruthObjects> &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) :
-    GroundTruthScene(generation_sensor_lists, evaluation_sensor_lists, scenario, environment, list_objects, list_sensors, generate_yaml_file) {
+    GroundTruthSceneInternal(std::vector<ushort> generation_sensor_lists, std::vector<ushort> evaluation_sensor_lists, std::string scenario, std::string environment) :
+    GroundTruthScene(generation_sensor_lists, evaluation_sensor_lists, scenario, environment) {
     }
 
     void startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) override;
@@ -366,7 +364,7 @@ public:
 
     double getTime();
 
-    GroundTruthSceneExternal(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment, std::vector<GroundTruthObjects>  &list_objects, std::vector<Sensors> &list_sensors, bool generate_yaml_file) : sensor_group(MAX_ALLOWED_SENSORS), GroundTruthScene(generation_sensor_list, evaluation_sensor_list, scenario, environment, list_objects, list_sensors, generate_yaml_file) {
+    GroundTruthSceneExternal(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment) : sensor_group(MAX_ALLOWED_SENSORS), GroundTruthScene(generation_sensor_list, evaluation_sensor_list, scenario, environment) {
 
 
         std::string to_replace = "traffic_demo";

@@ -19,7 +19,7 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
         cppObjects.push_back(CppObjects(0));
         cppObjects.push_back(CppObjects(1));
 
-        if (m_regenerate_yaml_file) {
+        if (Dataset::GENERATE) {
 
             for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
