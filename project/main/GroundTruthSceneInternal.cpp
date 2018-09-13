@@ -38,7 +38,6 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
                 //noise = std::make_unique<BlackNoise>(blackNoise);
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise, sensor_group_index);
-
             }
 
             //save_groundtruth_data
@@ -50,9 +49,8 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
                 cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
             }
 
-            startEvaluating(colorfulNoise);
         }
-
+        startEvaluating(colorfulNoise);
     }
 
 }

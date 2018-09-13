@@ -302,22 +302,22 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
     std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
 
-    if (vires_dataset.execute) {
+    if (cpp_dataset.execute || vires_dataset.execute) {
 
-        Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.gt,
-                             vires_dataset.start, vires_dataset.stop, vires_dataset.max_frames_dataset,
-                             vires_dataset.dataprocessing_map, vires_dataset.algorithm_map, evaluation_list);
+        if (vires_dataset.execute) {
 
-    } else if ( cpp_dataset.execute ) {
+            Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, vires_dataset.gt,
+                                 vires_dataset.start, vires_dataset.stop, vires_dataset.max_frames_dataset,
+                                 vires_dataset.dataprocessing_map, vires_dataset.algorithm_map, evaluation_list);
 
-        Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.gt,
-                             cpp_dataset.start, cpp_dataset.stop, cpp_dataset.max_frames_dataset,
-                             cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map, evaluation_list);
-    }
+        } else if ( cpp_dataset.execute ) {
 
-    for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+            Dataset::fillDataset(frame_size, depth, cn, CPP_DATASET_PATH, input, output, cpp_dataset.gt,
+                                 cpp_dataset.start, cpp_dataset.stop, cpp_dataset.max_frames_dataset,
+                                 cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map, evaluation_list);
+        }
 
-        if (cpp_dataset.execute || vires_dataset.execute) {
+        for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
             GroundTruthObjects::groundTruthObjectTotalCount = 0;
             std::unique_ptr<GroundTruthScene> base_ptr_gt_scene;
@@ -364,32 +364,33 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 if (Dataset::GENERATE ) {
                     gt_flow.save_flow_vector();
-                    exit(0);
+
+                } else {
+
+                    gt_flow.find_ground_truth_object_special_region_of_interest();
+                    fs.open(("../values.yml"), cv::FileStorage::WRITE);
+
+                    for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
+                        ptr_list_of_gt_objects_base.at(obj_index)->generate_object_mean_centroid_displacement(
+                                "ground_truth");
+                    }
+
+                    gt_flow.generate_collision_points();
+                    gt_flow.generate_metrics_optical_flow_algorithm(); // this is to just create Jaccard Index  =  1
+                    //gt_flow.analyse_stencil();
+
+                    time_map["prepare_ground_truth"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
+                    tic = steady_clock::now();
+
+                    if ((cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.analyse && vires_dataset.execute)) {
+
+                        pixelRobustness.generatePixelRobustness(gt_flow, gt_flow);
+                        vectorRobustness.generateVectorRobustness( gt_flow, gt_flow);
+                    }
+
+                    time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
+                    tic = steady_clock::now();
                 }
-
-                gt_flow.find_ground_truth_object_special_region_of_interest();
-                fs.open(("../values.yml"), cv::FileStorage::WRITE);
-
-                for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
-                    ptr_list_of_gt_objects_base.at(obj_index)->generate_object_mean_centroid_displacement(
-                            "ground_truth");
-                }
-
-                gt_flow.generate_collision_points();
-                gt_flow.generate_metrics_optical_flow_algorithm(); // this is to just create Jaccard Index  =  1
-                //gt_flow.analyse_stencil();
-
-                time_map["prepare_ground_truth"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
-                tic = steady_clock::now();
-
-                if ((cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.analyse && vires_dataset.execute)) {
-
-                    pixelRobustness.generatePixelRobustness(gt_flow, gt_flow);
-                    vectorRobustness.generateVectorRobustness( gt_flow, gt_flow);
-                }
-
-                time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
-                tic = steady_clock::now();
 
             }
 
