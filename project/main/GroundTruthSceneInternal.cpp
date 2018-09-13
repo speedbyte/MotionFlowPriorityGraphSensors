@@ -17,41 +17,49 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
     cppObjects.push_back(CppObjects(0));
     cppObjects.push_back(CppObjects(1));
 
-    if (Dataset::GENERATE) {
+    for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
 
-        for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+        std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
 
-            std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
-
-            BlackNoise blackNoise;
-            std::unique_ptr<Noise> noise;
-            if (m_environment == "night") {
-                BlackNoise blackNoise_;
-                noise = std::make_unique<BlackNoise>(blackNoise_);
-            } else {
-                WhiteNoise whiteNoise_;
-                noise = std::make_unique<WhiteNoise>(whiteNoise_);
-            }
-
-            //noise = std::make_unique<BlackNoise>(blackNoise);
-            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise, sensor_group_index);
+        BlackNoise blackNoise;
+        std::unique_ptr<Noise> noise;
+        if (m_environment == "night") {
+            BlackNoise blackNoise_;
+            noise = std::make_unique<BlackNoise>(blackNoise_);
+        } else {
+            WhiteNoise whiteNoise_;
+            noise = std::make_unique<WhiteNoise>(whiteNoise_);
         }
 
-    } else { // do not genreate yaml file
-        for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
-
-            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
-            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
-        }
-
+        //noise = std::make_unique<BlackNoise>(blackNoise);
+        cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise, sensor_group_index);
     }
+
 }
 
-void GroundTruthSceneInternal::save_gt_scene_data() {
+
+void GroundTruthSceneInternal::read_gt_scene_data() {
+
+    std::unique_ptr<Noise> noNoise = std::make_unique<NoNoise>();
+
+    for (ushort sensor_group_index = 0; sensor_group_index < m_generation_sensor_list.size(); sensor_group_index++ ) {
+
+        cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("cpp_");
+        cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("cpp_");
+    }
+
+}
+
+
+void GroundTruthSceneInternal::write_gt_scene_data() {
 
     try {
 
         for ( ushort sensor_group_index = 0 ; sensor_group_index < m_generation_sensor_list.size() ; sensor_group_index++) {
+
+            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
+            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage(m_ground_truth_generate_path, m_ground_truth_framedifference_path);
+            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images(m_ground_truth_generate_path);
 
             //cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).closeAllFileHandles();
 
@@ -62,10 +70,6 @@ void GroundTruthSceneInternal::save_gt_scene_data() {
             cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("cpp_");
             //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
 
-            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
-
-            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage(m_ground_truth_generate_path, m_ground_truth_framedifference_path);
-            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images(m_ground_truth_generate_path);
 
 
         }
@@ -80,7 +84,7 @@ void GroundTruthSceneInternal::save_gt_scene_data() {
 }
 
 
-void GroundTruthSceneInternal::startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) {
+void GroundTruthSceneInternal::convert_sensor_image_to_object_level(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) {
 
 
     for (ushort obj_index = 0; obj_index < cppObjects.at(m_evaluation_sensor_list.at(0)).get_ptr_customObjectMetaDataList().size(); obj_index++) {

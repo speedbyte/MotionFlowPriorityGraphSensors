@@ -78,8 +78,8 @@ public:
     };
 
 
-    virtual void startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) {
-        std::cout << "base implementation of startEvaluating()" << std::endl;
+    virtual void convert_sensor_image_to_object_level(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) {
+        std::cout << "base implementation of convert_sensor_image_to_object_level()" << std::endl;
         throw;
     };
 
@@ -89,7 +89,9 @@ public:
 
     void prepare_scene_directories_blue_sky(ushort sensor_group_index);
 
-    virtual void save_gt_scene_data() {};
+    virtual void write_gt_scene_data() {throw;};
+
+    virtual void read_gt_scene_data() {throw;};
 };
 
 class GroundTruthSceneInternal : public GroundTruthScene {
@@ -106,7 +108,7 @@ public:
     GroundTruthScene(generation_sensor_lists, evaluation_sensor_lists, scenario, environment) {
     }
 
-    void startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) override;
+    void convert_sensor_image_to_object_level(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) override;
 
     void generate_gt_scene() override;
 
@@ -114,7 +116,9 @@ public:
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
 
-    void save_gt_scene_data() override;
+    void write_gt_scene_data() override;
+
+    void read_gt_scene_data() override;
 
 
 };
@@ -328,7 +332,7 @@ $
 
 public:
 
-    void startEvaluating(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) override;
+    void convert_sensor_image_to_object_level(std::unique_ptr<Noise> &noise, std::vector<GroundTruthObjects> &list_of_gt_objects_base, std::vector<Sensors> &list_of_gt_sensors_base) override;
 
     void configVires() {
 
@@ -469,10 +473,8 @@ public:
             }
         }
 
-
         // some stuff for performance measurement
         mStartTime = -1.0;
-
 
         mTotalNoImages= 0;
 
@@ -587,7 +589,10 @@ public:
         std::cout << "killing previous GroundTruthScene object\n" ;
     }
 
-    void save_gt_scene_data() override;
+    void write_gt_scene_data() override;
+
+    void read_gt_scene_data() override;
+
 };
 
 

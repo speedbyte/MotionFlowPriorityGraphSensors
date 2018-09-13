@@ -344,15 +344,20 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 noisePointer = std::make_unique<NoNoise>();
             }
 
-            base_ptr_gt_scene->generate_gt_scene();
-            base_ptr_gt_scene->generate_bird_view();
+            if ( Dataset::GENERATE ) {
+                base_ptr_gt_scene->generate_gt_scene();
+                base_ptr_gt_scene->generate_bird_view();
+            }
 
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" ) {
 
-                base_ptr_gt_scene->save_gt_scene_data();  // writePositionInYAML; framdifference, edge images
-
-                base_ptr_gt_scene->startEvaluating(noisePointer, list_of_gt_objects_base, list_of_gt_sensors_base); // transfer data to list_of_objects.
+                if ( Dataset::GENERATE ) {
+                    base_ptr_gt_scene->write_gt_scene_data();  // writePositionInYAML; framdifference, edge images
+                } else {
+                    base_ptr_gt_scene->read_gt_scene_data();
+                }
+                base_ptr_gt_scene->convert_sensor_image_to_object_level(noisePointer, list_of_gt_objects_base, list_of_gt_sensors_base); // transfer data to list_of_objects.
                 // starting here,  the job of GroundTruthScene is complete
 
                 // The first iteration "blue_sky" will fil the objects_base and the ptr_objects_base and thereafter it is simply visible
