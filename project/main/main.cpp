@@ -341,13 +341,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             base_ptr_gt_scene->generate_gt_scene();
             base_ptr_gt_scene->generate_bird_view();
 
-            if ((env_index == environment_list.size() - 1) && Dataset::GENERATE) {
-                //base_ptr_gt_scene->stopSimulation();
-                // Hack the images and the position_file
-                //system("python ../quicky_1.py 1");
-                exit(0);
-            }
-
             // Generate Groundtruth data flow --------------------------------------
             if (environment_list[env_index] == "blue_sky" ) {
 
@@ -398,6 +391,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
                 tic = steady_clock::now();
 
+            }
+
+            if ((env_index == environment_list.size() - 1) && Dataset::GENERATE) {
+                //base_ptr_gt_scene->stopSimulation();
+                // Hack the images and the position_file
+                //system("python ../quicky_1.py 1");
+                exit(0);
             }
         }
     }

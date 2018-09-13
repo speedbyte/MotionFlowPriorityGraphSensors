@@ -40,6 +40,7 @@ y_axis_label_dict = {
     "l1_cumulative_distance_all_pixels" : "l1_cumulative_distance_all_pixels",
     "l2_cumulative_distance_all_pixels" : "l2_cumulative_distance_all_pixels",
     "collisionpoints" : "deviation",
+    "algorithm_sroi_pixels_count" : "algorithm_sroi_pixels_count"
 }
 
 parameter_list = [  ]
@@ -47,7 +48,7 @@ parameter_list = [ "algorithm_pixels_count", "l2_cumulative_distance_good_pixels
 parameter_list = [ "algorithm_pixels_count", "l2_cumulative_distance_good_pixels", "ma_cumulative_distance_good_pixels", "ma_cumulative_distance_all_pixels", "l2_cumulative_distance_all_pixels", "collisionpoints"]
 parameter_list = [ "ground_truth_pixels_count", "algorithm_pixels_count", "l1_total_count_good_pixels", "l2_total_count_good_pixels", "ma_total_count_good_pixels"]
 parameter_list = [ "algorithm_pixels_count", "ground_truth_sroi_pixels_count", "l1_total_count_good_pixels", "l2_total_count_good_pixels",
-                   "ma_total_count_good_pixels"]
+                   "ma_total_count_good_pixels", "algorithm_sroi_pixels_count"]
 
 datafilter_list  = [ "0", ]
 
