@@ -45,22 +45,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                 (list_of_current_objects.size());
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
 
-                char file_name_image_output[50], file_name_image_output_stiched[50], sensor_index_folder_suffix[10], stiched_sensor_index_folder_suffix[10];
-                sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-                sprintf(stiched_sensor_index_folder_suffix, "%02d", (Dataset::SENSOR_COUNT-1));
-
-                std::string gnuplot_image_file_with_path;
-                std::string gnuplot_image_file_with_path_stiched;
 
                 ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                         (0).at(current_frame_index).frame_no;
 
-                sprintf(file_name_image_output, "000%03d_10.png", image_frame_count);
-                sprintf(file_name_image_output_stiched, "stiched_000%03d_10.png", image_frame_count);
-
-                gnuplot_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
-
-                gnuplot_image_file_with_path_stiched = m_gnuplots_path.string() + stiched_sensor_index_folder_suffix + "/" + file_name_image_output_stiched;
 
                 std::cout << "current_frame_index " << current_frame_index << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
@@ -367,6 +355,24 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
     coord2 = "4," + std::to_string(m*(4) + c);
     gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
 
+
+    char file_name_image_output[50], file_name_image_output_stiched[50], sensor_index_folder_suffix[10], stiched_sensor_index_folder_suffix[10];
+    sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
+    sprintf(stiched_sensor_index_folder_suffix, "%02d", (Dataset::SENSOR_COUNT-1));
+
+    std::string gnuplot_image_file_with_path_stiched;
+
+    sprintf(file_name_image_output, "000%03d_10.png", evaluationData.at(obj_index).current_frame_index);
+    sprintf(file_name_image_output_stiched, "stiched_000%03d_10.png", evaluationData.at(obj_index).current_frame_index);
+
+
+    gnuplot_image_file_with_path_stiched = m_gnuplots_path.string() + stiched_sensor_index_folder_suffix + "/" + file_name_image_output_stiched;
+
+
+    std::string gnuplot_image_file_with_path;
+    gnuplot_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
+
+
     if ( obj_index == 0 ) {
 
         std::cout << "ellipse" << ellipse ;
@@ -375,7 +381,7 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
 
         gp2d << "set term png size 400,400\n";
         gp2d << "set output \"" + std::string("../gnuplot.png") + "\"\n";
-        //gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
+        gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
         gp2d << "set xrange [-5:5]\n";
         gp2d << "set yrange [-5:5]\n";
         //gp2d << gp_line;
