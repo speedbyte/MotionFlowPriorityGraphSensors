@@ -28,27 +28,16 @@ dict_color_noise = {
 }
 
 y_axis_label_dict = {
-    "ground_truth_pixels_count" : "ground_truth_pixels_count",
-    "ground_truth_sroi_pixels_count" : "ground_truth_sroi_pixels_count",
-    "algorithm_pixels_count" : "algorithm_pixels_count/ground_truth_pixels_count",
-    "l1_total_count_good_pixels" : "l1_total_count_good_pixels",
-    "l2_total_count_good_pixels" : "l2_total_count_good_pixels",
-    "ma_total_count_good_pixels" : "ma_total_count_good_pixels",
-    "l2_cumulative_distance_good_pixels": "good_pixels/algorithm_pixels_count",
-    "ma_cumulative_distance_good_pixels": "good_pixels/algorithm_pixels_count",
-     "ma_cumulative_distance_all_pixels" : "ma_cumulative_distance_all_pixels",
-    "l1_cumulative_distance_all_pixels" : "l1_cumulative_distance_all_pixels",
-    "l2_cumulative_distance_all_pixels" : "l2_cumulative_distance_all_pixels",
-    "collisionpoints" : "deviation",
-    "algorithm_sroi_pixels_count" : "algorithm_sroi_pixels_count"
+
 }
 
 parameter_list = [  ]
-parameter_list = [ "algorithm_pixels_count", "l2_cumulative_distance_good_pixels", "ma_cumulative_distance_good_pixels", "ma_cumulative_distance_all_pixels", "l1_cumulative_distance_all_pixels", "l2_cumulative_distance_all_pixels"]
-parameter_list = [ "algorithm_pixels_count", "l2_cumulative_distance_good_pixels", "ma_cumulative_distance_good_pixels", "ma_cumulative_distance_all_pixels", "l2_cumulative_distance_all_pixels", "collisionpoints"]
-parameter_list = [ "ground_truth_pixels_count", "algorithm_pixels_count", "l1_total_count_good_pixels", "l2_total_count_good_pixels", "ma_total_count_good_pixels"]
-parameter_list = [ "algorithm_pixels_count", "ground_truth_sroi_pixels_count", "l1_total_count_good_pixels", "l2_total_count_good_pixels",
-                   "ma_total_count_good_pixels", "algorithm_sroi_pixels_count"]
+parameter_list = [ "algorithm_pixels", "l2_cumulative_distance_good_pixels", "ma_cumulative_distance_good_pixels", "ma_cumulative_distance_all_pixels", "l1_cumulative_distance_all_pixels", "l2_cumulative_distance_all_pixels"]
+parameter_list = [ "algorithm_pixels", "l2_cumulative_distance_good_pixels", "ma_cumulative_distance_good_pixels", "ma_cumulative_distance_all_pixels", "l2_cumulative_distance_all_pixels", "collisionpoints"]
+parameter_list = [ "ground_truth_pixels", "algorithm_pixels", "l1_total_good_pixels", "l2_total_good_pixels", "ma_total_good_pixels"]
+parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels",
+                   "ma_total_good_pixels", "algorithm_sroi_pixels"]
+parameter_list = ["algorithm_metrics_total_pixel", "algorithm_metrics_l1_cumulative_error_all_pixels", "algorithm_sroi_metrics_total_pixel", "algorithm_sroi_metrics_l1_cumulative_error_all_pixels"]
 
 datafilter_list  = [ "0", ]
 

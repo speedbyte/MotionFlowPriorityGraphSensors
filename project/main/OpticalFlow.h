@@ -14,20 +14,18 @@
 
 typedef struct {
 
-    ushort total_pixel_count;
+    ushort total_pixel;
+    ushort l1_total_good_pixels;
+    ushort l2_total_good_pixels;
+    ushort ma_total_good_pixels;
 
-    ushort l1_total_count_good_pixels;
-    ushort l2_total_count_good_pixels;
-    ushort ma_total_count_good_pixels;
+    float l1_cumulative_error_all_pixels;
+    float l2_cumulative_error_all_pixels;
+    float ma_cumulative_error_all_pixels;
 
-    double l1_cumulative_distance_all_pixels;
-    double l2_cumulative_distance_all_pixels;
-    double ma_cumulative_distance_all_pixels;
-
-    double l1_cumulative_distance_good_pixels;
-    double l2_cumulative_distance_good_pixels;
-    double ma_cumulative_distance_good_pixels;
-
+    float l1_cumulative_error_good_pixels;
+    float l2_cumulative_error_good_pixels;
+    float ma_cumulative_error_good_pixels;
 
 } COUNT_METRICS;
 
@@ -38,14 +36,14 @@ typedef struct {
     int    obj_index;
     bool   visiblity;
 
-    ushort ground_truth_pixels_count;
-    ushort ground_truth_sroi_pixels_count;
+    ushort ground_truth_pixels;
+    ushort ground_truth_sroi_pixels;
 
-    COUNT_METRICS ground_truth_count_metrics;
-    COUNT_METRICS algorithm_count_metrics;
-    COUNT_METRICS algorithm_interpolated_count_metrics;
-    COUNT_METRICS algorith_sroi_count_metrics;
-    COUNT_METRICS algorithm_sroi_interpolated_count_metrics;
+    COUNT_METRICS ground_truth_metrics;
+    COUNT_METRICS algorithm_metrics;
+    COUNT_METRICS algorithm_interpolated_metrics;
+    COUNT_METRICS algorithm_sroi_metrics;
+    COUNT_METRICS algorithm_sroi_interpolated_metrics;
 
     cv::Point2f gt_mean_displacement;
 

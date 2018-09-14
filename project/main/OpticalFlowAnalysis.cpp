@@ -126,10 +126,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
 
                         evaluationData.at(
-                                obj_index).ground_truth_pixels_count = (ushort)CLUSTER_COUNT_GT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+                                obj_index).ground_truth_pixels = (ushort)CLUSTER_COUNT_GT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
 
                         evaluationData.at(
-                                obj_index).ground_truth_sroi_pixels_count = (ushort)CLUSTER_COUNT_GT_SPECIAL_ROI; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
+                                obj_index).ground_truth_sroi_pixels = (ushort)CLUSTER_COUNT_GT_SPECIAL_ROI; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
 
 
                         cv::Mat icovar;
@@ -139,12 +139,12 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             icovar = evaluationData.at(obj_index).covar_displacement.inv(cv::DECOMP_SVD);
                         }
 
-                        COUNT_METRICS &ground_truth_count_metrics = evaluationData.at(
-                                obj_index).ground_truth_count_metrics;
+                        COUNT_METRICS &ground_truth_metrics = evaluationData.at(
+                                obj_index).ground_truth_metrics;
 
-                        ground_truth_count_metrics.l1_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
-                        ground_truth_count_metrics.l2_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
-                        ground_truth_count_metrics.ma_total_count_good_pixels = (ushort)CLUSTER_COUNT_GT;
+                        ground_truth_metrics.l1_total_good_pixels = (ushort)CLUSTER_COUNT_GT;
+                        ground_truth_metrics.l2_total_good_pixels = (ushort)CLUSTER_COUNT_GT;
+                        ground_truth_metrics.ma_total_good_pixels = (ushort)CLUSTER_COUNT_GT;
 
                         if (m_opticalFlowName != "ground_truth") {
 
@@ -165,30 +165,27 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
                                     obj_index)->get_object_extrapolated_point_displacement().at
                                     (sensor_index).at(current_frame_index).second;
-
-//--------------------------------------------------------------------------------------------
-                            COUNT_METRICS &entire_roi_object_count_analysis = evaluationData.at(obj_index).algorithm_count_metrics;
-                            generate_analysis_data(entire_roi_object, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, entire_roi_object_count_analysis, icovar);
-
                             auto euclidean_dist_gt = cv::norm(gt_displacement);
                             auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
 //--------------------------------------------------------------------------------------------
-
-                            COUNT_METRICS &entire_roi_interpolated_count_analysis = evaluationData.at(obj_index).algorithm_interpolated_count_metrics;
-                            generate_analysis_data(entire_roi_object_interpolated, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, entire_roi_interpolated_count_analysis, icovar);
-
+                            COUNT_METRICS &entire_roi_object_analysis = evaluationData.at(obj_index).algorithm_metrics;
+                            generate_analysis_data(entire_roi_object, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, entire_roi_object_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
 
-
-                            COUNT_METRICS &special_roi_object_count_analysis = evaluationData.at(obj_index).algorith_sroi_count_metrics;
-                            generate_analysis_data(intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_count_analysis, icovar);
+                            COUNT_METRICS &entire_roi_interpolated_analysis = evaluationData.at(obj_index).algorithm_interpolated_metrics;
+                            generate_analysis_data(entire_roi_object_interpolated, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, entire_roi_interpolated_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
 
-                            COUNT_METRICS &special_roi_object_interpolated_count_analysis = evaluationData.at(obj_index).algorithm_sroi_interpolated_count_metrics;
-                            generate_analysis_data(intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_interpolated_count_analysis, icovar);
+                            COUNT_METRICS &special_roi_object_analysis = evaluationData.at(obj_index).algorithm_sroi_metrics;
+                            generate_analysis_data(intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_analysis, icovar);
+
+//--------------------------------------------------------------------------------------------
+
+                            COUNT_METRICS &special_roi_object_interpolated_analysis = evaluationData.at(obj_index).algorithm_sroi_interpolated_metrics;
+                            generate_analysis_data(intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_interpolated_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
                         }
@@ -227,7 +224,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 }
 
 
-void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_anaylsis, cv::Mat &icovar) {
+void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &anaylsis, cv::Mat &icovar) {
 
     const float DISTANCE_ERROR_TOLERANCE = 1;
 
@@ -235,16 +232,16 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
     unsigned CLUSTER_COUNT = (unsigned) cluster_to_evaluate.at(sensor_index).at(
             current_frame_index).size();
 
-    count_anaylsis.total_pixel_count = (ushort)CLUSTER_COUNT;
+    anaylsis.total_pixel = (ushort)CLUSTER_COUNT;
 
     std::vector<std::pair<float, float>> xy_pts;
 
 
     for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
-        double l1_cumulative_distance_all_pixels = 0;
-        double l2_cumulative_distance_all_pixels = 0;
-        double ma_cumulative_distance_all_pixels = 0;
+        double l1_cumulative_error_all_pixels = 0;
+        double l2_cumulative_error_all_pixels = 0;
+        double ma_cumulative_error_all_pixels = 0;
 
         double l1_cumulative_error_tolerated = 0;
         double l2_cumulative_error_tolerated = 0;
@@ -252,21 +249,21 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
 
         cv::Point2f algo_displacement = cluster_to_evaluate.at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
-        // l1_cumulative_distance_all_pixels
+        // l1_cumulative_error_all_pixels
         auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
-        l1_cumulative_distance_all_pixels += l1_dist_err;
-        count_anaylsis.l1_cumulative_distance_all_pixels = l1_cumulative_distance_all_pixels;
+        l1_cumulative_error_all_pixels += l1_dist_err;
+        anaylsis.l1_cumulative_error_all_pixels = l1_cumulative_error_all_pixels;
 
-        // l2_cumulative_distance_all_pixels
+        // l2_cumulative_error_all_pixels
         auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
         auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
-        l2_cumulative_distance_all_pixels += euclidean_dist_err;
-        count_anaylsis.l2_cumulative_distance_all_pixels = l2_cumulative_distance_all_pixels;
+        l2_cumulative_error_all_pixels += euclidean_dist_err;
+        anaylsis.l2_cumulative_error_all_pixels = l2_cumulative_error_all_pixels;
 
-        // ma_cumulative_distance_all_pixels
+        // ma_cumulative_error_all_pixels
         auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
-        ma_cumulative_distance_all_pixels += ma_dist_algo;
-        count_anaylsis.ma_cumulative_distance_all_pixels = ma_cumulative_distance_all_pixels;
+        ma_cumulative_error_all_pixels += ma_dist_algo;
+        anaylsis.ma_cumulative_error_all_pixels = ma_cumulative_error_all_pixels;
 
         //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
         //auto angle_err = std::abs(angle_algo - angle_gt);
@@ -278,31 +275,31 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
             //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             l1_cumulative_error_tolerated += l1_dist_err;
-            count_anaylsis.l1_total_count_good_pixels++; // how many valid pixels in the found pixel are actually
-            count_anaylsis.l1_cumulative_distance_good_pixels = l1_cumulative_error_tolerated;
+            anaylsis.l1_total_good_pixels++; // how many valid pixels in the found pixel are actually
+            anaylsis.l1_cumulative_error_good_pixels = l1_cumulative_error_tolerated;
         }
         if (
                 (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
             //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             l2_cumulative_error_tolerated += euclidean_dist_err;
-            count_anaylsis.l2_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
-            count_anaylsis.l2_cumulative_distance_good_pixels = l2_cumulative_error_tolerated;
+            anaylsis.l2_total_good_pixels++; // how many pixels in the found pixel are actually valid
+            anaylsis.l2_cumulative_error_good_pixels = l2_cumulative_error_tolerated;
         }
         if (
                 (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
             // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             ma_cumulative_error_tolerated += ma_dist_algo;
-            count_anaylsis.ma_total_count_good_pixels++; // how many pixels in the found pixel are actually valid
-            count_anaylsis.ma_cumulative_distance_good_pixels = ma_cumulative_error_tolerated;
+            anaylsis.ma_total_good_pixels++; // how many pixels in the found pixel are actually valid
+            anaylsis.ma_cumulative_error_good_pixels = ma_cumulative_error_tolerated;
         }
 
         xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
     }
 
     // Overload operator
-    //std::cout << "count metrics for object index "          << obj_index << " = " << count_anaylsis << std::endl;
+    //std::cout << "count metrics for object index "          << obj_index << " = " << anaylsis << std::endl;
 
 
     //-----------------------------------------------------------------------------------------

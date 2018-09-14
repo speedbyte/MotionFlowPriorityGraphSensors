@@ -38,11 +38,9 @@ class GlobalGammaChange: public Noise {
 
 };
 
-
 class Vignetting : public Noise {
 
 };
-
 
 class GuassianNoise: public Noise {
 
@@ -52,7 +50,6 @@ public:
     }
 
 };
-
 
 class BlackNoise : public Noise {
 
@@ -70,6 +67,8 @@ class ColorfulNoise : public Noise {
 public:
 
     void apply(cv::Mat &image) override {
+
+        // get the existing image data and apply noise on the top of it.
 
         uchar r = 0;
         uchar b = 0;
@@ -104,18 +103,16 @@ public:
     }
 };
 
-
 class RandomNoise : public Noise {
 
 public:
 
     void apply(cv::Mat &image) override {
 
-        std::cout << "applying white noise" << std::endl;
+        std::cout << "applying random noise" << std::endl;
         cv::randu(image, 0, 255);
     }
 };
-
 
 class Reflection: public Noise {
 public:

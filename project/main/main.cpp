@@ -25,9 +25,9 @@
 
 // check if depth is correct - DONE
 // find values of algorithm displacement at sroi - DONE.
+// quality of value of algorithm displacement at sroi - DONE
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
-// gnuplot for all objects combined diffferent colors. read about it.
-// repair gnuplot
+// repair gnuplot, gnuplot for all objects combined diffferent colors. read about it.
 // gnuplot interpolated values
 // interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
