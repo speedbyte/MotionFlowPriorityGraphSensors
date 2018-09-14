@@ -78,7 +78,7 @@ void PrepareGroundTruthFlow::generate_flow_vector() {
 
             std::cout << "current_frame " << image_frame_count << std::endl;
 
-            std::string frame_difference_path = Dataset::m_dataset_gtpath.string() + "/frame_difference_"  + sensor_index_folder_suffix + "/" + file_name_image_output;
+            std::string frame_difference_path = GroundTruthScene::m_ground_truth_framedifference_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
             cv::Mat frameDifference = cv::imread(frame_difference_path, CV_LOAD_IMAGE_ANYCOLOR);
             if ( frameDifference.data == NULL ) {
                 std::cout << "no image found, exiting" << std::endl;

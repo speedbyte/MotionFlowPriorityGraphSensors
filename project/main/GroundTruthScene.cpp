@@ -21,11 +21,12 @@
 #include "ObjectMetaData.h"
 #include "Utils.h"
 
-boost::filesystem::path GroundTruthScene::m_ground_truth_generate_path;
+boost::filesystem::path GroundTruthScene::m_ground_truth_color_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_edge_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_depth_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_flow_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_plot_path;
+boost::filesystem::path GroundTruthScene::m_ground_truth_framedifference_path;
 
 using namespace std::chrono;
 
@@ -33,7 +34,7 @@ void GroundTruthScene::prepare_scene_directories_others(ushort sensor_group_inde
 
     m_groundtruthpath = Dataset::m_dataset_gtpath; // data/stereo_flow
     // m_environment. this changes with every environment
-    m_ground_truth_generate_path = m_groundtruthpath.string() + "/" + m_environment;
+    m_ground_truth_color_path = m_groundtruthpath.string() + "/" + m_environment;
 
     char sensor_index_folder_suffix[50];
     if (Dataset::GENERATE) {
@@ -42,7 +43,7 @@ void GroundTruthScene::prepare_scene_directories_others(ushort sensor_group_inde
             std::cout << "prepare scene directories for " << m_environment << std::endl;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
-            std::string generate_path_sensor = m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix;
+            std::string generate_path_sensor = m_ground_truth_color_path.string() + "_" + sensor_index_folder_suffix;
 
 
             if (boost::filesystem::exists(generate_path_sensor)) {
@@ -72,7 +73,7 @@ void GroundTruthScene::prepare_scene_directories_blue_sky(ushort sensor_group_in
     m_ground_truth_edge_path = m_groundtruthpath.string() + "/" + "edge_";
 
     // m_environment. this changes with every environment
-    m_ground_truth_generate_path = m_groundtruthpath.string() + "/" + m_environment;
+    m_ground_truth_color_path = m_groundtruthpath.string() + "/" + m_environment;
 
 
     char sensor_index_folder_suffix[50];
@@ -82,7 +83,7 @@ void GroundTruthScene::prepare_scene_directories_blue_sky(ushort sensor_group_in
             std::cout << "prepare ground truth base directories for " << m_environment << std::endl;
 
             sprintf(sensor_index_folder_suffix, "%02d", sensor_group_index);
-            std::string generate_path_sensor = m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix;
+            std::string generate_path_sensor = m_ground_truth_color_path.string() + "_" + sensor_index_folder_suffix;
             std::string baseframe_path_sensor = m_baseframepath.string() + "_" + sensor_index_folder_suffix;
             std::string framedifference_path_sensor = m_ground_truth_framedifference_path.string()  + sensor_index_folder_suffix;
             std::string depth_path_sensor = m_ground_truth_depth_path.string()  + sensor_index_folder_suffix;

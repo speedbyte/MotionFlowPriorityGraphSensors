@@ -64,10 +64,9 @@ public:
 
     void validate_depth_images();
 
-    void generate_edge_images(boost::filesystem::path ground_truth_generate_path);
+    void generate_edge_images();
 
-    void generateFrameDifferenceImage(boost::filesystem::path ground_truth_generate_path,
-                                      boost::filesystem::path ground_truth_framedifference_path);
+    void generateFrameDifferenceImage();
 };
 
 #endif //MAIN_BASICOBJECTS_H

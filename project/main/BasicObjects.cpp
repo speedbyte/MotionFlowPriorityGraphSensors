@@ -38,10 +38,10 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
 
             sprintf(file_name_image, "000%03d_10.png", current_frame_index);
             std::string input_image_file_with_path =
-                    GroundTruthScene::m_ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image;
+                    GroundTruthScene::m_ground_truth_color_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_image;
 
             sprintf(file_name_image_output, "000%03d_10_bb.png", current_frame_index);
-            //output_image_file_with_path = GroundTruthScene::m_ground_truth_generate_path.string() + "stencil/" + file_name_image_output;
+            //output_image_file_with_path = GroundTruthScene::m_ground_truth_color_path.string() + "stencil/" + file_name_image_output;
 
             cv::Mat tempGroundTruthImageBase = cv::imread(input_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
             if (tempGroundTruthImageBase.data == NULL) {
@@ -367,7 +367,7 @@ void BasicObjects::CannyEdgeDetection(std::string flow_path, std::string edge_pa
     //cv::waitKey(0);
 }
 
-void BasicObjects::generate_edge_images(boost::filesystem::path ground_truth_generate_path) {
+void BasicObjects::generate_edge_images() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
@@ -386,7 +386,7 @@ void BasicObjects::generate_edge_images(boost::filesystem::path ground_truth_gen
         char file_name_input_image[50];
         sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
         std::string input_image_path =
-                ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+                GroundTruthScene::m_ground_truth_color_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
 
         cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
         if (image_02_frame.data == NULL) {
@@ -403,7 +403,7 @@ void BasicObjects::generate_edge_images(boost::filesystem::path ground_truth_gen
 }
 
 
-void BasicObjects::generateFrameDifferenceImage(boost::filesystem::path ground_truth_generate_path, boost::filesystem::path ground_truth_framedifference_path) {
+void BasicObjects::generateFrameDifferenceImage() {
     // Frame Differencing
 
     unsigned long FRAME_COUNT = 0;
@@ -419,7 +419,7 @@ void BasicObjects::generateFrameDifferenceImage(boost::filesystem::path ground_t
         char file_name_input_image[50];
         sprintf(file_name_input_image, "000%03d_10.png", current_frame_index);
         std::string input_image_path =
-                ground_truth_generate_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+                GroundTruthScene::m_ground_truth_color_path.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
 
         cv::Mat image_02_frame = cv::imread(input_image_path, CV_LOAD_IMAGE_COLOR);
         if (image_02_frame.data == NULL) {
@@ -445,7 +445,7 @@ void BasicObjects::generateFrameDifferenceImage(boost::filesystem::path ground_t
         //cv::imshow("try", frameDifference);
         //cv::waitKey(0);
         std::string frame_difference_image_path =
-                ground_truth_framedifference_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+                GroundTruthScene::m_ground_truth_framedifference_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
         cv::imwrite(frame_difference_image_path, frameDifference);
     }
 }

@@ -324,8 +324,8 @@ void GroundTruthSceneExternal::write_gt_scene_data() {
         for ( ushort sensor_group_index = 0 ; sensor_group_index < m_generation_sensor_list.size() ; sensor_group_index++) {
 
             viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
-            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage(m_ground_truth_generate_path, m_ground_truth_framedifference_path);
-            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images(m_ground_truth_generate_path);
+            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
+            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images();
 
             viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).closeAllFileHandles();
 

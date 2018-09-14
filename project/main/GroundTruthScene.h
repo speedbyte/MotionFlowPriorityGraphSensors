@@ -25,8 +25,6 @@ protected:
 
     boost::filesystem::path m_baseframepath;
 
-    boost::filesystem::path m_ground_truth_framedifference_path;
-
     boost::filesystem::path  m_position_object_path;
 
     std::string m_scenario;
@@ -54,15 +52,12 @@ protected:
 
 public:
 
-    static boost::filesystem::path  m_ground_truth_generate_path;
-
+    static boost::filesystem::path  m_ground_truth_color_path;
     static boost::filesystem::path  m_ground_truth_edge_path;
-
     static boost::filesystem::path  m_ground_truth_flow_path;
-
     static boost::filesystem::path  m_ground_truth_plot_path;
-
     static boost::filesystem::path  m_ground_truth_depth_path;
+    static boost::filesystem::path  m_ground_truth_framedifference_path;
 
     GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment){
 
