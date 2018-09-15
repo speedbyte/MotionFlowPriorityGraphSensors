@@ -55,7 +55,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                 for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
-
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > gt_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement();
@@ -112,7 +111,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).covar_displacement;
 
-
                         evaluationData.at(
                                 obj_index).ground_truth_pixels = (ushort)CLUSTER_COUNT_GT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
 
@@ -149,10 +147,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             unsigned CLUSTER_COUNT_INTERPOLATED_ALGORITHM = (unsigned) entire_roi_object_interpolated.at(sensor_index).at(
                                     current_frame_index).size();
 
-
-                            cv::Point2f gt_displacement = m_ptr_list_gt_objects.at(
-                                    obj_index)->get_object_extrapolated_point_displacement().at
-                                    (sensor_index).at(current_frame_index).second;
+                            cv::Point2f gt_displacement = evaluationData.at(obj_index).gt_mean_displacement;
                             auto euclidean_dist_gt = cv::norm(gt_displacement);
                             auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
@@ -212,7 +207,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 }
 
 
-void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &anaylsis, cv::Mat &icovar) {
+void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
 
     const float DISTANCE_ERROR_TOLERANCE = 1;
 
@@ -220,7 +215,7 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
     unsigned CLUSTER_COUNT = (unsigned) cluster_to_evaluate.at(sensor_index).at(
             current_frame_index).size();
 
-    anaylsis.total_pixel = (ushort)CLUSTER_COUNT;
+    count_metrics.total_pixel = (ushort)CLUSTER_COUNT;
 
     std::vector<std::pair<float, float>> xy_pts;
 
@@ -240,18 +235,18 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
         // l1_cumulative_error_all_pixels
         auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
         l1_cumulative_error_all_pixels += l1_dist_err;
-        anaylsis.l1_cumulative_error_all_pixels = l1_cumulative_error_all_pixels;
+        count_metrics.l1_cumulative_error_all_pixels = l1_cumulative_error_all_pixels;
 
         // l2_cumulative_error_all_pixels
         auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
         auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
         l2_cumulative_error_all_pixels += euclidean_dist_err;
-        anaylsis.l2_cumulative_error_all_pixels = l2_cumulative_error_all_pixels;
+        count_metrics.l2_cumulative_error_all_pixels = l2_cumulative_error_all_pixels;
 
         // ma_cumulative_error_all_pixels
         auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
         ma_cumulative_error_all_pixels += ma_dist_algo;
-        anaylsis.ma_cumulative_error_all_pixels = ma_cumulative_error_all_pixels;
+        count_metrics.ma_cumulative_error_all_pixels = ma_cumulative_error_all_pixels;
 
         //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
         //auto angle_err = std::abs(angle_algo - angle_gt);
@@ -263,47 +258,52 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
             //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             l1_cumulative_error_tolerated += l1_dist_err;
-            anaylsis.l1_total_good_pixels++; // how many valid pixels in the found pixel are actually
-            anaylsis.l1_cumulative_error_good_pixels = l1_cumulative_error_tolerated;
+            count_metrics.l1_total_good_pixels++; // how many valid pixels in the found pixel are actually
+            count_metrics.l1_cumulative_error_good_pixels = l1_cumulative_error_tolerated;
         }
         if (
                 (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
             //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             l2_cumulative_error_tolerated += euclidean_dist_err;
-            anaylsis.l2_total_good_pixels++; // how many pixels in the found pixel are actually valid
-            anaylsis.l2_cumulative_error_good_pixels = l2_cumulative_error_tolerated;
+            count_metrics.l2_total_good_pixels++; // how many pixels in the found pixel are actually valid
+            count_metrics.l2_cumulative_error_good_pixels = l2_cumulative_error_tolerated;
         }
         if (
                 (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
             // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             ma_cumulative_error_tolerated += ma_dist_algo;
-            anaylsis.ma_total_good_pixels++; // how many pixels in the found pixel are actually valid
-            anaylsis.ma_cumulative_error_good_pixels = ma_cumulative_error_tolerated;
+            count_metrics.ma_total_good_pixels++; // how many pixels in the found pixel are actually valid
+            count_metrics.ma_cumulative_error_good_pixels = ma_cumulative_error_tolerated;
         }
 
         xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
     }
 
     // Overload operator
-    //std::cout << "count metrics for object index "          << obj_index << " = " << anaylsis << std::endl;
+    //std::cout << "count metrics for object index "          << obj_index << " = " << count_metrics << std::endl;
 
 
     //-----------------------------------------------------------------------------------------
-
     // start gnuplotting
-    Gnuplot gp2d;
     cv::Mat stich_plots;
 
+    show_gnuplot(cluster_to_evaluate, sensor_index, current_frame_index, obj_index, evaluationData, count_metrics, icovar);
+
+}
+
+
+void OpticalFlow::show_gnuplot(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
+
+
     std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
-    gt_mean_pts.push_back(std::make_pair(gt_displacement.x, gt_displacement.y));
+    gt_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).gt_mean_displacement.x, evaluationData.at(obj_index).gt_mean_displacement.y));
     algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x, evaluationData.at(obj_index).mean_displacement.y));
 
     //Get the eigenvalues and eigenvectors
     cv::Mat_<float> ellipse(3,1);
-
-    if ( CLUSTER_COUNT > 1 ) {
+    if ( 1 > 1 ) {
 
         double chisquare_val = 2.4477;
         cv::Mat_<float> eigenvectors(2,2);
@@ -341,20 +341,19 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
         }
     }
 
+    Gnuplot gp2d;
     float m, c;
 
     std::string coord1;
     std::string coord2;
     std::string gp_line;
-    cv::Vec4f line = evaluationData.at(
-            obj_index).regression_line;
+    cv::Vec4f line = evaluationData.at(obj_index).regression_line;
 
     m = line[1] / line[0];
     c = line[3] - line[2] * m;
     coord1 = "-4," + std::to_string(m*(-4) + c);
     coord2 = "4," + std::to_string(m*(4) + c);
     gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
-
 
     char file_name_image_output[50], file_name_image_output_stiched[50], sensor_index_folder_suffix[10], stiched_sensor_index_folder_suffix[10];
     sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
@@ -384,14 +383,14 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
         gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
         gp2d << "set xrange [-5:5]\n";
         gp2d << "set yrange [-5:5]\n";
-        //gp2d << gp_line;
+        gp2d << gp_line;
         gp2d << ellipse_plot;
         gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
                 ", '-' with points pt 22 notitle 'GT'"
                 ", '-' with points pt 15 notitle 'Algo'"
                 // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
                 "\n";
-        gp2d.send1d(xy_pts);
+        //gp2d.send1d(xy_pts);
         gp2d.send1d(gt_mean_pts);
         gp2d.send1d(algo_mean_pts);
 
@@ -420,20 +419,7 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
 
        } */
     }
-    else if ( obj_index == 5 ) {
 
-        //gp2d << "replot\n";
-
-        gp2d << "replot '-' with points title'" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
-                ", '-' with points pt 22 notitle 'GT'"
-                ", '-' with points pt 15 notitle 'Algo'"
-                // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
-                "\n";
-
-        gp2d.send1d(xy_pts);
-        gp2d.send1d(gt_mean_pts);
-        gp2d.send1d(algo_mean_pts);
-    }
     // shift stich multiple sensor images in a grid.
 }
 

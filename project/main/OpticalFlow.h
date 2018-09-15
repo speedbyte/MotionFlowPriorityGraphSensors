@@ -188,6 +188,7 @@ public:
 
 private:
 
+    void show_gnuplot(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar);
 };
 
 #endif //MAIN_OPTICALFLOW_H
