@@ -166,7 +166,7 @@ public:
 
     void save_flow_vector();
 
-    void rerun_optical_flow_algorithm();
+    void rerun_optical_flow_algorithm_interpolated();
 
     void generate_metrics_optical_flow_algorithm();
 

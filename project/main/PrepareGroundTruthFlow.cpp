@@ -260,9 +260,9 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                 // Hence this list will grow in case a single object has interesection points with multiple objects.
                 // back_inserter simply pushes back the values and is an easy way to tackle appending an array.
 
-                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
+                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
 
-                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
+                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
 
                 // alternative and efficient method is stated above. Leaving this just for reference.
                 /*
@@ -328,7 +328,7 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                 //assert(intersection_of_algorithm_and_sroi.size() > 0);
 
                 // Validate
-               for ( auto it = frame_object_special_region_of_interest.at(obj_index).begin(); it != frame_object_special_region_of_interest.at(obj_index).end(); it++) {
+                for ( auto it = frame_object_special_region_of_interest.at(obj_index).begin(); it != frame_object_special_region_of_interest.at(obj_index).end(); it++) {
                     cv::circle(tempImage, (*it).first, 1, cv::Scalar(obj_index*255,255,0));
                 }
             }

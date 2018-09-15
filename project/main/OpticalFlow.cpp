@@ -343,14 +343,13 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
     }
 }
 
+
 void OpticalFlow::save_flow_vector() {
 
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
     // Additionally stores the position in a png file
-
     std::vector<Objects *> list_of_current_objects;
-
 
     if (m_opticalFlowName == "ground_truth") {
         for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
@@ -459,7 +458,6 @@ void OpticalFlow::save_flow_vector() {
             F_png_write_interpolated.writeColor(plot_path_interpolated, max_magnitude);
         }
     }
-
     std::cout << "end of saving " + m_resultordner + " flow files in an image" << std::endl;
 
 }
@@ -597,7 +595,7 @@ void OpticalFlow::generate_sroi_intersections() {
 
 
 
-void OpticalFlow::rerun_optical_flow_algorithm() {
+void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
 
     for ( ushort sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++ ) {
 
@@ -607,8 +605,8 @@ void OpticalFlow::rerun_optical_flow_algorithm() {
         sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
         std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(m_ptr_list_simulated_objects.size());
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement_interpolated(m_ptr_list_simulated_objects.size());
 
         std::vector<std::vector<std::vector<bool> >  > multiframe_visibility(m_ptr_list_simulated_objects.size());
 
@@ -657,15 +655,15 @@ void OpticalFlow::rerun_optical_flow_algorithm() {
                 }*/
                 /// put data in object_stencil_displacement
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > dummy;
-                common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility);
+                common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement_interpolated, multiframe_stencil_disjoint_displacement_interpolated, multiframe_visibility);
 
             } else {
 
                 std::cout << "skipping first frame frame count " << current_frame_index << std::endl;
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
-                    multiframe_stencil_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
-                    multiframe_stencil_disjoint_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                    multiframe_stencil_displacement_interpolated.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                    multiframe_stencil_disjoint_displacement_interpolated.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
                     multiframe_visibility.at(obj_index).push_back({{false}});
                 }
 
@@ -674,8 +672,8 @@ void OpticalFlow::rerun_optical_flow_algorithm() {
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
 
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement.at(obj_index), multiframe_visibility.at(obj_index));
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement.at(obj_index), multiframe_visibility.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement_interpolated.at(obj_index), multiframe_visibility.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement_interpolated.at(obj_index), multiframe_visibility.at(obj_index));
 
         }
 
