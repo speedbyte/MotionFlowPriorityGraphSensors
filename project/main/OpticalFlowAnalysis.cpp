@@ -147,28 +147,24 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             unsigned CLUSTER_COUNT_INTERPOLATED_ALGORITHM = (unsigned) entire_roi_object_interpolated.at(sensor_index).at(
                                     current_frame_index).size();
 
-                            cv::Point2f gt_displacement = evaluationData.at(obj_index).gt_mean_displacement;
-                            auto euclidean_dist_gt = cv::norm(gt_displacement);
-                            auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
-
 //--------------------------------------------------------------------------------------------
                             COUNT_METRICS &entire_roi_object_analysis = evaluationData.at(obj_index).algorithm_metrics;
-                            generate_analysis_data(entire_roi_object, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, entire_roi_object_analysis, icovar);
+                            generate_analysis_data(entire_roi_object, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &entire_roi_interpolated_analysis = evaluationData.at(obj_index).algorithm_interpolated_metrics;
-                            generate_analysis_data(entire_roi_object_interpolated, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, entire_roi_interpolated_analysis, icovar);
+                            generate_analysis_data(entire_roi_object_interpolated, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_interpolated_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &special_roi_object_analysis = evaluationData.at(obj_index).algorithm_sroi_metrics;
-                            generate_analysis_data(intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_analysis, icovar);
+                            generate_analysis_data(intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &special_roi_object_interpolated_analysis = evaluationData.at(obj_index).algorithm_sroi_interpolated_metrics;
-                            generate_analysis_data(intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, gt_displacement, obj_index, evaluationData, special_roi_object_interpolated_analysis, icovar);
+                            generate_analysis_data(intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_interpolated_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
                         }
@@ -207,7 +203,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 }
 
 
-void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const cv::Point2f &gt_displacement, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
+void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index,  const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
 
     const float DISTANCE_ERROR_TOLERANCE = 1;
 
@@ -218,6 +214,10 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
     count_metrics.total_pixel = (ushort)CLUSTER_COUNT;
 
     std::vector<std::pair<float, float>> xy_pts;
+
+    cv::Point2f gt_displacement = evaluationData.at(obj_index).gt_mean_displacement;
+    auto euclidean_dist_gt = cv::norm(gt_displacement);
+    auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
 
     for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
