@@ -23,7 +23,7 @@
 #include "Sensors.h"
 #include "Utils.h"
 
-// why is total error of sroi more than eroi????
+// why is cumulative error of sroi more than eroi????
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // repair gnuplot, gnuplot for all objects combined diffferent colors. read about it.
 // gnuplot interpolated values

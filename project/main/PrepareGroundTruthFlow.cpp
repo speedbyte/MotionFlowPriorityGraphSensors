@@ -182,6 +182,7 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
             sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
             std::string flow_path = m_generatepath.parent_path().string() + "/flow_occ_" + sensor_index_folder_suffix + "/" + file_name_input_image;
             //std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string gt_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             std::cout << "current_frame_index  " << current_frame_index << std::endl;
 
@@ -202,7 +203,6 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
 
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_1;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_2;
-
 
                 cv::Mat mask_object_1, mask_object_2;
                 cv::Mat mask_object_1_dilated, mask_object_2_dilated;
@@ -260,9 +260,9 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                 // Hence this list will grow in case a single object has interesection points with multiple objects.
                 // back_inserter simply pushes back the values and is an easy way to tackle appending an array.
 
-                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
+                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
 
-                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
+                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
 
                 // alternative and efficient method is stated above. Leaving this just for reference.
                 /*
@@ -301,13 +301,14 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                 // occlusion boundary
             }
 
+            cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
+            tempImage = cv::imread(gt_image_path, CV_LOAD_IMAGE_COLOR);
+
             for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
 
                 all_frame_object_special_region_of_interest.at(obj_index).push_back(
                         frame_object_special_region_of_interest.at(obj_index));
 
-
-                std::vector<std::pair<cv::Point2f, cv::Point2f> > special_roi_object = frame_object_special_region_of_interest.at(obj_index);
 
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > gt_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement();
 
@@ -317,33 +318,25 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy(gt_roi_object.at(sensor_index).at(current_frame_index).size());
 
                 MyIntersection intersection;
-                intersection.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.begin(), special_roi_object.end());
+                intersection.find_intersection_pair(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), frame_object_special_region_of_interest.at(obj_index).begin(), frame_object_special_region_of_interest.at(obj_index).end());
                 intersection_of_gt_and_sroi = intersection.getResultIntersectingPair();
                 bool isSorted = std::is_sorted(gt_roi_object.at(sensor_index).at(current_frame_index).begin(), gt_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                 assert(isSorted);
-                bool isSorted_sroi = std::is_sorted(special_roi_object.begin(), special_roi_object.end(), PairPointsSort<float>());
+                bool isSorted_sroi = std::is_sorted(frame_object_special_region_of_interest.at(obj_index).begin(), frame_object_special_region_of_interest.at(obj_index).end(), PairPointsSort<float>());
                 assert(isSorted_sroi);
 
                 //assert(intersection_of_algorithm_and_sroi.size() > 0);
-                // Validate
-                if ( 0 ) {
-                    cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
-                    tempImage = cv::Scalar::all(255);
-                    for ( auto it = gt_roi_object.at(sensor_index).at(current_frame_index).begin(); it != gt_roi_object.at(sensor_index).at(current_frame_index).end(); it++) {
-                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,255,0));
-                    }
-                    for ( auto it = special_roi_object.begin(); it != special_roi_object.end(); it++) {
-                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
-                    }
-                    for ( auto it = intersection_of_gt_and_sroi.begin(); it != intersection_of_gt_and_sroi.end(); it++) {
-                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
-                    }
 
-                    cv::imshow("gt_sroi", tempImage);
-                    cv::waitKey(0);
-                    cv::destroyAllWindows();
+                // Validate
+               for ( auto it = frame_object_special_region_of_interest.at(obj_index).begin(); it != frame_object_special_region_of_interest.at(obj_index).end(); it++) {
+                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(obj_index*255,255,0));
                 }
             }
+
+            cv::imshow("gt_sroi", tempImage);
+            cv::waitKey(0);
+            cv::destroyAllWindows();
+
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {

@@ -31,10 +31,10 @@ void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
     std::unique_ptr<Noise> objectNoise_noNoise = std::make_unique<NoNoise>();
 
     //Rectangle rectangle_obj1(30, 70, objectNoise_colorfulNoise, 200); // width, height
-    Circle circle_obj1(std::max(30,70), objectNoise_noNoise, 200); // width, height
+    Circle circle_obj1(60, objectNoise_noNoise, 200); // width, height
 
     //Rectangle rectangle_obj2(30, 70, objectNoise_colorfulNoise, 11); // width, height
-    Circle circle_obj2(std::max(30,70), objectNoise_noNoise, 11); // width, height
+    Circle circle_obj2(80, objectNoise_noNoise, 11); // width, height
 
     Achterbahn achterbahn;
 
@@ -144,17 +144,14 @@ void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
                     break;
                 }
                 cv::Scalar color;
-                unsigned char depth;
                 //cv::fillConvexPoly(tempGroundTruthDepthImage, contours.at(0), cv::Scalar(255,0,0));
                 if ( obj_index == 0 ) {
                     color = cv::Scalar(1,1,1);
-                    depth = 200;
                 } else {
                     color = cv::Scalar(1,1,1);
-                    depth = 11;
                 }
 
-                cv::circle(shape_circle, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, color, CV_FILLED);
+                cv::circle(shape_circle, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getObjectRadius(), color, CV_FILLED);
 
                 /*
                 image_data_and_shape.copyTo(tempGroundTruthImage(
@@ -174,7 +171,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.width_px),
                                  cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_dimension_camera_px.height_px))));
                 */
-                cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), 30, cv::Scalar_<unsigned char>(depth), CV_FILLED);
+                cv::circle(tempGroundTruthDepthImage, cv::Point(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y)), m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getObjectRadius(), cv::Scalar_<unsigned char>((unsigned)m_ptr_customObjectMetaDataList.at(obj_index)->getObjectShape().getObjectDepth()), CV_FILLED);
 
                 printf("! WRITE %u %u %u !\n", tempGroundTruthDepthImage.at<unsigned char>(cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y),cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x)), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.x), cvRound(m_ptr_customObjectMetaDataList.at(obj_index)->getAll().at(current_frame_index).m_object_location_camera_px.cog_px.y));
 

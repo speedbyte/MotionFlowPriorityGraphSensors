@@ -24,14 +24,18 @@ protected:
 
     ushort m_objectWidth;
     ushort m_objectHeight;
+
+    ushort m_objectRadius;
+
     float m_depth;
 
 public:
 
     ObjectImageShapeData() {};
 
-    ObjectImageShapeData(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth ) : m_objectWidth(width), m_objectHeight
+    ObjectImageShapeData(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth ) : m_objectRadius(std::max(width, height)/2), m_objectWidth(width), m_objectHeight
             (height), m_depth(depth) {
+        m_data_depth.setTo(depth);
     }
 
     virtual void process() {};
@@ -41,6 +45,7 @@ public:
     }
 
     void applyDepth(ushort depth) {
+        m_depth = depth;
         m_data_depth.setTo(depth);
     }
 
@@ -63,6 +68,12 @@ public:
     ushort getObjectHeight() {
         return m_objectHeight;
     }
+
+    ushort getObjectRadius() {
+        return m_objectRadius;
+    }
+
+
 };
 
 /*
@@ -328,7 +339,7 @@ public:
         }
     }
 
-    void setObjectShape(ObjectImageShapeData objectShape) {
+    void setObjectShape(ObjectImageShapeData &objectShape) {
         m_objectMetaData_shape = objectShape;
     }
 
@@ -641,17 +652,17 @@ public:
 class Circle :  public ObjectImageShapeData {
 
 private:
-    ushort m_objectRadius;
 
 public:
 
-    Circle(ushort radius, std::unique_ptr<Noise> &noise, ushort depth) : m_objectRadius(radius/2), ObjectImageShapeData(radius, radius, noise, depth) {
-        construct(radius, noise, depth);
+    Circle(ushort diameter, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(diameter, diameter, noise, depth) {
+        construct(diameter, noise, depth);
     };
 
     void construct(ushort radius, std::unique_ptr<Noise> &noise, ushort depth);
 
     void process() override ;
+
 
 };
 
