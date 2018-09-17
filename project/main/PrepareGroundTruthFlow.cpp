@@ -333,8 +333,8 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                 }
             }
 
-            cv::imshow("gt_sroi", tempImage);
-            cv::waitKey(0);
+            //cv::imshow("gt_sroi", tempImage);
+            //cv::waitKey(0);
             cv::destroyAllWindows();
 
         }

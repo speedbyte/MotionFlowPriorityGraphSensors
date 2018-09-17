@@ -93,7 +93,7 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
     PRINT_BENCHMARK(frame_stencil_displacement_time_required)
 }
 
-void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &object_stencil_displacement, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_disjoint_displacement, std::vector<bool> &frame_stencil_visibility, const std::vector<cv::Point2f>& all_moving_objects_in_frame, const cv::Mat& depth_02_frame) {
+void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &object_stencil_displacement, std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_disjoint_displacement, std::vector<bool> &frame_stencil_visibility, const std::vector<cv::Point2f> &all_moving_objects_in_frame, const cv::Mat& depth_02_frame) {
 
 
     bool visibility = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_visibility().at(
@@ -477,8 +477,8 @@ void OpticalFlow::generate_sroi_intersections() {
     char sensor_index_folder_suffix[50];
     for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(m_ptr_list_simulated_objects.size());
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_sroi(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_sroi_interpolated(m_ptr_list_simulated_objects.size());
 
         unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
                 sensor_index).size();
@@ -500,6 +500,7 @@ void OpticalFlow::generate_sroi_intersections() {
 
             std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             std::string plot_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string gt_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
 
             std::string flow_path_interpolated = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_interpolated;
             std::string plot_path_interpolated = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_interpolated;
@@ -509,12 +510,16 @@ void OpticalFlow::generate_sroi_intersections() {
                 plot_path = GroundTruthScene::m_ground_truth_plot_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             }
 
-            FlowImageExtended F_png_write(Dataset::m_frame_size.width, Dataset::m_frame_size.height);
             std::cout << "current_frame_index " << current_frame_index << std::endl;
-            float max_magnitude = 0.0;
 
             std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_algorithm_and_sroi;
             std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_interpolated_algorithm_and_sroi;
+
+            cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
+            tempImage = cv::imread(gt_image_path, CV_LOAD_IMAGE_COLOR);
+
+            cv::Mat tempImageInterpolated(Dataset::m_frame_size, CV_8UC3);
+            tempImageInterpolated = cv::imread(gt_image_path, CV_LOAD_IMAGE_COLOR);
 
             for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
@@ -533,16 +538,12 @@ void OpticalFlow::generate_sroi_intersections() {
 
                 //assert(intersection_of_algorithm_and_sroi.size() > 0);
                 // Validate
-                cv::Mat tempImage(Dataset::m_frame_size, CV_8UC3);
-                tempImage = cv::Scalar::all(255);
                 for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
-                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
+                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(obj_index*255,255,0));
                 }
                 //cv::imshow("algorithm_sroi", tempImage);
                 //cv::waitKey(0);
                 cv::destroyAllWindows();
-
-
 
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
@@ -562,17 +563,15 @@ void OpticalFlow::generate_sroi_intersections() {
                 }
                 //assert(intersection_of_algorithm_and_sroi.size() > 0);
                 // Validate
-                cv::Mat tempImageInterpolated(Dataset::m_frame_size, CV_8UC3);
-                tempImageInterpolated = cv::Scalar::all(255);
                 for ( auto it = intersection_of_interpolated_algorithm_and_sroi.begin(); it != intersection_of_interpolated_algorithm_and_sroi.end(); it++) {
-                    cv::circle(tempImageInterpolated, (*it).first, 1, cv::Scalar(255,0,0));
+                    cv::circle(tempImageInterpolated, (*it).first, 1, cv::Scalar(obj_index*255,255,0));
                 }
                 //cv::imshow("interpolated_algorithm_sroi", tempImageInterpolated);
                 //cv::waitKey(0);
                 cv::destroyAllWindows();
 
-                multiframe_stencil_displacement.at(obj_index).push_back(intersection_of_algorithm_and_sroi);
-                multiframe_stencil_displacement_interpolated.at(obj_index).push_back(intersection_of_interpolated_algorithm_and_sroi);
+                multiframe_stencil_displacement_sroi.at(obj_index).push_back(intersection_of_algorithm_and_sroi);
+                multiframe_stencil_displacement_sroi_interpolated.at(obj_index).push_back(intersection_of_interpolated_algorithm_and_sroi);
 
             }
 
@@ -580,8 +579,8 @@ void OpticalFlow::generate_sroi_intersections() {
         }
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
 
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_intersection_sroi(multiframe_stencil_displacement.at(obj_index));
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_intersection_sroi_interpolated(multiframe_stencil_displacement_interpolated.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_intersection_sroi(multiframe_stencil_displacement_sroi.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_intersection_sroi_interpolated(multiframe_stencil_displacement_sroi_interpolated.at(obj_index));
 
         }
     }

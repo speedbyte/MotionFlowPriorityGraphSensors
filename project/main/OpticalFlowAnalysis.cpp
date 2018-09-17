@@ -149,22 +149,22 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
 //--------------------------------------------------------------------------------------------
                             COUNT_METRICS &entire_roi_object_analysis = evaluationData.at(obj_index).algorithm_metrics;
-                            generate_analysis_data(entire_roi_object, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_analysis, icovar);
+                            generate_analysis_data("entire", entire_roi_object, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &entire_roi_interpolated_analysis = evaluationData.at(obj_index).algorithm_interpolated_metrics;
-                            generate_analysis_data(entire_roi_object_interpolated, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_interpolated_analysis, icovar);
+                            generate_analysis_data("entire_interpolated", entire_roi_object_interpolated, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_interpolated_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &special_roi_object_analysis = evaluationData.at(obj_index).algorithm_sroi_metrics;
-                            generate_analysis_data(intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_analysis, icovar);
+                            generate_analysis_data("special", intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &special_roi_object_interpolated_analysis = evaluationData.at(obj_index).algorithm_sroi_interpolated_metrics;
-                            generate_analysis_data(intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_interpolated_analysis, icovar);
+                            generate_analysis_data("special_interpolated", intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_interpolated_analysis, icovar);
 
 //--------------------------------------------------------------------------------------------
                         }
@@ -203,7 +203,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 }
 
 
-void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index,  const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
+void OpticalFlow::generate_analysis_data(std::string gnuplotname_prefix, const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index,  const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
 
     const float DISTANCE_ERROR_TOLERANCE = 1;
 
@@ -289,12 +289,12 @@ void OpticalFlow::generate_analysis_data(const std::vector<std::vector<std::vect
     // start gnuplotting
     cv::Mat stich_plots;
 
-    show_gnuplot(cluster_to_evaluate, sensor_index, current_frame_index, obj_index, evaluationData, count_metrics, icovar);
+    show_gnuplot(gnuplotname_prefix, xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, count_metrics, icovar);
 
 }
 
 
-void OpticalFlow::show_gnuplot(const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &cluster_to_evaluate, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
+void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector<std::pair<float, float> > &xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
 
 
     std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
@@ -303,6 +303,7 @@ void OpticalFlow::show_gnuplot(const std::vector<std::vector<std::vector<std::pa
 
     //Get the eigenvalues and eigenvectors
     cv::Mat_<float> ellipse(3,1);
+    ellipse.setTo(255);
     if ( 1 > 1 ) {
 
         double chisquare_val = 2.4477;
@@ -361,7 +362,7 @@ void OpticalFlow::show_gnuplot(const std::vector<std::vector<std::vector<std::pa
 
     std::string gnuplot_image_file_with_path_stiched;
 
-    sprintf(file_name_image_output, "000%03d_10.png", evaluationData.at(obj_index).current_frame_index);
+    sprintf(file_name_image_output, "%s_000%03d_10.png", gnuplotname_prefix.c_str(), evaluationData.at(obj_index).current_frame_index);
     sprintf(file_name_image_output_stiched, "stiched_000%03d_10.png", evaluationData.at(obj_index).current_frame_index);
 
 
@@ -374,12 +375,12 @@ void OpticalFlow::show_gnuplot(const std::vector<std::vector<std::vector<std::pa
 
     if ( obj_index == 0 ) {
 
-        std::cout << "ellipse" << ellipse ;
+        std::cout << "ellipse for " << gnuplotname_prefix << " is \n" << ellipse << std::endl;
 
         std::string ellipse_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse(0)) + "," +  std::to_string(ellipse(1)) + "  angle " + std::to_string(ellipse(2)) + " lw 5 front fs empty bo 3\n";
 
         gp2d << "set term png size 400,400\n";
-        gp2d << "set output \"" + std::string("../gnuplot.png") + "\"\n";
+        //gp2d << "set output \"" + std::string("../gnuplot.png") + "\"\n";
         gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
         gp2d << "set xrange [-5:5]\n";
         gp2d << "set yrange [-5:5]\n";
@@ -390,7 +391,7 @@ void OpticalFlow::show_gnuplot(const std::vector<std::vector<std::vector<std::pa
                 ", '-' with points pt 15 notitle 'Algo'"
                 // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
                 "\n";
-        //gp2d.send1d(xy_pts);
+        gp2d.send1d(xy_pts);
         gp2d.send1d(gt_mean_pts);
         gp2d.send1d(algo_mean_pts);
 
