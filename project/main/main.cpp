@@ -23,11 +23,12 @@
 #include "Sensors.h"
 #include "Utils.h"
 
-// why are there two signs in one gnuplot. stich images
+// stich images -
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
 
+// why are there two signs in one gnuplot - DONE, by creating a legend
 // check if depth is correct - DONE
 // find values of algorithm displacement at sroi - DONE.
 // quality of value of algorithm displacement at sroi - DONE
