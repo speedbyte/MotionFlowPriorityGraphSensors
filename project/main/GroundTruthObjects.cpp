@@ -50,8 +50,8 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
         }
         else {
 
-            //If we are at the end of the path vector, we need to reset our iterators
-            if (frame_number == (FRAME_COUNT-1) ) {
+            //If we are at the end of the generation dataset, we need to reset our iterators
+            if (frame_number == ushort(Dataset::MAX_GENERATION_DATASET ) ) {
 
                 frame_number = 0;
                 gt_displacement.x = gt_data.getAll().at(frame_number).m_object_location_camera_px.cog_px.x - gt_data.getAll().at(Dataset::ITERATION_END_POINT - 1).m_object_location_camera_px.cog_px.x;

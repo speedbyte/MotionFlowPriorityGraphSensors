@@ -220,12 +220,12 @@ class SensorDataPlot(object):
                 if ( data_points[count+1][obj_index]["visibility"] == 1 ):
                 #if ( data_points[count+1][obj_index]["visibility"] == 1 and data_points[count+1][obj_index]["obj_index"] == 0 ):
 
-                    xy["current_frame_index"] = data_points[count]["current_frame_index"]
+                    xy["frame_number"] = data_points[count]["frame_number"]
                     xy[measuring_parameter] = data_points[count+1][obj_index][measuring_parameter]
 
                     #for x in range(len(data_points_gt[count+1][obj_index][measuring_parameter])):
                     #    xy_collisionpoints.append(data_points_gt[count+1][obj_index][measuring_parameter][x]) # change!
-                    data.append([xy["current_frame_index"], xy[measuring_parameter]])
+                    data.append([xy["frame_number"], xy[measuring_parameter]])
             count = count + 2
 
         data_ = numpy.array(data)

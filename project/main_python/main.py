@@ -121,7 +121,7 @@ if __name__ == '__main__':
                         for index,env in enumerate(environment):
 
                             custom_data_list_name.append(plot_mapping[index])
-                            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, parameter, env, str(step_size), 0, x_label="current_frame_index", y_label="dummy" ) #y_axis_label_dict[parameter]
+                            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, parameter, env, str(step_size), 0, x_label="frame_number", y_label="dummy" ) #y_axis_label_dict[parameter]
                             parameter_plot_at_once_figures.append(plot_data)
 
                         print custom_data_list_name
@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
             # plotting the figure for each sensor separately
             plot_at_once(parameter_plots_with_details, 0) #plot_at_once(parameter_plot_at_once_figures, sensor_data_plot_object.getSensorIndex())
-            #parameter_plot_at_once_figures = getPlotList(sensor_data_plot_object, measuring_parameter="good_pixels", x_label="current_frame_index", y_label="good pixels / visible pixels")
+            #parameter_plot_at_once_figures = getPlotList(sensor_data_plot_object, measuring_parameter="good_pixels", x_label="frame_number", y_label="good pixels / visible pixels")
             
 
         figures = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
