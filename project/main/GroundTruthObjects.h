@@ -10,9 +10,10 @@
 
 #include "Dataset.h"
 #include "ObjectMetaData.h"
-#include "datasets.h"
+#include "Dataset.h"
 #include "Objects.h"
 #include "SensorImage.h"
+#include "ObjectImageShapeData.h"
 
 class GroundTruthObjects : public Objects {
 
@@ -44,7 +45,7 @@ public:
 
     void beginGroundTruthGeneration(ushort sensor_group_index, ObjectMetaData gt_data) {
 
-        if ( m_objectName != "BackgroundCanvas") {
+        if ( m_objectName != "ObjectImageBackgroundShapeData") {
 
             printf("generating ground truth basic displacement for sensor %d name %s with object id %u\n", sensor_group_index, getObjectName().c_str(), getObjectId());
 

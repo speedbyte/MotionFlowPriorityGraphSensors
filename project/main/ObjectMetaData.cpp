@@ -6,7 +6,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv/cv.hpp>
-#include "datasets.h"
+#include "Dataset.h"
 
 
 void Achterbahn::process(cv::Size frame_size) {
@@ -190,7 +190,7 @@ void Rectangle::process() {
 
 }
 
-void Canvas::process() {
+void ObjectImageBackgroundShapeData::process() {
 
     //m_data_image.create(m_objectHeight, m_objectWidth, CV_8UC3);
 

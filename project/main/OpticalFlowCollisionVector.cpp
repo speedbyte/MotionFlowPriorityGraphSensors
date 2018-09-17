@@ -51,9 +51,14 @@ void OpticalFlow::generate_collision_points() {
 
                 std::cout << "current_frame_index " << current_frame_index << " for datafilter_index " << datafilter_index<< std::endl;
 
+                ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                        (0).at(current_frame_index).frame_no;
+
                 std::vector<cv::Point2f> frame_collision_points;
-                std::vector<OPTICAL_FLOW_COLLISION_METRICS> frame_collision_points_average;
+                cv::Point2f frame_collision_points_average;
                 std::vector<cv::Point2f> frame_line_angles;
+                std::vector<OPTICAL_FLOW_COLLISION_METRICS> packet_frame_collision_points_analysis;
+
 
                 char file_name_image[50];
                 ushort vires_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
@@ -134,20 +139,23 @@ void OpticalFlow::generate_collision_points() {
 
                 // Average between the collision points of two objects ( Partial collision ).
                 // For ground truth it is simply summing two equal points and dividing by two.
+                // TODO - this is broken.. need to fix the averaging.
                 for (auto i = 0; i < frame_collision_points.size(); i = i + 2) {
                     if (frame_collision_points.at(i) != cv::Point2f(-1, -1) &&
                         frame_collision_points.at(i + 1) != cv::Point2f(-1, -1)) {
-                        frame_collision_points_average.push_back({current_frame_index,  0, cv::Point2f(
+                        frame_collision_points_average = cv::Point2f(
                                 ((frame_collision_points.at(i).x + frame_collision_points.at(i + 1).x) / 2),
                                 ((frame_collision_points.at(i).y + frame_collision_points.at(i + 1).y) /
-                                 2))});
+                                 2));
                     }
                     else {
-                        frame_collision_points_average.push_back({current_frame_index, 0, cv::Point2f(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity())});
+                        frame_collision_points_average = cv::Point2f(std::numeric_limits<float>::infinity(),std::numeric_limits<float>::infinity());
                     }
                 }
 
-                sensor_frame_collision_points.push_back(frame_collision_points_average);
+                packet_frame_collision_points_analysis.push_back({image_frame_count, frame_collision_points_average});
+
+                sensor_frame_collision_points.push_back(packet_frame_collision_points_analysis);
                 sensor_frame_line_angles.push_back(frame_line_angles);
             }
 

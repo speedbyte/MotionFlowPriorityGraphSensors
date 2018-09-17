@@ -5,102 +5,12 @@
 #ifndef MAIN_OBJECTMETADATA_H
 #define MAIN_OBJECTMETADATA_H
 
-#include <opencv2/core/utility.hpp>
-#include "Dataset.h"
 #include <iostream>
-#include <vires-interface/Common/viRDBIcd.h>
-#include "datasets.h"
 #include <opencv2/core/mat.hpp>
-#include <bits/unique_ptr.h>
-#include "Noise.h"
+#include <vires-interface/Common/viRDBIcd.h>
+#include "ObjectImageShapeData.h"
+#include "Dataset.h"
 
-
-class ObjectImageShapeData {
-
-protected:
-
-    cv::Mat m_data_image;
-    cv::Mat m_data_depth;
-
-    ushort m_objectWidth;
-    ushort m_objectHeight;
-
-    ushort m_objectRadius;
-
-    float m_depth;
-
-public:
-
-    ObjectImageShapeData() {};
-
-    ObjectImageShapeData(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth ) : m_objectRadius(std::max(width, height)/2), m_objectWidth(width), m_objectHeight
-            (height), m_depth(depth) {
-        m_data_depth.setTo(depth);
-    }
-
-    virtual void process() {};
-
-    void applyNoise(std::unique_ptr<Noise> &noise) {
-        noise->apply(m_data_image);
-    }
-
-    void applyDepth(ushort depth) {
-        m_depth = depth;
-        m_data_depth.setTo(depth);
-    }
-
-    cv::Mat getImage() {
-        return m_data_image;
-    }
-
-    cv::Mat getDepthImage() {
-        return m_data_depth;
-    }
-
-    float getObjectDepth() {
-        return m_depth;
-    }
-
-    ushort getObjectWidth() {
-        return m_objectWidth;
-    }
-
-    ushort getObjectHeight() {
-        return m_objectHeight;
-    }
-
-    ushort getObjectRadius() {
-        return m_objectRadius;
-    }
-
-
-};
-
-/*
-%YAML:1.0
-iterationNr: 100
-strings:
-   - "image1.jpg"
-   - Awesomeness
-   - "baboon.jpg"
-Mapping:
-   One: 1
-   Two: 2
-R: !!opencv-matrix
-   rows: 3
-   cols: 3
-   dt: u
-   data: [ 1, 0, 0, 0, 1, 0, 0, 0, 1 ]
-T: !!opencv-matrix
-   rows: 3
-   cols: 1
-   dt: d
-   data: [ 0., 0., 0. ]
-MyData:
-   A: 97
-   X: 3.1415926535897931e+000
-   id: mydata1234
-*/
 
 typedef struct object_location_inertial_m { float location_x_m; float location_y_m; float location_z_m;} object_location_inertial_m_str;
 
@@ -609,63 +519,6 @@ public:
     void process(cv::Size frame_size) override;
 
 };
-
-
-// Canvas is a kind of Object ( its just a big object, and hence has the same property )
-class Canvas  : public ObjectImageShapeData {
-
-private:
-
-
-public:
-
-
-    // The canvas can move to simulate a moving car. Hence we need position etc.
-    Canvas( ushort width, ushort height, std::unique_ptr<Noise> &noise ) : ObjectImageShapeData(width, height, noise, 0) {
-        m_data_image.create(height, width, CV_8UC3);
-        applyNoise(noise);
-    };
-
-    void process() override ;
-
-
-};
-
-
-class Rectangle :  public ObjectImageShapeData {
-
-private:
-
-public:
-
-    Rectangle(ushort width, ushort height, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(width, height, noise, depth) {
-        m_data_image.create(height, width, CV_8UC3);
-        m_data_depth.create(height, width, CV_8UC1);
-        applyNoise(noise);
-        applyDepth(depth);
-    };
-
-    void process() override ;
-
-};
-
-class Circle :  public ObjectImageShapeData {
-
-private:
-
-public:
-
-    Circle(ushort diameter, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(diameter, diameter, noise, depth) {
-        construct(diameter, noise, depth);
-    };
-
-    void construct(ushort radius, std::unique_ptr<Noise> &noise, ushort depth);
-
-    void process() override ;
-
-
-};
-
 
 
 

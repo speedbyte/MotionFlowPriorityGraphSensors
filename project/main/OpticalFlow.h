@@ -32,7 +32,7 @@ typedef struct {
 
 typedef struct {
 
-    int    current_frame_index;
+    int    frame_number;
     int    obj_index;
     bool   visiblity;
 
@@ -67,9 +67,8 @@ typedef struct {
 
 typedef struct {
 
-    int current_frame_index;
-    int obj_index;
-    cv::Point2f collisionpoints;
+    int frame_number;
+    cv::Point2f collision_points;
 
 } OPTICAL_FLOW_COLLISION_METRICS;
 

@@ -41,7 +41,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
     ushort start_point_1 = 100; // 100
     ushort start_point_2 = 220; // 220
 
-    Canvas canvas((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, noise);
+    ObjectImageBackgroundShapeData canvas((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, noise);
 
     achterbahn = Achterbahn("rectangle_long", start_point_1);
     achterbahn.process(Dataset::m_frame_size);
@@ -181,7 +181,7 @@ void CppObjects::process(std::unique_ptr<Noise> &noise, ushort sensor_index) {
             }
         }
 
-        Canvas object_background((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, objectNoise_colorfulNoise);
+        ObjectImageBackgroundShapeData object_background((ushort)Dataset::m_frame_size.width, (ushort)Dataset::m_frame_size.height, objectNoise_colorfulNoise);
         cv::Mat final = tempGroundTruthImage.clone();
         tempGroundTruthImage = object_background.getImage().mul(shape_circle);
         tempGroundTruthImage.copyTo(final, shape_circle);

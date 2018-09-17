@@ -51,13 +51,52 @@ public:
 
 };
 
-class BlackNoise : public Noise {
+
+
+template <ushort data>
+class StaticNoise : public Noise {
+
+    // Brute force noise. Blindly assign data to the Canvas
 
 public:
+
     void apply(cv::Mat &image) override {
 
-        std::cout << "applying black noise" << std::endl;
-        image = cv::Scalar(0,0,0);
+        srand(1000);
+
+        if ( data == 0 ) {
+            std::cout << "applying black static noise" << std::endl;
+            image = cv::Scalar(data, data, data);
+        } else if ( data == 255 ) {
+            image = cv::Scalar(data, data, data);
+            std::cout << "applying white static noise" << std::endl;
+        } else {
+            std::cout << "applying colored static noise" << std::endl;
+            image = cv::Scalar(rand()%255, rand()%255, rand()%255);
+        }
+    }
+};
+
+
+template <ushort data>
+class DynamicNoise : public Noise {
+
+public:
+
+    void apply(cv::Mat &image) override {
+
+        srand(time(NULL));
+
+        if (data == 0) {
+            std::cout << "applying black dynamic noise" << std::endl;
+            image = cv::Scalar(data, data, data);
+        } else if (data == 255) {
+            image = cv::Scalar(data, data, data);
+            std::cout << "applying white dynamic noise" << std::endl;
+        } else {
+            std::cout << "applying colored dynamic noise" << std::endl;
+            image = cv::Scalar(rand() % 255, rand() % 255, rand() % 255);
+        }
     }
 
 };
@@ -92,16 +131,6 @@ public:
     }
 };
 
-class WhiteNoise : public Noise {
-
-public:
-
-    void apply(cv::Mat &image) override {
-
-        std::cout << "applying white noise" << std::endl;
-        image = cv::Scalar(255,255,255);
-    }
-};
 
 class RandomNoise : public Noise {
 

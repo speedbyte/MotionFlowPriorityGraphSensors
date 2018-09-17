@@ -8,7 +8,7 @@
 #include <png++/image.hpp>
 #include <vires-interface/Common/viRDBIcd.h>
 #include "GenerateViresObjects.h"
-#include "datasets.h"
+#include "Dataset.h"
 #include "Utils.h"
 #include "GroundTruthScene.h"
 

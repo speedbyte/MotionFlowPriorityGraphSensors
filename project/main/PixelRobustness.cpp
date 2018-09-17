@@ -53,9 +53,9 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
                 m_fs << (std::string("evaluation_data_") + suffix + std::string("datafilter_") + std::to_string(datafilter_index) + "_" + std::string("sensor_index_") + std::to_string(sensor_index)) << "[";
             }
 
-            for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT-1; current_frame_index++) {
+            for (unsigned current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                m_fs <<  "{:" << "current_frame_index" <<                              m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(0).current_frame_index
+                m_fs <<  "{:" << "frame_number" << m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(0).frame_number
                         << "}";
                 m_fs << "[";
 

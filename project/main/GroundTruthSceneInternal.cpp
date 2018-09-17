@@ -21,18 +21,16 @@ void GroundTruthSceneInternal::generate_gt_scene(void) {
 
         std::cout << "generate_gt_scene at " << m_groundtruthpath.string() << " for " << sensor_group_index << std::endl;
 
-        BlackNoise blackNoise;
-        std::unique_ptr<Noise> noise;
+        std::unique_ptr<Noise> background_noise;
         if (m_environment == "night") {
-            BlackNoise blackNoise_;
-            noise = std::make_unique<BlackNoise>(blackNoise_);
-        } else {
-            WhiteNoise whiteNoise_;
-            noise = std::make_unique<WhiteNoise>(whiteNoise_);
+            StaticNoise<0> blackStaticNoise;
+            background_noise = std::make_unique<StaticNoise<0>>(blackStaticNoise);
+        }  else if (m_environment == "blue_sky") {
+            StaticNoise<255> whiteStaticNoise;
+            background_noise = std::make_unique<StaticNoise<255>>(whiteStaticNoise);
         }
 
-        //noise = std::make_unique<BlackNoise>(blackNoise);
-        cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(noise, sensor_group_index);
+        cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).process(background_noise, sensor_group_index);
     }
 
 }

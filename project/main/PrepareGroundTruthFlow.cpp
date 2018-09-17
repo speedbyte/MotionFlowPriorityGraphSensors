@@ -15,7 +15,7 @@
 #include <png++/png.hpp>
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
-#include "datasets.h"
+#include "Dataset.h"
 #include "PrepareGroundTruthFlow.h"
 #include "kbhit.h"
 

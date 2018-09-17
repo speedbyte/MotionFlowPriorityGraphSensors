@@ -49,7 +49,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                 ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                         (0).at(current_frame_index).frame_no;
 
-
                 std::cout << "current_frame_index " << current_frame_index << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
 
@@ -67,7 +66,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             current_frame_index).size();
 
 
-                    evaluationData.at(obj_index).current_frame_index = image_frame_count;
+                    evaluationData.at(obj_index).frame_number = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
                     evaluationData.at(obj_index).visiblity = list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index);
 
@@ -138,11 +137,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
-
                             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_intersection_sroi();
 
                             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_interpolated_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_interpolated_intersection_sroi();
-
 
                             unsigned CLUSTER_COUNT_INTERPOLATED_ALGORITHM = (unsigned) entire_roi_object_interpolated.at(sensor_index).at(
                                     current_frame_index).size();
@@ -365,8 +362,8 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
 
     std::string gnuplot_image_file_with_path_stiched;
 
-    sprintf(file_name_image_output, "%s_000%03d_10.png", gnuplotname_prefix.c_str(), evaluationData.at(obj_index).current_frame_index);
-    sprintf(file_name_image_output_stiched, "stiched_000%03d_10.png", evaluationData.at(obj_index).current_frame_index);
+    sprintf(file_name_image_output, "%s_000%03d_10.png", gnuplotname_prefix.c_str(), evaluationData.at(obj_index).frame_number);
+    sprintf(file_name_image_output_stiched, "stiched_000%03d_10.png", evaluationData.at(obj_index).frame_number);
 
 
     gnuplot_image_file_with_path_stiched = m_gnuplots_path.string() + stiched_sensor_index_folder_suffix + "/" + file_name_image_output_stiched;
