@@ -185,9 +185,12 @@ public:
 
     void generate_sroi_intersections();
 
+    void stich_gnuplots();
+
 private:
 
     void show_gnuplot(std::string, const std::vector<std::pair<float, float>>  &xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar);
+
 };
 
 #endif //MAIN_OPTICALFLOW_H
