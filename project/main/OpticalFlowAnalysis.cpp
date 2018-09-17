@@ -220,33 +220,31 @@ void OpticalFlow::generate_analysis_data(std::string gnuplotname_prefix, const s
     auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
 
+    double l1_cumulative_error_all_pixels = 0;
+    double l2_cumulative_error_all_pixels = 0;
+    double ma_cumulative_error_all_pixels = 0;
+
+    double l1_cumulative_error_tolerated = 0;
+    double l2_cumulative_error_tolerated = 0;
+    double ma_cumulative_error_tolerated = 0;
+
     for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
-        double l1_cumulative_error_all_pixels = 0;
-        double l2_cumulative_error_all_pixels = 0;
-        double ma_cumulative_error_all_pixels = 0;
-
-        double l1_cumulative_error_tolerated = 0;
-        double l2_cumulative_error_tolerated = 0;
-        double ma_cumulative_error_tolerated = 0;
 
         cv::Point2f algo_displacement = cluster_to_evaluate.at(sensor_index).at(current_frame_index).at(cluster_index).second;
 
         // l1_cumulative_error_all_pixels
         auto l1_dist_err = ( std::abs(algo_displacement.x - gt_displacement.x ) + std::abs(algo_displacement.y - gt_displacement.y));
         l1_cumulative_error_all_pixels += l1_dist_err;
-        count_metrics.l1_cumulative_error_all_pixels = l1_cumulative_error_all_pixels;
 
         // l2_cumulative_error_all_pixels
         auto euclidean_dist_algo_square = (std::pow((algo_displacement.x - gt_displacement.x),2 ) + std::pow((algo_displacement.y - gt_displacement.y),2 ));
         auto euclidean_dist_err = std::sqrt(euclidean_dist_algo_square);
         l2_cumulative_error_all_pixels += euclidean_dist_err;
-        count_metrics.l2_cumulative_error_all_pixels = l2_cumulative_error_all_pixels;
 
         // ma_cumulative_error_all_pixels
         auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
         ma_cumulative_error_all_pixels += ma_dist_algo;
-        count_metrics.ma_cumulative_error_all_pixels = ma_cumulative_error_all_pixels;
 
         //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
         //auto angle_err = std::abs(angle_algo - angle_gt);
@@ -259,7 +257,6 @@ void OpticalFlow::generate_analysis_data(std::string gnuplotname_prefix, const s
                 ) {
             l1_cumulative_error_tolerated += l1_dist_err;
             count_metrics.l1_total_good_pixels++; // how many valid pixels in the found pixel are actually
-            count_metrics.l1_cumulative_error_good_pixels = l1_cumulative_error_tolerated;
         }
         if (
                 (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
@@ -267,7 +264,6 @@ void OpticalFlow::generate_analysis_data(std::string gnuplotname_prefix, const s
                 ) {
             l2_cumulative_error_tolerated += euclidean_dist_err;
             count_metrics.l2_total_good_pixels++; // how many pixels in the found pixel are actually valid
-            count_metrics.l2_cumulative_error_good_pixels = l2_cumulative_error_tolerated;
         }
         if (
                 (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
@@ -275,11 +271,18 @@ void OpticalFlow::generate_analysis_data(std::string gnuplotname_prefix, const s
                 ) {
             ma_cumulative_error_tolerated += ma_dist_algo;
             count_metrics.ma_total_good_pixels++; // how many pixels in the found pixel are actually valid
-            count_metrics.ma_cumulative_error_good_pixels = ma_cumulative_error_tolerated;
         }
 
         xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));
     }
+
+    count_metrics.l1_cumulative_error_all_pixels = l1_cumulative_error_all_pixels;
+    count_metrics.l2_cumulative_error_all_pixels = l2_cumulative_error_all_pixels;
+    count_metrics.ma_cumulative_error_all_pixels = ma_cumulative_error_all_pixels;
+    count_metrics.l1_cumulative_error_good_pixels = l1_cumulative_error_tolerated;
+    count_metrics.l2_cumulative_error_good_pixels = l2_cumulative_error_tolerated;
+    count_metrics.ma_cumulative_error_good_pixels = ma_cumulative_error_tolerated;
+
 
     // Overload operator
     //std::cout << "count metrics for object index "          << obj_index << " = " << count_metrics << std::endl;
