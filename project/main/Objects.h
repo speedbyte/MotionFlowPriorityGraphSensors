@@ -141,6 +141,10 @@ public:
         return m_object_extrapolated_visibility;
     }
 
+    void  set_object_extrapolated_visibility(ushort sensor_index, ushort current_frame_index, bool visibility ) {
+        m_object_extrapolated_visibility.at(sensor_index).at(current_frame_index) = visibility;
+    }
+
     const std::vector<std::vector<std::vector<bool> > > &get_object_stencil_visibility() const {
         return m_object_stencil_visibility;
     };

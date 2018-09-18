@@ -82,7 +82,12 @@ int main ( int argc, char *argv[]) {
     cv::imshow("dd", image);
     cv::waitKey(0);
 
+
+
     cv::Mat image_mod = image.clone();
+    //#define CV_MAKETYPE(depth,cn) (CV_MAT_DEPTH(depth) + (((cn)-1) << CV_CN_SHIFT))
+    ushort channels = image_mod.channels();   // how many channels
+    ushort depth = image_mod.depth();  // if CV_8U or CV_16S or CV_32F
     std::cout << image_mod.channels();
     cv::Vec3b color = {255, 255, 255};
     cv::Vec3b color_edge = {255, 0, 0};

@@ -70,11 +70,14 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
             (0).at(current_frame_index).frame_no;
 
     // DEPTH READ
-    cv::Mat finalDepth(Dataset::m_frame_size,CV_32FC1);
     char file_name_input_image_depth[50];
     sprintf(file_name_input_image_depth, "depth_000%03d_10.png", image_frame_count);
     std::string input_image_path_depth = GroundTruthScene::m_ground_truth_depth_path.string()  + sensor_index_folder_suffix + "/" + file_name_input_image_depth;
-    cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_UNCHANGED);
+    cv::Mat depth_02_frame = cv::imread(input_image_path_depth, CV_LOAD_IMAGE_GRAYSCALE);
+    if ( depth_02_frame.empty() ) {
+        std::cerr << input_image_path_depth << " not found" << std::endl;
+        throw ("No image file found error");
+    }
 
     auto START_BENCHMARK
     for (ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
@@ -159,7 +162,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             for ( auto it = all_moving_objects_in_frame.begin(); it != all_moving_objects_in_frame.end(); it++) {
                 cv::circle(tempImage, (*it), 1, cv::Scalar(0,0,255));
             }
-            //cv::imshow("refined", tempImage);
+            //cv::imshow("first_level_refined", tempImage);
             //cv::waitKey(0);
             cv::destroyAllWindows();
 
@@ -174,6 +177,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             // Still to do -> bounding box upper right and lower left corner is the total depth of the object. Right now, I am just considering a straight depth of 1 unit.
             float offset_x = m_list_of_gt_sensors.at(sensor_index).getExtrapolatedGroundTruthDetails().at(0).at(current_frame_index).m_sensor_offset_m.offset_x;
             for (unsigned j = 0; j < gt_frame_stencil_displacement_from_roi.size(); j += 1) {
+
+                ushort depth = depth_02_frame.depth();  // if CV_8U=0 or CV_8S=1 ?
+
                 float val = depth_02_frame.at<unsigned char>(gt_frame_stencil_displacement_from_roi.at(j));
                 //std::cout << (ushort)val << "*" << std::round(depth_value_object-3) << " ";
                 bool found_correct_depth = (val == std::round(depth_value_object));
@@ -184,13 +190,19 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                     gt_frame_stencil_displacement_from_depth.push_back(gt_frame_stencil_displacement_from_roi.at(j));
                 }
             }
-            assert(gt_frame_stencil_displacement_from_depth.size()>0);
+            if ( gt_frame_stencil_displacement_from_depth.size()==0 ) {
+                // this object is not visible
+                //m_ptr_list_gt_objects.at(obj_index)->set_object_base_visibility(sensor_index, current_frame_index, false);
+                m_ptr_list_gt_objects.at(obj_index)->set_object_extrapolated_visibility(sensor_index, current_frame_index, false);
+                visibility = false;
+            }
+            // to do assert only when vires reported true visibility, but depth returned false visiblity assert(gt_frame_stencil_displacement_from_depth.size()>0);
             // Validate
             tempImage = cv::Scalar::all(255);
             for ( auto it = gt_frame_stencil_displacement_from_depth.begin(); it != gt_frame_stencil_displacement_from_depth.end(); it++) {
                 cv::circle(tempImage, (*it), 1, cv::Scalar(255,255,0));
             }
-            //cv::imshow("depth", tempImage);
+            //cv::imshow("depth_level_refined", tempImage);
             //cv::waitKey(0);
             cv::destroyAllWindows();
 
@@ -330,7 +342,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
         std::cout << "stencil size = " << object_stencil_displacement.size() << " " << frame_next_pts_array.size()
                   << std::endl;
 
-        assert(object_stencil_displacement.size() != 0);
+        if ( visibility ) {
+            assert(object_stencil_displacement.size() != 0);
+        }
         // TODO scratch : if object_stencil_displacement does not work
 
     }
