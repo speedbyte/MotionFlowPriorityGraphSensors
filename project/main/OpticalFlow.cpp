@@ -620,7 +620,6 @@ void OpticalFlow::generate_sroi_intersections() {
 
             }
 
-
         }
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
 
@@ -629,8 +628,6 @@ void OpticalFlow::generate_sroi_intersections() {
 
         }
     }
-
-
 
     std::cout << "end of generation " + m_resultordner + " intersection data" << std::endl;
 

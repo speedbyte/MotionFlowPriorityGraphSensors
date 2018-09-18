@@ -16,7 +16,7 @@
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
 #include "Dataset.h"
-#include "PrepareGroundTruthFlow.h"
+#include "GroundTruthFlow.h"
 #include "kbhit.h"
 
 #include <unordered_map>
@@ -31,7 +31,7 @@
 
 using namespace std::chrono;
 
-void PrepareGroundTruthFlow::prepare_groundtruth_flow_directories(std::string noise, ushort fps, ushort stepSize) {
+void GroundTruthFlow::prepare_groundtruth_flow_directories(std::string noise, ushort fps, ushort stepSize) {
 
     m_GroundTruthImageLocation = Dataset::m_dataset_gtpath.string() + noise;
 
@@ -47,7 +47,7 @@ void PrepareGroundTruthFlow::prepare_groundtruth_flow_directories(std::string no
 }
 
 
-void PrepareGroundTruthFlow::generate_flow_vector() {
+void GroundTruthFlow::generate_flow_vector() {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
 
@@ -122,7 +122,7 @@ void PrepareGroundTruthFlow::generate_flow_vector() {
 }
 
 
-void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
+void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
     // pixels lie on the occlusion boundary.
@@ -344,15 +344,13 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
-            all_sensors_object_special_region_of_interest.at(obj_index).push_back(all_frame_object_special_region_of_interest.at(obj_index));
+            m_ptr_list_gt_objects.at(obj_index)->push_back_object_intersection_sroi(all_frame_object_special_region_of_interest.at(obj_index));
         }
         // -----
     }
 
-    // special region of interest to be set to object ids in the variable m_special_region_of_interest
+    // special region of interest to be set to object ids in the variable m_object_sroi
     for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
-
-        m_ptr_list_gt_objects.at(obj_index)->setSpecialRegionOfInterest(all_sensors_object_special_region_of_interest.at(obj_index));
 
         // TODO: find complement of frame_object_special_region_of_interest_1 of an object id and all_points from groundtruth_object by writing a minus operator between the two types
         const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &groundtruthobject1_all_points = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement();

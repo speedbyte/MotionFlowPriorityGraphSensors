@@ -36,15 +36,10 @@ typedef struct {
     int    obj_index;
     bool   visiblity;
 
-    ushort ground_truth_pixels;
-    ushort ground_truth_sroi_pixels;
-
     COUNT_METRICS entire_metrics;
     COUNT_METRICS entire_interpolated_metrics;
     COUNT_METRICS sroi_metrics;
     COUNT_METRICS sroi_interpolated_metrics;
-
-    cv::Point2f gt_mean_displacement;
 
     // Mean
     cv::Point2f mean_pts;
@@ -110,6 +105,8 @@ protected:
 
     std::vector<Sensors> &m_list_of_gt_sensors;
 
+    std::shared_ptr<OpticalFlow> m_ptr_gt_flow;
+
     ushort mStepSize;
 
     std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > > > m_sensor_mean_displacement_points;
@@ -130,6 +127,8 @@ protected:
                                                          std::vector<cv::Point2f> &collision_points);
 
 public:
+
+    OpticalFlow( std::vector<ushort> evaluation_list, std::string weather, std::string opticalFlowName, std::vector<Sensors> &list_of_gt_sensors_base, std::vector<GroundTruthObjects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects*>  &ptr_list_simulated_objects, ushort stepSize, std::shared_ptr<OpticalFlow> ptr_gt_flow ) : m_evaluation_list(evaluation_list), m_weather(weather), m_opticalFlowName(opticalFlowName), m_list_of_gt_sensors(list_of_gt_sensors_base), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize), m_ptr_gt_flow(ptr_gt_flow)  { };
 
     OpticalFlow( std::vector<ushort> evaluation_list, std::string weather, std::string opticalFlowName, std::vector<Sensors> &list_of_gt_sensors_base, std::vector<GroundTruthObjects *> &ptr_list_gt_objects, std::vector<Objects *> &ptr_list_simulated_objects_base, std::vector<Objects*>  &ptr_list_simulated_objects, ushort stepSize ) : m_evaluation_list(evaluation_list), m_weather(weather), m_opticalFlowName(opticalFlowName), m_list_of_gt_sensors(list_of_gt_sensors_base), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
 

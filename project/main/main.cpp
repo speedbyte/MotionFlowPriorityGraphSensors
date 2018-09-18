@@ -14,7 +14,7 @@
 
 #include "GridLayout.h"
 #include "Dataset.h"
-#include "PrepareGroundTruthFlow.h"
+#include "GroundTruthFlow.h"
 #include "AlgorithmFlow.h"
 #include "GroundTruthScene.h"
 #include "GroundTruthObjects.h"
@@ -23,6 +23,7 @@
 #include "Sensors.h"
 #include "Utils.h"
 
+// why is obj_index ground truth total pixesl double?
 // total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // stich images python plot
@@ -327,6 +328,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                                  cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map, evaluation_list);
         }
 
+        std::shared_ptr<GroundTruthFlow> ptr_gt_flow;
+
         for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
             std::unique_ptr<GroundTruthScene> base_ptr_gt_scene;
@@ -377,7 +380,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_index)));
                 }
 
-                PrepareGroundTruthFlow gt_flow(evaluation_list, environ[env_index], list_of_gt_sensors_base,
+                GroundTruthFlow gt_flow(evaluation_list, environ[env_index], list_of_gt_sensors_base,
                                            ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
 
                 // in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
@@ -416,8 +419,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
                     tic = steady_clock::now();
                 }
-
+                ptr_gt_flow = std::make_unique<GroundTruthFlow>(gt_flow);
             }
+
 
             if ((env_index == environment_list.size() - 1) && Dataset::GENERATE) {
                 //base_ptr_gt_scene->stopSimulation();
@@ -426,169 +430,196 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 exit(0);
             }
         }
-    }
 
 
-    ushort fps = 30;
+        ushort fps = 30;
 
-    //for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {
-    for (ushort algorithm_index = 0; algorithm_index < 1 ; algorithm_index++) {
+        //for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {
+        for (ushort algorithm_index = 0; algorithm_index < 1 ; algorithm_index++) {
 
-        std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
-        std::map<std::string, std::unique_ptr<AlgorithmFlow>> map_string_to_OFalgorithm;
+            std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
+            std::map<std::string, std::unique_ptr<AlgorithmFlow>> map_string_to_OFalgorithm;
 
-        for (ushort stepSize = 1; stepSize <= 1; stepSize += 4) {
-            ptr_list_of_simulated_objects_base.clear();
-            std::vector<SimulatedObjects> list_of_simulated_objects_base;
-            Dataset::m_algorithm_map = Dataset::m_algorithm_map_original;
-            // Generate Algorithm data flow --------------------------------------
-            for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+            for (ushort stepSize = 1; stepSize <= 1; stepSize += 4) {
+                ptr_list_of_simulated_objects_base.clear();
+                std::vector<SimulatedObjects> list_of_simulated_objects_base;
+                Dataset::m_algorithm_map = Dataset::m_algorithm_map_original;
+                // Generate Algorithm data flow --------------------------------------
+                for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
 
-                std::vector<Objects *> ptr_list_of_simulated_objects;
-                bool found = false;
+                    std::vector<Objects *> ptr_list_of_simulated_objects;
+                    bool found = false;
 
-                map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list, environment_list[env_index], lk, "lk", list_of_gt_sensors_base,ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
-                map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list, environment_list[env_index], fb, "fback", list_of_gt_sensors_base,ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
-                map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list, environment_list[env_index], tvl, "dual_tvl_flow", list_of_gt_sensors_base,ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, stepSize);
+                    map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list,
+                                                                                    environment_list[env_index], lk,
+                                                                                    "lk", list_of_gt_sensors_base,
+                                                                                    ptr_list_of_gt_objects_base,
+                                                                                    ptr_list_of_simulated_objects_base,
+                                                                                    ptr_list_of_simulated_objects,
+                                                                                    stepSize, ptr_gt_flow);
+                    map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list,
+                                                                                  environment_list[env_index], fb,
+                                                                                  "fback", list_of_gt_sensors_base,
+                                                                                  ptr_list_of_gt_objects_base,
+                                                                                  ptr_list_of_simulated_objects_base,
+                                                                                  ptr_list_of_simulated_objects,
+                                                                                  stepSize, ptr_gt_flow);
+                    map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list,
+                                                                                     environment_list[env_index], tvl,
+                                                                                     "dual_tvl_flow",
+                                                                                     list_of_gt_sensors_base,
+                                                                                     ptr_list_of_gt_objects_base,
+                                                                                     ptr_list_of_simulated_objects_base,
+                                                                                     ptr_list_of_simulated_objects,
+                                                                                     stepSize, ptr_gt_flow);
 
-                if ( Dataset::m_algorithm_map["LK"]) {
+                    if (Dataset::m_algorithm_map["LK"]) {
 
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
-                    found = true;
-                    if ( env_index == (environment_list.size()-1)) {
-                        Dataset::m_algorithm_map["LK"] = 0;
-                    }
-                }
-                else if ( Dataset::m_algorithm_map["FB"] ) {
+                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
+                        found = true;
+                        if (env_index == (environment_list.size() - 1)) {
+                            Dataset::m_algorithm_map["LK"] = 0;
+                        }
+                    } else if (Dataset::m_algorithm_map["FB"]) {
 
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
-                    found = true;
-                    if ( env_index == (environment_list.size()-1)) {
-                        Dataset::m_algorithm_map["FB"] = 0;
-                    }
-                }
+                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
+                        found = true;
+                        if (env_index == (environment_list.size() - 1)) {
+                            Dataset::m_algorithm_map["FB"] = 0;
+                        }
+                    } else if (Dataset::m_algorithm_map["TVL"]) {
 
-                else if ( Dataset::m_algorithm_map["TVL"] ) {
+                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
+                        found = true;
+                        if (env_index == (environment_list.size() - 1)) {
+                            Dataset::m_algorithm_map["TVL"] = 0;
+                        }
+                    } else if (Dataset::m_algorithm_map["SF"]) {
 
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
-                    found = true;
-                    if ( env_index == (environment_list.size()-1)) {
-                        Dataset::m_algorithm_map["TVL"] = 0;
-                    }
-                }
-
-                else if ( Dataset::m_algorithm_map["SF"]) {
-
-                    //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
-                    list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["SF"]));
-                    found = true;
-                    if ( env_index == (environment_list.size()-1)) {
-                        Dataset::m_algorithm_map["SF"] = 0;
-                    }
-                }
-
-                if ( !found ) {
-                    break;
-                }
-
-                std::vector<SimulatedObjects> list_of_simulated_objects;
-                // just to be sure, all lists are empty
-                list_of_simulated_objects.clear();
-                ptr_list_of_simulated_objects.clear();
-
-                SimulatedObjects::simulatedObjectTotalCount = 0; // start from 0 for each list_of_algorithm
-
-                for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
-                    //two objects
-                    std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
-                            obj_index).get_object_extrapolated_visibility();
-
-                    SimulatedObjects objects(
-                            "simulated_" + list_of_gt_objects_base.at(obj_index).getObjectName(), extrapolated_visibility);
-                    list_of_simulated_objects.push_back(objects);  // mke new objects
-                }
-
-                // push the objects into the pointer. The pointer here will contain two elements.
-                for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                    ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
-                }
-
-                list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories( environment_list[env_index], fps, stepSize);
-                if ((Dataset::m_execute_algorithm && cpp_dataset.execute) || (Dataset::m_execute_algorithm && vires_dataset.execute)) {
-
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories( environment_list[env_index], fps, stepSize);
-                    // TODO - do something for stepSize.. its redundant here.
-                    /// run optical flow algorithm
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list, video_frames, fps);
-
-                    /// combine sensor data
-                    if ( (evaluation_list.size() + 1%evaluation_list.size()) > 1 ) {
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
-                    }
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->rerun_optical_flow_algorithm_interpolated();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_sroi_intersections();
-
-                    if (environment_list[env_index] == "blue_sky") { // store the stimulated objects from the ground run.
-                        for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                            list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
-                            ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_index));
-                            assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
+                        //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
+                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["SF"]));
+                        found = true;
+                        if (env_index == (environment_list.size() - 1)) {
+                            Dataset::m_algorithm_map["SF"] = 0;
                         }
                     }
+
+                    if (!found) {
+                        break;
+                    }
+
+                    std::vector<SimulatedObjects> list_of_simulated_objects;
+                    // just to be sure, all lists are empty
+                    list_of_simulated_objects.clear();
+                    ptr_list_of_simulated_objects.clear();
+
+                    SimulatedObjects::simulatedObjectTotalCount = 0; // start from 0 for each list_of_algorithm
+
+                    for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
+                        //two objects
+                        std::vector<std::vector<bool> > extrapolated_visibility = list_of_gt_objects_base.at(
+                                obj_index).get_object_extrapolated_visibility();
+
+                        SimulatedObjects objects(
+                                "simulated_" + list_of_gt_objects_base.at(obj_index).getObjectName(),
+                                extrapolated_visibility);
+                        list_of_simulated_objects.push_back(objects);  // mke new objects
+                    }
+
+                    // push the objects into the pointer. The pointer here will contain two elements.
                     for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                        assert(list_of_simulated_objects_base.at(obj_index).getObjectId() == obj_index);
-                        assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
+                        ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
                     }
 
-                    /// generate and save flow vector
-                    for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
-                        list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement( "algorithm");
+                    list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories(
+                            environment_list[env_index], fps, stepSize);
+                    if ((Dataset::m_execute_algorithm && cpp_dataset.execute) ||
+                        (Dataset::m_execute_algorithm && vires_dataset.execute)) {
+
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories(
+                                environment_list[env_index], fps, stepSize);
+                        // TODO - do something for stepSize.. its redundant here.
+                        /// run optical flow algorithm
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list,
+                                                                                                      video_frames,
+                                                                                                      fps);
+
+                        /// combine sensor data
+                        if ((evaluation_list.size() + 1 % evaluation_list.size()) > 1) {
+                            list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
+                        }
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector();
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->rerun_optical_flow_algorithm_interpolated();
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->generate_sroi_intersections();
+
+                        if (environment_list[env_index] ==
+                            "blue_sky") { // store the stimulated objects from the ground run.
+                            for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                                list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
+                                ptr_list_of_simulated_objects_base.push_back(
+                                        &list_of_simulated_objects_base.at(obj_index));
+                                assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
+                            }
+                        }
+                        for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                            assert(list_of_simulated_objects_base.at(obj_index).getObjectId() == obj_index);
+                            assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
+                        }
+
+                        /// generate and save flow vector
+                        for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
+                            list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement("algorithm");
+                        }
+
+                        /// analysis and metrics
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points();
+                        //list_of_ptr_of_environment_OFalgorithm[env_index]->analyse_stencil();
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm();
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots();
+
                     }
 
-                    /// analysis and metrics
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points();
-                    //list_of_ptr_of_environment_OFalgorithm[env_index]->analyse_stencil();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm();
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots();
-
-                }
-
-                auto position = list_of_ptr_of_environment_OFalgorithm.at(env_index)->getResultOrdner().find('/');
-                std::string suffix = list_of_ptr_of_environment_OFalgorithm.at(env_index)->getResultOrdner().replace(position, 1, "_");
-                time_map["algorithm_flow_" + suffix] = (duration_cast<milliseconds>( steady_clock::now() - tic).count());
-                tic = steady_clock::now();
-
-                if ((Dataset::m_execute_algorithm && cpp_dataset.analyse && cpp_dataset.execute) || (Dataset::m_execute_algorithm && vires_dataset.analyse && vires_dataset.execute)) {
-
-                    pixelRobustness.generatePixelRobustness( *list_of_ptr_of_environment_OFalgorithm[0], *list_of_ptr_of_environment_OFalgorithm[env_index]);
-                    vectorRobustness.generateVectorRobustness( *list_of_ptr_of_environment_OFalgorithm[env_index], *list_of_ptr_of_environment_OFalgorithm[0]);
-
-                    time_map["robustness_" + suffix] = (duration_cast<milliseconds>(steady_clock::now() - tic).count());
+                    auto position = list_of_ptr_of_environment_OFalgorithm.at(env_index)->getResultOrdner().find('/');
+                    std::string suffix = list_of_ptr_of_environment_OFalgorithm.at(
+                            env_index)->getResultOrdner().replace(position, 1, "_");
+                    time_map["algorithm_flow_" + suffix] = (duration_cast<milliseconds>(
+                            steady_clock::now() - tic).count());
                     tic = steady_clock::now();
 
+                    if ((Dataset::m_execute_algorithm && cpp_dataset.analyse && cpp_dataset.execute) ||
+                        (Dataset::m_execute_algorithm && vires_dataset.analyse && vires_dataset.execute)) {
+
+                        pixelRobustness.generatePixelRobustness(*list_of_ptr_of_environment_OFalgorithm[0],
+                                                                *list_of_ptr_of_environment_OFalgorithm[env_index]);
+                        vectorRobustness.generateVectorRobustness(*list_of_ptr_of_environment_OFalgorithm[env_index],
+                                                                  *list_of_ptr_of_environment_OFalgorithm[0]);
+
+                        time_map["robustness_" + suffix] = (duration_cast<milliseconds>(
+                                steady_clock::now() - tic).count());
+                        tic = steady_clock::now();
+
+                    }
                 }
-            }
 
-            //ffmpeg -framerate 10 -pattern_type glob -i '*.png' -r 30 -pix_fmt yuv420p movement.avi
+                //ffmpeg -framerate 10 -pattern_type glob -i '*.png' -r 30 -pix_fmt yuv420p movement.avi
 
-            if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
-                for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
-                    for (int sensors = 0; sensors < Dataset::SENSOR_COUNT; sensors++) {
-                        Utils::make_video_from_regex(
-                                Dataset::m_dataset_gtpath.string() + '/' + environment_list[env_index] + '_' +
-                                std::to_string(sensors));
-                        Utils::make_video_from_regex(
-                                Dataset::m_dataset_resultpath.string() + "/results_FB_" + environment_list[env_index] +
-                                '_' + std::to_string(fps) + "_" + std::to_string(stepSize) + "/position_occ_0" +
-                                std::to_string(sensors) + '/');
+                if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
+                    for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+                        for (int sensors = 0; sensors < Dataset::SENSOR_COUNT; sensors++) {
+                            Utils::make_video_from_regex(
+                                    Dataset::m_dataset_gtpath.string() + '/' + environment_list[env_index] + '_' +
+                                    std::to_string(sensors));
+                            Utils::make_video_from_regex(
+                                    Dataset::m_dataset_resultpath.string() + "/results_FB_" +
+                                    environment_list[env_index] +
+                                    '_' + std::to_string(fps) + "_" + std::to_string(stepSize) + "/position_occ_0" +
+                                    std::to_string(sensors) + '/');
+                        }
                     }
                 }
             }
         }
-
         //system("python ../../main_python/motionflow_graphs.py");
-
     }
 
     fs << "time_map" << "[";
@@ -629,13 +660,15 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         if ( kitti_flow_dataset.execute ) {
 
+            std::shared_ptr<GroundTruthFlow> ptr_gt_flow;
+
             //Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, kitti_flow_dataset.start, kitti_flow_dataset.stop);
 
             std::vector<GroundTruthObjects *> ptr_list_of_gt_objects_base;
             std::vector<Objects *> ptr_list_of_simulated_objects_base;
             std::vector<Objects *> ptr_list_of_simulated_objects;
 
-            Farneback fback(evaluation_list, "blue_sky", fb, "fback", list_of_gt_sensors_base, ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1);
+            Farneback fback(evaluation_list, "blue_sky", fb, "fback", list_of_gt_sensors_base, ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1, ptr_gt_flow);
             AlgorithmFlow *algo = &fback;
             // The ground truth generate_flow_frame and image is already available from the base dataset. Hence only results can be
             // calculated here.

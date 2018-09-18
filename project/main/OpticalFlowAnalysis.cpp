@@ -74,7 +74,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
-                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_intersection_sroi();
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_special_region_of_interest();
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_interpolated_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_interpolated_intersection_sroi();
 
@@ -89,10 +89,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         ).at(sensor_index).at(current_frame_index).mean_pts;
 
                         evaluationData.at(obj_index).mean_displacement = list_of_current_objects.at(obj_index)->
-                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
-                        ).at(sensor_index).at(current_frame_index).mean_displacement;
-
-                        evaluationData.at(obj_index).gt_mean_displacement = m_ptr_list_gt_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).mean_displacement;
 
@@ -116,11 +112,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).covar_displacement;
 
-                        evaluationData.at(
-                                obj_index).ground_truth_pixels = (ushort)CLUSTER_COUNT_GT; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
-
-                        evaluationData.at(
-                                obj_index).ground_truth_sroi_pixels = (ushort)CLUSTER_COUNT_GT_SPECIAL_ROI; //(dimension.x * dimension.y); // how many pixels are visible ( it could be that some pixels are occluded )
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
                         cv::Mat icovar;
@@ -129,7 +120,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                             icovar = evaluationData.at(obj_index).covar_displacement.inv(cv::DECOMP_SVD);
                         }
-
 
                         if (m_opticalFlowName != "ground_truth") {
 
@@ -163,9 +153,13 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
 
                             std::vector<std::pair<float, float>> gnuplot_xy_pts;
-                            COUNT_METRICS &ground_truth_metrics = evaluationData.at(obj_index).entire_metrics;
-                            gnuplot_xy_pts = generate_count_metrics_data("ground_truth", entire_roi_object, sensor_index, current_frame_index, obj_index, evaluationData, ground_truth_metrics, icovar);
-                            show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, ground_truth_metrics, icovar);
+                            COUNT_METRICS &entire_roi_object_count_metrics = evaluationData.at(obj_index).entire_metrics;
+                            gnuplot_xy_pts = generate_count_metrics_data("entire", entire_roi_object, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
+                            //show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, ground_truth_metrics, icovar);
+
+                            COUNT_METRICS &special_roi_object_count_metrics = evaluationData.at(obj_index).sroi_metrics;
+                            gnuplot_xy_pts = generate_count_metrics_data("special", intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_count_metrics, icovar);
+                            //show_gnuplot("special", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
                         }
 
@@ -217,7 +211,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             std::vector<std::pair<float, float>> gnuplot_xy_pts = {{0,0}};
                             cv::Mat icovar;
                             COUNT_METRICS &ground_truth_metrics = evaluationData.at(obj_index).entire_metrics;
-                            show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, ground_truth_metrics, icovar);
+                            //show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, ground_truth_metrics, icovar);
                         }
 
                     }
@@ -270,7 +264,7 @@ void OpticalFlow::stich_gnuplots() {
 
         for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
-            std::cout << "generating evaluation metrics in OpticalFlow.cpp for sensor index " << sensor_index
+            std::cout << "stiching gnuplots in OpticalFlow.cpp for sensor index " << sensor_index
                       << " for opticalflow  " << m_opticalFlowName << std::endl;
 
             unsigned FRAME_COUNT = (unsigned) Dataset::MAX_ITERATION_RESULTS;
@@ -360,8 +354,12 @@ std::vector<std::pair<float, float>> OpticalFlow::generate_count_metrics_data(st
     count_metrics.total_pixel = (ushort)CLUSTER_COUNT;
 
     std::vector<std::pair<float, float>> gnuplot_xy_pts;
-
-    cv::Point2f gt_displacement = evaluationData.at(obj_index).gt_mean_displacement;
+    cv::Point2f gt_displacement;
+    if ( m_opticalFlowName == "ground_truth") {
+        gt_displacement = m_ptr_list_gt_objects.at(obj_index)->get_object_base_point_displacement().at(current_frame_index).second;
+    } else {
+        gt_displacement = m_ptr_gt_flow->get_sensor_multiframe_evaluation_data().at(0).at(sensor_index).at(current_frame_index).at(obj_index).mean_displacement;
+    }
     auto euclidean_dist_gt = cv::norm(gt_displacement);
     auto angle_gt = std::tanh(gt_displacement.y / gt_displacement.x);
 
@@ -441,7 +439,7 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
 
 
     std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
-    gt_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).gt_mean_displacement.x, evaluationData.at(obj_index).gt_mean_displacement.y));
+    gt_mean_pts.push_back(std::make_pair(m_ptr_gt_flow->get_sensor_multiframe_evaluation_data().at(0).at(sensor_index).at(current_frame_index).at(obj_index).mean_displacement.x, m_ptr_gt_flow->m_sensor_multiframe_evaluation_data.at(0).at(sensor_index).at(current_frame_index).at(obj_index).mean_displacement.y));
     algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x, evaluationData.at(obj_index).mean_displacement.y));
 
     //Get the eigenvalues and eigenvectors
