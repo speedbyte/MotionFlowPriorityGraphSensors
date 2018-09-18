@@ -23,6 +23,7 @@
 #include "Sensors.h"
 #include "Utils.h"
 
+// it should be able to analyse both FB and TVL in main_python
 // fix sroi analysis l1, l2 and ma cumulative error and total pixels.
 // total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
