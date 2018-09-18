@@ -63,40 +63,38 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
 
                 for (unsigned objIndex = 0; objIndex < TOTAL_OBJECTS; objIndex++) {
 
-
-
                     ushort count = 0;
                     const std::vector<std::string> algorithm_metrics_strings = {
 
-                            "_total_pixel",
-                            "_l1_total_good_pixels",
-                            "_l2_total_good_pixels",
-                            "_ma_total_good_pixels",
+                            "total_pixel",
+                            "l1_total_good_pixels",
+                            "l2_total_good_pixels",
+                            "ma_total_good_pixels",
 
-                            "_l1_cumulative_error_all_pixels",
-                            "_l2_cumulative_error_all_pixels",
-                            "_ma_cumulative_error_all_pixels",
+                            "l1_cumulative_error_all_pixels",
+                            "l2_cumulative_error_all_pixels",
+                            "ma_cumulative_error_all_pixels",
 
-                            "_l1_cumulative_error_good_pixels",
-                            "_l2_cumulative_error_good_pixels",
-                            "_ma_cumulative_error_good_pixels",
+                            "l1_cumulative_error_good_pixels",
+                            "l2_cumulative_error_good_pixels",
+                            "ma_cumulative_error_good_pixels",
                     };
 
                     // ------------------------------
-                    std::string suffix_algorithm_metrics = "algorithm_metrics";
-                    ushort *algorithm_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithm_metrics);
+                    std::string suffix_algorithm_metrics = "";
+                    ushort *algorithm_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).entire_metrics);
                     float *algorithm_metrics_pointer_metrics_float = (float *)(algorithm_metrics_pointer_metrics+4);
                     // ------------------------------
-                    std::string suffix_algorithm_interpolated_metrics = "algorithm_interpolated_metrics";
-                    ushort *algorithm_interpolated_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithm_interpolated_metrics);
+                    std::string suffix_algorithm_interpolated_metrics = "interpolated_";
+                    ushort *algorithm_interpolated_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).entire_interpolated_metrics);
                     float *algorithm_interpolated_metrics_pointer_metrics_float = (float *)(algorithm_interpolated_metrics_pointer_metrics+4);
                     // ------------------------------
-                    std::string suffix_algorithm_sroi_metrics = "algorithm_sroi_metrics";
-                    ushort *algorithm_sroi_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithm_sroi_metrics);
+                    std::string suffix_algorithm_sroi_metrics = "sroi_";
+                    ushort *algorithm_sroi_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).sroi_metrics);
                     float *algorithm_sroi_metrics_pointer_metrics_float = (float *)(algorithm_sroi_metrics_pointer_metrics+4);
                     // ------------------------------
-                    std::string suffix_algorithm_sroi_interpolated_metrics = "algorithm_sroi_interpolated_metrics";
-                    ushort *algorithm_sroi_interpolated_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).algorithm_sroi_interpolated_metrics);
+                    std::string suffix_algorithm_sroi_interpolated_metrics = "sroi_interpolated_";
+                    ushort *algorithm_sroi_interpolated_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).sroi_interpolated_metrics);
                     float *algorithm_sroi_interpolated_metrics_pointer_metrics_float = (float *)(algorithm_sroi_interpolated_metrics_pointer_metrics+4);
 
 
@@ -111,12 +109,13 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
                          << "visibility" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblity
 
+/*
                          << "ground_truth_pixels" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ground_truth_pixels
 
                          << "ground_truth_sroi_pixels" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ground_truth_sroi_pixels
-
+*/
                          << "stddev_displacement" <<
                          (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).stddev_displacement);
 

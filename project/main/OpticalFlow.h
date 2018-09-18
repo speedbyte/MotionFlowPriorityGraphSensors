@@ -39,11 +39,10 @@ typedef struct {
     ushort ground_truth_pixels;
     ushort ground_truth_sroi_pixels;
 
-    COUNT_METRICS ground_truth_metrics;
-    COUNT_METRICS algorithm_metrics;
-    COUNT_METRICS algorithm_interpolated_metrics;
-    COUNT_METRICS algorithm_sroi_metrics;
-    COUNT_METRICS algorithm_sroi_interpolated_metrics;
+    COUNT_METRICS entire_metrics;
+    COUNT_METRICS entire_interpolated_metrics;
+    COUNT_METRICS sroi_metrics;
+    COUNT_METRICS sroi_interpolated_metrics;
 
     cv::Point2f gt_mean_displacement;
 

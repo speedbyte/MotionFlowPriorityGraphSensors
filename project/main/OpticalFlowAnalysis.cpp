@@ -70,7 +70,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                     evaluationData.at(obj_index).obj_index = obj_index;
                     evaluationData.at(obj_index).visiblity = list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index);
 
-
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
@@ -131,44 +130,43 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             icovar = evaluationData.at(obj_index).covar_displacement.inv(cv::DECOMP_SVD);
                         }
 
-                        COUNT_METRICS &ground_truth_metrics = evaluationData.at(
-                                obj_index).ground_truth_metrics;
-
-                        ground_truth_metrics.l1_total_good_pixels = (ushort)CLUSTER_COUNT_GT;
-                        ground_truth_metrics.l2_total_good_pixels = (ushort)CLUSTER_COUNT_GT;
-                        ground_truth_metrics.ma_total_good_pixels = (ushort)CLUSTER_COUNT_GT;
 
                         if (m_opticalFlowName != "ground_truth") {
-
-                            unsigned CLUSTER_COUNT_INTERPOLATED_ALGORITHM = (unsigned) entire_roi_object_interpolated.at(sensor_index).at(
-                                    current_frame_index).size();
 
                             std::vector<std::pair<float, float>> gnuplot_xy_pts;
 
 //--------------------------------------------------------------------------------------------
-                            COUNT_METRICS &entire_roi_object_count_metrics = evaluationData.at(obj_index).algorithm_metrics;
+                            COUNT_METRICS &entire_roi_object_count_metrics = evaluationData.at(obj_index).entire_metrics;
                             gnuplot_xy_pts = generate_count_metrics_data("entire", entire_roi_object, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
                             show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
                                     
 //--------------------------------------------------------------------------------------------
 
-                            COUNT_METRICS &entire_roi_interpolated_count_metrics = evaluationData.at(obj_index).algorithm_interpolated_metrics;
+                            COUNT_METRICS &entire_roi_interpolated_count_metrics = evaluationData.at(obj_index).entire_interpolated_metrics;
                             gnuplot_xy_pts = generate_count_metrics_data("entire_interpolated", entire_roi_object_interpolated, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_interpolated_count_metrics, icovar);
                             show_gnuplot("entire_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
 
-                            COUNT_METRICS &special_roi_object_count_metrics = evaluationData.at(obj_index).algorithm_sroi_metrics;
+                            COUNT_METRICS &special_roi_object_count_metrics = evaluationData.at(obj_index).sroi_metrics;
                             gnuplot_xy_pts = generate_count_metrics_data("special", intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_count_metrics, icovar);
                             show_gnuplot("special", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
 
-                            COUNT_METRICS &special_roi_object_interpolated_count_metrics = evaluationData.at(obj_index).algorithm_sroi_interpolated_metrics;
+                            COUNT_METRICS &special_roi_object_interpolated_count_metrics = evaluationData.at(obj_index).sroi_interpolated_metrics;
                             gnuplot_xy_pts = generate_count_metrics_data("special_interpolated", intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_interpolated_count_metrics, icovar);
                             show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
+                        } else {
+
+
+                            std::vector<std::pair<float, float>> gnuplot_xy_pts;
+                            COUNT_METRICS &ground_truth_metrics = evaluationData.at(obj_index).entire_metrics;
+                            gnuplot_xy_pts = generate_count_metrics_data("ground_truth", entire_roi_object, sensor_index, current_frame_index, obj_index, evaluationData, ground_truth_metrics, icovar);
+                            show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, ground_truth_metrics, icovar);
+
                         }
 
                     } else {
@@ -188,32 +186,38 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
 //--------------------------------------------------------------------------------------------
                             COUNT_METRICS &entire_roi_object_count_metrics = evaluationData.at(
-                                    obj_index).algorithm_metrics;
+                                    obj_index).entire_metrics;
                             show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index,
                                          evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &entire_roi_interpolated_count_metrics = evaluationData.at(
-                                    obj_index).algorithm_interpolated_metrics;
+                                    obj_index).entire_interpolated_metrics;
                             show_gnuplot("entire_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index,
                                          obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &special_roi_object_count_metrics = evaluationData.at(
-                                    obj_index).algorithm_sroi_metrics;
+                                    obj_index).sroi_metrics;
                             show_gnuplot("special", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index,
                                          evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
 
                             COUNT_METRICS &special_roi_object_interpolated_count_metrics = evaluationData.at(
-                                    obj_index).algorithm_sroi_interpolated_metrics;
+                                    obj_index).sroi_interpolated_metrics;
                             show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index,
                                          obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
+                        } else {
+
+                            std::vector<std::pair<float, float>> gnuplot_xy_pts = {{0,0}};
+                            cv::Mat icovar;
+                            COUNT_METRICS &ground_truth_metrics = evaluationData.at(obj_index).entire_metrics;
+                            show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, ground_truth_metrics, icovar);
                         }
 
                     }

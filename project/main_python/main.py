@@ -109,14 +109,18 @@ if __name__ == '__main__':
                         print "---------------------------"
                         custom_data_list_name = list()
 
-                        plot_mapping_noise = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
-
-                        plot_mapping = [plot_mapping_gt, plot_mapping_noise]
-
                         if noise == "ground_truth":
-                            environment = ["ground_truth"]
+                            assert(n==0)
+                            if ( just_ground_truth is True ):
+                                environment = ["ground_truth"]
+                                plot_mapping = [plot_mapping_gt]
+                            else:
+                                continue
                         else:
-                            environment = ["ground_truth", noise]
+                            if ( just_ground_truth is False):
+                                environment = ["ground_truth", noise]
+                                plot_mapping_noise = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
+                                plot_mapping = [plot_mapping_gt, plot_mapping_noise]
 
                         for index,env in enumerate(environment):
 
