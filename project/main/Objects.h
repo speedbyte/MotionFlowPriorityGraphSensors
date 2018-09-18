@@ -194,10 +194,10 @@ public:
         return m_object_sroi_disjoint;
     }
 
-    void push_back_object_intersection_sroi(
+    void push_back_object_sroi(
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>> sensor_stencil_movement);
 
-    void push_back_object_intersection_sroi_interpolated(
+    void push_back_object_sroi_interpolated(
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>> sensor_stencil_movement);
 };
 

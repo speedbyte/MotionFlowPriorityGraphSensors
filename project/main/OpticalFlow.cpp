@@ -402,6 +402,8 @@ void OpticalFlow::save_flow_vector() {
             if ( m_opticalFlowName == "ground_truth" ) {
                 flow_path = GroundTruthScene::m_ground_truth_flow_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
                 plot_path = GroundTruthScene::m_ground_truth_plot_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+                flow_path_interpolated = GroundTruthScene::m_ground_truth_flow_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_interpolated;
+                plot_path_interpolated = GroundTruthScene::m_ground_truth_plot_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image_interpolated;
             }
 
             FlowImageExtended F_png_write(Dataset::m_frame_size.width, Dataset::m_frame_size.height);
@@ -435,23 +437,24 @@ void OpticalFlow::save_flow_vector() {
             F_png_write.writeColor(plot_path, max_magnitude);
 
             cv::Mat readColorPlot = cv::imread(plot_path, CV_LOAD_IMAGE_COLOR);
-            for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
-                // get ground truth sroi area
-                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();                   for ( auto it = special_roi_object.at(sensor_index).at(current_frame_index).begin(); it != special_roi_object.at(sensor_index).at(current_frame_index).end(); it++ ) {
-                    cv::Vec3b current_pixel_value = readColorPlot.at<cv::Vec3b>((*it).first);
-                    if ( current_pixel_value == cv::Vec3b(0,0,0)) {
-                        readColorPlot.at<cv::Vec3b>((*it).first) = cv::Vec3b(255,255,255);
-                    } else {
-                        readColorPlot.at<cv::Vec3b>((*it).first) = cv::Vec3b(127,127,127);
-                    }
-                }
-            }
-            cv::imwrite(plot_path, readColorPlot);
 
             FlowImageExtended F_png_write_interpolated(F_png_write);
 
             for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
                 if (m_opticalFlowName != "ground_truth") {
+
+                    // get ground truth sroi area
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
+                    for ( auto it = special_roi_object.at(sensor_index).at(current_frame_index).begin(); it != special_roi_object.at(sensor_index).at(current_frame_index).end(); it++ ) {
+                        cv::Vec3b current_pixel_value = readColorPlot.at<cv::Vec3b>((*it).first);
+                        if ( current_pixel_value == cv::Vec3b(0,0,0)) {
+                            readColorPlot.at<cv::Vec3b>((*it).first) = cv::Vec3b(255,255,255);
+                        } else {
+                            readColorPlot.at<cv::Vec3b>((*it).first) = cv::Vec3b(127,127,127);
+                        }
+                    }
+                    cv::imwrite(plot_path, readColorPlot);
+
                     unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) list_of_current_objects.at(
                             obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(
                             current_frame_index).size();
@@ -623,8 +626,8 @@ void OpticalFlow::generate_sroi_intersections() {
         }
         for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
 
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_intersection_sroi(multiframe_stencil_displacement_sroi.at(obj_index));
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_intersection_sroi_interpolated(multiframe_stencil_displacement_sroi_interpolated.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_sroi(multiframe_stencil_displacement_sroi.at(obj_index));
+            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_sroi_interpolated(multiframe_stencil_displacement_sroi_interpolated.at(obj_index));
 
         }
     }
@@ -640,86 +643,123 @@ void OpticalFlow::generate_sroi_intersections() {
  */
 void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
 
+    std::vector<Objects *> list_of_current_objects;
+
+    if (m_opticalFlowName == "ground_truth") {
+        for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+            list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
+        }
+    } else {
+        list_of_current_objects = m_ptr_list_simulated_objects;
+    }
+
     for ( ushort sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++ ) {
 
-        unsigned FRAME_COUNT = (unsigned)m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).size();
-        assert(FRAME_COUNT>0);
-        char sensor_index_folder_suffix[50];
-        sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
-        std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
+        if ( m_opticalFlowName != "ground_truth") {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(m_ptr_list_simulated_objects.size());
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement_interpolated(m_ptr_list_simulated_objects.size());
+            unsigned FRAME_COUNT = Dataset::MAX_ITERATION_RESULTS;
+            assert(FRAME_COUNT > 0);
+            char sensor_index_folder_suffix[50];
+            sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
+            std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
-        std::vector<std::vector<std::vector<bool> >  > multiframe_visibility(m_ptr_list_simulated_objects.size());
+            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(
+                    list_of_current_objects.size());
+            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement_interpolated(
+                    list_of_current_objects.size());
 
-        std::cout << "rerun algorithm results will be stored in " << m_resultordner << std::endl;
+            std::vector<std::vector<std::vector<bool> > > multiframe_visibility(list_of_current_objects.size());
 
-        for (ushort current_frame_index=0; current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
+            std::cout << "rerun algorithm results will be stored in " << m_resultordner << std::endl;
 
-            std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
+            for (ushort current_frame_index = 0;
+                 current_frame_index < Dataset::MAX_ITERATION_RESULTS; current_frame_index++) {
 
-            char file_name_input_image[50];
-            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
-                    (0).at(current_frame_index).frame_no;
+                std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
-            sprintf(file_name_input_image, "interpolated_000%03d_10.png", image_frame_count);
-            std::string flow_path = m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+                char file_name_input_image[50];
+                ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                        (0).at(current_frame_index).frame_no;
 
-            // read flow vector
-            cv::Mat interpolatedFrame = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
-            if ( interpolatedFrame.empty() ) {
-                std::cerr << flow_path << " not found" << std::endl;
-                throw ("No image file found error");
-            }
-            cv::cvtColor(interpolatedFrame, interpolatedFrame, CV_RGB2BGR);
+                sprintf(file_name_input_image, "interpolated_000%03d_10.png", image_frame_count);
+                std::string flow_path =
+                        m_flow_occ_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
 
-            for ( auto row=0; row < Dataset::m_frame_size.height; row++) {
-                for ( auto col=0; col < Dataset::m_frame_size.width; col++) {
+                // read flow vector
+                cv::Mat interpolatedFrame = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
+                if (interpolatedFrame.empty()) {
+                    std::cerr << flow_path << " not found" << std::endl;
+                    throw ("No image file found error");
+                }
+                cv::cvtColor(interpolatedFrame, interpolatedFrame, CV_RGB2BGR);
 
-                    if ( (interpolatedFrame.at<cv::Vec3w>(row,col)[2] != 0 ) && (interpolatedFrame.at<cv::Vec3w>(row,col)[2] != 32704) ) { //never initialised value ( -512 ) && no algorithm detected value ( -1 )
-                        //std::cout << interpolatedFrame.at<cv::Vec3w>(row,col)[0] << " " << interpolatedFrame.at<cv::Vec3w>(row,col)[1] << " " << interpolatedFrame.at<cv::Vec3w>(row,col)[2] << std::endl;
-                        frame_next_pts_array.push_back(cv::Point2f(col, row));
-                        displacement_array.push_back(cv::Point2f(((interpolatedFrame.at<cv::Vec3w>(row,col)[0]-32768.0f)/64.0f), ((interpolatedFrame.at<cv::Vec3w>(row,col)[1]-32768.0f)/64.0f)));
+                for (auto row = 0; row < Dataset::m_frame_size.height; row++) {
+                    for (auto col = 0; col < Dataset::m_frame_size.width; col++) {
 
+                        if ((interpolatedFrame.at<cv::Vec3w>(row, col)[2] != 0) &&
+                            (interpolatedFrame.at<cv::Vec3w>(row, col)[2] !=
+                             32704)) { //never initialised value ( -512 ) && no algorithm detected value ( -1 )
+                            //std::cout << interpolatedFrame.at<cv::Vec3w>(row,col)[0] << " " << interpolatedFrame.at<cv::Vec3w>(row,col)[1] << " " << interpolatedFrame.at<cv::Vec3w>(row,col)[2] << std::endl;
+                            frame_next_pts_array.push_back(cv::Point2f(col, row));
+                            displacement_array.push_back(
+                                    cv::Point2f(((interpolatedFrame.at<cv::Vec3w>(row, col)[0] - 32768.0f) / 64.0f),
+                                                ((interpolatedFrame.at<cv::Vec3w>(row, col)[1] - 32768.0f) /
+                                                 64.0f)));
+
+                        }
                     }
                 }
-            }
 
-            if (current_frame_index) {  // Calculate only on second or subsequent images.
+                if (current_frame_index) {  // Calculate only on second or subsequent images.
 
-                std::cout << "current_frame " << image_frame_count << std::endl;
+                    std::cout << "current_frame " << image_frame_count << std::endl;
 
-                /// execute optical flow algorithms and get the flow vectors
-                /*
-                for (unsigned i = 0; i < frame_next_pts_array.size(); i++) {
-                    //cv::circle(image_02_frame, frame_next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
-                    cv::arrowedLine(image_02_frame, frame_prev_pts_array[i], frame_next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
-                }*/
-                /// put data in object_stencil_displacement
-                std::vector<std::pair<cv::Point2f,cv::Point2f > > dummy;
-                common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement_interpolated, multiframe_stencil_disjoint_displacement_interpolated, multiframe_visibility);
+                    /// execute optical flow algorithms and get the flow vectors
+                    /*
+                    for (unsigned i = 0; i < frame_next_pts_array.size(); i++) {
+                        //cv::circle(image_02_frame, frame_next_pts_array[i], 1, cv::Scalar(0, 255, 0), 1, 8);
+                        cv::arrowedLine(image_02_frame, frame_prev_pts_array[i], frame_next_pts_array[i], cv::Scalar(0,255,0), 1, 8, 0, 0.5);
+                    }*/
+                    /// put data in object_stencil_displacement
+                    std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy;
+                    common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array,
+                                      multiframe_stencil_displacement_interpolated,
+                                      multiframe_stencil_disjoint_displacement_interpolated, multiframe_visibility);
 
-            } else {
+                } else {
 
-                std::cout << "skipping first frame frame count " << current_frame_index << std::endl;
+                    std::cout << "skipping first frame frame count " << current_frame_index << std::endl;
 
-                for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
-                    multiframe_stencil_displacement_interpolated.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
-                    multiframe_stencil_disjoint_displacement_interpolated.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
-                    multiframe_visibility.at(obj_index).push_back({{false}});
+                    for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+                        multiframe_stencil_displacement_interpolated.at(obj_index).push_back(
+                                {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
+                        multiframe_stencil_disjoint_displacement_interpolated.at(obj_index).push_back(
+                                {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
+                        multiframe_visibility.at(obj_index).push_back({{false}});
+                    }
+
                 }
+            }
 
+            for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+
+                list_of_current_objects.at(
+                        obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(
+                        multiframe_stencil_displacement_interpolated.at(obj_index),
+                        multiframe_visibility.at(obj_index));
+                list_of_current_objects.at(
+                        obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(
+                        multiframe_stencil_disjoint_displacement_interpolated.at(obj_index),
+                        multiframe_visibility.at(obj_index));
             }
         }
+        else {
+            for ( ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
-        for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
-
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(multiframe_stencil_displacement_interpolated.at(obj_index), multiframe_visibility.at(obj_index));
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement_interpolated.at(obj_index), multiframe_visibility.at(obj_index));
-
+                list_of_current_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index), m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_visibility().at(sensor_index));
+                //list_of_current_objects.at(obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement_interpolated.at(obj_index), multiframe_visibility.at(obj_index));
+            }
         }
-
     }
 
 }

@@ -23,7 +23,7 @@
 #include "Sensors.h"
 #include "Utils.h"
 
-// why is obj_index ground truth total pixesl double?
+// fix sroi analysis l1, l2 and ma cumulative error and total pixels.
 // total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // stich images python plot
@@ -392,9 +392,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 if (Dataset::GENERATE ) {
                     gt_flow.save_flow_vector();
-
                 } else {
 
+                    gt_flow.rerun_optical_flow_algorithm_interpolated();
                     gt_flow.find_ground_truth_object_special_region_of_interest();
                     fs.open(("../values.yml"), cv::FileStorage::WRITE);
 

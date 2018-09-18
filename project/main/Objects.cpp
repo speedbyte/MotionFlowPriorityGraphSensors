@@ -27,14 +27,14 @@ void Objects::push_back_object_interpolated_stencil_point_displacement_pixel_vis
 
 }
 
-void Objects::push_back_object_intersection_sroi(
+void Objects::push_back_object_sroi(
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement) {
 
     m_object_sroi.push_back(sensor_stencil_movement);
 
 }
 
-void Objects::push_back_object_intersection_sroi_interpolated(
+void Objects::push_back_object_sroi_interpolated(
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement) {
 
     m_object_sroi_interpolated.push_back(sensor_stencil_movement);

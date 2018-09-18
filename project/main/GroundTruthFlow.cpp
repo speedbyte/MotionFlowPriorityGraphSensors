@@ -344,7 +344,8 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
-            m_ptr_list_gt_objects.at(obj_index)->push_back_object_intersection_sroi(all_frame_object_special_region_of_interest.at(obj_index));
+            m_ptr_list_gt_objects.at(obj_index)->push_back_object_sroi(all_frame_object_special_region_of_interest.at(obj_index));
+            m_ptr_list_gt_objects.at(obj_index)->push_back_object_sroi_interpolated(all_frame_object_special_region_of_interest.at(obj_index));
         }
         // -----
     }
