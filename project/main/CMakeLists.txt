@@ -19,7 +19,7 @@ find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 
 set(SOURCE_FILES
         KittiSubmitInterface.cpp ObjectMetaData.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
-        video_capture.cpp PrepareGroundTruthFlow.cpp AlgorithmFlow.cpp kbhit.cpp Dataset.cpp PlotFlow.cpp
+        video_capture.cpp GroundTruthFlow.cpp AlgorithmFlow.cpp kbhit.cpp Dataset.cpp PlotFlow.cpp
         GroundTruthScene.cpp GroundTruthSceneInternal.cpp GroundTruthSceneExternal.cpp GroundTruthObjects.cpp Noise.cpp Noise.h SensorImage.cpp
         SensorImage.h FlowImageExtended.cpp RobustnessIndex.cpp RobustnessIndex.h OpticalFlow.cpp OpticalFlowCollisionVector.cpp OpticalFlowAnalysis.cpp OpticalFlowOcclusion.cpp OpticalFlowPlotter.cpp OpticalFlow.h SimulatedObjects.cpp SimulatedObjects.h Objects.cpp Objects.h Sensors.cpp SensorMetaData.h Utils.h DataProcessingAlgorithm.cpp DataProcessingAlgorithm.h OpticalFlow_later.cpp GenerateViresObjects.cpp GenerateViresObjects.h GenerateCppObjects.cpp BasicObjects.cpp PixelRobustness.cpp VectorRobustness.cpp SortandIntersect.h InterpolateData.cpp InterpolateData.h ObjectImageShapeData.cpp ObjectImageShapeData.h)
 
