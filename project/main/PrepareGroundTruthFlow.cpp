@@ -190,11 +190,13 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
 
             getCombination(ptr_list_of_derived_objects, list_of_gt_objects_combination);
 
-            cv::Mat flow_image = cv::imread(flow_path, CV_LOAD_IMAGE_COLOR);
+            cv::Mat flow_image = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
+            cv::cvtColor(flow_image, flow_image, CV_RGB2BGR);
             if ( flow_image.empty() ) {
                 throw("No image found error");
             }
-            cv::Mat intersection_image(Dataset::m_frame_size, CV_8UC1);
+
+            cv::Mat intersection_image(Dataset::m_frame_size, CV_MAKE_TYPE(flow_image.depth(),1));
             int from_to[] = { 2,0 };  // copy the third channel ( channel 2 object id ) to the first channel of intersection_image
             cv::mixChannels(flow_image, intersection_image, from_to, 1); // the last parameter is the number of pairs
 
@@ -207,11 +209,15 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                 cv::Mat mask_object_1, mask_object_2;
                 cv::Mat mask_object_1_dilated, mask_object_2_dilated;
 
-                ushort val_1 = (ushort)(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId() + 127);
-                ushort val_2 = (ushort)(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId() + 127);
+                ushort val_1 = (ushort)(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId() * 64 + 32768) ;
+                ushort val_2 = (ushort)(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId() * 64 + 32768);
 
                 cv::inRange(intersection_image, val_1, val_1, mask_object_1);
                 cv::inRange(intersection_image, val_2, val_2, mask_object_2);
+
+                //cv::imshow("mask_1", mask_object_1);
+                //cv::imshow("mask_2", mask_object_2);
+                //cv::waitKey(0);
 
                 mask_object_1_dilated = mask_object_1.clone();
                 mask_object_2_dilated = mask_object_2.clone();
@@ -221,23 +227,11 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                     cv::dilate(mask_object_2_dilated, mask_object_2_dilated, cv::Mat());
                 }
 
-                cv::Mat final = mask_object_1_dilated & mask_object_2_dilated;
+                //cv::Mat final = mask_object_1_dilated & mask_object_2_dilated;
+                //cv::Mat boundary = final & mask_object_2;
 
-                cv::Mat boundary = final & mask_object_2;
-                cv::Mat special_region_of_interest_1 = mask_object_2 & mask_object_1_dilated;
-                cv::Mat special_region_of_interest_2 = mask_object_1 & mask_object_2_dilated;
-
-                // working of dilation, erosion, thinning, and findNonZero
-                // this can be omitted. just to validate if the algorithm has worked. otherwise finalImage has no use.
-                cv::Mat finalImage(Dataset::m_frame_size, CV_8UC3, cv::Scalar(0,0,0));
-                cv::Mat dummyImage(Dataset::m_frame_size, CV_8UC1, cv::Scalar(0));
-                std::vector<cv::Mat> to_merge = {special_region_of_interest_1, special_region_of_interest_2, dummyImage};
-                cv::merge(to_merge, finalImage);
-                //cv::imshow("intersection_1", special_region_of_interest_1);
-                //cv::imshow("intersection_2", special_region_of_interest_2);
-                //cv::imshow("sroi", finalImage);
-                //cv::waitKey(0);
-
+                cv::Mat special_region_of_interest_1 = mask_object_1 & mask_object_2_dilated; // elements in mask object 1
+                cv::Mat special_region_of_interest_2 = mask_object_2 & mask_object_1_dilated; // elements in mask object 2
 
                 for ( auto x = 0; x < special_region_of_interest_1.cols; x++ ) {
                     for ( auto y = 0; y < special_region_of_interest_1.rows; y++) {
@@ -256,13 +250,23 @@ void PrepareGroundTruthFlow::find_ground_truth_object_special_region_of_interest
                     }
                 }
 
+                if ( frame_special_region_of_interest_1.size() || frame_special_region_of_interest_2.size()) {
+                    // working of dilation, erosion, thinning, and findNonZero
+                    // this can be omitted. just to validate if the algorithm has worked. otherwise finalImage has no use.
+                    cv::Mat finalImage(Dataset::m_frame_size, CV_8UC3);
+                    cv::Mat dummyImage(Dataset::m_frame_size, CV_8UC1, cv::Scalar(0));
+                    std::vector<cv::Mat> to_merge = {special_region_of_interest_1, special_region_of_interest_2, dummyImage};
+                    cv::merge(to_merge, finalImage);
+                    //cv::imshow("sroi", finalImage);
+                    //cv::waitKey(0);
+                }
                 // frame_object_special_region_of_interest_1 will contain all the intersection pixels for each object combination.
                 // Hence this list will grow in case a single object has interesection points with multiple objects.
                 // back_inserter simply pushes back the values and is an easy way to tackle appending an array.
 
-                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
+                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId())));
 
-                std::copy(frame_special_region_of_interest_1.begin(), frame_special_region_of_interest_1.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
+                std::copy(frame_special_region_of_interest_2.begin(), frame_special_region_of_interest_2.end(), std::back_inserter(frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId())));
 
                 // alternative and efficient method is stated above. Leaving this just for reference.
                 /*

@@ -23,11 +23,14 @@
 #include "Sensors.h"
 #include "Utils.h"
 
-// stich images -
+// masking problem. cpp and vires - the solution is that the object id should be taken from position file and not generated as static id
+// total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
+// stich images python plot
 // interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
 
+// stich images - DONE
 // why are there two signs in one gnuplot - DONE, by creating a legend
 // check if depth is correct - DONE
 // find values of algorithm displacement at sroi - DONE.

@@ -560,21 +560,32 @@ void OpticalFlow::generate_sroi_intersections() {
                 // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
                 MyIntersection intersection;
-                intersection.find_intersection_pair(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
-                intersection_of_algorithm_and_sroi = intersection.getResultIntersectingPair();
-                bool isSorted = std::is_sorted(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                assert(isSorted);
-                bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
-                assert(isSorted_sroi);
 
                 if ( ( special_roi_object.at(sensor_index).at(current_frame_index).size() > 0 ) && current_frame_index > 0 ) {
+
+
+                    for ( auto it = entire_roi_object.at(sensor_index).at(current_frame_index).begin(); it != entire_roi_object.at(sensor_index).at(current_frame_index).end(); it++) {
+                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(obj_index*255,255,0));
+                    }
+
+                    for ( auto it = special_roi_object.at(sensor_index).at(current_frame_index).begin(); it != special_roi_object.at(sensor_index).at(current_frame_index).end(); it++) {
+                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,255,255));
+                    }
+
+                    intersection.find_intersection_pair(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end());
+                    intersection_of_algorithm_and_sroi = intersection.getResultIntersectingPair();
+                    bool isSorted = std::is_sorted(entire_roi_object.at(sensor_index).at(current_frame_index).begin(), entire_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                    assert(isSorted);
+                    bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
+                    assert(isSorted_sroi);
+
                     assert(intersection_of_algorithm_and_sroi.size() > 0);
                     // Validate
                     for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
-                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(obj_index*255,255,0));
+                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(127,127,127));
                     }
-                    cv::imshow("intersection_algorithm_sroi", tempImage);
-                    cv::waitKey(0);
+                    //cv::imshow("intersection_algorithm_sroi", tempImage);
+                    //cv::waitKey(0);
                     cv::destroyAllWindows();
                 }
                 multiframe_stencil_displacement_sroi.at(obj_index).push_back(intersection_of_algorithm_and_sroi);
