@@ -434,6 +434,20 @@ void OpticalFlow::save_flow_vector() {
             F_png_write.write(flow_path);
             F_png_write.writeColor(plot_path, max_magnitude);
 
+            cv::Mat readColorPlot = cv::imread(plot_path, CV_LOAD_IMAGE_COLOR);
+            for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
+                // get ground truth sroi area
+                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();                   for ( auto it = special_roi_object.at(sensor_index).at(current_frame_index).begin(); it != special_roi_object.at(sensor_index).at(current_frame_index).end(); it++ ) {
+                    cv::Vec3b current_pixel_value = readColorPlot.at<cv::Vec3b>((*it).first);
+                    if ( current_pixel_value == cv::Vec3b(0,0,0)) {
+                        readColorPlot.at<cv::Vec3b>((*it).first) = cv::Vec3b(255,255,255);
+                    } else {
+                        readColorPlot.at<cv::Vec3b>((*it).first) = cv::Vec3b(127,127,127);
+                    }
+                }
+            }
+            cv::imwrite(plot_path, readColorPlot);
+
             FlowImageExtended F_png_write_interpolated(F_png_write);
 
             for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
@@ -470,13 +484,17 @@ void OpticalFlow::save_flow_vector() {
             F_png_write_interpolated.interpolateBackground();
             F_png_write_interpolated.write(flow_path_interpolated);
             F_png_write_interpolated.writeColor(plot_path_interpolated, max_magnitude);
+
         }
     }
     std::cout << "end of saving " + m_resultordner + " flow files in an image" << std::endl;
 
 }
 
-
+/**
+ * This function generates the intersection of ground truth special roi and entire roi from the optical flow algorithm
+ * The second step of this function is to geneate the intersection of ground truth special roi and the interpolated roi from from the interpolation algorithm
+ */
 
 void OpticalFlow::generate_sroi_intersections() {
 
@@ -538,7 +556,6 @@ void OpticalFlow::generate_sroi_intersections() {
             for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
-
                 // sroi pixels
                 // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
@@ -558,7 +575,9 @@ void OpticalFlow::generate_sroi_intersections() {
                 //cv::imshow("algorithm_sroi", tempImage);
                 //cv::waitKey(0);
                 cv::destroyAllWindows();
+                multiframe_stencil_displacement_sroi.at(obj_index).push_back(intersection_of_algorithm_and_sroi);
 
+//----------------------------------------------------------------------------------------------------------------------
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
                 // sroi interpolated pixels
@@ -584,7 +603,6 @@ void OpticalFlow::generate_sroi_intersections() {
                 //cv::waitKey(0);
                 cv::destroyAllWindows();
 
-                multiframe_stencil_displacement_sroi.at(obj_index).push_back(intersection_of_algorithm_and_sroi);
                 multiframe_stencil_displacement_sroi_interpolated.at(obj_index).push_back(intersection_of_interpolated_algorithm_and_sroi);
 
             }
@@ -607,7 +625,9 @@ void OpticalFlow::generate_sroi_intersections() {
 
 
 
-
+/**
+ * This function reads the interpolated_flow image and creates the necessary interpolated vectors in the Object class
+ */
 void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
 
     for ( ushort sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++ ) {
