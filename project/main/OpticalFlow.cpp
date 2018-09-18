@@ -567,14 +567,16 @@ void OpticalFlow::generate_sroi_intersections() {
                 bool isSorted_sroi = std::is_sorted(special_roi_object.at(sensor_index).at(current_frame_index).begin(), special_roi_object.at(sensor_index).at(current_frame_index).end(), PairPointsSort<float>());
                 assert(isSorted_sroi);
 
-                //assert(intersection_of_algorithm_and_sroi.size() > 0);
-                // Validate
-                for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
-                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(obj_index*255,255,0));
+                if ( ( special_roi_object.at(sensor_index).at(current_frame_index).size() > 0 ) && current_frame_index > 0 ) {
+                    assert(intersection_of_algorithm_and_sroi.size() > 0);
+                    // Validate
+                    for ( auto it = intersection_of_algorithm_and_sroi.begin(); it != intersection_of_algorithm_and_sroi.end(); it++) {
+                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(obj_index*255,255,0));
+                    }
+                    cv::imshow("intersection_algorithm_sroi", tempImage);
+                    cv::waitKey(0);
+                    cv::destroyAllWindows();
                 }
-                //cv::imshow("algorithm_sroi", tempImage);
-                //cv::waitKey(0);
-                cv::destroyAllWindows();
                 multiframe_stencil_displacement_sroi.at(obj_index).push_back(intersection_of_algorithm_and_sroi);
 
 //----------------------------------------------------------------------------------------------------------------------
