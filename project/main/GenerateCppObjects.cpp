@@ -32,12 +32,16 @@ void CppObjects::process(std::unique_ptr<Noise> &canvas_background_noise, ushort
     std::unique_ptr<Noise> black_Noise = std::make_unique<StaticNoise<0>>();
 
     ushort depth_1 = 200;
+    ushort width_1 = 60;
+    ushort height_1 = 60;
     //Rectangle rectangle_obj1(30, 70, objectNoise_colorfulNoise, 200); // width, height
-    Circle circle_obj1(60, objectNoise_noNoise, depth_1); // width, height
+    Circle circle_obj1(width_1, objectNoise_noNoise, depth_1); // width, height
 
     ushort depth_2 = 11;
+    ushort width_2 = 80;
+    ushort height_2 = 80;
     //Rectangle rectangle_obj2(30, 70, objectNoise_colorfulNoise, 11); // width, height
-    Circle circle_obj2(80, objectNoise_noNoise, depth_2); // width, height
+    Circle circle_obj2(width_2, objectNoise_noNoise, depth_2); // width, height
 
     Achterbahn achterbahn;
 
@@ -60,7 +64,7 @@ void CppObjects::process(std::unique_ptr<Noise> &canvas_background_noise, ushort
 
     objectMetaDataList.at(0) = achterbahn;
     objectMetaDataList.at(0).setObjectShape(circle_obj1);
-    objectMetaDataList.at(0).setCppData();
+    objectMetaDataList.at(0).setCppData(width_1, height_1, depth_1);
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(0));
 
     achterbahn = Achterbahn("random object", start_point_2);
@@ -71,7 +75,7 @@ void CppObjects::process(std::unique_ptr<Noise> &canvas_background_noise, ushort
 
     objectMetaDataList.at(1) = achterbahn;
     objectMetaDataList.at(1).setObjectShape(circle_obj2);
-    objectMetaDataList.at(1).setCppData();
+    objectMetaDataList.at(1).setCppData(width_2, height_2, depth_2);
     m_ptr_customObjectMetaDataList.push_back(&objectMetaDataList.at(1));
 
     cv::Mat tempGroundTruthPosition;

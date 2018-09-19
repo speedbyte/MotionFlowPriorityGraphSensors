@@ -387,7 +387,7 @@ void GroundTruthSceneExternal::convert_sensor_image_to_object_level(std::unique_
             std::cout << "send object name " << viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName() << std::endl;
 
             if ( sensor_group_index == 0 ) {
-                gt_obj = GroundTruthObjects(viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectShape(),
+                gt_obj = GroundTruthObjects(
                                             viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectStartPoint(), noise,
                                             viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).get_ptr_customObjectMetaDataList().at(obj_index)->getObjectName());
                 list_of_gt_objects_base.push_back(gt_obj);

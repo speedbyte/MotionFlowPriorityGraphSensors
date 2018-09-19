@@ -152,16 +152,35 @@ void ObjectMetaData::setBoundingBoxPoints(ushort frameNumber, std::vector<cv::Po
 }
 
 
-void ObjectMetaData::setCppData() {
+/**
+ * This function is called at the time of generation of images. Since no yaml file are present at this stage, the value needs to be put via hand
+ */
+
+void ObjectMetaData::setCppData(ushort width, ushort height, ushort depth) {
 
     unsigned long FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
     assert(FRAME_COUNT > 0);
 
     for ( ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = m_objectMetaData_shape.getObjectWidth();
-        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = m_objectMetaData_shape.getObjectHeight();
-        m_object_gt_all.at(current_frame_index).m_object_distances.sensor_to_obj_usk = m_objectMetaData_shape.getObjectDepth();
+        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.width_px = width; //m_objectMetaData_shape.getObjectWidth();
+        m_object_gt_all.at(current_frame_index).m_object_dimension_camera_px.height_px = height; //m_objectMetaData_shape.getObjectHeight();
+        m_object_gt_all.at(current_frame_index).m_object_distances.sensor_to_obj_usk = depth; //m_objectMetaData_shape.getObjectDepth();
+
+    }
+    setCppDataGenerate();
+}
+
+/**
+ * This function is called after reading the yml file. In this file, the dimensions are already present
+ */
+void ObjectMetaData::setCppDataGenerate() {
+
+    unsigned long FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
+    assert(FRAME_COUNT > 0);
+
+    for ( ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
 
         m_object_gt_all.at(current_frame_index).m_region_of_interest_px.x = m_object_gt_all.at(
                 current_frame_index).m_object_location_camera_px.location_x_px;
@@ -181,5 +200,4 @@ void ObjectMetaData::setCppData() {
                 current_frame_index).m_object_dimension_camera_px.height_px;
     }
 }
-
 
