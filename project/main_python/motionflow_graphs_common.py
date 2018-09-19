@@ -173,33 +173,31 @@ class Figures(object):
         print summary_dict
         for sensor_index in sensor_list:
 
-            for n, noise in enumerate(noise_list):
+            assert(noise_list[0] != "ground_truth")
+            print "---------------------------"
 
-                assert(noise != "ground_truth")
+            if just_ground_truth is True:
+                environment = ["ground_truth"]
+            else:
+                environment = ["ground_truth"]
+                for noise in noise_list:
+                    environment.append(noise)
 
-                print "---------------------------"
-                custom_data_list_name = list()
+            for n_env, val_env in enumerate(environment):
+                #for n_env, step_size in enumerate(step_list):
+                regroup = len(index)*[0]
+                shift = shift+1
+                for p, algorithm in enumerate(algorithm_list):
+                    map_to_data = measuring_parameter + '_' + algorithm + '_' + val_env+ '_' + str(step_list[0]) + '_' + str(sensor_index)
+                    print map_to_data
+                    regroup[p] = summary_dict[map_to_data][0]
+                bar_positions = index + (shift*bar_width)
+                print bar_positions
+                rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n_env+1], edgecolor='black')
+                rects1.set_label(val_env)
 
-                if just_ground_truth is True:
-                    environment = ["ground_truth"]
-                else:
-                    environment = ["ground_truth", noise]
-
-                for n_env, val_env in enumerate(environment):
-                    #for n_env, step_size in enumerate(step_list):
-                    regroup = len(index)*[0]
-                    shift = shift+1
-                    for p, algorithm in enumerate(algorithm_list):
-                        map_to_data = measuring_parameter + '_' + algorithm + '_' + val_env+ '_' + str(step_list[0]) + '_' + str(sensor_index)
-                        print map_to_data
-                        regroup[p] = summary_dict[map_to_data][0]
-                    bar_positions = index + (shift*bar_width)
-                    print bar_positions
-                    rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n_env+1], edgecolor='black')
-                    rects1.set_label(val_env)
-
-                if just_ground_truth is True:
-                    break
+            if just_ground_truth is True:
+                break
 
 
         #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')

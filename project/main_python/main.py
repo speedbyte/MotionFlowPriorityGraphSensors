@@ -105,27 +105,30 @@ if __name__ == '__main__':
 
                 for step_size in step_list:
 
-                    for n, noise in enumerate(noise_list):
+                    assert(noise_list[0] != "ground_truth")
+                    print "---------------------------"
 
-                        assert(noise != "ground_truth")
-                        print "---------------------------"
+                    if just_ground_truth is True:
+                        environment = ["ground_truth"]
+                        plot_mapping = [plot_mapping_gt]
 
-                        if just_ground_truth is True:
-                            environment = ["ground_truth"]
-                            plot_mapping = [plot_mapping_gt]
-                        else:
-                            environment = ["ground_truth", noise]
+                    else:
+                        environment = ["ground_truth"]
+                        plot_mapping = [plot_mapping_gt]
+                        for noise in noise_list:
+                            environment.append(noise)
                             plot_mapping_noise = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
-                            plot_mapping = [[plot_mapping_gt], [plot_mapping_gt, plot_mapping_noise]]
+                            plot_mapping.append(plot_mapping_noise)
 
-                        for index,env in enumerate(environment):
+                    print plot_mapping
 
-                            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[index], parameter, env, str(step_size), 0, x_label="frame_number", y_label="dummy" ) #y_axis_label_dict[parameter]
-                            parameter_plot_at_once_figures.append(plot_data)
+                    for index,env in enumerate(environment):
+                        plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[index], parameter, env, str(step_size), 0, x_label="frame_number", y_label="dummy" ) #y_axis_label_dict[parameter]
+                        # plot both
+                        parameter_plot_at_once_figures.append(plot_data)
 
-                        print plot_mapping
-                        if just_ground_truth is True:
-                            break
+                    if just_ground_truth is True:
+                        break
                 print "---------------------------"
 
                 parameter_plots_with_details.append(parameter_plot_at_once_figures)

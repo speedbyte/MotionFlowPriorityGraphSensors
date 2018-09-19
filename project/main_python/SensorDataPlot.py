@@ -108,29 +108,12 @@ class SensorDataPlot(object):
         lower_y = 10000; upper_y = -100000;
 
         # Ground Truth
-        if ( len(custom_data_list_name) == 1 ):
+        data_points = yaml_file_data[custom_data_list_name]
 
-            data_points_gt = yaml_file_data[custom_data_list_name[0]]
-            print "getting " , custom_data_list_name
+        print "getting " , custom_data_list_name
 
-            if ( measuring_parameter == "collision" ):
-                x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
-                # collision sorted
-            else:
-                x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
-
-        # ###2
-        elif ( len(custom_data_list_name) == 2 ):
-
-            data_points_gt = yaml_file_data[custom_data_list_name[0]]
-            data_points = yaml_file_data[custom_data_list_name[1]]
-            print "getting ", custom_data_list_name
-
-            if ( measuring_parameter == "collision"):
-                x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)
-            else :
-                x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points, measuring_parameter)
-            print x_axis
+        x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points, measuring_parameter)
+        print x_axis
 
         lower_x = min(numpy.nanmin(x_axis), lower_x)
         upper_x = max(numpy.nanmax(x_axis), upper_x)
@@ -160,7 +143,6 @@ class SensorDataPlot(object):
         lock.release()
 
         plotData = PlotData(plot1, self.algorithm, measuring_parameter, noise, stepSize, x_label, y_label)
-
         return plotData
 
 
@@ -204,7 +186,7 @@ class SensorDataPlot(object):
         return x_axis, y_axis, y_axis_mean
 
 
-    def getSingleVal(self, data_points_gt, data_points, measuring_parameter):
+    def getSingleVal(self, data_points, measuring_parameter):
 
 
         # refine data

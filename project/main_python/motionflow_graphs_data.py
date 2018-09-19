@@ -40,7 +40,7 @@ parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_goo
 parameter_list = ["total_pixel", "l2_cumulative_error_all_pixels", "sroi_total_pixel", "sroi_l2_cumulative_error_all_pixels",]
 #parameter_list = ["total_pixel"]
 
-parameter_list_extended = ["sroi_total_pixel/total_pixel", "sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels"]
+parameter_list_extended = ["collision", "sroi_total_pixel/total_pixel", "sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels"]
 
 datafilter_list  = [ "0", ]
 
@@ -49,7 +49,6 @@ algorithm_list   = ["FB",]
 
 noise_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 noise_list = ["blue_sky", "heavy_snow",]
-noise_list = ["blue_sky", ]
 
 sensor_list      = [0, 1, 2]
 sensor_list      = [0, ]
