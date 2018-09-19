@@ -66,6 +66,14 @@ public:
     ushort getObjectRadius() {
         return m_objectRadius;
     }
+
+    void addObjectShape(cv::Point center, ushort radius)
+    {
+        cv::Scalar color = cv::Scalar(1,1,1);
+        //cv::fillConvexPoly(tempGroundTruthDepthImage, contours.at(0), cv::Scalar(255,0,0));
+        cv::circle(m_data_image, center, radius, color, CV_FILLED);
+    }
+
 };
 
 // ObjectImageBackgroundShapeData is a kind of Object ( its just a big object, and hence has the same property )
@@ -112,10 +120,8 @@ private:
 public:
 
     Circle(ushort diameter, std::unique_ptr<Noise> &noise, ushort depth) : ObjectImageShapeData(diameter, diameter, noise, depth) {
-        construct(diameter, noise, depth);
-    };
 
-    void construct(ushort radius, std::unique_ptr<Noise> &noise, ushort depth);
+    };
 
     void process() override ;
 
