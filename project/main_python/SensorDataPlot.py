@@ -99,7 +99,7 @@ class SensorDataPlot(object):
         return (temp_list[0])
 
 
-    def extract_plot_data_from_data_list(self, yaml_file_data, data_list, measuring_parameter, noise, stepSize, datafilter_index, x_label, y_label):
+    def extract_plot_data_from_data_list(self, yaml_file_data, custom_data_list_name, measuring_parameter, noise, stepSize, datafilter_index, x_label, y_label):
 
         figures_plot = list()
 
@@ -108,10 +108,10 @@ class SensorDataPlot(object):
         lower_y = 10000; upper_y = -100000;
 
         # Ground Truth
-        if ( len(data_list) == 1 ):
+        if ( len(custom_data_list_name) == 1 ):
 
-            data_points_gt = yaml_file_data[data_list[0]]
-            print "getting " , data_list
+            data_points_gt = yaml_file_data[custom_data_list_name[0]]
+            print "getting " , custom_data_list_name
 
             if ( measuring_parameter == "collision" ):
                 x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points_gt)
@@ -120,11 +120,11 @@ class SensorDataPlot(object):
                 x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points_gt, data_points_gt, measuring_parameter)
 
         # ###2
-        elif ( len(data_list) == 2 ):
+        elif ( len(custom_data_list_name) == 2 ):
 
-            data_points_gt = yaml_file_data[data_list[0]]
-            data_points = yaml_file_data[data_list[1]]
-            print "getting ", data_list
+            data_points_gt = yaml_file_data[custom_data_list_name[0]]
+            data_points = yaml_file_data[custom_data_list_name[1]]
+            print "getting ", custom_data_list_name
 
             if ( measuring_parameter == "collision"):
                 x_axis, y_axis, y_axis_mean = self.getCollisionPoints(data_points_gt, data_points)

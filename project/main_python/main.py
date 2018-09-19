@@ -52,12 +52,13 @@ def plot_at_once(figures_plot_array_all, sensor_index):
 
     print lower_x, upper_x, lower_y, upper_y
 
+    # plot the figure in numpy cache.
     for figures_plot_index_all in range(len(figures_plot_array_all)):
         figures = Figures(1)
         figures_plot_array = figures_plot_array_all[figures_plot_index_all]
-        #for figures_plot_index in figures_plot_array:
         figures.plot_all(figures_plot_array)
 
+        # and lastly save the figure
         figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), sensor_index)
 
 
@@ -107,9 +108,7 @@ if __name__ == '__main__':
                     for n, noise in enumerate(noise_list):
 
                         assert(noise != "ground_truth")
-
                         print "---------------------------"
-                        custom_data_list_name = list()
 
                         if just_ground_truth is True:
                             environment = ["ground_truth"]
@@ -117,15 +116,14 @@ if __name__ == '__main__':
                         else:
                             environment = ["ground_truth", noise]
                             plot_mapping_noise = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
-                            plot_mapping = [plot_mapping_gt, plot_mapping_noise]
+                            plot_mapping = [[plot_mapping_gt], [plot_mapping_gt, plot_mapping_noise]]
 
                         for index,env in enumerate(environment):
 
-                            custom_data_list_name.append(plot_mapping[index])
-                            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, custom_data_list_name, parameter, env, str(step_size), 0, x_label="frame_number", y_label="dummy" ) #y_axis_label_dict[parameter]
+                            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[index], parameter, env, str(step_size), 0, x_label="frame_number", y_label="dummy" ) #y_axis_label_dict[parameter]
                             parameter_plot_at_once_figures.append(plot_data)
 
-                        print custom_data_list_name
+                        print plot_mapping
                         if just_ground_truth is True:
                             break
                 print "---------------------------"
@@ -136,8 +134,9 @@ if __name__ == '__main__':
                 summary_list.append(sensor_data_plot_object.get_summary())
                 print len(sensor_data_plot_object.get_summary())
 
-            # plotting the figure for each sensor separately
+            # plot_at_once plots and saves the figure for each sensor separately
             plot_at_once(parameter_plots_with_details, 0) #plot_at_once(parameter_plot_at_once_figures, sensor_data_plot_object.getSensorIndex())
+
             #parameter_plot_at_once_figures = getPlotList(sensor_data_plot_object, measuring_parameter="good_pixels", x_label="frame_number", y_label="good pixels / visible pixels")
             
 
