@@ -203,6 +203,9 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
             for (ushort obj_combination_index = 0;
                  obj_combination_index < list_of_gt_objects_combination.size(); obj_combination_index++) {
 
+                cv::Point2f gt_displacement_1 = list_of_gt_objects_combination.at(obj_combination_index).first->get_object_extrapolated_point_displacement().at(sensor_index).at(current_frame_index).second;
+                cv::Point2f gt_displacement_2 = list_of_gt_objects_combination.at(obj_combination_index).second->get_object_extrapolated_point_displacement().at(sensor_index).at(current_frame_index).second;
+
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_1;
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest_2;
 
@@ -237,7 +240,7 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
                     for ( auto y = 0; y < special_region_of_interest_1.rows; y++) {
                         // there is only one object per Mat. Hence we can safely scan the whole frame.
                         if ( special_region_of_interest_1.at<unsigned char>(y,x) != 0 ) {
-                            frame_special_region_of_interest_1.push_back(std::make_pair(cv::Point2f(x,y), cv::Point2f(0,0)));
+                            frame_special_region_of_interest_1.push_back(std::make_pair(cv::Point2f(x,y), gt_displacement_1));
                         }
                     }
                 }
@@ -245,7 +248,7 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
                 for ( auto x = 0; x < special_region_of_interest_2.cols; x++ ) {
                     for ( auto y = 0; y < special_region_of_interest_2.rows; y++) {
                         if ( special_region_of_interest_2.at<unsigned char>(y,x) != 0 ) {
-                            frame_special_region_of_interest_2.push_back(std::make_pair(cv::Point2f(x,y), cv::Point2f(0,0)));
+                            frame_special_region_of_interest_2.push_back(std::make_pair(cv::Point2f(x,y), gt_displacement_2));
                         }
                     }
                 }
@@ -277,8 +280,6 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
                     frame_object_special_region_of_interest.at(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId()).push_back(frame_special_region_of_interest_1.at(x));
                 }
                 */
-
-
                 // The distance calculation is tailored for the dataset with a car and a ped. Not a general case.
                 // To make a general case every corner needs to be considered.
                 region_of_interest_px_str region_of_interest_px_1 = list_of_gt_objects_combination.at(obj_combination_index).first->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px;

@@ -440,8 +440,8 @@ void OpticalFlow::save_flow_vector() {
 
             FlowImageExtended F_png_write_interpolated(F_png_write);
 
-            for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
-                if (m_opticalFlowName != "ground_truth") {
+            if (m_opticalFlowName != "ground_truth") {
+                for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
 
                     // get ground truth sroi area
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
@@ -481,17 +481,14 @@ void OpticalFlow::save_flow_vector() {
                         F_png_write_interpolated.setObjectId(pts.x, pts.y, -1);
                     }
                 }
+                // interpolate only for algorithm
+                F_png_write_interpolated.interpolateBackground();
+                F_png_write_interpolated.write(flow_path_interpolated);
+                F_png_write_interpolated.writeColor(plot_path_interpolated, max_magnitude);
             }
-            // interpolate only for algorithm
-
-            F_png_write_interpolated.interpolateBackground();
-            F_png_write_interpolated.write(flow_path_interpolated);
-            F_png_write_interpolated.writeColor(plot_path_interpolated, max_magnitude);
-
         }
     }
     std::cout << "end of saving " + m_resultordner + " flow files in an image" << std::endl;
-
 }
 
 /**
@@ -565,7 +562,6 @@ void OpticalFlow::generate_sroi_intersections() {
                 MyIntersection intersection;
 
                 if ( ( special_roi_object.at(sensor_index).at(current_frame_index).size() > 0 ) && current_frame_index > 0 ) {
-
 
                     for ( auto it = entire_roi_object.at(sensor_index).at(current_frame_index).begin(); it != entire_roi_object.at(sensor_index).at(current_frame_index).end(); it++) {
                         cv::circle(tempImage, (*it).first, 1, cv::Scalar(obj_index*255,255,0));

@@ -23,8 +23,8 @@
 #include "Sensors.h"
 #include "Utils.h"
 
-// it should be able to analyse both FB and TVL in main_python
-// fix sroi analysis l1, l2 and ma cumulative error and total pixels.
+// class interpolate Data
+// check data processing
 // total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // stich images python plot
@@ -39,6 +39,15 @@
 // why are there two signs in one gnuplot - DONE, by creating a legend
 // stich images - DONE
 // masking problem. cpp and vires - i wasnt converting RGB to BGR and hence the problem arised.
+// fix sroi analysis l1, l2 and ma cumulative error and total pixels - added gt_displacement when gt_sroi is created
+
+
+
+// Evaluation models has Set of aögorithms - OF, Inter, Dataprocessing and lasstly Sensor Fusion.
+// Further it induces quantified noise
+// Analysis - Health of the algorithms by analysing overall pixels and pixels at SROI
+// Visual representation of the analysis of a single frame
+// All frames using graphs
 
 
 
@@ -406,7 +415,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     gt_flow.generate_collision_points();
                     gt_flow.generate_metrics_optical_flow_algorithm(); // this is to just create Jaccard Index  =  1
-                    //gt_flow.analyse_stencil();
 
                     time_map["prepare_ground_truth"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
                     tic = steady_clock::now();
@@ -574,9 +582,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         /// analysis and metrics
                         list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points();
-                        //list_of_ptr_of_environment_OFalgorithm[env_index]->analyse_stencil();
                         list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm();
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots();
+
+                        /// stiching images
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots(); // gnuplots
+                        list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots(); // optical flow algorithm interpolated data
 
                     }
 
