@@ -106,21 +106,18 @@ if __name__ == '__main__':
 
                     for n, noise in enumerate(noise_list):
 
+                        assert(noise != "ground_truth")
+
                         print "---------------------------"
                         custom_data_list_name = list()
 
-                        if noise == "ground_truth":
-                            assert(n==0)
-                            if ( just_ground_truth is True ):
-                                environment = ["ground_truth"]
-                                plot_mapping = [plot_mapping_gt]
-                            else:
-                                continue
+                        if just_ground_truth is True:
+                            environment = ["ground_truth"]
+                            plot_mapping = [plot_mapping_gt]
                         else:
-                            if ( just_ground_truth is False):
-                                environment = ["ground_truth", noise]
-                                plot_mapping_noise = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
-                                plot_mapping = [plot_mapping_gt, plot_mapping_noise]
+                            environment = ["ground_truth", noise]
+                            plot_mapping_noise = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
+                            plot_mapping = [plot_mapping_gt, plot_mapping_noise]
 
                         for index,env in enumerate(environment):
 
@@ -129,7 +126,9 @@ if __name__ == '__main__':
                             parameter_plot_at_once_figures.append(plot_data)
 
                         print custom_data_list_name
-                    print "---------------------------"
+                        if just_ground_truth is True:
+                            break
+                print "---------------------------"
 
                 parameter_plots_with_details.append(parameter_plot_at_once_figures)
 

@@ -24,7 +24,7 @@
 #include "Utils.h"
 
 // class interpolate Data
-// check data processing
+
 // total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // stich images python plot
@@ -586,7 +586,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         /// stiching images
                         list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots(); // gnuplots
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots(); // optical flow algorithm interpolated data
+                        //list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots(); // optical flow algorithm interpolated data
 
                     }
 

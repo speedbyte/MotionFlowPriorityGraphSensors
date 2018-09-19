@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # _*_ encoding:utf-8 _*_
 
-just_ground_truth = False
+just_ground_truth = True
 
 dict_datafilters = {
     "ground_truth": "ground truth",
@@ -49,7 +49,7 @@ algorithm_list   = ["FB",]
 
 noise_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
-noise_list = ["ground_truth", "blue_sky", ]
+noise_list = [ "blue_sky", ]
 
 sensor_list      = [0, 1, 2]
 sensor_list      = [0, ]
