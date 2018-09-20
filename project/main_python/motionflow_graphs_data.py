@@ -3,6 +3,17 @@
 
 just_ground_truth = False
 
+
+file_LK = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_LK.yml"
+file_FB = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_FB.yml"
+file_TVL = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_TVL.yml"
+
+dict_file_map = {
+    "FB" : file_FB,
+    "LK" : file_LK,
+    "TVL" : file_TVL
+}
+
 dict_datafilters = {
     "ground_truth": "ground truth",
     "datafilter_0": "datafilter_0",
@@ -31,21 +42,19 @@ y_axis_label_dict = {
 
 }
 
-parameter_list = [  ]
-parameter_list = [ "algorithm_pixels", "l2_cumulative_distance_good_pixels", "ma_cumulative_distance_good_pixels", "ma_cumulative_distance_all_pixels", "l1_cumulative_distance_all_pixels", "l2_cumulative_distance_all_pixels"]
-parameter_list = [ "algorithm_pixels", "l2_cumulative_distance_good_pixels", "ma_cumulative_distance_good_pixels", "ma_cumulative_distance_all_pixels", "l2_cumulative_distance_all_pixels", "collisionpoints"]
-parameter_list = [ "ground_truth_pixels", "algorithm_pixels", "l1_total_good_pixels", "l2_total_good_pixels", "ma_total_good_pixels"]
+parameter_list = [ ]
 parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels",
                    "ma_total_good_pixels", "algorithm_sroi_pixels"]
-parameter_list = ["total_pixel", "l2_cumulative_error_all_pixels", "sroi_total_pixel", "sroi_l2_cumulative_error_all_pixels",]
+parameter_list = ["total_pixel", "l2_cumulative_error_good_pixels", "sroi_total_pixel", "ma_cumulative_error_good_pixels", "sroi_l2_cumulative_error_good_pixels",
+                  ]
 #parameter_list = ["total_pixel"]
-parameter_list_extended = [["sroi_total_pixel", "total_pixel" ], ["sroi_l2_cumulative_error_all_pixels", "l2_cumulative_error_all_pixels" ]] #"sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels", "collision", ]
+parameter_list_extended = [["sroi_total_pixel", "total_pixel" ], ["sroi_l2_cumulative_error_all_pixels", "l2_cumulative_error_all_pixels" ], ["l2_cumulative_distance_good_pixels", "l2_total_good_pixels" ]] #"sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels", "collision", ]
 
 datafilter_list  = [ "0", ]
 
 algorithm_list   = ["LK", "FB",]
 algorithm_list   = ["FB",]
-algorithm_list   = ["LK",]
+algorithm_list   = ["FB", "TVL", "LK"]
 
 noise_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 noise_list = ["blue_sky", "heavy_snow",]

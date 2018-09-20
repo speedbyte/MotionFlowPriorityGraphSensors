@@ -27,7 +27,6 @@ scenario = "two"
 #file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" +scenario + "/values.yml"
 file_final = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
 file_ground_truth = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_ground_truth.yml"
-file_LK = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_LK.yml"
 
 
 SCALE = 1
@@ -88,13 +87,15 @@ if __name__ == '__main__':
     fd_concatenated.close()
     fd_ground_truth.close()
 
-    fd_concatenated = open(file_final, "a")
-    fd_lk = open(file_LK, "r")
-    fd_lk.readline() # remove header
-    fd_lk.readline() # remove header
+    for algorithm in algorithm_list:
+        fd_concatenated = open(file_final, "a")
+        fd_algo = open(dict_file_map[algorithm], "r")
+        fd_algo.readline() # remove header
+        fd_algo.readline() # remove header
 
-    fd_concatenated.write(fd_lk.read())
-    fd_lk.close()
+        fd_concatenated.write(fd_algo.read())
+        fd_algo.close()
+
     fd_concatenated.close()
 
     yaml_file_handle = YAMLParser(file_final)
@@ -193,7 +194,7 @@ if __name__ == '__main__':
 
         print "PARAMETER EXTENDED ----- ", parameter
 
-        for algoirhtm in algorithm_list:
+        for algorithm in algorithm_list:
             for each_plot in plotgraph_list_all_parameter_collect:
                 for figures_plot_array in each_plot:
 

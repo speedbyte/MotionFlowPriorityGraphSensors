@@ -45,11 +45,16 @@
 
 
 // Presentation:
+// How reliable is the data - compare L2_good_pixel and MA_good_pixel error. The lesser the distance the better it is.
 // Evaluation models has Set of aögorithms - OF, Inter, Dataprocessing and lasstly Sensor Fusion.
 // Further it induces quantified noise
 // Analysis - Health of the algorithms by analysing overall pixels and pixels at SROI
 // Visual representation of the analysis of a single frame
 // All frames using graphs
+
+
+// Frame number 37 has a peak, although the objects arent so close to each other. SROI is less, but the pixels in good pixel region are at the boundary.
+// Total pixels in other frames are much higer
 
 
 

@@ -5,10 +5,10 @@
 
 CPP_DATASET:
     START: 1
-    STOP: 10
-    MAX_GENERATION_DATASET: 10
+    STOP: 30
+    MAX_GENERATION_DATASET: 50
     PATH: "../../../datasets/cpp_dataset/"
-    EXECUTE: 1
+    EXECUTE: 0
     GT: 0
     ANALYSE: 1
     VIDEO: 0
@@ -44,8 +44,8 @@ RADAR_DATASET:
     ANALYSE: 1
 
 VIRES_DATASET:
-    START: 20
-    STOP: 25
+    START: 25
+    STOP: 55
     MAX_GENERATION_DATASET: 150
     PATH: "../../../datasets/vires_dataset/"
     EXECUTE: 0
@@ -53,4 +53,4 @@ VIRES_DATASET:
     ANALYSE: 1
     VIDEO: 0
     DATAPROCESSING: {NoAlgorithm: 1, SimpleAverage: 0, MovingAverage: 0, VotedMean: 0, RankedMean: 0}
-    ALGORITHMS: {FB: 1, LK: 0, SF: 0, TVL: 0}
+    ALGORITHMS: {FB: 0, LK: 1, SF: 0, TVL: 0}
