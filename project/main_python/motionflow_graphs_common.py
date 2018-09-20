@@ -157,7 +157,7 @@ class Figures(object):
         plt.close("all")
 
 
-    def bargraph_pixel(self, summary_dict, measuring_parameter):
+    def bargraph_pixel(self, summary_dict, measuring_parameter, extended=False):
 
         # each group member is positioned at bar position. hence array of group members and array of bar_position should be equal.
 
@@ -179,7 +179,10 @@ class Figures(object):
             if just_ground_truth is True:
                 environment = ["ground_truth"]
             else:
-                environment = ["ground_truth"]
+                if ( extended is False ):
+                    environment = ["ground_truth"]
+                else:
+                    environment = []
                 for noise in noise_list:
                     environment.append(noise)
 
@@ -188,7 +191,7 @@ class Figures(object):
                 regroup = len(index)*[0]
                 shift = shift+1
                 for p, algorithm in enumerate(algorithm_list):
-                    map_to_data = measuring_parameter + '_' + algorithm + '_' + val_env+ '_' + str(step_list[0]) + '_' + str(sensor_index)
+                    map_to_data = measuring_parameter + '_' + algorithm + '_' + val_env + '_' + str(step_list[0]) + '_' + str(sensor_index)
                     print map_to_data
                     regroup[p] = summary_dict[map_to_data][0]
                 bar_positions = index + (shift*bar_width)

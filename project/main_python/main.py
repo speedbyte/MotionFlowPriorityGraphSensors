@@ -59,16 +59,15 @@ def plot_at_once(figures_plot_array_all):
         figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), figures_plot_array_all[0][0].get_sensor_index())
 
 
-def plot_at_once_summary(bargraph_summary_list_each_parameter_collect, parameter):
+def plot_at_once_summary(bargraph_summary_list_each_parameter_collect, parameter, extended=False):
     figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
     flatten_bargraph_summary_list_each_parameter_collect = dict()
     for summary in bargraph_summary_list_each_parameter_collect:
-        print "bar graph summary ", summary
         flatten_bargraph_summary_list_each_parameter_collect.update(summary)
-    print len(flatten_bargraph_summary_list_each_parameter_collect)
+    print flatten_bargraph_summary_list_each_parameter_collect
 
-    figures_bargraph_each_parameter_all_data.bargraph_pixel(flatten_bargraph_summary_list_each_parameter_collect, parameter )
+    figures_bargraph_each_parameter_all_data.bargraph_pixel(flatten_bargraph_summary_list_each_parameter_collect, parameter, extended )
     figures_bargraph_each_parameter_all_data.save_figure(parameter , "summary")
 
 #    plt.close("all")
@@ -136,7 +135,7 @@ if __name__ == '__main__':
                         plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[index], parameter, sensor_index, env, str(step_size), 0, x_label="frame_number", y_label="dummy" )
 
                         parameter_plot_all_noise_each_parameter.append(plot_data)
-                    
+
                     if just_ground_truth is True:
                         break
                         
@@ -151,7 +150,7 @@ if __name__ == '__main__':
         bargraph_summary_list_all_parameter_collect.append([bargraph_summary_list_each_parameter_collect, parameter])
 
     # plot_at_once plots and saves one figure for a single parameter per sensor
-    if ( 0 ):
+    if ( 1 ):
         for each_plot in plotgraph_list_all_parameter_collect:
             plot_at_once(each_plot)
         # plot_at_once_summary plots and saves one figure for a single parameter per sensor
@@ -160,13 +159,19 @@ if __name__ == '__main__':
             plot_at_once_summary(each_plot_bar[0], parameter)
 
 
+
+
     plotgraph_list_all_parameter_collect_extended = list()
+    bargraph_summary_list_all_parameter_collect_extended = list()
+
 
     for n, parameter in enumerate(parameter_list_extended):
         # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
         parameter_plot_all_noise_each_parameter = list()
         plotgraph_list_each_parameter_collect = list()
+
+        bargraph_summary_list_each_parameter_collect = list()
 
         print "PARAMETER EXTENDED ----- ", parameter
 
@@ -175,8 +180,7 @@ if __name__ == '__main__':
 
                 for final_data in figures_plot_array:                
                 
-                    if ( final_data.get_algorithm() is "FB" and  final_data.get_sensor_index() == 0
-                         and final_data.get_env_index() ==  "blue_sky"):
+                    if ( final_data.get_algorithm() is "FB" and  final_data.get_sensor_index() == 0 ):
     
                         algorithm = final_data.get_algorithm()
                         sensor_index = final_data.get_sensor_index()
@@ -205,19 +209,25 @@ if __name__ == '__main__':
             new_y_axis = y_axis_1*100.0/y_axis_2
             yaml_file_data = [x_axis_1, new_y_axis]
 
-            parameter = "extended_" + parameter[0] + "_" + parameter[1]
+            parameter_extended = "extended_" + parameter[0] + "_" + parameter[1]
             plot_mapping[0] = "extended"
 
-            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[0], parameter, sensor_index, env, str(step_size), 0, x_label="frame_number", y_label="dummy" )
+            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[0], parameter_extended, sensor_index, env, str(step_size), 0, x_label="frame_number", y_label="dummy" )
 
             parameter_plot_all_noise_each_parameter.append(plot_data)
             plotgraph_list_each_parameter_collect.append(parameter_plot_all_noise_each_parameter)
             plotgraph_list_all_parameter_collect_extended.append(plotgraph_list_each_parameter_collect)
 
+            bargraph_summary_list_each_parameter_collect.append(sensor_data_plot_object.get_summary())
+            bargraph_summary_list_all_parameter_collect_extended.append([bargraph_summary_list_each_parameter_collect, parameter_extended])
+
 
     if ( 1 ):
         for each_plot in plotgraph_list_all_parameter_collect_extended:
             plot_at_once(each_plot)
+        for each_plot_bar in bargraph_summary_list_all_parameter_collect_extended:
+            parameter = each_plot_bar[1]
+            plot_at_once_summary(each_plot_bar[0], parameter, True)
 
 
 

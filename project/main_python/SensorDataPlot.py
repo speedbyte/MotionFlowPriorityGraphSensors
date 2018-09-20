@@ -129,19 +129,24 @@ class SensorDataPlot(object):
                 count = count+1
                 y_axis_mean=y_axis_mean+val
 
-        y_axis_mean = y_axis_mean/(count)
+        if ( count != 0 ):
+            y_axis_mean = y_axis_mean/(count)
+        else:
+            y_axis_mean = 0
 
         lower_x = min(numpy.nanmin(x_axis), lower_x)
         upper_x = max(numpy.nanmax(x_axis), upper_x)
 
         lower_y = min(numpy.nanmin(y_axis), lower_y)
         upper_y = max(numpy.nanmax(y_axis), upper_y)
+        map_to_data = measuring_parameter + '_' + self.algorithm + '_' + noise + '_' + str(stepSize) + '_' + str(self.sensor_index)
 
         plot1 = ['x_axis',
                  'y_axis',
                  x_axis,
                  y_axis,
-                 measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize), #title
+                 map_to_data,
+                 #measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize), #title
                  [lower_x, upper_x],
                  [lower_y, upper_y]
                  ]
@@ -153,7 +158,6 @@ class SensorDataPlot(object):
 
         # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
         lock.acquire()
-        map_to_data = measuring_parameter + '_' + self.algorithm + '_' + noise + '_' + str(stepSize) + '_' + str(self.sensor_index)
         print map_to_data, y_axis_mean
         self.summary_mean[map_to_data] = mean_list
         lock.release()
