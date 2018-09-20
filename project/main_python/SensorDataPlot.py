@@ -85,9 +85,10 @@ class SensorDataPlot(object):
         else:
             template_name_ = template_name_of_evaluation_data
 
-        temp_list = map(lambda x : (x + self.algorithm + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
+        # lambda isnt required here, but still keeping this for learning purpose
+        temp_name = map(lambda x : (x + self.algorithm + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
 
-        return (temp_list[0])
+        return (temp_name[0])
 
 
     def templateToYamlMapping_GT(self):
@@ -97,10 +98,9 @@ class SensorDataPlot(object):
         else:
             template_name_gt = template_name_of_evaluation_data_gt
 
-        temp_list = list()
-        temp_list.append(template_name_gt[0] + "sensor_index_" + str(self.getSensorIndex()))
+        temp_name = template_name_gt[0] + "sensor_index_" + str(self.getSensorIndex())
 
-        return (temp_list[0])
+        return (temp_name)
 
 
     def extract_plot_data_from_data_list(self, yaml_file_data, custom_data_list_name, measuring_parameter, sensor_index, noise, stepSize, datafilter_index, x_label, y_label):
@@ -111,13 +111,25 @@ class SensorDataPlot(object):
         lower_x = 10000; upper_x = -100000;
         lower_y = 10000; upper_y = -100000;
 
-        # Ground Truth
-        data_points = yaml_file_data[custom_data_list_name]
-
         print "getting " , custom_data_list_name
 
-        x_axis, y_axis, y_axis_mean = self.getSingleVal(data_points, measuring_parameter)
-        print x_axis
+        if ( "extended" not in custom_data_list_name ):
+            data_points = yaml_file_data[custom_data_list_name]
+            x_axis, y_axis = self.getSingleVal(data_points, measuring_parameter)
+
+        else:
+            x_axis = yaml_file_data[0]
+            y_axis = yaml_file_data[1]
+
+        y_axis_mean = 0
+
+        count = 0
+        for index,val in enumerate(y_axis):
+            if ( val == val ):
+                count = count+1
+                y_axis_mean=y_axis_mean+val
+
+        y_axis_mean = y_axis_mean/(count)
 
         lower_x = min(numpy.nanmin(x_axis), lower_x)
         upper_x = max(numpy.nanmax(x_axis), upper_x)
@@ -192,7 +204,6 @@ class SensorDataPlot(object):
 
     def getSingleVal(self, data_points, measuring_parameter):
 
-
         # refine data
         #scratch 01233
 
@@ -233,19 +244,8 @@ class SensorDataPlot(object):
         x_axis = numpy.array(new_x_axis)
         y_axis = numpy.array(new_y_axis)
 
-        y_axis_mean = 0
-
-        count = 0
-        for index,val in enumerate(y_axis):
-            if ( val == val ):
-                count = count+1
-                y_axis_mean=y_axis_mean+val
-
-        y_axis_mean = y_axis_mean/(count)
-
         assert(x_axis.size == y_axis.size)
-        return x_axis, y_axis, y_axis_mean
-
+        return x_axis, y_axis
 
 
     def get_summary(self):

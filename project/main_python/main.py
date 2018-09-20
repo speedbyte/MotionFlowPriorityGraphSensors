@@ -38,34 +38,28 @@ def plot_at_once(figures_plot_array_all):
     print "plot_at_once---------------------------"
 
     lower_x = 0; upper_x = 0; lower_y = 0; upper_y = 0;
-
-    for figures_plot_index_all in range(len(figures_plot_array_all)):
-        figures_plot_array = figures_plot_array_all[figures_plot_index_all]
+    # set x and y_limits.
+    for figures_plot_array in figures_plot_array_all:
         for figures_plot_index in figures_plot_array:
                 lower_x = min(figures_plot_index.get_x_axis_limits()[0], lower_x)
                 upper_x = max(figures_plot_index.get_x_axis_limits()[1], upper_x)
                 lower_y = min(figures_plot_index.get_y_axis_limits()[0], lower_y)
                 upper_y = max(figures_plot_index.get_y_axis_limits()[1], upper_y)
-
-    for figures_plot_index_all in range(len(figures_plot_array_all)):
-        figures_plot_array = figures_plot_array_all[figures_plot_index_all]
         for figures_plot_index in figures_plot_array:
             figures_plot_index.set_x_axis_limits([lower_x, upper_x])
             figures_plot_index.set_y_axis_limits([lower_y, upper_y])
-
     print lower_x, upper_x, lower_y, upper_y
 
     # plot the figure in numpy cache.
-    for figures_plot_index_all in range(len(figures_plot_array_all)):
+    for figures_plot_array in figures_plot_array_all:
         figures = Figures(1)
-        figures_plot_array = figures_plot_array_all[figures_plot_index_all]
         figures.plot_all(figures_plot_array)
 
         # and lastly save the figure
         figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), figures_plot_array_all[0][0].get_sensor_index())
 
 
-def plot_at_once_summary(bargraph_summary_list_each_parameter_collect):
+def plot_at_once_summary(bargraph_summary_list_each_parameter_collect, parameter):
     figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
     flatten_bargraph_summary_list_each_parameter_collect = dict()
@@ -97,17 +91,18 @@ if __name__ == '__main__':
         if e.returncode != 1:
             exit(0)
 
+    plotgraph_list_all_parameter_collect = list()
+    bargraph_summary_list_all_parameter_collect = list()
+
     for n, parameter in enumerate(parameter_list):
     # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
         print "PARAMETER ----- ", parameter
 
-        bargraph_summary_list_each_parameter_collect = list()
         plotgraph_list_each_parameter_collect = list()
+        bargraph_summary_list_each_parameter_collect = list()
 
         for sensor_index in sensor_list:
-
-            parameter_plots_with_details_each_sensor = list()
 
             for algorithm in algorithm_list:
 
@@ -138,7 +133,7 @@ if __name__ == '__main__':
                     print plot_mapping
 
                     for index,env in enumerate(environment):
-                        plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[index], parameter, sensor_index, env, str(step_size), 0, x_label="frame_number", y_label="dummy" ) #y_axis_label_dict[parameter]
+                        plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[index], parameter, sensor_index, env, str(step_size), 0, x_label="frame_number", y_label="dummy" )
 
                         parameter_plot_all_noise_each_parameter.append(plot_data)
                     
@@ -152,8 +147,75 @@ if __name__ == '__main__':
                 bargraph_summary_list_each_parameter_collect.append(sensor_data_plot_object.get_summary())
 
         # we are still in each parameter
+        plotgraph_list_all_parameter_collect.append(plotgraph_list_each_parameter_collect)
+        bargraph_summary_list_all_parameter_collect.append([bargraph_summary_list_each_parameter_collect, parameter])
 
-        # plot_at_once plots and saves the figure for each sensor separately
-        plot_at_once(plotgraph_list_each_parameter_collect)
+    # plot_at_once plots and saves one figure for a single parameter per sensor
+    if ( 1 ):
+        for each_plot in plotgraph_list_all_parameter_collect:
+            plot_at_once(each_plot)
+        # plot_at_once_summary plots and saves one figure for a single parameter per sensor
+        for each_plot_bar in bargraph_summary_list_all_parameter_collect:
+            parameter = each_plot_bar[1]
+            plot_at_once_summary(each_plot_bar[0], parameter)
 
-        plot_at_once_summary(bargraph_summary_list_each_parameter_collect)
+
+    for n, parameter in enumerate(parameter_list_extended):
+        # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
+
+        parameter_plot_all_noise_each_parameter = list()
+        plotgraph_list_each_parameter_collect = list()
+        plotgraph_list_all_parameter_collect_extended = list()
+
+        print "PARAMETER EXTENDED ----- ", parameter
+
+        for each_plot in plotgraph_list_all_parameter_collect:
+            for figures_plot_array in each_plot:
+                # and lastly save the figure
+                if ( figures_plot_array[0].get_algorithm() is "FB" and  figures_plot_array[0].get_sensor_index() == 0
+                     and figures_plot_array[0].get_env_index() ==  "ground_truth"):
+
+                    algorithm = "FB"
+                    sensor_index = 0
+                    step_size = 1
+                    env = "ground_truth"
+
+                    if ( parameter[0] is figures_plot_array[0].get_measuring_parameter()):
+                        first_parameter = figures_plot_array
+                        print "parameter ", figures_plot_array[0].get_measuring_parameter()
+                        print "step size ", figures_plot_array[0].get_step_size()
+                        x_axis_1 = figures_plot_array[0].get_x_axis()
+                        y_axis_1 = figures_plot_array[0].get_y_axis()
+                    elif ( parameter[1] is figures_plot_array[0].get_measuring_parameter()):
+                        second_parameter = figures_plot_array
+                        print "parameter ", figures_plot_array[0].get_measuring_parameter()
+                        print "step size ", figures_plot_array[0].get_step_size()
+                        x_axis_2 = figures_plot_array[0].get_x_axis()
+                        y_axis_2 = figures_plot_array[0].get_y_axis()
+
+        if ( first_parameter is not None and second_parameter is not None ):
+            print "hurrah found data"
+            sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm)
+            sensor_data_plot_object.set_measuring_parameter(parameter)
+            print y_axis_1
+            print y_axis_2
+            new_y_axis = y_axis_1*100.0/y_axis_2
+            yaml_file_data = [x_axis_1, new_y_axis]
+
+            parameter = "extended_" + parameter[0] + "_" + parameter[1]
+            plot_mapping[0] = "extended"
+
+            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[0], parameter, sensor_index, env, str(step_size), 0, x_label="frame_number", y_label="dummy" )
+
+            parameter_plot_all_noise_each_parameter.append(plot_data)
+            plotgraph_list_each_parameter_collect.append(parameter_plot_all_noise_each_parameter)
+            plotgraph_list_all_parameter_collect_extended.append(plotgraph_list_each_parameter_collect)
+
+
+    if ( 1 ):
+        for each_plot in plotgraph_list_all_parameter_collect_extended:
+            plot_at_once(each_plot)
+
+
+
+
