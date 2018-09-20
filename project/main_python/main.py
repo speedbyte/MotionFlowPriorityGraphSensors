@@ -65,6 +65,18 @@ def plot_at_once(figures_plot_array_all):
         figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), figures_plot_array_all[0][0].get_sensor_index())
 
 
+def plot_at_once_summary(bargraph_summary_list_each_parameter_collect):
+    figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
+
+    flatten_bargraph_summary_list_each_parameter_collect = dict()
+    for summary in bargraph_summary_list_each_parameter_collect:
+        print "bar graph summary ", summary
+        flatten_bargraph_summary_list_each_parameter_collect.update(summary)
+    print len(flatten_bargraph_summary_list_each_parameter_collect)
+
+    figures_bargraph_each_parameter_all_data.bargraph_pixel(flatten_bargraph_summary_list_each_parameter_collect, parameter )
+    figures_bargraph_each_parameter_all_data.save_figure(parameter , "summary")
+
 #    plt.close("all")
 
 import subprocess
@@ -144,15 +156,4 @@ if __name__ == '__main__':
         # plot_at_once plots and saves the figure for each sensor separately
         plot_at_once(plotgraph_list_each_parameter_collect)
 
-        #parameter_plot_all_noise_each_parameter = getPlotList(sensor_data_plot_object, measuring_parameter="good_pixels", x_label="frame_number", y_label="good pixels / visible pixels")
-
-        figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
-
-        flatten_bargraph_summary_list_each_parameter_collect = dict()
-        for summary in bargraph_summary_list_each_parameter_collect:
-            print "bar graph summary ", summary
-            flatten_bargraph_summary_list_each_parameter_collect.update(summary)
-        print len(flatten_bargraph_summary_list_each_parameter_collect)
-
-        figures_bargraph_each_parameter_all_data.bargraph_pixel(flatten_bargraph_summary_list_each_parameter_collect, parameter )
-        figures_bargraph_each_parameter_all_data.save_figure(parameter , "summary")
+        plot_at_once_summary(bargraph_summary_list_each_parameter_collect)
