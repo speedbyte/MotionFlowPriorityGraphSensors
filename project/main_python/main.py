@@ -25,7 +25,9 @@ output_folder = '/local/tmp/eaes/'
 dataset = "vires"
 scenario = "two"
 #file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" +scenario + "/values.yml"
-file = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
+file_final = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
+file_ground_truth = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_ground_truth.yml"
+file_LK = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_LK.yml"
 
 
 SCALE = 1
@@ -79,7 +81,23 @@ import subprocess
 
 if __name__ == '__main__':
 
-    yaml_file_handle = YAMLParser(file)
+    #concatenate files
+    fd_concatenated = open(file_final, "w")
+    fd_ground_truth = open(file_ground_truth, "r")
+    fd_concatenated.write(fd_ground_truth.read())
+    fd_concatenated.close()
+    fd_ground_truth.close()
+
+    fd_concatenated = open(file_final, "a")
+    fd_lk = open(file_LK, "r")
+    fd_lk.readline() # remove header
+    fd_lk.readline() # remove header
+
+    fd_concatenated.write(fd_lk.read())
+    fd_lk.close()
+    fd_concatenated.close()
+
+    yaml_file_handle = YAMLParser(file_final)
     yaml_file_data = yaml_file_handle.load()
 
     command = "rm " + output_folder + "*.png"
@@ -229,7 +247,3 @@ if __name__ == '__main__':
         for each_plot_bar in bargraph_summary_list_all_parameter_collect_extended:
             parameter = each_plot_bar[1]
             plot_at_once_summary(each_plot_bar[0], parameter, True)
-
-
-
-
