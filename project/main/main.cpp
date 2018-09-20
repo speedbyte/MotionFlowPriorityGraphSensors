@@ -24,12 +24,12 @@
 #include "Utils.h"
 
 //TODO
-// class interpolate Data
-// parameter-extended : total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
-// stich images python plot
+
+// stich images python plot automatically - DONE
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
+// class interpolate Data
 
 //DONE
 // check if depth is correct - depth is taken from the last value. the sensor position does not matter for the depth image. it is always taken from the middle of the rear axle.
@@ -41,6 +41,7 @@
 // stich images - DONE
 // masking problem. cpp and vires - i wasnt converting RGB to BGR and hence the problem arised.
 // fix sroi analysis l1, l2 and ma cumulative error and total pixels - added gt_displacement when gt_sroi is created
+// parameter-extended : total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error - DOME
 
 
 // Presentation:
@@ -306,7 +307,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
 
-    cv::FileStorage fs;
+    cv::FileStorage fs_ground_truth;
+    cv::FileStorage fs_algorithm;
 
     std::vector<GroundTruthObjects> list_of_gt_objects_base;
     std::vector<Sensors> list_of_gt_sensors_base;
@@ -314,9 +316,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::vector<GroundTruthObjects *> ptr_list_of_gt_objects_base;
     std::vector<Objects*> ptr_list_of_simulated_objects_base;
 
-    PixelRobustness pixelRobustness(fs);
-    VectorRobustness vectorRobustness(fs);
-    SensorFusionRobustness sensorFusionRobustness(fs);
+    PixelRobustness pixelRobustness;
+    VectorRobustness vectorRobustness;
+    SensorFusionRobustness sensorFusionRobustness;
 
     const std::vector<ushort> generation_list = {0}, evaluation_list = {0};
 
@@ -341,7 +343,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         std::shared_ptr<GroundTruthFlow> ptr_gt_flow;
 
-        for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+        for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {  // blue_sky, heavy_snow
 
             std::unique_ptr<GroundTruthScene> base_ptr_gt_scene;
             std::unique_ptr<Noise> noisePointer;
@@ -407,7 +409,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     gt_flow.rerun_optical_flow_algorithm_interpolated();
                     gt_flow.find_ground_truth_object_special_region_of_interest();
-                    fs.open(("../values.yml"), cv::FileStorage::WRITE);
+                    fs_ground_truth.open((std::string("../values_ground_truth") + std::string(".yml")), cv::FileStorage::WRITE);
 
                     for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                         ptr_list_of_gt_objects_base.at(obj_index)->generate_object_mean_centroid_displacement(
@@ -422,8 +424,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     if ((cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.analyse && vires_dataset.execute)) {
 
-                        pixelRobustness.generatePixelRobustness(gt_flow, gt_flow);
-                        vectorRobustness.generateVectorRobustness( gt_flow, gt_flow);
+                        pixelRobustness.generatePixelRobustness(gt_flow, gt_flow, fs_ground_truth);
+                        vectorRobustness.generateVectorRobustness( gt_flow, gt_flow, fs_ground_truth);
                     }
 
                     time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
@@ -485,6 +487,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     if (Dataset::m_algorithm_map["LK"]) {
 
+                        fs_algorithm.open((std::string("../values_LK") + std::string(".yml")), cv::FileStorage::WRITE);
+
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
@@ -492,6 +496,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                     } else if (Dataset::m_algorithm_map["FB"]) {
 
+                        fs_algorithm.open((std::string("../values_FB") + std::string(".yml")), cv::FileStorage::WRITE);
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
@@ -499,6 +504,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                     } else if (Dataset::m_algorithm_map["TVL"]) {
 
+                        fs_algorithm.open((std::string("../values_TVL") + std::string(".yml")), cv::FileStorage::WRITE);
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
@@ -506,6 +512,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                     } else if (Dataset::m_algorithm_map["SF"]) {
 
+                        fs_algorithm.open((std::string("../values_SF") + std::string(".yml")), cv::FileStorage::WRITE);
                         //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["SF"]));
                         found = true;
@@ -602,9 +609,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         (Dataset::m_execute_algorithm && vires_dataset.analyse && vires_dataset.execute)) {
 
                         pixelRobustness.generatePixelRobustness(*list_of_ptr_of_environment_OFalgorithm[0],
-                                                                *list_of_ptr_of_environment_OFalgorithm[env_index]);
+                                                                *list_of_ptr_of_environment_OFalgorithm[env_index], fs_algorithm);
                         vectorRobustness.generateVectorRobustness(*list_of_ptr_of_environment_OFalgorithm[env_index],
-                                                                  *list_of_ptr_of_environment_OFalgorithm[0]);
+                                                                  *list_of_ptr_of_environment_OFalgorithm[0], fs_algorithm);
 
                         time_map["robustness_" + suffix] = (duration_cast<milliseconds>(
                                 steady_clock::now() - tic).count());
@@ -634,20 +641,21 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         //system("python ../../main_python/motionflow_graphs.py");
     }
 
-    fs << "time_map" << "[";
+    fs_ground_truth << "time_map" << "[";
     int total = 0;
     for (auto &n : time_map) {
-        fs << "{:" << n.first << n.second << "}";
+        fs_ground_truth << "{:" << n.first << n.second << "}";
         std::cout << n.first << " " << n.second << std::endl;
         total += n.second;
     }
 
     time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
-    fs << "{:" << "total" << time_map["total"] << "}";
-    fs << "]";
+    fs_ground_truth << "{:" << "total" << time_map["total"] << "}";
+    fs_ground_truth << "]";
     std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;
 
-    fs.release();
+    fs_ground_truth.release();
+    fs_algorithm.release();
 
 
     /* MATLAB_DATASET ------------- */

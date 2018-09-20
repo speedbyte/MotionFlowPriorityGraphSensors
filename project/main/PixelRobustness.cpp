@@ -10,18 +10,18 @@
 #include "OpticalFlow.h"
 
 
-void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
+void PixelRobustness::generatePixelRobustness(const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow, cv::FileStorage &m_fs) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
 
 
     m_list_evaluation_data_multiframe = opticalFlow.get_sensor_multiframe_evaluation_data();
-    writeToYaml(opticalFlow);
+    writeToYaml(opticalFlow, m_fs);
 }
 
 
-void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
+void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorage &m_fs) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");

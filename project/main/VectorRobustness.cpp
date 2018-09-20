@@ -10,7 +10,7 @@
 #include "OpticalFlow.h"
 
 
-void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow) {
+void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_base, const OpticalFlow &opticalFlow, cv::FileStorage &m_fs) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");
@@ -21,11 +21,11 @@ void VectorRobustness::generateVectorRobustness(const OpticalFlow &opticalFlow_b
     }
 
     m_list_collision_data_multiframe = opticalFlow.getCollisionPoints();
-    writeToYaml(opticalFlow);
+    writeToYaml(opticalFlow, m_fs);
 }
 
 
-void VectorRobustness::writeToYaml(const OpticalFlow &opticalFlow) {
+void VectorRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorage &m_fs) {
 
     auto position = opticalFlow.getResultOrdner().find('/');
     std::string suffix = opticalFlow.getResultOrdner().replace(position, 1, "_");

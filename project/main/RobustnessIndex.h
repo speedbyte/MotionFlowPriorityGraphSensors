@@ -12,11 +12,9 @@ class RobustnessIndex {
 
 protected:
 
-    cv::FileStorage &m_fs;
-
 public:
 
-    RobustnessIndex(cv::FileStorage &fs): m_fs(fs) {}
+    RobustnessIndex() {}
 
 };
 
@@ -24,7 +22,7 @@ public:
 class MagnitudeRobusntess : public RobustnessIndex {
 
 public:
-    MagnitudeRobusntess(cv::FileStorage &fs) : RobustnessIndex(fs) {};
+    MagnitudeRobusntess() : RobustnessIndex() {};
 
 };
 
@@ -35,9 +33,9 @@ private:
 
 public:
 
-    PixelRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
-    void generatePixelRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
-    void writeToYaml(const OpticalFlow &opticalFlow);
+    PixelRobustness() : RobustnessIndex() {};
+    void generatePixelRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo, cv::FileStorage &fs);
+    void writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorage &fs);
 
 };
 
@@ -49,9 +47,9 @@ private:
 
 public:
 
-    VectorRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
-    void generateVectorRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo);
-    void writeToYaml(const OpticalFlow &opticalFlow);
+    VectorRobustness() : RobustnessIndex() {};
+    void generateVectorRobustness(const OpticalFlow &opticalFlow_gt, const OpticalFlow &opticalFlow_base_algo, cv::FileStorage &fs);
+    void writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorage &fs);
 
 
 };
@@ -61,7 +59,7 @@ class SensorFusionRobustness : public RobustnessIndex {
 
 public:
 
-    SensorFusionRobustness(cv::FileStorage &fs) : RobustnessIndex(fs) {};
+    SensorFusionRobustness() : RobustnessIndex() {};
 
 };
 
