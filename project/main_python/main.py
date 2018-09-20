@@ -2,9 +2,12 @@
 # _*_ encoding=utf-8 _*_
 
 
-import numpy
+import numpy as np
+import os
 import matplotlib
 matplotlib.use('Agg')
+
+import cv2
 
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
@@ -152,4 +155,6 @@ if __name__ == '__main__':
 
         figures.bargraph_pixel(flatten_summary_list, parameter )
         figures.save_figure(parameter , "summary")
+
+    stich_bargraphs()
 
