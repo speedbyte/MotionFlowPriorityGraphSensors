@@ -151,7 +151,7 @@ if __name__ == '__main__':
         bargraph_summary_list_all_parameter_collect.append([bargraph_summary_list_each_parameter_collect, parameter])
 
     # plot_at_once plots and saves one figure for a single parameter per sensor
-    if ( 1 ):
+    if ( 0 ):
         for each_plot in plotgraph_list_all_parameter_collect:
             plot_at_once(each_plot)
         # plot_at_once_summary plots and saves one figure for a single parameter per sensor
@@ -160,38 +160,41 @@ if __name__ == '__main__':
             plot_at_once_summary(each_plot_bar[0], parameter)
 
 
+    plotgraph_list_all_parameter_collect_extended = list()
+
     for n, parameter in enumerate(parameter_list_extended):
         # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
         parameter_plot_all_noise_each_parameter = list()
         plotgraph_list_each_parameter_collect = list()
-        plotgraph_list_all_parameter_collect_extended = list()
 
         print "PARAMETER EXTENDED ----- ", parameter
 
         for each_plot in plotgraph_list_all_parameter_collect:
             for figures_plot_array in each_plot:
-                # and lastly save the figure
-                if ( figures_plot_array[0].get_algorithm() is "FB" and  figures_plot_array[0].get_sensor_index() == 0
-                     and figures_plot_array[0].get_env_index() ==  "ground_truth"):
 
-                    algorithm = "FB"
-                    sensor_index = 0
-                    step_size = 1
-                    env = "ground_truth"
-
-                    if ( parameter[0] is figures_plot_array[0].get_measuring_parameter()):
-                        first_parameter = figures_plot_array
-                        print "parameter ", figures_plot_array[0].get_measuring_parameter()
-                        print "step size ", figures_plot_array[0].get_step_size()
-                        x_axis_1 = figures_plot_array[0].get_x_axis()
-                        y_axis_1 = figures_plot_array[0].get_y_axis()
-                    elif ( parameter[1] is figures_plot_array[0].get_measuring_parameter()):
-                        second_parameter = figures_plot_array
-                        print "parameter ", figures_plot_array[0].get_measuring_parameter()
-                        print "step size ", figures_plot_array[0].get_step_size()
-                        x_axis_2 = figures_plot_array[0].get_x_axis()
-                        y_axis_2 = figures_plot_array[0].get_y_axis()
+                for final_data in figures_plot_array:                
+                
+                    if ( final_data.get_algorithm() is "FB" and  final_data.get_sensor_index() == 0
+                         and final_data.get_env_index() ==  "blue_sky"):
+    
+                        algorithm = final_data.get_algorithm()
+                        sensor_index = final_data.get_sensor_index()
+                        step_size = 1
+                        env = final_data.get_env_index()
+    
+                        if ( parameter[0] is final_data.get_measuring_parameter()):
+                            first_parameter = figures_plot_array
+                            print "parameter ", final_data.get_measuring_parameter()
+                            print "step size ", final_data.get_step_size()
+                            x_axis_1 = final_data.get_x_axis()
+                            y_axis_1 = final_data.get_y_axis()
+                        elif ( parameter[1] is final_data.get_measuring_parameter()):
+                            second_parameter = figures_plot_array
+                            print "parameter ", final_data.get_measuring_parameter()
+                            print "step size ", final_data.get_step_size()
+                            x_axis_2 = final_data.get_x_axis()
+                            y_axis_2 = final_data.get_y_axis()
 
         if ( first_parameter is not None and second_parameter is not None ):
             print "hurrah found data"

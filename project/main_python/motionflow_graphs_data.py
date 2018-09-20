@@ -39,7 +39,7 @@ parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_goo
                    "ma_total_good_pixels", "algorithm_sroi_pixels"]
 parameter_list = ["total_pixel", "l2_cumulative_error_all_pixels", "sroi_total_pixel", "sroi_l2_cumulative_error_all_pixels",]
 #parameter_list = ["total_pixel"]
-parameter_list_extended = [["sroi_total_pixel", "total_pixel" ]] #"sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels", "collision", ]
+parameter_list_extended = [["sroi_total_pixel", "total_pixel" ], ["sroi_l2_cumulative_error_all_pixels", "l2_cumulative_error_all_pixels" ]] #"sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels", "collision", ]
 
 datafilter_list  = [ "0", ]
 
