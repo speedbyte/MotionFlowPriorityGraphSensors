@@ -31,7 +31,7 @@ file = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
 SCALE = 1
 
 
-def plot_at_once(figures_plot_array_all, sensor_index):
+def plot_at_once(figures_plot_array_all):
 
     print "plot_at_once---------------------------"
     print figures_plot_array_all
@@ -62,8 +62,7 @@ def plot_at_once(figures_plot_array_all, sensor_index):
         figures.plot_all(figures_plot_array)
 
         # and lastly save the figure
-        figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), sensor_index)
-
+        figures.save_figure(figures_plot_array[0].get_measuring_parameter(), figures_plot_array[0].get_algorithm(), figures_plot_array[0].get_step_size(), figures_plot_array_all[0][0].get_sensor_index())
 
 
 #    plt.close("all")
@@ -72,7 +71,6 @@ import subprocess
 
 # first for ground truth and then for ground truth and the each noise condition. This is because in each plot
 # both ground truth and noise is depicted.
-
 
 if __name__ == '__main__':
 
@@ -87,24 +85,26 @@ if __name__ == '__main__':
         if e.returncode != 1:
             exit(0)
 
-
     for n, parameter in enumerate(parameter_list):
     # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
         print "PARAMETER ----- ", parameter
-        summary_list = list()
+
+        bargraph_summary_list_each_parameter_collect = list()
+        plotgraph_list_each_parameter_collect = list()
 
         for sensor_index in sensor_list:
 
-            parameter_plots_with_details = list()
+            parameter_plots_with_details_each_sensor = list()
 
             for algorithm in algorithm_list:
 
                 sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm)
                 sensor_data_plot_object.set_measuring_parameter(parameter)
+
                 plot_mapping_gt = sensor_data_plot_object.templateToYamlMapping_GT()
 
-                parameter_plot_at_once_figures = list()
+                parameter_plot_all_noise_each_parameter = list()
 
                 for step_size in step_list:
 
@@ -126,35 +126,33 @@ if __name__ == '__main__':
                     print plot_mapping
 
                     for index,env in enumerate(environment):
-                        plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[index], parameter, env, str(step_size), 0, x_label="frame_number", y_label="dummy" ) #y_axis_label_dict[parameter]
-                        # plot both
-                        parameter_plot_at_once_figures.append(plot_data)
+                        plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[index], parameter, sensor_index, env, str(step_size), 0, x_label="frame_number", y_label="dummy" ) #y_axis_label_dict[parameter]
 
+                        parameter_plot_all_noise_each_parameter.append(plot_data)
+                    
                     if just_ground_truth is True:
                         break
+                        
                 print "---------------------------"
 
-                parameter_plots_with_details.append(parameter_plot_at_once_figures)
+                # store the summary for future use:
+                plotgraph_list_each_parameter_collect.append(parameter_plot_all_noise_each_parameter)
+                bargraph_summary_list_each_parameter_collect.append(sensor_data_plot_object.get_summary())
 
-                # summary
-                summary_list.append(sensor_data_plot_object.get_summary())
-                print len(sensor_data_plot_object.get_summary())
+        # we are still in each parameter
 
-            # plot_at_once plots and saves the figure for each sensor separately
-            plot_at_once(parameter_plots_with_details, 0) #plot_at_once(parameter_plot_at_once_figures, sensor_data_plot_object.getSensorIndex())
+        # plot_at_once plots and saves the figure for each sensor separately
+        plot_at_once(plotgraph_list_each_parameter_collect)
 
-            #parameter_plot_at_once_figures = getPlotList(sensor_data_plot_object, measuring_parameter="good_pixels", x_label="frame_number", y_label="good pixels / visible pixels")
-            
+        #parameter_plot_all_noise_each_parameter = getPlotList(sensor_data_plot_object, measuring_parameter="good_pixels", x_label="frame_number", y_label="good pixels / visible pixels")
 
-        figures = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
+        figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
-        flatten_summary_list = dict()
-        for summary in summary_list:
-            flatten_summary_list.update(summary)
-        print len(flatten_summary_list)
+        flatten_bargraph_summary_list_each_parameter_collect = dict()
+        for summary in bargraph_summary_list_each_parameter_collect:
+            print "bar graph summary ", summary
+            flatten_bargraph_summary_list_each_parameter_collect.update(summary)
+        print len(flatten_bargraph_summary_list_each_parameter_collect)
 
-        figures.bargraph_pixel(flatten_summary_list, parameter )
-        figures.save_figure(parameter , "summary")
-
-    stich_bargraphs()
-
+        figures_bargraph_each_parameter_all_data.bargraph_pixel(flatten_bargraph_summary_list_each_parameter_collect, parameter )
+        figures_bargraph_each_parameter_all_data.save_figure(parameter , "summary")

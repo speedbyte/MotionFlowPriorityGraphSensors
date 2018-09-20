@@ -23,14 +23,15 @@
 #include "Sensors.h"
 #include "Utils.h"
 
+//TODO
 // class interpolate Data
-
-// total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
-// quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
+// parameter-extended : total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error
 // stich images python plot
+// quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // interpolate using splash mechanism ( bilateral filter )
 // why is stencil size in LK 0, why cant we start FB and LK at the same time?
 
+//DONE
 // check if depth is correct - depth is taken from the last value. the sensor position does not matter for the depth image. it is always taken from the middle of the rear axle.
 // find values of algorithm displacement at sroi - DONE.
 // quality of value of algorithm displacement at sroi - DONE
@@ -42,7 +43,7 @@
 // fix sroi analysis l1, l2 and ma cumulative error and total pixels - added gt_displacement when gt_sroi is created
 
 
-
+// Presentation:
 // Evaluation models has Set of aögorithms - OF, Inter, Dataprocessing and lasstly Sensor Fusion.
 // Further it induces quantified noise
 // Analysis - Health of the algorithms by analysing overall pixels and pixels at SROI

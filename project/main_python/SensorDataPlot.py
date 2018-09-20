@@ -15,9 +15,10 @@ OUTLIER = 100000
 
 class PlotData(object):
 
-    def __init__(self, plot1, algorithm, measuring_parameter, noise, stepSize, x_label, y_label):
+    def __init__(self, plot1, algorithm, measuring_parameter, sensor_index, noise, stepSize, x_label, y_label):
         self.plot1 = plot1
         self.measuring_parameter = measuring_parameter
+        self.sensor_index = sensor_index
         self.noise = noise
         self.stepSize = stepSize
         self.x_label = x_label
@@ -44,6 +45,9 @@ class PlotData(object):
 
     def get_measuring_parameter(self):
         return self.measuring_parameter
+
+    def get_sensor_index(self):
+        return self.sensor_index
 
     def get_env_index(self):
         return self.noise
@@ -99,7 +103,7 @@ class SensorDataPlot(object):
         return (temp_list[0])
 
 
-    def extract_plot_data_from_data_list(self, yaml_file_data, custom_data_list_name, measuring_parameter, noise, stepSize, datafilter_index, x_label, y_label):
+    def extract_plot_data_from_data_list(self, yaml_file_data, custom_data_list_name, measuring_parameter, sensor_index, noise, stepSize, datafilter_index, x_label, y_label):
 
         figures_plot = list()
 
@@ -142,7 +146,7 @@ class SensorDataPlot(object):
         self.summary_mean[map_to_data] = mean_list
         lock.release()
 
-        plotData = PlotData(plot1, self.algorithm, measuring_parameter, noise, stepSize, x_label, y_label)
+        plotData = PlotData(plot1, self.algorithm, measuring_parameter, sensor_index, noise, stepSize, x_label, y_label)
         return plotData
 
 
