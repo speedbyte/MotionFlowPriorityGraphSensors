@@ -28,7 +28,6 @@
 // stich images python plot automatically - DONE
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // interpolate using splash mechanism ( bilateral filter )
-// why is stencil size in LK 0, why cant we start FB and LK at the same time?
 // class interpolate Data
 
 //DONE
@@ -42,7 +41,7 @@
 // masking problem. cpp and vires - i wasnt converting RGB to BGR and hence the problem arised.
 // fix sroi analysis l1, l2 and ma cumulative error and total pixels - added gt_displacement when gt_sroi is created
 // parameter-extended : total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error - DOME
-
+// why is stencil size in LK 0, why cant we start FB and LK at the same time? - DONE. added further variables. Now all algorithm will start
 
 // Presentation:
 // How reliable is the data - compare L2_good_pixel and MA_good_pixel error. The lesser the distance the better it is.
@@ -331,6 +330,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::string input = "data/stereo_flow/" + scenarios_list[0] + "/";
     std::string output = "results/stereo_flow/" + scenarios_list[0] + "/";
 
+    bool LK = true;
+    bool FB = true;
+    bool SF = true;
+    bool TVL = true;
+
     if (cpp_dataset.execute || vires_dataset.execute) {
 
         if (vires_dataset.execute) {
@@ -451,8 +455,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
         ushort fps = 30;
 
-        //for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {
-        for (ushort algorithm_index = 0; algorithm_index < 1 ; algorithm_index++) {
+        for (ushort algorithm_index = 0; algorithm_index < Dataset::m_algorithm_map.size() ; algorithm_index++) {
+        //for (ushort algorithm_index = 0; algorithm_index < 1 ; algorithm_index++) {
 
             std::vector<std::unique_ptr<AlgorithmFlow>> list_of_ptr_of_environment_OFalgorithm;
             std::map<std::string, std::unique_ptr<AlgorithmFlow>> map_string_to_OFalgorithm;
@@ -490,45 +494,51 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                                                                                      ptr_list_of_simulated_objects,
                                                                                      stepSize, ptr_gt_flow);
 
-                    if (Dataset::m_algorithm_map["LK"]) {
+                    if (Dataset::m_algorithm_map["LK"] && LK) {
 
                         fs_algorithm.open((std::string("../values_LK") + std::string(".yml")), cv::FileStorage::WRITE);
 
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
-                            Dataset::m_algorithm_map["LK"] = 0;
+                            //reset. We are done wth this algorithm
+                            LK = false;
                         }
-                    } else if (Dataset::m_algorithm_map["FB"]) {
+                    } else if (Dataset::m_algorithm_map["FB"] && FB) {
 
                         fs_algorithm.open((std::string("../values_FB") + std::string(".yml")), cv::FileStorage::WRITE);
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
-                            Dataset::m_algorithm_map["FB"] = 0;
+                            //reset. We are done wth this algorithm
+                            FB = false;
                         }
-                    } else if (Dataset::m_algorithm_map["TVL"]) {
+                    } else if (Dataset::m_algorithm_map["TVL"] && TVL) {
 
                         fs_algorithm.open((std::string("../values_TVL") + std::string(".yml")), cv::FileStorage::WRITE);
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
-                            Dataset::m_algorithm_map["TVL"] = 0;
+                            //reset. We are done wth this algorithm
+                            TVL = false;
                         }
-                    } else if (Dataset::m_algorithm_map["SF"]) {
+                    } else if (Dataset::m_algorithm_map["SF"] && SF) {
 
                         fs_algorithm.open((std::string("../values_SF") + std::string(".yml")), cv::FileStorage::WRITE);
                         //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["SF"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
-                            Dataset::m_algorithm_map["SF"] = 0;
+                            //reset. We are done wth this algorithm
+                            SF = false;
                         }
                     }
 
                     if (!found) {
                         break;
                     }
+
+                    //continue;
 
                     std::vector<SimulatedObjects> list_of_simulated_objects;
                     // just to be sure, all lists are empty

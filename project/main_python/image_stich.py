@@ -5,15 +5,18 @@ import os
 import numpy as np
 from matplotlib import pyplot as plt
 import cv2
+from os.path import basename
 
 def stich_bargraphs():
 
     list_dir = os.listdir("/local/tmp/eaes")
     list_bargraph_dir = list()
+    list_bargraph_names = list()
     list_graph_dir = list()
     for index, val in enumerate(list_dir):
         if ( "summary" in val ):
             list_bargraph_dir.append(val)
+            list_bargraph_names.append(basename(val))
         else:
             list_graph_dir.append(val)
 
@@ -39,10 +42,10 @@ def stich_bargraphs():
     #cv2.waitKey(0)
 
 
-    plt.subplot(221),plt.imshow(image_bar[0],'gray'),plt.title('ORIGINAL')
-    plt.subplot(222),plt.imshow(image_bar[1],'gray'),plt.title('REPLICATE')
-    plt.subplot(223),plt.imshow(image_bar[2],'gray'),plt.title('REFLECT')
-    plt.subplot(224),plt.imshow(image_bar[3],'gray'),plt.title('REFLECT_101')
+    plt.subplot(221),plt.imshow(image_bar[0],'gray'),plt.title(list_bargraph_names[0])
+    plt.subplot(222),plt.imshow(image_bar[1],'gray'),plt.title(list_bargraph_names[1])
+    plt.subplot(223),plt.imshow(image_bar[2],'gray'),plt.title(list_bargraph_names[2])
+    plt.subplot(224),plt.imshow(image_bar[3],'gray'),plt.title(list_bargraph_names[3])
 
     plt.show()
 
