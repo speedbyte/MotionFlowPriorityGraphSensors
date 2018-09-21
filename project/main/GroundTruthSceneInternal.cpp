@@ -80,7 +80,7 @@ void GroundTruthSceneInternal::write_gt_scene_data() {
     }
     catch (...) {
         std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
-        //stopSimulation();
+        exit(-1);
     }
 }
 

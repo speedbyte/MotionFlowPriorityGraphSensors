@@ -30,7 +30,7 @@ void GroundTruthObjects::generate_object_base_point_displacement(ObjectMetaData 
 
     ushort FRAME_COUNT;
     if ( Dataset::GENERATE) {
-        FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
+        FRAME_COUNT = Dataset::MAX_GENERATION_DATASET-1;
     } else {
         FRAME_COUNT = Dataset::MAX_ITERATION_RESULTS;
     }

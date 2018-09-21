@@ -250,7 +250,7 @@ void ViresObjects::parseEndOfFrame(const double &simTime, const unsigned int &si
     //mLastNetworkFrame = simFrame;
     fprintf(stderr, "RDBHandler::parseEndOfFrame: simTime = %.3f, simFrame = %d\n", simTime, simFrame);
 
-    if (simFrame > Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET + MAX_DUMPS) {
+    if (simFrame > Dataset::MAX_GENERATION_DATASET + MAX_DUMPS) {
         m_breaking = true;
     }
 
@@ -360,7 +360,7 @@ void ViresObjects::parseEntry(RDB_SENSOR_STATE_t *data, const double &simTime, c
 
     if (data->type == RDB_SENSOR_TYPE_VIDEO || data->type == RDB_SENSOR_TYPE_RADAR) {
 
-        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
+        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_GENERATION_DATASET ) ) {
 
             fprintf(stderr, "saving sensor truth for sensor_state simFrame = %d, simTime %f %s\n", simFrame, simTime,
                     data->name);
@@ -385,7 +385,7 @@ simFrame, const
 
     if (data->base.type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->base.type == RDB_OBJECT_TYPE_PLAYER_CAR) {
 
-        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
+        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_GENERATION_DATASET ) ) {
 
             /*
             fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
@@ -421,7 +421,7 @@ simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsign
 
 
     if (data->type == RDB_OBJECT_TYPE_PLAYER_PEDESTRIAN || data->type == RDB_OBJECT_TYPE_PLAYER_CAR) {
-        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_ITERATION_GT_SCENE_GENERATION_DATASET ) ) {
+        if (!m_dumpInitialFrames && (simFrame > (MAX_DUMPS+1)) && ((simFrame - MAX_DUMPS - 1) < Dataset::MAX_GENERATION_DATASET ) ) {
 
             //fprintf(stderr, "%s: %d %.3lf %.3lf %.3lf %.3lf \n",
             //        data->name, simFrame, data->pos.x, data->pos.y, data->geo.dimX, data->
@@ -566,7 +566,6 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                     fprintf(stderr, "force ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                             simFrame, simTime, data->imgSize, data->id);
                 }
-                //mImageCount++;
             } else {
                 fprintf(stderr, "ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
                         simFrame, simTime, data->imgSize, data->id);

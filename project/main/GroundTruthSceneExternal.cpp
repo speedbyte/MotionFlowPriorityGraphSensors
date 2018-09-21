@@ -250,10 +250,14 @@ void GroundTruthSceneExternal::generate_gt_scene() {
             //connected_shm = viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).shmConfigure(shmPtr, 2, totalSize);
             connected_shm = true;
         }
+    } else {
+        std::cerr << "Error in generation" << std::endl;
+        stopSimulation();
+        sleep(1);
+        exit(-1);
     }
 
     if (connected_shm ) {
-
 
         // now check the SHM for the time being
         bool breaking = false;
@@ -281,15 +285,17 @@ void GroundTruthSceneExternal::generate_gt_scene() {
         catch (...) {
             std::cerr << "Error in generation" << std::endl;
             stopSimulation();
-            return;
+            sleep(1);
+            exit(-1);
         };
 
         stopSimulation();
         //configVires();
-    }
-    else {
+    }  else {
         std::cerr << "Error in generation" << std::endl;
         stopSimulation();
+        sleep(1);
+        exit(-1);
     }
 
 }
@@ -334,6 +340,10 @@ void GroundTruthSceneExternal::write_gt_scene_data() {
 
             // writePosition deletes the file before generating yaml file
             viresObjects.at(m_generation_sensor_list.at(sensor_group_index)).writePositionInYaml("vires_");
+
+            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).readPositionFromFile("vires_");
+            // this additionally validates if the generation was successful - VERY IMP
+            viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).calcBBFrom3DPosition("vires_");
             //system("diff ../position_vires_original_15_65.yml ../position_vires_0.yml");
 
 
@@ -345,6 +355,7 @@ void GroundTruthSceneExternal::write_gt_scene_data() {
     catch (...) {
         std::cerr << "VTD Generation complete, but error in generating images" << std::endl;
         stopSimulation();
+        exit(-1);
     }
 }
 

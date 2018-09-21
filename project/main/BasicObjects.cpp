@@ -25,7 +25,13 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
 
     cv::Mat tempGroundTruthImage(Dataset::m_frame_size, CV_8UC3);
 
-    unsigned long FRAME_COUNT = Dataset::ITERATION_END_POINT;
+    unsigned long FRAME_COUNT;
+    if ( Dataset::GENERATE) {
+        FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
+    } else {
+        FRAME_COUNT = Dataset::ITERATION_END_POINT;
+    };
+
     assert(FRAME_COUNT > 0);
 
     if ( suffix == "vires_") {
@@ -266,6 +272,14 @@ void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
                               << std::endl;
                 }
             }
+
+            //cv::namedWindow("BB", CV_WINDOW_AUTOSIZE);
+            //cv::imshow("BB", tempGroundTruthImage);
+            //cv::waitKey(0);
+            //cv::destroyAllWindows();
+            //cv::imwrite(output_image_file_with_path, tempGroundTruthImage);
+            //---------------------------------------------------------------------------------
+
         }
     }
     else if ( suffix == "cpp_") {
@@ -647,8 +661,11 @@ void BasicObjects::readPositionFromFile(std::string suffix) {
     std::cout << "read yaml file for sensor_index " << sensor_index_folder_suffix << std::endl;
     //unsigned long FRAME_COUNT = m_list_gt_objects.at(0).get_object_shape_point_displacement().size();
     unsigned long FRAME_COUNT;
-    FRAME_COUNT = Dataset::ITERATION_END_POINT;
-
+    if ( Dataset::GENERATE) {
+        FRAME_COUNT = Dataset::MAX_GENERATION_DATASET;
+    } else {
+        FRAME_COUNT = Dataset::ITERATION_END_POINT;
+    };
 
     assert(FRAME_COUNT > 0);
 

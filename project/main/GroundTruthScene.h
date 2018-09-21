@@ -356,7 +356,7 @@ public:
         sprintf(command, "cd %s../../ ; bash vtdStop.sh", (m_datasetpath.string()).c_str());
         std::cout << command << std::endl;
         system(command);
-        std::cout << "End of generation" << std::endl;
+        std::cout << "Stopping simulation" << std::endl;
     }
 
 
