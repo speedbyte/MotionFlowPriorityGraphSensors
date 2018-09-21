@@ -82,22 +82,24 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
 
                     // ------------------------------
                     std::string suffix_algorithm_metrics = "";
-                    ushort *algorithm_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).entire_metrics);
-                    float *algorithm_metrics_pointer_metrics_float = (float *)(algorithm_metrics_pointer_metrics+4);
+                    ushort *algorithm_metrics_pointer_metrics_ushort = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).entire_metrics);
+                    float *algorithm_metrics_pointer_metrics_float = (float *)(algorithm_metrics_pointer_metrics_ushort+4);
+                    char *algorithm_metrics_pointer_metrics_sync_point = (char *)(algorithm_metrics_pointer_metrics_float+6);
                     // ------------------------------
                     std::string suffix_algorithm_interpolated_metrics = "interpolated_";
-                    ushort *algorithm_interpolated_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).entire_interpolated_metrics);
-                    float *algorithm_interpolated_metrics_pointer_metrics_float = (float *)(algorithm_interpolated_metrics_pointer_metrics+4);
+                    ushort *algorithm_interpolated_metrics_pointer_metrics_ushort = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).entire_interpolated_metrics);
+                    float *algorithm_interpolated_metrics_pointer_metrics_float = (float *)(algorithm_interpolated_metrics_pointer_metrics_ushort+4);
+                    char *algorithm_interpolated_metrics_pointer_metrics_sync_point = (char *)(algorithm_interpolated_metrics_pointer_metrics_float+6);
                     // ------------------------------
                     std::string suffix_algorithm_sroi_metrics = "sroi_";
-                    ushort *algorithm_sroi_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).sroi_metrics);
-                    float *algorithm_sroi_metrics_pointer_metrics_float = (float *)(algorithm_sroi_metrics_pointer_metrics+4);
+                    ushort *algorithm_sroi_metrics_pointer_metrics_ushort = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).sroi_metrics);
+                    float *algorithm_sroi_metrics_pointer_metrics_float = (float *)(algorithm_sroi_metrics_pointer_metrics_ushort+4);
+                    char *algorithm_sroi_metrics_pointer_metrics_sync_point = (char *)(algorithm_sroi_metrics_pointer_metrics_float+6);
                     // ------------------------------
                     std::string suffix_algorithm_sroi_interpolated_metrics = "sroi_interpolated_";
-                    ushort *algorithm_sroi_interpolated_metrics_pointer_metrics = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).sroi_interpolated_metrics);
-                    float *algorithm_sroi_interpolated_metrics_pointer_metrics_float = (float *)(algorithm_sroi_interpolated_metrics_pointer_metrics+4);
-
-
+                    ushort *algorithm_sroi_interpolated_metrics_pointer_metrics_ushort = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).sroi_interpolated_metrics);
+                    float *algorithm_sroi_interpolated_metrics_pointer_metrics_float = (float *)(algorithm_sroi_interpolated_metrics_pointer_metrics_ushort+4);
+                    char *algorithm_sroi_interpolated_metrics_pointer_metrics_sync_point = (char *)(algorithm_sroi_interpolated_metrics_pointer_metrics_float+6);
 
                     m_fs << "{"
 
@@ -108,7 +110,6 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
 
                          << "visibility" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblity
-
 /*
                          << "ground_truth_pixels" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ground_truth_pixels
@@ -119,54 +120,64 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                          << "stddev_displacement" <<
                          (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).stddev_displacement);
 
+                    // ------------------------------
+                    // the ushort part
                     count = 0;
                     for ( auto x = 0; x < 4; x++ ) {
-                        m_fs <<  suffix_algorithm_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_metrics_pointer_metrics+count);
+                        m_fs <<  suffix_algorithm_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_metrics_pointer_metrics_ushort+count);
                         count++;
                     }
 
+                    // the float part
                     count = 0;
                     for ( auto x = 4; x < 10; x++ ) {
                         m_fs <<  suffix_algorithm_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_metrics_pointer_metrics_float+count);
                         count++;
                     }
-
+                    assert(*(algorithm_metrics_pointer_metrics_sync_point+0) == '$');
+                    // ------------------------------
+                    // the ushort part
                     count = 0;
                     for ( auto x = 0; x < 4; x++ ) {
-                        m_fs <<  suffix_algorithm_interpolated_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_interpolated_metrics_pointer_metrics+count);
+                        m_fs <<  suffix_algorithm_interpolated_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_interpolated_metrics_pointer_metrics_ushort+count);
                         count++;
                     }
 
+                    // the float part
                     count = 0;
                     for ( auto x = 4; x < 10; x++ ) {
                         m_fs <<  suffix_algorithm_interpolated_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_interpolated_metrics_pointer_metrics_float+count);
                         count++;
                     }
-
-
+                    assert(*(algorithm_interpolated_metrics_pointer_metrics_sync_point+0) == '$');
+                    // ------------------------------
+                    // the ushort part
                     count = 0;
                     for ( auto x = 0; x < 4; x++ ) {
-                        m_fs <<  suffix_algorithm_sroi_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_sroi_metrics_pointer_metrics+count);
+                        m_fs <<  suffix_algorithm_sroi_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_sroi_metrics_pointer_metrics_ushort+count);
                         count++;
                     }
-
+                    // the float part
                     count = 0;
                     for ( auto x = 4; x < 10; x++ ) {
                         m_fs <<  suffix_algorithm_sroi_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_sroi_metrics_pointer_metrics_float+count);
                         count++;
                     }
-
+                    assert(*(algorithm_sroi_metrics_pointer_metrics_sync_point+0) == '$');
+                    // ------------------------------
+                    // the ushort part
                     count = 0;
                     for ( auto x = 0; x < 4; x++ ) {
-                        m_fs <<  suffix_algorithm_sroi_interpolated_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_sroi_interpolated_metrics_pointer_metrics+count);
+                        m_fs <<  suffix_algorithm_sroi_interpolated_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_sroi_interpolated_metrics_pointer_metrics_ushort+count);
                         count++;
                     }
-
+                    // the float part
                     count = 0;
                     for ( auto x = 4; x < 10; x++ ) {
                         m_fs <<  suffix_algorithm_sroi_interpolated_metrics + algorithm_metrics_strings.at(x)  << *(algorithm_sroi_interpolated_metrics_pointer_metrics_float+count);
                         count++;
                     }
+                    assert(*(algorithm_sroi_interpolated_metrics_pointer_metrics_sync_point+0) == '$');
 
                     m_fs
                          << "}";

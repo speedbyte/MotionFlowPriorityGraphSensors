@@ -27,6 +27,9 @@ typedef struct {
     float l2_cumulative_error_good_pixels;
     float ma_cumulative_error_good_pixels;
 
+    char sync_point[1];
+
+
 } COUNT_METRICS;
 
 
@@ -184,6 +187,10 @@ public:
     void generate_sroi_intersections();
 
     void stich_gnuplots();
+
+    std::string getOpticalFlowName() {
+        return m_opticalFlowName;
+    }
 
 private:
 

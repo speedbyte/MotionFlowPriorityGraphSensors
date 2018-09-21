@@ -412,7 +412,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 /// the following snippet generates mean centroid displacement for various data processing algorithms
                 gt_flow.generate_flow_vector();
 
-                if (Dataset::GENERATE ) {
+                if ( Dataset::GENERATE ) {
                     gt_flow.save_flow_vector();
                 } else {
 
@@ -473,30 +473,29 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list,
                                                                                     environment_list[env_index], lk,
-                                                                                    "lk", list_of_gt_sensors_base,
+                                                                                    "LK", list_of_gt_sensors_base,
                                                                                     ptr_list_of_gt_objects_base,
                                                                                     ptr_list_of_simulated_objects_base,
                                                                                     ptr_list_of_simulated_objects,
                                                                                     stepSize, ptr_gt_flow);
                     map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list,
                                                                                   environment_list[env_index], fb,
-                                                                                  "fback", list_of_gt_sensors_base,
+                                                                                  "FB", list_of_gt_sensors_base,
                                                                                   ptr_list_of_gt_objects_base,
                                                                                   ptr_list_of_simulated_objects_base,
                                                                                   ptr_list_of_simulated_objects,
                                                                                   stepSize, ptr_gt_flow);
                     map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list,
                                                                                      environment_list[env_index], tvl,
-                                                                                     "dual_tvl_flow",
+                                                                                     "TVL",
                                                                                      list_of_gt_sensors_base,
                                                                                      ptr_list_of_gt_objects_base,
                                                                                      ptr_list_of_simulated_objects_base,
                                                                                      ptr_list_of_simulated_objects,
                                                                                      stepSize, ptr_gt_flow);
 
+                    std::string path;
                     if (Dataset::m_algorithm_map["LK"] && LK) {
-
-                        fs_algorithm.open((std::string("../values_LK") + std::string(".yml")), cv::FileStorage::WRITE);
 
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
                         found = true;
@@ -563,13 +562,17 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
                     }
 
-                    list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories(
-                            environment_list[env_index], fps, stepSize);
+
                     if ((Dataset::m_execute_algorithm && cpp_dataset.execute) ||
                         (Dataset::m_execute_algorithm && vires_dataset.execute)) {
 
                         list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories(
                                 environment_list[env_index], fps, stepSize);
+
+                        path = list_of_ptr_of_environment_OFalgorithm[env_index]->getGeneratePath() + std::string("/values_") +
+                                list_of_ptr_of_environment_OFalgorithm[env_index]->getOpticalFlowName() + std::string(".yml");
+                        fs_algorithm.open(path, cv::FileStorage::WRITE);
+
                         // TODO - do something for stepSize.. its redundant here.
                         /// run optical flow algorithm
                         list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list,

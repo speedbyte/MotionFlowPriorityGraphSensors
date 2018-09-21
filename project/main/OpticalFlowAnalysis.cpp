@@ -65,7 +65,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                     unsigned CLUSTER_COUNT_GT_SPECIAL_ROI = (unsigned) special_roi_object.at(sensor_index).at(
                             current_frame_index).size();
 
-
                     evaluationData.at(obj_index).frame_number = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
                     evaluationData.at(obj_index).visiblity = list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index);
@@ -130,8 +129,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
 //--------------------------------------------------------------------------------------------
 
-                        COUNT_METRICS &entire_roi_interpolated_count_metrics = evaluationData.at(obj_index).entire_interpolated_metrics;
-                        gnuplot_xy_pts = generate_count_metrics_data("entire_interpolated", entire_roi_object_interpolated, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_interpolated_count_metrics, icovar);
+                        COUNT_METRICS &entire_roi_object_interpolated_count_metrics = evaluationData.at(obj_index).entire_interpolated_metrics;
+                        gnuplot_xy_pts = generate_count_metrics_data("entire_interpolated", entire_roi_object_interpolated, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_interpolated_count_metrics, icovar);
                         show_gnuplot("entire_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
@@ -165,13 +164,15 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 //--------------------------------------------------------------------------------------------
                         COUNT_METRICS &entire_roi_object_count_metrics = evaluationData.at(
                                 obj_index).entire_metrics;
+                        entire_roi_object_count_metrics.sync_point[0] = {'$'};
                         show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index,
                                      evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
 
-                        COUNT_METRICS &entire_roi_interpolated_count_metrics = evaluationData.at(
+                        COUNT_METRICS &entire_roi_object_interpolated_count_metrics = evaluationData.at(
                                 obj_index).entire_interpolated_metrics;
+                        entire_roi_object_interpolated_count_metrics.sync_point[0] = {'$'};
                         show_gnuplot("entire_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index,
                                      obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
@@ -179,6 +180,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         COUNT_METRICS &special_roi_object_count_metrics = evaluationData.at(
                                 obj_index).sroi_metrics;
+                        special_roi_object_count_metrics.sync_point[0] = {'$'};
                         show_gnuplot("special", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index,
                                      evaluationData, entire_roi_object_count_metrics, icovar);
 
@@ -186,6 +188,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         COUNT_METRICS &special_roi_object_interpolated_count_metrics = evaluationData.at(
                                 obj_index).sroi_interpolated_metrics;
+                        special_roi_object_interpolated_count_metrics.sync_point[0] = {'$'};
                         show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index,
                                      obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
@@ -220,6 +223,8 @@ std::vector<std::pair<float, float>> OpticalFlow::generate_count_metrics_data(st
 // displacements found by the algorithm for this object
     unsigned CLUSTER_COUNT = (unsigned) cluster_to_evaluate.at(sensor_index).at(
             current_frame_index).size();
+
+    count_metrics.sync_point[0] = {'$'};
 
     count_metrics.total_pixel = (ushort)CLUSTER_COUNT;
 
