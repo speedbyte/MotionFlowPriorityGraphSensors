@@ -15,7 +15,6 @@
 
 void ViresObjects::readObjectStateFromBinaryFile() {
 
-
     RDB_OBJECT_STATE_t object_state_data;
     RDB_OBJECT_STATE_t *data = &object_state_data;
 
@@ -53,7 +52,6 @@ void ViresObjects::readObjectStateFromBinaryFile() {
 
     }
 }
-
 
 void ViresObjects::readSensorObjectFromBinaryFile() {
 
@@ -99,7 +97,6 @@ void ViresObjects::readSensorObjectFromBinaryFile() {
         }
     }
 }
-
 
 void ViresObjects::readSensorStateFromBinaryFile() {
 
@@ -154,7 +151,6 @@ void ViresObjects::readSensorStateFromBinaryFile() {
 
 }
 
-
 void ViresObjects::readObjectData() {
     readObjectStateFromBinaryFile();
     readSensorObjectFromBinaryFile();
@@ -164,7 +160,6 @@ void ViresObjects::readSensorData() {
     readSensorStateFromBinaryFile();
 
 }
-
 
 void ViresObjects::getGroundTruthInformation(void* shmPtr, bool withTrigger, int triggerSocket, bool getGroundTruthData, bool getGroundTruthImages,
 ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushort m_moduleManagerSocket_PerfectInertial) {
@@ -225,7 +220,6 @@ ushort m_moduleManagerSocket_Camera, ushort m_moduleManagerSocket_Perfect, ushor
 
 
 }
-
 
 void ViresObjects::parseEntry(RDB_TRIGGER_t *data, const double &simTime, const unsigned int &
 simFrame, const unsigned short &pkgId, const unsigned short &flags, const unsigned int &elemId,

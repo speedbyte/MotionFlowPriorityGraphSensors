@@ -29,6 +29,8 @@
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // interpolate using splash mechanism ( bilateral filter )
 // class interpolate Data
+// why does vires generates one image more than the ground truth information. That means the last ground truth informtion is bogus. Hence while reading the ground truth, the max should be
+// frame_count in position file - 1.
 
 //DONE
 // check if depth is correct - depth is taken from the last value. the sensor position does not matter for the depth image. it is always taken from the middle of the rear axle.
