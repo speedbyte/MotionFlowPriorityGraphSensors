@@ -8,12 +8,12 @@ CPP_DATASET:
     STOP: 30
     MAX_GENERATION_DATASET: 50
     PATH: "../../../datasets/cpp_dataset/"
-    EXECUTE: 0
+    EXECUTE: 1
     GT: 0
     ANALYSE: 1
     VIDEO: 0
     DATAPROCESSING: {NoAlgorithm: 1, SimpleAverage: 0, MovingAverage: 0, VotedMean: 0, RankedMean: 0}
-    ALGORITHMS: {FB: 1, LK: 0, SF: 0, TVL: 0}
+    ALGORITHMS: {FB: 1, LK: 1, SF: 0, TVL: 1}
 
 MATLAB_DATASET:
     PATH: "../../../datasets/matlab_dataset/"
@@ -48,9 +48,9 @@ VIRES_DATASET:
     STOP: 55
     MAX_GENERATION_DATASET: 150
     PATH: "../../../datasets/vires_dataset/"
-    EXECUTE: 0
+    EXECUTE: 1
     GT: 0
     ANALYSE: 1
     VIDEO: 0
     DATAPROCESSING: {NoAlgorithm: 1, SimpleAverage: 0, MovingAverage: 0, VotedMean: 0, RankedMean: 0}
-    ALGORITHMS: {FB: 0, LK: 1, SF: 0, TVL: 0}
+    ALGORITHMS: {FB: 1, LK: 1, SF: 0, TVL: 0}
