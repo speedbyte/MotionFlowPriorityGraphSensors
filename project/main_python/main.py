@@ -50,6 +50,7 @@ def plot_at_once(figures_plot_array_all):
 
 
 def plot_at_once_summary(parameter, bargraph_summary_list_each_parameter_collect, extended=False):
+
     figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
     flatten_bargraph_summary_list_each_parameter_collect = dict()
@@ -100,20 +101,20 @@ if __name__ == '__main__':
             exit(0)
 
     plotgraph_list_all_parameter_collect = list()
-    bargraph_summary_list_all_parameter_collect = list()
 
     for n, parameter in enumerate(parameter_list):
     # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
+        bargraph_summary_list_all_parameter_collect = list()
         print "PARAMETER ----- ", parameter
 
         for sensor_index in sensor_list:
 
             for algorithm in algorithm_list:
 
-                sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter)
-
                 for step_size in step_list:
+
+                    sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter)
 
                     assert(noise_list[0] == "ground_truth")
                     print "---------------------------"
@@ -129,9 +130,9 @@ if __name__ == '__main__':
 
                         plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping, noise, str(step_size), datafilter_index=0, x_label="frame_number", y_label="dummy" )
                         plotgraph_list_all_parameter_collect.append(plot_data)
-                        if ( sensor_data_plot_object.get_summary() not in bargraph_summary_list_all_parameter_collect):
-                            val = sensor_data_plot_object.get_summary()
-                            bargraph_summary_list_all_parameter_collect.append([parameter, sensor_data_plot_object.get_summary()])
+
+                        val = plot_data.get_summary()
+                        bargraph_summary_list_all_parameter_collect.append(val)
 
                     if just_ground_truth is True:
                         break
@@ -139,6 +140,7 @@ if __name__ == '__main__':
                 print "---------------------------"
 
                 # store the summary for future use:
+        plot_at_once_summary(parameter, bargraph_summary_list_all_parameter_collect)
 
         # we are still in each parameter
 
@@ -154,8 +156,6 @@ if __name__ == '__main__':
         if (len(reshape_plotgraph_list) > 0 ):
             plot_at_once(reshape_plotgraph_list)
 
-    #for each_plot_bar in bargraph_summary_list_all_parameter_collect:
-        #plot_at_once_summary(each_plot_bar[0], each_plot_bar[1])
 
 
     plotgraph_list_all_parameter_collect_extended = list()

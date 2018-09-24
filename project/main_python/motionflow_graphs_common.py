@@ -106,8 +106,8 @@ class Figures(object):
                 else :
 
                     line1 = self.list_of_plots[figure_index].plot(x_axis_data,
-                                                                  y_axis_data/SCALE, 'ko-', lw=1,
-                                                                  color=dict_color_noise[env_index],
+                                                                  y_axis_data/SCALE, 'o-', lw=1,
+                                                                  #color=dict_color_noise[env_index],
                                                                   label=legend)
 
                 self.list_of_plots[figure_index].legend(loc='upper right', fontsize='small')
@@ -179,11 +179,7 @@ class Figures(object):
             if just_ground_truth is True:
                 environment = ["ground_truth"]
             else:
-                if ( extended is True ):
-                    pass
-                    # try to remove ground_truth from noise_list
-                else:
-                    environment = ["ground_truth"]
+                environment = list()
                 for noise in noise_list:
                     environment.append(noise)
 
@@ -194,7 +190,7 @@ class Figures(object):
                 for p, algorithm in enumerate(algorithm_list):
                     map_to_data = measuring_parameter + '_' + algorithm + '_' + val_env + '_' + str(step_list[0]) + '_' + str(sensor_index)
                     print map_to_data
-                    regroup[p] = summary_dict[map_to_data][0]
+                    regroup[p] = summary_dict[map_to_data]
                 bar_positions = index + (shift*bar_width)
                 print bar_positions
                 rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n_env+1], edgecolor='black')
