@@ -118,29 +118,40 @@ class Figures(object):
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
-    def save_figure(self, measuring_parameter, noise, stepSize=65535, sensor_index=65535 ):
+    def save_figure(self, measuring_parameter, type_of_graph, stepSize=65535, sensor_index=65535 ):
+
+        if ( stepSize == 65535 ):
+            step_suffix = ""
+        else:
+            step_suffix = "_stepSize_" + str(stepSize)
+
+        if ( sensor_index == 65535 ):
+            sensor_index_suffix = ""
+        else:
+            sensor_index_suffix = "_sensor_" + str(sensor_index)
+
 
         if ( self.figure_index >= 1 ):
-            step_suffix = "stepSize_" + str(stepSize)
-            self.fig1.savefig(output_folder + measuring_parameter + '_' + noise + '_' + step_suffix + '_' "sensor_" + str(sensor_index), bbox_inches='tight',dpi=200)
+
+            self.fig1.savefig(output_folder + type_of_graph + '_' + measuring_parameter +  step_suffix + sensor_index_suffix, bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 2 ):
             step_suffix = dict_datafilters["datafilter_1"] + "stepSize_" + str(stepSize)
-            if noise == "summary":
+            if type_of_graph == "summary":
                 step_suffix = ''
-            self.fig2.savefig(output_folder + measuring_parameter + '_' + noise+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
+            self.fig2.savefig(output_folder + measuring_parameter + '_' + type_of_graph + step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 3 ):
             step_suffix = dict_datafilters["datafilter_2"] + "stepSize_" + str(stepSize)
-            if noise == "summary":
+            if type_of_graph == "summary":
                 step_suffix = ''
-            self.fig3.savefig(output_folder + measuring_parameter + '_' + noise+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
+            self.fig3.savefig(output_folder + measuring_parameter + '_' + type_of_graph+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 4 ):
             step_suffix = dict_datafilters["datafilter_3"] + "stepSize_" + str(stepSize)
-            if noise == "summary":
+            if type_of_graph == "summary":
                 step_suffix = ''
-            self.fig4.savefig(output_folder + measuring_parameter + '_' + noise+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
+            self.fig4.savefig(output_folder + measuring_parameter + '_' + type_of_graph+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
 
     def plot_close_all(self):
@@ -148,7 +159,7 @@ class Figures(object):
         plt.close("all")
 
 
-    def bargraph_pixel(self, summary_dict, measuring_parameter, extended=False):
+    def bargraph_pixel(self, measuring_parameter, summary_dict, extended=False):
 
         # each group member is positioned at bar position. hence array of group members and array of bar_position should be equal.
 
@@ -192,8 +203,8 @@ class Figures(object):
         self.list_of_plots[0].set_xticks(index + 2*bar_width)
         self.list_of_plots[0].set_xticklabels(algorithm_list, rotation=90)
         self.list_of_plots[0].legend()
-        self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
-        self.list_of_plots[0].set_ylabel(measuring_parameter)
+        self.list_of_plots[0].set_xlabel(dict_parameter_extended[measuring_parameter])
+        self.list_of_plots[0].set_ylabel("")
 
         #self.list_of_plots[0].tight_layout()
 

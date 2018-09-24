@@ -16,6 +16,15 @@ file_list = list()
 file_final = "/local/git/MotionFlowPriorityGraphSensors/project/main_python/values.yml"
 
 
+dict_parameter_extended = {
+    "extended_sroi_l2_cumulative_error_all_pixels_l2_cumulative_error_all_pixels" : "percentage of sroi pixels error to total pixels error" ,
+
+    "extended_sroi_total_pixel_total_pixel" : "percentage of sroi pixels to total pixels",
+    "sroi_total_pixel" : "number of pixels in the special roi",
+    "total_pixel" : "total number of pixels"
+
+}
+
 dict_datafilters = {
     "ground_truth": "ground truth",
     "datafilter_0": "datafilter_0",
@@ -45,7 +54,7 @@ y_axis_label_dict = {
 }
 
 configuration_list = [["total_pixel_FB_ground_truth_1_0", "total_pixel_FB_blue_sky_1_0", "sroi_total_pixel_FB_blue_sky_1_0"], ["total_pixel_LK_ground_truth_1_0", "total_pixel_LK_blue_sky_1_0", "sroi_total_pixel_LK_blue_sky_1_0"]]
-configuration_list_extended  = ["extended_sroi_total_pixel_total_pixel_FB_ground_truth_1_0"]
+configuration_list_extended  = [["extended_sroi_total_pixel_total_pixel_FB_ground_truth_1_0"]]
 
 parameter_list = [ ]
 #parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels","ma_total_good_pixels", "algorithm_sroi_pixels"]

@@ -11,7 +11,6 @@ lock = threading.BoundedSemaphore()
 class SensorDataPlot(object):
 
     def __init__(self, sensor_index, algorithm, parameter):
-        self.summary_mean = dict()
         self.sensor_index = sensor_index
         self.algorithm = algorithm
         self.measuring_parameter = parameter
@@ -19,10 +18,7 @@ class SensorDataPlot(object):
     def get_algorithm(self):
         return self.algorithm
 
-    def set_measuring_parameter(self, measuring_parameter):
-        self.measuring_parameter = measuring_parameter
-
-    def templateToYamlMapping(self, i, step_size):
+    def templateToYamlMapping(self, noise, step_size):
 
         if ( self.measuring_parameter == "deviation" or self.measuring_parameter == "collisionpoints"):
             template_name_ = template_name_of_collisionpoints
@@ -30,7 +26,7 @@ class SensorDataPlot(object):
             template_name_ = template_name_of_evaluation_data
 
         # lambda isnt required here, but still keeping this for learning purpose
-        temp_name = map(lambda x : (x + self.algorithm + '_' + i + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
+        temp_name = map(lambda x : (x + self.algorithm + '_' + noise + "_" + fps_list[0] + '_' + str(step_size) + '_datafilter_0_' + "sensor_index_" + str(self.getSensorIndex())), template_name_)
 
         return (temp_name[0])
 
@@ -99,7 +95,6 @@ class SensorDataPlot(object):
         # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
         lock.acquire()
         print "summarizing" , map_to_data,
-        self.summary_mean[map_to_data] = y_axis_mean
         lock.release()
 
         plotData = PlotData(plot1, self.algorithm, self.measuring_parameter, map_to_data, self.sensor_index, noise, stepSize, x_label, y_label, y_axis_mean)
@@ -190,8 +185,3 @@ class SensorDataPlot(object):
 
         assert(x_axis.size == y_axis.size)
         return x_axis, y_axis
-
-
-    def get_summary(self):
-        return self.summary_mean
-

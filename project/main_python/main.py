@@ -2,28 +2,12 @@
 # _*_ encoding=utf-8 _*_
 
 
-import numpy as np
-import os
-
 from Figures import Figures
-
-
-import cv2
-
-from matplotlib import pyplot as plt
-from mpl_toolkits.mplot3d import axes3d
-
 from YAMLParser import YAMLParser
 from SensorDataPlot import SensorDataPlot
 from motionflow_graphs_data import *
 
-import threading
-import time
-
-
-
 SCALE = 1
-
 
 def plot_at_once_pointgraph(figures_plot_array_all):
 
@@ -47,7 +31,7 @@ def plot_at_once_pointgraph(figures_plot_array_all):
     figures.pointgraph_pixel(figures_plot_array_all)
 
     # and lastly save the figure
-    figures.save_figure(figures_plot_array_all[0].get_measuring_parameter(), figures_plot_array_all[0].get_algorithm(), figures_plot_array_all[0].get_step_size(), figures_plot_array_all[0].get_sensor_index())
+    figures.save_figure(figures_plot_array_all[0].get_measuring_parameter(), "point_graph", figures_plot_array_all[0].get_step_size(), figures_plot_array_all[0].get_sensor_index())
 
 
 def plot_at_once_bargraph(parameter, bargraph_summary_list_each_parameter_collect, extended=False):
@@ -59,8 +43,8 @@ def plot_at_once_bargraph(parameter, bargraph_summary_list_each_parameter_collec
         flatten_bargraph_summary_list_each_parameter_collect.update(summary)
     print flatten_bargraph_summary_list_each_parameter_collect
 
-    figures_bargraph_each_parameter_all_data.bargraph_pixel(flatten_bargraph_summary_list_each_parameter_collect, parameter, extended )
-    figures_bargraph_each_parameter_all_data.save_figure(parameter , "summary")
+    figures_bargraph_each_parameter_all_data.bargraph_pixel(parameter, flatten_bargraph_summary_list_each_parameter_collect, extended )
+    figures_bargraph_each_parameter_all_data.save_figure(parameter, "bar_graph")
 
 #    plt.close("all")
 
@@ -203,7 +187,7 @@ if __name__ == '__main__':
                         val = plot_data.get_summary()
                         bargraph_summary_list_all_parameter_extended_collect.append(val)
 
-        plot_at_once_bargraph(parameter_extended, bargraph_summary_list_all_parameter_extended_collect)
+        plot_at_once_bargraph(parameter_extended, bargraph_summary_list_all_parameter_extended_collect, True)
 
 
 
