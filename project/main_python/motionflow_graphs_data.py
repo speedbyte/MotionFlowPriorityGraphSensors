@@ -43,7 +43,7 @@ y_axis_label_dict = {
 }
 
 configuration_list = [["total_pixel_FB_ground_truth_1_0", "total_pixel_FB_blue_sky_1_0", "sroi_total_pixel_FB_blue_sky_1_0"], ["total_pixel_LK_ground_truth_1_0", "total_pixel_LK_blue_sky_1_0", "sroi_total_pixel_LK_blue_sky_1_0"]]
-configuration_list_extended  = []
+configuration_list_extended  = ["extended_sroi_total_pixel_total_pixel_FB_ground_truth_1_0"]
 
 parameter_list = [ ]
 #parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels","ma_total_good_pixels", "algorithm_sroi_pixels"]

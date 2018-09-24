@@ -213,6 +213,8 @@ if __name__ == '__main__':
                 reshape_plotgraph_list.append(individual_plots)
         if (len(reshape_plotgraph_list) > 0 ):
             plot_at_once(reshape_plotgraph_list)
+        else:
+            print configuration + " is not found !!!!!! "
 
 
     for configuration in configuration_list_extended:
@@ -222,4 +224,6 @@ if __name__ == '__main__':
                 reshape_plotgraph_list.append(individual_plots)
         if (len(reshape_plotgraph_list) > 0 ):
             plot_at_once(reshape_plotgraph_list)
+        else:
+            print configuration + " is not found !!!!!! "
 
