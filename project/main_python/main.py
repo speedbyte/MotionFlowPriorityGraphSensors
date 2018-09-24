@@ -19,14 +19,6 @@ from motionflow_graphs_data import *
 import threading
 import time
 
-#output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
-output_folder = '/local/tmp/eaes/'
-
-dataset = "vires"
-scenario = "two"
-#file = "/local/git/MotionFlowPriorityGraphSensors/datasets/"+dataset+"_dataset/data/stereo_flow/" +scenario + "/values.yml"
-file_final = "/local/git/MotionFlowPriorityGraphSensors/project/main/values.yml"
-file_ground_truth = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_ground_truth.yml"
 
 
 SCALE = 1
@@ -80,6 +72,7 @@ import subprocess
 
 if __name__ == '__main__':
 
+
     #concatenate files
     fd_concatenated = open(file_final, "w")
     fd_ground_truth = open(file_ground_truth, "r")
@@ -87,9 +80,9 @@ if __name__ == '__main__':
     fd_concatenated.close()
     fd_ground_truth.close()
 
-    for algorithm in algorithm_list:
+    for index, algorithm in enumerate(algorithm_list):
         fd_concatenated = open(file_final, "a")
-        fd_algo = open(dict_file_map[algorithm], "r")
+        fd_algo = open(file_list[index], "r")
         fd_algo.readline() # remove header
         fd_algo.readline() # remove header
 

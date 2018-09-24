@@ -3,16 +3,16 @@
 
 just_ground_truth = False
 
+#output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
+output_folder = '/local/tmp/eaes/'
 
-file_LK = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_LK.yml"
-file_FB = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_FB.yml"
-file_TVL = "/local/git/MotionFlowPriorityGraphSensors/project/main/values_TVL.yml"
+dataset = "vires"
+scenario = "two"
 
-dict_file_map = {
-    "FB" : file_FB,
-    "LK" : file_LK,
-    "TVL" : file_TVL
-}
+file_list = list()
+
+file_final = "/local/git/MotionFlowPriorityGraphSensors/project/main_python/values.yml"
+
 
 dict_datafilters = {
     "ground_truth": "ground truth",
@@ -53,12 +53,18 @@ parameter_list_extended = [["sroi_total_pixel", "total_pixel" ], ["sroi_l2_cumul
 datafilter_list  = [ "0", ]
 
 algorithm_list   = ["LK", "FB",]
-algorithm_list   = ["FB",]
-algorithm_list   = ["FB", "TVL", "LK"]
+#algorithm_list   = ["FB",]
+#algorithm_list   = ["FB", "TVL", "LK"]
+
+file_ground_truth = "/local/git/MotionFlowPriorityGraphSensors/datasets/" + dataset + "_dataset/data/stereo_flow/two/ground_truth/values_ground_truth.yml"
+
+for algorithm in algorithm_list:
+    file_list.append("/local/git/MotionFlowPriorityGraphSensors/datasets/" + dataset + "_dataset/results/stereo_flow/two/results_" + algorithm + "_blue_sky_30_1/values_" + algorithm + ".yml")
 
 noise_list = ["blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 noise_list = ["blue_sky", "heavy_snow",]
 noise_list = ["blue_sky",]
+
 
 sensor_list      = [0, 1, 2]
 sensor_list      = [0, ]

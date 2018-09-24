@@ -420,7 +420,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     gt_flow.rerun_optical_flow_algorithm_interpolated();
                     gt_flow.find_ground_truth_object_special_region_of_interest();
-                    fs_ground_truth.open((std::string("../values_ground_truth") + std::string(".yml")), cv::FileStorage::WRITE);
+                    fs_ground_truth.open((gt_flow.getGeneratePath() + std::string("/values_ground_truth.yml")) , cv::FileStorage::WRITE);
 
                     for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
                         ptr_list_of_gt_objects_base.at(obj_index)->generate_object_mean_centroid_displacement(
@@ -507,7 +507,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                     } else if (Dataset::m_algorithm_map["FB"] && FB) {
 
-                        fs_algorithm.open((std::string("../values_FB") + std::string(".yml")), cv::FileStorage::WRITE);
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
@@ -516,7 +515,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                     } else if (Dataset::m_algorithm_map["TVL"] && TVL) {
 
-                        fs_algorithm.open((std::string("../values_TVL") + std::string(".yml")), cv::FileStorage::WRITE);
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
                         found = true;
                         if (env_index == (environment_list.size() - 1)) {
@@ -525,7 +523,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                     } else if (Dataset::m_algorithm_map["SF"] && SF) {
 
-                        fs_algorithm.open((std::string("../values_SF") + std::string(".yml")), cv::FileStorage::WRITE);
                         //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["SF"]));
                         found = true;
