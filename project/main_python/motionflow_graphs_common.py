@@ -75,7 +75,7 @@ class Figures(object):
                 y_axis_data = plot_data[x].get_y_axis()
 
                 print "-------------"
-                env_index = plot_data[x].get_env_index()
+                env_index = plot_data[x].get_noise()
                 legend = plot_data[x].get_map_to_data()
                 print env_index, measuring_parameter
 

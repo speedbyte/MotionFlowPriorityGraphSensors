@@ -59,7 +59,7 @@ class PlotData(object):
     def get_sensor_index(self):
         return self.sensor_index
 
-    def get_env_index(self):
+    def get_noise(self):
         return self.noise
 
     def get_step_size(self):
