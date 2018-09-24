@@ -62,7 +62,6 @@ class Figures(object):
         print plot_data
         for figure_index in range(1):
 
-            measuring_parameter = plot_data[figure_index].get_measuring_parameter()
             self.list_of_plots[figure_index].set_xlabel(plot_data[figure_index].get_x_label())
             self.list_of_plots[figure_index].set_ylabel(plot_data[figure_index].get_y_label())
 
@@ -71,12 +70,13 @@ class Figures(object):
 
             for x in range(len(plot_data)):
 
+                measuring_parameter = plot_data[x].get_measuring_parameter()
                 x_axis_data = plot_data[x].get_x_axis()
                 y_axis_data = plot_data[x].get_y_axis()
 
                 print "-------------"
                 env_index = plot_data[x].get_env_index()
-                print env_index
+                print env_index, measuring_parameter
 
                 x_axis_limits = plot_data[x].get_x_axis_limits()
                 y_axis_limits = plot_data[x].get_y_axis_limits()
@@ -173,16 +173,16 @@ class Figures(object):
         print summary_dict
         for sensor_index in sensor_list:
 
-            assert(noise_list[0] != "ground_truth")
             print "---------------------------"
 
             if just_ground_truth is True:
                 environment = ["ground_truth"]
             else:
-                if ( extended is False ):
-                    environment = ["ground_truth"]
+                if ( extended is True ):
+                    pass
+                    # try to remove ground_truth from noise_list
                 else:
-                    environment = []
+                    environment = ["ground_truth"]
                 for noise in noise_list:
                     environment.append(noise)
 

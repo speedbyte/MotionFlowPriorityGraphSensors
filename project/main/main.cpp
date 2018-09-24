@@ -25,6 +25,7 @@
 
 //TODO
 
+// all python plot data first and then mix them as per requirement
 // stich images python plot automatically - DONE
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // interpolate using splash mechanism ( bilateral filter )
