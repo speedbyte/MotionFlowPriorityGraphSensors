@@ -17,11 +17,10 @@ file_final = "/local/git/MotionFlowPriorityGraphSensors/project/main_python/valu
 
 
 dict_parameter_extended = {
-    "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels" : "percentage of sroi pixels error to total pixels error" ,
-
-    "extended_sroi_total_pixel_eroi_total_pixel" : "percentage of sroi pixels to total pixels",
+    "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels" : "percentage of sroi pixels error to eroi pixels error" ,
+    "extended_sroi_total_pixel_eroi_total_pixel" : "percentage of sroi pixels to eroi pixels",
     "sroi_total_pixel" : "number of pixels in the special roi",
-    "eroi_total_pixel" : "total number of pixels"
+    "eroi_total_pixel" : "number of pixels in the entire roi",
 
 }
 
@@ -58,8 +57,8 @@ configuration_list_extended  = [["extended_sroi_total_pixel_eroi_total_pixel_FB_
 
 parameter_list = [ ]
 #parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels","ma_total_good_pixels", "algorithm_sroi_pixels"]
-#parameter_list = ["total_pixel", "l2_cumulative_error_good_pixels", "sroi_total_pixel", "ma_cumulative_error_good_pixels", "sroi_l2_cumulative_error_good_pixels",]
-parameter_list = ["eroi_total_pixel", "sroi_total_pixel", ]
+parameter_list = ["eroi_total_pixel", "eroi_l2_cumulative_error_all_pixels", "sroi_total_pixel", "eroi_ma_cumulative_error_all_pixels", "sroi_l2_cumulative_error_all_pixels",]
+#parameter_list = ["eroi_total_pixel", "sroi_total_pixel", ]
 parameter_list_extended = [["sroi_total_pixel", "eroi_total_pixel" ], ["sroi_l2_cumulative_error_all_pixels", "eroi_l2_cumulative_error_all_pixels" ],] #"sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels", "collision", ]
 #parameter_list_extended = [ ]
 
