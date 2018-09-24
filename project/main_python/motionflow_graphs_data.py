@@ -42,20 +42,20 @@ y_axis_label_dict = {
 
 }
 
-configuration_list = [["total_pixel", "sroi_total_pixel"], ["sroi_total_pixel"]]
+configuration_list = [["total_pixel_FB_ground_truth_1_0", "total_pixel_FB_blue_sky_1_0", "sroi_total_pixel_FB_blue_sky_1_0"], ["total_pixel_LK_ground_truth_1_0", "total_pixel_LK_blue_sky_1_0", "sroi_total_pixel_LK_blue_sky_1_0"]]
 
 parameter_list = [ ]
 #parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels","ma_total_good_pixels", "algorithm_sroi_pixels"]
 #parameter_list = ["total_pixel", "l2_cumulative_error_good_pixels", "sroi_total_pixel", "ma_cumulative_error_good_pixels", "sroi_l2_cumulative_error_good_pixels",]
-parameter_list = ["total_pixel", "sroi_total_pixel"]
+parameter_list = ["total_pixel", "sroi_total_pixel", ]
 parameter_list_extended = [["sroi_total_pixel", "total_pixel" ], ["sroi_l2_cumulative_error_all_pixels", "l2_cumulative_error_all_pixels" ], ["l2_cumulative_distance_good_pixels", "l2_total_good_pixels" ]] #"sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels", "collision", ]
 parameter_list_extended = [ ]
 
 
 datafilter_list  = [ "0", ]
 
-#algorithm_list   = ["LK", "FB",]
-algorithm_list   = ["FB",]
+algorithm_list   = ["LK", "FB",]
+#algorithm_list   = ["FB",]
 #algorithm_list   = ["FB", "TVL", "LK"]
 
 file_ground_truth = "/local/git/MotionFlowPriorityGraphSensors/datasets/" + dataset + "_dataset/data/stereo_flow/two/ground_truth/values_ground_truth.yml"

@@ -49,7 +49,7 @@ def plot_at_once(figures_plot_array_all):
     figures.save_figure(figures_plot_array_all[0].get_measuring_parameter(), figures_plot_array_all[0].get_algorithm(), figures_plot_array_all[0].get_step_size(), figures_plot_array_all[0].get_sensor_index())
 
 
-def plot_at_once_summary(bargraph_summary_list_each_parameter_collect, parameter, extended=False):
+def plot_at_once_summary(parameter, bargraph_summary_list_each_parameter_collect, extended=False):
     figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
     flatten_bargraph_summary_list_each_parameter_collect = dict()
@@ -107,18 +107,11 @@ if __name__ == '__main__':
 
         print "PARAMETER ----- ", parameter
 
-        bargraph_summary_list_each_parameter_collect = list()
-
         for sensor_index in sensor_list:
 
             for algorithm in algorithm_list:
 
-                sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm)
-                sensor_data_plot_object.set_measuring_parameter(parameter)
-
-                plot_mapping_gt = sensor_data_plot_object.templateToYamlMapping_GT()
-
-                parameter_plot_all_noise_each_parameter = list()
+                sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter)
 
                 for step_size in step_list:
 
@@ -126,18 +119,19 @@ if __name__ == '__main__':
                     print "---------------------------"
 
                     if just_ground_truth is True:
-                        environment = ["ground_truth"]
-                        plot_mapping = plot_mapping_gt
+                        noise_list = ["ground_truth"]
 
-                    else:
-                        for noise in noise_list:
-                            if noise is "ground_truth":
-                                plot_mapping = plot_mapping_gt
-                            else:
-                                plot_mapping = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
+                    for noise in noise_list:
+                        if noise is "ground_truth":
+                            plot_mapping = sensor_data_plot_object.templateToYamlMapping_GT()
+                        else:
+                            plot_mapping = sensor_data_plot_object.templateToYamlMapping(noise, step_size)
 
-                            plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping, parameter, sensor_index, noise, str(step_size), 0, x_label="frame_number", y_label="dummy" )
-                            plotgraph_list_all_parameter_collect.append(plot_data)
+                        plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping, noise, str(step_size), datafilter_index=0, x_label="frame_number", y_label="dummy" )
+                        plotgraph_list_all_parameter_collect.append(plot_data)
+                        if ( sensor_data_plot_object.get_summary() not in bargraph_summary_list_all_parameter_collect):
+                            val = sensor_data_plot_object.get_summary()
+                            bargraph_summary_list_all_parameter_collect.append([parameter, sensor_data_plot_object.get_summary()])
 
                     if just_ground_truth is True:
                         break
@@ -145,27 +139,23 @@ if __name__ == '__main__':
                 print "---------------------------"
 
                 # store the summary for future use:
-                bargraph_summary_list_each_parameter_collect.append(sensor_data_plot_object.get_summary())
 
         # we are still in each parameter
-        bargraph_summary_list_all_parameter_collect.append([bargraph_summary_list_each_parameter_collect, parameter])
 
     # plot_at_once plots and saves one figure for a single parameter per sensor
-    if ( 1 ):
-        # now make pairs.. whatever you want to get printed in one figure.
-        # i will print total_pixel_gt and blue_sky and sroi gt and blue sky in one graph
+    # now make pairs.. whatever you want to get printed in one figure.
+    # i will print total_pixel_gt and blue_sky and sroi gt and blue sky in one graph
 
-        for configuration in configuration_list:
-            reshape_plotgraph_list = list()
-            for individual_plots in plotgraph_list_all_parameter_collect:
-                if ( individual_plots.get_measuring_parameter() in configuration ):
-                    reshape_plotgraph_list.append(individual_plots)
-            if (len(reshape_plotgraph_list) > 0 ):
-                plot_at_once(reshape_plotgraph_list)
+    for configuration in configuration_list:
+        reshape_plotgraph_list = list()
+        for individual_plots in plotgraph_list_all_parameter_collect:
+            if ( individual_plots.get_map_to_data() in configuration ):
+                reshape_plotgraph_list.append(individual_plots)
+        if (len(reshape_plotgraph_list) > 0 ):
+            plot_at_once(reshape_plotgraph_list)
 
-        for each_plot_bar in bargraph_summary_list_all_parameter_collect:
-            parameter = each_plot_bar[1]
-            plot_at_once_summary(each_plot_bar[0], parameter)
+    #for each_plot_bar in bargraph_summary_list_all_parameter_collect:
+        #plot_at_once_summary(each_plot_bar[0], each_plot_bar[1])
 
 
     plotgraph_list_all_parameter_collect_extended = list()

@@ -15,7 +15,7 @@ OUTLIER = 100000
 
 class PlotData(object):
 
-    def __init__(self, plot1, algorithm, measuring_parameter, sensor_index, noise, stepSize, x_label, y_label):
+    def __init__(self, plot1, algorithm, measuring_parameter, map_to_data, sensor_index, noise, stepSize, x_label, y_label):
         self.plot1 = plot1
         self.measuring_parameter = measuring_parameter
         self.sensor_index = sensor_index
@@ -24,6 +24,10 @@ class PlotData(object):
         self.x_label = x_label
         self.y_label = y_label
         self.algorithm = algorithm
+        self.map_to_data = map_to_data
+
+    def get_map_to_data(self):
+        return self.map_to_data
 
     def get_x_axis(self):
         return self.plot1[2]
@@ -66,11 +70,11 @@ class PlotData(object):
 
 class SensorDataPlot(object):
 
-    def __init__(self, sensor_index, algorithm):
+    def __init__(self, sensor_index, algorithm, parameter):
         self.summary_mean = dict()
         self.sensor_index = sensor_index
         self.algorithm = algorithm
-        self.measuring_parameter = None
+        self.measuring_parameter = parameter
 
     def get_algorithm(self):
         return self.algorithm
@@ -103,7 +107,7 @@ class SensorDataPlot(object):
         return (temp_name)
 
 
-    def extract_plot_data_from_data_list(self, yaml_file_data, custom_data_list_name, measuring_parameter, sensor_index, noise, stepSize, datafilter_index, x_label, y_label):
+    def extract_plot_data_from_data_list(self, yaml_file_data, custom_data_list_name, noise, stepSize, datafilter_index, x_label, y_label):
 
         figures_plot = list()
 
@@ -115,7 +119,7 @@ class SensorDataPlot(object):
 
         if ( "extended" not in custom_data_list_name ):
             data_points = yaml_file_data[custom_data_list_name]
-            x_axis, y_axis = self.getSingleVal(data_points, measuring_parameter)
+            x_axis, y_axis = self.getSingleVal(data_points, self.measuring_parameter)
 
         else:
             x_axis = yaml_file_data[0]
@@ -139,30 +143,27 @@ class SensorDataPlot(object):
 
         lower_y = min(numpy.nanmin(y_axis), lower_y)
         upper_y = max(numpy.nanmax(y_axis), upper_y)
-        map_to_data = measuring_parameter + '_' + self.algorithm + '_' + noise + '_' + str(stepSize) + '_' + str(self.sensor_index)
+        map_to_data = self.measuring_parameter + '_' + self.algorithm + '_' + noise + '_' + str(stepSize) + '_' + str(self.sensor_index)
 
         plot1 = ['x_axis',
                  'y_axis',
                  x_axis,
                  y_axis,
                  map_to_data,
-                 #measuring_parameter + " " + dict_datafilters["datafilter_" + str(datafilter_index)] + " step size" + " " + str(stepSize), #title
                  [lower_x, upper_x],
                  [lower_y, upper_y]
                  ]
 
-        print "Table " + measuring_parameter + " robustness for " + noise
-        mean_list = list()
+        print "Table " + self.measuring_parameter + " robustness for " + noise
 
-        mean_list.append(y_axis_mean)
 
         # the mean_list contains all the datafilter in order ground truth, 0, 1, 2
         lock.acquire()
-        print map_to_data, y_axis_mean
-        self.summary_mean[map_to_data] = mean_list
+        print "summarizing" , map_to_data, y_axis_mean
+        self.summary_mean[map_to_data] = y_axis_mean
         lock.release()
 
-        plotData = PlotData(plot1, self.algorithm, measuring_parameter, sensor_index, noise, stepSize, x_label, y_label)
+        plotData = PlotData(plot1, self.algorithm, self.measuring_parameter, map_to_data, self.sensor_index, noise, stepSize, x_label, y_label)
         return plotData
 
 

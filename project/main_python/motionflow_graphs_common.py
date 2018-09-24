@@ -76,6 +76,7 @@ class Figures(object):
 
                 print "-------------"
                 env_index = plot_data[x].get_env_index()
+                legend = plot_data[x].get_map_to_data()
                 print env_index, measuring_parameter
 
                 x_axis_limits = plot_data[x].get_x_axis_limits()
@@ -107,7 +108,7 @@ class Figures(object):
                     line1 = self.list_of_plots[figure_index].plot(x_axis_data,
                                                                   y_axis_data/SCALE, 'ko-', lw=1,
                                                                   color=dict_color_noise[env_index],
-                                                                  label=dict_label_noise[env_index])
+                                                                  label=legend)
 
                 self.list_of_plots[figure_index].legend(loc='upper right', fontsize='small')
                 self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
