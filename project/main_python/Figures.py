@@ -1,23 +1,13 @@
 #!/usr/bin/env python
 # _*_ encoding=utf-8 _*_
 
+import matplotlib
+matplotlib.use('Agg')
 
-
-import yaml
-from mpl_toolkits.mplot3d import axes3d
-import matplotlib as mpl
 import matplotlib.pyplot as plt
-import plotly.tools as tls
-
 import numpy as np
-
 from motionflow_graphs_data import *
 
-
-#output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
-output_folder = '/local/tmp/eaes/'
-
-SCALE = 1
 
 class Figures(object):
 
@@ -48,8 +38,8 @@ class Figures(object):
             self.ax4 = self.fig4.add_subplot(111)
             self.list_of_plots.append(self.ax4)
 
-        #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
-        #self.fig1.set_size_inches(18.5, 10.5)
+            #plt.suptitle("Deviation of collision points between ground truth and scenes without noise")
+            #self.fig1.set_size_inches(18.5, 10.5)
 
 
     def plot_3d(self, plot_number):
@@ -57,7 +47,7 @@ class Figures(object):
         self.ax.plot(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
 
 
-    def plot_all(self, plot_data):
+    def pointgraph_pixel(self, plot_data):
 
         print plot_data
         for figure_index in range(1):
@@ -87,16 +77,16 @@ class Figures(object):
                     if ( measuring_parameter == "collision" ) :
                         s = np.argsort(plot_data[figure_index][2][x])
                         line1 = self.list_of_plots[figure_index].plot(plot_data[figure_index][2][x][s],
-                                                                  plot_data[figure_index][3][x][s]/SCALE, 'ko', lw=1,
-                                                                  color=plot_data[figure_index][4][x+env_index],
-                                                                  label=plot_data[figure_index][5][x+env_index])
+                                                                      plot_data[figure_index][3][x][s]/SCALE, 'ko', lw=1,
+                                                                      color=plot_data[figure_index][4][x+env_index],
+                                                                      label=plot_data[figure_index][5][x+env_index])
 
                     else:
 
                         line1 = self.list_of_plots[figure_index].plot(plot_data[x][2],
-                                                            plot_data[x][3]/SCALE, 'ko', lw=1,
-                                                            color=plot_data[x][4][env_index],
-                                                            label=plot_data[x][5][env_index])
+                                                                      plot_data[x][3]/SCALE, 'ko', lw=1,
+                                                                      color=plot_data[x][4][env_index],
+                                                                      label=plot_data[x][5][env_index])
                 elif ( measuring_parameter == "deviation" ) :
                     line1 = self.list_of_plots[figure_index].plot(x_axis_data,
                                                                   y_axis_data/SCALE, 'ko-', lw=1,
@@ -162,6 +152,7 @@ class Figures(object):
 
         # each group member is positioned at bar position. hence array of group members and array of bar_position should be equal.
 
+
         n_groups = len(algorithm_list)
         bar_width = 0.1
         opacity = 0.4
@@ -177,24 +168,21 @@ class Figures(object):
             print "---------------------------"
 
             if just_ground_truth is True:
-                environment = ["ground_truth"]
-            else:
-                environment = list()
-                for noise in noise_list:
-                    environment.append(noise)
+                raise RuntimeError
+                #noise_list = ["ground_truth"]
 
-            for n_env, val_env in enumerate(environment):
-                #for n_env, step_size in enumerate(step_list):
+            for n_noise, val_noise in enumerate(noise_list):
+                #for n_noise, step_size in enumerate(step_list):
                 regroup = len(index)*[0]
                 shift = shift+1
                 for p, algorithm in enumerate(algorithm_list):
-                    map_to_data = measuring_parameter + '_' + algorithm + '_' + val_env + '_' + str(step_list[0]) + '_' + str(sensor_index)
+                    map_to_data = measuring_parameter + '_' + algorithm + '_' + val_noise + '_' + str(step_list[0]) + '_' + str(sensor_index)
                     print map_to_data
                     regroup[p] = summary_dict[map_to_data]
                 bar_positions = index + (shift*bar_width)
                 print bar_positions
-                rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n_env+1], edgecolor='black')
-                rects1.set_label(val_env)
+                rects1 = self.list_of_plots[0].bar(bar_positions, regroup, bar_width, color=color_list_algorithms[n_noise+1], edgecolor='black')
+                rects1.set_label(val_noise)
 
             if just_ground_truth is True:
                 break
@@ -203,10 +191,9 @@ class Figures(object):
         #plt.title('Pixel Density in Blue Sky, Light Snow, Mild Snow and Heavy Snow')
         self.list_of_plots[0].set_xticks(index + 2*bar_width)
         self.list_of_plots[0].set_xticklabels(algorithm_list, rotation=90)
-        #self.list_of_plots[0].legend()
+        self.list_of_plots[0].legend()
         self.list_of_plots[0].set_xlabel('Result of data processing algorithms in various snow intensity and pixel density')
-
-        self.list_of_plots[0].set_ylabel('Average Jaccard index of displacement vectors over all frames')
+        self.list_of_plots[0].set_ylabel(measuring_parameter)
 
         #self.list_of_plots[0].tight_layout()
 
@@ -293,30 +280,3 @@ class Figures(object):
         self.list_of_plots[0].legend()
 
         #self.list_of_plots[0].tight_layout()
-
-
-class YAMLParser(object):
-
-    def __init__(self, filename):
-        self.file = filename
-        self.yaml_file = open(self.file, "r")
-        check = self.yaml_file.readline()
-        print "yaml check" , check
-        if ("YAML:1.0" in check ):
-            read_yaml_file = self.yaml_file.read().replace('YAML:1.0', 'YAML 1.0')
-            read_yaml_file = read_yaml_file.replace(':', ': ')
-            read_yaml_file = read_yaml_file.replace('.Inf', '.nan')
-            self.yaml_file.close()
-            self.yaml_file = open(self.file, "w")
-            self.yaml_file.write(read_yaml_file)
-            self.yaml_file.close()
-
-
-    def close(self):
-        if ( self.yaml_file != None ):
-            self.yaml_file.close()
-
-    def load(self):
-        yaml_load = yaml.load(open(self.file))
-        return yaml_load
-

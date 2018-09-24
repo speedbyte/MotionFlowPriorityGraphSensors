@@ -1,4 +1,11 @@
 
+
+from mpl_toolkits.mplot3d import axes3d
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import plotly.tools as tls
+
+
 delete_point_array = numpy.array([-65535])
 index_x0_gt_sorted = numpy.argsort(x0_gt)
 
@@ -132,7 +139,7 @@ if ( thread_deviation != None ):
 
                 plot_at_once_figures = thread_deviation.getPlotList()
                 collectPlots.append(plot_at_once_figures)
-                plot_at_once(plot_at_once_figures, sensor_plot.getSensorIndex())
+                plot_at_once_pointgraph(plot_at_once_figures, sensor_plot.getSensorIndex())
 
                 # summary
                 summary = sensor_plot.get_summary()

@@ -4,15 +4,16 @@
 
 import numpy as np
 import os
-import matplotlib
-matplotlib.use('Agg')
+
+from Figures import Figures
+
 
 import cv2
 
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
-from motionflow_graphs_common import Figures, YAMLParser
+from YAMLParser import YAMLParser
 from SensorDataPlot import SensorDataPlot
 from motionflow_graphs_data import *
 
@@ -24,7 +25,7 @@ import time
 SCALE = 1
 
 
-def plot_at_once(figures_plot_array_all):
+def plot_at_once_pointgraph(figures_plot_array_all):
 
     print "plot_at_once---------------------------"
     print figures_plot_array_all
@@ -43,13 +44,13 @@ def plot_at_once(figures_plot_array_all):
 
     # plot the figure in numpy cache.
     figures = Figures(1)
-    figures.plot_all(figures_plot_array_all)
+    figures.pointgraph_pixel(figures_plot_array_all)
 
     # and lastly save the figure
     figures.save_figure(figures_plot_array_all[0].get_measuring_parameter(), figures_plot_array_all[0].get_algorithm(), figures_plot_array_all[0].get_step_size(), figures_plot_array_all[0].get_sensor_index())
 
 
-def plot_at_once_summary(parameter, bargraph_summary_list_each_parameter_collect, extended=False):
+def plot_at_once_bargraph(parameter, bargraph_summary_list_each_parameter_collect, extended=False):
 
     figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
@@ -140,7 +141,7 @@ if __name__ == '__main__':
                 print "---------------------------"
 
         # store the summary for future use:
-        plot_at_once_summary(parameter, bargraph_summary_list_all_parameter_collect)
+        plot_at_once_bargraph(parameter, bargraph_summary_list_all_parameter_collect)
 
         # we are still in each parameter
 
@@ -202,7 +203,7 @@ if __name__ == '__main__':
                         val = plot_data.get_summary()
                         bargraph_summary_list_all_parameter_extended_collect.append(val)
 
-        plot_at_once_summary(parameter_extended, bargraph_summary_list_all_parameter_extended_collect)
+        plot_at_once_bargraph(parameter_extended, bargraph_summary_list_all_parameter_extended_collect)
 
 
 
@@ -212,7 +213,7 @@ if __name__ == '__main__':
             if ( individual_plots.get_map_to_data() in configuration ):
                 reshape_plotgraph_list.append(individual_plots)
         if (len(reshape_plotgraph_list) > 0 ):
-            plot_at_once(reshape_plotgraph_list)
+            plot_at_once_pointgraph(reshape_plotgraph_list)
         else:
             print configuration + " is not found !!!!!! "
 
@@ -223,7 +224,7 @@ if __name__ == '__main__':
             if ( individual_plots.get_map_to_data() in configuration ):
                 reshape_plotgraph_list.append(individual_plots)
         if (len(reshape_plotgraph_list) > 0 ):
-            plot_at_once(reshape_plotgraph_list)
+            plot_at_once_pointgraph(reshape_plotgraph_list)
         else:
             print configuration + " is not found !!!!!! "
 

@@ -2,11 +2,13 @@
 # _*_ encoding:utf-8 _*_
 
 just_ground_truth = False
+SCALE = 1
+OUTLIER = 100000
 
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
-dataset = "vires"
+dataset = "cpp"
 scenario = "two"
 
 file_list = list()
@@ -55,9 +57,9 @@ parameter_list_extended = [["sroi_total_pixel", "total_pixel" ], ["sroi_l2_cumul
 
 datafilter_list  = [ "0", ]
 
-algorithm_list   = ["LK", "FB",]
+#algorithm_list   = ["LK", "FB",]
 #algorithm_list   = ["FB",]
-#algorithm_list   = ["FB", "TVL", "LK"]
+algorithm_list   = ["FB", "TVL", "LK"]
 
 file_ground_truth = "/local/git/MotionFlowPriorityGraphSensors/datasets/" + dataset + "_dataset/data/stereo_flow/two/ground_truth/values_ground_truth.yml"
 

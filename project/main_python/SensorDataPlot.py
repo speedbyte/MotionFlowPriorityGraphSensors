@@ -1,78 +1,12 @@
+#!/usr/bin/env python
+# _*_ encoding=utf-8 _*_
 
-
-import numpy
-from motionflow_graphs_common import Figures, YAMLParser
+import numpy as np
+from PlotData import PlotData
 from motionflow_graphs_data import *
 
 import threading
-
 lock = threading.BoundedSemaphore()
-
-
-
-OUTLIER = 100000
-
-
-class PlotData(object):
-
-    def __init__(self, plot1, algorithm, measuring_parameter, map_to_data, sensor_index, noise, stepSize, x_label, y_label, y_axis_mean):
-        self.plot1 = plot1
-        self.measuring_parameter = measuring_parameter
-        self.sensor_index = sensor_index
-        self.noise = noise
-        self.stepSize = stepSize
-        self.x_label = x_label
-        self.y_label = y_label
-        self.algorithm = algorithm
-        self.map_to_data = map_to_data
-        self.y_axis_mean = y_axis_mean
-        self.summary_mean = dict()
-        self.summary_mean[map_to_data] = y_axis_mean
-
-    def get_summary(self):
-        return self.summary_mean
-
-    def get_map_to_data(self):
-        return self.map_to_data
-
-    def get_x_axis(self):
-        return self.plot1[2]
-
-    def get_y_axis(self):
-        return self.plot1[3]
-
-    def get_x_axis_limits(self):
-        return self.plot1[5]
-
-    def get_y_axis_limits(self):
-        return self.plot1[6]
-
-    def set_x_axis_limits(self, limits):
-        self.plot1[5] = limits
-
-    def set_y_axis_limits(self, limits):
-        self.plot1[6] = limits
-
-    def get_measuring_parameter(self):
-        return self.measuring_parameter
-
-    def get_sensor_index(self):
-        return self.sensor_index
-
-    def get_noise(self):
-        return self.noise
-
-    def get_step_size(self):
-        return self.stepSize
-
-    def get_x_label(self):
-        return self.x_label
-
-    def get_y_label(self):
-        return self.y_label
-
-    def get_algorithm(self):
-        return self.algorithm
 
 class SensorDataPlot(object):
 
@@ -144,11 +78,11 @@ class SensorDataPlot(object):
         else:
             y_axis_mean = 0
 
-        lower_x = min(numpy.nanmin(x_axis), lower_x)
-        upper_x = max(numpy.nanmax(x_axis), upper_x)
+        lower_x = min(np.nanmin(x_axis), lower_x)
+        upper_x = max(np.nanmax(x_axis), upper_x)
 
-        lower_y = min(numpy.nanmin(y_axis), lower_y)
-        upper_y = max(numpy.nanmax(y_axis), upper_y)
+        lower_y = min(np.nanmin(y_axis), lower_y)
+        upper_y = max(np.nanmax(y_axis), upper_y)
         map_to_data = self.measuring_parameter + '_' + self.algorithm + '_' + noise + '_' + str(stepSize) + '_' + str(self.sensor_index)
 
         plot1 = ['x_axis',
@@ -186,7 +120,7 @@ class SensorDataPlot(object):
             data.append(xy)
 
         y_axis_mean = 0
-        data = numpy.array(data)
+        data = np.array(data)
         x0, y0 = data.T
         x_axis = x0
         y_axis = y0
@@ -235,10 +169,10 @@ class SensorDataPlot(object):
                     data.append([xy["frame_number"], xy[measuring_parameter]])
             count = count + 2
 
-        data_ = numpy.array(data)
+        data_ = np.array(data)
         a,b = data_.T
-        x_axis = numpy.array(a)
-        y_axis = numpy.array(b)
+        x_axis = np.array(a)
+        y_axis = np.array(b)
         new_x_axis = list()
         new_y_axis = list()
         pre_val = -1
@@ -251,8 +185,8 @@ class SensorDataPlot(object):
             else:
                 new_y_axis[new_index] = new_y_axis[new_index] + y_axis[index]
             pre_val = val
-        x_axis = numpy.array(new_x_axis)
-        y_axis = numpy.array(new_y_axis)
+        x_axis = np.array(new_x_axis)
+        y_axis = np.array(new_y_axis)
 
         assert(x_axis.size == y_axis.size)
         return x_axis, y_axis
