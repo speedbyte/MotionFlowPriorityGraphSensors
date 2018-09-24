@@ -139,7 +139,7 @@ if __name__ == '__main__':
                         
                 print "---------------------------"
 
-                # store the summary for future use:
+        # store the summary for future use:
         plot_at_once_summary(parameter, bargraph_summary_list_all_parameter_collect)
 
         # we are still in each parameter
@@ -156,73 +156,65 @@ if __name__ == '__main__':
         if (len(reshape_plotgraph_list) > 0 ):
             plot_at_once(reshape_plotgraph_list)
 
-
-
     plotgraph_list_all_parameter_collect_extended = list()
-    bargraph_summary_list_all_parameter_collect_extended = list()
-
 
     for n, parameter in enumerate(parameter_list_extended):
         # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
-        parameter_plot_all_noise_each_parameter = list()
-        plotgraph_list_each_parameter_collect = list()
-
-        bargraph_summary_list_each_parameter_collect = list()
+        bargraph_summary_list_all_parameter_collect = list()
 
         print "PARAMETER EXTENDED ----- ", parameter
 
         for algorithm in algorithm_list:
+
             for each_plot in plotgraph_list_all_parameter_collect:
-                for figures_plot_array in each_plot:
 
-                    for final_data in figures_plot_array:
+                if ( each_plot.get_algorithm() is algorithm and  each_plot.get_sensor_index() == 0 ):
 
-                        if ( final_data.get_algorithm() is algorithm and  final_data.get_sensor_index() == 0 ):
+                    algorithm = each_plot.get_algorithm()
+                    sensor_index = each_plot.get_sensor_index()
+                    step_size = 1
+                    env = each_plot.get_env_index()
 
-                            algorithm = final_data.get_algorithm()
-                            sensor_index = final_data.get_sensor_index()
-                            step_size = 1
-                            env = final_data.get_env_index()
+                    if ( parameter[0] is each_plot.get_measuring_parameter()):
+                        first_parameter = each_plot
+                        print "parameter ", each_plot.get_measuring_parameter()
+                        print "step size ", each_plot.get_step_size()
+                        x_axis_1 = each_plot.get_x_axis()
+                        y_axis_1 = each_plot.get_y_axis()
+                    elif ( parameter[1] is each_plot.get_measuring_parameter()):
+                        second_parameter = each_plot
+                        print "parameter ", each_plot.get_measuring_parameter()
+                        print "step size ", each_plot.get_step_size()
+                        x_axis_2 = each_plot.get_x_axis()
+                        y_axis_2 = each_plot.get_y_axis()
 
-                            if ( parameter[0] is final_data.get_measuring_parameter()):
-                                first_parameter = figures_plot_array
-                                print "parameter ", final_data.get_measuring_parameter()
-                                print "step size ", final_data.get_step_size()
-                                x_axis_1 = final_data.get_x_axis()
-                                y_axis_1 = final_data.get_y_axis()
-                            elif ( parameter[1] is final_data.get_measuring_parameter()):
-                                second_parameter = figures_plot_array
-                                print "parameter ", final_data.get_measuring_parameter()
-                                print "step size ", final_data.get_step_size()
-                                x_axis_2 = final_data.get_x_axis()
-                                y_axis_2 = final_data.get_y_axis()
+                if ( first_parameter is not None and second_parameter is not None ):
+                    print "hurrah found data"
+                    sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter)
+                    print y_axis_1
+                    print y_axis_2
+                    new_y_axis = y_axis_1*100.0/y_axis_2
+                    yaml_file_data = [x_axis_1, new_y_axis]
 
-            if ( first_parameter is not None and second_parameter is not None ):
-                print "hurrah found data"
-                sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm)
-                sensor_data_plot_object.set_measuring_parameter(parameter)
-                print y_axis_1
-                print y_axis_2
-                new_y_axis = y_axis_1*100.0/y_axis_2
-                yaml_file_data = [x_axis_1, new_y_axis]
-
-                parameter_extended = "extended_" + parameter[0] + "_" + parameter[1]
-                plot_mapping[0] = "extended"
-
-                plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping[0], parameter_extended, sensor_index, env, str(step_size), 0, x_label="frame_number", y_label="dummy" )
-
-                parameter_plot_all_noise_each_parameter.append(plot_data)
-                plotgraph_list_each_parameter_collect.append(parameter_plot_all_noise_each_parameter)
-                plotgraph_list_all_parameter_collect_extended.append(plotgraph_list_each_parameter_collect)
-
-                bargraph_summary_list_each_parameter_collect.append(sensor_data_plot_object.get_summary())
-                bargraph_summary_list_all_parameter_collect_extended.append([bargraph_summary_list_each_parameter_collect, parameter_extended])
+                    parameter_extended = "extended_" + parameter[0] + "_" + parameter[1]
+                    plot_mapping = "extended"
 
 
-    if ( 1 ):
-        for each_plot in plotgraph_list_all_parameter_collect_extended:
-            plot_at_once(each_plot)
-        for each_plot_bar in bargraph_summary_list_all_parameter_collect_extended:
-            parameter = each_plot_bar[1]
-            plot_at_once_summary(each_plot_bar[0], parameter, True)
+                    plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, plot_mapping, parameter_extended, sensor_index, env, str(step_size), datafilter_index=0, x_label="frame_number", y_label="dummy" )
+                    plotgraph_list_all_parameter_collect.append(plot_data)
+
+                    val = plot_data.get_summary()
+                    bargraph_summary_list_all_parameter_collect.append(val)
+
+        plot_at_once_summary(parameter, bargraph_summary_list_all_parameter_collect)
+
+
+    for configuration in configuration_list_extended:
+        reshape_plotgraph_list = list()
+        for individual_plots in plotgraph_list_all_parameter_collect:
+            if ( individual_plots.get_map_to_data() in configuration ):
+                reshape_plotgraph_list.append(individual_plots)
+        if (len(reshape_plotgraph_list) > 0 ):
+            plot_at_once(reshape_plotgraph_list)
+
