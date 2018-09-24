@@ -15,9 +15,9 @@
 typedef struct {
 
     ushort total_pixel;
-    ushort l1_total_good_pixels;
-    ushort l2_total_good_pixels;
-    ushort ma_total_good_pixels;
+    ushort l1_good_pixels;
+    ushort l2_good_pixels;
+    ushort ma_good_pixels;
 
     float l1_cumulative_error_all_pixels;
     float l2_cumulative_error_all_pixels;

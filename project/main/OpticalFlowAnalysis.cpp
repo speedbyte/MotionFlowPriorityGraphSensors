@@ -274,21 +274,21 @@ std::vector<std::pair<float, float>> OpticalFlow::generate_count_metrics_data(st
             //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             l1_cumulative_error_tolerated += l1_dist_err;
-            count_metrics.l1_total_good_pixels++; // how many valid pixels in the found pixel are actually
+            count_metrics.l1_good_pixels++; // how many valid pixels in the found pixel are actually
         }
         if (
                 (euclidean_dist_err) < DISTANCE_ERROR_TOLERANCE
             //&& (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             l2_cumulative_error_tolerated += euclidean_dist_err;
-            count_metrics.l2_total_good_pixels++; // how many pixels in the found pixel are actually valid
+            count_metrics.l2_good_pixels++; // how many pixels in the found pixel are actually valid
         }
         if (
                 (ma_dist_algo) < DISTANCE_ERROR_TOLERANCE
             // && (angle_err * 180 / CV_PI) < ANGLE_ERROR_TOLERANCE
                 ) {
             ma_cumulative_error_tolerated += ma_dist_algo;
-            count_metrics.ma_total_good_pixels++; // how many pixels in the found pixel are actually valid
+            count_metrics.ma_good_pixels++; // how many pixels in the found pixel are actually valid
         }
 
         gnuplot_xy_pts.push_back(std::make_pair(algo_displacement.x, algo_displacement.y));

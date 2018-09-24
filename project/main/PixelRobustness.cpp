@@ -67,9 +67,9 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                     const std::vector<std::string> algorithm_metrics_strings = {
 
                             "total_pixel",
-                            "l1_total_good_pixels",
-                            "l2_total_good_pixels",
-                            "ma_total_good_pixels",
+                            "l1_good_pixels",
+                            "l2_good_pixels",
+                            "ma_good_pixels",
 
                             "l1_cumulative_error_all_pixels",
                             "l2_cumulative_error_all_pixels",
@@ -81,12 +81,12 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                     };
 
                     // ------------------------------
-                    std::string suffix_algorithm_metrics = "";
+                    std::string suffix_algorithm_metrics = "eroi_";
                     ushort *algorithm_metrics_pointer_metrics_ushort = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).entire_metrics);
                     float *algorithm_metrics_pointer_metrics_float = (float *)(algorithm_metrics_pointer_metrics_ushort+4);
                     char *algorithm_metrics_pointer_metrics_sync_point = (char *)(algorithm_metrics_pointer_metrics_float+6);
                     // ------------------------------
-                    std::string suffix_algorithm_interpolated_metrics = "interpolated_";
+                    std::string suffix_algorithm_interpolated_metrics = "eroi_interpolated_";
                     ushort *algorithm_interpolated_metrics_pointer_metrics_ushort = (ushort *)(&m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).entire_interpolated_metrics);
                     float *algorithm_interpolated_metrics_pointer_metrics_float = (float *)(algorithm_interpolated_metrics_pointer_metrics_ushort+4);
                     char *algorithm_interpolated_metrics_pointer_metrics_sync_point = (char *)(algorithm_interpolated_metrics_pointer_metrics_float+6);
