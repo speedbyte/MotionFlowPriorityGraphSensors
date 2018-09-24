@@ -42,6 +42,8 @@ y_axis_label_dict = {
 
 }
 
+configuration_list = [["total_pixel", "sroi_total_pixel"], ["sroi_total_pixel"]]
+
 parameter_list = [ ]
 #parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels","ma_total_good_pixels", "algorithm_sroi_pixels"]
 #parameter_list = ["total_pixel", "l2_cumulative_error_good_pixels", "sroi_total_pixel", "ma_cumulative_error_good_pixels", "sroi_l2_cumulative_error_good_pixels",]

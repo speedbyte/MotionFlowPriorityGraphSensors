@@ -155,11 +155,13 @@ if __name__ == '__main__':
         # now make pairs.. whatever you want to get printed in one figure.
         # i will print total_pixel_gt and blue_sky and sroi gt and blue sky in one graph
 
-        reshape_plotgraph_list = list()
-        for individual_plots in plotgraph_list_all_parameter_collect:
-            if ( individual_plots.get_measuring_parameter() is "total_pixel"):
-                reshape_plotgraph_list.append(individual_plots)
-            plot_at_once(reshape_plotgraph_list)
+        for configuration in configuration_list:
+            reshape_plotgraph_list = list()
+            for individual_plots in plotgraph_list_all_parameter_collect:
+                if ( individual_plots.get_measuring_parameter() in configuration ):
+                    reshape_plotgraph_list.append(individual_plots)
+            if (len(reshape_plotgraph_list) > 0 ):
+                plot_at_once(reshape_plotgraph_list)
 
         for each_plot_bar in bargraph_summary_list_all_parameter_collect:
             parameter = each_plot_bar[1]
