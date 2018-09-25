@@ -500,33 +500,16 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         ptr_list_of_simulated_objects.push_back(&list_of_simulated_objects.at(obj_index));
                     }
 
-
-
-                    map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list,
-                            noise_list[noise_index], lk,
-                            "LK", list_of_gt_sensors_base,
-                            ptr_list_of_gt_objects_base,
-                            ptr_list_of_simulated_objects_base,
-                            ptr_list_of_simulated_objects,
-                            stepSize, ptr_gt_flow);
-                    map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list,
-                            noise_list[noise_index], fb,
-                            "FB", list_of_gt_sensors_base,
-                            ptr_list_of_gt_objects_base,
-                            ptr_list_of_simulated_objects_base,
-                            ptr_list_of_simulated_objects,
-                            stepSize, ptr_gt_flow);
-                    map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list,
-                            noise_list[noise_index], tvl,
-                            "TVL",
-                            list_of_gt_sensors_base,
-                            ptr_list_of_gt_objects_base,
-                            ptr_list_of_simulated_objects_base,
-                            ptr_list_of_simulated_objects,
-                            stepSize, ptr_gt_flow);
-
                     std::string path;
                     if (Dataset::m_algorithm_map["LK"] && LK) {
+
+                        map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list,
+                                noise_list[noise_index], lk,
+                                "LK", list_of_gt_sensors_base,
+                                ptr_list_of_gt_objects_base,
+                                ptr_list_of_simulated_objects_base,
+                                ptr_list_of_simulated_objects,
+                                stepSize, ptr_gt_flow);
 
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
                         found = true;
@@ -536,6 +519,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                     } else if (Dataset::m_algorithm_map["FB"] && FB) {
 
+                        map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list,
+                                noise_list[noise_index], fb,
+                                "FB", list_of_gt_sensors_base,
+                                ptr_list_of_gt_objects_base,
+                                ptr_list_of_simulated_objects_base,
+                                ptr_list_of_simulated_objects,
+                                stepSize, ptr_gt_flow);
+
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
                         found = true;
                         if (noise_index == (noise_list.size() - 1)) {
@@ -544,6 +535,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                     } else if (Dataset::m_algorithm_map["TVL"] && TVL) {
 
+                        map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list,
+                                noise_list[noise_index], tvl,
+                                "TVL",
+                                list_of_gt_sensors_base,
+                                ptr_list_of_gt_objects_base,
+                                ptr_list_of_simulated_objects_base,
+                                ptr_list_of_simulated_objects,
+                                stepSize, ptr_gt_flow);
                         list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
                         found = true;
                         if (noise_index == (noise_list.size() - 1)) {
@@ -566,7 +565,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
 
 
-
                     if ((Dataset::m_execute_algorithm && cpp_dataset.execute) ||
                         (Dataset::m_execute_algorithm && vires_dataset.execute)) {
 
@@ -582,7 +580,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         list_of_ptr_of_environment_OFalgorithm[noise_index]->run_optical_flow_algorithm(evaluation_list,
                                                                                                       video_frames,
                                                                                                       fps);
-
                         /// combine sensor data
                         if ((evaluation_list.size() + 1 % evaluation_list.size()) > 1) {
                             list_of_ptr_of_environment_OFalgorithm[noise_index]->combine_sensor_data();
