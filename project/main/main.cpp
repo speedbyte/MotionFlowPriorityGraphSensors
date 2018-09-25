@@ -582,19 +582,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         ptr_OF_algorithm->rerun_optical_flow_algorithm_interpolated();
                         ptr_OF_algorithm->generate_sroi_intersections();
 
-                        if (noise_list[noise_index] ==
-                            "blue_sky") { // store the stimulated objects from the ground run.
-                            list_of_simulated_objects_base = list_of_simulated_objects;
-                            ptr_list_of_simulated_objects_base = ptr_list_of_simulated_objects;
-                            for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                                assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
-                            }
-                        }
-                        for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                            assert(ptr_list_of_simulated_objects.at(obj_index)->getObjectId() == obj_index);
-                            //assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
-                        }
-
                         /// generate and save flow vector
                         for (ushort i = 0; i < list_of_simulated_objects.size(); i++) {
                             list_of_simulated_objects.at(i).generate_object_mean_centroid_displacement("algorithm");
@@ -629,6 +616,20 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         tic = steady_clock::now();
 
                     }
+
+                    if (noise_list[noise_index] ==
+                            "blue_sky") { // store the stimulated objects from the ground run.
+                        list_of_simulated_objects_base = list_of_simulated_objects;
+                        // push the objects into the pointer. The pointer here will contain two elements.
+                        for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                            ptr_list_of_simulated_objects_base.push_back(&list_of_simulated_objects_base.at(obj_index));
+                        }
+                    }
+                    for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
+                        assert(ptr_list_of_simulated_objects.at(obj_index)->getObjectId() == obj_index);
+                        assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
+                    }
+
                 }
 
                 //ffmpeg -framerate 10 -pattern_type glob -i '*.png' -r 30 -pix_fmt yuv420p movement.avi
