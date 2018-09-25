@@ -8,7 +8,7 @@ OUTLIER = 100000
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
-dataset = "cpp"
+dataset = "vires"
 scenario = "two"
 
 file_list = list()
@@ -54,29 +54,86 @@ y_axis_label_dict = {
 
 }
 
-configuration_list = [["eroi_total_pixel_FB_ground_truth_1_0", "eroi_total_pixel_FB_blue_sky_1_0", "sroi_total_pixel_FB_blue_sky_1_0"], ["eroi_total_pixel_LK_ground_truth_1_0", "eroi_total_pixel_LK_blue_sky_1_0", "sroi_total_pixel_LK_blue_sky_1_0"]]
+display_list = [
 
-configuration_list_extended  = [["extended_sroi_total_pixel_eroi_total_pixel_FB_ground_truth_1_0"]]
+    [ "sroi_total_pixel_FB_ground_truth_1_0", "eroi_total_pixel_FB_ground_truth_1_0", "sroi_l2_good_pixels_FB_blue_sky_1_0", "sroi_total_pixel_FB_blue_sky_1_0",
+      "eroi_l2_good_pixels_FB_blue_sky_1_0", "eroi_total_pixel_FB_blue_sky_1_0" ],
 
-configuration_list_bargraph = []
+    [ "eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0", "sroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
+     "eroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0", "sroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",],
 
-configuration_list_bargraph_extended = [
+]
+
+display_list_extended  = [
+
+    ["extended_sroi_total_pixel_eroi_total_pixel_FB_ground_truth_1_0"]
+
+]
+
+display_list_bargraph = []
+
+display_list_bargraph_extended = [
     ["extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels"],
     ["extended_sroi_total_pixel_eroi_total_pixel"],
                                        ]
 
+parameter_list = [
 
-parameter_list = [ ]
-#parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels","ma_total_good_pixels", "algorithm_sroi_pixels"]
-parameter_list = ["eroi_total_pixel", "eroi_l2_cumulative_error_all_pixels", "sroi_total_pixel", "eroi_ma_cumulative_error_all_pixels", "sroi_l2_cumulative_error_all_pixels",]
-#parameter_list = ["eroi_total_pixel", "sroi_total_pixel", ]
-parameter_list_extended = [["sroi_total_pixel", "eroi_total_pixel" ], ["sroi_l2_cumulative_error_all_pixels", "eroi_l2_cumulative_error_all_pixels" ],] #"sroi_l2_cumulative_error_all_pixels/l2_cumulative_error_all_pixels", "collision", ]
-#parameter_list_extended = [ ]
+    "eroi_total_pixel",
+    "eroi_l1_good_pixels",
+    "eroi_l2_good_pixels",
+    "eroi_ma_good_pixels",
+    "eroi_l1_cumulative_error_all_pixels",
+    "eroi_l2_cumulative_error_all_pixels",
+    "eroi_ma_cumulative_error_all_pixels",
+    "eroi_l1_cumulative_error_good_pixels",
+    "eroi_l2_cumulative_error_good_pixels",
+    "eroi_ma_cumulative_error_good_pixels",
+    "eroi_interpolated_total_pixel",
+    "eroi_interpolated_l1_good_pixels",
+    "eroi_interpolated_l2_good_pixels",
+    "eroi_interpolated_ma_good_pixels",
+    "eroi_interpolated_l1_cumulative_error_all_pixels",
+    "eroi_interpolated_l2_cumulative_error_all_pixels",
+    "eroi_interpolated_ma_cumulative_error_all_pixels",
+    "eroi_interpolated_l1_cumulative_error_good_pixels",
+    "eroi_interpolated_l2_cumulative_error_good_pixels",
+    "eroi_interpolated_ma_cumulative_error_good_pixels",
+    "sroi_total_pixel",
+    "sroi_l1_good_pixels",
+    "sroi_l2_good_pixels",
+    "sroi_ma_good_pixels",
+    "sroi_l1_cumulative_error_all_pixels",
+    "sroi_l2_cumulative_error_all_pixels",
+    "sroi_ma_cumulative_error_all_pixels",
+    "sroi_l1_cumulative_error_good_pixels",
+    "sroi_l2_cumulative_error_good_pixels",
+    "sroi_ma_cumulative_error_good_pixels",
+    "sroi_interpolated_total_pixel",
+    "sroi_interpolated_l1_good_pixels",
+    "sroi_interpolated_l2_good_pixels",
+    "sroi_interpolated_ma_good_pixels",
+    "sroi_interpolated_l1_cumulative_error_all_pixels",
+    "sroi_interpolated_l2_cumulative_error_all_pixels",
+    "sroi_interpolated_ma_cumulative_error_all_pixels",
+    "sroi_interpolated_l1_cumulative_error_good_pixels",
+    "sroi_interpolated_l2_cumulative_error_good_pixels",
+    "sroi_interpolated_ma_cumulative_error_good_pixels",
+
+]
+
+parameter_list_extended = [
+
+    [ "sroi_total_pixel", "eroi_total_pixel" ],
+    [ "sroi_l2_good_pixels", "sroi_total_pixel" ],
+    [ "eroi_l2_good_pixels", "eroi_total_pixel" ],
+
+    ]
 
 
 datafilter_list  = [ "0", ]
 
-#algorithm_list   = ["LK", "FB",]
+algorithm_list   = ["LK", "FB",]
 #algorithm_list   = ["FB",]
 algorithm_list   = ["FB", "TVL", "LK"]
 
@@ -90,7 +147,6 @@ for noise in noise_list:
     if (  noise is not "ground_truth"):
         for algorithm in algorithm_list:
             file_list.append("/local/git/MotionFlowPriorityGraphSensors/datasets/" + dataset + "_dataset/results/stereo_flow/two/results_" + algorithm + "_" + noise + "_30_1/values_" + algorithm + ".yml")
-
 
 sensor_list      = [0, 1, 2]
 sensor_list      = [0, ]

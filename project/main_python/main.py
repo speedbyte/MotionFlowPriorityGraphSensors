@@ -9,7 +9,7 @@ from motionflow_graphs_data import *
 
 SCALE = 1
 
-def plot_at_once_pointgraph(figures_plot_array_all):
+def plot_at_once_pointgraph(figures_plot_array_all, display_list_index, extended = False):
 
     print "plot_at_once---------------------------"
     print figures_plot_array_all
@@ -31,7 +31,12 @@ def plot_at_once_pointgraph(figures_plot_array_all):
     figures.pointgraph_pixel(figures_plot_array_all)
 
     # and lastly save the figure
-    figures.save_figure(figures_plot_array_all[0].get_measuring_parameter(), "point_graph", figures_plot_array_all[0].get_step_size(), figures_plot_array_all[0].get_sensor_index())
+    if ( extended ):
+        suffix = "point_graph_extended"
+    else:
+        suffix = "point_graph"
+
+    figures.save_figure(suffix, str(display_list_index), figures_plot_array_all[0].get_step_size(), figures_plot_array_all[0].get_sensor_index())
 
 
 def plot_at_once_bargraph(parameter, bargraph_list_each_parameter_collect, extended=False):
@@ -125,7 +130,7 @@ if __name__ == '__main__':
                 print "---------------------------"
 
         # store the summary for future use:
-        for configuration in configuration_list_bargraph:
+        for configuration in display_list_bargraph:
             if ( parameter in configuration ):
                 plot_at_once_bargraph(parameter, bargraph_list_all_parameter_collect, False)
                 break
@@ -194,7 +199,7 @@ if __name__ == '__main__':
 
 
         # store the summary for future use:
-        for configuration in configuration_list_bargraph_extended:
+        for configuration in display_list_bargraph_extended:
             if ( parameter_extended in configuration ):
                 plot_at_once_bargraph(parameter_extended, bargraph_list_all_parameter_extended_collect, True)
                 break
@@ -202,24 +207,24 @@ if __name__ == '__main__':
                 print parameter_extended + " is not found in the configuration list"
 
 
-    for configuration in configuration_list:
+    for index, configuration in enumerate(display_list):
         reshape_plotgraph_list = list()
         for individual_plots in plotgraph_list_all_parameter_collect:
             if ( individual_plots.get_map_to_data() in configuration ):
                 reshape_plotgraph_list.append(individual_plots)
         if (len(reshape_plotgraph_list) > 0 ):
-            plot_at_once_pointgraph(reshape_plotgraph_list)
+            plot_at_once_pointgraph(reshape_plotgraph_list, index)
         else:
-            print configuration + " is not found !!!!!! "
+            print str(configuration) + " is not found !!!!!! "
 
 
-    for configuration in configuration_list_extended:
+    for configuration in display_list_extended:
         reshape_plotgraph_list = list()
         for individual_plots in plotgraph_list_all_parameter_extended_collect:
             if ( individual_plots.get_map_to_data() in configuration ):
                 reshape_plotgraph_list.append(individual_plots)
         if (len(reshape_plotgraph_list) > 0 ):
-            plot_at_once_pointgraph(reshape_plotgraph_list)
+            plot_at_once_pointgraph(reshape_plotgraph_list, 0, True)
         else:
             print configuration + " is not found !!!!!! "
 

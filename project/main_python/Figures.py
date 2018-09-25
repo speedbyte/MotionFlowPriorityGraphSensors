@@ -118,7 +118,7 @@ class Figures(object):
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)
 
 
-    def save_figure(self, measuring_parameter, type_of_graph, stepSize=65535, sensor_index=65535 ):
+    def save_figure(self, type_of_graph, measuring_index, stepSize=65535, sensor_index=65535 ):
 
         if ( stepSize == 65535 ):
             step_suffix = ""
@@ -133,25 +133,25 @@ class Figures(object):
 
         if ( self.figure_index >= 1 ):
 
-            self.fig1.savefig(output_folder + type_of_graph + '_' + measuring_parameter +  step_suffix + sensor_index_suffix, bbox_inches='tight',dpi=200)
+            self.fig1.savefig(output_folder + type_of_graph + '_' + measuring_index +  step_suffix + sensor_index_suffix, bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 2 ):
             step_suffix = dict_datafilters["datafilter_1"] + "stepSize_" + str(stepSize)
             if type_of_graph == "summary":
                 step_suffix = ''
-            self.fig2.savefig(output_folder + measuring_parameter + '_' + type_of_graph + step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
+            self.fig2.savefig(output_folder + measuring_index + '_' + type_of_graph + step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 3 ):
             step_suffix = dict_datafilters["datafilter_2"] + "stepSize_" + str(stepSize)
             if type_of_graph == "summary":
                 step_suffix = ''
-            self.fig3.savefig(output_folder + measuring_parameter + '_' + type_of_graph+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
+            self.fig3.savefig(output_folder + measuring_index + '_' + type_of_graph+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
         if ( self.figure_index >= 4 ):
             step_suffix = dict_datafilters["datafilter_3"] + "stepSize_" + str(stepSize)
             if type_of_graph == "summary":
                 step_suffix = ''
-            self.fig4.savefig(output_folder + measuring_parameter + '_' + type_of_graph+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
+            self.fig4.savefig(output_folder + measuring_index + '_' + type_of_graph+ step_suffix.replace(' ', '_') , bbox_inches='tight',dpi=200)
 
 
     def plot_close_all(self):
