@@ -18,8 +18,8 @@ void OpticalFlow::plot_stencil() {
         COUNT = 1;
     }
     else {
-        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
-            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(m_ptr_list_simulated_objects.at(i)));
+        for ( auto i = 0; i < get_simulated_objects_ptr_list().size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(get_simulated_objects_ptr_list().at(i)));
         }
         ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
         COUNT = (unsigned)ptr_list_of_current_objects.at(
@@ -91,10 +91,10 @@ void OpticalFlow::plot_stencil() {
                     }
                     else {
 
-                        cv::Point2f algo_pts = m_ptr_list_simulated_objects.at(
+                        cv::Point2f algo_pts = get_simulated_objects_ptr_list().at(
                                 obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_pts;
 
-                        cv::Point2f algo_displacement = m_ptr_list_simulated_objects.at(
+                        cv::Point2f algo_displacement = get_simulated_objects_ptr_list().at(
                                 obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_displacement;
 
                         cv::Point2f next_pts = cv::Point2f(algo_pts.x + algo_displacement.x*10, algo_pts.y + algo_displacement.y*10);

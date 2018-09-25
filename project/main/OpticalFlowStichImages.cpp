@@ -20,8 +20,8 @@ void OpticalFlow::stich_gnuplots() {
         COUNT = 1;
         ptr_list_of_current_objects = ptr_list_of_copied_gt_objects;
     } else {
-        for (auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
-            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects *>(m_ptr_list_simulated_objects.at(i)));
+        for (auto i = 0; i < get_simulated_objects_ptr_list().size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects *>(get_simulated_objects_ptr_list().at(i)));
         }
         ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
         COUNT = (unsigned) ptr_list_of_current_objects.at(0)->

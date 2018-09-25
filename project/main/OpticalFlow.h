@@ -104,10 +104,6 @@ protected:
 
     const std::vector<GroundTruthObjects *> &m_ptr_list_gt_objects;
 
-    const std::vector<SimulatedObjects *> &m_ptr_list_simulated_objects_base;
-
-    const std::vector<SimulatedObjects *> &m_ptr_list_simulated_objects;
-
     const std::vector<Sensors> &m_list_of_gt_sensors;
 
     const std::shared_ptr<OpticalFlow> m_ptr_gt_flow;
@@ -132,9 +128,9 @@ protected:
 
 public:
 
-    OpticalFlow( const std::vector<ushort> evaluation_list, const std::string noise, const std::string opticalFlowName, const std::vector<Sensors> &list_of_gt_sensors_base, const std::vector<GroundTruthObjects *> &ptr_list_gt_objects, const std::vector<SimulatedObjects *> &ptr_list_simulated_objects_base, const std::vector<SimulatedObjects*>  &ptr_list_simulated_objects, const ushort stepSize, const std::shared_ptr<OpticalFlow> ptr_gt_flow ) : m_evaluation_list(evaluation_list), m_noise(noise), m_opticalFlowName(opticalFlowName), m_list_of_gt_sensors(list_of_gt_sensors_base), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize), m_ptr_gt_flow(ptr_gt_flow)  { };
+    OpticalFlow( const std::vector<ushort> evaluation_list, const std::string noise, const std::string opticalFlowName, const std::vector<Sensors> &list_of_gt_sensors_base, const std::vector<GroundTruthObjects *> &ptr_list_gt_objects, const ushort stepSize, const std::shared_ptr<OpticalFlow> ptr_gt_flow ) : m_evaluation_list(evaluation_list), m_noise(noise), m_opticalFlowName(opticalFlowName), m_list_of_gt_sensors(list_of_gt_sensors_base), m_ptr_list_gt_objects(ptr_list_gt_objects), mStepSize(stepSize), m_ptr_gt_flow(ptr_gt_flow)  { };
 
-    OpticalFlow( const std::vector<ushort> evaluation_list, const std::string noise, const std::string opticalFlowName, const std::vector<Sensors> &list_of_gt_sensors_base, const std::vector<GroundTruthObjects *> &ptr_list_gt_objects, const std::vector<SimulatedObjects *> &ptr_list_simulated_objects_base, const std::vector<SimulatedObjects*>  &ptr_list_simulated_objects, const ushort stepSize ) : m_evaluation_list(evaluation_list), m_noise(noise), m_opticalFlowName(opticalFlowName), m_list_of_gt_sensors(list_of_gt_sensors_base), m_ptr_list_gt_objects(ptr_list_gt_objects), m_ptr_list_simulated_objects_base(ptr_list_simulated_objects_base), m_ptr_list_simulated_objects(ptr_list_simulated_objects), mStepSize(stepSize)  { };
+    OpticalFlow( const std::vector<ushort> evaluation_list, const std::string noise, const std::string opticalFlowName, const std::vector<Sensors> &list_of_gt_sensors_base, const std::vector<GroundTruthObjects *> &ptr_list_gt_objects, const ushort stepSize ) : m_evaluation_list(evaluation_list), m_noise(noise), m_opticalFlowName(opticalFlowName), m_list_of_gt_sensors(list_of_gt_sensors_base), m_ptr_list_gt_objects(ptr_list_gt_objects), mStepSize(stepSize)  { };
 
     const std::vector<std::vector<std::vector<std::vector<OPTICAL_FLOW_COLLISION_METRICS > > > > &getCollisionPoints () const {
         return m_list_sensor_collision_points;
@@ -159,6 +155,10 @@ public:
     void prepare_directories_common();
 
     void generate_collision_points();
+
+    virtual const std::vector<SimulatedObjects *>& get_simulated_objects_ptr_list() {
+        throw;
+    }
 
     void common_flow_frame(ushort sensor_index, ushort current_frame_index,  const std::vector<cv::Point2f> &next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement,  std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility,
                            std::vector<cv::Point2f> all_moving_objects_in_frame = {}) ;

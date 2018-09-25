@@ -23,9 +23,16 @@ class AlgorithmFlow : public OpticalFlow {
 private:
     ALGO_TYPES mAlgo;
 
+    const std::vector<SimulatedObjects *> &m_ptr_list_simulated_objects_base;
+
+    const std::vector<SimulatedObjects *> &m_ptr_list_simulated_objects;
+
+
 public:
 
-    AlgorithmFlow( const std::vector<ushort> evaluation_list, const std::string noise, const ALGO_TYPES algo, const std::string opticalFlowName, const std::vector<Sensors> &list_of_gt_sensors_base, const std::vector<GroundTruthObjects*> &ptr_list_gt_objects, const std::vector<SimulatedObjects*> &ptr_list_simulated_base_objects, const std::vector<SimulatedObjects*>  &ptr_list_simulated_objects, const ushort stepSize, const std::shared_ptr<OpticalFlow> ptr_gt_flow ) : mAlgo(algo), OpticalFlow(evaluation_list, noise, opticalFlowName, list_of_gt_sensors_base, ptr_list_gt_objects, ptr_list_simulated_base_objects, ptr_list_simulated_objects, stepSize, ptr_gt_flow ) { }
+    AlgorithmFlow( const std::vector<ushort> evaluation_list, const std::string noise, const ALGO_TYPES algo, const std::string opticalFlowName, const std::vector<Sensors> &list_of_gt_sensors_base, const std::vector<GroundTruthObjects*> &ptr_list_gt_objects,
+            const std::vector<SimulatedObjects*> &ptr_list_simulated_base_objects, const std::vector<SimulatedObjects*>  &ptr_list_simulated_objects, const ushort stepSize, const std::shared_ptr<OpticalFlow> ptr_gt_flow ) :
+            mAlgo(algo), m_ptr_list_simulated_objects_base(ptr_list_simulated_base_objects), m_ptr_list_simulated_objects(ptr_list_simulated_objects), OpticalFlow(evaluation_list, noise, opticalFlowName, list_of_gt_sensors_base, ptr_list_gt_objects, stepSize, ptr_gt_flow ) { }
 
     void prepare_algorithm_flow_directories(std::string noise, ushort fps, ushort stepSize);
 
@@ -36,6 +43,11 @@ public:
     virtual void execute(const cv::Mat &prevGray, const cv::Mat &curGray, std::vector<cv::Point2f> &frame_prev_pts, std::vector<cv::Point2f> &frame_next_pts, std::vector<cv::Point2f> &displacement_array, bool &needToInit) {
         std::cout << "cannot be called" << std::endl;
     }
+
+    const std::vector<SimulatedObjects *>& get_simulated_objects_ptr_list() override {
+        return m_ptr_list_simulated_objects;
+    }
+
 };
 
 

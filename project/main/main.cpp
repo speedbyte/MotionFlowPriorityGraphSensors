@@ -320,7 +320,6 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::vector<Sensors> list_of_gt_sensors_base;
 
     std::vector<GroundTruthObjects *> ptr_list_of_gt_objects_base;
-    std::vector<SimulatedObjects *> ptr_list_of_simulated_objects_base;
 
     PixelRobustness pixelRobustness;
     VectorRobustness vectorRobustness;
@@ -406,7 +405,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
 
                 GroundTruthFlow gt_flow(evaluation_list, environ[noise_index], list_of_gt_sensors_base,
-                                           ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
+                                           ptr_list_of_gt_objects_base);
 
                 // in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
                 // fs.open((Dataset::m_dataset_gtpath.string() + "/values.yml"), cv::FileStorage::WRITE);
@@ -464,8 +463,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             std::map<std::string, std::unique_ptr<AlgorithmFlow>> map_string_to_OFalgorithm;
 
             for (ushort stepSize = 1; stepSize <= 1; stepSize += 4) {
-                ptr_list_of_simulated_objects_base.clear();
+
+                // the base changes when the ground truth with respect to this cycle changes.
+                // If the step size changes, then it means that the ground truth also changes.
                 std::vector<SimulatedObjects> list_of_simulated_objects_base;
+                std::vector<SimulatedObjects *> ptr_list_of_simulated_objects_base;
+
                 Dataset::m_algorithm_map = Dataset::m_algorithm_map_original;
                 // Generate Algorithm data flow --------------------------------------
                 for (ushort noise_index = 0; noise_index < noise_list.size(); noise_index++) {
@@ -590,15 +593,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                         if (noise_list[noise_index] ==
                             "blue_sky") { // store the stimulated objects from the ground run.
+                            list_of_simulated_objects_base = list_of_simulated_objects;
+                            ptr_list_of_simulated_objects_base = ptr_list_of_simulated_objects;
                             for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                                list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
-                                ptr_list_of_simulated_objects_base.push_back(
-                                        &list_of_simulated_objects_base.at(obj_index));
                                 assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
                             }
                         }
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
-                            assert(list_of_simulated_objects_base.at(obj_index).getObjectId() == obj_index);
+                            assert(ptr_list_of_simulated_objects.at(obj_index)->getObjectId() == obj_index);
                             //assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
                         }
 

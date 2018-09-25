@@ -241,7 +241,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 object_stencil_displacement.clear();
                 frame_stencil_visibility.clear();
 
-                assert(m_ptr_list_simulated_objects.size() == m_ptr_list_gt_objects.size());
+                assert(get_simulated_objects_ptr_list().size() == m_ptr_list_gt_objects.size());
                 std::cout << "making a stencil on the basis of groundtruth object "
                           << m_ptr_list_gt_objects.at(obj_index)->getObjectId() << std::endl;
 
@@ -308,7 +308,8 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 // this should contain the intersection between entire_frame_algorithm_result_pts_displacement and algorithm_result_pts_displacement
                 // so we need to store the data.
-                
+
+                /*
                 std::cout << "making a stencil on the basis of base algorithm object "
                           << m_ptr_list_simulated_objects_base.at(obj_index)->getObjectId() << std::endl;
                 assert(m_ptr_list_simulated_objects.size() == m_ptr_list_simulated_objects_base.size());
@@ -335,7 +336,9 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                                     std::make_pair(cv::Point2f(x, y), algo_displacement));
                         }
                     }
+
                 }
+                 */
             }
         }
 
@@ -373,8 +376,9 @@ void OpticalFlow::save_flow_vector() {
             ptr_list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
         }
     } else {
-        for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-            ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(m_ptr_list_simulated_objects.at(i)));
+
+        for ( auto i = 0; i < get_simulated_objects_ptr_list().size(); i++) {
+            ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(get_simulated_objects_ptr_list().at(i)));
         }
     }
 
@@ -509,8 +513,8 @@ void OpticalFlow::generate_sroi_intersections() {
 
     std::vector<Objects *> ptr_list_of_current_objects;
 
-    for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
-        ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(m_ptr_list_simulated_objects.at(i)));
+    for ( auto i = 0; i < get_simulated_objects_ptr_list().size(); i++) {
+        ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(get_simulated_objects_ptr_list().at(i)));
     }
 
     ptr_list_of_current_objects = ptr_list_of_current_objects;
@@ -518,8 +522,8 @@ void OpticalFlow::generate_sroi_intersections() {
     char sensor_index_folder_suffix[50];
     for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
 
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_sroi(m_ptr_list_simulated_objects.size());
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_sroi_interpolated(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_sroi(m_ptr_list_gt_objects.size());
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_sroi_interpolated(m_ptr_list_gt_objects.size());
 
         unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
                 sensor_index).size();
@@ -630,10 +634,10 @@ void OpticalFlow::generate_sroi_intersections() {
             }
 
         }
-        for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++) {
+        for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++) {
 
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_sroi(multiframe_stencil_displacement_sroi.at(obj_index));
-            m_ptr_list_simulated_objects.at(obj_index)->push_back_object_sroi_interpolated(multiframe_stencil_displacement_sroi_interpolated.at(obj_index));
+            get_simulated_objects_ptr_list().at(obj_index)->push_back_object_sroi(multiframe_stencil_displacement_sroi.at(obj_index));
+            get_simulated_objects_ptr_list().at(obj_index)->push_back_object_sroi_interpolated(multiframe_stencil_displacement_sroi_interpolated.at(obj_index));
 
         }
     }
@@ -656,8 +660,8 @@ void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
             ptr_list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
         }
     } else {
-        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
-            ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(m_ptr_list_simulated_objects.at(i)));
+        for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+            ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(get_simulated_objects_ptr_list().at(i)));
         }
     }
 

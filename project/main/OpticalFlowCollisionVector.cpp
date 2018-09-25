@@ -21,10 +21,10 @@ void OpticalFlow::generate_collision_points() {
     }
     else {
 
-        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
-            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(m_ptr_list_simulated_objects.at(i)));
+        for ( auto i = 0; i < get_simulated_objects_ptr_list().size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(get_simulated_objects_ptr_list().at(i)));
         }
-        COUNT = (unsigned)m_ptr_list_simulated_objects.at(0)->get_list_object_line_parameters().size();
+        COUNT = (unsigned)get_simulated_objects_ptr_list().at(0)->get_list_object_line_parameters().size();
         getCombination(ptr_list_of_copied_simulated_objects, list_of_simulated_objects_combination);
         list_of_current_objects_combination = list_of_simulated_objects_combination;
     }
