@@ -34,16 +34,16 @@ def plot_at_once_pointgraph(figures_plot_array_all):
     figures.save_figure(figures_plot_array_all[0].get_measuring_parameter(), "point_graph", figures_plot_array_all[0].get_step_size(), figures_plot_array_all[0].get_sensor_index())
 
 
-def plot_at_once_bargraph(parameter, bargraph_summary_list_each_parameter_collect, extended=False):
+def plot_at_once_bargraph(parameter, bargraph_list_each_parameter_collect, extended=False):
 
     figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
-    flatten_bargraph_summary_list_each_parameter_collect = dict()
-    for summary in bargraph_summary_list_each_parameter_collect:
-        flatten_bargraph_summary_list_each_parameter_collect.update(summary)
-    print flatten_bargraph_summary_list_each_parameter_collect
+    flatten_bargraph_list_each_parameter_collect = dict()
+    for summary in bargraph_list_each_parameter_collect:
+        flatten_bargraph_list_each_parameter_collect.update(summary)
+    print flatten_bargraph_list_each_parameter_collect
 
-    figures_bargraph_each_parameter_all_data.bargraph_pixel(parameter, flatten_bargraph_summary_list_each_parameter_collect, extended )
+    figures_bargraph_each_parameter_all_data.bargraph_pixel(parameter, flatten_bargraph_list_each_parameter_collect, extended )
     figures_bargraph_each_parameter_all_data.save_figure(parameter, "bar_graph")
 
 #    plt.close("all")
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     for n, parameter in enumerate(parameter_list):
     # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
-        bargraph_summary_list_all_parameter_collect = list()
+        bargraph_list_all_parameter_collect = list()
         print "PARAMETER ----- ", parameter
 
         for sensor_index in sensor_list:
@@ -117,15 +117,20 @@ if __name__ == '__main__':
                         plotgraph_list_all_parameter_collect.append(plot_data)
 
                         val = plot_data.get_summary()
-                        bargraph_summary_list_all_parameter_collect.append(val)
+                        bargraph_list_all_parameter_collect.append(val)
 
                     if just_ground_truth is True:
                         break
-                        
+
                 print "---------------------------"
 
         # store the summary for future use:
-        plot_at_once_bargraph(parameter, bargraph_summary_list_all_parameter_collect)
+        for configuration in configuration_list_bargraph:
+            if ( parameter in configuration ):
+                plot_at_once_bargraph(parameter, bargraph_list_all_parameter_collect, False)
+                break
+            else:
+                print parameter + " is not found in the configuration list"
 
         # we are still in each parameter
 
@@ -139,7 +144,7 @@ if __name__ == '__main__':
     for n, parameter in enumerate(parameter_list_extended):
         # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
-        bargraph_summary_list_all_parameter_extended_collect = list()
+        bargraph_list_all_parameter_extended_collect = list()
         parameter_extended = "extended_" + parameter[0] + "_" + parameter[1]
 
         print "PARAMETER EXTENDED ----- ", parameter
@@ -185,10 +190,16 @@ if __name__ == '__main__':
                         plotgraph_list_all_parameter_extended_collect.append(plot_data)
 
                         val = plot_data.get_summary()
-                        bargraph_summary_list_all_parameter_extended_collect.append(val)
+                        bargraph_list_all_parameter_extended_collect.append(val)
 
-        plot_at_once_bargraph(parameter_extended, bargraph_summary_list_all_parameter_extended_collect, True)
 
+        # store the summary for future use:
+        for configuration in configuration_list_bargraph_extended:
+            if ( parameter_extended in configuration ):
+                plot_at_once_bargraph(parameter_extended, bargraph_list_all_parameter_extended_collect, True)
+                break
+            else:
+                print parameter_extended + " is not found in the configuration list"
 
 
     for configuration in configuration_list:

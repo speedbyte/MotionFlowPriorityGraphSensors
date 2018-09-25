@@ -21,6 +21,8 @@ dict_parameter_extended = {
     "extended_sroi_total_pixel_eroi_total_pixel" : "percentage of sroi pixels to eroi pixels",
     "sroi_total_pixel" : "number of pixels in the special roi",
     "eroi_total_pixel" : "number of pixels in the entire roi",
+    "eroi_l2_cumulative_error_all_pixels" : "add up all the l2 errors",
+    "eroi_ma_cumulative_error_all_pixels" : "add up all the mahalanobis distance errors",
 
 }
 
@@ -53,7 +55,16 @@ y_axis_label_dict = {
 }
 
 configuration_list = [["eroi_total_pixel_FB_ground_truth_1_0", "eroi_total_pixel_FB_blue_sky_1_0", "sroi_total_pixel_FB_blue_sky_1_0"], ["eroi_total_pixel_LK_ground_truth_1_0", "eroi_total_pixel_LK_blue_sky_1_0", "sroi_total_pixel_LK_blue_sky_1_0"]]
+
 configuration_list_extended  = [["extended_sroi_total_pixel_eroi_total_pixel_FB_ground_truth_1_0"]]
+
+configuration_list_bargraph = []
+
+configuration_list_bargraph_extended = [
+    ["extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels"],
+    ["extended_sroi_total_pixel_eroi_total_pixel"],
+                                       ]
+
 
 parameter_list = [ ]
 #parameter_list = [ "algorithm_pixels", "ground_truth_sroi_pixels", "l1_total_good_pixels", "l2_total_good_pixels","ma_total_good_pixels", "algorithm_sroi_pixels"]
