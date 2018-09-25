@@ -5,20 +5,24 @@
 
 void OpticalFlow::plot_stencil() {
 
-    std::vector<Objects*> list_of_current_objects;
-    std::vector<Objects *> ptr_list_of_derived_objects;
+    std::vector<Objects*> ptr_list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_copied_gt_objects;
+    std::vector<Objects *> ptr_list_of_copied_simulated_objects;
     for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+        ptr_list_of_copied_gt_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
     }
 
     unsigned COUNT;
     if ( m_opticalFlowName == "ground_truth") {
-        list_of_current_objects = ptr_list_of_derived_objects;
+        ptr_list_of_current_objects = ptr_list_of_copied_gt_objects;
         COUNT = 1;
     }
     else {
-        list_of_current_objects = m_ptr_list_simulated_objects;
-        COUNT = (unsigned)list_of_current_objects.at(
+        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(m_ptr_list_simulated_objects.at(i)));
+        }
+        ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
+        COUNT = (unsigned)ptr_list_of_current_objects.at(
                 0)->get_list_object_dataprocessing_mean_centroid_displacement().size();
     }
 
@@ -44,7 +48,7 @@ void OpticalFlow::plot_stencil() {
 
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
 
-        unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
+        unsigned FRAME_COUNT = (unsigned) ptr_list_of_current_objects.at(0)
                 ->get_object_stencil_point_displacement().at(sensor_index).size();
 
         assert(FRAME_COUNT > 0);
@@ -67,9 +71,9 @@ void OpticalFlow::plot_stencil() {
 
             std::cout << "current_frame_index " << current_frame_index << " for datafilter_index " << datafilter_index<< std::endl;
 
-            for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+            for (ushort obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
 
-                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index) ) {
+                if (ptr_list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index) ) {
 
                     cv::Point2f pts_gt = m_ptr_list_gt_objects.at(
                             obj_index)->get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index).at(sensor_index).at(current_frame_index).mean_pts;

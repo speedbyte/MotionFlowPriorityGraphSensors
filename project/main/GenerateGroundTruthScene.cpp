@@ -15,7 +15,7 @@
 #include <sys/time.h>
 #include <opencv2/imgcodecs/imgcodecs_c.h>
 #include <opencv/cv.hpp>
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 #include "kbhit.h"
 #include "GenerateViresObjects.h"
 #include "ObjectMetaData.h"

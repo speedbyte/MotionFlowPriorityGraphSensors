@@ -14,7 +14,7 @@
 #include "ObjectMetaData.h"
 #include "SensorMetaData.h"
 #include "Utils.h"
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 
 void BasicObjects::calcBBFrom3DPosition(std::string suffix) {
 

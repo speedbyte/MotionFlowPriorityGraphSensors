@@ -1,7 +1,7 @@
 
 
 
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 
 void GroundTruthSceneInternal::generate_gt_scene(void) {
 

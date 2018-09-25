@@ -23,7 +23,7 @@
 #include <bits/unordered_map.h>
 
 #include "Dataset.h"
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 #include "SortandIntersect.h"
 
 
@@ -139,16 +139,22 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
     // -----
 
 
-    std::vector<Objects *> list_of_current_objects;
-    std::vector<Objects *> ptr_list_of_derived_objects;
+    std::vector<Objects *> ptr_list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_copied_gt_objects;
+    std::vector<Objects *> ptr_list_of_copied_simulated_objects;
     for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+        ptr_list_of_copied_gt_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
     }
 
     if (m_opticalFlowName == "ground_truth") {
-        list_of_current_objects = ptr_list_of_derived_objects;
+        ptr_list_of_current_objects = ptr_list_of_copied_gt_objects;
     } else {
-        list_of_current_objects = m_ptr_list_simulated_objects;
+
+        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(m_ptr_list_simulated_objects.at(i)));
+        }
+
+        ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
     }
 
     char sensor_index_folder_suffix[50];
@@ -188,7 +194,7 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
             std::vector<std::pair<Objects *, Objects *> > list_of_gt_objects_combination;
 
-            getCombination(ptr_list_of_derived_objects, list_of_gt_objects_combination);
+            getCombination(ptr_list_of_copied_gt_objects, list_of_gt_objects_combination);
 
             cv::Mat flow_image = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
             cv::cvtColor(flow_image, flow_image, CV_RGB2BGR);

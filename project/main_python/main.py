@@ -63,9 +63,9 @@ if __name__ == '__main__':
     fd_concatenated.close()
     fd_ground_truth.close()
 
-    for index, algorithm in enumerate(algorithm_list):
+    for file_to_append in file_list:
         fd_concatenated = open(file_final, "a")
-        fd_algo = open(file_list[index], "r")
+        fd_algo = open(file_to_append, "r")
         fd_algo.readline() # remove header
         fd_algo.readline() # remove header
 

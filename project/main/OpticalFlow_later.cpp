@@ -12,24 +12,28 @@
 
 void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_index, std::vector<std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > >  &sensor_shape_points) {
 
-    std::vector<Objects*> list_of_current_objects;
-    std::vector<Objects *> ptr_list_of_derived_objects;
+    std::vector<Objects*> ptr_list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_copied_gt_objects;
+    std::vector<Objects *> ptr_list_of_copied_simulated_objects;
     for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+        ptr_list_of_copied_gt_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
     }
 
     if ( m_opticalFlowName == "ground_truth") {
-        list_of_current_objects = ptr_list_of_derived_objects;
+        ptr_list_of_current_objects = ptr_list_of_copied_gt_objects;
     }
     else {
-        list_of_current_objects = m_ptr_list_simulated_objects;
+        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(m_ptr_list_simulated_objects.at(i)));
+        }
+        ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
     }
 
     std::vector<std::map<std::pair<float, float>, int> > sensor_scenario_displacement_occurence;
     std::vector<std::vector<std::pair<cv::Point2i, cv::Point2f>> > sensor_frame_shape_points;
     std::map<std::pair<float, float>, int> scenario_displacement_occurence;
 
-    unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
+    unsigned FRAME_COUNT = (unsigned) ptr_list_of_current_objects.at(0)
             ->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(0).size();
 
     std::cout << "generating shape points in OpticalFlow.cpp for sensor fusion" << m_resultordner << " for datafilter " << datafilter_index << std::endl;
@@ -43,7 +47,7 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
 
         for (unsigned sensor_index = 0; sensor_index <= 0 ; sensor_index++) {
 
-            for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+            for (ushort obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
 
                 auto CLUSTER_COUNT_GT = m_ptr_list_gt_objects.at(
                         obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(0).at(0).at(current_frame_index).size();
@@ -52,8 +56,8 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                         obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(0).at(1).at(current_frame_index).size();
 
 //CLUSTER_COUNT_GT =  ( CLUSTER_COUNT_GT + CLUSTER_COUNT_GT_2 ) /2;
-                if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(current_frame_index) ||
-                    list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(current_frame_index)) {
+                if (ptr_list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(current_frame_index) ||
+                    ptr_list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(current_frame_index)) {
 
 // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
 
@@ -84,14 +88,14 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     }
                     else {
 
-                        if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(current_frame_index)) {
+                        if (ptr_list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(0).at(current_frame_index)) {
 
-                            auto CLUSTER_COUNT_ALGO = list_of_current_objects.at(
+                            auto CLUSTER_COUNT_ALGO = ptr_list_of_current_objects.at(
                                     obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(0).at(current_frame_index).size();
 
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_ALGO; cluster_index++) {
 
-                                cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
+                                cv::Point2f algo_displacement = ptr_list_of_current_objects.at(obj_index)->
                                         get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index
                                 ).at(0).at(current_frame_index).at(cluster_index).second;
 
@@ -119,14 +123,14 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                             baseTreffer = ((float) CLUSTER_COUNT_GT) / mStepSize;
                         }
 
-                        else if (list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(current_frame_index)) {
+                        else if (ptr_list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(1).at(current_frame_index)) {
 
-                            auto CLUSTER_COUNT_ALGO_2 = list_of_current_objects.at(
+                            auto CLUSTER_COUNT_ALGO_2 = ptr_list_of_current_objects.at(
                                     obj_index)->get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index).at(1).at(current_frame_index).size();
 
                             for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_ALGO_2; cluster_index++) {
 
-                                cv::Point2f algo_displacement = list_of_current_objects.at(obj_index)->
+                                cv::Point2f algo_displacement = ptr_list_of_current_objects.at(obj_index)->
                                         get_list_object_dataprocessing_stencil_points_displacement().at(datafilter_index
                                 ).at(1).at(current_frame_index).at(cluster_index).second;
 
@@ -157,16 +161,16 @@ void OpticalFlow::generate_shape_points_sensor_fusion(const ushort &datafilter_i
                     }
                     frame_shape_points.push_back(std::make_pair(cv::Point2i(current_frame_index, 0), cv::Point2f(vollTreffer, baseTreffer)));
 
-                    std::cout << "vollTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                    std::cout << "vollTreffer for object " << ptr_list_of_current_objects.at(obj_index)->getObjectId() << " = "
                               << vollTreffer << std::endl;
-                    std::cout << "baseTreffer for object " << list_of_current_objects.at(obj_index)->getObjectId() << " = "
+                    std::cout << "baseTreffer for object " << ptr_list_of_current_objects.at(obj_index)->getObjectId() << " = "
                               << baseTreffer << std::endl;
 
                     assert(vollTreffer <= std::ceil(baseTreffer) + 20 );
 
                 } else {
-                    std::cout << "visibility of object " << list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
-                              list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
+                    std::cout << "visibility of object " << ptr_list_of_current_objects.at(obj_index)->getObjectId() << " = " <<
+                              ptr_list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index)
                                       .at(current_frame_index)
                               << " and hence not generating any shape points for this object " << std::endl;
 

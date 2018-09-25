@@ -16,7 +16,7 @@
 #include "Dataset.h"
 #include "GroundTruthFlow.h"
 #include "AlgorithmFlow.h"
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 #include "GroundTruthObjects.h"
 #include "RobustnessIndex.h"
 
@@ -96,7 +96,6 @@ void usage()
 
 
 int main ( int argc, char *argv[]) {
-
 
     /*
     cv::Mat image = cv::imread("/local/git/MotionFlowPriorityGraphSensors/datasets/vires_dataset/results/stereo_flow/two/results_FB_none/stencil/000003_10_color_algo_3.png", cv::IMREAD_ANYCOLOR);
@@ -250,7 +249,7 @@ int main ( int argc, char *argv[]) {
 
     /*
 D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset consisting of 50 high resolution monocular
-     * videos ( 21260 frames ) for five different virtual worlds in urban settings under different imaging and weather c
+     * videos ( 21260 frames ) for five different virtual worlds in urban settings under different imaging and noise c
      * conditions.
      */
     if (vkitti_raw_dataset.execute) {
@@ -305,11 +304,11 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //assert(MAX_ITERATION_RESULTS <= MAX_ITERATION_GT_SCENE_GENERATION_DATASET);
 
     const std::vector<std::string> scenarios_list = {"two"};
-    //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "rain_low"};
-    //std::vector < std::string> environment_list = {"blue_sky", "night"};
-    //const std::vector < std::string> environment_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> environment_list = {"blue_sky", "heavy_snow"};
-    const std::vector<std::string> environment_list = {"blue_sky"};
+    //const std::vector < std::string> noise_list = {"blue_sky", "light_snow", "rain_low"};
+    //std::vector < std::string> noise_list = {"blue_sky", "night"};
+    //const std::vector < std::string> noise_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
+    const std::vector<std::string> noise_list = {"blue_sky", "heavy_snow"};
+    //const std::vector<std::string> noise_list = {"blue_sky"};
 
     auto tic_all = steady_clock::now();
     auto tic = steady_clock::now();
@@ -321,7 +320,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     std::vector<Sensors> list_of_gt_sensors_base;
 
     std::vector<GroundTruthObjects *> ptr_list_of_gt_objects_base;
-    std::vector<Objects*> ptr_list_of_simulated_objects_base;
+    std::vector<SimulatedObjects *> ptr_list_of_simulated_objects_base;
 
     PixelRobustness pixelRobustness;
     VectorRobustness vectorRobustness;
@@ -353,25 +352,26 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                                  cpp_dataset.dataprocessing_map, cpp_dataset.algorithm_map, evaluation_list);
         }
 
+
         std::shared_ptr<GroundTruthFlow> ptr_gt_flow;
 
-        for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {  // blue_sky, heavy_snow
+        for (ushort noise_index = 0; noise_index < noise_list.size(); noise_index++) {  // blue_sky, heavy_snow
 
             std::unique_ptr<GroundTruthScene> base_ptr_gt_scene;
             std::unique_ptr<Noise> noisePointer;
             if (vires_dataset.execute) {
 
-                base_ptr_gt_scene = std::make_unique<GroundTruthSceneExternal>(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index]);
+                base_ptr_gt_scene = std::make_unique<GroundTruthSceneExternal>(generation_list, evaluation_list, scenarios_list[0], noise_list[noise_index]);
 
             } else if (cpp_dataset.execute) {
 
-                base_ptr_gt_scene = std::make_unique<GroundTruthSceneInternal>(generation_list, evaluation_list, scenarios_list[0], environment_list[env_index]);
+                base_ptr_gt_scene = std::make_unique<GroundTruthSceneInternal>(generation_list, evaluation_list, scenarios_list[0], noise_list[noise_index]);
                 noisePointer = std::make_unique<ColorfulNoise>();
 
             }
 
             for ( ushort sensor_group_index = 0; sensor_group_index < generation_list.size(); sensor_group_index++ ) {
-                if (environment_list[env_index] == "blue_sky" ) {
+                if (noise_list[noise_index] == "blue_sky" ) {
 
                     base_ptr_gt_scene->prepare_scene_directories_others(generation_list.at(sensor_group_index));
                     base_ptr_gt_scene->prepare_scene_directories_blue_sky(generation_list.at(sensor_group_index));
@@ -389,7 +389,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             }
 
             // Generate Groundtruth data flow --------------------------------------
-            if (environment_list[env_index] == "blue_sky" ) {
+            if (noise_list[noise_index] == "blue_sky" ) {
 
                 if ( Dataset::GENERATE ) {
                     base_ptr_gt_scene->write_gt_scene_data();  // writePositionInYAML; framdifference, edge images
@@ -405,7 +405,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     ptr_list_of_gt_objects_base.push_back(&(list_of_gt_objects_base.at(obj_index)));
                 }
 
-                GroundTruthFlow gt_flow(evaluation_list, environ[env_index], list_of_gt_sensors_base,
+                GroundTruthFlow gt_flow(evaluation_list, environ[noise_index], list_of_gt_sensors_base,
                                            ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects_base);
 
                 // in case i want to store values.yml in the groundtruth path, otherwise store simply in the project path
@@ -447,14 +447,13 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             }
 
 
-            if ((env_index == environment_list.size() - 1) && Dataset::GENERATE) {
+            if ((noise_index == noise_list.size() - 1) && Dataset::GENERATE) {
                 //base_ptr_gt_scene->stopSimulation();
                 // Hack the images and the position_file
                 //system("python ../quicky_1.py 1");
                 exit(0);
             }
         }
-
 
         ushort fps = 30;
 
@@ -469,76 +468,12 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 std::vector<SimulatedObjects> list_of_simulated_objects_base;
                 Dataset::m_algorithm_map = Dataset::m_algorithm_map_original;
                 // Generate Algorithm data flow --------------------------------------
-                for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+                for (ushort noise_index = 0; noise_index < noise_list.size(); noise_index++) {
 
-                    std::vector<Objects *> ptr_list_of_simulated_objects;
+                    std::vector<SimulatedObjects *> ptr_list_of_simulated_objects;
                     bool found = false;
 
-                    map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list,
-                                                                                    environment_list[env_index], lk,
-                                                                                    "LK", list_of_gt_sensors_base,
-                                                                                    ptr_list_of_gt_objects_base,
-                                                                                    ptr_list_of_simulated_objects_base,
-                                                                                    ptr_list_of_simulated_objects,
-                                                                                    stepSize, ptr_gt_flow);
-                    map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list,
-                                                                                  environment_list[env_index], fb,
-                                                                                  "FB", list_of_gt_sensors_base,
-                                                                                  ptr_list_of_gt_objects_base,
-                                                                                  ptr_list_of_simulated_objects_base,
-                                                                                  ptr_list_of_simulated_objects,
-                                                                                  stepSize, ptr_gt_flow);
-                    map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list,
-                                                                                     environment_list[env_index], tvl,
-                                                                                     "TVL",
-                                                                                     list_of_gt_sensors_base,
-                                                                                     ptr_list_of_gt_objects_base,
-                                                                                     ptr_list_of_simulated_objects_base,
-                                                                                     ptr_list_of_simulated_objects,
-                                                                                     stepSize, ptr_gt_flow);
-
-                    std::string path;
-                    if (Dataset::m_algorithm_map["LK"] && LK) {
-
-                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
-                        found = true;
-                        if (env_index == (environment_list.size() - 1)) {
-                            //reset. We are done wth this algorithm
-                            LK = false;
-                        }
-                    } else if (Dataset::m_algorithm_map["FB"] && FB) {
-
-                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
-                        found = true;
-                        if (env_index == (environment_list.size() - 1)) {
-                            //reset. We are done wth this algorithm
-                            FB = false;
-                        }
-                    } else if (Dataset::m_algorithm_map["TVL"] && TVL) {
-
-                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
-                        found = true;
-                        if (env_index == (environment_list.size() - 1)) {
-                            //reset. We are done wth this algorithm
-                            TVL = false;
-                        }
-                    } else if (Dataset::m_algorithm_map["SF"] && SF) {
-
-                        //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
-                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["SF"]));
-                        found = true;
-                        if (env_index == (environment_list.size() - 1)) {
-                            //reset. We are done wth this algorithm
-                            SF = false;
-                        }
-                    }
-
-                    if (!found) {
-                        break;
-                    }
-
                     //continue;
-
                     std::vector<SimulatedObjects> list_of_simulated_objects;
                     // just to be sure, all lists are empty
                     list_of_simulated_objects.clear();
@@ -563,31 +498,97 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     }
 
 
+
+                    map_string_to_OFalgorithm["LK"] = std::make_unique<LukasKanade>(evaluation_list,
+                            noise_list[noise_index], lk,
+                            "LK", list_of_gt_sensors_base,
+                            ptr_list_of_gt_objects_base,
+                            ptr_list_of_simulated_objects_base,
+                            ptr_list_of_simulated_objects,
+                            stepSize, ptr_gt_flow);
+                    map_string_to_OFalgorithm["FB"] = std::make_unique<Farneback>(evaluation_list,
+                            noise_list[noise_index], fb,
+                            "FB", list_of_gt_sensors_base,
+                            ptr_list_of_gt_objects_base,
+                            ptr_list_of_simulated_objects_base,
+                            ptr_list_of_simulated_objects,
+                            stepSize, ptr_gt_flow);
+                    map_string_to_OFalgorithm["TVL"] = std::make_unique<DualTVLFlow>(evaluation_list,
+                            noise_list[noise_index], tvl,
+                            "TVL",
+                            list_of_gt_sensors_base,
+                            ptr_list_of_gt_objects_base,
+                            ptr_list_of_simulated_objects_base,
+                            ptr_list_of_simulated_objects,
+                            stepSize, ptr_gt_flow);
+
+                    std::string path;
+                    if (Dataset::m_algorithm_map["LK"] && LK) {
+
+                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["LK"]));
+                        found = true;
+                        if (noise_index == (noise_list.size() - 1)) {
+                            //reset. We are done wth this algorithm
+                            LK = false;
+                        }
+                    } else if (Dataset::m_algorithm_map["FB"] && FB) {
+
+                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["FB"]));
+                        found = true;
+                        if (noise_index == (noise_list.size() - 1)) {
+                            //reset. We are done wth this algorithm
+                            FB = false;
+                        }
+                    } else if (Dataset::m_algorithm_map["TVL"] && TVL) {
+
+                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["TVL"]));
+                        found = true;
+                        if (noise_index == (noise_list.size() - 1)) {
+                            //reset. We are done wth this algorithm
+                            TVL = false;
+                        }
+                    } else if (Dataset::m_algorithm_map["SF"] && SF) {
+
+                        //The Simple Flow algorithm attempts to establish a local flow vector for each point that best explains the motion of the neighborhood around that point. It does this by computing the (integer) flow vector that optimizes an energy function. his energy function is essentially a sum over terms for each pixel in the neighborhood in which the energy grows quadratically with the difference between the intensities of the pixel in the neighborhood at time t and the corresponding pixel (i.e., displaced by the flow vector) at time t + 1.
+                        list_of_ptr_of_environment_OFalgorithm.push_back(std::move(map_string_to_OFalgorithm["SF"]));
+                        found = true;
+                        if (noise_index == (noise_list.size() - 1)) {
+                            //reset. We are done wth this algorithm
+                            SF = false;
+                        }
+                    }
+
+                    if (!found) {
+                        break;
+                    }
+
+
+
                     if ((Dataset::m_execute_algorithm && cpp_dataset.execute) ||
                         (Dataset::m_execute_algorithm && vires_dataset.execute)) {
 
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->prepare_algorithm_flow_directories(
-                                environment_list[env_index], fps, stepSize);
+                        list_of_ptr_of_environment_OFalgorithm[noise_index]->prepare_algorithm_flow_directories(
+                                noise_list[noise_index], fps, stepSize);
 
-                        path = list_of_ptr_of_environment_OFalgorithm[env_index]->getGeneratePath() + std::string("/values_") +
-                                list_of_ptr_of_environment_OFalgorithm[env_index]->getOpticalFlowName() + std::string(".yml");
+                        path = list_of_ptr_of_environment_OFalgorithm[noise_index]->getGeneratePath() + std::string("/values_") +
+                                list_of_ptr_of_environment_OFalgorithm[noise_index]->getOpticalFlowName() + std::string(".yml");
                         fs_algorithm.open(path, cv::FileStorage::WRITE);
 
                         // TODO - do something for stepSize.. its redundant here.
                         /// run optical flow algorithm
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->run_optical_flow_algorithm(evaluation_list,
+                        list_of_ptr_of_environment_OFalgorithm[noise_index]->run_optical_flow_algorithm(evaluation_list,
                                                                                                       video_frames,
                                                                                                       fps);
 
                         /// combine sensor data
                         if ((evaluation_list.size() + 1 % evaluation_list.size()) > 1) {
-                            list_of_ptr_of_environment_OFalgorithm[env_index]->combine_sensor_data();
+                            list_of_ptr_of_environment_OFalgorithm[noise_index]->combine_sensor_data();
                         }
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->save_flow_vector();
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->rerun_optical_flow_algorithm_interpolated();
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->generate_sroi_intersections();
+                        list_of_ptr_of_environment_OFalgorithm[noise_index]->save_flow_vector();
+                        list_of_ptr_of_environment_OFalgorithm[noise_index]->rerun_optical_flow_algorithm_interpolated();
+                        list_of_ptr_of_environment_OFalgorithm[noise_index]->generate_sroi_intersections();
 
-                        if (environment_list[env_index] ==
+                        if (noise_list[noise_index] ==
                             "blue_sky") { // store the stimulated objects from the ground run.
                             for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
                                 list_of_simulated_objects_base.push_back(list_of_simulated_objects.at(obj_index));
@@ -598,7 +599,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
                         for (auto obj_index = 0; obj_index < list_of_simulated_objects.size(); obj_index++) {
                             assert(list_of_simulated_objects_base.at(obj_index).getObjectId() == obj_index);
-                            assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
+                            //assert(ptr_list_of_simulated_objects_base.at(obj_index)->getObjectId() == obj_index);
                         }
 
                         /// generate and save flow vector
@@ -607,18 +608,18 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         }
 
                         /// analysis and metrics
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->generate_collision_points();
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->generate_metrics_optical_flow_algorithm();
+                        list_of_ptr_of_environment_OFalgorithm[noise_index]->generate_collision_points();
+                        list_of_ptr_of_environment_OFalgorithm[noise_index]->generate_metrics_optical_flow_algorithm();
 
                         /// stiching images
-                        list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots(); // gnuplots
-                        //list_of_ptr_of_environment_OFalgorithm[env_index]->stich_gnuplots(); // optical flow algorithm interpolated data
+                        list_of_ptr_of_environment_OFalgorithm[noise_index]->stich_gnuplots(); // gnuplots
+                        //list_of_ptr_of_environment_OFalgorithm[noise_index]->stich_gnuplots(); // optical flow algorithm interpolated data
 
                     }
 
-                    auto position = list_of_ptr_of_environment_OFalgorithm.at(env_index)->getResultOrdner().find('/');
+                    auto position = list_of_ptr_of_environment_OFalgorithm.at(noise_index)->getResultOrdner().find('/');
                     std::string suffix = list_of_ptr_of_environment_OFalgorithm.at(
-                            env_index)->getResultOrdner().replace(position, 1, "_");
+                            noise_index)->getResultOrdner().replace(position, 1, "_");
                     time_map["algorithm_flow_" + suffix] = (duration_cast<milliseconds>(
                             steady_clock::now() - tic).count());
                     tic = steady_clock::now();
@@ -627,8 +628,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         (Dataset::m_execute_algorithm && vires_dataset.analyse && vires_dataset.execute)) {
 
                         pixelRobustness.generatePixelRobustness(*list_of_ptr_of_environment_OFalgorithm[0],
-                                                                *list_of_ptr_of_environment_OFalgorithm[env_index], fs_algorithm);
-                        vectorRobustness.generateVectorRobustness(*list_of_ptr_of_environment_OFalgorithm[env_index],
+                                                                *list_of_ptr_of_environment_OFalgorithm[noise_index], fs_algorithm);
+                        vectorRobustness.generateVectorRobustness(*list_of_ptr_of_environment_OFalgorithm[noise_index],
                                                                   *list_of_ptr_of_environment_OFalgorithm[0], fs_algorithm);
 
                         time_map["robustness_" + suffix] = (duration_cast<milliseconds>(
@@ -641,14 +642,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 //ffmpeg -framerate 10 -pattern_type glob -i '*.png' -r 30 -pix_fmt yuv420p movement.avi
 
                 if ((cpp_dataset.video && cpp_dataset.execute) || (vires_dataset.video && vires_dataset.execute)) {
-                    for (ushort env_index = 0; env_index < environment_list.size(); env_index++) {
+                    for (ushort noise_index = 0; noise_index < noise_list.size(); noise_index++) {
                         for (int sensors = 0; sensors < Dataset::SENSOR_COUNT; sensors++) {
                             Utils::make_video_from_regex(
-                                    Dataset::m_dataset_gtpath.string() + '/' + environment_list[env_index] + '_' +
+                                    Dataset::m_dataset_gtpath.string() + '/' + noise_list[noise_index] + '_' +
                                     std::to_string(sensors));
                             Utils::make_video_from_regex(
                                     Dataset::m_dataset_resultpath.string() + "/results_FB_" +
-                                    environment_list[env_index] +
+                                    noise_list[noise_index] +
                                     '_' + std::to_string(fps) + "_" + std::to_string(stepSize) + "/position_occ_0" +
                                     std::to_string(sensors) + '/');
                         }
@@ -703,8 +704,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
             //Dataset::fillDataset(frame_size, depth, cn, VIRES_DATASET_PATH, input, output, kitti_flow_dataset.start, kitti_flow_dataset.stop);
 
             std::vector<GroundTruthObjects *> ptr_list_of_gt_objects_base;
-            std::vector<Objects *> ptr_list_of_simulated_objects_base;
-            std::vector<Objects *> ptr_list_of_simulated_objects;
+            std::vector<SimulatedObjects *> ptr_list_of_simulated_objects_base;
+            std::vector<SimulatedObjects *> ptr_list_of_simulated_objects;
 
             Farneback fback(evaluation_list, "blue_sky", fb, "fback", list_of_gt_sensors_base, ptr_list_of_gt_objects_base, ptr_list_of_simulated_objects_base, ptr_list_of_simulated_objects, 1, ptr_gt_flow);
             AlgorithmFlow *algo = &fback;

@@ -11,7 +11,7 @@
 #include "Noise.h"
 #include "ObjectMetaData.h"
 #include "GenerateCppObjects.h"
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 
 void CppObjects::process(std::unique_ptr<Noise> &canvas_background_noise, ushort sensor_index) {
 

@@ -10,7 +10,7 @@
 #include "GenerateViresObjects.h"
 #include "Dataset.h"
 #include "Utils.h"
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 
 
 void ViresObjects::readObjectStateFromBinaryFile() {

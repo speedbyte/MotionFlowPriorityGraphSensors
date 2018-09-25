@@ -12,7 +12,7 @@
 #include "Utils.h"
 #include "SortandIntersect.h"
 #include "InterpolateData.h"
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 #include <gnuplot-iostream/gnuplot-iostream.h>
 
 using namespace std::chrono;
@@ -229,7 +229,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
         } else {
 
-            if (m_weather == "blue_sky"  || m_weather == "heavy_snow") {
+            if (m_noise == "blue_sky"  || m_noise == "heavy_snow") {
 
                 // Intersection between ground truth stencil and the algorithm stencil.
 
@@ -366,14 +366,16 @@ void OpticalFlow::save_flow_vector() {
     // reads the flow vector array already created at the time of instantiation of the object.
     // Additionally stores the frames in a png file
     // Additionally stores the position in a png file
-    std::vector<Objects *> list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_current_objects;
 
     if (m_opticalFlowName == "ground_truth") {
         for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-            list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
+            ptr_list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
         }
     } else {
-        list_of_current_objects = m_ptr_list_simulated_objects;
+        for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+            ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(m_ptr_list_simulated_objects.at(i)));
+        }
     }
 
     char sensor_index_folder_suffix[50];
@@ -413,18 +415,18 @@ void OpticalFlow::save_flow_vector() {
             std::cout << "current_frame_index " << current_frame_index << std::endl;
             float max_magnitude = 0.0;
 
-            for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+            for (auto obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
 
-                unsigned CLUSTER_COUNT = (unsigned) list_of_current_objects.at(
+                unsigned CLUSTER_COUNT = (unsigned) ptr_list_of_current_objects.at(
                         obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size();
 
                 for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT; cluster_index++) {
 
-                    cv::Point2f pts = list_of_current_objects.at(obj_index)->
+                    cv::Point2f pts = ptr_list_of_current_objects.at(obj_index)->
                             get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).at(
                             cluster_index).first;
 
-                    cv::Point2f displacement = list_of_current_objects.at(obj_index)->
+                    cv::Point2f displacement = ptr_list_of_current_objects.at(obj_index)->
                             get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).at(
                             cluster_index).second;
 
@@ -444,7 +446,7 @@ void OpticalFlow::save_flow_vector() {
             FlowImageExtended F_png_write_interpolated(F_png_write);
 
             if (m_opticalFlowName != "ground_truth") {
-                for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+                for (auto obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
 
                     // get ground truth sroi area
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
@@ -458,18 +460,18 @@ void OpticalFlow::save_flow_vector() {
                     }
                     cv::imwrite(plot_path, readColorPlot);
 
-                    unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) list_of_current_objects.at(
+                    unsigned CLUSTER_COUNT_DISJOINT_DATA = (unsigned) ptr_list_of_current_objects.at(
                             obj_index)->get_object_stencil_point_disjoint_displacement().at(sensor_index).at(
                             current_frame_index).size();
 
                     for (auto cluster_index = 0; cluster_index < CLUSTER_COUNT_DISJOINT_DATA; cluster_index++) {
 
-                        cv::Point2f pts = list_of_current_objects.at(obj_index)->
+                        cv::Point2f pts = ptr_list_of_current_objects.at(obj_index)->
                                 get_object_stencil_point_disjoint_displacement().at(sensor_index).at(
                                 current_frame_index).at(
                                 cluster_index).first;
 
-                        cv::Point2f displacement = list_of_current_objects.at(obj_index)->
+                        cv::Point2f displacement = ptr_list_of_current_objects.at(obj_index)->
                                 get_object_stencil_point_disjoint_displacement().at(sensor_index).at(
                                 current_frame_index).at(
                                 cluster_index).second;
@@ -505,9 +507,13 @@ void OpticalFlow::generate_sroi_intersections() {
     // Additionally stores the frames in a png file
     // Additionally stores the position in a png file
 
-    std::vector<Objects *> list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_current_objects;
 
-    list_of_current_objects = m_ptr_list_simulated_objects;
+    for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
+        ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(m_ptr_list_simulated_objects.at(i)));
+    }
+
+    ptr_list_of_current_objects = ptr_list_of_current_objects;
 
     char sensor_index_folder_suffix[50];
     for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
@@ -556,12 +562,12 @@ void OpticalFlow::generate_sroi_intersections() {
             cv::Mat tempImageInterpolated(Dataset::m_frame_size, CV_8UC3);
             tempImageInterpolated = cv::imread(gt_image_path, CV_LOAD_IMAGE_COLOR);
 
-            for (auto obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+            for (auto obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
 
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
                 // sroi pixels
                 // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
-                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
+                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = ptr_list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
                 MyIntersection intersection;
 
                 if ( ( special_roi_object.at(sensor_index).at(current_frame_index).size() > 0 ) && current_frame_index > 0 ) {
@@ -594,7 +600,7 @@ void OpticalFlow::generate_sroi_intersections() {
                 multiframe_stencil_displacement_sroi.at(obj_index).push_back(intersection_of_algorithm_and_sroi);
 
 //----------------------------------------------------------------------------------------------------------------------
-                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
+                std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = ptr_list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
                 // sroi interpolated pixels
                 // does eroi_interpolated contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
@@ -643,14 +649,16 @@ void OpticalFlow::generate_sroi_intersections() {
  */
 void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
 
-    std::vector<Objects *> list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_current_objects;
 
     if (m_opticalFlowName == "ground_truth") {
         for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-            list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
+            ptr_list_of_current_objects.push_back(static_cast<GroundTruthObjects*>(m_ptr_list_gt_objects.at(i)));
         }
     } else {
-        list_of_current_objects = m_ptr_list_simulated_objects;
+        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
+            ptr_list_of_current_objects.push_back(static_cast<SimulatedObjects*>(m_ptr_list_simulated_objects.at(i)));
+        }
     }
 
     for ( ushort sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++ ) {
@@ -664,11 +672,11 @@ void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
             std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(
-                    list_of_current_objects.size());
+                    ptr_list_of_current_objects.size());
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement_interpolated(
-                    list_of_current_objects.size());
+                    ptr_list_of_current_objects.size());
 
-            std::vector<std::vector<std::vector<bool> > > multiframe_visibility(list_of_current_objects.size());
+            std::vector<std::vector<std::vector<bool> > > multiframe_visibility(ptr_list_of_current_objects.size());
 
             std::cout << "rerun algorithm results will be stored in " << m_resultordner << std::endl;
 
@@ -730,7 +738,7 @@ void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
 
                     std::cout << "skipping first frame frame count " << current_frame_index << std::endl;
 
-                    for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+                    for (ushort obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
                         multiframe_stencil_displacement_interpolated.at(obj_index).push_back(
                                 {{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
                         multiframe_stencil_disjoint_displacement_interpolated.at(obj_index).push_back(
@@ -741,23 +749,23 @@ void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
                 }
             }
 
-            for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+            for (ushort obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
 
-                list_of_current_objects.at(
+                ptr_list_of_current_objects.at(
                         obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(
                         multiframe_stencil_displacement_interpolated.at(obj_index),
                         multiframe_visibility.at(obj_index));
-                list_of_current_objects.at(
+                ptr_list_of_current_objects.at(
                         obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(
                         multiframe_stencil_disjoint_displacement_interpolated.at(obj_index),
                         multiframe_visibility.at(obj_index));
             }
         }
         else {
-            for ( ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+            for ( ushort obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
 
-                list_of_current_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index), m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_visibility().at(sensor_index));
-                //list_of_current_objects.at(obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement_interpolated.at(obj_index), multiframe_visibility.at(obj_index));
+                ptr_list_of_current_objects.at(obj_index)->push_back_object_interpolated_stencil_point_displacement_pixel_visibility(m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index), m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_visibility().at(sensor_index));
+                //ptr_list_of_current_objects.at(obj_index)->push_back_object_interpolated_stencil_point_disjoint_displacement_pixel_visibility(multiframe_stencil_disjoint_displacement_interpolated.at(obj_index), multiframe_visibility.at(obj_index));
             }
         }
     }

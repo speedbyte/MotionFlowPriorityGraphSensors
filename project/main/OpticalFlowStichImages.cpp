@@ -7,21 +7,24 @@
 
 void OpticalFlow::stich_gnuplots() {
 
-    std::vector<Objects *> list_of_current_objects;
-    std::vector<Objects *> ptr_list_of_derived_objects;
+    std::vector<Objects *> ptr_list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_copied_gt_objects;
+    std::vector<Objects *> ptr_list_of_copied_simulated_objects;
 
     for (auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-        ptr_list_of_derived_objects.push_back(static_cast<Objects *>(m_ptr_list_gt_objects.at(i)));
+        ptr_list_of_copied_gt_objects.push_back(static_cast<Objects *>(m_ptr_list_gt_objects.at(i)));
     }
-
 
     unsigned COUNT;
     if (m_opticalFlowName == "ground_truth") {
         COUNT = 1;
-        list_of_current_objects = ptr_list_of_derived_objects;
+        ptr_list_of_current_objects = ptr_list_of_copied_gt_objects;
     } else {
-        list_of_current_objects = m_ptr_list_simulated_objects;
-        COUNT = (unsigned) list_of_current_objects.at(0)->
+        for (auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects *>(m_ptr_list_simulated_objects.at(i)));
+        }
+        ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
+        COUNT = (unsigned) ptr_list_of_current_objects.at(0)->
                 get_list_object_dataprocessing_mean_centroid_displacement().size();
     }
 

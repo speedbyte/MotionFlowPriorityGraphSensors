@@ -6,11 +6,13 @@ void OpticalFlow::generate_collision_points() {
     std::vector<std::pair<Objects*, Objects* > > list_of_gt_objects_combination;
     std::vector<std::pair<Objects*, Objects* > > list_of_simulated_objects_combination;
 
-    std::vector<Objects *> ptr_list_of_derived_objects;
+    std::vector<Objects *> ptr_list_of_copied_gt_objects;
+    std::vector<Objects *> ptr_list_of_copied_simulated_objects;
+
     for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+        ptr_list_of_copied_gt_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
     }
-    getCombination(ptr_list_of_derived_objects, list_of_gt_objects_combination);
+    getCombination(ptr_list_of_copied_gt_objects, list_of_gt_objects_combination);
 
     unsigned COUNT;
     if ( m_opticalFlowName == "ground_truth") {
@@ -18,8 +20,12 @@ void OpticalFlow::generate_collision_points() {
         list_of_current_objects_combination = list_of_gt_objects_combination;
     }
     else {
+
+        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(m_ptr_list_simulated_objects.at(i)));
+        }
         COUNT = (unsigned)m_ptr_list_simulated_objects.at(0)->get_list_object_line_parameters().size();
-        getCombination(m_ptr_list_simulated_objects, list_of_simulated_objects_combination);
+        getCombination(ptr_list_of_copied_simulated_objects, list_of_simulated_objects_combination);
         list_of_current_objects_combination = list_of_simulated_objects_combination;
     }
 

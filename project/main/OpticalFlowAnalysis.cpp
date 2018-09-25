@@ -6,20 +6,24 @@
 
 void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
-    std::vector<Objects *> list_of_current_objects;
-    std::vector<Objects *> ptr_list_of_derived_objects;
+    std::vector<Objects *> ptr_list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_copied_gt_objects;
+    std::vector<Objects *> ptr_list_of_copied_simulated_objects;
 
     for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
-        ptr_list_of_derived_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+        ptr_list_of_copied_gt_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
     }
 
     unsigned COUNT;
     if (m_opticalFlowName == "ground_truth") {
         COUNT = 1;
-        list_of_current_objects = ptr_list_of_derived_objects;
+        ptr_list_of_current_objects = ptr_list_of_copied_gt_objects;
     } else {
-        list_of_current_objects = m_ptr_list_simulated_objects;
-        COUNT = (unsigned)list_of_current_objects.at(0)->
+        for ( auto i = 0; i < m_ptr_list_simulated_objects.size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(m_ptr_list_simulated_objects.at(i)));
+        }
+        ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
+        COUNT = (unsigned)ptr_list_of_current_objects.at(0)->
                 get_list_object_dataprocessing_mean_centroid_displacement().size();
     }
 
@@ -33,7 +37,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
             std::cout << "generating evaluation metrics in OpticalFlow.cpp for sensor index " << sensor_index
                       << " for opticalflow  " << m_opticalFlowName << std::endl;
 
-            unsigned FRAME_COUNT = (unsigned) list_of_current_objects.at(0)
+            unsigned FRAME_COUNT = (unsigned) ptr_list_of_current_objects.at(0)
                     ->get_object_stencil_point_displacement().at(sensor_index).size();
 
             assert(FRAME_COUNT > 0);
@@ -42,8 +46,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
             for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                (list_of_current_objects.size());
-                std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(list_of_current_objects.size());
+                (ptr_list_of_current_objects.size());
+                std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(ptr_list_of_current_objects.size());
 
 
                 ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
@@ -52,7 +56,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                 std::cout << "current_frame_index " << current_frame_index << " for opticalflow_index " << m_opticalFlowName
                           << std::endl;
 
-                for (ushort obj_index = 0; obj_index < list_of_current_objects.size(); obj_index++) {
+                for (ushort obj_index = 0; obj_index < ptr_list_of_current_objects.size(); obj_index++) {
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
 
@@ -67,46 +71,46 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                     evaluationData.at(obj_index).frame_number = image_frame_count;
                     evaluationData.at(obj_index).obj_index = obj_index;
-                    evaluationData.at(obj_index).visiblity = list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index);
+                    evaluationData.at(obj_index).visiblity = ptr_list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(sensor_index).at(current_frame_index);
 
-                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = ptr_list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
 
-                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = ptr_list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
-                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_special_region_of_interest();
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_algorithm_and_sroi = ptr_list_of_current_objects.at(obj_index)->get_object_special_region_of_interest();
 
-                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_interpolated_algorithm_and_sroi = list_of_current_objects.at(obj_index)->get_object_interpolated_intersection_sroi();
+                    std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > intersection_of_interpolated_algorithm_and_sroi = ptr_list_of_current_objects.at(obj_index)->get_object_interpolated_intersection_sroi();
 
                     if (evaluationData.at(obj_index).visiblity) {
 
-                        evaluationData.at(obj_index).regression_line = list_of_current_objects.at(obj_index)->
+                        evaluationData.at(obj_index).regression_line = ptr_list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).regression_line;
 
-                        evaluationData.at(obj_index).mean_pts = list_of_current_objects.at(obj_index)->
+                        evaluationData.at(obj_index).mean_pts = ptr_list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).mean_pts;
 
-                        evaluationData.at(obj_index).mean_displacement = list_of_current_objects.at(obj_index)->
+                        evaluationData.at(obj_index).mean_displacement = ptr_list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).mean_displacement;
 
-                        evaluationData.at(obj_index).stddev_pts = list_of_current_objects.at(
+                        evaluationData.at(obj_index).stddev_pts = ptr_list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).stddev_pts;
 
-                        evaluationData.at(obj_index).stddev_displacement = list_of_current_objects.at(
+                        evaluationData.at(obj_index).stddev_displacement = ptr_list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).stddev_displacement;
 
-                        evaluationData.at(obj_index).covar_pts = list_of_current_objects.at(
+                        evaluationData.at(obj_index).covar_pts = ptr_list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).covar_pts;
 
-                        evaluationData.at(obj_index).covar_displacement = list_of_current_objects.at(
+                        evaluationData.at(obj_index).covar_displacement = ptr_list_of_current_objects.at(
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).covar_displacement;
@@ -150,8 +154,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                     } else {
 
                         std::cout << "visibility of object "
-                                  << list_of_current_objects.at(obj_index)->getObjectName() << " = " <<
-                                  list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
+                                  << ptr_list_of_current_objects.at(obj_index)->getObjectName() << " = " <<
+                                  ptr_list_of_current_objects.at(obj_index)->get_object_extrapolated_visibility().at(
                                                   sensor_index)
                                           .at(current_frame_index)
                                   << " and hence not generating any shape points for this object " << std::endl;

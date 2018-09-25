@@ -8,7 +8,7 @@
 
 #include "Dataset.h"
 #include "PlotFlow.h"
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 #include "FlowImageExtended.h"
 #include "OpticalFlow.h"
 
@@ -28,8 +28,8 @@ private:
 
 public:
 
-    GroundTruthFlow( std::vector<ushort> evaluation_list, std::string weather, std::vector<Sensors> &list_of_gt_sensors_base, std::vector<GroundTruthObjects *> &list_gt_objects, std::vector<Objects*> &list_simulated_objects_base, std::vector<Objects*> &list_simulated_objects ) :
-            OpticalFlow(evaluation_list, weather, "ground_truth", list_of_gt_sensors_base, list_gt_objects, list_simulated_objects_base, list_simulated_objects, 0 ) {
+    GroundTruthFlow( std::vector<ushort> evaluation_list, std::string noise, std::vector<Sensors> &list_of_gt_sensors_base, std::vector<GroundTruthObjects *> &list_gt_objects, const std::vector<SimulatedObjects*> &list_simulated_objects_base, const std::vector<SimulatedObjects*> &list_simulated_objects ) :
+            OpticalFlow(evaluation_list, noise, "ground_truth", list_of_gt_sensors_base, list_gt_objects, list_simulated_objects_base, list_simulated_objects, 0 ) {
     }
 
     ~GroundTruthFlow(){

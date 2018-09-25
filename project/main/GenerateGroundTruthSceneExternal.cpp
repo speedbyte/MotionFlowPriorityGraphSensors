@@ -2,7 +2,7 @@
 
 
 #include <sys/time.h>
-#include "GroundTruthScene.h"
+#include "GenerateGroundTruthScene.h"
 
 #define DEFAULT_RX_PORT_CAM_0               48182   /* for image port it should be 48192 */
 #define DEFAULT_RX_PORT_PERFECT_0           48183   /* for image port it should be 48192 */
