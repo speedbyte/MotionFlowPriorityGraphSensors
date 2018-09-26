@@ -47,6 +47,8 @@
 // why is stencil size in LK 0, why cant we start FB and LK at the same time? - DONE. added further variables. Now all algorithm will start
 
 // Presentation:
+// the gradient matters. If the error is in the same direction, then its fine. but if the error is distributed, then its a problem
+// So, what is the error covariance matrix?
 // How reliable is the data - compare L2_good_pixel and MA_good_pixel error. The lesser the distance the better it is.
 // Evaluation models has Set of aögorithms - OF, Inter, Dataprocessing and lasstly Sensor Fusion.
 // Further it induces quantified noise
