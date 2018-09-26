@@ -18,9 +18,9 @@ file_final = "/local/git/MotionFlowPriorityGraphSensors/project/main_python/valu
 
 dict_parameter_extended = {
     "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels" : "percentage of sroi pixels error to eroi pixels error" ,
-    "extended_sroi_total_pixel_eroi_total_pixel" : "percentage of sroi pixels to eroi pixels",
-    "sroi_total_pixel" : "number of pixels in the special roi",
-    "eroi_total_pixel" : "number of pixels in the entire roi",
+    "extended_sroi_all_pixels_eroi_all_pixels" : "percentage of sroi pixels to eroi pixels",
+    "sroi_all_pixels" : "number of pixels in the special roi",
+    "eroi_all_pixels" : "number of pixels in the entire roi",
     "eroi_l2_cumulative_error_all_pixels" : "add up all the l2 errors",
     "eroi_ma_cumulative_error_all_pixels" : "add up all the mahalanobis distance errors",
 
@@ -56,42 +56,75 @@ y_axis_label_dict = {
 
 display_list = [
 
-    [ "sroi_total_pixel_FB_ground_truth_1_0", "eroi_total_pixel_FB_ground_truth_1_0", "sroi_l2_good_pixels_FB_blue_sky_1_0", "sroi_total_pixel_FB_blue_sky_1_0",
-      "eroi_l2_good_pixels_FB_blue_sky_1_0", "eroi_total_pixel_FB_blue_sky_1_0" 
-      ],
-
     [
-        "eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0", "sroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
-      "eroi_l2_cumulative_error_good_pixels_FB_blue_sky_1_0", "sroi_l2_cumulative_error_good_pixels_FB_blue_sky_1_0",
-
+      "sroi_all_pixels_FB_ground_truth_1_0",
+      "eroi_all_pixels_FB_ground_truth_1_0",
+      #"sroi_l2_good_pixels_FB_blue_sky_1_0",
+      "sroi_all_pixels_FB_blue_sky_1_0",
+      #"eroi_l2_good_pixels_FB_blue_sky_1_0",
+      "eroi_all_pixels_FB_blue_sky_1_0"
     ],
 
-    [ "eroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0", "sroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
-      "eroi_ma_cumulative_error_good_pixels_FB_blue_sky_1_0", "sroi_ma_cumulative_error_good_pixels_FB_blue_sky_1_0",],
+    [
+        "eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
+        "sroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
+        "eroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
+        "sroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
+      #"eroi_l2_cumulative_error_good_pixels_FB_blue_sky_1_0",
+      #"sroi_l2_cumulative_error_good_pixels_FB_blue_sky_1_0",
+    ],
+
+    [
+      "sroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
+      "sroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
+      #"eroi_ma_cumulative_error_good_pixels_FB_blue_sky_1_0",
+      #"sroi_ma_cumulative_error_good_pixels_FB_blue_sky_1_0",
+    ],
 
 
 ]
 
 display_list_extended  = [
 
-    ["extended_sroi_total_pixel_eroi_total_pixel_FB_blue_sky_1_0",
-     "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
-     "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_LK_blue_sky_1_0",
-     "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_TVL_blue_sky_1_0"]
+    [
+        "extended_sroi_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
+        "extended_sroi_ma_cumulative_error_all_pixels_eroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
+    ],
+    [
+        "extended_sroi_l2_good_pixels_eroi_l2_good_pixels_FB_blue_sky_1_0",
+        "extended_sroi_l2_cumulative_error_good_pixels_eroi_l2_cumulative_error_good_pixels_FB_blue_sky_1_0",
+        "extended_sroi_ma_cumulative_error_good_pixels_eroi_ma_cumulative_error_good_pixels_FB_blue_sky_1_0",
+    ],
 
+    [
+        "extended_eroi_l2_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "extended_eroi_ma_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+    ],
+
+    [
+        "extended_sroi_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "extended_sroi_l2_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "extended_sroi_ma_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+    ],
 
 ]
 
 display_list_bargraph = []
 
 display_list_bargraph_extended = [
-    ["extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels"],
-    ["extended_sroi_total_pixel_eroi_total_pixel"],
-                                       ]
+
+    [
+        "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels"
+    ],
+    [
+        "extended_sroi_all_pixels_eroi_all_pixels"
+    ],
+]
 
 parameter_list = [
 
-    "eroi_total_pixel",
+    "eroi_all_pixels",
     "eroi_l1_good_pixels",
     "eroi_l2_good_pixels",
     "eroi_ma_good_pixels",
@@ -101,7 +134,7 @@ parameter_list = [
     "eroi_l1_cumulative_error_good_pixels",
     "eroi_l2_cumulative_error_good_pixels",
     "eroi_ma_cumulative_error_good_pixels",
-    "eroi_interpolated_total_pixel",
+    "eroi_interpolated_all_pixels",
     "eroi_interpolated_l1_good_pixels",
     "eroi_interpolated_l2_good_pixels",
     "eroi_interpolated_ma_good_pixels",
@@ -111,7 +144,7 @@ parameter_list = [
     "eroi_interpolated_l1_cumulative_error_good_pixels",
     "eroi_interpolated_l2_cumulative_error_good_pixels",
     "eroi_interpolated_ma_cumulative_error_good_pixels",
-    "sroi_total_pixel",
+    "sroi_all_pixels",
     "sroi_l1_good_pixels",
     "sroi_l2_good_pixels",
     "sroi_ma_good_pixels",
@@ -121,7 +154,7 @@ parameter_list = [
     "sroi_l1_cumulative_error_good_pixels",
     "sroi_l2_cumulative_error_good_pixels",
     "sroi_ma_cumulative_error_good_pixels",
-    "sroi_interpolated_total_pixel",
+    "sroi_interpolated_all_pixels",
     "sroi_interpolated_l1_good_pixels",
     "sroi_interpolated_l2_good_pixels",
     "sroi_interpolated_ma_good_pixels",
@@ -131,17 +164,22 @@ parameter_list = [
     "sroi_interpolated_l1_cumulative_error_good_pixels",
     "sroi_interpolated_l2_cumulative_error_good_pixels",
     "sroi_interpolated_ma_cumulative_error_good_pixels",
-
 ]
 
 parameter_list_extended = [
 
-    [ "sroi_total_pixel", "eroi_total_pixel" ],
-    [ "sroi_l2_good_pixels", "sroi_total_pixel" ],
-    [ "eroi_l2_good_pixels", "eroi_total_pixel" ],
-    [ "sroi_l2_cumulative_error_all_pixels", "eroi_l2_cumulative_error_all_pixels" ]
+    [ "sroi_all_pixels", "eroi_all_pixels" ],
+    [ "sroi_l2_good_pixels", "eroi_l2_good_pixels" ],
+    [ "sroi_l2_cumulative_error_all_pixels", "eroi_l2_cumulative_error_all_pixels" ],
+    [ "sroi_ma_cumulative_error_all_pixels", "eroi_ma_cumulative_error_all_pixels" ],
+    [ "sroi_l2_cumulative_error_good_pixels", "eroi_l2_cumulative_error_good_pixels" ],
+    [ "sroi_ma_cumulative_error_good_pixels", "eroi_ma_cumulative_error_good_pixels" ],
+    [ "eroi_l2_good_pixels", "eroi_all_pixels" ],
+    [ "sroi_l2_good_pixels", "eroi_all_pixels" ],
+    [ "eroi_ma_good_pixels", "eroi_all_pixels" ],
+    [ "sroi_ma_good_pixels", "eroi_all_pixels" ],
 
-    ]
+]
 
 
 datafilter_list  = [ "0", ]

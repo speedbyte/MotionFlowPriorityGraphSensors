@@ -66,7 +66,7 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                     ushort count = 0;
                     const std::vector<std::string> algorithm_metrics_strings = {
 
-                            "total_pixel",
+                            "all_pixels",
                             "l1_good_pixels",
                             "l2_good_pixels",
                             "ma_good_pixels",

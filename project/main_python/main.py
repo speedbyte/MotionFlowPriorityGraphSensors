@@ -218,13 +218,13 @@ if __name__ == '__main__':
             print str(configuration) + " is not found !!!!!! "
 
 
-    for configuration in display_list_extended:
+    for index, configuration in enumerate(display_list_extended):
         reshape_plotgraph_list = list()
         for individual_plots in plotgraph_list_all_parameter_extended_collect:
             if ( individual_plots.get_map_to_data() in configuration ):
                 reshape_plotgraph_list.append(individual_plots)
         if (len(reshape_plotgraph_list) > 0 ):
-            plot_at_once_pointgraph(reshape_plotgraph_list, 0, True)
+            plot_at_once_pointgraph(reshape_plotgraph_list, index, True)
         else:
             print configuration + " is not found !!!!!! "
 

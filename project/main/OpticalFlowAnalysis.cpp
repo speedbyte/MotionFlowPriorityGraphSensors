@@ -230,7 +230,7 @@ std::vector<std::pair<float, float>> OpticalFlow::generate_count_metrics_data(st
 
     count_metrics.sync_point[0] = {'$'};
 
-    count_metrics.total_pixel = (ushort)CLUSTER_COUNT;
+    count_metrics.all_pixels = (ushort)CLUSTER_COUNT;
 
     std::vector<std::pair<float, float>> gnuplot_xy_pts;
     cv::Point2f gt_displacement;

@@ -14,7 +14,7 @@
 
 typedef struct {
 
-    ushort total_pixel;
+    ushort all_pixels;
     ushort l1_good_pixels;
     ushort l2_good_pixels;
     ushort ma_good_pixels;

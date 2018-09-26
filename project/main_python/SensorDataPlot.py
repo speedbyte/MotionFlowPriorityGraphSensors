@@ -154,7 +154,7 @@ class SensorDataPlot(object):
                 #only survey for a specific object
                 xy = dict()
                 #if ( data_points[count+1][obj_index]["visibility"] == 1  ):
-                if ( data_points[count+1][obj_index]["visibility"] == 1 and data_points[count+1][obj_index]["obj_index"] == 1 ):
+                if ( data_points[count+1][obj_index]["visibility"] == 1 and data_points[count+1][obj_index]["obj_index"] == 0 ):
 
                     xy["frame_number"] = data_points[count]["frame_number"]
                     xy[measuring_parameter] = data_points[count+1][obj_index][measuring_parameter]
