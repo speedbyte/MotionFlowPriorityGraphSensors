@@ -57,16 +57,28 @@ y_axis_label_dict = {
 display_list = [
 
     [ "sroi_total_pixel_FB_ground_truth_1_0", "eroi_total_pixel_FB_ground_truth_1_0", "sroi_l2_good_pixels_FB_blue_sky_1_0", "sroi_total_pixel_FB_blue_sky_1_0",
-      "eroi_l2_good_pixels_FB_blue_sky_1_0", "eroi_total_pixel_FB_blue_sky_1_0" ],
+      "eroi_l2_good_pixels_FB_blue_sky_1_0", "eroi_total_pixel_FB_blue_sky_1_0" 
+      ],
 
-    [ "eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0", "sroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
-     "eroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0", "sroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",],
+    [
+        "eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0", "sroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
+      "eroi_l2_cumulative_error_good_pixels_FB_blue_sky_1_0", "sroi_l2_cumulative_error_good_pixels_FB_blue_sky_1_0",
+
+    ],
+
+    [ "eroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0", "sroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
+      "eroi_ma_cumulative_error_good_pixels_FB_blue_sky_1_0", "sroi_ma_cumulative_error_good_pixels_FB_blue_sky_1_0",],
+
 
 ]
 
 display_list_extended  = [
 
-    ["extended_sroi_total_pixel_eroi_total_pixel_FB_ground_truth_1_0"]
+    ["extended_sroi_total_pixel_eroi_total_pixel_FB_blue_sky_1_0",
+     "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
+     "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_LK_blue_sky_1_0",
+     "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_TVL_blue_sky_1_0"]
+
 
 ]
 
@@ -127,6 +139,7 @@ parameter_list_extended = [
     [ "sroi_total_pixel", "eroi_total_pixel" ],
     [ "sroi_l2_good_pixels", "sroi_total_pixel" ],
     [ "eroi_l2_good_pixels", "eroi_total_pixel" ],
+    [ "sroi_l2_cumulative_error_all_pixels", "eroi_l2_cumulative_error_all_pixels" ]
 
     ]
 
