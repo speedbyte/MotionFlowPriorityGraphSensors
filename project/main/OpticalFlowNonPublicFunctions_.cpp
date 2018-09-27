@@ -304,8 +304,13 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 }
 
 
-void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement, std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility,
-                                    std::vector<cv::Point2f> all_moving_objects_in_frame) {
+void OpticalFlow::common_flow_frame( ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array,
+        const std::vector<cv::Point2f>  &displacement_array,
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement,
+        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &multiframe_contour_stencil_displacement,
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement,
+        std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility,
+        std::vector<cv::Point2f> all_moving_objects_in_frame) {
 
     char sensor_index_folder_suffix[50];
     sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
@@ -344,6 +349,8 @@ void OpticalFlow::common_flow_frame(ushort sensor_index, ushort current_frame_in
         frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, object_stencil_displacement, object_contour_stencil_displacement, frame_stencil_disjoint_displacement,frame_stencil_visibility,  all_moving_objects_in_frame, depth_02_frame);
 
         multiframe_stencil_displacement.at(obj_index).push_back(object_stencil_displacement);
+        multiframe_contour_stencil_displacement.at(obj_index).push_back(object_contour_stencil_displacement);
+
         multiframe_stencil_disjoint_displacement.at(obj_index).push_back(frame_stencil_disjoint_displacement);
         multiframe_stencil_visibility.at(obj_index).push_back(frame_stencil_visibility);
 

@@ -60,6 +60,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
         std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > multiframe_contour_stencil_displacement(m_ptr_list_simulated_objects.size());
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement(m_ptr_list_simulated_objects.size());
 
         std::vector<std::vector<std::vector<bool> >  > multiframe_visibility(m_ptr_list_simulated_objects.size());
@@ -125,7 +126,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
                 /// put data in object_stencil_displacement
                 std::vector<std::pair<cv::Point2f,cv::Point2f > > dummy;
-                common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility);
+                common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, multiframe_stencil_displacement, multiframe_contour_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility);
 
             }
 

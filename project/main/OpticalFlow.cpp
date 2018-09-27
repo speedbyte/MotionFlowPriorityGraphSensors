@@ -372,6 +372,10 @@ void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
 
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(
                     ptr_list_of_current_objects.size());
+
+            std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > multiframe_contour_stencil_displacement_interpolated(
+                    ptr_list_of_current_objects.size());
+
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement_interpolated(
                     ptr_list_of_current_objects.size());
 
@@ -430,7 +434,7 @@ void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
                     /// put data in object_stencil_displacement
                     std::vector<std::pair<cv::Point2f, cv::Point2f> > dummy;
                     common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array,
-                                      multiframe_stencil_displacement_interpolated,
+                                      multiframe_stencil_displacement_interpolated, multiframe_contour_stencil_displacement_interpolated,
                                       multiframe_stencil_disjoint_displacement_interpolated, multiframe_visibility);
 
                 } else {

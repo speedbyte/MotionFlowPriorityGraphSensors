@@ -56,6 +56,8 @@ void GroundTruthFlow::generate_flow_vector() {
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(
                 m_ptr_list_gt_objects.size());
+        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > multiframe_contour_stencil_displacement(
+                m_ptr_list_gt_objects.size());
         std::vector<std::vector<std::vector<bool> > > multiframe_visibility(m_ptr_list_gt_objects.size());
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement(
                 m_ptr_list_gt_objects.size());
@@ -103,7 +105,7 @@ void GroundTruthFlow::generate_flow_vector() {
             std::vector<cv::Point2f> frame_next_pts_array, displacement_array;
 
             common_flow_frame(sensor_index, current_frame_index, frame_next_pts_array, displacement_array,
-                              multiframe_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility, all_moving_objects_in_frame);
+                              multiframe_stencil_displacement, multiframe_contour_stencil_displacement, multiframe_stencil_disjoint_displacement, multiframe_visibility, all_moving_objects_in_frame);
 
         }
 
