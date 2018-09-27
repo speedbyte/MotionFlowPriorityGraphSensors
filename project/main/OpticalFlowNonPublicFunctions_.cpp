@@ -297,6 +297,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
     else {
 
         object_stencil_displacement.push_back(std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0)));
+        object_contour_stencil_displacement.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))});
         frame_stencil_visibility.push_back(visibility);
 
     }

@@ -15,6 +15,7 @@
 typedef struct {
 
     ushort all_pixels;
+
     ushort l1_good_pixels;
     ushort l2_good_pixels;
     ushort ma_good_pixels;
@@ -44,6 +45,10 @@ typedef struct {
     COUNT_METRICS sroi_metrics;
     COUNT_METRICS sroi_interpolated_metrics;
 
+
+    // contour pixels
+    ushort all_contour_size;
+    ushort all_contour_pixels[20];
     // Mean
     cv::Point2f mean_pts;
     cv::Point2f mean_displacement;

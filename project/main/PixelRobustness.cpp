@@ -110,13 +110,7 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
 
                          << "visibility" <<
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblity
-/*
-                         << "ground_truth_pixels" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ground_truth_pixels
 
-                         << "ground_truth_sroi_pixels" <<
-                         m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).ground_truth_sroi_pixels
-*/
                          << "stddev_displacement" <<
                          (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).stddev_displacement);
 
@@ -178,6 +172,16 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                         count++;
                     }
                     assert(*(algorithm_sroi_interpolated_metrics_pointer_metrics_sync_point+0) == '$');
+
+                    m_fs << "contour_size" << m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
+                            current_frame_index).at(objIndex).all_contour_size;
+
+                    for ( auto x = 0; x < m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
+                            current_frame_index).at(objIndex).all_contour_size; x++ ) {
+                        m_fs << "contour_pixels_" + std::to_string(x) <<
+                                (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
+                                        current_frame_index).at(objIndex).all_contour_pixels[x]);
+                    }
 
                     m_fs
                          << "}";

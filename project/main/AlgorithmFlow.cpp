@@ -136,6 +136,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
 
                 for ( ushort obj_index = 0; obj_index < m_ptr_list_simulated_objects.size(); obj_index++ ) {
                     multiframe_stencil_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
+                    multiframe_contour_stencil_displacement.at(obj_index).push_back({{{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}}});
                     multiframe_stencil_disjoint_displacement.at(obj_index).push_back({{std::make_pair(cv::Point2f(0, 0),cv::Point2f(0, 0))}});
                     multiframe_visibility.at(obj_index).push_back({{false}});
                 }
