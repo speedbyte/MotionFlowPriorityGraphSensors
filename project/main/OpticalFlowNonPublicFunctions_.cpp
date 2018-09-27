@@ -178,8 +178,33 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 std::fill(frame_stencil_visibility.begin(), frame_stencil_visibility.end(), (bool)1);
 
                 for ( auto it = object_stencil_displacement.begin(); it != object_stencil_displacement.end(); it++) {
-                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
+                    //cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
                 }
+                //cv::imshow("all_algo", tempImage);
+                //cv::waitKey(0);
+
+                //---------------------------------------------------------------------------------------------------------
+                // Look for only those pixels that lie within the ground truth stencil of this particular object
+                std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >  object_contours = m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest();
+                ushort CONTOUR_COUNT = object_contours.at(sensor_index).at(current_frame_index).size();
+                for ( ushort obj_contour_index = 0; obj_contour_index < CONTOUR_COUNT; obj_contour_index++) {
+
+                    std::vector<std::pair<cv::Point2f, cv::Point2f> > object_contour_stencil_displacement;
+                    MyIntersection myIntersectionContour;
+                    myIntersectionContour.find_intersection_pair(entire_frame_algorithm_result_pts_displacement.begin(), entire_frame_algorithm_result_pts_displacement.end(),
+                            m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(sensor_index).at(current_frame_index).at(obj_contour_index).begin(),
+                            m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(sensor_index).at(current_frame_index).at(obj_contour_index).end());
+                    object_contour_stencil_displacement = myIntersectionContour.getResultIntersectingPair();
+
+                    for ( auto it = object_contour_stencil_displacement.begin(); it != object_contour_stencil_displacement.end(); it++) {
+                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
+                    }
+                    cv::imshow("algo_contours_" + std::to_string(obj_contour_index), tempImage);
+                    cv::waitKey(0);
+
+                }
+
+                cv::destroyAllWindows();
 
                 //---------------------------------------------------------------------------------------------------------
                 // Look for only those pixels that does not lie within the ground truth stencil of this particular object
@@ -198,13 +223,14 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                 //std::fill(frame_stencil_disjoint_visibility.begin(), frame_stencil_disjoint_visibility.end(), (bool)1);
 
                 for ( auto it = frame_stencil_disjoint_displacement.begin(); it != frame_stencil_disjoint_displacement.end(); it++) {
-                    cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
+                    //cv::circle(tempImage, (*it).first, 1, cv::Scalar(255,0,0));
                 }
                 //cv::imshow("disjoint", tempImage);
                 //cv::waitKey(0);
                 cv::destroyAllWindows();
 
                 std::cout << "found " << object_stencil_displacement.size() << " disjoint " << frame_stencil_disjoint_displacement.size() << " total " << m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() << std::endl;
+
 
                 /*
                 assert( ((object_stencil_displacement.size() + frame_stencil_disjoint_displacement.size()) <=  m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement().at(sensor_index).at(current_frame_index).size() + 25)

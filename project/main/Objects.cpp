@@ -32,6 +32,14 @@ void Objects::push_back_object_sroi(
 
 }
 
+void Objects::push_back_object_croi(
+        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > sensor_stencil_movement) {
+
+    m_object_croi.push_back(sensor_stencil_movement);
+
+}
+
+
 void Objects::push_back_object_sroi_interpolated(
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement) {
 

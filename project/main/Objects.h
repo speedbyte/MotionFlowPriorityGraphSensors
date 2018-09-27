@@ -47,6 +47,9 @@ protected:
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_object_sroi;
 
+    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >
+            m_object_croi;
+
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_object_sroi_interpolated;
 
@@ -190,12 +193,19 @@ public:
         return m_object_sroi;
     }
 
+    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &get_object_contour_region_of_interest() const {
+        return m_object_croi;
+    }
+
     const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &get_object_disjoint_special_region_of_interest() const {
         return m_object_sroi_disjoint;
     }
 
     void push_back_object_sroi(
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>> sensor_stencil_movement);
+
+    void push_back_object_croi(
+            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>>> sensor_stencil_movement);
 
     void push_back_object_sroi_interpolated(
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>> sensor_stencil_movement);

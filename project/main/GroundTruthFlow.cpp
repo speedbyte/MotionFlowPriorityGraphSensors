@@ -121,6 +121,9 @@ void GroundTruthFlow::generate_flow_vector() {
 }
 
 
+
+
+
 void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
@@ -216,6 +219,7 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
                 cv::Mat mask_object_1, mask_object_2;
                 cv::Mat mask_object_1_dilated, mask_object_2_dilated;
+                cv::Mat mask_object_1_eroded, mask_object_2_eroded, mask_object_1_eroded_pre, mask_object_2_eroded_pre;
 
                 ushort val_1 = (ushort)(list_of_gt_objects_combination.at(obj_combination_index).first->getObjectId() * 64 + 32768) ;
                 ushort val_2 = (ushort)(list_of_gt_objects_combination.at(obj_combination_index).second->getObjectId() * 64 + 32768);
@@ -322,6 +326,7 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
                 std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > gt_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement();
 
+                // validate special region of interest
                 // sroi pixels
                 // does eroi contains sroi coordinates? It should have because we are expanding eroi with new interpolated values. So, what is the final value?
                 std::vector<std::pair<cv::Point2f, cv::Point2f> > intersection_of_gt_and_sroi;
@@ -367,6 +372,167 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
     // validate woth getSpecialRegionOfInterest
 
+}
+
+void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
+
+    // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
+    // pixels lie on the occlusion boundary.
+    // intersection coordinates, convert to Mat, fill with 0, and then find the contour. This is the occlusion boundary.
+    // subtract area for evaluation from the object farther away.
+    // total = visible part object front + visible part object back
+    // boundary = common
+    // invisible part = total object part back - visible part object back
+    // object_stencil_displacement contains ground truth - all pixels are present in the vector
+    // Intersection bounding box
+
+    // depends on flow image and flow stencil
+
+    // -----
+
+    std::vector<Objects *> ptr_list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_copied_gt_objects;
+    std::vector<Objects *> ptr_list_of_copied_simulated_objects;
+    for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+        ptr_list_of_copied_gt_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+    }
+
+    if (m_opticalFlowName == "ground_truth") {
+        ptr_list_of_current_objects = ptr_list_of_copied_gt_objects;
+    } else {
+
+        for ( auto i = 0; i < get_simulated_objects_ptr_list().size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(get_simulated_objects_ptr_list().at(i)));
+        }
+
+        ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
+    }
+
+    char sensor_index_folder_suffix[50];
+
+    for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
+
+
+        unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
+                sensor_index).size();
+        assert(FRAME_COUNT > 0);
+
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::m_frame_size, CV_32FC3);
+        sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
+
+        std::cout << "begin generating ground truth object contours" << sensor_index_folder_suffix << std::endl;
+
+        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > all_frame_object_contour_region_of_interest(m_ptr_list_gt_objects.size());
+
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+
+            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > frame_object_contour_region_of_interest(m_ptr_list_gt_objects.size());
+
+            char file_name_input_image[50];
+            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(current_frame_index).frame_no;
+
+            sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+            std::string flow_path = m_generatepath.parent_path().string() + "/flow_occ_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+            //std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+            std::string gt_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
+
+            std::cout << "current_frame_index  " << current_frame_index << std::endl;
+
+            cv::Mat flow_image = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
+            cv::cvtColor(flow_image, flow_image, CV_RGB2BGR);
+            if ( flow_image.empty() ) {
+                throw("No image found error");
+            }
+
+            cv::Mat intersection_image(Dataset::m_frame_size, CV_MAKE_TYPE(flow_image.depth(),1));
+            int from_to[] = { 2,0 };  // copy the third channel ( channel 2 object id ) to the first channel of intersection_image
+            cv::mixChannels(flow_image, intersection_image, from_to, 1); // the last parameter is the number of pairs
+
+            for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+
+                cv::Point2f gt_displacement_1 = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(current_frame_index).second;
+
+                std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_special_region_of_interest;
+
+                cv::Mat mask_object;
+                cv::Mat mask_object_eroded, mask_object_eroded_pre;
+
+                ushort val = (ushort)(m_ptr_list_gt_objects.at(obj_index)->getObjectId() * 64 + 32768) ;
+
+                cv::inRange(intersection_image, val, val, mask_object);
+
+                std::vector<cv::Mat> contours;
+
+                cv::Mat mask_object_new;
+                cv::medianBlur ( mask_object, mask_object_new, 11);
+                //cv::bilateralFilter( mask_object, mask_object_new, 19, 7, 7, 4);
+                //cv::fastNlMeansDenoising(mask_object, mask_object_new, 10, 21, 51 );
+                cv::imshow("denoise", mask_object_new);
+                cv::imshow("noise", mask_object);
+                //cv::waitKey(0);
+                cv::destroyAllWindows();
+                //cv::fastNlMeansDenoising(mask_object_2, mask_object_2); //, float h=3, int templateWindowSize=7, int searchWindowSize=21 )¶
+
+                mask_object_eroded = mask_object_new.clone();
+
+                cv::Mat results;
+                do {
+
+                    mask_object_eroded_pre = mask_object_eroded.clone();
+
+                    for (int i = 0; i < 5; i++) {
+                        cv::erode(mask_object_eroded, mask_object_eroded, cv::Mat());
+                    }
+
+                    cv::compare(mask_object_eroded, mask_object_eroded_pre, results, CV_CMP_NE);
+                    contours.push_back(results.clone());
+
+                    //cv::imshow("final", results);
+                    //cv::waitKey(0);
+
+                } while (cv::countNonZero(results) > 1);
+
+                std::cout << "number of contours in the object = " << contours.size() << std::endl;
+
+                std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > frame_contour_region_of_interest(contours.size());
+
+                for ( ushort object_contour_index = 0; object_contour_index < contours.size(); object_contour_index++) {
+                    if ( contours.at(object_contour_index).data == NULL  ) {
+                        throw;
+                    }
+                    //cv::imshow("contour", contours.at(object_contour_index));
+                    //cv::waitKey(0);
+                    for ( auto x = 0; x < results.cols; x++ ) {
+                        for ( auto y = 0; y < results.rows; y++) {
+                        // there is only one object per Mat. Hence we can safely scan the whole frame.
+                            if ( contours.at(object_contour_index).at<char>(y,x) != 0 ) {
+                                frame_contour_region_of_interest.at(object_contour_index).push_back(std::make_pair(cv::Point2f(x,y), gt_displacement_1));
+                            }
+                        }
+                    }
+                }
+
+                frame_object_contour_region_of_interest.at(obj_index) = frame_contour_region_of_interest;
+
+            }
+
+            for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+
+                all_frame_object_contour_region_of_interest.at(obj_index).push_back(
+                        frame_object_contour_region_of_interest.at(obj_index));
+
+            }
+        }
+
+
+        for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+
+            m_ptr_list_gt_objects.at(obj_index)->push_back_object_croi(all_frame_object_contour_region_of_interest.at(obj_index));
+
+        }
+    }
 }
 
 

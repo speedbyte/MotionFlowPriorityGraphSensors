@@ -33,6 +33,15 @@
 // why does vires generates one image more than the ground truth information. That means the last ground truth informtion is bogus. Hence while reading the ground truth, the max should be
 // frame_count in position file - 1.
 
+// algorithm
+
+// get all moving objects using frame difference
+// get intersection in std::vector form squared region of interest and all moving objects
+// refine the intersection point using depth information
+// convert std vector ( object_stencil_displacement.. ) contains the necessary masks; into flow image and code the pixels with object id
+// read flow image with object id and make masks of objects to calculate special region of interest.
+
+
 //DONE
 // check if depth is correct - depth is taken from the last value. the sensor position does not matter for the depth image. it is always taken from the middle of the rear axle.
 // find values of algorithm displacement at sroi - DONE.
@@ -307,8 +316,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> noise_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> noise_list = {"blue_sky", "night"};
     //const std::vector < std::string> noise_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    const std::vector<std::string> noise_list = {"blue_sky", "heavy_snow"};
-    //const std::vector<std::string> noise_list = {"blue_sky"};
+    //const std::vector<std::string> noise_list = {"blue_sky", "heavy_snow"};
+    const std::vector<std::string> noise_list = {"blue_sky"};
 
     auto tic_all = std::chrono::steady_clock::now();
     auto tic = std::chrono::steady_clock::now();
@@ -420,6 +429,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     gt_flow.rerun_optical_flow_algorithm_interpolated();
                     gt_flow.find_ground_truth_object_special_region_of_interest();
+                    gt_flow.find_ground_truth_object_contour_region_of_interest();
+
                     fs_ground_truth.open((gt_flow.getGeneratePath() + std::string("/values_ground_truth.yml")) , cv::FileStorage::WRITE);
 
                     for (ushort obj_index = 0; obj_index < list_of_gt_objects_base.size(); obj_index++) {
@@ -466,7 +477,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             std::unique_ptr<AlgorithmFlow> ptr_OF_algorithm;
 
-            for (ushort stepSize = 2; stepSize <= 2; stepSize += 4) {
+            for (ushort stepSize = 1; stepSize <= 1; stepSize += 4) {
 
                 // the base changes when the ground truth with respect to this cycle changes.
                 // If the step size changes, then it means that the ground truth also changes.

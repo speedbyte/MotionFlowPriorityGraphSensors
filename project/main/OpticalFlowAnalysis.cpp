@@ -1,8 +1,7 @@
+
 #include "OpticalFlow.h"
 #include <gnuplot-iostream/gnuplot-iostream.h>
 #include "Utils.h"
-#include "SortandIntersect.h"
-#include "Objects.h"
 
 void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
