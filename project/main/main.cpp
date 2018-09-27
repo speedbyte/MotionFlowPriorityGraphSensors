@@ -62,8 +62,6 @@
 
 
 
-using namespace std::chrono;
-
 //extern bool eval(std::string result_sha, Mail *mail);
 //extern void plotVectorField (FlowImage &F,std::string dir,char* prefix);
 
@@ -312,8 +310,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     const std::vector<std::string> noise_list = {"blue_sky", "heavy_snow"};
     //const std::vector<std::string> noise_list = {"blue_sky"};
 
-    auto tic_all = steady_clock::now();
-    auto tic = steady_clock::now();
+    auto tic_all = std::chrono::steady_clock::now();
+    auto tic = std::chrono::steady_clock::now();
 
     cv::FileStorage fs_ground_truth;
     cv::FileStorage fs_algorithm;
@@ -432,8 +430,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                     gt_flow.generate_collision_points();
                     gt_flow.generate_metrics_optical_flow_algorithm(); // this is to just create Jaccard Index  =  1
 
-                    time_map["prepare_ground_truth"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
-                    tic = steady_clock::now();
+                    time_map["prepare_ground_truth"] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - tic).count();
+                    tic = std::chrono::steady_clock::now();
 
                     if ((cpp_dataset.analyse && cpp_dataset.execute) || (vires_dataset.analyse && vires_dataset.execute)) {
 
@@ -441,8 +439,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         vectorRobustness.generateVectorRobustness( gt_flow, gt_flow, fs_ground_truth);
                     }
 
-                    time_map["robustness_gt_flow"] = duration_cast<milliseconds>(steady_clock::now() - tic).count();
-                    tic = steady_clock::now();
+                    time_map["robustness_gt_flow"] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - tic).count();
+                    tic = std::chrono::steady_clock::now();
                 }
                 ptr_gt_flow = std::make_unique<GroundTruthFlow>(gt_flow);
             }
@@ -468,7 +466,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
             std::unique_ptr<AlgorithmFlow> ptr_OF_algorithm;
 
-            for (ushort stepSize = 1; stepSize <= 1; stepSize += 4) {
+            for (ushort stepSize = 2; stepSize <= 2; stepSize += 4) {
 
                 // the base changes when the ground truth with respect to this cycle changes.
                 // If the step size changes, then it means that the ground truth also changes.
@@ -606,9 +604,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     auto position = ptr_OF_algorithm->getResultOrdner().find('/');
                     std::string suffix = ptr_OF_algorithm->getResultOrdner().replace(position, 1, "_");
-                    time_map["algorithm_flow_" + suffix] = (duration_cast<milliseconds>(
-                            steady_clock::now() - tic).count());
-                    tic = steady_clock::now();
+                    time_map["algorithm_flow_" + suffix] = (std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() - tic).count());
+                    tic = std::chrono::steady_clock::now();
 
                     if ((Dataset::m_execute_algorithm && cpp_dataset.analyse && cpp_dataset.execute) ||
                         (Dataset::m_execute_algorithm && vires_dataset.analyse && vires_dataset.execute)) {
@@ -618,9 +616,9 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                         vectorRobustness.generateVectorRobustness(*ptr_OF_algorithm,
                                                                   *ptr_OF_algorithm, fs_algorithm);
 
-                        time_map["robustness_" + suffix] = (duration_cast<milliseconds>(
-                                steady_clock::now() - tic).count());
-                        tic = steady_clock::now();
+                        time_map["robustness_" + suffix] = (std::chrono::duration_cast<std::chrono::milliseconds>(
+                                std::chrono::steady_clock::now() - tic).count());
+                        tic = std::chrono::steady_clock::now();
 
                     }
 
@@ -668,7 +666,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
         total += n.second;
     }
 
-    time_map["total"] = duration_cast<milliseconds>(steady_clock::now() - tic_all).count();
+    time_map["total"] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - tic_all).count();
     fs_ground_truth << "{:" << "total" << time_map["total"] << "}";
     fs_ground_truth << "]";
     std::cout << "unaccounted time = " << time_map["total"] - total << std::endl;

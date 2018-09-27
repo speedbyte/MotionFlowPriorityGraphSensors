@@ -29,7 +29,6 @@
 
 //Creating a movement path. The path is stored in a x and y vector
 
-using namespace std::chrono;
 
 void GroundTruthFlow::prepare_groundtruth_flow_directories(std::string noise, ushort fps, ushort stepSize) {
 

@@ -11,8 +11,6 @@
 
 extern void salt(cv::Mat image, int n);
 
-using namespace std::chrono;
-
 void canny(cv::Mat& img, cv::Mat& out) {
     // Convert to gray
     if (img.channels()==3)
@@ -254,7 +252,7 @@ void of_algo(boost::filesystem::path dataset_path, std::string video, std::strin
                 z_pts.push_back(count);
             }
         }
-        auto toc = steady_clock::now();
+        auto toc = std::chrono::steady_clock::now();
 
         video_out.write(frame);
         // Display the output image

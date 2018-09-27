@@ -28,8 +28,6 @@ boost::filesystem::path GroundTruthScene::m_ground_truth_flow_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_plot_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_framedifference_path;
 
-using namespace std::chrono;
-
 void GroundTruthScene::prepare_scene_directories_others(ushort sensor_group_index) {
 
     m_groundtruthpath = Dataset::m_dataset_gtpath; // data/stereo_flow

@@ -126,6 +126,10 @@ protected:
     void find_collision_points_given_two_line_parameters(const cv::Point2f lineparameters1, const cv::Point2f lineparameters2,
                                                          std::vector<cv::Point2f> &collision_points);
 
+    void common_flow_frame(ushort sensor_index, ushort current_frame_index,  const std::vector<cv::Point2f> &next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement,  std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility,
+            std::vector<cv::Point2f> all_moving_objects_in_frame = {}) ;
+
+
 public:
 
     OpticalFlow( const std::vector<ushort> evaluation_list, const std::string noise, const std::string opticalFlowName, const std::vector<Sensors> &list_of_gt_sensors_base, const std::vector<GroundTruthObjects *> &ptr_list_gt_objects, const ushort stepSize, const std::shared_ptr<OpticalFlow> ptr_gt_flow ) : m_evaluation_list(evaluation_list), m_noise(noise), m_opticalFlowName(opticalFlowName), m_list_of_gt_sensors(list_of_gt_sensors_base), m_ptr_list_gt_objects(ptr_list_gt_objects), mStepSize(stepSize), m_ptr_gt_flow(ptr_gt_flow)  { };
@@ -159,9 +163,6 @@ public:
     virtual const std::vector<SimulatedObjects *>& get_simulated_objects_ptr_list() {
         throw;
     }
-
-    void common_flow_frame(ushort sensor_index, ushort current_frame_index,  const std::vector<cv::Point2f> &next_pts_array, const std::vector<cv::Point2f>  &displacement_array,std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement, std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement,  std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility,
-                           std::vector<cv::Point2f> all_moving_objects_in_frame = {}) ;
 
     void plot_stencil();
 

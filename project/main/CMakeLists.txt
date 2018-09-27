@@ -21,7 +21,11 @@ set(SOURCE_FILES
         KittiSubmitInterface.cpp ObjectMetaData.cpp main.cpp run_configuration.cpp kitti_calibration.cpp
         video_capture.cpp GroundTruthFlow.cpp AlgorithmFlow.cpp kbhit.cpp Dataset.cpp PlotFlow.cpp
         GenerateGroundTruthScene.cpp GenerateGroundTruthSceneInternal.cpp GenerateGroundTruthSceneExternal.cpp GroundTruthObjects.cpp Noise.cpp Noise.h SensorImage.cpp
-        SensorImage.h FlowImageExtended.cpp RobustnessIndex.cpp RobustnessIndex.h OpticalFlow.cpp OpticalFlowCollisionVector.cpp OpticalFlowAnalysis.cpp OpticalFlowOcclusion.cpp OpticalFlowPlotter.cpp OpticalFlow.h SimulatedObjects.cpp SimulatedObjects.h Objects.cpp Objects.h Sensors.cpp SensorMetaData.h Utils.h DataProcessingAlgorithm.cpp DataProcessingAlgorithm.h OpticalFlow_later.cpp GenerateViresObjects.cpp GenerateViresObjects.h GenerateCppObjects.cpp BasicObjects.cpp PixelRobustness.cpp VectorRobustness.cpp SortandIntersect.h InterpolateData.cpp InterpolateData.h ObjectImageShapeData.cpp ObjectImageShapeData.h OpticalFlowStichImages.cpp)
+        SensorImage.h FlowImageExtended.cpp RobustnessIndex.cpp RobustnessIndex.h OpticalFlow.cpp OpticalFlowCollisionVector.cpp OpticalFlowAnalysis.cpp OpticalFlowOcclusion.cpp
+        OpticalFlowPlotter.cpp OpticalFlow.h SimulatedObjects.cpp SimulatedObjects.h Objects.cpp Objects.h Sensors.cpp SensorMetaData.h Utils.h DataProcessingAlgorithm.cpp
+        DataProcessingAlgorithm.h OpticalFlow_later.cpp GenerateViresObjects.cpp GenerateViresObjects.h GenerateCppObjects.cpp BasicObjects.cpp PixelRobustness.cpp
+        VectorRobustness.cpp SortandIntersect.h InterpolateData.cpp InterpolateData.h ObjectImageShapeData.cpp ObjectImageShapeData.h OpticalFlowStichImages.cpp
+        OpticalFlowNonPublicFunctions_.cpp)
 
 add_executable(main ${SOURCE_FILES})
 target_link_libraries( main ${OpenCV_LIBRARIES} ${Boost_LIBRARIES} png viresrdb)

@@ -325,7 +325,7 @@ void GroundTruthSceneExternal::read_gt_scene_data() {
 
 
 void GroundTruthSceneExternal::generate_frame_difference_images_noise() {
-    viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_frame_difference_images();
+    //viresObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_frame_difference_images();
 }
 
 void GroundTruthSceneExternal::write_gt_scene_data() {
