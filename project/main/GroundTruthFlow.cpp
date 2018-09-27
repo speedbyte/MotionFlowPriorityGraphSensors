@@ -476,12 +476,29 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                 cv::Mat sectioned_contours;
 
                 std::vector<std::vector<cv::Point> > contours_vector;
-
                 cv::findContours(mask_object, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
 
                 for ( ushort contour_index = 0; contour_index < contours_vector.size(); contour_index++) {
                     cv::drawContours(mask_object_new, contours_vector, contour_index, cv::Scalar(255), -1);
                 }
+
+                cv::Point pt1_diag1 = cv::Point((unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x,
+                                          (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y);
+
+                cv::Point pt2_diag1 = cv::Point(
+                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x
+                        + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.width_px,
+                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y
+                + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.height_px);
+
+                cv::Point pt1_diag2 = cv::Point((unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x
+                                                + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.width_px, (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y);
+
+                cv::Point pt2_diag2 = cv::Point(
+                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x,
+                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y
+                        + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.height_px);
+
 
                 //cv::imshow("denoise", mask_object_new);
                 //cv::imshow("noise", mask_object);
@@ -500,10 +517,27 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                     }
 
                     cv::compare(mask_object_eroded, mask_object_eroded_pre, results, CV_CMP_NE);
-                    contours.push_back(results.clone());
 
-                    //cv::imshow("final", results);
-                    //cv::waitKey(0);
+                    cv::Mat mask_object_section;
+
+                    mask_object_section = results.clone();
+
+                    cv::line(mask_object_section, pt1_diag1, pt2_diag1, 0, 2);
+                    cv::line(mask_object_section, pt1_diag2, pt2_diag2, 0, 2);
+
+                    cv::Mat mask_object_new_new(mask_object.size(), CV_8UC1, cv::Scalar(0));
+                    cv::findContours(mask_object_section, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+
+                    for ( ushort contour_index = 0; contour_index < contours_vector.size(); contour_index++) {
+                        mask_object_new_new.setTo(0);
+                        if ( contours_vector.at(contour_index).size() > 2) {
+                            cv::drawContours(mask_object_new_new, contours_vector, contour_index, cv::Scalar(255), -1);
+                            contours.push_back(mask_object_new_new.clone());
+                            cv::imshow("final", mask_object_new_new);
+                            cv::waitKey(0);
+
+                        }
+                    }
 
                 } while (cv::countNonZero(results) > 1);
 
