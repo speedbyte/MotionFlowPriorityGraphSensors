@@ -66,7 +66,7 @@ public:
 
     void generate_edge_images();
 
-    void generateFrameDifferenceImage();
+    void generate_frame_difference_images();
 };
 
 #endif //MAIN_BASICOBJECTS_H

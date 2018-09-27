@@ -589,6 +589,8 @@ public:
 
     void read_gt_scene_data() override;
 
+    void generate_frame_difference_images_noise();
+
 };
 
 

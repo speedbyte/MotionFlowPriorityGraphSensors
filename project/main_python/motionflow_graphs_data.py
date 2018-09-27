@@ -100,12 +100,23 @@ display_list_extended  = [
     [
         "extended_eroi_l2_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
         "extended_eroi_ma_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+
+        "extended_eroi_l2_good_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
+        "extended_eroi_ma_good_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
+
     ],
 
     [
         "extended_sroi_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
         "extended_sroi_l2_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
         "extended_sroi_ma_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+    ],
+
+    [
+        "extended_eroi_l2_cumulative_error_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "extended_eroi_l2_cumulative_error_all_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
+        "extended_sroi_l2_cumulative_error_all_pixels_sroi_all_pixels_FB_blue_sky_1_0",
+        "extended_sroi_l2_cumulative_error_all_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
     ],
 
 ]
@@ -178,13 +189,15 @@ parameter_list_extended = [
     [ "sroi_l2_good_pixels", "eroi_all_pixels" ],
     [ "eroi_ma_good_pixels", "eroi_all_pixels" ],
     [ "sroi_ma_good_pixels", "eroi_all_pixels" ],
+    [ "eroi_l2_cumulative_error_all_pixels", "eroi_all_pixels" ],
+    [ "sroi_l2_cumulative_error_all_pixels", "sroi_all_pixels" ],
 
 ]
 
 
 datafilter_list  = [ "0", ]
 
-algorithm_list   = ["LK", "FB",]
+algorithm_list   = ["TVL", "FB",]
 #algorithm_list   = ["FB",]
 algorithm_list   = ["FB", "TVL", "LK"]
 

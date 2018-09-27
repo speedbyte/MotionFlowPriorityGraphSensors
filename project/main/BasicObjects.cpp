@@ -417,7 +417,7 @@ void BasicObjects::generate_edge_images() {
 }
 
 
-void BasicObjects::generateFrameDifferenceImage() {
+void BasicObjects::generate_frame_difference_images() {
     // Frame Differencing
 
     unsigned long FRAME_COUNT = 0;

@@ -446,9 +446,14 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
                 }
                 ptr_gt_flow = std::make_unique<GroundTruthFlow>(gt_flow);
             }
+            else {
 
+                if (Dataset::GENERATE) {
 
-            if ((noise_index == noise_list.size() - 1) && Dataset::GENERATE) {
+                }
+            }
+
+             if ((noise_index == noise_list.size() - 1) && Dataset::GENERATE) {
                 //base_ptr_gt_scene->stopSimulation();
                 // Hack the images and the position_file
                 //system("python ../quicky_1.py 1");

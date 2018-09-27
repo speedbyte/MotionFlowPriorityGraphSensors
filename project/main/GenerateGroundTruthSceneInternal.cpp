@@ -59,7 +59,7 @@ void GroundTruthSceneInternal::write_gt_scene_data() {
         for ( ushort sensor_group_index = 0 ; sensor_group_index < m_generation_sensor_list.size() ; sensor_group_index++) {
 
             cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).validate_depth_images();
-            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generateFrameDifferenceImage();
+            cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_frame_difference_images();
             cppObjects.at(m_evaluation_sensor_list.at(sensor_group_index)).generate_edge_images();
 
             //cppObjects.at(m_generation_sensor_list.at(sensor_group_index)).closeAllFileHandles();
