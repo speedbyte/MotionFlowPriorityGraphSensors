@@ -7,7 +7,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -D_DEBUG -ggdb3  -Wsign-conversion")
 
-find_package(OpenCV EXACT 3.2.0 COMPONENTS core highgui videoio imgcodecs video REQUIRED)
+find_package(OpenCV EXACT 3.2.0 COMPONENTS core highgui videoio imgcodecs video photo REQUIRED)
 find_package(Boost EXACT 1.64 COMPONENTS filesystem iostreams REQUIRED)
 
 #configure_file(Example.h.in Example.h)
