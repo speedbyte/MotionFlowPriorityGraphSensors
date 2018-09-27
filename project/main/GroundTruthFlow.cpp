@@ -478,6 +478,25 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                 //cv::fastNlMeansDenoising(mask_object_2, mask_object_2); //, float h=3, int templateWindowSize=7, int searchWindowSize=21 )¶
 
                 mask_object_eroded = mask_object_new.clone();
+                cv::Mat sectioned_contours;
+
+                std::vector<std::vector<cv::Point> > contours_vector;
+                cv::findContours(mask_object, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE,
+                        cv::Point(cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
+                                current_frame_index).m_object_location_camera_px.location_x_px),
+                                cvRound(m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(
+                                        current_frame_index).m_object_location_camera_px.location_y_px)));
+
+
+                cv::Mat contourImage(mask_object.size(), CV_8UC3, cv::Scalar(0,0,0));
+                for ( ushort contour_index = 0; contour_index < contours_vector.size(); contour_index++) {
+                    cv::drawContours(contourImage, contours, contour_index, cv::Scalar(255,255,255));
+                    // cv2.drawContours(des,[cnt],0,255,-1)
+                    break;
+                }
+
+                cv::imshow("con", contourImage);
+                cv::waitKey(0);
 
                 cv::Mat results;
                 do {

@@ -17,6 +17,7 @@ void Objects::push_back_object_stencil_point_displacement_pixel_visibility(
 
 }
 
+
 void Objects::push_back_object_interpolated_stencil_point_displacement_pixel_visibility(
         std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > sensor_stencil_movement,  std::vector<std::vector<bool> > sensor_stencil_visibility ) {
 

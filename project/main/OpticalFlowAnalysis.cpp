@@ -59,6 +59,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >  special_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_special_region_of_interest();
 
+                    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > contour_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest();
+
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > gt_roi_object = m_ptr_list_gt_objects.at(obj_index)->get_object_stencil_point_displacement();
 
                     // displacements found by the ground truth for this object
