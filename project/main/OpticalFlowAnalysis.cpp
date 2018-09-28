@@ -45,9 +45,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
             for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
-                (ptr_list_of_current_objects.size());
                 std::vector<OPTICAL_FLOW_EVALUATION_METRICS> evaluationData(ptr_list_of_current_objects.size());
-
 
                 ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                         (0).at(current_frame_index).frame_no;
@@ -144,9 +142,13 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
-                        evaluationData.at(obj_index).all_contour_size = contour_roi_object.at(sensor_index).at(current_frame_index).at(0).size();
+                        evaluationData.at(obj_index).all_contour_size = contour_roi_object.at(sensor_index).at(current_frame_index).size();
                         for ( ushort contour_index = 0 ; contour_index < evaluationData.at(obj_index).all_contour_size; contour_index++) {
-                            evaluationData.at(obj_index).all_contour_pixels[contour_index] = contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).at(0).size();
+                            if ( contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).size() > 0 ) {
+                                evaluationData.at(obj_index).all_contour_pixels[contour_index] = contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).at(0).size();
+                            } else {
+                                evaluationData.at(obj_index).all_contour_pixels[contour_index] = 0;
+                            }
                         }
 
 

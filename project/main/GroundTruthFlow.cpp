@@ -509,12 +509,15 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
 
                 mask_object_eroded = mask_object_new.clone();
 
+                ushort erosion_size = (ushort)((m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.width_px *
+                        m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.width_px) / 420);
                 cv::Mat results;
                 do {
 
                     mask_object_eroded_pre = mask_object_eroded.clone();
 
-                    for (int i = 0; i < 5; i++) {
+
+                    for (int i = 0; i < erosion_size; i++) {
                         cv::erode(mask_object_eroded, mask_object_eroded, cv::Mat());
                     }
 
@@ -552,7 +555,10 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                 std::vector< GROUND_TRUTH_CONTOURS > frame_contour_region_of_interest(contours.size());
 
                 for ( ushort contour_index = 0; contour_index < contours.size(); contour_index++) {
-                    for ( ushort section_index = 0; section_index < contours_vector.size(); section_index++) {
+
+                    GROUND_TRUTH_CONTOURS  section_region_of_interest(contours.at(contour_index).size());
+
+                    for ( ushort section_index = 0; section_index < contours.at(contour_index).size(); section_index++ ) {
                         if (contours.at(contour_index).at(section_index).data == NULL) {
                             throw;
                         }
@@ -562,16 +568,17 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                             for (auto y = 0; y < results.rows; y++) {
                                 // there is only one object per Mat. Hence we can safely scan the whole frame.
                                 if (contours.at(contour_index).at(section_index).at<char>(y, x) != 0) {
-                                    frame_contour_region_of_interest.at(contour_index).at(section_index).push_back(
+                                    section_region_of_interest.at(section_index).push_back(
                                             std::make_pair(cv::Point2f(x, y), gt_displacement_1));
                                 }
                             }
                         }
+                        frame_contour_region_of_interest.at(contour_index).push_back(section_region_of_interest.at(section_index));
                     }
+
                 }
 
                 frame_object_contour_region_of_interest.at(obj_index) = frame_contour_region_of_interest;
-
             }
 
             for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
