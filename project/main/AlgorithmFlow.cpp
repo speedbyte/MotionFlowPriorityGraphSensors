@@ -60,7 +60,7 @@ void AlgorithmFlow::run_optical_flow_algorithm(std::vector<ushort> evaluation_se
         std::cout << "saving algorithm flow files in flow/ for sensor_index  " << sensor_index << std::endl;
 
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement(m_ptr_list_simulated_objects.size());
-        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > multiframe_contour_stencil_displacement(m_ptr_list_simulated_objects.size());
+        std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > multiframe_contour_stencil_displacement(m_ptr_list_simulated_objects.size());
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement(m_ptr_list_simulated_objects.size());
 
         std::vector<std::vector<std::vector<bool> >  > multiframe_visibility(m_ptr_list_simulated_objects.size());

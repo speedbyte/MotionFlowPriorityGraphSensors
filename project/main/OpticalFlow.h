@@ -10,6 +10,8 @@
 #include "SimulatedObjects.h"
 #include "FlowImageExtended.h"
 #include "Sensors.h"
+#include "MotionFlowTypes.h"
+
 
 
 typedef struct {
@@ -82,7 +84,7 @@ private:
     void frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index,
             const std::vector<cv::Point2f> &frame_next_pts_array, const std::vector<cv::Point2f>  &displacement_array,
             ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &object_stencil_displacement,
-            std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &object_contour_stencil_displacement,
+            std::vector< GROUND_TRUTH_CONTOURS > &object_contour_stencil_displacement,
             std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_disjoint_displacement,
             std::vector<bool> &frame_stencil_visibility, const std::vector<cv::Point2f> &all_moving_objects_in_frame, const cv::Mat& depth_02_frame);
 
@@ -139,7 +141,7 @@ protected:
     void common_flow_frame(ushort sensor_index, ushort current_frame_index,  const std::vector<cv::Point2f> &next_pts_array,
             const std::vector<cv::Point2f>  &displacement_array,
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement,
-            std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &multiframe_contour_stencil_displacement,
+            std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > &multiframe_contour_stencil_displacement,
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement,
             std::vector<std::vector<std::vector<bool> >  > &multiframe_visibility,
             std::vector<cv::Point2f> all_moving_objects_in_frame = {}) ;

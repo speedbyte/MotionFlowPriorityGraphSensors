@@ -8,6 +8,8 @@
 
 #include <opencv2/core/types.hpp>
 #include "ObjectMetaData.h"
+#include "MotionFlowTypes.h"
+
 
 
 typedef struct {
@@ -47,7 +49,7 @@ protected:
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
             m_object_sroi;
 
-    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >
+    std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > >
             m_object_croi;
 
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > >
@@ -193,7 +195,7 @@ public:
         return m_object_sroi;
     }
 
-    const std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &get_object_contour_region_of_interest() const {
+    const std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > &get_object_contour_region_of_interest() const {
         return m_object_croi;
     }
 
@@ -205,7 +207,7 @@ public:
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>> sensor_stencil_movement);
 
     void push_back_object_croi(
-            std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>>> sensor_stencil_movement);
+            std::vector<std::vector< GROUND_TRUTH_CONTOURS > > sensor_stencil_movement);
 
     void push_back_object_sroi_interpolated(
             std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>>> sensor_stencil_movement);

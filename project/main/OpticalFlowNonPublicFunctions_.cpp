@@ -9,7 +9,7 @@
 
 void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array,
         const std::vector<cv::Point2f>  &displacement_array, ushort obj_index, std::vector<std::pair<cv::Point2f, cv::Point2f> > &object_stencil_displacement,
-        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > &object_contour_stencil_displacement,
+        std::vector< GROUND_TRUTH_CONTOURS > &object_contour_stencil_displacement,
         std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_stencil_disjoint_displacement, std::vector<bool> &frame_stencil_visibility,
         const std::vector<cv::Point2f> &all_moving_objects_in_frame,
         const cv::Mat& depth_02_frame) {
@@ -195,11 +195,11 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
                     tempImage = cv::Scalar::all(255);
                     MyIntersection myIntersectionContour;
                     myIntersectionContour.find_intersection_pair(entire_frame_algorithm_result_pts_displacement.begin(), entire_frame_algorithm_result_pts_displacement.end(),
-                            m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(sensor_index).at(current_frame_index).at(obj_contour_index).begin(),
-                            m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(sensor_index).at(current_frame_index).at(obj_contour_index).end());
-                    object_contour_stencil_displacement.at(obj_contour_index) = myIntersectionContour.getResultIntersectingPair();
+                            m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(sensor_index).at(current_frame_index).at(obj_contour_index).at(0).begin(),
+                            m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(sensor_index).at(current_frame_index).at(obj_contour_index).at(0).end());
+                    object_contour_stencil_displacement.at(obj_contour_index).at(0) = myIntersectionContour.getResultIntersectingPair();
 
-                    for ( auto it = object_contour_stencil_displacement.at(obj_contour_index).begin(); it != object_contour_stencil_displacement.at(obj_contour_index).end(); it++) {
+                    for ( auto it = object_contour_stencil_displacement.at(obj_contour_index).at(0).begin(); it != object_contour_stencil_displacement.at(obj_contour_index).at(0).end(); it++) {
                         cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
                     }
                     //cv::imshow("algo_contours_" + std::to_string(obj_contour_index), tempImage);
@@ -297,7 +297,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
     else {
 
         object_stencil_displacement.push_back(std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0)));
-        object_contour_stencil_displacement.push_back({std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))});
+        object_contour_stencil_displacement.push_back({{std::make_pair(cv::Point2f(0, 0), cv::Point2f(0, 0))}});
         frame_stencil_visibility.push_back(visibility);
 
     }
@@ -308,7 +308,7 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 void OpticalFlow::common_flow_frame( ushort sensor_index, ushort current_frame_index, const std::vector<cv::Point2f> &frame_next_pts_array,
         const std::vector<cv::Point2f>  &displacement_array,
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_displacement,
-        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > &multiframe_contour_stencil_displacement,
+        std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > &multiframe_contour_stencil_displacement,
         std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > &multiframe_stencil_disjoint_displacement,
         std::vector<std::vector<std::vector<bool> >  > &multiframe_stencil_visibility,
         std::vector<cv::Point2f> all_moving_objects_in_frame) {
@@ -336,7 +336,7 @@ void OpticalFlow::common_flow_frame( ushort sensor_index, ushort current_frame_i
         std::vector<std::pair<cv::Point2f, cv::Point2f> > frame_stencil_disjoint_displacement;
         std::vector<bool> frame_stencil_visibility;
 
-        std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > >  object_contours = m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest();
+        std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > >  object_contours = m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest();
         ushort CONTOUR_COUNT;
 
         if ( m_opticalFlowName== "ground_truth") {
@@ -344,7 +344,7 @@ void OpticalFlow::common_flow_frame( ushort sensor_index, ushort current_frame_i
         } else {
             CONTOUR_COUNT = object_contours.at(sensor_index).at(current_frame_index).size();
         }
-        std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > object_contour_stencil_displacement(CONTOUR_COUNT);
+        std::vector< GROUND_TRUTH_CONTOURS > object_contour_stencil_displacement(CONTOUR_COUNT);
 
 
         frame_stencil_displacement_region_of_interest_method(sensor_index, current_frame_index, frame_next_pts_array, displacement_array, obj_index, object_stencil_displacement, object_contour_stencil_displacement, frame_stencil_disjoint_displacement,frame_stencil_visibility,  all_moving_objects_in_frame, depth_02_frame);

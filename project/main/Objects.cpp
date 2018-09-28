@@ -34,7 +34,7 @@ void Objects::push_back_object_sroi(
 }
 
 void Objects::push_back_object_croi(
-        std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > sensor_stencil_movement) {
+        std::vector<std::vector< GROUND_TRUTH_CONTOURS > > sensor_stencil_movement) {
 
     m_object_croi.push_back(sensor_stencil_movement);
 

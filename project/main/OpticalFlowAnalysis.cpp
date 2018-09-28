@@ -68,7 +68,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object = ptr_list_of_current_objects.at(obj_index)->get_object_stencil_point_displacement();
 
-                    std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > contour_roi_object = ptr_list_of_current_objects.at(obj_index)->get_object_contour_region_of_interest();
+                    std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > contour_roi_object = ptr_list_of_current_objects.at(obj_index)->get_object_contour_region_of_interest();
 
                     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > entire_roi_object_interpolated = ptr_list_of_current_objects.at(obj_index)->get_object_interpolated_stencil_point_displacement();
 
@@ -144,9 +144,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
-                        evaluationData.at(obj_index).all_contour_size = contour_roi_object.at(sensor_index).at(current_frame_index).size();
+                        evaluationData.at(obj_index).all_contour_size = contour_roi_object.at(sensor_index).at(current_frame_index).at(0).size();
                         for ( ushort contour_index = 0 ; contour_index < evaluationData.at(obj_index).all_contour_size; contour_index++) {
-                            evaluationData.at(obj_index).all_contour_pixels[contour_index] = contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).size();
+                            evaluationData.at(obj_index).all_contour_pixels[contour_index] = contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).at(0).size();
                         }
 
 

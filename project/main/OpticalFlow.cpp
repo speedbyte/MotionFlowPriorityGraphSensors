@@ -373,7 +373,7 @@ void OpticalFlow::rerun_optical_flow_algorithm_interpolated() {
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_displacement_interpolated(
                     ptr_list_of_current_objects.size());
 
-            std::vector<std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > > multiframe_contour_stencil_displacement_interpolated(
+            std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > multiframe_contour_stencil_displacement_interpolated(
                     ptr_list_of_current_objects.size());
 
             std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > multiframe_stencil_disjoint_displacement_interpolated(
