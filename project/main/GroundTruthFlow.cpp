@@ -533,16 +533,22 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                     cv::findContours(mask_object_section, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
 
                     for ( ushort contour_index = 0; contour_index < contours_vector.size(); contour_index++) {
-                        mask_object_new_new.setTo(0);
                         std::vector<cv::Mat>  sections;
+                        sections.clear();
+                        ushort total_contour_area = 0;
                         for ( ushort section_index = 0; section_index < contours_vector.size(); section_index++) {
-
-                            if (contours_vector.at(contour_index).size() > 4) {
+                            total_contour_area += contours_vector.at(section_index).size();
+                        }
+                        for ( ushort section_index = 0; section_index < contours_vector.size(); section_index++) {
+                            mask_object_new_new.setTo(0);
+                            if (contours_vector.at(section_index).size() > unsigned(total_contour_area * 5 / 100) ){
                                 cv::drawContours(mask_object_new_new, contours_vector, section_index, cv::Scalar(255),
-                                                 -1);
+                                        -1);
                                 sections.push_back(mask_object_new_new.clone());
-                                //cv::imshow("final", mask_object_new_new);
-                                //cv::waitKey(0);
+                                if ( current_frame_index == 1 ) {
+                                    //cv::imshow("final", mask_object_new_new);
+                                    //cv::waitKey(0);
+                                }
                             }
                         }
                         contours.push_back(sections);
@@ -574,7 +580,6 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                         }
                         frame_contour_region_of_interest.at(contour_index).push_back(section_region_of_interest.at(section_index));
                     }
-
                 }
 
                 frame_object_contour_region_of_interest.at(obj_index) = frame_contour_region_of_interest;
@@ -592,7 +597,6 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
         for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
 
             m_ptr_list_gt_objects.at(obj_index)->push_back_object_croi(all_frame_object_contour_region_of_interest.at(obj_index));
-
         }
     }
 }

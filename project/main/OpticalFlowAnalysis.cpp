@@ -161,7 +161,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         for ( ushort contour_index = 0 ; contour_index < object_contour_count; contour_index++) {
                             for ( ushort section_index = 0; section_index < contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).size(); section_index++ ) {
 
-                                if (contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).size() > 0) {
+                                if (contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).at(section_index).size() > 0) {
 
                                     // write penalty function !!
                                     distribution_matrix.at<unsigned short>(contour_index, section_index) = contour_roi_object.at(
