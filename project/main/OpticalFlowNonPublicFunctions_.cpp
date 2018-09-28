@@ -190,24 +190,41 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
 
                 //---------------------------------------------------------------------------------------------------------
                 // Look for only those pixels that lie within the ground truth stencil of this particular object
+                // object_contour_stencil_displacement.size() - how many contours ?
                 for ( ushort obj_contour_index = 0; obj_contour_index < object_contour_stencil_displacement.size(); obj_contour_index++) {
 
+                    ushort SECTION_COUNT = (ushort)m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(
+                            sensor_index).at(current_frame_index).at(obj_contour_index).size();
+
+                    GROUND_TRUTH_CONTOURS  section_region_of_interest(SECTION_COUNT);
+
                     tempImage = cv::Scalar::all(255);
-                    MyIntersection myIntersectionContour;
-                    myIntersectionContour.find_intersection_pair(entire_frame_algorithm_result_pts_displacement.begin(), entire_frame_algorithm_result_pts_displacement.end(),
-                            m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(sensor_index).at(current_frame_index).at(obj_contour_index).at(0).begin(),
-                            m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(sensor_index).at(current_frame_index).at(obj_contour_index).at(0).end());
-                    object_contour_stencil_displacement.at(obj_contour_index).at(0) = myIntersectionContour.getResultIntersectingPair();
 
-                    for ( auto it = object_contour_stencil_displacement.at(obj_contour_index).at(0).begin(); it != object_contour_stencil_displacement.at(obj_contour_index).at(0).end(); it++) {
-                        cv::circle(tempImage, (*it).first, 1, cv::Scalar(0,0,255));
+                    for ( ushort section_index = 0; section_index < SECTION_COUNT; section_index++) {
+
+                        MyIntersection myIntersectionContour;
+                        myIntersectionContour.find_intersection_pair(
+                                entire_frame_algorithm_result_pts_displacement.begin(),
+                                entire_frame_algorithm_result_pts_displacement.end(),
+                                m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(
+                                        sensor_index).at(current_frame_index).at(obj_contour_index).at(section_index).begin(),
+                                m_ptr_list_gt_objects.at(obj_index)->get_object_contour_region_of_interest().at(
+                                        sensor_index).at(current_frame_index).at(obj_contour_index).at(section_index).end());
+
+                        section_region_of_interest.at(section_index) = myIntersectionContour.getResultIntersectingPair();
+                        object_contour_stencil_displacement.at(obj_contour_index).push_back(section_region_of_interest.at(section_index));
+
+                        for (auto it = object_contour_stencil_displacement.at(obj_contour_index).at(section_index).begin();
+                                it != object_contour_stencil_displacement.at(obj_contour_index).at(section_index).end(); it++) {
+                            cv::circle(tempImage, (*it).first, 1, cv::Scalar(0, 0, 255));
+                        }
+                        //cv::imshow("algo_contours_" + std::to_string(obj_contour_index), tempImage);
+                        //cv::waitKey(0);
+
                     }
-                    //cv::imshow("algo_contours_" + std::to_string(obj_contour_index), tempImage);
-                    //cv::waitKey(0);
-
+                    cv::destroyAllWindows();
                 }
 
-                cv::destroyAllWindows();
 
                 //---------------------------------------------------------------------------------------------------------
                 // Look for only those pixels that does not lie within the ground truth stencil of this particular object

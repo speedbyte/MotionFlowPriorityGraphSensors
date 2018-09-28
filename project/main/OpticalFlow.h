@@ -50,7 +50,7 @@ typedef struct {
 
     // contour pixels
     ushort all_contour_size;
-    ushort all_contour_pixels[20];
+    ushort all_contour_pixels[50];
     // Mean
     cv::Point2f mean_pts;
     cv::Point2f mean_displacement;

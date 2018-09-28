@@ -510,14 +510,13 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                 mask_object_eroded = mask_object_new.clone();
 
                 ushort erosion_size = (ushort)((m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.width_px *
-                        m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.width_px) / 420);
+                        m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.height_px) / 420);
                 cv::Mat results;
                 do {
 
                     mask_object_eroded_pre = mask_object_eroded.clone();
 
-
-                    for (int i = 0; i < erosion_size; i++) {
+                    for (int i = 0; i < 5; i++) {
                         cv::erode(mask_object_eroded, mask_object_eroded, cv::Mat());
                     }
 

@@ -142,14 +142,40 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
 
 //--------------------------------------------------------------------------------------------
-                        evaluationData.at(obj_index).all_contour_size = contour_roi_object.at(sensor_index).at(current_frame_index).size();
-                        for ( ushort contour_index = 0 ; contour_index < evaluationData.at(obj_index).all_contour_size; contour_index++) {
-                            if ( contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).size() > 0 ) {
-                                evaluationData.at(obj_index).all_contour_pixels[contour_index] = contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).at(0).size();
-                            } else {
-                                evaluationData.at(obj_index).all_contour_pixels[contour_index] = 0;
+
+                        ushort object_contour_count = (ushort)contour_roi_object.at(sensor_index).at(current_frame_index).size();
+                        ushort distribution_matrix_row = object_contour_count;
+                        ushort max_object_section_count = 0;
+                        //evaluationData.at(obj_index).all_contour_size = object_contour_count;
+                        for ( ushort contour_index = 0 ; contour_index < object_contour_count; contour_index++) {
+
+                            max_object_section_count = std::max(max_object_section_count, (ushort)contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).size());
+
+                        }
+
+                        ushort distribution_matrix_cols = max_object_section_count;
+
+                        cv::Mat distribution_matrix(distribution_matrix_row, distribution_matrix_cols, CV_16UC1);
+                        distribution_matrix.setTo(65535);
+
+                        for ( ushort contour_index = 0 ; contour_index < object_contour_count; contour_index++) {
+                            for ( ushort section_index = 0; section_index < contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).size(); section_index++ ) {
+
+                                if (contour_roi_object.at(sensor_index).at(current_frame_index).at(contour_index).size() > 0) {
+
+                                    // write penalty function !!
+                                    distribution_matrix.at<unsigned short>(contour_index, section_index) = contour_roi_object.at(
+                                            sensor_index).at(current_frame_index).at(contour_index).at(section_index).size();
+                                    /*evaluationData.at(
+                                            obj_index).all_contour_pixels[contour_index] = contour_roi_object.at(
+                                            sensor_index).at(current_frame_index).at(contour_index).at(0).size();*/
+                                } else {
+                                    distribution_matrix.at<unsigned short>(contour_index, section_index) = 0;
+                                }
                             }
                         }
+
+                        std::cout << distribution_matrix << std::endl;
 
 
                     } else {
