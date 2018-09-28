@@ -173,15 +173,8 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                     }
                     assert(*(algorithm_sroi_interpolated_metrics_pointer_metrics_sync_point+0) == '$');
 
-                    m_fs << "contour_size" << m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
-                            current_frame_index).at(objIndex).all_contour_size;
-
-                    for ( auto x = 0; x < m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
-                            current_frame_index).at(objIndex).all_contour_size; x++ ) {
-                        m_fs << "contour_pixels_" + std::to_string(x) <<
-                                (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
-                                        current_frame_index).at(objIndex).all_contour_pixels[x]);
-                    }
+                    m_fs << "reliability" << m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
+                            current_frame_index).at(objIndex).reliability;
 
                     m_fs
                          << "}";

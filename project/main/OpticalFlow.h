@@ -48,9 +48,9 @@ typedef struct {
     COUNT_METRICS sroi_interpolated_metrics;
 
 
-    // contour pixels
-    ushort all_contour_size;
-    ushort all_contour_pixels[50];
+    // reliability
+    ushort reliability;
+
     // Mean
     cv::Point2f mean_pts;
     cv::Point2f mean_displacement;

@@ -166,14 +166,21 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                     // write penalty function !!
                                     distribution_matrix.at<unsigned short>(contour_index, section_index) = contour_roi_object.at(
                                             sensor_index).at(current_frame_index).at(contour_index).at(section_index).size();
-                                    /*evaluationData.at(
-                                            obj_index).all_contour_pixels[contour_index] = contour_roi_object.at(
-                                            sensor_index).at(current_frame_index).at(contour_index).at(0).size();*/
                                 } else {
                                     distribution_matrix.at<unsigned short>(contour_index, section_index) = 0;
                                 }
                             }
                         }
+
+                        float reliability = 0.0;
+
+                        // calculate penalty
+
+                        // calculated reliability
+
+                        evaluationData.at(
+                                obj_index).reliability = reliability;
+
 
                         std::cout << distribution_matrix << std::endl;
 
