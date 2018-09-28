@@ -427,6 +427,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                 if ( Dataset::GENERATE ) {
                     gt_flow.save_flow_vector();
+                    gt_flow.save_ground_truth_object_contour_region_of_interest();
+
                 } else {
 
                     gt_flow.rerun_optical_flow_algorithm_interpolated();

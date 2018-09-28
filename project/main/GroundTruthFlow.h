@@ -43,6 +43,8 @@ public:
     void find_ground_truth_object_special_region_of_interest();
 
     void find_ground_truth_object_contour_region_of_interest();
+
+    void save_ground_truth_object_contour_region_of_interest();
 };
 
 

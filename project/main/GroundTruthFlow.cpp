@@ -437,7 +437,7 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
 
-            sprintf(file_name_input_image, "000%03d_10.png", image_frame_count);
+            sprintf(file_name_input_image, "contours_000%03d_10.png", image_frame_count);
             std::string flow_path = m_generatepath.parent_path().string() + "/flow_occ_" + sensor_index_folder_suffix + "/" + file_name_input_image;
             //std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
             std::string gt_image_path = m_GroundTruthImageLocation.string() + "_" + sensor_index_folder_suffix + "/" + file_name_input_image;
@@ -464,6 +464,142 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                 cv::Mat mask_object_eroded, mask_object_eroded_pre;
 
                 ushort val = (ushort)(m_ptr_list_gt_objects.at(obj_index)->getObjectId() * 64 + 32768) ;
+                cv::inRange(intersection_image, val, val, mask_object);
+
+                if (intersection_image.data == NULL) {
+                    throw;
+                }
+
+                std::vector< GROUND_TRUTH_CONTOURS > frame_contour_region_of_interest(contours.size());
+
+                GROUND_TRUTH_CONTOURS  section_region_of_interest(contours.at(contour_index).size());
+
+                for (auto x = 0; x < intersection_image.cols; x++) {
+                    for (auto y = 0; y < intersection_image.rows; y++) {
+                        // there is only one object per Mat. Hence we can safely scan the whole frame.
+                        if (intersection_image.at<char>(y, x) != 0) {
+                            section_region_of_interest.at(section_index).push_back(
+                                    std::make_pair(cv::Point2f(x, y), gt_displacement_1));
+                        }
+                    }
+                }
+                frame_contour_region_of_interest.at(contour_index).push_back(section_region_of_interest.at(section_index));
+
+                frame_object_contour_region_of_interest.at(obj_index) = frame_contour_region_of_interest;
+
+                std::cout << "number of contours in the object = " << contours.size() << std::endl;
+
+                /*
+                for ( ushort contour_index = 0; contour_index < contours.size(); contour_index++) {
+
+                    for ( ushort section_index = 0; section_index < contours.at(contour_index).size(); section_index++ ) {
+                        //cv::imshow("contour", contours.at(contour_index));
+                        //cv::waitKey(0);
+                    }
+                }*/
+
+            }
+
+            for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+
+                all_frame_object_contour_region_of_interest.at(obj_index).push_back(
+                        frame_object_contour_region_of_interest.at(obj_index));
+
+            }
+        }
+
+        for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+
+            m_ptr_list_gt_objects.at(obj_index)->push_back_object_croi(all_frame_object_contour_region_of_interest.at(obj_index));
+        }
+    }
+}
+
+
+
+void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
+
+    // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
+    // pixels lie on the occlusion boundary.
+    // intersection coordinates, convert to Mat, fill with 0, and then find the contour. This is the occlusion boundary.
+    // subtract area for evaluation from the object farther away.
+    // total = visible part object front + visible part object back
+    // boundary = common
+    // invisible part = total object part back - visible part object back
+    // object_stencil_displacement contains ground truth - all pixels are present in the vector
+    // Intersection bounding box
+
+    // depends on flow image and flow stencil
+
+    // -----
+
+    std::vector<Objects *> ptr_list_of_current_objects;
+    std::vector<Objects *> ptr_list_of_copied_gt_objects;
+    std::vector<Objects *> ptr_list_of_copied_simulated_objects;
+    for ( auto i = 0; i < m_ptr_list_gt_objects.size(); i++) {
+        ptr_list_of_copied_gt_objects.push_back(static_cast<Objects*>(m_ptr_list_gt_objects.at(i)));
+    }
+
+    if (m_opticalFlowName == "ground_truth") {
+        ptr_list_of_current_objects = ptr_list_of_copied_gt_objects;
+    } else {
+
+        for ( auto i = 0; i < get_simulated_objects_ptr_list().size(); i++) {
+            ptr_list_of_copied_simulated_objects.push_back(static_cast<Objects*>(get_simulated_objects_ptr_list().at(i)));
+        }
+
+        ptr_list_of_current_objects = ptr_list_of_copied_simulated_objects;
+    }
+
+    char sensor_index_folder_suffix[50];
+
+    for (unsigned sensor_index = 0; sensor_index < Dataset::SENSOR_COUNT; sensor_index++) {
+
+
+        unsigned FRAME_COUNT = (unsigned) m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(
+                sensor_index).size();
+        assert(FRAME_COUNT > 0);
+
+        cv::Mat image_02_frame = cv::Mat::zeros(Dataset::m_frame_size, CV_32FC3);
+        sprintf(sensor_index_folder_suffix, "%02d", m_evaluation_list.at(sensor_index));
+
+        std::cout << "begin generating ground truth object contours for sensor " << sensor_index_folder_suffix << std::endl;
+
+        std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > all_frame_object_contour_region_of_interest(m_ptr_list_gt_objects.size());
+
+        for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+
+            std::vector<std::vector< GROUND_TRUTH_CONTOURS > > frame_object_contour_region_of_interest(m_ptr_list_gt_objects.size());
+
+            char file_name_input_image_flow[50], file_name_input_image_contour[50];
+            ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
+                    (0).at(current_frame_index).frame_no;
+
+            sprintf(file_name_input_image_contour, "contour_000%03d_10.png", image_frame_count);
+            sprintf(file_name_input_image_flow, "000%03d_10.png", image_frame_count);
+            std::string flow_path = m_generatepath.parent_path().string() + "/flow_occ_" + sensor_index_folder_suffix + "/" + file_name_input_image_flow;
+            //std::string kitti_path = m_plots_path.string() + sensor_index_folder_suffix + "/" + file_name_input_image;
+
+            std::cout << "current_frame_index  " << current_frame_index << std::endl;
+
+            cv::Mat flow_image = cv::imread(flow_path, CV_LOAD_IMAGE_UNCHANGED);
+            cv::cvtColor(flow_image, flow_image, CV_RGB2BGR);
+            if ( flow_image.empty() ) {
+                throw("No image found error");
+            }
+
+            cv::Mat intersection_image(Dataset::m_frame_size, CV_MAKE_TYPE(flow_image.depth(),1));
+            int from_to[] = { 2,0 };  // copy the third channel ( channel 2 object id ) to the first channel of intersection_image
+            cv::mixChannels(flow_image, intersection_image, from_to, 1); // the last parameter is the number of pairs
+
+            for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+
+                cv::Point2f gt_displacement_1 = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(current_frame_index).second;
+
+                cv::Mat mask_object;
+
+                ushort val = (ushort)(m_ptr_list_gt_objects.at(obj_index)->getObjectId() * 64 + 32768) ;
 
                 cv::inRange(intersection_image, val, val, mask_object);
 
@@ -484,50 +620,19 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                     cv::drawContours(mask_object_new, contours_vector, contour_index, cv::Scalar(255), -1);
                 }
 
-                cv::Point pt1_diag1 = cv::Point((unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x,
-                                          (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y);
-
-                cv::Point pt2_diag1 = cv::Point(
-                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x
-                        + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.width_px,
-                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y
-                + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.height_px);
-
-                cv::Point pt1_diag2 = cv::Point((unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x
-                                                + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.width_px, (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y);
-
-                cv::Point pt2_diag2 = cv::Point(
-                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x,
-                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y
-                        + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.height_px);
-
-
                 //cv::imshow("denoise", mask_object_new);
                 //cv::imshow("noise", mask_object);
                 //cv::waitKey(0);
                 cv::destroyAllWindows();
-
-                mask_object_eroded = mask_object_new.clone();
 
                 ushort erosion_size = (ushort)((m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.width_px *
                         m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.height_px) / 420);
                 cv::Mat results;
                 do {
 
-                    mask_object_eroded_pre = mask_object_eroded.clone();
-
-                    for (int i = 0; i < 5; i++) {
-                        cv::erode(mask_object_eroded, mask_object_eroded, cv::Mat());
-                    }
-
-                    cv::compare(mask_object_eroded, mask_object_eroded_pre, results, CV_CMP_NE);
-
                     cv::Mat mask_object_section;
 
                     mask_object_section = results.clone();
-
-                    cv::line(mask_object_section, pt1_diag1, pt2_diag1, 0, 2);
-                    cv::line(mask_object_section, pt1_diag2, pt2_diag2, 0, 2);
 
                     cv::Mat mask_object_new_new(mask_object.size(), CV_8UC1, cv::Scalar(0));
                     cv::findContours(mask_object_section, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
@@ -600,6 +705,7 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
         }
     }
 }
+
 
 
 /*
