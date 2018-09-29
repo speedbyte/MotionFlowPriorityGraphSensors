@@ -374,7 +374,7 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
 }
 
-void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
+void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
     // pixels lie on the occlusion boundary.
@@ -562,9 +562,9 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                             for (auto y = 0; y < results.rows; y++) {
                                 // there is only one object per Mat. Hence we can safely scan the whole frame.
                                 if (contours.at(contour_index).at(section_index).at<char>(y, x) != 0) {
-                                    contour_image.at<cv::Vec3s>(x,y)[0] = contour_index;
-                                    contour_image.at<cv::Vec3s>(x,y)[1] = section_index;
-                                    contour_image.at<cv::Vec3s>(x,y)[2] = obj_index;
+                                    contour_image.at<cv::Vec3s>(y,x)[0] = contour_index;
+                                    contour_image.at<cv::Vec3s>(y,x)[1] = section_index;
+                                    contour_image.at<cv::Vec3s>(y,x)[2] = obj_index;
                                 }
                             }
                         }
@@ -580,7 +580,7 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
     }
 }
 
-void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
+void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
     // pixels lie on the occlusion boundary.
