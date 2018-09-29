@@ -374,7 +374,7 @@ void GroundTruthFlow::find_ground_truth_object_special_region_of_interest() {
 
 }
 
-void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
+void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
     // pixels lie on the occlusion boundary.
@@ -475,19 +475,69 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
                     cv::drawContours(mask_object_new, contours_vector, contour_index, cv::Scalar(255), -1);
                 }
 
+                cv::inRange(intersection_image, val, val, mask_object);
+
+                std::vector<std::vector<cv::Mat> > contours;
+
+                cv::Mat mask_object_new(mask_object.size(), CV_8UC1, cv::Scalar(0));
+                //cv::medianBlur ( mask_object, mask_object_new, 11);
+                //cv::bilateralFilter( mask_object, mask_object_new, 19, 7, 7, 4);
+                //cv::fastNlMeansDenoising(mask_object, mask_object_new, 10, 21, 51 );
+                //cv::fastNlMeansDenoising(mask_object_2, mask_object_2); //, float h=3, int templateWindowSize=7, int searchWindowSize=21 )¶
+
+                cv::Mat sectioned_contours;
+
+                std::vector<std::vector<cv::Point> > contours_vector;
+                cv::findContours(mask_object, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+
+                for ( ushort contour_index = 0; contour_index < contours_vector.size(); contour_index++) {
+                    cv::drawContours(mask_object_new, contours_vector, contour_index, cv::Scalar(255), -1);
+                }
+
+                cv::Point pt1_diag1 = cv::Point((unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x,
+                                                (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y);
+
+                cv::Point pt2_diag1 = cv::Point(
+                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x
+                        + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.width_px,
+                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y
+                        + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.height_px);
+
+                cv::Point pt1_diag2 = cv::Point((unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x
+                                                + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.width_px, (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y);
+
+                cv::Point pt2_diag2 = cv::Point(
+                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.x,
+                        (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.y
+                        + (unsigned)m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_region_of_interest_px.height_px);
+
+
                 //cv::imshow("denoise", mask_object_new);
                 //cv::imshow("noise", mask_object);
                 //cv::waitKey(0);
                 cv::destroyAllWindows();
 
-                ushort erosion_size = (ushort)((m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.width_px * m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.height_px) / 420);
+                mask_object_eroded = mask_object_new.clone();
 
+                ushort erosion_size = (ushort)((m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.width_px *
+                                                m_ptr_list_gt_objects.at(obj_index)->getExtrapolatedGroundTruthDetails().at(sensor_index).at(current_frame_index).m_object_dimension_camera_px.height_px) / 420);
                 cv::Mat results;
                 do {
+
+                    mask_object_eroded_pre = mask_object_eroded.clone();
+
+                    for (int i = 0; i < 5; i++) {
+                        cv::erode(mask_object_eroded, mask_object_eroded, cv::Mat());
+                    }
+
+                    cv::compare(mask_object_eroded, mask_object_eroded_pre, results, CV_CMP_NE);
 
                     cv::Mat mask_object_section;
 
                     mask_object_section = results.clone();
+
+                    cv::line(mask_object_section, pt1_diag1, pt2_diag1, 0, 2);
+                    cv::line(mask_object_section, pt1_diag2, pt2_diag2, 0, 2);
 
                     cv::Mat mask_object_new_new(mask_object.size(), CV_8UC1, cv::Scalar(0));
                     cv::findContours(mask_object_section, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
@@ -548,7 +598,7 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
     }
 }
 
-void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
+void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
 
     // Intersection between pair of objects. Total visible pixels is known. This metric will show how many
     // pixels lie on the occlusion boundary.
