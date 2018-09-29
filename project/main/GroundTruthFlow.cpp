@@ -453,27 +453,9 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                 cv::Point2f gt_displacement_1 = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(current_frame_index).second;
 
                 cv::Mat mask_object;
+                cv::Mat mask_object_eroded, mask_object_eroded_pre;
 
                 ushort val = (ushort)(m_ptr_list_gt_objects.at(obj_index)->getObjectId() * 64 + 32768) ;
-
-                cv::inRange(intersection_image, val, val, mask_object);
-
-                std::vector<std::vector<cv::Mat> > contours;
-
-                cv::Mat mask_object_new(mask_object.size(), CV_8UC1, cv::Scalar(0));
-                //cv::medianBlur ( mask_object, mask_object_new, 11);
-                //cv::bilateralFilter( mask_object, mask_object_new, 19, 7, 7, 4);
-                //cv::fastNlMeansDenoising(mask_object, mask_object_new, 10, 21, 51 );
-                //cv::fastNlMeansDenoising(mask_object_2, mask_object_2); //, float h=3, int templateWindowSize=7, int searchWindowSize=21 )¶
-
-                cv::Mat sectioned_contours;
-
-                std::vector<std::vector<cv::Point> > contours_vector;
-                cv::findContours(mask_object, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
-
-                for ( ushort contour_index = 0; contour_index < contours_vector.size(); contour_index++) {
-                    cv::drawContours(mask_object_new, contours_vector, contour_index, cv::Scalar(255), -1);
-                }
 
                 cv::inRange(intersection_image, val, val, mask_object);
 
@@ -553,7 +535,7 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                             mask_object_new_new.setTo(0);
                             if (contours_vector.at(section_index).size() > unsigned(total_contour_area * 5 / 100) ){
                                 cv::drawContours(mask_object_new_new, contours_vector, section_index, cv::Scalar(255),
-                                        -1);
+                                                 -1);
                                 sections.push_back(mask_object_new_new.clone());
                                 if ( current_frame_index == 1 ) {
                                     //cv::imshow("final", mask_object_new_new);
@@ -648,7 +630,7 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
 
         std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > all_frame_object_contour_region_of_interest(m_ptr_list_gt_objects.size(),
                                                                                                                      std::vector<std::vector< GROUND_TRUTH_CONTOURS > > (FRAME_COUNT,
-                                                                                                                     std::vector< GROUND_TRUTH_CONTOURS > (20, GROUND_TRUTH_CONTOURS(4))));
+                                                                                                                                                                         std::vector< GROUND_TRUTH_CONTOURS > (20, GROUND_TRUTH_CONTOURS(4))));
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
