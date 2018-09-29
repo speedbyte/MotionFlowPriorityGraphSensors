@@ -173,6 +173,9 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                     }
                     assert(*(algorithm_sroi_interpolated_metrics_pointer_metrics_sync_point+0) == '$');
 
+                    m_fs << "distribution_matrix" << m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
+                            current_frame_index).at(objIndex).distribution_matrix;
+
                     m_fs << "reliability" << m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
                             current_frame_index).at(objIndex).reliability;
 

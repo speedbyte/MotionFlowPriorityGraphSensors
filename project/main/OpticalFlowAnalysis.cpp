@@ -174,6 +174,9 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         }
 
 
+                        evaluationData.at(
+                                obj_index).distribution_matrix = distribution_matrix;
+
 
                         float reliability = 0.0;
 

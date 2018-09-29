@@ -49,6 +49,7 @@ typedef struct {
 
 
     // reliability
+    cv::Mat distribution_matrix;
     ushort reliability;
 
     // Mean

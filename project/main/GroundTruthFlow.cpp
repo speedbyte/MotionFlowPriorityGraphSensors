@@ -708,16 +708,25 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                     bool some_value_left_in_this_contour = false;
                     for (ushort section_index = 0; section_index < 5; section_index++) {
 
+                        bool some_value_left_in_this_section = true;
+
                         if (all_frame_object_contour_region_of_interest.at(obj_index).at(
                                 current_frame_index).at(contour_index).at(
                                 section_index).size() != 0) {
                             some_value_left_in_this_contour = true;
+                        } else {
+                            some_value_left_in_this_section = false;
                         }
                         if (some_value_left_in_this_contour) {
                             std::cout << contour_index << " number of entries in each section = " << section_index
                                     << all_frame_object_contour_region_of_interest.at(obj_index).at(
                                             current_frame_index).at(contour_index).at(
                                             section_index).size() << std::endl;
+                        }
+                        if ( !some_value_left_in_this_section ) {
+                            all_frame_object_contour_region_of_interest.at(obj_index).at(
+                                    current_frame_index).at(contour_index).resize(section_index);
+                            break;
                         }
                     }
                     if (!some_value_left_in_this_contour) {
