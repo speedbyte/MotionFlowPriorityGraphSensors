@@ -702,13 +702,29 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                 }
             }
 
-            for ( ushort contour_index = 0; contour_index < 10; contour_index++) {
-                for (ushort section_index = 0; section_index < 5; section_index++) {
 
-                    std::cout << contour_index << " number of entries in each section = " << section_index
-                              << all_frame_object_contour_region_of_interest.at(0).at(
-                                      current_frame_index).at(contour_index).at(
-                                      section_index).size() << std::endl;
+            for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
+                for (ushort contour_index = 0; contour_index < 10; contour_index++) {
+                    bool some_value_left_in_this_contour = false;
+                    for (ushort section_index = 0; section_index < 5; section_index++) {
+
+                        if (all_frame_object_contour_region_of_interest.at(obj_index).at(
+                                current_frame_index).at(contour_index).at(
+                                section_index).size() != 0) {
+                            some_value_left_in_this_contour = true;
+                        }
+                        if (some_value_left_in_this_contour) {
+                            std::cout << contour_index << " number of entries in each section = " << section_index
+                                    << all_frame_object_contour_region_of_interest.at(obj_index).at(
+                                            current_frame_index).at(contour_index).at(
+                                            section_index).size() << std::endl;
+                        }
+                    }
+                    if (!some_value_left_in_this_contour) {
+                        all_frame_object_contour_region_of_interest.at(obj_index).at(
+                                current_frame_index).resize(contour_index);
+                        break;
+                    }
                 }
             }
 

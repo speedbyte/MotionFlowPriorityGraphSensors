@@ -144,6 +144,7 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 //--------------------------------------------------------------------------------------------
 
                         ushort object_contour_count = (ushort)contour_roi_object.at(sensor_index).at(current_frame_index).size();
+
                         ushort distribution_matrix_row = object_contour_count;
                         ushort max_object_section_count = 0;
                         //evaluationData.at(obj_index).all_contour_size = object_contour_count;
@@ -171,6 +172,8 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 }
                             }
                         }
+
+
 
                         float reliability = 0.0;
 
