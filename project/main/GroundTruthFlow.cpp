@@ -421,8 +421,6 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
 
         std::cout << "begin saving ground truth object contours for sensor " << sensor_index_folder_suffix << std::endl;
 
-        std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > all_frame_object_contour_region_of_interest(m_ptr_list_gt_objects.size());
-
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             cv::Mat contour_image(Dataset::m_frame_size, CV_MAKE_TYPE(CV_16U,3));
@@ -449,8 +447,6 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
             cv::mixChannels(flow_image, intersection_image, from_to, 1); // the last parameter is the number of pairs
 
             for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
-
-                cv::Point2f gt_displacement_1 = m_ptr_list_gt_objects.at(obj_index)->get_object_extrapolated_point_displacement().at(sensor_index).at(current_frame_index).second;
 
                 cv::Mat mask_object;
                 cv::Mat mask_object_eroded, mask_object_eroded_pre;
@@ -507,7 +503,6 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
                 do {
 
                     mask_object_eroded_pre = mask_object_eroded.clone();
-
                     for (int i = 0; i < 5; i++) {
                         cv::erode(mask_object_eroded, mask_object_eroded, cv::Mat());
                     }
@@ -537,10 +532,8 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
                                 cv::drawContours(mask_object_new_new, contours_vector, section_index, cv::Scalar(255),
                                                  -1);
                                 sections.push_back(mask_object_new_new.clone());
-                                if ( current_frame_index == 1 ) {
-                                    //cv::imshow("final", mask_object_new_new);
-                                    //cv::waitKey(0);
-                                }
+                                //cv::imshow("final", mask_object_new_new);
+                                //cv::waitKey(0);
                             }
                         }
                         contours.push_back(sections);
@@ -549,19 +542,17 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
 
                 std::cout << "number of contours in the object = " << contours.size() << std::endl;
 
-
                 for ( ushort contour_index = 0; contour_index < contours.size(); contour_index++) {
-
                     for ( ushort section_index = 0; section_index < contours.at(contour_index).size(); section_index++ ) {
                         if (contours.at(contour_index).at(section_index).data == NULL) {
                             throw;
                         }
-                        //cv::imshow("contour", contours.at(contour_index));
+                        //cv::imshow("contours", contours.at(contour_index).at(section_index));
                         //cv::waitKey(0);
-                        for (auto x = 0; x < results.cols; x++) {
-                            for (auto y = 0; y < results.rows; y++) {
+                        for (auto x = 0; x < contours.at(contour_index).at(section_index).cols; x++) {
+                            for (auto y = 0; y < contours.at(contour_index).at(section_index).rows; y++) {
                                 // there is only one object per Mat. Hence we can safely scan the whole frame.
-                                if (contours.at(contour_index).at(section_index).at<char>(y, x) != 0) {
+                                if (contours.at(contour_index).at(section_index).at<unsigned char>(y, x) != 0) {
                                     contour_image.at<cv::Vec3s>(y,x)[0] = contour_index;
                                     contour_image.at<cv::Vec3s>(y,x)[1] = section_index;
                                     contour_image.at<cv::Vec3s>(y,x)[2] = obj_index;
