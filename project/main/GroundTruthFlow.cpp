@@ -421,8 +421,10 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
 
         std::cout << "begin saving ground truth object contours for sensor " << sensor_index_folder_suffix << std::endl;
 
+        auto tic = std::chrono::steady_clock::now();
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
+            START_BENCHMARK
             cv::Mat contour_image(Dataset::m_frame_size, CV_MAKE_TYPE(CV_16U,3));
 
             char file_name_input_image_flow[50], file_name_input_image_contour[50];
@@ -547,8 +549,11 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
                         if (contours.at(contour_index).at(section_index).data == NULL) {
                             throw;
                         }
-                        //cv::imshow("contours", contours.at(contour_index).at(section_index));
+                        contours.at(contour_index).at(section_index).copyTo(contour_image, contours.at(contour_index).at(section_index));
+                        contour_image.setTo(cv::Scalar(contour_index, section_index, obj_index), contours.at(contour_index).at(section_index));
+                        //cv::imshow("contours", contour_image);
                         //cv::waitKey(0);
+                        /*
                         for (auto x = 0; x < contours.at(contour_index).at(section_index).cols; x++) {
                             for (auto y = 0; y < contours.at(contour_index).at(section_index).rows; y++) {
                                 // there is only one object per Mat. Hence we can safely scan the whole frame.
@@ -558,14 +563,16 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
                                     contour_image.at<cv::Vec3s>(y,x)[2] = obj_index;
                                 }
                             }
-                        }
+                        }*/
                     }
                 }
             }
 
-            cv::imwrite(file_name_input_image_contour, contour_image);
-            cv::imshow("contour_image", contour_image);
-            cv::waitKey(0);
+            PRINT_BENCHMARK(generate_contours)
+
+            cv::imwrite(contour_path, contour_image);
+            //cv::imshow("contour_image", contour_image);
+            //cv::waitKey(0);
 
         }
     }
@@ -629,7 +636,7 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
                     (0).at(current_frame_index).frame_no;
 
-            sprintf(file_name_input_image_contour, "contours_000%03d_10.png", image_frame_count);
+            sprintf(file_name_input_image_contour, "contour_000%03d_10.png", image_frame_count);
 
             std::string contour_path = m_generatepath.parent_path().string() + "/flow_occ_" + sensor_index_folder_suffix + "/" + file_name_input_image_contour;
 
@@ -637,12 +644,21 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
 
             std::cout << "current_frame_index  " << current_frame_index << std::endl;
 
-            cv::Mat contour_image = cv::imread(contour_path, CV_LOAD_IMAGE_COLOR);
+            cv::Mat contour_image = cv::imread(contour_path, CV_LOAD_IMAGE_UNCHANGED);
             if ( contour_image.empty() ) {
                 throw("No image found error");
             }
 
+            //cv::Mat
+            //7200, 6 = step buf ( 6 bytes ) 1200 * 6 = 7200
+            //size = 400
+            //u size = 1200+400*6
+
+            // exif tool
+            // Bit Depth = 16
+            // RGB
             //cv::Point2f gt_displacement_1 = m_ptr_list_gt_objects.at(0)->get_object_extrapolated_point_displacement().at(sensor_index).at(current_frame_index).second;
+
             cv::Point2f gt_displacement_1 = cv::Point2f(0,0);
 
 
@@ -650,12 +666,14 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                 for (auto y = 0; y < contour_image.rows; y++) {
                     // there is only one object per Mat. Hence we can safely scan the whole frame.
 
+                    printf("section %d ", contour_image.at<cv::Vec3s>(y,x)[1]);
+
                     all_frame_object_contour_region_of_interest.
                             at(contour_image.at<cv::Vec3s>(y,x)[2]).
                             at(current_frame_index).
                             at(contour_image.at<cv::Vec3s>(y,x)[0]).
                             at(contour_image.at<cv::Vec3s>(y,x)[1]).
-                            push_back(std::make_pair(cv::Point2f(x,y), gt_displacement_1));
+                            push_back(std::make_pair(cv::Point2f(y,x), gt_displacement_1));
                 }
             }
 
