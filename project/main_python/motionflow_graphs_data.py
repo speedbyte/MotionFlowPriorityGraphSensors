@@ -8,8 +8,16 @@ OUTLIER = 100000
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
-dataset = "vires"
+dataset = "cpp"
 scenario = "two"
+
+noise_list = ["ground_truth", "blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
+noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
+noise_list = ["ground_truth", "blue_sky",]
+
+#algorithm_list   = ["TVL", "FB",]
+algorithm_list   = ["FB",]
+#algorithm_list   = ["FB", "TVL", "LK"]
 
 file_list = list()
 
@@ -175,6 +183,12 @@ parameter_list = [
     "sroi_interpolated_l1_cumulative_error_good_pixels",
     "sroi_interpolated_l2_cumulative_error_good_pixels",
     "sroi_interpolated_ma_cumulative_error_good_pixels",
+    "distribution_matrix",
+]
+
+parameter_list = [
+    "eroi_all_pixels",
+    "distribution_matrix",
 ]
 
 parameter_list_extended = [
@@ -197,15 +211,8 @@ parameter_list_extended = [
 
 datafilter_list  = [ "0", ]
 
-algorithm_list   = ["TVL", "FB",]
-#algorithm_list   = ["FB",]
-algorithm_list   = ["FB", "TVL", "LK"]
-
 file_ground_truth = "/local/git/MotionFlowPriorityGraphSensors/datasets/" + dataset + "_dataset/data/stereo_flow/two/ground_truth/values_ground_truth.yml"
 
-noise_list = ["ground_truth", "blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
-noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
-#noise_list = ["ground_truth", "blue_sky",]
 
 for noise in noise_list:
     if (  noise is not "ground_truth"):

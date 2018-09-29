@@ -55,7 +55,10 @@ class SensorDataPlot(object):
 
         if ( "extended" not in custom_data_list_name ):
             data_points = yaml_file_data[custom_data_list_name]
-            x_axis, y_axis = self.getSingleVal(data_points, self.measuring_parameter)
+            if ( self.measuring_parameter is "distribution_matrix"):
+                x_axis, y_axis = self.getDistributionReliability(data_points, self.measuring_parameter)
+            else:
+                x_axis, y_axis = self.getSingleVal(data_points, self.measuring_parameter)
 
         else:
             x_axis = yaml_file_data[0]
@@ -141,6 +144,53 @@ class SensorDataPlot(object):
         return x_axis, y_axis, y_axis_mean
 
 
+    def getDistributionReliability(self, data_points, measuring_parameter):
+
+        # refine data
+        #scratch 01233
+
+        data = list()
+
+        count = 0
+        for index in range(len(data_points)/2):
+            for obj_index in range(len(data_points[1])):
+                #only survey for a specific object
+                xy = dict()
+                #if ( data_points[count+1][obj_index]["visibility"] == 1  ):
+                if ( data_points[count+1][obj_index]["visibility"] == 1 and data_points[count+1][obj_index]["obj_index"] == 0 ):
+
+                    xy["frame_number"] = data_points[count]["frame_number"]
+                    xy[measuring_parameter] = data_points[count+1][obj_index][measuring_parameter]
+
+                    #for x in range(len(data_points_gt[count+1][obj_index][measuring_parameter])):
+                    #    xy_collisionpoints.append(data_points_gt[count+1][obj_index][measuring_parameter][x]) # change!
+                    data.append([xy["frame_number"], xy[measuring_parameter]])
+            count = count + 2
+
+        data_ = np.array(data)
+        # the first element in each array is a, and the second element in each array is b. This is how .T works.
+        a,b = data_.T
+        x_axis = np.array(a)
+        y_axis = np.array(b)
+        new_x_axis = list()
+        new_y_axis = list()
+        pre_val = -1
+        new_index = -1
+        for index, val in enumerate(x_axis):
+            if ( pre_val != val ):
+                new_x_axis.append(val)
+                new_y_axis.append(y_axis[index])
+                new_index = new_index + 1
+            else:
+                new_y_axis[new_index] = new_y_axis[new_index] + y_axis[index]
+            pre_val = val
+        x_axis = np.array(new_x_axis)
+        y_axis = np.array(new_y_axis)
+
+        assert(x_axis.size == y_axis.size)
+        return x_axis, y_axis
+
+
     def getSingleVal(self, data_points, measuring_parameter):
 
         # refine data
@@ -165,6 +215,7 @@ class SensorDataPlot(object):
             count = count + 2
 
         data_ = np.array(data)
+        # the first element in each array is a, and the second element in each array is b. This is how .T works.
         a,b = data_.T
         x_axis = np.array(a)
         y_axis = np.array(b)
