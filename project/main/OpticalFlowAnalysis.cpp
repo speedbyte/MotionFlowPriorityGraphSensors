@@ -357,39 +357,44 @@ std::vector<std::pair<float, float>> OpticalFlow::generate_count_metrics_data(st
 void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector<std::pair<float, float> > &gnuplot_xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
 
 
-    if ( m_opticalFlowName != "ground_truth") {
+    if ( m_opticalFlowName != "ground_truth" ) {
 
         std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
-        gt_mean_pts.push_back(std::make_pair(m_ptr_gt_flow->get_sensor_multiframe_evaluation_data().at(0).at(sensor_index).at(current_frame_index).at(obj_index).mean_displacement.x, m_ptr_gt_flow->m_sensor_multiframe_evaluation_data.at(0).at(sensor_index).at(current_frame_index).at(obj_index).mean_displacement.y));
-        algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x, evaluationData.at(obj_index).mean_displacement.y));
+        gt_mean_pts.push_back(std::make_pair(
+                m_ptr_gt_flow->get_sensor_multiframe_evaluation_data().at(0).at(sensor_index).at(
+                        current_frame_index).at(obj_index).mean_displacement.x,
+                m_ptr_gt_flow->m_sensor_multiframe_evaluation_data.at(0).at(sensor_index).at(current_frame_index).at(
+                        obj_index).mean_displacement.y));
+        algo_mean_pts.push_back(std::make_pair(evaluationData.at(obj_index).mean_displacement.x,
+                evaluationData.at(obj_index).mean_displacement.y));
 
         //Get the eigenvalues and eigenvectors
-        cv::Mat_<float> ellipse(3,1);
+        cv::Mat_<float> ellipse(3, 1);
         ellipse.setTo(255);
-        if ( 1 > 1 ) {
+        if ( current_frame_index > 0 ) {
 
             double chisquare_val = 2.4477;
-            cv::Mat_<float> eigenvectors(2,2);
-            cv::Mat_<float> eigenvalues(1,2);
+            cv::Mat_<float> eigenvectors(2, 2);
+            cv::Mat_<float> eigenvalues(1, 2);
 
             cv::eigen(evaluationData.at(obj_index).covar_displacement, eigenvalues, eigenvectors);
 
             //std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
 
-            if ( eigenvectors.data != NULL ) {
+            if (eigenvectors.data != NULL) {
                 //Calculate the angle between the largest eigenvector and the x-axis
-                double angle = atan2(eigenvectors(0,1), eigenvectors(0,0));
+                double angle = atan2(eigenvectors(0, 1), eigenvectors(0, 0));
 
                 //Shift the angle to the [0, 2pi] interval instead of [-pi, pi]
-                if(angle < 0)
+                if (angle < 0)
                     angle += 6.28318530718;
 
                 //Conver to degrees instead of radians
-                angle = 180*angle/3.14159265359;
+                angle = 180 * angle / 3.14159265359;
 
                 //Calculate the size of the minor and major axes
-                double halfmajoraxissize=chisquare_val*sqrt(eigenvalues(0));
-                double halfminoraxissize=chisquare_val*sqrt(eigenvalues(1));
+                double halfmajoraxissize = chisquare_val * sqrt(eigenvalues(0));
+                double halfminoraxissize = chisquare_val * sqrt(eigenvalues(1));
 
                 //Return the oriented ellipse
                 //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise
