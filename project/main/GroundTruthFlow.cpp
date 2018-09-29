@@ -425,7 +425,7 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
 
             START_BENCHMARK
-            cv::Mat contour_image_write(Dataset::m_frame_size, CV_8UC3, cv::Scalar(0,0,0));
+            cv::Mat contour_image_write(Dataset::m_frame_size, CV_8UC3, cv::Scalar(255,255,255));
 
             char file_name_input_image_flow[50], file_name_input_image_contour[50];
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
@@ -505,6 +505,7 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
                 do {
 
                     mask_object_eroded_pre = mask_object_eroded.clone();
+
                     for (int i = 0; i < 5; i++) {
                         cv::erode(mask_object_eroded, mask_object_eroded, cv::Mat());
                     }
@@ -518,28 +519,30 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
                     cv::line(mask_object_section, pt1_diag1, pt2_diag1, 0, 2);
                     cv::line(mask_object_section, pt1_diag2, pt2_diag2, 0, 2);
 
+                    //cv::imshow("input_contour", mask_object_section);
+                    //cv::waitKey(0);
+
                     cv::Mat mask_object_new_new(mask_object.size(), CV_8UC1, cv::Scalar(0));
                     cv::findContours(mask_object_section, contours_vector, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
 
-                    for ( ushort contour_index = 0; contour_index < contours_vector.size(); contour_index++) {
-                        std::vector<cv::Mat>  sections;
-                        sections.clear();
-                        ushort total_contour_area = 0;
-                        for ( ushort section_index = 0; section_index < contours_vector.size(); section_index++) {
-                            total_contour_area += contours_vector.at(section_index).size();
-                        }
-                        for ( ushort section_index = 0; section_index < contours_vector.size(); section_index++) {
-                            mask_object_new_new.setTo(0);
-                            if (contours_vector.at(section_index).size() > unsigned(total_contour_area * 5 / 100) ){
-                                cv::drawContours(mask_object_new_new, contours_vector, section_index, cv::Scalar(255),
-                                                 -1);
-                                sections.push_back(mask_object_new_new.clone());
-                                //cv::imshow("final", mask_object_new_new);
-                                //cv::waitKey(0);
-                            }
-                        }
-                        contours.push_back(sections);
+                    ushort total_contour_area = 0;
+                    for ( ushort section_index = 0; section_index < contours_vector.size(); section_index++) {
+                        total_contour_area += contours_vector.at(section_index).size();
                     }
+                    std::vector<cv::Mat>  sections;
+                    sections.clear();
+                    for ( ushort section_index = 0; section_index < contours_vector.size(); section_index++) {
+                        mask_object_new_new.setTo(0);
+                        if (contours_vector.at(section_index).size() > unsigned(total_contour_area * 5 / 100) ){
+                            cv::drawContours(mask_object_new_new, contours_vector, section_index, cv::Scalar(255),
+                                             -1);
+                            sections.push_back(mask_object_new_new.clone());
+                            //cv::imshow("final", mask_object_new_new);
+                            //cv::waitKey(0);
+                        }
+                    }
+                    contours.push_back(sections);
+
                 } while (cv::countNonZero(results) > 1);
 
                 std::cout << "number of contours in the object = " << contours.size() << std::endl;
@@ -562,6 +565,8 @@ void GroundTruthFlow::save_ground_truth_object_contour_region_of_interest() {
 
                         contour_image_write_temp.copyTo(contour_image_write, contours.at(contour_index).at(section_index));
                         contour_image_write.setTo(cv::Scalar(contour_index+127, section_index+127, obj_index), contours.at(contour_index).at(section_index));
+
+                        std::cout << "set " << contour_index << " " << section_index << std::endl;
 
                         //cv::imshow("contours", contour_image_write);
                         //cv::waitKey(0);
@@ -640,9 +645,13 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
 
         std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > all_frame_object_contour_region_of_interest(m_ptr_list_gt_objects.size(),
                                                                                                                      std::vector<std::vector< GROUND_TRUTH_CONTOURS > > (FRAME_COUNT,
-                                                                                                                                                                         std::vector< GROUND_TRUTH_CONTOURS > (20, GROUND_TRUTH_CONTOURS(4))));
+                                                                                                                                                                         std::vector< GROUND_TRUTH_CONTOURS > (60, GROUND_TRUTH_CONTOURS(4))));
+        auto tic = std::chrono::steady_clock::now();
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
+
+
+            START_BENCHMARK
 
             char file_name_input_image_flow[50], file_name_input_image_contour[50];
             ushort image_frame_count = m_ptr_list_gt_objects.at(0)->getExtrapolatedGroundTruthDetails().at
@@ -673,30 +682,36 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
 
             cv::Point2f gt_displacement_1 = cv::Point2f(0,0);
 
-
             for (auto x = 0; x < contour_image_read.cols; x++) {
                 for (auto y = 0; y < contour_image_read.rows; y++) {
                     // there is only one object per Mat. Hence we can safely scan the whole frame.
 
-                    printf("section %d ", contour_image_read.at<cv::Vec3s>(y,x)[1]);
 
-                    all_frame_object_contour_region_of_interest.
-                            at(contour_image_read.at<cv::Vec3s>(y,x)[2]).
-                            at(current_frame_index).
-                            at(contour_image_read.at<cv::Vec3s>(y,x)[0]).
-                            at(contour_image_read.at<cv::Vec3s>(y,x)[1]).
-                            push_back(std::make_pair(cv::Point2f(y,x), gt_displacement_1));
+                    ushort contour_index = (ushort)(contour_image_read.at<cv::Vec3b>(y,x)[0]);
+                    ushort section_index = (ushort)(contour_image_read.at<cv::Vec3b>(y,x)[1]);
+
+                    if ( contour_index != 255 ) {
+
+                        all_frame_object_contour_region_of_interest.
+                                at(contour_image_read.at<cv::Vec3b>(y,x)[2]).
+                                at(current_frame_index).
+                                at((unsigned)(contour_index-127)).
+                                at((unsigned)(section_index-127)).
+                                push_back(std::make_pair(cv::Point2f(y,x), gt_displacement_1));
+                    }
                 }
             }
 
             for ( ushort contour_index = 0; contour_index < 20; contour_index++) {
                 for (ushort section_index = 0; section_index < 4; section_index++) {
-                    std::cout << "number of entries in each section = "
+                    std::cout << contour_index << " number of entries in each section = " << section_index
                               << all_frame_object_contour_region_of_interest.at(0).at(
                                       current_frame_index).at(contour_index).at(
                                       section_index).size() << std::endl;
                 }
             }
+
+            PRINT_BENCHMARK(find_contours);
         }
 
         for ( ushort obj_index = 0; obj_index < m_ptr_list_gt_objects.size(); obj_index++ ) {
