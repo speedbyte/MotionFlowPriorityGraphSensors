@@ -645,7 +645,7 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
 
         std::vector<std::vector<std::vector< GROUND_TRUTH_CONTOURS > > > all_frame_object_contour_region_of_interest(m_ptr_list_gt_objects.size(),
                                                                                                                      std::vector<std::vector< GROUND_TRUTH_CONTOURS > > (FRAME_COUNT,
-                                                                                                                                                                         std::vector< GROUND_TRUTH_CONTOURS > (60, GROUND_TRUTH_CONTOURS(4))));
+                                                                                                                                                                         std::vector< GROUND_TRUTH_CONTOURS > (20, GROUND_TRUTH_CONTOURS(5))));
         auto tic = std::chrono::steady_clock::now();
 
         for (ushort current_frame_index = 0; current_frame_index < FRAME_COUNT; current_frame_index++) {
@@ -697,13 +697,14 @@ void GroundTruthFlow::find_ground_truth_object_contour_region_of_interest() {
                                 at(current_frame_index).
                                 at((unsigned)(contour_index-127)).
                                 at((unsigned)(section_index-127)).
-                                push_back(std::make_pair(cv::Point2f(y,x), gt_displacement_1));
+                                push_back(std::make_pair(cv::Point2f(x,y), gt_displacement_1));
                     }
                 }
             }
 
-            for ( ushort contour_index = 0; contour_index < 20; contour_index++) {
-                for (ushort section_index = 0; section_index < 4; section_index++) {
+            for ( ushort contour_index = 0; contour_index < 10; contour_index++) {
+                for (ushort section_index = 0; section_index < 5; section_index++) {
+
                     std::cout << contour_index << " number of entries in each section = " << section_index
                               << all_frame_object_contour_region_of_interest.at(0).at(
                                       current_frame_index).at(contour_index).at(

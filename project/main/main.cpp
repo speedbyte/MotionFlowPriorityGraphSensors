@@ -433,6 +433,7 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
 
                     gt_flow.rerun_optical_flow_algorithm_interpolated();
                     gt_flow.find_ground_truth_object_special_region_of_interest();
+                    //gt_flow.save_ground_truth_object_contour_region_of_interest();
                     gt_flow.find_ground_truth_object_contour_region_of_interest();
 
                     fs_ground_truth.open((gt_flow.getGeneratePath() + std::string("/values_ground_truth.yml")) , cv::FileStorage::WRITE);
