@@ -59,7 +59,7 @@ void OpticalFlow::stich_gnuplots() {
                         file_name_image_output_stiched;
 
                 std::string gnuplotname_prefix;
-                for (ushort x = 0; x < 4; x++) {
+                for (ushort x = 0; x < 2; x++) {
 
                     char file_name_image_input[50], sensor_index_folder_suffix[10];
                     std::string gnuplot_image_file_with_path;
@@ -67,43 +67,39 @@ void OpticalFlow::stich_gnuplots() {
 
                     //stich_plots = cv::imread(gnuplot_image_file_with_path_stiched, CV_LOAD_IMAGE_ANYCOLOR);
 
-                    cv::Mat roi_stich;
-                    switch (x) {
-                        case 0:
-                            gnuplotname_prefix = "entire_" + std::to_string(0);
-                            roi_stich = stich_plots.rowRange(0, 400).colRange(0, 400);
-                            break;
-                        case 1:
-                            //gnuplotname_prefix = "entire_interpolated" + std::to_string(0);
-                            gnuplotname_prefix = "entire_" + std::to_string(1);
-                            roi_stich = stich_plots.rowRange(400, 800).colRange(0, 400);
-                            break;
-                        case 2:
-                            gnuplotname_prefix = "special_" + std::to_string(0);
-                            roi_stich = stich_plots.rowRange(0, 400).colRange(400, 800);
-                            break;
-                        case 3:
-                            //gnuplotname_prefix = "special_interpolated" + std::to_string(0);
-                            gnuplotname_prefix = "special_" + std::to_string(1);
-                            roi_stich = stich_plots.rowRange(400, 800).colRange(400, 800);
-                            break;
+                    for (ushort obj_index = 0; obj_index < 2; obj_index++) {
+
+                        cv::Mat roi_stich;
+                        switch (x) {
+                            case 0:
+                                gnuplotname_prefix = "entire_" + std::to_string(obj_index);
+                                //gnuplotname_prefix = "entire_interpolated" + std::to_string(0);
+                                roi_stich = stich_plots.rowRange(400 * obj_index, 400 + 400 * obj_index).colRange(0, 400);
+                                break;
+                            case 1:
+                                gnuplotname_prefix = "special_" + std::to_string(obj_index);
+                                //gnuplotname_prefix = "special_interpolated" + std::to_string(0);
+                                roi_stich = stich_plots.rowRange(400 * obj_index, 400 + 400*obj_index).colRange(400, 800);
+                                break;
+                        }
+
+                        sprintf(file_name_image_input, "%s_000%03d_10.png", gnuplotname_prefix.c_str(),
+                                m_sensor_multiframe_evaluation_data.at(datafilter_index).at(sensor_index).at(
+                                        current_frame_index).at(0).frame_number);
+                        gnuplot_image_file_with_path =
+                                m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_input;
+
+                        cv::Mat gnuplot_index = cv::imread(gnuplot_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
+                        if (gnuplot_index.empty()) {
+
+                            std::cout << gnuplot_image_file_with_path << " not found" << std::endl;
+                        }
+                        //cv::imshow("plot", gnuplot_index);
+                        //cv::waitKey(0);
+
+                        gnuplot_index.copyTo(roi_stich);
+                        boost::filesystem::remove(gnuplot_image_file_with_path);
                     }
-
-                    sprintf(file_name_image_input, "%s_000%03d_10.png", gnuplotname_prefix.c_str(),
-                            m_sensor_multiframe_evaluation_data.at(datafilter_index).at(sensor_index).at(
-                                    current_frame_index).at(0).frame_number);
-                    gnuplot_image_file_with_path =
-                            m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_input;
-
-                    cv::Mat gnuplot_index = cv::imread(gnuplot_image_file_with_path, CV_LOAD_IMAGE_ANYCOLOR);
-                    if (gnuplot_index.empty()) {
-                        throw "no image is found error";
-                    }
-                    //cv::imshow("plot", gnuplot_index);
-                    //cv::waitKey(0);
-
-                    gnuplot_index.copyTo(roi_stich);
-                    boost::filesystem::remove(gnuplot_image_file_with_path);
                 }
 
                 cv::imwrite(gnuplot_image_file_with_path_stiched, stich_plots);
