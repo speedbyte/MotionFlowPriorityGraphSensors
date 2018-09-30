@@ -182,11 +182,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                             cv::add(distribution_matrix, cv::Scalar(1), distribution_matrix);
                             cv::divide(distribution_matrix, ground_truth_distribution_matrix , normalized_distribution_matrix);
 
-                            //std::cout << distribution_matrix << ground_truth_distribution_matrix << normalized_distribution_matrix << std::endl;
+                            std::cout << distribution_matrix << ground_truth_distribution_matrix << normalized_distribution_matrix << std::endl;
 
                         } else {
 
-                            distribution_matrix.setTo(1);
                             normalized_distribution_matrix = distribution_matrix;
 
                         }
