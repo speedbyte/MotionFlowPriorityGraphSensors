@@ -73,43 +73,35 @@ void DataProcessingAlgorithm::common(Objects *object, std::string post_processin
                 final_values_for_this_object.covar_displacement = covar_displacement;
                 final_values_for_this_object.regression_line = regression_line_displacement;
 
+                double chisquare_val = 2.4477;
+                cv::Mat_<float> eigenvectors(2, 2);
+                cv::Mat_<float> eigenvalues(1, 2);
 
-                if ( 1 == 1) {
+                cv::eigen(covar_displacement, eigenvalues, eigenvectors);
 
-                    double chisquare_val = 2.4477;
-                    cv::Mat_<float> eigenvectors(2, 2);
-                    cv::Mat_<float> eigenvalues(1, 2);
+                std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
 
-                    cv::eigen(covar_displacement, eigenvalues, eigenvectors);
+                if (eigenvectors.data != NULL) {
+                    //Calculate the angle between the largest eigenvector and the x-axis
+                    double angle = atan2(eigenvectors(0, 1), eigenvectors(0, 0));
 
-                    std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
+                    //Shift the angle to the [0, 2pi] interval instead of [-pi, pi]
+                    if (angle < 0)
+                        angle += 6.28318530718;
 
-                    if (eigenvectors.data != NULL) {
-                        //Calculate the angle between the largest eigenvector and the x-axis
-                        double angle = atan2(eigenvectors(0, 1), eigenvectors(0, 0));
+                    //Conver to degrees instead of radians
+                    angle = 180 * angle / 3.14159265359;
 
-                        //Shift the angle to the [0, 2pi] interval instead of [-pi, pi]
-                        if (angle < 0)
-                            angle += 6.28318530718;
+                    //Calculate the size of the minor and major axes
+                    double halfmajoraxissize = chisquare_val * sqrt(eigenvalues(0));
+                    double halfminoraxissize = chisquare_val * sqrt(eigenvalues(1));
 
-                        //Conver to degrees instead of radians
-                        angle = 180 * angle / 3.14159265359;
+                    //Return the oriented ellipse_shape_from_eigendata
+                    //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise
+                    ellipse << halfmajoraxissize, halfminoraxissize, angle;
 
-                        //Calculate the size of the minor and major axes
-                        double halfmajoraxissize = chisquare_val * sqrt(eigenvalues(0));
-                        double halfminoraxissize = chisquare_val * sqrt(eigenvalues(1));
+                    std::cout << "ellipse" << ellipse;
 
-                        //Return the oriented ellipse_shape_from_eigendata
-                        //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise
-                        ellipse << halfmajoraxissize, halfminoraxissize, angle;
-
-                        std::cout << "ellipse" << ellipse;
-
-                        //cv::Mat visualizeimage(240, 320, CV_8UC1, cv::Scalar::all(0));
-                        //cv::ellipse_shape_from_eigendata(visualizeimage, ellipse_shape_from_eigendata, cv::Scalar::all(255), 2);
-                        //cv::imshow("EllipseDemo", visualizeimage);
-                        //cv::waitKey(1000);
-                    }
                 }
 
                 final_values_for_this_object.ellipse = ellipse.clone();
