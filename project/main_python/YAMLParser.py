@@ -19,6 +19,7 @@ class YAMLParser(object):
             self.yaml_file = open(self.file, "w")
             self.yaml_file.write(read_yaml_file)
             self.yaml_file.close()
+        exit(0)
 
 
     def close(self):

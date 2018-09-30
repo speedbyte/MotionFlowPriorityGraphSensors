@@ -184,7 +184,7 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                                 current_frame_index).at(objIndex).distribution_matrix.cols; col++) {
                                 m_fs <<
                                         (int)m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
-                                                current_frame_index).at(objIndex).distribution_matrix.at<ushort>(row, col);
+                                                current_frame_index).at(objIndex).distribution_matrix.at<float>(row, col);
                             }
                         m_fs << "]";
                     }

@@ -628,10 +628,24 @@ int main ( int argc, char *argv[]) {
 
     cv::Point3f hello;
 
+    //cv::Matx<unsigned, 2, 2> numerator;
+    //cv::Matx<unsigned, 2, 2> denominator;
+
+    cv::Mat_<ushort> numerator(2,2);
+    cv::Mat_<ushort> denominator(2,2);
+
+    numerator << 75, 119, 0, 5;
+    denominator << 240, 236, 166, 180;
+
+    cv::Mat_<float> divide_results;
+    //divide_results = numerator/denominator;
+    cv::divide(numerator, denominator, divide_results);
+
+    std::cout << divide_results;
+
 
     std::cout << "\nfitLine----------------------------------------------" << std::endl;
     //fitLine();
-
     std::cout << "\ncartToPolar----------------------------------------------" << std::endl;
     //cartToPolar();
     std::cout << "\npolarToCart----------------------------------------------" << std::endl;
@@ -654,7 +668,7 @@ int main ( int argc, char *argv[]) {
     //linearLeastSquare();
     std::cout << "\nangle----------------------------------------------" << std::endl;
     //angle_and_magnitude()
-    maha_points();
+    //maha_points();
 
 
     return 0;

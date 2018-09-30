@@ -174,9 +174,26 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                         }
 
 
-                        evaluationData.at(
-                                obj_index).distribution_matrix = distribution_matrix;
+                        cv::Mat_<float> normalized_distribution_matrix;
 
+                        if ( m_opticalFlowName != "ground_truth") {
+
+                            cv::Mat ground_truth_distribution_matrix =  m_ptr_gt_flow->get_sensor_multiframe_evaluation_data().at(datafilter_index).at(sensor_index).at(current_frame_index).at(obj_index).distribution_matrix;
+                            cv::add(distribution_matrix, cv::Scalar(1), distribution_matrix);
+                            cv::divide(distribution_matrix, ground_truth_distribution_matrix , normalized_distribution_matrix);
+
+                            //std::cout << distribution_matrix << ground_truth_distribution_matrix << normalized_distribution_matrix << std::endl;
+
+                        } else {
+
+                            distribution_matrix.setTo(1);
+                            normalized_distribution_matrix = distribution_matrix;
+
+                        }
+
+                        evaluationData.at(
+                                obj_index).distribution_matrix = normalized_distribution_matrix;
+                        std::cout << normalized_distribution_matrix << std::endl;
 
                         float reliability = 0.0;
 
@@ -186,10 +203,6 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
                         evaluationData.at(
                                 obj_index).reliability = reliability;
-
-
-                        std::cout << distribution_matrix << std::endl;
-
 
                     } else {
 
