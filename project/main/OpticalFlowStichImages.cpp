@@ -70,19 +70,21 @@ void OpticalFlow::stich_gnuplots() {
                     cv::Mat roi_stich;
                     switch (x) {
                         case 0:
-                            gnuplotname_prefix = "entire";
+                            gnuplotname_prefix = "entire_" + std::to_string(0);
                             roi_stich = stich_plots.rowRange(0, 400).colRange(0, 400);
                             break;
                         case 1:
-                            gnuplotname_prefix = "entire_interpolated";
+                            //gnuplotname_prefix = "entire_interpolated" + std::to_string(0);
+                            gnuplotname_prefix = "entire_" + std::to_string(1);
                             roi_stich = stich_plots.rowRange(400, 800).colRange(0, 400);
                             break;
                         case 2:
-                            gnuplotname_prefix = "special";
+                            gnuplotname_prefix = "special_" + std::to_string(0);
                             roi_stich = stich_plots.rowRange(0, 400).colRange(400, 800);
                             break;
                         case 3:
-                            gnuplotname_prefix = "special_interpolated";
+                            //gnuplotname_prefix = "special_interpolated" + std::to_string(0);
+                            gnuplotname_prefix = "special_" + std::to_string(1);
                             roi_stich = stich_plots.rowRange(400, 800).colRange(400, 800);
                             break;
                     }

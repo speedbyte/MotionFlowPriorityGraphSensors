@@ -121,25 +121,25 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 //--------------------------------------------------------------------------------------------
                         COUNT_METRICS &entire_roi_object_count_metrics = evaluationData.at(obj_index).entire_metrics;
                         gnuplot_xy_pts = generate_count_metrics_data("entire", entire_roi_object, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
-                        show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
+                        show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData);
 
 //--------------------------------------------------------------------------------------------
 
                         COUNT_METRICS &entire_roi_object_interpolated_count_metrics = evaluationData.at(obj_index).entire_interpolated_metrics;
                         gnuplot_xy_pts = generate_count_metrics_data("entire_interpolated", entire_roi_object_interpolated, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_interpolated_count_metrics, icovar);
-                        show_gnuplot("entire_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
+                        //show_gnuplot("entire_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData);
 
 //--------------------------------------------------------------------------------------------
 
                         COUNT_METRICS &special_roi_object_count_metrics = evaluationData.at(obj_index).sroi_metrics;
                         gnuplot_xy_pts = generate_count_metrics_data("special", intersection_of_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_count_metrics, icovar);
-                        show_gnuplot("special", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
+                        show_gnuplot("special", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData);
 
 //--------------------------------------------------------------------------------------------
 
                         COUNT_METRICS &special_roi_object_interpolated_count_metrics = evaluationData.at(obj_index).sroi_interpolated_metrics;
                         gnuplot_xy_pts = generate_count_metrics_data("special_interpolated", intersection_of_interpolated_algorithm_and_sroi, sensor_index, current_frame_index, obj_index, evaluationData, special_roi_object_interpolated_count_metrics, icovar);
-                        show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
+                        //show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData);
 
 //--------------------------------------------------------------------------------------------
 
@@ -222,15 +222,14 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 obj_index).entire_metrics;
                         entire_roi_object_count_metrics.sync_point[0] = {'$'};
                         show_gnuplot("entire", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index,
-                                     evaluationData, entire_roi_object_count_metrics, icovar);
+                                     evaluationData);
 
 //--------------------------------------------------------------------------------------------
 
                         COUNT_METRICS &entire_roi_object_interpolated_count_metrics = evaluationData.at(
                                 obj_index).entire_interpolated_metrics;
                         entire_roi_object_interpolated_count_metrics.sync_point[0] = {'$'};
-                        show_gnuplot("entire_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index,
-                                     obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
+                        //show_gnuplot("entire_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData);
 
 //--------------------------------------------------------------------------------------------
 
@@ -238,15 +237,14 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 obj_index).sroi_metrics;
                         special_roi_object_count_metrics.sync_point[0] = {'$'};
                         show_gnuplot("special", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index,
-                                     evaluationData, entire_roi_object_count_metrics, icovar);
+                                     evaluationData);
 
 //--------------------------------------------------------------------------------------------
 
                         COUNT_METRICS &special_roi_object_interpolated_count_metrics = evaluationData.at(
                                 obj_index).sroi_interpolated_metrics;
                         special_roi_object_interpolated_count_metrics.sync_point[0] = {'$'};
-                        show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index,
-                                     obj_index, evaluationData, entire_roi_object_count_metrics, icovar);
+                        //show_gnuplot("special_interpolated", gnuplot_xy_pts, sensor_index, current_frame_index, obj_index, evaluationData);
 
 //--------------------------------------------------------------------------------------------
                     }
@@ -366,7 +364,7 @@ std::vector<std::pair<float, float>> OpticalFlow::generate_count_metrics_data(st
 }
 
 
-void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector<std::pair<float, float> > &gnuplot_xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData, COUNT_METRICS &count_metrics, cv::Mat &icovar) {
+void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector<std::pair<float, float> > &gnuplot_xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData) {
 
 
     if ( m_opticalFlowName != "ground_truth" ) {
@@ -439,37 +437,34 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
         char file_name_image_output[50], sensor_index_folder_suffix[10];
         std::string gnuplot_image_file_with_path;
         sprintf(sensor_index_folder_suffix, "%02d", sensor_index);
-        sprintf(file_name_image_output, "%s_000%03d_10.png", gnuplotname_prefix.c_str(), evaluationData.at(obj_index).frame_number);
+        sprintf(file_name_image_output, "%s_%01d_000%03d_10.png", gnuplotname_prefix.c_str(), obj_index, evaluationData.at(obj_index).frame_number);
         gnuplot_image_file_with_path = m_gnuplots_path.string() + sensor_index_folder_suffix + "/" + file_name_image_output;
 
-        if ( obj_index == 0 ) {
+        std::cout << "ellipse_shape_from_eigendata for " << gnuplotname_prefix << " is \n" << ellipse_shape_from_eigendata << std::endl;
 
-            std::cout << "ellipse_shape_from_eigendata for " << gnuplotname_prefix << " is \n" << ellipse_shape_from_eigendata << std::endl;
+        // the object 1 is a key word in gnuplot and has nothing to do with objects.
+        std::string ellipse_shape_from_eigendata_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse_shape_from_eigendata(0)) + "," +  std::to_string(ellipse_shape_from_eigendata(1)) + "  angle " + std::to_string(ellipse_shape_from_eigendata(2)) + " lw 5 front fs empty bo 3\n";
 
-            // the object 1 is a key word in gnuplot and has nothing to do with objects.
-            std::string ellipse_shape_from_eigendata_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse_shape_from_eigendata(0)) + "," +  std::to_string(ellipse_shape_from_eigendata(1)) + "  angle " + std::to_string(ellipse_shape_from_eigendata(2)) + " lw 5 front fs empty bo 3\n";
-
-            gp2d << "set term png size 400,400\n";
-            //gp2d << "set output \"" + std::string("../gnuplot.png") + "\"\n";
-            gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
-            gp2d << "set xrange [-5:5]\n";
-            gp2d << "set yrange [-5:5]\n";
-            if ( !std::isnan(m)) {
-                gp2d << gp_line;
-            }
-            gp2d << ellipse_shape_from_eigendata_plot;
-            gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
-                    ", '-' with points pt 22 title 'Mean GT'"
-                    ", '-' with points pt 15 title 'Mean Algo'"
-                    // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
-                    "\n";
-            gp2d.send1d(gnuplot_xy_pts);
-            gp2d.send1d(gt_mean_pts);
-            gp2d.send1d(algo_mean_pts);
-
-            usleep(100000);  // give some time to gnuplot to write the plot on the filesystem
-
+        gp2d << "set term png size 400,400\n";
+        //gp2d << "set output \"" + std::string("../gnuplot.png") + "\"\n";
+        gp2d << "set output \"" + gnuplot_image_file_with_path + "\"\n";
+        gp2d << "set xrange [-5:5]\n";
+        gp2d << "set yrange [-5:5]\n";
+        if ( !std::isnan(m)) {
+            gp2d << gp_line;
         }
+        gp2d << ellipse_shape_from_eigendata_plot;
+        gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
+                ", '-' with points pt 22 title 'Mean GT'"
+                ", '-' with points pt 15 title 'Mean Algo'"
+                // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
+                "\n";
+        gp2d.send1d(gnuplot_xy_pts);
+        gp2d.send1d(gt_mean_pts);
+        gp2d.send1d(algo_mean_pts);
+
+        usleep(100000);  // give some time to gnuplot to write the plot on the filesystem
+
     }
     // shift stich multiple sensor images in a grid.
 }
