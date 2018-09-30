@@ -392,17 +392,37 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
 
         Gnuplot gp2d;
         float m, c;
+        float m_gt, c_gt;
 
         std::string coord1;
         std::string coord2;
         std::string gp_line;
+
+        std::string coord1_gt;
+        std::string coord2_gt;
+        std::string gp_line_gt;
+
+
         cv::Vec4f line = evaluationData.at(obj_index).regression_line;
 
         m = line[1] / line[0];
         c = line[3] - line[2] * m;
+
+        cv::Vec4f line_gt = m_ptr_gt_flow->m_sensor_multiframe_evaluation_data.at(0).at(sensor_index).at(current_frame_index).at(
+                obj_index).regression_line;
+
+        m_gt = line_gt[1] / line_gt[0];
+        c_gt = line_gt[3] - line_gt[2] * m_gt;
+
         coord1 = "-4," + std::to_string(m*(-4) + c);
         coord2 = "4," + std::to_string(m*(4) + c);
         gp_line = "set arrow from " + coord1 + " to " + coord2 + " nohead lc rgb \'red\'\n";
+
+
+        coord1_gt = "-4," + std::to_string(m_gt*(-4) + c_gt);
+        coord2_gt = "4," + std::to_string(m_gt*(4) + c_gt);
+        gp_line_gt = "set arrow from " + coord1_gt + " to " + coord2_gt + " nohead lc rgb \'green\'\n";
+
 
         char file_name_image_output[50], sensor_index_folder_suffix[10];
         std::string gnuplot_image_file_with_path;
@@ -422,6 +442,9 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
         gp2d << "set yrange [-5:5]\n";
         if ( !std::isnan(m)) {
             gp2d << gp_line;
+        }
+        if ( !std::isnan(m_gt)) {
+            gp2d << gp_line_gt;
         }
         gp2d << ellipse_shape_from_eigendata_plot;
         gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"

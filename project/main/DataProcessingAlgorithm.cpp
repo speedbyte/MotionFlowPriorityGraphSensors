@@ -64,6 +64,10 @@ void DataProcessingAlgorithm::common(Objects *object, std::string post_processin
                 // Covariance matrix of the displacement dataset
                 if ( CLUSTER_SIZE != 0 ) {
                     Utils::getCovarMatrix(samples, covar_pts, covar_displacement, regression_line_displacement);
+                    //where (vx, vy) is a normalized vector collinear to the line and (x0, y0) is a point on the line.
+                    if ( post_processing_algorithm == "ground_truth" ) {
+                        regression_line_displacement = {mean(2), mean(3), 0, 0};
+                    }
                 }
 
                 cv::Mat_<float> ellipse(3,1);
