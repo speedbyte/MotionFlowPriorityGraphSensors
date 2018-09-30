@@ -80,6 +80,10 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).regression_line;
 
+                        evaluationData.at(obj_index).ellipse = ptr_list_of_current_objects.at(obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(current_frame_index).ellipse;
+
                         evaluationData.at(obj_index).mean_pts = ptr_list_of_current_objects.at(obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).mean_pts;
@@ -383,41 +387,7 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
         ellipse_shape_from_eigendata.setTo(255);
 
         if ( current_frame_index > 0 ) {
-
-            double chisquare_val = 2.4477;
-            cv::Mat_<float> eigenvectors(2, 2);
-            cv::Mat_<float> eigenvalues(1, 2);
-
-            cv::eigen(evaluationData.at(obj_index).covar_displacement, eigenvalues, eigenvectors);
-
-            std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
-
-            if (eigenvectors.data != NULL) {
-                //Calculate the angle between the largest eigenvector and the x-axis
-                double angle = atan2(eigenvectors(0, 1), eigenvectors(0, 0));
-
-                //Shift the angle to the [0, 2pi] interval instead of [-pi, pi]
-                if (angle < 0)
-                    angle += 6.28318530718;
-
-                //Conver to degrees instead of radians
-                angle = 180 * angle / 3.14159265359;
-
-                //Calculate the size of the minor and major axes
-                double halfmajoraxissize = chisquare_val * sqrt(eigenvalues(0));
-                double halfminoraxissize = chisquare_val * sqrt(eigenvalues(1));
-
-                //Return the oriented ellipse_shape_from_eigendata
-                //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise
-                ellipse_shape_from_eigendata << halfmajoraxissize, halfminoraxissize, angle;
-
-                //std::cout << "ellips" << ellipse_shape_from_eigendata;
-
-                //cv::Mat visualizeimage(240, 320, CV_8UC1, cv::Scalar::all(0));
-                //cv::ellipse_shape_from_eigendata(visualizeimage, ellipse_shape_from_eigendata, cv::Scalar::all(255), 2);
-                //cv::imshow("EllipseDemo", visualizeimage);
-                //cv::waitKey(1000);
-            }
+            ellipse_shape_from_eigendata = evaluationData.at(obj_index).ellipse;
         }
 
         Gnuplot gp2d;

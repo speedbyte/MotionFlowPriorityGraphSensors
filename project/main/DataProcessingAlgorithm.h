@@ -12,7 +12,7 @@ class DataProcessingAlgorithm {
 protected:
 
     std::string m_algoName;
-    std::vector<std::vector<OBJECTS_MEAN_STDDEV > > m_sensor_multiframe_dataprocessing_centroid_displacement;
+    std::vector<std::vector<OBJECTS_MEAN_STDDEV > > m_sensor_multiframe_dataprocessing_object_results;
     std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f> > > > m_sensor_multiframe_dataprocessing_stencil_point_displacement;
 
 public:
@@ -28,7 +28,7 @@ public:
     }
 
     const std::vector<std::vector<OBJECTS_MEAN_STDDEV > > &get_object_dataprocessing_mean_centroid_displacement() const {
-        return m_sensor_multiframe_dataprocessing_centroid_displacement;
+        return m_sensor_multiframe_dataprocessing_object_results;
     }
 
     const std::vector<std::vector<std::vector<std::pair<cv::Point2f, cv::Point2f>> > > &get_object_dataprocessing_stencil_point_displacement() const {

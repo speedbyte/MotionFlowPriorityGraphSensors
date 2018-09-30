@@ -67,6 +67,10 @@ typedef struct {
     // Regressin line
     cv::Vec4f regression_line;
 
+    // Ellipse parameters
+    cv::Mat_<float> ellipse;
+
+
 } OPTICAL_FLOW_EVALUATION_METRICS;
 
 

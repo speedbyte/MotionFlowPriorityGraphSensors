@@ -343,13 +343,9 @@ public:
 
     }
 
-    static void getCovarMatrix(cv::Mat_<cv::Vec4f> &samples, cv::Mat &cov_pts, cv::Mat &cov_displacement, cv::Scalar mean, cv::Vec4f &line) {
+    static void getCovarMatrix(cv::Mat_<cv::Vec4f> &samples, cv::Mat &cov_pts, cv::Mat &cov_displacement, cv::Vec4f &line) {
 
         cv::Mat mu;
-
-        std::cout << "mean " << mean << "\n";
-
-        //samples = samples - mean;
 
         cv::Mat samples_rescale = samples.reshape(1, samples.cols);
 
