@@ -17,6 +17,7 @@ noise_list = ["ground_truth", "blue_sky",]
 
 #algorithm_list   = ["TVL", "FB",]
 algorithm_list   = ["FB",]
+algorithm_list   = ["FB", "LK"]
 #algorithm_list   = ["FB", "TVL", "LK"]
 
 file_list = list()
@@ -89,6 +90,9 @@ display_list = [
       #"sroi_ma_cumulative_error_good_pixels_FB_blue_sky_1_0",
     ],
 
+    ["distribution_matrix_FB_blue_sky_1_0",
+     "distribution_matrix_LK_blue_sky_1_0"],
+
 
 ]
 
@@ -129,6 +133,8 @@ display_list_extended  = [
 
 ]
 
+display_list_extended  = []
+
 display_list_bargraph = []
 
 display_list_bargraph_extended = [
@@ -140,6 +146,8 @@ display_list_bargraph_extended = [
         "extended_sroi_all_pixels_eroi_all_pixels"
     ],
 ]
+
+display_list_bargraph_extended = []
 
 parameter_list = [
 
@@ -186,10 +194,10 @@ parameter_list = [
     "distribution_matrix",
 ]
 
-parameter_list = [
-    "eroi_all_pixels",
-    "distribution_matrix",
-]
+#parameter_list = [
+#    "eroi_all_pixels",
+#    "distribution_matrix",
+#]
 
 parameter_list_extended = [
 
@@ -208,6 +216,7 @@ parameter_list_extended = [
 
 ]
 
+parameter_list_extended = [ ]
 
 datafilter_list  = [ "0", ]
 

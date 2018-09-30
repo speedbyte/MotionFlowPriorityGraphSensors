@@ -4,6 +4,7 @@
 import numpy as np
 from PlotData import PlotData
 from motionflow_graphs_data import *
+import math
 
 import threading
 lock = threading.BoundedSemaphore()
@@ -166,6 +167,22 @@ class SensorDataPlot(object):
                     #    xy_collisionpoints.append(data_points_gt[count+1][obj_index][measuring_parameter][x]) # change!
                     data.append([xy["frame_number"], xy[measuring_parameter]])
             count = count + 2
+
+        for index_combined, combined in enumerate(data):
+            #print "frame number ", combined[0]
+            contours = combined[1]
+            consistency_check = 0
+            for index_contour, contour in enumerate(contours):
+                #print "contour number = ", index_contour
+                section_length = len(contour)
+                #print contour
+                # descent from high to low
+                for x in range(section_length-1):
+                    consistency_check = consistency_check + math.atan(contour[section_length-1-x] - contour[section_length-1-x-1])
+            data[index_combined][1] = consistency_check
+            #print "final consistency value " , consistency_check
+
+        print data
 
         data_ = np.array(data)
         # the first element in each array is a, and the second element in each array is b. This is how .T works.
