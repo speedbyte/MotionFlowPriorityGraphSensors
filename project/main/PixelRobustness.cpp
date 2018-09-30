@@ -112,8 +112,10 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                          m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).visiblity
 
                          << "stddev_displacement" <<
-                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).stddev_displacement);
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).stddev_displacement)
 
+                         << "covar_displacement" <<
+                         (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).at(objIndex).covar_displacement);
                     // ------------------------------
                     // the ushort part
                     count = 0;

@@ -369,8 +369,9 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
                 evaluationData.at(obj_index).mean_displacement.y));
 
         //Get the eigenvalues and eigenvectors
-        cv::Mat_<float> ellipse(3, 1);
-        ellipse.setTo(255);
+        cv::Mat_<float> ellipse_shape_from_eigendata(3, 1);
+        ellipse_shape_from_eigendata.setTo(255);
+
         if ( current_frame_index > 0 ) {
 
             double chisquare_val = 2.4477;
@@ -379,7 +380,7 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
 
             cv::eigen(evaluationData.at(obj_index).covar_displacement, eigenvalues, eigenvectors);
 
-            //std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
+            std::cout << "eigen " << eigenvectors << "\n" << eigenvalues << std::endl ;
 
             if (eigenvectors.data != NULL) {
                 //Calculate the angle between the largest eigenvector and the x-axis
@@ -396,14 +397,14 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
                 double halfmajoraxissize = chisquare_val * sqrt(eigenvalues(0));
                 double halfminoraxissize = chisquare_val * sqrt(eigenvalues(1));
 
-                //Return the oriented ellipse
+                //Return the oriented ellipse_shape_from_eigendata
                 //The -angle is used because OpenCV defines the angle clockwise instead of anti-clockwise
-                ellipse << halfmajoraxissize, halfminoraxissize, -angle;
+                ellipse_shape_from_eigendata << halfmajoraxissize, halfminoraxissize, angle;
 
-                //std::cout << "ellips" << ellipse;
+                //std::cout << "ellips" << ellipse_shape_from_eigendata;
 
                 //cv::Mat visualizeimage(240, 320, CV_8UC1, cv::Scalar::all(0));
-                //cv::ellipse(visualizeimage, ellipse, cv::Scalar::all(255), 2);
+                //cv::ellipse_shape_from_eigendata(visualizeimage, ellipse_shape_from_eigendata, cv::Scalar::all(255), 2);
                 //cv::imshow("EllipseDemo", visualizeimage);
                 //cv::waitKey(1000);
             }
@@ -431,9 +432,10 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
 
         if ( obj_index == 0 ) {
 
-            std::cout << "ellipse for " << gnuplotname_prefix << " is \n" << ellipse << std::endl;
+            std::cout << "ellipse_shape_from_eigendata for " << gnuplotname_prefix << " is \n" << ellipse_shape_from_eigendata << std::endl;
 
-            std::string ellipse_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse(0)) + "," +  std::to_string(ellipse(1)) + "  angle " + std::to_string(ellipse(2)) + " lw 5 front fs empty bo 3\n";
+            // the object 1 is a key word in gnuplot and has nothing to do with objects.
+            std::string ellipse_shape_from_eigendata_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse_shape_from_eigendata(0)) + "," +  std::to_string(ellipse_shape_from_eigendata(1)) + "  angle " + std::to_string(ellipse_shape_from_eigendata(2)) + " lw 5 front fs empty bo 3\n";
 
             gp2d << "set term png size 400,400\n";
             //gp2d << "set output \"" + std::string("../gnuplot.png") + "\"\n";
@@ -443,7 +445,7 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
             if ( !std::isnan(m)) {
                 gp2d << gp_line;
             }
-            gp2d << ellipse_plot;
+            gp2d << ellipse_shape_from_eigendata_plot;
             gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
                     ", '-' with points pt 22 title 'Mean GT'"
                     ", '-' with points pt 15 title 'Mean Algo'"

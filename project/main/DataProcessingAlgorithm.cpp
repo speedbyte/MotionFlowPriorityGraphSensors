@@ -61,6 +61,7 @@ void DataProcessingAlgorithm::common(Objects *object, std::string post_processin
                 }
 
                 cv::Mat_<float> ellipse(3,1);
+                // this is a structure of all sample semantics
                 multiframe_centroid_displacement.push_back({cv::Point2f(mean(0), mean(1)), cv::Point2f(mean(2), mean(3)),cv::Point2f(stddev(0), stddev(1)), cv::Point2f(stddev(2), stddev(3)), covar_pts, covar_displacement, line, ellipse});
                 multiframe_dataprocessing_displacement.push_back(frame_dataprocessing_displacement);
 

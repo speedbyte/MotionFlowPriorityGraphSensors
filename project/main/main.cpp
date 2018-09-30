@@ -25,13 +25,14 @@
 
 //TODO
 
-// all python plot data first and then mix them as per requirement
+// penalty is a function of distribution,
 // stich images python plot automatically - DONE
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
 // interpolate using splash mechanism ( bilateral filter )
 // class interpolate Data
 // why does vires generates one image more than the ground truth information. That means the last ground truth informtion is bogus. Hence while reading the ground truth, the max should be
 // frame_count in position file - 1.
+// why is Cov(XY) not stddev_x*stddv_y?
 
 // algorithm
 
@@ -40,6 +41,12 @@
 // refine the intersection point using depth information
 // convert std vector ( object_stencil_displacement.. ) contains the necessary masks; into flow image and code the pixels with object id
 // read flow image with object id and make masks of objects to calculate special region of interest.
+
+
+// About
+// algorithm return x and y displacements and they are correspondingly stored in a cv::Point2f
+// ellipse vectors are found by covar_displacement and the output is major axis, minor axis and orientation.
+// square of stddev_x and stddev_y is cov(XX) and respectively cov(YY)
 
 
 //DONE
@@ -54,6 +61,7 @@
 // fix sroi analysis l1, l2 and ma cumulative error and total pixels - added gt_displacement when gt_sroi is created
 // parameter-extended : total algo sroi pixels / total algo pixels AND total algo sroi pixel error / total algo pixel error - DOME
 // why is stencil size in LK 0, why cant we start FB and LK at the same time? - DONE. added further variables. Now all algorithm will start
+// all python plot data first and then mix them as per requirement - DONE.
 
 // Presentation:
 // the gradient matters. If the error is in the same direction, then its fine. but if the error is distributed, then its a problem
@@ -68,6 +76,8 @@
 
 // Frame number 37 has a peak, although the objects arent so close to each other. SROI is less, but the pixels in good pixel region are at the boundary.
 // Total pixels in other frames are much higer
+
+
 
 
 
