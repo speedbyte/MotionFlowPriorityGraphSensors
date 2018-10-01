@@ -7,6 +7,7 @@ from YAMLParser import YAMLParser
 from SensorDataPlot import SensorDataPlot
 from motionflow_graphs_data import *
 import math
+import numpy as np
 
 SCALE = 1
 
@@ -144,11 +145,21 @@ if __name__ == '__main__':
     # i will print total_pixel_gt and blue_sky and sroi gt and blue sky in one graph
 
     # calculate reliability
-    nucleus = 1/math.log(( l2_good_pixels - ma_good_pixels ) / all_pixels ) ;
-    first_parameter = each_plot
-    print "map_data ", each_plot.get_map_to_data()
-    x_axis_1 = each_plot.get_x_axis()
-    y_axis_1 = each_plot.get_y_axis()
+    for each_plot in plotgraph_list_all_parameter_collect:
+        if ( each_plot.get_map_to_data() == "eroi_l2_good_pixels_LK_blue_sky_1_0"):
+            x_axis_1 = each_plot.get_x_axis()
+            l2_good_pixels = each_plot.get_y_axis()
+            print type(l2_good_pixels)
+        elif ( each_plot.get_map_to_data() == "eroi_ma_good_pixels_LK_blue_sky_1_0"):
+            x_axis_1 = each_plot.get_x_axis()
+            ma_good_pixels = each_plot.get_y_axis()
+        elif ( each_plot.get_map_to_data() == "eroi_all_pixels_LK_blue_sky_1_0"):
+            x_axis_1 = each_plot.get_x_axis()
+            all_pixels = each_plot.get_y_axis()
+
+
+    nucleus = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
+    nucleus = 1/np.log(nucleus)
 
 
     plotgraph_list_all_parameter_extended_collect = list()

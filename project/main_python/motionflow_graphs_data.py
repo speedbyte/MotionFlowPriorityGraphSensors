@@ -18,7 +18,7 @@ noise_list = ["ground_truth", "blue_sky",]
 #algorithm_list   = ["TVL", "FB",]
 algorithm_list   = ["FB",]
 algorithm_list   = ["FB", "LK"]
-algorithm_list   = ["FB", "LK", "TVL"]
+#algorithm_list   = ["FB", "LK", "TVL"]
 
 file_list = list()
 
@@ -248,7 +248,7 @@ parameter_list = [
     "sroi_interpolated_ma_cumulative_error_good_pixels",
     "distribution_matrix",
     "intersection_angle_deg",
-    "correlation",
+    #"correlation",
 
 ]
 
