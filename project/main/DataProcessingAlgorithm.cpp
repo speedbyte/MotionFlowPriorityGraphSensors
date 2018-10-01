@@ -35,8 +35,9 @@ void DataProcessingAlgorithm::common(Objects *object, std::string post_processin
 
             if (visibility) {
 
-                cv::Mat_<float>  corr;
-                cv::Scalar mean, stddev;
+                float  corr;
+                cv::Scalar_<double> mean;
+                cv::Scalar stddev;
                 cv::Mat covar_pts(2,2, CV_32FC1), covar_displacement(2,2, CV_32FC1);
                 cv::Vec4f regression_line_displacement;
 
@@ -56,6 +57,9 @@ void DataProcessingAlgorithm::common(Objects *object, std::string post_processin
 
                 /* ------------------------------------------------------------------------------ */
 
+                if  (mean(2) == 0 ) {
+                    mean(2) = 0.00000001;
+                }
                 final_values_for_this_object.mean_pts = cv::Point2f(mean(0), mean(1));
                 final_values_for_this_object.mean_displacement = cv::Point2f(mean(2), mean(3));
                 final_values_for_this_object.stddev_pts = cv::Point2f(stddev(0), stddev(1));
@@ -69,13 +73,21 @@ void DataProcessingAlgorithm::common(Objects *object, std::string post_processin
                         regression_line_displacement = {mean(2), mean(3), 0, 0};
                     }
                 }
+                assert(mean(2) != 0 );
 
-                cv::Mat_<float> ellipse(3,1);
+                if ( covar_displacement.data != NULL ) {
+                    corr = (float) (covar_displacement.at<float>(0, 1) / (stddev(2) * stddev(3)));
+                } else {
+                    corr = std::numeric_limits<float>::infinity();
+                }
                 // this is a structure of all sample semantics
 
                 final_values_for_this_object.covar_pts = covar_pts;
                 final_values_for_this_object.covar_displacement = covar_displacement;
                 final_values_for_this_object.regression_line = regression_line_displacement;
+                final_values_for_this_object.correlation = corr;
+
+                cv::Mat_<float> ellipse(3,1);
 
                 double chisquare_val = 2.4477;
                 cv::Mat_<float> eigenvectors(2, 2);
@@ -141,7 +153,7 @@ void DataProcessingAlgorithm::common(Objects *object, std::string post_processin
 
 
 void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
-                          cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+                          cv::Scalar_<double> &mean,  cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
@@ -162,7 +174,7 @@ void NoAlgorithm::execute(Objects *object, ushort sensor_index, ushort current_f
 }
 
 void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
-                            cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+                            cv::Scalar_<double> &mean,  cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
@@ -186,7 +198,7 @@ void SimpleAverage::execute(Objects *object, ushort sensor_index, ushort current
 
 
 void MovingAverage::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
-                                  cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+                                  cv::Scalar_<double> &mean,  cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
     for (unsigned cluster_index = 0; cluster_index < CLUSTER_SIZE; cluster_index++) {
 
@@ -214,7 +226,7 @@ void MovingAverage::execute(Objects *object, ushort sensor_index, ushort current
 
 }
 
-void VotedMean::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+void VotedMean::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE, cv::Scalar_<double> &mean,  cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
 
@@ -266,7 +278,7 @@ void VotedMean::execute(Objects *object, ushort sensor_index, ushort current_fra
 
 }
 
-void RankedMean::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE, cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+void RankedMean::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE, cv::Scalar_<double> &mean,  cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
     
@@ -324,7 +336,7 @@ void RankedMean::execute(Objects *object, ushort sensor_index, ushort current_fr
 
 
 void SensorFusion::execute(Objects *object, ushort sensor_index, ushort current_frame_index, unsigned CLUSTER_SIZE,
-                                 cv::Scalar &mean, cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
+                                 cv::Scalar_<double> &mean,  cv::Scalar &stddev,  std::vector<std::pair<cv::Point2f, cv::Point2f> > &frame_dataprocessing_displacement, cv::Mat_<cv::Vec4f> &samples) {
 
 
     

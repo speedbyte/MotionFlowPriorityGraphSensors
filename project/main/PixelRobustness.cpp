@@ -59,6 +59,9 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                         << "}";
                 m_fs << "[";
 
+                std::cout << "current_frame_index " << current_frame_index << " for pixel robustness"
+                        << std::endl;
+
                 unsigned long TOTAL_OBJECTS = m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(current_frame_index).size();
 
                 for (unsigned objIndex = 0; objIndex < TOTAL_OBJECTS; objIndex++) {
@@ -129,7 +132,10 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
 
                          << "stddev_displacement" <<
                          (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
-                                 current_frame_index).at(objIndex).stddev_displacement);
+                                 current_frame_index).at(objIndex).stddev_displacement)
+
+                         << "intersection_angle_deg" << (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
+                            current_frame_index).at(objIndex).intersection_angle_deg);
 
                          cv::Mat_<float> covar = (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
                                          current_frame_index).at(objIndex).covar_displacement);
@@ -147,7 +153,9 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                              }
                          }
                          m_fs << "]";
-
+                         m_fs << "correlation" <<
+                                m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
+                                        current_frame_index).at(objIndex).correlation;
                    // ------------------------------
                     // the ushort part
                     count = 0;
@@ -234,9 +242,6 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                         m_fs << "]";
                     }
                     m_fs << "]";
-
-                    m_fs << "reliability" << m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
-                            current_frame_index).at(objIndex).reliability;
 
                     m_fs
                          << "}";

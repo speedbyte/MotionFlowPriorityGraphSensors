@@ -2,6 +2,7 @@
 #include "OpticalFlow.h"
 #include <gnuplot-iostream/gnuplot-iostream.h>
 #include "Utils.h"
+#include "Objects.h"
 
 void OpticalFlow::generate_metrics_optical_flow_algorithm() {
 
@@ -111,6 +112,11 @@ void OpticalFlow::generate_metrics_optical_flow_algorithm() {
                                 obj_index)->
                                 get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
                         ).at(sensor_index).at(current_frame_index).covar_displacement;
+
+                        evaluationData.at(obj_index).correlation = ptr_list_of_current_objects.at(
+                                obj_index)->
+                                get_list_object_dataprocessing_mean_centroid_displacement().at(datafilter_index
+                        ).at(sensor_index).at(current_frame_index).correlation;
 
                         // Instances of CLUSTER_COUNT_ALGO in CLUSTER_COUNT_GT
                         cv::Mat icovar;
@@ -368,7 +374,7 @@ std::vector<std::pair<float, float>> OpticalFlow::generate_count_metrics_data(st
 }
 
 
-void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector<std::pair<float, float> > &gnuplot_xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData) {
+void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector<std::pair<float, float> > &gnuplot_xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData) {
 
 
     if ( m_opticalFlowName != "ground_truth" ) {
@@ -428,6 +434,9 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
         cv::Matx<cv::Complexf,2,1> result_object2d = coefficients2d.solve(rhs2d); // equivalent to coefficients.inv()*rhs
         std::cout << result_object2d << std::endl;
         intersection_pts.push_back(std::make_pair(result_object2d(0).re, result_object2d(1).re));
+
+        float intersection_angle = (float)(std::abs((180.0*std::tanh(m)/M_PI) - (180*std::tanh(m_gt)/M_PI)));
+        evaluationData.at(obj_index).intersection_angle_deg = intersection_angle;
 
         // shift origin to intersection point
 

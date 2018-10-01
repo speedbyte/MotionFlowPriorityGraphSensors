@@ -286,11 +286,11 @@ void Objects::generate_object_mean_lineparameters( std::string post_processing_a
                         m = mean_displacement_vector.y / mean_displacement_vector.x;
                         c = next_pts.y - m * next_pts.x;  // c = y - mx
                         
-                        assert(c!=0);
-
                         if ((int) c == 0) {
                             c += 0.001;
                         }
+
+                        assert(c!=0);
 
                         //float d = (float) sqrt((double) mean_displacement_vector.x * mean_displacement_vector.x +
                         //                       (double) mean_displacement_vector.y * mean_displacement_vector.y);

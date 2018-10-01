@@ -64,11 +64,16 @@ typedef struct {
     cv::Mat covar_pts;
     cv::Mat covar_displacement;
 
+    float correlation;
+
     // Regressin line
     cv::Vec4f regression_line;
 
     // Ellipse parameters
     cv::Mat_<float> ellipse;
+
+    // Intersection angle
+    float intersection_angle_deg;
 
 
 } OPTICAL_FLOW_EVALUATION_METRICS;
@@ -218,7 +223,7 @@ public:
 
 private:
 
-    void show_gnuplot(std::string, const std::vector<std::pair<float, float>>  &xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, const std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData);
+    void show_gnuplot(std::string, const std::vector<std::pair<float, float>>  &xy_pts, const ushort sensor_index, const ushort current_frame_index, const ushort obj_index, std::vector<OPTICAL_FLOW_EVALUATION_METRICS> &evaluationData);
 
 };
 
