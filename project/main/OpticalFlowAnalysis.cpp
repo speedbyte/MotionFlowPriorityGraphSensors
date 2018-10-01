@@ -373,7 +373,7 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
 
     if ( m_opticalFlowName != "ground_truth" ) {
 
-        std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts;
+        std::vector<std::pair<float, float>> gt_mean_pts, algo_mean_pts, intersection_pts;
         gt_mean_pts.push_back(std::make_pair(
                 m_ptr_gt_flow->get_sensor_multiframe_evaluation_data().at(0).at(sensor_index).at(
                         current_frame_index).at(obj_index).mean_displacement.x,
@@ -423,6 +423,13 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
         coord2_gt = "4," + std::to_string(m_gt*(4) + c_gt);
         gp_line_gt = "set arrow from " + coord1_gt + " to " + coord2_gt + " nohead lc rgb \'green\'\n";
 
+        cv::Matx<float,2,2> coefficients2d (-m,1,-m_gt,1);
+        cv::Matx<float,2,1> rhs2d(c,c_gt);
+        cv::Matx<cv::Complexf,2,1> result_object2d = coefficients2d.solve(rhs2d); // equivalent to coefficients.inv()*rhs
+        std::cout << result_object2d << std::endl;
+        intersection_pts.push_back(std::make_pair(result_object2d(0).re, result_object2d(1).re));
+
+        // shift origin to intersection point
 
         char file_name_image_output[50], sensor_index_folder_suffix[10];
         std::string gnuplot_image_file_with_path;
@@ -450,11 +457,13 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
         gp2d << "plot '-' with points title '" + m_ptr_list_gt_objects.at(obj_index)->getObjectName() + "'"
                 ", '-' with points pt 22 title 'Mean GT'"
                 ", '-' with points pt 15 title 'Mean Algo'"
+                ", '-' with points pt 35 title 'Intersection'"
                 // , '-' with circles linecolor rgb \"#FF0000\" fill solid notitle 'GT'"
                 "\n";
         gp2d.send1d(gnuplot_xy_pts);
         gp2d.send1d(gt_mean_pts);
         gp2d.send1d(algo_mean_pts);
+        gp2d.send1d(intersection_pts);
 
         usleep(100000);  // give some time to gnuplot to write the plot on the filesystem
 

@@ -537,10 +537,13 @@ void solveLinear() {
 
     cv::Matx<float,2,2> coefficients2d (2,-3,5,6);
     cv::Matx<float,2,1> rhs2d(3,6);
-    std::cout << coefficients2d.inv();
     std::cout << "---------2d object method solving linear equation\n";
     cv::Matx<cv::Complexf,2,1> result_object2d = coefficients2d.solve(rhs2d); // equivalent to coefficients.inv()*rhs
-    std::cout << result_object2d << cv::determinant(coefficients2d) << std::endl;
+    std::cout << result_object2d << std::endl;
+
+    std::cout << "---------traditional method to solve linear equations\n";
+    std::cout << coefficients2d.inv();
+    std::cout << cv::determinant(coefficients2d) << std::endl;
 
     cv::Matx33f coefficient = {1,2,3,4,5,6,7,8,9};
     float determinant  = cv::determinant(coefficient);
