@@ -6,6 +6,7 @@ from Figures import Figures
 from YAMLParser import YAMLParser
 from SensorDataPlot import SensorDataPlot
 from motionflow_graphs_data import *
+import math
 
 SCALE = 1
 
@@ -59,7 +60,6 @@ import subprocess
 # both ground truth and noise is depicted.
 
 if __name__ == '__main__':
-
 
     #concatenate files
     fd_concatenated = open(file_final, "w")
@@ -143,6 +143,12 @@ if __name__ == '__main__':
     # now make pairs.. whatever you want to get printed in one figure.
     # i will print total_pixel_gt and blue_sky and sroi gt and blue sky in one graph
 
+    # calculate reliability
+    nucleus = 1/math.log(( l2_good_pixels - ma_good_pixels ) / all_pixels ) ;
+    first_parameter = each_plot
+    print "map_data ", each_plot.get_map_to_data()
+    x_axis_1 = each_plot.get_x_axis()
+    y_axis_1 = each_plot.get_y_axis()
 
 
     plotgraph_list_all_parameter_extended_collect = list()
@@ -189,6 +195,7 @@ if __name__ == '__main__':
                         sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter_extended)
                         print y_axis_1
                         print y_axis_2
+                        ### formula #######
                         new_y_axis = y_axis_1*100.0/y_axis_2
                         yaml_file_data = [x_axis_1, new_y_axis]
 
