@@ -103,15 +103,17 @@ display_list = [
 display_list = [
 
     # the following graph shows the importance of mahalabnobis distance
+    # the conclusion is that if eigen vector is not equal to the l2 radius && l2 good pixels tends to ma good pixels,
+    # we have a beautiful nucleus. show 37, 46 for sroi and 39 for eroi.
     [
-        "eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
-        "eroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
+        "eroi_l2_good_pixels_FB_blue_sky_1_0",
+        "eroi_ma_good_pixels_FB_blue_sky_1_0",
     ],
 
     # the following graph shows the importance of mahalabnobis distance
     [
-        "sroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
-        "sroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
+        "sroi_l2_good_pixels_FB_blue_sky_1_0",
+        "sroi_ma_good_pixels_FB_blue_sky_1_0",
     ],
 
     # this graph shows if the object is fully covered or just a part of

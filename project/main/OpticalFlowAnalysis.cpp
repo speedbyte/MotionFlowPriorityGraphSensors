@@ -325,7 +325,7 @@ std::vector<std::pair<float, float>> OpticalFlow::generate_count_metrics_data(st
         l2_cumulative_error_all_pixels += euclidean_dist_err;
 
         // ma_cumulative_error_all_pixels
-        auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, evaluationData.at(obj_index).mean_displacement);
+        auto ma_dist_algo = Utils::getMahalanobisDistance(icovar, algo_displacement, gt_displacement);
         ma_cumulative_error_all_pixels += ma_dist_algo;
 
         //auto angle_algo = std::tanh(algo_displacement.y / algo_displacement.x);
@@ -449,7 +449,9 @@ void OpticalFlow::show_gnuplot(std::string gnuplotname_prefix, const std::vector
         std::cout << "ellipse_shape_from_eigendata for " << gnuplotname_prefix << " is \n" << ellipse_shape_from_eigendata << std::endl;
 
         // the object 1 is a key word in gnuplot and has nothing to do with objects.
-        std::string ellipse_shape_from_eigendata_plot = "set object 1 ellipse center " + std::to_string(evaluationData.at(obj_index).mean_displacement.x) + "," + std::to_string(evaluationData.at(obj_index).mean_displacement.y) + " size " + std::to_string(ellipse_shape_from_eigendata(0)) + "," +  std::to_string(ellipse_shape_from_eigendata(1)) + "  angle " + std::to_string(ellipse_shape_from_eigendata(2)) + " lw 5 front fs empty bo 3\n";
+        std::string ellipse_shape_from_eigendata_plot = "set object 1 ellipse center " + std::to_string(m_ptr_gt_flow->m_sensor_multiframe_evaluation_data.at(0).at(sensor_index).at(current_frame_index).at(
+                obj_index).mean_displacement.x) + "," + std::to_string( m_ptr_gt_flow->m_sensor_multiframe_evaluation_data.at(0).at(sensor_index).at(current_frame_index).at(
+                obj_index).mean_displacement.y) + " size " + std::to_string(ellipse_shape_from_eigendata(0)) + "," +  std::to_string(ellipse_shape_from_eigendata(1)) + "  angle " + std::to_string(ellipse_shape_from_eigendata(2)) + " lw 5 front fs empty bo 3\n";
 
         gp2d << "set term png size 400,400\n";
         //gp2d << "set output \"" + std::string("../gnuplot.png") + "\"\n";
