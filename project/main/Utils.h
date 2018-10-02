@@ -111,38 +111,47 @@ public:
         boost::filesystem::path temp;
         bool video_writer_init = false;
 
-        for (boost::filesystem::directory_iterator dir_iter(dir_path); dir_iter != end_iter; ++dir_iter) {
-            if (boost::filesystem::is_regular_file(dir_iter->status())) {
-                std::string extension = boost::filesystem::extension(*dir_iter);
-                if (extension == ".png") {
+        boost::filesystem::directory_iterator dir_iter(dir_path);
 
-                    std::cout << *dir_iter << std::endl;
-                    temp = *dir_iter;
-                    temp_image = cv::imread(temp.string(), cv::IMREAD_COLOR);
-                    if (video_writer_init == false) {
-                        if (!video_write.open((dir_path.string() + "/movement_video.avi"), CV_FOURCC('D', 'I', 'V', 'X'),
-                                5.0,
-                                cv::Size(temp_image.cols, temp_image.rows), true)) {
-                            std::cerr << "failed to initialise the video write" << std::endl;
-                            throw;
-                        }
-                        if (!video_write.isOpened()) {
-                            std::cerr << "Could not open video" << std::endl;
-                        }
+        std::vector<boost::filesystem::path> v;                                // so we can sort them later
 
-                        video_writer_init = true;
+        std::copy(dir_iter, boost::filesystem::directory_iterator(), std::back_inserter(v));
+
+        std::vector<boost::filesystem::path>::const_iterator it(v.begin());
+        std::vector<boost::filesystem::path>::const_iterator it_end(v.end());
+
+        std::sort(v.begin(), v.end());             // sort, since directory iteration
+        // is not ordered on some file systems
+
+        for ( ; it != it_end; ++it )
+        {
+            std::string extension = boost::filesystem::extension(*it);
+            if (extension == ".png") {
+
+                std::cout << *it << '\n';
+                temp = *it;
+                temp_image = cv::imread(temp.string(), cv::IMREAD_COLOR);
+                if (video_writer_init == false) {
+                    if (!video_write.open((dir_path.string() + "/movement_video.avi"), CV_FOURCC('D', 'I', 'V', 'X'),
+                                          5.0,
+                                          cv::Size(temp_image.cols, temp_image.rows), true)) {
+                        std::cerr << "failed to initialise the video write" << std::endl;
+                        throw;
                     }
-                    /*cv::namedWindow("video", CV_WINDOW_AUTOSIZE);
-                    cv::imshow("video", temp_image);
-                    cv::waitKey(1000);*/
-                    video_write.write(temp_image);
-                } else {
-                    std::cout << "ignoring extension : " << extension << " path " << *dir_iter << std::endl;
+                    if (!video_write.isOpened()) {
+                        std::cerr << "Could not open video" << std::endl;
+                    }
+                    video_writer_init = true;
                 }
+                /*cv::namedWindow("video", CV_WINDOW_AUTOSIZE);
+                cv::imshow("video", temp_image);
+                cv::waitKey(1000);*/
+                video_write.write(temp_image);
+            } else {
+                std::cout << "ignoring extension : " << extension << " path " << *dir_iter << std::endl;
             }
             cv::destroyAllWindows();
         }
-
         video_write.release();
     }
 

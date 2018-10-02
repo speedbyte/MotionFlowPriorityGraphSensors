@@ -2,6 +2,7 @@
 # _*_ encoding:utf-8 _*_
 
 just_ground_truth = False
+values_yml_present = True
 SCALE = 1
 OUTLIER = 100000
 

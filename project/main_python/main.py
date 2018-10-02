@@ -65,22 +65,23 @@ import subprocess
 if __name__ == '__main__':
 
     #concatenate files
-    fd_concatenated = open(file_final, "w")
-    fd_ground_truth = open(file_ground_truth, "r")
-    fd_concatenated.write(fd_ground_truth.read())
-    fd_concatenated.close()
-    fd_ground_truth.close()
+    if ( values_yml_present is False ):
+        fd_concatenated = open(file_final, "w")
+        fd_ground_truth = open(file_ground_truth, "r")
+        fd_concatenated.write(fd_ground_truth.read())
+        fd_concatenated.close()
+        fd_ground_truth.close()
 
-    for file_to_append in file_list:
-        fd_concatenated = open(file_final, "a")
-        fd_algo = open(file_to_append, "r")
-        fd_algo.readline() # remove header
-        fd_algo.readline() # remove header
+        for file_to_append in file_list:
+            fd_concatenated = open(file_final, "a")
+            fd_algo = open(file_to_append, "r")
+            fd_algo.readline() # remove header
+            fd_algo.readline() # remove header
 
-        fd_concatenated.write(fd_algo.read())
-        fd_algo.close()
+            fd_concatenated.write(fd_algo.read())
+            fd_algo.close()
 
-    fd_concatenated.close()
+        fd_concatenated.close()
 
     yaml_file_handle = YAMLParser(file_final)
     yaml_file_data = yaml_file_handle.load()
@@ -278,7 +279,7 @@ if __name__ == '__main__':
                         print "nucleus",
 
                     elif ( parameter_multiple == "multiple_occlusion_consistency" ):
-                        occlusion_consistency = 1/np.exp( (sroi_l2_cumulative_error_all_pixels * 1.0 / eroi_l2_cumulative_error_all_pixels) - (sroi_all_pixels * 1.0 / eroi_all_pixels) )
+                        occlusion_consistency = ( (sroi_l2_cumulative_error_all_pixels * 1.0 / eroi_l2_cumulative_error_all_pixels) - (sroi_all_pixels * 1.0 / eroi_all_pixels) )  * 100
                         ### formula #######
                         new_y_axis = (occlusion_consistency)
                         print "occlusion",  occlusion_consistency

@@ -8,7 +8,7 @@
 cv::Size_<unsigned> Dataset::m_frame_size;
 ushort Dataset::m_depth;
 ushort Dataset::m_cn;
-ushort Dataset::Dataset::SENSOR_COUNT;
+ushort Dataset::SENSOR_COUNT;
 ushort Dataset::ITERATION_START_POINT;
 ushort Dataset::ITERATION_END_POINT;
 bool Dataset::GENERATE;
