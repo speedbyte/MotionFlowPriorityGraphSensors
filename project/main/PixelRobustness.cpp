@@ -137,18 +137,38 @@ void PixelRobustness::writeToYaml(const OpticalFlow &opticalFlow, cv::FileStorag
                          << "intersection_angle_deg" << (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
                             current_frame_index).at(objIndex).intersection_angle_deg);
 
+                         cv::Mat_<float> ellipse = m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
+                            current_frame_index).at(objIndex).ellipse;
+
+                         if ( ellipse.data != NULL ) {
+                             cv::Vec3f flatten_ellipse = { ellipse(0), ellipse(1), ellipse(2) };
+                             m_fs << "ellipse" << "[:";
+                             for ( ushort element = 0; element < flatten_ellipse.rows; element++) {
+                                 m_fs << flatten_ellipse(element);
+                             }
+                             m_fs << "]";
+                         } else {
+                             cv::Vec3f flatten_ellipse = { 0, 0, 0 };
+                             m_fs << "ellipse" << "[:";
+                             for ( ushort element = 0; element < flatten_ellipse.rows; element++) {
+                                 m_fs << flatten_ellipse(element);
+                             }
+                             m_fs << "]";
+                         }
+
                          cv::Mat_<float> covar = (m_list_evaluation_data_multiframe.at(datafilter_index).at(sensor_index).at(
                                          current_frame_index).at(objIndex).covar_displacement);
+
                          if ( covar.data != NULL ) {
                              cv::Vec4f flatten_covar = { covar(0,0), covar(0,1), covar(1,0), covar(1,1) };
                              m_fs << "covar_displacement" << "[:";
-                             for ( ushort row = 0; row < 4; row++) {
+                             for ( ushort row = 0; row < flatten_covar.rows; row++) {
                                  m_fs << flatten_covar(row);
                              }
                          } else {
                              cv::Vec4f flatten_covar = { 0, 0, 0, 0 };
                              m_fs << "covar_displacement" << "[:";
-                             for ( ushort row = 0; row < 4; row++) {
+                             for ( ushort row = 0; row < flatten_covar.rows; row++) {
                                  m_fs << flatten_covar(row);
                              }
                          }

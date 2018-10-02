@@ -8,7 +8,7 @@ OUTLIER = 100000
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
-dataset = "cpp"
+dataset = "vires"
 scenario = "two"
 
 noise_list = ["ground_truth", "blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
@@ -16,8 +16,9 @@ noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
 noise_list = ["ground_truth", "blue_sky",]
 
 #algorithm_list   = ["TVL", "FB",]
-algorithm_list   = ["FB",]
-algorithm_list   = ["FB", "LK"]
+algorithm_list   = ["LK",]
+#algorithm_list   = ["FB",]
+#algorithm_list   = ["FB", "LK"]
 #algorithm_list   = ["FB", "LK", "TVL"]
 
 file_list = list()

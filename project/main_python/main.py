@@ -145,21 +145,29 @@ if __name__ == '__main__':
     # i will print total_pixel_gt and blue_sky and sroi gt and blue sky in one graph
 
     # calculate reliability
-    for each_plot in plotgraph_list_all_parameter_collect:
-        if ( each_plot.get_map_to_data() == "eroi_l2_good_pixels_LK_blue_sky_1_0"):
-            x_axis_1 = each_plot.get_x_axis()
-            l2_good_pixels = each_plot.get_y_axis()
-            print type(l2_good_pixels)
-        elif ( each_plot.get_map_to_data() == "eroi_ma_good_pixels_LK_blue_sky_1_0"):
-            x_axis_1 = each_plot.get_x_axis()
-            ma_good_pixels = each_plot.get_y_axis()
-        elif ( each_plot.get_map_to_data() == "eroi_all_pixels_LK_blue_sky_1_0"):
-            x_axis_1 = each_plot.get_x_axis()
-            all_pixels = each_plot.get_y_axis()
+    for algorithm in algorithm_list:
+
+        for each_plot in plotgraph_list_all_parameter_collect:
+            #if ( each_plot.get_algorithm() is algorithm and  each_plot.get_sensor_index() == 0 and each_plot.get_noise() is noise ):
+            if ( each_plot.get_algorithm() is algorithm ):
+
+                if ( each_plot.get_measuring_parameter() == "eroi_l2_good_pixels"):
+                    x_axis_1 = each_plot.get_x_axis()
+                    l2_good_pixels = each_plot.get_y_axis()
+                elif ( each_plot.get_measuring_parameter() == "eroi_ma_good_pixels"):
+                    x_axis_1 = each_plot.get_x_axis()
+                    ma_good_pixels = each_plot.get_y_axis()
+                elif ( each_plot.get_measuring_parameter() == "eroi_all_pixels"):
+                    x_axis_1 = each_plot.get_x_axis()
+                    all_pixels = each_plot.get_y_axis()
+                elif ( each_plot.get_measuring_parameter() == "distribution_matrix"):
+                    x_axis_1 = each_plot.get_x_axis()
+                    distribution_matrix = each_plot.get_y_axis()
 
 
-    nucleus = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
-    nucleus = 1/np.log(nucleus)
+        nucleus = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
+        nucleus = 1/np.log(nucleus)
+        print nucleus
 
 
     plotgraph_list_all_parameter_extended_collect = list()
