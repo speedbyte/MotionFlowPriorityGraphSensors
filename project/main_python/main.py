@@ -214,13 +214,66 @@ if __name__ == '__main__':
 
     plotgraph_list_all_parameter_multiple_collect = list()
 
-    for n, parameter in enumerate(parameter_list_multiple):
-        # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
+    for sensor_index in sensor_list:
 
+        for algorithm in algorithm_list:
+
+            for noise in noise_list:
+
+                for each_plot in plotgraph_list_all_parameter_collect:
+
+                    # set algorithm wise
+                    if ( each_plot.get_algorithm() is algorithm and  each_plot.get_sensor_index() == 0 and each_plot.get_noise() is noise ):
+
+                        algorithm = each_plot.get_algorithm()
+                        sensor_index = each_plot.get_sensor_index()
+                        step_size = 1
+                        noise = each_plot.get_noise()
+
+                        if ( each_plot.get_measuring_parameter() == "eroi_l2_good_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            l2_good_pixels = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "eroi_ma_good_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            ma_good_pixels = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "eroi_all_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            all_pixels = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "distribution_matrix"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            distribution_matrix = each_plot.get_y_axis()
+
+
+                for n, parameter in enumerate(parameter_list_multiple):
+                    # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
+
+                    parameter_multiple = "multiple_" + parameter[0]
+
+                    print "PARAMETER multiple ----- ", parameter_multiple
+
+                    if ( parameter_multiple == "multiple_nucleus_reliability" ):
+                        nucleus_reliability = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
+                        ### formula #######
+                        new_y_axis = 1/np.log(nucleus_reliability)
+                        print "nucleus",
+
+                    elif ( parameter_multiple == "multiple_occlusion_reliability" ):
+                        occlusion_reliability = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
+                        ### formula #######
+                        new_y_axis = 1/np.log(nucleus_reliability)
+                        print "nucleus",  nucleus_reliability
+
+                    sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter_multiple)
+                    yaml_file_data = [x_axis_1, new_y_axis]
+
+                    plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, parameter_multiple, noise, str(step_size), datafilter_index=0, x_label="frame_number", y_label="dummy" )
+                    plotgraph_list_all_parameter_multiple_collect.append(plot_data)
+
+
+
+    for n, parameter in enumerate(parameter_list_multiple):
         bargraph_list_all_parameter_multiple_collect = list()
         parameter_multiple = "multiple_" + parameter[0]
-
-        print "PARAMETER multiple ----- ", parameter_multiple
 
         for sensor_index in sensor_list:
 
@@ -228,49 +281,11 @@ if __name__ == '__main__':
 
                 for noise in noise_list:
 
-                    for each_plot in plotgraph_list_all_parameter_collect:
+                    for each_plot in plotgraph_list_all_parameter_multiple_collect:
 
-                        # set algorithm wise
-                        if ( each_plot.get_algorithm() is algorithm and  each_plot.get_sensor_index() == 0 and each_plot.get_noise() is noise ):
-
-                            algorithm = each_plot.get_algorithm()
-                            sensor_index = each_plot.get_sensor_index()
-                            step_size = 1
-                            noise = each_plot.get_noise()
-
-                            if ( each_plot.get_measuring_parameter() == "eroi_l2_good_pixels"):
-                                x_axis_1 = each_plot.get_x_axis()
-                                l2_good_pixels = each_plot.get_y_axis()
-                                first_parameter = True
-                            elif ( each_plot.get_measuring_parameter() == "eroi_ma_good_pixels"):
-                                x_axis_1 = each_plot.get_x_axis()
-                                ma_good_pixels = each_plot.get_y_axis()
-                                second_parameter = True
-                            elif ( each_plot.get_measuring_parameter() == "eroi_all_pixels"):
-                                x_axis_1 = each_plot.get_x_axis()
-                                all_pixels = each_plot.get_y_axis()
-                                third_parameter = True
-                            elif ( each_plot.get_measuring_parameter() == "distribution_matrix"):
-                                x_axis_1 = each_plot.get_x_axis()
-                                distribution_matrix = each_plot.get_y_axis()
-                                fourth_parameter = True
-
-                    if ( first_parameter is True and second_parameter is True and third_parameter is True and fourth_parameter is True ):
-                        print "hurrah found data"
-
-                        nucleus = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
-                        ### formula #######
-                        new_y_axis = 1/np.log(nucleus)
-                        print "nucleus",  nucleus
-
-                        sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter_multiple)
-                        yaml_file_data = [x_axis_1, new_y_axis]
-
-                        plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, parameter_multiple, noise, str(step_size), datafilter_index=0, x_label="frame_number", y_label="dummy" )
-                        plotgraph_list_all_parameter_multiple_collect.append(plot_data)
-
-                        val = plot_data.get_summary()
-                        bargraph_list_all_parameter_multiple_collect.append(val)
+                        if ( each_plot.get_measuring_parameter() == parameter_multiple):
+                            val = each_plot.get_summary()
+                            bargraph_list_all_parameter_multiple_collect.append(val)
 
         # store the summary for future use:
         for configuration in display_list_bargraph_multiple:
@@ -279,7 +294,6 @@ if __name__ == '__main__':
                 break
             else:
                 print parameter_multiple + " is not found in the configuration list"
-
 
 
 

@@ -42,7 +42,8 @@ dict_parameter_dual = {
     "eroi_all_pixels" : "number of pixels in the entire roi",
     "eroi_l2_cumulative_error_all_pixels" : "add up all the l2 errors",
     "eroi_ma_cumulative_error_all_pixels" : "add up all the mahalanobis distance errors",
-    "multiple_nucleus" : "reliability in the nucleus",
+    "multiple_nucleus_reliability" : "reliability due to the nucleus",
+    "multiple_occlusion_reliability" : "reliability at the occlusion boundaries",
 
 }
 
@@ -170,10 +171,10 @@ display_list_multiple  = [
     ###############################
     # what is the percentage of error due to the special region of interest.
     [
-        "multiple_nucleus_FB_blue_sky_1_0",
-        "multiple_nucleus_FB_heavy_snow_1_0",
-        #"multiple_nucleus_LK_blue_sky_1_0",
-        #"multiple_nucleus_TVL_blue_sky_1_0",
+        "multiple_nucleus_reliability_FB_blue_sky_1_0",
+        "multiple_nucleus_reliability_FB_heavy_snow_1_0",
+        #"multiple_nucleus_reliability_LK_blue_sky_1_0",
+        #"multiple_nucleus_reliability_TVL_blue_sky_1_0",
     ],
 ]
 
@@ -193,7 +194,7 @@ display_list_bargraph_dual = [
 display_list_bargraph_multiple = [
 
     [
-        "multiple_nucleus"
+        "multiple_nucleus_reliability"
     ],
 ]
 
@@ -267,7 +268,7 @@ parameter_list_dual = [
 
 parameter_list_multiple = [
 
-    [ "nucleus" ],
+    [ "nucleus_reliability" ],
 
 ]
 

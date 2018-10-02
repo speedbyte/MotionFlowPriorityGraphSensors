@@ -179,7 +179,8 @@ class SensorDataPlot(object):
                 # descent from high to low
                 for x in range(section_length-1):
                     if ( contour[section_length-1-x] == 1 or contour[section_length-1-x-1] == 1 ):
-                        print "ignore this value. coz the ground truth itself did not have any value here"
+                        pass
+                        #print "ignore this value. coz the ground truth itself did not have any value here"
                 else:
                     consistency_check = consistency_check + abs(math.atan(contour[section_length-1-x] - contour[section_length-1-x-1]))
             data[index_combined][1] = consistency_check*consistency_check
