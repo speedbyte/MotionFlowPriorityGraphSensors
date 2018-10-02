@@ -113,6 +113,21 @@ class Figures(object):
                     self.list_of_plots[figure_index].set_ylim([y_axis_limits[0], y_axis_limits[1]])
 
 
+    def plot_single(self, x_axis_data, y_axis_data):
+
+        for figure_index in range(1):
+
+            self.list_of_plots[figure_index].set_xlabel("frame_number")
+            self.list_of_plots[figure_index].set_ylabel("dummy")
+            line1 = self.list_of_plots[figure_index].plot(x_axis_data,
+                                                          y_axis_data/SCALE, 'o-', lw=1,
+                                                          #color=dict_color_noise[env_index],
+                                                          label="nucleus")
+            self.list_of_plots[figure_index].legend(loc='upper right', fontsize='small')
+            self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+
+
+
     def plot_show_vector_coll_blue_sky(self):
 
         self.fig1.savefig(output_folder + 'collision_plot', bbox_inches='tight',dpi=200)

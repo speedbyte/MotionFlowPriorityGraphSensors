@@ -167,7 +167,13 @@ if __name__ == '__main__':
 
         nucleus = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
         nucleus = 1/np.log(nucleus)
-        print nucleus
+        print "nucleus",  nucleus
+        figure = Figures(1)
+        figure.plot_single(x_axis_1, nucleus)
+        #def save_figure(self, type_of_graph, measuring_index, stepSize=65535, sensor_index=65535 ):
+        figure.save_figure("point_graph_individual", str(0), 1, 0)
+
+
 
 
     plotgraph_list_all_parameter_extended_collect = list()
