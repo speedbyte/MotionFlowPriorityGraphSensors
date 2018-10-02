@@ -113,7 +113,7 @@ class Figures(object):
                     self.list_of_plots[figure_index].set_ylim([y_axis_limits[0], y_axis_limits[1]])
 
 
-    def plot_single(self, x_axis_data, y_axis_data):
+    def plot_single(self, x_axis_data, y_axis_data, y_axis_limits):
 
         for figure_index in range(1):
 
@@ -125,6 +125,7 @@ class Figures(object):
                                                           label="nucleus")
             self.list_of_plots[figure_index].legend(loc='upper right', fontsize='small')
             self.list_of_plots[figure_index].xaxis.set_major_locator(plt.MaxNLocator(integer = True))
+            self.list_of_plots[figure_index].set_ylim([y_axis_limits[0], y_axis_limits[1]])
 
 
 
@@ -174,7 +175,7 @@ class Figures(object):
         plt.close("all")
 
 
-    def bargraph_pixel(self, measuring_parameter, summary_dict, extended=False):
+    def bargraph_pixel(self, measuring_parameter, summary_dict, dual=False):
 
         # each group member is positioned at bar position. hence array of group members and array of bar_position should be equal.
 
@@ -218,7 +219,7 @@ class Figures(object):
         self.list_of_plots[0].set_xticks(index + 2*bar_width)
         self.list_of_plots[0].set_xticklabels(algorithm_list, rotation=90)
         self.list_of_plots[0].legend()
-        self.list_of_plots[0].set_xlabel(dict_parameter_extended[measuring_parameter])
+        self.list_of_plots[0].set_xlabel(dict_parameter_dual[measuring_parameter])
         self.list_of_plots[0].set_ylabel("")
 
         #self.list_of_plots[0].tight_layout()

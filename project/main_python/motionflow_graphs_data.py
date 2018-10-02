@@ -16,10 +16,10 @@ noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
 noise_list = ["ground_truth", "blue_sky",]
 
 #algorithm_list   = ["TVL", "FB",]
-algorithm_list   = ["LK",]
+#algorithm_list   = ["LK",]
 #algorithm_list   = ["FB",]
 #algorithm_list   = ["FB", "LK"]
-#algorithm_list   = ["FB", "LK", "TVL"]
+algorithm_list   = ["FB", "LK", "TVL"]
 
 file_list = list()
 
@@ -30,9 +30,9 @@ for noise in noise_list:
         for algorithm in algorithm_list:
             file_list.append("/local/git/MotionFlowPriorityGraphSensors/datasets/" + dataset + "_dataset/results/stereo_flow/two/results_" + algorithm + "_" + noise + "_30_1/values_" + algorithm + ".yml")
 
-dict_parameter_extended = {
-    "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels" : "percentage of sroi pixels error to eroi pixels error" ,
-    "extended_sroi_all_pixels_eroi_all_pixels" : "percentage of sroi pixels to eroi pixels",
+dict_parameter_dual = {
+    "dual_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels" : "percentage of sroi pixels error to eroi pixels error" ,
+    "dual_sroi_all_pixels_eroi_all_pixels" : "percentage of sroi pixels to eroi pixels",
     "sroi_all_pixels" : "number of pixels in the special roi",
     "eroi_all_pixels" : "number of pixels in the entire roi",
     "eroi_l2_cumulative_error_all_pixels" : "add up all the l2 errors",
@@ -134,76 +134,85 @@ display_list = [
 
 
 
-display_list_extended  = [
+display_list_dual  = [
 
 ###############################
 # what is the percentage of error due to the special region of interest.
     [
-        "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
-        "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_LK_blue_sky_1_0",
-        "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_TVL_blue_sky_1_0",
+        "dual_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
+        "dual_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_LK_blue_sky_1_0",
+        "dual_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels_TVL_blue_sky_1_0",
     ],
 
     # what is the percentage of good pixels in the entire area
     [
-        "extended_sroi_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
-        "extended_sroi_all_pixels_eroi_all_pixels_LK_blue_sky_1_0",
-        "extended_sroi_all_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
+        "dual_sroi_all_pixels_eroi_all_pixels_FB_ground_truth_1_0",
+        "dual_sroi_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "dual_sroi_all_pixels_eroi_all_pixels_LK_blue_sky_1_0",
+        "dual_sroi_all_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
     ],
 
 ###################################
 
 # what is the percentage of good pixels in the special region of interest
     [
-        "extended_sroi_l2_good_pixels_sroi_all_pixels_FB_blue_sky_1_0",
-        "extended_sroi_l2_good_pixels_sroi_all_pixels_LK_blue_sky_1_0",
-        "extended_sroi_l2_good_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
+        "dual_sroi_l2_good_pixels_sroi_all_pixels_FB_blue_sky_1_0",
+        "dual_sroi_l2_good_pixels_sroi_all_pixels_LK_blue_sky_1_0",
+        "dual_sroi_l2_good_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
     ],
-
-
-
-
 
 # what is the percentage of good pixels in the entire area
     [
-        "extended_eroi_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
-        "extended_eroi_l2_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
-        "extended_eroi_l2_good_pixels_eroi_all_pixels_LK_blue_sky_1_0",
-        "extended_eroi_l2_good_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
+        "dual_eroi_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "dual_eroi_l2_good_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "dual_eroi_l2_good_pixels_eroi_all_pixels_LK_blue_sky_1_0",
+        "dual_eroi_l2_good_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
     ],
 
 
 # how much error does each pixel contribute to in the entire area
     [
-        "extended_eroi_l2_cumulative_error_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
-        "extended_eroi_l2_cumulative_error_all_pixels_eroi_all_pixels_LK_blue_sky_1_0",
-        "extended_eroi_l2_cumulative_error_all_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
+        "dual_eroi_l2_cumulative_error_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
+        "dual_eroi_l2_cumulative_error_all_pixels_eroi_all_pixels_LK_blue_sky_1_0",
+        "dual_eroi_l2_cumulative_error_all_pixels_eroi_all_pixels_TVL_blue_sky_1_0",
     ],
 
 # how much error does each pixel contribute to in the special area
     [
-        "extended_sroi_l2_cumulative_error_all_pixels_sroi_all_pixels_FB_blue_sky_1_0",
-        "extended_sroi_l2_cumulative_error_all_pixels_sroi_all_pixels_LK_blue_sky_1_0",
-        "extended_sroi_l2_cumulative_error_all_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
+        "dual_sroi_l2_cumulative_error_all_pixels_sroi_all_pixels_FB_blue_sky_1_0",
+        "dual_sroi_l2_cumulative_error_all_pixels_sroi_all_pixels_LK_blue_sky_1_0",
+        "dual_sroi_l2_cumulative_error_all_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
     ],
 
 ]
 
-#display_list_extended  = []
+display_list_multiple  = [
+
+    ###############################
+    # what is the percentage of error due to the special region of interest.
+    [
+        "multiple_nucleus_FB_blue_sky_1_0",
+        "multiple_nucleusLK_blue_sky_1_0",
+        "multiple_nucleus_TVL_blue_sky_1_0",
+    ],
+]
+
+
+#display_list_dual  = []
 
 display_list_bargraph = []
 
-display_list_bargraph_extended = [
+display_list_bargraph_dual = [
 
     [
-        "extended_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels"
+        "dual_sroi_l2_cumulative_error_all_pixels_eroi_l2_cumulative_error_all_pixels"
     ],
     [
-        "extended_sroi_all_pixels_eroi_all_pixels"
+        "dual_sroi_all_pixels_eroi_all_pixels"
     ],
 ]
 
-display_list_bargraph_extended = []
+display_list_bargraph_dual = []
 
 parameter_list = [
 
@@ -258,7 +267,7 @@ parameter_list = [
 #    "distribution_matrix",
 #]
 
-parameter_list_extended = [
+parameter_list_dual = [
 
     [ "sroi_all_pixels", "eroi_all_pixels" ],
     [ "sroi_l2_good_pixels", "sroi_all_pixels" ],
@@ -276,7 +285,15 @@ parameter_list_extended = [
 
 ]
 
-#parameter_list_extended = [ ]
+
+parameter_list_multiple = [
+
+    [ "nucleus" ],
+
+]
+
+
+#parameter_list_dual = [ ]
 
 datafilter_list  = [ "0", ]
 

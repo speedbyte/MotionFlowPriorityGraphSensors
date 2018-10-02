@@ -54,7 +54,7 @@ class SensorDataPlot(object):
 
         print "getting " , custom_data_list_name
 
-        if ( "extended" not in custom_data_list_name ):
+        if ( "dual" not in custom_data_list_name or "mulitple" not in custom_data_list_name ):
             data_points = yaml_file_data[custom_data_list_name]
             if ( self.measuring_parameter is "distribution_matrix"):
                 x_axis, y_axis = self.getDistributionReliability(data_points, self.measuring_parameter)
