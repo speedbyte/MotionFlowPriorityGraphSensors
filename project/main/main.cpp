@@ -328,8 +328,8 @@ D     * novel real-to-virtual cloning method. Photo realistic synthetic dataaset
     //const std::vector < std::string> noise_list = {"blue_sky", "light_snow", "rain_low"};
     //std::vector < std::string> noise_list = {"blue_sky", "night"};
     //const std::vector < std::string> noise_list = {"blue_sky", "light_snow", "mild_snow", "heavy_snow"};
-    //const std::vector<std::string> noise_list = {"blue_sky", "heavy_snow"};
-    const std::vector<std::string> noise_list = {"blue_sky"};
+    const std::vector<std::string> noise_list = {"blue_sky", "heavy_snow"};
+    //const std::vector<std::string> noise_list = {"blue_sky"};
 
     auto tic_all = std::chrono::steady_clock::now();
     auto tic = std::chrono::steady_clock::now();

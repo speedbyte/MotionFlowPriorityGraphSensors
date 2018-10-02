@@ -29,8 +29,6 @@ protected:
 
     std::string m_scenario;
 
-    std::string m_environment;
-
     cv::FileStorage m_write_fs;
 
     std::vector<ushort> m_generation_sensor_list;
@@ -58,9 +56,11 @@ public:
     static boost::filesystem::path  m_ground_truth_plot_path;
     static boost::filesystem::path  m_ground_truth_depth_path;
     static boost::filesystem::path  m_ground_truth_framedifference_path;
+    static std::string m_environment;
 
-    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario), m_environment(environment){
+    GroundTruthScene(std::vector<ushort> generation_sensor_list, std::vector<ushort> evaluation_sensor_list, std::string scenario, std::string environment):m_generation_sensor_list(generation_sensor_list), m_evaluation_sensor_list(evaluation_sensor_list), m_scenario(scenario){
 
+        GroundTruthScene::m_environment = environment;
         //m_ptr_customObjectMetaDataList = {};
         m_datasetpath = Dataset::m_dataset_basepath;
         m_groundtruthpath = Dataset::m_dataset_gtpath;

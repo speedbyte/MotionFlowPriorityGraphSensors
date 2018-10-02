@@ -5,6 +5,11 @@ just_ground_truth = False
 SCALE = 1
 OUTLIER = 100000
 
+#figure = Figures(1)
+#figure.plot_single(x_axis_1, nucleus, [-1,1])
+#def save_figure(self, type_of_graph, measuring_index, stepSize=65535, sensor_index=65535 ):
+#figure.save_figure("point_graph_multiple", algorithm, 1, 0)
+
 #output_folder = '/local/git/MotionFlowPriorityGraphSensors/overleaf/paper_1/'
 output_folder = '/local/tmp/eaes/'
 
@@ -13,7 +18,7 @@ scenario = "two"
 
 noise_list = ["ground_truth", "blue_sky", "light_snow", "mild_snow", "heavy_snow"] #night
 noise_list = ["ground_truth", "blue_sky", "heavy_snow",]
-noise_list = ["ground_truth", "blue_sky",]
+#noise_list = ["ground_truth", "blue_sky",]
 
 #algorithm_list   = ["TVL", "FB",]
 #algorithm_list   = ["LK",]
@@ -37,6 +42,7 @@ dict_parameter_dual = {
     "eroi_all_pixels" : "number of pixels in the entire roi",
     "eroi_l2_cumulative_error_all_pixels" : "add up all the l2 errors",
     "eroi_ma_cumulative_error_all_pixels" : "add up all the mahalanobis distance errors",
+    "multiple_nucleus" : "reliability in the nucleus",
 
 }
 
@@ -70,39 +76,6 @@ y_axis_label_dict = {
 
 display_list = [
 
-    [
-        "sroi_all_pixels_FB_ground_truth_1_0",
-        "eroi_all_pixels_FB_ground_truth_1_0",
-        #"sroi_l2_good_pixels_FB_blue_sky_1_0",
-        "sroi_all_pixels_FB_blue_sky_1_0",
-        #"eroi_l2_good_pixels_FB_blue_sky_1_0",
-        "eroi_all_pixels_FB_blue_sky_1_0"
-    ],
-
-    [
-        "eroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
-        "eroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
-    ],
-
-    [
-        "sroi_l2_cumulative_error_all_pixels_FB_blue_sky_1_0",
-        "sroi_ma_cumulative_error_all_pixels_FB_blue_sky_1_0",
-    ],
-
-    [
-        "distribution_matrix_FB_blue_sky_1_0",
-        "distribution_matrix_LK_blue_sky_1_0"
-    ],
-
-    [
-        "intersection_angle_deg_FB_blue_sky_1_0",
-        "intersection_angle_deg_LK_blue_sky_1_0",
-        "intersection_angle_deg_TVL_blue_sky_1_0"],
-]
-
-
-display_list = [
-
     # the following graph shows the importance of mahalabnobis distance
     # the conclusion is that if eigen vector is not equal to the l2 radius && l2 good pixels tends to ma good pixels,
     # we have a beautiful nucleus. show 37, 46 for sroi and 39 for eroi.
@@ -110,6 +83,12 @@ display_list = [
         "eroi_l2_good_pixels_FB_blue_sky_1_0",
         "eroi_ma_good_pixels_FB_blue_sky_1_0",
     ],
+
+    [
+        "eroi_l2_good_pixels_FB_heavy_snow_1_0",
+        "eroi_ma_good_pixels_FB_heavy_snow_1_0",
+    ],
+
 
     # the following graph shows the importance of mahalabnobis distance
     [
@@ -192,13 +171,12 @@ display_list_multiple  = [
     # what is the percentage of error due to the special region of interest.
     [
         "multiple_nucleus_FB_blue_sky_1_0",
-        "multiple_nucleusLK_blue_sky_1_0",
-        "multiple_nucleus_TVL_blue_sky_1_0",
+        "multiple_nucleus_FB_heavy_snow_1_0",
+        #"multiple_nucleus_LK_blue_sky_1_0",
+        #"multiple_nucleus_TVL_blue_sky_1_0",
     ],
 ]
 
-
-#display_list_dual  = []
 
 display_list_bargraph = []
 
@@ -212,7 +190,13 @@ display_list_bargraph_dual = [
     ],
 ]
 
-display_list_bargraph_dual = []
+display_list_bargraph_multiple = [
+
+    [
+        "multiple_nucleus"
+    ],
+]
+
 
 parameter_list = [
 
@@ -262,11 +246,6 @@ parameter_list = [
 
 ]
 
-#parameter_list = [
-#    "eroi_all_pixels",
-#    "distribution_matrix",
-#]
-
 parameter_list_dual = [
 
     [ "sroi_all_pixels", "eroi_all_pixels" ],
@@ -292,8 +271,6 @@ parameter_list_multiple = [
 
 ]
 
-
-#parameter_list_dual = [ ]
 
 datafilter_list  = [ "0", ]
 

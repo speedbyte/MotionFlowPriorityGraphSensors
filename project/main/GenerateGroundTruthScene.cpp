@@ -27,6 +27,7 @@ boost::filesystem::path GroundTruthScene::m_ground_truth_depth_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_flow_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_plot_path;
 boost::filesystem::path GroundTruthScene::m_ground_truth_framedifference_path;
+std::string GroundTruthScene::m_environment;
 
 void GroundTruthScene::prepare_scene_directories_others(ushort sensor_group_index) {
 

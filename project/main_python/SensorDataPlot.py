@@ -54,7 +54,7 @@ class SensorDataPlot(object):
 
         print "getting " , custom_data_list_name
 
-        if ( "dual" not in custom_data_list_name or "mulitple" not in custom_data_list_name ):
+        if ( "dual" not in custom_data_list_name and "multiple" not in custom_data_list_name ):
             data_points = yaml_file_data[custom_data_list_name]
             if ( self.measuring_parameter is "distribution_matrix"):
                 x_axis, y_axis = self.getDistributionReliability(data_points, self.measuring_parameter)
@@ -178,6 +178,9 @@ class SensorDataPlot(object):
                 #print contour
                 # descent from high to low
                 for x in range(section_length-1):
+                    if ( contour[section_length-1-x] == 1 or contour[section_length-1-x-1] == 1 ):
+                        print "ignore this value. coz the ground truth itself did not have any value here"
+                else:
                     consistency_check = consistency_check + abs(math.atan(contour[section_length-1-x] - contour[section_length-1-x-1]))
             data[index_combined][1] = consistency_check*consistency_check
             #print "final consistency value " , consistency_check

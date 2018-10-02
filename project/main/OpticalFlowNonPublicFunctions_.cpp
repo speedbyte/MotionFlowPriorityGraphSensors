@@ -54,9 +54,10 @@ void OpticalFlow::frame_stencil_displacement_region_of_interest_method(ushort se
             for ( auto it = squared_region_of_interest.begin(); it != squared_region_of_interest.end(); it++) {
                 cv::circle(tempImage, (*it), 1, cv::Scalar(255,0,0));
             }
-            //cv::imshow("coarse", tempImage);
-            //cv::waitKey(0);
-            cv::destroyAllWindows();
+            //char file_name_input_image[50];
+            //sprintf(file_name_input_image, "roi_000%03d_10_%d.png", current_frame_index, obj_index);
+            //cv::imwrite("/local/tmp/prezi/" + std::string(file_name_input_image), tempImage);
+            //cv::destroyAllWindows();
 
             // ---------------------------------------------------------------------------------------------------------
             // 2nd step - Refine intersection between squared ROI and frame difference.

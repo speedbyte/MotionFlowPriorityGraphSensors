@@ -548,13 +548,17 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
             */
 
             if (!m_dumpInitialFrames) {
+
                 std::basic_string<char> input_image_depth_file_with_path = GroundTruthScene::m_ground_truth_depth_path.string() + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
                 if ( simFrame > (MAX_DUMPS) ) {
-                    cv::flip(depth_image_opencv, depth_image_opencv_flipped, 0);
-                    cv::imwrite(input_image_depth_file_with_path, depth_image_opencv_flipped);
-                    //depth_image.write(input_image_depth_file_with_path);
-                    fprintf(stderr, "saving depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
-                            simFrame, simTime, data->imgSize, data->id);
+
+                    if ( GroundTruthScene::m_environment == "blue_sky") {
+                        cv::flip(depth_image_opencv, depth_image_opencv_flipped, 0);
+                        cv::imwrite(input_image_depth_file_with_path, depth_image_opencv_flipped);
+                        //depth_image.write(input_image_depth_file_with_path);
+                        fprintf(stderr, "saving depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
+                                simFrame, simTime, data->imgSize, data->id);
+                    }
                 }
                 else {
                     fprintf(stderr, "force ignoring depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",

@@ -11,7 +11,7 @@ import numpy as np
 
 SCALE = 1
 
-def plot_at_once_pointgraph(figures_plot_array_all, display_list_index, dual = False):
+def plot_at_once_pointgraph(figures_plot_array_all, display_list_index, dual = False, multiple = False):
 
     print "plot_at_once---------------------------"
     print figures_plot_array_all
@@ -35,13 +35,15 @@ def plot_at_once_pointgraph(figures_plot_array_all, display_list_index, dual = F
     # and lastly save the figure
     if ( dual ):
         suffix = "point_graph_dual"
+    elif ( multiple ):
+        suffix = "point_graph_multiple"
     else:
         suffix = "point_graph"
 
     figures.save_figure(suffix, str(display_list_index), figures_plot_array_all[0].get_step_size(), figures_plot_array_all[0].get_sensor_index())
 
 
-def plot_at_once_bargraph(parameter, bargraph_list_each_parameter_collect, dual=False):
+def plot_at_once_bargraph(parameter, bargraph_list_each_parameter_collect, dual=False, multiple=False):
 
     figures_bargraph_each_parameter_all_data = Figures(1) # only 1 figure for bar graph consisting of all details including multiple sensors
 
@@ -152,7 +154,7 @@ if __name__ == '__main__':
         bargraph_list_all_parameter_dual_collect = list()
         parameter_dual = "dual_" + parameter[0] + "_" + parameter[1]
 
-        print "PARAMETER dual ----- ", parameter
+        print "PARAMETER dual ----- ", parameter_dual
 
         for sensor_index in sensor_list:
 
@@ -171,18 +173,18 @@ if __name__ == '__main__':
                             noise = each_plot.get_noise()
 
                             if ( parameter[0] is each_plot.get_measuring_parameter()):
-                                first_parameter = each_plot
+                                first_parameter = True
                                 print "map_data ", each_plot.get_map_to_data()
                                 x_axis_1 = each_plot.get_x_axis()
                                 y_axis_1 = each_plot.get_y_axis()
 
                             elif ( parameter[1] is each_plot.get_measuring_parameter()):
-                                second_parameter = each_plot
+                                second_parameter = True
                                 print "map_data ", each_plot.get_map_to_data()
                                 x_axis_2 = each_plot.get_x_axis()
                                 y_axis_2 = each_plot.get_y_axis()
 
-                    if ( first_parameter is not None and second_parameter is not None ):
+                    if ( first_parameter is True and second_parameter is True ):
                         print "hurrah found data"
 
                         sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter_dual)
@@ -216,9 +218,9 @@ if __name__ == '__main__':
         # do for each parameter one by one. each parameter takes ground truth and all other factors such as noise, type of algorithm etc.
 
         bargraph_list_all_parameter_multiple_collect = list()
-        parameter_multiple = "multiple_" + parameter
+        parameter_multiple = "multiple_" + parameter[0]
 
-        print "PARAMETER multiple ----- ", parameter
+        print "PARAMETER multiple ----- ", parameter_multiple
 
         for sensor_index in sensor_list:
 
@@ -227,50 +229,56 @@ if __name__ == '__main__':
                 for noise in noise_list:
 
                     for each_plot in plotgraph_list_all_parameter_collect:
-                        #if ( each_plot.get_algorithm() is algorithm and  each_plot.get_sensor_index() == 0 and each_plot.get_noise() is noise ):
-                        if ( each_plot.get_algorithm() is algorithm ):
-            
+
+                        # set algorithm wise
+                        if ( each_plot.get_algorithm() is algorithm and  each_plot.get_sensor_index() == 0 and each_plot.get_noise() is noise ):
+
+                            algorithm = each_plot.get_algorithm()
+                            sensor_index = each_plot.get_sensor_index()
+                            step_size = 1
+                            noise = each_plot.get_noise()
+
                             if ( each_plot.get_measuring_parameter() == "eroi_l2_good_pixels"):
                                 x_axis_1 = each_plot.get_x_axis()
                                 l2_good_pixels = each_plot.get_y_axis()
+                                first_parameter = True
                             elif ( each_plot.get_measuring_parameter() == "eroi_ma_good_pixels"):
                                 x_axis_1 = each_plot.get_x_axis()
                                 ma_good_pixels = each_plot.get_y_axis()
+                                second_parameter = True
                             elif ( each_plot.get_measuring_parameter() == "eroi_all_pixels"):
                                 x_axis_1 = each_plot.get_x_axis()
                                 all_pixels = each_plot.get_y_axis()
+                                third_parameter = True
                             elif ( each_plot.get_measuring_parameter() == "distribution_matrix"):
                                 x_axis_1 = each_plot.get_x_axis()
                                 distribution_matrix = each_plot.get_y_axis()
+                                fourth_parameter = True
 
-                    nucleus = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
-                    ### formula #######
-                    new_y_axis = 1/np.log(nucleus)
-                    print "nucleus",  nucleus
+                    if ( first_parameter is True and second_parameter is True and third_parameter is True and fourth_parameter is True ):
+                        print "hurrah found data"
 
-                    sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter_multiple)
-                    yaml_file_data = [x_axis_1, new_y_axis]
+                        nucleus = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
+                        ### formula #######
+                        new_y_axis = 1/np.log(nucleus)
+                        print "nucleus",  nucleus
 
-                    plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, parameter_multiple, noise, str(step_size), datafilter_index=0, x_label="frame_number", y_label="dummy" )
-                    plotgraph_list_all_parameter_multiple_collect.append(plot_data)
+                        sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter_multiple)
+                        yaml_file_data = [x_axis_1, new_y_axis]
 
-                    val = plot_data.get_summary()
-                    bargraph_list_all_parameter_multiple_collect.append(val)
+                        plot_data = sensor_data_plot_object.extract_plot_data_from_data_list(yaml_file_data, parameter_multiple, noise, str(step_size), datafilter_index=0, x_label="frame_number", y_label="dummy" )
+                        plotgraph_list_all_parameter_multiple_collect.append(plot_data)
+
+                        val = plot_data.get_summary()
+                        bargraph_list_all_parameter_multiple_collect.append(val)
 
         # store the summary for future use:
-        for configuration in display_list_bargraph_dual:
-            if ( parameter_dual in configuration ):
-                plot_at_once_bargraph(parameter_dual, bargraph_list_all_parameter_dual_collect, True)
+        for configuration in display_list_bargraph_multiple:
+            if ( parameter_multiple in configuration ):
+                plot_at_once_bargraph(parameter_multiple, bargraph_list_all_parameter_multiple_collect, True)
                 break
             else:
-                print parameter_dual + " is not found in the configuration list"
-
-
-
-        #figure = Figures(1)
-        #figure.plot_single(x_axis_1, nucleus, [-1,1])
-        #def save_figure(self, type_of_graph, measuring_index, stepSize=65535, sensor_index=65535 ):
-        #figure.save_figure("point_graph_multiple", algorithm, 1, 0)
+                print parameter_multiple + " is not found in the configuration list"
 
 
 
@@ -299,10 +307,10 @@ if __name__ == '__main__':
 
     for index, configuration in enumerate(display_list_multiple):
         reshape_plotgraph_list = list()
-        for individual_plots in plotgraph_list_all_parameter_dual_collect:
+        for individual_plots in plotgraph_list_all_parameter_multiple_collect:
             if ( individual_plots.get_map_to_data() in configuration ):
                 reshape_plotgraph_list.append(individual_plots)
         if (len(reshape_plotgraph_list) > 0 ):
-            plot_at_once_pointgraph(reshape_plotgraph_list, index, True)
+            plot_at_once_pointgraph(reshape_plotgraph_list, index, False, True)
         else:
             print configuration + " is not found !!!!!! "
