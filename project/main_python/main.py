@@ -210,7 +210,7 @@ if __name__ == '__main__':
                 print parameter_dual + " is not found in the configuration list"
 
 
-    # calculate reliability
+    # calculate consistency
 
     plotgraph_list_all_parameter_multiple_collect = list()
 
@@ -232,16 +232,36 @@ if __name__ == '__main__':
 
                         if ( each_plot.get_measuring_parameter() == "eroi_l2_good_pixels"):
                             x_axis_1 = each_plot.get_x_axis()
-                            l2_good_pixels = each_plot.get_y_axis()
+                            eroi_l2_good_pixels = each_plot.get_y_axis()
                         elif ( each_plot.get_measuring_parameter() == "eroi_ma_good_pixels"):
                             x_axis_1 = each_plot.get_x_axis()
-                            ma_good_pixels = each_plot.get_y_axis()
+                            eroi_ma_good_pixels = each_plot.get_y_axis()
                         elif ( each_plot.get_measuring_parameter() == "eroi_all_pixels"):
                             x_axis_1 = each_plot.get_x_axis()
-                            all_pixels = each_plot.get_y_axis()
+                            eroi_all_pixels = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "sroi_all_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            sroi_all_pixels = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "sroi_l2_good_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            sroi_l2_good_pixels = each_plot.get_y_axis()
                         elif ( each_plot.get_measuring_parameter() == "distribution_matrix"):
                             x_axis_1 = each_plot.get_x_axis()
                             distribution_matrix = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "sroi_l2_cumulative_error_all_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            sroi_l2_cumulative_error_all_pixels = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "eroi_l2_cumulative_error_all_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            eroi_l2_cumulative_error_all_pixels = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "sroi_l2_cumulative_error_good_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            sroi_l2_cumulative_error_good_pixels = each_plot.get_y_axis()
+                        elif ( each_plot.get_measuring_parameter() == "eroi_l2_cumulative_error_good_pixels"):
+                            x_axis_1 = each_plot.get_x_axis()
+                            eroi_l2_cumulative_error_good_pixels = each_plot.get_y_axis()
+
+
 
 
                 for n, parameter in enumerate(parameter_list_multiple):
@@ -251,17 +271,17 @@ if __name__ == '__main__':
 
                     print "PARAMETER multiple ----- ", parameter_multiple
 
-                    if ( parameter_multiple == "multiple_nucleus_reliability" ):
-                        nucleus_reliability = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
+                    if ( parameter_multiple == "multiple_nucleus_consistency" ):
+                        nucleus_consistency = (( eroi_l2_good_pixels - eroi_ma_good_pixels ) * 1.0 / eroi_all_pixels )
                         ### formula #######
-                        new_y_axis = 1/np.log(nucleus_reliability)
+                        new_y_axis = 1/np.log(nucleus_consistency)
                         print "nucleus",
 
-                    elif ( parameter_multiple == "multiple_occlusion_reliability" ):
-                        occlusion_reliability = (( l2_good_pixels - ma_good_pixels ) * 1.0 / all_pixels )
+                    elif ( parameter_multiple == "multiple_occlusion_consistency" ):
+                        occlusion_consistency = 1/np.exp( (sroi_l2_cumulative_error_all_pixels * 1.0 / eroi_l2_cumulative_error_all_pixels) - (sroi_all_pixels * 1.0 / eroi_all_pixels) )
                         ### formula #######
-                        new_y_axis = 1/np.log(nucleus_reliability)
-                        print "nucleus",  nucleus_reliability
+                        new_y_axis = (occlusion_consistency)
+                        print "occlusion",  occlusion_consistency
 
                     sensor_data_plot_object = SensorDataPlot(sensor_index, algorithm, parameter_multiple)
                     yaml_file_data = [x_axis_1, new_y_axis]

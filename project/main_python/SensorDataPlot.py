@@ -57,7 +57,7 @@ class SensorDataPlot(object):
         if ( "dual" not in custom_data_list_name and "multiple" not in custom_data_list_name ):
             data_points = yaml_file_data[custom_data_list_name]
             if ( self.measuring_parameter is "distribution_matrix"):
-                x_axis, y_axis = self.getDistributionReliability(data_points, self.measuring_parameter)
+                x_axis, y_axis = self.getDistributionconsistency(data_points, self.measuring_parameter)
             else:
                 x_axis, y_axis = self.getSingleVal(data_points, self.measuring_parameter)
 
@@ -145,7 +145,7 @@ class SensorDataPlot(object):
         return x_axis, y_axis, y_axis_mean
 
 
-    def getDistributionReliability(self, data_points, measuring_parameter):
+    def getDistributionconsistency(self, data_points, measuring_parameter):
 
         # refine data
         #scratch 01233
