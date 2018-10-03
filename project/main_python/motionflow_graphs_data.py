@@ -45,6 +45,7 @@ dict_parameter_dual = {
     "eroi_ma_cumulative_error_all_pixels" : "add up all the mahalanobis distance errors",
     "multiple_nucleus_consistency" : "consistency due to the nucleus",
     "multiple_occlusion_consistency" : "consistency at the occlusion boundaries",
+    "distribution_matrix" : "coverage of optical flow within objects",
 
 }
 
@@ -142,6 +143,12 @@ display_list_dual  = [
         "dual_sroi_l2_good_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
     ],
 
+    [
+        "dual_sroi_ma_good_pixels_sroi_all_pixels_FB_blue_sky_1_0",
+        "dual_sroi_ma_good_pixels_sroi_all_pixels_LK_blue_sky_1_0",
+        "dual_sroi_ma_good_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
+    ],
+
 # what is the percentage of good pixels in the entire area
     [
         "dual_eroi_all_pixels_eroi_all_pixels_FB_blue_sky_1_0",
@@ -188,7 +195,12 @@ display_list_multiple  = [
 ]
 
 
-display_list_bargraph = []
+display_list_bargraph = [
+    [
+        "distribution_matrix"
+    ],
+
+]
 
 display_list_bargraph_dual = [
 
@@ -265,6 +277,7 @@ parameter_list_dual = [
 
     [ "sroi_all_pixels", "eroi_all_pixels" ],
     [ "sroi_l2_good_pixels", "sroi_all_pixels" ],
+    [ "sroi_ma_good_pixels", "sroi_all_pixels" ],
     [ "sroi_l2_good_pixels", "eroi_l2_good_pixels" ],
     [ "sroi_l2_cumulative_error_all_pixels", "eroi_l2_cumulative_error_all_pixels" ],
     [ "sroi_ma_cumulative_error_all_pixels", "eroi_ma_cumulative_error_all_pixels" ],
