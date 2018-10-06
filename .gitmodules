@@ -13,7 +13,6 @@
 [submodule "boost"]
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
-	branch = b143a5b72075f47307a23e680889d8434c8afc54
 [submodule "gnuplot-iostream"]
 	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
@@ -110,8 +109,8 @@
 [submodule "simulator/CARLA"]
 	path = simulator/CARLA
 	url = https://github.com/carla-simulator/carla.git
-	branch = 13b972
+	branch = master
 [submodule "simulator/UnrealEngine"]
 	path = simulator/UnrealEngine
 	url = https://github.com/EpicGames/UnrealEngine.git
-	branch = release
+	branch = master

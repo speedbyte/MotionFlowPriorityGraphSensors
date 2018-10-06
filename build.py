@@ -1,6 +1,27 @@
 #!/usr/bin/env python
 # _*_ coding: utf-8 _*_
 
+
+
+
+#CARLA
+#sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+#sudo apt-get update
+#sudo apt-get install build-essential clang-5.0 lld-5.0 g++-7 ninja-build python python-pip python-dev tzdata sed curl wget unzip autoconf libtool
+#pip install --user setuptools nose2
+
+#git clone --depth=1 -b release https://github.com/EpicGames/UnrealEngine.git ./UnrealEngine_4.2
+#mono-xbuild
+#./Setup.sh && ./GenerateProjectFiles.sh && make
+# download Assets - Contents.tar.gz
+# export UE4_ROOT=~/UnrealEngine_4.19
+
+#LS_COLORS=$LS_COLORS:'di=1;35:' ; export LS_COLORS
+#PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/local/git/PriorityGraphSensors/libs/ffmpeg-install/lib/pkgconfig:/local/git/PriorityGraphSensors/libs/boost-install/lib/pkgconfig:/local/git/PriorityGraphSensors/libs/opencv-install/lib/pkgconfig ; export PKG_CONFIG_PATH
+#BOOST_ROOT=/local/git/PriorityGraphSensors/libs/boost-install; export BOOST_ROOT
+
+
+
 import argparse
 import subprocess
 import os
@@ -100,7 +121,7 @@ def parse_arguements(args):
                 print command
                 call_shell_command(command)
                 if "boost" in library_install: 
-                    command = "./b2 --clean && rm -rf bin.v2" 
+                    command = "./b2 --clean-all -n && rm -rf bin.v2"
                 elif "ffmpeg" in library_install:
                     command = "make clean"
                 else:
@@ -132,7 +153,7 @@ def parse_arguements(args):
             pkg_config_path_ffmpeg = subprocess.check_output("pkg-config --cflags libavcodec", shell=True)
             if "boost" in library_install:
                 if os.path.isdir(library + "/tools/build") is False:
-                    print  "download build.git by git submodule update --remote";
+                    print  "git fetch --all --recurse-submodules=yes. Do this in the boost diretory"
                     sys.exit(1)
                 command = "./bootstrap.sh --prefix=" + library_install
             elif "ffmpeg" in library_install:
