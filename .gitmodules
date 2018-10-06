@@ -107,3 +107,7 @@
 [submodule "libs/opencv_contrib"]
 	path = libs/opencv_contrib
 	url = https://github.com/opencv/opencv_contrib.git
+[submodule "simulator/CARLA"]
+	path = simulator/CARLA
+	url = https://github.com/carla-simulator/carla.git
+	branch = 13b972
