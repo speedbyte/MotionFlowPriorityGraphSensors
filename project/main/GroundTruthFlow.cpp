@@ -47,7 +47,6 @@ void GroundTruthFlow::prepare_groundtruth_flow_directories(std::string noise, us
     }
 }
 
-
 void GroundTruthFlow::generate_flow_vector() {
 
     std::cout << "ground truth flow will be stored in " << m_generatepath << std::endl;
