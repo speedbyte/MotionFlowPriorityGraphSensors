@@ -25,6 +25,7 @@
 
 //TODO
 
+// Look at various scenarios. Run optical flow with different fps, resolution and see how they contribute in sensor fusion. LIDAR.
 // penalty is a function of distribution,
 // stich images python plot automatically - DONE
 // quantify noise. rain or static noise is not enough. need to know how many original pixels are corrputed by this noise.
