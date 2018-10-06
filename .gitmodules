@@ -13,7 +13,7 @@
 [submodule "boost"]
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
-	branch = 7e1702ecf7ee2b3a18062d9e2bf1d9be1e7b66e5
+	branch = b143a5b72075f47307a23e680889d8434c8afc54
 [submodule "gnuplot-iostream"]
 	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
