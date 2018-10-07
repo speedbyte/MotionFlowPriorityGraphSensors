@@ -1,4 +1,4 @@
-[submodule "ffmpeg"]
+[SUbmodule "ffmpeg"]
 	path = libs/ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git
 	ignore = dirty
@@ -13,6 +13,7 @@
 [submodule "boost"]
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
+        ignore = dirty
 [submodule "gnuplot-iostream"]
 	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
@@ -41,6 +42,7 @@
 [submodule "overleaf-maths"]
 	path = overleaf/maths
 	url = https://git.overleaf.com/10769078vhnvxscwscbm
+        ignore = dirty 
 [submodule "overleaf-marcelBA"]
 	path = overleaf/marcelBA
 	url = https://git.overleaf.com/9933334yfshcrdkdfhx
@@ -110,7 +112,9 @@
 	path = simulator/CARLA
 	url = https://github.com/carla-simulator/carla.git
 	branch = master
+        ignore = dirty
 [submodule "simulator/UnrealEngine"]
 	path = simulator/UnrealEngine
 	url = https://github.com/EpicGames/UnrealEngine.git
 	branch = master
+        ignore = dirty
