@@ -1,9 +1,7 @@
 # coding=utf-8
 
-import carla_client as carla
-import datetime
+import carla
 
-print dir(datetime)
 print dir(carla)
 
 #Camera
