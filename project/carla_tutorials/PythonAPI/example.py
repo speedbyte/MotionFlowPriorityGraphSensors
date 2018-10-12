@@ -12,6 +12,8 @@ import os
 import random
 import time
 
+
+
 # This function is here because this functionality haven't been ported to the
 # new API yet.
 def save_to_disk(image):
@@ -39,7 +41,91 @@ def save_to_disk(image):
     image.save(filename)
 
 
-def main(add_a_camera, enable_autopilot):
+
+def
+
+
+def prepare_settings(sensor_type):
+
+    if (sensor_type == "camera"):
+
+        camera = carla.sensor.Camera('MyCamera', PostProcessing='SceneFinal')
+        camera.set(FOV=90.0)
+        camera.set_image_size(800, 600)
+        camera.set_position(x=0.30, y=0, z=1.30)
+        camera.set_rotation(pitch=0, yaw=0, roll=0)
+
+        carla_settings.add_sensor(camera)
+
+        #[CARLA/Sensor/MyCamera]
+        #SensorType=CAMERA
+        #PostProcessing=SceneFinal
+        #ImageSizeX=800
+        #ImageSizeY=600
+        #FOV=90
+        #PositionX=0.30
+        #PositionY=0
+        #PositionZ=1.30
+        #RotationPitch=0
+        #RotationRoll=0
+        #RotationYaw=0
+    elif (sensor_type == "semantic_segmentation"):
+
+        camera = carla.sensor.Camera('MyCamera', PostProcessing='SemanticSegmentation')
+        camera.set(FOV=90.0)
+        camera.set_image_size(800, 600)
+        camera.set_position(x=0.30, y=0, z=1.30)
+        camera.set_rotation(pitch=0, yaw=0, roll=0)
+
+        carla_settings.add_sensor(camera)
+
+        #CarlaSettings.ini
+
+        #[CARLA/Sensor/MyCamera]
+        #SensorType=CAMERA
+        #PostProcessing=SemanticSegmentation
+        #ImageSizeX=800
+        #ImageSizeY=600
+        #FOV=90
+        #PositionX=0.30
+        #PositionY=0
+        #PositionZ=1.30
+        #RotationPitch=0
+        #RotationRoll=0
+        #RotationYaw=0
+    elif (sensor_type == "lidar"):
+
+        lidar = carla.sensor.Lidar('MyLidar')
+        lidar.set(
+            Channels=32,
+            Range=50,
+            PointsPerSecond=100000,
+            RotationFrequency=10,
+            UpperFovLimit=10,
+            LowerFovLimit=-30)
+        lidar.set_position(x=0, y=0, z=1.40)
+        lidar.set_rotation(pitch=0, yaw=0, roll=0)
+
+        carla_settings.add_sensor(lidar)
+
+        #CarlaSettings.ini
+        #[CARLA/Sensor/MyLidar]
+        #SensorType=LIDAR_RAY_CAST
+        #Channels=32
+        #Range=50
+        #PointsPerSecond=100000
+        #RotationFrequency=10
+        #UpperFOVLimit=10
+        #LowerFOVLimit=-30
+        #PositionX=0
+        #PositionY=0
+        #PositionZ=1.40
+        #RotationPitch=0
+        #RotationYaw=0
+        #RotationRoll=0
+
+
+def prepare_environment(add_a_camera, enable_autopilot):
     client = carla.Client('localhost', 2000)
     client.set_timeout(2000)
 
@@ -104,11 +190,11 @@ def main(add_a_camera, enable_autopilot):
                 time.sleep(3)
 
                 print('vehicle at %s' % vehicle.get_location())
-                vehicle.set_location(carla.Location(x=220, y=199, z=38))
+                vehicle.set_location(carla.Location(x=0, y=0, z=0))
                 print('is now at %s' % vehicle.get_location())
 
                 time.sleep(2)
-            if ( index > 4  ):
+            if ( index > 3  ):
                 rendering = False
 
     finally:
@@ -119,5 +205,5 @@ def main(add_a_camera, enable_autopilot):
 
 if __name__ == '__main__':
 
-    main(add_a_camera=True, enable_autopilot=True)
+    prepare_environment(add_a_camera=True, enable_autopilot=True)
 
