@@ -57,51 +57,59 @@ def main(add_a_camera, enable_autopilot):
 
     try:
 
+        index = 0
+
+        rendering = True
         while True:
 
-            bp = random.choice(vehicle_blueprints)
+            index = index + 1
 
-            if bp.contains_attribute('number_of_wheels'):
-                n = bp.get_attribute('number_of_wheels')
-                print('spawning vehicle %r with %d wheels' % (bp.id, n))
+            if ( rendering is True ):
+                bp = random.choice(vehicle_blueprints)
 
-            color = random.choice(bp.get_attribute('color').recommended_values)
-            bp.set_attribute('color', color)
+                if bp.contains_attribute('number_of_wheels'):
+                    n = bp.get_attribute('number_of_wheels')
+                    print('spawning vehicle %r with %d wheels' % (bp.id, n))
 
-            transform = carla.Transform(
-                carla.Location(x=180.0, y=199.0, z=40.0),
-                carla.Rotation(yaw=0.0))
+                color = random.choice(bp.get_attribute('color').recommended_values)
+                bp.set_attribute('color', color)
 
-            vehicle = world.try_spawn_actor(bp, transform)
+                transform = carla.Transform(
+                    carla.Location(x=180.0, y=199.0, z=40.0),
+                    carla.Rotation(yaw=0.0))
 
-            if vehicle is None:
-                continue
+                vehicle = world.try_spawn_actor(bp, transform)
 
-            actor_list.append(vehicle)
+                if vehicle is None:
+                    continue
 
-            print(vehicle)
+                actor_list.append(vehicle)
 
-            if add_a_camera:
-                add_a_camera = False
+                print(vehicle)
 
-                camera_bp = blueprint_library.find('sensor.camera')
-                # camera_bp.set_attribute('post_processing', 'Depth')
-                camera_transform = carla.Transform(carla.Location(x=0.4, y=0.0, z=1.4))
-                camera = world.spawn_actor(camera_bp, camera_transform, attach_to=vehicle)
-                camera.listen(save_to_disk)
+                if add_a_camera:
+                    add_a_camera = False
 
-            if enable_autopilot:
-                vehicle.set_autopilot()
-            else:
-                vehicle.apply_control(carla.VehicleControl(throttle=1.0, steer=-1.0))
+                    camera_bp = blueprint_library.find('sensor.camera')
+                    # camera_bp.set_attribute('post_processing', 'Depth')
+                    camera_transform = carla.Transform(carla.Location(x=0.4, y=0.0, z=1.4))
+                    camera = world.spawn_actor(camera_bp, camera_transform, attach_to=vehicle)
+                    camera.listen(save_to_disk)
 
-            time.sleep(3)
+                if enable_autopilot:
+                    vehicle.set_autopilot()
+                else:
+                    vehicle.apply_control(carla.VehicleControl(throttle=1, steer=0.0))
 
-            print('vehicle at %s' % vehicle.get_location())
-            vehicle.set_location(carla.Location(x=220, y=199, z=38))
-            print('is now at %s' % vehicle.get_location())
+                time.sleep(3)
 
-            time.sleep(2)
+                print('vehicle at %s' % vehicle.get_location())
+                vehicle.set_location(carla.Location(x=220, y=199, z=38))
+                print('is now at %s' % vehicle.get_location())
+
+                time.sleep(2)
+            if ( index > 4  ):
+                rendering = False
 
     finally:
 
@@ -111,4 +119,5 @@ def main(add_a_camera, enable_autopilot):
 
 if __name__ == '__main__':
 
-    main(add_a_camera=False, enable_autopilot=True)
+    main(add_a_camera=True, enable_autopilot=True)
+
