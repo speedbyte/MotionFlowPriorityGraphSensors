@@ -185,7 +185,6 @@ def main():
 
     while True:
         try:
-
             game = CarlaGame(args)
             game.execute()
             break
@@ -193,7 +192,6 @@ def main():
         except Exception as error:
             logging.error(error)
             time.sleep(1)
-
 
 if __name__ == '__main__':
 
