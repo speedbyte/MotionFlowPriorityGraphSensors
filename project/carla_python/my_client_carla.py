@@ -30,4 +30,3 @@ carla_settings.add_sensor(camera)
 #RotationRoll=0
 #RotationYaw=0
 
-
