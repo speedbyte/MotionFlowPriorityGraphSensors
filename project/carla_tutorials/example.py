@@ -9,6 +9,8 @@ sys.path.append('client_files')
 
 import carla
 import sensor
+import settings as client_settings
+import client
 #from carla import sensor
 
 from tcp import TCPClient
@@ -60,7 +62,8 @@ class CarlaWrapper(object):
         with make_connection(TCPClient, 'localhost', 2000, timeout=15) as self.check_client:
             logging.info('connecting...')
 
-        self._client = carla.Client('localhost', 2000)
+        self._client = client.CarlaClient('localhost', 2000)
+        self._client.connect()
 
         self._display = None
         self._surface = None
@@ -316,13 +319,24 @@ class CarlaWrapper(object):
 
     def prepare_settings(self, sensor_type):
 
+        settings = client_settings.CarlaSettings()
+        settings.set(SendNonPlayerAgentsInfo=True, SynchronousMode=True)
+        settings.randomize_seeds()
+
         if (sensor_type == "camera"):
 
-            camera = carla.sensor.Camera('MyCamera', PostProcessing='SceneFinal')
+            camera = sensor.Camera('DefaultCamera', PostProcessing='SceneFinal')
             camera.set(FOV=90.0)
             camera.set_image_size(WINDOW_WIDTH, WINDOW_HEIGHT)
             camera.set_position(x=0.30, y=0, z=1.30)
             camera.set_rotation(pitch=0, yaw=0, roll=0)
+
+            settings.add_sensor(camera)
+
+            logging.debug('sending CarlaSettings:\n%s', settings)
+            logging.info('new episode requested')
+
+            scene = self._client.load_settings(settings)
 
             #carla_settings.add_sensor(camera)
             #[CARLA/Sensor/MyCamera]
@@ -363,7 +377,7 @@ class CarlaWrapper(object):
             #RotationYaw=0
         elif (sensor_type == "lidar"):
 
-            lidar = carla.sensor.Lidar('MyLidar')
+            lidar = sensor.Lidar('DefaultLidar')
             lidar.set(
                 Channels=32,
                 Range=50,
@@ -373,6 +387,7 @@ class CarlaWrapper(object):
                 LowerFovLimit=-30)
             lidar.set_position(x=0, y=0, z=1.40)
             lidar.set_rotation(pitch=0, yaw=0, roll=0)
+            settings.add_sensor(lidar)
 
             #carla_settings.add_sensor(lidar)
 
@@ -411,6 +426,7 @@ if __name__ == '__main__':
     os.makedirs(folder)
 
     carla_wrapper = CarlaWrapper(add_a_camera=True, enable_autopilot=True)
+    carla_wrapper.prepare_settings("camera")
     carla_wrapper.check_server()
 
     carla_wrapper.prepare_environment()
