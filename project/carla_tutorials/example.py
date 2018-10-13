@@ -150,9 +150,7 @@ class CarlaWrapper(object):
 
                 if ( self.kill_script is True  ):
                     break
-
                 time.sleep(0.1)
-
                 if ( self.rendering is True ):
                     #choose any vehicle
                     bp = random.choice(vehicle_blueprints)
@@ -163,24 +161,30 @@ class CarlaWrapper(object):
                         print('spawning vehicle %r with %d wheels' % (bp.id, n))
 
                     color = random.choice(bp.get_attribute('color').recommended_values)
+                    #color = '255,0,0'
                     bp.set_attribute('color', color)
 
                     if ( index <  MAX_ENVIRONMENT_ACTORS  ):
                         transform = carla.Transform(
-                            carla.Location(x=300.0, y=199.0, z=40.0),
+                            carla.Location(x=290.0, y=199.0, z=40.0),
                             carla.Rotation(yaw=0.0))
                         vehicle = world.try_spawn_actor(bp, transform)
-                        if self._autopilot_enabled:
-                            vehicle.set_autopilot()
-                        else:
-                            vehicle.apply_control(carla.VehicleControl(throttle=1, steer=0.0))
+                        if vehicle is None:
+                            continue
+                        new_location = vehicle.get_location()
+                        new_location.x = new_location.x + 5 + 10*index
+                        self.set_new_vehicle_position(vehicle, new_location)
+                        actor_list.append(vehicle)
                     else:
                         transform = carla.Transform(
                             carla.Location(x=335.0, y=179.0, z=40.0),
                             carla.Rotation(yaw=90.0))
                         vehicle = world.try_spawn_actor(bp_ego, transform)
+                        if vehicle is None:
+                            continue
                         self.ego_vehicle = vehicle
-                        vehicle.apply_control(carla.VehicleControl(throttle=0, steer=0.0))
+                    vehicle.apply_control(carla.VehicleControl(throttle=0, steer=0.0))
+                    print(vehicle)
 
                     # the last vehicle is ego vehicle
                     if ( index == MAX_ENVIRONMENT_ACTORS  ):
@@ -202,17 +206,14 @@ class CarlaWrapper(object):
                             #initialize pygame window to show the camera window
                             self.initialise_pygame()
 
-                    if vehicle is None:
-                        continue
-                    actor_list.append(vehicle)
-                    print(vehicle)
-
+                            for actor in actor_list:
+                                if self._autopilot_enabled:
+                                    actor.set_autopilot()
+                                else:
+                                    actor.apply_control(carla.VehicleControl(throttle=1, steer=0.0))
 
                     time.sleep(3)
-
                     print('vehicle at %s' % vehicle.get_location())
-
-                    time.sleep(2)
 
                 # successfully spawned a vehicle
                 index = index + 1
@@ -244,9 +245,9 @@ class CarlaWrapper(object):
                 self._vehicle = None
 
 
-    def set_new_vehicle_position(self, vehicle):
+    def set_new_vehicle_position(self, vehicle, location):
 
-        vehicle.set_location(carla.Location(x=220, y=199, z=38))
+        vehicle.set_location(location)
         print('is now at %s' % vehicle.get_location())
 
 
