@@ -73,8 +73,13 @@ class CarlaWrapper(object):
 
         self._display = None
         self._surface = None
+
+        self._display_depth = None
+        self._surface_depth = None
+
         self._camera = None
-        self._vehicle = None
+
+        self.ego_vehicle = None
         self._autopilot_enabled = enable_autopilot
         self.add_a_camera = add_a_camera
         self._is_on_reverse = False
@@ -89,6 +94,12 @@ class CarlaWrapper(object):
                 (WINDOW_WIDTH, WINDOW_HEIGHT),
                 pygame.HWSURFACE | pygame.DOUBLEBUF)
             logging.debug('pygame started')
+
+            self._display_depth = pygame.display.set_mode(
+                (WINDOW_WIDTH, WINDOW_HEIGHT),
+                pygame.HWSURFACE | pygame.DOUBLEBUF)
+            logging.debug('pygame depth started')
+
             self.pygame_initalised = True
 
         except:
@@ -119,18 +130,40 @@ class CarlaWrapper(object):
         if ( self.pygame_initalised is True ):
             self._parse_image(image_raw)
 
-        #save ground_truth
-        ushort frame_number = (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC);
-        const char marker[] = "$$";
-        //std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_SENSOR_STATE_t) << std::endl;
-        fstream_output_sensor_state.write(marker, sizeof(marker-1));
-        fstream_output_sensor_state.write((char *)&frame_number, sizeof(frame_number));
-        fstream_output_sensor_state.write((char *)data, sizeof(RDB_SENSOR_STATE_t));
-
-
-
 
     def _parse_image(self, image_raw):
+        array = np.frombuffer(image_raw.raw_data, dtype=np.dtype("uint8"))
+        array = np.reshape(array, (image_raw.height, image_raw.width, 4))
+        array = array[:, :, :3]
+        array = array[:, :, ::-1]
+        self._surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
+
+
+    def save_to_disk_depth(self, image_raw):
+        """Save this image to disk (requires PIL installed)."""
+
+        filename = '_images/{:0>6d}_{:s}.png'.format(image_raw.frame_number, image_raw.type)
+
+        try:
+            from PIL import Image as PImage
+        except ImportError:
+            raise RuntimeError(
+                'cannot import PIL, make sure pillow package is installed')
+
+        image = PImage.frombytes(
+            mode='RGBA',
+            size=(image_raw.width, image_raw.height),
+            data=image_raw.raw_data,
+            decoder_name='raw')
+        color = image.split()
+        image = PImage.merge("RGB", color[2::-1])
+
+        image.save(filename)
+        if ( self.pygame_initalised is True ):
+            self._parse_image_depth(image_raw)
+
+
+    def _parse_image_depth(self, image_raw):
         array = np.frombuffer(image_raw.raw_data, dtype=np.dtype("uint8"))
         array = np.reshape(array, (image_raw.height, image_raw.width, 4))
         array = array[:, :, :3]
@@ -147,7 +180,9 @@ class CarlaWrapper(object):
         blueprint_library = world.get_blueprint_library();
         vehicle_blueprints = blueprint_library.filter('vehicle');
 
-        cam_blueprint = world.get_blueprint_library().find('sensor.camera')
+        camera_bp = world.get_blueprint_library().find('sensor.camera')
+        camera_bp_depth = world.get_blueprint_library().find('sensor.camera')
+        camera_bp_depth.set_attribute('post_processing', 'Depth')
         camera_transform_position = carla.Transform(carla.Location(x=1.4, y=0.0, z=1.4))
 
         actor_list = []
@@ -201,18 +236,20 @@ class CarlaWrapper(object):
                         if self.add_a_camera:
 
                             try:
-                                self._camera = world.spawn_actor(cam_blueprint, camera_transform_position, attach_to=self.ego_vehicle)
+                                self._camera = world.spawn_actor(camera_bp, camera_transform_position, attach_to=self.ego_vehicle)
+                                self._camera_depth = world.spawn_actor(camera_bp_depth, camera_transform_position, attach_to=self.ego_vehicle)
                                 #self._camera.listen(lambda image: self._parse_image(image))
                                 time.sleep(2)
                                 self._camera.listen(lambda image: self.save_to_disk(image))
+                                self._camera_depth.listen(lambda image_depth: self.save_to_disk_depth(image_depth))
 
                             except:
                                 if self._camera is not None:
                                     self._camera.destroy()
                                     self._camera = None
-                                if self._vehicle is not None:
-                                    self._vehicle.destroy()
-                                    self._vehicle = None
+                                if self.ego_vehicle is not None:
+                                    self.ego_vehicle.destroy()
+                                    self.ego_vehicle = None
 
                             self.add_a_camera = False
                             #initialize pygame window to show the camera window
@@ -240,6 +277,7 @@ class CarlaWrapper(object):
                                 return
                         #self._on_loop()
                         self._on_render()
+                        self._on_render_depth()
                     except Exception as error:
                         logging.error(error)
                         time.sleep(1)
@@ -254,9 +292,9 @@ class CarlaWrapper(object):
             if self._camera is not None:
                 self._camera.destroy()
                 self._camera = None
-            if self._vehicle is not None:
-                self._vehicle.destroy()
-                self._vehicle = None
+            if self.ego_vehicle is not None:
+                self.ego_vehicle.destroy()
+                self.ego_vehicle = None
 
 
     def set_new_vehicle_position(self, vehicle, location):
@@ -269,10 +307,10 @@ class CarlaWrapper(object):
         autopilot = self._autopilot_enabled
         control = self._get_keyboard_control(pygame.key.get_pressed())
         if autopilot != self._autopilot_enabled:
-            self._vehicle.set_autopilot(autopilot)
+            self.ego_vehicle.set_autopilot(autopilot)
             self._autopilot_enabled = autopilot
         if not self._autopilot_enabled:
-            self._vehicle.apply_control(control)
+            self.ego_vehicle.apply_control(control)
 
 
     def _get_keyboard_control(self, keys):
@@ -297,6 +335,11 @@ class CarlaWrapper(object):
     def _on_render(self):
         if self._surface is not None:
             self._display.blit(self._surface, (0, 0))
+        pygame.display.flip()
+
+    def _on_render_depth(self):
+        if self._surface_depth is not None:
+            self._display_depth.blit(self._surface_depth, (0, 0))
         pygame.display.flip()
 
 
