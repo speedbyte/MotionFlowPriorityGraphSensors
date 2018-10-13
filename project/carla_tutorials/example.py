@@ -13,8 +13,7 @@ import settings as client_settings
 import client
 #from carla import sensor
 
-from tcp import TCPClient
-from util import make_connection
+#from util import make_connection
 
 
 import os
@@ -49,21 +48,28 @@ except ImportError:
     raise RuntimeError('cannot import numpy, make sure numpy package is installed')
 
 
-WINDOW_WIDTH = 1200
-WINDOW_HEIGHT = 400
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
 START_POSITION = carla.Transform(carla.Location(x=180.0, y=199.0, z=40.0))
-
+MAX_ENVIRONMENT_ACTORS = 3
 
 class CarlaWrapper(object):
     def __init__(self, add_a_camera, enable_autopilot):
 
         self.rendering = True
+        logging.info('connecting...')
 
-        with make_connection(TCPClient, 'localhost', 2000, timeout=15) as self.check_client:
-            logging.info('connecting...')
+        #self._client = client.CarlaClient('localhost', 2000)
+        #self._client.connect()
+        #print("client connected is " + str(self._client.connected()))
 
-        self._client = client.CarlaClient('localhost', 2000)
-        self._client.connect()
+        self._client = carla.Client('localhost', 2000)
+        self._client.set_timeout(2000)
+        print('client version: %s' % self._client.get_client_version())
+        print('server version: %s' % self._client.get_server_version())
+
+        logging.info('listening to server %s:%s', 'localhost', 2000)
+
 
         self._display = None
         self._surface = None
@@ -122,37 +128,19 @@ class CarlaWrapper(object):
         self._surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
 
 
-
-
     def prepare_environment(self):
-        #client = carla.Client('localhost', 2000)
 
-        self._client.set_timeout(2000)
-
-        print('client version: %s' % self._client.get_client_version())
-        print('server version: %s' % self._client.get_server_version())
+        # not CarlaClient
 
         world = self._client.get_world()
 
         blueprint_library = world.get_blueprint_library();
         vehicle_blueprints = blueprint_library.filter('vehicle');
 
-        #camera = sensor.Camera('MyCamera', PostProcessing='SceneFinal')
-        #camera.set(FOV=90.0)
-        #camera.set_image_size(WINDOW_WIDTH, WINDOW_HEIGHT)
-        #camera.set_position(x=0.30, y=0, z=1.30)
-        #camera.set_rotation(pitch=0, yaw=0, roll=0)
-
         cam_blueprint = world.get_blueprint_library().find('sensor.camera')
-
-        camera_transform_position = carla.Transform(carla.Location(x=0.4, y=0.0, z=1.4))
+        camera_transform_position = carla.Transform(carla.Location(x=1.4, y=0.0, z=1.4))
 
         actor_list = []
-
-        log_level = logging.DEBUG | logging.INFO# if args.debug else logging.INFO
-        logging.basicConfig(format='%(levelname)s: %(message)s', level=log_level)
-
-        logging.info('listening to server %s:%s', 'localhost', 2000)
 
         print(__doc__)
 
@@ -168,7 +156,7 @@ class CarlaWrapper(object):
                 if ( self.rendering is True ):
                     #choose any vehicle
                     bp = random.choice(vehicle_blueprints)
-                    bp_ego = vehicle_blueprints[0]
+                    bp_ego = vehicle_blueprints.find('ford.mustang')
 
                     if bp.contains_attribute('number_of_wheels'):
                         n = bp.get_attribute('number_of_wheels')
@@ -177,9 +165,9 @@ class CarlaWrapper(object):
                     color = random.choice(bp.get_attribute('color').recommended_values)
                     bp.set_attribute('color', color)
 
-                    if ( index < 3 ):
+                    if ( index <  MAX_ENVIRONMENT_ACTORS  ):
                         transform = carla.Transform(
-                            carla.Location(x=180.0, y=199.0, z=40.0),
+                            carla.Location(x=300.0, y=199.0, z=40.0),
                             carla.Rotation(yaw=0.0))
                         vehicle = world.try_spawn_actor(bp, transform)
                         if self._autopilot_enabled:
@@ -188,14 +176,14 @@ class CarlaWrapper(object):
                             vehicle.apply_control(carla.VehicleControl(throttle=1, steer=0.0))
                     else:
                         transform = carla.Transform(
-                            carla.Location(x=194.0, y=205.0, z=40.0),
-                            carla.Rotation(yaw=-90.0))
+                            carla.Location(x=335.0, y=179.0, z=40.0),
+                            carla.Rotation(yaw=90.0))
                         vehicle = world.try_spawn_actor(bp_ego, transform)
                         self.ego_vehicle = vehicle
                         vehicle.apply_control(carla.VehicleControl(throttle=0, steer=0.0))
 
                     # the last vehicle is ego vehicle
-                    if ( index == 3  ):
+                    if ( index == MAX_ENVIRONMENT_ACTORS  ):
                         if self.add_a_camera:
                             try:
                                 self._camera = world.spawn_actor(cam_blueprint, camera_transform_position, attach_to=self.ego_vehicle)
@@ -228,7 +216,7 @@ class CarlaWrapper(object):
 
                 # successfully spawned a vehicle
                 index = index + 1
-                if ( index > 3  ):
+                if ( index > MAX_ENVIRONMENT_ACTORS  ):
                     self.rendering = False
 
                 if self.rendering is False and self.pygame_initalised is True:
@@ -297,25 +285,8 @@ class CarlaWrapper(object):
         pygame.display.flip()
 
 
-
-    def check_server(self):
-
-        #self.check_client.close()
-        try:
-            while False:
-                logging.info('reading...')
-                data = self.check_client.read()
-                if not data:
-                    raise RuntimeError('failed to read data from server')
-                logging.info('writing...')
-                self.check_client.write(data)
-        except AssertionError as assertion:
-            raise assertion
-        except Exception as exception:
-            logging.error('exception: %s', exception)
-            time.sleep(1)
-            exit(0)
-
+    def disconnect_world_client(self):
+        self._client.disconnect()
 
     def prepare_settings(self, sensor_type):
 
@@ -351,7 +322,7 @@ class CarlaWrapper(object):
             #RotationPitch=0
             #RotationRoll=0
             #RotationYaw=0
-        elif (sensor_type == "semantic_segmentation"):
+        elif (sensor_type == "se"):
 
             camera = carla.sensor.Camera('MyCamera', PostProcessing='SemanticSegmentation')
             camera.set(FOV=90.0)
@@ -411,6 +382,8 @@ class CarlaWrapper(object):
 
 if __name__ == '__main__':
 
+
+
     log_level = logging.NOTSET
     logging.basicConfig(format='%(levelname)s: %(message)s', level=log_level)
     #log.setLevel(log_level)
@@ -425,12 +398,17 @@ if __name__ == '__main__':
     print("creating folder " + folder)
     os.makedirs(folder)
 
-    carla_wrapper = CarlaWrapper(add_a_camera=True, enable_autopilot=True)
-    carla_wrapper.prepare_settings("camera")
-    carla_wrapper.check_server()
+    try:
+        carla_wrapper = CarlaWrapper(add_a_camera=True, enable_autopilot=True)
+        #carla_wrapper.prepare_settings("camera")
+        carla_wrapper.prepare_environment()
 
-    carla_wrapper.prepare_environment()
+    except Exception as exception:
+        print(str(exception))
 
-    time.sleep(5)
+    finally:
+        pass
+        #carla_wrapper.disconnect_world_client()
+
 
 
