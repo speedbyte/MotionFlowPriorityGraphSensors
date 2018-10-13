@@ -78,6 +78,7 @@ class CarlaWrapper(object):
         self._surface_depth = None
 
         self._camera = None
+        self._camera_depth = None
 
         self.ego_vehicle = None
         self._autopilot_enabled = enable_autopilot
@@ -169,6 +170,7 @@ class CarlaWrapper(object):
         array = array[:, :, :3]
         array = array[:, :, ::-1]
         self._surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
+        #self._surface_depth = pygame.surfarray.make_surface(array.swapaxes(0, 1))
 
 
     def prepare_environment(self):
