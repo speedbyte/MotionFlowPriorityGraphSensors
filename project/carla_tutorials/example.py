@@ -119,6 +119,16 @@ class CarlaWrapper(object):
         if ( self.pygame_initalised is True ):
             self._parse_image(image_raw)
 
+        #save ground_truth
+        ushort frame_number = (ushort) ((simFrame - MAX_DUMPS - 2) / IMAGE_SKIP_FACTOR_DYNAMIC);
+        const char marker[] = "$$";
+        //std::cout << sizeof(marker) << " " << sizeof(frame_number) << " " << sizeof(RDB_SENSOR_STATE_t) << std::endl;
+        fstream_output_sensor_state.write(marker, sizeof(marker-1));
+        fstream_output_sensor_state.write((char *)&frame_number, sizeof(frame_number));
+        fstream_output_sensor_state.write((char *)data, sizeof(RDB_SENSOR_STATE_t));
+
+
+
 
     def _parse_image(self, image_raw):
         array = np.frombuffer(image_raw.raw_data, dtype=np.dtype("uint8"))
@@ -189,9 +199,11 @@ class CarlaWrapper(object):
                     # the last vehicle is ego vehicle
                     if ( index == MAX_ENVIRONMENT_ACTORS  ):
                         if self.add_a_camera:
+
                             try:
                                 self._camera = world.spawn_actor(cam_blueprint, camera_transform_position, attach_to=self.ego_vehicle)
                                 #self._camera.listen(lambda image: self._parse_image(image))
+                                time.sleep(2)
                                 self._camera.listen(lambda image: self.save_to_disk(image))
 
                             except:
@@ -212,7 +224,8 @@ class CarlaWrapper(object):
                                 else:
                                     actor.apply_control(carla.VehicleControl(throttle=1, steer=0.0))
 
-                    time.sleep(3)
+
+                    #time.sleep(1)
                     print('vehicle at %s' % vehicle.get_location())
 
                 # successfully spawned a vehicle
@@ -237,6 +250,7 @@ class CarlaWrapper(object):
             pygame.quit()
             for actor in actor_list:
                 actor.destroy()
+            self.ego_vehicle.destroy()
             if self._camera is not None:
                 self._camera.destroy()
                 self._camera = None
