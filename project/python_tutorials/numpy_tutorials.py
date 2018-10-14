@@ -2,6 +2,7 @@
 
 
 import numpy as np
+import os
 
 data = [
     [ 3.47358069,  3.44533315,  3.41713449,  -0.74376439, -0.74551423,
@@ -19,14 +20,6 @@ if __name__ == '__main__':
     print "numpy tutorials"
 
 
-    array  = np.array(data)
-    array = array[2]
-    print array
-
-    arr = [1,2,3,4]
-    print arr[3::-1]
-
-    file = "/local/git/MotionFlowPriorityGraphSensors/project/carla_tutorials/Depth.png"
 
 
 

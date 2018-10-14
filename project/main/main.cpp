@@ -166,6 +166,66 @@ int main ( int argc, char *argv[]) {
     */
 
 
+    std::string file_depth = "/local/git/MotionFlowPriorityGraphSensors/project/carla_tutorials/Depth.png";
+    cv::Mat depth_image = cv::imread(file_depth, CV_LOAD_IMAGE_UNCHANGED);
+
+    ushort channel_ = depth_image.channels();
+    ushort depth_ = depth_image.depth();
+
+    cv::Mat reshaped(depth_image.rows, depth_image.cols, CV_32SC1, depth_image.data);
+
+    cv::Mat depth_image_opencv(depth_image.rows, depth_image.cols, CV_32FC1);
+
+
+    float nearClip = 0.1; //m_camera_info.clipNear;
+    float farClip = 1500; //m_camera_info.clipFar;
+    /*
+     *float alpha = cameraInfo->focalY / 2;
+     *float n = cameraInfo->height / 2 / tan(alpha);
+     */
+
+    for (ushort row = 0; row < depth_image.rows; row++)
+    {
+        for (ushort col = 0; col < depth_image.cols; col++)
+        {
+            unsigned pixel_unsigned_val = depth_image.at<cv::Vec4b>(row, col)[0] + depth_image.at<cv::Vec4b>(row, col)[1] >> 8 + depth_image.at<cv::Vec4b>(row, col)[2] >> 16;
+            // just getting the bytes as they are in the array. So, basically we get the depth of each pixel in unsigned int.
+            float z_normalized = (float) (pixel_unsigned_val * 1.0 / std::numeric_limits<uint>::max()); // ZMAX
+
+            //z_normalized = 0.5*(f+n)/(f-n) + (-f*n)/(f-n) * (1/d) + 0.5
+            //z_normalized: z-buffer value (normalized in [0,1]. Non-normalized fixed point zf = z * (s^n - 1 ) where n is bit depth of the depth buffer)
+            //d: distance of fragment (pixel) to xy plane of camera coordinate system
+            //nearClip: near plane (camera frustum setting)
+            //farClip: far plane (camera frustum setting)
+            //we need far clip and near clip because we want to convert the values into depth in SI unit. Until now its just a unitless number.
+            float depth = ((-farClip * nearClip) / (farClip - nearClip)) /
+                    (z_normalized - 0.5f - 0.5f * (farClip + nearClip) / (farClip - nearClip));
+            depth_image_opencv.at<float>(row,col) = z_normalized*255;
+        }
+    }
+    cv::Mat depth_image_opencv_flipped;
+    cv::flip(depth_image_opencv, depth_image_opencv_flipped, 0);
+    cv::imshow("dpeth immage", depth_image_opencv_flipped);
+    cv::waitKey(0);
+
+    /*
+    png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
+    unsigned int count = 0;
+
+    for (int32_t v = 0; v < image_info_.height; v++) {
+        for (int32_t u = 0; u < image_info_.width; u++) {
+            png::rgba_pixel val;
+            val.red = (unsigned char) image_data_[count++];
+            val.green = (unsigned char) image_data_[count++];
+            val.blue = (unsigned char) image_data_[count++];
+            val.alpha = (unsigned char)image_data_[count++];
+            depth_image.set_pixel(u, v, val);
+        }
+    }
+    */
+
+
+
     typedef struct {
         ushort start;
         ushort stop;
