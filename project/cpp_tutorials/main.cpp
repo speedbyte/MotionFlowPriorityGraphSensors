@@ -238,6 +238,19 @@ int main ( int argc, char *argv[]) {
     float float_val = *(reinterpret_cast<float *>( &val ));
     printf("answer - %f\n", float_val);
 
+    float a_float_value = 123.123;
+    unsigned int* check_conversion_ui = reinterpret_cast<unsigned int *>(&a_float_value);
+    float* check_conversion_float = reinterpret_cast<float *>(&a_float_value);
+    float reconverting_to_float = (float)*check_conversion_ui;
+    printf("%X and %f\n", *check_conversion_ui, reconverting_to_float);   // 0x42F63EFA - this is 123.123 in float and 1123434234 in integer. By typecasting to float 1123434234 becomes 1123434234.000
+    std::cout << "unsigned int type conversion " << *check_conversion_ui << std::endl;
+    std::cout << "float type conversion " << *check_conversion_float << std::endl;
+
+    float z_normalized_try = (reconverting_to_float) / std::numeric_limits<uint>::max(); // ZMAX
+    float z_normalized_try_ui = (float)(*check_conversion_ui*1.0 / std::numeric_limits<uint>::max()); // ZMAX
+    assert(z_normalized_try == z_normalized_try_ui);
+
+
     float z_normalized = (float)(0xfbc0a8fb) / std::numeric_limits<uint>::max(); // ZMAX
 
     float nearClip = 0.1; //m_camera_info.clipNear;

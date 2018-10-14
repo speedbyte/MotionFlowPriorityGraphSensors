@@ -139,8 +139,9 @@ display_list_dual  = [
 # what is the percentage of good pixels in the special region of interest
     [
         "dual_sroi_l2_good_pixels_sroi_all_pixels_FB_blue_sky_1_0",
-        "dual_sroi_l2_good_pixels_sroi_all_pixels_LK_blue_sky_1_0",
-        "dual_sroi_l2_good_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
+        "dual_sroi_ma_good_pixels_sroi_all_pixels_FB_blue_sky_1_0",
+        #"dual_sroi_l2_good_pixels_sroi_all_pixels_LK_blue_sky_1_0",
+        #"dual_sroi_l2_good_pixels_sroi_all_pixels_TVL_blue_sky_1_0",
     ],
 
     [

@@ -501,10 +501,9 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
 
             sprintf(file_name_image, "depth_000%03d_10.png", (simFrame - (MAX_DUMPS+2)));
 
-            float *depthImageFloat = reinterpret_cast<float *>((reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
             unsigned int *depthUnsigned = reinterpret_cast<unsigned int*>((reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
 
-            float *depthImageOutput = new float[image_info_.width * image_info_.height * 1];
+            float *depthImageOutputFloat = new float[image_info_.width * image_info_.height * 1];
 
             float nearClip = 0.1; //m_camera_info.clipNear;
             float farClip = 1500; //m_camera_info.clipFar;
@@ -515,8 +514,8 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
 
             for(size_t index = 0; index < image_info_.width * image_info_.height; ++index)
             {
-                unsigned int z = depthUnsigned[index];
-                float z_normalized = ((float)z) / std::numeric_limits<uint>::max(); // ZMAX
+                // just getting the bytes as they are in the array. So, basically we get the depth of each pixel in unsigned int.
+                float z_normalized = (float)(depthUnsigned[index]*1.0 / std::numeric_limits<uint>::max()); // ZMAX
 
                 //z_normalized = 0.5*(f+n)/(f-n) + (-f*n)/(f-n) * (1/d) + 0.5
                 //z_normalized: z-buffer value (normalized in [0,1]. Non-normalized fixed point zf = z * (s^n - 1 ) where n is bit depth of the depth buffer)
@@ -524,11 +523,11 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                 //nearClip: near plane (camera frustum setting)
                 //farClip: far plane (camera frustum setting)
                 float depth = ((-farClip*nearClip)/(farClip-nearClip))/(z_normalized-0.5f-0.5f*(farClip+nearClip)/(farClip-nearClip));
-                depthImageOutput[index] = depth;
+                depthImageOutputFloat[index] = depth;
 
             }
 
-            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, depthImageOutput);
+            cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, depthImageOutputFloat);
             cv::Mat depth_image_opencv_flipped;
 
             /*
