@@ -15,6 +15,7 @@ import client
 
 #from util import make_connection
 
+import math
 
 import os
 import random
@@ -44,6 +45,7 @@ except ImportError:
 
 try:
     import numpy as np
+    from numpy.matlib import repmat
 except ImportError:
     raise RuntimeError('cannot import numpy, make sure numpy package is installed')
 
@@ -156,20 +158,64 @@ class CarlaWrapper(object):
             size=(image_raw.width, image_raw.height),
             data=image_raw.raw_data,
             decoder_name='raw')
-        color = image.split()
-        image = PImage.merge("RGB", color[2::-1])
+        #color = image.split()
+        #image = PImage.merge("RGB", color[2::-1])
 
         image.save(filename)
-        if ( self.pygame_initalised is True ):
-            self._parse_image_depth(image_raw)
+        #if ( self.pygame_initalised is True ):
+        #    self._parse_image_depth(image_raw)
 
 
     def _parse_image_depth(self, image_raw):
+
+        """Convert a CARLA raw image to a BGRA numpy array."""
+        far = 1000.0  # max depth in meters.
+        max_depth=0.9
+
         array = np.frombuffer(image_raw.raw_data, dtype=np.dtype("uint8"))
         array = np.reshape(array, (image_raw.height, image_raw.width, 4))
-        array = array[:, :, :3]
-        array = array[:, :, ::-1]
-        self._surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
+        array = array.astype(np.float32)
+        # Apply (R + G * 256 + B * 256 * 256) / (256 * 256 * 256 - 1).
+        normalized_depth = np.dot(array[:, :, :3], [65536.0, 256.0, 1.0])
+        normalized_depth /= 16777215.0  # (256.0 * 256.0 * 256.0 - 1.0)
+
+
+        # (Intrinsic) K Matrix
+        k = np.identity(3)
+        k[0, 2] = image_raw.width / 2.0
+        k[1, 2] = image_raw.height / 2.0
+        k[0, 0] = k[1, 1] = image_raw.width / \
+                            (2.0 * math.tan(image_raw.fov * math.pi / 360.0))
+    
+        # 2d pixel coordinates
+        pixel_length = image_raw.width * image_raw.height
+        u_coord = repmat(np.r_[image_raw.width-1:-1:-1],
+                         image_raw.height, 1).reshape(pixel_length)
+        v_coord = repmat(np.c_[image_raw.height-1:-1:-1],
+                         1, image_raw.width).reshape(pixel_length)
+        normalized_depth = np.reshape(normalized_depth, pixel_length)
+    
+        # Search for pixels where the depth is greater than max_depth to
+        # delete them
+        max_depth_indexes = np.where(normalized_depth > max_depth)
+        normalized_depth = np.delete(normalized_depth, max_depth_indexes)
+        u_coord = np.delete(u_coord, max_depth_indexes)
+        v_coord = np.delete(v_coord, max_depth_indexes)
+
+        # pd2 = [u,v,1]
+        p2d = np.array([u_coord, v_coord, np.ones_like(u_coord)])
+    
+        # P = [X,Y,Z]
+        p3d = np.dot(np.linalg.inv(k), p2d)
+        p3d *= normalized_depth * far
+
+        #print(p3d)
+
+        final_depth = p3d[2]
+        print final_depth
+
+
+        self._surface = pygame.surfarray.make_surface(final_depth)
         #self._surface_depth = pygame.surfarray.make_surface(array.swapaxes(0, 1))
 
 
