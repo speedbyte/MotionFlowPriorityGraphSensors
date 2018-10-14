@@ -522,6 +522,7 @@ void ViresObjects::parseEntry(RDB_IMAGE_t *data, const double &simTime, const un
                 //d: distance of fragment (pixel) to xy plane of camera coordinate system
                 //nearClip: near plane (camera frustum setting)
                 //farClip: far plane (camera frustum setting)
+                //we need far clip and near clip because we want to convert the values into depth in SI unit. Until now its just a unitless number.
                 float depth = ((-farClip*nearClip)/(farClip-nearClip))/(z_normalized-0.5f-0.5f*(farClip+nearClip)/(farClip-nearClip));
                 depthImageOutputFloat[index] = depth;
 
