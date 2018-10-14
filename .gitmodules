@@ -10,10 +10,6 @@
 	path = external/algorithms/PRSM-sceneflow
 	url = https://github.com/vogechri/PRSM
 	ignore = dirty
-[submodule "boost"]
-	path = libs/boost
-	url = https://github.com/boostorg/boost.git
-        ignore = dirty
 [submodule "gnuplot-iostream"]
 	path = libs/gnuplot-iostream
 	url = https://github.com/dstahlke/gnuplot-iostream.git
@@ -118,3 +114,6 @@
 	url = https://github.com/EpicGames/UnrealEngine.git
 	branch = master
         ignore = dirty
+[submodule "libs/boost"]
+	path = libs/boost
+	url = https://github.com/boostorg/boost.git
