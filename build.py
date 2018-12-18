@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#/usr/bin/env python
 # _*_ coding: utf-8 _*_
 
 
@@ -34,7 +34,7 @@ SOURCE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/'
 def call_shell_command(command):
     ret = subprocess.check_call(command, shell=True)
     if ret == 0:
-        print "%s successful" % command
+        print"%s successful" % command
         return ret
     else:
         print "%s failed" % command
@@ -203,7 +203,9 @@ def parse_arguements(args):
                             "-DVTK_Group_Qt=OFF " \
                             "-DVTK_Group_Views=OFF " \
                             "-DWITH_GTK=ON " \
+                            "-DWITH_PNG=ON " \
                             "-DWITH_CUDA=OFF " \
+                            "-DWITH_MATLAB=OFF " \
                             "-DBUILD_JPEG=ON " \
                             "-DBUILD_2d=ON " \
                             "-DBUILD_CUDA=OFF " \

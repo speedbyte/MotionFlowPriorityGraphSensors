@@ -11,6 +11,7 @@
 #include <map>
 #include <boost/filesystem.hpp>
 #include <opencv2/imgproc.hpp>
+#include <random>
 #include "Dataset.h"
 
 class Utils {

@@ -48,7 +48,7 @@ VIRES_DATASET:
     STOP: 55
     MAX_GENERATION_DATASET: 150
     PATH: "../../../datasets/vires_dataset/"
-    EXECUTE: 1
+    EXECUTE: 0
     GT: 0
     ANALYSE: 1
     VIDEO: 0

@@ -205,8 +205,8 @@ int main ( int argc, char *argv[]) {
     }
     cv::Mat depth_image_opencv_flipped;
     cv::flip(depth_image_opencv, depth_image_opencv_flipped, 0);
-    cv::imshow("dpeth immage", depth_image_opencv_flipped);
-    cv::waitKey(0);
+    cv::imshow("depth immage", depth_image_opencv_flipped);
+    //cv::waitKey(0);
 
     /*
     png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
