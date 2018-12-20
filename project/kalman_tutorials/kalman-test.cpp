@@ -58,7 +58,8 @@ int main(int argc, char* argv[]) {
   // Best guess of initial states
   Eigen::VectorXd x0(n);
   x0 << measurements[0], 0, -9.81;
-  kf.init(x0);
+  //kf.init(x0);
+  kf.init(0, x0);
 
   // Feed measurements into filter, output estimated states
   double t = 0;

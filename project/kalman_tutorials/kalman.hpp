@@ -33,6 +33,22 @@ public:
       const Eigen::MatrixXd& P
   );
 
+    /**
+    * Create a Kalman filter with the specified matrices.
+    *   A - System dynamics matrix
+    *   C - Output matrix
+    *   Q - Process noise covariance
+    *   R - Measurement noise covariance
+    *   P - Estimate error covariance
+    */
+    KalmanFilter(
+            const Eigen::MatrixXd& A,
+            const Eigen::MatrixXd& C,
+            const Eigen::MatrixXd& Q,
+            const Eigen::MatrixXd& R,
+            const Eigen::MatrixXd& P
+    );
+
   /**
   * Create a blank estimator.
   */
