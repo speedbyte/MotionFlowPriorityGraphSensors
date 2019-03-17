@@ -111,6 +111,41 @@ void image_processing_bmp() {
 }
 
 
+void image_processing_change_color() {
+
+   cv::Mat image = cv::imread("/local/mega_personal/personal_folder/jobs/aktuell/e-signature.jpg", cv::IMREAD_ANYCOLOR);
+
+   cv::namedWindow("dd", CV_WINDOW_AUTOSIZE);
+   cv::imshow("dd", image);
+   cv::waitKey(0);
+
+
+   cv::Mat image_mod = image.clone();
+   //#define CV_MAKETYPE(depth,cn) (CV_MAT_DEPTH(depth) + (((cn)-1) << CV_CN_SHIFT))
+   ushort channels = image_mod.channels();   // how many channels
+   ushort depth = image_mod.depth();  // if CV_8U or CV_16S or CV_32F
+   std::cout << image_mod.channels();
+   cv::Vec3b color = {255, 255, 255};
+   cv::Vec3b color_edge = {255, 0, 0};
+   for ( ushort x = 0; x < image_mod.cols; x++) {
+       for ( ushort y = 0; y < image_mod.rows; y++) {
+           ushort blue = image_mod.at<cv::Vec3b>(y,x)[0];
+           ushort green = image_mod.at<cv::Vec3b>(y,x)[1];
+           ushort red = image_mod.at<cv::Vec3b>(y,x)[2];
+           if  (image_mod.at<cv::Vec3b>(y,x)[0] > 220 && image_mod.at<cv::Vec3b>(y,x)[1] > 220  && image_mod.at<cv::Vec3b>(y,x)[2] > 220 ) {
+               image_mod.at<cv::Vec3b>(y,x) = color;
+           }
+           else {
+               //image_mod.at<cv::Vec3b>(y,x) = color_edge;
+           }
+       }
+   }
+   cv::namedWindow("dd2", CV_WINDOW_AUTOSIZE);
+   cv::imshow("dd2", image_mod);
+   cv::imwrite("/local/mega_personal/personal_folder/jobs/aktuell/e-signature_mod.jpg", image_mod);
+   cv::waitKey(0);
+
+}
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -248,71 +283,6 @@ void miscallenous() {
     cv::Mat test_absolute_frame = cv::Mat::zeros(cv::Size(1242,375), CV_16UC3);
 }
 
-void change_to_depth() {
-
-
-
-    float *depthImageFloat = reinterpret_cast<float *>((reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
-    unsigned int *depthUnsigned = reinterpret_cast<unsigned int*>((reinterpret_cast<char *>(data) + sizeof(RDB_IMAGE_t)));
-
-    float *depthImageOutput = new float[image_info_.width * image_info_.height * 1];
-
-    float nearClip = 0.1; //m_camera_info.clipNear;
-    float farClip = 1500; //m_camera_info.clipFar;
-    /*
-     *float alpha = cameraInfo->focalY / 2;
-     *float n = cameraInfo->height / 2 / tan(alpha);
-     */
-
-    for(size_t index = 0; index < image_info_.width * image_info_.height; ++index)
-    {
-        unsigned int z = depthUnsigned[index];
-        float z_normalized = ((float)z) / std::numeric_limits<uint>::max(); // ZMAX
-
-        //z_normalized = 0.5*(f+n)/(f-n) + (-f*n)/(f-n) * (1/d) + 0.5
-        //z_normalized: z-buffer value (normalized in [0,1]. Non-normalized fixed point zf = z * (s^n - 1 ) where n is bit depth of the depth buffer)
-        //d: distance of fragment (pixel) to xy plane of camera coordinate system
-        //nearClip: near plane (camera frustum setting)
-        //farClip: far plane (camera frustum setting)
-        float depth = ((-farClip*nearClip)/(farClip-nearClip))/(z_normalized-0.5f-0.5f*(farClip+nearClip)/(farClip-nearClip));
-        depthImageOutput[index] = depth;
-
-    }
-
-    cv::Mat depth_image_opencv(image_info_.height, image_info_.width, CV_32FC1, depthImageOutput);
-    cv::Mat depth_image_opencv_flipped;
-
-    /*
-    png::image<png::rgba_pixel> depth_image(image_info_.width, image_info_.height);
-    unsigned int count = 0;
-
-    for (int32_t v = 0; v < image_info_.height; v++) {
-        for (int32_t u = 0; u < image_info_.width; u++) {
-            png::rgba_pixel val;
-            val.red = (unsigned char) image_data_[count++];
-            val.green = (unsigned char) image_data_[count++];
-            val.blue = (unsigned char) image_data_[count++];
-            val.alpha = (unsigned char)image_data_[count++];
-            depth_image.set_pixel(u, v, val);
-        }
-    }
-    */
-
-    if (!m_dumpInitialFrames) {
-
-        std::basic_string<char> input_image_depth_file_with_path = GroundTruthScene::m_ground_truth_depth_path.string() + sensor_index_folder_suffix + "/" + file_name_image; //+ "/" +  file_name_image;
-        if ( simFrame > (MAX_DUMPS) ) {
-
-            if ( GroundTruthScene::m_environment == "blue_sky") {
-                cv::flip(depth_image_opencv, depth_image_opencv_flipped, 0);
-                cv::imwrite(input_image_depth_file_with_path, depth_image_opencv_flipped);
-                //depth_image.write(input_image_depth_file_with_path);
-                fprintf(stderr, "saving depth image for simFrame = %d, simTime = %.3f, dataSize = %d with image id %d\n",
-                        simFrame, simTime, data->imgSize, data->id);
-            }
-        }
-
-}
 
 
 int main ( int argc, char *argv[] ) {
@@ -326,10 +296,11 @@ int main ( int argc, char *argv[] ) {
     duration    // Max track duration ('timestamp' units)
     ); */
 
-    sobel();
-    canny();
+    //sobel();
+    //canny();
 
-    change_to_depth();
+    //change_to_depth();
+    image_processing_change_color();
 
     return(0);
 
@@ -345,7 +316,6 @@ int main ( int argc, char *argv[] ) {
     addWeighted();
     image_processing_();
     image_processing_bmp();
-
 
     absdiff(kittisrc1, kittisrc2);
     //xml_yaml(kittisrc1, kittisrc2);

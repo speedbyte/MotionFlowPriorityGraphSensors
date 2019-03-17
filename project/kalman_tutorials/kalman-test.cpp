@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
   int n = 3; // Number of states
   int m = 1; // Number of measurements
 
-  double dt = 1.0/30; // Time step
+  double dt = 1.0/30; // Time step ( 30 Hz )
 
   Eigen::MatrixXd A(n, n); // System dynamics matrix
   Eigen::MatrixXd C(m, n); // Output matrix
