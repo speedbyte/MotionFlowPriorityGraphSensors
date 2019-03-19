@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "Main.py", line 20, in <module>
-  File "DeviceFrame.pyo", line 411, in Start
-  File "DeviceFrame.pyo", line 172, in __init__
-  File "logging\__init__.pyo", line 1529, in basicConfig
-  File "logging\__init__.pyo", line 902, in __init__
-  File "logging\__init__.pyo", line 925, in _open
-IOError: [Errno 2] No such file or directory: 'f:\\workspace_python\\DeviceTracer\\dist\\log\\program.log'
