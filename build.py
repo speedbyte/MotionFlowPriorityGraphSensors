@@ -34,10 +34,10 @@ SOURCE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/'
 def call_shell_command(command):
     ret = subprocess.check_call(command, shell=True)
     if ret == 0:
-        print"%s successful" % command
+        print("%s successful" % command)
         return ret
     else:
-        print "%s failed" % command
+        print("%s failed" % command)
         return ret
     # except subprocess.CalledProcessError as e:
     #    print e.returncode
@@ -99,8 +99,8 @@ def parse_arguements(args):
             build_properties[count] = args.KITTI_FLOW_OPTION
         os.chdir(SOURCE_DIR)
 
-    print build_properties
-    zipped = zip(submodule_metadata, build_properties)
+    print(build_properties)
+    zipped = list(zip(submodule_metadata, build_properties))
     build_option = args.BUILD_OPTION
     make_power = subprocess.check_output("getconf _NPROCESSORS_ONLN", shell=True)
     make_power = make_power.strip('\n')
@@ -112,13 +112,13 @@ def parse_arguements(args):
             library_install = SOURCE_DIR + "libs-install/" + zipped[count][0][0] + "-install"
 
             if build_option == "clean":
-                print "cleaning %s" % library;
+                print("cleaning %s" % library);
                 os.chdir(library)
                 command = "rm -rf " + library + "/cmake-build-debug"
-                print command
+                print(command)
                 call_shell_command(command)
                 command = "rm -rf " + library_install + "/*"
-                print command
+                print(command)
                 call_shell_command(command)
                 if "boost" in library_install: 
                     command = "./b2 --clean-all -n && rm -rf bin.v2"
@@ -131,29 +131,29 @@ def parse_arguements(args):
                 # SYSTEM INSTALL
                 if args.INSTALL_OPTION:
                     command = "rm -rf /usr/local/include/" + zipped[count][0][0][zipped[count][0][0].find('/')+1:]
-                    print command
+                    print(command)
                     #call_shell_command(command)
                 sys.exit(0)
 
             os.chdir(library)
             if "kitti" in library_install:
                 os.chdir("cpp") 
-            print "starting building %s with version %s" % (os.getcwd(), metadata)
+            print("starting building %s with version %s" % (os.getcwd(), metadata))
             if build_option == "manual":
-                raw_input("Press enter to continue")
+                input("Press enter to continue")
             call_shell_command("mkdir -p " + library_install)
             command = "mkdir -p " + library_install + "/lib/pkgconfig"
             call_shell_command(command)
 
             # CONFIGURE
-            print "Configuring %s" % library
+            print("Configuring %s" % library)
             if build_option == "manual":
-                raw_input("Press enter to continue")
+                input("Press enter to continue")
             os.environ['PKG_CONFIG_PATH'] = "/usr/local/lib/pkgconfig"
             pkg_config_path_ffmpeg = subprocess.check_output("pkg-config --cflags libavcodec", shell=True)
             if "boost" in library_install:
                 if os.path.isdir(library + "/tools/build") is False:
-                    print  "git fetch --all --recurse-submodules=yes. Do this in the boost diretory"
+                    print("git fetch --all --recurse-submodules=yes. Do this in the boost diretory")
                     sys.exit(1)
                 command = "./bootstrap.sh --prefix=" + library_install
             elif "ffmpeg" in library_install:
@@ -177,13 +177,13 @@ def parse_arguements(args):
                 if "opencv" in library_install:
                     extra_cmake_option ="-DOPENCV_EXTRA_MODULES_PATH="+library+"/../opencv_contrib/modules "
                     exit
-                    print extra_cmake_option
+                    print(extra_cmake_option)
                     if "/usr/local" in pkg_config_path_ffmpeg:
-                        print "correct ffmpeg path while building opencv ", pkg_config_path_ffmpeg.strip('\n')
+                        print("correct ffmpeg path while building opencv ", pkg_config_path_ffmpeg.strip('\n'))
                     else:
                         if build_option == "manual":
-                            raw_input("Press enter to continue")
-                        print "Plese build ffmpeg before opencv. Aborting due to incompatibility between ffmpeg and opencv ", pkg_config_path_ffmpeg.strip('\n')
+                            input("Press enter to continue")
+                        print("Plese build ffmpeg before opencv. Aborting due to incompatibility between ffmpeg and opencv ", pkg_config_path_ffmpeg.strip('\n'))
                         sys.exit(-1)
                 call_shell_command("mkdir -p cmake-build-debug")
                 os.chdir("cmake-build-debug")
@@ -237,27 +237,27 @@ def parse_arguements(args):
                             "-DBUILD_tracking=ON " \
                             "-DBUILD_visualization=ON " \
                             ".."
-            print command
+            print(command)
             if build_option == "manual":
-                raw_input("Press enter to continue")
+                input("Press enter to continue")
             call_shell_command(command)
             if build_option == "manual":
-                raw_input("Press enter to continue")
+                input("Press enter to continue")
 
             # MAKE
             if "boost" in library_install:
                 command = "./b2 cxxflags=\"-Wno-unused-local-typedefs -Wstrict-aliasing\" headers install -j " + make_power
             else:
                 command = "time make -j " + make_power
-            print command
+            print(command)
             if build_option == "manual":
-                raw_input("Press enter to continue")
+                input("Press enter to continue")
             ret = call_shell_command(command)
             if ( ret != 0 ):
-                print "ffmpeg build terminated with error"
+                print("ffmpeg build terminated with error")
                 sys.exit(1) # rm -rf build; rm -f config.mak;; fi            
             if build_option == "manual":
-                raw_input("Press enter to continue")
+                input("Press enter to continue")
 
             # MAKE INSTALL
             if "boost" in library_install:
@@ -265,14 +265,14 @@ def parse_arguements(args):
             else:
                 command = "time make install"
                 if build_option == "manual":
-                    raw_input("Press enter to continue")
-                print command
+                    input("Press enter to continue")
+                print(command)
                 call_shell_command(command)
                 if build_option == "manual":
-                    raw_input("Press enter to continue")
+                    input("Press enter to continue")
 
             # POST INSTALL
-            print "Post install"
+            print("Post install")
             if "boost" in library_install:
                 command = "python " + SOURCE_DIR + "utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p " + library_install + " -o " + library_install + "/lib/pkgconfig/boost.pc " + library_install + "/lib/"
 
@@ -281,11 +281,11 @@ def parse_arguements(args):
 
             else:
                 command = ""
-                print "no post install command"
+                print("no post install command")
 
-            print command
+            print(command)
             if build_option == "manual":
-                raw_input("Press enter to continue")
+                input("Press enter to continue")
             ret = call_shell_command(command)
 
             os.chdir(SOURCE_DIR)
@@ -295,20 +295,20 @@ def parse_arguements(args):
                 #kinit
                 #aklogs
                 command = "rsync -avr " + library_install + "/ ~/tmp/"
-                print command
+                print(command)
                 if build_option == "manual":
-                    raw_input("Press enter to continue")
+                    input("Press enter to continue")
                 call_shell_command(command)
                 # copy back to /usr/local
                 command = "sudo rsync -avr ~/tmp/ /usr/local/"
-                print command
+                print(command)
                 if build_option == "manual":
-                    raw_input("Press enter to continue")
+                    input("Press enter to continue")
                 call_shell_command(command)
                 command = "rm -rf ~/tmp"
-                print command
+                print(command)
                 if build_option == "manual":
-                    raw_input("Press enter to continue")
+                    input("Press enter to continue")
                 call_shell_command(command)
 
 
@@ -333,7 +333,7 @@ parser.add_argument('--test', action='store_true', help='test script')
 parser.set_defaults(func=parse_arguements)
 
 if len(sys.argv) == 1:
-    print (parser.format_help())
+    print((parser.format_help()))
 
 results = parser.parse_args()
 results.func(results)

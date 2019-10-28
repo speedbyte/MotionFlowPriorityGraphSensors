@@ -1,31 +1,44 @@
-binascii.unhexlify('41') -> 'A'
-binascii.hexlify('A') -> '41'
-int('41', 16) -> 65
+#!/usr/bin/env python
+# *_* encoding=utf-8 _*_
 
-float('223.2') -> 223.2
-s.decode(encoding) - typ 'str' to typ 'unicode'
-u.encode(encoding) - typ 'unicode' to  typ 'str'
+import binascii
 
-map(str, [12,34,56]) converts [12,34,56] into ['12','34','56']
-[str(x) for x in [12, 34, 56]]
+binascii.unhexlify('41')    #-> 'A'
+binascii.hexlify('A')       # -> '41'
+int('41', 16)               # -> 65
 
-to convert '0x22' into 0x22
-int('0x22', 16)
+float('223.2') # -> 223.2
 
-to convert 255 into '0xFF'
-hex(255)
-
-You can test the type of the object as follows:
->>> a='abc'
->>> isinstance(a, str)
-True
->>> isinstance(a, (list, tuple))
-False
-
+s = "VikÃ¤s"
+str_coded_utf8 = s.decode('utf-8')               # -> typ 'str' to typ 'unicode'
+str_coded_base64 = s.decode('base64')  # -> typ 'str' to typ 'unicode'
+str_coded_utf8.encode('utf-8')       # -> typ 'unicode' to  typ 'str'
 
 str = "VIKAS"
 x = str.encode('utf-8')
 UnpackAndConvertToHex = map(hex, struct.unpack(len(str)*'B',str))
+
+
+# map second parameter requires a list
+map(str, [12,34,56]) # converts [12,34,56] into ['12','34','56']
+#or
+[str(x) for x in [12, 34, 56]]
+
+# to convert '0x22' into 0x22
+int('0x22', 16)  # convert into integer
+
+
+# to convert 255 into '0xFF'
+hex(255)            # converts into str
+
+#You can test the type of the object as follows:
+a='abc'
+isinstance(a, str)   # -> True
+isinstance(a, (list, tuple))  # ->False
+
+
+
+
 
 # to get the date_ 2009-05-13 for example.
 import datetime
@@ -67,7 +80,7 @@ os.execl("./srec_cat.exe", "srec_cat.exe", "%s -Binary" % filename, "-output %s"
 data = struct.pack("B", byteContentsHex[x])
 
 val = struct.unpack('B',strval)
-tuple zurück.
+tuple zurï¿½ck.
 
         def openfilebutton(self, event):
             print 'set file path'
