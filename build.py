@@ -20,6 +20,7 @@
 #PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/local/git/PriorityGraphSensors/libs/ffmpeg-install/lib/pkgconfig:/local/git/PriorityGraphSensors/libs/boost-install/lib/pkgconfig:/local/git/PriorityGraphSensors/libs/opencv-install/lib/pkgconfig ; export PKG_CONFIG_PATH
 #BOOST_ROOT=/local/git/PriorityGraphSensors/libs/boost-install; export BOOST_ROOT
 
+#dependencies - yasm, freetype2
 
 
 import argparse
@@ -32,7 +33,7 @@ import re
 SOURCE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/'
 
 def call_shell_command(command):
-    ret = subprocess.check_call(command, shell=True)
+    ret = subprocess.check_output(command, shell=True, encoding='utf-8')
     if ret == 0:
         print("%s successful" % command)
         return ret
@@ -64,11 +65,13 @@ def parse_arguements(args):
         verbose_string = "OFF"
 
     command = "git submodule status | awk '{print $1}'"
-    submodule_commit = subprocess.check_output(command, shell=True)
+    submodule_commit = subprocess.check_output(command, shell=True, encoding='utf-8')
+    #submodule_commit = str(submodule_commit_bytes, 'utf-8')
     submodule_commit = submodule_commit.split('\n')
 
     command = "git submodule status | awk '{print $2}'"
-    submodule_dir = subprocess.check_output(command, shell=True)
+    submodule_dir_bytes = subprocess.check_output(command, shell=True)
+    submodule_dir = str(submodule_dir_bytes, 'utf-8')
     submodule_dir = submodule_dir.split('\n')
 
     build_properties = len(submodule_dir) * [None]
@@ -81,6 +84,7 @@ def parse_arguements(args):
         os.chdir(submodule_dir[count])
         command = "git show " + submodule_commit[count] + " --pretty=format:\"%ci%d\"|head -n1"
         submodule_tag = subprocess.check_output(command, shell=True)
+        submodule_tag = str(submodule_tag, 'utf-8')
         submodule_tag = submodule_tag.strip('\n')
         submodule_metadata.append((submodule_dir[count], submodule_tag))
         if "libs/opencv" == submodule_dir[count]:
@@ -102,8 +106,8 @@ def parse_arguements(args):
     print(build_properties)
     zipped = list(zip(submodule_metadata, build_properties))
     build_option = args.BUILD_OPTION
-    make_power = subprocess.check_output("getconf _NPROCESSORS_ONLN", shell=True)
-    make_power = make_power.strip('\n')
+    make_power = subprocess.check_output("getconf _NPROCESSORS_ONLN", shell=True, encoding='utf-8')
+    make_power = str(make_power).strip('\n')
     for count in range(len(zipped)):
         if zipped[count][1]:
             os.chdir(SOURCE_DIR)
@@ -150,7 +154,7 @@ def parse_arguements(args):
             if build_option == "manual":
                 input("Press enter to continue")
             os.environ['PKG_CONFIG_PATH'] = "/usr/local/lib/pkgconfig"
-            pkg_config_path_ffmpeg = subprocess.check_output("pkg-config --cflags libavcodec", shell=True)
+
             if "boost" in library_install:
                 if os.path.isdir(library + "/tools/build") is False:
                     print("git fetch --all --recurse-submodules=yes. Do this in the boost diretory")
@@ -171,12 +175,13 @@ def parse_arguements(args):
                 "--disable-libvpx "\
                 "--enable-libx264 "\
                 "--enable-nonfree "\
-                "--enable-openssl "
+                "--disable-openssl "
             else:
                 extra_cmake_option=""
                 if "opencv" in library_install:
+                    pkg_config_path_ffmpeg = subprocess.check_output("pkg-config --cflags libavcodec", shell=True, encoding='utf')
                     extra_cmake_option ="-DOPENCV_EXTRA_MODULES_PATH="+library+"/../opencv_contrib/modules "
-                    exit
+                    #exit
                     print(extra_cmake_option)
                     if "/usr/local" in pkg_config_path_ffmpeg:
                         print("correct ffmpeg path while building opencv ", pkg_config_path_ffmpeg.strip('\n'))
