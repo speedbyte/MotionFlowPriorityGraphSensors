@@ -22,6 +22,9 @@
 
 #dependencies - yasm, freetype2
 
+#dependencies unreal - monox-build
+# ./setup.sh; ./GenerateProjectfiles.sh; make
+# Engien/Binaries/Linux  -> .UE4Editor , here the shaders will be compiled on the first run
 
 import argparse
 import subprocess

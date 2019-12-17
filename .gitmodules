@@ -114,3 +114,6 @@
 [submodule "libs/boost"]
 	path = libs/boost
 	url = https://github.com/boostorg/boost.git
+[submodule "libs/cmake"]
+	path = libs/cmake
+	url = https://github.com/Kitware/CMake.git
