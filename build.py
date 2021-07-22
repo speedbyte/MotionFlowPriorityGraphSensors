@@ -33,20 +33,18 @@ import os
 import sys
 import re
 
-SOURCE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/'
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) + '/'
 
 def call_shell_command(command):
-    ret = subprocess.check_output(command, shell=True, encoding='utf-8')
-    if ret == 0:
+    try:
+        # check_output throws an excecption if the command did not work. There is no return code.
+        result = subprocess.check_output(command, shell=True, encoding='utf-8')
         print("%s successful" % command)
+        return result
+    except subprocess.CalledProcessError as e:
+        ret = e.returncode
+        print ("error message %s with return code %s" % (e.output, e.returncode))
         return ret
-    else:
-        print("%s failed" % command)
-        return ret
-    # except subprocess.CalledProcessError as e:
-    #    print e.returncode
-    #    print e.output
-    #    print e.message
 
     # apt-cache search ^libflann-dev | cut -d ' ' -f1
     # proc = subprocess.Popen(command.split(' '), stderr=subprocess.PIPE)
@@ -56,6 +54,7 @@ def call_shell_command(command):
     #    print command + " failed"
     #    print err
     #    sys.exit(-1)
+
     # else:
     #    print command + " successful"
     #    return out
@@ -104,7 +103,7 @@ def parse_arguements(args):
             build_properties[count] = args.VIRES_OPTION
         if "libs/kitti_devkit_stereo_opticalflow_sceneflow" in submodule_dir[count]:
             build_properties[count] = args.KITTI_FLOW_OPTION
-        os.chdir(SOURCE_DIR)
+        os.chdir(ROOT_DIR)
 
     print(build_properties)
     zipped = list(zip(submodule_metadata, build_properties))
@@ -113,26 +112,27 @@ def parse_arguements(args):
     make_power = str(make_power).strip('\n')
     for count in range(len(zipped)):
         if zipped[count][1]:
-            os.chdir(SOURCE_DIR)
+            os.chdir(ROOT_DIR)
             metadata = zipped[count][0][1]
-            library = SOURCE_DIR + zipped[count][0][0]
-            library_install = SOURCE_DIR + "libs-install/" + zipped[count][0][0] + "-install"
-
+            package = zipped[count][0][0]
+            package_path = ROOT_DIR + package
+            library_install = ROOT_DIR + "libs-install/" + package + "-install"
+            library_install_final = "/usr/local"
             if build_option == "clean":
-                print("cleaning %s" % library);
-                os.chdir(library)
-                command = "rm -rf " + library + "/cmake-build-debug"
+                print("cleaning %s" % package_path);
+                os.chdir(package_path)
+                command = "rm -rf " + package_path + "/cmake-build-debug"
                 print(command)
                 call_shell_command(command)
                 command = "rm -rf " + library_install + "/*"
                 print(command)
                 call_shell_command(command)
-                if "boost" in library_install: 
+                if "boost" in library_install:
                     command = "./b2 --clean-all -n && rm -rf bin.v2"
                 elif "ffmpeg" in library_install:
                     command = "make clean"
                 else:
-                    command = "echo cmake-build-debug in " + library + " is already deleted"
+                    command = "echo cmake-build-debug in " + package_path + " is already deleted"
 #                print command
                 call_shell_command(command)
                 # SYSTEM INSTALL
@@ -142,9 +142,9 @@ def parse_arguements(args):
                     #call_shell_command(command)
                 sys.exit(0)
 
-            os.chdir(library)
+            os.chdir(package_path)
             if "kitti" in library_install:
-                os.chdir("cpp") 
+                os.chdir("cpp")
             print("starting building %s with version %s" % (os.getcwd(), metadata))
             if build_option == "manual":
                 input("Press enter to continue")
@@ -153,13 +153,13 @@ def parse_arguements(args):
             call_shell_command(command)
 
             # CONFIGURE
-            print("Configuring %s" % library)
+            print("Configuring %s" % package_path)
             if build_option == "manual":
                 input("Press enter to continue")
             os.environ['PKG_CONFIG_PATH'] = "/usr/local/lib/pkgconfig"
 
             if "boost" in library_install:
-                if os.path.isdir(library + "/tools/build") is False:
+                if os.path.isdir(package_path + "/tools/build") is False:
                     print("git fetch --all --recurse-submodules=yes. Do this in the boost diretory")
                     sys.exit(1)
                 command = "./bootstrap.sh --prefix=" + library_install
@@ -183,7 +183,7 @@ def parse_arguements(args):
                 extra_cmake_option=""
                 if "opencv" in library_install:
                     pkg_config_path_ffmpeg = subprocess.check_output("pkg-config --cflags libavcodec", shell=True, encoding='utf')
-                    extra_cmake_option ="-DOPENCV_EXTRA_MODULES_PATH="+library+"/../opencv_contrib/modules "
+                    extra_cmake_option = "-DOPENCV_EXTRA_MODULES_PATH=" + package_path + "/../opencv_contrib/modules "
                     #exit
                     print(extra_cmake_option)
                     if "/usr/local" in pkg_config_path_ffmpeg:
@@ -195,11 +195,11 @@ def parse_arguements(args):
                         sys.exit(-1)
                 call_shell_command("mkdir -p cmake-build-debug")
                 os.chdir("cmake-build-debug")
-                command  =  "cmake -Wno -dev -Wl,-rpath=/usr/local/lib " +\
+                command  =  "cmake -Wno -Wl,-rpath=/usr/local/lib " +\
                             extra_cmake_option +\
                             "-DENABLE_PRECOMPILED_HEADERS=OFF " \
                             "-DCMAKE_BUILD_TYPE=DEBUG " \
-                            "-DCMAKE_INSTALL_PREFIX=" + library_install + " " + \
+                            "-DCMAKE_INSTALL_PREFIX=" + library_install_final + " " + \
                             "-DCMAKE_VERBOSE_MAKEFILE=" + verbose_string + " " \
                             " OPENCV_EXTRA_EXE_LINKER_FLAGS=-Wl,-rpath,/usr/local/lib" \
                             "-DCMAKE_USE_OPENSSL:BOOL=ON " \
@@ -261,9 +261,9 @@ def parse_arguements(args):
             if build_option == "manual":
                 input("Press enter to continue")
             ret = call_shell_command(command)
-            if ( ret != 0 ):
-                print("ffmpeg build terminated with error")
-                sys.exit(1) # rm -rf build; rm -f config.mak;; fi            
+            print (ret)
+            print("%s build terminated successfully" % package_path)
+#            sys.exit(1) # rm -rf build; rm -f config.mak;; fi
             if build_option == "manual":
                 input("Press enter to continue")
 
@@ -282,7 +282,7 @@ def parse_arguements(args):
             # POST INSTALL
             print("Post install")
             if "boost" in library_install:
-                command = "python " + SOURCE_DIR + "utils/pkg-config-generator/main.py -n Boost -v 1.64.0 -p " + library_install + " -o " + library_install + "/lib/pkgconfig/boost.pc " + library_install + "/lib/"
+                command = "python " + ROOT_DIR + "utils/pkg-config-generator/main.py -n Boost -v 1.67.0 -p " + library_install + " -o " + library_install + "/lib/pkgconfig/boost.pc " + library_install + "/lib/"
 
             elif "ffmpeg" in library_install:
                 command = "find " + library_install + "/lib/pkgconfig/ -name '*.pc' -exec sed -i 's!" + library_install + "!/usr/local!' {} \;"
@@ -296,7 +296,7 @@ def parse_arguements(args):
                 input("Press enter to continue")
             ret = call_shell_command(command)
 
-            os.chdir(SOURCE_DIR)
+            os.chdir(ROOT_DIR)
 
             # SYSTEM INSTALL
             if args.INSTALL_OPTION:

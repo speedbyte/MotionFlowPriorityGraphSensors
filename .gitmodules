@@ -1,119 +1,107 @@
-[SUbmodule "ffmpeg"]
-	path = libs/ffmpeg
-	url = https://git.ffmpeg.org/ffmpeg.git
-	ignore = dirty
-[submodule "opencv"]
-	path = libs/opencv
-	url = https://github.com/opencv/opencv.git
-	ignore = dirty
-[submodule "PRSM"]
-	path = external/algorithms/PRSM-sceneflow
-	url = https://github.com/vogechri/PRSM
-	ignore = dirty
-[submodule "gnuplot-iostream"]
-	path = libs/gnuplot-iostream
-	url = https://github.com/dstahlke/gnuplot-iostream.git
-	ignore = dirty
-[submodule "protobuf"]
-	path = libs/protobuf
-	url = https://github.com/google/protobuf
-[submodule "libuvc"]
-	path = libs/libuvc
-	url = https://github.com/ktossell/libuvc
-	ignore = dirty
-[submodule "mrpt"]
-	path = project/mrpt
-	url = https://github.com/MRPT/mrpt.git
-	ignore = dirty
-[submodule "pcl"]
-	path = libs/pcl
-	url = https://github.com/PointCloudLibrary/pcl.git
-	ignore = dirty
-[submodule "graphviz"]
-	path = libs/graphviz
-	url = https://github.com/ellson/graphviz.git
+[submodule "VTDSource"]
+	path = internal/VTDSource
+	url = /home/veikas/internal/VTDSource.git
+#git@atreus.informatik.uni-tuebingen.de:testcase-generation/VTDSource.git
+[submodule "VIRES"]
+	path = internal/VIRES
+	url = /home/veikas/internal/VIRES.git
+#git@atreus.informatik.uni-tuebingen.de:Veikas/VIRES.git
+[submodule "vires-interface"]
+	path = internal/vires-interface
+	url = /home/veikas/internal/vires-interface.git
+#git@github.com:speedbyte/vires-interface.git
 [submodule "VirtualTestDriveFramework"]
-	path = project/VirtualTestDriveFramework
-	url = git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/VirtualTestDriveFramework.git
+	path = internal/VirtualTestDriveFramework
+	url = /home/veikas/internal/VirtualTestDriveFramework.git
+#git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/VirtualTestDriveFramework.git
 [submodule "overleaf-maths"]
-	path = overleaf/maths
+	path = documentation/overleaf/maths
 	url = https://git.overleaf.com/5c4357c779d0c14d49735cbc
-	ignore = dirty 
 [submodule "overleaf-marcelBA"]
-	path = overleaf/marcelBA
+	path = documentation/overleaf/marcelBA
 	url = https://git.overleaf.com/5d5066e9d655257fb6a03c41
 [submodule "cockpit"]
-	path = overleaf/cockpit
+	path = documentation/overleaf/cockpit
 	url = https://git.overleaf.com/5cb78521e3d1df2ed2cbf4da
+[submodule "overleaf/paper_1"]
+	path = documentation/overleaf/paper_1
+	url = https://git.overleaf.com/5cb787fae3d1df2ed2cbf619
 [submodule "QtKittiVisualizer"]
-	path = kitti_eval/QtKittiVisualizer
+	path = submdodules/devkits/QtKittiVisualizer
 	url = https://github.com/MarkMuth/QtKittiVisualizer.git
 	branch = master
-	ignore = dirty
 [submodule "kitti-pcl"]
-	path = kitti_eval/kitti-pcl
+	path = submodules/devkits/kitti-pcl
 	url = https://github.com/yanii/kitti-pcl.git
-	ignore = dirty
 [submodule "kitti2pcl"]
-	path = kitti_eval/kitti2pcl
+	path = submodules/devkits/kitti2pcl
 	url = https://github.com/jaejunlee0538/kitti2pcl.git
-	ignore = dirty
-[submodule "libs/pngpp"]
-	path = libs/pngpp
-	url = https://github.com/bysreg/pngpp.git
-	ignore = dirty
-[submodule "vtk"]
-	path = libs/vtk
-	url = https://gitlab.kitware.com/vtk/vtk.git
-[submodule "external/pcl_manipulation"]
-	path = external/pcl_manipulation
+[submodule "pcl_manipulation"]
+	path = submodules/algorithms/pcl_manipulation
 	url = https://github.com/Benzarti-Ilyess/pcl_manipulation.git
-[submodule "external/VTDSource"]
-	path = external/VTDSource
-	url = git@atreus.informatik.uni-tuebingen.de:testcase-generation/VTDSource.git
-[submodule "VIRES"]
-	path = VIRES
-	url = git@atreus.informatik.uni-tuebingen.de:Veikas/VIRES.git
-[submodule "vires-interface"]
-	path = libs/vires-interface
-	url = git@github.com:speedbyte/vires-interface.git
 [submodule "kitti_devkit_stereo_opticalflow_sceneflow"]
-	path = libs/kitti_devkit_stereo_opticalflow_sceneflow
+	path = submodules/devkits/kitti_devkit_stereo_opticalflow_sceneflow
 	url = git@github.com:speedbyte/kitti_devkit_stereo_opticalflow_sceneflow.git
-[submodule "utils/pkg-config-generator"]
-	path = utils/pkg-config-generator
+[submodule "pkg-config-generator"]
+	path = submodules/utils/pkg-config-generator
 	url = https://github.com/nmante/pkg-config-generator.git
-[submodule "pix2pixHD"]
-	path = project/NVIDIA/pix2pixHD
-	url = https://github.com/NVIDIA/pix2pixHD.git
-[submodule "libs/middlebury_devkit_flow"]
-	path = libs/middlebury_devkit_flow
+[submodule "PRSM"]
+	path = submodules/algorithms/PRSM
+	url = https://github.com/vogechri/PRSM
+[submodule "middlebury_devkit_flow"]
+	path = submodules/devkits/middlebury_devkit_flow
 	url = git@github.com:speedbyte/middlebury_devkit_flow.git
-[submodule "libs/rob_devkit_flow"]
-	path = libs/rob_devkit_flow
+[submodule "rob_devkit_flow"]
+	path = submodules/devkits/rob_devkit_flow
 	url = http://cvlibs.net:3000/ageiger/rob_devkit.git
-[submodule "libs/MPI-Sintel-testing_devkit"]
-	path = libs/MPI-Sintel-testing_devkit
+[submodule "MPI-Sintel-testing_devkit"]
+	path = submodules/devkits/MPI-Sintel-testing_devkit
 	url = git@github.com:speedbyte/MPI-Sintel-testing_devkit.git
-[submodule "overleaf/paper_1"]
-	path = overleaf/paper_1
-	url = https://git.overleaf.com/5cb787fae3d1df2ed2cbf619
-[submodule "libs/opencv_contrib"]
-	path = libs/opencv_contrib
-	url = https://github.com/opencv/opencv_contrib.git
-[submodule "simulator/CARLA"]
-	path = simulator/CARLA
+[submodule "CARLA"]
+	path = submodules/simulator/CARLA
 	url = https://github.com/carla-simulator/carla.git
 	branch = master
-        ignore = dirty
-[submodule "simulator/UnrealEngine"]
-	path = simulator/UnrealEngine
+[submodule "UnrealEngine"]
+	path = submodules/simulator/UnrealEngine
 	url = https://github.com/EpicGames/UnrealEngine.git
 	branch = master
-        ignore = dirty
-[submodule "libs/boost"]
-	path = libs/boost
+[submodule "ffmpeg"]
+	path = submodules/libs/ffmpeg
+	url = https://git.ffmpeg.org/ffmpeg.git
+[submodule "opencv"]
+	path = submodules/libs/opencv
+	url = https://github.com/opencv/opencv.git
+[submodule "gnuplot-iostream"]
+	path = submodules/libs/gnuplot-iostream
+	url = https://github.com/dstahlke/gnuplot-iostream.git
+[submodule "protobuf"]
+	path = submodules/libs/protobuf
+	url = https://github.com/google/protobuf
+[submodule "libuvc"]
+	path = submodules/libs/libuvc
+	url = https://github.com/ktossell/libuvc
+[submodule "mrpt"]
+	path = submodules/libs/mrpt
+	url = https://github.com/MRPT/mrpt.git
+[submodule "pcl"]
+	path = submodules/libs/pcl
+	url = https://github.com/PointCloudLibrary/pcl.git
+[submodule "graphviz"]
+	path = submodules/libs/graphviz
+	url = https://github.com/ellson/graphviz.git
+[submodule "libs/pngpp"]
+	path = submodules/libs/pngpp
+	url = https://github.com/bysreg/pngpp.git
+[submodule "vtk"]
+	path = submodules/libs/vtk
+	url = https://gitlab.kitware.com/vtk/vtk.git
+[submodule "pix2pixHD"]
+	path = submodules/libs/pix2pixHD
+	url = https://github.com/NVIDIA/pix2pixHD.git
+[submodule "opencv_contrib"]
+	path = submodules/libs/opencv_contrib
+	url = https://github.com/opencv/opencv_contrib.git
+[submodule "boost"]
+	path = submodules/libs/boost
 	url = https://github.com/boostorg/boost.git
-[submodule "libs/cmake"]
-	path = libs/cmake
-	url = https://github.com/Kitware/CMake.git
+
