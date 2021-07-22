@@ -1,18 +1,18 @@
 [submodule "VTDSource"]
 	path = internal/VTDSource
-	url = /home/veikas/internal/VTDSource.git
+	url = /local/internal/VTDSource.git
 #git@atreus.informatik.uni-tuebingen.de:testcase-generation/VTDSource.git
-[submodule "VIRES"]
-	path = internal/VIRES
-	url = /home/veikas/internal/VIRES.git
+#[submodule "VIRES"]
+#	path = internal/VIRES
+#	url = /local/internal/VIRES.git
 #git@atreus.informatik.uni-tuebingen.de:Veikas/VIRES.git
 [submodule "vires-interface"]
 	path = internal/vires-interface
-	url = /home/veikas/internal/vires-interface.git
+	url = /local/internal/vires-interface.git
 #git@github.com:speedbyte/vires-interface.git
 [submodule "VirtualTestDriveFramework"]
 	path = internal/VirtualTestDriveFramework
-	url = /home/veikas/internal/VirtualTestDriveFramework.git
+	url = /local/internal/VirtualTestDriveFramework.git
 #git@atreus.informatik.uni-tuebingen.de:PerceptionSandbox-Fork/VirtualTestDriveFramework.git
 [submodule "overleaf-maths"]
 	path = documentation/overleaf/maths
