@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
 
@@ -7,7 +7,7 @@
 #CARLA
 #sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 #sudo apt-get update
-#sudo apt-get install build-essential clang-5.0 lld-5.0 g++-7 ninja-build python python-pip python-dev tzdata sed curl wget unzip autoconf libtool
+#sudo apt-get install build-essential clang-5.0 llpd-5.0 g++-7 ninja-build python python-pip python-dev tzdata sed curl wget unzip autoconf libtool
 #pip install --user setuptools nose2
 
 #git clone --depth=1 -b release https://github.com/EpicGames/UnrealEngine.git ./UnrealEngine_4.2
@@ -164,7 +164,7 @@ def parse_arguements(args):
                     sys.exit(1)
                 command = "./bootstrap.sh --prefix=" + library_install
             elif "ffmpeg" in library_install:
-                command = "CXXFLAGS=\"-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC\" ./configure --prefix=\"" + library_install + "\" --bindir=\"./bin\" " \
+                command = "CXXFLAGS=\"-D__STDC_CONSTANT_MACROS -Wdeprecated-declarations -fPIC\" ./configure --prefix=\"" + library_install + "\" --bindir=\"" + library_install + "/bin\" " \
                 "--enable-shared " \
                 "--enable-avresample " \
                 "--enable-gpl " \
@@ -179,6 +179,8 @@ def parse_arguements(args):
                 "--enable-libx264 "\
                 "--enable-nonfree "\
                 "--disable-openssl "
+#                "--extra-cflags=\"-I/usr/local/include\" " \
+#                "--extra-ldflags=\"-L/usr/local/lib\" " \
             else:
                 extra_cmake_option=""
                 if "opencv" in library_install:
