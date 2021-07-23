@@ -32,3 +32,4 @@ git submodule add --name "vtk" https://gitlab.kitware.com/vtk/vtk.git submodules
 git submodule add --name "pix2pixHD" https://github.com/NVIDIA/pix2pixHD.git submodules/libs/pix2pixHD
 git submodule add --name "opencv_contrib" https://github.com/opencv/opencv_contrib.git submodules/libs/opencv_contrib
 git submodule add --name "boost" https://github.com/boostorg/boost.git submodules/libs/boost
+git submodule add --name "rob_devkit_depth" https://github.com/joseph-zhong/KITTI-devkit submodules/devkits/rob_devkit_depth

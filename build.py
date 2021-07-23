@@ -89,15 +89,15 @@ def parse_arguements(args):
         submodule_tag = str(submodule_tag, 'utf-8')
         submodule_tag = submodule_tag.strip('\n')
         submodule_metadata.append((submodule_dir[count], submodule_tag))
-        if "libs/opencv" == submodule_dir[count]:
+        if "submodules/libs/opencv" == submodule_dir[count]:
             build_properties[count] = args.OPENCV_OPTION
-        if "libs/pcl" in submodule_dir[count]:
+        if "submodules/libs/pcl" in submodule_dir[count]:
             build_properties[count] = args.PCL_OPTION
-        if "libs/vtk" in submodule_dir[count]:
+        if "submodules/libs/vtk" in submodule_dir[count]:
             build_properties[count] = args.VTK_OPTION
-        if "libs/boost" in submodule_dir[count]:
+        if "submodules/libs/boost" in submodule_dir[count]:
             build_properties[count] = args.BOOST_OPTION
-        if "libs/ffmpeg" in submodule_dir[count]:
+        if "submodules/libs/ffmpeg" in submodule_dir[count]:
             build_properties[count] = args.FFMPEG_OPTION
         if "libs/vires-interface" in submodule_dir[count]:
             build_properties[count] = args.VIRES_OPTION
@@ -320,43 +320,43 @@ def parse_arguements(args):
                 call_shell_command(command)
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    #subparsers = parser.add_subparsers(title='subcommands', description='')
+    #External Modules
+    parser.add_argument('--opencv', action='store_true', dest='OPENCV_OPTION', help='builds opencv')
+    parser.add_argument('--pcl', action='store_true', dest='PCL_OPTION', help='builds pcl')
+    parser.add_argument('--vtk', action='store_true', dest='VTK_OPTION', help='builds vtk')
+    parser.add_argument('--boost', action='store_true', dest='BOOST_OPTION', help='builds boost')
+    parser.add_argument('--ffmpeg', action='store_true', dest='FFMPEG_OPTION', help='builds ffmpeg')
+    parser.add_argument('--vires', action=  'store_true', dest='VIRES_OPTION', help='builds vires')
+    parser.add_argument('--kitti_flow', action='store_true', dest='KITTI_FLOW_OPTION', help='builds kitti flow')
+    #Generic options
+    parser.add_argument('-t', dest="BUILD_OPTION", choices=('clean', 'manual'), help='build parameters')
+    parser.add_argument('-v', action='store_true', dest='VERBOSE_OPTION', help='build parameters')
+    parser.add_argument('-i', action='store_true', dest='INSTALL_OPTION', help='build parameters')
+    #Tests
+    parser.add_argument('--test', action='store_true', help='test script')
 
-parser = argparse.ArgumentParser()
-#subparsers = parser.add_subparsers(title='subcommands', description='')
-#External Modules
-parser.add_argument('--opencv', action='store_true', dest='OPENCV_OPTION', help='builds opencv')
-parser.add_argument('--pcl', action='store_true', dest='PCL_OPTION', help='builds pcl')
-parser.add_argument('--vtk', action='store_true', dest='VTK_OPTION', help='builds vtk')
-parser.add_argument('--boost', action='store_true', dest='BOOST_OPTION', help='builds boost')
-parser.add_argument('--ffmpeg', action='store_true', dest='FFMPEG_OPTION', help='builds ffmpeg')
-parser.add_argument('--vires', action='store_true', dest='VIRES_OPTION', help='builds vires')
-parser.add_argument('--kitti_flow', action='store_true', dest='KITTI_FLOW_OPTION', help='builds kitti flow')
-#Generic options
-parser.add_argument('-t', dest="BUILD_OPTION", choices=('clean', 'manual'), help='build parameters')
-parser.add_argument('-v', action='store_true', dest='VERBOSE_OPTION', help='build parameters')
-parser.add_argument('-i', action='store_true', dest='INSTALL_OPTION', help='build parameters')
-#Tests
-parser.add_argument('--test', action='store_true', help='test script')
+    parser.set_defaults(func=parse_arguements)
 
-parser.set_defaults(func=parse_arguements)
+    if len(sys.argv) == 1:
+        print((parser.format_help()))
 
-if len(sys.argv) == 1:
-    print((parser.format_help()))
-
-results = parser.parse_args()
-results.func(results)
+    results = parser.parse_args()
+    results.func(results)
 
 
-#parser = argparse.ArgumentParser()
-#parser.add_argument('host', help = "Host to schedule. Local fqdn used if not specified.", nargs = '?'  default=alias)
-#parser.add_argument('duration', type = int, help = 'Duration of downtime (minutes), 15 if not specified', default=15)
-#parser.add_argument('-d', '--debug', action='store_true', help = 'Print debug info')
+    #parser = argparse.ArgumentParser()
+    #parser.add_argument('host', help = "Host to schedule. Local fqdn used if not specified.", nargs = '?'  default=alias)
+    #parser.add_argument('duration', type = int, help = 'Duration of downtime (minutes), 15 if not specified', default=15)
+    #parser.add_argument('-d', '--debug', action='store_true', help = 'Print debug info')
 
-#g = p.add_mutually_exclusive_group()
-#g.add_argument('-l', '--flexible', help = "Use f_L_exible downtime (used by default)", action='store_true')
-#g.add_argument('-f', '--fixed', help = 'Use _F_ixed downtime', action="store_false")
-#mode2 = p.add_argument_group('show')
-#mode2.add_argument('-s', '--show', help = 'show downtimes for host', action="store_true")
-#args = p.parse_args()
+    #g = p.add_mutually_exclusive_group()
+    #g.add_argument('-l', '--flexible', help = "Use f_L_exible downtime (used by default)", action='store_true')
+    #g.add_argument('-f', '--fixed', help = 'Use _F_ixed downtime', action="store_false")
+    #mode2 = p.add_argument_group('show')
+    #mode2.add_argument('-s', '--show', help = 'show downtimes for host', action="store_true")
+    #args = p.parse_args()
 
 
