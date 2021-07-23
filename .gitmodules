@@ -27,7 +27,7 @@
 	path = documentation/overleaf/paper_1
 	url = https://git.overleaf.com/5cb787fae3d1df2ed2cbf619
 [submodule "QtKittiVisualizer"]
-	path = submdodules/devkits/QtKittiVisualizer
+	path = submodules/devkits/QtKittiVisualizer
 	url = https://github.com/MarkMuth/QtKittiVisualizer.git
 	branch = master
 [submodule "kitti-pcl"]

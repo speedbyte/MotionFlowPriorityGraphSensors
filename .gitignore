@@ -1,7 +1,3 @@
-values.yml
-datasets
-local_datasets/
-libs-install
 libs-install/
 datasets/
 libs/OpenGL/
@@ -11,12 +7,9 @@ VIRES/VTD.2.0/Data/Distros/
 VIRES/VTD.2.0/Data/Setups/Current
 VIRES/VTD.2.0/Data/Projects/Current
 VIRES/VTD.2.0/Data/Projects/OpenCRG/
-libs/boost-install/
-*.yaml
 *.user
 *.autosave
 *.orig
-results_*
 *.pyc
 *~
 *.idea
@@ -28,6 +21,3 @@ release/
 .pydevproject
 *.o
 *.swp
-*.mat
-*.png
-*.avi
