@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 git submodule add --name "VTDSource" /local/internal/VTDSource.git internal/VTDSource
 git submodule add --name "VIRES" /local/internal/VIRES.git internal/VIRES
 git submodule add --name "vires-interface" /local/internal/vires-interface.git internal/vires-interface

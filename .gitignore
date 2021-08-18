@@ -11,6 +11,7 @@ VIRES/VTD.2.0/Data/Projects/OpenCRG/
 *.autosave
 *.orig
 *.pyc
+*.pyd
 *~
 *.idea
 cmake-build-debug/
