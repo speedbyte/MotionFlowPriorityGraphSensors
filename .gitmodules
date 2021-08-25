@@ -105,3 +105,6 @@
 	path = submodules/libs/boost
 	url = https://github.com/boostorg/boost.git
 
+[submodule "rtabmap"]
+	path = submodules/libs/rtabmap
+	url = https://github.com/introlab/rtabmap.git

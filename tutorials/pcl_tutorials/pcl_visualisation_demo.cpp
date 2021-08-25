@@ -352,9 +352,8 @@ main (int argc, char** argv)
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   if (simple)
   {
-    //viewer = simpleVis(basic_cloud_ptr)
-    std::string filename("/local/git/PriorityGraphSensors/kitti_raw_dataset/data/2011_09_26_drive_0001_sync"
-                                 "/velodyne_points/data_pcd_generated/0000000001.pcd");
+    //viewer = simpleVis(basic_cloud_ptr);
+    std::string filename("/media/sf_D_DRIVE/datasets/kitti_raw_dataset/data/2011_09_26_drive_0001_sync/velodyne_points/data_pcd_generated/0000000001.pcd");
     viewer = simpleVis(loadCloud(filename));
   }
   else if (rgb)

@@ -1,9 +1,6 @@
 #/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
-
-
-
 #CARLA
 #sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 #sudo apt-get update
@@ -91,6 +88,8 @@ def parse_arguements(args):
         submodule_metadata.append((submodule_dir[count], submodule_tag))
         if "submodules/libs/opencv" == submodule_dir[count]:
             build_properties[count] = args.OPENCV_OPTION
+        if "submodules/libs/opencv" == submodule_dir[count]:
+            build_properties[count] = args.RTABMAP_OPTION
         if "submodules/libs/pcl" in submodule_dir[count]:
             build_properties[count] = args.PCL_OPTION
         if "submodules/libs/vtk" in submodule_dir[count]:
@@ -327,6 +326,7 @@ if __name__ == '__main__':
     #subparsers = parser.add_subparsers(title='subcommands', description='')
     #External Modules
     parser.add_argument('--opencv', action='store_true', dest='OPENCV_OPTION', help='builds opencv')
+    parser.add_argument('--rtabmap', action='store_true', dest='RTABMAP_OPTION', help='builds rtabmap')
     parser.add_argument('--pcl', action='store_true', dest='PCL_OPTION', help='builds pcl')
     parser.add_argument('--vtk', action='store_true', dest='VTK_OPTION', help='builds vtk')
     parser.add_argument('--boost', action='store_true', dest='BOOST_OPTION', help='builds boost')
