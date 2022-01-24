@@ -41,7 +41,7 @@
 	url = https://github.com/Benzarti-Ilyess/pcl_manipulation.git
 [submodule "kitti_devkit_stereo_opticalflow_sceneflow"]
 	path = submodules/devkits/kitti_devkit_stereo_opticalflow_sceneflow
-	url = git@github.com:speedbyte/kitti_devkit_stereo_opticalflow_sceneflow.git
+	url = https://github.com/speedbyte/kitti_devkit_stereo_opticalflow_sceneflow.git
 [submodule "pkg-config-generator"]
 	path = submodules/utils/pkg-config-generator
 	url = https://github.com/nmante/pkg-config-generator.git
@@ -50,13 +50,13 @@
 	url = https://github.com/vogechri/PRSM
 [submodule "middlebury_devkit_flow"]
 	path = submodules/devkits/middlebury_devkit_flow
-	url = git@github.com:speedbyte/middlebury_devkit_flow.git
+	url = https://github.com/speedbyte//middlebury_devkit_flow.git
 [submodule "rob_devkit_flow"]
 	path = submodules/devkits/rob_devkit_flow
 	url = http://cvlibs.net:3000/ageiger/rob_devkit.git
 [submodule "MPI-Sintel-testing_devkit"]
 	path = submodules/devkits/MPI-Sintel-testing_devkit
-	url = git@github.com:speedbyte/MPI-Sintel-testing_devkit.git
+	url = https://github.com/speedbyte/MPI-Sintel-testing_devkit.git
 [submodule "CARLA"]
 	path = submodules/simulator/CARLA
 	url = https://github.com/carla-simulator/carla.git
@@ -104,7 +104,12 @@
 [submodule "boost"]
 	path = submodules/libs/boost
 	url = https://github.com/boostorg/boost.git
-
 [submodule "rtabmap"]
 	path = submodules/libs/rtabmap
 	url = https://github.com/introlab/rtabmap.git
+[submodule "rob_devkit_depth"]
+	path = submodules/devkits/rob_devkit_depth
+	url = https://github.com/joseph-zhong/KITTI-devkit
+[submodule "CarlaUnreal"]
+	path = submodules/simulator/CarlaUnreal
+	url = https://github.com/CarlaUnreal/UnrealEngine.git

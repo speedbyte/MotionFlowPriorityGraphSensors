@@ -16,7 +16,6 @@ VIRES/VTD.2.0/Data/Projects/OpenCRG/
 *~
 *.idea
 cmake-build-debug/
-external/algorithms/VSF-sceneflow-1.0/Results/
 build/
 release/
 .project
